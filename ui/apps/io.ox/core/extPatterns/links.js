@@ -42,9 +42,12 @@ define('io.ox/core/extPatterns/links',
             drawDefault = function (baton) {
                 var prio = _.device('small') ? self.mobile : self.prio;
                 var icons = self.icon && baton.options.icons !== false;
-                var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                var a = $('<a>')
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
+                        href: '#',
+                        tabindex: 1,
+                        'data-action': self.id,
                         'draggable': options.draggable || false,
                         'role': 'menuitem',
                         'title': self.title || self.label || '',

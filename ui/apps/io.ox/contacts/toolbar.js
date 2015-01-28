@@ -16,11 +16,12 @@ define('io.ox/contacts/toolbar',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/backbone/mini-views/toolbar',
      'gettext!io.ox/contacts',
      'io.ox/contacts/api',
      'io.ox/contacts/actions',
      'less!io.ox/contacts/style'
-    ], function (ext, links, actions, Dropdown, gt, api) {
+    ], function (ext, links, actions, Dropdown, Toolbar, gt, api) {
 
     'use strict';
 
@@ -60,6 +61,7 @@ define('io.ox/contacts/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Send mail'),
+            title: gt('Send mail'),
             ref: 'io.ox/contacts/actions/send'
         },
         'invite': {
@@ -73,6 +75,7 @@ define('io.ox/contacts/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Edit'),
+            title: gt('Edit contact'),
             drawDisabled: true,
             ref: 'io.ox/contacts/actions/update'
         },
@@ -80,6 +83,7 @@ define('io.ox/contacts/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Delete'),
+            title: gt('Delete contact'),
             ref: 'io.ox/contacts/actions/delete'
         },
         //
@@ -172,30 +176,29 @@ define('io.ox/contacts/toolbar',
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="toolbar">');
-
-    var updateToolbar = _.debounce(function (list) {
-        var self = this;
-        if (!list) return;
-        //get full data, needed for require checks for example
-        api.getList(list).done(function (data) {
-            // extract single object if length === 1
-            data = data.length === 1 ? data[0] : data;
-            // draw toolbar
-            var baton = ext.Baton({ $el: toolbar, data: data, app: self });
-            ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.empty(), baton);
-        });
-
-    }, 10);
-
     ext.point('io.ox/contacts/mediator').extend({
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="toolbar">')
+               toolbar.render().$el
             );
-            app.updateToolbar = updateToolbar;
+            app.updateToolbar = _.debounce(function (list) {
+                var self = this;
+                if (!list) return;
+                //get full data, needed for require checks for example
+                api.getList(list).done(function (data) {
+                    // extract single object if length === 1
+                    data = data.length === 1 ? data[0] : data;
+                    // draw toolbar
+                    var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self }),
+                        ret = ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                    $.when.apply($, ret.value()).then(function () {
+                        toolbar.initButtons();
+                    });
+                });
+            }, 10);
         }
     });
 
