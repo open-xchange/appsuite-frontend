@@ -336,7 +336,10 @@ define('io.ox/core/folder/node', [
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
+            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) {
+                this.$el.attr({ 'aria-haspopup': true });
+                this.renderContextControl();
+            }
 
             // get data
             if (!this.isVirtual) api.get(o.model_id);
@@ -394,9 +397,14 @@ define('io.ox/core/folder/node', [
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
+                $('<a>')
+                .addClass('folder-options contextmenu-control')
                 .attr({
-                    'data-contextmenu': this.options.contextmenu || 'default'
+                    'data-contextmenu': this.options.contextmenu || 'default',
+                    'aria-label': gt('Folder-specific actions'),
+                    href: '#',
+                    role: 'button',
+                    tabindex: 1
                 })
                 .append(
                     $('<i class="fa fa-bars" aria-hidden="true">'),
