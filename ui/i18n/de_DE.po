@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-20 12:37+0100\n"
+"PO-Revision-Date: 2015-01-28 16:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2125,16 +2125,12 @@ msgid "Delete appointment"
 msgstr "Termin löschen"
 
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
-#, fuzzy
-#| msgid "Create contact"
 msgid "Delete contact"
-msgstr "Kontakt anlegen"
+msgstr "Kontakt löschen"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
-#, fuzzy
-#| msgid "Create task"
 msgid "Delete task"
-msgstr "Aufgabe erstellen"
+msgstr "Aufgabe löschen"
 
 #: apps/io.ox/files/actions.js:1032 module:io.ox/files
 msgid "Delete version"
@@ -2602,8 +2598,6 @@ msgid "Edit appointment"
 msgstr "Termin bearbeiten"
 
 #: apps/io.ox/contacts/toolbar.js:78 module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit Contact"
 msgid "Edit contact"
 msgstr "Kontakt bearbeiten"
 
@@ -3238,7 +3232,6 @@ msgstr "Essen"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
 #: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
-#, fuzzy
 msgid "For best results, please use "
 msgstr "Für beste Ergebnisse, verwenden Sie bitte "
 
@@ -4175,16 +4168,14 @@ msgstr "Mittlere Priorität"
 #: apps/io.ox/mail/common-extensions.js:400 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
 #, fuzzy
-#| msgid "Mark as read"
 msgid "Message is read"
-msgstr "Als gelesen markieren"
+msgstr "Nachricht wurde gelesen"
 
 #: apps/io.ox/mail/common-extensions.js:406 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
 #, fuzzy
-#| msgid "Mark as unread"
 msgid "Message is unread"
-msgstr "Als ungelesen markieren"
+msgstr "Nachricht wurde nicht gelesen"
 
 #: apps/io.ox/contacts/edit/view-form.js:105 module:io.ox/contacts
 msgid "Messaging"
@@ -4736,12 +4727,10 @@ msgstr "An Arbeitstagen"
 #. result count for screenreaders
 #. %1$s number of items found by search feature
 #: apps/io.ox/core/desktop.js:1852 module:io.ox/core
-#, fuzzy
-#| msgid "No items found"
 msgid "One item was found."
 msgid_plural "%1$s items were found."
-msgstr[0] "Keine Objekte gefunden"
-msgstr[1] "Keine Objekte gefunden"
+msgstr[0] "Es wurde ein Objekt gefunden."
+msgstr[1] "Es wurden %1$s Objekte gefunden."
 
 #: apps/io.ox/mail/write/main.js:1188 module:io.ox/mail
 msgid ""
@@ -7323,9 +7312,8 @@ msgstr "Dies kann eine Weile dauern..."
 
 #: apps/io.ox/mail/detail/view.js:243 module:io.ox/mail
 #, fuzzy
-#| msgid "This mail has been added to the portal"
 msgid "This message has been truncated due to size limitations."
-msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
+msgstr "Diese Nachricht wurde wegen Größenbeschränkungen abgeschnitten."
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -7436,9 +7424,8 @@ msgstr "Ordner an/aus"
 #: apps/io.ox/search/facets/extensions.js:349 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:605
 #, fuzzy
-#| msgid "Sort options"
 msgid "Toggle options"
-msgstr "Sortier-Optionen"
+msgstr "Optionen an/aus"
 
 #: apps/io.ox/core/desktop.js:1905 module:io.ox/core
 msgid "Toggle search"
@@ -7792,9 +7779,8 @@ msgstr "Wartestatus"
 
 #: apps/io.ox/core/yell.js:24 module:io.ox/core
 #, fuzzy
-#| msgid "Warnings"
 msgid "Warning"
-msgstr "Warnhinweise"
+msgstr "Warnhinweis"
 
 #: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
