@@ -677,9 +677,13 @@ msgstr ""
 "részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr ""
 "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
 "található Rendszer menü ikonra és válassza ki a Beállításokat."

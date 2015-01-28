@@ -662,9 +662,13 @@ msgstr ""
 "は [目次] をクリックします。"
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr ""
 "メール設定を開くには、メニュー バーの右上にあるシステム メニュー アイコンをク"
 "リックします。次に、[設定] を選択します。"
