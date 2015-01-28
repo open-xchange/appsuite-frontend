@@ -33,12 +33,12 @@ define('io.ox/core/folder/actions/color-selection', [
 
                 // update all appointments without color
                 $('[data-folder="' + folder.id + '"]').each(function () {
-                    this.className = this.className.replace(/color-label-\d/, 'color-label-' + color_label);
+                    this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + color_label);
                 });
 
                 //update color in folder view
                 $('li[data-id="' + folder.id + '"] .color-label').each(function () {
-                    this.className = this.className.replace(/color-label-\d/, 'color-label-' + color_label);
+                    this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + color_label);
                 });
             },
             notifications.yell
