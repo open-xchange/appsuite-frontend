@@ -353,7 +353,7 @@ define('io.ox/core/notifications',
                 'right',
                 self.badgeView.render().$el.on('keydown', focusNotifications),
                 $.proxy(this.toggleList, this)
-            ).attr('id', 'io-ox-notifications-icon');
+            ).attr({id: 'io-ox-notifications-icon', role: 'navigation'});
         },
 
         get: function (key, listview) {
