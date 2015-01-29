@@ -63,7 +63,6 @@ define([
                     calendarEventListener = function () {
                         defCalendarEvent.resolve();
                     };
-
                 api.one('set:calendar:reminder', calendarEventListener);
                 api.one('set:tasks:reminder', taskEventListener);
                 api.getReminders();
