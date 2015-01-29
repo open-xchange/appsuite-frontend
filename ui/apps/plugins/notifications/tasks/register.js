@@ -484,6 +484,12 @@ define('plugins/notifications/tasks/register', [
                     reminderAPI.deleteReminder(reminders);
                 }
             });
+            api.on('update', function (e, task) {
+                if (notifications.collection._byId[task.id]) {
+                    //get fresh data to be consistent(name, due date change etc)
+                    reminderAPI.getReminders();
+                }
+            });
         }
     });
 
