@@ -332,9 +332,19 @@
         float: right;
     }
 
+    &.visible-selection.has-focus .selected {
+        .date {
+            opacity: 1;
+        }
+
+        .list-item-content .drag-title {
+            opacity: 1;
+        }
+    }
+
     .date {
 
-        opacity: 0.50;
+        opacity: 0.75;
 
         html.high-contrast & {
             opacity: 1;
@@ -379,7 +389,7 @@
         }
 
         .drag-title {
-            opacity: 0.70;
+            opacity: 0.75;
         }
 
         i.flag {
