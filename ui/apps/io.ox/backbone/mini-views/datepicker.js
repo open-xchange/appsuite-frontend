@@ -62,8 +62,15 @@ define('io.ox/backbone/mini-views/datepicker', [
                     function () {
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
+                            ariaID = guid + '-aria',
                             dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date'));
-                        self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr('id', guid);
+
+                        self.nodes.dayField = $('<input>').attr({
+                            id: guid,
+                            'aria-describedby': ariaID,
+                            tabindex: 1,
+                            type: 'text'
+                        }).addClass('form-control datepicker-day-field');
 
                         if (self.mobileMode) {
                             // render date input only on mobile devices
@@ -74,20 +81,34 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
 
                         // render time input
-                        guid = _.uniqueId('form-control-label-');
-                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">').attr('id', guid).attr({
-                            'aria-label': gt('Use up and down keys to change the time. Close selection by pressing ESC key.')
-                        });
+                        self.nodes.timeField = $('<input>').attr({
+                            id: guid = _.uniqueId('form-control-label-'),
+                            type: 'text',
+                            'aria-describedby': guid + '-aria',
+                            tabindex: 1
+                        }).addClass('form-control');
 
                         // render timezone badge
                         self.nodes.timezoneField = $('<span class="label label-default">');
 
+                        // add a11y
+                        self.nodes.a11yDate = $('<p>')
+                            .attr({ id: ariaID })
+                            .addClass('sr-only')
+                            .text(gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.'));
+                        self.nodes.a11yTime = $('<p>')
+                            .attr({ id: guid + '-aria' })
+                            .addClass('sr-only')
+                            .text(gt('Use up and down keys to change the time. Close selection by pressing ESC key.'));
+
                         return [
                             dayFieldLabel,
                             self.nodes.dayField,
+                            self.nodes.a11yDate,
                             '&nbsp;',
                             $('<label class="sr-only">').attr('for', guid).text(gt('Time')),
                             self.nodes.timeField,
+                            self.nodes.a11yTime,
                             '&nbsp;',
                             self.nodes.timezoneField
                         ];
@@ -115,9 +136,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 });
             } else {
                 // get the right date format and init datepicker
-                this.nodes.dayField.attr({
-                    'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
-                }).datepicker({
+                this.nodes.dayField.datepicker({
                     autoclose: true,
                     clearBtn: self.options.clearButton,
                     format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
