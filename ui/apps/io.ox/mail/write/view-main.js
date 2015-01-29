@@ -689,10 +689,10 @@ define('io.ox/mail/write/view-main',
             // Options
             this.addSection('options', false, gt('More'), true).append(
                 // Priority
-                $('<div>').addClass('section-item')
-                .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
+                $('<fieldset>').addClass('section-item')
+                .css({ paddingTop: '1em', paddingBottom: '0.5em' })
                 .append(
-                    $('<span>').addClass('group-label').text(gt('Priority'))
+                    $('<legend>').addClass('group-label').text(gt('Priority'))
                 )
                 .append(createRadio('priority', '1', gt('High')))
                 .append(createRadio('priority', '3', gt('Normal'), true))
@@ -713,9 +713,10 @@ define('io.ox/mail/write/view-main',
 
             if (_.device('!touch')) {
                 var format = settings.get('messageFormat', 'html');
-                this.addSection('format', true, gt('Text format'), false).append(
+                this.addSection('format', true, null , false).append(
 
-                    $('<div class="section-item">').append(
+                    $('<fieldset class="section-item">').append(
+                        $('<legend>').text(gt('Text format')),
                         createRadio('format', 'text', gt('Text'), format === 'text'),
                         createRadio('format', 'html', gt('HTML'), format === 'html' || format === 'alternative')
                     )
