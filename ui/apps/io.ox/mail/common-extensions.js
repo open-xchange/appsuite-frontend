@@ -311,6 +311,34 @@ define('io.ox/mail/common-extensions',
                     })
                     .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
 
+                    // support for fixed position
+                    // TODO: introduce as general solution
+                    node.on('show.bs.dropdown', function (e) {
+                        var link = $(e.relatedTarget),
+                            offset = link.offset(),
+                            // need to use siblings() instead of next() due to funky backdrop injection on mobile devices (see bug 35863)
+                            menu = link.siblings('.dropdown-menu'),
+                            top, overlay;
+                        top = offset.top + link.height();
+                        menu.css({ top: offset.top + link.height(), bottom: 'auto', left: offset.left });
+                        if ((top + menu.height()) > $(window).height()) menu.css({ top: 'auto', bottom: '20px' });
+                        overlay = $('<div class="dropdown-overlay">').append(menu);
+                        // catch click manually (same idea as boostrap's dropdown-backdrop)
+                        if (_.device('touch')) {
+                            overlay.on('click', { link: link }, function (e) {
+                                e.data.link.dropdown('toggle');
+                            });
+                        }
+                        link.data('overlay', overlay);
+                        $('body').append(overlay);
+                    });
+
+                    node.on('hide.bs.dropdown', function (e) {
+                        var link = $(e.relatedTarget), overlay = link.data('overlay');
+                        link.parent().append(overlay.children());
+                        overlay.remove();
+                    });
+
                     url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
 
@@ -396,16 +424,10 @@ define('io.ox/mail/common-extensions',
 
                 if (util.isUnseen(data)) {
                     api.markRead(data);
-                    node.attr({
-                        'aria-label': gt('Message is read'),
-                        'aria-checked': false
-                    });
+                    node.attr('aria-label', gt('This E-mail is read, press to mark it as unread.'));
                 } else {
                     api.markUnread(data);
-                    node.attr({
-                        'aria-label': gt('Message is unread'),
-                        'aria-checked': true
-                    });
+                    node.attr('aria-label', gt('This E-mail is unread, press to mark it as read.'));
                 }
             }
 
@@ -413,19 +435,9 @@ define('io.ox/mail/common-extensions',
 
                 if (util.isEmbedded(baton.data)) return;
 
-                var unseen = util.isUnseen(baton.data),
-                    button = $('<a>').attr({
-                    href: '#',
-                    role: 'checkbox',
-                    tabindex: 1,
-                    'aria-label': unseen ? gt('Message is unread') : gt('Message is read'),
-                    'aria-checked': unseen
-                }).append(
-                    $('<i class="fa" aria-hidden="true"/>')
-                ).addClass('unread-toggle');
-
-                this.append(
-                    button.on('click', { view: baton.view, node: button }, toggle)
+                var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
+                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa" aria-hidden="true"/></a>');
+                this.append(button.on('click', { view: baton.view, node: button }, toggle)
                 );
             };
         }()),
