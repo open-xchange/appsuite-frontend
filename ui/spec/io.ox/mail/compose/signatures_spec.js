@@ -17,7 +17,7 @@ define([
 ], function (compose, settings, signatures) {
     'use strict';
 
-    describe.only('Mail Compose', function () {
+    describe('Mail Compose', function () {
         var app;
         var leetSignature = signatures.current.data.filter(function (s) {
             return s.id === '1337';
