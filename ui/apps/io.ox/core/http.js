@@ -263,7 +263,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '317' : 'supported_capabilities',
             '3010' : 'com.openexchange.publish.publicationFlag',
             '3020' : 'com.openexchange.subscribe.subscriptionFlag',
-            '3030' : 'com.openexchange.folderstorage.displayName'
+            '3030' : 'com.openexchange.folderstorage.displayName',
+            '3040' : 'com.openexchange.imap.extAccount'
         },
         'user': {
             '610' : 'aliases',
