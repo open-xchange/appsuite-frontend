@@ -1516,7 +1516,7 @@ msgstr "Klicka här för ett gratisprov."
 msgid "Click here to quit the help center"
 msgstr "Klicka här för att avsluta hjälpcentralen"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Klicka här för att återansluta till ditt xing-konto för att se aktiviteter."
@@ -1920,7 +1920,7 @@ msgid "Create list"
 msgstr "Skapa lista"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Skapa nytt %1$s-konto"
 
@@ -3288,6 +3288,12 @@ msgstr "Direktlänk"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Få gratis uppgradering"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -4964,6 +4970,14 @@ msgstr "Spela upp ljudfiler"
 msgid "Play video files"
 msgstr "Spela upp videofiler"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5127,7 +5141,7 @@ msgstr "Portalinställningar"
 msgid "Position"
 msgstr "Position"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Lägg upp en statusuppdatering"
 
@@ -6768,11 +6782,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Följande produkter kommer nu aktiveras:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr "Nästa steg är att låta systemet komma åt ditt %s-konto åt dig."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6921,8 +6930,8 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Det finns redan %1$d möte i den här tidsramen."
 msgstr[1] "Det finns redan %1$d möten i den här tidsrymden."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Det finns ingen aktuell aktivitet i ditt Xing-nätverk."
 
@@ -7958,13 +7967,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Du kommer loggas ut automatiskt om %1$d sekund"
 msgstr[1] "Du kommer loggas ut automatiskt om %1$d sekunder"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
-"Ditt %s-konto har skapats. Du kommer få ett bekräftelse-mail från %s snart."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Ditt %s-nyhetsflöde"
 
@@ -8067,13 +8070,13 @@ msgstr "Din session är för gammal"
 msgid "Your shared contacts:"
 msgstr "Dina delade kontakter:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Din statusuppdatering kunde inte läggas upp på %s. Felmeddelandet var: \"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Din statusuppdatering lades upp på %s"
 
@@ -12356,6 +12359,10 @@ msgstr "din plattform"
 #~ "Namnet som du har angett är inte tillgängligt. Välj ett annat display "
 #~ "namn. Kontext %1$d Objekt %2$d"
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr "Nästa steg är att låta systemet komma åt ditt %s-konto åt dig."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Antal mottagare är begränsat till %1$s mottagare per fält"
 
@@ -13992,6 +13999,12 @@ msgstr "din plattform"
 
 #~ msgid "You need write permissions to unlock a document."
 #~ msgstr "Du behöver skrivrättigheter för att låsa upp ett dokument."
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "Ditt %s-konto har skapats. Du kommer få ett bekräftelse-mail från %s "
+#~ "snart."
 
 #~ msgid "Your answer"
 #~ msgstr "Ditt svar"

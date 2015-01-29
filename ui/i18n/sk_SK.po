@@ -1536,7 +1536,7 @@ msgstr "Kliknutím sem získate bezplatnú skúšobnú verziu."
 msgid "Click here to quit the help center"
 msgstr "Kliknutím sem ukončíte centrum pomoci"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Kliknutím sen sa znovu pripojíte ku kontu xing, aby ste videli aktivity."
@@ -1940,7 +1940,7 @@ msgid "Create list"
 msgstr "Vytvoriť zoznam"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Vytvoriť nový účet %1$s"
 
@@ -3317,6 +3317,12 @@ msgstr "Priamy odkaz"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Získajte aktualizáciu zadarmo"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -5002,6 +5008,14 @@ msgstr "Prehrať zvukové súbory"
 msgid "Play video files"
 msgstr "Prehrať video súbory"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5166,7 +5180,7 @@ msgstr "Nastavenia portálu"
 msgid "Position"
 msgstr "Pozícia"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Poslať aktualizáciu stavu"
 
@@ -6807,11 +6821,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Nasledovné produkty budú teraz aktivované:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr "Ďalším krokom je umožniť tomuto systému prístup k účtu %s."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6961,8 +6970,8 @@ msgstr[0] "V tomto časovom rámci máte už %1$d schôdzku."
 msgstr[1] "V tomto časovom rámci máte už %1$d schôdzky."
 msgstr[2] "V tomto časovom rámci máte už %1$d schôdzok."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Vo vašej sieti Xing nenastala nedávno žiadna aktivita"
 
@@ -8005,14 +8014,7 @@ msgstr[0] "Budete automaticky odhlásení o %1$d sekundu"
 msgstr[1] "Budete automaticky odhlásení o %1$d sekundy"
 msgstr[2] "Budete automaticky odhlásení o %1$d sekúnd"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
-"Váš účet %s bol vytvorený. Čoskoro očakávajte potvrdzovací e-mail od "
-"odosielateľa %s."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Váš kanál noviniek %s"
 
@@ -8115,14 +8117,14 @@ msgstr "Vaša relácia vypršala"
 msgid "Your shared contacts:"
 msgstr "Vaše spoločné kontakty:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Vašu aktualizáciu stavu nebolo možné zverejniť na %s. Chybová správa bola: "
 "„%s“"
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Vaša aktualizácia stavu bola úspešne zverejnená na %s"
 
@@ -13325,6 +13327,10 @@ msgstr "vaša platforma"
 #~ msgid "The new folder tree setting will take effect after a new login."
 #~ msgstr "Nové nastavenie stromu priečinkov sa prejaví po novom prihlásení."
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr "Ďalším krokom je umožniť tomuto systému prístup k účtu %s."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Počet príjemcov je obmedzený na %1$s príjemcov na pole"
 
@@ -14173,6 +14179,12 @@ msgstr "vaša platforma"
 
 #~ msgid "You're not allowed to delete this attachment!"
 #~ msgstr "Nemôžete zmazať túto prílohu!"
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "Váš účet %s bol vytvorený. Čoskoro očakávajte potvrdzovací e-mail od "
+#~ "odosielateľa %s."
 
 #~ msgid "Your answer"
 #~ msgstr "Vaša odpoveď"

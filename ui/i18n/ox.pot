@@ -9974,49 +9974,52 @@ msgstr ""
 msgid "Mail address"
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:131
+#: apps/plugins/portal/xing/register.js:134
 #: module:plugins/portal
-msgid "Your %s account has been created. Expect a confirmation mail from %s soon."
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to complete account setup."
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:132
-#: module:plugins/portal
-msgid "The next step is allowing this system to access your %s account for you."
-msgstr ""
-
-#: apps/plugins/portal/xing/register.js:155
+#: apps/plugins/portal/xing/register.js:157
 #: module:plugins/portal
 msgid "Post a status update"
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:166
+#: apps/plugins/portal/xing/register.js:168
 #: module:plugins/portal
 msgid "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:170
+#: apps/plugins/portal/xing/register.js:172
 #: module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:186
+#: apps/plugins/portal/xing/register.js:188
 #: module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr ""
 
+#: apps/plugins/portal/xing/register.js:269
+#: module:plugins/portal
+msgid "Get news from your XING network delivered to you. Stay in touch and find out about new business opportunities."
+msgstr ""
+
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268
+#: apps/plugins/portal/xing/register.js:273
 #: module:plugins/portal
 msgid "Create new %1$s account"
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:309
+#: apps/plugins/portal/xing/register.js:314
 #: module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 
-#: apps/plugins/portal/xing/register.js:327
+#: apps/plugins/portal/xing/register.js:332
 #: module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr ""

@@ -1512,7 +1512,7 @@ msgstr "Ilmainen koeversio tästä napsauttamalla."
 msgid "Click here to quit the help center"
 msgstr "Napsauta tästä sulkeaksesi help center"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Napsauta tästä luodaksesi uusi yhteys Xing-tilillesi, jotta näet tapahtumat."
@@ -1916,7 +1916,7 @@ msgid "Create list"
 msgstr "Luo lista"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Luo uusi %1$s tili"
 
@@ -3282,6 +3282,12 @@ msgstr "Suora linkki"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Ilmainen päivitys"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -4958,6 +4964,14 @@ msgstr "Soita äänitiedostoja"
 msgid "Play video files"
 msgstr "Toista videotiedostoja"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5122,7 +5136,7 @@ msgstr "Portaalin asetukset"
 msgid "Position"
 msgstr "Asema"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Postaa tilapäivitys"
 
@@ -6762,13 +6776,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Seuraavat tuotteet aktivoidaan nyt:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr ""
-"Seuraava vaihe on antaa tälle järjestelmälle oikeus käyttää %s-tiliäsi "
-"puolestasi."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6919,8 +6926,8 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Tällä ajanjaksolla on jo %1$d tapaaminen."
 msgstr[1] "Tällä ajanjaksolla on jo %1$d tapaamista."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Xing-verkostossasi ei ole viimeaikaisia tapahtumia"
 
@@ -7948,12 +7955,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 msgstr[1] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr "%s-tilisi on luotu. Voit odottaa saavasi pian %s varmistuspostin."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "%s uutissyötteesi"
 
@@ -8057,13 +8059,13 @@ msgstr "Istuntosi on vanhentunut"
 msgid "Your shared contacts:"
 msgstr "Jaetut yhteystietosi:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Tilapäivitystäsi ei voitu postata palveluun %s. Virheviesti oli: \"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Tilapäivityksesi on onnistuneesti postattu palveluun %s"
 
@@ -9516,6 +9518,12 @@ msgstr "Alustasi"
 #~ "Oikean alareunan kuvake avustaa sähköpostien lajittelussa. Napsauta "
 #~ "kuvaketta saadaksesi lista lajitteluperusteista."
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr ""
+#~ "Seuraava vaihe on antaa tälle järjestelmälle oikeus käyttää %s-tiliäsi "
+#~ "puolestasi."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr ""
 #~ "Vastaanottajien määrä on rajoitettu %1$s vastaanottajaan kenttää kohden"
@@ -9899,6 +9907,10 @@ msgstr "Alustasi"
 #~ msgstr[1] ""
 #~ "Sinulla on %1$d ilmoitusta. Paina [enter] päästäksesi ilmoitusalueelle ja "
 #~ "[escape] sulkeaksi sen."
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr "%s-tilisi on luotu. Voit odottaa saavasi pian %s varmistuspostin."
 
 #~ msgid "Your answer"
 #~ msgstr "Vastauksesi"

@@ -1541,7 +1541,7 @@ msgstr "Apăsați aici pentru a ieși din centrul de asistență"
 msgid "Click here to quit the help center"
 msgstr "Apăsați aici pentru a ieși din centrul de asistență"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Apăsați aici pentru a vă conecta din nou la contul dumneavoastră xing pentru "
@@ -1947,7 +1947,7 @@ msgid "Create list"
 msgstr "Creează o listă"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Creează cont %1$s nou"
 
@@ -3325,6 +3325,12 @@ msgstr "Legătură directă"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Obține actualizarea gratuită"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -5011,6 +5017,14 @@ msgstr "Redă fișierele audio"
 msgid "Play video files"
 msgstr "Redă fișierele video"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5175,7 +5189,7 @@ msgstr "Setări portal"
 msgid "Position"
 msgstr "Post"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Postează o actualizare de stare"
 
@@ -6827,13 +6841,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Următoarele produse vor fi activate acum:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr ""
-"Etapa următoare permite sistemului să acceseze contul %s pentru "
-"dumneavoastră."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6983,8 +6990,8 @@ msgstr[0] "Există deja %1$d întâlnire în acest interval de timp."
 msgstr[1] "Există deja %1$d întâlniri în acest interval de timp."
 msgstr[2] "Există deja %1$d de întâlniri în acest interval de timp."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Nicio activitate recentă în rețeaua dumneavoastră Xing."
 
@@ -8035,14 +8042,7 @@ msgstr[0] "Veți fi deconectat automat peste %1$d secundă"
 msgstr[1] "Veți fi deconectat automat peste %1$d secunde"
 msgstr[2] "Veți fi deconectat automat peste %1$d de secunde"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
-"Contul dumneavoastră %s a fost creat. Veți primi un mesaj de confirmare de "
-"la %s."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Fluxul de știri %s "
 
@@ -8147,14 +8147,14 @@ msgstr "Sesiunea dumneavoastră a expirat"
 msgid "Your shared contacts:"
 msgstr "Contactele dumneavoastră partajate:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Actualizarea stării dumneavoastră nu a putut fi publicată pe %s. Mesaj de "
 "eroare: \"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Actualizarea stării dumneavoastră a fost publicată pe %s"
 
@@ -13410,6 +13410,12 @@ msgstr "platforma dumneavoastră"
 #~ "Noua setare a arborelui de dosare va fi aplicată după o autentificare "
 #~ "nouă."
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr ""
+#~ "Etapa următoare permite sistemului să acceseze contul %s pentru "
+#~ "dumneavoastră."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr ""
 #~ "Numărul destinatarilor este limitat la %1$s destinatari pentru fiecare "
@@ -14294,6 +14300,12 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "You're not allowed to delete this attachment!"
 #~ msgstr "Nu aveți permisiune pentru a șterge acest fișier atașat!"
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "Contul dumneavoastră %s a fost creat. Veți primi un mesaj de confirmare "
+#~ "de la %s."
 
 #~ msgid "Your answer"
 #~ msgstr "Răspunsul dumneavoastră"

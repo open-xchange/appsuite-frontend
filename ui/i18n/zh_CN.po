@@ -1501,7 +1501,7 @@ msgstr "点击此处获得免费使用。"
 msgid "Click here to quit the help center"
 msgstr "点击此处离开帮助中心"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr "单击这里重新连接到您的 xing 户口，以观看活动。"
 
@@ -1902,7 +1902,7 @@ msgid "Create list"
 msgstr "创建列表"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "创建新 %1$s 户口"
 
@@ -3258,6 +3258,12 @@ msgstr "直接链接"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "获取免费更新"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -4927,6 +4933,14 @@ msgstr "播放音效档"
 msgid "Play video files"
 msgstr "播放视象档"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5086,7 +5100,7 @@ msgstr "门户设定"
 msgid "Position"
 msgstr "职位"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "发送一个状态更新"
 
@@ -6711,11 +6725,6 @@ msgstr "以下应用已复原，如果您不想它被复原只需删除复原点
 msgid "The following products will be activated now:"
 msgstr "以下产品将会马上激活："
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr "下一步是允许此系统替您访问您的 %s 户口。"
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6858,8 +6867,8 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "您已经在此时段有一个 %1$d 约会。"
 msgstr[1] "您已经在此时段有一个 %1$d 约会。"
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "您的 Xing 最近没有活动。"
 
@@ -7863,12 +7872,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "您会在 %1$d 秒后自动注销"
 msgstr[1] "您会在 %1$d 秒后自动注销"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "您的 %s 新闻条目"
 
@@ -7968,12 +7972,12 @@ msgstr "会话已过期"
 msgid "Your shared contacts:"
 msgstr "您的已分享联系人："
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr "无法在 %s 发送您的状态更新，错误消息为： \"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "您的状态更新已成功在 %s 发送"
 
@@ -11418,6 +11422,10 @@ msgstr "您的平台"
 #~ msgstr ""
 #~ "在右下方的图标帮助您排序您的电子邮件。单击图标以获得一个排序准则列表。"
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr "下一步是允许此系统替您访问您的 %s 户口。"
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "收件人数量限制每输入字段 %1$s 个"
 
@@ -11790,6 +11798,10 @@ msgstr "您的平台"
 
 #~ msgid "You have edit rights."
 #~ msgstr "您有编辑权。"
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
 
 #~ msgid "Your answer"
 #~ msgstr "您的答案"

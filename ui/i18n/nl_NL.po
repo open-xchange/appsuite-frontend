@@ -1527,7 +1527,7 @@ msgstr "Klik hier om het gratis te proberen."
 msgid "Click here to quit the help center"
 msgstr "Klik hier om Hulp te sluiten"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Klik hier om opnieuw met uw xing account te verbinden om activiteiten te "
@@ -1935,7 +1935,7 @@ msgid "Create list"
 msgstr "Lijst aanmaken"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Nieuw %1$s aanmaken"
 
@@ -3322,6 +3322,12 @@ msgstr "Directe link"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Ontvang een gratis upgrade"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -5007,6 +5013,14 @@ msgstr "Afspelen audio-bestanden"
 msgid "Play video files"
 msgstr "Afspelen video-bestand"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5174,7 +5188,7 @@ msgstr "Portaalinstellingen"
 msgid "Position"
 msgstr "Functie"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Post een status"
 
@@ -6828,12 +6842,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "De volgende producten worden nu geactiveerd:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr ""
-"De volgende stap is het systeem toestaan om uw %s account te benaderen."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6984,8 +6992,8 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "U heeft %1$d afspraak in deze periode."
 msgstr[1] "U heeft %1$d afspraken in deze periode."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Er waren geen recente activiteit in uw Xing netwerk."
 
@@ -8025,14 +8033,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "U wordt over %1$d seconde automatisch afgemeld"
 msgstr[1] "U wordt over %1$d seconden automatisch afgemeld"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
-"Uw %s account is aangemaakt. Verwacht binnenkort een e-mailbevestiging van "
-"%s."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Uw %s nieuwsberichten"
 
@@ -8135,13 +8136,13 @@ msgstr "Uw sessie is verlopen"
 msgid "Your shared contacts:"
 msgstr "Uw gedeelde contact:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Uw status update kan niet worden geplaatst op %s. De foutmelding was: \"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Uw status update is succesvol gepost op %s"
 
@@ -9632,6 +9633,11 @@ msgstr "uw platform"
 #~ "Het pictogram in de hoek rechtsonder helpt u bij het sorteren van uw e-"
 #~ "mailberichten. Klik op dit pictogram voor een lijst met sorteeropties."
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr ""
+#~ "De volgende stap is het systeem toestaan om uw %s account te benaderen."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Het aantal ontvangers is beperkt tot %1$s per veld"
 
@@ -10017,6 +10023,12 @@ msgstr "uw platform"
 #~ msgstr[1] ""
 #~ "U heeft %1$d meldingen. Toets [enter] om naar het meldingengebied te "
 #~ "springen en [escape] om deze te sluiten. "
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "Uw %s account is aangemaakt. Verwacht binnenkort een e-mailbevestiging "
+#~ "van %s."
 
 #~ msgid "Your answer"
 #~ msgstr "Uw antwoord"

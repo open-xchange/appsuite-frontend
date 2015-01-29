@@ -1530,7 +1530,7 @@ msgstr "Нажмите для доступа к пробной версии."
 msgid "Click here to quit the help center"
 msgstr "Нажмите для выхода из справочного центра"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Нажмите здесь, чтобы снова подключиться к учетной записи Xing и просмотреть "
@@ -1935,7 +1935,7 @@ msgid "Create list"
 msgstr "Создать список"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Создать аккаунт %1$s "
 
@@ -3304,6 +3304,12 @@ msgstr "Прямая ссылка"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Получить бесплатное обновление"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -4987,6 +4993,14 @@ msgstr "Проигрывать аудиофайлы"
 msgid "Play video files"
 msgstr "Проигрывать видеофайлы"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5148,7 +5162,7 @@ msgstr "Параметры портала"
 msgid "Position"
 msgstr "Должность"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Опубликовать обновление статуса"
 
@@ -6783,11 +6797,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Будут активированы перечисленные продукты:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr "Следующий шаг разрешает доступ системы к вашей учетной записи %s."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6937,8 +6946,8 @@ msgstr[0] "В это время уже назначена %1$d встреча."
 msgstr[1] "В это время уже назначено %1$d встречи."
 msgstr[2] "В это время уже назначено %1$d встреч."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Нет событий в сети Xing."
 
@@ -7970,12 +7979,7 @@ msgstr[0] "Сеанс будет завершен через %1$d секунду
 msgstr[1] "Сеанс будет завершен через %1$d секунды"
 msgstr[2] "Сеанс будет завершен через %1$d секунд"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr "Учетная запись %s создана. Вы получите подтверждение по почте от %s."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Лента новостей %s"
 
@@ -8077,12 +8081,12 @@ msgstr "Время сеанса истекло"
 msgid "Your shared contacts:"
 msgstr "Общие контакты:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr "Не удалось опубликовать ваш статус в %s. Ошибка: «%s»"
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Обновление статуса опубликовано в %s"
 
@@ -9931,6 +9935,10 @@ msgstr "ваша платформа"
 #~ msgstr ""
 #~ "Нажмите значок в правом нижнем углу для просмотра критериев сортировки."
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr "Следующий шаг разрешает доступ системы к вашей учетной записи %s."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Максимальное число получателей в поле: %1$s"
 
@@ -10334,6 +10342,11 @@ msgstr "ваша платформа"
 #~ msgstr[2] ""
 #~ "Получено %1$d уведомлений. Нажмите [Enter] для перехода к секции "
 #~ "уведомлений или [Escape], чтобы закрыть окно."
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "Учетная запись %s создана. Вы получите подтверждение по почте от %s."
 
 #~ msgid "Your answer"
 #~ msgstr "Ваш ответ"

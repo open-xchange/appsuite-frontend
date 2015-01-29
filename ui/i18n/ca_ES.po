@@ -1516,7 +1516,7 @@ msgstr "Premeu aquí per a una prova gratuïta."
 msgid "Click here to quit the help center"
 msgstr "Feu clic aquí per a sortir del centre d'ajuda"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Premeu aquí per a reconnectar el vostre compte de Xing per a veure les "
@@ -1927,7 +1927,7 @@ msgid "Create list"
 msgstr "Crea una llista"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Crea una nou compte de %1$s"
 
@@ -3295,6 +3295,12 @@ msgstr "Obtén-ne un enllaç"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Obtén una actualització gratuïta"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -4976,6 +4982,14 @@ msgstr "Reprodueix fitxers d'àudio"
 msgid "Play video files"
 msgstr "Reprodueix fitxers de vídeo"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5146,7 +5160,7 @@ msgstr "Preferències del portal"
 msgid "Position"
 msgstr "Posició"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Publica una actualització d'estat"
 
@@ -6795,13 +6809,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Els següents productes s'activaran ara:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr ""
-"La següent passa és permetre que aquest sistema pugui tenir accés al vostre "
-"compte de %s per vós."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6948,8 +6955,8 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Ja teniu %1$d cita en aquest horari."
 msgstr[1] "Ja teniu %1$d cites en aquest horari."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "No hi activitat recent a la vostra xarxa Xing."
 
@@ -7990,14 +7997,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Us desconnectareu automàticament en %1$d segon"
 msgstr[1] "Us desconnectareu automàticament en %1$d segons"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
-"El vostre compte de %s ha estat creat. Aviat rebreu un correu de confirmació "
-"de %s."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "La vostra font de notícies de %s"
 
@@ -8102,14 +8102,14 @@ msgstr "La vostra sessió ha expirat"
 msgid "Your shared contacts:"
 msgstr "Els vostres contactes compartits:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "La vostra actualització d'estat no s'ha pogut publicar a %s. El missatge "
 "d'error ha estat \"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "La vostra actualització d'estat s'ha publicat satisfactòriament a %s"
 
@@ -8815,6 +8815,12 @@ msgstr "la vostra plataforma"
 #~ msgstr "Text de la firma"
 
 #~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr ""
+#~ "La següent passa és permetre que aquest sistema pugui tenir accés al "
+#~ "vostre compte de %s per vós."
+
+#~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "
 #~ "when you enter the application the next time."
 #~ msgstr ""
@@ -8832,6 +8838,12 @@ msgstr "la vostra plataforma"
 
 #~ msgid "Unset default signature"
 #~ msgstr "Firma predeterminada no definida"
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "El vostre compte de %s ha estat creat. Aviat rebreu un correu de "
+#~ "confirmació de %s."
 
 #~ msgid "total"
 #~ msgstr "total"

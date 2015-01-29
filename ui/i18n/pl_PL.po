@@ -1543,7 +1543,7 @@ msgstr "Kliknij tutaj, aby zamówić pełną wersję."
 msgid "Click here to quit the help center"
 msgstr "Kliknij tutaj, aby zamknąć pomoc"
 
-#: apps/plugins/portal/xing/register.js:309 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:314 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Kliknij tutaj, aby połączyć się ponownie z kontem w serwisie Xing i "
@@ -1948,7 +1948,7 @@ msgid "Create list"
 msgstr "Utwórz listę"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:268 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:273 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Utwórz nowe konto %1$s"
 
@@ -3328,6 +3328,12 @@ msgstr "Łącze bezpośrednie"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Pobierz bezpłatne uaktualnienie"
+
+#: apps/plugins/portal/xing/register.js:269 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
 
 #: apps/io.ox/portal/main.js:370 module:io.ox/portal
 #: apps/io.ox/portal/main.js:392
@@ -5013,6 +5019,14 @@ msgstr "Odtwórz pliki audio"
 msgid "Play video files"
 msgstr "Odtwórz pliki wideo"
 
+#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
@@ -5175,7 +5189,7 @@ msgstr "Ustawienia portalu"
 msgid "Position"
 msgstr "Stanowisko"
 
-#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
 msgid "Post a status update"
 msgstr "Opublikuj aktualizację statusu"
 
@@ -6835,13 +6849,6 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Zostaną uaktywnione następujące produkty:"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr ""
-"Następnym krokiem jest zezwolenie temu systemowi na uzyskiwanie dostępu do "
-"Twojego konta %s w Twoim imieniu."
-
 #: apps/io.ox/core/notifications.js:37 module:io.ox/core
 #: apps/io.ox/core/notifications.js:46
 msgid "The notification area is closed"
@@ -6993,8 +7000,8 @@ msgstr[0] "W tym przedziale czasu masz już %1$d spotkanie."
 msgstr[1] "W tym przedziale czasu masz już %1$d spotkania."
 msgstr[2] "W tym przedziale czasu masz już %1$d spotkań."
 
-#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:241
+#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:243
 msgid "There is no recent activity in your Xing network."
 msgstr "Brak nowych działań w sieci Xing."
 
@@ -8043,14 +8050,7 @@ msgstr[0] "Za %1$d sekundę nastąpi automatyczne wylogowanie"
 msgstr[1] "Za %1$d sekundy nastąpi automatyczne wylogowanie"
 msgstr[2] "Za %1$d sekund nastąpi automatyczne wylogowanie"
 
-#: apps/plugins/portal/xing/register.js:131 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
-"Twoje konto %s zostało utworzone. Wkrótce otrzymasz wiadomość z "
-"potwierdzeniem od: %s."
-
-#: apps/plugins/portal/xing/register.js:327 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:332 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Twój kanał informacyjny %s"
 
@@ -8152,14 +8152,14 @@ msgstr "Sesja wygasła"
 msgid "Your shared contacts:"
 msgstr "Wspólne kontakty:"
 
-#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Nie udało się opublikować aktualizacji statusu na: %s. Komunikat o błędzie: "
 "\"%s\""
 
-#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Aktualizacja statusu została opublikowana na: %s"
 
@@ -9961,6 +9961,12 @@ msgstr "Twoja platforma"
 #~ "Ikona w prawym dolnym rogu pozwala na sortowanie wiadomości e-mail. Po "
 #~ "kliknięciu tej ikony uzyskasz listę kryteriów sortowania."
 
+#~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr ""
+#~ "Następnym krokiem jest zezwolenie temu systemowi na uzyskiwanie dostępu "
+#~ "do Twojego konta %s w Twoim imieniu."
+
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Obowiązuje ograniczenie do %1$s adresatów na pole"
 
@@ -10378,6 +10384,12 @@ msgstr "Twoja platforma"
 #~ msgstr[2] ""
 #~ "Masz %1$d powiadomień. Aby przejść do obszaru powiadomień, naciśnij "
 #~ "klawisz [Enter]. Aby zamknąć obszar powiadomień, naciśnij klawisz [Esc]."
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr ""
+#~ "Twoje konto %s zostało utworzone. Wkrótce otrzymasz wiadomość z "
+#~ "potwierdzeniem od: %s."
 
 #~ msgid "Your answer"
 #~ msgstr "Twoja odpowiedź"
