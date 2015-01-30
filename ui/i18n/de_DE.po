@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-29 10:03+0100\n"
+"PO-Revision-Date: 2015-01-30 10:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -785,10 +785,8 @@ msgid "Administrator"
 msgstr "Administrator"
 
 #: apps/io.ox/core/desktop.js:1371 module:io.ox/core
-#, fuzzy
-#| msgid "Advanced Settings"
 msgid "Advanced Facets"
-msgstr "Erweiterte Einstellungen"
+msgstr "Erweiterte Suchfilter"
 
 #: apps/io.ox/settings/main.js:484 module:io.ox/core
 msgid "Advanced Settings"
@@ -1611,10 +1609,8 @@ msgid "Common Emoji"
 msgstr "Allgemeine Emoji-Symbole"
 
 #: apps/io.ox/core/desktop.js:1365 module:io.ox/core
-#, fuzzy
-#| msgid "Comments"
 msgid "Common Facets"
-msgstr "Anmerkungen"
+msgstr "Allgemeine Suchfilter"
 
 #: apps/io.ox/mail/toolbar.js:233 module:io.ox/mail
 msgid "Compact"
