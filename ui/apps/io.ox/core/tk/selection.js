@@ -47,7 +47,8 @@ define('io.ox/core/tk/selection',
             dropType: '',
             scrollpane: container,
             focus: '[tabindex]',
-            tabFix: 1
+            tabFix: 1,
+            markable: false
         }, options);
 
         this.classFocus = 'focussed';
@@ -92,6 +93,8 @@ define('io.ox/core/tk/selection',
             selectPrevious,
             selectLast,
             selectNext,
+            // marker mode
+            isMarker = $.noop,
             // trick for smooth updates
             lastIndex = -1,
             lastValidIndex = 0,
@@ -156,7 +159,11 @@ define('io.ox/core/tk/selection',
                 last = id;
             } else {
                 // single selection
-                toggle(id);
+                if (isMarker(e)) {
+                    toggleMark(id);
+                } else {
+                    toggle(id);
+                }
                 // remember
                 last = prev = id;
                 lastValidIndex = getIndex(id);
@@ -180,7 +187,7 @@ define('io.ox/core/tk/selection',
         selectFirst = function (e) {
             if (bHasIndex && observedItems.length) {
                 var item = observedItems[0];
-                clear();
+                clear(e);
                 apply(item.data, e);
                 self.trigger('select:first', item.data);
             }
@@ -191,7 +198,7 @@ define('io.ox/core/tk/selection',
                 var index = getIndex(last) - 1, item;
                 if (index >= 0) {
                     item = observedItems[index];
-                    clear();
+                    clear(e);
                     apply(item.data, e);
                     self.trigger('select:previous', item.data);
                 }
@@ -202,7 +209,7 @@ define('io.ox/core/tk/selection',
             if (bHasIndex && observedItems.length) {
                 var index = observedItems.length - 1,
                     item = observedItems[index];
-                clear();
+                clear(e);
                 apply(item.data, e);
                 self.trigger('select:last', item.data);
             }
@@ -213,7 +220,7 @@ define('io.ox/core/tk/selection',
                 var index = getIndex(last) + 1, item;
                 if (index < observedItems.length) {
                     item = observedItems[index];
-                    clear();
+                    clear(e);
                     apply(item.data, e);
                     self.trigger('select:next', item.data);
                 }
@@ -237,11 +244,17 @@ define('io.ox/core/tk/selection',
                     selectPrevious(e);
                 }
                 break;
+            case 32:
+                // last is the current selected/focussed
+                if (options.markable)
+                    toggle(last);
+                break;
             case 40:
                 e.preventDefault();
                 if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                 // cursor down
                 if (e.metaKey || e.crtlKey) {
+                    console.log('40: selectLast');
                     selectLast(e);
                 } else {
                     selectNext(e);
@@ -454,6 +467,79 @@ define('io.ox/core/tk/selection',
             });
             container.find('.selectable input.reflect-selection').prop('checked', false);
         };
+
+        // mark option block
+        if (options.markable) {
+
+            this.classMarked = 'marked';
+
+            isMarker = function (e) {
+                return multiple && e && (e.which === 38 || e.which === 40);
+            };
+
+            var clearOrginal = clear,
+                markedItem,
+                // clear wrapper
+                clear = function (e) {
+                    // clear mark
+                    if (markedItem) {
+                        var key = self.serialize(markedItem);
+                        markedItem = undefined;
+                        container.find('[data-obj-id="' + key + '"]').removeClass(self.classMarked).attr({
+                            'tabindex': options.tabFix !== false ? -1 : null
+                        });
+                    }
+                    if (isMarker(e)) return;
+                    // call orignale clear
+                    clearOrginal(e);
+                },
+                isMarked = function (id) {
+                    return markedItem === self.serialize(id);
+                },
+                fastMark = function (id, node) {
+                    var key = self.serialize(id);
+                    markedItem = id;
+                    var $node = (node || getNode(key));
+                    // set focus?
+                    if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+                    return $node
+                        .addClass(self.classMarked)
+                        .attr({
+                            'tabindex': options.tabFix !== false ? options.tabFix : null
+                        });
+                },
+                toggleMark = function (id) {
+                    if (isMarked(id)) {
+                        unmark(id);
+                    } else {
+                        mark(id);
+                    }
+                },
+                mark = function (id, silent) {
+                    if (id) {
+                        fastMark(id).intoViewport(options.scrollpane);
+                        last = id;
+                        lastIndex = getIndex(id);
+                        if (prev === empty) {
+                            prev = id;
+                            lastValidIndex = lastIndex;
+                        }
+                        if (silent !== true) {
+                            self.trigger('mark', self.serialize(id));
+                        }
+                    }
+                },
+                unmark = function (id) {
+                    var key = self.serialize(id);
+                    markedItem = undefined;
+                    getNode(key)
+                        .removeClass(self.classMarked)
+                        .attr({
+                            tabindex: options.tabFix !== false ? -1 : null
+                        });
+                    self.trigger('unmark', key);
+                };
+        }
 
         /**
          * Serialize object to get a flat key
