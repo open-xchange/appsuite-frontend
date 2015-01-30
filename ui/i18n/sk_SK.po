@@ -542,12 +542,12 @@ msgstr "Prijať zmeny"
 #: apps/plugins/notifications/calendar/register.js:87
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:88
-#: apps/plugins/notifications/tasks/register.js:545
-#: apps/plugins/notifications/tasks/register.js:546
+#: apps/plugins/notifications/tasks/register.js:551
+#: apps/plugins/notifications/tasks/register.js:552
 msgid "Accept invitation"
 msgstr "Prijať pozvanie"
 
-#: apps/plugins/notifications/tasks/register.js:542
+#: apps/plugins/notifications/tasks/register.js:548
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Prijať/zamietnuť"
@@ -5241,7 +5241,7 @@ msgstr "Stlačením skryjete všetky upozornenia na nové emaily."
 msgid "Press to hide all notifications for overdue tasks."
 msgstr "Stlačením skryjete všetky upozornenia úloh po termíne."
 
-#: apps/plugins/notifications/tasks/register.js:504
+#: apps/plugins/notifications/tasks/register.js:510
 #: module:plugins/notifications
 msgid "Press to hide all task invitations."
 msgstr "Stlačením skryjete všetky pozvania na úlohy."
@@ -6514,13 +6514,13 @@ msgstr[2] "Úlohy boli zmazané!"
 
 #. %1$s task title
 #. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js:526
+#: apps/plugins/notifications/tasks/register.js:532
 #: module:plugins/notifications
 #, c-format
 msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 msgstr "Pozvanie na úlohu. %1$s %2$s %3$s. Stlačením [Enter] otvoríte"
 
-#: apps/plugins/notifications/tasks/register.js:500
+#: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Pozvania úloh"
@@ -8260,7 +8260,7 @@ msgstr "upravovať vlastné objekty"
 #: apps/io.ox/core/tk/reminder-util.js:78 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:521
+#: apps/plugins/notifications/tasks/register.js:527
 msgid "end date"
 msgstr "dátum konca"
 

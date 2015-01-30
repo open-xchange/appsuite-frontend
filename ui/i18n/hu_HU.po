@@ -522,12 +522,12 @@ msgstr "Változások elfogadása"
 #: apps/plugins/notifications/calendar/register.js:87
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:88
-#: apps/plugins/notifications/tasks/register.js:545
-#: apps/plugins/notifications/tasks/register.js:546
+#: apps/plugins/notifications/tasks/register.js:551
+#: apps/plugins/notifications/tasks/register.js:552
 msgid "Accept invitation"
 msgstr "Meghívó elfogadása"
 
-#: apps/plugins/notifications/tasks/register.js:542
+#: apps/plugins/notifications/tasks/register.js:548
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Elfogadás/visszautasítás"
@@ -5225,7 +5225,7 @@ msgid "Press to hide all notifications for overdue tasks."
 msgstr ""
 "Nyomja meg az esedékes feladatokról szóló összes értesítés elrejtéséhez."
 
-#: apps/plugins/notifications/tasks/register.js:504
+#: apps/plugins/notifications/tasks/register.js:510
 #: module:plugins/notifications
 msgid "Press to hide all task invitations."
 msgstr "Nyomja meg a feladatokról küldött összes meghívó elrejtéséhez."
@@ -6497,13 +6497,13 @@ msgstr[1] "A feladatok törölve"
 
 #. %1$s task title
 #. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js:526
+#: apps/plugins/notifications/tasks/register.js:532
 #: module:plugins/notifications
 #, c-format
 msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 msgstr "Feladatmeghívó. %1$s %2$s %3$s. A megnyitáshoz nyomja meg az Entert"
 
-#: apps/plugins/notifications/tasks/register.js:500
+#: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Feladatmeghívók"
@@ -8234,7 +8234,7 @@ msgstr "saját elemek szerkesztése"
 #: apps/io.ox/core/tk/reminder-util.js:78 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:521
+#: apps/plugins/notifications/tasks/register.js:527
 msgid "end date"
 msgstr "befejező dátum"
 
