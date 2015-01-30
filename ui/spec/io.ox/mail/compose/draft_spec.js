@@ -69,6 +69,12 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         return app.compose({ folder_id: 'default0/INBOX' });
                     });
                 });
+                afterEach(function () {
+                    var api = require('io.ox/mail/api');
+                    if (api.send.restore) {
+                        api.send.restore();
+                    }
+                });
                 it('should not register a timer', function () {
                     expect(app.view.autosave.timer).not.to.be.a('number');
                 });
@@ -81,8 +87,68 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     btn.click();
                     expect(spy.called, 'mail API send has been called').to.be.true;
                     var mail = spy.firstCall.args[0];
-                    expect(mail.sendtype).to.equal('4');
+                    //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
+                    expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
+                    expect(mail.msgref).not.to.exist;
                     spy.restore();
+                });
+                it('should ', function () {
+                    this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
+                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                            data: 'default0/INBOX/Drafts/666'
+                        }));
+                    });
+                    this.server.respondWith('GET', /api\/mail\?action=get/, function (xhr) {
+                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                            data: {
+                                id: '666',
+                                folder_id: 'default0/INBOX/Drafts',
+                                msgref: 'default0/INBOX/Drafts/666',
+                                attachments: [{
+                                    content: ''
+                                }]
+                            }
+                        }));
+                    });
+                    app.view.model.set('to', [['Testuser', 'test@example.com']]);
+                    app.view.model.set('subject', 'example mail');
+
+                    var api = require('io.ox/mail/api');
+                    var spy = sinon.spy(api, 'send');
+
+                    expect(spy.called, 'mail API send has been called').to.be.false;
+                    var server = this.server;
+                    var def = app.view.saveDraft().then(function () {
+                        expect(spy.calledOnce, 'mail API send has been called once').to.be.true;
+                        var mail = spy.firstCall.args[0];
+                        //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
+                        expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
+                        expect(mail.msgref).not.to.exist;
+
+                        return app.view.saveDraft();
+                    }).then(function () {
+                        expect(spy.calledTwice, 'mail API send has been called twice').to.be.true;
+                        var mail = spy.secondCall.args[0];
+                        //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
+                        expect(mail.sendtype).to.equal(api.SENDTYPE.EDIT_DRAFT);
+                        expect(mail.msgref).to.exist;
+
+                        return app.view.send();
+                    }).then(function () {
+                        expect(spy.calledThrice, 'mail API send has been called thrice').to.be.true;
+                        var mail = spy.thirdCall.args[0];
+                        // 4 - Transport of a draft mail. The field "msgref" must be present
+                        expect(mail.sendtype).to.equal(api.SENDTYPE.DRAFT);
+                        expect(mail.msgref).to.exist;
+                        // app already garbage collected because of quit being called by send()
+                        app = {
+                            quit: $.noop
+                        };
+                    }).always(function (result) {
+                        expect(result || {}).not.to.have.property('error');
+                        spy.restore();
+                    });
+                    return def;
                 });
             });
         });

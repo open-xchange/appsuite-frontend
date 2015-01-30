@@ -396,13 +396,12 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 old_vcard_flag;
 
-            if (mail.msgref) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
@@ -417,28 +416,27 @@ define('io.ox/mail/compose/view', [
             old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
-            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                return mailAPI.send(mail, mail.files).always(function (result) {
-                    if (result.error) {
-                        notifications.yell(result);
-                        def.reject(result);
-                    } else {
-                        mailAPI.get(self.parseMsgref(result.data)).then(function (data) {
-                            // Replace inline images in contenteditable with links from draft response
-                            $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                                $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
-                            });
-                            self.model.set('msgref', result.data, { silent: true });
-                            self.model.dirty(false);
-                            notifications.yell('success', gt('Mail saved as draft'));
-                            def.resolve(result);
-                        });
-                    }
-                });
+            return attachmentEmpty.emptinessCheck(mail.files).then(function () {
+                return mailAPI.send(mail, mail.files);
+            }).always(function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    return def.reject(result);
+                } else {
+                    return $.when(result, mailAPI.get(self.parseMsgref(result.data)));
+                }
+            }).then(function (result, data) {
+                if (data && _.isArray(data.attachments) && data.attachments[0]) {
+                    // Replace inline images in contenteditable with links from draft response
+                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                    });
+                }
+                self.model.set('msgref', result.data, { silent: true });
+                self.model.dirty(false);
+                notifications.yell('success', gt('Mail saved as draft'));
+                return result;
             });
-
-            return $.when.apply($, [def, defSend]);
-
         },
 
         autoSaveDraft: function () {
