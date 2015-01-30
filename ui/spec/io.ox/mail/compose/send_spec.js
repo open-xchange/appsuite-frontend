@@ -60,6 +60,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 }).then(function () {
                     expect($('.io-ox-dialog-popup').find('button[data-action="send"]'), 'number of buttons with action send').to.have.length(1);
                     expect($('.io-ox-dialog-popup').find('button[data-action="subject"]'), 'number of buttons with action subject').to.have.length(1);
+                    spy.restore();
                 });
             });
         });
