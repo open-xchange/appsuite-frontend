@@ -23,7 +23,7 @@ $(document).ready(function () {
         this.matcher = this.options.matcher || this.matcher;
         this.sorter = this.options.sorter || this.sorter;
         this.highlighter = this.options.highlighter || this.highlighter;
-        this.$menu = $(this.options.menu).insertAfter(this.$element);
+        this.$menu = $(this.options.menu).attr({ role: 'listbox' }).insertAfter(this.$element);
         this.source = this.options.source;
         this.shown = false;
         this.$ul = $(this.$menu);
@@ -280,7 +280,7 @@ $(document).ready(function () {
         source: [],
         items: 8,
         menu: '<ul class="typeahead dropdown-menu"></ul>',
-        item: '<li><a></a></li>',
+        item: '<li role="option"><a></a></li>',
         autocompleteBehaviour: false
     };
 
