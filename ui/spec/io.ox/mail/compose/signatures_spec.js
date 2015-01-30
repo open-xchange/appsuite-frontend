@@ -37,7 +37,6 @@ define([
             describe('in HTML mode', function () {
                 beforeEach(function () {
                     this.server.respondWith('GET', /api\/snippet\?action=all/, function (xhr) {
-                        console.log('hurray!');
                         xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(signatures.current));
                     });
                     settings.set('messageFormat', 'html');
