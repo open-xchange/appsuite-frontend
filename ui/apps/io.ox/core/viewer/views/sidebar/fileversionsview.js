@@ -31,13 +31,19 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             //console.info('FileVersionsView.draw()');
             var panel, panelBody,
                 model = baton && baton.model,
-                versions = model && model.get('versions');
+                versions = model && model.get('versions'),
+                numberOfVersions = model && model.get('numberOfVersions');
 
             baton.$el.empty();
-            if (!model || !model.isDriveFile()) { return; } // mail and PIM attachments don't support versions
+            // mail and PIM attachments don't support versions
+            // display versions panel only if number of versions > 2
+            if (!model || !model.isDriveFile() || numberOfVersions < 2) { return; }
 
             // render panel
-            panel = Util.createPanelNode({ title: gt('Versions'), collapsed: true });
+            panel = Util.createPanelNode({
+                title: gt('Versions (%1$d)', _.noI18n(numberOfVersions)),
+                collapsed: true
+            });
             panelBody = panel.find('.panel-body');
 
             if (_.isArray(versions)) {
@@ -155,6 +161,23 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         draw: function (baton) {
             var size = (_.isNumber(baton.data.file_size)) ? _.filesize(baton.data.file_size) : '-';
             this.find('td:last').append($('<div class="size">').text(gt.noI18n(size)));
+        }
+    });
+
+    Ext.point(POINT + '/version').extend({
+        id: 'comment',
+        index: 50,
+        draw: function (baton) {
+            var comment = baton.data.version_comment,
+                clippedComment = _.ellipsis(comment, { max: 40, charpos: 'end' });
+
+            if (!_.isEmpty(clippedComment)) {
+                this.find('td:last').append(
+                    $('<div class="comment">').append(
+                        $('<span>', { title: _.noI18n(comment) }).addClass('version-comment').text(gt.noI18n(clippedComment))
+                    )
+                );
+            }
         }
     });
 
