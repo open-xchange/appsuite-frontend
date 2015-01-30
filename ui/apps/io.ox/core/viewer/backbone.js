@@ -149,7 +149,8 @@ define('io.ox/core/viewer/backbone', [
                 lastModified: null,
                 module: null,
                 description: null,
-                versions: null
+                versions: null,
+                numberOfVersions: 0
             };
         },
 
@@ -259,6 +260,7 @@ define('io.ox/core/viewer/backbone', [
                 result.folderId = data.folder_id;
                 result.meta = data.meta;
                 result.lastModified = data.last_modified;
+                result.numberOfVersions = data.number_of_versions;
             }
 
             return result;
