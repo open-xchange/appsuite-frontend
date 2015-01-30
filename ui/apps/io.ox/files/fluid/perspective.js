@@ -216,7 +216,14 @@ define('io.ox/files/fluid/perspective',
         id: 'selection',
         register: function (baton) {
 
-            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined , tabFix: false});
+            Selection.extend(this, scrollpane, {
+                    draggable: true,
+                    dragType: 'mail',
+                    scrollpane: wrapper,
+                    focus: undefined ,
+                    tabFix: false,
+                    markable: true
+                });
             //selection accessible via app
             baton.app.selection = this.selection;
 

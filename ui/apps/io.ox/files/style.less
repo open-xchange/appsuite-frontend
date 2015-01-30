@@ -91,7 +91,7 @@
                 .file-cell {
                     &.selected  {
                         background-color: @color-focus-selected;
-                        &:hover {
+                        &:hover, &.marked {
                             background-color: @color-focus-selected-hover;
                         }
                         i.icon-lock {
@@ -109,10 +109,9 @@
                     &.selected {
                         background-color: @color-focus-selected;
                         color: white;
-                        &:hover {
+                        &:hover, &.marked {
                             background-color: @color-focus-selected-hover;
                         }
-
                     }
                 }
             }
@@ -124,7 +123,7 @@
                         }
                         color: @color-focus-selected
                     }
-                    &.selected:hover {
+                    &.selected:hover, &.selected.marked {
                         .preview-cover {
                             border-color: @color-focus-selected-hover;
                         }
@@ -267,7 +266,7 @@
                         .image-effect(0.9);
                     }
                 }
-                &:hover {
+                &:hover, &.marked {
                     background-color: @color-hover;
                     .image-effect(0.9);
                 }
@@ -361,7 +360,7 @@
                         background-color: @color-selected-hover;
                     }
                     }
-                &:hover {
+                &:hover, &.marked {
                     background-color: @color-hover;
                 }
              }
@@ -443,7 +442,7 @@
                     color: @color-selected;
                 }
                 //show short title on hover
-                &:hover {
+                &:hover, &.marked {
                     .bordered;
                     .preview-cover {
                         border-color: @color-hover;
@@ -454,7 +453,7 @@
                     }
                 }
 
-                &.selected:hover {
+                &.selected:hover, &.selected.marked {
                     .bordered;
                     .preview-cover {
                        border-color: @color-selected-hover;
