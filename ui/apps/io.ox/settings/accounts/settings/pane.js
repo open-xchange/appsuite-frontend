@@ -251,7 +251,7 @@ define('io.ox/settings/accounts/settings/pane',
                         })
                         .each(function (submodule) {
                             $dropDown.append(
-                                $('<li>').append(
+                                $('<li role="presentation">').append(
                                     $('<a>', { tabindex: 1, role: 'menuitem', href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
                                     .text(submodule.displayName)
                                     .on('click', function (e) {
@@ -267,7 +267,7 @@ define('io.ox/settings/accounts/settings/pane',
                                 )
                             );
                         }).value();
-
+                        self.$el.find('.dropdown-toggle').dropdown();
                         return this;
                     },
 
