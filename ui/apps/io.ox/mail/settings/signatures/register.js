@@ -349,11 +349,19 @@ define('io.ox/mail/settings/signatures/register',
                                     .append(
                                         $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
                                         $('<div class="widget-controls">').append(
-                                            $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))),
-                                            $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')),
+                                            $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))).attr({
+                                                role: 'button',
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), isDefault ? gt('(Default)') : gt('Set as default'))
+                                            }),
+                                            $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')).attr({
+                                                role: 'button',
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Edit'))
+                                            }),
                                             $('<a class="remove">').attr({
                                                 'data-action': 'delete',
                                                 title: gt('Delete'),
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Delete')),
+                                                role: 'button',
                                                 tabindex: 1
                                             }).append($('<i class="fa fa-trash-o">'))
                                         )
