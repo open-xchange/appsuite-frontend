@@ -52,10 +52,11 @@ define('io.ox/calendar/edit/template',
 
     ext.point('io.ox/calendar/edit/section/header').extend({
         draw: function (baton) {
-            var row = $('<div class="col-lg-12 header">');
-            ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
-            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
-            this.append($('<div class="row">').append(row));
+            var headerCol = $('<div class="col-sm-6 hidden-xs">'),
+                buttonCol = $('<div class="col-xs-12 col-sm-6 text-right">');
+            ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
+            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', buttonCol, baton);
+            this.append($('<div class="row header">').append(headerCol, buttonCol));
         }
     });
 
@@ -71,6 +72,18 @@ define('io.ox/calendar/edit/template',
     // buttons
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
+        id: 'discard',
+        draw: function (baton) {
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
+                .on('click', function () {
+                    baton.app.quit();
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 200,
         id: 'save',
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
@@ -85,18 +98,6 @@ define('io.ox/calendar/edit/template',
                 })
             );
 
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 200,
-        id: 'discard',
-        draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
-                .on('click', function () {
-                    baton.app.quit();
-                })
-            );
         }
     });
 
