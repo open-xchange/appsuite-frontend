@@ -255,6 +255,9 @@ define('io.ox/mail/settings/pane',
                             $('<div>').addClass('row').append(
                                 $('<div>').addClass('col-md-2').append(
                                     new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el
+                                ),
+                                $('<div>').addClass('col-md-10').append(
+                                    new mini.ErrorView({ selector: '.form-group.expertmode' }).render().$el
                                 )
                             )
                         )
