@@ -254,7 +254,6 @@ define('io.ox/core/tk/selection',
                 if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                 // cursor down
                 if (e.metaKey || e.crtlKey) {
-                    console.log('40: selectLast');
                     selectLast(e);
                 } else {
                     selectNext(e);
