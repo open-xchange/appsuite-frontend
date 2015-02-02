@@ -39,13 +39,13 @@ define('io.ox/calendar/invitations/register',
 
     var buttonClasses = {
         'accept': 'btn-success accept',
-        'accept_and_replace': 'btn-inverse',
+        'accept_and_replace': '',
         'accept_and_ignore_conflicts': 'btn-success ignore',
-        'accept_party_crasher': 'btn-inverse',
-        'create': 'pull-left btn-inverse',
-        'update': 'pull-left btn-inverse',
-        'delete': 'pull-left btn-inverse',
-        'declinecounter': 'pull-left btn-danger',
+        'accept_party_crasher': '',
+        'create': '',
+        'update': '',
+        'delete': '',
+        'declinecounter': 'btn-danger',
         'tentative': 'btn-warning',
         'decline': 'btn-danger',
         'ignore': ''
@@ -70,7 +70,7 @@ define('io.ox/calendar/invitations/register',
         3: gt('You have tentatively accepted the appointment')
     };
 
-    var priority = ['update', 'ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
+    var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
 
     function analyzeIMIPAttachment(imip) {
 
@@ -215,18 +215,16 @@ define('io.ox/calendar/invitations/register',
         },
 
         getButtons: function (actions) {
-            return _(priority).chain()
+            return _(priority)
+                .chain()
                 .filter(function (action) {
                     return _(actions).contains(action);
                 })
                 .map(function (action) {
-                    var button = $('<button type="button" class="btn btn-default" tabindex="1">')
+                    return $('<button type="button" class="btn btn-default" tabindex="1">')
                         .attr('data-action', action)
                         .addClass(buttonClasses[action])
                         .text(i18n[action]);
-                    return button
-                        .add($('<span>').text('\u00A0'))
-                        .addClass(button.hasClass('pull-left') ? 'pull-left' : '');
                 })
                 .value();
         },
