@@ -333,6 +333,7 @@ define('io.ox/calendar/list/perspective',
             // set new all request with extend range
             grid.setAllRequest(generateAllRequest(getIncreasedTimeFrame()));
             // refresh the grid
+            grid.selection.clear();
             grid.refresh();
         });
 
