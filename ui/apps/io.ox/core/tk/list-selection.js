@@ -37,6 +37,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
     // animate function using requestAnimationFrame to be smooth
     var animate = function (cb) {
+        var cb = cb || $.noop;
         function frame () {
             // do animation, aka. move the cell to the left
             var elapsed, delta, c;
@@ -48,10 +49,18 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     delta = delta * -1; // bounce
                 }
                 c = (-movetarget + delta);
-                cell.css('-webkit-transform', 'translate3d(' + c + 'px, 0, 0)');
+                cell.css({
+                    '-webkit-transform': 'translate3d(' + c + 'px, 0, 0)',
+                    'transform': 'translate3d(' + c + 'px, 0, 0)'
+                });
+
                 window.requestAnimationFrame(frame); // to understand recursion you must understand recursion
             } else {
-                cell.css('-webkit-transform', 'translate3d(' + -movetarget + 'px, 0, 0)');
+                cell.css({
+                    '-webkit-transform': 'translate3d(' + -movetarget + 'px, 0, 0)',
+                    'transform': 'translate3d(' + -movetarget + 'px, 0, 0)'
+                });
+
                 cb();
             }
         }
@@ -65,7 +74,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         function frame() {
             if (height >= 63) {
-                cellsBelow.css('-webkit-transform', 'translate3d(0, -63px,0)');
+                cellsBelow.css({
+                    '-webkit-transform': 'translate3d(0, -63px, 0)',
+                    'transform': 'translate3d(0, -63px, 0)'
+                });
                 cb();
             } else {
                 /*
@@ -82,7 +94,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 */
 
                 height += decrease;
-                cellsBelow.css('-webkit-transform', 'translate3d(0,-' + height + 'px,0)');
+
+                cellsBelow.css({
+                    '-webkit-transform': 'translate3d(0, -' + height + 'px, 0)',
+                    'transform': 'translate3d(0, -' + height + 'px, 0)'
+                });
+
                 window.requestAnimationFrame(frame);
             }
         }
@@ -93,13 +110,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
     // track speed during touchmove and (re-)calculate the current velocity
     // based on the distance the cell is moved between two concurrent tracking calls
     var track = function () {
-        var now, elapsed, delta;
+        var now, elapsed, delta, v;
         now = Date.now();
         elapsed = now - timestamp; // time ellapsed since last track
         timestamp = now;
         delta = sX - cX; // distance dragged
-        velocity = 1000 * delta / (1 + elapsed); // real velocity
-        //velocity = 0.8 * v + 0.2 * velocity; // moving-average-filtered velocity to erase large variations in velocity
+        v = 1000 * delta / (1 + elapsed); // real velocity
+        velocity = 0.8 * v + 0.2 * velocity; // moving-average-filtered velocity to erase large variations in velocity
     };
 
     function Selection(view) {
@@ -547,12 +564,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         resetSwipeCell: function (a) {
+            var self = this;
             try {
                 this.startX = 0;
                 this.startY = 0;
                 this.unfold = false;
                 this.target = null;
-
                 this.t0 = 0;
                 this.otherUnfolded = false;
                 movetarget = 0;
@@ -640,8 +657,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.target.before(this.swipeCell);
                 }
                 // translate the moved cell
-                if (this.distanceX < 0) this.target.css('-webkit-transform', 'translate3d(' + this.distanceX + 'px, 0, 0)');
-
+                if (this.distanceX < 0) {
+                    this.target.css({
+                        '-webkit-transform': 'translate3d(' + this.distanceX + 'px, 0, 0)',
+                        'transform': 'translate3d(' + this.distanceX + 'px, 0, 0)'
+                    });
+                }
                 // if delete threshold is reached, enlarge delete button over whole cell
                 if (Math.abs(width * this.distanceX) >= THRESHOLD_REMOVE) {
                     this.expandDelete = true;
@@ -718,15 +739,21 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 this.btnMore.removeAttr('style');
                 this.btnDelete.removeAttr('style');
                 this.expandDelete = false;
-
                 $(this).addClass('unfolded');
-
                 e.data.unfold = true;
                 e.data.currentSelection = this; // save this for later use
             } else if (this.remove) {
                 // remove
-                $(this).css('transition', '-webkit-transform 100ms');
-                $(this).css('-webkit-transform', 'translate3d(-100%, 0, 0)');
+                $(this).css({
+                    '-webkit-transition': '-webkit-transform 100ms',
+                    'transition': 'transform 100ms'
+                });
+
+                $(this).css({
+                    '-webkit-transform': 'translate3d(-100%, 0, 0)',
+                    'transform': 'translate3d(-100%, 0, 0)'
+
+                });
                 this.btnMore.remove();
                 var self = this;
                 // delay start with 100ms to wait for other transition to finish
