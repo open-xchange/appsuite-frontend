@@ -102,8 +102,8 @@ define('io.ox/portal/settings/pane',
             $('<div class="clearfix">'),
             $('<div class="sr-only" role="log" id="notification" aria-live="assertive" aria-relevant="additions">')
         );
-        button.dropdown();
         repopulateAddButton();
+        button.dropdown();
     }
 
     function repopulateAddButton() {
