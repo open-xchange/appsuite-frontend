@@ -49,7 +49,7 @@ define('io.ox/files/fluid/view-detail',
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<h1 tabindex="1">').addClass('title clear-title')
+                $('<h1>').addClass('title clear-title')
                 .text(gt.noI18n(baton.data.filename || baton.data.title || '\u00A0'))
                 .on('dblclick', function () {
                     actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
