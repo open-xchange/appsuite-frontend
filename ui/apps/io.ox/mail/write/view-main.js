@@ -109,13 +109,15 @@ define('io.ox/mail/write/view-main',
         },
 
         createLink: function (id, label, show) {
+
             return (this.sections[id + 'Link'] = $('<div>'))
                 .addClass('section-link')
                 .append(
                     $('<a>', { href: '#', tabindex: '7', role: 'button' })
                     .attr({
                         'data-section-link': id,
-                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label
+                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label,
+                        'aria-expanded': !!show
                     })
                     .data('label', label)
                     .text(label)
@@ -167,10 +169,16 @@ define('io.ox/mail/write/view-main',
             var id = e.data.id,
                 link = this.sections[id + 'Link'].find('a');
             if (this.sections[id].is(':visible')) {
-                link.attr('aria-label', gt('open') + ' ' + link.data('label'));
+                link.attr({
+                    'aria-label': gt('open') + ' ' + link.data('label'),
+                    'aria-expanded': false
+                });
                 this.hideSection(id, e.target);
             } else {
-                link.attr('aria-label', gt('close') + ' ' + link.data('label'));
+                link.attr({
+                    'aria-label': gt('close') + ' ' + link.data('label'),
+                    'aria-expanded': true
+                });
                 this.showSection(id, e.target);
             }
         },
@@ -497,7 +505,7 @@ define('io.ox/mail/write/view-main',
             // sections
 
             // TO
-            this.addSection('to').append(
+            this.addSection('to', true, null, false).append(
                 this.createRecipientList('to'),
                 this.createField('to', gt('To'))
                     .find('input').attr('placeholder', gt.format('%1$s ...', gt('To'))).placeholder().end()
@@ -594,7 +602,7 @@ define('io.ox/mail/write/view-main',
 
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
-                    this.createLink('attachments', gt('Attachments')),
+                    this.createLink('attachments', gt('Attachments'), true),
                     uploadSection.append(
                         $inputWrap,
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
@@ -672,7 +680,7 @@ define('io.ox/mail/write/view-main',
             }());
 
             // FROM
-            this.addSection('sender', false, gt('Sender'), true)
+            this.addSection('sender', true, gt('Sender'), true)
                 .append(this.createSenderField())
                 .append(this.createReplyToField());
 
