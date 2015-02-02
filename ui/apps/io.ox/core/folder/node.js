@@ -32,7 +32,7 @@ define('io.ox/core/folder/node', [
 
         events: {
             'click .folder-options'     : 'onOptions',
-            'click .folder-arrow'       : 'onToggle',
+            'click .folder-arrow'       : 'onArrowClick',
             'dblclick .folder-label'    : 'onToggle',
             'mousedown .folder-arrow'   : 'onArrowMousedown',
             'keydown'                   : 'onKeydown'
@@ -158,8 +158,22 @@ define('io.ox/core/folder/node', [
             this.toggle(!this.options.open);
         },
 
+        hasArrow: function () {
+            // return true if icon is not fixed-width, i.e. empty
+            return this.$.arrow.find('i.fa-fw').length === 0;
+        },
+
+        onArrowClick: function (e) {
+            if (!$(e.target).closest(this.$.arrow).length) return;
+            if (!this.hasArrow()) return;
+            this.onToggle(e);
+        },
+
         onArrowMousedown: function (e) {
             // just to avoid changing the focus (see bug 35802)
+            // but only if the folder shows the arrow (see bug 36424)
+            if (!$(e.target).closest(this.$.arrow).length) return;
+            if (!this.hasArrow()) return;
             e.preventDefault();
         },
 
