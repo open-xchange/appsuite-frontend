@@ -121,6 +121,7 @@ define('io.ox/mail/write/view-main',
                     })
                     .data('label', label)
                     .text(label)
+                    .prepend($('<i class="fa fa-caret-' + (show ? 'down' : 'right') + '" aria-hidden="true">'))
                     .on('click', { id: id }, $.proxy(this.fnToggleSection, this))
                 );
         },
@@ -168,6 +169,7 @@ define('io.ox/mail/write/view-main',
             e.preventDefault();
             var id = e.data.id,
                 link = this.sections[id + 'Link'].find('a');
+                link.find('i').toggleClass('fa-caret-down fa-caret-right');
             if (this.sections[id].is(':visible')) {
                 link.attr({
                     'aria-label': gt('open') + ' ' + link.data('label'),
