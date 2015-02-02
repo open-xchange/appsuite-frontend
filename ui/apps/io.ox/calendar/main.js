@@ -474,38 +474,39 @@ define('io.ox/calendar/main',
             // when search is ready
             win.facetedsearch.ready
                 .done(function (facetedsearch) {
-                        var lastPerspective,
-                            SEARCH_PERSPECTIVE = 'list',
-                            cancelSearch = function () {
-                                var win = app.getWindow();
-                                if (win.facetedsearch && win.facetedsearch.view)
-                                    win.facetedsearch.view.trigger('button:cancel');
-                            };
-                        // register
-                        commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
+                    var lastPerspective,
+                        SEARCH_PERSPECTIVE = 'list',
+                        cancelSearch = function () {
+                            var win = app.getWindow();
+                            if (win.facetedsearch && win.facetedsearch.view)
+                                win.facetedsearch.view.trigger('button:cancel');
+                        };
+                    // register
+                    commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
 
-                        // additional handler: switch to list perspective (and back)
-                        win.on({
-                            'search:query': function () {
-                                // switch to supported perspective
-                                lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
-                                if (lastPerspective !== SEARCH_PERSPECTIVE) {
-                                    // fluent option: do not write to user settings
-                                    app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
-                                    // cancel search when user changes view
-                                    app.props.on('change', cancelSearch);
-                                }
-                            },
-                            'search:cancel': function () {
-                                // switch back to perspective used before
-                                var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
-                                if (lastPerspective && lastPerspective !== currentPerspective)
-                                    app.props.set('layout', lastPerspective);
-                                // disable
-                                app.props.off('change', cancelSearch);
-                                // reset
-                                lastPerspective = undefined;
+                    // additional handler: switch to list perspective (and back)
+                    win.on({
+                        'search:query': function () {
+                            // switch to supported perspective
+                            lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                            if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                                // fluent option: do not write to user settings
+                                app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
+                                // cancel search when user changes view
+                                app.props.on('change', cancelSearch);
                             }
+                        },
+                        'search:cancel': function () {
+                            // switch back to perspective used before
+                            var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                            if (lastPerspective && lastPerspective !== currentPerspective)
+                                app.props.set('layout', lastPerspective);
+                            // disable
+                            app.props.off('change', cancelSearch);
+                            // reset
+                            lastPerspective = undefined;
+
+                        }
                     });
                 });
         },

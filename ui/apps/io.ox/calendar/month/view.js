@@ -62,12 +62,12 @@ define('io.ox/calendar/month/view',
                 var self = this,
                     obj = _.cid(String(cid));
 
-                if (!cT.hasClass('current')) {
+                if (!cT.hasClass('current') || _.device('smartphone')) {
                     self.trigger('showAppointment', e, obj);
                     self.pane.find('.appointment')
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
-                        .addClass('opac');
+                        .addClass(_.device('smartphone') ? '' : 'opac');
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
                 } else {
                     $('.appointment', self.pane).removeClass('opac');

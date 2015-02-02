@@ -158,12 +158,15 @@ define('io.ox/calendar/list/perspective',
             if (_.device('smartphone')) {
                 app.pages.changePage('detailView');
                 var p = app.pages.getPage('detailView');
+                // clear selection after page is left, otherwise the selection
+                // will not fire an event if the user click on the same appointment again
+                p.one('pagehide', function () {
+                    app.grid.selection.clear();
+                });
                 // draw details to page
-
                 p.idle().empty().append(viewDetail.draw(data));
                 // update toolbar with new baton
                 app.pages.getToolbar('detailView').setBaton(baton);
-
 
             } else {
                 right.idle().empty().append(viewDetail.draw(baton));
