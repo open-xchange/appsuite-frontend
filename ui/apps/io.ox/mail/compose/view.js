@@ -445,14 +445,27 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 self = this;
 
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
+            }
+            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
+            }
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
+            }
+
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    if (mail.sendtype !== mailAPI.SENDTYPE.FORWARD) {
+                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                         self.model.set('msgref', result, { silent: true });
-                        self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
                     }
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
