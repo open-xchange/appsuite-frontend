@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-30 10:18+0100\n"
+"PO-Revision-Date: 2015-02-03 10:53+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -5930,7 +5930,7 @@ msgstr "Teilen"
 
 #: apps/io.ox/files/toolbar.js:73 module:io.ox/files
 msgid "Share selected files"
-msgstr "Gewählte Dateien wählen"
+msgstr "Gewählte Dateien teilen"
 
 #. if only one item -> insert filename / on more than one item -> item count
 #: apps/io.ox/files/actions/share.js:27 module:io.ox/files
