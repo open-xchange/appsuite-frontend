@@ -399,7 +399,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
             marked.setOptions({
                 renderer: new marked.Renderer(),
-                gfm: false,
+                gfm: true,
                 tables: false,
                 breaks: true,
                 pedantic: false,
