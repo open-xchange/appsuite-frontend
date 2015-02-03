@@ -404,32 +404,12 @@ define.async('io.ox/core/tk/html-editor',
         this.setContent = set;
 
         this.setPlainText = function (str) {
-            var text = '', quote = false, tmp = '', lTag, rTag;
             // clean up
             str = trimEnd(str);
-            // needs leading empty paragraph?
-            if (str.substr(0, 2) === '\n\n') {
-                text += '<p></p>';
-                str = str.substr(2);
-            }
-            // split & loop
-            _(str.split('\n').concat('')).each(function (line) {
-                var trimmed = $.trim(line);
-                if (trimmed === '' || (quote && trimmed.substr(0, 1) !== '>')) {
-                    lTag = quote ? '<blockquote type="cite"><p>' : '<p>';
-                    rTag = quote ? '</blockquote></p>' : '</p>';
-                    text += tmp !== '' ? lTag + tmp.replace(/<br>$/, '') + rTag : '';
-                    tmp = '';
-                    quote = false;
-                } else if (trimmed.substr(0, 1) === '>') {
-                    tmp += trimmed.substr(2).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
-                    quote = true;
-                } else {
-                    // use untrimmed "line" here!
-                    tmp += line.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
-                }
+            if (!str) return;
+            textproc.texttohtml(str).done(function (content) {
+                set('<p></p>' + content);
             });
-            set(text);
         };
 
         this.paste = function (str) {
