@@ -108,7 +108,8 @@ define('io.ox/core/folder/tree',
 
         getTreeNodeOptions: function (options, model) {
             if (model.get('id') === 'default0/INBOX' && options.parent.folder === 'virtual/standard') {
-                options.subfolders = false;
+                // usually no subfolders; exception is altnamespace
+                options.subfolders = !!api.altnamespace;
             }
             if (this.flat && options.parent !== this) {
                 options.subfolders = false;

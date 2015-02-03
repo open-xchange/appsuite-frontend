@@ -241,6 +241,9 @@ define('io.ox/mail/settings/pane',
 
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle sr-only').append(
+                        $('<h2>').text(gt('Additional settings'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
 
                         $('<label for="lineWrapAfter">').addClass('control-label').text(
@@ -252,6 +255,9 @@ define('io.ox/mail/settings/pane',
                             $('<div>').addClass('row').append(
                                 $('<div>').addClass('col-md-2').append(
                                     new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el
+                                ),
+                                $('<div>').addClass('col-md-10').append(
+                                    new mini.ErrorView({ selector: '.form-group.expertmode' }).render().$el
                                 )
                             )
                         )

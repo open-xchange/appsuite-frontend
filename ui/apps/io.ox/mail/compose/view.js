@@ -396,13 +396,12 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 old_vcard_flag;
 
-            if (mail.msgref) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
@@ -417,28 +416,27 @@ define('io.ox/mail/compose/view', [
             old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
-            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                return mailAPI.send(mail, mail.files).always(function (result) {
-                    if (result.error) {
-                        notifications.yell(result);
-                        def.reject(result);
-                    } else {
-                        mailAPI.get(self.parseMsgref(result.data)).then(function (data) {
-                            // Replace inline images in contenteditable with links from draft response
-                            $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                                $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
-                            });
-                            self.model.set('msgref', result.data, { silent: true });
-                            self.model.dirty(false);
-                            notifications.yell('success', gt('Mail saved as draft'));
-                            def.resolve(result);
-                        });
-                    }
-                });
+            return attachmentEmpty.emptinessCheck(mail.files).then(function () {
+                return mailAPI.send(mail, mail.files);
+            }).always(function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    return def.reject(result);
+                } else {
+                    return $.when(result, mailAPI.get(self.parseMsgref(result.data)));
+                }
+            }).then(function (result, data) {
+                if (data && _.isArray(data.attachments) && data.attachments[0]) {
+                    // Replace inline images in contenteditable with links from draft response
+                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                    });
+                }
+                self.model.set('msgref', result.data, { silent: true });
+                self.model.dirty(false);
+                notifications.yell('success', gt('Mail saved as draft'));
+                return result;
             });
-
-            return $.when.apply($, [def, defSend]);
-
         },
 
         autoSaveDraft: function () {
@@ -447,14 +445,27 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 self = this;
 
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
+            }
+            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
+            }
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
+            }
+
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    if (mail.sendtype !== mailAPI.SENDTYPE.FORWARD) {
+                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                         self.model.set('msgref', result, { silent: true });
-                        self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
                     }
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
@@ -837,7 +848,7 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature();
+            this.setSelectedSignature(this.model.get('signature'));
         },
 
         getMobileSignature: function () {
@@ -850,21 +861,28 @@ define('io.ox/mail/compose/view', [
             return value;
         },
 
-        setSelectedSignature: function () {
-            var ds = _.where(this.signatures, { id: String(this.model.get('signature')) })[0];
-            if (ds) {
+        setSelectedSignature: function (model, id) {
+            if (_.isString(model)) {
+                id = model;
+            }
+            var newSignature = _.where(this.signatures, { id: String(id) })[0],
+                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
+
+            if (prevSignature) {
+                this.removeSignature(prevSignature);
+            }
+            if (newSignature) {
+                var ds = newSignature;
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
-            } else {
-                this.removeSignature();
             }
             this.prependNewLine();
         },
 
-        removeSignature: function () {
+        removeSignature: function (signature) {
             var self = this,
                 isHTML = !!this.editor.find,
-                currentSignature = this.model.get('currentSignature');
+                currentSignature = mailUtil.signatures.cleanAdd(signature.content, isHTML);
 
             // remove current signature from editor
 
@@ -905,8 +923,6 @@ define('io.ox/mail/compose/view', [
             var text,
                 isHTML = !!this.editor.find;
 
-            this.removeSignature();
-
             // add signature?
             if (this.signatures.length > 0) {
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
@@ -919,7 +935,6 @@ define('io.ox/mail/compose/view', [
                     this.editor.prependContent(text);
                     this.editor.scrollTop('top');
                 }
-                this.model.set('currentSignature', text);
             }
         },
 
@@ -946,7 +961,9 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
-            return this.changeEditorMode().done(function () {
+            return this.changeEditorMode().then(function () {
+                return self.signaturesLoading;
+            }).done(function () {
                 if (data.replaceBody !== 'no') {
                     var mode = self.model.get('mode');
                     // set focus in compose and forward mode to recipient tokenfield

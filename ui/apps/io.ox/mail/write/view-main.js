@@ -109,16 +109,19 @@ define('io.ox/mail/write/view-main',
         },
 
         createLink: function (id, label, show) {
+
             return (this.sections[id + 'Link'] = $('<div>'))
                 .addClass('section-link')
                 .append(
                     $('<a>', { href: '#', tabindex: '7', role: 'button' })
                     .attr({
                         'data-section-link': id,
-                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label
+                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label,
+                        'aria-expanded': !!show
                     })
                     .data('label', label)
                     .text(label)
+                    .prepend($('<i class="fa fa-caret-' + (show ? 'down' : 'right') + '" aria-hidden="true">'))
                     .on('click', { id: id }, $.proxy(this.fnToggleSection, this))
                 );
         },
@@ -166,11 +169,18 @@ define('io.ox/mail/write/view-main',
             e.preventDefault();
             var id = e.data.id,
                 link = this.sections[id + 'Link'].find('a');
+                link.find('i').toggleClass('fa-caret-down fa-caret-right');
             if (this.sections[id].is(':visible')) {
-                link.attr('aria-label', gt('open') + ' ' + link.data('label'));
+                link.attr({
+                    'aria-label': gt('open') + ' ' + link.data('label'),
+                    'aria-expanded': false
+                });
                 this.hideSection(id, e.target);
             } else {
-                link.attr('aria-label', gt('close') + ' ' + link.data('label'));
+                link.attr({
+                    'aria-label': gt('close') + ' ' + link.data('label'),
+                    'aria-expanded': true
+                });
                 this.showSection(id, e.target);
             }
         },
@@ -497,7 +507,7 @@ define('io.ox/mail/write/view-main',
             // sections
 
             // TO
-            this.addSection('to').append(
+            this.addSection('to', true, null, false).append(
                 this.createRecipientList('to'),
                 this.createField('to', gt('To'))
                     .find('input').attr('placeholder', gt.format('%1$s ...', gt('To'))).placeholder().end()
@@ -594,7 +604,7 @@ define('io.ox/mail/write/view-main',
 
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
-                    this.createLink('attachments', gt('Attachments')),
+                    this.createLink('attachments', gt('Attachments'), true),
                     uploadSection.append(
                         $inputWrap,
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
@@ -672,7 +682,7 @@ define('io.ox/mail/write/view-main',
             }());
 
             // FROM
-            this.addSection('sender', false, gt('Sender'), true)
+            this.addSection('sender', true, gt('Sender'), true)
                 .append(this.createSenderField())
                 .append(this.createReplyToField());
 
@@ -689,10 +699,10 @@ define('io.ox/mail/write/view-main',
             // Options
             this.addSection('options', false, gt('More'), true).append(
                 // Priority
-                $('<div>').addClass('section-item')
-                .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
+                $('<fieldset>').addClass('section-item')
+                .css({ paddingTop: '1em', paddingBottom: '0.5em' })
                 .append(
-                    $('<span>').addClass('group-label').text(gt('Priority'))
+                    $('<legend>').addClass('group-label').text(gt('Priority'))
                 )
                 .append(createRadio('priority', '1', gt('High')))
                 .append(createRadio('priority', '3', gt('Normal'), true))
@@ -713,9 +723,10 @@ define('io.ox/mail/write/view-main',
 
             if (_.device('!touch')) {
                 var format = settings.get('messageFormat', 'html');
-                this.addSection('format', true, gt('Text format'), false).append(
+                this.addSection('format', true, null , false).append(
 
-                    $('<div class="section-item">').append(
+                    $('<fieldset class="section-item">').append(
+                        $('<legend>').text(gt('Text format')),
                         createRadio('format', 'text', gt('Text'), format === 'text'),
                         createRadio('format', 'html', gt('HTML'), format === 'html' || format === 'alternative')
                     )

@@ -216,7 +216,14 @@ define('io.ox/files/fluid/perspective',
         id: 'selection',
         register: function (baton) {
 
-            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined });
+            Selection.extend(this, scrollpane, {
+                    draggable: true,
+                    dragType: 'mail',
+                    scrollpane: wrapper,
+                    focus: undefined ,
+                    tabFix: false,
+                    markable: true
+                });
             //selection accessible via app
             baton.app.selection = this.selection;
 
@@ -354,7 +361,12 @@ define('io.ox/files/fluid/perspective',
                     return !baton.app.folderViewIsVisible();
                 };
             this.append(
-                filesContainer = $('<ul class="files-container list-unstyled f6-target view-' + baton.options.mode + '" tabindex="1">')
+                filesContainer = $('<ul class="files-container list-unstyled f6-target view-' + baton.options.mode + '">')
+                    .attr({
+                        tabindex: 1,
+                        role: 'listbox',
+                        'aria-multiselectable': true
+                    })
                     .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
                     .on('click', function () {
                         //force focus on container click
@@ -449,8 +461,11 @@ define('io.ox/files/fluid/perspective',
             var title = file.filename || file.title;
 
             this.addClass('file-cell pull-left selectable')
-                .attr('data-obj-id', _.cid(file))
-                .attr('tabindex', -1)
+                .attr({
+                    'data-obj-id': _.cid(file),
+                    'role': 'option',
+                    'tabindex': '-1'
+                })
                 .append(
                     //checkbox
                     $('<div class="checkbox">').append(
@@ -609,7 +624,7 @@ define('io.ox/files/fluid/perspective',
                 });
             });
 
-            scrollpane
+            scrollpane.find('.files-container')
                 .on('focus', '.file-cell', function (e) {
                     $(e.delegateTarget).removeAttr('tabindex');
                 })

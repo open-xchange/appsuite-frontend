@@ -582,25 +582,24 @@ define('io.ox/mail/util',
                     return preview(text);
                 },
                 is: function (text, list, isHTML) {
-                    var clean,
-                        signatures = _(list).map(function (signature) {
+                    var signatures = _(list).map(function (signature) {
                             //consider changes applied by appsuite
-                            clean = add(signature.content, !!isHTML);
+                            var clean = add(signature.content, !!isHTML);
                             //consider changes applied by tiny
                             if (clean === '')
                                 return '<br>';
                             else {
                                 return clean
-                                        //replace surrounding white-space (except linebreaks)
-                                        .replace(/>[\t\f\v ]+/g, '>')
-                                        .replace(/[\t\f\v ]+</g, '<')
-                                        //set breaks
-                                        .replace(/(\r\n|\n|\r)/g, '<br>')
-                                        //remove empty alt attribute(added by tiny)
-                                        .replace(/ alt=""/, '');
+                                    //set breaks
+                                    .replace(/(\r\n|\n|\r)/g, '<br>')
+                                    //replace surrounding white-space (except linebreaks)
+                                    .replace(/>[\t\f\v ]+/g, '>')
+                                    .replace(/[\t\f\v ]+</g, '<')
+                                    //remove empty alt attribute(added by tiny)
+                                    .replace(/ alt=""/, '');
                             }
                         });
-                    return _(signatures).indexOf(text) > - 1;
+                    return _(signatures).indexOf(add(text, !!isHTML)) > - 1;
                 }
             };
         })(),

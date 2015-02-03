@@ -260,7 +260,7 @@ define('io.ox/contacts/edit/view-form',
 
             node.find('.toggle-compact')
                 .find('i').attr('class', icon).end()
-                .find('a').attr('role', 'button').text(label);
+                .find('a').attr({ 'aria-expanded': !isCompact }).text(label);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -301,9 +301,14 @@ define('io.ox/contacts/edit/view-form',
                     new FullnameView({ model: baton.model }).render().$el,
                     new JobView({ model: baton.model }).render().$el,
                     $('<nav class="toggle-compact">').append(
-                        $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
+                        $('<a>').attr({
+                            href: '#',
+                            role: 'button',
+                            tabindex: 1,
+                            'aria-expanded': false
+                        }).click(toggle).text(gt('Extended view')),
                         $.txt(' '),
-                        $('<i class="fa fa-plus-square-o">')
+                        $('<i class="fa fa-plus-square-o" aria-hidden="true">')
                     )
                 );
             }

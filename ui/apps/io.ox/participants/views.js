@@ -43,7 +43,12 @@ define('io.ox/participants/views',
                 $text: $('<div class="participant-name">'),
                 $mail: $('<a class="participant-email">'),
                 $extra: $('<a class="extra-decorator">'),
-                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="fa fa-trash-o"></i></div></a>')
+                $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
+                    $('<div class="icon">').append(
+                        $('<i class="fa fa-trash-o" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
+                    )
+                )
             };
 
             this.setDisplayName();

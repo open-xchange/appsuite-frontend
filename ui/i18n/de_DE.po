@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-28 16:02+0100\n"
+"PO-Revision-Date: 2015-01-29 11:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -831,10 +831,8 @@ msgstr "Administrator"
 
 #. search: clickable headline to show/hide list of advanced facets/filters
 #: apps/io.ox/core/desktop.js:1465 module:io.ox/core
-#, fuzzy
-#| msgid "Advanced Settings"
 msgid "Advanced Facets"
-msgstr "Erweiterte Einstellungen"
+msgstr "Erweiterte Suchfilter"
 
 #: apps/io.ox/settings/main.js:396 module:io.ox/core
 msgid "Advanced Settings"
@@ -843,12 +841,12 @@ msgstr "Erweiterte Einstellungen"
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was closed."
-msgstr ""
+msgstr "Erweiterte Suchfilter wurden geschlossen."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was opened."
-msgstr ""
+msgstr "Erweiterte Suchfilter wurden geöffnet."
 
 #: apps/io.ox/search/facets/extensions.js:283 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:371
@@ -1502,9 +1500,8 @@ msgstr "Es wird aufgeräumt... Dies kann eine Weile dauern."
 #: apps/io.ox/backbone/mini-views/datepicker.js:31 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:30
 #, fuzzy
-#| msgid "clear"
 msgid "Clear"
-msgstr "löschen"
+msgstr "Löschen"
 
 #: apps/io.ox/search/autocomplete/extensions.js:193 module:io.ox/core
 msgid "Clear field"
@@ -1669,10 +1666,8 @@ msgstr "Allgemeine Emoji-Symbole"
 
 #. search: headline for list of common facets/filters
 #: apps/io.ox/core/desktop.js:1454 module:io.ox/core
-#, fuzzy
-#| msgid "Comments"
 msgid "Common Facets"
-msgstr "Anmerkungen"
+msgstr "Allgemeine Suchfilter"
 
 #: apps/io.ox/mail/toolbar.js:234 module:io.ox/mail
 msgid "Compact"
@@ -4167,13 +4162,11 @@ msgstr "Mittlere Priorität"
 
 #: apps/io.ox/mail/common-extensions.js:400 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
 msgid "Message is read"
 msgstr "Nachricht wurde gelesen"
 
 #: apps/io.ox/mail/common-extensions.js:406 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
 msgid "Message is unread"
 msgstr "Nachricht wurde nicht gelesen"
 
@@ -4515,6 +4508,7 @@ msgstr "Keine Objekte gefunden"
 #: apps/io.ox/core/desktop.js:1849 module:io.ox/core
 msgid "No items were found. Please adjust currently used facets."
 msgstr ""
+"Keine Suchergebnisse. Bitte passen Sie die derzeit verwendeten Suchfilter an."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:234 module:io.ox/core
 msgid "No lost requests"
@@ -5656,10 +5650,8 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "Nach Empfang einer Nachricht, Kopie vom Server löschen"
 
 #: apps/io.ox/search/facets/extensions.js:322 module:io.ox/core
-#, fuzzy
-#| msgid "Remove contact"
 msgid "Remove facet"
-msgstr "Kontakt entfernen"
+msgstr "Suchfilter entfernen"
 
 #: apps/io.ox/core/folder/favorites.js:136 module:io.ox/core
 msgid "Remove from favorites"
@@ -5935,6 +5927,11 @@ msgid ""
 "are listed. To narrow down search result please adjust active facets or add "
 "new ones"
 msgstr ""
+"Auf der Seite mit den Suchergebnissen werden alle aktiven Suchfilter "
+"angezeigt, um sie schnell und einfach anpassen oder entfernen zu können. "
+"Unterhalb dieser allgemeinen Suchfilter werden erweiterte Suchfilter "
+"angezeigt. Um die Suche einzugrenzen, passen Sie bitte die aktiven "
+"Suchfilter an oder fügen Sie neue hinzu."
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/fluid/perspective.js:331 module:io.ox/files
@@ -6516,7 +6513,7 @@ msgstr "Abonnements"
 
 #: apps/io.ox/core/yell.js:23 module:io.ox/core
 msgid "Success"
-msgstr ""
+msgstr "Erfolg"
 
 #: apps/plugins/portal/xing/register.js:56 module:plugins/portal
 msgid "Successfully reauthorized your %s account"
@@ -7311,7 +7308,6 @@ msgid "This may take some seconds"
 msgstr "Dies kann eine Weile dauern..."
 
 #: apps/io.ox/mail/detail/view.js:243 module:io.ox/mail
-#, fuzzy
 msgid "This message has been truncated due to size limitations."
 msgstr "Diese Nachricht wurde wegen Größenbeschränkungen abgeschnitten."
 
@@ -7423,7 +7419,6 @@ msgstr "Ordner an/aus"
 
 #: apps/io.ox/search/facets/extensions.js:349 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:605
-#, fuzzy
 msgid "Toggle options"
 msgstr "Optionen an/aus"
 
@@ -7778,7 +7773,6 @@ msgid "Waiting"
 msgstr "Wartestatus"
 
 #: apps/io.ox/core/yell.js:24 module:io.ox/core
-#, fuzzy
 msgid "Warning"
 msgstr "Warnhinweis"
 
