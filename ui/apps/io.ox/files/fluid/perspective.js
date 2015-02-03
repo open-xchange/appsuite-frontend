@@ -427,6 +427,22 @@ define('io.ox/files/fluid/perspective',
         $(this).remove();
     }
 
+    function getAriaLabel (file, title, filesize, changed) {
+        var arialabel = [
+            title,
+            filesize.replace('\xA0', ' '),
+            gt.noI18n(changed)
+        ];
+        if (api.tracker.isLocked(file)) {
+            if (api.tracker.isLockedByMe(file)) {
+                arialabel.push(gt('This file is locked by you'));
+            } else {
+                arialabel.push(gt('This file is locked by %1$s'));
+            }
+        }
+        return arialabel.join(', ');
+    }
+
     ext.point('io.ox/files/icons/file').extend({
 
         draw: function (baton) {
@@ -458,13 +474,15 @@ define('io.ox/files/fluid/perspective',
                 );
             }
 
-            var title = file.filename || file.title;
+            var title = file.filename || file.title,
+                filesize = gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''}));
 
             this.addClass('file-cell pull-left selectable')
                 .attr({
                     'data-obj-id': _.cid(file),
                     'role': 'option',
-                    'tabindex': '-1'
+                    'tabindex': '-1',
+                    'aria-label': getAriaLabel(file, title, filesize, changed)
                 })
                 .append(
                     //checkbox
@@ -476,7 +494,7 @@ define('io.ox/files/fluid/perspective',
                     //preview
                     previewImage, previewBackground,
                     //details
-                    $('<div class="details">').append(
+                    $('<div class="details" aria-hidden="true">').append(
                         //title
                         $('<div class="text title drag-title">')
                         .attr('title', title)
@@ -491,7 +509,7 @@ define('io.ox/files/fluid/perspective',
                         //smart last modified
                         $('<span class="text modified">').text(gt.noI18n(changed)),
                         //filesize
-                        $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
+                        $('<span class="text size">').text(filesize)
                     )
                 );
             if (_.device('smartphone')) {
