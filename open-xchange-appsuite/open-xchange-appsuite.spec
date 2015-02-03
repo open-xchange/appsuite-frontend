@@ -559,6 +559,8 @@ if [ -x %{update} ]; then %{update}; fi
 
 %changelog
 * Wed Jan 21 2015 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-10-27
+* Wed Jan 21 2015 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2015-01-26
 * Wed Jan 07 2015 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2015-01-12
