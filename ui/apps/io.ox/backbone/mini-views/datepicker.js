@@ -85,9 +85,6 @@ define('io.ox/backbone/mini-views/datepicker', [
                 )
             );
 
-            // insert initial values
-            this.updateView();
-
             if (this.mobileMode) {
                 require(['io.ox/core/tk/mobiscroll'], function () {
                     var moset = {};
@@ -140,16 +137,21 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             this.nodes.dayField.on('change', _.bind(this.updateModel, this));
 
+            // insert initial values
+            this.updateView();
+
             return this;
         },
 
         updateView: function () {
             var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
             if (_.isNaN(timestamp)) return;
-            this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
+                this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
                 this.nodes.timeField.val(new date.Local(timestamp).format(date.TIME));
                 this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(timestamp || _.now()).abbr));
+            } else {
+                this.nodes.dayField.val(this.getDateStr(timestamp));
             }
         },
 
