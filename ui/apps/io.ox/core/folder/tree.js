@@ -24,7 +24,7 @@ define('io.ox/core/folder/tree',
 
     var TreeView = Backbone.View.extend({
 
-        className: 'folder-tree abs',
+        className: 'folder-tree',
 
         events: {
             'click .contextmenu-control'                    : 'onToggleContextMenu',
@@ -39,6 +39,7 @@ define('io.ox/core/folder/tree',
                 contextmenu: false,
                 customize: $.noop,
                 disable: $.noop,
+                abs: true,
                 icons: settings.get('features/folderIcons', false),
                 root: 'default0/INBOX',
                 highlight: _.device('!smartphone'),
@@ -63,6 +64,8 @@ define('io.ox/core/folder/tree',
             this.$el.append(this.$container);
 
             this.selection = new Selection(this);
+
+            if (options.abs) this.$el.addClass('abs');
 
             // add contextmenu?
             if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));

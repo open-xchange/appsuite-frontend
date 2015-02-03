@@ -111,6 +111,7 @@ define('io.ox/core/folder/picker',
             flat: !!o.flat,
             indent: o.indent,
             module: o.module,
+            abs: o.abs,
             open: open,
             root: o.root,
             customize: o.customize,
@@ -164,7 +165,7 @@ define('io.ox/core/folder/picker',
                     )
                     // path might fail so we use always to con
                     .always(function () {
-                        dialog.getBody().idle().append(tree.render().$el);
+                        dialog.getBody().idle().prepend(tree.render().$el);
                         tree.$el.focus();
                         o.show(dialog, tree);
                     });
