@@ -153,6 +153,7 @@ define('io.ox/core/tk/tokenfield', [
                             var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                             if (_.isArray(newAttrs)) {
                                 e.attrs.label = newAttrs[1];
+                                e.attrs.value = newAttrs[3];
                             } else {
                                 newAttrs = ['', e.attrs.value, '', e.attrs.value];
                             }
