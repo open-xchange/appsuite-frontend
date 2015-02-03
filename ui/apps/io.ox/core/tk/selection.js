@@ -160,7 +160,7 @@ define('io.ox/core/tk/selection',
             } else {
                 // single selection
                 if (isMarker(e)) {
-                    toggleMark(id);
+                    mark(id);
                 } else {
                     toggle(id);
                 }
@@ -258,6 +258,10 @@ define('io.ox/core/tk/selection',
                 } else {
                     selectNext(e);
                 }
+                break;
+            case 9:
+                if (options.markable)
+                    clearMarks();
                 break;
             // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
             case 8:
@@ -481,19 +485,10 @@ define('io.ox/core/tk/selection',
                 // clear wrapper
                 clear = function (e) {
                     // clear mark
-                    if (markedItem) {
-                        var key = self.serialize(markedItem);
-                        markedItem = undefined;
-                        container.find('[data-obj-id="' + key + '"]').removeClass(self.classMarked).attr({
-                            'tabindex': options.tabFix !== false ? -1 : null
-                        });
-                    }
+                    clearMarks();
                     if (isMarker(e)) return;
                     // call orignale clear
                     clearOrginal(e);
-                },
-                isMarked = function (id) {
-                    return markedItem === self.serialize(id);
                 },
                 fastMark = function (id, node) {
                     var key = self.serialize(id);
@@ -501,18 +496,19 @@ define('io.ox/core/tk/selection',
                     var $node = (node || getNode(key));
                     // set focus?
                     if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+                    var guid = $node.attr('id') || _.uniqueId('option-');
+
                     return $node
-                        .addClass(self.classMarked)
-                        .attr({
-                            'tabindex': options.tabFix !== false ? options.tabFix : null
-                        });
-                },
-                toggleMark = function (id) {
-                    if (isMarked(id)) {
-                        unmark(id);
-                    } else {
-                        mark(id);
-                    }
+                            .addClass(self.classMarked)
+                            .attr({
+                                'tabindex': options.tabFix !== false ? options.tabFix : null,
+                                id: guid
+                            })
+                            // apply a11y
+                            // TODO: when descent attribute was set voiceover doesn't notifies user about changed selection when using 'select with space'
+                            .parent('[role="listbox"]')
+                            .attr('aria-activedescendant', guid)
+                            .end();
                 },
                 mark = function (id, silent) {
                     if (id) {
@@ -528,15 +524,19 @@ define('io.ox/core/tk/selection',
                         }
                     }
                 },
-                unmark = function (id) {
-                    var key = self.serialize(id);
-                    markedItem = undefined;
-                    getNode(key)
-                        .removeClass(self.classMarked)
-                        .attr({
-                            tabindex: options.tabFix !== false ? -1 : null
-                        });
-                    self.trigger('unmark', key);
+                clearMarks = function () {
+                    if (markedItem) {
+                        var key = self.serialize(markedItem);
+                        markedItem = undefined;
+                        getNode(key)
+                            .removeClass(self.classMarked)
+                            .attr({
+                                tabindex: options.tabFix !== false ? -1 : null
+                            })
+                            .parent('[role="listbox"]')
+                            .removeAttr('aria-activedescendant');
+                        markedItem = undefined;
+                    }
                 };
         }
 
