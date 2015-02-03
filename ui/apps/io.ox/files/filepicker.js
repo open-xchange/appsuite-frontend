@@ -43,7 +43,7 @@ define('io.ox/files/filepicker',
             def = $.Deferred(),
             self = this;
 
-        Selection.extend(this, filesPane, {});
+        Selection.extend(this, filesPane, { markable: true });
 
         this.selection.keyboard(filesPane, true);
         this.selection.setMultiple(options.multiselect);

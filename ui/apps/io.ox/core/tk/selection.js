@@ -246,8 +246,10 @@ define('io.ox/core/tk/selection',
                 break;
             case 32:
                 // last is the current selected/focussed
-                if (options.markable)
+                if (options.markable) {
+                    e.preventDefault();
                     toggle(last);
+                }
                 break;
             case 40:
                 e.preventDefault();

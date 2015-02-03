@@ -43,10 +43,9 @@
 
         .io-ox-fileselection {
 
-            outline: none;
-
             li.file {
 
+                outline: none;
                 line-height: 30px;
                 padding: 2px 7px;
                 cursor: pointer;
@@ -70,11 +69,8 @@
                         color: @foldertree-selected-label-color;
                     }
                 }
-            }
 
-            &:focus .file {
-
-                &.selected, &.selected:hover {
+                &:focus {
 
                     background-color: @foldertree-selected-focus-background;
 
