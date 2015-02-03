@@ -569,7 +569,6 @@ define('io.ox/files/fluid/perspective',
             self.main.empty().append(
                 wrapper = $('<div class="files-wrapper">')
                     .attr({
-                        'role': 'main',
                         'aria-label': gt('Files View')
                     })
                     .append(
