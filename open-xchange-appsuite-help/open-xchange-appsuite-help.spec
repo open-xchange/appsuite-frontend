@@ -227,6 +227,8 @@ done
 * Tue Jan 27 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Fifth candidate for 7.6.2 release
 * Wed Jan 21 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2014-10-27
+* Wed Jan 21 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-01-26
 * Wed Jan 07 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-01-12
