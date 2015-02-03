@@ -1727,6 +1727,7 @@ define('io.ox/core/desktop',
                                             .attr({
                                                 class: 'form-control search-field',
                                                 tabindex: 1,
+                                                role: 'search',
                                                 id: id,
                                                 placeholder: label + ' ...',
                                                 'aria-describedby': guid

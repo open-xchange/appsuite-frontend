@@ -174,6 +174,7 @@ define('io.ox/search/autocomplete/extensions',
                         $('<input type="text">')
                         .attr({
                             class: 'form-control search-field',
+                            role: 'search',
                             tabindex: 1,
                             id: id,
                             placeholder: label + ' ...'

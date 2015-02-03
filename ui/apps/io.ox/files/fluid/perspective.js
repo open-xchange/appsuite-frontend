@@ -37,7 +37,7 @@ define('io.ox/files/fluid/perspective',
         dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
         filesContainer, breadcrumb, wrapper,
-        scrollpane = $('<div class="files-scrollable-pane" role="section">');
+        scrollpane = $('<div class="files-scrollable-pane">');
 
     //init
     filesContainer = wrapper = $('');
