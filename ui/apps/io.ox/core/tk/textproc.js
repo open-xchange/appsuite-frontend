@@ -19,21 +19,12 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         o.content = o.content
             // remove comments
             .replace(/<!--(.*?)-->/g, '')
-            // remove class attribute - except for emojis
-            .replace(/\sclass="[^"]+"/g, function (all) {
-                // just to test if class attribute contains "emoji"
-                return /emoji/.test(all) ? all : '';
-            })
             // remove emoji images and convert them back to unicode characters
             .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
-
-            // remove custom attributes
-            .replace(/ data-[^=]+="[^"]*"/ig, '')
-            // remove relative links
-            .replace(/(<a[^<]+)href="([^"]+)"/g, function (all, prefix, href) {
-                // check for http:, mailto:, or tel:
-                return /^\w+:/.test(href) ? all : prefix;
-            })
+            // remove class attribute and custom attributes
+            .replace(/(data-[^=]+|class)="[^"]*"/ig, '')
+            // remove relative links (remove if links don't start with a protocol)
+            .replace(/<a[^>]+href="(?!.+:)[^"].+?">(.+)<\/\s?a>/gi, '$1')
             // remove &nbsp;
             .replace(/&nbsp;/ig, ' ')
             // fix missing white-space before/after links
