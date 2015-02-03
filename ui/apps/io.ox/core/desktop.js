@@ -1488,7 +1488,13 @@ define('io.ox/core/desktop',
                                         win.facetedsearch.view.trigger('button:cancel');
                                     })
                             )
-                        );
+                        )
+                        .addClass('f6-target')
+                        .attr({
+                            role: 'navigation',
+                            //#. search: leftside sidepanel container that shows active and available facets
+                            'aria-label': gt('Search Facets')
+                        });
                         // add nodes
                         side.append(nodes.container);
                     }
@@ -1725,7 +1731,7 @@ define('io.ox/core/desktop',
                                     .append(
                                             $('<input type="text">')
                                             .attr({
-                                                class: 'form-control search-field',
+                                                class: 'form-control search-field f6-target',
                                                 tabindex: 1,
                                                 role: 'search',
                                                 id: id,
