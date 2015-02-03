@@ -42,8 +42,9 @@ define('io.ox/core/folder/api',
         return id === '1' || /^default\d+/.test(id) ? 0 : 1;
     }
 
-    function injectIndex(item, index) {
-        item.index = index;
+    function injectIndex(id, item, index) {
+        if (!item.index) item.index = {};
+        item.index[id] = index;
         return item;
     }
 
@@ -76,11 +77,14 @@ define('io.ox/core/folder/api',
     });
 
     var FolderCollection = Backbone.Collection.extend({
-        constructor: function () {
+        constructor: function (id) {
             Backbone.Collection.apply(this, arguments);
+            this.id = id;
             this.fetched = false;
         },
-        comparator: 'index',
+        comparator: function (model) {
+            return (model.get('index') || {})[this.id] || 0;
+        },
         model: FolderModel
     });
 
@@ -125,7 +129,7 @@ define('io.ox/core/folder/api',
 
         getCollection: function (id, all) {
             id = getCollectionId(id, all);
-            return this.collections[id] || (this.collections[id] = new FolderCollection());
+            return this.collections[id] || (this.collections[id] = new FolderCollection(id));
         },
 
         unfetch: function (id) {
@@ -155,7 +159,7 @@ define('io.ox/core/folder/api',
         // 2. apply custom order
         list = sort.apply(id, list);
         // 3. inject index
-        _(list).each(injectIndex);
+        _(list).each(injectIndex.bind(this, id));
         // done
         return list;
     }
@@ -216,23 +220,36 @@ define('io.ox/core/folder/api',
     // Define a virtual collection
     //
 
+    function VirtualFolder(id, getter) {
+        this.id = id;
+        this.getter = getter.bind(this);
+    }
+
+    VirtualFolder.prototype.concat = function () {
+        var id = this.id;
+        return $.when.apply($, arguments).then(function () {
+            return _(arguments).chain().flatten().map(injectIndex.bind(this, id)).value();
+        });
+    };
+
     var virtual = {
 
         hash: {},
 
         get: function (id) {
-            var getter = this.hash[id];
-            return getter !== undefined ? getter() : $.Deferred().reject();
+            var folder = this.hash[id];
+            return folder !== undefined ? folder.getter() : $.Deferred().reject();
         },
 
         add: function (id, getter) {
-            this.hash[id] = getter;
+            this.hash[id] = new VirtualFolder(id, getter);
             pool.getModel(id).set('subfolders', true);
         },
 
         concat: function () {
+            if (ox.debug) console.warn('Deprecated! Please use this.concat()');
             return $.when.apply($, arguments).then(function () {
-                return _(arguments).chain().flatten().map(injectIndex).value();
+                return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
             });
         }
     };
