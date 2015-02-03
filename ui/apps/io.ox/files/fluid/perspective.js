@@ -364,7 +364,8 @@ define('io.ox/files/fluid/perspective',
                 filesContainer = $('<ul class="files-container list-unstyled f6-target view-' + baton.options.mode + '">')
                     .attr({
                         tabindex: 1,
-                        role: 'listbox'
+                        role: 'listbox',
+                        'aria-multiselectable': true
                     })
                     .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
                     .on('click', function () {
