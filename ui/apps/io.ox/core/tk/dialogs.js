@@ -193,7 +193,7 @@ define('io.ox/core/tk/dialogs',
                     // tab
                     if (o.tabTrap) {
                         // get items first
-                        items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                        items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
                         if (items.length) {
                             e.preventDefault();
                             focus = $(document.activeElement);
