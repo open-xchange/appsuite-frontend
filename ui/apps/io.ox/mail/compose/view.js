@@ -1003,7 +1003,6 @@ define('io.ox/mail/compose/view', [
 
             // add subject to app title
             this.setTitle();
-            this.app.getWindow().setTitle(gt('Compose'));
 
             // add view specific event handling to tokenfields
             this.$el.find('input.tokenfield').each(function () {
