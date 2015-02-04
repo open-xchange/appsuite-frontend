@@ -282,6 +282,7 @@ define('plugins/portal/xing/register',
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('xing', win).done(function () {
+                api.createSubscription();
                 baton.model.node.find('h2 .fa-xing').replaceWith($('<span class="title">').text(title));
                 baton.model.node.removeClass('requires-setup widget-color-custom color-xing');
                 ox.trigger('refresh^');
