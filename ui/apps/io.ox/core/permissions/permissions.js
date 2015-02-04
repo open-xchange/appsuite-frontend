@@ -394,11 +394,11 @@ define('io.ox/core/permissions/permissions',
 
                     if (isFolderAdmin) {
                         if (_.device('desktop')) {
-                            dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
+                            dialog.addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 }).addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
                         }
 
                         var node =  $('<div class="autocomplete-controls input-group">').append(
-                                $('<input type="text" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
+                                $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
                                 }),
                                 $('<span class="input-group-btn">').append(
@@ -476,9 +476,7 @@ define('io.ox/core/permissions/permissions',
                     .on('cancel', function () {
                         collection.off();
                     })
-                    .show(function () {
-                        this.find('input').focus();
-                    });
+                    .show();
 
                     // load user data after opening the dialog
                     userAPI.getList(ids, true, { allColumns: true }).done(function () {
@@ -488,6 +486,7 @@ define('io.ox/core/permissions/permissions',
                         collection.reset(_(data.permissions).map(function (obj) {
                             return new Permission(obj);
                         }));
+                        dialog.getPopup().find('[tabindex="1"]:first').focus();
                     });
 
                 } catch (e) {
