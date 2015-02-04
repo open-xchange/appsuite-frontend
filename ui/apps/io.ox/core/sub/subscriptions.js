@@ -149,7 +149,6 @@ define('io.ox/core/sub/subscriptions', [
                     if (module === 'infostore') folder = app.folder.get() || folder;
 
                     if (baton.newFolder) {
-
                         var service = findId(baton.services, baton.model.get('source'));
 
                         folderAPI.create(folder, {
