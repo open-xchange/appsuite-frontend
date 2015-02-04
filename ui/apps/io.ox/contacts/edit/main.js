@@ -62,6 +62,7 @@ define('io.ox/contacts/edit/main',
                     function cont(contact) {
                         var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
                         app.setTitle(appTitle || gt('Create contact'));
+                        win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact });
                         container.append(

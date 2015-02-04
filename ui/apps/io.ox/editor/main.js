@@ -204,11 +204,12 @@ define('io.ox/editor/main',
                 app.create();
             }
 
+            win.setTitle(gt('Editor'));
+
             model.on('keyup:title', function (title) {
                 if (!title) {
                     title = gt('Editor');
                 }
-                win.setTitle(title);
                 app.setTitle(title);
             });
 

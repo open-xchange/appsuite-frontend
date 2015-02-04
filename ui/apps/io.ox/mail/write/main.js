@@ -763,6 +763,7 @@ define('io.ox/mail/write/main',
             win.nodes.main.find('h1.title').text(title);
             title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
+            win.setTitle(gt('Compose'));
             // set signature
             currentSignature = mail.signature || '';
             // set format
