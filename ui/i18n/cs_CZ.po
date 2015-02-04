@@ -803,6 +803,12 @@ msgstr "Nový účastník byl přidán"
 msgid "Adding subscription. This may take some seconds …"
 msgstr "Může to několik sekund trvat"
 
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#, fuzzy
+#| msgid "Editing settings"
+msgid "Additional settings"
+msgstr "Úprava nastavení"
+
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Address Book"
@@ -893,11 +899,11 @@ msgstr ""
 msgid "All my appointments"
 msgstr "Všechny schůzky"
 
-#: apps/io.ox/mail/settings/pane.js:295 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Povolit zprávy s HTML formátováním"
 
-#: apps/io.ox/mail/settings/pane.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povolit přednačítání obrázků odkazovaných z externích zdrojů"
 
@@ -1129,7 +1135,7 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Automaticky přeposlat"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:273 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automaticky ukládat koncepty zpráv"
 
@@ -1165,7 +1171,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Automaticky zalamovat prostý text na znaku: "
 
@@ -1443,7 +1449,7 @@ msgstr "Změnit heslo a odhlásit se"
 msgid "Change status"
 msgstr "Změnit stav"
 
-#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Změnit přihlášení k odběru"
 
@@ -1632,7 +1638,7 @@ msgstr "Skrýt formulář"
 msgid "Color"
 msgstr "Barva"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Obarvit citované řádky"
 
@@ -2065,7 +2071,7 @@ msgstr "Výchozí zobrazení kalendáře"
 msgid "Default reminder"
 msgstr "Výchozí upomínka"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Výchozí adresa odesílatele"
 
@@ -2235,7 +2241,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodit zprávu"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Display"
 msgstr "Zobrazení"
 
@@ -2243,7 +2249,7 @@ msgstr "Zobrazení"
 msgid "Display Name"
 msgstr "Zobrazované jméno"
 
-#: apps/io.ox/mail/settings/pane.js:305 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Zobrazit emotikony graficky v textových zprávách"
 
@@ -3467,7 +3473,7 @@ msgstr "Hodiny"
 msgid "How does this work?"
 msgstr "Jak to funguje?"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "Přihlášení k odběru složky IMAP"
 
@@ -5026,7 +5032,7 @@ msgstr "Zadejte, prosím, URL kanálu."
 msgid "Please enter a search query"
 msgstr "Zadejte, prosím, co vyhledat"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:162 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:164 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6162,7 +6168,7 @@ msgstr "Zobrazit citovaný text"
 msgid "Show request body"
 msgstr "Zobrazit obsah požadavku"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:318 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Zobrazit požadavky na potvrzení o doručení"
 
@@ -11983,9 +11989,6 @@ msgstr "vaše platforma"
 
 #~ msgid "Editing multiple tasks"
 #~ msgstr "Úprava více úkolů"
-
-#~ msgid "Editing settings"
-#~ msgstr "Úprava nastavení"
 
 #~ msgid "Editor feature set:"
 #~ msgstr "Funkce editoru:"

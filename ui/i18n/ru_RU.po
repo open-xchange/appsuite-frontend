@@ -799,6 +799,12 @@ msgstr "Участник добавлен"
 msgid "Adding subscription. This may take some seconds …"
 msgstr "Это может занять несколько секунд"
 
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#, fuzzy
+#| msgid "Editing settings"
+msgid "Additional settings"
+msgstr "Изменение настроек"
+
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Address Book"
@@ -888,11 +894,11 @@ msgstr "Сообщения старше %1$d дня(ей) будут перен�
 msgid "All my appointments"
 msgstr "Встречи"
 
-#: apps/io.ox/mail/settings/pane.js:295 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Разрешить HTML в сообщениях"
 
-#: apps/io.ox/mail/settings/pane.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Разрешить загрузку изображений из сети"
 
@@ -1125,7 +1131,7 @@ msgstr "Автор"
 msgid "Auto Forward"
 msgstr "Автопересылка"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:273 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Автосохранение черновиков"
 
@@ -1163,7 +1169,7 @@ msgstr "Автоматически удалить уведомление пос�
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Автоматически переносить текст после знака:"
 
@@ -1441,7 +1447,7 @@ msgstr "Изменить пароль и выйти"
 msgid "Change status"
 msgstr "Изменить статус"
 
-#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Изменить подписку"
 
@@ -1631,7 +1637,7 @@ msgstr "Свернуть"
 msgid "Color"
 msgstr "Цвет"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Выделить цитаты"
 
@@ -2062,7 +2068,7 @@ msgstr "Режим календаря по умолчанию"
 msgid "Default reminder"
 msgstr "Стандартное напоминание"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Адрес отправителя по умолчанию"
 
@@ -2232,7 +2238,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Удалить сообщение"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Display"
 msgstr "Вид"
 
@@ -2240,7 +2246,7 @@ msgstr "Вид"
 msgid "Display Name"
 msgstr "Краткое имя"
 
-#: apps/io.ox/mail/settings/pane.js:305 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Показывать значки настроения в текстовых сообщениях"
 
@@ -3469,7 +3475,7 @@ msgstr "Часы"
 msgid "How does this work?"
 msgstr "Как это работает?"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "Подписка папки IMAP"
 
@@ -5026,7 +5032,7 @@ msgstr "Введите адрес ленты."
 msgid "Please enter a search query"
 msgstr "Введите запрос поиска"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:162 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:164 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6160,7 +6166,7 @@ msgstr "Показать цитируемый текст"
 msgid "Show request body"
 msgstr "Показать тело запроса"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:318 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Показать запросы уведомления о прочтении"
 
@@ -9141,9 +9147,6 @@ msgstr "ваша платформа"
 
 #~ msgid "Editing multiple tasks"
 #~ msgstr "Правка нескольких задач"
-
-#~ msgid "Editing settings"
-#~ msgstr "Изменение настроек"
 
 #~ msgid "Email Address:"
 #~ msgstr "Email: "

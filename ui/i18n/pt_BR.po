@@ -784,6 +784,12 @@ msgstr "Adicionado o novo participante"
 msgid "Adding subscription. This may take some seconds …"
 msgstr "Isto pode levar alguns segundos"
 
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#, fuzzy
+#| msgid "Editing settings"
+msgid "Additional settings"
+msgstr "Editando configurações"
+
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Address Book"
@@ -875,11 +881,11 @@ msgstr ""
 msgid "All my appointments"
 msgstr "Todos os compromissos"
 
-#: apps/io.ox/mail/settings/pane.js:295 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Permitir e-mails formatados em HTML"
 
-#: apps/io.ox/mail/settings/pane.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Permitir o pré-carregamento de imagens lincadas externamente"
 
@@ -1113,7 +1119,7 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Encaminhar automaticamente"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:273 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Salvar automaticamente rascunhos de e-mail"
 
@@ -1152,7 +1158,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Automaticamente quebrar texto simples após caractere:"
 
@@ -1435,7 +1441,7 @@ msgstr "Alterar senha e encerrar sessão"
 msgid "Change status"
 msgstr "Alterar status"
 
-#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Alterar inscrição"
 
@@ -1623,7 +1629,7 @@ msgstr "Recolher formulário"
 msgid "Color"
 msgstr "Cor"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Cor das linhas citadas"
 
@@ -2056,7 +2062,7 @@ msgstr "Visualização do calendário padrão"
 msgid "Default reminder"
 msgstr "Lembrete padrão"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Endereço do remetente padrão"
 
@@ -2227,7 +2233,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Descartar mensagem"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Display"
 msgstr "Exibir"
 
@@ -2235,7 +2241,7 @@ msgstr "Exibir"
 msgid "Display Name"
 msgstr "Nome de exibição"
 
-#: apps/io.ox/mail/settings/pane.js:305 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Exibir emoticons como gráficos no texto dos e-mails"
 
@@ -3470,7 +3476,7 @@ msgstr "Horas"
 msgid "How does this work?"
 msgstr "Como isto funciona?"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "Inscrição de pasta IMAP"
 
@@ -5025,7 +5031,7 @@ msgstr "Por favor, insira uma URL do feed."
 msgid "Please enter a search query"
 msgstr "Por favor, insira um parâmetro da pesquisa"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:162 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:164 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6165,7 +6171,7 @@ msgstr "Exibir texto citado"
 msgid "Show request body"
 msgstr "Exibir corpo da requisição"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:318 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Exibir solicitações de confirmações de leitura"
 
@@ -10037,9 +10043,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Editing multiple tasks"
 #~ msgstr "Editando várias tarefas"
-
-#~ msgid "Editing settings"
-#~ msgstr "Editando configurações"
 
 #~ msgid "Editor feature set:"
 #~ msgstr "Conjunto de recursos do editor:"

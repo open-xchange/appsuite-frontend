@@ -788,6 +788,12 @@ msgstr "Nieuwe deelnemer toegevoegd"
 msgid "Adding subscription. This may take some seconds …"
 msgstr "Dit kan enige tijd in beslag nemen"
 
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#, fuzzy
+#| msgid "Editing settings"
+msgid "Additional settings"
+msgstr "Instellingen bewerken"
+
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Address Book"
@@ -878,12 +884,12 @@ msgstr ""
 msgid "All my appointments"
 msgstr "Afspraken"
 
-#: apps/io.ox/mail/settings/pane.js:295 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "E-mails met HTML-indeling toestaan"
 
 # (Reinout)
-#: apps/io.ox/mail/settings/pane.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Vooraf laden van externe afbeeldingen toestaan"
 
@@ -1115,7 +1121,7 @@ msgstr "Auteur"
 msgid "Auto Forward"
 msgstr "Automatisch Doorsturen"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:273 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "E-mailconcepten automatisch opslaan"
 
@@ -1156,7 +1162,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Automatische terugloop in platte tekst na teken:"
 
@@ -1438,7 +1444,7 @@ msgstr "Wachtwoord wijzigen en afmelden"
 msgid "Change status"
 msgstr "Status wijzigen"
 
-#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Wijzig abonnement"
 
@@ -1628,7 +1634,7 @@ msgstr "Formulier inklappen"
 msgid "Color"
 msgstr "Kleur"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Geciteerde regels kleuren"
 
@@ -2064,7 +2070,7 @@ msgstr "Standaardagendaoverzicht:"
 msgid "Default reminder"
 msgstr "Standaardherinnering"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Standaardadres afzender"
 
@@ -2234,7 +2240,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Bericht weggooien"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Display"
 msgstr "Weergeven"
 
@@ -2242,7 +2248,7 @@ msgstr "Weergeven"
 msgid "Display Name"
 msgstr "Weergavenaam"
 
-#: apps/io.ox/mail/settings/pane.js:305 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Emoticons als plaatjes weergeven in e-mails opgemaakt in platte tekst"
 
@@ -3487,7 +3493,7 @@ msgstr "Uren"
 msgid "How does this work?"
 msgstr "Hoe werkt dit?"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "IMAP map abonnement"
 
@@ -5046,7 +5052,7 @@ msgstr "Voer een feed URL in."
 msgid "Please enter a search query"
 msgstr "Voer alstublieft een zoekopdracht in"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:162 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:164 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6189,7 +6195,7 @@ msgstr "Toon geciteerde tekst"
 msgid "Show request body"
 msgstr "Toon aanvraag tekst"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:318 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Toon verzoeken om ontvangstbevestigingen"
 
@@ -9036,9 +9042,6 @@ msgstr "uw platform"
 
 #~ msgid "Editing multiple tasks"
 #~ msgstr "Bewerken van meerdere taken"
-
-#~ msgid "Editing settings"
-#~ msgstr "Instellingen bewerken"
 
 #~ msgid "Email notification for appointment creator?"
 #~ msgstr "E-mailattentie voor maker van afspraak?"

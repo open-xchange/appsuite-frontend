@@ -779,6 +779,12 @@ msgstr "Uusi osallistuja lisätty"
 msgid "Adding subscription. This may take some seconds …"
 msgstr "Tämä voi kestää muutaman sekunnin"
 
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#, fuzzy
+#| msgid "Editing settings"
+msgid "Additional settings"
+msgstr "Asetusten muokkaaminen"
+
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Address Book"
@@ -868,11 +874,11 @@ msgstr "Kaikki  %1$d päivää vanhemmat viestit siirretään arkistokansioon"
 msgid "All my appointments"
 msgstr "Tapaamiset"
 
-#: apps/io.ox/mail/settings/pane.js:295 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Salli html muotoillut sähköpostit"
 
-#: apps/io.ox/mail/settings/pane.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
@@ -1102,7 +1108,7 @@ msgstr "Tekijä"
 msgid "Auto Forward"
 msgstr "Automaattinen välitys"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:273 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
@@ -1142,7 +1148,7 @@ msgstr ""
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
@@ -1423,7 +1429,7 @@ msgstr "Vaihda salasana ja kirjaudu ulos."
 msgid "Change status"
 msgstr "Muuta tilannetta"
 
-#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:346 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Muuta tilausta"
 
@@ -1612,7 +1618,7 @@ msgstr "Pienennä lomake"
 msgid "Color"
 msgstr "Väri"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Värjää lainaukset"
 
@@ -2045,7 +2051,7 @@ msgstr "Kalenterin oletusnäkymä"
 msgid "Default reminder"
 msgstr "Oletusmuistutus"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
@@ -2215,7 +2221,7 @@ msgctxt "dialog"
 msgid "Discard message"
 msgstr "Hylkää viesti"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:294 module:io.ox/mail
 msgid "Display"
 msgstr "Viestien näyttäminen"
 
@@ -2223,7 +2229,7 @@ msgstr "Viestien näyttäminen"
 msgid "Display Name"
 msgstr "Näytä nimi"
 
-#: apps/io.ox/mail/settings/pane.js:305 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
 
@@ -3447,7 +3453,7 @@ msgstr "Tuntia"
 msgid "How does this work?"
 msgstr "Kuinka tämä toimii?"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "IMAP-kansioiden tilaus"
 
@@ -4997,7 +5003,7 @@ msgstr "Anna syötteen URL."
 msgid "Please enter a search query"
 msgstr "Syötä hakulauseke"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:162 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:164 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6133,7 +6139,7 @@ msgstr "Näytä lainattu teksti"
 msgid "Show request body"
 msgstr "Näytä pyynnön runko"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:318 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Näytä lukukuittauspyynnöt"
 
@@ -8956,9 +8962,6 @@ msgstr "Alustasi"
 
 #~ msgid "Editing multiple tasks"
 #~ msgstr "Useamman tehtävän muokkaus"
-
-#~ msgid "Editing settings"
-#~ msgstr "Asetusten muokkaaminen"
 
 #~ msgid "Email notification for appointment creator?"
 #~ msgstr "Sähköposti-ilmoitus tapaamisen luojalle?"
