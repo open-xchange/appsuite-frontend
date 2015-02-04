@@ -418,20 +418,21 @@ define('io.ox/mail/compose/view', [
 
             return attachmentEmpty.emptinessCheck(mail.files).then(function () {
                 return mailAPI.send(mail, mail.files);
-            }).always(function (result) {
+            }).then(function (result) {
+                return $.when(
+                    result,
+                    mailAPI.get(self.parseMsgref(result.data))
+                );
+            }, function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     return def.reject(result);
-                } else {
-                    return $.when(result, mailAPI.get(self.parseMsgref(result.data)));
                 }
             }).then(function (result, data) {
-                if (data && _.isArray(data.attachments) && data.attachments[0]) {
-                    // Replace inline images in contenteditable with links from draft response
-                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
-                    });
-                }
+                // Replace inline images in contenteditable with links from draft response
+                $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                    $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                });
                 self.model.set('msgref', result.data, { silent: true });
                 self.model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
