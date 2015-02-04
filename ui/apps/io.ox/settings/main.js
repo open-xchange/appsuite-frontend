@@ -459,7 +459,7 @@ define('io.ox/settings/main', [
             draw: function () {
 
                 var buildCheckbox = function () {
-                    var checkbox = $('<input type="checkbox" tabindex="1" class="input-xlarge">').on('change', function () {
+                    var checkbox = $('<input type="checkbox" tabindex="1">').on('change', function () {
                         expertmode = checkbox.prop('checked');
                         coreSettings.set('settings/advancedMode', expertmode).save();
 

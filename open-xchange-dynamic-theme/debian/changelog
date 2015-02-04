@@ -1,3 +1,15 @@
+open-xchange-dynamic-theme (7.6.2-6) stable; urgency=low
+
+  * Sixth candidate for 7.6.2 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 30 Jan 2015 16:34:07 +0100
+
+open-xchange-dynamic-theme (7.6.2-5) stable; urgency=low
+
+  * Fifth candidate for 7.6.2 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 27 Jan 2015 11:47:37 +0100
+
 open-xchange-dynamic-theme (7.6.2-4) stable; urgency=low
 
   * Moved open-xchange-dynamic-theme to the core repository

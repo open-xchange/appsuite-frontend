@@ -16,13 +16,14 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/toolbar',
     'io.ox/core/tk/upload',
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
+], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
 
     'use strict';
 
@@ -55,6 +56,7 @@ define('io.ox/calendar/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Edit'),
+            title: gt('Edit appointment'),
             ref: 'io.ox/calendar/detail/actions/edit'
         },
         'changestatus': {
@@ -68,6 +70,7 @@ define('io.ox/calendar/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Delete'),
+            title: gt('Delete appointment'),
             ref: 'io.ox/calendar/detail/actions/delete'
         },
         //
@@ -179,25 +182,25 @@ define('io.ox/calendar/toolbar', [
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
-
-    var updateToolbar = _.debounce(function (list) {
-        if (!list) return;
-        // extract single object if length === 1
-        list = list.length === 1 ? list[0] : list;
-        // draw toolbar
-        var baton = ext.Baton({ $el: toolbar, data: list, app: this });
-        ext.point('io.ox/calendar/classic-toolbar').invoke('draw', toolbar.empty(), baton);
-    }, 10);
-
     ext.point('io.ox/calendar/mediator').extend({
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+                toolbar.render().$el
             );
-            app.updateToolbar = updateToolbar;
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
+                // extract single object if length === 1
+                list = list.length === 1 ? list[0] : list;
+                // draw toolbar
+                var baton = ext.Baton({ $el: toolbar.$list, data: list, app: app }),
+                    ret = ext.point('io.ox/calendar/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                $.when.apply($, ret.value()).then(function () {
+                    toolbar.initButtons();
+                });
+            }, 10);
         }
     });
 

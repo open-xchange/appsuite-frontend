@@ -26,8 +26,8 @@ define('io.ox/files/carousel', [
 
     var regIsImage = /\.(gif|tiff|jpe?g|bmp|png)$/i,
         //list from our text preview renderer
-        regIsPlainText = /\.(txt|asc|js|md|json|csv)$/i,
-        regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
+        regIsPlainText = /\.(txt|asc|js|md|json)$/i,
+        regIsDocument = /\.(csv|pdf|docx?|xlsx?|pptx?)$/i;
 
     var carouselSlider = {
 

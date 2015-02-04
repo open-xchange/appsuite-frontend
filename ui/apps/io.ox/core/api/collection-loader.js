@@ -95,6 +95,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 return collection;
             }
 
+            this.loading = true;
             collection.expired = false;
             _.defer(process.bind(this), params, 'load');
             return collection;

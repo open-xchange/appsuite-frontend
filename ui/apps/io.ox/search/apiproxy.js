@@ -214,13 +214,17 @@ define('io.ox/search/apiproxy',[
                         if (result) {
                             model.setItems(result, start);
                             app.view.trigger('query:result', result);
+                            app.view.model.trigger('query:result', result);
                         }
                         app.view.trigger('query:stop');
+                        app.view.model.trigger('query:stop');
                         return result;
                     }
 
                     function fail(result) {
                         notifications.yell(result);
+                        app.view.model.trigger('query:fail');
+                        app.view.model.trigger('query:stop');
                         app.view.trigger('query:stop');
                         app.view.trigger('query:fail');
                     }
@@ -236,6 +240,7 @@ define('io.ox/search/apiproxy',[
                             }
                         };
                         app.view.trigger('query:start');
+                        app.view.model.trigger('query:start');
                         return model.getFacets()
                             .done(filterFacets.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))

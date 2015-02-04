@@ -14,7 +14,22 @@
 .io-ox-calendar-edit-window {
 
     .io-ox-calendar-edit {
+
         padding-top: 10px;
+
+        div.header {
+            margin-bottom: 10px;
+
+           .btn.save {
+                margin-left: 13px;
+            }
+
+            h1.title {
+                line-height:0;
+                font-size: 20px;
+                float: left;
+            }
+        }
     }
 
     .io-ox-busy {
@@ -28,7 +43,7 @@
     }
 
     legend, label {
-        color: #888;
+        color: @label-default-bg;
         margin-bottom: 5px;
         font-size: 13px;
     }
@@ -45,9 +60,6 @@
     }
 
     .dateinput {
-        .label-default {
-            background-color: #aaa;
-        }
 
         .form-inline input {
             width: 90px;
@@ -165,6 +177,18 @@
     .io-ox-calendar-edit {
         margin-top: 0;
         padding: 0 13px;
+
+        div.header {
+            margin-bottom: 9px;
+
+            h1.title {
+                float: none;
+            }
+
+            .btn {
+                display: none;
+            }
+        }
 
         .dateinput .form-inline input {
             padding: 4px 6px;

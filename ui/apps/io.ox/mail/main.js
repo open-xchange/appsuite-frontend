@@ -760,7 +760,7 @@ define('io.ox/mail/main', [
                 app.right.css({ left: '', top: '' });
 
                 // relocate toolbar
-                toolbar = nodes.body.find('.classic-toolbar');
+                toolbar = nodes.body.find('.classic-toolbar-container');
                 className = 'classic-toolbar-visible';
                 if (layout === 'compact') {
                     nodes.body.removeClass(className);

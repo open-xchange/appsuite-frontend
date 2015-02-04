@@ -441,7 +441,7 @@
     .conflicts .person-link {
 
         &.accepted {
-            color: #799952;
+            color: #5C7F31;
         }
 
         &.declined {
@@ -609,15 +609,9 @@
 .participants-view {
 
     @participant-unconfirmed:   #428BCA;
-    @participant-accepted:      #799952;
+    @participant-accepted:      #5C7F31;
     @participant-declined:      #913F3F;
     @participant-tentative:     #cc8800;
-
-    .io-ox-label {
-        font-size: 0.9em;
-        padding: 1em 0 0.25em 0em;
-        margin-bottom: 0.5em;
-    }
 
     min-height: 2em;
 
@@ -641,8 +635,6 @@
             color: @participant-accepted;
 
             i {
-
-                opacity: 0.35;
 
                 html.high-contrast & {
                     opacity: 1;
@@ -799,9 +791,12 @@
 
 .itip-actions {
     text-align: right;
-    margin: 14px 0 0 14px;
+    margin: 14px 0 0 0;
     white-space: nowrap;
     display: inline-block;
+    .btn {
+        margin-left: 7px;
+    }
 }
 
 .itip-item {
@@ -834,8 +829,8 @@
 }
 
 .itip-details {
+    margin: 14px 0;
     .confirmation-status {
-        margin: 7px 0;
         &.accepted { color: @green; }
         &.declined { color: @red; }
         &.tentative { color: @orange; }

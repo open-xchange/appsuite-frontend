@@ -46,11 +46,11 @@ define('io.ox/core/metrics/bot/util', [], function () {
             var def = $.Deferred();
             var timeout = setTimeout(function () {
                 console.error('Event not triggered', id);
+                hub.off(id, handler);
                 def.reject();
             }, that.TIMEOUT);
             var handler = function () {
                 clearTimeout(timeout);
-                hub.off(id, handler);
                 def.resolve();
             };
             if (_.isString(hub)) {
@@ -58,7 +58,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 id = hub;
                 hub = ox;
             }
-            hub.on(id, handler);
+            hub.one(id, handler);
             return def.promise().done(callback);
         },
 
@@ -79,6 +79,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
             var def = $.Deferred();
             var timeout = setTimeout(function () {
                 console.error('Cannot launch app', id);
+                ox.off('app:resume app:ready', handler);
                 def.reject();
             }, that.TIMEOUT);
             // look for related resume or ready event
@@ -86,12 +87,11 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 var name = app.getName();
                 if (name === id) {
                     clearTimeout(timeout);
-                    ox.off('app:resume app:ready', handler);
                     this.app = app;
                     def.resolve(app);
                 }
             };
-            ox.on('app:resume app:ready', handler.bind(this));
+            ox.one('app:resume app:ready', handler.bind(this));
             return def.promise().done(callback);
         },
 
@@ -102,14 +102,19 @@ define('io.ox/core/metrics/bot/util', [], function () {
         },
 
         // wait for list view to change collection and display content
-        waitForListView: function (listView, folder, callback) {
-            return that.waitFor(function check() {
-                if (!listView.collection) return false;
-                if (listView.collection.cid.indexOf('folder=' + folder) === -1) return false;
-                // must wait for more than one node (first one is busy-indicator)
-                return listView.el.childNodes.length > 1;
+        waitForListView: function (listView, needle, callback) {
+
+            function hasProperCollection() {
+                return listView.collection && listView.collection.cid.indexOf(needle) > -1;
+            }
+
+            this.waitFor(function () {
+                if (!hasProperCollection()) return false;
+                return listView.loader.loading === false;
             })
-            .done(callback);
+            .done(function () {
+                setTimeout(callback, 0);
+            });
         },
 
         waitForImage: function (url, callback) {
@@ -119,9 +124,12 @@ define('io.ox/core/metrics/bot/util', [], function () {
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
             xhr.onload = function () {
-                if (this.status !== 200) return;
-                var blob = new window.Blob([this.response], { type: 'image/jpg' });
-                if (callback) callback (blob);
+                if (this.status === 200) {
+                    var blob = new window.Blob([this.response], { type: 'image/jpg' });
+                    if (callback) callback (blob);
+                } else {
+                    console.error('Failed to load image', url);
+                }
             };
             xhr.send();
         },

@@ -30,7 +30,7 @@ define('io.ox/core/folder/extensions', [
 
     // define virtual/standard
     api.virtual.add('virtual/standard', function () {
-        return api.virtual.concat(
+        return this.concat(
             // inbox
             api.get(INBOX),
             // sent, drafts, spam, trash, archive
@@ -79,24 +79,28 @@ define('io.ox/core/folder/extensions', [
 
         localFolders: function (tree) {
 
+            var defaultId = api.altnamespace ? 'default0' : INBOX;
+
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
                 empty: false,
                 filter: function (id, model) {
-                    return !account.isStandardFolder(model.id);
+                    if (account.isStandardFolder(model.id)) return false;
+                    if (api.is('public|shared', model.toJSON())) return false;
+                    return true;
                 },
                 // convention! virtual folders are identified by their id starting with "virtual"
                 folder: 'virtual/default0',
                 icons: tree.options.icons,
-                model_id: INBOX,
+                model_id: defaultId,
                 parent: tree,
                 title: gt('My folders'),
                 tree: tree
             });
 
-            // open my folder whenever a folder is added to INBOX
-            api.pool.getCollection(INBOX).on('add', function () {
+            // open "My folders" whenever a folder is added to INBOX/root
+            api.pool.getCollection(defaultId).on('add', function () {
                 node.toggle(true);
             });
 
@@ -116,7 +120,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('remote-accounts')
+                .render().$el.addClass('remote-folders')
             );
         },
 
@@ -144,8 +148,11 @@ define('io.ox/core/folder/extensions', [
                     //empty: false,
                     filter: function (id, model) {
                         // exclude standard folder
+                        if (account.isStandardFolder(model.id)) return false;
                         // 'default0/virtual' is dovecot's special "all" folder
-                        return !account.isStandardFolder(model.id) && model.id !== 'default0/virtual';
+                        if (model.id === 'default0/virtual') return false;
+                        // alt namespace only allows public/shared folder here
+                        return api.altnamespace ? api.is('public|shared', model.toJSON()) : true;
                     },
                     folder: 'default0',
                     headless: true,
@@ -153,7 +160,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el
+                .render().$el.addClass('other-folders')
             );
         },
 
@@ -194,6 +201,11 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.localFolders
         },
         {
+            id: 'other',
+            index: INDEX += 100,
+            draw: extensions.otherFolders
+        },
+        {
             id: 'remote-accounts',
             index: INDEX += 100,
             draw: extensions.remoteAccounts
@@ -202,11 +214,6 @@ define('io.ox/core/folder/extensions', [
             id: 'add-account',
             index: INDEX += 100,
             draw: extensions.addRemoteAccount
-        },
-        {
-            id: 'other',
-            index: INDEX += 100,
-            draw: extensions.otherFolders
         }
     );
 
@@ -216,12 +223,16 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.standardFolders
         },
         {
-            id: 'remote-accounts',
-            draw: extensions.remoteAccounts
+            id: 'local-folders',
+            draw: extensions.localFolders
         },
         {
             id: 'other',
             draw: extensions.otherFolders
+        },
+        {
+            id: 'remote-accounts',
+            draw: extensions.remoteAccounts
         }
     );
 

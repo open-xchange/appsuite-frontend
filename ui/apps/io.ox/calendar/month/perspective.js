@@ -267,6 +267,18 @@ define('io.ox/calendar/month/perspective', [
         },
 
         /**
+         * Called after the perspective is shown.
+         */
+        afterShow: function () {
+            // See Bug 36417 - calendar jumps to wrong month with IE10
+            // If month perspectice is rendered the first time after another perspective was already rendered, the tops will all be 0.
+            // That happens, because the perspective is made visible after rendering but only when there was already another calendar perspective rendered;
+            if (_.keys(this.tops).length <= 1) {
+                this.getFirsts();
+            }
+        },
+
+        /**
          * scroll to given month
          * @param  {object} opt
          *          string|LocalDate date: date target as LocalDate or string (next|prev|today)

@@ -272,9 +272,19 @@
         float: right;
     }
 
+    &.visible-selection.has-focus .selected {
+        .date {
+            opacity: 1;
+        }
+
+        .list-item-content .drag-title {
+            opacity: 1;
+        }
+    }
+
     .date {
 
-        opacity: 0.50;
+        opacity: 0.75;
 
         html.high-contrast & {
             opacity: 1;
@@ -319,7 +329,7 @@
         }
 
         .drag-title {
-            opacity: 0.70;
+            opacity: 0.75;
         }
 
         i.flag {
@@ -332,7 +342,7 @@
 
     &.visible-selection.has-focus .list-item.selected i {
         opacity: 0.9;
-        &:not(.flag) {
+        &:not(.flag):not(.has-attachments) {
             color: rgba(255, 255, 255, 0.50);
         }
     }
@@ -343,6 +353,11 @@
         height: 18px;
         margin: 0 0 0 7px;
         float: right;
+        
+    }
+
+    &.visible-selection.has-focus .list-item.selected .fa-paperclip.has-attachments {
+        opacity: 1;
     }
 
     .priority {
@@ -485,7 +500,7 @@
         height: 40px;
         text-align: center;
         font-size: 14px;
-        color: #ccc;
+        color: #767676;
         &:hover { text-decoration: none; color: #aaa; }
         i.fa:before { content: "\f003"; } // fa-envelope-o
     }
@@ -493,7 +508,7 @@
     &.no-padding .unread-toggle { left: 40px; }
 
     &.unread .unread-toggle {
-        color: #08c;
+        color: @link-color;
         i.fa:before { content: "\f0e0"; } // fa-envelope
     }
 
@@ -507,7 +522,7 @@
             &:hover { text-decoration: none; }
         }
         .flag-dropdown-icon.flag_0 {
-            color: #ccc;
+            color: #767676;
         }
     }
 }
@@ -1008,7 +1023,7 @@ textarea.inplace-editor {
     &.no-padding .contact-picture { left: 0; }
 
     .io-ox-label {
-        color: #888;
+        color: #767676;
         .fontWeight(300);
         white-space: nowrap;
 
@@ -1302,6 +1317,18 @@ textarea.inplace-editor {
         }
 
         img.emoji-softbank { margin: 0 2px; }
+
+        // See 36097 - This issue may have to be revisited, see also "breakableHTML"
+        div {
+            word-break: break-word;
+        }
+    }
+
+    .max-size-warning {
+        color: #777;
+        margin: 10px -20px 0 -20px;
+        padding: 20px 20px 0 20px;
+        border-top: 1px solid #ddd;
     }
 }
 

@@ -76,6 +76,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                             .done(function () {
                                 win.idle();
                                 def.resolve({ app: app });
+                                ox.trigger('mail:' + type + ':ready', obj, app);
                             });
                         })
                         .fail(function (e) {
@@ -103,10 +104,14 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         app.replyall = compose('replyall');
         app.edit     = compose('edit');
 
+        // for debugging purposes
+        window.compose = app;
+
         return app;
     }
 
     return {
+
         getApp: createInstance,
 
         reuse: function (type, data) {

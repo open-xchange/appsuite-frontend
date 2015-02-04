@@ -86,9 +86,9 @@ define('io.ox/calendar/view-grid-template', [
                 }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 fields.time.text(tmpStr = gt.noI18n(util.getTimeInterval(data)));
-                a11yLabel += ', ' + tmpStr;
+                a11yLabel += ', ' + util.getTimeIntervalA11y(data);
                 fields.date.text(tmpStr = gt.noI18n(util.getDateInterval(data)));
-                a11yLabel += ', ' + tmpStr;
+                a11yLabel += ', ' + gt.noI18n(util.getDateIntervalA11y(data));
                 fields.shown_as.get(0).className = 'shown_as label ' + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {
                     var conflicts = $('<span>');

@@ -42,7 +42,8 @@ define('io.ox/mail/common-extensions', [
                 fromlist = data.from || [['', '']],
                 subject = _.escape($.trim(data.subject)),
                 unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
-                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize;
+                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize +
+                    (data.attachment ? ', ' + gt('has attachments') : '');
 
             this.attr({
                 'aria-hidden': true

@@ -43,9 +43,12 @@ define('io.ox/core/extPatterns/links', [
                 var prio = _.device('smartphone') ? self.mobile : self.prio;
                 var icons = self.icon && baton.options.icons !== false;
                 var title = self.title || self.label;
-                var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                var a = $('<a>')
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
+                        href: '#',
+                        tabindex: 1,
+                        'data-action': self.id,
                         'draggable': options.draggable || false,
                         'role': 'menuitem',
                         'data-section': self.section || 'default',
@@ -590,7 +593,7 @@ define('io.ox/core/extPatterns/links', [
                             'aria-haspopup': true
                         });
 
-                        div.attr('role', 'menu');
+                        div.attr('role', 'toolbar');
                         // add footer label?
                         if (extension.label) {
                             ul.append(

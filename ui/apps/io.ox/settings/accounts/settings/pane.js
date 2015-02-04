@@ -93,6 +93,10 @@ define('io.ox/settings/accounts/settings/pane', [
             );
         },
 
+        drawRecoveryButtonHeadline = function () {
+            return $('<h2 class="sr-only">').text(gt('Password recovery'));
+        },
+
         drawRecoveryButton = function () {
             return $('<div class="hint">').append(
                 $.txt(
@@ -235,7 +239,7 @@ define('io.ox/settings/accounts/settings/pane', [
                         self.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);
 
                         if (this.collection.length > 1) {
-                            self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButton);
+                            self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButtonHeadline(), drawRecoveryButton());
                         }
 
                         this.collection.each(function (item) {
@@ -259,7 +263,7 @@ define('io.ox/settings/accounts/settings/pane', [
                         })
                         .each(function (submodule) {
                             $dropDown.append(
-                                $('<li>').append(
+                                $('<li role="presentation">').append(
                                     $('<a>', { tabindex: 1, role: 'menuitem', href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
                                     .text(submodule.displayName)
                                     .on('click', function (e) {
@@ -281,7 +285,7 @@ define('io.ox/settings/accounts/settings/pane', [
                                 )
                             );
                         }).value();
-
+                        self.$el.find('.dropdown-toggle').dropdown();
                         return this;
                     },
 

@@ -154,6 +154,8 @@ define('io.ox/files/api', [
         'ogv':  'video/ogg',
         'ogm':  'video/ogg',
         'webm': 'video/webm',
+        // CSV
+        'csv': 'text/csv',
         // open office
         'odc': 'application/vnd.oasis.opendocument.chart',
         'odb': 'application/vnd.oasis.opendocument.database',
@@ -455,7 +457,7 @@ define('io.ox/files/api', [
 
             if ('filename' in options) {
                 formData.append('file', options.file, options.filename);
-            } else {
+            } else if ('file' in options) {
                 formData.append('file', options.file);
             }
 

@@ -676,9 +676,13 @@ msgstr ""
 "początkowa lub Spis treści w górnej części okna."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr ""
 "Aby otworzyć ustawienia, kliknij ikonę menu systemowego widoczną w prawym "
 "górnym rogu paska menu. Wybierz polecenie Ustawienia. "

@@ -78,14 +78,23 @@ define('io.ox/portal/widgets', [
         _(settings.get('widgets/protected' + widgetSet)).each(function (widgetDef, id) {
             widgetDef.protectedWidget = true;
             widgets[id] = _.extend({}, widgets[id], widgetDef, { protectedWidget: true });
+            widgets[id].userWidget = false;
+            widgetDef.userWidget = false;
+
+            var draggable = false;
             if (widgetDef.changeable) {
                 var updates = userValues[id] || {};
                 _(widgetDef.changeable).each(function (enabled, attr) {
                     if (enabled) {
                         widgets[id][attr] = updates[attr] || widgets[id][attr];
+                        if (attr === 'index') {
+                            draggable = true;
+                        }
                     }
                 });
             }
+            widgetDef.draggable = draggable;
+            widgets[id].draggable = draggable;
         });
 
         // no widgets configured (first start)
@@ -360,7 +369,6 @@ define('io.ox/portal/widgets', [
                     enabled: model.get('protectedWidget') ? true : model.get('enabled')
                 };
             });
-
             return extraSettings;
         },
 
@@ -390,28 +398,21 @@ define('io.ox/portal/widgets', [
                 old_state = obj,
                 index = 0;
 
-            var protectedIDs = _(obj).chain().filter(function (e) {
-                return e.protectedWidget;
-            }).pluck('index').value();
-
             function getIndex(i) {
-                if (_.contains(protectedIDs, i)) {
-                    return getIndex(i + 1);
-                } else {
-                    return i;
-                }
+                return i;
             }
 
             // update all indexes
             widgetList.children().each(function () {
                 var node = $(this), id = node.attr('data-widget-id');
                 if (id in obj) {
-                    if (!obj[id].protectedWidget) {
+                    if (obj[id].draggable || _.isUndefined(obj[id].draggable) || _.isNull(obj[id].draggable)) {
                         index++;
                         obj[id].index = getIndex(index);
                     }
                 }
             });
+
             self.update(obj);
             collection.trigger('sort');
             return settings.set('widgets/user', self.toJSON()).set('settings' + widgetSet, self.extraSettingsToJSON()).save().fail(

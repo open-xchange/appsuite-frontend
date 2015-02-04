@@ -402,7 +402,6 @@ define('io.ox/core/sub/settings/pane', [
                 );
                 setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
             }
-
         }
     });
 });

@@ -24,12 +24,12 @@ define('io.ox/core/folder/tree', [
 
     var TreeView = Backbone.View.extend({
 
-        className: 'folder-tree abs',
+        className: 'folder-tree',
 
         events: {
-            'click .contextmenu-control':   'onToggleContextMenu',
-            'keydown .contextmenu-control': 'onKeydown',
-            'contextmenu .selectable':      'onContextMenu'
+            'click .contextmenu-control':                    'onToggleContextMenu',
+            'keydown .contextmenu-control':                  'onKeydown',
+            'contextmenu .selectable, .contextmenu-control': 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -39,6 +39,7 @@ define('io.ox/core/folder/tree', [
                 contextmenu: false,
                 customize: $.noop,
                 disable: $.noop,
+                abs: true,
                 icons: settings.get('features/folderIcons', false),
                 root: 'default0/INBOX',
                 highlight: _.device('!smartphone'),
@@ -63,6 +64,8 @@ define('io.ox/core/folder/tree', [
             this.$el.append(this.$container);
 
             this.selection = new Selection(this);
+
+            if (options.abs) this.$el.addClass('abs');
 
             // add contextmenu?
             if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
@@ -107,11 +110,9 @@ define('io.ox/core/folder/tree', [
         },
 
         getTreeNodeOptions: function (options, model) {
-            // context===appp
-            // introduced with 53adc4646275bba89879f830b660f83e20d6f337
-            // https://gitweb.open-xchange.com/?p=wd/frontend/web;a=commit;h=53adc4646275bba89879f830b660f83e20d6f337
-            if (this.context === 'app' && model.get('id') === 'default0/INBOX' && options.parent.folder === 'virtual/standard') {
-                options.subfolders = false;
+            if (model.get('id') === 'default0/INBOX' && options.parent.folder === 'virtual/standard') {
+                // usually no subfolders; exception is altnamespace
+                options.subfolders = !!api.altnamespace;
             }
             if (this.flat && options.parent !== this) {
                 options.subfolders = false;
@@ -164,7 +165,12 @@ define('io.ox/core/folder/tree', [
         onContextMenu: function (e) {
             // clicks bubbles. right-click not
             e.stopPropagation();
+            e.preventDefault();
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
+            if (target.is('.contextmenu-control')) {
+                top = target.offset().top;
+                left = target.offset().left + 40;
+            }
             this.toggleContextMenu(target, top, left);
         },
 
@@ -178,24 +184,15 @@ define('io.ox/core/folder/tree', [
 
             var dropdown = this.$dropdown;
             // done if not open
-            if (!dropdown.hasClass('open')) return;
+            // if (!dropdown.hasClass('open')) return;
             // shift-tab
-            if (e.shiftKey && e.which === 9) return;
-
+            // if (e.shiftKey && e.which === 9) return;
             switch (e.which) {
-            case 9:
-                // tab
-            case 40:
+            case 32:
                 // cursor down
                 e.preventDefault();
+                $(e.currentTarget).click();
                 return dropdown.find('.dropdown-menu > li:first > a').focus();
-            case 38:
-                // cursor up
-                e.preventDefault();
-                return dropdown.find('.dropdown-menu > li:last > a').focus();
-            case 27:
-                // escape
-                return dropdown.find('.dropdown-toggle').dropdown('toggle');
             }
         },
 
@@ -216,7 +213,7 @@ define('io.ox/core/folder/tree', [
                 if (_.device('smartphone')) {
                     ul.append(
                         $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" data-toggle="dropdown" aria-haspopup="true">').append(
                                 $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                                 $('<span class="sr-only">')
                             )
@@ -255,12 +252,13 @@ define('io.ox/core/folder/tree', [
                 this.$el.after(
                     this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
                         $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
                         this.$dropdownMenu = $('<ul class="dropdown-menu" role="menu">')
                     )
                     .on('show.bs.dropdown', show.bind(this))
                     .on('hidden.bs.dropdown', hide)
                 );
+                this.$dropdownToggle.dropdown();
             };
         }()),
 

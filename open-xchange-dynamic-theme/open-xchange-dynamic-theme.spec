@@ -58,6 +58,10 @@ if [ -x %{update} ]; then %{update}; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
+* Fri Jan 30 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Sixth candidate for 7.6.2 release
+* Tue Jan 27 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Fifth candidate for 7.6.2 release
 * Wed Dec 17 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Moved open-xchange-dynamic-theme to the core repository
 * Wed Dec 17 2014 Viktor Pracht <viktor.pracht@open-xchange.com>

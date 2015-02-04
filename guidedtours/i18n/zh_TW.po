@@ -605,9 +605,13 @@ msgstr ""
 "明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
 
 #: apps/io.ox/tours/main.js:187 module:io.ox/tours

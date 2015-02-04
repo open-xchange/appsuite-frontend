@@ -23,6 +23,7 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         this.items = [];
         this.current = -1;
         this.deferred = $.Deferred();
+        this.only = false;
         if (callback) callback.call(this);
     }
 
@@ -35,11 +36,25 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
 
         next: function () {
             var item = this.items[++this.current];
-            if (item) this.process(item); else this.done();
+            if (item) this.process(item); else this.resolve();
         },
 
-        done: function () {
+        resolve: function () {
             this.deferred.resolve(this);
+        },
+
+        done: function (callback) {
+            return this.deferred.done(callback.bind(this));
+        },
+
+        getState: function () {
+            return this.deferred.state();
+        },
+
+        getResults: function () {
+            return _(this.items).map(function (item) {
+                return { description: item.description, duration: item.getDuration(), state: item.getState() };
+            });
         }
     });
 
@@ -47,10 +62,16 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
     // Test Suite
     //
 
+    // track last context for this.test.only()
+    var lastContext = null;
+
     function Suite(callback) {
-        AbstractSuite.call(this, callback);
         // for debugging purposes
         window.suite = this;
+        // for test.only() support
+        lastContext = this;
+        // inherit from AbstractSuite
+        AbstractSuite.call(this, callback);
     }
 
     _.extend(Suite.prototype, AbstractSuite.prototype, {
@@ -58,10 +79,16 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         // process item
         process: function (item) {
             console.log('Running test:', item.description);
-            item.run().done(function () {
-                console.log('Test finished. Took:', metrics.formatTimestamp(item.getDuration()));
-                this.next();
-            }.bind(this));
+            item.run().then(
+                function success() {
+                    console.log('Test finished. Took:', metrics.formatTimestamp(item.getDuration()));
+                    this.next();
+                }.bind(this),
+                function fail() {
+                    console.error('Test failed:', item.description);
+                    this.next();
+                }.bind(this)
+            );
         },
 
         getDuration: function () {
@@ -70,24 +97,46 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
             }, 0);
         },
 
-        test: function (description, callback) {
-            this.items.push(new Test(description, callback));
+        test: function (description, callback, only) {
+            if (this.only && !only) return;
+            this.items.push(new Test(description, callback, only));
         },
 
         // typical convenience function; instead of commenting stuff out
         xtest: function () {
-        }
+        },
 
+        // return results in CSV format
+        toCSV: function () {
+
+            var line = metrics.getBrowser() + ';' + _.now() + ';' + metrics.toSeconds(this.getDuration()) + ';';
+
+            return line + _(this.getResults())
+                .map(function (item) {
+                    return item.state === 'resolved' ? metrics.toSeconds(item.duration) : 'N/A';
+                })
+                .join(';');
+        }
     });
+
+    // handle test.only
+    Suite.prototype.test.only = function (description, callback) {
+        // remove all test not marked as "only"
+        lastContext.items = _(lastContext.items).filter(function (test) { return test.only; });
+        lastContext.test(description, callback, true);
+        lastContext.only = true;
+    };
 
     //
     // Test
     //
 
-    function Test(description, callback) {
+    function Test(description, callback, only) {
         // inherit from Suite
-        this.description = description;
         AbstractSuite.call(this, callback);
+        // define after inheritance
+        this.description = description;
+        this.only = !!only;
     }
 
     _.extend(Test.prototype, AbstractSuite.prototype, {
@@ -140,7 +189,13 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         waitForSelector: util.waitForSelector,
         waitForFolder: util.waitForFolder,
         waitForListView: util.waitForListView,
-        waitForImage: util.waitForImage
+        waitForImage: util.waitForImage,
+
+        // run find on current app's window
+        $: function (selector) {
+            if (!this.app) return $();
+            return this.app.getWindowNode().find(selector);
+        }
     });
 
     var that = {
@@ -150,9 +205,11 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         },
 
         suite: function (callback) {
-            new Suite(callback).run().done(function (suite) {
+            var suite = new Suite(callback);
+            suite.run().done(function (suite) {
                 console.log('Suite finished.', 'Took: ' + metrics.formatTimestamp(suite.getDuration()), 'Browser: ' + metrics.getBrowser());
             });
+            return suite;
         }
     };
 

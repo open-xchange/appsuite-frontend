@@ -192,7 +192,7 @@ define('io.ox/core/tk/dialogs', [
                     // tab
                     if (o.tabTrap) {
                         // get items first
-                        items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                        items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
                         if (items.length) {
                             e.preventDefault();
                             focus = $(document.activeElement);
@@ -309,7 +309,7 @@ define('io.ox/core/tk/dialogs', [
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse,
-                tabIndex: options.tabIndex
+                tabIndex: options.tabIndex || options.tabindex
             };
 
             if (options.type) {
@@ -317,7 +317,10 @@ define('io.ox/core/tk/dialogs', [
             }
             var button = $.button(opt);
             nodes.buttons.push(button);
-            return button.addClass(options.classes).attr('role', 'button');
+            return button.addClass(options.classes).attr({
+                role: 'button',
+                type: 'button'
+            });
         };
 
         this.addButton = function (action, label, dataaction, options) {

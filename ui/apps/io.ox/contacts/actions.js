@@ -302,7 +302,8 @@ define('io.ox/contacts/actions', [
     new Action('io.ox/contacts/actions/download-attachment', {
         id: 'download',
         requires: function (e) {
-            return e.collection.has('some') && _.device('!ios');
+            //browser support for downloading more than one file at once is pretty bad (see Bug #36212)
+            return e.collection.has('one') && _.device('!ios');
         },
         multiple: function (list) {
             require(['io.ox/contacts/actions/attachment'], function (attachmentAction) {
