@@ -23,7 +23,7 @@ define('io.ox/core/tk/dialogs',
     var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
         popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $('<div class="modal-header">'),
+                $('<div class="modal-header" id="dialog-title">'),
                 $('<div class="modal-body">'),
                 $('<div class="clearfix">'),
                 $('<div class="modal-footer">')
@@ -278,7 +278,7 @@ define('io.ox/core/tk/dialogs',
         this.text = function (str) {
             var p = nodes.body;
             p.find('.plain-text').remove();
-            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ''));
+            p.append($('<h4 class="plain-text">').text(str || ''));
             return this;
         };
 
