@@ -576,6 +576,8 @@ define('io.ox/portal/main',
             'aria-label': gt('Portal Widgets')
         });
 
+        win.setTitle(gt('Portal'));
+
         ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 
         app.updateTitle();
