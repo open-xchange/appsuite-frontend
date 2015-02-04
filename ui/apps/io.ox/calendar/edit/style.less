@@ -120,7 +120,8 @@
             @color-label-contrast: contrast(@@color-label-bg-mod);
 
             .color-label-@{counter} {
-                background-color: ~"@{color-label-bg-@{counter}}";
+                @color-label-counter: ~"color-label-bg-@{counter}";
+                background-color: darken(@@color-label-counter, 10%);
                 .fa {
                     color: @color-label-contrast;
                 }

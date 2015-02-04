@@ -316,9 +316,13 @@ div.hopscotch-bubble {
 /* top bar */
 #io-ox-topbar {
 
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 40px;
     bottom: auto;
-    z-index: 2;
+    z-index: 11; // one more than #io-ox-screens
     background-color: @topbar-background;
 
     .launchers {
@@ -330,8 +334,9 @@ div.hopscotch-bubble {
     }
 
     .launchers-secondary {
-        float:right;
-        position:relative;
+        float: right;
+        position: relative;
+        margin-right: 7px;
     }
 
     html.high-contrast & {
@@ -373,7 +378,7 @@ html.ios8-standalone-ipad-fix {
 #io-ox-top-logo-small {
     width: 60px;
     height: 22px;
-    margin: 8px 13px 0 13px;
+    margin: 8px 7px 0 13px;
     float: right;
     background-image: url('apps/themes/default/logo-small.png');
     background-repeat: no-repeat;
@@ -821,6 +826,44 @@ html.ios8-standalone-ipad-fix {
 
 #io-ox-windowmanager {
     overflow: hidden;
+}
+
+/* banner */
+#io-ox-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+    &.visible {
+        color: #fff;
+        line-height: 40px;
+        padding: 10px 20px 10px 10px;
+        display: block;
+        height: 60px;
+        .vertical-gradient(darken(@topbar-background, 10%), darken(@topbar-background, 18%));
+    }
+    .banner-title {
+        font-size: 20px;
+        font-weight: 300;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.70);
+        float: left;
+    }
+    .banner-content {
+        font-size: 13px;
+        float: right;
+        label {
+            font-weight: inherit;
+            color: rgba(255, 255, 255, 0.70);
+        }
+    }
+    .banner-action {
+        color: #fff;
+        font-size: 20px;
+        margin-left: 14px;
+        position: relative;
+        text-decoration: none;
+        top: 2px;
+    }
 }
 
 /* notifications */
@@ -1568,7 +1611,7 @@ html.ios8-standalone-ipad-fix {
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     margin: 0;
-    padding: 0 4px 0 5px;
+    padding: 0 7px 0 5px;
     .user-select(none);
 
     html.high-contrast & {

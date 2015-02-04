@@ -515,16 +515,6 @@ define('io.ox/calendar/main', [
         },
         /*
          * mobile only
-         * change current month label in navbar
-         */
-        'change:navbar:month': function (app) {
-            if (_.device('!smartphone')) return;
-            app.on('change:navbar:month', function (title) {
-                app.pages.getNavbar('month').setTitle(title);
-            });
-        },
-        /*
-         * mobile only
          * change current date label in navbar
          */
         'change:navbar:date-mobile': function (app) {

@@ -1032,6 +1032,46 @@ define('io.ox/core/main', [
             }
         });
 
+        ext.point('io.ox/core/banner').extend({
+            id: 'default',
+            draw: function () {
+
+                var sc = ox.serverConfig;
+                if (sc.banner === false || _.device('!desktop')) return;
+
+                var banner = $('#io-ox-banner').toggleClass('visible'),
+                    height = sc.bannerHeight || 60;
+
+                // move affected viewports
+                $('#io-ox-topbar, #io-ox-screens, #io-ox-notifications').css('top', '+=' + height + 'px');
+
+                // set title
+                banner.find('.banner-title').append(
+                    sc.bannerCompany !== false ? $('<b>').text((sc.bannerCompany || 'OX') + ' ') : $(),
+                    $.txt(sc.bannerProductName || 'App Suite')
+                );
+
+                // show current user
+                banner.find('.banner-content').append(
+                    $('<label>').text(gt('Signed in as:')),
+                    $.txt(' '), $.txt(ox.user),
+                    $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
+                        .attr('title', gt('Sign out'))
+                        .append('<i class="fa fa-power-off">')
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            logout();
+                        })
+                );
+
+                // prevent logout action within top-bar drop-down
+                ext.point('io.ox/core/topbar/right/dropdown').disable('logout');
+
+                // prevent logo
+                ext.point('io.ox/core/topbar/right').disable('logo');
+            }
+        });
+
         ext.point('io.ox/core/relogin').extend({
             draw: function () {
                 this.append(
@@ -1396,6 +1436,7 @@ define('io.ox/core/main', [
                     debug('Stage "load" > loaded.done');
 
                     // draw top bar now
+                    ext.point('io.ox/core/banner').invoke('draw');
                     ext.point('io.ox/core/topbar').invoke('draw');
 
                     // help here

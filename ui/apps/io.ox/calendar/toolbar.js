@@ -52,6 +52,12 @@ define('io.ox/calendar/toolbar', [
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
         },
+        'today': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Today'),
+            ref: 'io.ox/calendar/actions/today'
+        },
         'edit': {
             prio: 'hi',
             mobile: 'hi',

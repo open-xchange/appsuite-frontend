@@ -681,6 +681,11 @@ define('io.ox/calendar/util', [
                     ret.hasFirst = true;
                 }
                 day.add(date.DAY);
+
+                obj.isLast = day.getDate() === 1;
+                if (obj.isLast) {
+                    ret.hasLast = true;
+                }
             }
             return ret;
         },
