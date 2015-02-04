@@ -42,9 +42,7 @@ define('io.ox/search/facets/extensions',
                         });
                 },
                 disable: function (data) {
-                    var same = type === 'move' && data.id === id,
-                        create = api.can('create', data);
-                    return same || !create;
+                    return !api.can('read', data);
                 }
             });
         });
