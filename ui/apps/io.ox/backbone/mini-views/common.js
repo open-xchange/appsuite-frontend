@@ -208,14 +208,16 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
                         if ($(this).hasClass('has-error')) return;
                         $(this).addClass('has-error');
                         self.$el.attr({
-                            'id': errorId,
-                            'role': 'alert'
+                            'id': errorId
                         });
                         self.$el.text(message).show().end();
                         $(this).find('input').attr({
                             'aria-invalid': true,
                             'aria-describedby': errorId
-                        }).focus();
+                        });
+                        _.defer(function () {
+                            $(container).find('input').focus();
+                        });
                     },
                     valid: function () {
                         $(this).removeClass('has-error');
