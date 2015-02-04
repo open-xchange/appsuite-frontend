@@ -685,9 +685,11 @@ define('io.ox/calendar/util',
         },
 
         resolveParticipants: function (participants, mode) {
+
             var groupIDs = [],
                 userIDs = [],
                 result = [];
+
             mode = mode || 'dist';
 
             _.each(participants, function (participant) {
@@ -716,9 +718,12 @@ define('io.ox/calendar/util',
                     return _([].concat(result, users)).uniq();
                 } else {
                     _.each(users, function (user) {
-                        if (user.id !== ox.user_id) {
-                            result.push([user.display_name, user.mail]);
-                        }
+                        // don't add myself
+                        if (user.id === ox.user_id) return;
+                        // don't add if mail address is missing (yep, edge-case)
+                        if (!user.mail) return;
+                        // add to result
+                        result.push([user.display_name, user.mail]);
                     });
                     return result;
                 }
