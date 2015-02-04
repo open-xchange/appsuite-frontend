@@ -38,6 +38,7 @@ define('io.ox/calendar/month/view', [
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         pane:           $(),
+        type:           '',
 
         events: {
             'click .appointment':      'onClickAppointment',
@@ -53,6 +54,7 @@ define('io.ox/calendar/month/view', [
             this.folder = options.folder;
             this.pane = options.pane;
             this.app = options.app;
+            this.weekType = options.weekType;
         },
 
         onClickAppointment: function (e) {
@@ -140,30 +142,31 @@ define('io.ox/calendar/month/view', [
                 if (day.isFirst) {
                     firstFound = true;
                 }
-                var dayCell;
-                this.$el.append(
-                    dayCell = $('<div>')
-                        .css('z-index', list.days.length - i)
-                        .addClass('day out' +
-                            (day.isFirst ? ' first' : '') +
-                            (day.isToday ? ' today' : '') +
-                            (day.isWeekend ? ' weekend' : '') +
-                            (day.isFirst && i > 0 ? ' borderleft' : '') +
-                            (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '')
-                        )
+
+                var dayCell = $('<div>')
+                .css('z-index', list.days.length - i)
+                .addClass((day.isFirst ? ' first' : '') +
+                    (day.isFirst && i === 0 ? ' forceleftborder' : '') +
+                    (day.isToday ? ' today' : '') +
+                    (day.isWeekend ? ' weekend' : '') +
+                    (day.isFirst || i === 0 ? ' borderleft' : '') +
+                    (day.isLast ? ' borderright' : '') +
+                    (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '') +
+                    (list.hasLast && !firstFound ? ' borderbottom' : '')
+                );
+
+                if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
+                    this.$el.append(dayCell.addClass('day-filler'));
+                } else {
+                    var dayCell;
+                    this.$el.append(
+                        dayCell
+                        .addClass('day')
                         .attr('id', day.year + '-' + day.month + '-' + day.date)
                         .data('date', day.timestamp)
                         .append(
                             $('<div>').addClass('list abs'),
                             $('<div>').addClass('number').text(gt.noI18n(day.date))
-                        )
-                );
-
-                if (day.isFirst) {
-                    // prepend month name, like January 2013
-                    weekinfo.prepend(
-                        $('<span class="month-name">').text(
-                            gt.noI18n(date.locale.monthsShort[day.month]) + ' ' + gt.noI18n(day.year)
                         )
                     );
                 }
@@ -176,7 +179,7 @@ define('io.ox/calendar/month/view', [
                     self.changeToSelectedDay($(this).data('date'));
                 });
             } else {
-                this.$el.prepend(weekinfo.addClass(firstFound ? ' bordertop' : ''));
+                this.$el.prepend(weekinfo);
             }
             return this;
         },

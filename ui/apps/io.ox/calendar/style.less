@@ -21,7 +21,6 @@
         }
 
         height: @calendar-toolbar-height;
-        text-align: center;
         padding-top: @calendar-toolbar-top-padding;
 
         .info {
@@ -29,10 +28,12 @@
             text-align: left;
             max-width: 30%;
             position: absolute;
-            left: 20px;
+            left: @weekview-time-width;
             line-height: @calendar-toolbar-height - @calendar-toolbar-top-padding;
             font-size: 20px;
             color: #333;
+            text-decoration: none;
+
             .ellipsis();
             .fontWeight(300);
 
@@ -42,11 +43,17 @@
             }
 
         }
+    }
 
-        .pagination {
-            margin:  0 0 0 @weekview-time-width;
+    .controls-container {
+        display: inline-block;
+        padding-top: 8px;
+        width: @weekview-time-width;
+        text-align: center;
+
+        a {
+            padding: 9px;
         }
-
     }
 
     .footer-container {
@@ -77,8 +84,8 @@
 
                 &.today {
                     font-weight: bold;
-                    background-color: @weekview-today;
-                    color: #333;
+                    background-color: @calendar-today;
+                    color: #fff;
                 }
 
             }
@@ -289,6 +296,25 @@
 
         .generate-color-label(10);
     }
+
+    @media (min-width: 1281px) {
+        @adjusted-width: @weekview-time-width * 1.25;
+        .toolbar {
+            .info {
+                left: @adjusted-width;
+            }
+        }
+
+        .controls-container {
+            width: @adjusted-width;
+        }
+
+        .footer-container {
+            .footer {
+                left: @adjusted-width;
+            }
+        }
+    }
 }
 
 .custom-colors {
@@ -316,7 +342,10 @@
                 .generate-color-label(@counter) when (@counter > 0) {
                     .generate-color-label((@counter - 1));
 
-                    &.color-label-@{counter}:before { background-color: ~"@{color-label-bg-@{counter}}"; }
+                    &.color-label-@{counter}:before {
+                        @color-label-counter: ~"color-label-bg-@{counter}";
+                        background-color: darken(@@color-label-counter, 10%);
+                    }
                 }
 
                 .generate-color-label(10);
