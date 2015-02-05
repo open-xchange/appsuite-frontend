@@ -339,6 +339,14 @@
                     }
                 }
 
+                @media all and (max-width: 480px), all and (max-device-width: 480px) {
+                    &.color-label {
+                        &:before {
+                            top: 12px;
+                        }
+                    }
+                }
+
                 .generate-color-label(@counter) when (@counter > 0) {
                     .generate-color-label((@counter - 1));
 
