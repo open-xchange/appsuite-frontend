@@ -51,6 +51,7 @@ define('io.ox/mail/compose/model', [
                 priority: 3,
                 received_date: '',
                 reply_to: '',
+                sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
                 sent_date: '',
                 signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
@@ -269,6 +270,11 @@ define('io.ox/mail/compose/model', [
                 'sendtype',
                 'csid'
             );
+
+            // remove display name from sender if necessary
+            if (this.get('sendDisplayName') === false) {
+                result.from[0][0] = null;
+            }
 
             if (this.get('msgref')) {
                 result.msgref = this.get('msgref');

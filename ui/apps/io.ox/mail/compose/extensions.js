@@ -26,11 +26,12 @@ define('io.ox/mail/compose/extensions', [
 
     function renderFrom(array) {
         if (!array) return;
-        var name = _(array).first(),
-            address = _(array).last();
+        var name = _(array).first(), address = _(array).last();
+        // consider setting
+        if (!settings.get('sendDisplayName', true)) name = null;
         return [
             $('<span class="name">').text(name ? name + ' ' : ''),
-            $('<span class="address">').text('<' + address + '>')
+            $('<span class="address">').text(name ? '<' + address + '>' : address)
         ];
     }
 
@@ -92,6 +93,7 @@ define('io.ox/mail/compose/extensions', [
 
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
+
                     var defaultSender = _(baton.model.get('from')).first(),
                         dropdown = new SenderDropdown({
                             model: baton.model,
@@ -102,13 +104,27 @@ define('io.ox/mail/compose/extensions', [
 
                     sender.drawDropdown().done(function (list) {
 
-                        if (list.sortedAddresses.length >= 1) {
-                            _.each(_(list.sortedAddresses).pluck('option'), function (item) {
+                        function drawOptions() {
+
+                            if (!list.sortedAddresses.length) return;
+                            var options = _(list.sortedAddresses).pluck('option');
+
+                            _(options).each(function (item) {
                                 dropdown.option('from', [item], function () {
                                     return renderFrom(item);
                                 });
                             });
+
+                            // append options to edit display names
+                            dropdown
+                                .divider()
+                                .option('sendDisplayName', true, gt('Send your name'));
+
+                            // stop event propagation so that the user can see the effect
+                            dropdown.$ul.find('[data-name="sendDisplayName"]').attr('data-keep-open', true);
                         }
+
+                        drawOptions();
 
                         node.append(
                             $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')),
@@ -116,6 +132,17 @@ define('io.ox/mail/compose/extensions', [
                                 dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                             )
                         );
+
+                        dropdown.listenTo(dropdown.model, 'change:sendDisplayName', function (model, value) {
+                            // update setting first
+                            settings.set('sendDisplayName', value).save();
+                            // redraw dropdown
+                            dropdown.$('ul').empty();
+                            drawOptions();
+                            dropdown.label();
+                            // re-focus element otherwise the bootstap a11y closes the drop-down
+                            dropdown.$ul.find('[data-name="sendDisplayName"]').focus();
+                        });
                     });
                 };
 

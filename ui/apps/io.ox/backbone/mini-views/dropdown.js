@@ -27,9 +27,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var node = $(e.currentTarget),
                 name = node.attr('data-name'),
                 value = node.data('value'),
-                toggle = node.data('toggle');
+                toggle = node.data('toggle'),
+                keep = node.attr('data-keep-open') === 'true';
             // ignore plain links
             if (value === undefined) return;
+            if (keep) e.stopPropagation();
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
