@@ -451,7 +451,7 @@ define('io.ox/core/folder/extensions', [
                 index: 200,
                 draw: function (baton) {
 
-                    this.find('.folder-shared:first').remove();
+                    this.find('.folder-node:first .folder-shared:first').remove();
 
                     if (_.device('smartphone')) return;
                     if (!api.is('unlocked', baton.data)) return;
