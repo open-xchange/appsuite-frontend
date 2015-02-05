@@ -16,6 +16,9 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
     describe('Mail Compose', function () {
         var app;
         beforeEach(function () {
+            this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
+                xhr.respond(200, 'image/gif', '');
+            });
             app = compose.getApp();
             return app.launch();
         });
