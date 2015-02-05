@@ -323,6 +323,34 @@ define('io.ox/mail/compose/view', [
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
 
+            var mailto, params;
+            // triggerd by mailto?
+            if (mailto = _.url.hash('mailto')) {
+
+                var parseRecipients = function (recipients) {
+                    return recipients.split(',').map(function (recipient) {
+                        var parts = _.compact(
+                            recipient.replace(/^("([^"]*)"|([^<>]*))?\s*(<(\s*(.*?)\s*)>)?/, '$2//$3//$5').split('//')
+                        ).map(function (str) { return str.trim(); });
+                        return (parts.length === 1) ? [parts[0], parts[0]] : parts;
+                    });
+                };
+                // remove 'mailto:'' prefix and split at '?''
+                var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
+                var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
+                // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
+                for (var key in params) params[key.toLowerCase()] = params[key];
+                // save data
+                if (to)         { this.model.set('to',  parseRecipients(to),         { silent: true }); }
+                if (params.cc)  { this.model.set('cc',  parseRecipients(params.cc),  { silent: true }); }
+                if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
+
+                this.setSubject(params.subject || '');
+                this.model.setContent(params.body || '');
+                // clear hash
+                _.url.hash('mailto', null);
+            }
+
             ext.point(POINT + '/mailto').invoke('setup');
         },
 
