@@ -50,7 +50,7 @@ define('io.ox/core/attachments/view',
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
 
-            this.$header = $('<header>');
+            this.$header = $('<header role="heading">');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
             this.isListRendered = false;

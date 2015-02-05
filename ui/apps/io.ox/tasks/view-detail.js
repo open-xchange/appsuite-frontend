@@ -62,7 +62,7 @@ define('io.ox/tasks/view-detail',
             var infoPanel,
                 task = baton.interpretedData;
             this.append(
-                $('<header>').append(
+                $('<header role="heading">').append(
                     infoPanel = $('<div>').addClass('info-panel'),
                     $('<h1 class="title clear-title">').append(
                         // lock icon
