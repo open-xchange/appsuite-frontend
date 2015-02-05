@@ -34,6 +34,12 @@ define('io.ox/mail/compose/view', [
     var INDEX = 0,
         POINT = 'io.ox/mail/compose';
 
+    ext.point(POINT + '/mailto').extend({
+        id: 'mailto',
+        index: 100,
+        setup: extensions.mailto
+    });
+
     ext.point(POINT + '/fields').extend({
         id: 'header',
         index: INDEX += 100,
@@ -316,6 +322,8 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'needsync', this.syncMail);
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+
+            ext.point(POINT + '/mailto').invoke('setup');
         },
 
         filterData: function (data) {
