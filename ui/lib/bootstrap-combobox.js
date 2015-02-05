@@ -362,4 +362,4 @@
             $this.typeahead($this.data());
         });
     });
-});
+}(jQuery)

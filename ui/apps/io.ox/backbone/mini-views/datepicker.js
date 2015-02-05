@@ -19,18 +19,6 @@ define('io.ox/backbone/mini-views/datepicker', [
 
     'use strict';
 
-    //customize datepicker
-    //just localize the picker, use en as default with current languages
-    $.fn.datepicker.dates.en = {
-        days: date.locale.days,
-        daysShort: date.locale.daysShort,
-        daysMin: date.locale.daysStandalone,
-        months: date.locale.months,
-        monthsShort: date.locale.monthsShort,
-        today: gt('Today'),
-        clear: gt('Clear')
-    };
-
     // Bootstrap DatePicker
     var DatePickerView = Backbone.View.extend({
 
@@ -54,7 +42,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         render: function () {
-            var self = this;
+            var self = this,
+                def = $.Deferred();
 
             this.$el.append(
                 $('<legend>').addClass('control-label').text(this.options.label),
@@ -126,21 +115,17 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                     // initialize mobiscroll plugin
                     self.nodes.dayField.mobiscroll(mobileSettings);
+                    def.resolve();
                 });
             } else {
-                // get the right date format and init datepicker
-                this.nodes.dayField.datepicker({
-                    autoclose: true,
-                    clearBtn: self.options.clearButton,
-                    format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                    parentEl: self.$el,
-                    todayBtn: 'linked', // today button should insert and select. See Bug #34381
-                    todayHighlight: true,
-                    weekStart: date.locale.weekStart
-                });
+                require(['io.ox/core/tk/datepicker'], function () {
+                    // get the right date format and init datepicker
+                    self.nodes.dayField.datepicker({
+                        clearBtn: self.options.clearButton,
+                        parentEl: self.$el
+                    });
 
-                // build and init timepicker based on combobox plugin
-                if (self.options.display === 'DATETIME') {
+                    // build and init timepicker based on combobox plugin
                     var hours_typeahead = [],
                         filldate = new date.Local().setHours(0, 0, 0, 0),
                         interval = parseInt(settings.get('interval'), 10) || 30;
@@ -159,20 +144,22 @@ define('io.ox/backbone/mini-views/datepicker', [
                                 return pd.getTime();
                             });
                             return items;
-                        },
-                        autocompleteBehaviour: false
+                        }
                     };
 
-                    this.nodes.timeField.combobox(comboboxHours);
-                    this.nodes.timeField.on('change', _.bind(this.updateModel, this));
-                }
-                this.toggleTimeInput(self.options.display === 'DATETIME');
+                    self.nodes.timeField.combobox(comboboxHours);
+                    self.nodes.timeField.on('change', _.bind(self.updateModel, self));
+                    self.toggleTimeInput(self.options.display === 'DATETIME');
+
+                    def.resolve();
+                });
             }
 
-            this.nodes.dayField.on('change', _.bind(this.updateModel, this));
-
-            // insert initial values
-            this.updateView();
+            def.then(function () {
+                // insert initial values
+                self.updateView();
+                self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+            });
 
             return this;
         },
