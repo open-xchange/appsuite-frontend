@@ -150,6 +150,12 @@ define('io.ox/settings/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
+
+        left.attr({
+            'role': 'navigation',
+            'aria-label': gt('Settings')
+        });
+
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             'tabindex': 1,
             'aria-describedby': 'currentsettingtitle',
