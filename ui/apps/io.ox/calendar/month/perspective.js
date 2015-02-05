@@ -20,9 +20,10 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/print',
+    'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
+], function (View, api, date, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -271,6 +272,12 @@ define('io.ox/calendar/month/perspective', [
             return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
         },
 
+        updateColor: function (model) {
+            $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
+                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+            });
+        },
+
         update: function (useCache) {
             var today = new date.Local(),
                 day = $('#' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate(), this.pane);
@@ -280,6 +287,12 @@ define('io.ox/calendar/month/perspective', [
             }
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
             this.updateWeeks({ start: this.firstWeek, weeks: weeks }, useCache);
+
+            if (this.folderModel) {
+                this.folderModel.off('change:meta', this.updateColor);
+            }
+            this.folderModel = folderAPI.pool.getModel(this.folder.id);
+            this.folderModel.on('change:meta', this.updateColor, this);
         },
 
         /**
@@ -517,6 +530,9 @@ define('io.ox/calendar/month/perspective', [
             $(window).on('resize', this.getFirsts);
 
             self.getFolder().done(function () {
+                self.folderModel = folderAPI.pool.getModel(self.folder.id);
+                self.folderModel.on('change:meta', self.updateColor, self);
+
                 self.drawWeeks({ multi: self.initLoad }).done(function () {
                     self.gotoMonth();
                 });

@@ -489,7 +489,12 @@ define('io.ox/core/folder/extensions', [
 
                     var folderColor = calendarUtil.getFolderColor(baton.data);
 
-                    this.find('.folder-label').addClass('color-label color-label-' + folderColor);
+                    // remove any color-label.* classes from folder.
+                    this.find('.folder-label').each(function (index, node) {
+                        node.className = _(node.className.split(' ')).filter(function (c) {
+                            return !c.match(/color-label(-\d{1,2})?/);
+                        }).join(' ');
+                    }).addClass('color-label color-label-' + folderColor);
                 }
             }
         );

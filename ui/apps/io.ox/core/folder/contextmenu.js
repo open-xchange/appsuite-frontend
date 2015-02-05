@@ -49,6 +49,62 @@ define('io.ox/core/folder/contextmenu', [
         );
     }
 
+    var ColorSelectionView = Backbone.View.extend({
+        tagName: 'div',
+        className: 'custom-colors',
+        events: {
+            'click .color-label': 'select',
+            'remove': 'onRemove'
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change:meta', this.update);
+        },
+        update: function () {
+            //toggle active class
+            $('.active', this.$el).removeClass('active').attr('aria-checked', false);
+            $('.color-label-' + this.model.get('meta').color_label, this.$el).addClass('active').attr('aria-checked', true);
+        },
+        select: function (e) {
+            var meta = _.extend({},
+                this.model.get('meta'),
+                { color_label: $(e.target).data('index') }
+            );
+
+            api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell(error);
+                });
+            });
+
+            //prevent dialog from closing
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        render: function (util) {
+            var folderColor = util.getFolderColor({ meta: this.model.get('meta') }),
+                self = this;
+
+            _(_.range(1, 11)).each(function (colorNumber) {
+                self.$el.append(
+                    $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                    .addClass('color-label-' + colorNumber)
+                    .addClass(folderColor == colorNumber ? 'active' : '')
+                    .attr({
+                        'data-index': colorNumber,
+                        'aria-checked': folderColor == colorNumber,
+                        'aria-label': util.getColorLabel(colorNumber)
+                    })
+                    .append('<i class="fa fa-check">')
+                );
+            });
+
+            return this;
+        },
+        onRemove: function () {
+            this.stopListening();
+        }
+    });
+
     var extensions = {
 
         //
@@ -450,36 +506,6 @@ define('io.ox/core/folder/contextmenu', [
 
         customColor: (function () {
 
-            var util;
-
-            function clickHandler(e) {
-
-                //prevent dialog from closing
-                e.stopPropagation();
-                e.preventDefault();
-
-                e.data.baton.elem = $(this);
-
-                require(['io.ox/core/folder/actions/color-selection'], function (colorSelection) {
-                    colorSelection(e.data.baton, e.data.color_label);
-                });
-            }
-
-            function getColorLabel(color_label, baton) {
-
-                var folderColor = util.getFolderColor(baton.data);
-
-                return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
-                    .addClass('color-label-' + color_label)
-                    .addClass(folderColor == color_label ? 'active' : '')
-                    .attr({
-                        'aria-checked': folderColor == color_label,
-                        'aria-label': util.getColorLabel(color_label)
-                    })
-                    .append('<i class="fa fa-check">')
-                    .on('click', { color_label: color_label, baton: baton }, clickHandler);
-            }
-
             return function (baton) {
 
                 if (!/^calendar$/.test(baton.module)) return;
@@ -493,13 +519,11 @@ define('io.ox/core/folder/contextmenu', [
 
                 require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (settings, calendarUtil) {
                     if (settings.get('colorScheme') === 'custom') {
-                        util = calendarUtil;
+                        //util = calendarUtil;
                         listItem.append(
-                            $('<div class="custom-colors">').append(
-                                _.map(_.range(1, 11), function (opt) {
-                                    return getColorLabel(opt, baton);
-                                })
-                            )
+                            new ColorSelectionView({
+                                model: api.pool.getModel(baton.data.id)
+                            }).render(calendarUtil).$el
                         );
                     } else {
                         listItem.remove();
