@@ -299,9 +299,11 @@ define('io.ox/core/main',
                 (fn.call(this) || $.when()).done(function () {
                     // revert visual changes
                     self.idle().empty().append(content).css('width', '');
-                    //detaching results in lost focus, which is bad for keyboard support, so we need to restore it.
-                    //try pressing enter on the refresh button for example
-                    focus.focus();
+                    //detaching results in lost focus, which is bad for keyboard support.
+                    //so we need to restore it, if it was not set manually in the mean time.
+                    if ($(document.activeElement).filter('body').length > 0) {
+                        focus.focus();
+                    }
                 });
             });
         }
