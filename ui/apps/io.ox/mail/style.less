@@ -402,6 +402,10 @@
         float: right;
     }
 
+    &.visible-selection.has-focus .list-item.selected .fa-paperclip.has-attachments {
+        opacity: 1;
+    }
+
     .priority {
         float: right;
         .high { color: @mail-priority; }
@@ -921,9 +925,11 @@ textarea.inplace-editor {
         height: 0;
     }
 
-    .subscription-actions {
-        text-align: right;
-        margin-top: 1em;
+    .subscription {
+        .actions {
+            text-align: right;
+            margin-top: 1em;
+        }
     }
 
     .thread-inline-actions {
@@ -1183,7 +1189,7 @@ textarea.inplace-editor {
     }
 
     .notification-item {
-        padding: 14px 40px 14px 20px;
+        padding: 14px 20px;
         background-color: #f0f0f0;
         border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
