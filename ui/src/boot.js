@@ -75,11 +75,17 @@ $(window).load(function () {
 
     var req = window.req = window.require;
     window.require = function (deps, success, fail) {
+        var errorHandler = function (error) {
+            console.error('require: Error in ' + error.requireModules, error.stack);
+        };
         if (_.isArray(deps)) {
             // use deferred object
             _(deps).each(function (m) {
                 $(window).trigger('require:require', m);
             });
+            if (!fail) {
+                fail = errorHandler;
+            }
             var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
             return def.promise();
