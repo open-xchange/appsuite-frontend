@@ -106,7 +106,7 @@ define('io.ox/calendar/week/view', [
             this.fulltimeNote   = $('<div>').addClass('note');
             this.timeline       = $('<div>').addClass('timeline');
             this.dayLabel       = $('<div>').addClass('footer');
-            this.kwInfo         = _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info');
+            this.kwInfo         = _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault);
             this.weekCon        = $('<div>').addClass('week-container');
 
             this.kwInfo.attr({
