@@ -153,9 +153,6 @@ define('io.ox/core/tk/list', [
                 this.$el.append(li);
             }
 
-            // add to selection
-            this.selection.add(this.getCID(model), li);
-
             // forward event
             this.trigger('add', model, index);
         },
