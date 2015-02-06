@@ -19,7 +19,7 @@ define('io.ox/core/session', [
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 };
+    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 }, CLIENT = 'open-xchange-appsuite';
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -66,7 +66,7 @@ define('io.ox/core/session', [
                     action: 'autologin',
                     client: that.client(),
                     rampup: true,
-                    rampupFor: 'open-xchange-appsutie',
+                    rampupFor: CLIENT,
                     version: that.version()
                 }
             })
@@ -206,7 +206,7 @@ define('io.ox/core/session', [
                 params: {
                     action: 'rampup',
                     rampup: true,
-                    rampupFor: 'open-xchange-appsuite'
+                    rampupFor: CLIENT
                 },
                 appendColumns: false,
                 processResponse: false
@@ -264,7 +264,7 @@ define('io.ox/core/session', [
         },
 
         client: function () {
-            return 'open-xchange-appsuite';
+            return CLIENT;
         },
 
         version: function () {

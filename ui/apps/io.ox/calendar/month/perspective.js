@@ -20,9 +20,10 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/print',
+    'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
+], function (View, api, date, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -44,7 +45,6 @@ define('io.ox/calendar/month/perspective', [
         folder: null,
         app: null,          // the current application
         dialog: $(),        // sidepopup
-        isScrolling: false, // scrolling
 
         /**
          * open sidepopup to show appointment
@@ -195,23 +195,53 @@ define('io.ox/calendar/month/perspective', [
                 weeks = param.multi * self.updateLoad,
                 day = param.up ? self.firstWeek -= (weeks) * date.WEEK : self.lastWeek,
                 start = day;
-            // draw all weeks
-            for (var i = 1; i <= weeks; i++, day += date.WEEK) {
-                // add collection for week
-                self.collections[day] = new Backbone.Collection([]);
-                // new view
-                var view = new View({
-                    collection: self.collections[day],
-                    day: day,
-                    folder: self.folder,
-                    pane: this.pane,
-                    app: this.app
-                });
+
+            function createView(options) {
+                var view = new View(options);
+
                 view.on('showAppointment', self.showAppointment, self)
                     .on('createAppoinment', self.createAppointment, self)
                     .on('openEditAppointment', self.openEditAppointment, self)
                     .on('updateAppointment', self.updateAppointment, self);
+
+                return view;
+            }
+            // draw all weeks
+            for (var i = 1; i <= weeks; i++, day += date.WEEK) {
+                var startDate = new date.Local(day + date.DAY).setStartOfWeek(),
+                    endDate = new date.Local(day + date.DAY + date.WEEK).setStartOfWeek(),
+                    monthDelimiter = startDate.getDate() > endDate.getDate();
+
+                // add collection for week
+                self.collections[day] = new Backbone.Collection([]);
+                // new view
+                var view = createView({
+                    collection: self.collections[day],
+                    day: day,
+                    folder: self.folder,
+                    pane: this.pane,
+                    app: this.app,
+                    weekType: monthDelimiter ? 'last' : ''
+                });
                 views.push(view.render().el);
+
+                // seperate last days if month before and first days of next month
+                if (monthDelimiter) {
+                    // add an
+                    views.push($('<div class="week month-name">').attr('id', endDate.getYear() + '-' + endDate.getMonth()).append($('<div>').text(gt.noI18n(endDate.format('MMMM y')))));
+                    view.$el.addClass('no-border');
+
+                    if (endDate.getDate() != 1) {
+                        views.push(createView({
+                            collection: self.collections[day],
+                            day: day,
+                            folder: self.folder,
+                            pane: this.pane,
+                            app: this.app,
+                            weekType: 'first'
+                        }).render().el);
+                    }
+                }
             }
 
             if (!param.up) {
@@ -242,6 +272,12 @@ define('io.ox/calendar/month/perspective', [
             return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
         },
 
+        updateColor: function (model) {
+            $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
+                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+            });
+        },
+
         update: function (useCache) {
             var today = new date.Local(),
                 day = $('#' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate(), this.pane);
@@ -251,6 +287,12 @@ define('io.ox/calendar/month/perspective', [
             }
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
             this.updateWeeks({ start: this.firstWeek, weeks: weeks }, useCache);
+
+            if (this.folderModel) {
+                this.folderModel.off('change:meta', this.updateColor);
+            }
+            this.folderModel = folderAPI.pool.getModel(this.folder.id);
+            this.folderModel.on('change:meta', this.updateColor, this);
         },
 
         /**
@@ -261,8 +303,22 @@ define('io.ox/calendar/month/perspective', [
             var self = this;
             if (this.pane) {
                 $('.day.first', this.pane).each(function (i, el) {
-                    self.tops[($(el).position().top + self.pane.scrollTop()) >> 0] = $(el);
+                    var elem = $(el);
+                    // >> 0 parses a floating point number to an integer
+                    self.tops[($(el).position().top - elem.height() / 2 + self.pane.scrollTop()) >> 0] = elem;
                 });
+            }
+        },
+
+        /**
+         * Called after the perspective is shown.
+         */
+        afterShow: function () {
+            // See Bug 36417 - calendar jumps to wrong month with IE10
+            // If month perspectice is rendered the first time after another perspective was already rendered, the tops will all be 0.
+            // That happens, because the perspective is made visible after rendering but only when there was already another calendar perspective rendered;
+            if (_.keys(this.tops).length <= 1) {
+                this.getFirsts();
             }
         },
 
@@ -272,52 +328,42 @@ define('io.ox/calendar/month/perspective', [
          *          string|LocalDate date: date target as LocalDate or string (next|prev|today)
          *          number           duration: duration of the scroll animation
          */
-        gotoMonth: function (opt) {
-            if (!this.isScrolling) {
-                this.isScrolling = true;
-                var self = this,
-                    param = $.extend({
-                        date: self.app.refDate || new date.Local(),
-                        duration: 0
-                    }, opt);
+        gotoMonth: function (target) {
+            var self = this;
 
-                if (typeof param.date === 'string') {
-                    if (param.date === 'today') {
-                        param.date = new date.Local();
-                    } else {
-                        param.date = new date.Local(self.current).addMonths(param.date === 'prev' ? -1 : 1);
-                    }
-                }
+            target = target || self.app.refDate || new date.Local();
 
-                var firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
-                    nextFirstDay = $('#' + param.date.getYear() + '-' + (param.date.getMonth() + 1) + '-1', self.pane),
-                    scrollToDate = function () {
-                        // scroll to position
-                        if (firstDay.length === 0) return;
-                        if (param.duration === 0) {
-                            firstDay.get(0).scrollIntoView();
-                            self.isScrolling = false;
-                        } else {
-                            self.pane.animate({ scrollTop: firstDay.position().top + self.scrollTop() + 1 }, param.duration, function () {
-                                self.isScrolling = false;
-                            });
-                        }
-                    };
-
-                if (firstDay.length > 0 && nextFirstDay.length > 0) {
-                    scrollToDate();
+            if (typeof target === 'string') {
+                if (target === 'today') {
+                    target = new date.Local();
+                } else if (target === 'prev') {
+                    target = new date.Local(self.previous);
                 } else {
-                    if (param.date.getTime() < self.current.getTime()) {
-                        this.drawWeeks({ up: true }).done(function () {
-                            firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                            scrollToDate();
-                        });
-                    } else {
-                        this.drawWeeks().done(function () {
-                            firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                            scrollToDate();
-                        });
-                    }
+                    target = new date.Local(self.current).addMonths(1);
+                }
+            }
+
+            var firstDay = $('#' + target.getYear() + '-' + target.getMonth(), self.pane),
+                nextFirstDay = $('#' + target.getYear() + '-' + (target.getMonth() + 1), self.pane),
+                scrollToDate = function () {
+                    // scroll to position
+                    if (firstDay.length === 0) return;
+                    firstDay.get(0).scrollIntoView();
+                };
+
+            if (firstDay.length > 0 && nextFirstDay.length > 0) {
+                scrollToDate();
+            } else {
+                if (target.getTime() < self.current.getTime()) {
+                    this.drawWeeks({ up: true }).done(function () {
+                        firstDay = $('#' + target.getYear() + '-' + target.getMonth(), self.pane);
+                        scrollToDate();
+                    });
+                } else {
+                    this.drawWeeks().done(function () {
+                        firstDay = $('#' + target.getYear() + '-' + target.getMonth(), self.pane);
+                        scrollToDate();
+                    });
                 }
             }
         },
@@ -395,6 +441,7 @@ define('io.ox/calendar/month/perspective', [
                 self = this;
 
             this.app = app;
+            this.previous = new date.Local(year, month - 1, 1);
             this.current = new date.Local(year, month, 1);
             this.lastWeek = this.firstWeek = new date.Local(year, month - 1, 1).setStartOfWeek().getTime();
 
@@ -421,99 +468,72 @@ define('io.ox/calendar/month/perspective', [
 
             if (_.device('!smartphone')) {
                 var toolbarNode = $('<div>')
-                    .addClass('toolbar')
+                    .addClass('controls-container')
                     .append(
-                        this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
-                        $('<div>')
-                            .append(
-                                $('<ul class="pagination">')
-                                    .append(
-                                        $('<li>')
-                                            .append(
-                                                $('<a href="#">').addClass('control prev').append($('<i class="fa fa-chevron-left">'))
-                                            ).on('click', $.proxy(function (e) {
-                                                e.preventDefault();
-                                                this.gotoMonth({
-                                                    duration: _.device('desktop') ? 400 : 0,
-                                                    date: 'prev'
-                                                });
-                                            }, this)),
-                                        $('<li>').append(
-                                            $('<a href="#">').addClass('link today').text(gt('Today'))
-                                        ).on('click', $.proxy(function (e) {
-                                            e.preventDefault();
-                                            this.gotoMonth({
-                                                duration: _.device('desktop') ? 800 : 0,
-                                                date: 'today'
-                                            });
-                                        }, this)),
-                                        $('<li>')
-                                            .append(
-                                                    $('<a href="#">').addClass('control next').append($('<i class="fa fa-chevron-right">'))
-                                            ).on('click', $.proxy(function (e) {
-                                                e.preventDefault();
-                                                this.gotoMonth({
-                                                    duration: _.device('desktop') ? 400 : 0,
-                                                    date: 'next'
-                                                });
-                                            }, this))
-                                    )
-                            )
+                        $('<a href="#" tabindex="1" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left">'))
+                        .on('click', $.proxy(function (e) {
+                            e.preventDefault();
+                            this.gotoMonth('prev');
+                        }, this)),
+                        $('<a href="#" tabindex="1" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right">'))
+                        .on('click', $.proxy(function (e) {
+                            e.preventDefault();
+                            this.gotoMonth('next');
+                        }, this))
                     );
 
-                // prepend toolbar to month veu
+                // prepend toolbar to month view
                 this.scaffold.prepend(toolbarNode);
-            } else {
-                // for mobile use
-                this.monthInfo = gt.noI18n(this.current.format('MMMM y'));
-                this.app.trigger('change:navbar:month', this.monthInfo);
             }
 
             this.pane
                 .on('scroll', $.proxy(function (e) {
-                    if (!this.isScrolling) {
-                        if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
-                            this.drawWeeks();
-                        }
-                        if (this.scrollTop() <= this.scrollOffset) {
-                            this.drawWeeks({ up: true });
-                        }
+                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
+                        this.drawWeeks();
+                    }
+                    if (this.scrollTop() <= this.scrollOffset) {
+                        this.drawWeeks({ up: true });
                     }
                 }, this))
                 .on('scrollstop', $.proxy(function () {
-                    var month = false;
+                    var month = false,
+                        prevMonth = 0,
+                        scrollTop = this.scrollTop(),
+                        height = this.pane.height();
 
                     // find first visible month on scroll-position
                     for (var y in this.tops) {
-                        if (!month || this.scrollTop() + this.scrollOffset >= y) {
+                        y = y >> 0;
+                        if ((y + this.tops[y].height()) > scrollTop && (scrollTop + height / 3) > y) {
+                            // select month where title is in upper half of the screen
                             month = this.tops[y].data('date');
-                        } else {
+                            break;
+                        } else if (y > scrollTop + height / 3) {
+                            // on first element, which is not in the upper visible third, stop.
                             break;
                         }
+
+                        prevMonth = this.tops[y].data('date');
+                        month = this.tops[y].data('date');
                     }
 
-                    // highlight current visible month
+                    if (prevMonth != this.previous.getTime()) {
+                        this.previous.setTime(prevMonth);
+                    }
+
                     if (month !== this.current.getTime()) {
                         this.current.setTime(month);
                         self.app.refDate.setYear(this.current.getYear(), this.current.getMonth(), self.app.refDate.getDate());
-                        $('.day:not(.out)', this.pane)
-                            .add($('[id^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
-                            .toggleClass('out');
-
-                        if (_.device('smartphone')) {
-                            self.monthInfo = gt.noI18n(this.current.format('MMMM y'));
-                            self.app.trigger('change:navbar:month', self.monthInfo);
-                        } else {
-                            self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
-                        }
                     }
                 }, this));
 
             $(window).on('resize', this.getFirsts);
 
             self.getFolder().done(function () {
+                self.folderModel = folderAPI.pool.getModel(self.folder.id);
+                self.folderModel.on('change:meta', self.updateColor, self);
+
                 self.drawWeeks({ multi: self.initLoad }).done(function () {
-                    $('[id^="' + self.current.getYear() + '-' + self.current.getMonth() + '-"]', self.pane).toggleClass('out');
                     self.gotoMonth();
                 });
             });
@@ -523,17 +543,11 @@ define('io.ox/calendar/month/perspective', [
                     switch (e.which) {
                     case 37:
                         // left
-                        self.gotoMonth({
-                            duration: _.device('desktop') ? 400 : 0,
-                            date: 'prev'
-                        });
+                        self.gotoMonth('prev');
                         break;
                     case 39:
                         // right
-                        self.gotoMonth({
-                            duration: _.device('desktop') ? 400 : 0,
-                            date: 'next'
-                        });
+                        self.gotoMonth('next');
                         break;
                     case 13:
                         // enter

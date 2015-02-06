@@ -22,7 +22,7 @@ define('io.ox/core/tk/dialogs', [
     var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
         popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $('<div class="modal-header">'),
+                $('<div class="modal-header" id="dialog-title">'),
                 $('<div class="modal-body">'),
                 $('<div class="clearfix">'),
                 $('<div class="modal-footer">')
@@ -192,7 +192,7 @@ define('io.ox/core/tk/dialogs', [
                     // tab
                     if (o.tabTrap) {
                         // get items first
-                        items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                        items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
                         if (items.length) {
                             e.preventDefault();
                             focus = $(document.activeElement);
@@ -277,7 +277,7 @@ define('io.ox/core/tk/dialogs', [
         this.text = function (str) {
             var p = nodes.body;
             p.find('.plain-text').remove();
-            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ''));
+            p.append($('<h4 class="plain-text">').text(str || ''));
             return this;
         };
 
@@ -309,7 +309,7 @@ define('io.ox/core/tk/dialogs', [
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse,
-                tabIndex: options.tabIndex
+                tabIndex: options.tabIndex || options.tabindex
             };
 
             if (options.type) {
@@ -317,7 +317,10 @@ define('io.ox/core/tk/dialogs', [
             }
             var button = $.button(opt);
             nodes.buttons.push(button);
-            return button.addClass(options.classes).attr('role', 'button');
+            return button.addClass(options.classes).attr({
+                role: 'button',
+                type: 'button'
+            });
         };
 
         this.addButton = function (action, label, dataaction, options) {
@@ -551,10 +554,14 @@ define('io.ox/core/tk/dialogs', [
 
     //
     // global click handler to properly close side-popups
-    $(document).on('click', function (e) {
+    $(document).on('click', function (e) {
 
         var popups = $('.io-ox-sidepopup');
         if (popups.length === 0) return;
+        //check if we are inside a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
+        if ($(e.target).closest('.io-ox-dialog-popup,.modal-footer').length > 0) {
+            return;
+        }
 
         var inside = $(e.target).closest('.io-ox-sidepopup'),
             index = popups.index(inside);
@@ -562,7 +569,7 @@ define('io.ox/core/tk/dialogs', [
         popups.slice(index + 1).trigger('close');
     });
 
-    $(document).on('keydown', function (e) {
+    $(document).on('keydown', function (e) {
         if (e.which === 27) $('.io-ox-sidepopup').trigger('close');
     });
 

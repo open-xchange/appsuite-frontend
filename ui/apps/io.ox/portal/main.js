@@ -173,8 +173,12 @@ define('io.ox/portal/main', [
         id: 'classes',
         index: 200,
         draw: function (baton) {
+            var draggable = baton.model.get('draggable');
+            if (_.isUndefined(draggable) || _.isNull(draggable)) {
+                draggable = true;
+            }
             this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
-                .addClass(baton.model.get('protectedWidget') || false ? ' protected' : ' draggable');
+                .addClass(draggable ? ' draggable' : ' protected');
         }
     });
 
@@ -578,6 +582,8 @@ define('io.ox/portal/main', [
             'aria-label': gt('Portal Widgets')
         });
 
+        win.setTitle(gt('Portal'));
+
         ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 
         app.updateTitle();
@@ -595,6 +601,7 @@ define('io.ox/portal/main', [
 
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);
+                ox.trigger('portal:items:render');
             });
 
             // add side popup

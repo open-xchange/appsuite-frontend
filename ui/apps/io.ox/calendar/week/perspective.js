@@ -19,9 +19,10 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/notifications',
+    'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, gt) {
 
     'use strict';
 
@@ -243,6 +244,12 @@ define('io.ox/calendar/week/perspective', [
             }
         },
 
+        updateColor: function (model) {
+            $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
+                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+            });
+        },
+
         /**
          * refresh appointment data
          */
@@ -262,6 +269,13 @@ define('io.ox/calendar/week/perspective', [
                         self.activeElement = null;
                     }
                 });
+
+                // register event to listen to color changes on current folder
+                if (self.folderModel) {
+                    self.folderModel.off('change:meta', self.updateColor);
+                }
+                self.folderModel = folderAPI.pool.getModel(data.id);
+                self.folderModel.on('change:meta', self.updateColor, self);
             });
         },
         /**

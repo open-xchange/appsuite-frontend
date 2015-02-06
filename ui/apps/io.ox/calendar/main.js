@@ -387,6 +387,7 @@ define('io.ox/calendar/main', [
          * Set folderview property
          */
         'prop-folderview-mobile': function (app) {
+            if (_.device('!smartphone')) return;
             app.props.set('folderview', false);
         },
 
@@ -511,16 +512,6 @@ define('io.ox/calendar/main', [
                         lastPerspective = undefined;
                     }
                 });
-            });
-        },
-        /*
-         * mobile only
-         * change current month label in navbar
-         */
-        'change:navbar:month': function (app) {
-            if (_.device('!smartphone')) return;
-            app.on('change:navbar:month', function (title) {
-                app.pages.getNavbar('month').setTitle(title);
             });
         },
         /*

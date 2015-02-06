@@ -20,9 +20,10 @@ define('io.ox/calendar/list/perspective', [
     'io.ox/core/date',
     'io.ox/calendar/util',
     'io.ox/core/extPatterns/actions',
+    'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (api, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
+], function (api, tmpl, viewDetail, commons, ext, date, util, actions, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -32,6 +33,12 @@ define('io.ox/calendar/list/perspective', [
     perspective.refresh = function () {
         this.updateGridOptions();
         this.grid.refresh(true);
+    };
+
+    perspective.updateColor = function (model) {
+        $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
+            this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+        });
     };
 
     perspective.render = function (app) {
@@ -45,6 +52,8 @@ define('io.ox/calendar/list/perspective', [
             optDropdown = null,
             // how many months do we display
             months = 1;
+
+        this.app = app;
 
         if (_.device('smartphone')) {
             app.left.addClass('calendar-list-view vsplit');
@@ -340,9 +349,22 @@ define('io.ox/calendar/list/perspective', [
             return $.Deferred().resolve(ids);
         });
 
+        self.app.folder.getData().done(function (data) {
+            self.folderModel = folderAPI.pool.getModel(data.id);
+            self.folderModel.on('change:meta', self.updateColor, self);
+        });
+
         grid.prop('folder', app.folder.get());
         app.on('folder:change', function () {
             self.updateGridOptions();
+
+            self.app.folder.getData().done(function (data) {
+                if (this.folderModel) {
+                    this.folderModel.off('change:meta', this.updateColor);
+                }
+                self.folderModel = folderAPI.pool.getModel(data.id);
+                self.folderModel.on('change:meta', self.updateColor, self);
+            });
         });
 
         // jump to newly created items

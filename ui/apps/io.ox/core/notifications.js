@@ -23,7 +23,7 @@ define('io.ox/core/notifications', [
 
     var BadgeView = Backbone.View.extend({
         tagName: 'a',
-        className: 'notifications-icon',
+        className: 'notifications-icon f6-target',
         initialize: function () {
             this.model.set('a11y', '');
             this.model.on('change', _.bind(this.onChange, this));
@@ -33,12 +33,11 @@ define('io.ox/core/notifications', [
             var count = this.model.get('count'),
                 //#. %1$d number of notifications
                 //#, c-format
-                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
-                a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
+                a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count);
             //don't create a loop here
             this.model.set('a11y', a11y, { silent: true });
             this.nodes.badge.toggleClass('empty', count === 0);
-            this.$el.attr('aria-label', a11y + ' ' + a11yState);
+            this.$el.attr('aria-label', a11y);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
             new NotificationController().yell('screenreader', a11y);
         },
@@ -46,7 +45,7 @@ define('io.ox/core/notifications', [
             var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
             this.$el.attr({
-                'aria-pressed': open ? true : false,
+                'aria-expanded': open ? true : false,
                 'aria-label': this.model.get('a11y') + ' ' + a11yState
             });
         },
@@ -55,7 +54,7 @@ define('io.ox/core/notifications', [
                 href: '#',
                 tabindex: '1',
                 role: 'button',
-                'aria-pressed': false
+                'aria-expanded': false
             })
             .append(
                 this.nodes.badge = $('<span class="badge">').append(
@@ -90,9 +89,8 @@ define('io.ox/core/notifications', [
     });
 
     var NotificationsView = Backbone.View.extend({
-        tagName: 'ul',
+        tagName: 'div',
         id: 'io-ox-notifications-display',
-        className: 'list-unstyled',
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || {};
@@ -143,17 +141,20 @@ define('io.ox/core/notifications', [
             }
 
             _(self.subviews).each(function (category) {
+                category.$el.detach();
                 //subviews must be rendered even if they have 0 items.
                 //this is because the empty call had to be moved from the general render of the notification area to each subview.
                 //if empty is called here the notificationviews loose their events on redraw and if we don't call render views with 0 items they might not clear old items properly
-                self.$el.append(category.render().el);
+                category.render();
                 if (category.collection.length > 0) {
                     empty = false;
+                    //only attach views again if they contain items, to not confuse screenreaders
+                    self.$el.append(category.el);
                 }
             });
 
             if (empty) {
-                self.$el.append($('<legend class="section-title no-news-message">').text(gt('No notifications')));
+                self.$el.append($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
             }
 
             //restore focus if possible
@@ -352,7 +353,7 @@ define('io.ox/core/notifications', [
                 'right',
                 self.badgeView.render().$el.on('keydown', focusNotifications),
                 $.proxy(this.toggleList, this)
-            ).attr('id', 'io-ox-notifications-icon');
+            ).attr({ id: 'io-ox-notifications-icon', role: 'navigation' });
         },
 
         get: function (key, listview) {

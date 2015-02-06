@@ -28,7 +28,8 @@ define('io.ox/portal/settings/pane', [
     var POINT = 'io.ox/portal/settings/detail', pane;
 
     var collection = widgets.getCollection(),
-        list = $('<ol class="list-group list-unstyled widget-list">');
+        list = $('<ol class="list-group list-unstyled widget-list">'),
+        notificationId = _.uniqueId('notification_');
 
     collection
         .on('remove', function (model) {
@@ -104,10 +105,11 @@ define('io.ox/portal/settings/pane', [
                 ),
                 $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
             ),
-            $('<div class="clearfix">')
+            $('<div class="clearfix">'),
+            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
         );
-        button.dropdown();
         repopulateAddButton();
+        button.dropdown();
     }
 
     function repopulateAddButton() {
@@ -215,11 +217,13 @@ define('io.ox/portal/settings/pane', [
             items = list.children('.draggable'),
             current = node.parent(),
             index = items.index(current),
-            id = current.attr('data-widget-id');
+            id = current.attr('data-widget-id'),
+            notification = pane.find('#' + notificationId);
 
         function cont() {
             widgets.save(list);
             list.find('[data-widget-id="' + id + '"] .drag-handle').focus();
+            notification.text(gt('the item has been moved'));
         }
 
         switch (e.which) {
@@ -261,7 +265,7 @@ define('io.ox/portal/settings/pane', [
                     .attr({
                         href: '#',
                         'title': gt('Drag to reorder widget'),
-                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
+                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'),
                         role: 'button',
                         tabindex: 1
                     })

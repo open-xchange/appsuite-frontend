@@ -662,9 +662,13 @@ msgstr ""
 "øverst i vinduet."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr ""
 "For et åbne indstillingerne, klik på menuikonet System i øverste højre side "
 "af menulinjen. Vælg Indstillinger."

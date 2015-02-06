@@ -42,7 +42,8 @@ define('io.ox/mail/common-extensions', [
                 fromlist = data.from || [['', '']],
                 subject = _.escape($.trim(data.subject)),
                 unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
-                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize;
+                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize +
+                    (data.attachment ? ', ' + gt('has attachments') : '');
 
             this.attr({
                 'aria-hidden': true
@@ -569,18 +570,24 @@ define('io.ox/mail/common-extensions', [
             };
         }()),
         subscriptionNotification: (function () {
-            /**
-             * @description actions for publication invitation mails
-             */
-            return function (baton) {
-                var $el = this;
+
+            // respond to publication invitation mails
+
+            function draw(model) {
+
+                if (!model.has('headers')) return;
+                if (!model.get('headers')['X-OX-PubURL']) return;
+
+                var self = this;
+
                 require(['io.ox/core/pubsub/notifications/subscription'], function (draw) {
-                    if (baton.model && baton.model.has('headers')) {
-                        draw.call($el, baton.model);
-                    } else if (baton.model) {
-                        baton.view.listenToOnce(baton.model, 'change:headers', draw.bind($el));
-                    }
+                    draw.call(self, model);
                 });
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                baton.view.listenToOnce(baton.model, 'change:headers', draw.bind(this));
             };
 
         }())

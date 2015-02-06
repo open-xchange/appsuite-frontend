@@ -71,7 +71,7 @@ define('io.ox/calendar/week/view', [
 
             // define view events
             var events = {
-                'click .control.next,.control.prev,.control.today': 'onControlView',
+                'click .control.next,.control.prev': 'onControlView',
                 'click .appointment': 'onClickAppointment',
                 'click .weekday': 'onCreateAppointment'
             };
@@ -106,7 +106,7 @@ define('io.ox/calendar/week/view', [
             this.fulltimeNote   = $('<div>').addClass('note');
             this.timeline       = $('<div>').addClass('timeline');
             this.dayLabel       = $('<div>').addClass('footer');
-            this.kwInfo         = _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info');
+            this.kwInfo         = _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault);
             this.weekCon        = $('<div>').addClass('week-container');
 
             this.kwInfo.attr({
@@ -308,9 +308,6 @@ define('io.ox/calendar/week/view', [
             }
             if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && !this.lasso)) {
                 this.setStartDate('prev');
-            }
-            if (cT.hasClass('today')) {
-                this.setStartDate();
             }
             this.trigger('onRefresh');
             return false;
@@ -617,11 +614,13 @@ define('io.ox/calendar/week/view', [
             var timeLabel = [],
                 self = this;
 
-            for (var i = 1; i < this.slots; i++) {
+            for (var i = 0; i < this.slots; i++) {
                 var number = new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME);
                 timeLabel.push(
                     $('<div>')
                         .addClass('time')
+                        .addClass((i >= this.workStart && i < this.workEnd) ? 'in' : '')
+                        .addClass((i + 1 === this.workStart || i + 1 === this.workEnd) ? 'working-time-border' : '')
                         .append($('<div>').addClass('number').text(gt.noI18n(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2'))))
                 );
             }
@@ -647,7 +646,7 @@ define('io.ox/calendar/week/view', [
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
             // create days
-            this.weekCon.append(this.timeline);
+            //this.weekCon.append(this.timeline);
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -663,7 +662,9 @@ define('io.ox/calendar/week/view', [
                 for (var i = 1; i <= this.slots * this.fragmentation; i++) {
                     day.append(
                         $('<div>')
-                            .addClass('timeslot ' + (i > (this.workStart * this.fragmentation) && i <= (this.workEnd * this.fragmentation) ? 'in' : 'out'))
+                        .addClass('timeslot')
+                        .addClass((i <= (this.workStart * this.fragmentation) || i > (this.workEnd * this.fragmentation)) ? 'out' : '')
+                        .addClass((i === (this.workStart * this.fragmentation) || i === (this.workEnd * this.fragmentation)) ? 'working-time-border' : '')
                     );
                 }
                 this.weekCon.append(day);
@@ -675,38 +676,27 @@ define('io.ox/calendar/week/view', [
             // create toolbar, view space and dayLabel
             this.$el.empty().append(
                 $('<div class="toolbar">').append(
-                    this.kwInfo,
-                    $('<div>').append(
-                        $('<ul class="pagination">').append(
-                            $('<li>').append(
-                                $('<a>').attr({
-                                    href: '#',
-                                    tabindex: 1,
-                                    role: 'button',
-                                    title: prevStr,
-                                    'aria-label': prevStr
-                                })
-                                .addClass('control prev')
-                                .append($('<i class="fa fa-chevron-left">'))
-                            ),
-                            $('<li>').append(
-                                $('<a href="#" tabindex="1" role="button">')
-                                    .addClass('control today')
-                                    .text(gt('Today'))
-                            ),
-                            $('<li>').append(
-                                $('<a>').attr({
-                                    href: '#',
-                                    tabindex: 1,
-                                    role: 'button',
-                                    title: nextStr,
-                                    'aria-label': nextStr
-                                })
-                                .addClass('control next')
-                                .append($('<i class="fa fa-chevron-right">'))
-                            )
-                        )
-                    )
+                    $('<div class="controls-container">').append(
+                        $('<a>').attr({
+                            href: '#',
+                            tabindex: 1,
+                            role: 'button',
+                            title: prevStr,
+                            'aria-label': prevStr
+                        })
+                        .addClass('control prev')
+                        .append($('<i class="fa fa-chevron-left">')),
+                        $('<a>').attr({
+                            href: '#',
+                            tabindex: 1,
+                            role: 'button',
+                            title: nextStr,
+                            'aria-label': nextStr
+                        })
+                        .addClass('control next')
+                        .append($('<i class="fa fa-chevron-right">'))
+                    ),
+                    this.kwInfo
                 ),
                 $('<div class="footer-container">').append(
                     this.dayLabel
@@ -721,11 +711,10 @@ define('io.ox/calendar/week/view', [
         },
 
         rerenderWorktime: function () {
-            var self = this;
             this.weekCon.find('.day').each(function () {
-                $(this).find('.timeslot').removeClass('in out').each(function (i, el) {
+                $(this).find('.timeslot').each(function (i, el) {
                     i++;
-                    $(el).addClass('timeslot ' + (i > (self.workStart * self.fragmentation) && i <= (self.workEnd * self.fragmentation) ? 'in' : 'out'));
+                    $(el).addClass('timeslot');
                 });
             });
             return this;
@@ -737,10 +726,10 @@ define('io.ox/calendar/week/view', [
         setScrollPos: function () {
             this.adjustCellHeight();
             var slotHeight = this.cellHeight * this.fragmentation,
-                workHeight = slotHeight * (this.workEnd - this.workStart);
+                timelineTop = parseFloat(this.timeline.css('top')) * slotHeight * 0.24;
 
-            // adjust scoll position
-            this.pane.scrollTop((slotHeight * this.workStart) - (this.pane.height() - workHeight) / 2);
+            // adjust scoll position to center current time
+            this.pane.scrollTop(timelineTop - this.pane.height() / 2);
             return this;
         },
 
@@ -753,6 +742,7 @@ define('io.ox/calendar/week/view', [
                 Math.max(this.pane.height() / ((this.workEnd - this.workStart + 1) * this.fragmentation),
                 this.minCellHeight)
             );
+
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
                 $('.timeslot', this.pane).height(this.cellHeight - 1);
@@ -805,10 +795,16 @@ define('io.ox/calendar/week/view', [
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
+
+                    var todayContainer = $('.week-view-container').find('.day[date="' + d + '"]', this.pane);
+
                     if (this.columns > 1) {
-                        $('.week-view-container').find('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
+                        todayContainer.addClass(this.options.todayClass);
                     }
+
                     day.addClass(this.options.todayClass);
+
+                    todayContainer.append(this.timeline);
                     this.timeline.show();
                 }
                 days.push(day);
@@ -818,7 +814,7 @@ define('io.ox/calendar/week/view', [
             this.dayLabel.empty().append(days);
 
             this.kwInfo.empty().append(
-                $.txt(
+                $('<span>').text(
                     gt.noI18n(this.columns > 1 ?
                         this.startDate.formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
                         this.startDate.format(date.DAYOFWEEK_DATE)
@@ -1044,7 +1040,8 @@ define('io.ox/calendar/week/view', [
                         maxWidth: self.appWidth + '%'
                         // zIndex: j
                     })
-                    .addClass(border ? 'border' : '');
+                    .addClass(border ? 'border' : '')
+                    .addClass(height < 2 * (self.minCellHeight - (border ? 2 : 1)) ? 'no-wrap' : '');
                 }
                 self.$('.week-container ' + day, self.$el).append(apps);
             });
@@ -1498,6 +1495,9 @@ define('io.ox/calendar/week/view', [
                         self.onUpdateAppointment(app);
                     }
                 });
+
+            // global event for tracking purposes
+            ox.trigger('calendar:items:render', this);
         },
 
         /**

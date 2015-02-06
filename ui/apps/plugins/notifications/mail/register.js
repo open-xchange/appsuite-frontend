@@ -25,19 +25,18 @@ define('plugins/notifications/mail/register', [
     ext.point('io.ox/core/notifications/mail/header').extend({
         draw: function (baton) {
             this.append(
-                $('<legend class="section-title">').text(gt('New Mails'))
-                    //special attribute to restore focus on redraw
-                    .attr('focusId', 'mail-notification-')
-                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                $('<h1 class="section-title">').text(gt('New Mails')).attr('focusId', 'mail-notification-').append(
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({
                             tabindex: 1,
-                            'aria-label': gt('Press to hide all notifications for new mails.'),
+                            'aria-label': gt('Hide all notifications for new mails.'),
                             'data-action': 'clear',
                             'focus-id': 'mail-notification-clear'
-                        })),
-                $('<div class="items">'),
+                        })
+                ),
+                $('<ul class="items list-unstyled">'),
                 $('<div class="open-app">').append(
-                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="btn btn-primary btn-sm refocus" focus-id="mail-notification-open-app">').text(
+                    $('<button data-action="open-app" tabindex="1" class="btn btn-primary btn-sm refocus" focus-id="mail-notification-open-app">').text(
                         baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
                     )
                 )
@@ -50,7 +49,7 @@ define('plugins/notifications/mail/register', [
             require(['io.ox/mail/util'], function (util) {
                 var f = data.from || [['', '']];
                 node.append(
-                    $('<div class="item refocus" tabindex="1" role="listitem">')
+                    $('<li class="item refocus" tabindex="1" role="listitem">')
                         //special attribute to restore focus on redraw
                         .attr({
                             'focus-id': 'mail-notification-' + _.cid(data),
@@ -77,7 +76,7 @@ define('plugins/notifications/mail/register', [
 
     var NotificationsView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-mail',
         events: {
@@ -121,7 +120,7 @@ define('plugins/notifications/mail/register', [
                         // draw mails
                         for (i = 0; i < $i; i++) {
                             baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                            ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
+                            ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$el.find('.items'), baton);
                         }
 
                     });
@@ -131,7 +130,7 @@ define('plugins/notifications/mail/register', [
                     // draw mails
                     for (i = 0; i < $i; i++) {
                         baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
+                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$el.find('.items'), baton);
                     }
                 }
             }

@@ -53,7 +53,8 @@ module.exports = function (grunt) {
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
-                            'typeahead.js/dist/typeahead.jquery.js'
+                            'typeahead.js/dist/typeahead.jquery.js',
+                            'marked/lib/marked.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'

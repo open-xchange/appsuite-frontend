@@ -264,6 +264,24 @@ define('io.ox/calendar/actions', [
         }
     });
 
+    new Action('io.ox/calendar/actions/today', {
+        requires: function (baton) {
+            var p = baton.baton.app.getWindow().getPerspective();
+
+            return !!p && (p.name === 'month' || p.name === 'week');
+        },
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+
+            if (p.view && p.view.setStartDate) {
+                p.view.setStartDate();
+                p.view.trigger('onRefresh');
+            } else if (p.gotoMonth) {
+                p.gotoMonth('today');
+            }
+        }
+    });
+
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone',
         requires: function () {
@@ -314,10 +332,7 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             var p = baton.app.getWindow().getPerspective();
             if (!p) return;
-            p.gotoMonth({
-                duration: 0,
-                date: 'today'
-            });
+            p.gotoMonth('today');
         }
     });
 

@@ -169,6 +169,7 @@ define('io.ox/core/folder/util', [
         }
         // vars
         var rights = data.own_rights,
+            bits,
             isSystem = data.standard_folder || is('system', data),
             isAdmin = perm(rights, 28) === 1,
             isMail = data.module === 'mail',
@@ -203,8 +204,10 @@ define('io.ox/core/folder/util', [
             // default folder cannot be renamed
             return !is('defaultfolder', data);
         case 'create:folder':
-            // check 4th bit (see http://oxpedia.org/wiki/index.php?title=HTTP_API#PermissionFlags)
-            return isAdmin || (rights & 4) === 4;
+            // check 3rd bit (value is 4! see http://oxpedia.org/wiki/index.php?title=HTTP_API#PermissionFlags)
+            // backend promised that it's sufficient to check this bit; isAdmin would be wrong here
+            bits = perm(rights, 0);
+            return (bits & 4) === 4 || (bits & 64) === 64;
         case 'delete:folder':
         case 'remove:folder':
             // must be admin; system and default folder cannot be deleted

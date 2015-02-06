@@ -21,7 +21,6 @@
         }
 
         height: @calendar-toolbar-height;
-        text-align: center;
         padding-top: @calendar-toolbar-top-padding;
 
         .info {
@@ -29,10 +28,12 @@
             text-align: left;
             max-width: 30%;
             position: absolute;
-            left: 20px;
+            left: @weekview-time-width;
             line-height: @calendar-toolbar-height - @calendar-toolbar-top-padding;
             font-size: 20px;
             color: #333;
+            text-decoration: none;
+
             .ellipsis();
             .fontWeight(300);
 
@@ -42,11 +43,17 @@
             }
 
         }
+    }
 
-        .pagination {
-            margin:  0 0 0 @weekview-time-width;
+    .controls-container {
+        display: inline-block;
+        padding-top: 8px;
+        width: @weekview-time-width;
+        text-align: center;
+
+        a {
+            padding: 9px;
         }
-
     }
 
     .footer-container {
@@ -77,8 +84,8 @@
 
                 &.today {
                     font-weight: bold;
-                    background-color: @weekview-today;
-                    color: #333;
+                    background-color: @calendar-today;
+                    color: #fff;
                 }
 
             }
@@ -102,8 +109,12 @@
 
         &.reserved { .background(@appointment-reserved); }
         &.absent { .background(@appointment-absent); }
-        &.temporary { .background(@appointment-temporary); }
-        &.free { .background(@appointment-free); }
+        &.temporary {
+            .background(@appointment-temporary);
+            //white text would fail contrast requirements
+            .title { color: #321900; }
+        }
+        &.free { .background(@appointment-free-dark); }
         &.private { .background(@appointment-private); }
 
         &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
@@ -167,6 +178,7 @@
 
             &.hover {
                 background-color: darken(@t, @appointment-hover-pct);
+                color: darken(darken(@appointment-temporary, 15%), @appointment-hover-pct);
             }
 
             .common();
@@ -181,6 +193,7 @@
 
             &.hover {
                 background-color: darken(@a, @appointment-hover-pct);
+                color: darken(@appointment-absent, @appointment-hover-pct);
             }
 
             .common();
@@ -289,6 +302,25 @@
 
         .generate-color-label(10);
     }
+
+    @media (min-width: 1281px) {
+        @adjusted-width: @weekview-time-width * 1.25;
+        .toolbar {
+            .info {
+                left: @adjusted-width;
+            }
+        }
+
+        .controls-container {
+            width: @adjusted-width;
+        }
+
+        .footer-container {
+            .footer {
+                left: @adjusted-width;
+            }
+        }
+    }
 }
 
 .custom-colors {
@@ -313,10 +345,21 @@
                     }
                 }
 
+                @media all and (max-width: 480px), all and (max-device-width: 480px) {
+                    &.color-label {
+                        &:before {
+                            top: 12px;
+                        }
+                    }
+                }
+
                 .generate-color-label(@counter) when (@counter > 0) {
                     .generate-color-label((@counter - 1));
 
-                    &.color-label-@{counter}:before { background-color: ~"@{color-label-bg-@{counter}}"; }
+                    &.color-label-@{counter}:before {
+                        @color-label-counter: ~"color-label-bg-@{counter}";
+                        background-color: darken(@@color-label-counter, 10%);
+                    }
                 }
 
                 .generate-color-label(10);
@@ -441,7 +484,7 @@
     .conflicts .person-link {
 
         &.accepted {
-            color: #799952;
+            color: #5C7F31;
         }
 
         &.declined {
@@ -609,15 +652,9 @@
 .participants-view {
 
     @participant-unconfirmed:   #428BCA;
-    @participant-accepted:      #799952;
+    @participant-accepted:      #5C7F31;
     @participant-declined:      #913F3F;
     @participant-tentative:     #cc8800;
-
-    .io-ox-label {
-        font-size: 0.9em;
-        padding: 1em 0 0.25em 0em;
-        margin-bottom: 0.5em;
-    }
 
     min-height: 2em;
 
@@ -641,8 +678,6 @@
             color: @participant-accepted;
 
             i {
-
-                opacity: 0.35;
 
                 html.high-contrast & {
                     opacity: 1;
@@ -799,9 +834,12 @@
 
 .itip-actions {
     text-align: right;
-    margin: 14px 0 0 14px;
+    margin: 14px 0 0 0;
     white-space: nowrap;
     display: inline-block;
+    .btn {
+        margin-left: 7px;
+    }
 }
 
 .itip-item {
@@ -834,8 +872,8 @@
 }
 
 .itip-details {
+    margin: 14px 0;
     .confirmation-status {
-        margin: 7px 0;
         &.accepted { color: @green; }
         &.declined { color: @red; }
         &.tentative { color: @orange; }

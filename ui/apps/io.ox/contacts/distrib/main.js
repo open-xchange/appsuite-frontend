@@ -113,6 +113,9 @@ define('io.ox/contacts/distrib/main', [
 
                 app.setTitle(model.get('display_name'));
 
+                // set title, init model/view
+                win.setTitle(gt('Edit distribution list'));
+
                 view = new ContactCreateDistView({ model: model });
 
                 model.on({

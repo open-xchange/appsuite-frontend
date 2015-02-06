@@ -153,8 +153,22 @@ define('io.ox/core/folder/node', [
             this.toggle(!this.options.open);
         },
 
+        hasArrow: function () {
+            // return true if icon is not fixed-width, i.e. empty
+            return this.$.arrow.find('i.fa-fw').length === 0;
+        },
+
+        onArrowClick: function (e) {
+            if (!$(e.target).closest(this.$.arrow).length) return;
+            if (!this.hasArrow()) return;
+            this.onToggle(e);
+        },
+
         onArrowMousedown: function (e) {
             // just to avoid changing the focus (see bug 35802)
+            // but only if the folder shows the arrow (see bug 36424)
+            if (!$(e.target).closest(this.$.arrow).length) return;
+            if (!this.hasArrow()) return;
             e.preventDefault();
         },
 
@@ -303,7 +317,7 @@ define('io.ox/core/folder/node', [
                     'aria-level':    o.level + 1,
                     'aria-selected': false,
                     'data-id':       this.folder,
-                    'data-index':    this.model.get('index'),
+                    'data-index':    this.getIndex(),
                     'data-model':    o.model_id,
                     'role':         'treeitem',
                     'tabindex':     '-1'
@@ -337,7 +351,10 @@ define('io.ox/core/folder/node', [
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
+            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) {
+                this.$el.attr({ 'aria-haspopup': true });
+                this.renderContextControl();
+            }
 
             // get data
             if (!this.isVirtual) api.get(o.model_id);
@@ -355,7 +372,7 @@ define('io.ox/core/folder/node', [
             o.tree.options.customize.call(this.$el, baton);
 
             // simple tree-based disable callback
-            if (o.tree.options.disable(data)) this.$el.addClass('disabled');
+            if (o.tree.options.disable(data, o)) this.$el.addClass('disabled');
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));
@@ -395,9 +412,14 @@ define('io.ox/core/folder/node', [
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
+                $('<a>')
+                .addClass('folder-options contextmenu-control')
                 .attr({
-                    'data-contextmenu': this.options.contextmenu || 'default'
+                    'data-contextmenu': this.options.contextmenu || 'default',
+                    'aria-label': gt('Folder-specific actions'),
+                    href: '#',
+                    role: 'button',
+                    tabindex: 1
                 })
                 .append(
                     $('<i class="fa fa-bars" aria-hidden="true">'),
@@ -409,9 +431,15 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.model.get('index'),
+                'data-index': this.getIndex(),
                 'data-model': this.model_id
             });
+        },
+
+        getIndex: function () {
+            var parent = this.options.parent;
+            if (!parent || !parent.collection) return 0;
+            return (this.model.get('index') || {})[parent.collection.id] || 0;
         },
 
         isEmpty: function () {

@@ -250,6 +250,7 @@ define('io.ox/mail/sender', [
 
             // append options to select-box
             return that.getAddresses().then(function (addresses, numbers, primary) {
+
                 var defaultAddress = fallbackAddress || primary[1],
                     defaultValue,
                     list = [].concat(addresses, numbers);

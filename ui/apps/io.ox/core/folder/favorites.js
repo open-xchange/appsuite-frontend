@@ -37,20 +37,20 @@ define('io.ox/core/folder/favorites', [
             store(collection.pluck('id'));
         }
 
-        collection.on('add remove', storeCollection);
-
-        function initialize(id) {
-            api.multiple(favorites).done(function (response) {
+        // define virtual folder
+        api.virtual.add(id, function () {
+            return api.multiple(favorites).then(function (response) {
                 // compact() removes non-existent entries
                 var list = _(response).compact();
-                // update collection
-                list = api.processListResponse(id, list);
-                collection.reset(list);
-                model.set('subfolders', true);
+                model.set('subfolders', list.length > 0);
                 // if there was an error we update settings
                 if (list.length !== response.length) storeCollection();
+                return list;
             });
-        }
+        });
+
+        // respond to change events
+        collection.on('add remove', storeCollection);
 
         var extension = {
             id: 'favorites',
@@ -73,8 +73,6 @@ define('io.ox/core/folder/favorites', [
 
                 // store new order
                 tree.on('sort:' + id, store);
-
-                if (favorites.length > 0) initialize(id);
             }
         };
 

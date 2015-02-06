@@ -1,4 +1,3 @@
-            /* jshint unused: false */
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -16,8 +15,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
-    'io.ox/core/extensions'
-], function (emoji, capabilities, settings, ext) {
+    'io.ox/core/extensions',
+    'io.ox/core/tk/textproc'
+], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';
 
@@ -53,231 +53,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             });
         }
     });
-
-    /*
-     * Helpers to handle paste
-     */
-    function makeParagraph() {
-        var self = $(this),
-            style = self.attr('style'),
-            p = $('<p>');
-        if (style) {
-            p.attr('style', style);
-        }
-        self.replaceWith(p.append(self.contents()));
-    }
-
-    // just to test if class attribute contains "emoji"
-    var regEmoji = /emoji/,
-        // check for http:, mailto:, or tel:
-        regProtocal = /^\w+:/;
-
-    function paste_preprocess(pl, o) {
-        //console.debug('pre', o.content);
-        o.content = o.content
-            // remove comments
-            .replace(/<!--(.*?)-->/g, '')
-            // remove class attribute - except for emojis
-            .replace(/\sclass="[^"]+"/g, function (all) {
-                return regEmoji.test(all) ? all : '';
-            })
-            // remove emoji images and convert them back to unicode characters
-            .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
-
-            // remove custom attributes
-            .replace(/ data-[^=]+="[^"]*"/ig, '')
-            // remove relative links
-            .replace(/(<a[^<]+)href="([^"]+)"/g, function (all, prefix, href) {
-                return regProtocal.test(href) ? all : prefix;
-            })
-            // remove &nbsp;
-            .replace(/&nbsp;/ig, ' ')
-            // fix missing white-space before/after links
-            .replace(/([^>\s])<a/ig, '$1 <a')
-            .replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
-            // beautify simple quotes
-            .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
-            // beautify dashes
-            .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
-
-        o.content = emoji.processEmoji(o.content);
-    }
-
-    // simplify DOM tree
-    function simplify(memo, elem) {
-        var self = $(elem),
-            tagName = elem.tagName,
-            children = self.children(),
-            text,
-            unwrapDiv = true;
-
-        if (tagName === 'DIV' && self.attr('id') && self.attr('id').indexOf('ox-text-p') !== -1) {
-            // OX Text Paragraph DIV
-            unwrapDiv = false;
-        }
-
-        // remove attributes
-        self.removeAttr('id title alt rel');
-        // is closed tag?
-        if (/^(BR|HR|IMG)$/.test(tagName)) {
-            return memo;
-        }
-        // fix text align
-        if (self.attr('align')) {
-            self.css('textAlign', self.attr('align')).removeAttr('align');
-        }
-        // fix text nodes
-        self.contents().each(function () {
-            if (elem.nodeType === 3) {
-                elem.nodeValue = elem.nodeValue
-                    // fix space before quotes
-                    .replace(/:$/, ': ');
-            }
-        });
-        // has no children?
-        if (children.length === 0) {
-            //do not trim single spaces
-            text = self.text() === ' ' ? self.text : $.trim(self.text());
-            // has no text?
-            if (text === '') {
-                // empty table cell?
-                if (tagName === 'TD') {
-                    self.text('\u00A0');
-                } else {
-                    // remove empty element
-                    self.remove();
-                    return false;
-                }
-            } else {
-                // remove simple <span>, <small>, and <pre>
-                if (/^(SPAN|SMALL|PRE)$/.test(tagName)) {
-                    if (!self.attr('class') && !self.attr('style')) {
-                        self.replaceWith($.txt(self.text()));
-                        return false;
-                    }
-                }
-                // is quote?
-                if (/^".+"$/.test(text)) {
-                    self.text(text.replace(/^"/, '\u201C').replace(/"$/, '\u201D'));
-                }
-            }
-        } else {
-            // extraneous DIV?
-            if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
-                children.eq(0).unwrap();
-                return false;
-            }
-        }
-        return memo;
-    }
-
-    function unwrap() {
-        $(this).children().first().unwrap();
-    }
-
-    function cleanUpLinks() {
-        var self = $(this), match;
-        if (!self.attr('href')) {
-            // unwrap dead links (usually javascript hooks)
-            self.replaceWith(self.contents());
-        } else {
-            // remove title & target
-            self.removeAttr('title target');
-            // fix references
-            if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                match = (String(self.text())).match(/^\[(\d+)\]$/);
-                self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
-            }
-        }
-    }
-
-    function replaceCodeByEm() {
-        var self = $(this);
-        self.replaceWith($('<em>').text(self.text()));
-    }
-
-    function beautifyTable() {
-        var self = $(this);
-        self.removeAttr('width')
-            .attr({
-                border: '0',
-                cellSpacing: '0',
-                cellPadding: '0'
-            })
-            .css({
-                lineHeight: '1em',
-                // center!
-                margin: '0.5em auto 0.5em auto'
-            });
-        self.find('th')
-            .css({
-                fontWeight: 'bold',
-                textAlign: 'center',
-                borderBottom: '1px solid #555',
-                padding: '0.4em 1em 0.4em 1em'
-            });
-        self.find('td')
-            .css({
-                borderBottom: '1px solid #aaa',
-                padding: '0.4em 1em 0.4em 1em'
-            });
-        self.find('tr').first()
-            .find('td, th').css({
-                borderTop: '1px solid #555'
-            });
-        self.find('tr').last()
-            .find('td, th').css({
-                borderBottom: '1px solid #555'
-            });
-    }
-
-    function removeEmptyParagraphs() {
-        var self = $(this),
-            contents = self.contents();
-        if (contents.length === 1 && contents.get(0).tagName === 'BR') {
-            self.remove();
-        }
-    }
-
-    function paste_postprocess(pl, o) {
-        var node = $(o.node), done;
-        //console.debug('post', node.html());
-        // remove iframes and other stuff that shouldn't be in an email
-        // images too - doesn't work with copy/paste (except for emoji classed images)
-        node.find(
-            'iframe, object, applet, input, textarea, button, select, ' +
-            'canvas, script, noscript, audio, video, img'
-            )
-            .filter(':not(img.emoji,img[src*="' + ox.abs + ox.root + '/api/file"])').remove();
-        // beautify SUP tags
-        node.find('sup').css('lineHeight', '0');
-        // unwrap
-        node.find('article, header, footer, section, form').each(unwrap);
-        // clean up links
-        node.find('a').each(cleanUpLinks);
-        // replace <code> by <em>
-        node.find('code').each(replaceCodeByEm);
-        // simplify structure
-        do {
-            done = _(node.find('*')).inject(simplify, true);
-        } while (!done);
-        // beautify tables
-        node.find('table').each(beautifyTable);
-        // replace top-level <div> by <p>
-        node.eq(0).children('div').each(makeParagraph);
-        // remove <p> with just one <br> inside
-        node.find('p').each(removeEmptyParagraphs);
-    }
-
-    function isInsideBlockquote(range) {
-        // get ancestor/parent container
-        var container = range.commonAncestorContainer || range.parentElement();
-        // loop for blockquote
-        var bq = $(container).parents('blockquote').last(),
-            is = bq.length > 0;
-        //console.debug('inside?', is, bq);
-        return is;
-    }
 
     function splitContent_W3C(ed) {
         // get current range
@@ -363,6 +138,16 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         ed.execCommand('Delete', false, null);
     }
 
+    function isInsideBlockquote(range) {
+        // get ancestor/parent container
+        var container = range.commonAncestorContainer || range.parentElement();
+        // loop for blockquote
+        var bq = $(container).parents('blockquote').last(),
+            is = bq.length > 0;
+        //console.debug('inside?', is, bq);
+        return is;
+    }
+
     function splitContent(ed, e) {
         // get current range
         var range = ed.selection.getRng();
@@ -391,7 +176,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
     function Editor(el, opt) {
 
-        var def = $.Deferred(), ed;
+        var rendered = $.Deferred(), initialized = $.Deferred(), ed;
 
         opt = _.extend({
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
@@ -457,7 +242,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
             init_instance_callback: function (editor) {
                 ed = editor;
-                def.resolve();
+                initialized.resolve();
             },
 
             execcommand_callback: function (editor_id, elm, command) {
@@ -468,12 +253,15 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 }
             },
             // post processing (string-based)
-            paste_preprocess: paste_preprocess,
+            paste_preprocess: textproc.paste_preprocess,
             // post processing (DOM-based)
-            paste_postprocess: paste_postprocess,
+            paste_postprocess: textproc.paste_postprocess,
 
             setup: function (ed) {
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
+                ed.on('BeforeRenderUI', function () {
+                    rendered.resolve();
+                });
             }
         };
 
@@ -490,8 +278,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var resizeEditor = _.debounce(function () {
             if (el === null) return;
 
-            var p = el.parent(),
-                h = $(window).height(),
+            var h = $(window).height(),
                 top = el.offset().top;
 
             el.css('min-height', h - top - 40 + 'px');
@@ -508,10 +295,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             return;
 
         }, 30),
-
-        quote = function (str) {
-            return '> ' + $.trim(str).replace(/\n/g, '\n> ');
-        },
 
         set = function (str) {
             var text = emoji.processEmoji(str, function (text, lib) {
@@ -560,8 +343,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         // publish internal 'done'
         this.done = function (fn) {
-            def.done(fn);
-            return def;
+            return $.when(initialized, rendered).done(fn);
         };
 
         this.focus = function () {
@@ -575,73 +357,18 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.getContent = get;
 
         this.getPlainText = function () {
-
-            if (_.browser.IE) {
-                // IE ignores paragraphs, so we help a bit
-                $('p', ed.getBody()).append('<br>');
-            }
-            // fix headers
-            $(':header', ed.getBody()).append('<br>');
-            // loop over top-level nodes
-            var tmp = '';
-            $(ed.getBody()).children().each(function () {
-                var text = '',
-                    content;
-                // get text via selection
-                // use jQuery to parse HTML, because there is no obvious way to
-                // transform the emoji img tags to unicode before getContent call
-                ed.selection.select(this, true);
-                content = emoji.imageTagsToUnified(ed.selection.getContent());
-                // preserve simple line breaks and get text content
-                text = $('<div>').html(content.replace(/<br>/g, '\n')).text();
-                switch (this.tagName) {
-                case 'BLOCKQUOTE':
-                    tmp += quote(text) + '\n\n';
-                    break;
-                case 'P':
-                case 'H1':
-                case 'H2':
-                case 'H3':
-                case 'H4':
-                    tmp += text + '\n\n';
-                    break;
-                default:
-                    tmp += text + '\n';
-                    break;
-                }
-            });
-            return tmp;
+            return textproc.htmltotext($(ed.getBody()).html());
         };
 
         this.setContent = set;
 
         this.setPlainText = function (str) {
-            var text = '', quote = false, tmp = '', lTag, rTag;
             // clean up
             str = trimEnd(str);
-            // needs leading empty paragraph?
-            if (str.substr(0, 2) === '\n\n') {
-                text += '<p></p>';
-                str = str.substr(2);
-            }
-            // split & loop
-            _(str.split('\n').concat('')).each(function (line) {
-                var trimmed = $.trim(line);
-                if (trimmed === '' || (quote && trimmed.substr(0, 1) !== '>')) {
-                    lTag = quote ? '<blockquote type="cite"><p>' : '<p>';
-                    rTag = quote ? '</blockquote></p>' : '</p>';
-                    text += tmp !== '' ? lTag + tmp.replace(/<br>$/, '') + rTag : '';
-                    tmp = '';
-                    quote = false;
-                } else if (trimmed.substr(0, 1) === '>') {
-                    tmp += trimmed.substr(2).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
-                    quote = true;
-                } else {
-                    // use untrimmed "line" here!
-                    tmp += line.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
-                }
+            if (!str) return;
+            textproc.texttohtml(str).done(function (content) {
+                set('<p></p>' + content);
             });
-            set(text);
         };
 
         this.paste = function (str) {
@@ -761,7 +488,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 el.empty();
                 el.tinymce().remove();
             }
-            el = el.tinymce = def = ed = null;
+            el = el.tinymce = initialized = rendered = ed = null;
         };
     }
 

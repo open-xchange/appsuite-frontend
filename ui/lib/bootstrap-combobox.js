@@ -16,15 +16,23 @@
     'use strict';
 
     var Combobox = function (element, options) {
-        this.$element = $(element);
+        this.$outer = $('<div>').attr({
+            role: 'combobox',
+            'aria-expanded': false
+        }).css('display', 'inline');
+        this.$element = $(element).wrap(this.$outer);
         this.options = $.extend({}, $.fn.combobox.defaults, options);
         this.matcher = this.options.matcher || this.matcher;
         this.sorter = this.options.sorter || this.sorter;
         this.highlighter = this.options.highlighter || this.highlighter;
-        this.$menu = $(this.options.menu).insertAfter(this.$element);
+        this.$menu = $(this.options.menu).attr({ role: 'listbox' }).insertAfter(this.$element);
         this.source = this.options.source;
         this.shown = false;
         this.$ul = $(this.$menu);
+        this.$inputWrap = $('<div>').attr({
+            role: 'presentation'
+        }).css('display', 'inline');
+        this.$element.attr({ 'aria-owns': 'listchoices' }).wrap(this.$inputWrap);
         this.listen();
     };
 
@@ -81,7 +89,7 @@
             }, 0);
         },
         mouseleave: function(e) {
-            this.$li.removeClass('active');
+            this.$li.removeClass('active').attr({ 'aria-selected': false });
         },
         move: function (e) {
             if (!this.shown) return;
@@ -175,7 +183,7 @@
             });
 
             if (selected) {
-                $(selected).addClass('active');
+                $(selected).addClass('active').attr({ 'aria-selected': true });
             } else {
                 this.shown = false;
             }
@@ -208,24 +216,24 @@
             return this;
         },
         next: function (e) {
-            var active = this.$menu.find('.active').removeClass('active'),
+            var active = this.$menu.find('.active').removeClass('active').attr({ 'aria-selected': false }),
                 next = active.next();
 
             if (!next.length) {
                 next = $(this.$menu.find('li')[0]);
             }
             this.scrollIntoCombobox(next);
-            next.addClass('active');
+            next.addClass('active').attr({ 'aria-selected': true });
         },
         prev: function (e) {
-            var active = this.$menu.find('.active').removeClass('active'),
+            var active = this.$menu.find('.active').removeClass('active').attr({ 'aria-selected': false }),
                 prev = active.prev();
 
             if (!prev.length) {
                 prev = this.$menu.find('li').last();
             }
             this.scrollIntoCombobox(prev);
-            prev.addClass('active');
+            prev.addClass('active').attr({ 'aria-selected': true });
         },
         lookup: function (event) {
             var self = this,
@@ -338,9 +346,20 @@
         source: [],
         items: 8,
         menu: '<ul class="typeahead dropdown-menu"></ul>',
-        item: '<li><a></a></li>',
+        item: '<li role="option" aria-selected="false"><a></a></li>',
         autocompleteBehaviour: false
     };
 
     $.fn.combobox.Constructor = Combobox;
-}(window.jQuery);
+
+    $(function () {
+        $('body').on('focus.combobox.data-api', '[data-provide="combobox"]', function (e) {
+            var $this = $(this);
+            if ($this.data('combobox')) {
+                return;
+            }
+            e.preventDefault();
+            $this.typeahead($this.data());
+        });
+    });
+}(jQuery)

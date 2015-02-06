@@ -30,15 +30,16 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Overdue Tasks')).append(
+                $('<h1 class="section-title">').text(gt('Overdue Tasks')).append(
                     $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                    .attr({ tabindex: 1,
-                        'aria-label': gt('Press to hide all notifications for overdue tasks.'),
-                        'data-action': 'clear',
-                        'focus-id': 'task-overdue-notification-clear'
-                    })
+                        .attr({
+                            tabindex: 1,
+                            'aria-label': gt('Hide all notifications for overdue tasks.'),
+                            'data-action': 'clear',
+                            'focus-id': 'task-overdue-notification-clear'
+                        })
                 ),
-                $('<div class="notifications">')
+                $('<ul class="items list-unstyled">')
             );
         }
     });
@@ -54,7 +55,7 @@ define('plugins/notifications/tasks/register', [
         var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
 
         node.append(
-            $('<div class="taskNotification item refocus" tabindex="1" role="listitem">')
+            $('<li class="taskNotification item refocus" tabindex="1" role="listitem">')
             .attr({
                 'data-cid': model.get('cid'),
                 'focus-id': 'task-overdue-notification-' + model.get('cid'),
@@ -82,7 +83,7 @@ define('plugins/notifications/tasks/register', [
 
     var NotificationsView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-tasks',
 
@@ -103,7 +104,7 @@ define('plugins/notifications/tasks/register', [
 
                 this.collection.each(function (model) {
                     baton = ext.Baton({ model: model, view: this });
-                    ext.point('io.ox/core/notifications/due-tasks/item').invoke('draw', this.$('.notifications'), baton);
+                    ext.point('io.ox/core/notifications/due-tasks/item').invoke('draw', this.$('.items'), baton);
                 }, this);
             }
             return this;
@@ -258,16 +259,16 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/task-reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task reminders')).append(
+                $('<h1 class="section-title">').text(gt('Task reminders')).append(
                     $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({
                         tabindex: 1,
-                        'aria-label': gt('Press to hide all task reminders.'),
+                        'aria-label': gt('Hide all task reminders.'),
                         'data-action': 'clear',
                         'focus-id': 'task-reminder-notification-clear'
                     })
                 ),
-                $('<div class="notifications">')
+                $('<ul class="items list-unstyled">')
             );
         }
     });
@@ -284,7 +285,7 @@ define('plugins/notifications/tasks/register', [
     var ReminderView = Backbone.View.extend({
 
         className: 'taskNotification item',
-
+        tagName: 'li',
         events: {
             'click [data-action="ok"]': 'deleteReminder',
             'change [data-action="reminder"]': 'remindAgain',
@@ -383,7 +384,7 @@ define('plugins/notifications/tasks/register', [
 
     var NotificationsReminderView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
         events: {
@@ -400,7 +401,7 @@ define('plugins/notifications/tasks/register', [
                 ext.point('io.ox/core/notifications/task-reminder/header').invoke('draw', this.$el, baton);
 
                 this.collection.each(function (model) {
-                    this.$el.find('.notifications').append(
+                    this.$el.find('.items').append(
                         new ReminderView({ model: model }).render().$el
                     );
                 }, this);
@@ -484,6 +485,12 @@ define('plugins/notifications/tasks/register', [
                     reminderAPI.deleteReminder(reminders);
                 }
             });
+            api.on('update', function (e, task) {
+                if (notifications.collection._byId[task.id]) {
+                    //get fresh data to be consistent(name, due date change etc)
+                    reminderAPI.getReminders();
+                }
+            });
         }
     });
 
@@ -497,16 +504,16 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task invitations')).append(
-                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({
-                            tabindex: 1,
-                            'aria-label': gt('Press to hide all task invitations.'),
-                            'data-action': 'clear',
-                            'focus-id': 'task-invitation-notification-clear'
-                        })
+                $('<h1 class="section-title">').text(gt('Task invitations'))
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({
+                        tabindex: 1,
+                        'aria-label': gt('Hide all task invitations.'),
+                        'data-action': 'clear',
+                        'focus-id': 'task-invitation-notification-clear'
+                    })
                 ),
-                $('<div class="notifications">')
+                $('<ul class="items list-unstyled">')
             );
         }
     });
@@ -517,21 +524,21 @@ define('plugins/notifications/tasks/register', [
             require(['io.ox/tasks/util'], function (util) {
                 var task = util.interpretTask(baton.model.toJSON()),
                     endText = '';
-                if (_.noI18n(baton.model.get('end_date'))) {
+                if (baton.model.get('end_date')) {
                     endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
                 }
                         //#. %1$s task title
                         //#. %2$s task end date
+                        //#. %3$s task status
                         //#, c-format
-                var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
+                var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText, baton.model.get('status'));
                 self.attr({
                     role: 'listitem',
                     'data-cid': _.ecid(baton.model.attributes),
                     'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
                     tabindex: 1,
                     'aria-label': label
-                })
-                .append(
+                }).append(
                     $('<div class="title">').text(_.noI18n(task.title)),
                     $('<div class="clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(task.end_date)),
@@ -557,7 +564,7 @@ define('plugins/notifications/tasks/register', [
     var ConfirmationView = Backbone.View.extend({
 
         className: 'taskNotification item',
-
+        tagName: 'li',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
@@ -658,7 +665,7 @@ define('plugins/notifications/tasks/register', [
 
     var NotificationsConfirmationView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-confirmation-tasks',
 
@@ -676,7 +683,7 @@ define('plugins/notifications/tasks/register', [
                 ext.point('io.ox/core/notifications/task-confirmation/header').invoke('draw', this.$el, baton);
 
                 this.collection.each(function (model) {
-                    this.$el.append(
+                    this.$el.find('.items').append(
                         new ConfirmationView({ model: model }).render().$el
                     );
                 }, this);

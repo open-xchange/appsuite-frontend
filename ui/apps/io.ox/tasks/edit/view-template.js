@@ -164,7 +164,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     });
 
-    // start date
     point.basicExtend({
         id: 'start_date',
         index: 500,
@@ -182,7 +181,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     });
 
-    // due date
     point.basicExtend({
         id: 'end_date',
         index: 600,

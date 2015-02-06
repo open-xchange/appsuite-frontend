@@ -32,8 +32,9 @@ define('io.ox/core/api/backbone', [], function () {
         comparator: 'index',
         model: Model,
         parse: function (array) {
+            if (!_.isArray(array)) array = [array];
             return _(array).map(function (item) {
-                return new Model(item);
+                return item instanceof Model ? item : new Model(item);
             });
         }
     });

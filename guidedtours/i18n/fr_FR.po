@@ -691,9 +691,13 @@ msgstr ""
 "supérieure de la fenêtre."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr ""
 "Pour accéder aux réglages, cliquez sur l'icône « Menu système » en haut à "
 "droite de la barre de menu. Choisissez « Réglages »."

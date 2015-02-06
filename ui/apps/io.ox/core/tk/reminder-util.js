@@ -13,8 +13,9 @@
 
 define('io.ox/core/tk/reminder-util', [
     'gettext!io.ox/core',
+    'io.ox/calendar/util',
     'less!io.ox/core/tk/reminder-util'
-], function (gt) {
+], function (gt, util) {
 
     'use strict';
 
@@ -34,10 +35,15 @@ define('io.ox/core/tk/reminder-util', [
                 );
         } else {
             // special link dropdown
+            var toggle;
             node.append(
-                $('<div>').addClass('dropdown').css({ float: 'left' }).append(
-                    $('<a href="#" role="listbox" aria-label="' + gt('Press [enter] to select a time when you want to be reminded again') + '"tabindex="1" data-action="reminderbutton" aria-haspopup="true">')
-                    .attr({ 'data-toggle': 'dropdown', 'focus-id': focusId + '-select' })
+                $('<div>').addClass('dropdown').css({ 'float': 'left' }).append(
+                    toggle = $('<a role="menuitem" tabindex="1" data-action="reminderbutton">')
+                    .attr({
+                        'data-toggle': 'dropdown',
+                        'focus-id': focusId + '-select',
+                        'aria-haspopup': 'true'
+                    })
                     .text(gt('Remind me again')).addClass('refocus')
                     .append(
                         $('<i class="fa fa-chevron-down">').css({ paddingLeft: '5px', textDecoration: 'none' })
@@ -45,7 +51,7 @@ define('io.ox/core/tk/reminder-util', [
                     $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({ minWidth: 'auto' }).append(function () {
                         var ret = [];
                         for (var i = 0; i < values.length; i++) {
-                            ret.push('<li><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' + values[i][1] + '</a></li>');
+                            ret.push('<li role="presentation"><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' + values[i][1] + '</a></li>');
                         }
                         return ret;
                     })
@@ -53,6 +59,7 @@ define('io.ox/core/tk/reminder-util', [
                 $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
                     .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
+            toggle.dropdown();
         }
     }
 
@@ -99,7 +106,7 @@ define('io.ox/core/tk/reminder-util', [
                     //#. %4$s Appointment location
                     //#, c-format
             label = gt('Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open',
-                _.noI18n(model.get('title')), _.noI18n(model.get('date')), _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '');
+                _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('caldata'))), _.noI18n(util.getTimeIntervalA11y(model.get('caldata'))), _.noI18n(model.get('location')) || '');
         }
 
         var focusId = model.attributes.cid;

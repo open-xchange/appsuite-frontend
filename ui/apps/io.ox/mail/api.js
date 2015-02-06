@@ -245,6 +245,9 @@ define('io.ox/mail/api', [
         // determine default view parameter
         if (!obj.view) obj.view = defaultView(obj);
 
+        // limit default size (30KB)
+        obj.max_size = settings.get('maxSize/view', 1024 * 100);
+
         return get.call(api, obj, options && options.cache).done(function (data) {
             if (model) {
                 // if we already have a model we promote changes for threads
@@ -738,18 +741,21 @@ define('io.ox/mail/api', [
         view = view === 'text/html' ? 'html' : view;
 
         // attach original message on touch devices?
-        var attachOriginalMessage = view === 'text' &&
-                Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+        var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
             csid = api.csid();
 
         return http.PUT({
             module: 'mail',
-            params: {
+            // using jQuery's params because it ignores undefined values
+            params: $.extend({}, {
                 action: action || '',
                 attachOriginalMessage: attachOriginalMessage,
                 view: view,
-                setFrom: (/reply|replyall|forward/.test(action))
-            },
+                setFrom: (/reply|replyall|forward/.test(action)),
+                csid: csid,
+                embedded: obj.embedded,
+                max_size: obj.max_size
+            }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);
             }),
@@ -1333,7 +1339,7 @@ define('io.ox/mail/api', [
         }
 
         function original() {
-            document.title = document.customTitle;
+            if (document.customTitle) document.title = document.customTitle;
             if (interval) { clearInterval(interval); interval = null; }
         }
 

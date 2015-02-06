@@ -47,7 +47,12 @@ define('io.ox/participants/views', [
                 $text: $('<div class="participant-name">'),
                 $mail: this.options.halo ? $('<a class="participant-email">') : $('<span class="participant-email">'),
                 $extra: $('<a class="extra-decorator">'),
-                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="fa fa-trash-o"></i></div></a>')
+                $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
+                    $('<div class="icon">').append(
+                        $('<i class="fa fa-trash-o" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
+                    )
+                )
             };
 
             this.setDisplayName();
@@ -141,8 +146,7 @@ define('io.ox/participants/views', [
 
             switch (type) {
             case 1:
-                // uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                mail = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
+                mail = this.model.get('field') ? this.model.get(this.model.get('field')) : this.model.getEmail();
                 this.setRows(mail, this.model.get('external') ? gt('External contact') : '');
                 if (this.options.halo) {
                     this.nodes.$mail

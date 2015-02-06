@@ -124,7 +124,7 @@ define('io.ox/core/import/import', [
             if (!_.contains(['calendar'], baton.module)) return;
 
             this.append(
-                $('<div class="checkbox">').appned(
+                $('<div class="checkbox">').append(
                     $('<label>').append(
                         $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
                         gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
@@ -177,7 +177,8 @@ define('io.ox/core/import/import', [
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
                         failHandler = function (data) {
-                            var list = _(data).chain()
+                            var list = _(data)
+                                .chain()
                                 .map(function (item) {
                                     if (item && item.code === 'CON-0600') {
                                         //append first value which caused conversion error (csv import)
@@ -185,12 +186,16 @@ define('io.ox/core/import/import', [
                                     }
                                     return item && item.error;
                                 })
-                                .compact();
-                            notifications.yell('error', list.length ?
-                                list.join('\n\n') :
-                                //#. Error message if calender import failed
-                                gt('There was no appointment data to import')
-                            );
+                                .compact()
+                                .value();
+                            notifications.yell({
+                                type: 'error',
+                                message: list.length ?
+                                    list.join('\n\n') :
+                                    //#. Error message if calender import failed
+                                    gt('There was no appointment data to import'),
+                                duration: -1
+                            });
                             popup.idle();
                         };
 
@@ -218,12 +223,17 @@ define('io.ox/core/import/import', [
                         });
                         //cache
                         try {
-                            baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
-                                baton.api.trigger('refresh.all');
-                            });
+                            // todo: clean that up; fails for calendar
+                            if (baton.api.caches.all.grepRemove) {
+                                baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
+                                    baton.api.trigger('refresh.all');
+                                });
+                            } else if (baton.api.refresh) {
+                                baton.api.refresh();
+                            }
                         } catch (e) {
                             // if api is unknown, refresh everything
-                            console.warn('import triggering global refresh because of unknown API', e);
+                            if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
                             ox.trigger('refresh^');
                         }
                         //partially failed?

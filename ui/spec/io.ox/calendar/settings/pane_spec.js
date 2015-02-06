@@ -51,16 +51,16 @@ define([
             this.node.find('input[name="markFulltimeAppointmentsAsFree"]').parent().text().should.be.equal(gt('Mark all day appointments as free'));
 
             this.node.find('input[name="notifyNewModifiedDeleted"]').should.have.length(1);
-            this.node.find('input[name="notifyNewModifiedDeleted"]').parent().text().should.be.equal(gt('Email notification for New, Changed, Deleted?'));
+            this.node.find('input[name="notifyNewModifiedDeleted"]').parent().text().should.be.equal(gt('Receive notification for appointment changes'));
 
             this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').should.have.length(1);
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').parent().text().should.be.equal(gt('Email notification for appointment creator?'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').parent().text().should.be.equal(gt('Receive notification as appointment creator when participants accept or decline'));
 
             this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').should.have.length(1);
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').parent().text().should.be.equal(gt('Email notification for appointment participant?'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').parent().text().should.be.equal(gt('Receive notification as appointment participant when other participants accept or decline'));
 
             this.node.find('input[name="deleteInvitationMailAfterAction"]').should.have.length(1);
-            this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete a notification mail after it has been accepted or declined?'));
+            this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete notifications after having accepted or declined'));
 
         });
 

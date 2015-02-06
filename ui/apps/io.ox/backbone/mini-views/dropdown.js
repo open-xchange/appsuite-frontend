@@ -27,7 +27,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var node = $(e.currentTarget),
                 name = node.attr('data-name'),
                 value = node.data('value'),
-                toggle = node.data('toggle');
+                toggle = node.data('toggle'),
+                keep = node.attr('data-keep-open') === 'true';
+            // keep drop-down open?
+            if (keep) e.stopPropagation();
             // ignore plain links
             if (value === undefined) return;
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
@@ -92,7 +95,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
-            //in firefox draggable=false is not enough to prevent dragging...
+            // in firefox draggable=false is not enough to prevent dragging...
             if ( _.device('firefox') ) {
                 link.attr('ondragstart', 'return false;');
             }
@@ -100,9 +103,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         link: function (name, text, callback) {
-            var link = $('<a draggable="false">', { href: '#', 'data-name': name })
-                    .text(text).on('click', callback);
-            //in firefox draggable=false is not enough to prevent dragging...
+            var link = $('<a href="#" draggable="false">')
+                .attr('data-name', name)
+                .text(text).on('click', callback);
+            // in firefox draggable=false is not enough to prevent dragging...
             if ( _.device('firefox') ) {
                 link.attr('ondragstart', 'return false;');
             }
@@ -110,7 +114,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         header: function (text) {
-            this.$ul.append($('<li class="dropdown-header" role="sectionhead">').text(text).attr('aria-hidden', true));
+            this.$ul.append($('<li class="dropdown-header" role="sectionhead">').text(text));
             return this;
         },
 
@@ -121,7 +125,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         render: function () {
             var label = _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label),
-                ariaLabel = this.options.aria ? this.options.aria : '',
+                ariaLabel = this.options.aria ? this.options.aria : null,
                 toggle;
             if (_.isString(label)) {
                 ariaLabel += (' ' + label);

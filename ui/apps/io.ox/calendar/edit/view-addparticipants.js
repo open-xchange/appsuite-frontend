@@ -147,7 +147,14 @@ define('io.ox/calendar/edit/view-addparticipants', [
                                     closeButton: false,
                                     halo: false
                                 });
+
                             this.append(pview.render().el);
+
+                             // apply a11y
+                            this.attr({
+                                'aria-label': this.find('.participant-name').text() + ' ' + this.find('.participant-email').text(),
+                                'tabIndex': 1
+                            });
                         },
                         click: function () {
                             self.autoparticipants.trigger('selected', self.autoparticipants.getSelectedItem());

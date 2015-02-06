@@ -295,7 +295,8 @@ define('io.ox/core/main', [
         if (fn) {
             node.on('click', function (e) {
                 e.preventDefault();
-                var self = $(this), content;
+                var self = $(this), content,
+                    focus = $(document.activeElement);
                 // set fixed width, hide label, be busy
                 content = self.contents().detach();
                 self.css('width', self.width() + 'px').text('\u00A0').busy();
@@ -303,6 +304,11 @@ define('io.ox/core/main', [
                 (fn.call(this) || $.when()).done(function () {
                     // revert visual changes
                     self.idle().empty().append(content).css('width', '');
+                    //detaching results in lost focus, which is bad for keyboard support.
+                    //so we need to restore it, if it was not set manually in the mean time.
+                    if ($(document.activeElement).filter('body').length > 0) {
+                        focus.focus();
+                    }
                 });
             });
         }
@@ -331,6 +337,8 @@ define('io.ox/core/main', [
 
         function off() {
             if (count === 0 && timer === null) {
+                $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Refresh'));
+
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                     if (refreshIcon.hasClass('fa-spin')) {
@@ -346,6 +354,8 @@ define('io.ox/core/main', [
             if (count === 0) {
                 if (timer === null) {
                     if (!options.silent) {
+                        $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Currently refreshing'));
+
                         if (useSpinner) {
                             refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                             if (!refreshIcon.hasClass('fa-spin')) {
@@ -699,33 +709,11 @@ define('io.ox/core/main', [
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a.apptitle', node).text(value);
+            $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
-            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
+            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
             tabManager();
         });
-
-        // ext.point('io.ox/core/topbar/right').extend({
-        //     id: 'search-input',
-        //     index: 101,
-        //     draw: function () {
-        //         if (capabilities.has('search')) {
-        //             var placeholder = $('<span>'),
-        //                 self = this;
-        //             //add search field placeholder
-        //             self.append(
-        //                 addLauncher('right', placeholder, $.noop(), gt('Search'))
-        //                 .attr('id', 'io-ox-search-topbar')
-        //                 .addClass('io-ox-search widget-content')
-        //             );
-
-        //             //replace placeholder with concrete search field
-        //             require(['io.ox/search/main'], function (searchapp) {
-        //                 placeholder.replaceWith(searchapp.init());
-        //             });
-        //         }
-        //     }
-        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
@@ -747,40 +735,6 @@ define('io.ox/core/main', [
                 }
             }
         });
-
-        // ext.point('io.ox/core/topbar/right').extend({
-        //     id: 'search',
-        //     index: 150,
-        //     draw: function () {
-        //         if (capabilities.has('search') && !(_.device('smartphone'))) {
-        //             this.append(
-        //                 addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
-        //                                 var app = ox.ui.App.getCurrentApp();
-
-        //                                 // TODO: remove temporary evil hack
-        //                                 if (!app.getWindow().options.facetedsearch) {
-        //                                     // load search default app
-        //                                     var e = $.Event('click');
-        //                                     $('.launcher[data-app-name="io.ox/mail"]')
-        //                                         .find('a')
-        //                                         .trigger(e);
-        //                                     app = ox.ui.App.getCurrentApp();
-        //                                 }
-
-        //                                 if (app.props) {
-        //                                     // active app suppors search
-        //                                     if (!app.props.get('folderview'))
-        //                                         app.props.set('folderview', true);
-        //                                     app.getWindow().nodes.facetedsearch.toolbar.find('.search-field').focus();
-        //                                 }
-
-        //                     },  gt('Search'))
-        //                 .attr('id', 'io-ox-search-topbar-icon')
-        //                 .addClass('io-ox-search')
-        //             );
-        //         }
-        //     }
-        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'search-mobile',
@@ -968,7 +922,7 @@ define('io.ox/core/main', [
                 var ul, a;
                 this.append(
                     $('<li class="launcher dropdown" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
+                        a = $('<a class="dropdown-toggle f6-target" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
                         .append(
                             $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))
@@ -1071,7 +1025,7 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<div class="launchers-secondary">');
+                var rightbar = $('<ul class="launchers-secondary">');
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
@@ -1085,6 +1039,46 @@ define('io.ox/core/main', [
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
 
                 $(window).resize(tabManager);
+            }
+        });
+
+        ext.point('io.ox/core/banner').extend({
+            id: 'default',
+            draw: function () {
+
+                var sc = ox.serverConfig;
+                if (sc.banner === false || _.device('!desktop')) return;
+
+                var banner = $('#io-ox-banner').toggleClass('visible'),
+                    height = sc.bannerHeight || 60;
+
+                // move affected viewports
+                $('#io-ox-topbar, #io-ox-screens, #io-ox-notifications').css('top', '+=' + height + 'px');
+
+                // set title
+                banner.find('.banner-title').append(
+                    sc.bannerCompany !== false ? $('<b>').text((sc.bannerCompany || 'OX') + ' ') : $(),
+                    $.txt(sc.bannerProductName || 'App Suite')
+                );
+
+                // show current user
+                banner.find('.banner-content').append(
+                    $('<label>').text(gt('Signed in as:')),
+                    $.txt(' '), $.txt(ox.user),
+                    $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
+                        .attr('title', gt('Sign out'))
+                        .append('<i class="fa fa-power-off">')
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            logout();
+                        })
+                );
+
+                // prevent logout action within top-bar drop-down
+                ext.point('io.ox/core/topbar/right/dropdown').disable('logout');
+
+                // prevent logo
+                ext.point('io.ox/core/topbar/right').disable('logo');
             }
         });
 
@@ -1187,7 +1181,7 @@ define('io.ox/core/main', [
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose');
+                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
             baton.autoLaunch = (manifest && (manifest.refreshable || mailto)) ?
                 appURL.split(/,/) :
@@ -1220,7 +1214,8 @@ define('io.ox/core/main', [
             if (isEmpty) {
                 drawDesktop();
                 ox.ui.screens.show('desktop');
-                ox.launch(getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app);
+                var autoStart = getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app;
+                if (autoStart !== 'none/main') ox.launch(autoStart);
             } else {
                 ox.ui.screens.show('windowmanager');
             }
@@ -1451,6 +1446,7 @@ define('io.ox/core/main', [
                     debug('Stage "load" > loaded.done');
 
                     // draw top bar now
+                    ext.point('io.ox/core/banner').invoke('draw');
                     ext.point('io.ox/core/topbar').invoke('draw');
 
                     // help here
@@ -1576,10 +1572,21 @@ define('io.ox/core/main', [
     });
 
     //
-    // Respons to special http error codes (see bug 32836)
+    // Respond to special http error codes (see bug 32836)
     //
-    ox.on('http:error', function (error) {
-        if (error.code === 'MSG-1000' || error.code === 'MSG-1001') notifications.yell(error);
+
+    ox.on('http:error', function (e, error) {
+        switch (error.code) {
+            case 'MSG-1000':
+            case 'MSG-1001':
+                // IMAP-specific: 'Relogin required'
+                notifications.yell(error);
+                break;
+            case 'LGI-0016':
+                // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
+                location.href = error.error;
+                break;
+        }
     });
 
     return {

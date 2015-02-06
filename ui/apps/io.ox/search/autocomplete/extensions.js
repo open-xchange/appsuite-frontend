@@ -162,6 +162,9 @@ define('io.ox/search/autocomplete/extensions',[
         },
 
         searchfieldMobile: function (baton) {
+
+            if (!_.device('small')) return;
+
             var group,
                 label = gt('Search'),
                 id = 'search-search-field';
@@ -173,6 +176,7 @@ define('io.ox/search/autocomplete/extensions',[
                         $('<input type="text">')
                         .attr({
                             class: 'form-control search-field',
+                            role: 'search',
                             tabindex: 1,
                             id: id,
                             placeholder: label + ' ...'
@@ -239,6 +243,8 @@ define('io.ox/search/autocomplete/extensions',[
             ext.point(POINT + '/name').invoke('draw', this, baton);
             // email address
             ext.point(POINT + '/detail').invoke('draw', this, baton);
+            // aria lebel
+            ext.point(POINT + '/a11y').invoke('draw', this, baton);
         },
 
         image: function (baton) {
@@ -291,7 +297,14 @@ define('io.ox/search/autocomplete/extensions',[
                     $('<i>').text('\u00A0' + detail)
                 );
             }
+        },
 
+        a11y: function () {
+            var text = this.find('.name').text() + ' ' +  this.find('.detail').text();
+            this.attr({
+                'aria-label': text,
+                'tabIndex': 1
+            });
         }
 
     };

@@ -606,9 +606,13 @@ msgstr ""
 "程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr "要打开设置，请单击菜单条右上方的系统菜单图标。选择设置。"
 
 #: apps/io.ox/tours/main.js:187 module:io.ox/tours

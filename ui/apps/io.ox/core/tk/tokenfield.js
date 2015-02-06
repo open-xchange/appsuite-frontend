@@ -24,6 +24,47 @@ define('io.ox/core/tk/tokenfield', [
 
     'use strict';
 
+    $.fn.tokenfield.Constructor.prototype.getTokensList = function (delimiter, beautify, active) {
+        delimiter = delimiter || this._firstDelimiter;
+        beautify = ( typeof beautify !== 'undefined' && beautify !== null ) ? beautify : this.options.beautify;
+
+        var separator = delimiter + ( beautify && delimiter !== ' ' ? ' ' : '');
+        return $.map( this.getTokens(active), function (token) {
+            if (token.model) {
+                var displayname = token.model.getDisplayName(),
+                    email = token.model.getEmail();
+                return displayname === email ? email : '"' + displayname + '" <' + email + '>';
+            }
+            return token.value;
+        }).join(separator);
+    };
+
+    $.fn.tokenfield.Constructor.prototype.setTokens = function (tokens, add, triggerChange) {
+        if (!tokens) return;
+
+        if (!add) this.$wrapper.find('.token').remove();
+
+        if (typeof triggerChange === 'undefined') {
+            triggerChange = true;
+        }
+
+        if (typeof tokens === 'string') {
+            if (this._delimiters.length) {
+                // Split based on comma as delimiter whilst ignoring comma in quotes
+                tokens = tokens.match(/([^\"\',]*((\'[^\']*\')*||(\"[^\"]*\")*))+/gm).filter(function (e) { return e; });
+            } else {
+                tokens = [tokens];
+            }
+        }
+
+        var _self = this;
+        $.each(tokens, function (i, attrs) {
+            _self.createToken(attrs, triggerChange);
+        });
+
+        return this.$element.get(0);
+    };
+
     var Tokenfield = Typeahead.extend({
 
         className: 'test',
@@ -80,7 +121,6 @@ define('io.ox/core/tk/tokenfield', [
                     placeholder: this.options.placeholder || ''
                 })
                 .addClass('tokenfield');
-
             this.$el.tokenfield({
                 createTokensOnBlur: true,
                 minLength: o.minLength,
@@ -110,11 +150,18 @@ define('io.ox/core/tk/tokenfield', [
                         if (e.attrs.model) {
                             model = e.attrs.model;
                         } else {
+                            var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                            if (_.isArray(newAttrs)) {
+                                e.attrs.label = newAttrs[1];
+                                e.attrs.value = newAttrs[3];
+                            } else {
+                                newAttrs = ['', e.attrs.value, '', e.attrs.value];
+                            }
                             // add extrenal participant
                             model = new pModel.Participant({
                                 type: 5,
-                                display_name: e.attrs.label,
-                                email1: e.attrs.value
+                                display_name: newAttrs[1],
+                                email1: newAttrs[3]
                             });
                         }
                         model.set('token', {
@@ -206,6 +253,16 @@ define('io.ox/core/tk/tokenfield', [
                 }
             }).droppable({
                 hoverClass: 'drophover'
+            });
+
+            // Remove on cut
+            this.$el.closest('div.tokenfield').on('keydown', function (e) {
+                if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
+                    $(this).find('.token.active').each(function () {
+                        self.collection.remove($(this).data().attrs.model);
+                    });
+                    self.redrawToken();
+                }
             });
 
             return this;

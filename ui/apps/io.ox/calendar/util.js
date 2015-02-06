@@ -130,6 +130,12 @@ define('io.ox/calendar/util', [
             return d.format(date.DAYOFWEEK_DATE);
         },
 
+        //returns date with full weekday name
+        getDateA11y: function (timestamp) {
+            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
+            return date.locale.days[d.getDay()] + ', ' + d.format(date.DATE);
+        },
+
         getSmartDate: function (data, showDate) {
 
             var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
@@ -156,7 +162,7 @@ define('io.ox/calendar/util', [
 
                 if (diff >= -1 * date.DAY) {
                     return gt('Yesterday');
-                } else if (diffWeek > -7 * date.DAY || lastSunday) {
+                } else if (diffWeek > -7 * date.DAY || lastSunday) {
                     return gt('Last Week');
                 }
             } else {
@@ -222,6 +228,30 @@ define('io.ox/calendar/util', [
                     return this.getDate(startDate);
                 } else {
                     return this.getDate(startDate) + ' \u2013 ' + this.getDate(endDate);
+                }
+            } else {
+                return '';
+            }
+        },
+
+        getDateIntervalA11y: function (data) {
+            if (data && data.start_date && data.end_date) {
+                var startDate = data.start_date,
+                    endDate = data.end_date;
+                if (data.full_time) {
+                    startDate = date.Local.utc(startDate);
+                    endDate = date.Local.utc(endDate);
+                    endDate -= date.DAY;
+                }
+                if (this.onSameDay(startDate, endDate)) {
+                    return this.getDateA11y(startDate);
+                } else {
+                            //#. date intervals for screenreaders
+                            //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                            //#. %1$s is the start date
+                            //#. %2$s is the end date
+                            //#, c-format
+                    return gt('%1$s to %2$s', this.getDateA11y(startDate), this.getDateA11y(endDate));
                 }
             } else {
                 return '';
@@ -314,6 +344,21 @@ define('io.ox/calendar/util', [
                 return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
             }
         },
+        getTimeIntervalA11y: function (data) {
+            if (!data || !data.start_date || !data.end_date) return '';
+            if (data.full_time) {
+                return this.getFullTimeInterval(data, true);
+            } else {
+                var start = new date.Local(data.start_date),
+                    end = new date.Local(data.end_date);
+                        //#. Time intervals for screenreaders
+                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                        //#. %1$s is the start time
+                        //#. %2$s is the end time
+                        //#, c-format
+                return gt('%1$s to %2$s', start.format(date.TIME), end.format(date.TIME));
+            }
+        },
 
         getStartAndEndTime: function (data) {
             var ret = [];
@@ -331,7 +376,7 @@ define('io.ox/calendar/util', [
             var current = date.Local.getTTInfoLocal(data.start_date);
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data))),
-                $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.abbr)).popover({
                     container: '#io-ox-core',
                     content: getContent(),
                     html: true,
@@ -342,7 +387,7 @@ define('io.ox/calendar/util', [
                         return 'left';
                     },
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
-                    trigger: 'hover'
+                    trigger: 'hover focus'
                 }).on('blur', function () {
                     $(this).popover('hide');
                 })
@@ -463,26 +508,24 @@ define('io.ox/calendar/util', [
                         //#. recurrence string
                         //#. %1$d: numeric
                         gt('Every %1$d weeks on all days', interval);
-                }
-
-                // special case: weekly on work days
-                if (days === 62) {
+                } else if (days === 62) { // special case: weekly on work days
                     str = interval === 1 ?
                         //#. recurrence string
                         gt('On work days') :
                         //#. recurrence string
                         //#. %1$d: numeric
                         gt('Every %1$d weeks on work days', interval);
+                } else {
+                    str = interval === 1 ?
+                    //#. recurrence string
+                    //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
+                    gt('Weekly on %1$s', getDayString(days)) :
+                    //#. recurrence string
+                    //#. %1$d: numeric
+                    //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+                    gt('Every %1$d weeks on %2$s', interval, getDayString(days));
                 }
 
-                str = interval === 1 ?
-                //#. recurrence string
-                //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-                gt('Weekly on %1$s', getDayString(days)) :
-                //#. recurrence string
-                //#. %1$d: numeric
-                //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                gt('Every %1$d weeks on %2$s', interval, getDayString(days));
                 break;
 
             // MONTHLY
@@ -496,18 +539,19 @@ define('io.ox/calendar/util', [
                         //#. %1$d: numeric, interval
                         //#. %1$d: numeric, day in month
                         gt('Every %1$d months on day %2$d', interval, day_in_month);
+                } else {
+                    str = interval === 1 ?
+                    //#. recurrence string
+                    //#. %1$s: count string, e.g. first, second, or last
+                    //#. %2$s: day string, e.g. Monday
+                    gt('Monthly on the %1$s %2$s', getCountString(day_in_month), getDayString(days)) :
+                    //#. recurrence string
+                    //#. %1$d: numeric, interval
+                    //#. %2$s: count string, e.g. first, second, or last
+                    //#. %3$s: day string, e.g. Monday
+                    gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
                 }
 
-                str = interval === 1 ?
-                //#. recurrence string
-                //#. %1$s: count string, e.g. first, second, or last
-                //#. %2$s: day string, e.g. Monday
-                gt('Monthly on the %1$s %2$s', getCountString(day_in_month), getDayString(days)) :
-                //#. recurrence string
-                //#. %1$d: numeric, interval
-                //#. %2$s: count string, e.g. first, second, or last
-                //#. %3$s: day string, e.g. Monday
-                gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
                 break;
 
             // YEARLY
@@ -523,20 +567,21 @@ define('io.ox/calendar/util', [
                         //#. %2$s: Month nane, e.g. January
                         //#. %3$d: Date, numeric, e.g. 29
                         gt('Every %1$d years on %2$s %3$d', interval, getMonthString(month), day_in_month);
+                } else {
+                    str = !interval || interval === 1 ?
+                    //#. recurrence string
+                    //#. %1$s: count string, e.g. first, second, or last
+                    //#. %2$s: day string, e.g. Monday
+                    //#. %3$s: month nane, e.g. January
+                    gt('Yearly on the %1$s %2$s of %3$d', getCountString(day_in_month), getDayString(days), getMonthString(month)) :
+                    //#. recurrence string
+                    //#. %1$d: interval, numeric
+                    //#. %2$s: count string, e.g. first, second, or last
+                    //#. %3$s: day string, e.g. Monday
+                    //#. %4$s: month nane, e.g. January
+                    gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
                 }
 
-                str = !interval || interval === 1 ?
-                //#. recurrence string
-                //#. %1$s: count string, e.g. first, second, or last
-                //#. %2$s: day string, e.g. Monday
-                //#. %3$s: month nane, e.g. January
-                gt('Yearly on the %1$s %2$s of %3$d', getCountString(day_in_month), getDayString(days), getMonthString(month)) :
-                //#. recurrence string
-                //#. %1$d: interval, numeric
-                //#. %2$s: count string, e.g. first, second, or last
-                //#. %3$s: day string, e.g. Monday
-                //#. %4$s: month nane, e.g. January
-                gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
                 break;
             }
 
@@ -636,6 +681,11 @@ define('io.ox/calendar/util', [
                     ret.hasFirst = true;
                 }
                 day.add(date.DAY);
+
+                obj.isLast = day.getDate() === 1;
+                if (obj.isLast) {
+                    ret.hasLast = true;
+                }
             }
             return ret;
         },
@@ -659,9 +709,11 @@ define('io.ox/calendar/util', [
         },
 
         resolveParticipants: function (participants, mode) {
+
             var groupIDs = [],
                 userIDs = [],
                 result = [];
+
             mode = mode || 'dist';
 
             _.each(participants, function (participant) {
@@ -690,9 +742,12 @@ define('io.ox/calendar/util', [
                     return _([].concat(result, users)).uniq();
                 } else {
                     _.each(users, function (user) {
-                        if (user.id !== ox.user_id) {
-                            result.push([user.display_name, user.mail]);
-                        }
+                        // don't add myself
+                        if (user.id === ox.user_id) return;
+                        // don't add if mail address is missing (yep, edge-case)
+                        if (!user.mail) return;
+                        // add to result
+                        result.push([user.display_name, user.mail]);
                     });
                     return result;
                 }

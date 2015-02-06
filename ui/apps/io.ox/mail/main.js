@@ -760,7 +760,7 @@ define('io.ox/mail/main', [
                 app.right.css({ left: '', top: '' });
 
                 // relocate toolbar
-                toolbar = nodes.body.find('.classic-toolbar');
+                toolbar = nodes.body.find('.classic-toolbar-container');
                 className = 'classic-toolbar-visible';
                 if (layout === 'compact') {
                     nodes.body.removeClass(className);
@@ -1137,6 +1137,8 @@ define('io.ox/mail/main', [
             chromeless: true,
             facetedsearch: capabilities.has('search')
         });
+
+        if (_.url.hash().mailto) ox.registry.call('mail-compose', 'compose');
 
         app.setWindow(win);
         app.settings = settings;

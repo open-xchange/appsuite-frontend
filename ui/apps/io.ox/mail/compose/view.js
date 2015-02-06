@@ -34,6 +34,12 @@ define('io.ox/mail/compose/view', [
     var INDEX = 0,
         POINT = 'io.ox/mail/compose';
 
+    ext.point(POINT + '/mailto').extend({
+        id: 'mailto',
+        index: 100,
+        setup: extensions.mailto
+    });
+
     ext.point(POINT + '/fields').extend({
         id: 'header',
         index: INDEX += 100,
@@ -316,6 +322,36 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'needsync', this.syncMail);
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+
+            var mailto, params;
+            // triggerd by mailto?
+            if (mailto = _.url.hash('mailto')) {
+
+                var parseRecipients = function (recipients) {
+                    return recipients.split(',').map(function (recipient) {
+                        var parts = _.compact(
+                            recipient.replace(/^("([^"]*)"|([^<>]*))?\s*(<(\s*(.*?)\s*)>)?/, '$2//$3//$5').split('//')
+                        ).map(function (str) { return str.trim(); });
+                        return (parts.length === 1) ? [parts[0], parts[0]] : parts;
+                    });
+                };
+                // remove 'mailto:'' prefix and split at '?''
+                var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
+                var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
+                // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
+                for (var key in params) params[key.toLowerCase()] = params[key];
+                // save data
+                if (to)         { this.model.set('to',  parseRecipients(to),         { silent: true }); }
+                if (params.cc)  { this.model.set('cc',  parseRecipients(params.cc),  { silent: true }); }
+                if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
+
+                this.setSubject(params.subject || '');
+                this.model.setContent(params.body || '');
+                // clear hash
+                _.url.hash('mailto', null);
+            }
+
+            ext.point(POINT + '/mailto').invoke('setup');
         },
 
         filterData: function (data) {
@@ -324,9 +360,11 @@ define('io.ox/mail/compose/view', [
         },
 
         fetchMail: function (obj) {
+
             var self = this,
             mode = obj.mode;
             delete obj.mode;
+
             if (/(compose|edit)/.test(mode)) {
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
@@ -342,6 +380,10 @@ define('io.ox/mail/compose/view', [
             if (content_type === 'alternative') {
                 content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
             }
+
+            // use CSS sanitizing and size limit (large than detail view)
+            obj.embedded = true;
+            obj.max_size = settings.get('maxSize/compose', 1024 * 256);
 
             return mailAPI[mode](obj, content_type).then(function (data) {
                 data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
@@ -390,13 +432,12 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 old_vcard_flag;
 
-            if (mail.msgref) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
@@ -411,28 +452,28 @@ define('io.ox/mail/compose/view', [
             old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
-            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                return mailAPI.send(mail, mail.files).always(function (result) {
-                    if (result.error) {
-                        notifications.yell(result);
-                        def.reject(result);
-                    } else {
-                        mailAPI.get(self.parseMsgref(result.data)).then(function (data) {
-                            // Replace inline images in contenteditable with links from draft response
-                            $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                                $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
-                            });
-                            self.model.set('msgref', result.data, { silent: true });
-                            self.model.dirty(false);
-                            notifications.yell('success', gt('Mail saved as draft'));
-                            def.resolve(result);
-                        });
-                    }
+            return attachmentEmpty.emptinessCheck(mail.files).then(function () {
+                return mailAPI.send(mail, mail.files);
+            }).then(function (result) {
+                return $.when(
+                    result,
+                    mailAPI.get(self.parseMsgref(result.data))
+                );
+            }, function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    return def.reject(result);
+                }
+            }).then(function (result, data) {
+                // Replace inline images in contenteditable with links from draft response
+                $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                    $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
                 });
+                self.model.set('msgref', result.data, { silent: true });
+                self.model.dirty(false);
+                notifications.yell('success', gt('Mail saved as draft'));
+                return result;
             });
-
-            return $.when.apply($, [def, defSend]);
-
         },
 
         autoSaveDraft: function () {
@@ -441,13 +482,30 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 self = this;
 
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
+            }
+            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
+            }
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
+            }
+
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    self.model.set('msgref', result, { silent: true });
-                    self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
+
+                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
+                        self.model.set('msgref', result, { silent: true });
+                    }
+
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
@@ -681,34 +739,31 @@ define('io.ox/mail/compose/view', [
 
             // ask for empty to,cc,bcc and/or empty subject
             var noRecipient = _.isEmpty(mail.to) && _.isEmpty(mail.cc) && _.isEmpty(mail.bcc);
-            if ($.trim(mail.subject) === '' || noRecipient) {
-                if (noRecipient) {
-                    notifications.yell('error', gt('Mail has no recipient.'));
-                    self.$el.find('.tokenfield:first .token-input').focus();
-                    def.reject();
-                } else if ($.trim(mail.subject) === '') {
-                    // show dialog
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog({ focus: false })
-                            .text(gt('Mail has empty subject. Send it anyway?'))
-                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
-                            .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
-                            .show(function () {
-                                def.notify('empty subject');
-                            })
-                            .done(function (action) {
-                                if (action === 'send') {
-                                    attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                                        cont();
-                                    });
-                                } else {
-                                    self.$el.find('input[name="subject"]').focus();
-                                    def.reject();
-                                }
-                            });
-                    });
-                }
-
+            if (noRecipient) {
+                notifications.yell('error', gt('Mail has no recipient.'));
+                self.$el.find('.tokenfield:first .token-input').focus();
+                def.reject();
+            } else if ($.trim(mail.subject) === '') {
+                // show dialog
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({ focus: false })
+                        .text(gt('Mail has empty subject. Send it anyway?'))
+                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
+                        .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
+                        .show(function () {
+                            def.notify('empty subject');
+                        })
+                        .done(function (action) {
+                            if (action === 'send') {
+                                attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                                    cont();
+                                });
+                            } else {
+                                self.$el.find('input[name="subject"]').focus();
+                                def.reject();
+                            }
+                        });
+                });
             } else {
                 attachmentEmpty.emptinessCheck(mail.files).done(function () {
                     cont();
@@ -832,7 +887,7 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature();
+            this.setSelectedSignature(this.model.get('signature'));
         },
 
         getMobileSignature: function () {
@@ -845,21 +900,28 @@ define('io.ox/mail/compose/view', [
             return value;
         },
 
-        setSelectedSignature: function () {
-            var ds = _.where(this.signatures, { id: String(this.model.get('signature')) })[0];
-            if (ds) {
+        setSelectedSignature: function (model, id) {
+            if (_.isString(model)) {
+                id = model;
+            }
+            var newSignature = _.where(this.signatures, { id: String(id) })[0],
+                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
+
+            if (prevSignature) {
+                this.removeSignature(prevSignature);
+            }
+            if (newSignature) {
+                var ds = newSignature;
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
-            } else {
-                this.removeSignature();
             }
             this.prependNewLine();
         },
 
-        removeSignature: function () {
+        removeSignature: function (signature) {
             var self = this,
                 isHTML = !!this.editor.find,
-                currentSignature = this.model.get('currentSignature');
+                currentSignature = mailUtil.signatures.cleanAdd(signature.content, isHTML);
 
             // remove current signature from editor
 
@@ -900,8 +962,6 @@ define('io.ox/mail/compose/view', [
             var text,
                 isHTML = !!this.editor.find;
 
-            this.removeSignature();
-
             // add signature?
             if (this.signatures.length > 0) {
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
@@ -914,7 +974,6 @@ define('io.ox/mail/compose/view', [
                     this.editor.prependContent(text);
                     this.editor.scrollTop('top');
                 }
-                this.model.set('currentSignature', text);
             }
         },
 
@@ -941,7 +1000,9 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
-            return this.changeEditorMode().done(function () {
+            return this.changeEditorMode().then(function () {
+                return self.signaturesLoading;
+            }).done(function () {
                 if (data.replaceBody !== 'no') {
                     var mode = self.model.get('mode');
                     // set focus in compose and forward mode to recipient tokenfield
