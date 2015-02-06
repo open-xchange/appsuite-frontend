@@ -1734,6 +1734,7 @@ define('io.ox/core/desktop',
                                                 class: 'form-control search-field f6-target',
                                                 tabindex: 1,
                                                 role: 'search',
+                                                'aria-label': gt('Search box'),
                                                 id: id,
                                                 placeholder: label + ' ...',
                                                 'aria-describedby': guid
