@@ -1,0 +1,56 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+#io-ox-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+
+    &.visible {
+        color: #fff;
+        line-height: 40px;
+        padding: 10px 20px 10px 10px;
+        display: block;
+        height: 60px;
+        .vertical-gradient(darken(@topbar-background, 10%), darken(@topbar-background, 18%));
+    }
+
+    .banner-title {
+        font-size: 20px;
+        font-weight: 300;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.70);
+        float: left;
+    }
+
+    .banner-content {
+        font-size: 13px;
+        float: right;
+
+        label {
+            font-weight: inherit;
+            color: rgba(255, 255, 255, 0.70);
+        }
+    }
+
+    .banner-action {
+        color: #fff;
+        font-size: 20px;
+        margin-left: 14px;
+        position: relative;
+        text-decoration: none;
+        top: 2px;
+    }
+}

@@ -998,3 +998,24 @@ li {
         }
     }
 }
+//
+// Expandable section
+//
+
+.expandable {
+
+    .expandable-content { display: none; }
+
+    &.open .expandable-content { display: block; }
+
+    .expandable-toggle { color: inherit; }
+
+    .expandable-indicator:before {
+        color: #aaa;
+        content: "\f0da"; // fa-caret-right
+    }
+
+    &.open .expandable-indicator:before {
+        content: "\f0d7"; // fa-caret-down
+    }
+}

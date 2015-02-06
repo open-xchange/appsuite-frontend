@@ -1,0 +1,70 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+/* Guidance view */
+
+.statistics {
+
+    .overflow(auto);
+    position: static; /* Bug 31425 */
+    @distance: 28px;
+
+    &.modal-body {
+        padding: 28px 28px 0 28px;
+    }
+
+    h1.folder-name {
+        font-size: 24px;
+        text-transform: uppercase;
+        margin: 0 0 24px 0;
+    }
+
+    header, section {
+        margin: 0 0 @distance 0;
+        &:last-child { margin-bottom: 0; }
+    }
+
+    .folder-summary {
+        color: #888;
+    }
+
+    .folder-actions {
+        margin-top: 14px;
+    }
+
+    h2 {
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: 300;
+        margin: 0 0 14px 0;
+    }
+
+    ul.compact {
+
+        li {
+            a.disabled {
+                display: none;
+            }
+        }
+
+        li.divider {
+            display: none;
+        }
+    }
+
+    canvas {
+        margin-bottom: 10px;
+    }
+}
