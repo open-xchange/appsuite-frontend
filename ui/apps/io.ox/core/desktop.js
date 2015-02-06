@@ -1014,7 +1014,7 @@ define('io.ox/core/desktop',
                         return $('<nav class="window-toolbar">')
                             .addClass('f6-target')
                             .attr({
-                                'role': 'navigation',
+                                'role': 'toolbar',
                                 'aria-label': gt('Application Toolbar')
                             });
                     }

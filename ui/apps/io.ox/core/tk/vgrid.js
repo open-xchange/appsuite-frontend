@@ -295,6 +295,11 @@ define('io.ox/core/tk/vgrid',
             topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
                 .prependTo(node),
             toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
+                .attr({
+                    role: 'toolbar',
+                    //#. toolbar with 'select all' and 'sort by'
+                    'aria-label': gt('Item list options')
+                })
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?

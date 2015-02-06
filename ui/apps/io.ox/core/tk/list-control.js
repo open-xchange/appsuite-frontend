@@ -78,10 +78,10 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
         },
 
         render: function () {
-
-            var top = $('<nav class="toolbar generic-toolbar top">'),
+            // aria-hidden used to allow sr to navigate to list itself via role 'navigation'
+            var top = $('<div class="toolbar generic-toolbar top" role="toolbar" aria-hidden="true">'),
                 topPoint = ext.point(this.id + '/list-view/toolbar/top'),
-                bottom = $('<nav class="toolbar generic-toolbar visual-focus bottom">'),
+                bottom = $('<div class="toolbar generic-toolbar visual-focus bottom" role="toolbar">'),
                 bottomPoint = ext.point(this.id + '/list-view/toolbar/bottom'),
                 baton = new ext.Baton({ view: this, app: this.options.app });
 
