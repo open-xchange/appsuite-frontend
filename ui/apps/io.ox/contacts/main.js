@@ -168,7 +168,12 @@ define('io.ox/contacts/main',
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target').attr('tabindex', 1).scrollable();
+            app.right = right.addClass('default-content-padding f6-target')
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Contact Details')
+                }).scrollable();
         },
 
         'vgrid': function (app) {

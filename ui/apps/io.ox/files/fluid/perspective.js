@@ -188,12 +188,7 @@ define('io.ox/files/fluid/perspective',
 
             } else {
                 dialog.show(e, function (popup) {
-                    popup
-                        .append(viewDetail.draw(file, app))
-                        .attr({
-                            'role': 'complementary',
-                            'aria-label': gt('File Details')
-                        });
+                    popup.append(viewDetail.draw(file, app));
                     el = popup.closest('.io-ox-sidepopup');
                 });
 
