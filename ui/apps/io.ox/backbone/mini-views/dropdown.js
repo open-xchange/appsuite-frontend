@@ -29,9 +29,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 value = node.data('value'),
                 toggle = node.data('toggle'),
                 keep = node.attr('data-keep-open') === 'true';
+            // keep drop-down open?
+            if (keep) e.stopPropagation();
             // ignore plain links
             if (value === undefined) return;
-            if (keep) e.stopPropagation();
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
@@ -94,7 +95,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
-            //in firefox draggable=false is not enough to prevent dragging...
+            // in firefox draggable=false is not enough to prevent dragging...
             if ( _.device('firefox') ) {
                 link.attr('ondragstart', 'return false;');
             }
@@ -102,9 +103,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         link: function (name, text, callback) {
-            var link = $('<a draggable="false">', { href: '#', 'data-name': name })
-                    .text(text).on('click', callback);
-            //in firefox draggable=false is not enough to prevent dragging...
+            var link = $('<a href="#" draggable="false">')
+                .attr('data-name', name)
+                .text(text).on('click', callback);
+            // in firefox draggable=false is not enough to prevent dragging...
             if ( _.device('firefox') ) {
                 link.attr('ondragstart', 'return false;');
             }

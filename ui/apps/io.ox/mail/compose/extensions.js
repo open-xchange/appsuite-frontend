@@ -27,8 +27,12 @@ define('io.ox/mail/compose/extensions', [
     function renderFrom(array) {
         if (!array) return;
         var name = _(array).first(), address = _(array).last();
-        // consider setting
-        if (!settings.get('sendDisplayName', true)) name = null;
+        // consider custom settings
+        if (!settings.get('sendDisplayName', true)) {
+            name = null;
+        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+            name = settings.get(['customDisplayNames', address, 'name'], '');
+        }
         return [
             $('<span class="name">').text(name ? name + ' ' : ''),
             $('<span class="address">').text(name ? '<' + address + '>' : address)
@@ -91,6 +95,12 @@ define('io.ox/mail/compose/extensions', [
 
         sender: function (baton) {
 
+            function editNames() {
+                require(['io.ox/mail/compose/names'], function (names) {
+                    names.open();
+                });
+            }
+
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
 
@@ -104,6 +114,22 @@ define('io.ox/mail/compose/extensions', [
 
                     sender.drawDropdown().done(function (list) {
 
+                        function toggleNames() {
+                            var value = !!settings.get('sendDisplayName', true);
+                            settings.set('sendDisplayName', !value).save();
+                            redraw();
+                             // stop propagation to keep drop-down open
+                            return false;
+                        }
+
+                        function redraw() {
+                            dropdown.$('ul').empty();
+                            drawOptions();
+                            dropdown.label();
+                            // re-focus element otherwise the bootstap a11y closes the drop-down
+                            dropdown.$ul.find('[data-name="toggle-display"]').focus();
+                        }
+
                         function drawOptions() {
 
                             if (!list.sortedAddresses.length) return;
@@ -115,13 +141,14 @@ define('io.ox/mail/compose/extensions', [
                                 });
                             });
 
-                            // append options to edit display names
+                            if (_.device('smartphone')) return;
+
+                            // append options to toggle and edit names
+                            var state = !!settings.get('sendDisplayName', true);
                             dropdown
                                 .divider()
-                                .option('sendDisplayName', true, gt('Send your name'));
-
-                            // stop event propagation so that the user can see the effect
-                            dropdown.$ul.find('[data-name="sendDisplayName"]').attr('data-keep-open', true);
+                                .link('toggle-display', state ? gt('Hide names') : gt('Show names'), toggleNames)
+                                .link('edit-real-names', gt('Edit names'), editNames);
                         }
 
                         drawOptions();
@@ -133,16 +160,7 @@ define('io.ox/mail/compose/extensions', [
                             )
                         );
 
-                        dropdown.listenTo(dropdown.model, 'change:sendDisplayName', function (model, value) {
-                            // update setting first
-                            settings.set('sendDisplayName', value).save();
-                            // redraw dropdown
-                            dropdown.$('ul').empty();
-                            drawOptions();
-                            dropdown.label();
-                            // re-focus element otherwise the bootstap a11y closes the drop-down
-                            dropdown.$ul.find('[data-name="sendDisplayName"]').focus();
-                        });
+                        ox.on('change:customDisplayNames', redraw);
                     });
                 };
 

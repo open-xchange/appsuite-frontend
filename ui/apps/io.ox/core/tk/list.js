@@ -179,9 +179,7 @@ define('io.ox/core/tk/list', [
             if (topPosition(li, this.el) < top) this.$el.scrollTop(top - li.outerHeight(true));
 
             if (this.selection) this.selection.remove(cid, li);
-
-            // use fadeOut instead of remove() for a smooth visual effect
-            li.fadeOut();
+            li.remove();
 
             // simulate scroll event because the list might need to paginate.
             // Unless it's the last one! If we did scroll for the last one, we would
