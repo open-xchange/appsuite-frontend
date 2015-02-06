@@ -75,6 +75,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                             app.view.setMail()
                             .done(function () {
                                 win.idle();
+                                win.setTitle(gt('Compose'));
                                 def.resolve({ app: app });
                                 ox.trigger('mail:' + type + ':ready', obj, app);
                             });

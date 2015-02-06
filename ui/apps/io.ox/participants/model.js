@@ -248,7 +248,7 @@ define('io.ox/participants/model', [
                 type: this.get('type')
             };
             if (this.get('type') === 5) {
-                ret.mail = this.get('email1');
+                ret.mail = this.getEmail();
             } else if (this.has('id')) {
                 ret.id = this.get('id');
             }

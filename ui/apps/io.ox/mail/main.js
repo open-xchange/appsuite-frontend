@@ -1138,6 +1138,8 @@ define('io.ox/mail/main', [
             facetedsearch: capabilities.has('search')
         });
 
+        if (_.url.hash().mailto) ox.registry.call('mail-compose', 'compose');
+
         app.setWindow(win);
         app.settings = settings;
         window.mailapp = app;

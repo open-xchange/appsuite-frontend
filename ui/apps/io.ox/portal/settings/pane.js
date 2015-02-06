@@ -28,7 +28,8 @@ define('io.ox/portal/settings/pane', [
     var POINT = 'io.ox/portal/settings/detail', pane;
 
     var collection = widgets.getCollection(),
-        list = $('<ol class="list-group list-unstyled widget-list">');
+        list = $('<ol class="list-group list-unstyled widget-list">'),
+        notificationId = _.uniqueId('notification_');
 
     collection
         .on('remove', function (model) {
@@ -105,7 +106,7 @@ define('io.ox/portal/settings/pane', [
                 $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
             ),
             $('<div class="clearfix">'),
-            $('<div class="sr-only" role="log" id="notification" aria-live="assertive" aria-relevant="additions">')
+            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
         );
         repopulateAddButton();
         button.dropdown();
@@ -217,7 +218,7 @@ define('io.ox/portal/settings/pane', [
             current = node.parent(),
             index = items.index(current),
             id = current.attr('data-widget-id'),
-            notification = pane.find('#notification');
+            notification = pane.find('#' + notificationId);
 
         function cont() {
             widgets.save(list);

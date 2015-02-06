@@ -295,7 +295,8 @@ define('io.ox/core/main', [
         if (fn) {
             node.on('click', function (e) {
                 e.preventDefault();
-                var self = $(this), content;
+                var self = $(this), content,
+                    focus = $(document.activeElement);
                 // set fixed width, hide label, be busy
                 content = self.contents().detach();
                 self.css('width', self.width() + 'px').text('\u00A0').busy();
@@ -303,6 +304,11 @@ define('io.ox/core/main', [
                 (fn.call(this) || $.when()).done(function () {
                     // revert visual changes
                     self.idle().empty().append(content).css('width', '');
+                    //detaching results in lost focus, which is bad for keyboard support.
+                    //so we need to restore it, if it was not set manually in the mean time.
+                    if ($(document.activeElement).filter('body').length > 0) {
+                        focus.focus();
+                    }
                 });
             });
         }
@@ -331,6 +337,8 @@ define('io.ox/core/main', [
 
         function off() {
             if (count === 0 && timer === null) {
+                $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Refresh'));
+
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                     if (refreshIcon.hasClass('fa-spin')) {
@@ -346,6 +354,8 @@ define('io.ox/core/main', [
             if (count === 0) {
                 if (timer === null) {
                     if (!options.silent) {
+                        $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Currently refreshing'));
+
                         if (useSpinner) {
                             refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                             if (!refreshIcon.hasClass('fa-spin')) {
@@ -1171,7 +1181,7 @@ define('io.ox/core/main', [
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose');
+                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
             baton.autoLaunch = (manifest && (manifest.refreshable || mailto)) ?
                 appURL.split(/,/) :

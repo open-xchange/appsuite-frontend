@@ -74,11 +74,13 @@ define('io.ox/preview/main', [
 
                 if (!options.omitClick) {
                     $node = clickableLink(file);
-                    if (supportsDragOut) {
-                        $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
-                    } else {
-                        $node.attr('title', gt('Click to open.'));
-                    }
+                    var label = supportsDragOut ?
+                        gt('Click to open. Drag to your desktop to download.') :
+                        gt('Click to open.');
+                    $node.attr({
+                        'title': label,
+                        'aria-label': $node.attr('aria-label') || label
+                    });
                 } else {
                     $node = $('<div>');
                 }

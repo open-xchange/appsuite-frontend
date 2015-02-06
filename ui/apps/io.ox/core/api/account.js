@@ -311,8 +311,9 @@ define('io.ox/core/api/account', [
     // make sure account's personal is set
     var ensureDisplayName = function (account) {
 
-                // no account given or account already has "personal"
-        if (!account || (account.personal && $.trim(account.personal) !== '')) {
+        // no account given or account already has "personal"
+        // one space is a special marker not to use any default display name
+        if (!account || (account.personal && (account.personal === ' ' || $.trim(account.personal) !== ''))) {
             return $.Deferred().resolve(account);
         }
 
@@ -353,7 +354,10 @@ define('io.ox/core/api/account', [
 
         // build common array of [display_name, email]
         return _(addresses).map(function (address) {
-            return getAddressArray(account.personal, address);
+            var isAlias = address !== account.primary_address,
+                anonymouse = isAlias && settings.get('features/anonymousAliases', false),
+                display_name = anonymouse ? '' : account.personal;
+            return getAddressArray(display_name, address);
         });
     }
 

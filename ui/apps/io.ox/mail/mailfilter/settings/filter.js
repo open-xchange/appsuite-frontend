@@ -465,7 +465,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 })
                             ),
                             $('<div class="clearfix">'),
-                            $('<div class="sr-only" role="log" aria-live="assertive" aria-relevant="additions">').attr('id', notificationId),
+                            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId),
                             $('<ol>').addClass('list-group list-unstyled widget-list ui-sortable')
                         );
                         this.renderFilter();

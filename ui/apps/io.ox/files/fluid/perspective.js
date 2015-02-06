@@ -734,6 +734,10 @@ define('io.ox/files/fluid/perspective', [
                     dropZoneInit(app);
                     app.currentFile = tmp;
                 }
+
+                // 'close' triggered via defer: do not steal focus from carousel
+                if (self.main.closest('.window-container').find('.carousel').is(':visible')) return;
+
                 //focus handling
                 filesContainer.trigger('dialog:closed');
             });

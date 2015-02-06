@@ -207,7 +207,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
 
             // change format string for date only mode
-            if (this.options.display === 'DATE') {
+            if (this.options.display === 'DATE' || this.nodes.timeField.val() === '') {
                 formatStr = date.DATE;
             }
 

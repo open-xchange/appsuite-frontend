@@ -33,6 +33,7 @@ define('io.ox/files/carousel', [
 
         app: null,
         win: null,
+        lastfocused: null,
 
         defaults: {
             start: 0,
@@ -45,7 +46,7 @@ define('io.ox/files/carousel', [
 
         firstStart: true,
         list: [],
-        container:      $('<div class="abs carousel slide">').attr({ 'data-ride': 'carousel' }),
+        container:      $('<div class="abs carousel slide">').attr({ 'tabIndex': 1, 'data-ride': 'carousel' }),
         inner:          $('<div class="abs carousel-inner" role="listbox">'),
         prevControl:    $('<a class="left carousel-control">')
                             .attr({
@@ -157,6 +158,10 @@ define('io.ox/files/carousel', [
             this.show();
             this.eventHandler();
 
+            // set focus
+            this.lastfocused = $(document.activeElement);
+            this.container.focus();
+
             // no automatic animation
             this.container.carousel({ interval: false });
         },
@@ -224,7 +229,7 @@ define('io.ox/files/carousel', [
             this.nextControl.on('click', $.proxy(this.nextItem, this));
             this.closeControl.on('click', $.proxy(this.close, this));
 
-            $(document).keyup(function (e) {
+            this.container.keyup(function (e) {
                 if (e.keyCode === 27) self.close();
                 if (e.keyCode === 39) self.nextItem();
                 if (e.keyCode === 37) self.prevItem();
@@ -419,6 +424,7 @@ define('io.ox/files/carousel', [
                 this.container.empty().remove();
                 this.list = [];
             }
+            this.lastfocused.focus();
         }
     };
 

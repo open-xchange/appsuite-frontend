@@ -11,13 +11,12 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/notifications/subscription', [
-    'gettext!io.ox/core/pubsub'
-], function (gt) {
+define('io.ox/core/pubsub/notifications/subscription', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
     return function draw(model) {
+
         var data = model.toJSON(),
             label = '',
             pub = {},
@@ -54,11 +53,12 @@ define('io.ox/core/pubsub/notifications/subscription', [
                     gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)
                 ),
                 $('<div class="actions">').append(
-                    $('<button type="button" class="btn btn-default btn-sm" data-action="show">').text(
+                    $('<button type="button" class="btn btn-default" data-action="show">').text(
                         isSingleFilePublication ? gt('Show file') : gt('Show original publication')
                     ),
+                    $.txt(' '),
                     isSingleFilePublication ? '' :
-                    $('<button type="button" class="btn btn-primary btn-sm" data-action="subscribe">').text(gt('Subscribe'))
+                    $('<button type="button" class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                 )
             )
         );

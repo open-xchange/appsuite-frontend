@@ -419,7 +419,7 @@ define('io.ox/mail/compose/extensions', [
                 if (navigator.registerProtocolHandler && !_.browser.Firefox) {
                     var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                     navigator.registerProtocolHandler(
-                        'mailto', url + '#app=io.ox/mail/compose:compose&mailto=%s', ox.serverConfig.productNameMail
+                        'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
                     );
                 }
             }

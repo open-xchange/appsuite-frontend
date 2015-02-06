@@ -414,7 +414,7 @@ define('io.ox/mail/threadview', [
             _(elem).each(function (el) {
                 var span = $('<span>').text($(el).text());
                 span.addClass(elem.attr('class'));
-                span.addClass('sp');
+                span.addClass('sp').removeClass('halo-link');
                 $(el).after(span);
             });
             elem.remove();

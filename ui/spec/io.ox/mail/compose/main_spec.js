@@ -18,6 +18,9 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
         describe('main app', function () {
             var app;
             beforeEach(function () {
+                this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
+                    xhr.respond(200, 'image/gif', '');
+                });
                 app = compose.getApp();
                 return app.launch();
             });

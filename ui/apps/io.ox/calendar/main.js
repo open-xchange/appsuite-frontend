@@ -387,6 +387,7 @@ define('io.ox/calendar/main', [
          * Set folderview property
          */
         'prop-folderview-mobile': function (app) {
+            if (_.device('!smartphone')) return;
             app.props.set('folderview', false);
         },
 

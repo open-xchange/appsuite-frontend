@@ -109,8 +109,12 @@
 
         &.reserved { .background(@appointment-reserved); }
         &.absent { .background(@appointment-absent); }
-        &.temporary { .background(@appointment-temporary); }
-        &.free { .background(@appointment-free); }
+        &.temporary {
+            .background(@appointment-temporary);
+            //white text would fail contrast requirements
+            .title { color: #321900; }
+        }
+        &.free { .background(@appointment-free-dark); }
         &.private { .background(@appointment-private); }
 
         &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
@@ -174,6 +178,7 @@
 
             &.hover {
                 background-color: darken(@t, @appointment-hover-pct);
+                color: darken(darken(@appointment-temporary, 15%), @appointment-hover-pct);
             }
 
             .common();
@@ -188,6 +193,7 @@
 
             &.hover {
                 background-color: darken(@a, @appointment-hover-pct);
+                color: darken(@appointment-absent, @appointment-hover-pct);
             }
 
             .common();
