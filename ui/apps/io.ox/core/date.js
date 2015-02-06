@@ -985,7 +985,11 @@ define.async('io.ox/core/date', [
     }).pipe(null, function () {
         return require(['text!io.ox/core/date/date.root.json']);
     }).done(function (locale) {
-        api.locale = JSON.parse(locale);
+         if (_.isObject(locale)) {
+            api.locale = locale;
+        } else {
+            api.locale = JSON.parse(locale);
+        }
         monthRegex = makeRegex(api.locale.months, api.locale.monthsShort);
         dayRegex = makeRegex(api.locale.days, api.locale.daysShort);
         monthMap = makeMap(api.locale.months, api.locale.monthsShort);
