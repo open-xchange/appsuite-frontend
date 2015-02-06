@@ -416,6 +416,7 @@ define('io.ox/core/folder/extensions',
                             userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
                         )
                     );
+                    baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }
             },
             {
@@ -432,6 +433,7 @@ define('io.ox/core/folder/extensions',
                         $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
                         .on('click', { id: baton.data.id }, openPermissions)
                     );
+                    baton.view.options.a11yDescription.push(gt('You share this folder with other users'));
                 }
             },
             {
@@ -449,6 +451,7 @@ define('io.ox/core/folder/extensions',
                         $('<i class="fa folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
                         .on('click', { folder: baton.data }, openPubSubSettings)
                     );
+                    baton.view.options.a11yDescription.push(gt('This folder has publications and/or subscriptions'));
                 }
             }
         );
