@@ -363,7 +363,6 @@ define('io.ox/calendar/week/perspective',
                 .addClass('week-view')
                 .empty()
                 .attr({
-                    'role': 'main'
                 });
 
             this.collection = new Backbone.Collection([]);

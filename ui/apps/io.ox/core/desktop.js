@@ -1607,7 +1607,7 @@ define('io.ox/core/desktop',
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body">')
+                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window'))
                     )
                     // capture controller events
                     .on('controller:quit', function () {

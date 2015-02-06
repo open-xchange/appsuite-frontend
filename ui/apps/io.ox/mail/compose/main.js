@@ -46,6 +46,10 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 search: false,
                 chromeless: true
             }));
+
+            // use main role on 'outer' to include actions in header
+            win.nodes.body.removeAttr('role');
+            win.nodes.outer.attr('role', 'main');
         });
 
         app.failSave = function () {
