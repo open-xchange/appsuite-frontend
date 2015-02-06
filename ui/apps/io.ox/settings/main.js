@@ -19,10 +19,11 @@ define('io.ox/settings/main',
      'gettext!io.ox/core',
      'settings!io.ox/settings/configjump',
      'settings!io.ox/core',
+     'io.ox/core/capabilities',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
      'less!io.ox/settings/style'
-    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings) {
+    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities) {
 
     'use strict';
 
@@ -174,6 +175,9 @@ define('io.ox/settings/main',
             var apps = _.filter(installed, function (item) {
                 if (!item.settings) return false;
                 if (item.device) return _.device(item.device);
+                //special code for tasks because here settings depend on a capability
+                //could have been done in manifest, but I did not want to change the general structure because of one special case, that might even disappear in the future
+                if (item.id === 'io.ox/tasks') return capabilities.has('delegate_tasks');
                 return true;
             });
 
@@ -193,7 +197,7 @@ define('io.ox/settings/main',
         _(configJumpSettings.get()).chain().keys().each(function (id) {
             var declaration = configJumpSettings.get(id);
             if (declaration.requires) {
-                if (!require('io.ox/core/capabilities').has(declaration.requires)) {
+                if (!capabilities.has(declaration.requires)) {
                     return;
                 }
             }
