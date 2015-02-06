@@ -674,7 +674,7 @@ msgstr "Rzeczywisty czas trwania w minutach"
 #: apps/io.ox/core/folder/actions/add.js:98 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:326 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:353 module:io.ox/mail
 msgid "Add"
 msgstr "Dodaj"
 
@@ -688,7 +688,7 @@ msgstr "Dodaj konto"
 msgid "Add action"
 msgstr "Dodaj działanie"
 
-#: apps/io.ox/mail/compose/extensions.js:328 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Dodaj załączniki"
 
@@ -712,11 +712,11 @@ msgid "Add files"
 msgstr "Dodaj pliki"
 
 #: apps/io.ox/core/tk/attachments.js:607 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:356 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:383 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Dodaj z usługi Drive"
 
-#: apps/io.ox/mail/compose/extensions.js:352 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:379 module:io.ox/mail
 msgid "Add local file"
 msgstr "Dodaj plik lokalny"
 
@@ -968,8 +968,8 @@ msgid "An error occurred."
 msgstr "Wystąpił błąd."
 
 #: apps/io.ox/calendar/detail/main.js:46 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:85
-#: apps/io.ox/calendar/week/perspective.js:221
+#: apps/io.ox/calendar/week/perspective.js:86
+#: apps/io.ox/calendar/week/perspective.js:222
 msgid "An error occurred. Please try again."
 msgstr "Wystąpił błąd. Spróbuj ponownie."
 
@@ -1032,16 +1032,16 @@ msgstr "Zastosuj regułę, jeśli zostały spełnione wszystkie warunki."
 #: apps/io.ox/calendar/actions/acceptdeny.js:225 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:340
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:276
-#: apps/io.ox/calendar/week/perspective.js:159
+#: apps/io.ox/calendar/week/perspective.js:160
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Appointment"
 msgstr "Spotkanie"
 
 #: apps/io.ox/calendar/detail/main.js:38 module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js:55
-#: apps/io.ox/calendar/list/perspective.js:66
-#: apps/io.ox/calendar/month/perspective.js:63
-#: apps/io.ox/calendar/week/perspective.js:68
+#: apps/io.ox/calendar/list/perspective.js:64
+#: apps/io.ox/calendar/list/perspective.js:75
+#: apps/io.ox/calendar/month/perspective.js:64
+#: apps/io.ox/calendar/week/perspective.js:69
 msgid "Appointment Details"
 msgstr "Szczegóły spotkania"
 
@@ -1109,7 +1109,7 @@ msgstr "Archiwum"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:107
+#: apps/io.ox/core/folder/contextmenu.js:163
 msgctxt "verb"
 msgid "Archive"
 msgstr "Archiwum"
@@ -1134,7 +1134,7 @@ msgstr "Czy na pewno chcesz usunąć ten tweet?"
 msgid "As incoming mail server"
 msgstr "Jako serwer poczty przychodzącej"
 
-#: apps/io.ox/calendar/list/perspective.js:226 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:677 module:io.ox/tasks
 msgid "Ascending"
@@ -1162,8 +1162,8 @@ msgstr[2] "Załączniki zostały zapisane"
 #: apps/io.ox/calendar/edit/extensions.js:546 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:335 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:343 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:362
+#: apps/io.ox/mail/compose/extensions.js:370 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:389
 #: apps/io.ox/tasks/edit/view-template.js:505 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:226
@@ -1247,8 +1247,8 @@ msgstr "Średni czas: %1$s ms"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/mail/compose/extensions.js:51 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:186
+#: apps/io.ox/mail/compose/extensions.js:52 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:213
 msgid "BCC"
 msgstr "UDW"
 
@@ -1329,8 +1329,8 @@ msgstr "Kup prezent"
 msgid "Buy now!"
 msgstr "Kup teraz!"
 
-#: apps/io.ox/calendar/month/perspective.js:134 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:151
+#: apps/io.ox/calendar/month/perspective.js:135 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:152
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
@@ -1338,8 +1338,8 @@ msgstr ""
 "Zmieniając datę tego spotkania utworzysz wyjątek w cyklu. Czy chcesz "
 "kontynuować?"
 
-#: apps/io.ox/mail/compose/extensions.js:50 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:177
+#: apps/io.ox/mail/compose/extensions.js:51 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:204
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1383,9 +1383,9 @@ msgstr "Widok kalendarza"
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:149
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:376
 #: apps/io.ox/calendar/main.js:251 apps/io.ox/calendar/main.js:317
-#: apps/io.ox/calendar/month/perspective.js:116
-#: apps/io.ox/calendar/week/perspective.js:117
-#: apps/io.ox/calendar/week/perspective.js:160
+#: apps/io.ox/calendar/month/perspective.js:117
+#: apps/io.ox/calendar/week/perspective.js:118
+#: apps/io.ox/calendar/week/perspective.js:161
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:200
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:717
@@ -1418,7 +1418,7 @@ msgstr "Widok kalendarza"
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
-#: apps/io.ox/mail/compose/extensions.js:327
+#: apps/io.ox/mail/compose/extensions.js:354
 #: apps/io.ox/mail/compose/view.js:570
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
@@ -1569,7 +1569,7 @@ msgstr "Miasto"
 msgid "Classic colors"
 msgstr "Ciemne kolory"
 
-#: apps/io.ox/core/folder/contextmenu.js:82 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:138 module:io.ox/core
 msgid "Clean up"
 msgstr "Wykonaj czyszczenie"
 
@@ -1579,8 +1579,8 @@ msgstr "Wykonaj czyszczenie"
 msgid "Cleaning up ..."
 msgstr "Wykonaj czyszczenie"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:31 module:io.ox/core
-#: apps/io.ox/core/tk/datepicker.js:35 apps/io.ox/core/tk/mobiscroll.js:29
+#: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:29
 #, fuzzy
 #| msgid "clear"
 msgid "Clear"
@@ -1784,7 +1784,7 @@ msgstr "Utwórz e-mail"
 msgid "Compose new email"
 msgstr "Nowa wiadomość e-mail"
 
-#: apps/io.ox/mail/compose/extensions.js:65 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:66 module:io.ox/mail
 msgid "Compose new mail"
 msgstr "Nowa wiadomość e-mail"
 
@@ -1944,7 +1944,7 @@ msgstr ""
 "Nie można zapisać ustawień. Potrzebny jest przynajmniej jeden użytkownik z "
 "uprawnieniami administratora."
 
-#: apps/io.ox/calendar/list/perspective.js:169 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:178 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "Nie można wczytać danych spotkania."
 
@@ -2076,7 +2076,7 @@ msgid "Data only partially imported ( %1$s of %2$s records)"
 msgstr ""
 "Dane zostały tylko częściowo zaimportowane (liczba rekordów: %1$s z %2$s)"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:66 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:55 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:119
 #: apps/io.ox/mail/view-options.js:31 module:io.ox/mail
 msgid "Date"
@@ -2098,7 +2098,7 @@ msgstr "Data urodzenia"
 msgid "Day"
 msgstr "Dzień"
 
-#: apps/io.ox/calendar/week/perspective.js:299 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:313 module:io.ox/calendar
 msgid "Day View"
 msgstr "Widok dnia"
 
@@ -2172,7 +2172,7 @@ msgstr "Odroczone"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:70 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:85
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:204
+#: apps/io.ox/core/folder/contextmenu.js:260
 #: apps/io.ox/core/sub/settings/pane.js:219 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:221 apps/io.ox/files/actions.js:457
 #: module:io.ox/files apps/io.ox/files/actions/delete.js:74
@@ -2250,7 +2250,7 @@ msgstr ""
 msgid "Department"
 msgstr "Dział"
 
-#: apps/io.ox/calendar/list/perspective.js:227 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:236 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:678 module:io.ox/tasks
 msgid "Descending"
@@ -2304,7 +2304,7 @@ msgstr "Wyłącz widget"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:217
 #: apps/io.ox/core/settings/user.js:82
-#: apps/io.ox/mail/compose/extensions.js:73 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:74 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:86
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
@@ -2482,7 +2482,7 @@ msgid "Do you want to delete this appointment?"
 msgstr "Czy chcesz usunąć to spotkanie?"
 
 #: apps/io.ox/calendar/actions/edit.js:37 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:156
+#: apps/io.ox/calendar/week/perspective.js:157
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -2534,7 +2534,7 @@ msgstr "Pobierz już teraz %s dla systemu %s"
 msgid "Download %s via the OX Updater"
 msgstr "Pobierz %s za pomocą programu OX Updater"
 
-#: apps/io.ox/core/folder/contextmenu.js:257 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:313 module:io.ox/core
 msgid "Download entire folder"
 msgstr "Pobierz cały folder"
 
@@ -2582,7 +2582,7 @@ msgstr "Ustawienia aplikacji Drive"
 msgid "Drop EML file here for import"
 msgstr "Upuść tutaj plik EML, aby go zaimportować"
 
-#: apps/io.ox/mail/compose/extensions.js:271 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:298 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Upuść załączniki w tym miejscu"
 
@@ -2832,7 +2832,7 @@ msgid "Empty"
 msgstr "Puste"
 
 #: apps/io.ox/core/folder/actions/common.js:44 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:125
+#: apps/io.ox/core/folder/contextmenu.js:181
 #: apps/io.ox/files/folderview-extensions.js:37 module:io.ox/mail
 #: apps/io.ox/files/folderview-extensions.js:55
 msgid "Empty folder"
@@ -3025,7 +3025,7 @@ msgid "Expires in"
 msgstr ""
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:286
+#: apps/io.ox/core/folder/contextmenu.js:342
 msgid "Export"
 msgstr "Export"
 
@@ -3380,8 +3380,8 @@ msgid "Friday"
 msgstr "Piątek"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:99
-#: apps/io.ox/mail/compose/extensions.js:114 apps/io.ox/mail/main.js:534
+#: apps/io.ox/mail/compose/extensions.js:101
+#: apps/io.ox/mail/compose/extensions.js:130 apps/io.ox/mail/main.js:534
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Od"
@@ -3517,7 +3517,7 @@ msgstr "Ukryte foldery"
 msgid "Hidden tasks"
 msgstr "Ukryte"
 
-#: apps/io.ox/core/folder/contextmenu.js:446 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:502 module:io.ox/core
 msgid "Hide"
 msgstr "Ukryj"
 
@@ -3673,8 +3673,8 @@ msgstr "Ignoruj ostrzeżenia"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:191 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:147 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js:115
-#: apps/io.ox/calendar/week/perspective.js:116
+#: apps/io.ox/calendar/month/perspective.js:116
+#: apps/io.ox/calendar/week/perspective.js:117
 #: apps/plugins/notifications/calendar/register.js:201
 #: module:plugins/notifications
 msgid "Ignore conflicts"
@@ -3692,7 +3692,7 @@ msgstr ""
 msgid "Image 1"
 msgstr "Obraz 1"
 
-#: apps/io.ox/core/folder/contextmenu.js:313 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:369 module:io.ox/core
 #: apps/io.ox/core/import/import.js:141
 msgid "Import"
 msgstr "Import"
@@ -4052,7 +4052,7 @@ msgstr "Niski priorytet"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:226 module:io.ox/mail
 msgid "Mail"
 msgstr "Poczta"
 
@@ -4201,7 +4201,7 @@ msgstr "Stan cywilny"
 msgid "Mark all day appointments as free"
 msgstr "Oznacz spotkania całodniowe jako Wolne"
 
-#: apps/io.ox/core/folder/contextmenu.js:66 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:122 module:io.ox/core
 msgid "Mark all mails as read"
 msgstr "Oznacz wszystkie wiadomości jako przeczytane"
 
@@ -4339,7 +4339,7 @@ msgstr "Poniedziałek"
 msgid "Month"
 msgstr "Miesiąc"
 
-#: apps/io.ox/calendar/month/perspective.js:440 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:453 module:io.ox/calendar
 msgid "Month View"
 msgstr "Widok miesiąca"
 
@@ -4377,7 +4377,7 @@ msgstr "Znaleziono więcej pozycji niż wyświetlane %1$s"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:506
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:76 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
-#: apps/io.ox/core/folder/contextmenu.js:231 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:287 module:io.ox/core
 #: apps/io.ox/files/actions.js:298 module:io.ox/files
 #: apps/io.ox/files/actions.js:528 apps/io.ox/files/toolbar.js:145
 #: apps/io.ox/mail/actions.js:181 apps/io.ox/mail/actions.js:593
@@ -4532,11 +4532,11 @@ msgid "New rule"
 msgstr "Nowa reguła"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:154
+#: apps/io.ox/core/folder/contextmenu.js:210
 msgid "New subfolder"
 msgstr "Nowy podfolder"
 
-#: apps/io.ox/core/folder/contextmenu.js:366 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:422 module:io.ox/core
 msgid "New subscription"
 msgstr "Nowa subskrypcja"
 
@@ -4564,8 +4564,8 @@ msgid "Nickname"
 msgstr "Pseudonim"
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:136 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:153 apps/io.ox/core/main.js:129
+#: apps/io.ox/calendar/month/perspective.js:137 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:129
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:176
 msgid "No"
 msgstr "Nie"
@@ -4578,7 +4578,7 @@ msgstr "Nie znaleziono kanałów RSS."
 msgid "No Tweets yet."
 msgstr "Nie ma jeszcze żadnych tweetów."
 
-#: apps/io.ox/calendar/list/perspective.js:252 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:261 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "Nie znaleziono spotkań do: %s"
 
@@ -4670,7 +4670,7 @@ msgstr "Bez wolnych żądań"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:226 module:io.ox/mail
 #: apps/io.ox/mail/util.js:388 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:60 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:63
@@ -5097,7 +5097,7 @@ msgstr "Ludzie"
 msgid "Permanently remove deleted emails"
 msgstr "Trwale usuwaj kasowane wiadomości e-mail"
 
-#: apps/io.ox/core/folder/contextmenu.js:342 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:398 module:io.ox/core
 msgid "Permissions"
 msgstr "Uprawnienia"
 
@@ -5228,7 +5228,7 @@ msgstr "Podaj adres URL kanału."
 msgid "Please enter a search query"
 msgstr "Wpisz zapytanie do wyszukania"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:198 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:185 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -5510,7 +5510,7 @@ msgid "Progress must be a valid number between 0 and 100"
 msgstr "Wartość postępu musi być liczbą z zakresu od 0 do 100."
 
 #: apps/io.ox/core/folder/actions/properties.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:412
+#: apps/io.ox/core/folder/contextmenu.js:468
 msgid "Properties"
 msgstr "Właściwości"
 
@@ -5790,7 +5790,7 @@ msgid "Remove from favorites"
 msgstr "Usuń z ulubionych"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:179 apps/io.ox/files/actions.js:508
+#: apps/io.ox/core/folder/contextmenu.js:235 apps/io.ox/files/actions.js:508
 #: module:io.ox/files apps/io.ox/files/actions/rename.js:90
 #: apps/io.ox/files/actions/rename.js:95
 msgid "Rename"
@@ -5931,7 +5931,7 @@ msgstr "Sobota"
 #: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:84
+#: apps/io.ox/mail/compose/extensions.js:85
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/settings/signatures/register.js:166
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
@@ -6066,7 +6066,7 @@ msgstr "Wybierz folder"
 msgid "Selection Details"
 msgstr "Szczegóły wyboru"
 
-#: apps/io.ox/mail/compose/extensions.js:87 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:88 module:io.ox/mail
 msgid "Send"
 msgstr "Wyślij"
 
@@ -6113,6 +6113,12 @@ msgstr "Wyślij nową wiadomość"
 msgid "Send vacation notice during this time only"
 msgstr "Wyślij zawiadomienie o urlopie tylko w wybranych godzinach"
 
+#: apps/io.ox/mail/compose/extensions.js:121 module:io.ox/mail
+#, fuzzy
+#| msgid "Your name"
+msgid "Send your name"
+msgstr "Twoje imię i nazwisko"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
 msgid "Sender/From"
@@ -6142,7 +6148,7 @@ msgstr "Wrzesień"
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js:224 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
-#: apps/io.ox/calendar/week/perspective.js:158
+#: apps/io.ox/calendar/week/perspective.js:159
 msgid "Series"
 msgstr "Cykl"
 
@@ -6250,7 +6256,7 @@ msgstr "Udostępnione"
 msgid "Shopping cart"
 msgstr "Koszyk"
 
-#: apps/io.ox/core/folder/contextmenu.js:446 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:502 module:io.ox/core
 msgid "Show"
 msgstr "Pokaż"
 
@@ -6270,11 +6276,11 @@ msgstr "Pokaż wszystkie elementy"
 msgid "Show appointment details"
 msgstr "Pokaż szczegóły spotkania"
 
-#: apps/io.ox/mail/compose/extensions.js:185 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:212 module:io.ox/mail
 msgid "Show blind carbon copy input field"
 msgstr "Pokaż pole wejściowe na UDW"
 
-#: apps/io.ox/mail/compose/extensions.js:176 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:203 module:io.ox/mail
 msgid "Show carbon copy input field"
 msgstr "Pokaż pole wejściowe na DW"
 
@@ -6518,7 +6524,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Sortuj według"
 
-#: apps/io.ox/calendar/list/perspective.js:218 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:227 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:669 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Opcje sortowania"
@@ -6596,8 +6602,8 @@ msgstr "Student/uczeń"
 
 #: apps/io.ox/calendar/edit/extensions.js:108 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:229
-#: apps/io.ox/mail/compose/extensions.js:233
+#: apps/io.ox/mail/compose/extensions.js:256
+#: apps/io.ox/mail/compose/extensions.js:260
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
@@ -7451,7 +7457,7 @@ msgstr "Czwartek"
 msgid "Tiles"
 msgstr "Kafelki"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:105 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:94 module:io.ox/core
 #: apps/io.ox/calendar/settings/pane.js:118 module:io.ox/calendar
 msgid "Time"
 msgstr "Godzina"
@@ -7474,7 +7480,7 @@ msgid "Title"
 msgstr "Tytuł"
 
 #: apps/io.ox/mail/common-extensions.js:248 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:49
+#: apps/io.ox/mail/compose/extensions.js:50
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:532
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
@@ -7489,12 +7495,11 @@ msgstr ""
 "Aby dodać kontakty ręcznie, podaj prawidłowy adres e-mail (np. jan."
 "kowalski@example.com lub \"Jan Kowalski\" <jk@example.com>)"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:30 module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:82 module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:171
 #: apps/io.ox/calendar/util.js:209 apps/io.ox/core/tk/datepicker.js:34
-#: apps/io.ox/search/facets/extensions.js:511
+#: module:io.ox/core apps/io.ox/search/facets/extensions.js:511
 #: apps/plugins/portal/birthdays/register.js:86 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:159
 msgid "Today"
@@ -7762,7 +7767,7 @@ msgstr "Priorytet"
 msgid "Use SSL connection"
 msgstr "Użyj łącza SSL"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:94 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:83 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:113 module:io.ox/calendar
 #: apps/io.ox/search/facets/extensions.js:530
 msgid ""
@@ -7796,7 +7801,7 @@ msgstr "Użyj oddzielnej nazwy użytkownika i hasła"
 msgid "Use unified mail for this account"
 msgstr "Użyj ujednoliconej poczty dla tego konta"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:98 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:87 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr ""
@@ -7902,7 +7907,7 @@ msgstr "Środa"
 msgid "Week"
 msgstr "Tydzień"
 
-#: apps/io.ox/calendar/week/perspective.js:310 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:324 module:io.ox/calendar
 msgid "Week View"
 msgstr "Widok tygodnia"
 
@@ -7970,7 +7975,7 @@ msgstr "Całodniowe"
 msgid "Workweek"
 msgstr "Tydzień roboczy"
 
-#: apps/io.ox/calendar/week/perspective.js:304 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:318 module:io.ox/calendar
 msgid "Workweek View"
 msgstr "Widok tygodnia roboczego"
 
@@ -8015,8 +8020,8 @@ msgid "Yellow"
 msgstr "Żółty"
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:135 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:152 apps/io.ox/core/main.js:128
+#: apps/io.ox/calendar/month/perspective.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:153 apps/io.ox/core/main.js:128
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:178
 #: apps/io.ox/files/util.js:249 module:io.ox/files
 msgid "Yes"
