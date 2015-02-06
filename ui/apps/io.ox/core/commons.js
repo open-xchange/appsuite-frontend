@@ -697,6 +697,8 @@ define('io.ox/core/commons',
                     // left
                     sides.left = $('<div class="leftside">')
                     .attr({
+                        'role': 'navigation',
+                        'aria-label': gt('Item list')
                     })
                     .on('select', select),
                     // navigation

@@ -63,6 +63,10 @@ define('io.ox/core/folder/tree',
             this.$el.toggleClass(options.highlightclass, !!options.highlight);
             this.$el.append(this.$container);
 
+            this.$el.attr({
+                'role': 'navigation'
+            });
+
             this.selection = new Selection(this);
 
             if (options.abs) this.$el.addClass('abs');

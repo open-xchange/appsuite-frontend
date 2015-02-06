@@ -708,7 +708,11 @@ define('io.ox/contacts/main',
         app.setWindow(win);
         app.settings = settings;
 
-        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">');
+        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
+            .attr({
+                role: 'navigation',
+                'aria-label': gt('Item List')
+            });
 
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,

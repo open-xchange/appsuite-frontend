@@ -95,7 +95,10 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 bottomPoint.invoke('draw', bottom, baton);
             }
 
-            this.$el.append(top, this.listView.render().$el.addClass('abs'), bottom);
+            // add landmark role
+            this.$el.attr({
+                'role': 'navigation'
+            }).append(top, this.listView.render().$el.addClass('abs'), bottom);
 
             return this;
         }
