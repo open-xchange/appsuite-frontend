@@ -865,6 +865,11 @@ html.ios8-standalone-ipad-fix {
 
     #io-ox-notifications-display {
 
+        //special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
+        .span-to-div {
+            display: block;
+        }
+
         padding: 24px 14px;
 		list-style-type: none; //no dots here
 
@@ -877,6 +882,7 @@ html.ios8-standalone-ipad-fix {
             margin: 14px 0 7px 0;
             padding: 0 14px;
             border: 0;
+            display: inline-block;
 
             html.high-contrast & {
                 color: @white;
@@ -886,7 +892,8 @@ html.ios8-standalone-ipad-fix {
 
         .clear-button {
             float: right;
-            line-height: inherit;
+            line-height: 24px;
+            margin: 14px 14px 0 0;
             padding: 0;
             color: #767676;
             font-size: 14px;

@@ -39,13 +39,11 @@ define('io.ox/core/notifications',
             this.nodes.badge.toggleClass('empty', count === 0);
             this.$el.attr('aria-label', a11y);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
-            new NotificationController().yell('screenreader', a11y);
+            yell('screenreader', a11y);
         },
         onToggle: function (open) {
-            var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
-            this.$el.attr({'aria-expanded': open ? true : false,
-                           'aria-label': this.model.get('a11y') + ' ' + a11yState});
+            this.$el.attr({'aria-expanded': open ? true : false});
         },
         render: function () {
             this.$el.attr({
@@ -223,7 +221,7 @@ define('io.ox/core/notifications',
             }, this));
 
             // try to focus first item; focus badge otherwise
-            var firstItem = $('#io-ox-notifications .item').first();
+            var firstItem = $('#io-ox-notifications [tabindex="1"]').first();
             if (firstItem.length > 0) firstItem.focus(); else this.badgeView.$el.focus();
 
             this.trigger('show');
@@ -328,24 +326,38 @@ define('io.ox/core/notifications',
             }, delay || 2000);
 
             function focusNotifications(e) {
-                //enter
-                if (e.which === 13) {
-                    if (self.isOpen()) {
-                        //focus badge when closing
-                        _.defer(function () {
-                            self.badgeView.$el.focus();
-                        });
-                    } else {
-                        //focus notifications when opening
-                        _.defer(function () {
-                            var firstItem = $('#io-ox-notifications .item').first();
-                            if (firstItem.length > 0) {
-                                firstItem.focus();
-                            } else {
+                switch (e.which) {
+                    //enter
+                    case 13:
+                        if (self.isOpen()) {
+                            //focus badge when closing
+                            _.defer(function () {
                                 self.badgeView.$el.focus();
+                            });
+                        } else {
+                            //focus notifications when opening
+                            _.defer(function () {
+                                var firstItem = $('#io-ox-notifications [tabindex="1"]').first();
+                                if (firstItem.length > 0) {
+                                    firstItem.focus();
+                                } else {
+                                    self.badgeView.$el.focus();
+                                }
+                            });
+                        }
+                        break;
+                    //tab
+                    case 9:
+                        if (self.isOpen()) {
+                            if (!e.shiftKey) {
+                                e.preventDefault();
+                                var Item = $('#io-ox-notifications [tabindex="1"]').first();
+                                if (Item.length > 0) {
+                                    Item.focus();
+                                }
                             }
-                        });
-                    }
+                        }
+                        break;
                 }
             }
 
@@ -415,11 +427,17 @@ define('io.ox/core/notifications',
             });
 
             var focusBadge =  function (e) {
-                if (e.which === 9) {
+                if (e.which === 9 && e.shiftKey) {
                     //tabkey
-                    //prevent default to not jump to reload button
                     e.preventDefault();
-                    $('#io-ox-notifications .refocus').first().focus();
+                    $('#io-ox-notifications-icon .notifications-icon').focus();
+                }
+            };
+            var focusReload =  function (e) {
+                if (e.which === 9 && !e.shiftKey) {
+                    //tabkey
+                    e.preventDefault();
+                    $('#io-ox-refresh-icon .apptitle').focus();
                 }
             };
 
@@ -430,7 +448,16 @@ define('io.ox/core/notifications',
             }
             //jump back to first item if tab is pressed on last item
             this.lastItem = this.notificationsView.$el.find('[tabindex="1"]').last();
-            this.lastItem.on('keydown', focusBadge);
+            this.lastItem.on('keydown', focusReload);
+
+            //clear first item reference
+            if (this.firstItem) {
+                this.firstItem.off('keydown', focusBadge);
+                this.firstItem = undefined;
+            }
+            //jump back to badge if tab is pressed on first item
+            this.firstItem = this.notificationsView.$el.find('[tabindex="1"]').first();
+            this.firstItem.on('keydown', focusBadge);
         },
 
         yell: yell
