@@ -58,11 +58,13 @@ define('io.ox/tasks/edit/view',
             if (!capabilities.has('infostore')) {
                 ext.point('io.ox/tasks/edit/view').disable('attachment_list');
                 ext.point('io.ox/tasks/edit/view').disable('attachment_upload');
+                ext.point('io.ox/tasks/edit/view').disable('attachments_legend');
             }
             // hide participants tab for PIM user
             if (!capabilities.has('delegate_tasks')) {
                 ext.point('io.ox/tasks/edit/view').disable('participants_list');
                 ext.point('io.ox/tasks/edit/view').disable('add_participant');
+                ext.point('io.ox/tasks/edit/view').disable('participants_legend');
             }
 
             util.splitExtensionsByRow(this.point.list(), rows);
