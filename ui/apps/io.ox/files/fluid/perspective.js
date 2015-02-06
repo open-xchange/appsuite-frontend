@@ -364,7 +364,6 @@ define('io.ox/files/fluid/perspective', [
                         role: 'listbox',
                         'aria-multiselectable': true
                     })
-                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
                     .on('click', function () {
                         //force focus on container click
                         focus();
