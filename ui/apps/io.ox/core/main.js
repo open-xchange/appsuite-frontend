@@ -1575,7 +1575,7 @@ define('io.ox/core/main', [
     // Respond to special http error codes (see bug 32836)
     //
 
-    ox.on('http:error', function (e, error) {
+    ox.on('http:error', function (error) {
         switch (error.code) {
             case 'MSG-1000':
             case 'MSG-1001':
