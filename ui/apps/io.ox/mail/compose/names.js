@@ -89,7 +89,7 @@ define('io.ox/mail/compose/names', [
             this.$el.append(
                 // help text
                 $('<div class="help-block">').css('margin', '0 0 1em 0').text(gt(
-                    'Select a checkbox to define a custom name for that address; otherwise a default name will be used. ' +
+                    'Select a checkbox to define a custom name for that address; otherwise the mail account\'s default name will be used. ' +
                     'If you want to use an address anonymously, select the checkbox and leave the field empty.'
                 )),
                 // addresses
