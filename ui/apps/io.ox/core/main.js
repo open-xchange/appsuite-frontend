@@ -1562,7 +1562,7 @@ define('io.ox/core/main', [
     //
     // Visual response to hidden folders
     //
-    folderAPI.on('warn:hidden', function (e, folder) {
+    folderAPI.on('warn:hidden', function (folder) {
         if (folder) {
             notifications.yell('info',
                //#. %1$s is the filename
