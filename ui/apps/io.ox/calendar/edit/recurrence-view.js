@@ -798,10 +798,10 @@ define('io.ox/calendar/edit/recurrence-view',
                 });
 
                 _('recurrence_type days month day_in_month interval occurrences until'.split(' ')).each(function (attr) {
-                    self.observeModel('change:' + attr, self.updateView, self);
+                    self.listenTo(self.model, 'change:' + attr, self.updateView);
                 });
 
-                self.observeModel('change:start_date', self.updateSuggestions, self);
+                this.listenTo(this.model, 'change:start_date', self.updateSuggestions);
 
                 this.updateView();
                 this.updateSuggestions();

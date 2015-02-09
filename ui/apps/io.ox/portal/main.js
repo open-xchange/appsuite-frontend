@@ -173,8 +173,12 @@ define('io.ox/portal/main',
         id: 'classes',
         index: 200,
         draw: function (baton) {
+            var draggable = baton.model.get('draggable');
+            if (_.isUndefined(draggable) || _.isNull(draggable)) {
+                draggable = true;
+            }
             this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
-                .addClass(baton.model.get('protectedWidget') || false ? ' protected' : ' draggable');
+                .addClass(draggable ? ' draggable' : ' protected');
         }
     });
 

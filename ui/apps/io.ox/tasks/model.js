@@ -12,14 +12,14 @@
  */
 
 define('io.ox/tasks/model',
-    ['io.ox/tasks/api',
+    ['io.ox/core/date',
+     'io.ox/tasks/api',
      'io.ox/backbone/modelFactory',
      'io.ox/backbone/validation',
      'io.ox/core/extensions',
      'io.ox/participants/model',
-     'io.ox/core/date',
      'gettext!io.ox/tasks'
-    ], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
+    ], function (date, api, ModelFactory, Validations, ext, pModel, gt) {
 
     'use strict';
 
@@ -41,10 +41,10 @@ define('io.ox/tasks/model',
                     if (this._participants) {
                         return this._participants;
                     }
-                    var self = this;
-                    var resetListUpdate = false;
-                    var changeParticipantsUpdate = false;
-                    var participants = this._participants = new pModel.Participants(this.get('participants'));
+                    var self = this,
+                        resetListUpdate = false,
+                        changeParticipantsUpdate = false,
+                        participants = this._participants = new pModel.Participants(this.get('participants'));
                     participants.invoke('fetch');
 
                     function resetList() {
@@ -69,6 +69,20 @@ define('io.ox/tasks/model',
                     });
 
                     return participants;
+                },
+                // special functions for datepicker
+                getDate: function (attr) {
+                    var time = this.get.apply(this, arguments);
+                    if (time && _.indexOf(['start_date', 'end_date'], attr) >= 0) {
+                        time = date.Local.utc(time);
+                    }
+                    return time;
+                },
+                setDate: function (attr, time) {
+                    if (time && _.indexOf(['start_date', 'end_date'], attr) >= 0) {
+                        arguments[1] = date.Local.localTime(time);
+                   }
+                    return this.set.apply(this, arguments);
                 }
             }
         });

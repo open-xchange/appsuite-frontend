@@ -46,11 +46,13 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     var paths = env.paths || ['.'];
     if (paths.indexOf(path) < 0) paths.push(path);
     var data = '';
+    var fileFound = false;
     paths.forEach(function (path) {
         try {
             //first, try to load directly
             //see bug 33460
             data += readFile(less.modules.path.join(path, href));
+            fileFound = true;
         } catch (e) {
             try {
                 // alternatively, try to load only the basename part in path
@@ -59,8 +61,8 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
             }
         }
     });
-    if (!data) {
-        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found" });
+    if (!fileFound && !data) {
+        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
         return;
     }
 
@@ -87,9 +89,9 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
 	print('Processing', dir);
 	deleteRecurse(/\.css$/, new java.io.File(dir));
 	var defs = [bootstrap, bootstrapDP, fontAwesome, style1].join('\n');
-	compileLess(defs, subDir('common.css'));
+	compileLess(defs, subDir('common.css'), '<multiple less files>');
 	compileLess(readFile(subDir('style.less')),
-		subDir('style.css'));
+		subDir('style.css'), '<default theme style.less>');
 	recurse('', subDir, new java.io.File('apps'));
     }
 }());
@@ -156,7 +158,7 @@ function compileLess(input, outputFile, sourceFileName) {
         ],
         filename: '' + sourceFileName
     }).parse(input, function (e, css) {
-        if (e) return error(e);
+        if (e) return error(e, sourceFileName);
         outputFile.getParentFile().mkdirs();
         writeFile(outputFile, css.toCSS({
             compress: true,
