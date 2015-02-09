@@ -29,6 +29,8 @@ define('io.ox/files/carousel',
         regIsPlainText = /\.(txt|asc|js|md|json)$/i,
         regIsDocument = /\.(csv|pdf|docx?|xlsx?|pptx?)$/i;
 
+    var guid = _.uniqueId('carousel-');
+
     var carouselSlider = {
 
         app: null,
@@ -46,7 +48,7 @@ define('io.ox/files/carousel',
 
         firstStart: true,
         list: [],
-        container:      $('<div class="abs carousel slide">').attr({ 'tabIndex': 1, 'data-ride': 'carousel' }),
+        container:      $('<div class="abs carousel slide">').attr({ 'tabIndex': 1, 'data-ride': 'carousel', 'aria-describedby': guid }),
         inner:          $('<div class="abs carousel-inner" role="listbox">'),
         prevControl:    $('<a class="left carousel-control">')
                             .attr({
@@ -71,6 +73,8 @@ define('io.ox/files/carousel',
                                 $('<i class="fa fa-times" aria-hidden="true" >'),
                                 $('<span class="sr-only">').text(gt('Close'))
                             ),
+        //#. helper text for slideshow widget navigation
+        info:           $('<div class="sr-only">').attr('id', guid).text(gt('Use left/right arrow keys to navigate and escape key to exit view.')),
 
        /**
         * The config parameter used to initialize a carousel.
@@ -391,6 +395,7 @@ define('io.ox/files/carousel',
             win.busy();
             win.append(
                 this.container.append(
+                    this.info,
                     this.inner,
                     this.prevControl,
                     this.nextControl,
