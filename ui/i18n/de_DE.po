@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-05 14:35+0100\n"
+"PO-Revision-Date: 2015-02-09 15:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1968,19 +1968,16 @@ msgstr "Währung"
 
 #: apps/io.ox/core/main.js:357 module:io.ox/core
 #, fuzzy
-#| msgid "Current version"
 msgid "Currently refreshing"
-msgstr "Aktuelle Version"
+msgstr "Es wird aktualisiert"
 
 #: apps/io.ox/calendar/toolbar.js:174 module:io.ox/calendar
 msgid "Custom colors"
 msgstr "Benutzerdefinierte Farben"
 
 #: apps/io.ox/mail/compose/names.js:75 module:io.ox/mail
-#, fuzzy
-#| msgid "Custom"
 msgid "Custom name"
-msgstr "Benutzerdefiniert"
+msgstr "Benutzerdefinierter Name"
 
 #: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
@@ -2631,16 +2628,13 @@ msgid "Edit draft"
 msgstr "Entwurf bearbeiten"
 
 #: apps/io.ox/mail/compose/extensions.js:151 module:io.ox/mail
-#, fuzzy
-#| msgid "List name"
 msgid "Edit names"
-msgstr "Name der Liste"
+msgstr "Namen bearbeiten"
 
 #: apps/io.ox/mail/compose/names.js:156 module:io.ox/mail
 #, fuzzy
-#| msgid "Edit to set a name."
 msgid "Edit real names"
-msgstr "Bearbeiten, um einen Namen hinzuzufügen"
+msgstr "Klarnamen bearbeiten"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
 msgid "Edit rule"
@@ -3486,10 +3480,8 @@ msgid "Hide details"
 msgstr "Details ausblenden"
 
 #: apps/io.ox/mail/compose/extensions.js:150 module:io.ox/mail
-#, fuzzy
-#| msgid "Middle name"
 msgid "Hide names"
-msgstr "Zweiter Vorname"
+msgstr "Namen verstecken"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:72 module:io.ox/core
 msgid "Hide request body"
@@ -4950,7 +4942,7 @@ msgstr "Passwortlänge muss zwischen %1$d und %2$d Zeichen liegen."
 #: module:io.ox/settings/accounts
 #, fuzzy
 msgid "Password recovery"
-msgstr "Passwortwiederherstellung"
+msgstr "Passwort wiederherstellen"
 
 #: apps/io.ox/files/share/view.js:262 module:io.ox/files
 msgid "Password required"
@@ -5948,6 +5940,10 @@ msgid ""
 "default name will be used. If you want to use an address anonymously, select "
 "the checkbox and leave the field empty."
 msgstr ""
+"Wählen Sie ein Kontrollfeld, um einen benutzerdefinierten Namen für diese "
+"Adresse festzulegen. Andernfalls wird ein Standardname verwendet. Wollen Sie "
+"eine Adresse anonym verwenden, aktivieren Sie das Kontrollfeld und lassen "
+"Sie das Feld leer."
 
 #: apps/io.ox/core/tk/vgrid.js:304 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:287 module:io.ox/mail
@@ -6224,10 +6220,8 @@ msgid "Show more comments"
 msgstr "Weitere Kommentare anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js:150 module:io.ox/mail
-#, fuzzy
-#| msgid "Show as"
 msgid "Show names"
-msgstr "Anzeigen als"
+msgstr "Namen anzeigen"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
@@ -7649,10 +7643,8 @@ msgstr ""
 "Cursor-Modus muss deaktiviert werden."
 
 #: apps/io.ox/mail/compose/names.js:67 module:io.ox/mail
-#, fuzzy
-#| msgid "User name"
 msgid "Use custom name"
-msgstr "Benutzername"
+msgstr "Benutzerdefinierten Namen verwenden"
 
 #: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
@@ -8681,7 +8673,7 @@ msgstr "das Objekt wurde verschoben"
 #: apps/io.ox/mail/settings/model.js:27
 #, fuzzy
 msgid "the line length must be a number"
-msgstr "die Zeilenlänge muss eine Ziffer sein"
+msgstr "die Zeilenlänge muss durch eine Ziffer angegeben werden"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
