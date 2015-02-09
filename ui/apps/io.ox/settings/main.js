@@ -46,9 +46,6 @@ define('io.ox/settings/main',
             },
             set: function (data, fields) {
                 var title = /*#, dynamic*/gt.pgettext('app', data.title);
-                this.attr({
-                    'aria-label': title
-                });
                 //clean template
                 fields.title.empty();
                 fields.title.append($.txt(
@@ -163,7 +160,7 @@ define('io.ox/settings/main',
             'role': 'main'
         }).scrollable();
 
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
+        grid = new VGrid(left, { editable: false, containerLabel: gt('Select'), multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
