@@ -64,7 +64,11 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                     if (type === 'paginate' && self.collection.length > 0) {
                         // check if first fetched item matches last existing item
                         // use case: reload on new messages; race-conditions with external clients
-                        if (_.cid(_(data).first()) !== self.collection.last().cid) {
+                        var first = _(data).first(), last = self.collection.last().toJSON();
+                        // use "head" item to compare threads
+                        if (last.head) last = last.head;
+                        // compare
+                        if (_.cid(first) !== _.cid(last)) {
                             self.done();
                             params.thread = params.action === 'threadedAll';
                             self.reload(params, self.LIMIT);

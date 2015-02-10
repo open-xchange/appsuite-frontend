@@ -307,7 +307,9 @@ define('io.ox/core/tk/list',
                 'before:paginate': this.busy,
                 'paginate': this.idle,
                 'paginate:fail': this.idle,
-                'complete': this.onComplete
+                'complete': this.onComplete,
+                // reload
+                'reload': this.idle
             });
             this.selection.reset();
             this.trigger('collection:set');
