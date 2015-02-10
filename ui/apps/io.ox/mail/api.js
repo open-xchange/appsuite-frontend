@@ -478,7 +478,7 @@ define('io.ox/mail/api',
         // determine default view parameter
         if (!obj.view) obj.view = defaultView(obj);
 
-        // limit default size (30KB)
+        // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         return get.call(api, obj, options && options.cache).done(function (data) {
