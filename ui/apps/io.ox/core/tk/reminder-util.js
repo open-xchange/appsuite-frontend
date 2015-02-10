@@ -73,10 +73,12 @@ define('io.ox/core/tk/reminder-util', [
         //find out remindertype
         if (model.get('reminder') && model.get('reminder').module === 4) {
             //task
-            info = [$('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                    $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
-                    $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
-                    $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))];
+            info = [
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
+                $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
+                $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))
+            ];
             var endText = '',
                 statusText = '';
             if (_.noI18n(model.get('end_date'))) {
@@ -92,16 +94,18 @@ define('io.ox/core/tk/reminder-util', [
             label = gt('%1$s %2$s %3$s.', _.noI18n(model.get('title')), endText, statusText);
         } else {
             //appointment
-            info = [$('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                    $('<span class="span-to-div time">').text(model.get('time')),
-                    $('<span class="span-to-div date">').text(model.get('date')),
-                    $('<span class="span-to-div title">').text(model.get('title')),
-                    $('<span class="span-to-div location">').text(model.get('location'))];
-                    //#. %1$s Appointment title
-                    //#. %2$s Appointment date
-                    //#. %3$s Appointment time
-                    //#. %4$s Appointment location
-                    //#, c-format
+            info = [
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div time">').text(model.get('time')),
+                $('<span class="span-to-div date">').text(model.get('date')),
+                $('<span class="span-to-div title">').text(model.get('title')),
+                $('<span class="span-to-div location">').text(model.get('location'))
+            ];
+            //#. %1$s Appointment title
+            //#. %2$s Appointment date
+            //#. %3$s Appointment time
+            //#. %4$s Appointment location
+            //#, c-format
             label = gt('%1$s %2$s %3$s %4$s.',
                     _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('caldata'))), _.noI18n(util.getTimeIntervalA11y(model.get('caldata'))), _.noI18n(model.get('location')) || '');
         }
@@ -111,14 +115,15 @@ define('io.ox/core/tk/reminder-util', [
             focusId = _.ecid(model.attributes);
         }
 
-        node.attr({'data-cid': model.get('cid'),
-                   'model-cid': model.cid,
-                   'aria-label': label,
-                   'aria-describedby': descriptionId,
-                   //calendar and task are a bit different here (recurrenceposition etc)
-                   'focus-id': 'reminder-notification-' + focusId,
-                   role: 'listitem',
-                   'tabindex': 1
+        node.attr({
+            'data-cid': model.get('cid'),
+            'model-cid': model.cid,
+            'aria-label': label,
+            'aria-describedby': descriptionId,
+            //calendar and task are a bit different here (recurrenceposition etc)
+            'focus-id': 'reminder-notification-' + focusId,
+            role: 'listitem',
+            'tabindex': 1
         }).addClass('reminder-item refocus clearfix');
         buildActions(actions, options, 'reminder-notification-' + focusId);
 

@@ -94,7 +94,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             $('<label class="sr-only">').attr('for', guid).text(gt('Time')),
                             self.nodes.timeField,
                             self.nodes.a11yTime,
-                           '&nbsp;',
+                            '&nbsp;',
                             self.nodes.timezoneField
                         ];
                     }
@@ -110,16 +110,12 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
                     }
                     if (!self.isFullTime()) {
-                       self.mobileSettings.preset = 'datetime';
+                        self.mobileSettings.preset = 'datetime';
                     }
 
                     // initialize mobiscroll plugin
                     self.nodes.dayField.mobiscroll(mobileSettings);
-<<<<<<< HEAD
-                    def.resolve();
-=======
-                   self.nodes.dayField.on('change', _.bind(self.updateModel, self));
->>>>>>> release-7.6.2
+                    self.nodes.dayField.on('change', _.bind(self.updateModel, self));
                 });
             } else {
                 require(['io.ox/core/tk/datepicker'], function () {

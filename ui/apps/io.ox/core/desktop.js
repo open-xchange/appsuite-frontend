@@ -1592,7 +1592,7 @@ define('io.ox/core/desktop', [
                                             .text(label),
                                         $('<p class="sr-only sr-description">')
                                             .attr({
-                                                id: guid,
+                                                id: guid
                                             })
                                             .text(
                                                 //#. search feature help text for screenreaders

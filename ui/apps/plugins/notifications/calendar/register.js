@@ -26,11 +26,12 @@ define('plugins/notifications/calendar/register', [
             this.append(
                 $('<h1 class="section-title">').text(gt('Appointment invitations')),
                 $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                    .attr({ tabindex: 1,
+                    .attr({
+                        tabindex: 1,
                         'aria-label': gt('Hide all appointment invitations.'),
                         'data-action': 'clear',
                         'focus-id': 'calendar-invite-clear'
-                }),
+                    })
             );
         }
     });
@@ -40,11 +41,12 @@ define('plugins/notifications/calendar/register', [
             this.append(
                 $('<h1 class="section-title">').text(gt('Appointment reminders')),
                 $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                    .attr({ tabindex: 1,
+                    .attr({
+                        tabindex: 1,
                         'aria-label': gt('Hide all appointment reminders.'),
                         'data-action': 'clear',
                         'focus-id': 'calendar-reminder-notification-clear'
-                }),
+                    }),
                 $('<ul class="items list-unstyled">')
             );
         }
@@ -62,12 +64,12 @@ define('plugins/notifications/calendar/register', [
                     'focus-id': 'calendar-invite-' + model.get('cid'),
                     'aria-describedby': descriptionId,
                     'tabindex': 1,
-                                //#. %1$s Appointment title
-                                //#. %2$s Appointment date
-                                //#. %3$s Appointment time
-                                //#. %4$s Appointment location
-                                //#. %5$s Appointment Organizer
-                                //#, c-format
+                    //#. %1$s Appointment title
+                    //#. %2$s Appointment date
+                    //#. %3$s Appointment time
+                    //#. %4$s Appointment location
+                    //#. %5$s Appointment Organizer
+                    //#, c-format
                     'aria-label': gt('%1$s %2$s %3$s %4$s %5$s.',
                             _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('data'))),
                             _.noI18n(util.getTimeIntervalA11y(model.get('data'))), _.noI18n(model.get('location')) || '',
@@ -85,8 +87,10 @@ define('plugins/notifications/calendar/register', [
                             .css('margin-right', '14px')
                             .text(gt('Accept / Decline')),
                         $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                            .attr({'aria-label': gt('Accept invitation'),
-                                   'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
+                            .attr({
+                                'aria-label': gt('Accept invitation'),
+                                'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'
+                            })
                             .append('<i class="fa fa-check">')
                     )
                 );

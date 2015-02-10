@@ -55,11 +55,13 @@ define('plugins/notifications/tasks/register', [
 
         node.append(
             $('<li class="taskNotification item refocus" tabindex="1" role="listitem">')
-            .attr({'data-cid': model.get('cid'),
-                   'focus-id': 'task-overdue-notification-' + model.get('cid'),
-                   'model-cid': model.cid,
-                   'aria-label': label,
-                   'aria-describedby': descriptionId})
+            .attr({
+                'data-cid': model.get('cid'),
+                'focus-id': 'task-overdue-notification-' + model.get('cid'),
+                'model-cid': model.cid,
+                'aria-label': label,
+                'aria-describedby': descriptionId
+            })
             .append(
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
@@ -524,17 +526,19 @@ define('plugins/notifications/tasks/register', [
                 if (baton.model.get('end_date')) {
                     endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
                 }
-                        //#. %1$s task title
-                        //#. %2$s task end date
-                        //#. %3$s task status
-                        //#, c-format
-                var label = gt('%1$s %2$s %3$s.', _.noI18n(baton.model.get('title')), endText ,baton.model.get('status'));
-                self.attr({role: 'listitem',
-                           'data-cid': _.ecid(baton.model.attributes),
-                           'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                           tabindex: 1,
-                           'aria-describedby': descriptionId,
-                           'aria-label': label})
+                //#. %1$s task title
+                //#. %2$s task end date
+                //#. %3$s task status
+                //#, c-format
+                var label = gt('%1$s %2$s %3$s.', _.noI18n(baton.model.get('title')), endText, baton.model.get('status'));
+                self.attr({
+                    role: 'listitem',
+                    'data-cid': _.ecid(baton.model.attributes),
+                    'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
+                    tabindex: 1,
+                    'aria-describedby': descriptionId,
+                    'aria-label': label
+                })
                 .append(
                     $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                     $('<span class="span-to-div title">').text(_.noI18n(task.title)),
@@ -546,8 +550,10 @@ define('plugins/notifications/tasks/register', [
                         .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
                         .text(gt('Accept/Decline')),
                         $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                            .attr({'aria-label': gt('Accept invitation'),
-                                   'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
+                            .attr({
+                                'aria-label': gt('Accept invitation'),
+                                'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)
+                            })
                             .append('<i class="fa fa-check">')
                     )
                 );

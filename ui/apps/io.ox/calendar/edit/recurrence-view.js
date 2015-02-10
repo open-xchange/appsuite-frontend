@@ -487,8 +487,6 @@ define('io.ox/calendar/edit/recurrence-view', [
                     wrapper: $('<div>').addClass('checkbox'),
                     recView: $('<form class="io-ox-recurrence-view form-inline">').hide(),
                     summary: $('<span>'),
-                    wrapper: $('<div>').addClass('checkbox'),
-                    recView: $('<form class="io-ox-recurrence-view form-inline">').hide(),
                     typeChoice: $('<div class="inset">'),
                     hint: $('<div class="text-muted inset">'),
                     alternative1: $('<div class="inset">'),

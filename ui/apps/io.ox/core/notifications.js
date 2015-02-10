@@ -44,8 +44,7 @@ define('io.ox/core/notifications', [
         onToggle: function (open) {
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
             this.$el.attr({
-                'aria-expanded': open ? true : false,
-                'aria-label': this.model.get('a11y') + ' ' + a11yState
+                'aria-expanded': open ? true : false
             });
         },
         render: function () {
@@ -366,15 +365,11 @@ define('io.ox/core/notifications', [
                 'right',
                 self.badgeView.render().$el.on('keydown', focusNotifications),
                 $.proxy(this.toggleList, this)
-<<<<<<< HEAD
-            ).attr({ id: 'io-ox-notifications-icon', role: 'navigation' });
-=======
             ).attr({
                 id: 'io-ox-notifications-icon',
                 role: 'navigation',
                 'aria-label': gt('Notifications')
             });
->>>>>>> release-7.6.2
         },
 
         get: function (key, listview) {

@@ -654,7 +654,7 @@ define('io.ox/contacts/api', [
                         var fail = this.width === 1 || e.type === 'error';
                         if (!fail) cachesURLs[url] = url;
                         node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                        node = scrollpane = null;
+                        node = null;
                         $(this).off();
                     })
                     .attr('src', url);
