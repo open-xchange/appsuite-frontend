@@ -332,8 +332,6 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-
-
     var forms = {
         ControlGroup: ControlGroup,
         SelectControlGroup: SelectControlGroup,
