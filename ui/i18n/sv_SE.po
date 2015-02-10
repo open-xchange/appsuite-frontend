@@ -6024,9 +6024,9 @@ msgstr "Välj"
 
 #: apps/io.ox/mail/compose/names.js:91 module:io.ox/mail
 msgid ""
-"Select a checkbox to define a custom name for that address; otherwise a "
-"default name will be used. If you want to use an address anonymously, select "
-"the checkbox and leave the field empty."
+"Select a checkbox to define a custom name for that address; otherwise the "
+"mail account's default name will be used. If you want to use an address "
+"anonymously, select the checkbox and leave the field empty."
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js:304 module:io.ox/core

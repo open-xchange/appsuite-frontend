@@ -5935,10 +5935,15 @@ msgid "Select"
 msgstr "Wählen"
 
 #: apps/io.ox/mail/compose/names.js:91 module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Select a checkbox to define a custom name for that address; otherwise a "
+#| "default name will be used. If you want to use an address anonymously, "
+#| "select the checkbox and leave the field empty."
 msgid ""
-"Select a checkbox to define a custom name for that address; otherwise a "
-"default name will be used. If you want to use an address anonymously, select "
-"the checkbox and leave the field empty."
+"Select a checkbox to define a custom name for that address; otherwise the "
+"mail account's default name will be used. If you want to use an address "
+"anonymously, select the checkbox and leave the field empty."
 msgstr ""
 "Wählen Sie ein Kontrollfeld, um einen benutzerdefinierten Namen für diese "
 "Adresse festzulegen. Andernfalls wird ein Standardname verwendet. Wollen Sie "
