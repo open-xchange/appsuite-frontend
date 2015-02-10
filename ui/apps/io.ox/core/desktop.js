@@ -1493,7 +1493,7 @@ define('io.ox/core/desktop',
                         .attr({
                             role: 'navigation',
                             //#. search: leftside sidepanel container that shows active and available facets
-                            'aria-label': gt('Search Facets')
+                            'aria-label': gt('Search Options')
                         });
                         // add nodes
                         side.append(nodes.container);
@@ -1720,6 +1720,7 @@ define('io.ox/core/desktop',
                         index: 200,
                         draw: function () {
                             var node = this.nodes.facetedsearch.toolbar,
+                                //#. search feature help text for screenreaders
                                 label = gt('Search'),
                                 id = win.name + '-search-field',
                                 guid = _.uniqueId('form-control-description-'),
@@ -1733,8 +1734,8 @@ define('io.ox/core/desktop',
                                             .attr({
                                                 class: 'form-control search-field f6-target',
                                                 tabindex: 1,
-                                                role: 'search',
-                                                'aria-label': gt('Search box'),
+                                                role: 'navigation',
+                                                'aria-label': gt('Search within application'),
                                                 id: id,
                                                 placeholder: label + ' ...',
                                                 'aria-describedby': guid

@@ -206,7 +206,10 @@ define('io.ox/core/main',
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     topbar
-        .attr('aria-label', gt('Applications'))
+        .attr({
+            'aria-label': gt('Applications'),
+            'role': 'banner'
+        })
         // prevent dragging links
         .on('dragstart', false)
         // make system drop-down accessible
