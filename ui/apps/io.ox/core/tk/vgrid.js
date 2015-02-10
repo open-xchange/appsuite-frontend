@@ -227,7 +227,8 @@ define('io.ox/core/tk/vgrid', [
             secondToolbar: false,
             swipeLeftHandler: false,
             swipeRightHandler: false,
-            selectSmart: true
+            selectSmart: true,
+            containerLabel: gt('Multiselect')
         }, options || {});
 
         if (options.settings) {
@@ -247,7 +248,13 @@ define('io.ox/core/tk/vgrid', [
             firstRun = true,
             // inner container / added role="presentation" because screen reader runs amok
             scrollpane = $('<div class="abs vgrid-scrollpane">').appendTo(node),
-            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox" aria-multiselectable="true" aria-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            ariaAttributesContainer = function () {
+                var obj = {};
+                if (options.multiple) obj['aria-multiselectable'] = 'true';
+                obj['aria-label'] = options.containerLabel;
+                return obj;
+            },
+            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar
@@ -295,6 +302,11 @@ define('io.ox/core/tk/vgrid', [
             topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
                 .prependTo(node),
             toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
+                .attr({
+                    role: 'toolbar',
+                    //#. toolbar with 'select all' and 'sort by'
+                    'aria-label': gt('Item list options')
+                })
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?
@@ -527,7 +539,9 @@ define('io.ox/core/tk/vgrid', [
                 // get clone
                 return template.getClone(function () {
                     // add checkbox for edit mode
-                    return createCheckbox.call(this);
+                    if (options.editable) {
+                        return createCheckbox.call(this);
+                    }
                 });
             };
         }());

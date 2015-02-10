@@ -437,7 +437,15 @@ define('io.ox/mail/main', [
          */
         'list-view-control': function (app) {
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
-            app.left.append(app.listControl.render().$el);
+            app.left.append(
+                app.listControl.render().$el
+                    //#. items list (e.g. mails)
+                    .attr('aria-label', gt('Item list'))
+                    .find('.toolbar')
+                    //#. toolbar with 'select all' and 'sort by'
+                    .attr('aria-label', gt('Item list options'))
+                    .end()
+            );
             // make resizable
             app.listControl.resizable();
         },

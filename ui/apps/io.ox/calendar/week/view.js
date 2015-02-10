@@ -357,11 +357,12 @@ define('io.ox/calendar/week/view', [
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = _.cid(String(cT.data('cid')));
-                if (!cT.hasClass('current')) {
+                if (!cT.hasClass('current') || _.device('smartphone')) {
+                    // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
-                        .addClass('opac');
+                        .addClass(_.device('smartphone') ? '' : 'opac'); // do not add opac class on phones
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
                     self.trigger('showAppointment', e, obj);
 

@@ -31,6 +31,48 @@ define('io.ox/settings/main', [
 
     'use strict';
 
+    var tmpl = {
+        main: {
+            build: function () {
+                var title;
+                this.addClass('application')
+                    .append(
+                        title = $('<div>')
+                            .addClass('title')
+                    );
+                if (_.device('smartphone')) {
+                    // must use inline styles because vgrid's height calculon-o-mat does not
+                    // respect any css values bound via classes for its calculation
+                    title.css('margin', '4px 0');
+                    title.prepend($('<i class="fa fa-chevron-right pull-right">'));
+                }
+                return { title: title };
+            },
+            set: function (data, fields) {
+                var title = /*#, dynamic*/gt.pgettext('app', data.title);
+                //clean template
+                fields.title.empty();
+                fields.title.append($.txt(
+                        title === data.title ? /*#, dynamic*/gt(data.title) : title
+                    )
+                );
+            }
+        },
+        label: {
+            build: function () {
+                this.addClass('settings-label');
+            },
+            set: function (data) {
+                this.text(data.group || '');
+            }
+        }
+        // might be good to introduce real groups!
+        // requiresLabel: function (i, data, current) {
+        //     if (!data) { return false; }
+        //     return data.group !== current ? data.group : false;
+        // }
+    };
+
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
@@ -108,6 +150,29 @@ define('io.ox/settings/main', [
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
+        left = vsplit.left.addClass('leftside border-right');
+
+        left.attr({
+            'role': 'navigation',
+            'aria-label': gt('Settings')
+        });
+
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
+            'tabindex': 1,
+            'aria-describedby': 'currentsettingtitle',
+            //needed or mac voice over reads the whole settings pane when an input element is focused
+            'role': 'main'
+        }).scrollable();
+
+        grid = new VGrid(left, { editable: false, containerLabel: gt('Select'), multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
+
+        // disable the Deserializer
+        grid.setDeserialize(function (cid) {
+            return cid;
+        });
+
+        grid.addTemplate(tmpl.main);
+        grid.addLabelTemplate(tmpl.label);
 
         var appsInitialized = appsAPI.getInstalled().done(function (installed) {
 

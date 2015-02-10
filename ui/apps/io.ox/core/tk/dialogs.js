@@ -602,7 +602,7 @@ define('io.ox/core/tk/dialogs', [
                     )
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, pane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(

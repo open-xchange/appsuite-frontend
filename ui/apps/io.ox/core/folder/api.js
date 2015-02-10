@@ -44,8 +44,7 @@ define('io.ox/core/folder/api', [
     }
 
     function injectIndex(id, item, index) {
-        if (!item.index) item.index = {};
-        item.index[id] = index;
+        item['index/' + id] = index;
         return item;
     }
 
@@ -88,7 +87,7 @@ define('io.ox/core/folder/api', [
             this.fetched = false;
         },
         comparator: function (model) {
-            return (model.get('index') || {})[this.id] || 0;
+            return model.get('index/' + this.id) || 0;
         },
         model: FolderModel
     });
@@ -103,15 +102,17 @@ define('io.ox/core/folder/api', [
     _.extend(Pool.prototype, {
 
         addModel: function (data) {
-            var id = data.id;
-            if (this.models[id] === undefined) {
+
+            var id = data.id, model = this.models[id];
+
+            if (model === undefined) {
                 // add new model
-                this.models[id] = new FolderModel(data);
+                this.models[id] = model = new FolderModel(data);
             } else {
                 // update existing model
-                this.models[id].set(data);
+                model.set(data);
             }
-            return this.models[id];
+            return model;
         },
 
         addCollection: function (id, list, options) {
@@ -666,6 +667,7 @@ define('io.ox/core/folder/api', [
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
                 api.trigger('create', data);
+                api.trigger('create:' + id, data);
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
@@ -933,7 +935,8 @@ define('io.ox/core/folder/api', [
         getSection: getSection,
         Bitmask: Bitmask,
         propagate: propagate,
-        altnamespace: altnamespace
+        altnamespace: altnamespace,
+        injectIndex: injectIndex
     });
 
     return api;

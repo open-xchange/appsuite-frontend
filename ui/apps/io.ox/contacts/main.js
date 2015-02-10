@@ -168,7 +168,12 @@ define('io.ox/contacts/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target').attr('tabindex', 1).scrollable();
+            app.right = right.addClass('default-content-padding f6-target')
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Contact Details')
+                }).scrollable();
         },
 
         'vgrid': function (app) {
@@ -782,7 +787,11 @@ define('io.ox/contacts/main', [
         app.setWindow(win);
         app.settings = settings;
 
-        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">');
+        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
+            .attr({
+                role: 'navigation',
+                'aria-label': gt('Item List')
+            });
 
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,

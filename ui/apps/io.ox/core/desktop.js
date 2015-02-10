@@ -1008,7 +1008,7 @@ define('io.ox/core/desktop', [
                         return $('<nav class="window-toolbar">')
                             .addClass('f6-target')
                             .attr({
-                                'role': 'navigation',
+                                'role': 'toolbar',
                                 'aria-label': gt('Application Toolbar')
                             });
                     }
@@ -1409,7 +1409,7 @@ define('io.ox/core/desktop', [
                         .attr({
                             role: 'navigation',
                             //#. search: leftside sidepanel container that shows active and available facets
-                            'aria-label': gt('Search Facets')
+                            'aria-label': gt('Search Options')
                         });
                         // add nodes
                         side.append(nodes.container);
@@ -1520,7 +1520,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body">')
+                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window'))
                     )
                     // capture controller events
                     .on('controller:quit', function () {
@@ -1567,6 +1567,7 @@ define('io.ox/core/desktop', [
                     index: 200,
                     draw: function () {
                         var node = this.nodes.facetedsearch.toolbar,
+                            //#. search feature help text for screenreaders
                             label = gt('Search'),
                             id = win.name + '-search-field',
                             guid = _.uniqueId('form-control-description-'),
@@ -1574,22 +1575,77 @@ define('io.ox/core/desktop', [
 
                         // input group and dropdown
                         node.append(
-                            group = $('<div class="input-group">').append(
-                                $('<input type="text">')
+                            group = $('<div class="input-group">')
+                                .append(
+                                        $('<input type="text">')
+                                        .attr({
+                                            class: 'form-control search-field f6-target',
+                                            tabindex: 1,
+                                            role: 'navigation',
+                                            'aria-label': gt('Search within application'),
+                                            id: id,
+                                            placeholder: label + ' ...',
+                                            'aria-describedby': guid
+                                        }),
+                                        $('<label class="sr-only">')
+                                            .attr('for', id)
+                                            .text(label),
+                                        $('<p class="sr-only sr-description">')
+                                            .attr({
+                                                id: guid,
+                                            })
+                                            .text(
+                                                //#. search feature help text for screenreaders
+                                                gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                            )
+                                )
+                        );
+                    }
+                });
+                // hint: listener is implemented in search/autocomplete/extensions
+                // ext.point(win.name + '/facetedsearch/view').extend({
+                //     id: 'clear',
+                //     index: 250,
+                //     draw: function () {
+
+                //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
+                //         group.append(
+                //             $('<a href="#">')
+                //                 .attr({
+                //                     'tabindex': '1',
+                //                     'class': 'btn-clear',
+                //                 }).append(
+                //                     $('<i class="fa fa-times"></i>')
+                //                 )
+                //                 .on('click', function (e) {
+                //                     e.preventDefault();
+                //                 })
+                //         );
+                //     }
+                // });
+
+                ext.point(win.name + '/facetedsearch/view').extend({
+                    id: 'action',
+                    index: 300,
+                    draw: function () {
+                        var group = this.nodes.facetedsearch.toolbar.find('.input-group');
+                        group.append(
+                            $('<span class="input-group-btn">').append(
+                                // submit
+                                $('<button type="button">')
                                 .attr({
-                                    class: 'form-control search-field f6-target',
-                                    tabindex: 1,
-                                    role: 'search',
-                                    id: id,
-                                    placeholder: label + ' ...',
-                                    'aria-describedby': guid
-                                }),
-                                $('<label class="sr-only">').attr('for', id).text(label),
-                                $('<p class="sr-only sr-description">').attr({ id: guid })
-                                    .text(
-                                        //#. search feature help text for screenreaders
-                                        gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-                                    )
+                                    'tabindex': '1',
+                                    'class': 'btn btn-default btn-search',
+                                    'data-toggle': 'tooltip',
+                                    'data-placement': 'bottom',
+                                    'data-animation': 'false',
+                                    'data-container': 'body',
+                                    'data-original-title': gt('Start search'),
+                                    'aria-label': gt('Start search')
+                                })
+                                .append(
+                                    $('<i class="fa fa-search"></i>')
+                                )
                             )
                         );
                     }

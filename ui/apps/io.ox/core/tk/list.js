@@ -326,7 +326,9 @@ define('io.ox/core/tk/list', [
                 'before:paginate': this.busy,
                 'paginate': this.idle,
                 'paginate:fail': this.idle,
-                'complete': this.onComplete
+                'complete': this.onComplete,
+                // reload
+                'reload': this.idle
             });
             if (this.selection) this.selection.reset();
             this.trigger('collection:set');

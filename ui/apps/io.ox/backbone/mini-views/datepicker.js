@@ -94,7 +94,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             $('<label class="sr-only">').attr('for', guid).text(gt('Time')),
                             self.nodes.timeField,
                             self.nodes.a11yTime,
-                            '&nbsp;',
+                           '&nbsp;',
                             self.nodes.timezoneField
                         ];
                     }
@@ -109,13 +109,17 @@ define('io.ox/backbone/mini-views/datepicker', [
                     if (self.options.clearButton) {
                         self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
                     }
-                    if (self.options.display === 'DATETIME') {
-                        self.mobileSettings.preset = 'datetime';
+                    if (!self.isFullTime()) {
+                       self.mobileSettings.preset = 'datetime';
                     }
 
                     // initialize mobiscroll plugin
                     self.nodes.dayField.mobiscroll(mobileSettings);
+<<<<<<< HEAD
                     def.resolve();
+=======
+                   self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+>>>>>>> release-7.6.2
                 });
             } else {
                 require(['io.ox/core/tk/datepicker'], function () {
@@ -168,8 +172,8 @@ define('io.ox/backbone/mini-views/datepicker', [
             var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             if (!this.mobileMode) {
-                this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
                 this.nodes.timeField.val(new date.Local(timestamp).format(date.TIME));
+                this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
                 this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(timestamp || _.now()).abbr));
             } else {
                 this.nodes.dayField.val(this.getDateStr(timestamp));
@@ -186,9 +190,17 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
         },
 
+        isFullTime: function () {
+            if (this.model.has('full_time')) {
+                return !!this.model.get('full_time');
+            } else {
+                return this.options.display === 'DATE';
+            }
+        },
+
         getDateStr: function (timestamp) {
             var val = new date.Local(timestamp);
-            if (this.options.display === 'DATETIME' && this.mobileMode) {
+            if (!this.isFullTime() && this.mobileMode) {
                 return val.format(date.DATE) + ' ' + val.format(date.TIME);
             }
             return val.format(date.DATE);
@@ -196,19 +208,18 @@ define('io.ox/backbone/mini-views/datepicker', [
 
         getTimestamp: function () {
             var dateStr = this.nodes.dayField.val(),
-                formatStr = date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME);
+                formatStr = date.getFormat(date.DATE);
             //
             if (dateStr === '') {
                 return null;
             }
 
-            if (!this.mobileMode && this.options.display === 'DATETIME') {
-                dateStr += ' ' + this.nodes.timeField.val();
-            }
-
-            // change format string for date only mode
-            if (this.options.display === 'DATE' || this.nodes.timeField.val() === '') {
-                formatStr = date.DATE;
+            // change format string for datetime if timefield is present
+            if (!this.isFullTime()) {
+                if (!this.mobileMode && this.nodes.timeField.val() !== '') {
+                    dateStr += ' ' + this.nodes.timeField.val();
+                }
+                formatStr += ' ' + date.getFormat(date.TIME);
             }
 
             // parse string to timestamp
@@ -239,13 +250,11 @@ define('io.ox/backbone/mini-views/datepicker', [
 
         // toggle time input fields
         toggleTimeInput: function (show) {
-            this.options.display = show ? 'DATETIME' : 'DATE';
             if (this.mobileMode) {
                 this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
             } else {
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');
             }
-            this.updateView();
         }
     });
 

@@ -377,7 +377,8 @@ define('io.ox/calendar/week/perspective', [
                 .addClass('week-view')
                 .empty()
                 .attr({
-                    'role': 'main'
+                    'role': 'navigation',
+                    'aria-label': gt('Appointment list')
                 });
 
             this.collection = new Backbone.Collection([]);

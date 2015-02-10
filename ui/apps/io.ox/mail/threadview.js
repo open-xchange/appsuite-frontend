@@ -45,7 +45,7 @@ define('io.ox/mail/threadview', [
                         $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
                         $('<a href="#" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
                     )
-                )
+                ).attr('role', 'toolbar')
             );
         }
     });
