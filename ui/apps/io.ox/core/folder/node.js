@@ -127,7 +127,7 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed.index !== undefined) {
+            if (model.changed[this.getIndexAttribute()] !== undefined) {
                 this.renderAttributes();
                 if (this.options.parent.onSort) this.options.parent.onSort();
             }
@@ -320,7 +320,7 @@ define('io.ox/core/folder/node', [
                     'aria-level'    : o.level + 1,
                     'aria-selected' : false,
                     'data-id'       : this.folder,
-                    'data-index'    : this.model.get('index'),
+                    'data-index'    : this.getIndex(),
                     'data-model'    : o.model_id,
                     'role'          : 'treeitem',
                     'tabindex'      : '-1'
@@ -442,9 +442,21 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.model.get('index'),
+                'data-index': this.getIndex(),
                 'data-model': this.model_id
             });
+        },
+
+        getIndexAttribute: function () {
+            var parent = this.options.parent;
+            if (!parent || !parent.collection) return undefined;
+            return 'index/' + parent.collection.id;
+        },
+
+        getIndex: function () {
+            var attribute = this.getIndexAttribute();
+            if (attribute === undefined) return 0;
+            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {

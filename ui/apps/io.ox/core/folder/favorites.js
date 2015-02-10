@@ -42,6 +42,7 @@ define('io.ox/core/folder/favorites',
             return api.multiple(favorites).then(function (response) {
                 // compact() removes non-existent entries
                 var list = _(response).compact();
+                _(list).each(api.injectIndex.bind(api, id));
                 model.set('subfolders', list.length > 0);
                 // if there was an error we update settings
                 if (list.length !== response.length) storeCollection();
@@ -87,7 +88,9 @@ define('io.ox/core/folder/favorites',
         var id = e.data.id,
             module = e.data.module,
             model = api.pool.getModel(id),
-            collection = api.pool.getCollection('virtual/favorites/' + module);
+            collectionId = 'virtual/favorites/' + module,
+            collection = api.pool.getCollection(collectionId);
+        model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
     }

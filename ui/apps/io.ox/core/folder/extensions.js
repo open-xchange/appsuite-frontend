@@ -99,7 +99,7 @@ define('io.ox/core/folder/extensions',
             });
 
             // open "My folders" whenever a folder is added to INBOX/root
-            api.pool.getCollection(defaultId).on('add', function () {
+            api.on('create:' + defaultId, function () {
                 node.toggle(true);
             });
 
