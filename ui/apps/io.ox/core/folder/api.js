@@ -102,7 +102,7 @@ define('io.ox/core/folder/api',
 
             if (model === undefined) {
                 // add new model
-                this.models[id] = new FolderModel(data);
+                this.models[id] = model = new FolderModel(data);
             } else {
                 // update existing model
                 model.set(data);
