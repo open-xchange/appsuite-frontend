@@ -62,7 +62,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
         }
     });
     if (!fileFound && !data) {
-        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
+        callback({ type: 'File', message: "'" + less.modules.path(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
         return;
     }
 
