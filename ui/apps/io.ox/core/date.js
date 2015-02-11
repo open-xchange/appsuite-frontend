@@ -985,8 +985,8 @@ define.async('io.ox/core/date', [
     }).pipe(null, function () {
         return require(['text!io.ox/core/date/date.root.json']);
     }).done(function (locale) {
-         if (_.isObject(locale)) {
-            api.locale = locale;
+        if (_.isObject(locale)) {
+            api.locale = locale; // in cordova based setups locale is already a JSON
         } else {
             api.locale = JSON.parse(locale);
         }

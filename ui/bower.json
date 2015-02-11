@@ -30,7 +30,8 @@
     "bootstrap-tokenfield": "0.12.1",
     "typeahead.js": "0.10.5",
     "mobiscroll": "2.14.4",
-    "marked": "~0.3.3"
+    "marked": "~0.3.3",
+    "velocity": "~1.2.1"
   },
   "resolutions": {
     "bootstrap": "3.3.1"

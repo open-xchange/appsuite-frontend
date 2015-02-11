@@ -731,7 +731,7 @@ define('io.ox/core/main', [
                     tabManager();
                 } else {
                     //lets wait till we are online
-                    ox.one('connection:online', function () {
+                    ox.once('connection:online', function () {
                         self.append(notifications.attach(addLauncher, 2000));
                         tabManager();
                     });
