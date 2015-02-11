@@ -255,6 +255,10 @@ define('io.ox/core/folder/api', [
         });
     };
 
+    VirtualFolder.prototype.fetch = function () {
+        return this.getter().done(pool.addCollection.bind(pool, getCollectionId(this.id)));
+    };
+
     var virtual = {
 
         hash: {},
@@ -274,6 +278,10 @@ define('io.ox/core/folder/api', [
             return $.when.apply($, arguments).then(function () {
                 return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
             });
+        },
+
+        refresh: function () {
+            _(this.hash).invoke('fetch');
         }
     };
 
@@ -861,7 +869,9 @@ define('io.ox/core/folder/api', [
             flat({ module: module, cache: false });
         });
         // go!
-        http.resume();
+        http.resume().done(function () {
+            virtual.refresh();
+        });
     }
 
     ox.on('please:refresh refresh^', refresh);
