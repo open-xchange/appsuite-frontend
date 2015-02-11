@@ -12,8 +12,7 @@
  */
 
 define('io.ox/core/tk/list-selection', [
-    'settings!io.ox/core',
-    '3rd.party/velocity/velocity.min.js'
+    'settings!io.ox/core'
 ], function (settings) {
 
     'use strict';
@@ -33,6 +32,10 @@ define('io.ox/core/tk/list-selection', [
         tension = 350,
         friction = 20,
         animDuration = 625;
+
+    if (_.device('smartphone')) {
+        require(['3rd.party/velocity/velocity.min.js']);
+    }
 
     function Selection(view) {
 
