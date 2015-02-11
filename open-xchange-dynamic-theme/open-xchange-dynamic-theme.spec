@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 6
+%define         ox_release 7
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -54,6 +54,8 @@ if [ -x %{update} ]; then %{update}; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
+* Wed Feb 11 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Seventh candidate for 7.6.2 release
 * Fri Jan 30 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Sixth candidate for 7.6.2 release
 * Tue Jan 27 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
