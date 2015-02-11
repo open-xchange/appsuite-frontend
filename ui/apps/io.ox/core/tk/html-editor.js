@@ -525,6 +525,25 @@ define.async('io.ox/core/tk/html-editor',
             return $('iframe', ed.getContentAreaContainer());
         };
 
+        var gc = {
+
+            items: [],
+
+            collect: function (obj) {
+                if (!_.isObject(obj)) return;
+                if (obj._elmCache) this.items.push(obj);
+                if (obj._items) obj._items.each(this.collect.bind(this));
+            },
+
+            run: function () {
+                _(this.items).each(function (item) {
+                    // clear internal _elmCache manually to avoid leaks
+                    item._elmCache = {};
+                });
+                this.items = [];
+            }
+        };
+
         this.destroy = function () {
             this.handleHide();
             if (ed) {
@@ -532,9 +551,16 @@ define.async('io.ox/core/tk/html-editor',
                 this.getContainer().attr('src', 'blank.html');
                 $(ed.getWin()).off('focus blur');
             }
+            if (ed && ed.theme && ed.theme.panel) {
+                // we need to collect all items first
+                // some items are removed by TinyMCE's internal "remove" function
+                // some items are added, however
+                gc.collect(ed.theme.panel);
+            }
             if (textarea.tinymce()) {
                 textarea.tinymce().remove();
             }
+            gc.run();
             textarea = textarea.tinymce = def = ed = null;
         };
     }

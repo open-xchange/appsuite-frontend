@@ -86,7 +86,6 @@ define('io.ox/core/tk/view',
             this.model.off('change error:invalid');
             this.node.off('update.model');
             this.node.empty().remove();
-            this.model.destroy();
             this.node = this.model = null;
         }
     };

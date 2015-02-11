@@ -1450,8 +1450,10 @@ define('io.ox/mail/write/main',
                 // clear timer for autosave
                 stopAutoSave(app);
                 app.clearKeepalive();
+                // destroy view
+                view.destroy();
                 // clear all private vars
-                app = win = editor = currentSignature = editorHash = null;
+                app = win = view = editor = currentSignature = editorHash = null;
             };
 
             if (app.dirty()) {
