@@ -935,7 +935,6 @@ define('io.ox/mail/main', [
                 // resolve thread
                 baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
-                console.log('delete', baton);
                 actions.invoke('io.ox/mail/actions/delete', null, baton);
             });
         },

@@ -13,8 +13,7 @@
 
 define('io.ox/core/tk/list-selection', [
     'settings!io.ox/core',
-    'static/3rd.party/velocity/velocity.js',
-    'static/3rd.party/velocity/velocity.ui.js'
+    '3rd.party/velocity/velocity.min.js'
 ], function (settings) {
 
     'use strict';
@@ -503,8 +502,6 @@ define('io.ox/core/tk/list-selection', [
                 this.target = null;
                 this.t0 = 0;
                 this.otherUnfolded = false;
-                console.log('reset cell animation ONCE');
-
                 $(self).velocity({
                     'translateX': [0, [tension, friction], a]
                 }, {
@@ -585,26 +582,20 @@ define('io.ox/core/tk/list-selection', [
                         //'-webkit-transform': 'translateX(' + this.distanceX + 'px)',
                         'transform': 'translate3d(' + this.distanceX + 'px,0,0)'
                     });
-                    console.log('Translating to', this.distanceX);
                 }
                 // if delete threshold is reached, enlarge delete button over whole cell
                 if (Math.abs(this.distanceX) >= THRESHOLD_REMOVE && !this.expandDelete) {
-                    console.log('hier bin ich');
                     this.expandDelete = true;
                     this.btnMore.hide();
 
-                    console.log('enlarge animation-> ONCE');
                     this.btnDelete.velocity({
                         width: ['100%', [tension, friction]]
                     }, {
                         duration: 300
                     });
 
-                    //this.btnDelete.css('transition', 'width 100ms');
-                    //this.btnDelete.css('width', '100%');
                 } else if (this.expandDelete && Math.abs(this.distanceX) <= THRESHOLD_REMOVE) {
                     // remove style
-                    console.log('expandDelete remove-> ONCE');
                     this.expandDelete = false;
                     this.btnDelete.velocity({
                         width: ['95px', [tension, friction]]
@@ -612,8 +603,6 @@ define('io.ox/core/tk/list-selection', [
                         duration: 300
                     });
                     this.btnMore.show();
-                    //this.btnMore.removeAttr('style');
-                    //this.btnDelete.removeAttr('style');
                 }
             }
         },
@@ -628,8 +617,6 @@ define('io.ox/core/tk/list-selection', [
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
-                console.log('reset cell', this.distanceX);
-
                 e.data.resetSwipeCell.call(e.data.currentSelection, distanceX === 0 ? -LOCKDISTANCE : distanceX);
                 return false; // don't do a select after this
             }
@@ -651,11 +638,6 @@ define('io.ox/core/tk/list-selection', [
 
             cell = $(this); // save for later animation
             if (this.unfold) {
-                console.log('forcefeed distanceX', distanceX);
-
-                this.unfold = true;
-                //this.btnMore.removeAttr('style');
-                //this.btnDelete.removeAttr('style');
                 this.expandDelete = false;
 
                 cell.velocity({
@@ -671,7 +653,6 @@ define('io.ox/core/tk/list-selection', [
                 e.data.unfold = true;
                 e.data.currentSelection = this; // save this for later use
             } else if (this.remove) {
-                console.log('kick of remove animations');
                 var self = this;
 
                 $(this).velocity({
@@ -682,9 +663,7 @@ define('io.ox/core/tk/list-selection', [
                         self.btnMore.remove();
                         self.startX = 0;
                         self.startY = 0;
-                        console.log('cell data', cell.data());
                         cell.data('velocity').transformCache = {};
-
                         var cellsBelow = $(self).nextAll();
                         cellsBelow.velocity({
                             translateY: '-62px'
@@ -710,7 +689,6 @@ define('io.ox/core/tk/list-selection', [
                     }
                 });
             } else if (distanceX) {
-                console.log('reset 2');
                 e.data.resetSwipeCell.call(this, Math.abs(distanceX));
                 return false;
             }

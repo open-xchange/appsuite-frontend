@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'bower_components',
-                        src: ['velocity/*.min.js'],
+                        src: ['velocity/velocity.min.js'],
                         dest: 'build/apps/3rd.party/'
                     }
                 ]
