@@ -247,6 +247,21 @@ define('io.ox/core/folder/extensions',
         }
     );
 
+    ext.point('io.ox/core/foldertree/mail/filter').extend(
+        {
+            id: 'standard-folders',
+            draw: extensions.standardFolders
+        },
+        {
+            id: 'local-folders',
+            draw: extensions.localFolders
+        },
+        {
+            id: 'other',
+            draw: extensions.otherFolders
+        }
+    );
+
     //
     // Files / Drive
     //
