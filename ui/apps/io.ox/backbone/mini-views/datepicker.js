@@ -205,17 +205,20 @@ define('io.ox/backbone/mini-views/datepicker', [
         getTimestamp: function () {
             var dateStr = this.nodes.dayField.val(),
                 formatStr = date.getFormat(date.DATE);
-            //
-            if (dateStr === '') {
-                return null;
-            }
+
+            // empty?
+            if (dateStr === '')  return null;
 
             // change format string for datetime if timefield is present
             if (!this.isFullTime()) {
-                if (!this.mobileMode && this.nodes.timeField.val() !== '') {
-                    dateStr += ' ' + this.nodes.timeField.val();
-                }
                 formatStr += ' ' + date.getFormat(date.TIME);
+                if (!this.mobileMode) {
+                    if (this.nodes.timeField && this.nodes.timeField.val() !== '') {
+                        dateStr += ' ' + this.nodes.timeField.val();
+                    } else {
+                        formatStr = date.getFormat(date.DATE);
+                    }
+                }
             }
 
             // parse string to timestamp

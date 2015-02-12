@@ -396,7 +396,7 @@ define('io.ox/mail/detail/content', [
             if (baton.options.autoCollapseBlockquotes === false) return;
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)
-            this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
+            this.find('blockquote:not(blockquote blockquote)').each(function () {
                 var text = getText(this);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
                 $(this).addClass('collapsed-blockquote').after(

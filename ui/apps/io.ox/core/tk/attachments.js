@@ -220,6 +220,7 @@ define('io.ox/core/tk/attachments', [
      * @param {object} baton
      */
     function EditableFileList(options, baton) {
+
         var self = this,
             counter = 0,
             files = [],
@@ -235,8 +236,14 @@ define('io.ox/core/tk/attachments', [
 
             init: function () {
                 // add preview side-popup
-                new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
+                this.sidepopup = new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
+                // destroy if removed from DOM
+                $el.on('dispose', this.destroy.bind(this));
+            },
 
+            destroy: function () {
+                this.sidepopup.undelegate($el).destroy();
+                this.sidepopup = $el = self = options = baton = null;
             },
 
             render: function () {
