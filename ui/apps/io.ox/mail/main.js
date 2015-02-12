@@ -925,6 +925,21 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Handle archive event based on keyboard shortcut
+         */
+        'selection-archive': function () {
+            app.listView.on('selection:archive', function (list) {
+                var baton = ext.Baton({ data: list });
+                // remember if this list is based on a single thread
+                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
+                // resolve thread
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                // call action
+                actions.invoke('io.ox/mail/actions/archive', null, baton);
+            });
+        },
+
+        /*
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {

@@ -403,6 +403,8 @@ define('io.ox/core/tk/list-selection', [
                 if (e.ctrlKey || e.metaKey) {
                     e.preventDefault();
                     this.selectAll();
+                } else {
+                    this.view.trigger('selection:archive', this.get());
                 }
                 break;
 

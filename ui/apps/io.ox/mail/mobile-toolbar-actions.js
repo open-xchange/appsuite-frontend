@@ -107,6 +107,16 @@ define('io.ox/mail/mobile-toolbar-actions', [
             label: gt('Copy'),
             ref: 'io.ox/mail/actions/copy',
             section: 'file-op'
+        },
+        'archive': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-archive',
+            drawDisabled: true,
+            label: gt('Archive'),
+            section: 'file-op',
+            ref: 'io.ox/mail/actions/archive',
+            cssClasses: 'io-ox-action-link mobile-toolbar-action'
         }
     };
 
@@ -130,7 +140,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
     addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
 
     //multiselect in listview
-    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
+    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move', 'archive']);
 
     pointDetailView.extend(new links.Dropdown({
         id: 'test',
