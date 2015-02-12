@@ -76,7 +76,7 @@ define('io.ox/core/extPatterns/links',
                         'data-animation': 'false',
                         'data-container': 'body',
                         // tooltip removes title attribute
-                        'aria-label': self.title || self.label || ''
+                        'aria-label': !self.label ? self.title || null : null
                     })
                     .tooltip()
                     .on('dispose', function () {
