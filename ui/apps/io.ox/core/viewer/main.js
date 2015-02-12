@@ -21,6 +21,24 @@ define('io.ox/core/viewer/main', [
     'use strict';
 
     /**
+     * Extracts the file list from the baton of the Viewer launch action.
+     *
+     * @param {Object} baton
+     *  The baton object delivered by the Viewer launch action.
+     *
+     * @returns {Array|null}
+     *  The file list or null.
+     */
+    function getFileList (baton) {
+        if (!baton) { return null; }
+        // Drive has the list in the allIds property, Mail in the root
+        if (_.isArray(baton.allIds)) { return baton.allIds; }
+        if (_.isArray(baton)) { return baton; }
+
+        return null;
+    }
+
+    /**
      * The OX Viewer component
      *
      * @constructor
@@ -31,12 +49,11 @@ define('io.ox/core/viewer/main', [
          */
         this.launch = function (baton) {
             //console.warn('Main.launch() ');
-            if (!baton) {
+            var fileList = getFileList(baton);
+            if (!fileList) {
                 console.error('Core.Viewer.launch(): no files to preview.');
                 return;
             }
-            // Drive has the list in the allIds property, Mail in the root
-            var fileList = baton.allIds || baton;
             // create file collection and populate it with file models
             this.fileCollection = new backbone.Collection();
             this.fileCollection.set(fileList, { parse: true });
