@@ -63,7 +63,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
                             ariaID = guid + '-aria',
-                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date'));
+                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + date.getInputFormat(date.DATE) + ')');
 
                         self.nodes.dayField = $('<input>').attr({
                             id: guid,
@@ -106,7 +106,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             self.nodes.dayField,
                             self.nodes.a11yDate,
                             '&nbsp;',
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Time')),
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + date.getInputFormat(date.TIME) + ')'),
                             self.nodes.timeField,
                             self.nodes.a11yTime,
                            '&nbsp;',
@@ -125,12 +125,12 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
                     }
                     if (!self.isFullTime()) {
-                       self.mobileSettings.preset = 'datetime';
+                        self.mobileSettings.preset = 'datetime';
                     }
 
                     // initialize mobiscroll plugin
                     self.nodes.dayField.mobiscroll(mobileSettings);
-                   self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+                    self.nodes.dayField.on('change', _.bind(self.updateModel, self));
                 });
             } else {
                 // get the right date format and init datepicker

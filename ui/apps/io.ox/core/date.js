@@ -69,6 +69,15 @@ define.async('io.ox/core/date',
             return format;
         },
 
+        getInputFormat: function (format) {
+            return this.getFormat(format).replace(/(y+)|(M+)|(d+)/g, function (_, y, m, d) {
+                return y ? gt('yyyy') :
+                       m ? gt('MM') :
+                       d ? gt('dd') :
+                       _;
+            });
+        },
+
         /**
          * Formats a duration as a string
          * @param {Number} t The duration in milliseconds
