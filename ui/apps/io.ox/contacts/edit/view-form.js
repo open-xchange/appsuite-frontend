@@ -25,8 +25,10 @@ define('io.ox/contacts/edit/view-form',
      'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/attachments',
      'gettext!io.ox/contacts',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/util',
      'less!io.ox/contacts/edit/style'
-    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
+    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils) {
 
     'use strict';
 
@@ -151,7 +153,21 @@ define('io.ox/contacts/edit/view-form',
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact'
+                className: 'edit-contact compact',
+                init: function (o) {
+                    // see Bug 36592
+                    if (o && o.model.get('folder_id')) {
+                        folderApi.get(o.model.get('folder_id')).done(function (folderData) {
+                            if (folderUtils.is('public', folderData)) {
+                                ext.point('io.ox/contacts/edit/personal').disable('private_flag');
+                            } else {
+                                ext.point('io.ox/contacts/edit/personal').enable('private_flag');
+                            }
+                        });
+                    } else {
+                        ext.point('io.ox/contacts/edit/personal').enable('private_flag');
+                    }
+                }
             });
 
         point.extend(new PictureUpload({
