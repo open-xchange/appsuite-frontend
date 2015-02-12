@@ -85,9 +85,15 @@ define('io.ox/core/folder/api', [
             Backbone.Collection.apply(this, arguments);
             this.id = id;
             this.fetched = false;
+            this.bind('remove', this.onRemove, this);
         },
         comparator: function (model) {
             return model.get('index/' + this.id) || 0;
+        },
+        onRemove: function (model) {
+            if (!isFlat(model.get('module'))) {
+                pool.getModel(this.id).set('subfolders', this.length > 0);
+            }
         },
         model: FolderModel
     });
@@ -688,21 +694,7 @@ define('io.ox/core/folder/api', [
     //
 
     function removeFromCollection(model) {
-        // flat folders are different
-        var module = model.get('module'), section, parent, collection;
-        if (isFlat(module)) {
-            // contacts, calendar, tasks
-            section = getSection(model.get('type'));
-            collection = getFlatCollection(module, section);
-            collection.remove(model);
-        } else {
-            // mail and drive
-            parent = model.get('folder_id');
-            collection = pool.getCollection(parent);
-            collection.remove(model);
-            // update parent folder; subfolders might have changed
-            pool.getModel(parent).set('subfolders', collection.length > 0);
-        }
+        _(pool.collections).invoke('remove', model);
     }
 
     function remove(id) {
