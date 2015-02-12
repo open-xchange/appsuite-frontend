@@ -470,13 +470,12 @@ define('io.ox/core/extPatterns/links',
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                toggle = $('<a>').attr({
-                    href: '#',
-                    tabindex: 1,
+                toggle = $('<a href="#" role="button" tabindex="1">').attr({
                     'data-toggle': 'dropdown',
                     'aria-haspopup': true,
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
-                }).append(
+                })
+                .append(
                     options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
                     options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
                 ),

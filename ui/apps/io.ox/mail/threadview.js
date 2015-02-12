@@ -57,7 +57,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view" role="listbox">')
+                    this.$messages = $('<div class="thread-view list-view">')
                 )
             );
         }
@@ -69,7 +69,7 @@ define('io.ox/mail/threadview',
         draw: function (baton) {
             if (baton.view.collection.length <= 1) return;
             this.append(
-                $('<a href="#" class="toggle-all" tabindex="1">')
+                $('<a href="#" role="button" class="toggle-all" tabindex="1">')
                 .append('<i class="fa fa-angle-double-down">')
                 .attr({
                     'data-toggle': 'tooltip',
@@ -126,7 +126,7 @@ define('io.ox/mail/threadview',
         },
 
         empty: function () {
-            this.$ul.empty();
+            this.$messages.empty();
             this.$el.scrollTop(0);
             this.$el.find('.thread-view-list').hide();
             this.model = null;
@@ -188,7 +188,7 @@ define('io.ox/mail/threadview',
         },
 
         toggleMail: function (cid, state) {
-            var $li = this.$ul.children('[data-cid="' + $.escape(cid) + '"]'),
+            var $li = this.$messages.children('[data-cid="' + $.escape(cid) + '"]'),
                 view = $li.data('view');
             if (view) view.toggle(state);
         },
@@ -244,7 +244,7 @@ define('io.ox/mail/threadview',
                 this.empty();
                 return;
             } else {
-                this.$ul.empty();
+                this.$messages.empty();
                 this.$el.scrollTop(0);
             }
 
@@ -253,7 +253,7 @@ define('io.ox/mail/threadview',
             this.$el.find('.thread-view-list').show();
 
             // draw thread list
-            this.$ul.append(
+            this.$messages.append(
                 this.collection.chain().map(this.renderListItem, this).value()
             );
 
@@ -268,10 +268,10 @@ define('io.ox/mail/threadview',
                 li = this.renderListItem(model);
 
             // insert or append
-            if (index < children.length) children.eq(index).before(li); else this.$ul.append(li);
+            if (index < children.length) children.eq(index).before(li); else this.$messages.append(li);
 
             if (li.position().top <= 0) {
-                this.$ul.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
+                this.$messages.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
             }
 
             this.zIndex();
@@ -282,12 +282,12 @@ define('io.ox/mail/threadview',
 
             var children = this.getItems(),
                 li = children.filter('[data-cid="' + model.cid + '"]'),
-                top = this.$ul.scrollTop();
+                top = this.$messages.scrollTop();
 
             if (li.length === 0) return;
 
             if (li.position().top < top) {
-                this.$ul.scrollTop(top - li.outerHeight(true));
+                this.$messages.scrollTop(top - li.outerHeight(true));
             }
 
             li.remove();
@@ -354,7 +354,7 @@ define('io.ox/mail/threadview',
                 remove: this.onPoolRemove
             });
 
-            this.$ul = $();
+            this.$messages = $();
 
             this.$el.on('toggle', '.list-item', this.onToggle.bind(this));
 
@@ -369,7 +369,7 @@ define('io.ox/mail/threadview',
 
         // return alls items of this list
         getItems: function () {
-            return this.$ul.children('.list-item');
+            return this.$messages.children('.list-item');
         },
 
         // render scaffold
@@ -380,8 +380,8 @@ define('io.ox/mail/threadview',
 
         // render an email
         renderListItem: function (model) {
-            var view = new detail.View({ tagName: 'li', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
-            return view.render().$el.attr({ role: 'listitem', tabindex: '1' });
+            var view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            return view.render().$el.attr({ tabindex: '1' });
         },
 
         // update zIndex for all list-items (descending)
@@ -401,7 +401,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view">')
+                    this.$messages = $('<ul class="thread-view list-view">')
                 )
             );
         }
@@ -435,7 +435,7 @@ define('io.ox/mail/threadview',
                 reset: this.onReset
             });
 
-            this.$ul = $();
+            this.$messages = $();
         },
 
         // render an email
