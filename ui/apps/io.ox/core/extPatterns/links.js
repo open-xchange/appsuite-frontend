@@ -390,8 +390,9 @@ define('io.ox/core/extPatterns/links',
             // move to real target node at dummy's position
             if (baton.$.positionDummy) {
                 baton.$.positionDummy.before(nav.children());
-                //remove dummy
+                // now remove dummy
                 baton.$.positionDummy.remove();
+                delete baton.$.positionDummy;
             }
 
             // clear
@@ -408,11 +409,13 @@ define('io.ox/core/extPatterns/links',
                 // needed to keep the position or extensionpoint index would be ignored
                 baton.$.positionDummy = $('<div class="position-dummy">').hide();
                 baton.$el.append(baton.$.positionDummy);
-                baton.$el = null;
             }
 
             drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
                 .done(_.lfo(true, processItems, baton));
+
+            delete baton.$.temp;
+            delete baton.$el;
         };
     };
 
