@@ -29,7 +29,6 @@ define('io.ox/participants/views',
         },
 
         render: function () {
-
             var self = this;
 
             // we set the class this way because some controller pass an existing node
@@ -41,8 +40,8 @@ define('io.ox/participants/views',
             this.nodes = {
                 $img: $('<div>'),
                 $text: $('<div class="participant-name">'),
-                $mail: $('<a class="participant-email">'),
-                $extra: $('<a class="extra-decorator">'),
+                $mail: $('<a>'),
+                $extra: $('<a>'),
                 $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
@@ -70,8 +69,8 @@ define('io.ox/participants/views',
             this.$el.append(
                 this.nodes.$img,
                 this.nodes.$text,
-                $('<div>').append(this.nodes.$mail),
-                $('<div>').append(this.nodes.$extra),
+                $('<div class="participant-email">').append(this.nodes.$mail),
+                $('<div class="extra-decorator">').append(this.nodes.$extra),
                 this.nodes.$removeButton
             );
 

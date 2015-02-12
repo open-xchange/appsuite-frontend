@@ -22,7 +22,6 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-
     var //last results, used to identify internal Users
         lastSearchResults = [],
         blackList = {},
@@ -152,7 +151,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
                         // apply a11y
                         this.attr({
-                            'aria-label': this.find('.participant-name').text() + ' ' + this.find('.participant-email').text() ,
+                            'aria-label': pview.nodes.$text.text() + ' ' + pview.nodes.$mail.text() ,
                             'tabIndex': 1
                         });
                     },
