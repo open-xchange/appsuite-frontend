@@ -300,7 +300,7 @@ define('io.ox/core/tk/vgrid',
             },
 
             topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
-                .prependTo(node),
+                .appendTo(node),
             toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
                 .attr({
                     role: 'toolbar',
@@ -324,7 +324,7 @@ define('io.ox/core/tk/vgrid',
                             .append($('<i class="fa fa-th-list">'))
                             .on('click', { grid: this }, fnToggleEditable)
                 )
-                .appendTo(node),
+                .prependTo(node),
             // item template
             template = new Template({tempDrawContainer: container}),
             // label template

@@ -232,7 +232,6 @@ define('io.ox/calendar/main',
                     gt('Back')
                 );
 
-
             app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
             });
@@ -254,7 +253,6 @@ define('io.ox/calendar/main',
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
         },
-
 
         /*
          * VGrid
