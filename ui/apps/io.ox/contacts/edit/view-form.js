@@ -25,8 +25,8 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/attachments',
     'gettext!io.ox/contacts',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/util',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/util',
     'less!io.ox/contacts/edit/style'
 ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils) {
 
@@ -172,6 +172,7 @@ define('io.ox/contacts/edit/view-form', [
                 render: function () {
                     this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
                     return this;
+                },
                 init: function (o) {
                     // see Bug 36592
                     if (o && o.model.get('folder_id')) {
