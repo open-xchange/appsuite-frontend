@@ -85,15 +85,14 @@ define('io.ox/core/folder/api', [
             Backbone.Collection.apply(this, arguments);
             this.id = id;
             this.fetched = false;
-            this.bind('remove', this.onRemove, this);
+            this.on('remove', this.onRemove, this);
         },
         comparator: function (model) {
             return model.get('index/' + this.id) || 0;
         },
         onRemove: function (model) {
-            if (!isFlat(model.get('module'))) {
-                pool.getModel(this.id).set('subfolders', this.length > 0);
-            }
+            if (isFlat(model.get('module'))) return;
+            pool.getModel(this.id).set('subfolders', this.length > 0);
         },
         model: FolderModel
     });
@@ -619,14 +618,8 @@ define('io.ox/core/folder/api', [
         if (id === target) return;
 
         // prepare move
-        var model = pool.getModel(id),
-            parent = model.get('folder_id'),
-            collection = pool.getCollection(parent);
-
-        // remove model from parent collection
-        collection.remove(model);
-        // update parent folder; subfolders might have changed
-        pool.getModel(parent).set('subfolders', collection.length > 0);
+        var model = pool.getModel(id);
+        removeFromAllCollections(model);
 
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
@@ -693,7 +686,7 @@ define('io.ox/core/folder/api', [
     // Remove folder
     //
 
-    function removeFromCollection(model) {
+    function removeFromAllCollections(model) {
         _(pool.collections).invoke('remove', model);
     }
 
@@ -706,7 +699,7 @@ define('io.ox/core/folder/api', [
         api.trigger('remove:prepare', data);
 
         // update collection (now)
-        removeFromCollection(model);
+        removeFromAllCollections(model);
         model.trigger('destroy');
 
         // delete on server
