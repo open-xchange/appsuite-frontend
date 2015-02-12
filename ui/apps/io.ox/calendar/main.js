@@ -573,9 +573,6 @@ define('io.ox/calendar/main', [
 
         win.addClass('io-ox-calendar-main');
 
-        // easy debugging
-        window.calendar = app;
-
         // go!
         commons.addFolderSupport(app, null, 'calendar', options.folder || 'virtual/all-my-appointments')
             .always(function () {

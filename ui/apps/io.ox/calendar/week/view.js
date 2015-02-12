@@ -147,7 +147,7 @@ define('io.ox/calendar/week/view', [
                         self.trigger('onRefresh');
                     })
                     .on('show', function () {
-                        $(self).datepicker('update', new Date(self.startDate.getTime()));
+                        $(this).datepicker('update', new Date(self.startDate.getTime()));
                     });
                 });
             }
