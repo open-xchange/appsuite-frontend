@@ -110,7 +110,7 @@ msgstr[1] "%1$d kiválasztva"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d üzenet a beszélgetésben"
 
-#: apps/io.ox/mail/main.js:613 module:io.ox/mail
+#: apps/io.ox/mail/main.js:614 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d üzenet kijelölve"
 
@@ -125,7 +125,7 @@ msgstr[0] "%1$d értesítése van."
 msgstr[1] "%1$d értesítése van."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:631 module:io.ox/mail
+#: apps/io.ox/mail/main.js:632 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d kiválasztva"
 
@@ -252,7 +252,7 @@ msgstr "%1$s megváltoztatta az állapotát:"
 
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/fluid/perspective.js:453 module:io.ox/files
-#: apps/io.ox/files/fluid/perspective.js:925
+#: apps/io.ox/files/fluid/perspective.js:926
 #: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
 #, fuzzy
 #| msgid "Date completed"
@@ -1038,7 +1038,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:1162 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1193 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
@@ -1272,8 +1272,8 @@ msgstr "Titkos másolat"
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:376
 #: module:io.ox/contacts apps/io.ox/core/commons.js:697 module:io.ox/core
-#: apps/io.ox/files/main.js:159 module:io.ox/files apps/io.ox/mail/main.js:158
-#: module:io.ox/mail apps/io.ox/mail/main.js:163
+#: apps/io.ox/files/main.js:159 module:io.ox/files apps/io.ox/mail/main.js:159
+#: module:io.ox/mail apps/io.ox/mail/main.js:164
 #: apps/io.ox/mail/threadview.js:40 apps/io.ox/tasks/main.js:160
 #: module:io.ox/tasks
 msgid "Back"
@@ -1432,12 +1432,12 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/accounts/settings.js:281
 #: apps/io.ox/mail/accounts/view-form.js:327 module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
-#: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
+#: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:372
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:607
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:999
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1030
 #: apps/io.ox/mail/settings/signatures/register.js:167
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:623 module:io.ox/portal
@@ -1952,7 +1952,7 @@ msgstr "A beállítások nem menthetők"
 msgid "Could not save settings."
 msgstr "A beállítások nem menthetők."
 
-#: apps/io.ox/core/folder/api.js:589 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:597 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2204,7 +2204,7 @@ msgstr "Elhalasztott"
 #: module:io.ox/files apps/io.ox/files/actions/delete.js:74
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:498
-#: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
+#: apps/io.ox/mail/actions/delete.js:48 apps/io.ox/mail/actions/delete.js:67
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:375
 #: apps/io.ox/mail/settings/signatures/register.js:376
@@ -2517,7 +2517,7 @@ msgstr ""
 "A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
 "kívánja szerkeszteni?"
 
-#: apps/io.ox/mail/actions/delete.js:37 module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js:36 module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
 msgstr[0] "Véglegesen törölni szeretné ezt az e-mailt?"
@@ -2681,8 +2681,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:153
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/mailfilter/settings/filter.js:159
-#: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
-#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1003
+#: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1034
 #: apps/io.ox/mail/settings/signatures/register.js:369
 #: apps/io.ox/mail/settings/signatures/register.js:371
 #: apps/io.ox/portal/settings/pane.js:326 module:io.ox/portal
@@ -2841,7 +2841,7 @@ msgstr "E-mail értesítés a feladat létrehozójának?"
 msgid "Email notification for task participant?"
 msgstr "E-mail értesítés a feladat résztvevőinek?"
 
-#: apps/io.ox/mail/actions/delete.js:65 module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js:64 module:io.ox/mail
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
@@ -3327,8 +3327,8 @@ msgstr "Mappaspecifikus műveletek"
 #: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:368 apps/io.ox/core/folder/view.js:281
 #: module:io.ox/core apps/io.ox/files/main.js:143 module:io.ox/files
-#: apps/io.ox/files/main.js:150 apps/io.ox/mail/main.js:143 module:io.ox/mail
-#: apps/io.ox/mail/main.js:150 apps/io.ox/tasks/main.js:144 module:io.ox/tasks
+#: apps/io.ox/files/main.js:150 apps/io.ox/mail/main.js:144 module:io.ox/mail
+#: apps/io.ox/mail/main.js:151 apps/io.ox/tasks/main.js:144 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:151
 msgid "Folders"
 msgstr "Mappák"
@@ -3416,7 +3416,7 @@ msgstr "péntek"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:111
-#: apps/io.ox/mail/compose/extensions.js:157 apps/io.ox/mail/main.js:542
+#: apps/io.ox/mail/compose/extensions.js:157 apps/io.ox/mail/main.js:543
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Feladó"
@@ -3897,7 +3897,7 @@ msgstr "Elemek"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:690 module:io.ox/core
-#: apps/io.ox/mail/main.js:443 module:io.ox/mail
+#: apps/io.ox/mail/main.js:444 module:io.ox/mail
 #, fuzzy
 #| msgid "Items"
 msgid "Item list"
@@ -3905,7 +3905,7 @@ msgstr "Elemek"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
-#: apps/io.ox/mail/main.js:446 module:io.ox/mail
+#: apps/io.ox/mail/main.js:447 module:io.ox/mail
 #, fuzzy
 #| msgid "Sort options"
 msgid "Item list options"
@@ -4118,7 +4118,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Levelek"
 
-#: apps/io.ox/mail/main.js:302 module:io.ox/mail
+#: apps/io.ox/mail/main.js:303 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Levél részletei"
 
@@ -4181,7 +4181,7 @@ msgstr "A levélnek nincs címzettje."
 msgid "Mail quota"
 msgstr "Levélkvóta"
 
-#: apps/io.ox/mail/actions/delete.js:62 module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js:61 module:io.ox/mail
 msgid "Mail quota exceeded"
 msgstr "Levélkvóta túllépve"
 
@@ -4529,7 +4529,7 @@ msgstr "Soha"
 msgid "New"
 msgstr "Új"
 
-#: apps/io.ox/core/folder/api.js:637 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:645 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:155 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Új mappa"
@@ -4690,7 +4690,7 @@ msgstr "Nincs elveszett kérés"
 msgid "No mails in your inbox"
 msgstr "Nincsenek levelek Beérkezett üzenetek mappában"
 
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:600 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nincs kiválasztott üzenet"
 
@@ -5775,7 +5775,7 @@ msgid "Reload statistics"
 msgstr "Statisztika újratöltése"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/fluid/perspective.js:930 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:931 module:io.ox/files
 #, fuzzy
 #| msgid "Reminder date %1$s"
 msgid "Remaining time: %1$s"
@@ -7476,7 +7476,7 @@ msgstr ""
 "Ez a widget ki van kapcsolva, mert a Twitter gyorsasági korlátja túl lett "
 "lépve."
 
-#: apps/io.ox/mail/main.js:162 module:io.ox/mail
+#: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "Szál"
 
@@ -7515,7 +7515,7 @@ msgstr "Megszólítás"
 #: apps/io.ox/mail/common-extensions.js:248 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:54
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:540
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:541
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "Címzett"
@@ -7772,7 +7772,7 @@ msgid "Upload progress"
 msgstr "Folyamatban"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/fluid/perspective.js:905 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:906 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
 msgid "Uploading %1$s"

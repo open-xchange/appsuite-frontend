@@ -110,7 +110,7 @@ msgstr[1] "%1$d selecionado"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d mensagens nesta conversa"
 
-#: apps/io.ox/mail/main.js:613 module:io.ox/mail
+#: apps/io.ox/mail/main.js:614 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d mensagens selecionadas"
 
@@ -125,7 +125,7 @@ msgstr[0] "Você tem %1$d notificação."
 msgstr[1] "Você tem %1$d notificações."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:631 module:io.ox/mail
+#: apps/io.ox/mail/main.js:632 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d selecionado"
 
@@ -252,7 +252,7 @@ msgstr "%1$s alterou seu status:"
 
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/fluid/perspective.js:453 module:io.ox/files
-#: apps/io.ox/files/fluid/perspective.js:925
+#: apps/io.ox/files/fluid/perspective.js:926
 #: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
 #, fuzzy
 #| msgid "Date completed"
@@ -1040,7 +1040,7 @@ msgstr "Anexar vCard"
 msgid "Application Toolbar"
 msgstr "Barra de ferramentas do aplicativo"
 
-#: apps/io.ox/mail/main.js:1162 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1193 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "O aplicativo pode não funcionar como esperado até este problema ser "
@@ -1272,8 +1272,8 @@ msgstr "BCC"
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:376
 #: module:io.ox/contacts apps/io.ox/core/commons.js:697 module:io.ox/core
-#: apps/io.ox/files/main.js:159 module:io.ox/files apps/io.ox/mail/main.js:158
-#: module:io.ox/mail apps/io.ox/mail/main.js:163
+#: apps/io.ox/files/main.js:159 module:io.ox/files apps/io.ox/mail/main.js:159
+#: module:io.ox/mail apps/io.ox/mail/main.js:164
 #: apps/io.ox/mail/threadview.js:40 apps/io.ox/tasks/main.js:160
 #: module:io.ox/tasks
 msgid "Back"
@@ -1432,12 +1432,12 @@ msgstr "Visualização do calendário"
 #: apps/io.ox/mail/accounts/settings.js:281
 #: apps/io.ox/mail/accounts/view-form.js:327 module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
-#: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
+#: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:372
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:607
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:999
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1030
 #: apps/io.ox/mail/settings/signatures/register.js:167
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:623 module:io.ox/portal
@@ -1953,7 +1953,7 @@ msgstr "Não foi possível salvar as configurações"
 msgid "Could not save settings."
 msgstr "Não foi possível salvar as configurações."
 
-#: apps/io.ox/core/folder/api.js:589 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:597 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2203,7 +2203,7 @@ msgstr "Adiado"
 #: module:io.ox/files apps/io.ox/files/actions/delete.js:74
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:498
-#: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
+#: apps/io.ox/mail/actions/delete.js:48 apps/io.ox/mail/actions/delete.js:67
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:375
 #: apps/io.ox/mail/settings/signatures/register.js:376
@@ -2515,7 +2515,7 @@ msgid ""
 msgstr ""
 "Você deseja editar a série inteira ou apenas um compromisso dentro da série?"
 
-#: apps/io.ox/mail/actions/delete.js:37 module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js:36 module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
 msgstr[0] "Deseja excluir permanentemente este e-mail?"
@@ -2679,8 +2679,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:153
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/mailfilter/settings/filter.js:159
-#: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
-#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1003
+#: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1034
 #: apps/io.ox/mail/settings/signatures/register.js:369
 #: apps/io.ox/mail/settings/signatures/register.js:371
 #: apps/io.ox/portal/settings/pane.js:326 module:io.ox/portal
@@ -2839,7 +2839,7 @@ msgstr "Notificação de e-mail para o criador da tarefa?"
 msgid "Email notification for task participant?"
 msgstr "Notificação de e-mail para participante da tarefa?"
 
-#: apps/io.ox/mail/actions/delete.js:65 module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js:64 module:io.ox/mail
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
@@ -3329,8 +3329,8 @@ msgstr "Ações específicas de pasta"
 #: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:368 apps/io.ox/core/folder/view.js:281
 #: module:io.ox/core apps/io.ox/files/main.js:143 module:io.ox/files
-#: apps/io.ox/files/main.js:150 apps/io.ox/mail/main.js:143 module:io.ox/mail
-#: apps/io.ox/mail/main.js:150 apps/io.ox/tasks/main.js:144 module:io.ox/tasks
+#: apps/io.ox/files/main.js:150 apps/io.ox/mail/main.js:144 module:io.ox/mail
+#: apps/io.ox/mail/main.js:151 apps/io.ox/tasks/main.js:144 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:151
 msgid "Folders"
 msgstr "Pastas"
@@ -3417,7 +3417,7 @@ msgstr "Sexta-feira"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:111
-#: apps/io.ox/mail/compose/extensions.js:157 apps/io.ox/mail/main.js:542
+#: apps/io.ox/mail/compose/extensions.js:157 apps/io.ox/mail/main.js:543
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "De"
@@ -3897,7 +3897,7 @@ msgstr "Itens"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:690 module:io.ox/core
-#: apps/io.ox/mail/main.js:443 module:io.ox/mail
+#: apps/io.ox/mail/main.js:444 module:io.ox/mail
 #, fuzzy
 #| msgid "Items"
 msgid "Item list"
@@ -3905,7 +3905,7 @@ msgstr "Itens"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
-#: apps/io.ox/mail/main.js:446 module:io.ox/mail
+#: apps/io.ox/mail/main.js:447 module:io.ox/mail
 #, fuzzy
 #| msgid "Sort options"
 msgid "Item list options"
@@ -4119,7 +4119,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
 
-#: apps/io.ox/mail/main.js:302 module:io.ox/mail
+#: apps/io.ox/mail/main.js:303 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Detalhes de e-mail"
 
@@ -4182,7 +4182,7 @@ msgstr "O e-mail não tem destinatário."
 msgid "Mail quota"
 msgstr "Cota de e-mail"
 
-#: apps/io.ox/mail/actions/delete.js:62 module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js:61 module:io.ox/mail
 msgid "Mail quota exceeded"
 msgstr "Cota de e-mail excedida"
 
@@ -4530,7 +4530,7 @@ msgstr "Nunca"
 msgid "New"
 msgstr "Novo"
 
-#: apps/io.ox/core/folder/api.js:637 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:645 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:155 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Nova pasta"
@@ -4691,7 +4691,7 @@ msgstr "Sem requisições perdidas"
 msgid "No mails in your inbox"
 msgstr "Nenhum e-mail na sua caixa de entrada"
 
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:600 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nenhuma mensagem selecionada"
 
@@ -5775,7 +5775,7 @@ msgid "Reload statistics"
 msgstr "Recarregar estatísticas"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/fluid/perspective.js:930 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:931 module:io.ox/files
 #, fuzzy
 #| msgid "Reminder date %1$s"
 msgid "Remaining time: %1$s"
@@ -7486,7 +7486,7 @@ msgstr ""
 "Este widget está atualmente desconectado, pois o twitter excedeu seu limite "
 "de taxa."
 
-#: apps/io.ox/mail/main.js:162 module:io.ox/mail
+#: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "Linha"
 
@@ -7525,7 +7525,7 @@ msgstr "Título"
 #: apps/io.ox/mail/common-extensions.js:248 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:54
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:540
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:541
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
 msgid "To"
 msgstr "Para"
@@ -7784,7 +7784,7 @@ msgid "Upload progress"
 msgstr "Em andamento"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/fluid/perspective.js:905 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:906 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
 msgid "Uploading %1$s"
