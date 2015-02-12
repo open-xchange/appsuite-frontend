@@ -78,6 +78,18 @@ define('io.ox/mail/settings/signatures/register',
                     baton.editor = ed;
                     baton.editor.handleShow(true);
 
+                    // replace setplaintext function to not add additional <p>-tag
+                    baton.editor.setPlainText = function (str) {
+                        // clean up
+                        str = String(str || '').replace(/[\s\xA0]+$/g, '');
+                        if (!str) return;
+                        return require(['io.ox/core/tk/textproc']).done(function (textproc) {
+                            return textproc.texttohtml(str).done(function (content) {
+                                baton.editor.setContent(content);
+                            });
+                        });
+                    };
+
                     if (looksLikeHTML(baton.content)) {
                         baton.editor.setContent(baton.content);
                     } else {
