@@ -108,6 +108,16 @@ define('io.ox/mail/write/view-main',
             });
         },
 
+        destroy: function () {
+            ViewClass.prototype.destroy.call(this);
+            // too many internal references!
+            this.sections = this.app = null;
+            this.baton = this.baton.app = this.baton.view = null;
+            this.scrollpane = this.rightside = this.leftside = this.editor = this.emoji = null;
+            this.priorityOverlay = this.subject = this.spacer = null;
+            this.textarea = this.form = this.emojiview = this.signatures = null;
+        },
+
         createLink: function (id, label, show) {
 
             return (this.sections[id + 'Link'] = $('<div>'))
