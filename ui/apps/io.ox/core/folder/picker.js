@@ -172,6 +172,7 @@ define('io.ox/core/folder/picker',
             })
             .done(function () {
                 o.close(dialog, tree);
+                console.log('destroy ...');
                 tree = dialog = o = null;
             });
     };

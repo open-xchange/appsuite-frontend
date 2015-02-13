@@ -12,7 +12,8 @@
  */
 
 define('io.ox/mail/detail/view',
-    ['io.ox/mail/common-extensions',
+    ['io.ox/backbone/disposable',
+     'io.ox/mail/common-extensions',
      'io.ox/core/extensions',
      'io.ox/mail/api',
      'io.ox/mail/util',
@@ -23,7 +24,7 @@ define('io.ox/mail/detail/view',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'io.ox/mail/actions'
-    ], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
+    ], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
 
@@ -249,7 +250,7 @@ define('io.ox/mail/detail/view',
 
     var pool = Pool.create('mail');
 
-    var View = Backbone.View.extend({
+    var View = DisposableView.extend({
 
         className: 'list-item mail-item mail-detail f6-target',
 
@@ -384,7 +385,6 @@ define('io.ox/mail/detail/view',
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
-            this.$el.on('dispose', this.dispose.bind(this));
 
             this.on({
                 'load': function () {
@@ -444,12 +444,6 @@ define('io.ox/mail/detail/view',
             ox.trigger('mail:detail:render', this);
 
             return this;
-        },
-
-        dispose: function () {
-            this.stopListening();
-            this.off();
-            this.model = this.options = this.$el = null;
         }
     });
 

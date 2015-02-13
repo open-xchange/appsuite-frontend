@@ -12,18 +12,19 @@
  */
 
 define('io.ox/core/folder/node', [
+    'io.ox/backbone/disposable',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
     'gettext!io.ox/core'
-], function (api, ext, account, gt) {
+], function (DisposableView, api, ext, account, gt) {
 
     'use strict';
 
     // angle caret chevron
     var ICON = 'caret';
 
-    var TreeNodeView = Backbone.View.extend({
+    var TreeNodeView = DisposableView.extend({
 
         tagName: 'li',
         className: 'folder selectable',
@@ -376,9 +377,6 @@ define('io.ox/core/folder/node', [
 
             // simple tree-based disable callback
             if (o.tree.options.disable(data, o)) this.$el.addClass('disabled');
-
-            // register for 'dispose' event (using inline function to make this testable via spyOn)
-            this.$el.on('dispose', this.remove.bind(this));
         },
 
         getCounter: function () {

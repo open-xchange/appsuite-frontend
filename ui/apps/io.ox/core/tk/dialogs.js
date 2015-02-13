@@ -20,14 +20,19 @@ define('io.ox/core/tk/dialogs',
     'use strict';
 
     // scaffolds
-    var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
-        popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
+    function getUnderlay() {
+        return $('<div class="abs io-ox-dialog-underlay">').hide();
+    }
+
+    function getPopup() {
+        return $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
                 $('<div class="modal-header" id="dialog-title">'),
                 $('<div class="modal-body">'),
                 $('<div class="clearfix">'),
                 $('<div class="modal-footer">')
             );
+    }
 
     var Dialog = function (options) {
 
@@ -49,9 +54,9 @@ define('io.ox/core/tk/dialogs',
 
             nodes = {
                 buttons: [],
-                underlay: underlay.clone(),
-                popup: popup.clone(),
-                wrapper: $('<div>').addClass('abs io-ox-dialog-wrapper')
+                underlay: getUnderlay(),
+                popup: getPopup(),
+                wrapper: $('<div class="abs io-ox-dialog-wrapper">')
             },
 
             lastFocus = $(),
@@ -103,6 +108,7 @@ define('io.ox/core/tk/dialogs',
                 }
                 self.close = self.idle = $.noop;
                 nodes.header = nodes.body = nodes.footer = nodes.underlay = nodes.wrapper = null;
+                nodes.buttons = lastFocus = innerFocus = null;
                 nodes = deferred = self = data = o = null;
             },
 
@@ -889,7 +895,6 @@ define('io.ox/core/tk/dialogs',
 
         this.destroy = function () {
             close();
-            console.log('destroy sidepopup');
             this.nodes = overlay = pane = closer = popup = arrow = null;
             return this;
         };

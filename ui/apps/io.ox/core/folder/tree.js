@@ -12,17 +12,18 @@
  */
 
 define('io.ox/core/folder/tree',
-    ['io.ox/core/folder/selection',
+    ['io.ox/backbone/disposable',
+     'io.ox/core/folder/selection',
      'io.ox/core/folder/api',
      'io.ox/core/extensions',
      'settings!io.ox/core',
      'io.ox/core/folder/favorites',
      'io.ox/core/folder/extensions',
-     'less!io.ox/core/folder/style'], function (Selection, api, ext, settings) {
+     'less!io.ox/core/folder/style'], function (DisposableView, Selection, api, ext, settings) {
 
     'use strict';
 
-    var TreeView = Backbone.View.extend({
+    var TreeView = DisposableView.extend({
 
         className: 'folder-tree',
 
