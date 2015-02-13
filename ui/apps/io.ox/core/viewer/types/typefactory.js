@@ -14,8 +14,8 @@ define('io.ox/core/viewer/types/typefactory', [
     'io.ox/core/viewer/types/documenttype',
     'io.ox/core/viewer/types/imagetype',
     'io.ox/core/viewer/types/videotype',
-    'io.ox/core/viewer/types/basetype'
-], function (AudioType, DocumentType, ImageType, VideoType, BaseType) {
+    'io.ox/core/viewer/types/defaulttype'
+], function (AudioType, DocumentType, ImageType, VideoType, DefaultType) {
 
     /**
      * The factory for creating Viewer file type instances.
@@ -35,9 +35,9 @@ define('io.ox/core/viewer/types/typefactory', [
          *  a file type object.
          */
         getModelType: function (model) {
-            //console.warn('getModelType()', model);
+            //console.warn('getModelType()', model.get('fileCategory'));
             if (!model.get('fileCategory')) {
-                return new BaseType();
+                return new DefaultType();
             }
             switch (model.get('fileCategory')) {
                 case 'AUDIO':
@@ -48,8 +48,16 @@ define('io.ox/core/viewer/types/typefactory', [
                     return new ImageType();
                 case 'OFFICE':
                     return new DocumentType();
+                case 'OFFICE_TEXT':
+                    return new DocumentType();
+                case 'OFFICE_SPREADSHEET':
+                    return new DocumentType();
+                case 'OFFICE_PRESENTATION':
+                    return new DocumentType();
+                case 'PDF':
+                    return new DocumentType();
                 default:
-                    return new BaseType();
+                    return new DefaultType();
             }
         }
     };
