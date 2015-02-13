@@ -52,8 +52,14 @@
     }
 
     #io-ox-notifications-display {
+
         padding: 24px 14px;
         list-style-type: none; //no dots here
+
+        // special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
+        .span-to-div {
+            display: block;
+        }
 
         .section-title {
 
