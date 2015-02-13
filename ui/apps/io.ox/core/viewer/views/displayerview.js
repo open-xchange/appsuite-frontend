@@ -12,8 +12,9 @@
  */
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
+    'io.ox/core/viewer/types/typefactory',
     'gettext!io.ox/core'
-], function (EventDispatcher, gt) {
+], function (EventDispatcher, TypeFactory, gt) {
 
     'use strict';
 
@@ -100,21 +101,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {jQuery}
          */
         createSlide: function (model, modelIndex) {
-            var slide = $('<div class="item">'),
-                image = $('<img class="viewer-displayer-image">'),
-                caption = $('<div class="viewer-displayer-caption">'),
-                previewUrl = model && model.getPreviewUrl(),
-                filename = model && model.get('filename') || '',
-                slidesCount = this.collection.length,
-                displayerTopOffset = $('.viewer-toolbar').outerHeight();
-            if (previewUrl) {
-                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                    .css({ maxHeight: window.innerHeight - displayerTopOffset });
-                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                slide.append(image, caption);
-            }
-            slide.attr('data-slide', modelIndex);
-            return slide;
+            return TypeFactory.getModelType(model).createSlide(model, modelIndex);
         },
 
         /**
@@ -135,31 +122,17 @@ define('io.ox/core/viewer/views/displayerview', [
                 step = preloadDirection === 'left' ? 1 : -1,
                 slideToLoad = slideToLoad || 0,
                 loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
-                slidesCount = this.collection.length,
+                collection = this.collection,
+                slidesCount = collection.length,
                 slidesList = this.$el.find('.item');
-            // load a single slide with the given slide index
-            function loadSlide (slideIndex) {
-                if (typeof slideIndex !== 'number' || isNaN(slideIndex) || Math.abs(slideIndex) >= slidesCount) {
-                    return;
-                }
-                var slideIndex = slideIndex % slidesCount,
-                    slideEl = slidesList.eq(slideIndex),
-                    imageToLoad = slideEl.find('img');
-                if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
-                slideEl.busy();
-                imageToLoad.attr('src', imageToLoad.attr('data-src'));
-                imageToLoad[0].onload = function () {
-                    slideEl.idle();
-                    imageToLoad.show();
-                };
-                imageToLoad[0].onerror = function () {
-                    var notification = $('<p class="viewer-displayer-notification">')
-                        .text(gt('Sorry, there is no preview available for this file.'));
-                    slideEl.idle().append(notification);
-                };
-            }
             // load the load range, containing the requested slide and preload slides
-            _.each(loadRange, loadSlide);
+            _.each(loadRange, function (slideIndex) {
+                if (slideIndex < 0) { slideIndex += slidesCount; }
+                if (slideIndex >= slidesCount) { slideIndex -= slidesCount; }
+                var slideModel = collection.at(slideIndex),
+                    slideElement = slidesList.eq(slideIndex);
+                TypeFactory.getModelType(slideModel).loadSlide(slideIndex, slideElement);
+            });
         },
 
         /**
