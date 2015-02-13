@@ -29,7 +29,7 @@ define('io.ox/core/folder/tree',
         events: {
             'click .contextmenu-control'                    : 'onToggleContextMenu',
             'keydown .contextmenu-control'                  : 'onKeydown',
-            'contextmenu .selectable, .contextmenu-control'  : 'onContextMenu'
+            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control'  : 'onContextMenu'
         },
 
         initialize: function (options) {
