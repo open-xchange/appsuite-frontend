@@ -794,7 +794,6 @@ define('io.ox/files/fluid/perspective', [
             }
 
             redraw = function (ids) {
-                console.log('doing fancy redraw');
                 drawFiles(ids);
                 wrapper.off('scroll', onScroll).on('scroll', onScroll);
                 self.selection.update();

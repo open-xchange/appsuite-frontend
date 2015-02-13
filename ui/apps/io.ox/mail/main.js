@@ -64,16 +64,16 @@ define('io.ox/mail/main', [
             app.navbar = navbar;
             app.toolbar = toolbar;
 
-            app.pages = new PageController(app);
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
-
+            var baton = ext.Baton({ app: app });
             // create 4 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 })
             });
@@ -83,16 +83,16 @@ define('io.ox/mail/main', [
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView',
                     extension: 'io.ox/mail/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView/multiselect',
                     extension: 'io.ox/mail/mobile/toolbar'
                 })
@@ -102,11 +102,11 @@ define('io.ox/mail/main', [
                 name: 'threadView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'threadView',
                     extension: 'io.ox/mail/mobile/toolbar'
                 })
@@ -116,11 +116,11 @@ define('io.ox/mail/main', [
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/mail/mobile/toolbar'
                 })

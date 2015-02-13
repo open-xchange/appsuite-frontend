@@ -55,11 +55,10 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
         },
 
         initialize: function (opt) {
-            this.app = opt.app;
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
-            this.baton = opt.baton || ext.Baton({ app: opt.app });
+            this.baton = opt.baton;// || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
             this.hiddenElements = [];
         },
@@ -128,6 +127,10 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
             this.baton = baton;
             this.render();
             return this;
+        },
+
+        toggle: function (state) {
+            this.$el.toggle(state);
         }
     });
 
@@ -139,9 +142,8 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
     var ToolbarView = BarView.extend({
 
         initialize: function (opt) {
-            this.app = opt.app;
             this.page = opt.page;
-            this.baton = opt.baton || ext.Baton({ app: opt.app });
+            this.baton = opt.baton;// || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
         },
         render: function () {

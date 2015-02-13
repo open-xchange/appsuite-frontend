@@ -71,12 +71,13 @@ define('io.ox/files/main', [
             if (_.device('!smartphone')) return;
             var c = app.getWindow().nodes.main;
             var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+                toolbar = $('<div class="mobile-toolbar">'),
+                baton = ext.Baton({ app: app });
 
             app.navbar = navbar;
             app.toolbar = toolbar;
 
-            app.pages = new PageController(app);
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
@@ -85,7 +86,7 @@ define('io.ox/files/main', [
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/files/mobile/navbar'
                 })
             });
@@ -95,16 +96,16 @@ define('io.ox/files/main', [
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/files/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'fluid',
                     extension: 'io.ox/files/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'fluid/multiselect',
                     extension: 'io.ox/files/mobile/toolbar'
                 })
@@ -114,11 +115,11 @@ define('io.ox/files/main', [
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/files/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/files/mobile/toolbar'
 
