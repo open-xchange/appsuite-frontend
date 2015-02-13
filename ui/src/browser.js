@@ -203,9 +203,7 @@
 
         }
         // fixes for testrunner
-        if (window.ox !== undefined) {
-            us.browser.karma = !!window.ox.testUtils;
-        }
+        us.browser.karma = !!window.__karma__;
 
         // fixes for Windows 8 Chrome
         // Windows 8 Chrome does report touch events which leads to
