@@ -112,7 +112,6 @@ define('io.ox/mail/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             icon: 'fa fa-archive',
-            drawDisabled: true,
             label: gt('Archive'),
             section: 'file-op',
             ref: 'io.ox/mail/actions/archive',

@@ -164,6 +164,10 @@ define('io.ox/mail/actions', [
                 if (memo === false) return false;
                 // is not primary account?
                 if (!account.isPrimary(obj.folder_id)) return false;
+                // is unified folder (may be external)
+                if (account.isUnifiedFolder(obj.folder_id)) return false;
+                // is in a subfolder of archive?
+                if (account.is('archive', obj.folder_id)) return false;
                 // else
                 return true;
             }, true);
