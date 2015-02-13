@@ -213,10 +213,10 @@ define('io.ox/mail/detail/view',
             var data = content.get(baton.data),
                 node = data.content;
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.html(), function (text, lib) {
+                emoji.processEmoji(node.innerHTML, function (html, lib) {
                     baton.processedEmoji = !lib.loaded;
                     if (baton.processedEmoji) return;
-                    node.empty().append(text);
+                    node.innerHTML = html;
                 });
             }
             this.idle().append(node);
