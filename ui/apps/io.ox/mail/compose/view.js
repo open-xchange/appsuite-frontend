@@ -899,9 +899,9 @@ define('io.ox/mail/compose/view', [
         },
 
         setSelectedSignature: function (model, id) {
-            if (_.isString(model)) {
-                id = model;
-            }
+
+            if (_.isString(model)) id = model;
+
             var newSignature = _.where(this.signatures, { id: String(id) })[0],
                 prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
 
@@ -917,32 +917,23 @@ define('io.ox/mail/compose/view', [
         },
 
         removeSignature: function (signature) {
+
             var self = this,
                 isHTML = !!this.editor.find,
                 currentSignature = mailUtil.signatures.cleanAdd(signature.content, isHTML);
 
             // remove current signature from editor
-
             if (isHTML) {
                 this.editor.find('.io-ox-signature').each(function () {
-                    var node = $(this),
-                        text = node.html()
-                            //remove attributes added by tinymce
-                            .replace(/ data-mce-[src|style|href]+="[^"]+"\s?/, '')
-                            //remove empty alt attribute(added by tiny)
-                            .replace(/ alt=""/, '')
-                            //replace subsequent white-space (except linebreaks)
-                            .replace(/>[\t\f\v ]+/g, '>')
-                            .replace(/[\t\f\v ]+</g, '<')
-                            .trim();
 
-                    if (self.isSignature(text)) {
-                        // remove entire node
-                        node.remove();
-                    } else {
-                        // was modified so remove class
-                        node.removeClass('io-ox-signature');
-                    }
+                    var node = $(this),
+                        text = node.text(),
+                        unchanged = _(self.signatures).find(function (signature) {
+                            return $('<div>').html(signature.content).text() === text;
+                        });
+
+                    // remove entire block unless it seems edited
+                    if (unchanged) node.remove(); else node.removeClass('io-ox-signature');
                 });
             } else {
                 if (currentSignature) {
@@ -957,6 +948,7 @@ define('io.ox/mail/compose/view', [
         },
 
         setSignature: function (signature) {
+
             var text,
                 isHTML = !!this.editor.find;
 
