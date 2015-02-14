@@ -534,27 +534,29 @@ define('io.ox/mail/util',
         },
 
         signatures: (function () {
-            var htmltags = /(<\/?\w+(\s[^<>]*)?>)/g,
+
+            var looksLikeHTML = function (text) {
+                    return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
+                },
                 general = function (text) {
                     return String(text || '')
-                        //replace white-space and evil \r
+                        // replace white-space and evil \r
                         .replace(/(\r\n|\n|\r)/g, '\n')
-                        //replace subsequent white-space (except linebreaks)
+                        // replace subsequent white-space (except linebreaks)
                         .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
                         .trim();
                 },
                 add = function (text, isHTML) {
                     var clean = general(text);
-                    //special entities like '&'/&amp;
+                    // special entities like '&'/&amp;
                     var $parsed = $('<dummy>').html(clean);
                     if (isHTML) {
-                        if (!htmltags.test(clean)) {
+                        if (!looksLikeHTML(clean)) {
                             $parsed.text(clean);
                         }
-
                         return $parsed.html();
                     } else {
-                        if (!htmltags.test(clean)) {
+                        if (!looksLikeHTML(clean)) {
                             $parsed.text(clean);
                         }
                         $parsed.find('p').replaceWith(function () {
@@ -568,37 +570,41 @@ define('io.ox/mail/util',
                 },
                 preview = function (text) {
                     return general(text)
-                        //remove ASCII art (intended to remove separators like '________')
+                        // remove ASCII art (intended to remove separators like '________')
                         .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                        //remove htmltags
-                        .replace(htmltags, '')
+                        // remove htmltags
+                        .replace(/(<\/?\w+(\s[^<>]*)?>)/g, '')
                         .trim();
                 };
+
             return {
+
                 cleanAdd: function (text, isHTML) {
                     return add(text, !!isHTML);
                 },
+
                 cleanPreview: function (text) {
                     return preview(text);
                 },
+
                 is: function (text, list, isHTML) {
                     var signatures = _(list).map(function (signature) {
-                            //consider changes applied by appsuite
-                            var clean = add(signature.content, !!isHTML);
-                            //consider changes applied by tiny
-                            if (clean === '')
-                                return '<br>';
-                            else {
-                                return clean
-                                    //set breaks
-                                    .replace(/(\r\n|\n|\r)/g, '<br>')
-                                    //replace surrounding white-space (except linebreaks)
-                                    .replace(/>[\t\f\v ]+/g, '>')
-                                    .replace(/[\t\f\v ]+</g, '<')
-                                    //remove empty alt attribute(added by tiny)
-                                    .replace(/ alt=""/, '');
-                            }
-                        });
+                        // consider changes applied by appsuite
+                        var clean = add(signature.content, !!isHTML);
+                        // consider changes applied by tiny
+                        if (clean === '')
+                            return '<br>';
+                        else {
+                            return clean
+                                // set breaks
+                                .replace(/(\r\n|\n|\r)/g, '<br>')
+                                // replace surrounding white-space (except linebreaks)
+                                .replace(/>[\t\f\v ]+/g, '>')
+                                .replace(/[\t\f\v ]+</g, '<')
+                                // remove empty alt attribute(added by tiny)
+                                .replace(/ alt=""/, '');
+                        }
+                    });
                     return _(signatures).indexOf(add(text, !!isHTML)) > - 1;
                 }
             };
