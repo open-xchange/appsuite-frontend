@@ -325,17 +325,33 @@ define('io.ox/mail/threadview',
         },
 
         onKeydown: function (e) {
-            if (!e.shiftKey) return;
             switch (e.which) {
-            case 38:
-                // cursor up
-                this.onNext(e);
-                break;
-            case 40:
-                // cursor down
-                this.onPrevious(e);
-                break;
+                case 38:
+                    // cursor up
+                    if (e.shiftKey) this.onNext(e);
+                    if (e.altKey) this.focusMessage(e, -1);
+                    break;
+                case 40:
+                    // cursor down
+                    if (e.shiftKey) this.onPrevious(e);
+                    if (e.altKey) this.focusMessage(e, +1);
+                    break;
             }
+        },
+
+        focusMessage: function (e, shift) {
+            var items = this.getItems(),
+                current = $(document.activeElement).closest('.list-item'),
+                index = items.index(current);
+            // avoid scrolling
+            e.preventDefault();
+            // shift and check bounds
+            index = index + shift;
+            if (index < 0 || index >= items.length) return;
+            // focus and open next message, close previous
+            current.data('view').toggle(false);
+            items.eq(index).focus().data('view').toggle(true);
+            items.eq(index).get(0).scrollIntoView(true);
         },
 
         initialize: function () {
