@@ -1465,6 +1465,7 @@ define('io.ox/core/main',
             index: 'last',
             run: function () {
                 ox.trigger('core:ready');
+                baton = null;
             }
         });
 
