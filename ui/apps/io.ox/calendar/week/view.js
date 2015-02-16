@@ -1502,11 +1502,11 @@ define('io.ox/calendar/week/view',
                         app.old_end_date = app.end_date;
                         el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
 
-                        if (el.position().left !== ui.originalPosition.left) {
+                        if (parseInt(el.position().left, 10) !== parseInt(ui.originalPosition.left, 10)) {
                             _.extend(app, {
                                 start_date: app.end_date - (newDayCount * date.DAY)
                             });
-                        } else if (el.width() !== ui.originalSize.width) {
+                        } else if (parseInt(el.width(), 10) !== parseInt(ui.originalSize.width, 10)) {
                             _.extend(app, {
                                 end_date: app.start_date + (newDayCount * date.DAY)
                             });
