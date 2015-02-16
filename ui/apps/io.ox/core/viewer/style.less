@@ -18,13 +18,17 @@
 @viewer-toolbar-height: 45px;
 @viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
+@viewer-toolbar-filename-width-smartphone-portrait: 170px;
+@viewer-toolbar-filename-width-smartphone-landscape: 320px;
 @viewer-toolbar-hover-bgcolor: #333333;
 @viewer-toolbar-focus-bgcolor: #222222;
 @viewer-toolbar-active-bgcolor: #222222;
 @viewer-toolbar-link-width: 60px;
+@viewer-toolbar-link-width-smartphone: 50px;
 
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
+@viewer-sidebar-width-smartphone: 100%;
 @viewer-sidebar-active-bgcolor: #333333;
 @viewer-sidebar-label-text-color: #999999;
 
@@ -67,7 +71,6 @@
         z-index: 1;
         > li {
             display: inline-block;
-            min-width: @viewer-toolbar-link-width;
             height: @viewer-toolbar-height;
             text-align: center;
             > a {
@@ -120,6 +123,20 @@
             > a.active { background-color: @viewer-toolbar-active-bgcolor ; }
             &.dropdown.open { background-color: @viewer-toolbar-active-bgcolor; }
             .dropdown-menu { margin: 0; }
+        }
+        &.smartphone > li > a {
+            min-width: @viewer-toolbar-link-width-smartphone;
+        
+            @media(orientation: portrait) {
+                &.viewer-toolbar-filename {
+                    max-width: @viewer-toolbar-filename-width-smartphone-portrait;
+                }
+            }
+            @media(orientation: landscape) {
+                &.viewer-toolbar-filename {
+                    max-width: @viewer-toolbar-filename-width-smartphone-landscape;
+                }
+            }
         }
     }
 
@@ -216,6 +233,9 @@
         outline: none;
         &.opened {
             display: block;
+        }
+        &.smartphone {
+            width: @viewer-sidebar-width-smartphone;
         }
     }
 

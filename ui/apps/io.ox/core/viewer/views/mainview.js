@@ -211,7 +211,7 @@ define('io.ox/core/viewer/views/mainview', [
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
             //console.warn('MainView.refreshViewSizes()');
-            var rightOffset = this.sidebarView.opened ? this.sidebarView.width : 0;
+            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0;
             this.displayerView.$el.css({ width: window.innerWidth - rightOffset });
         },
 

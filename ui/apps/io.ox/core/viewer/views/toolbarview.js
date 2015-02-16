@@ -107,7 +107,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'togglesidebar': {
                 prio: 'hi',
-                mobile: 'lo',
+                mobile: 'hi',
                 icon: 'fa fa-info-circle',
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
@@ -116,7 +116,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'close': {
                 prio: 'hi',
-                mobile: 'lo',
+                mobile: 'hi',
                 icon: 'fa fa-times',
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
@@ -333,6 +333,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             var toolbar = this.$el.attr('role', 'menu'),
                 baton = Ext.Baton({ $el: toolbar, model: data.model, data: data.model.get('origData') });
             this.model = data.model;
+            this.$el.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
             toolbar.empty();
             Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
             return this;

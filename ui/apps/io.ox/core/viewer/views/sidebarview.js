@@ -37,9 +37,6 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         className: 'viewer-sidebar',
 
-        // the default width of this sidebar in pixels.
-        width: 400,
-
         // the visible state of the side bar, hidden per default.
         opened: false,
 
@@ -80,6 +77,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             );
 
             this.$el.attr('tabindex', -1);
+            this.$el.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
 
             return this;
         },
