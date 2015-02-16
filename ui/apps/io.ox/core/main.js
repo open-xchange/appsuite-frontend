@@ -773,7 +773,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -793,7 +793,7 @@ define('io.ox/core/main',
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">')
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">')
                         .text(gt('My contact data'))
                     )
                     .on('click', function (e) {
@@ -815,7 +815,7 @@ define('io.ox/core/main',
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li role="presentation">', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
+                        $('<a target="_blank" href="" role="menuitem" tabindex="-1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
                                 currentType = currentApp && currentApp.getName(),
@@ -864,7 +864,7 @@ define('io.ox/core/main',
                         };
                         this.append(
                             $('<li role="presentation">').append(
-                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
+                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="-1">').text(gt('Fullscreen'))
                             )
                             .on('click', function (e) {
                                 e.preventDefault();
@@ -882,7 +882,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="about" role="menuitem" tabindex="1">').text(gt('About'))
+                        $('<a href="#" data-action="about" role="menuitem" tabindex="-1">').text(gt('About'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -903,7 +903,7 @@ define('io.ox/core/main',
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                         $('<li role="presentation">').append(
-                            $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
+                            $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
                         )
                         .on('click', function (e) {
                             e.preventDefault();
@@ -921,7 +921,7 @@ define('io.ox/core/main',
                 var ul, a;
                 this.append(
                     $('<li class="launcher dropdown" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle f6-target" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
+                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
                         .append(
                             $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))
