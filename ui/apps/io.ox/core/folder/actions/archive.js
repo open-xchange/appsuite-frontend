@@ -27,7 +27,7 @@ define('io.ox/core/folder/actions/archive', [
         //#. notification while archiving messages
         yell('busy', gt('Archiving messages ...'));
 
-        api.archive(id).then(yell.done, yell);
+        api.archiveFolder(id).then(yell.done, yell);
     }
 
     return function (id) {

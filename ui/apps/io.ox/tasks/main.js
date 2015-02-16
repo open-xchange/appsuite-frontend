@@ -54,11 +54,12 @@ define('io.ox/tasks/main', [
             if (_.device('!smartphone')) return;
             var c = app.getWindow().nodes.main;
             var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+                toolbar = $('<div class="mobile-toolbar">'),
+                baton = ext.Baton({ app: app });
             app.navbar = navbar;
             app.toolbar = toolbar;
 
-            app.pages = new PageController(app, { container: c });
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: c });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
@@ -66,7 +67,7 @@ define('io.ox/tasks/main', [
             app.pages.addPage({
                 name: 'folderTree',
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/tasks/mobile/navbar'
                 })
             });
@@ -75,16 +76,16 @@ define('io.ox/tasks/main', [
                 name: 'listView',
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/tasks/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView',
                     extension: 'io.ox/tasks/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
                     page: 'detailView',
                     extension: 'io.ox/tasks/mobile/toolbar'
@@ -94,11 +95,11 @@ define('io.ox/tasks/main', [
             app.pages.addPage({
                 name: 'detailView',
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/tasks/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/tasks/mobile/toolbar'
 

@@ -72,10 +72,9 @@ define('io.ox/core/tk/dialogs', [
             },
 
             close = function () {
-                if (!self) {
-                    //already closed
-                    return;
-                }
+
+                // already closed?
+                if (!self) return;
 
                 // disable scrollblocker - Bug 29011
                 o.container.removeClass('blockscroll');
@@ -102,7 +101,7 @@ define('io.ox/core/tk/dialogs', [
                     delete self[prop];
                 }
                 self.close = self.idle = $.noop;
-                nodes.header = nodes.body = nodes.footer = null;
+                nodes.header = nodes.body = nodes.footer = nodes.underlay = nodes.wrapper = null;
                 nodes = deferred = self = data = o = null;
             },
 
@@ -602,7 +601,7 @@ define('io.ox/core/tk/dialogs', [
                     )
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, pane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(
@@ -853,18 +852,24 @@ define('io.ox/core/tk/dialogs', [
         };
 
         this.delegate = function (node, selector, handler) {
-            $(node).on('click', selector, function (e) {
+
+            $(node).on('click.sidepopup', selector, function (e) {
                 if ((e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
             });
 
-            $(node).on('keypress', selector, function (e) {
+            $(node).on('keypress.sidepopup', selector, function (e) {
                 if (e.which === 13 && (e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
             });
 
+            return this;
+        };
+
+        this.undelegate = function (node) {
+            $(node).off('.sidepopup');
             return this;
         };
 
@@ -882,6 +887,13 @@ define('io.ox/core/tk/dialogs', [
 
         this.close = function (e) {
             close(e);
+        };
+
+        this.destroy = function () {
+            close();
+            console.log('destroy sidepopup');
+            this.nodes = overlay = pane = closer = popup = arrow = null;
+            return this;
         };
     };
 

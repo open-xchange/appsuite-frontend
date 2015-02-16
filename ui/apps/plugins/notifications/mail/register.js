@@ -25,15 +25,15 @@ define('plugins/notifications/mail/register', [
     ext.point('io.ox/core/notifications/mail/header').extend({
         draw: function (baton) {
             this.append(
-                $('<h1 class="section-title">').text(gt('New Mails')).attr('focusId', 'mail-notification-').append(
-                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({
-                            tabindex: 1,
-                            'aria-label': gt('Hide all notifications for new mails.'),
-                            'data-action': 'clear',
-                            'focus-id': 'mail-notification-clear'
-                        })
-                ),
+                $('<h1 class="section-title">').text(gt('New Mails'))
+                    //special attribute to restore focus on redraw
+                    .attr('focusId', 'mail-notification-'),
+                $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
+                        'aria-label': gt('Hide all notifications for new mails.'),
+                        'data-action': 'clear',
+                        'focus-id': 'mail-notification-clear'
+                    }),
                 $('<ul class="items list-unstyled">'),
                 $('<div class="open-app">').append(
                     $('<button data-action="open-app" tabindex="1" class="btn btn-primary btn-sm refocus" focus-id="mail-notification-open-app">').text(
@@ -47,22 +47,25 @@ define('plugins/notifications/mail/register', [
     function drawItem(node, data) {
         if (data) {
             require(['io.ox/mail/util'], function (util) {
-                var f = data.from || [['', '']];
+                var f = data.from || [['', '']],
+                    descriptionId = _.uniqueId('notification-description-');
                 node.append(
                     $('<li class="item refocus" tabindex="1" role="listitem">')
                         //special attribute to restore focus on redraw
                         .attr({
                             'focus-id': 'mail-notification-' + _.cid(data),
                             'data-cid': _.cid(data),
+                            'aria-describedby': descriptionId,
                             //#. %1$s mail sender
                             //#. %2$s mail subject
                             //#, c-format
-                            'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                            'aria-label': gt('Mail from %1$s %2$s', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
                         }).append(
-                            $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                            $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                            // TODO: re-add teaser once we get this via getList(...)
-                        )
+                        $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                        $('<span class="span-to-div title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                        $('<span class="span-to-div subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                        // TODO: re-add teaser once we get this via getList(...)
+                    )
                 );
             });
         }

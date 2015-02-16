@@ -79,6 +79,12 @@ module.exports = function (grunt) {
                         src: ['*.{js,css,png}'],
                         cwd: 'lib/node_modules/emoji/lib',
                         dest: 'build/apps/3rd.party/emoji'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components',
+                        src: ['velocity/velocity.min.js'],
+                        dest: 'build/apps/3rd.party/'
                     }
                 ]
             }

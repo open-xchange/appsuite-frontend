@@ -74,7 +74,8 @@ define('io.ox/mail/compose/names', [
             return new mini.InputView({ name: 'name', model: this.model }).render().$el
                 .attr('title', gt('Custom name'))
                 .attr('placeholder', placeholder)
-                .prop('disabled', !overwrite);
+                .prop('disabled', !overwrite)
+                .val(overwrite ? this.model.get('name') : '');
         }
     });
 
@@ -86,6 +87,12 @@ define('io.ox/mail/compose/names', [
 
         render: function () {
             this.$el.append(
+                // help text
+                $('<div class="help-block">').css('margin', '0 0 1em 0').text(gt(
+                    'Select a checkbox to define a custom name for that address; otherwise the mail account\'s default name will be used. ' +
+                    'If you want to use an address anonymously, select the checkbox and leave the field empty.'
+                )),
+                // addresses
                 this.collection.map(function (model) {
                     return new NameView({ model: model }).render().$el;
                 })

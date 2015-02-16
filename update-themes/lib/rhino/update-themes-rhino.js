@@ -62,7 +62,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
         }
     });
     if (!fileFound && !data) {
-        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
+        callback({ type: 'File', message: "'" + less.modules.path(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
         return;
     }
 
@@ -154,7 +154,8 @@ function compileLess(input, outputFile, sourceFileName) {
         paths: [
             'apps/3rd.party/bootstrap/less',
             'apps/3rd.party/font-awesome/less',
-            'apps/themes'
+            'apps/themes',
+            'apps/themes/' + themeName
         ],
         filename: '' + sourceFileName
     }).parse(input, function (e, css) {

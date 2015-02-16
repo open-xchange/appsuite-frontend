@@ -100,7 +100,7 @@ define('io.ox/core/folder/extensions', [
             });
 
             // open "My folders" whenever a folder is added to INBOX/root
-            api.pool.getCollection(defaultId).on('add', function () {
+            api.on('create:' + defaultId, function () {
                 node.toggle(true);
             });
 
@@ -444,6 +444,7 @@ define('io.ox/core/folder/extensions', [
                     this.addClass('shared').find('.folder-node').append(
                         $('<div class="owner">').text(title)
                     );
+                    baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }
             },
             {
@@ -460,6 +461,7 @@ define('io.ox/core/folder/extensions', [
                         $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
                         .on('click', { id: baton.data.id }, openPermissions)
                     );
+                    baton.view.options.a11yDescription.push(gt('You share this folder with other users'));
                 }
             },
             {
@@ -477,6 +479,7 @@ define('io.ox/core/folder/extensions', [
                         $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions'))
                         .on('click', { folder: baton.data }, openSubSettings)
                     );
+                    baton.view.options.a11yDescription.push(gt('This folder has publications and/or subscriptions'));
                 }
             },
             {

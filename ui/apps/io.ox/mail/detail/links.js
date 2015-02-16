@@ -409,7 +409,7 @@ define('io.ox/mail/detail/links', [
             this.contents().each(function () {
                 processTextNode(this);
             });
-            this.find('*').not('style').contents().each(function () {
+            this.find('*:not(style)').contents().each(function () {
                 processTextNode(this);
             });
         }

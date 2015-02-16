@@ -57,11 +57,12 @@ define('io.ox/contacts/main', [
             if (_.device('!smartphone')) return;
             var c = app.getWindow().nodes.main;
             var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+                toolbar = $('<div class="mobile-toolbar">'),
+                baton = ext.Baton({ app: app });
             app.navbar = navbar;
             app.toolbar = toolbar;
 
-            app.pages = new PageController(app);
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
@@ -70,7 +71,7 @@ define('io.ox/contacts/main', [
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
                 })
             });
@@ -80,16 +81,16 @@ define('io.ox/contacts/main', [
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView',
                     extension: 'io.ox/contacts/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
                     page: 'detailView',
                     extension: 'io.ox/contacts/mobile/toolbar'
@@ -100,11 +101,11 @@ define('io.ox/contacts/main', [
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/contacts/mobile/toolbar'
 
@@ -168,7 +169,12 @@ define('io.ox/contacts/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target').attr('tabindex', 1).scrollable();
+            app.right = right.addClass('default-content-padding f6-target')
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Contact Details')
+                }).scrollable();
         },
 
         'vgrid': function (app) {
@@ -782,7 +788,11 @@ define('io.ox/contacts/main', [
         app.setWindow(win);
         app.settings = settings;
 
-        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">');
+        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
+            .attr({
+                role: 'navigation',
+                'aria-label': gt('Item List')
+            });
 
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,

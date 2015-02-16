@@ -30,29 +30,28 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<h1 class="section-title">').text(gt('Overdue Tasks')).append(
-                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({
-                            tabindex: 1,
-                            'aria-label': gt('Hide all notifications for overdue tasks.'),
-                            'data-action': 'clear',
-                            'focus-id': 'task-overdue-notification-clear'
-                        })
-                ),
+                $('<h1 class="section-title">').text(gt('Overdue Tasks')),
+                $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
+                        'aria-label': gt('Hide all notifications for overdue tasks.'),
+                        'data-action': 'clear',
+                        'focus-id': 'task-overdue-notification-clear'
+                    }),
                 $('<ul class="items list-unstyled">')
             );
         }
     });
 
     function drawItem(node, model) {
-        var endText = '';
+        var endText = '',
+            descriptionId = _.uniqueId('notification-description-');
         if (_.noI18n(model.get('end_date'))) {
             endText = gt('end date ') + _.noI18n(model.get('end_date'));
         }
                 //#. %1$s task title
                 //#. %2$s task end date
                 //#, c-format
-        var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
+        var label = gt('%1$s %2$s.', _.noI18n(model.get('title')), endText);
 
         node.append(
             $('<li class="taskNotification item refocus" tabindex="1" role="listitem">')
@@ -60,10 +59,12 @@ define('plugins/notifications/tasks/register', [
                 'data-cid': model.get('cid'),
                 'focus-id': 'task-overdue-notification-' + model.get('cid'),
                 'model-cid': model.cid,
-                'aria-label': label
+                'aria-label': label,
+                'aria-describedby': descriptionId
             })
             .append(
-                $('<div class="title">').text(_.noI18n(model.get('title'))),
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
@@ -259,15 +260,14 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/task-reminder/header').extend({
         draw: function () {
             this.append(
-                $('<h1 class="section-title">').text(gt('Task reminders')).append(
-                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                $('<h1 class="section-title">').text(gt('Task reminders')),
+                $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({
                         tabindex: 1,
                         'aria-label': gt('Hide all task reminders.'),
                         'data-action': 'clear',
                         'focus-id': 'task-reminder-notification-clear'
-                    })
-                ),
+                    }),
                 $('<ul class="items list-unstyled">')
             );
         }
@@ -504,15 +504,13 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
-                $('<h1 class="section-title">').text(gt('Task invitations'))
-                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                    .attr({
-                        tabindex: 1,
+                $('<h1 class="section-title">').text(gt('Task invitations')),
+                $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
                         'aria-label': gt('Hide all task invitations.'),
                         'data-action': 'clear',
                         'focus-id': 'task-invitation-notification-clear'
-                    })
-                ),
+                    }),
                 $('<ul class="items list-unstyled">')
             );
         }
@@ -523,23 +521,27 @@ define('plugins/notifications/tasks/register', [
             var self = this;
             require(['io.ox/tasks/util'], function (util) {
                 var task = util.interpretTask(baton.model.toJSON()),
-                    endText = '';
+                    endText = '',
+                    descriptionId = _.uniqueId('notification-description-');
                 if (baton.model.get('end_date')) {
                     endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
                 }
-                        //#. %1$s task title
-                        //#. %2$s task end date
-                        //#. %3$s task status
-                        //#, c-format
-                var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText, baton.model.get('status'));
+                //#. %1$s task title
+                //#. %2$s task end date
+                //#. %3$s task status
+                //#, c-format
+                var label = gt('%1$s %2$s %3$s.', _.noI18n(baton.model.get('title')), endText, baton.model.get('status'));
                 self.attr({
                     role: 'listitem',
                     'data-cid': _.ecid(baton.model.attributes),
                     'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
                     tabindex: 1,
+                    'aria-describedby': descriptionId,
                     'aria-label': label
-                }).append(
-                    $('<div class="title">').text(_.noI18n(task.title)),
+                })
+                .append(
+                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                    $('<span class="span-to-div title">').text(_.noI18n(task.title)),
                     $('<div class="clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(task.end_date)),
                         $('<span class="status">').text(task.status).addClass(task.badge)),
@@ -549,7 +551,6 @@ define('plugins/notifications/tasks/register', [
                         .text(gt('Accept/Decline')),
                         $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
                             .attr({
-                                'title': gt('Accept invitation'),
                                 'aria-label': gt('Accept invitation'),
                                 'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)
                             })

@@ -650,8 +650,12 @@ define('io.ox/contacts/api', [
                             }
                         });
                 } else {
-                    $(new Image()).one('load error', function (e) {
-                        (this.width === 1 || e.type === 'error' ? fail : success)();
+                    $(new Image()).on('load error', function (e) {
+                        var fail = this.width === 1 || e.type === 'error';
+                        if (!fail) cachesURLs[url] = url;
+                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                        node = null;
+                        $(this).off();
                     })
                     .attr('src', url);
                 }

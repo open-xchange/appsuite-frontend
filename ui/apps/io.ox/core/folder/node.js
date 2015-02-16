@@ -127,7 +127,7 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed.index !== undefined) {
+            if (model.changed[this.getIndexAttribute()] !== undefined) {
                 this.renderAttributes();
                 if (this.options.parent.onSort) this.options.parent.onSort();
             }
@@ -276,7 +276,8 @@ define('io.ox/core/folder/node', [
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
-                title: ''                       // custom title
+                title: '',                      // custom title
+                a11yDescription: []             // content for aria-description tag
             }, options);
 
             // also set: folder, parent, tree
@@ -285,6 +286,7 @@ define('io.ox/core/folder/node', [
             this.model = api.pool.getModel(o.model_id);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
+            this.describedbyID = _.uniqueId('description-');
             this.$ = {};
 
             // make accessible via DOM
@@ -313,6 +315,7 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
+                    id:              this.describedbyID,
                     'aria-label':    '',
                     'aria-level':    o.level + 1,
                     'aria-selected': false,
@@ -334,6 +337,8 @@ define('io.ox/core/folder/node', [
                         ),
                         this.$.counter = $('<div class="folder-counter">')
                     ),
+                    // tag for screenreader only (aria-description)
+                    this.$.a11y = $('<span class="sr-only">').attr({ id: this.describedbyID }),
                     // subfolders
                     this.$.subfolders = $('<ul class="subfolders" role="group">')
                 );
@@ -395,7 +400,12 @@ define('io.ox/core/folder/node', [
         renderTitle: function () {
             var title = this.getTitle();
             this.$.label.text(title);
-            this.$el.attr('aria-label', title);
+        },
+
+        renderA11yNode: function () {
+            if (this.options.a11yDescription.length) {
+                this.$.a11y.text(this.options.a11yDescription.join('. '));
+            }
         },
 
         renderTooltip: function () {
@@ -407,7 +417,10 @@ define('io.ox/core/folder/node', [
             if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
             summary = summary.join(', ');
             if (summary) summary = ' (' + summary + ')';
-            this.$el.attr('title', this.model.get('title') + summary);
+            this.$el.attr({
+                'title': this.model.get('title') + summary,
+                'aria-label': this.model.get('title') + summary
+            });
         },
 
         renderContextControl: function () {
@@ -436,10 +449,16 @@ define('io.ox/core/folder/node', [
             });
         },
 
-        getIndex: function () {
+        getIndexAttribute: function () {
             var parent = this.options.parent;
-            if (!parent || !parent.collection) return 0;
-            return (this.model.get('index') || {})[parent.collection.id] || 0;
+            if (!parent || !parent.collection) return undefined;
+            return 'index/' + parent.collection.id;
+        },
+
+        getIndex: function () {
+            var attribute = this.getIndexAttribute();
+            if (attribute === undefined) return 0;
+            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {
@@ -468,6 +487,7 @@ define('io.ox/core/folder/node', [
             this.renderIcon();
             this.onChangeSubFolders();
             ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+            this.renderA11yNode();
             return this;
         },
 

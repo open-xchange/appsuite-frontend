@@ -15,20 +15,25 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
 
     'use strict';
 
-    var PageController = function (app, o) {
+    var PageController = function (o) {
         // stats ;)
-        if (!window.trappedTaps) window.trappedTaps = 0;
+        //if (!window.trappedTaps) window.trappedTaps = 0;
         var pages = {},
             current,
             order = [],
             lastPage = [],
             self = this,
-            app = app,
+            // mimic an app object instead of real reference
+            app = {
+                navbar: o.navbar,
+                toolbar: o.toolbar,
+                options: {
+                    name: o.appname
+                }
+            },
+            //app = app,
             backButtonRules,
-            options = o || {},
-            $taptrap = $('<div class="taptrap">').on('touchstart click mousedown', function () {
-                window.trappedTaps++;
-            });
+            options = o || {};
 
         function createPage(opt) {
             var defaults = {
@@ -119,23 +124,25 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             lastPage = current;
             // start animation to-page in
             current = to;
-            var taptrap = $taptrap.clone(true);
+            var tapTrap = $('<div class="taptrap">');
             if (_.device('!smartphone')) {
                 // taptrap is not needed on desktop, use empty node
-                taptrap = $();
+                tapTrap = $();
             }
 
             // only animate if possible
             if (Modernizr.cssanimations && !opt.disableAnimations) {
                 _.defer(function () {
                     $toPage
-                        .append(taptrap)
+                        .append(tapTrap)
                         .addClass('io-ox-core-animation in current ' + opt.animation)
                         .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
                             $(this).removeClass('io-ox-core-animation in ' + opt.animation);
                             $toPage.trigger('pageshow', { from: opt.from, to: opt.to });
-                            taptrap.remove();
+                            $(this).find('.taptrap').remove();
                         });
+                    // prevent leaking
+                    tapTrap = null;
                 }, 1);
 
                 // start animation "from" page out
@@ -271,16 +278,15 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             return pages;
         };
 
-        this.toggleSecondaryToolbar = function (page, state)  {
-            showToolbar(page, state);
-        };
-
         var showNavbar = function (page) {
-            var bar = pages[page].navbar;
+            var bar = pages[page].navbar, last = pages[lastPage];
 
             if (bar) {
-                app.navbar.find('.toolbar-content').detach();
+
+                //app.navbar.find('.toolbar-content').detach();
                 app.navbar.append(bar.$el);
+                bar.toggle(true);
+                if (last) last.navbar.toggle(false);
             }
         };
 
@@ -306,6 +312,7 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             }
         };
 
+        this.toggleSecondaryToolbar = showToolbar;
     };
 
     return PageController;

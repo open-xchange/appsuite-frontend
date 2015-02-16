@@ -383,7 +383,7 @@ define('io.ox/mail/compose/view', [
 
             // use CSS sanitizing and size limit (large than detail view)
             obj.embedded = true;
-            obj.max_size = settings.get('maxSize/compose', 1024 * 256);
+            obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
             return mailAPI[mode](obj, content_type).then(function (data) {
                 data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;

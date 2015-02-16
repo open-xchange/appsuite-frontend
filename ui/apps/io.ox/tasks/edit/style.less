@@ -88,6 +88,13 @@
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
+        .form-inline input {
+            padding: 4px 6px;
+            &.datepicker-day-field {
+                width: 100%;
+            }
+        }
+
         .form-control[readonly] { background-color: #fff; }
 
         .task-edit-cancel { float: none; }

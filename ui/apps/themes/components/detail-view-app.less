@@ -1,0 +1,47 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.detail-view-app {
+
+    background-color: #eee;
+    .overflow();
+
+    .thread-view-control, .detail-view-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .detail-view-container {
+
+        height: 100%;
+        overflow: visible;
+        outline: 0;
+
+        & > div {
+            min-height: 100%;
+            background-color: white;
+            padding: 20px;
+            // bottom padding of outer element not shown with height/min-height: 100%.
+            // instead of padding: 20px we use border + background-clip
+            border: 20px solid transparent;
+            background-clip: padding-box;
+        }
+    }
+
+    .thread-view-control, .thread-view-list {
+        position: static;
+        min-height: 100%;
+    }
+}

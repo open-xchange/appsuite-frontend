@@ -1,0 +1,127 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.io-ox-dialog-wrapper {
+    height: 100%;
+    width: 100%;
+
+    .modal-body {
+        overflow-y: auto;
+        max-height: 400px;
+    }
+}
+
+.io-ox-dialog-underlay {
+    background-color: black;
+    opacity: 0;
+    z-index: 65000;
+    .transition(opacity 0.15s linear);
+
+    &.in {
+        opacity: 0.30;
+    }
+
+    &.topmost {
+        z-index: 65002;
+    }
+
+}
+
+.io-ox-dialog-popup {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto 0 auto;
+    overflow: visible;
+    background-color: white;
+    z-index: 65001;
+    border: 0 none;
+    .box-shadow(0 5px 25px -5px #000);
+    .border-radius(5px 5px 5px 5px);
+
+    .modal-header {
+        h2, h3, h4 {
+            margin: 0;
+            .ellipsis();
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+    }
+
+    .modal-body {
+        &.max-height-100 { max-height: 100px; }
+        &.max-height-150 { max-height: 150px; }
+        &.max-height-200 { max-height: 200px; }
+        &.max-height-250 { max-height: 250px; }
+        &.max-height-300 { max-height: 300px; }
+        &.max-height-350 { max-height: 350px; }
+    }
+
+    &.zero-padding {
+        .modal-body {
+            padding: 0;
+            iframe {
+                display: block;
+                .border-radius(5px 5px 0 0);
+            }
+        }
+        .modal-footer {
+            margin-top: 0;
+        }
+    }
+
+    &.relogin {
+        z-index: 65301;
+    }
+
+    .content {
+        overflow: auto;
+
+        .plain-text {
+            font-size: 12pt;
+            text-align: center;
+            color: @text-color;
+            padding: 10px;
+        }
+
+    }
+
+    .modal-footer > .btn {
+        min-width: 5em;
+    }
+
+    .io-ox-sidepopup.right {
+        .border-radius(0 5px 5px 0);
+    }
+
+    .io-ox-sidepopup.left {
+        .border-radius(5px 0 0 5px);
+    }
+
+    &:focus {
+        outline: none;
+        .box-shadow(0 5px 25px -5px darken(@link-color, 20%));
+    }
+
+    &.topmost {
+        z-index: 65003;
+    }
+
+    .modal-header, .modal-footer {
+        padding: 13px;
+    }
+
+}

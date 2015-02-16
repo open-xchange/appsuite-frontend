@@ -1,0 +1,82 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.fadein {
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    -webkit-animation: fadein 300ms;
+
+    &.fast {
+        -webkit-animation: fadein 150ms;
+    }
+}
+
+.fadeout {
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    -webkit-animation: fadeout 300ms;
+
+    &.fast {
+        -webkit-animation: fadeout 150ms;
+    }
+}
+
+@-webkit-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+.legacy-chrome .animate-moveleft {
+    -webkit-transform: none;
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    left:0;
+}
+
+.legacy-chrome .animate-moveright {
+    -webkit-transform: none;
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    left:90%;
+}
+
+/* special fix for broken spin animation for Firefox on windows */
+/* see http://stackoverflow.com/questions/19661001/firefox-bug-font-is-sloppy-when-transformed#19684395 */
+.fix-spin .fa-spin {
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale");
+}
+
+// small screens (mobile)
+// note that we have to target max-width and max-device-width
+// to target all devices which don't support the max-device-width
+// property
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+    .animate-moveright {
+        -webkit-transform: translateX(90%);
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 300ms;
+    }
+
+    .animate-moveleft {
+        -webkit-transform: translateX(0%);
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 300ms;
+    }
+}

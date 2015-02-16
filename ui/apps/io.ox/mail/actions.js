@@ -155,6 +155,30 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/archive', {
+        requires: function (e) {
+            if (!e.collection.has('some')) return false;
+
+            return _(e.baton.array()).reduce(function (memo, obj) {
+                // already false?
+                if (memo === false) return false;
+                // is not primary account?
+                if (!account.isPrimary(obj.folder_id)) return false;
+                // is unified folder (may be external)
+                if (account.isUnifiedFolder(obj.folder_id)) return false;
+                // is in a subfolder of archive?
+                if (account.is('archive', obj.folder_id)) return false;
+                // else
+                return true;
+            }, true);
+        },
+        action: function (baton) {
+            var list = _.isArray(baton.data) ? baton.data : [ baton.data ];
+
+            api.archive(list);
+        }
+    });
+
     /*
      *  Move and Copy
      */
@@ -599,6 +623,16 @@ define('io.ox/mail/actions', [
         id: 'copy',
         label: gt('Copy'),
         ref: 'io.ox/mail/actions/copy',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'hi',
+        mobile: 'hi',
+        id: 'archive',
+        label: gt('Archive'),
+        ref: 'io.ox/mail/actions/archive',
         section: 'file-op'
     }));
 

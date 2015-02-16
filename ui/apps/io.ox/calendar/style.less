@@ -273,7 +273,7 @@
 
                 color: @@color;
                 background-color: @@background;
-                border-left-color: lighten(@@color, 20%);
+                border-left-color: @@color;
 
                 &.private {
                     border-left-color: #222;
@@ -996,5 +996,26 @@ li {
                 }
             }
         }
+    }
+}
+//
+// Expandable section
+//
+
+.expandable {
+
+    .expandable-content { display: none; }
+
+    &.open .expandable-content { display: block; }
+
+    .expandable-toggle { color: inherit; }
+
+    .expandable-indicator:before {
+        color: #aaa;
+        content: "\f0da"; // fa-caret-right
+    }
+
+    &.open .expandable-indicator:before {
+        content: "\f0d7"; // fa-caret-down
     }
 }

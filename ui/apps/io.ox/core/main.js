@@ -211,7 +211,10 @@ define('io.ox/core/main', [
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     topbar
-        .attr('aria-label', gt('Applications'))
+        .attr({
+            'aria-label': gt('Applications'),
+            'role': 'banner'
+        })
         // prevent dragging links
         .on('dragstart', false)
         // make system drop-down accessible
@@ -728,7 +731,7 @@ define('io.ox/core/main', [
                     tabManager();
                 } else {
                     //lets wait till we are online
-                    ox.one('connection:online', function () {
+                    ox.once('connection:online', function () {
                         self.append(notifications.attach(addLauncher, 2000));
                         tabManager();
                     });
@@ -1331,7 +1334,7 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0">').append(
                             $('<div class="header">').append(
                                 $('<h3>').text(gt('Restore applications')),
                                 $('<div>').text(
@@ -1562,7 +1565,7 @@ define('io.ox/core/main', [
     //
     // Visual response to hidden folders
     //
-    folderAPI.on('warn:hidden', function (e, folder) {
+    folderAPI.on('warn:hidden', function (folder) {
         if (folder) {
             notifications.yell('info',
                //#. %1$s is the filename
@@ -1575,7 +1578,7 @@ define('io.ox/core/main', [
     // Respond to special http error codes (see bug 32836)
     //
 
-    ox.on('http:error', function (e, error) {
+    ox.on('http:error', function (error) {
         switch (error.code) {
             case 'MSG-1000':
             case 'MSG-1001':

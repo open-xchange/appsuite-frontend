@@ -51,7 +51,6 @@ define('io.ox/calendar/model', [
 
             init: function () {
                 var defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
-
                 // set default time
                 this.attributes = _.extend({
                     start_date: defStart.getTime(),
@@ -59,14 +58,12 @@ define('io.ox/calendar/model', [
                 }, this.attributes);
 
                 // End date automatically shifts with start date
-                var length = this.get('end_date') - this.get('start_date'),
-                    updatingStart = false,
-                    updatingEnd = false;
+                var length = this.get('end_date') - this.get('start_date');
 
                 // internal storage for last timestamps
                 this.cache = {
-                    start: this.get('full_time') ? date.Local.utc(this.get('start_date')) : this.get('start_date'),
-                    end: this.get('full_time') ? date.Local.utc(this.get('end_date')) : this.get('end_date')
+                    start: this.get('full_time') ? defStart.getTime() : this.get('start_date'),
+                    end: this.get('full_time') ? defStart.getTime() + date.HOUR : this.get('end_date')
                 };
 
                 // bind events
@@ -77,26 +74,19 @@ define('io.ox/calendar/model', [
                         }
                     },
                     'change:start_date': function (model, startDate) {
-                        if (length < 0 || updatingStart) {
+                        if (length < 0) {
                             return;
                         }
-                        updatingEnd = true;
                         if (startDate && _.isNumber(length)) {
                             model.set('end_date', startDate + length, { validate: true });
                         }
-                        updatingEnd = false;
                     },
                     'change:end_date': function (model, endDate) {
-                        if (updatingEnd) {
-                            return;
-                        }
                         var tmpLength = endDate - model.get('start_date');
                         if (tmpLength < 0) {
-                            updatingStart = true;
                             if (endDate && _.isNumber(length)) {
                                 model.set('start_date', endDate - length, { validate: true });
                             }
-                            updatingStart = false;
                         } else {
                             length = tmpLength;
                         }

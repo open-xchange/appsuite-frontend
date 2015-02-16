@@ -200,7 +200,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             $container.append($anchor);
 
             function drawState() {
-                var label = options.options['bit_' + self[attribute]];
+                var label = options.options[self[attribute]];
                 if (options.chooseLabel) {
                     label = options.chooseLabel(self[attribute]);
                 }
@@ -617,6 +617,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                                 62: gt('day of the week'),
                                 65: gt('day of the weekend')
                             }),
+                            chooseLabel: function (val) {
+                                return this.options['bit_' + val];
+                            },
                             initial: 2
                         },
                         interval: {
@@ -682,6 +685,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                                 62: gt('day of the week'),
                                 65: gt('day of the weekend')
                             }),
+                            chooseLabel: function (val) {
+                                return this.options['bit_' + val];
+                            },
                             initial: 2
                         },
                         month: {

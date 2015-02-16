@@ -108,6 +108,13 @@ define('io.ox/mail/toolbar', [
             label: gt('Edit draft'),
             ref: 'io.ox/mail/actions/edit'
         },
+        'archive': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-archive',
+            label: gt('Archive'),
+            ref: 'io.ox/mail/actions/archive'
+        },
         //
         // --- LO ----
         //

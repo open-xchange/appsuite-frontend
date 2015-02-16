@@ -220,6 +220,7 @@ define('io.ox/core/tk/attachments', [
      * @param {object} baton
      */
     function EditableFileList(options, baton) {
+
         var self = this,
             counter = 0,
             files = [],
@@ -235,8 +236,14 @@ define('io.ox/core/tk/attachments', [
 
             init: function () {
                 // add preview side-popup
-                new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
+                this.sidepopup = new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
+                // destroy if removed from DOM
+                $el.on('dispose', this.destroy.bind(this));
+            },
 
+            destroy: function () {
+                this.sidepopup.undelegate($el).destroy();
+                this.sidepopup = $el = self = options = baton = null;
             },
 
             render: function () {
@@ -621,7 +628,7 @@ define('io.ox/core/tk/attachments', [
             gguid = _.uniqueId('form-control-label-'),
             label = $('<label>').attr('for', gguid).addClass('sr-only').text(options.buttontext),
             input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ id: gguid, tabindex: options.tabindex }),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($.txt(options.buttontext)).append(label, input),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button" tabindex="1">').append($.txt(options.buttontext)).append(label, input),
             driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').attr({ tabindex: options.tabindex }).text(gt('Add from Drive'));
 
         input.on('focus', function () {

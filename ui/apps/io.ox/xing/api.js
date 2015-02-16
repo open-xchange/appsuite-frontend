@@ -137,8 +137,8 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
      */
     createSubscription = function () {
         require([
-            'io.ox/core/api/sub',
-            'io.ox/core/sub/model',
+            'io.ox/core/api/pubsub',
+            'io.ox/core/pubsub/model',
             'io.ox/core/folder/api',
             'io.ox/keychain/api',
             'io.ox/core/notifications'

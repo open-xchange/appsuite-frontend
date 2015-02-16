@@ -252,7 +252,8 @@ define('io.ox/core/folder/view', [
                 // defer so that favorite folders are drawn already
                 _.defer(function () {
                     api.path(id).done(function (path) {
-                        var ids = _(path).pluck('id');
+                        // get all ids except the folder itself, therefore slice(0, -1);
+                        var ids = _(path).pluck('id').slice(0, -1);
                         tree.open = _(tree.open.concat(ids)).uniq();
                     })
                     .always(function () {

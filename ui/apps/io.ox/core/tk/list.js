@@ -45,7 +45,7 @@ define('io.ox/core/tk/list', [
         scaffold: $(
             '<li class="list-item">' +
             '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"/></div>' +
-            '<div class="list-item-content"></div>' +
+            '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
 
@@ -296,6 +296,24 @@ define('io.ox/core/tk/list', [
 
             // make sure busy & idle use proper this (for convenient callbacks)
             _.bindAll(this, 'busy', 'idle');
+
+            // set special class if not on smartphones (different behavior)
+            if (_.device('!smartphone')) {
+                this.$el.addClass('visible-selection');
+
+            }
+            // helper to detect scrolling in action, only used by mobiles
+            if (_.device('smartphone')) {
+                var self = this,
+                    timer;
+                this.$el.scroll(function () {
+                    self.selection.isScrolling = true;
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        self.selection.isScrolling = false;
+                    }, 250);
+                });
+            }
         },
 
         forwardCollectionEvents: function (name) {
@@ -326,7 +344,9 @@ define('io.ox/core/tk/list', [
                 'before:paginate': this.busy,
                 'paginate': this.idle,
                 'paginate:fail': this.idle,
-                'complete': this.onComplete
+                'complete': this.onComplete,
+                // reload
+                'reload': this.idle
             });
             if (this.selection) this.selection.reset();
             this.trigger('collection:set');

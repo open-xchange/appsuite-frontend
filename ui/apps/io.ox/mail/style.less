@@ -102,6 +102,7 @@
 }
 
 .list-item {
+    background-color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
@@ -181,14 +182,39 @@
         }
         font-size: @phone-font-size;
         line-height: @phone-line-height;
+        border-right: 1px solid rgba(0, 0, 0, 0.15);
+        margin-right: -1px;
 
     }
 }
 
+.swipe-option-cell {
+    position: absolute;
+    width: 100%;
+    right: 0px;
+    z-index: -5;
+    .swipe-button {
+        height: 100%;
+        width: 95px;
+        color:#fff;
+        line-height: 63px;
+        font-size: 30px;
+        text-align: center;
+        float: right;
+        &.delete {
+            background: #FF4105;
+        }
+        &.more {
+            background: rgb(255, 169, 8);
+        }
+    }
+}
+
+
 .list-view {
     @media (max-width: 480px), (max-device-width: 480px)  {
         .list-item:hover {
-            background-color: rgba(221, 221, 221, 0.5);
+            background-color: rgb(238, 238, 238);
         }
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
@@ -1702,3 +1728,4 @@ h4.mail-attachment-preview {
     }
 
 }
+.to-cc { position: relative; }

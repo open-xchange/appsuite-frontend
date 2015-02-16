@@ -245,7 +245,7 @@ define('io.ox/mail/api', [
         // determine default view parameter
         if (!obj.view) obj.view = defaultView(obj);
 
-        // limit default size (30KB)
+        // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         return get.call(api, obj, options && options.cache).done(function (data) {
@@ -362,10 +362,50 @@ define('io.ox/mail/api', [
         );
     };
 
+    /**
+     * archives a list of files
+     * @param  {array} ids
+     * @return { deferred}
+     */
+    api.archive = function (ids) {
+        if (!_.isArray(ids) || ids.length === 0) {
+            return;
+        }
+
+        prepareRemove(ids);
+
+        return http.wait(
+            http.PUT({
+                module: 'mail',
+                params: { action: 'archive', timestamp: _.then() },
+                data: http.simplify(ids)
+            })
+            .done(function () {
+                var accountId = accountAPI.parseAccountId(_.cid(ids[0])),
+                    folders = _.intersection(accountAPI.getFoldersByType('archive'), folderAPI.getStandardMailFolders());
+
+                folders = _(folders).filter(function (folder) {
+                    return accountAPI.parseAccountId(folder) === accountId;
+                });
+
+                // this test will only work for primary archive folders
+                // account api assumes, that external accounts are always having an archive folder
+                if (folders.length > 0) {
+                    folderAPI.reload(folders);
+                } else {
+                    // refresh all folders because the archive folder might be new
+                    folderAPI.refresh();
+                    // reload mail views
+                    api.trigger('refresh.all');
+                }
+            })
+        );
+    };
+
     //
-    // Archive messages
+    // Archive all messages inside a folder which are older than 90 days
     //
-    api.archive = function (id) {
+    api.archiveFolder = function (id) {
 
         return http.PUT({
             module: 'mail',

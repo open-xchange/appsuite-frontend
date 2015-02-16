@@ -1,4 +1,4 @@
-/**
+    /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -108,6 +108,19 @@ define('io.ox/settings/main', [
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
+        left = vsplit.left.addClass('leftside border-right');
+
+        left.attr({
+            'role': 'navigation',
+            'aria-label': gt('Settings')
+        });
+
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
+            'tabindex': 1,
+            'aria-describedby': 'currentsettingtitle',
+            //needed or mac voice over reads the whole settings pane when an input element is focused
+            'role': 'main'
+        }).scrollable();
 
         var appsInitialized = appsAPI.getInstalled().done(function (installed) {
 

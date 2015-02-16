@@ -44,8 +44,7 @@ define('io.ox/core/folder/api', [
     }
 
     function injectIndex(id, item, index) {
-        if (!item.index) item.index = {};
-        item.index[id] = index;
+        item['index/' + id] = index;
         return item;
     }
 
@@ -86,9 +85,14 @@ define('io.ox/core/folder/api', [
             Backbone.Collection.apply(this, arguments);
             this.id = id;
             this.fetched = false;
+            this.on('remove', this.onRemove, this);
         },
         comparator: function (model) {
-            return (model.get('index') || {})[this.id] || 0;
+            return model.get('index/' + this.id) || 0;
+        },
+        onRemove: function (model) {
+            if (isFlat(model.get('module'))) return;
+            pool.getModel(this.id).set('subfolders', this.length > 0);
         },
         model: FolderModel
     });
@@ -103,15 +107,17 @@ define('io.ox/core/folder/api', [
     _.extend(Pool.prototype, {
 
         addModel: function (data) {
-            var id = data.id;
-            if (this.models[id] === undefined) {
+
+            var id = data.id, model = this.models[id];
+
+            if (model === undefined) {
                 // add new model
-                this.models[id] = new FolderModel(data);
+                this.models[id] = model = new FolderModel(data);
             } else {
                 // update existing model
-                this.models[id].set(data);
+                model.set(data);
             }
-            return this.models[id];
+            return model;
         },
 
         addCollection: function (id, list, options) {
@@ -254,6 +260,10 @@ define('io.ox/core/folder/api', [
         });
     };
 
+    VirtualFolder.prototype.fetch = function () {
+        return this.getter().done(pool.addCollection.bind(pool, getCollectionId(this.id)));
+    };
+
     var virtual = {
 
         hash: {},
@@ -273,6 +283,10 @@ define('io.ox/core/folder/api', [
             return $.when.apply($, arguments).then(function () {
                 return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
             });
+        },
+
+        refresh: function () {
+            _(this.hash).invoke('fetch');
         }
     };
 
@@ -604,14 +618,8 @@ define('io.ox/core/folder/api', [
         if (id === target) return;
 
         // prepare move
-        var model = pool.getModel(id),
-            parent = model.get('folder_id'),
-            collection = pool.getCollection(parent);
-
-        // remove model from parent collection
-        collection.remove(model);
-        // update parent folder; subfolders might have changed
-        pool.getModel(parent).set('subfolders', collection.length > 0);
+        var model = pool.getModel(id);
+        removeFromAllCollections(model);
 
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
@@ -666,6 +674,7 @@ define('io.ox/core/folder/api', [
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
                 api.trigger('create', data);
+                api.trigger('create:' + id, data);
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
@@ -677,22 +686,8 @@ define('io.ox/core/folder/api', [
     // Remove folder
     //
 
-    function removeFromCollection(model) {
-        // flat folders are different
-        var module = model.get('module'), section, parent, collection;
-        if (isFlat(module)) {
-            // contacts, calendar, tasks
-            section = getSection(model.get('type'));
-            collection = getFlatCollection(module, section);
-            collection.remove(model);
-        } else {
-            // mail and drive
-            parent = model.get('folder_id');
-            collection = pool.getCollection(parent);
-            collection.remove(model);
-            // update parent folder; subfolders might have changed
-            pool.getModel(parent).set('subfolders', collection.length > 0);
-        }
+    function removeFromAllCollections(model) {
+        _(pool.collections).invoke('remove', model);
     }
 
     function remove(id) {
@@ -704,7 +699,7 @@ define('io.ox/core/folder/api', [
         api.trigger('remove:prepare', data);
 
         // update collection (now)
-        removeFromCollection(model);
+        removeFromAllCollections(model);
         model.trigger('destroy');
 
         // delete on server
@@ -859,7 +854,9 @@ define('io.ox/core/folder/api', [
             flat({ module: module, cache: false });
         });
         // go!
-        http.resume();
+        http.resume().done(function () {
+            virtual.refresh();
+        });
     }
 
     ox.on('please:refresh refresh^', refresh);
@@ -933,7 +930,8 @@ define('io.ox/core/folder/api', [
         getSection: getSection,
         Bitmask: Bitmask,
         propagate: propagate,
-        altnamespace: altnamespace
+        altnamespace: altnamespace,
+        injectIndex: injectIndex
     });
 
     return api;

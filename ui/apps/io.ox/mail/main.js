@@ -21,6 +21,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/threadview',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
+    'io.ox/core/extPatterns/links',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'io.ox/core/toolbars-mobile',
@@ -37,7 +38,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
 
     'use strict';
 
@@ -63,16 +64,16 @@ define('io.ox/mail/main', [
             app.navbar = navbar;
             app.toolbar = toolbar;
 
-            app.pages = new PageController(app);
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
-
+            var baton = ext.Baton({ app: app });
             // create 4 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 })
             });
@@ -82,16 +83,16 @@ define('io.ox/mail/main', [
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView',
                     extension: 'io.ox/mail/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'listView/multiselect',
                     extension: 'io.ox/mail/mobile/toolbar'
                 })
@@ -101,11 +102,11 @@ define('io.ox/mail/main', [
                 name: 'threadView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'threadView',
                     extension: 'io.ox/mail/mobile/toolbar'
                 })
@@ -115,11 +116,11 @@ define('io.ox/mail/main', [
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app,
+                    baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
-                    app: app,
+                    baton: baton,
                     page: 'detailView',
                     extension: 'io.ox/mail/mobile/toolbar'
                 })
@@ -437,7 +438,15 @@ define('io.ox/mail/main', [
          */
         'list-view-control': function (app) {
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
-            app.left.append(app.listControl.render().$el);
+            app.left.append(
+                app.listControl.render().$el
+                    //#. items list (e.g. mails)
+                    .attr('aria-label', gt('Item list'))
+                    .find('.toolbar')
+                    //#. toolbar with 'select all' and 'sort by'
+                    .attr('aria-label', gt('Item list options'))
+                    .end()
+            );
             // make resizable
             app.listControl.resizable();
         },
@@ -916,6 +925,21 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Handle archive event based on keyboard shortcut
+         */
+        'selection-archive': function () {
+            app.listView.on('selection:archive', function (list) {
+                var baton = ext.Baton({ data: list });
+                // remember if this list is based on a single thread
+                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
+                // resolve thread
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                // call action
+                actions.invoke('io.ox/mail/actions/archive', null, baton);
+            });
+        },
+
+        /*
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {
@@ -939,6 +963,36 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.listView.on('selection:doubleclick', function (list) {
                 ox.launch('io.ox/mail/detail/main', { cid: list[0] });
+            });
+        },
+
+         /*
+         * Add support for selection:
+         */
+        'selection-mobile-swipe': function (app) {
+            if (_.device('!smartphone')) return;
+
+            ext.point('io.ox/mail/mobile/swipeButtonMore').extend(new links.Dropdown({
+                id: 'actions',
+                index: 1,
+                classes: '',
+                label: '',
+                ariaLabel: '',
+                icon: '',
+                noCaret: true,
+                ref: 'io.ox/mail/links/inline'
+            }));
+
+            app.listView.on('selection:more', function (list, node) {
+                var baton = ext.Baton({ data: list });
+                // remember if this list is based on a single thread
+                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
+                // resolve thread
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                // call action
+                // we open a dropdown here with options.
+                ext.point('io.ox/mail/mobile/swipeButtonMore').invoke('draw', node, baton);
+                node.find('a').click();
             });
         },
 
