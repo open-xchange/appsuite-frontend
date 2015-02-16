@@ -53,7 +53,7 @@ msgstr[1] "(%1$s) 个附件"
 #. General duration (nominative case): X days, Y hours and Z minutes
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js:130 module:io.ox/core
+#: apps/io.ox/core/date.js:139 module:io.ox/core
 #, c-format
 msgid "%1$d day, %2$s"
 msgid_plural "%1$d days, %2$s"
@@ -63,7 +63,7 @@ msgstr[1] "%1$d 天、%2$s"
 #. Reminder (objective case): in X days, Y hours and Z minutes
 #. %1$d is the number of days
 #. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js:125 module:io.ox/core
+#: apps/io.ox/core/date.js:134 module:io.ox/core
 #, c-format
 msgctxt "in"
 msgid "%1$d day, %2$s"
@@ -78,7 +78,7 @@ msgstr "最近更改了 %1$d 个文件"
 #. General duration (nominative case): X hours and Y minutes
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js:162 module:io.ox/core
+#: apps/io.ox/core/date.js:171 module:io.ox/core
 #, c-format
 msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
@@ -88,7 +88,7 @@ msgstr[1] "%1$d 小时和 %2$s"
 #. Reminder (objective case): in X hours and Y minutes
 #. %1$d is the number of hours
 #. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js:157 module:io.ox/core
+#: apps/io.ox/core/date.js:166 module:io.ox/core
 #, c-format
 msgctxt "in"
 msgid "%1$d hour and %2$s"
@@ -106,7 +106,7 @@ msgstr[1] "已选定 %1$d 个项目"
 msgid "%1$d messages in this conversation"
 msgstr "此交谈有 %1$d 个消息"
 
-#: apps/io.ox/mail/main.js:608 module:io.ox/mail
+#: apps/io.ox/mail/main.js:616 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "已选定 %1$d 个消息"
 
@@ -119,7 +119,7 @@ msgstr[0] "%1$d 条通知。"
 msgstr[1] "%1$d 条通知。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:626 module:io.ox/mail
+#: apps/io.ox/mail/main.js:634 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "已选定 %1$d 个"
 
@@ -129,7 +129,7 @@ msgstr "已选定 %1$d 个"
 #. %3$s is the city
 #. %4$s is the state
 #. %5$s is the country
-#: apps/io.ox/contacts/edit/view-form.js:136 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:138 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:408
 #: apps/plugins/halo/xing/register.js:68 module:plugins/portal
 msgid ""
@@ -143,7 +143,7 @@ msgstr ""
 "%1$s\n"
 "%2$s"
 
-#: apps/io.ox/settings/main.js:288 module:io.ox/core
+#: apps/io.ox/settings/main.js:295 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -164,10 +164,68 @@ msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. %1$s Appointment title
+#. %2$s Appointment date
+#. %3$s Appointment time
+#. %4$s Appointment location
+#. %5$s Appointment Organizer
+#: apps/plugins/notifications/calendar/register.js:72
+#: module:plugins/notifications
+#, fuzzy, c-format
+#| msgid ""
+#| "%1$s\n"
+#| "%2$s %3$s\n"
+#| "%4$s\n"
+#| "%5$s"
+msgid "%1$s %2$s %3$s %4$s %5$s."
+msgstr ""
+"%5$s\n"
+"%4$s %3$s\n"
+"%1$s\n"
+"%2$s"
+
+#. %1$s Appointment title
+#. %2$s Appointment date
+#. %3$s Appointment time
+#. %4$s Appointment location
+#: apps/io.ox/core/tk/reminder-util.js:109 module:io.ox/core
+#, fuzzy, c-format
+#| msgid ""
+#| "%1$s\n"
+#| "%2$s %3$s\n"
+#| "%4$s\n"
+#| "%5$s"
+msgid "%1$s %2$s %3$s %4$s."
+msgstr ""
+"%5$s\n"
+"%4$s %3$s\n"
+"%1$s\n"
+"%2$s"
+
+#. %1$s task title
+#. %2$s task end date
+#. %3$s task status
+#: apps/io.ox/core/tk/reminder-util.js:96 module:io.ox/core
+#: apps/plugins/notifications/tasks/register.js:530
+#: module:plugins/notifications
+#, fuzzy, c-format
+#| msgid "%3$s %2$s, %1$s"
+msgid "%1$s %2$s %3$s."
+msgstr "%2$s %1$s %3$s"
+
+#. %1$s task title
+#. %2$s task end date
+#: apps/plugins/notifications/tasks/register.js:54
+#: module:plugins/notifications
+#, fuzzy, c-format
+#| msgid "%1$s %2$s"
+msgid "%1$s %2$s."
+msgstr "%1$s %2$s"
+
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:371 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1750
+#: apps/io.ox/calendar/week/view.js:1751
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s （暂定）"
@@ -238,6 +296,14 @@ msgstr "%1$s - %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s 更改了他们的状态："
 
+#: apps/io.ox/mail/settings/signatures/register.js:366 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:370
+#: apps/io.ox/mail/settings/signatures/register.js:375
+#, fuzzy
+#| msgid "%1$s %2$s"
+msgid "%1$s, %2$s"
+msgstr "%1$s %2$s"
+
 #. Name without title
 #. %1$s is the first name
 #. %2$s is the last name
@@ -256,7 +322,7 @@ msgstr "%2$s %1$s %3$s"
 #. General duration (nominative case): X days
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js:333 module:io.ox/calendar
-#: apps/io.ox/core/date.js:116 module:io.ox/core
+#: apps/io.ox/core/date.js:125 module:io.ox/core
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -265,7 +331,7 @@ msgstr[1] "%d 天"
 
 #. Reminder (objective case): in X days
 #. %d is the number of days
-#: apps/io.ox/core/date.js:112 module:io.ox/core
+#: apps/io.ox/core/date.js:121 module:io.ox/core
 #, c-format
 msgctxt "in"
 msgid "%d day"
@@ -275,7 +341,7 @@ msgstr[1] "%d 天"
 
 #. General duration (nominative case): X hours
 #. %d is the number of hours
-#: apps/io.ox/core/date.js:148 module:io.ox/core
+#: apps/io.ox/core/date.js:157 module:io.ox/core
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -284,7 +350,7 @@ msgstr[1] "%d 小时"
 
 #. Reminder (objective case): in X hours
 #. %d is the number of hours
-#: apps/io.ox/core/date.js:144 module:io.ox/core
+#: apps/io.ox/core/date.js:153 module:io.ox/core
 #, c-format
 msgctxt "in"
 msgid "%d hour"
@@ -294,7 +360,7 @@ msgstr[1] "%d 小时"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/core/date.js:174 module:io.ox/core
+#: apps/io.ox/core/date.js:183 module:io.ox/core
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -303,7 +369,7 @@ msgstr[1] "%d 分钟"
 
 #. Reminder (objective case): in X minutes
 #. %d is the number of minutes
-#: apps/io.ox/core/date.js:170 module:io.ox/core
+#: apps/io.ox/core/date.js:179 module:io.ox/core
 #, c-format
 msgctxt "in"
 msgid "%d minute"
@@ -313,7 +379,7 @@ msgstr[1] "%d 分钟"
 
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
-#: apps/io.ox/core/date.js:97 module:io.ox/core
+#: apps/io.ox/core/date.js:106 module:io.ox/core
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -322,7 +388,7 @@ msgstr[1] "%d 周"
 
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks
-#: apps/io.ox/core/date.js:93 module:io.ox/core
+#: apps/io.ox/core/date.js:102 module:io.ox/core
 #, c-format
 msgctxt "in"
 msgid "%d week"
@@ -350,8 +416,9 @@ msgstr "iOS 版 %s 客户端"
 msgid "%s is also available for other platforms:"
 msgstr "%s 也在其他平台可用："
 
-#: apps/io.ox/mail/settings/signatures/register.js:352 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:445
+#: apps/io.ox/mail/settings/signatures/register.js:364 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:366
+#: apps/io.ox/mail/settings/signatures/register.js:465
 msgid "(Default)"
 msgstr "（默认）"
 
@@ -481,7 +548,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "已选定 <b>%1$d</b> 个元素"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:512 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:525 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "已发送一个送达回执"
 
@@ -496,11 +563,11 @@ msgstr ""
 msgid "A severe error occurred!"
 msgstr "发生一个严重错误！"
 
-#: apps/io.ox/core/main.js:872 module:io.ox/core
+#: apps/io.ox/core/main.js:885 module:io.ox/core
 msgid "About"
 msgstr "关于"
 
-#: apps/io.ox/calendar/edit/template.js:270 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:287 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Absent"
 msgstr "缺乏"
@@ -513,7 +580,7 @@ msgstr "缺乏"
 msgid "Accept"
 msgstr "接受"
 
-#: apps/plugins/notifications/calendar/register.js:82
+#: apps/plugins/notifications/calendar/register.js:87
 #: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "接受 / 拒绝"
@@ -523,15 +590,13 @@ msgstr "接受 / 拒绝"
 msgid "Accept changes"
 msgstr "接受更改"
 
-#: apps/plugins/notifications/calendar/register.js:84
+#: apps/plugins/notifications/calendar/register.js:89
 #: module:plugins/notifications
-#: apps/plugins/notifications/calendar/register.js:85
-#: apps/plugins/notifications/tasks/register.js:543
-#: apps/plugins/notifications/tasks/register.js:544
+#: apps/plugins/notifications/tasks/register.js:548
 msgid "Accept invitation"
 msgstr "接受邀请"
 
-#: apps/plugins/notifications/tasks/register.js:541
+#: apps/plugins/notifications/tasks/register.js:546
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "接受 / 拒绝"
@@ -550,7 +615,7 @@ msgstr "以 WebDAV 访问文件"
 msgid "Accessing global address book is not permitted"
 msgstr "不允许访问全域地址簿"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:237 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:236 module:io.ox/core/pubsub
 #: apps/plugins/portal/mail/register.js:195 module:plugins/portal
 msgid "Account"
 msgstr "账户"
@@ -593,7 +658,7 @@ msgstr "户口已更新"
 #: apps/io.ox/files/mobile-toolbar-actions.js:86
 #: apps/io.ox/files/mobile-toolbar-actions.js:111
 #: apps/io.ox/files/mobile-toolbar-actions.js:124
-#: apps/io.ox/mail/detail/view.js:96 apps/io.ox/mail/detail/view.js:97
+#: apps/io.ox/mail/detail/view.js:97 apps/io.ox/mail/detail/view.js:98
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:747
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:140
@@ -617,12 +682,12 @@ msgstr "按分钟设置间隔"
 #: apps/io.ox/core/folder/actions/add.js:100 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:326 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:584
+#: apps/io.ox/mail/compose/extensions.js:328 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:604
 msgid "Add"
 msgstr "添加"
 
-#: apps/io.ox/mail/write/view-main.js:528 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:548 module:io.ox/mail
 msgid "Add Attachment"
 msgstr "添加附件"
 
@@ -636,7 +701,7 @@ msgstr "添加新户口"
 msgid "Add action"
 msgstr "添加动作"
 
-#: apps/io.ox/mail/compose/extensions.js:328 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:330 module:io.ox/mail
 msgid "Add attachments"
 msgstr "添加附件"
 
@@ -660,16 +725,16 @@ msgid "Add distribution list"
 msgstr "添加通讯组列表"
 
 #: apps/io.ox/files/filepicker.js:31 module:io.ox/files
-#: apps/io.ox/mail/write/view-main.js:586 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:606 module:io.ox/mail
 msgid "Add files"
 msgstr "添加文件"
 
-#: apps/io.ox/core/tk/attachments.js:605 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:355 module:io.ox/mail
+#: apps/io.ox/core/tk/attachments.js:612 module:io.ox/core/tk/attachments
+#: apps/io.ox/mail/compose/extensions.js:357 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "从 Drive 添加"
 
-#: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:353 module:io.ox/mail
 msgid "Add local file"
 msgstr "附加本地文件"
 
@@ -680,11 +745,11 @@ msgstr "附加本地文件"
 msgid "Add mail account"
 msgstr "添加邮件帐户"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:224 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:223 module:io.ox/core/pubsub
 msgid "Add new account"
 msgstr "添加新户口"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:297 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:296 module:io.ox/core/pubsub
 msgid "Add new folder for this subscription"
 msgstr "为此订阅添加新文件夹"
 
@@ -692,11 +757,11 @@ msgstr "为此订阅添加新文件夹"
 msgid "Add new participant"
 msgstr "添加新参与者"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:457 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:460 module:io.ox/mail
 msgid "Add new rule"
 msgstr "添加新规则"
 
-#: apps/io.ox/mail/settings/signatures/register.js:458 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:478 module:io.ox/mail
 msgid "Add new signature"
 msgstr "添加新签名"
 
@@ -716,28 +781,28 @@ msgstr "在 %s 上添加"
 msgid "Add participant"
 msgstr "添加参与者"
 
-#: apps/io.ox/calendar/edit/template.js:332 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:334
-#: apps/io.ox/calendar/edit/template.js:341
+#: apps/io.ox/calendar/edit/template.js:349 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:351
+#: apps/io.ox/calendar/edit/template.js:358
 #: apps/io.ox/tasks/edit/view-template.js:405 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:407
 msgid "Add participant/resource"
 msgstr "添加参与者/资源"
 
-#: apps/io.ox/mail/settings/signatures/register.js:158 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
 msgid "Add signature"
 msgstr "添加签名"
 
-#: apps/io.ox/mail/settings/signatures/register.js:100 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:112 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "在引用文本上方添加签名"
 
-#: apps/io.ox/mail/settings/signatures/register.js:101 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "在引用文本下方添加签名"
 
-#: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1280
+#: apps/io.ox/mail/compose/view.js:750 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1281
 msgid "Add subject"
 msgstr "添加题目"
 
@@ -750,7 +815,7 @@ msgstr "添加到地址簿"
 msgid "Add to calendar"
 msgstr "添加到日历"
 
-#: apps/io.ox/core/folder/favorites.js:136 module:io.ox/core
+#: apps/io.ox/core/folder/favorites.js:139 module:io.ox/core
 msgid "Add to favorites"
 msgstr "添加到我的最爱"
 
@@ -762,7 +827,7 @@ msgstr "添加到我的最爱"
 msgid "Add to portal"
 msgstr "添加到门户"
 
-#: apps/io.ox/portal/settings/pane.js:96 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:97 module:io.ox/portal
 msgid "Add widget"
 msgstr "添加迷你程序"
 
@@ -781,17 +846,22 @@ msgstr "添加您的帐户"
 msgid "Added the new participant"
 msgstr "添加新参与者"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
 msgid "Adding subscription. This may take some seconds …"
 msgstr "添加订阅中，可能稍时片刻..."
+
+#: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
+#, fuzzy
+#| msgid "Editing settings"
+msgid "Additional settings"
+msgstr "编辑设定"
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:216 module:io.ox/mail
 msgid "Address Book"
 msgstr "地址簿"
 
-#: apps/io.ox/core/main.js:222 module:io.ox/core
+#: apps/io.ox/core/main.js:225 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:31
 msgctxt "app"
 msgid "Address Book"
@@ -810,7 +880,7 @@ msgid "Address Other"
 msgstr "地址（其他）"
 
 #: apps/io.ox/files/util.js:60 module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:354 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:352 module:io.ox/core
 msgid "Adjust"
 msgstr "调整"
 
@@ -827,22 +897,22 @@ msgstr "管理员"
 msgid "Advanced Facets"
 msgstr "进阶刻面"
 
-#: apps/io.ox/settings/main.js:396 module:io.ox/core
+#: apps/io.ox/settings/main.js:403 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "进阶设置"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
 msgid "Advanced facets block was closed."
 msgstr "进阶刻面块已关闭。"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
 msgid "Advanced facets block was opened."
 msgstr "进阶刻面块已关闭。"
 
-#: apps/io.ox/search/facets/extensions.js:283 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:371
+#: apps/io.ox/search/facets/extensions.js:281 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:369
 msgid "All"
 msgstr "全部"
 
@@ -853,18 +923,18 @@ msgid "All Emoji"
 msgstr "所有表情符号"
 
 #: apps/io.ox/contacts/view-detail.js:191 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:425 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:432 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/view-detail.js:231 module:io.ox/tasks
 msgid "All attachments"
 msgstr "所有附件"
 
-#: apps/io.ox/calendar/edit/template.js:189 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:204 module:io.ox/calendar/edit/main
 msgid "All day"
 msgstr "整天"
 
-#: apps/io.ox/search/facets/extensions.js:623 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:626
-#: apps/io.ox/search/facets/extensions.js:633
+#: apps/io.ox/search/facets/extensions.js:621 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:624
+#: apps/io.ox/search/facets/extensions.js:631
 msgid "All folders"
 msgstr "所有文件夹"
 
@@ -872,11 +942,11 @@ msgstr "所有文件夹"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "所有超过 %1$d 天的消息将会移到归档文件夹"
 
-#: apps/io.ox/mail/settings/pane.js:295 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "允许 html 格式的电子邮件"
 
-#: apps/io.ox/mail/settings/pane.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "允许外部链接图像的预加载"
 
@@ -886,7 +956,7 @@ msgstr "发生一个错误。"
 
 #: apps/io.ox/calendar/week/perspective.js:85 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:221
-#: apps/io.ox/mail/write/main.js:1041 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1042 module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "发生了一个错误。请重试。"
 
@@ -899,8 +969,7 @@ msgstr "发生了一个错误。请重试。"
 msgid "An internal error occurred"
 msgstr "发生一个内部错误"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
 msgid "An unknown error occurred"
 msgstr "发生一个不明错误"
 
@@ -921,11 +990,11 @@ msgstr "追加 vcard"
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
 
-#: apps/io.ox/mail/main.js:1156 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1166 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
-#: apps/io.ox/core/main.js:209 module:io.ox/core
+#: apps/io.ox/core/main.js:210 module:io.ox/core
 msgid "Applications"
 msgstr "应用程序"
 
@@ -945,7 +1014,7 @@ msgid "Apply rule if any condition is met."
 msgstr "如果达到其中一个条件套用规则。"
 
 #: apps/io.ox/calendar/acceptdeny.js:228 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:320
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:321
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:267
 #: apps/io.ox/calendar/week/perspective.js:159
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
@@ -959,32 +1028,19 @@ msgstr "约会"
 msgid "Appointment Details"
 msgstr "约会详情"
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
-#: apps/plugins/notifications/calendar/register.js:68
-#: module:plugins/notifications
-#, c-format
-msgid "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
-msgstr "约会邀请。%1$s %2$s %3$s %4$s %5$s。请按 [enter] 打开"
-
 #: apps/plugins/notifications/calendar/register.js:27
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "约会邀请"
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#: apps/io.ox/core/tk/reminder-util.js:106 module:io.ox/core
-#, c-format
-msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
-msgstr "约会提醒。%1$s %2$s %3$s %4$s。请按 [enter] 打开"
+#: apps/io.ox/calendar/month/perspective.js:418 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:367
+#, fuzzy
+#| msgid "Appointments"
+msgid "Appointment list"
+msgstr "约会"
 
-#: apps/plugins/notifications/calendar/register.js:41
+#: apps/plugins/notifications/calendar/register.js:42
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "约会提醒"
@@ -994,14 +1050,14 @@ msgstr "约会提醒"
 msgid "Appointments"
 msgstr "约会"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:327 module:io.ox/core/pubsub
-#: apps/io.ox/core/pubsub/subscriptions.js:330
+#: apps/io.ox/core/pubsub/subscriptions.js:326 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:329
 msgid "Approximate Duration for Subscriptions"
 msgstr "大致订阅持续时间"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:663
+#: apps/io.ox/calendar/edit/recurrence-view.js:666
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:706
+#: apps/io.ox/calendar/edit/recurrence-view.js:712
 msgid "April"
 msgstr "四月"
 
@@ -1036,7 +1092,7 @@ msgstr "您确定要删除此推吗？"
 msgid "As incoming mail server"
 msgstr "一个外来邮件服务器"
 
-#: apps/io.ox/calendar/list/perspective.js:236 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:239 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:665 module:io.ox/tasks
 msgid "Ascending"
@@ -1046,11 +1102,11 @@ msgstr "升序"
 msgid "Assistant"
 msgstr "助理"
 
-#: apps/io.ox/mail/compose/view.js:137 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:143 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "附加 vCard "
 
-#: apps/io.ox/mail/write/view-main.js:707 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:727 module:io.ox/mail
 msgid "Attach my vCard"
 msgstr "附加我的 vCard "
 
@@ -1064,12 +1120,12 @@ msgid_plural "Attachments have been saved"
 msgstr[0] "已保存附件"
 msgstr[1] "已保存附件"
 
-#: apps/io.ox/calendar/edit/template.js:448 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:465 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:326 module:io.ox/calendar
-#: apps/io.ox/contacts/edit/view-form.js:113 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:343 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:361
-#: apps/io.ox/mail/write/view-main.js:597
+#: apps/io.ox/contacts/edit/view-form.js:115 module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js:345 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:363
+#: apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/tasks/edit/view-template.js:486 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:91 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:223
@@ -1077,7 +1133,7 @@ msgid "Attachments"
 msgstr "附件"
 
 #: apps/io.ox/contacts/actions.js:527 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:586 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:593 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:378 module:io.ox/tasks
 msgid "Attachments have been saved!"
 msgstr "附件已被保存！"
@@ -1086,9 +1142,9 @@ msgstr "附件已被保存！"
 msgid "Attention"
 msgstr "注意"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:667
+#: apps/io.ox/calendar/edit/recurrence-view.js:670
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:710
+#: apps/io.ox/calendar/edit/recurrence-view.js:716
 msgid "August"
 msgstr "八月"
 
@@ -1105,7 +1161,7 @@ msgstr "作者"
 msgid "Auto Forward"
 msgstr "自动转发"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:276 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "自动保存电子邮件草稿"
 
@@ -1113,7 +1169,7 @@ msgstr "自动保存电子邮件草稿"
 msgid "Automatic opening of notification area"
 msgstr "自动打开通知区域"
 
-#: apps/io.ox/core/main.js:482 module:io.ox/core
+#: apps/io.ox/core/main.js:495 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:218
 msgid "Automatic sign out"
 msgstr "自动注销"
@@ -1138,7 +1194,7 @@ msgstr "在一个通知邮件接受或拒绝后，自动删除它？"
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
-#: apps/io.ox/mail/settings/pane.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:252 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr "自动在字符后包裹纯文字："
 
@@ -1158,7 +1214,7 @@ msgstr "暗送"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
-#: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:371
+#: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:376
 #: module:io.ox/contacts apps/io.ox/core/commons.js:708 module:io.ox/core
 #: apps/io.ox/files/main.js:159 module:io.ox/files apps/io.ox/mail/main.js:158
 #: module:io.ox/mail apps/io.ox/mail/main.js:163
@@ -1173,11 +1229,11 @@ msgid "Back to appointment"
 msgstr "回到约会"
 
 #: apps/io.ox/core/settings/pane.js:73 module:io.ox/core
-#: apps/io.ox/settings/main.js:247
+#: apps/io.ox/settings/main.js:254
 msgid "Basic settings"
 msgstr "基本设置"
 
-#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:269 module:io.ox/mail
 msgid "Bcc"
 msgstr "密件抄送"
 
@@ -1193,17 +1249,17 @@ msgstr "开票信息"
 msgid "Birthdays"
 msgstr "生日"
 
-#: apps/io.ox/portal/settings/pane.js:155 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:157 module:io.ox/portal
 msgid "Black"
 msgstr "黑色"
 
-#: apps/io.ox/mail/write/view-main.js:514 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:534 module:io.ox/mail
 msgid "Blind copy (BCC) to"
 msgstr "暗送（BCC）到"
 
 #: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:162
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "蓝色"
@@ -1220,7 +1276,7 @@ msgstr "浏览器"
 msgid "Business Address"
 msgstr "业务地址"
 
-#: apps/io.ox/contacts/edit/view-form.js:108 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:110 module:io.ox/contacts
 #: apps/plugins/halo/xing/register.js:155 module:plugins/portal
 msgid "Business address"
 msgstr "业务地址"
@@ -1251,13 +1307,13 @@ msgstr "更改此约会日期可创建一个系列约会的例外情况。是否
 msgid "CC"
 msgstr "抄送"
 
-#: apps/io.ox/core/import/import.js:83 module:io.ox/core
+#: apps/io.ox/core/import/import.js:73 module:io.ox/core
 msgid "CSV"
 msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:136 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:847 apps/io.ox/calendar/week/view.js:854
+#: apps/io.ox/calendar/week/view.js:848 apps/io.ox/calendar/week/view.js:855
 msgid "CW %1$d"
 msgstr "第 %1$d 周"
 
@@ -1270,7 +1326,7 @@ msgid "Calendar"
 msgstr "日历"
 
 #: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
-#: apps/io.ox/core/main.js:223 module:io.ox/core
+#: apps/io.ox/core/main.js:226 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
 msgid "Calendar"
@@ -1284,30 +1340,30 @@ msgstr "日历视图"
 #: apps/io.ox/calendar/acceptdeny.js:195 apps/io.ox/calendar/acceptdeny.js:229
 #: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/actions.js:272
 #: apps/io.ox/calendar/actions.js:284 apps/io.ox/calendar/edit/main.js:127
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:356
-#: apps/io.ox/calendar/main.js:252 apps/io.ox/calendar/main.js:319
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:357
+#: apps/io.ox/calendar/main.js:251 apps/io.ox/calendar/main.js:317
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:160
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:199
-#: apps/io.ox/contacts/edit/main.js:253 apps/io.ox/contacts/main.js:642
-#: apps/io.ox/core/desktop.js:1976 module:io.ox/core
+#: apps/io.ox/contacts/distrib/main.js:202
+#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/contacts/main.js:647
+#: apps/io.ox/core/desktop.js:1985 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:101
 #: apps/io.ox/core/folder/actions/archive.js:43
 #: apps/io.ox/core/folder/actions/common.js:44
 #: apps/io.ox/core/folder/actions/remove.js:33
 #: apps/io.ox/core/folder/actions/rename.js:65
-#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:142
-#: apps/io.ox/core/main.js:485 apps/io.ox/core/main.js:1276
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/main.js:498 apps/io.ox/core/main.js:1289
 #: apps/io.ox/core/permissions/permissions.js:364
 #: apps/io.ox/core/permissions/permissions.js:397 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:115 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
 #: apps/io.ox/core/tk/folderviews.js:633 apps/io.ox/core/tk/folderviews.js:691
 #: apps/io.ox/core/tk/mobiscroll.js:29 apps/io.ox/core/upsell.js:36
-#: apps/io.ox/editor/main.js:348 module:io.ox/editor
+#: apps/io.ox/editor/main.js:349 module:io.ox/editor
 #: apps/io.ox/files/actions.js:392 module:io.ox/files
 #: apps/io.ox/files/actions.js:557 apps/io.ox/files/actions.js:612
 #: apps/io.ox/files/actions.js:722 apps/io.ox/files/fluid/view-detail.js:229
@@ -1321,22 +1377,22 @@ msgstr "日历视图"
 #: apps/io.ox/mail/actions.js:87 apps/io.ox/mail/actions.js:106
 #: apps/io.ox/mail/actions.js:795
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
-#: apps/io.ox/mail/compose/extensions.js:327
-#: apps/io.ox/mail/compose/view.js:557
-#: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:994
-#: apps/io.ox/mail/settings/signatures/register.js:167
+#: apps/io.ox/mail/compose/extensions.js:329
+#: apps/io.ox/mail/compose/view.js:605
+#: apps/io.ox/mail/mailfilter/settings/filter.js:103
+#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1002
+#: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1464 apps/io.ox/mail/write/view-main.js:585
+#: apps/io.ox/mail/write/main.js:1467 apps/io.ox/mail/write/view-main.js:605
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:617 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:162
+#: apps/io.ox/settings/accounts/settings/pane.js:166
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:63
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:95
 #: apps/io.ox/tasks/edit/main.js:176 apps/io.ox/tasks/main.js:192
 #: apps/io.ox/tasks/main.js:206 apps/plugins/core/feedback/register.js:140
-#: apps/plugins/notifications/calendar/register.js:195
+#: apps/plugins/notifications/calendar/register.js:199
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
 #: module:plugins/portal apps/plugins/portal/mail/register.js:206
 #: apps/plugins/portal/rss/register.js:160
@@ -1404,7 +1460,7 @@ msgstr "更改确认状态"
 msgid "Change due date"
 msgstr "更改完成日期"
 
-#: apps/io.ox/search/facets/extensions.js:610 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:608 module:io.ox/core
 msgid "Change folder"
 msgstr "更改文件夹"
 
@@ -1422,7 +1478,7 @@ msgstr "更改密码后注销"
 msgid "Change status"
 msgstr "更改状态"
 
-#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:349 module:io.ox/mail
 msgid "Change subscription"
 msgstr "更改订阅"
 
@@ -1482,12 +1538,12 @@ msgstr "清理中... 可能需时片刻。"
 msgid "Clear"
 msgstr "清空"
 
-#: apps/io.ox/search/autocomplete/extensions.js:193 module:io.ox/core
+#: apps/io.ox/search/autocomplete/extensions.js:194 module:io.ox/core
 msgid "Clear field"
 msgstr "清除字段"
 
-#: apps/io.ox/calendar/week/view.js:815 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:819
+#: apps/io.ox/calendar/week/view.js:816 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:820
 msgid "Click for whole day appointment"
 msgstr "单击查看全天约会"
 
@@ -1499,7 +1555,7 @@ msgstr "点击此处获得免费使用。"
 msgid "Click here to quit the help center"
 msgstr "点击此处离开帮助中心"
 
-#: apps/plugins/portal/xing/register.js:312 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:318 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr "单击这里重新连接到您的 xing 户口，以观看活动。"
 
@@ -1519,16 +1575,16 @@ msgstr "点击连结已更改值。"
 msgid "Click to authorize your account again"
 msgstr "点击此处重新认证您的户口"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:490
+#: apps/io.ox/calendar/edit/recurrence-view.js:489
 #: module:io.ox/calendar/edit/main
 msgid "Click to close the recurrence view"
 msgstr "单击以关闭循环视图"
 
-#: apps/io.ox/core/yell.js:157 module:io.ox/core
+#: apps/io.ox/core/yell.js:192 module:io.ox/core
 msgid "Click to close this notification"
 msgstr "单击关闭此通知"
 
-#: apps/io.ox/preview/main.js:80 module:io.ox/preview
+#: apps/io.ox/preview/main.js:79 module:io.ox/preview
 msgid "Click to open."
 msgstr "点击打开。"
 
@@ -1557,10 +1613,10 @@ msgstr "点击上载图像"
 #: apps/io.ox/core/folder/actions/properties.js:70
 #: apps/io.ox/core/permissions/permissions.js:459
 #: apps/io.ox/core/pubsub/publications.js:106 module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:582 apps/io.ox/core/wizard/registry.js:60
+#: apps/io.ox/core/tk/dialogs.js:590 apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions.js:351 module:io.ox/files
-#: apps/io.ox/files/carousel.js:71 apps/io.ox/files/mediaplayer.js:301
+#: apps/io.ox/files/carousel.js:74 apps/io.ox/files/mediaplayer.js:301
 #: apps/io.ox/mail/accounts/settings.js:331
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:354 apps/io.ox/mail/actions.js:205
@@ -1570,7 +1626,7 @@ msgstr "点击上载图像"
 msgid "Close"
 msgstr "关闭"
 
-#: apps/io.ox/core/tk/dialogs.js:778 module:io.ox/core
+#: apps/io.ox/core/tk/dialogs.js:786 module:io.ox/core
 msgid "Close all"
 msgstr "关闭全部"
 
@@ -1589,24 +1645,25 @@ msgstr "关闭搜寻"
 msgid "Close this reminder"
 msgstr "关闭此提醒"
 
-#: apps/io.ox/calendar/edit/template.js:232 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:249 module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:128 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:151
 msgid "Collapse form"
 msgstr "折叠表格"
 
 #: apps/io.ox/mail/view-options.js:36 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:176 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:178
+#: apps/io.ox/portal/settings/pane.js:178 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:180
 msgid "Color"
 msgstr "颜色"
 
-#: apps/io.ox/mail/settings/pane.js:310 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:316 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "颜色引用线"
 
 #: apps/io.ox/calendar/acceptdeny.js:97 module:io.ox/calendar
-#: apps/io.ox/contacts/edit/view-form.js:111 module:io.ox/contacts
+#: apps/io.ox/calendar/invitations/register.js:263 module:io.ox/calendar/main
+#: apps/io.ox/contacts/edit/view-form.js:113 module:io.ox/contacts
 #: apps/io.ox/contacts/model.js:242 apps/io.ox/contacts/view-detail.js:439
 #: apps/plugins/portal/xing/actions.js:68 module:plugins/portal
 msgid "Comment"
@@ -1647,7 +1704,7 @@ msgstr "普遍刻面"
 msgid "Compact"
 msgstr "精简"
 
-#: apps/io.ox/contacts/edit/view-form.js:244 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:260 module:io.ox/contacts
 msgid "Compact view"
 msgstr "精简视图"
 
@@ -1662,10 +1719,10 @@ msgid "Company"
 msgstr "公司"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:382
+#: apps/io.ox/mail/compose/main.js:83 apps/io.ox/mail/compose/view.js:418
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
-#: apps/io.ox/mail/write/main.js:216
+#: apps/io.ox/mail/write/main.js:216 apps/io.ox/mail/write/main.js:766
 msgid "Compose"
 msgstr "撰写"
 
@@ -1704,12 +1761,12 @@ msgstr "冲突："
 msgid "Connector for Microsoft Outlook®"
 msgstr "Microsoft Outlook® 的连接器"
 
-#: apps/io.ox/contacts/edit/main.js:276 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:277 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Contact"
 msgstr "联系人"
 
-#: apps/io.ox/contacts/view-detail.js:787 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:175 module:io.ox/contacts
 msgid "Contact Details"
 msgstr "联系人详情"
 
@@ -1746,7 +1803,7 @@ msgstr "联系人已移动"
 msgid "Contains"
 msgstr "包含"
 
-#: apps/io.ox/core/main.js:1277 module:io.ox/core
+#: apps/io.ox/core/main.js:1290 module:io.ox/core
 msgid "Continue"
 msgstr "继续"
 
@@ -1754,7 +1811,7 @@ msgstr "继续"
 msgid "Conversations"
 msgstr "交谈"
 
-#: apps/io.ox/core/main.js:227 module:io.ox/core
+#: apps/io.ox/core/main.js:230 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:36
 msgctxt "app"
 msgid "Conversations"
@@ -1772,13 +1829,13 @@ msgstr "谈话"
 msgid "Copy"
 msgstr "复制"
 
-#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:258 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
 msgstr "复制"
 
-#: apps/io.ox/mail/write/view-main.js:507 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:527 module:io.ox/mail
 msgid "Copy (CC) to"
 msgstr "抄送（CC）到"
 
@@ -1817,7 +1874,7 @@ msgid "Could not load new Tweets."
 msgstr "读取新推失败。"
 
 #: apps/io.ox/core/tk/autocomplete.js:360 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:850 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:864 module:io.ox/core
 msgid "Could not load this list"
 msgstr "不能加载此列表"
 
@@ -1830,18 +1887,18 @@ msgid "Could not save settings."
 msgstr "不能保存设定。"
 
 #: apps/io.ox/core/api/folder.js:688 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:544
+#: apps/io.ox/core/folder/api.js:562
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
 msgstr "无法保存设定。必须最少有一个拥有管理员权力的用户："
 
-#: apps/io.ox/calendar/list/perspective.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:178 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "读取约会数据失败。"
 
-#: apps/io.ox/contacts/main.js:442 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:485
+#: apps/io.ox/contacts/main.js:447 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:490
 msgid "Couldn't load contact data."
 msgstr "加载联系人数据失败。"
 
@@ -1879,7 +1936,7 @@ msgstr "不能加载您的假期通知。"
 msgid "Country"
 msgstr "国家/地区"
 
-#: apps/io.ox/calendar/edit/template.js:77 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:91 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:36 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:42 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:95
@@ -1887,13 +1944,13 @@ msgid "Create"
 msgstr "创建"
 
 #: apps/io.ox/calendar/edit/main.js:141 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:292
-#: apps/io.ox/calendar/edit/template.js:67
+#: apps/io.ox/calendar/edit/main.js:293
+#: apps/io.ox/calendar/edit/template.js:69
 msgid "Create appointment"
 msgstr "创建约会"
 
 #: apps/io.ox/contacts/edit/main.js:64 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:180
+#: apps/io.ox/contacts/edit/main.js:65 apps/io.ox/contacts/edit/main.js:181
 msgid "Create contact"
 msgstr "创建联系人"
 
@@ -1907,11 +1964,11 @@ msgid "Create list"
 msgstr "创建列表"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:271 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:276 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "创建新 %1$s 户口"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Create new rule"
 msgstr "创建新规则"
 
@@ -1925,7 +1982,7 @@ msgstr "创建提醒"
 
 #: apps/io.ox/tasks/edit/main.js:144 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:43 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:94 apps/io.ox/tasks/edit/view.js:125
+#: apps/io.ox/tasks/edit/view-template.js:94 apps/io.ox/tasks/edit/view.js:127
 msgid "Create task"
 msgstr "创建任务"
 
@@ -1934,8 +1991,7 @@ msgid "Created"
 msgstr "已创建"
 
 #. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
 msgid ""
 "Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
@@ -1950,6 +2006,12 @@ msgstr "创建新文件"
 msgid "Currency"
 msgstr "货币"
 
+#: apps/io.ox/core/main.js:355 module:io.ox/core
+#, fuzzy
+#| msgid "Current version"
+msgid "Currently refreshing"
+msgstr "当前版本"
+
 #: apps/io.ox/portal/main.js:139 module:io.ox/portal
 msgid "Customize this page"
 msgstr "自定义本页"
@@ -1958,15 +2020,15 @@ msgstr "自定义本页"
 msgid "Dark colors"
 msgstr "深颜色"
 
-#: apps/io.ox/core/import/import.js:241 module:io.ox/core
+#: apps/io.ox/core/import/import.js:250 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "数据导入成功"
 
-#: apps/io.ox/core/import/import.js:243 module:io.ox/core
+#: apps/io.ox/core/import/import.js:252 module:io.ox/core
 msgid "Data only partially imported ( %1$s of %2$s records)"
 msgstr "只导入部分数据（%2$s 中 %1$ 条记录）"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:65 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:66 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:118
 #: apps/io.ox/mail/view-options.js:31 module:io.ox/mail
 msgid "Date"
@@ -1997,9 +2059,9 @@ msgstr "日视图"
 msgid "Days"
 msgstr "日"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:671
+#: apps/io.ox/calendar/edit/recurrence-view.js:674
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:714
+#: apps/io.ox/calendar/edit/recurrence-view.js:720
 msgid "December"
 msgstr "十二月"
 
@@ -2033,7 +2095,7 @@ msgstr "默认日历视图"
 msgid "Default reminder"
 msgstr "默认提醒"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:266 module:io.ox/mail
 msgid "Default sender address"
 msgstr "默认发件人地址"
 
@@ -2062,7 +2124,8 @@ msgstr "延迟"
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:86
 #: apps/io.ox/mail/actions.js:105 apps/io.ox/mail/actions.js:923
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:356
+#: apps/io.ox/mail/settings/signatures/register.js:374
+#: apps/io.ox/mail/settings/signatures/register.js:375
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:615
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -2079,7 +2142,7 @@ msgstr "延迟"
 msgid "Delete"
 msgstr "删除"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:161
+#: apps/io.ox/settings/accounts/settings/pane.js:165
 #: module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "删除户口"
@@ -2125,13 +2188,13 @@ msgstr "邮件从本地存储删除时也将从服务器上删除"
 msgid "Department"
 msgstr "部门"
 
-#: apps/io.ox/calendar/list/perspective.js:237 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:240 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:666 module:io.ox/tasks
 msgid "Descending"
 msgstr "降序"
 
-#: apps/io.ox/calendar/edit/template.js:213 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:230 module:io.ox/calendar/edit/main
 #: apps/io.ox/files/actions.js:607 module:io.ox/files
 #: apps/io.ox/files/views/create.js:163
 #: apps/io.ox/tasks/edit/view-template.js:118 module:io.ox/tasks/edit
@@ -2162,9 +2225,9 @@ msgstr "直接链接：%1$s"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:237 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:307
-#: apps/io.ox/portal/settings/pane.js:336 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:140 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:308
+#: apps/io.ox/portal/settings/pane.js:340 module:io.ox/portal
 msgid "Disable"
 msgstr "禁用"
 
@@ -2173,9 +2236,9 @@ msgstr "禁用"
 msgid "Disable widget"
 msgstr "关闭小程序"
 
-#: apps/io.ox/calendar/edit/template.js:95 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:78 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js:183
+#: apps/io.ox/contacts/edit/view-form.js:199
 #: apps/io.ox/core/settings/user.js:82
 #: apps/io.ox/mail/compose/extensions.js:74 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
@@ -2188,9 +2251,9 @@ msgstr "放弃"
 
 #. "Discard changes" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/calendar/edit/main.js:355 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/main.js:198 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:252 apps/io.ox/editor/main.js:347
+#: apps/io.ox/calendar/edit/main.js:356 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/distrib/main.js:201 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:253 apps/io.ox/editor/main.js:348
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:175 module:io.ox/tasks
 msgctxt "dialog"
 msgid "Discard changes"
@@ -2198,13 +2261,13 @@ msgstr "丢弃更改"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:555 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1462
+#: apps/io.ox/mail/compose/view.js:603 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1465
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "丢弃消息"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:297 module:io.ox/mail
 msgid "Display"
 msgstr "显示"
 
@@ -2212,7 +2275,7 @@ msgstr "显示"
 msgid "Display Name"
 msgstr "显示名称"
 
-#: apps/io.ox/mail/settings/pane.js:305 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:311 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "在文本电子邮件中以图形显示表情符号"
 
@@ -2231,20 +2294,20 @@ msgid "Distance"
 msgstr "距离"
 
 #: apps/io.ox/contacts/distrib/main.js:38 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:169
+#: apps/io.ox/contacts/distrib/main.js:172
 msgid "Distribution List"
 msgstr "通讯组列表"
 
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:200 apps/io.ox/contacts/model.js:315
+#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:315
 #: apps/io.ox/contacts/view-detail.js:50 apps/io.ox/participants/model.js:43
-#: module:io.ox/participants/model apps/io.ox/participants/views.js:176
+#: module:io.ox/participants/model apps/io.ox/participants/views.js:180
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
 msgstr "通讯组列表"
 
 #: apps/io.ox/contacts/distrib/main.js:79 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:125
+#: apps/io.ox/contacts/distrib/main.js:128
 msgid "Distribution list has been saved"
 msgstr "已保存通讯组列表"
 
@@ -2263,7 +2326,7 @@ msgstr "确定要删除文件夹 \"%s\" 吗？"
 msgid "Do you really want to delete these items?"
 msgstr "确定要删除该项吗？"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:160
+#: apps/io.ox/settings/accounts/settings/pane.js:164
 #: module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "确定要删除此户口吗？"
@@ -2294,15 +2357,15 @@ msgstr[1] "您确定要删除此任务吗？"
 msgid "Do you really want to delete this widget?"
 msgstr "您确定要删除这个迷你程序吗？"
 
-#: apps/io.ox/calendar/edit/main.js:352 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/main.js:195 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:249 apps/io.ox/editor/main.js:344
+#: apps/io.ox/calendar/edit/main.js:353 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/distrib/main.js:198 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:250 apps/io.ox/editor/main.js:345
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:172 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
 msgstr "您真的想放弃更改吗？"
 
-#: apps/io.ox/mail/compose/view.js:552 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1459
+#: apps/io.ox/mail/compose/view.js:600 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1462
 msgid "Do you really want to discard your message?"
 msgstr "您真的想丢弃您的消息吗？"
 
@@ -2352,22 +2415,22 @@ msgstr "文档"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:182 module:io.ox/core
+#: apps/io.ox/core/yell.js:216 module:io.ox/core
 #: apps/io.ox/tasks/actions.js:139 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:275 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:70
 #: module:io.ox/mail apps/io.ox/tasks/util.js:246
-#: apps/plugins/notifications/tasks/register.js:69
+#: apps/plugins/notifications/tasks/register.js:71
 #: module:plugins/notifications
 msgid "Done"
 msgstr "已完成"
 
-#: apps/io.ox/calendar/week/view.js:661 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:662 module:io.ox/calendar
 msgid "Doubleclick in this row for whole day appointment"
 msgstr "在此行里双击以查看全天约会"
 
 #: apps/io.ox/contacts/actions.js:769 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:469 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:476 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/actions.js:869 module:io.ox/files
 #: apps/io.ox/files/actions.js:1018 apps/io.ox/files/actions.js:1290
 #: apps/io.ox/files/toolbar.js:101 apps/io.ox/mail/actions.js:1130
@@ -2412,11 +2475,11 @@ msgctxt "folder"
 msgid "Drafts"
 msgstr "草稿"
 
-#: apps/io.ox/portal/settings/pane.js:258 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:262 module:io.ox/portal
 msgid "Drag to reorder widget"
 msgstr "以拖动重新排序小部件"
 
-#: apps/io.ox/core/main.js:226 module:io.ox/core
+#: apps/io.ox/core/main.js:229 module:io.ox/core
 #: apps/io.ox/files/settings/pane.js:52 module:io.ox/files
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
@@ -2432,7 +2495,7 @@ msgstr "Drive 设置"
 msgid "Drop EML file here for import"
 msgstr "拖放 EML 文件到这里以作导入"
 
-#: apps/io.ox/mail/compose/extensions.js:271 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:273 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "把附件放在这里"
 
@@ -2440,8 +2503,8 @@ msgstr "把附件放在这里"
 msgid "Drop here to import this mail"
 msgstr "拖放到这里以导入此邮件"
 
-#: apps/io.ox/calendar/edit/template.js:520 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/edit/view-form.js:342 module:io.ox/contacts
+#: apps/io.ox/calendar/edit/template.js:537 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/edit/view-form.js:363 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:720 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "拖放到这里已上载一个 <b class=\"dndignore\">新附件</b>"
@@ -2494,10 +2557,10 @@ msgstr "EB"
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:634 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:220 apps/io.ox/calendar/main.js:226
-#: apps/io.ox/calendar/main.js:247 apps/io.ox/calendar/main.js:319
+#: apps/io.ox/calendar/main.js:246 apps/io.ox/calendar/main.js:317
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/contacts/actions.js:696
-#: module:io.ox/contacts apps/io.ox/contacts/main.js:359
-#: apps/io.ox/contacts/main.js:365 apps/io.ox/contacts/main.js:642
+#: module:io.ox/contacts apps/io.ox/contacts/main.js:364
+#: apps/io.ox/contacts/main.js:370 apps/io.ox/contacts/main.js:647
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77
 #: apps/io.ox/core/pubsub/settings/pane.js:223 module:io.ox/core/pubsub
@@ -2505,14 +2568,15 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/main.js:146
 #: apps/io.ox/files/main.js:152 apps/io.ox/files/main.js:343
 #: apps/io.ox/files/main.js:390 apps/io.ox/mail/actions.js:913
-#: apps/io.ox/mail/mailfilter/settings/filter.js:153
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159
+#: apps/io.ox/mail/mailfilter/settings/filter.js:155
+#: apps/io.ox/mail/mailfilter/settings/filter.js:160
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
-#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:998
-#: apps/io.ox/mail/settings/signatures/register.js:353
-#: apps/io.ox/portal/settings/pane.js:317 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:319
+#: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1006
+#: apps/io.ox/mail/settings/signatures/register.js:368
+#: apps/io.ox/mail/settings/signatures/register.js:370
+#: apps/io.ox/portal/settings/pane.js:321 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:323
 #: apps/io.ox/settings/accounts/settings/pane.js:46
 #: module:io.ox/settings/accounts
 #: apps/io.ox/settings/accounts/settings/pane.js:50
@@ -2525,7 +2589,7 @@ msgstr "EB"
 msgid "Edit"
 msgstr "编辑"
 
-#: apps/io.ox/contacts/edit/main.js:178 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:179 module:io.ox/contacts
 msgid "Edit Contact"
 msgstr "编辑联系人"
 
@@ -2538,13 +2602,14 @@ msgid "Edit Tumblr feed"
 msgstr "编辑 Tumblr feed"
 
 #: apps/io.ox/calendar/edit/main.js:141 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:290
-#: apps/io.ox/calendar/edit/template.js:67 apps/io.ox/calendar/toolbar.js:59
+#: apps/io.ox/calendar/edit/main.js:291
+#: apps/io.ox/calendar/edit/template.js:69 apps/io.ox/calendar/toolbar.js:59
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "编辑约会"
 
-#: apps/io.ox/contacts/toolbar.js:78 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:65 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:78
 msgid "Edit contact"
 msgstr "编辑联系人"
 
@@ -2553,6 +2618,7 @@ msgid "Edit description"
 msgstr "编辑描述"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:46 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:119
 msgid "Edit distribution list"
 msgstr "编辑通讯组列表"
 
@@ -2561,29 +2627,30 @@ msgstr "编辑通讯组列表"
 msgid "Edit draft"
 msgstr "编辑草稿"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Edit rule"
 msgstr "编辑规则"
 
-#: apps/io.ox/mail/settings/signatures/register.js:158 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
 msgid "Edit signature"
 msgstr "编辑签名"
 
 #: apps/io.ox/tasks/edit/main.js:27 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/main.js:227 apps/io.ox/tasks/edit/view-template.js:49
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:91
-#: apps/io.ox/tasks/edit/view.js:125 apps/io.ox/tasks/toolbar.js:53
+#: apps/io.ox/tasks/edit/view.js:127 apps/io.ox/tasks/toolbar.js:53
 #: module:io.ox/mail
 msgid "Edit task"
 msgstr "编辑任务"
 
-#: apps/io.ox/contacts/main.js:222 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:227 module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr "编辑一个名称。"
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
-#: apps/io.ox/editor/main.js:209 apps/io.ox/editor/main.js:314
-#: apps/io.ox/mail/compose/view.js:113 module:io.ox/mail
+#: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:211
+#: apps/io.ox/editor/main.js:315 apps/io.ox/mail/compose/view.js:119
+#: module:io.ox/mail
 msgid "Editor"
 msgstr "编辑器"
 
@@ -2678,7 +2745,7 @@ msgid "Employment"
 msgstr "雇用"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:729 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:743 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "空置"
@@ -2690,7 +2757,7 @@ msgstr "空置"
 msgid "Empty folder"
 msgstr "空文件夹"
 
-#: apps/io.ox/contacts/main.js:221 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:226 module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "找到空的名称和描述。"
 
@@ -2701,9 +2768,9 @@ msgstr "清空文件夹... 可能需时片刻。"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:237 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:307
-#: apps/io.ox/portal/settings/pane.js:340 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:140 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:308
+#: apps/io.ox/portal/settings/pane.js:344 module:io.ox/portal
 msgid "Enable"
 msgstr "启用"
 
@@ -2723,8 +2790,8 @@ msgstr "结束"
 msgid "End of working time"
 msgstr "工作时间结束"
 
-#: apps/io.ox/calendar/edit/template.js:164 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:552 module:io.ox/core
+#: apps/io.ox/calendar/edit/template.js:174 module:io.ox/calendar/edit/main
+#: apps/io.ox/search/facets/extensions.js:550 module:io.ox/core
 msgid "Ends on"
 msgstr "结束于"
 
@@ -2745,7 +2812,7 @@ msgstr "信封"
 
 #: apps/io.ox/core/print.js:198 module:io.ox/core
 #: apps/io.ox/core/pubsub/subscriptions.js:111 module:io.ox/core/pubsub
-#: apps/io.ox/core/yell.js:21 apps/io.ox/core/yell.js:91
+#: apps/io.ox/core/yell.js:21 apps/io.ox/core/yell.js:131
 msgid "Error"
 msgstr "错误"
 
@@ -2845,12 +2912,12 @@ msgstr "准确日期"
 msgid "Executive"
 msgstr "行政主管"
 
-#: apps/io.ox/core/main.js:847 module:io.ox/core
+#: apps/io.ox/core/main.js:860 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "离开全屏幕"
 
-#: apps/io.ox/calendar/edit/template.js:224 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:230
+#: apps/io.ox/calendar/edit/template.js:241 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:247
 #: apps/io.ox/tasks/edit/view-template.js:131 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:151
 msgid "Expand form"
@@ -2859,7 +2926,7 @@ msgstr "展开表格"
 #. Label for a button which shows more upcoming
 #. appointments in a listview by extending the search
 #. by one month in the future
-#: apps/io.ox/calendar/main.js:279 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:277 module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "扩张一个月的时段"
 
@@ -2872,19 +2939,19 @@ msgstr "导出"
 msgid "Export folder"
 msgstr "导出文件夹"
 
-#: apps/io.ox/contacts/edit/view-form.js:244 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js:304
-#: apps/io.ox/contacts/edit/view-form.js:319
+#: apps/io.ox/contacts/edit/view-form.js:260 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:325
+#: apps/io.ox/contacts/edit/view-form.js:340
 msgid "Extended view"
 msgstr "扩展视图"
 
 #: apps/io.ox/participants/model.js:42 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:140 module:io.ox/calendar/edit/main
-#: apps/io.ox/participants/views.js:167
+#: apps/io.ox/participants/views.js:144 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:171
 msgid "External contact"
 msgstr "外部联系人"
 
-#: apps/io.ox/mail/common-extensions.js:459 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:472 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "为保护您的隐私，从外部链接的图像的预加载已被阻止！"
@@ -2936,7 +3003,7 @@ msgid "Failed to recover accounts"
 msgstr "复原失败"
 
 #: apps/io.ox/contacts/distrib/main.js:86 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:131
+#: apps/io.ox/contacts/distrib/main.js:134
 msgid "Failed to save distribution list."
 msgstr "保存通讯组列表失败。"
 
@@ -2944,19 +3011,19 @@ msgstr "保存通讯组列表失败。"
 msgid "Failed to sign in"
 msgstr "登录失败"
 
-#: apps/io.ox/core/desktop.js:2076 module:io.ox/core
+#: apps/io.ox/core/desktop.js:2085 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
 msgstr "起动应用失败。也许您有连接问题，请重试。"
 
-#: apps/io.ox/calendar/invitations/register.js:490 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:527 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
 msgstr "更新确认状态失败；最可能是约会已删除。"
 
-#: apps/io.ox/calendar/invitations/register.js:491 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:528 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -2972,7 +3039,7 @@ msgstr "最爱"
 msgid "Favorited"
 msgstr "已加最爱"
 
-#: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
+#: apps/io.ox/core/folder/favorites.js:68 module:io.ox/core
 msgid "Favorites"
 msgstr "最爱"
 
@@ -2988,9 +3055,9 @@ msgstr "传真（家居）"
 msgid "Fax (alt)"
 msgstr "传真（替代）"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:661
+#: apps/io.ox/calendar/edit/recurrence-view.js:664
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:704
+#: apps/io.ox/calendar/edit/recurrence-view.js:710
 msgid "February"
 msgstr "二月"
 
@@ -3016,10 +3083,6 @@ msgstr "感觉：装饰"
 msgid "File"
 msgstr "档案"
 
-#: apps/io.ox/files/fluid/perspective.js:195 module:io.ox/files
-msgid "File Details"
-msgstr "文件详情"
-
 #: apps/io.ox/files/actions.js:653 module:io.ox/files
 msgid "File has been copied"
 msgstr "文档已复制"
@@ -3044,7 +3107,7 @@ msgstr "文件限额"
 msgid "File: %1$s"
 msgstr "文件：%1$s"
 
-#: apps/io.ox/files/fluid/perspective.js:540 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:567 module:io.ox/files
 msgid "Files View"
 msgstr "文件视图"
 
@@ -3056,7 +3119,7 @@ msgstr "文档已复制"
 msgid "Files have been moved"
 msgstr "文档已被移动"
 
-#: apps/io.ox/calendar/edit/template.js:574 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:591 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:51 module:io.ox/calendar
 msgid "Find a free time"
@@ -3122,7 +3185,7 @@ msgstr "文件夹视图"
 
 #. %1$s is the filename
 #: apps/io.ox/core/api/folder.js:1276 module:io.ox/core
-#: apps/io.ox/core/main.js:1498
+#: apps/io.ox/core/main.js:1512
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3130,16 +3193,16 @@ msgstr ""
 "名称为 \"%1$s\" 的文件夹将会被隐藏。启用 \"显示隐藏文件和文件夹\" 以再次访问"
 "这些文件夹。"
 
-#: apps/io.ox/core/folder/node.js:404 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:411 apps/io.ox/core/tk/folderviews.js:878
+#: apps/io.ox/core/folder/node.js:428 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:435 apps/io.ox/core/tk/folderviews.js:878
 msgid "Folder-specific actions"
 msgstr "文件夹指定动作"
 
 #: apps/io.ox/calendar/main.js:205 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:217 apps/io.ox/calendar/main.js:224
-#: apps/io.ox/contacts/main.js:356 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:363 apps/io.ox/core/commons-folderview.js:51
-#: module:io.ox/core apps/io.ox/core/folder/view.js:279
+#: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:368 apps/io.ox/core/commons-folderview.js:51
+#: module:io.ox/core apps/io.ox/core/folder/view.js:280
 #: apps/io.ox/files/main.js:143 module:io.ox/files
 #: apps/io.ox/files/main.js:150 apps/io.ox/mail/main.js:143 module:io.ox/mail
 #: apps/io.ox/mail/main.js:150 apps/io.ox/tasks/main.js:144 module:io.ox/tasks
@@ -3169,7 +3232,7 @@ msgstr "食物"
 msgid "For best results, please use "
 msgstr "为了最好的结果，请使用"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:99
+#: apps/io.ox/settings/accounts/settings/pane.js:103
 #: module:io.ox/settings/accounts
 msgid ""
 "For security reasons, all account passwords are encrypted with your primary "
@@ -3185,7 +3248,7 @@ msgid "Forgot your password?"
 msgstr "忘记密码？"
 
 #: apps/io.ox/core/export/export.js:48 module:io.ox/core
-#: apps/io.ox/core/import/import.js:47
+#: apps/io.ox/core/import/import.js:37
 msgid "Format"
 msgstr "格式"
 
@@ -3207,7 +3270,7 @@ msgstr "转发所有接收电子邮件到此地址"
 msgid "Forward emails as"
 msgstr "电子邮件的转发方式"
 
-#: apps/io.ox/calendar/edit/template.js:271 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:288 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
 msgstr "空闲的"
@@ -3224,12 +3287,12 @@ msgstr "星期五"
 
 #: apps/io.ox/mail/actions.js:811 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:101
-#: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:534
-#: apps/io.ox/mail/view-options.js:32 apps/io.ox/mail/write/view-main.js:265
+#: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:542
+#: apps/io.ox/mail/view-options.js:32 apps/io.ox/mail/write/view-main.js:285
 msgid "From"
 msgstr "从"
 
-#: apps/io.ox/core/main.js:850 module:io.ox/core apps/io.ox/core/main.js:854
+#: apps/io.ox/core/main.js:863 module:io.ox/core apps/io.ox/core/main.js:867
 msgid "Fullscreen"
 msgstr "全屏幕"
 
@@ -3262,6 +3325,12 @@ msgstr "获得 %s"
 msgid "Get free upgrade"
 msgstr "获取免费更新"
 
+#: apps/plugins/portal/xing/register.js:272 module:plugins/portal
+msgid ""
+"Get news from your XING network delivered to you. Stay in touch and find out "
+"about new business opportunities."
+msgstr ""
+
 #: apps/io.ox/portal/main.js:367 module:io.ox/portal
 #: apps/io.ox/portal/main.js:389
 msgid "Get started here"
@@ -3281,20 +3350,20 @@ msgstr "早上好， %s"
 
 #: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:156
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:158
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "灰色"
 
 #: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:160
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:162
 #: module:io.ox/portal
 msgid "Green"
 msgstr "绿色"
 
 #: apps/io.ox/participants/model.js:39 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:149 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:153 module:io.ox/calendar/edit/main
 msgid "Group"
 msgstr "组"
 
@@ -3306,8 +3375,8 @@ msgstr "访客"
 msgid "Guidance"
 msgstr "指引"
 
-#: apps/io.ox/mail/compose/view.js:115 module:io.ox/mail
-#: apps/io.ox/mail/settings/pane.js:42 apps/io.ox/mail/write/view-main.js:720
+#: apps/io.ox/mail/compose/view.js:121 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:42 apps/io.ox/mail/write/view-main.js:741
 msgid "HTML"
 msgstr "HTML"
 
@@ -3329,7 +3398,7 @@ msgid "Hello World"
 msgstr "您好世界"
 
 #: apps/io.ox/calendar/freebusy/templates.js:113
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:805
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:818
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "帮助"
@@ -3339,7 +3408,7 @@ msgstr "帮助"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "您好！<br><br>%1$s 和您分享一个出版：<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:326 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:341 module:io.ox/core
 msgid "Hidden"
 msgstr "隐藏"
 
@@ -3355,7 +3424,7 @@ msgstr "隐藏"
 msgid "Hide QR code"
 msgstr "隐藏 QR 码"
 
-#: apps/io.ox/search/facets/extensions.js:59 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:57 module:io.ox/core
 msgid "Hide advanced filters"
 msgstr "隐藏进阶过滤器"
 
@@ -3364,7 +3433,7 @@ msgstr "隐藏进阶过滤器"
 msgid "Hide all appointment invitations."
 msgstr "隐藏所有约会邀请。"
 
-#: apps/plugins/notifications/calendar/register.js:44
+#: apps/plugins/notifications/calendar/register.js:45
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "隐藏所有约会提醒。"
@@ -3378,12 +3447,12 @@ msgstr "隐藏所有新邮件的通知。"
 msgid "Hide all notifications for overdue tasks."
 msgstr "隐藏所有逾期任务的通知。"
 
-#: apps/plugins/notifications/tasks/register.js:506
+#: apps/plugins/notifications/tasks/register.js:507
 #: module:plugins/notifications
 msgid "Hide all task invitations."
 msgstr "隐藏所有任务邀请。"
 
-#: apps/plugins/notifications/tasks/register.js:261
+#: apps/plugins/notifications/tasks/register.js:263
 #: module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "隐藏所有任务提醒。"
@@ -3405,8 +3474,8 @@ msgstr "隐藏请求内文"
 msgid "Hide stack trace"
 msgstr "隐藏堆叠痕迹"
 
-#: apps/io.ox/mail/compose/view.js:125 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:697
+#: apps/io.ox/mail/compose/view.js:131 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:717
 #: apps/io.ox/tasks/edit/view-template.js:350 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
 msgid "High"
@@ -3432,7 +3501,7 @@ msgstr "兴趣"
 msgid "Home Address"
 msgstr "住宅地址"
 
-#: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:109 module:io.ox/contacts
 msgid "Home address"
 msgstr "住宅地址"
 
@@ -3453,7 +3522,7 @@ msgstr "小时"
 msgid "How does this work?"
 msgstr "这如何运作？"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:344 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "IMAP 文件夹订阅"
 
@@ -3494,12 +3563,12 @@ msgstr "忽略警告"
 #: apps/io.ox/calendar/edit/main.js:125 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116
 #: apps/io.ox/calendar/week/perspective.js:116
-#: apps/plugins/notifications/calendar/register.js:193
+#: apps/plugins/notifications/calendar/register.js:197
 #: module:plugins/notifications
 msgid "Ignore conflicts"
 msgstr "忽略冲突"
 
-#: apps/io.ox/core/import/import.js:130 module:io.ox/core
+#: apps/io.ox/core/import/import.js:123 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3510,16 +3579,18 @@ msgid "Image 1"
 msgstr "图像 1"
 
 #: apps/io.ox/core/folder/contextmenu.js:313 module:io.ox/core
-#: apps/io.ox/core/import/import.js:141
+#: apps/io.ox/core/import/import.js:178
 msgid "Import"
 msgstr "导入"
 
-#: apps/io.ox/core/import/import.js:162 module:io.ox/core
-msgid "Import into"
-msgstr "导入到"
+#: apps/io.ox/core/import/import.js:170 module:io.ox/core
+#, fuzzy
+#| msgid "Export folder"
+msgid "Import from file"
+msgstr "导出文件夹"
 
-#: apps/io.ox/mail/settings/signatures/register.js:299 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:475
+#: apps/io.ox/mail/settings/signatures/register.js:311 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:495
 msgid "Import signatures"
 msgstr "导入签名"
 
@@ -3654,17 +3725,35 @@ msgstr "正是"
 msgid "Is smaller than"
 msgstr "是小于"
 
-#: apps/io.ox/core/commons.js:701 module:io.ox/core
-msgid "Items"
+#: apps/io.ox/contacts/main.js:719 module:io.ox/contacts
+#, fuzzy
+#| msgid "Items"
+msgid "Item List"
 msgstr "项目"
+
+#. items list (e.g. mails)
+#: apps/io.ox/core/commons.js:701 module:io.ox/core
+#: apps/io.ox/mail/main.js:443 module:io.ox/mail
+#, fuzzy
+#| msgid "Items"
+msgid "Item list"
+msgstr "项目"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
+#: apps/io.ox/mail/main.js:446 module:io.ox/mail
+#, fuzzy
+#| msgid "Sort options"
+msgid "Item list options"
+msgstr "排序选项"
 
 #: apps/io.ox/files/actions.js:193 module:io.ox/files
 msgid "Items without a file can not be downloaded."
 msgstr "没有一个文件的项目无法下载。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:660
+#: apps/io.ox/calendar/edit/recurrence-view.js:663
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:703
+#: apps/io.ox/calendar/edit/recurrence-view.js:709
 msgid "January"
 msgstr "一月"
 
@@ -3677,19 +3766,19 @@ msgstr "日本手机服务商"
 msgid "Job"
 msgstr "工作"
 
-#: apps/io.ox/contacts/edit/view-form.js:110 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
 msgid "Job description"
 msgstr "职业描述"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:666
+#: apps/io.ox/calendar/edit/recurrence-view.js:669
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:709
+#: apps/io.ox/calendar/edit/recurrence-view.js:715
 msgid "July"
 msgstr "七月"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:665
+#: apps/io.ox/calendar/edit/recurrence-view.js:668
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:708
+#: apps/io.ox/calendar/edit/recurrence-view.js:714
 msgid "June"
 msgstr "六月"
 
@@ -3740,7 +3829,7 @@ msgstr "姓氏"
 msgid "Last name, First name"
 msgstr "姓氏，名字"
 
-#: apps/io.ox/core/main.js:214 module:io.ox/core
+#: apps/io.ox/core/main.js:217 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "执行器下拉。请按 [enter] 以跳到下拉。"
 
@@ -3749,6 +3838,10 @@ msgstr "执行器下拉。请按 [enter] 以跳到下拉。"
 #: apps/io.ox/mail/toolbar.js:232 module:io.ox/mail
 msgid "Layout"
 msgstr "布局"
+
+#: apps/io.ox/core/import/import.js:149 module:io.ox/core
+msgid "Learn more"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -3768,14 +3861,14 @@ msgstr "生活"
 
 #: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:161
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "浅蓝色"
 
 #: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:159
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:161
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "浅绿色"
@@ -3822,7 +3915,7 @@ msgstr "列表"
 msgid "Listview"
 msgstr "列表视图"
 
-#: apps/io.ox/calendar/edit/template.js:130 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:140 module:io.ox/calendar/edit/main
 msgid "Location"
 msgstr "地点"
 
@@ -3839,8 +3932,8 @@ msgstr "丢失"
 msgid "Loss: %1$s %"
 msgstr "丢失： %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:127 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:699
+#: apps/io.ox/mail/compose/view.js:133 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:719
 #: apps/io.ox/tasks/edit/view-template.js:348 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
 msgid "Low"
@@ -3856,13 +3949,17 @@ msgstr "低优先级"
 msgid "MB"
 msgstr "MB"
 
+#: apps/io.ox/core/date.js:75 module:io.ox/core
+msgid "MM"
+msgstr ""
+
 #: apps/io.ox/core/tk/folderviews.js:895 module:io.ox/core
 #: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:797
+#: apps/io.ox/mail/write/main.js:798
 msgid "Mail"
 msgstr "邮件"
 
-#: apps/io.ox/core/main.js:221 module:io.ox/core
+#: apps/io.ox/core/main.js:224 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:153
 #: module:io.ox/mail
 msgctxt "app"
@@ -3873,7 +3970,7 @@ msgstr "邮件"
 msgid "Mail Details"
 msgstr "邮件信息"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:455 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:458 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr "邮件过滤器规则"
@@ -3890,8 +3987,8 @@ msgstr "邮件地址"
 msgid "Mail and Messaging"
 msgstr "邮件和即时通讯"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:121
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:253
+#: apps/io.ox/settings/accounts/settings/pane.js:125
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:260
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "电子邮件和社交账户"
@@ -3899,6 +3996,14 @@ msgstr "电子邮件和社交账户"
 #: apps/plugins/portal/quota/register.js:50 module:plugins/portal
 msgid "Mail count quota"
 msgstr "邮件总数限额"
+
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Mail from %1$s %2$s"
+msgstr "来自 %1$s 的电子邮件：%2$d"
 
 #: apps/io.ox/mail/actions.js:268 module:io.ox/mail
 msgid "Mail has been copied"
@@ -3912,13 +4017,13 @@ msgstr "电子邮件已导入"
 msgid "Mail has been moved"
 msgstr "邮件已移动"
 
-#: apps/io.ox/mail/compose/view.js:700 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1278
+#: apps/io.ox/mail/compose/view.js:748 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1279
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "邮件没有题目，您还要发送吗？"
 
-#: apps/io.ox/mail/compose/view.js:693 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1271
+#: apps/io.ox/mail/compose/view.js:741 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1272
 msgid "Mail has no recipient."
 msgstr "邮件没有收件人。"
 
@@ -3938,9 +4043,9 @@ msgstr "邮件提醒"
 msgid "Mail reminder for"
 msgstr "邮件提醒于"
 
-#: apps/io.ox/mail/compose/view.js:433 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:459 apps/io.ox/mail/write/main.js:1329
-#: apps/io.ox/mail/write/main.js:1394
+#: apps/io.ox/mail/compose/view.js:474 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 apps/io.ox/mail/write/main.js:1330
+#: apps/io.ox/mail/write/main.js:1395
 msgid "Mail saved as draft"
 msgstr "邮件已保存为草稿"
 
@@ -3974,6 +4079,10 @@ msgstr "每小时邮件数（%）"
 msgid "Mails per week-day (%)"
 msgstr "每工作日邮件数（%）"
 
+#: apps/io.ox/core/desktop.js:1610 module:io.ox/core
+msgid "Main window"
+msgstr ""
+
 #: apps/io.ox/files/actions.js:1025 module:io.ox/files
 msgid "Make this the current version"
 msgstr "定此为当前版本"
@@ -3996,9 +4105,9 @@ msgstr "管理文件"
 msgid "Manual"
 msgstr "手动"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:662
+#: apps/io.ox/calendar/edit/recurrence-view.js:665
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:705
+#: apps/io.ox/calendar/edit/recurrence-view.js:711
 msgid "March"
 msgstr "三月"
 
@@ -4071,9 +4180,9 @@ msgstr "标记为未读"
 msgid "Matches"
 msgstr "匹配"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:664
+#: apps/io.ox/calendar/edit/recurrence-view.js:667
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:707
+#: apps/io.ox/calendar/edit/recurrence-view.js:713
 msgid "May"
 msgstr "五月"
 
@@ -4086,17 +4195,7 @@ msgstr "媒介"
 msgid "Medium priority"
 msgstr "中优先级"
 
-#: apps/io.ox/mail/common-extensions.js:400 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:421
-msgid "Message is read"
-msgstr "消息为已读"
-
-#: apps/io.ox/mail/common-extensions.js:406 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:421
-msgid "Message is unread"
-msgstr "消息为未读"
-
-#: apps/io.ox/contacts/edit/view-form.js:105 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
 msgid "Messaging"
 msgstr "消息"
 
@@ -4131,8 +4230,8 @@ msgstr "分钟"
 msgid "Miscellaneous"
 msgstr "杂项"
 
-#: apps/io.ox/mail/write/view-main.js:1081 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:1082
+#: apps/io.ox/mail/write/view-main.js:1102 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:1103
 msgid "Mobile"
 msgstr "手机"
 
@@ -4156,10 +4255,6 @@ msgstr "星期一"
 msgid "Month"
 msgstr "月"
 
-#: apps/io.ox/calendar/month/perspective.js:406 module:io.ox/calendar
-msgid "Month View"
-msgstr "月视图"
-
 #. recurrence string
 #. %1$d: numeric, day in month
 #: apps/io.ox/calendar/util.js:534 module:io.ox/calendar
@@ -4179,8 +4274,8 @@ msgstr "月"
 
 #: apps/io.ox/core/extPatterns/links.js:360 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:371
-#: apps/io.ox/mail/write/view-main.js:690 module:io.ox/mail
-#: apps/io.ox/search/facets/extensions.js:698
+#: apps/io.ox/mail/write/view-main.js:710 module:io.ox/mail
+#: apps/io.ox/search/facets/extensions.js:696
 msgid "More"
 msgstr "更多"
 
@@ -4217,7 +4312,11 @@ msgstr "移动文件夹"
 msgid "Move to folder"
 msgstr "移动到文件夹"
 
-#: apps/io.ox/core/main.js:784 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:231 module:io.ox/core
+msgid "Multiselect"
+msgstr ""
+
+#: apps/io.ox/core/main.js:797 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:258
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
@@ -4272,21 +4371,14 @@ msgid "New"
 msgstr "新建"
 
 #: apps/io.ox/core/api/folder.js:551 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:592
-#: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
+#: apps/io.ox/core/folder/api.js:610
+#: apps/io.ox/core/pubsub/subscriptions.js:156 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "新文件夹"
 
 #: apps/io.ox/mail/api.js:1822 module:io.ox/mail
 msgid "New Mail"
 msgstr "新邮件"
-
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:58 module:plugins/notifications
-#, c-format
-msgid "New Mail from %1$s %2$s. Press [enter] to open"
-msgstr "来自 %1$s %2$s 的新邮件。请按 [enter] 打开"
 
 #: apps/plugins/notifications/mail/register.js:28 module:plugins/notifications
 msgid "New Mails"
@@ -4301,7 +4393,7 @@ msgstr "新约会"
 msgid "New calendar"
 msgstr "新日历"
 
-#: apps/io.ox/contacts/edit/main.js:206 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:207 module:io.ox/contacts
 msgid "New contact"
 msgstr "新联系人"
 
@@ -4320,24 +4412,24 @@ msgid "New password"
 msgstr "新密码"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:353
+#: apps/io.ox/core/folder/extensions.js:368
 msgid "New private calendar"
 msgstr "新私人日历"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:353
+#: apps/io.ox/core/folder/extensions.js:368
 msgid "New private folder"
 msgstr "新私人文件夹"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:376
+#: apps/io.ox/core/folder/extensions.js:391
 msgid "New public calendar"
 msgstr "新公共日历"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:376
+#: apps/io.ox/core/folder/extensions.js:391
 msgid "New public folder"
 msgstr "新公共文件夹"
 
@@ -4359,17 +4451,17 @@ msgid "New task"
 msgstr "新任务"
 
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
-#: apps/io.ox/files/carousel.js:66 module:io.ox/files
+#: apps/io.ox/files/carousel.js:69 module:io.ox/files
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
 msgstr "下一个"
 
-#: apps/io.ox/calendar/week/view.js:689 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:690 module:io.ox/calendar
 msgid "Next Day"
 msgstr "下一天"
 
 #: apps/io.ox/calendar/util.js:177 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:689
+#: apps/io.ox/calendar/week/view.js:690
 msgid "Next Week"
 msgstr "下周"
 
@@ -4392,7 +4484,7 @@ msgstr "没找到 RSS feeds。"
 msgid "No Tweets yet."
 msgstr "还没有新推。"
 
-#: apps/io.ox/calendar/list/perspective.js:262 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:265 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "直至 %s 没有找到任何约会"
 
@@ -4429,7 +4521,7 @@ msgid "No items found"
 msgstr "没找到项目"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/core/desktop.js:1849 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1858 module:io.ox/core
 msgid "No items were found. Please adjust currently used facets."
 msgstr "没有找到项目。请调整当前使用的进刻面。"
 
@@ -4445,16 +4537,16 @@ msgstr "您的文件夹中没有邮件"
 msgid "No matching templates on this Server"
 msgstr "此服务器中无匹配的模版"
 
-#: apps/io.ox/mail/main.js:594 module:io.ox/mail
+#: apps/io.ox/mail/main.js:602 module:io.ox/mail
 msgid "No message selected"
 msgstr "没有选定消息"
 
-#: apps/io.ox/core/notifications.js:157 module:io.ox/core
+#: apps/io.ox/core/notifications.js:155 module:io.ox/core
 msgid "No notifications"
 msgstr "没有通知"
 
 #: apps/io.ox/contacts/actions.js:481 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:520 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:527 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:332 module:io.ox/tasks
 msgid "No preview available"
 msgstr "无预览"
@@ -4472,9 +4564,9 @@ msgstr "无收件人"
 msgid "No reminder"
 msgstr "无提醒"
 
-#: apps/io.ox/mail/compose/view.js:148 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:386
-#: apps/io.ox/mail/write/view-main.js:970
+#: apps/io.ox/mail/compose/view.js:154 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:406
+#: apps/io.ox/mail/write/view-main.js:991
 msgid "No signature"
 msgstr "没有签名"
 
@@ -4487,9 +4579,9 @@ msgstr "没有慢速请求"
 #: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
 #: apps/io.ox/mail/util.js:389 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
-#: apps/io.ox/mail/write/main.js:797
-#: apps/plugins/notifications/mail/register.js:58 module:plugins/notifications
-#: apps/plugins/notifications/mail/register.js:61
+#: apps/io.ox/mail/write/main.js:798
+#: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:65
 #, c-format
 msgid "No subject"
 msgstr "无主题"
@@ -4505,7 +4597,7 @@ msgstr "墙上还没有留言。"
 
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:193 module:io.ox/core
-#: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:434 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
@@ -4514,8 +4606,8 @@ msgstr "墙上还没有留言。"
 msgid "None"
 msgstr "无"
 
-#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:698
+#: apps/io.ox/mail/compose/view.js:132 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:718
 msgid "Normal"
 msgstr "常规"
 
@@ -4536,6 +4628,10 @@ msgstr "未开始"
 msgid "Note"
 msgstr "备注"
 
+#: apps/io.ox/core/import/import.js:140 module:io.ox/core
+msgid "Note on CSV files:"
+msgstr ""
+
 #: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
@@ -4555,24 +4651,30 @@ msgstr ""
 msgid "Note: The vCard format cannot contain distribution lists"
 msgstr "备注：vCard 格式不能包含通信组列表"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:317 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:316 module:io.ox/core/pubsub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
 msgstr ""
 "备注：此订阅将会以外部内容取代日历内容，因此您必须为此订阅创建一个新文件夹。"
 
+#: apps/io.ox/core/notifications.js:371 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Notifications"
+msgstr "没有通知"
+
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
 msgid "Notifier"
 msgstr "通知器"
 
-#: apps/io.ox/calendar/edit/template.js:431 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:448 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr "以电子邮件通知所有参与者。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:670
+#: apps/io.ox/calendar/edit/recurrence-view.js:673
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:713
+#: apps/io.ox/calendar/edit/recurrence-view.js:719
 msgid "November"
 msgstr "十一月"
 
@@ -4599,9 +4701,9 @@ msgstr "对象权限"
 msgid "Objects"
 msgstr "物件"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:669
+#: apps/io.ox/calendar/edit/recurrence-view.js:672
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:712
+#: apps/io.ox/calendar/edit/recurrence-view.js:718
 msgid "October"
 msgstr "十月"
 
@@ -4637,13 +4739,13 @@ msgstr "在工作天"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/core/desktop.js:1852 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1861 module:io.ox/core
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "找到一个项目"
 msgstr[1] "找到 %1$s 个项目"
 
-#: apps/io.ox/mail/write/main.js:1188 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1189 module:io.ox/mail
 msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
 "files are not sent as attachments but kept on the server. The email you have "
@@ -4671,7 +4773,7 @@ msgid "Open folder view"
 msgstr "打开文件夹视图"
 
 #: apps/io.ox/contacts/actions.js:761 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:461 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:468 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1122 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:597 module:io.ox/tasks
 msgid "Open in browser"
@@ -4769,15 +4871,15 @@ msgstr "选项 20"
 #: apps/io.ox/contacts/toolbar.js:168 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:214 module:io.ox/files
-#: apps/io.ox/mail/compose/view.js:136 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:146 apps/io.ox/mail/toolbar.js:238
+#: apps/io.ox/mail/compose/view.js:142 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:152 apps/io.ox/mail/toolbar.js:238
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "选项"
 
 #: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:158
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:160
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "橙色"
@@ -4787,7 +4889,7 @@ msgid "Order"
 msgstr "循序"
 
 #: apps/io.ox/calendar/view-detail.js:177 module:io.ox/calendar
-#: apps/io.ox/participants/views.js:107 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:111 module:io.ox/calendar/edit/main
 msgid "Organizer"
 msgstr "组织器"
 
@@ -4795,7 +4897,7 @@ msgstr "组织器"
 msgid "Other Address"
 msgstr "其他地址"
 
-#: apps/io.ox/contacts/edit/view-form.js:109 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:111 module:io.ox/contacts
 msgid "Other address"
 msgstr "其他地址"
 
@@ -4806,14 +4908,6 @@ msgstr "外送服务器 (SMTP)"
 #: apps/io.ox/tasks/util.js:233 module:io.ox/tasks
 msgid "Overdue"
 msgstr "过期"
-
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js:54
-#: module:plugins/notifications
-#, c-format
-msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
-msgstr "过期任务。%1$s %2$s。请按 [enter] 打开"
 
 #: apps/plugins/notifications/tasks/register.js:33
 #: module:plugins/notifications
@@ -4833,7 +4927,7 @@ msgstr "PB"
 msgid "Pager"
 msgstr "寻呼机"
 
-#: apps/io.ox/calendar/edit/template.js:297 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:314 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/participants.js:175 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:371 module:io.ox/tasks/edit
 msgid "Participants"
@@ -4852,6 +4946,13 @@ msgstr "密码"
 #, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "密码长度必须在 %1$d 和 %2$d 字符之间。"
+
+#: apps/io.ox/settings/accounts/settings/pane.js:97
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "Password"
+msgid "Password recovery"
+msgstr "密码"
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
 msgid "Password strength: Good"
@@ -4902,7 +5003,7 @@ msgstr "权限"
 msgid "Personal"
 msgstr "个人"
 
-#: apps/io.ox/contacts/edit/view-form.js:104 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:106 module:io.ox/contacts
 msgid "Personal information"
 msgstr "个人信息"
 
@@ -4910,7 +5011,7 @@ msgstr "个人信息"
 msgid "Phone"
 msgstr "电话"
 
-#: apps/io.ox/contacts/edit/view-form.js:106 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:108 module:io.ox/contacts
 msgid "Phone & fax numbers"
 msgstr "电话和传真号码"
 
@@ -4923,8 +5024,8 @@ msgid "Phone (business alt)"
 msgstr "电话（业务、替代）"
 
 #: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
-#: apps/io.ox/mail/write/view-main.js:1077 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:1078
+#: apps/io.ox/mail/write/view-main.js:1098 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:1099
 msgid "Phone (business)"
 msgstr "电话（业务）"
 
@@ -4948,8 +5049,8 @@ msgstr "电话（住宅）"
 msgid "Phone (other)"
 msgstr "电话（其他）"
 
-#: apps/io.ox/mail/write/view-main.js:1079 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:1080
+#: apps/io.ox/mail/write/view-main.js:1100 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:1101
 msgid "Phone (private)"
 msgstr "电话（私人）"
 
@@ -4967,7 +5068,7 @@ msgstr "在此选择一个时间"
 
 #: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "粉红色"
@@ -4977,7 +5078,7 @@ msgstr "粉红色"
 msgid "Places"
 msgstr "地点"
 
-#: apps/io.ox/mail/compose/view.js:114 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:120 module:io.ox/mail
 msgid "Plain Text"
 msgstr "纯文本"
 
@@ -4995,7 +5096,15 @@ msgstr "播放音效档"
 msgid "Play video files"
 msgstr "播放视象档"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1104
+#: apps/plugins/portal/xing/register.js:135 module:plugins/portal
+msgid ""
+"Please check your inbox for a confirmation email.\n"
+"\n"
+"Follow the instructions in the email and then return to the widget to "
+"complete account setup."
+msgstr ""
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:1110
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
 msgstr "请从以下句子中选择。"
@@ -5024,7 +5133,7 @@ msgstr "请输入一个 feed URL。"
 msgid "Please enter a search query"
 msgstr "请输入一个搜索查詢"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:181 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:199 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:70 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:77
 msgid "Please enter a valid date"
@@ -5038,7 +5147,7 @@ msgstr "请输入一个有效电子邮件地址"
 msgid "Please enter a valid email address or phone number"
 msgstr "请输入一个有效的电子邮件地址或电话号码"
 
-#: apps/io.ox/mail/settings/signatures/register.js:148 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:160 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "请输入一个有效名称"
 
@@ -5105,11 +5214,11 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "请您提供旧密码以复原户口密码。"
 
-#: apps/io.ox/core/import/import.js:203 module:io.ox/core
+#: apps/io.ox/core/import/import.js:212 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "请选择一个汇入的文件"
 
-#: apps/io.ox/core/import/import.js:207 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "请选择一个有效 iCal 文件作汇入"
 
@@ -5123,7 +5232,7 @@ msgid ""
 "account:"
 msgstr "请选择以下哪些数据我们可以用作创建您的 %s 户口："
 
-#: apps/io.ox/core/main.js:1035 module:io.ox/core
+#: apps/io.ox/core/main.js:1048 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "请再登录继续"
@@ -5141,17 +5250,20 @@ msgstr "请更新您的浏览器。"
 msgid "Plus"
 msgstr "额外"
 
-#: apps/io.ox/core/main.js:220 module:io.ox/core
+#: apps/io.ox/portal/main.js:577 module:io.ox/portal
+#, fuzzy
+#| msgctxt "app"
+#| msgid "Portal"
+msgid "Portal"
+msgstr "门户"
+
+#: apps/io.ox/core/main.js:223 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:29
 msgctxt "app"
 msgid "Portal"
 msgstr "门户"
 
-#: apps/io.ox/portal/main.js:576 module:io.ox/portal
-msgid "Portal Widgets"
-msgstr "门户小部件"
-
-#: apps/io.ox/portal/settings/pane.js:64 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:65 module:io.ox/portal
 msgid "Portal settings"
 msgstr "门户设定"
 
@@ -5159,7 +5271,7 @@ msgstr "门户设定"
 msgid "Position"
 msgstr "职位"
 
-#: apps/plugins/portal/xing/register.js:156 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:158 module:plugins/portal
 msgid "Post a status update"
 msgstr "发送一个状态更新"
 
@@ -5197,14 +5309,24 @@ msgstr "按下 [enter] 以跳到 tumblr feed。"
 msgid "Press [enter] to jump to the twitter feed."
 msgstr "按下 [enter] 以跳到推特 feed。"
 
-#: apps/io.ox/files/carousel.js:57 module:io.ox/files
+#: apps/io.ox/core/tk/reminder-util.js:80 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:99
+#: apps/plugins/notifications/calendar/register.js:77
+#: module:plugins/notifications apps/plugins/notifications/mail/register.js:63
+#: apps/plugins/notifications/tasks/register.js:64
+#: apps/plugins/notifications/tasks/register.js:538
+#, fuzzy
+msgid "Press [enter] to open"
+msgstr "按下 [enter] 以跳到"
+
+#: apps/io.ox/files/carousel.js:60 module:io.ox/files
 msgid "Prev"
 msgstr "前一个"
 
 #: apps/io.ox/contacts/actions.js:753 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:454 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:461 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 apps/io.ox/mail/actions.js:1114
-#: module:io.ox/mail apps/io.ox/preview/main.js:116 module:io.ox/preview
+#: module:io.ox/mail apps/io.ox/preview/main.js:118 module:io.ox/preview
 #: apps/io.ox/tasks/actions.js:590 module:io.ox/tasks
 msgid "Preview"
 msgstr "概览"
@@ -5213,11 +5335,11 @@ msgstr "概览"
 msgid "Previous"
 msgstr "前一个"
 
-#: apps/io.ox/calendar/week/view.js:690 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:691 module:io.ox/calendar
 msgid "Previous Day"
 msgstr "前一天"
 
-#: apps/io.ox/calendar/week/view.js:690 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:691 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "上周"
 
@@ -5240,8 +5362,8 @@ msgstr "打印"
 msgid "Printout"
 msgstr "打印"
 
-#: apps/io.ox/mail/compose/view.js:124 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:695
+#: apps/io.ox/mail/compose/view.js:130 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:715
 #: apps/io.ox/tasks/edit/view-template.js:352 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:662 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:105
@@ -5252,11 +5374,11 @@ msgstr "优先级"
 msgid "Privacy Notice"
 msgstr "隐私通告"
 
-#: apps/io.ox/calendar/edit/template.js:285 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:302 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:73 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:75
 #: apps/io.ox/contacts/view-detail.js:152 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:298 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:313 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 #: apps/io.ox/tasks/edit/view-template.js:362 module:io.ox/tasks/edit
 msgid "Private"
@@ -5299,7 +5421,7 @@ msgstr "进度必须是 0 到 100 之间的有效数值"
 msgid "Properties"
 msgstr "属性"
 
-#: apps/io.ox/core/folder/extensions.js:310 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:325 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 msgid "Public"
 msgstr "公共"
@@ -5340,7 +5462,7 @@ msgstr "购买配置"
 
 #: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫色"
@@ -5417,10 +5539,10 @@ msgid "Recover"
 msgstr "还原"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:28 module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js:104
+#: apps/io.ox/settings/accounts/settings/pane.js:108
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:106
-#: apps/io.ox/settings/accounts/settings/pane.js:107
+#: apps/io.ox/settings/accounts/settings/pane.js:110
+#: apps/io.ox/settings/accounts/settings/pane.js:111
 msgid "Recover passwords"
 msgstr "还原密码"
 
@@ -5438,7 +5560,7 @@ msgstr "重复任务需要一个有效开始日期。"
 
 #: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:157
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:159
 #: module:io.ox/portal
 msgid "Red"
 msgstr "红色"
@@ -5448,11 +5570,11 @@ msgstr "红色"
 msgid "Redirect to"
 msgstr "转送到"
 
-#: apps/io.ox/portal/settings/pane.js:440 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:444 module:io.ox/portal
 msgid "Reduce to widget summary"
 msgstr "减少到小部件摘要"
 
-#: apps/io.ox/core/main.js:751 module:io.ox/core
+#: apps/io.ox/core/main.js:338 module:io.ox/core apps/io.ox/core/main.js:764
 #: apps/io.ox/core/pubsub/settings/pane.js:208 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:209
 msgid "Refresh"
@@ -5505,8 +5627,8 @@ msgid "Remind me again "
 msgstr "再次提醒我"
 
 #: apps/io.ox/calendar/acceptdeny.js:53 module:io.ox/calendar
-#: apps/io.ox/calendar/edit/template.js:251 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:562 module:io.ox/calendar/main
+#: apps/io.ox/calendar/edit/template.js:268 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/invitations/register.js:601 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1069 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:167
 msgid "Reminder"
@@ -5527,7 +5649,7 @@ msgstr "提醒日期 %1$s "
 msgid "Reminder has been created"
 msgstr "已创建提醒"
 
-#: apps/io.ox/search/facets/extensions.js:330 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:328 module:io.ox/core
 msgid "Remove"
 msgstr "移除"
 
@@ -5541,6 +5663,7 @@ msgid "Remove attachment"
 msgstr "删除附件"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:262 module:io.ox/contacts
+#: apps/io.ox/participants/views.js:48 module:io.ox/calendar/edit/main
 msgid "Remove contact"
 msgstr "移除联系人"
 
@@ -5548,15 +5671,15 @@ msgstr "移除联系人"
 msgid "Remove copy from server after retrieving a message"
 msgstr "在取回一个消息后，从服务器移除副本。"
 
-#: apps/io.ox/search/facets/extensions.js:322 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:320 module:io.ox/core
 msgid "Remove facet"
 msgstr "移除刻面"
 
-#: apps/io.ox/core/folder/favorites.js:136 module:io.ox/core
+#: apps/io.ox/core/folder/favorites.js:139 module:io.ox/core
 msgid "Remove from favorites"
 msgstr "从我的最爱删除"
 
-#: apps/io.ox/mail/write/view-main.js:1217 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:1238 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "从收件人列表删除"
 
@@ -5573,7 +5696,7 @@ msgstr "重命名"
 msgid "Rename folder"
 msgstr "更名文件夹"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1224
+#: apps/io.ox/calendar/edit/recurrence-view.js:1231
 #: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "重复"
@@ -5596,7 +5719,7 @@ msgstr "全部回复"
 msgid "Reply all"
 msgstr "全部回复"
 
-#: apps/io.ox/mail/write/view-main.js:281 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:301 module:io.ox/mail
 msgid "Reply to"
 msgstr "回复"
 
@@ -5610,12 +5733,12 @@ msgstr "回复所有收件人"
 msgid "Reply to sender"
 msgstr "回复发信人"
 
-#: apps/io.ox/mail/compose/view.js:138 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:711
+#: apps/io.ox/mail/compose/view.js:144 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:731
 msgid "Request read receipt"
 msgstr "请求送达回执"
 
-#: apps/io.ox/calendar/edit/template.js:268 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:285 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Reserved"
 msgstr "已保留"
@@ -5626,12 +5749,12 @@ msgstr "重设此操作"
 
 #: apps/io.ox/contacts/view-detail.js:54 module:io.ox/contacts
 #: apps/io.ox/participants/model.js:40 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:152 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:156 module:io.ox/calendar/edit/main
 msgid "Resource"
 msgstr "资源"
 
 #: apps/io.ox/participants/model.js:41 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:163 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:167 module:io.ox/calendar/edit/main
 msgid "Resource group"
 msgstr "资源组"
 
@@ -5639,7 +5762,7 @@ msgstr "资源组"
 msgid "Resources"
 msgstr "资源"
 
-#: apps/io.ox/core/main.js:1269 module:io.ox/core
+#: apps/io.ox/core/main.js:1282 module:io.ox/core
 msgid "Restore applications"
 msgstr "恢复应用"
 
@@ -5702,13 +5825,13 @@ msgstr "销售量"
 msgid "Saturday"
 msgstr "星期六"
 
-#: apps/io.ox/calendar/edit/template.js:77 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:91 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:45 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js:173
+#: apps/io.ox/contacts/edit/view-form.js:189
 #: apps/io.ox/core/folder/actions/imap-subscription.js:49 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:363
 #: apps/io.ox/core/permissions/permissions.js:397
-#: apps/io.ox/core/settings/user.js:81 apps/io.ox/core/tk/dialogs.js:582
+#: apps/io.ox/core/settings/user.js:81 apps/io.ox/core/tk/dialogs.js:590
 #: apps/io.ox/editor/main.js:134 module:io.ox/editor
 #: apps/io.ox/editor/main.js:156 apps/io.ox/files/actions.js:611
 #: module:io.ox/files apps/io.ox/files/filepicker.js:32
@@ -5716,8 +5839,8 @@ msgstr "星期六"
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:69 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:85
-#: apps/io.ox/mail/mailfilter/settings/filter.js:101
-#: apps/io.ox/mail/settings/signatures/register.js:166
+#: apps/io.ox/mail/mailfilter/settings/filter.js:102
+#: apps/io.ox/mail/settings/signatures/register.js:178
 #: apps/io.ox/mail/write/view-main.js:56 apps/io.ox/oauth/settings.js:80
 #: module:io.ox/settings/oauth apps/io.ox/tasks/edit/view-template.js:48
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:92
@@ -5734,8 +5857,8 @@ msgstr "保存"
 msgid "Save as distribution list"
 msgstr "保存为通讯组列表"
 
-#: apps/io.ox/mail/compose/view.js:556 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1463
+#: apps/io.ox/mail/compose/view.js:604 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1466
 msgid "Save as draft"
 msgstr "保存为草稿"
 
@@ -5749,7 +5872,7 @@ msgid "Save attachment"
 msgstr "保存附件"
 
 #: apps/io.ox/contacts/actions.js:777 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:477 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:484 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1138 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:613 module:io.ox/tasks
 msgid "Save to Drive"
@@ -5792,34 +5915,41 @@ msgstr[1] "保存附件到 Drive"
 msgid "Scheduling"
 msgstr "安排时间"
 
-#: apps/io.ox/core/main.js:224 module:io.ox/core
+#: apps/io.ox/core/main.js:227 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:33
 msgctxt "app"
 msgid "Scheduling"
 msgstr "排程"
 
-#: apps/io.ox/core/desktop.js:1676 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/desktop.js:1717
-#: apps/io.ox/core/desktop.js:1913 apps/io.ox/core/main.js:734
+#. search feature help text for screenreaders
+#: apps/io.ox/core/desktop.js:1682 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1683 apps/io.ox/core/desktop.js:1724
+#: apps/io.ox/core/desktop.js:1922 apps/io.ox/core/main.js:747
 #: apps/io.ox/search/autocomplete/extensions.js:167
-#: apps/io.ox/search/autocomplete/extensions.js:209
+#: apps/io.ox/search/autocomplete/extensions.js:210
 #: apps/io.ox/search/main.js:199 module:io.ox/search
 #: apps/io.ox/search/main.js:260 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "搜索"
 
-#: apps/io.ox/core/desktop.js:1668 module:io.ox/core
+#. search: leftside sidepanel container that shows active and available facets
+#: apps/io.ox/core/desktop.js:1496 module:io.ox/core
+#, fuzzy
+msgid "Search Options"
+msgstr "搜寻在"
+
+#: apps/io.ox/core/desktop.js:1674 module:io.ox/core
 msgid "Search for items"
 msgstr "搜寻项目"
 
-#: apps/io.ox/calendar/edit/view-addparticipants.js:193
+#: apps/io.ox/calendar/edit/view-addparticipants.js:192
 #: module:io.ox/calendar/edit/main
 msgid "Search here"
 msgstr "搜索这里"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1743 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1752 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -5829,17 +5959,24 @@ msgstr ""
 "搜寻结果页列出所有活跃刻面，以允许易调整性/易移动性。在这些普遍刻面之下，列出"
 "了额外的进阶刻面。要缩窄搜寻结果请调整活跃刻面或添加新的。"
 
+#: apps/io.ox/core/desktop.js:1738 module:io.ox/core
+#, fuzzy
+#| msgid "Show original publication"
+msgid "Search within application"
+msgstr "显示原来发布"
+
 #. Appears in file icon view during searches
-#: apps/io.ox/files/fluid/perspective.js:331 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:333 module:io.ox/files
 msgid "Searched for: %1$s"
 msgstr "搜寻：%1$s"
 
 #: apps/io.ox/mail/accounts/view-form.js:572 module:io.ox/settings
+#: apps/io.ox/settings/main.js:163 module:io.ox/core
 msgid "Select"
 msgstr "选择"
 
-#: apps/io.ox/core/tk/vgrid.js:304 module:io.ox/core
-#: apps/io.ox/mail/settings/signatures/register.js:287 module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js:316 module:io.ox/core
+#: apps/io.ox/mail/settings/signatures/register.js:299 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:100
 msgid "Select all"
 msgstr "选择所有"
@@ -5861,7 +5998,7 @@ msgid "Send"
 msgstr "发送"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "发送一个送达回执"
 
@@ -5903,7 +6040,7 @@ msgstr "发送新电子邮件"
 msgid "Send vacation notice during this time only"
 msgstr "只于此时间发送假期通知"
 
-#: apps/io.ox/mail/write/view-main.js:675 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:695 module:io.ox/mail
 msgid "Sender"
 msgstr "发送者"
 
@@ -5913,7 +6050,7 @@ msgid "Sender/From"
 msgstr "发送者/来自"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:848 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:896 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:246
 msgid "Sent from %s via mobile"
 msgstr "从 %s 经过移动网路发送"
@@ -5928,9 +6065,9 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "已发送消息"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:668
+#: apps/io.ox/calendar/edit/recurrence-view.js:671
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:711
+#: apps/io.ox/calendar/edit/recurrence-view.js:717
 msgid "September"
 msgstr "九月"
 
@@ -5965,8 +6102,9 @@ msgstr "服务器无法访问"
 msgid "Server version"
 msgstr "服务器版本"
 
-#: apps/io.ox/mail/settings/signatures/register.js:352 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:443
+#: apps/io.ox/mail/settings/signatures/register.js:364 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:366
+#: apps/io.ox/mail/settings/signatures/register.js:463
 msgid "Set as default"
 msgstr "保存为默认"
 
@@ -5975,8 +6113,8 @@ msgstr "保存为默认"
 msgid "Set color"
 msgstr "设定颜色"
 
-#: apps/io.ox/core/main.js:763 module:io.ox/core apps/io.ox/core/main.js:914
-#: apps/io.ox/settings/main.js:288
+#: apps/io.ox/core/main.js:776 module:io.ox/core apps/io.ox/core/main.js:927
+#: apps/io.ox/settings/main.js:153 apps/io.ox/settings/main.js:295
 msgid "Settings"
 msgstr "设置"
 
@@ -6008,7 +6146,7 @@ msgstr "分享此文件"
 msgid "Share this folder"
 msgstr "分享此文件夹"
 
-#: apps/io.ox/core/folder/extensions.js:320 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:335 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 msgid "Shared"
 msgstr "共享"
@@ -6020,6 +6158,12 @@ msgstr "已分享约会"
 #: apps/plugins/portal/xing/actions.js:203 module:plugins/portal
 msgid "Shared activity"
 msgstr "已分享活动"
+
+#: apps/io.ox/core/folder/extensions.js:434 module:io.ox/core
+#, fuzzy
+#| msgid "You share this folder with other users"
+msgid "Shared by other users"
+msgstr "您和其他用户分享此文件夹"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -6035,11 +6179,11 @@ msgstr "显示为"
 msgid "Show QR code"
 msgstr "显示 QR 码"
 
-#: apps/io.ox/search/facets/extensions.js:60 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:58 module:io.ox/core
 msgid "Show advanced filters"
 msgstr "显示进阶过滤器"
 
-#: apps/plugins/notifications/mail/register.js:39 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
 msgid "Show all %1$d messages in inbox"
 msgstr "在收件夹里显示所有 %1$d 消息"
 
@@ -6068,7 +6212,7 @@ msgstr "显示副本输入字段"
 msgid "Show comments"
 msgstr "显示注释"
 
-#: apps/io.ox/calendar/invitations/register.js:410 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:443 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "显示冲突"
 
@@ -6085,8 +6229,7 @@ msgstr "显示详情"
 msgid "Show done tasks"
 msgstr "显示已完成任务"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:58
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
 msgid "Show file"
 msgstr "显示文件"
 
@@ -6098,11 +6241,11 @@ msgstr "显示隐藏文件和文件夹"
 msgid "Show icons"
 msgstr "显示图标"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid "Show images"
 msgstr "显示图像"
 
-#: apps/plugins/notifications/mail/register.js:39 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
 msgid "Show inbox"
 msgstr "显示收件箱"
 
@@ -6127,8 +6270,7 @@ msgstr "显示更多注释"
 msgid "Show next day"
 msgstr "显示后一天"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:58
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
 msgid "Show original publication"
 msgstr "显示原来发布"
 
@@ -6136,7 +6278,7 @@ msgstr "显示原来发布"
 msgid "Show previous day"
 msgstr "显示前一天"
 
-#: apps/io.ox/mail/detail/content.js:406 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:361 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "显示引用文本"
 
@@ -6145,7 +6287,7 @@ msgstr "显示引用文本"
 msgid "Show request body"
 msgstr "显示请求内文"
 
-#: apps/io.ox/mail/settings/pane.js:315 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:321 module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "显示送达回执的请求"
 
@@ -6167,7 +6309,7 @@ msgid "Show version history"
 msgstr "显示版本历史"
 
 #. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-#: apps/io.ox/calendar/edit/template.js:265 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:282 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:203 module:io.ox/calendar
 msgid "Shown as"
 msgstr "显示为"
@@ -6177,22 +6319,22 @@ msgstr "显示为"
 msgid "Sign in"
 msgstr "登录"
 
-#: apps/io.ox/core/main.js:893 module:io.ox/core apps/io.ox/core/main.js:932
+#: apps/io.ox/core/main.js:906 module:io.ox/core apps/io.ox/core/main.js:945
 msgid "Sign out"
 msgstr "登出"
 
-#: apps/io.ox/core/main.js:486 module:io.ox/core
+#: apps/io.ox/core/main.js:499 module:io.ox/core
 msgid "Sign out now"
 msgstr "现在登出"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:377 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:397 module:io.ox/mail
 msgid "Signature"
 msgstr "签名"
 
-#: apps/io.ox/mail/compose/view.js:147 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:404
-#: apps/io.ox/mail/write/view-main.js:623
+#: apps/io.ox/mail/compose/view.js:153 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:424
+#: apps/io.ox/mail/write/view-main.js:643
 msgid "Signatures"
 msgstr "签名"
 
@@ -6211,7 +6353,7 @@ msgid "Size (bytes)"
 msgstr "体积（字节）"
 
 #: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
-#: apps/io.ox/core/tk/attachments.js:446 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:453 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/toolbar.js:79 module:io.ox/files
 #: apps/io.ox/mail/actions.js:1106 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:582 module:io.ox/tasks
@@ -6222,7 +6364,7 @@ msgstr "幻灯片"
 msgid "Slow requests"
 msgstr "慢速请求"
 
-#: apps/io.ox/portal/settings/pane.js:436 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:440 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "智能手机配置："
 
@@ -6236,18 +6378,16 @@ msgstr "社交户口只会用作下载联系人和/或日历数据"
 msgid "SoftBank"
 msgstr "软银"
 
-#: apps/io.ox/contacts/edit/main.js:93 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:94 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "有些输入字段包含无效数据"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:51
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
 msgid "Someone shared a file with you"
 msgstr "有人想您分享了一个文件"
 
 #. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:54
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
 msgid ""
 "Someone shared a folder with you. Would you like to subscribe those %1$s?"
 msgstr "有人向您分享了一个文件夹。请问您要否订阅它们 %1$s？"
@@ -6288,12 +6428,12 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "依 .. 排序"
 
-#: apps/io.ox/calendar/list/perspective.js:228 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:231 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:657 module:io.ox/tasks
 msgid "Sort options"
 msgstr "排序选项"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:262 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:261 module:io.ox/core/pubsub
 msgid "Source"
 msgstr "来源"
 
@@ -6325,13 +6465,13 @@ msgstr "起始日期"
 msgid "Start of working time"
 msgstr "工作时间开始"
 
-#: apps/io.ox/core/desktop.js:1787 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1788
+#: apps/io.ox/core/desktop.js:1796 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1797
 msgid "Start search"
 msgstr "开始搜索"
 
-#: apps/io.ox/calendar/edit/template.js:144 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:550 module:io.ox/core
+#: apps/io.ox/calendar/edit/template.js:154 module:io.ox/calendar/edit/main
+#: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core
 msgid "Starts on"
 msgstr "开始于"
 
@@ -6363,15 +6503,15 @@ msgstr "街道"
 msgid "Student"
 msgstr "学生"
 
-#: apps/io.ox/calendar/edit/template.js:118 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:120 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:805 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:231
 #: apps/io.ox/mail/compose/extensions.js:235
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:135
-#: apps/io.ox/mail/view-options.js:35 apps/io.ox/mail/write/view-main.js:870
-#: apps/io.ox/mail/write/view-main.js:925
+#: apps/io.ox/mail/view-options.js:35 apps/io.ox/mail/write/view-main.js:891
+#: apps/io.ox/mail/write/view-main.js:946
 #: apps/io.ox/tasks/edit/view-template.js:107 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:661 module:io.ox/tasks
 msgid "Subject"
@@ -6381,8 +6521,8 @@ msgstr "主题"
 msgid "Submit comment"
 msgstr "送出回帖"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61
-#: module:io.ox/core/pubsub apps/io.ox/core/pubsub/subscriptions.js:53
+#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
+#: apps/io.ox/core/pubsub/subscriptions.js:53 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:56
 msgid "Subscribe"
 msgstr "订阅"
@@ -6477,29 +6617,12 @@ msgid_plural "Tasks have been deleted!"
 msgstr[0] "任务已删除！"
 msgstr[1] "任务已删除！"
 
-#. %1$s task title
-#. %2$s task end date
-#. %3$s task status
-#: apps/plugins/notifications/tasks/register.js:527
-#: module:plugins/notifications
-#, c-format
-msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
-msgstr "任务邀请。%1$s %2$s %3$s。请按 [enter] 打开"
-
-#: apps/plugins/notifications/tasks/register.js:503
+#: apps/plugins/notifications/tasks/register.js:504
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "任务邀请"
 
-#. %1$s task title
-#. %2$s task end date
-#. %3$s task status
-#: apps/io.ox/core/tk/reminder-util.js:94 module:io.ox/core
-#, c-format
-msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
-msgstr "任务提醒。%1$s %2$s %3$s。请按 [enter] 打开"
-
-#: apps/plugins/notifications/tasks/register.js:257
+#: apps/plugins/notifications/tasks/register.js:259
 #: module:plugins/notifications
 msgid "Task reminders"
 msgstr "任务提醒"
@@ -6516,7 +6639,7 @@ msgstr "任务已更改过，请重新加载"
 msgid "Tasks"
 msgstr "任务"
 
-#: apps/io.ox/core/main.js:225 module:io.ox/core
+#: apps/io.ox/core/main.js:228 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:34 apps/io.ox/tasks/settings/pane.js:50
 #: module:io.ox/tasks
 msgctxt "app"
@@ -6551,7 +6674,7 @@ msgstr "电报"
 msgid "Template"
 msgstr "模版"
 
-#: apps/io.ox/calendar/edit/template.js:269 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:286 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Temporary"
 msgstr "临时"
@@ -6567,11 +6690,11 @@ msgid "Tentatively accepted"
 msgstr "暂定接受"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:719
+#: apps/io.ox/mail/write/view-main.js:740
 msgid "Text"
 msgstr "文本"
 
-#: apps/io.ox/mail/write/view-main.js:716 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:739 module:io.ox/mail
 msgid "Text format"
 msgstr "时间格式"
 
@@ -6647,7 +6770,7 @@ msgstr ""
 "此约会将会<a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
 "\"options\">每星期</a>重复。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:676
+#: apps/io.ox/calendar/edit/recurrence-view.js:679
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
@@ -6660,7 +6783,7 @@ msgstr ""
 "a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">星期三</a>重"
 "复， "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:648
+#: apps/io.ox/calendar/edit/recurrence-view.js:651
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
@@ -6732,31 +6855,31 @@ msgstr "结束时间不能在开始时间之前。调整开始时间？"
 msgid "The email address %1$s is already in the list"
 msgstr "邮件地址 %1$s 已经在列表里"
 
-#: apps/io.ox/mail/compose/view.js:632 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1213
+#: apps/io.ox/mail/compose/view.js:680 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1214
 msgid "The email has been sent"
 msgstr "已发送电子邮件"
 
-#: apps/io.ox/core/tk/attachments.js:349 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:356 module:io.ox/core/tk/attachments
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
 "publication maximum file size of %2$s"
 msgstr "因为文件 \"%1$s\" 超出附件发布最大文件体积 %2$s，所以未能上载。"
 
-#: apps/io.ox/core/tk/attachments.js:354 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:361 module:io.ox/core/tk/attachments
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr "因为文件 \"%1$s\" 超出 infostore 限额 %2$s，所以未能上载。"
 
-#: apps/io.ox/core/tk/attachments.js:338 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:345 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/upload.js:260 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr "因为文件 \"%1$s\" 超出最大文件体积 %2$s，所以未能上载。"
 
-#: apps/io.ox/core/tk/attachments.js:343 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:350 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/upload.js:267 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
@@ -6772,6 +6895,12 @@ msgstr "此文件于 %1$s 可用"
 msgid "The first 90 days are free."
 msgstr "开始 90 天为免费。"
 
+#: apps/io.ox/core/import/import.js:143 module:io.ox/core
+msgid ""
+"The first record of a valid CVS file must define proper column names. "
+"Supported separators are comma and semi-colon."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/common.js:34 module:io.ox/core
 msgid "The folder has been cleaned up."
 msgstr "文件夹已清理。"
@@ -6786,7 +6915,7 @@ msgstr "文件夹已清空。"
 msgid "The folder is available at %1$s"
 msgstr "文件夹于 %1$s 可用"
 
-#: apps/io.ox/core/main.js:1271 module:io.ox/core
+#: apps/io.ox/core/main.js:1284 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6796,22 +6925,9 @@ msgstr "以下应用已恢复，如果您不想它被恢复只需删除恢复点
 msgid "The following products will be activated now:"
 msgstr "以下产品将会马上激活："
 
-#: apps/plugins/portal/xing/register.js:133 module:plugins/portal
-msgid ""
-"The next step is allowing this system to access your %s account for you."
-msgstr "下一步是允许此系统替您访问您的 %s 户口。"
-
-#: apps/io.ox/core/notifications.js:45 module:io.ox/core
-msgid "The notification area is closed"
-msgstr "通知区域关闭"
-
-#: apps/io.ox/core/notifications.js:45 module:io.ox/core
-msgid "The notification area is open"
-msgstr "通知区域开放"
-
 #. Mail compose. Maximum number of recipients exceeded
 #. %1$s = maximum
-#: apps/io.ox/mail/write/view-main.js:341 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:361 module:io.ox/mail
 msgid "The number of recipients is limited to %1$s recipients per field"
 msgstr "收件人数量限制每输入字段 %1$s 个"
 
@@ -6831,11 +6947,11 @@ msgid ""
 "another folder."
 msgstr "选择的文件夹为虚拟和不能被搜寻的。请选择别的文件夹。"
 
-#: apps/io.ox/mail/common-extensions.js:545 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:558 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "此发送人想在您阅读此电子邮件时获得一个通知"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:753
+#: apps/io.ox/calendar/edit/recurrence-view.js:759
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6846,7 +6962,7 @@ msgstr ""
 "<span class=\"number-control\">2</span> 次约会后</a><a href=\"#\" data-"
 "attribute=\"occurrences\" data-widget=\"number\"> 结束。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:743
+#: apps/io.ox/calendar/edit/recurrence-view.js:749
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6857,7 +6973,7 @@ msgstr ""
 "\">11/03/2013</a><a href=\"#\" data-attribute=\"ending\" data-widget="
 "\"options\">结束</a>。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:734
+#: apps/io.ox/calendar/edit/recurrence-view.js:740
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6893,8 +7009,8 @@ msgstr "发布的数据将能被互联网的任何人访问，请您三思您想
 msgid "The start date must be before the due date."
 msgstr "起始日期一定要在结束日期之前。"
 
-#: apps/io.ox/calendar/model.js:265 module:io.ox/calendar
-#: apps/io.ox/calendar/model.js:266
+#: apps/io.ox/calendar/model.js:255 module:io.ox/calendar
+#: apps/io.ox/calendar/model.js:256
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:98 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:99
 msgid "The start date must be before the end date."
@@ -6932,18 +7048,18 @@ msgstr "主题"
 msgid "There are unsaved changes."
 msgstr "找到未保存更改。"
 
-#: apps/io.ox/calendar/invitations/register.js:403 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:436 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "您已经在此时段有一个 %1$d 约会。"
 msgstr[1] "您已经在此时段有一个 %1$d 约会。"
 
-#: apps/plugins/portal/xing/register.js:187 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:243
+#: apps/plugins/portal/xing/register.js:189 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:245
 msgid "There is no recent activity in your Xing network."
 msgstr "您的 Xing 最近没有活动。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:474 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:478 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "没有定义规则"
 
@@ -6964,7 +7080,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "XING 有一个问题，错误消息为： \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:196 module:io.ox/core
+#: apps/io.ox/core/import/import.js:205 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "没有可以导入的约会数据"
 
@@ -6985,6 +7101,16 @@ msgid ""
 "the folder structure from the folder \"%1$s\"."
 msgstr "这些统计只包含从 \"%1$s\" 文件夹少于四层文件夹结构深度的文件夹。"
 
+#: apps/io.ox/mail/common-extensions.js:428 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:439
+msgid "This E-mail is read, press to mark it as unread."
+msgstr "此电子邮件已读，单击以标记成未读。"
+
+#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:439
+msgid "This E-mail is unread, press to mark it as read."
+msgstr "此电子邮件未读，单击以标记成已读。"
+
 #: apps/io.ox/core/login-i18n.js:35 module:io.ox/core/login
 msgid "This browser is not supported on your current platform."
 msgstr "在您当前平台上不支持此浏览器。"
@@ -6997,7 +7123,7 @@ msgstr "此联系人为私人，不能予以分享。"
 msgid "This distribution list has been added to the portal"
 msgstr "此通讯组列表已添加到门户"
 
-#: apps/io.ox/calendar/edit/template.js:395 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:412 module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
 msgstr "此电子邮件地址不能用作约会"
 
@@ -7077,15 +7203,17 @@ msgid_plural "These files have not been unlocked"
 msgstr[0] "此档案没有被解锁"
 msgstr[1] "这些档案没有被解锁"
 
-#: apps/io.ox/files/fluid/view-detail.js:81 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:435 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:81
 msgid "This file is locked by %1$s"
 msgstr "此文件被 %1$s 锁着"
 
-#: apps/io.ox/files/fluid/view-detail.js:79 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:433 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:79
 msgid "This file is locked by you"
 msgstr "此文件被您锁着"
 
-#: apps/io.ox/editor/main.js:246 module:io.ox/editor
+#: apps/io.ox/editor/main.js:247 module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
 msgstr "此文件将会写入在您的默认文件夹以允许编辑"
 
@@ -7097,7 +7225,8 @@ msgstr "此文件夹没有发布"
 msgid "This folder has no subscriptions"
 msgstr "此文件夹没有订阅"
 
-#: apps/io.ox/core/folder/extensions.js:449 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:466 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:469
 #: apps/io.ox/core/tk/folderviews.js:947
 msgid "This folder has publications and/or subscriptions"
 msgstr "此文件夹有发布和/或订阅"
@@ -7141,15 +7270,15 @@ msgstr "本列表还没有成员"
 msgid "This mail has been added to the portal"
 msgstr "此邮件已添加到门户"
 
-#: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:147 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "此邮件没有内容"
 
-#: apps/io.ox/core/yell.js:178 module:io.ox/core
+#: apps/io.ox/core/yell.js:212 module:io.ox/core
 msgid "This may take some seconds"
 msgstr "可能稍时片刻"
 
-#: apps/io.ox/mail/detail/view.js:243 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "此消息已因体积限制而被截短。"
 
@@ -7193,7 +7322,7 @@ msgstr "方块"
 msgid "Tiles"
 msgstr "方块"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:89 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:109 module:io.ox/core
 #: apps/io.ox/calendar/settings/pane.js:118 module:io.ox/calendar
 msgid "Time"
 msgstr "时间"
@@ -7215,14 +7344,14 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "标题"
 
-#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:247 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:49
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:532
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:540
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
 #: apps/io.ox/mail/write/inplace/inplace.js:72
-#: apps/io.ox/mail/write/view-main.js:502
-#: apps/io.ox/mail/write/view-main.js:503
+#: apps/io.ox/mail/write/view-main.js:522
+#: apps/io.ox/mail/write/view-main.js:523
 msgid "To"
 msgstr "收件人"
 
@@ -7237,16 +7366,16 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/datepicker.js:30 module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:82 module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
-#: apps/io.ox/calendar/month/perspective.js:442
+#: apps/io.ox/calendar/month/perspective.js:454
 #: apps/io.ox/calendar/util.js:170 apps/io.ox/calendar/util.js:208
-#: apps/io.ox/calendar/week/view.js:151 apps/io.ox/calendar/week/view.js:712
-#: apps/io.ox/search/facets/extensions.js:514
+#: apps/io.ox/calendar/week/view.js:151 apps/io.ox/calendar/week/view.js:713
+#: apps/io.ox/search/facets/extensions.js:512
 #: apps/plugins/portal/birthdays/register.js:86 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:159
 msgid "Today"
 msgstr "今天"
 
-#: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:322 module:io.ox/core
 msgid "Toggle checkboxes"
 msgstr "切换选择框"
 
@@ -7255,12 +7384,12 @@ msgstr "切换选择框"
 msgid "Toggle folder"
 msgstr "切换文件夹"
 
-#: apps/io.ox/search/facets/extensions.js:349 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:605
+#: apps/io.ox/search/facets/extensions.js:347 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:603
 msgid "Toggle options"
 msgstr "切换选项"
 
-#: apps/io.ox/core/desktop.js:1905 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1914 module:io.ox/core
 msgid "Toggle search"
 msgstr "切换搜寻"
 
@@ -7298,7 +7427,7 @@ msgstr "最高十个您发送邮件的人"
 msgid "Total cost"
 msgstr "总费用"
 
-#: apps/io.ox/core/folder/node.js:391 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:412 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "总数： %1$s"
 
@@ -7336,7 +7465,7 @@ msgstr "推特"
 msgid "Twitter reported the following errors:"
 msgstr "推特报告以下错误："
 
-#: apps/io.ox/calendar/edit/template.js:284 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:301 module:io.ox/calendar/edit/main
 #: apps/plugins/portal/flickr/register.js:221 module:plugins/portal
 msgid "Type"
 msgstr "类型"
@@ -7416,7 +7545,7 @@ msgstr "解锁"
 msgid "Unread"
 msgstr "未读"
 
-#: apps/io.ox/core/folder/node.js:392 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:413 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未读：%1$d"
 
@@ -7424,7 +7553,7 @@ msgstr "未读：%1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "将会失去未保存的文档，您确定现在要注销？"
 
-#: apps/io.ox/mail/settings/signatures/register.js:464 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:484 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "取消默认签名"
 
@@ -7441,7 +7570,7 @@ msgstr ""
 msgid "Updater"
 msgstr "更新程序"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:329 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:328 module:io.ox/core/pubsub
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
@@ -7463,7 +7592,7 @@ msgstr "升级到高级版"
 msgid "Upload a new version"
 msgstr "上载一个新版本"
 
-#: apps/io.ox/core/tk/attachments.js:594 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:601 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/fluid/view-detail.js:227 module:io.ox/files
 msgid "Upload file"
 msgstr "上载档案"
@@ -7502,9 +7631,9 @@ msgstr "紧急"
 msgid "Use SSL connection"
 msgstr "使用 SSL 连接"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:119 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:98 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:113 module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:534
+#: apps/io.ox/search/facets/extensions.js:532
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -7513,14 +7642,23 @@ msgstr ""
 "使用方向键以更改日期。同时按下 ctrl 键以更改年份或 shift 键以更改月份。按下 "
 "ESC 键以关闭日期选择器。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:263 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:259 module:io.ox/portal
-msgid "Use cursor keys to change the item position"
+#: apps/io.ox/mail/mailfilter/settings/filter.js:264 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:263 module:io.ox/portal
+#, fuzzy
+#| msgid "Use cursor keys to change the item position"
+msgid ""
+"Use cursor keys to change the item position. Virtual cursor mode has to be "
+"disabled."
 msgstr "使用方向键以更改项目位置"
 
 #: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
+
+#. helper text for slideshow widget navigation
+#: apps/io.ox/files/carousel.js:77 module:io.ox/files
+msgid "Use left/right arrow keys to navigate and escape key to exit view."
+msgstr ""
 
 #. Auth type. Use separate username and password
 #: apps/io.ox/mail/accounts/view-form.js:50 module:io.ox/settings
@@ -7531,7 +7669,7 @@ msgstr "使用分离的用户名称和密码"
 msgid "Use unified mail for this account"
 msgstr "该户口使用统一邮件"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:79 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:102 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr "使用上下键以更改时间，按下 ESC 键以关闭选择。"
@@ -7541,7 +7679,7 @@ msgstr "使用上下键以更改时间，按下 ESC 键以关闭选择。"
 msgid "User data"
 msgstr "用户数据"
 
-#: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js:114 module:io.ox/contacts
 msgid "User fields"
 msgstr "用户定义"
 
@@ -7605,7 +7743,7 @@ msgstr "等待中"
 msgid "Warning"
 msgstr "警告"
 
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:498 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：该邮件可能存在邮件欺诈！"
 
@@ -7772,8 +7910,8 @@ msgstr "黄色"
 msgid "Yes"
 msgstr "是"
 
-#: apps/io.ox/mail/compose/view.js:701 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1279
+#: apps/io.ox/mail/compose/view.js:749 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1280
 msgid "Yes, send without subject"
 msgstr "是，不带题目发送"
 
@@ -7829,7 +7967,7 @@ msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "您不是直接连接到 %s。这些人是链接到 %s 的："
 
-#: apps/io.ox/calendar/invitations/register.js:145 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:146 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "您是组织者"
 
@@ -7839,7 +7977,7 @@ msgid ""
 "your drive. Send it anyway?"
 msgstr "您附上一个空的文件。此文件可能已从您的盘里删除了。要坚持发送吗？"
 
-#: apps/io.ox/mail/write/view-main.js:523 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:543 module:io.ox/mail
 msgid ""
 "You can drag and drop files from your computer here to add as attachment."
 msgstr "您可以在这里从您的计算机拖放文件，以添加成附件。"
@@ -7858,11 +7996,11 @@ msgstr "您可以使用 Ctrl+Enter 快速保存更改。"
 msgid "You cannot move items to virtual folders"
 msgstr "您不能移动项目到虚拟文件夹。"
 
-#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "您已经拒绝了约会"
 
-#: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:162 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "您拒绝了此任务"
 
@@ -7899,11 +8037,11 @@ msgstr "您一条未读消息"
 msgid "You have accepted the appointment"
 msgstr "您已接受此约会"
 
-#: apps/io.ox/calendar/invitations/register.js:154 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:155 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "您已接受此约会"
 
-#: apps/io.ox/calendar/invitations/register.js:155 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:156 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "您已接受此任务"
 
@@ -7956,16 +8094,17 @@ msgstr "您需要使用 Android %n 或更新版本。"
 msgid "You need to use iOS %n or higher."
 msgstr "您需要使用 %n 或更新版本。"
 
-#: apps/io.ox/core/folder/extensions.js:432 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:448 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:451
 #: apps/io.ox/core/tk/folderviews.js:970
 msgid "You share this folder with other users"
 msgstr "您和其他用户分享此文件夹"
 
-#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:167 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "您暂时接受此约会"
 
-#: apps/io.ox/calendar/invitations/register.js:167 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:168 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "您暂时接受此任务"
 
@@ -7977,22 +8116,17 @@ msgid ""
 msgstr ""
 "您会自动回到约会对话。选择的开始和结束时间，还有当前参与者列表将会套用。"
 
-#: apps/io.ox/core/main.js:463 module:io.ox/core
+#: apps/io.ox/core/main.js:476 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "您会在 %1$d 秒后自动注销"
 msgstr[1] "您会在 %1$d 秒后自动注销"
 
-#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
-msgid ""
-"Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
-
-#: apps/plugins/portal/xing/register.js:330 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:336 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "您的 %s 新闻条目"
 
-#: apps/io.ox/core/main.js:954 module:io.ox/core
+#: apps/io.ox/core/main.js:967 module:io.ox/core
 msgid "Your Applications"
 msgstr "您的应用程序"
 
@@ -8079,7 +8213,7 @@ msgstr "您的密码会在它包含大写、数字、和如 %1$s 特殊字符时
 msgid "Your selected picture will be displayed after saving"
 msgstr "您选择的图像将会在保存后显示"
 
-#: apps/io.ox/core/main.js:1034 module:io.ox/core
+#: apps/io.ox/core/main.js:1047 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "会话已过期"
@@ -8088,12 +8222,12 @@ msgstr "会话已过期"
 msgid "Your shared contacts:"
 msgstr "您的已分享联系人："
 
-#: apps/plugins/portal/xing/register.js:167 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:169 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr "无法在 %s 发送您的状态更新，错误消息为： \"%s\""
 
-#: apps/plugins/portal/xing/register.js:171 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:173 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "您的状态更新已成功在 %s 发送"
 
@@ -8110,9 +8244,9 @@ msgstr "ZB"
 msgid "accepted"
 msgstr "已接受"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:477
+#: apps/io.ox/calendar/edit/recurrence-view.js:476
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:760
+#: apps/io.ox/calendar/edit/recurrence-view.js:766
 msgid "after %1$d appointment"
 msgid_plural "after %1$d appointments"
 msgstr[0] "%1$d 次约会后"
@@ -8125,7 +8259,7 @@ msgid "and"
 msgstr "与"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:284 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "和 %1$d 位收件人"
 
@@ -8134,13 +8268,13 @@ msgid "by noon"
 msgstr "中午前"
 
 #: apps/io.ox/core/tk/dropdown-options.js:209 module:io.ox/core
-#: apps/io.ox/mail/write/view-main.js:118 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:173
+#: apps/io.ox/mail/write/view-main.js:129 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:191
 msgid "close"
 msgstr "关闭"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:596 module:io.ox/core
+#: apps/io.ox/core/main.js:609 module:io.ox/core
 msgid "close for %1$s"
 msgstr "按 %1$s 关闭"
 
@@ -8170,15 +8304,21 @@ msgstr "日期范围"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:631
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:696
+#: apps/io.ox/calendar/edit/recurrence-view.js:699
 msgid "day of the week"
 msgstr "每周的"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:632
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:697
+#: apps/io.ox/calendar/edit/recurrence-view.js:700
 msgid "day of the weekend"
 msgstr "每周末的"
+
+#: apps/io.ox/core/date.js:76 module:io.ox/core
+#, fuzzy
+#| msgid "Add"
+msgid "dd"
+msgstr "添加"
 
 #: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
 msgid "declined"
@@ -8215,31 +8355,31 @@ msgstr "编辑所有对象"
 msgid "edit own objects"
 msgstr "编辑拥有的对象"
 
-#: apps/io.ox/core/tk/reminder-util.js:85 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:87 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:521
+#: apps/plugins/notifications/tasks/register.js:524
 msgid "end date "
 msgstr "结束日期"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:730
+#: apps/io.ox/calendar/edit/recurrence-view.js:736
 #: module:io.ox/calendar/edit/main
 msgid "ends"
 msgstr "结束"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:727
+#: apps/io.ox/calendar/edit/recurrence-view.js:733
 #: module:io.ox/calendar/edit/main
 msgid "ends after a certain number of appointments"
 msgstr "在一定数量的约会后结束"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:726
+#: apps/io.ox/calendar/edit/recurrence-view.js:732
 #: module:io.ox/calendar/edit/main
 msgid "ends on a specific date"
 msgstr "指定日期结束"
 
 #. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:474
+#: apps/io.ox/calendar/edit/recurrence-view.js:473
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:544
 #: apps/io.ox/calendar/edit/recurrence-view.js:547
@@ -8250,11 +8390,11 @@ msgstr[1] "每 %1$d 天"
 
 #. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:476
+#: apps/io.ox/calendar/edit/recurrence-view.js:475
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:588
 #: apps/io.ox/calendar/edit/recurrence-view.js:590
-#: apps/io.ox/calendar/edit/recurrence-view.js:642
+#: apps/io.ox/calendar/edit/recurrence-view.js:645
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "每 %1$d 月"
@@ -8262,7 +8402,7 @@ msgstr[1] "每 %1$d 月"
 
 #. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:475
+#: apps/io.ox/calendar/edit/recurrence-view.js:474
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:565
 #: apps/io.ox/calendar/edit/recurrence-view.js:568
@@ -8282,7 +8422,7 @@ msgstr "每天"
 #. This is inserted into an HTML construct and is the form without the number
 #: apps/io.ox/calendar/edit/recurrence-view.js:584
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:640
+#: apps/io.ox/calendar/edit/recurrence-view.js:643
 msgid "every month"
 msgstr "每月"
 
@@ -8299,8 +8439,7 @@ msgid "expand"
 msgstr "扩张"
 
 #. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:40
-#: module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
 msgid "files"
 msgstr "文件"
 
@@ -8308,7 +8447,7 @@ msgstr "文件"
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:613
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:682
+#: apps/io.ox/calendar/edit/recurrence-view.js:685
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "first"
 msgstr "第一个"
@@ -8325,16 +8464,22 @@ msgstr "flickr.photos.search"
 #. as in: fourth week or fourth Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:622
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:688
+#: apps/io.ox/calendar/edit/recurrence-view.js:691
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "fourth"
 msgstr "第四个"
 
-#: apps/io.ox/core/import/import.js:70 module:io.ox/core
+#: apps/io.ox/mail/common-extensions.js:46 module:io.ox/mail
+#, fuzzy
+#| msgid "Add attachments"
+msgid "has attachments"
+msgstr "添加附件"
+
+#: apps/io.ox/core/import/import.js:60 module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/plugins/notifications/calendar/register.js:101
+#: apps/plugins/notifications/calendar/register.js:105
 #: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"
@@ -8354,13 +8499,13 @@ msgstr "30 分钟"
 msgid "in 5 minutes"
 msgstr "5 分钟"
 
-#: apps/io.ox/mail/write/view-main.js:516 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:517
+#: apps/io.ox/mail/write/view-main.js:536 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:537
 msgid "in blind copy"
 msgstr "无名副本"
 
-#: apps/io.ox/mail/write/view-main.js:509 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:510
+#: apps/io.ox/mail/write/view-main.js:529 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:530
 msgid "in copy"
 msgstr "副本"
 
@@ -8376,7 +8521,7 @@ msgstr "一周内"
 #. as in: last week or last Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:610
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:690
+#: apps/io.ox/calendar/edit/recurrence-view.js:693
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "last"
 msgstr "最后一个"
@@ -8390,9 +8535,9 @@ msgstr "晚上稍后时间"
 msgid "monthly"
 msgstr "每月"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:725
+#: apps/io.ox/calendar/edit/recurrence-view.js:731
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:739
+#: apps/io.ox/calendar/edit/recurrence-view.js:745
 msgid "never ends"
 msgstr "永不结束"
 
@@ -8439,13 +8584,13 @@ msgstr "没有编辑权限"
 msgid "no read permissions"
 msgstr "无读取权限"
 
-#: apps/io.ox/mail/write/view-main.js:118 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:170
+#: apps/io.ox/mail/write/view-main.js:129 module:io.ox/mail
+#: apps/io.ox/mail/write/view-main.js:185
 msgid "open"
 msgstr "打开"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:170 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:175
+#: apps/io.ox/mail/mailfilter/settings/filter.js:171 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:176
 msgid "process subsequent rules"
 msgstr "处理连续规则"
 
@@ -8460,9 +8605,9 @@ msgstr "读取所有对象"
 msgid "read own objects"
 msgstr "读取拥有的对象"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:178 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:183
-#: apps/io.ox/portal/settings/pane.js:351 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:179 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:184
+#: apps/io.ox/portal/settings/pane.js:355 module:io.ox/portal
 msgid "remove"
 msgstr "移除"
 
@@ -8470,7 +8615,7 @@ msgstr "移除"
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:616
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:684
+#: apps/io.ox/calendar/edit/recurrence-view.js:687
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "second"
 msgstr "第二个"
@@ -8481,7 +8626,7 @@ msgid "seen"
 msgstr "看到"
 
 #: apps/io.ox/core/export/export.js:50 module:io.ox/core
-#: apps/io.ox/core/import/import.js:48
+#: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "选择格式"
 
@@ -8489,7 +8634,7 @@ msgstr "选择格式"
 msgid "show image"
 msgstr "显示图像"
 
-#: apps/io.ox/core/tk/reminder-util.js:88 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:90 module:io.ox/core
 msgid "status "
 msgstr "状态"
 
@@ -8502,11 +8647,23 @@ msgstr "%s 的子文件夹"
 msgid "tentative"
 msgstr "暂定"
 
+#: apps/io.ox/mail/mailfilter/settings/filter.js:419 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:221 module:io.ox/portal
+#, fuzzy
+#| msgid "File has been moved"
+msgid "the item has been moved"
+msgstr "文档已被移动"
+
+#: apps/io.ox/mail/settings/model.js:26 module:io.ox/mail
+#: apps/io.ox/mail/settings/model.js:27
+msgid "the line length must be a number"
+msgstr ""
+
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:619
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:686
+#: apps/io.ox/calendar/edit/recurrence-view.js:689
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "third"
 msgstr "第三个"
@@ -8549,7 +8706,7 @@ msgstr "无限"
 msgid "unread"
 msgstr "未读"
 
-#: apps/io.ox/core/import/import.js:96 module:io.ox/core
+#: apps/io.ox/core/import/import.js:86 module:io.ox/core
 msgid "vCard"
 msgstr "vCard"
 
@@ -8585,6 +8742,10 @@ msgstr "每年"
 #: apps/plugins/portal/oxdriveclients/register.js:35 module:plugins/portal
 msgid "your platform"
 msgstr "您的平台"
+
+#: apps/io.ox/core/date.js:74 module:io.ox/core
+msgid "yyyy"
+msgstr ""
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -8957,6 +9118,13 @@ msgstr "您的平台"
 #~ msgid_plural "Appointments have been moved"
 #~ msgstr[0] "约会已复制"
 #~ msgstr[1] "约会已复制"
+
+#~ msgid ""
+#~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
+#~ msgstr "约会邀请。%1$s %2$s %3$s %4$s %5$s。请按 [enter] 打开"
+
+#~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
+#~ msgstr "约会提醒。%1$s %2$s %3$s %4$s。请按 [enter] 打开"
 
 #~ msgid "Appointments in personal calendars: set status to"
 #~ msgstr "个人日历中的约会：将状态设置为"
@@ -9621,9 +9789,6 @@ msgstr "您的平台"
 #~ msgid "Current page and total page count"
 #~ msgstr "当前页面和页面总数"
 
-#~ msgid "Current version"
-#~ msgstr "当前版本"
-
 #~ msgid "Current week"
 #~ msgstr "本周"
 
@@ -10078,9 +10243,6 @@ msgstr "您的平台"
 #~ msgid "Editing multiple tasks"
 #~ msgstr "编辑多个任务"
 
-#~ msgid "Editing settings"
-#~ msgstr "编辑设定"
-
 #~ msgid "Editor feature set:"
 #~ msgstr "编辑器功能集："
 
@@ -10331,6 +10493,9 @@ msgstr "您的平台"
 #~ msgid "Fiji"
 #~ msgstr "斐济"
 
+#~ msgid "File Details"
+#~ msgstr "文件详情"
+
 #~ msgid "File name"
 #~ msgstr "文件名"
 
@@ -10531,6 +10696,9 @@ msgstr "您的平台"
 #~ msgid "Image"
 #~ msgstr "图像"
 
+#~ msgid "Import into"
+#~ msgstr "导入到"
+
 #~ msgid "In %s hours:"
 #~ msgstr "%s 小时内："
 
@@ -10717,8 +10885,17 @@ msgstr "您的平台"
 #~ msgid "Mediaplayer"
 #~ msgstr "媒体播放器"
 
+#~ msgid "Message is read"
+#~ msgstr "消息为已读"
+
+#~ msgid "Message is unread"
+#~ msgstr "消息为未读"
+
 #~ msgid "Mobile device settings:"
 #~ msgstr "移动装置设置："
+
+#~ msgid "Month View"
+#~ msgstr "月视图"
 
 #~ msgid "More zoom settings"
 #~ msgstr "更多放大设定"
@@ -10743,6 +10920,9 @@ msgstr "您的平台"
 
 #~ msgid "Network Problems"
 #~ msgstr "网络错误"
+
+#~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
+#~ msgstr "来自 %1$s %2$s 的新邮件。请按 [enter] 打开"
 
 #~ msgid "New objects icon"
 #~ msgstr "新对象图标"
@@ -10828,6 +11008,9 @@ msgstr "您的平台"
 #~ msgid "Opening the settings"
 #~ msgstr "打开设定"
 
+#~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
+#~ msgstr "过期任务。%1$s %2$s。请按 [enter] 打开"
+
 #~ msgid "POP3:"
 #~ msgstr "POP3:"
 
@@ -10876,15 +11059,14 @@ msgstr "您的平台"
 #~ msgid "Portal Squares"
 #~ msgstr "门户"
 
+#~ msgid "Portal Widgets"
+#~ msgstr "门户小部件"
+
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "葡萄牙文（葡萄牙）"
 
 #~ msgid "Press [enter] to close this alertbox."
 #~ msgstr "请按 [enter] 关闭此示警框。"
-
-#, fuzzy
-#~ msgid "Press [enter] to jump to"
-#~ msgstr "按下 [enter] 以跳到"
 
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "如果您要再被通知，请按 [enter] 以选择一个时间。"
@@ -10978,10 +11160,6 @@ msgstr "您的平台"
 
 #~ msgid "Saving latest changes ..."
 #~ msgstr "保存更改中 ..."
-
-#, fuzzy
-#~ msgid "Search in"
-#~ msgstr "搜寻在"
 
 #~ msgid "Searched in"
 #~ msgstr "搜寻在"
@@ -11158,10 +11336,16 @@ msgstr "您的平台"
 #~ msgid "Table"
 #~ msgstr "表格"
 
+#~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
+#~ msgstr "任务邀请。%1$s %2$s %3$s。请按 [enter] 打开"
+
 #~ msgid "Task moved."
 #~ msgid_plural "Tasks moved."
 #~ msgstr[0] "任务已移动。"
 #~ msgstr[1] "任务已移动。"
+
+#~ msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
+#~ msgstr "任务提醒。%1$s %2$s %3$s。请按 [enter] 打开"
 
 #~ msgid "Tasks have been moved"
 #~ msgstr "任务已被移动"
@@ -11263,6 +11447,16 @@ msgstr "您的平台"
 #~ "在右下方的图标帮助您排序您的电子邮件。单击图标以获得一个排序准则列表。"
 
 #~ msgid ""
+#~ "The next step is allowing this system to access your %s account for you."
+#~ msgstr "下一步是允许此系统替您访问您的 %s 户口。"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "通知区域关闭"
+
+#~ msgid "The notification area is open"
+#~ msgstr "通知区域开放"
+
+#~ msgid ""
 #~ "The number on the right side of the E-Mail subject corresponds to the "
 #~ "number of E-Mails in a thread. To open the thread, click on the number."
 #~ msgstr ""
@@ -11289,12 +11483,6 @@ msgstr "您的平台"
 
 #~ msgid "Theme colors"
 #~ msgstr "主题颜色"
-
-#~ msgid "This E-mail is read, press to mark it as unread."
-#~ msgstr "此电子邮件已读，单击以标记成未读。"
-
-#~ msgid "This E-mail is unread, press to mark it as read."
-#~ msgstr "此电子邮件未读，单击以标记成已读。"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "无法确认此户口"
@@ -11577,6 +11765,10 @@ msgstr "您的平台"
 
 #~ msgid "You have edit rights."
 #~ msgstr "您有编辑权。"
+
+#~ msgid ""
+#~ "Your %s account has been created. Expect a confirmation mail from %s soon."
+#~ msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "您的自动转发已被保存"
