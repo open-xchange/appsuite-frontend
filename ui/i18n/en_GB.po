@@ -1,10 +1,10 @@
-# Timothy Friesen <tjfriese@gmail.com>, 2013, 2014.
-# Eric Bischoff <eric@bureau-cornavin.com>, 2013.
+# Timothy Friesen <tim@bureau-cornavin.com>, 2013, 2014.
+# Eric Bischoff <eric@bureau-cornavin.com>, 2013, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-07 20:31-0600\n"
+"PO-Revision-Date: 2015-02-08 18:06-0700\n"
 "Last-Translator: \n"
 "Language-Team: British English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -98,12 +98,11 @@ msgstr[0] "%1$d hour and %2$s"
 msgstr[1] "%1$d hours and %2$s"
 
 #: apps/io.ox/core/commons.js:105 module:io.ox/core
-#, fuzzy
 #| msgid "%1$d selected"
 msgid "%1$d item selected"
 msgid_plural "%1$d items selected"
-msgstr[0] "%1$d selected"
-msgstr[1] "%1$d selected"
+msgstr[0] "%1$d item selected"
+msgstr[1] "%1$d items selected"
 
 #: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
@@ -115,13 +114,13 @@ msgstr "%1$d messages selected"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications.js:36 module:io.ox/core
-#, fuzzy, c-format
+#, c-format
 #| msgid "You have %1$d notification."
 #| msgid_plural "You have %1$d notifications."
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
-msgstr[0] "You have %1$d notification."
-msgstr[1] "You have %1$d notifications."
+msgstr[0] "%1$d notification."
+msgstr[1] "%1$d notifications."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js:626 module:io.ox/mail
@@ -149,7 +148,6 @@ msgstr ""
 "%5$s"
 
 #: apps/io.ox/settings/main.js:288 module:io.ox/core
-#, fuzzy
 #| msgctxt "mail address"
 #| msgid "%1$s %2$s"
 msgid "%1$s %2$s"
@@ -237,10 +235,10 @@ msgstr "%1$s recommends this link:"
 #. %2$s is the end time
 #: apps/io.ox/calendar/util.js:253 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:358
-#, fuzzy, c-format
+#, c-format
 #| msgid "%1$s at %2$s"
 msgid "%1$s to %2$s"
-msgstr "%1$s at %2$s"
+msgstr "%1$s to %2$s"
 
 #: apps/plugins/portal/xing/activities.js:193 module:plugins/portal
 #: apps/plugins/portal/xing/activities.js:210
@@ -584,7 +582,6 @@ msgid "Account settings"
 msgstr "Account settings"
 
 #: apps/io.ox/mail/accounts/settings.js:71 module:io.ox/mail/accounts/settings
-#, fuzzy
 #| msgid ""
 #| "Account settings could not be saved. Please take a look at the "
 #| "annotations in the form."
@@ -593,7 +590,7 @@ msgid ""
 "in the form. "
 msgstr ""
 "Account settings could not be saved. Please take a look at the annotations "
-"in the form."
+"in the form. "
 
 #: apps/io.ox/mail/accounts/view-form.js:279 module:io.ox/settings
 msgid "Account updated"
@@ -745,16 +742,14 @@ msgid "Add signature"
 msgstr "Add signature"
 
 #: apps/io.ox/mail/settings/signatures/register.js:100 module:io.ox/mail
-#, fuzzy
 #| msgid "Above quoted text"
 msgid "Add signature above quoted text"
-msgstr "Above quoted text"
+msgstr "Add signature above quoted text"
 
 #: apps/io.ox/mail/settings/signatures/register.js:101 module:io.ox/mail
-#, fuzzy
 #| msgid "Below quoted text"
 msgid "Add signature below quoted text"
-msgstr "Below quoted text"
+msgstr "Add signature below quoted text"
 
 #: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1280
@@ -788,10 +783,9 @@ msgstr "Add widget"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:395 module:io.ox/portal
-#, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
-msgstr "Add your account"
+msgstr "Add your %1$s account"
 
 #: apps/plugins/portal/facebook/register.js:372 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:377
@@ -805,10 +799,9 @@ msgstr "Added the new participant"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:75
 #: module:io.ox/core/pubsub
-#, fuzzy
 #| msgid "This may take some seconds"
 msgid "Adding subscription. This may take some seconds …"
-msgstr "This may take a few seconds"
+msgstr "Adding subscription. This may take a few seconds …"
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:216 module:io.ox/mail
@@ -848,10 +841,9 @@ msgstr "Administrator"
 
 #. search: clickable headline to show/hide list of advanced facets/filters
 #: apps/io.ox/core/desktop.js:1465 module:io.ox/core
-#, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced Facets"
-msgstr "Advanced Settings"
+msgstr "Advanced Filters"
 
 #: apps/io.ox/settings/main.js:396 module:io.ox/core
 msgid "Advanced Settings"
@@ -860,12 +852,12 @@ msgstr "Advanced Settings"
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was closed."
-msgstr ""
+msgstr "Advanced filters block was closed."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was opened."
-msgstr ""
+msgstr "Advanced filters block was opened."
 
 #: apps/io.ox/search/facets/extensions.js:283 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:371
@@ -1440,10 +1432,9 @@ msgid "Change due date"
 msgstr "Change due date"
 
 #: apps/io.ox/search/facets/extensions.js:610 module:io.ox/core
-#, fuzzy
 #| msgid "New folder"
 msgid "Change folder"
-msgstr "New folder"
+msgstr "Change folder"
 
 #: apps/io.ox/core/settings/pane.js:284 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
@@ -1516,10 +1507,9 @@ msgstr "Cleaning up... This may take a few seconds."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:31 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:30
-#, fuzzy
 #| msgid "clear"
 msgid "Clear"
-msgstr "clear"
+msgstr "Clear"
 
 #: apps/io.ox/search/autocomplete/extensions.js:193 module:io.ox/core
 msgid "Clear field"
@@ -1679,10 +1669,9 @@ msgstr "Common Emoji"
 
 #. search: headline for list of common facets/filters
 #: apps/io.ox/core/desktop.js:1454 module:io.ox/core
-#, fuzzy
 #| msgid "Comments"
 msgid "Common Facets"
-msgstr "Comments"
+msgstr "Common Filters"
 
 #: apps/io.ox/mail/toolbar.js:234 module:io.ox/mail
 msgid "Compact"
@@ -2135,16 +2124,14 @@ msgid "Delete appointment"
 msgstr "Delete appointment"
 
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
-#, fuzzy
 #| msgid "Create contact"
 msgid "Delete contact"
-msgstr "Create contact"
+msgstr "Delete contact"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
-#, fuzzy
 #| msgid "Create task"
 msgid "Delete task"
-msgstr "Create task"
+msgstr "Delete task"
 
 #: apps/io.ox/files/actions.js:1032 module:io.ox/files
 msgid "Delete version"
@@ -2603,10 +2590,9 @@ msgid "Edit appointment"
 msgstr "Edit appointment"
 
 #: apps/io.ox/contacts/toolbar.js:78 module:io.ox/contacts
-#, fuzzy
 #| msgid "Edit Contact"
 msgid "Edit contact"
-msgstr "Edit Contact"
+msgstr "Edit contact"
 
 #: apps/io.ox/files/actions.js:946 module:io.ox/files
 msgid "Edit description"
@@ -3234,10 +3220,9 @@ msgstr "Food"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
 #: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
-#, fuzzy
 #| msgid "For best results, please use"
 msgid "For best results, please use "
-msgstr "For best results, please use"
+msgstr "For best results, please use "
 
 #: apps/io.ox/settings/accounts/settings/pane.js:99
 #: module:io.ox/settings/accounts
@@ -3433,44 +3418,38 @@ msgstr "Hide advanced filters"
 
 #: apps/plugins/notifications/calendar/register.js:30
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all appointment invitations."
 msgid "Hide all appointment invitations."
-msgstr "Press to hide all appointment invitations."
+msgstr "Hide all appointment invitations."
 
 #: apps/plugins/notifications/calendar/register.js:44
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all appointment reminders."
 msgid "Hide all appointment reminders."
-msgstr "Press to hide all appointment reminders."
+msgstr "Hide all appointment reminders."
 
 #: apps/plugins/notifications/mail/register.js:33 module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all notifications for new mails."
 msgid "Hide all notifications for new mails."
-msgstr "Press to hide all notifications for new e-mail messages."
+msgstr "Hide all notifications for new e-mail messages."
 
 #: apps/plugins/notifications/tasks/register.js:36
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all notifications for overdue tasks."
 msgid "Hide all notifications for overdue tasks."
-msgstr "Press to hide all notifications for overdue tasks."
+msgstr "Hide all notifications for overdue tasks."
 
 #: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all task invitations."
 msgid "Hide all task invitations."
-msgstr "Press to hide all task invitations."
+msgstr "Hide all task invitations."
 
 #: apps/plugins/notifications/tasks/register.js:261
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all task reminders."
 msgid "Hide all task reminders."
-msgstr "Press to hide all task reminders."
+msgstr "Hide all task reminders."
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
@@ -4179,17 +4158,15 @@ msgstr "Medium priority"
 
 #: apps/io.ox/mail/common-extensions.js:400 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
 #| msgid "Mark as read"
 msgid "Message is read"
-msgstr "Mark as read"
+msgstr "Message is read"
 
 #: apps/io.ox/mail/common-extensions.js:406 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
 #| msgid "Mark as unread"
 msgid "Message is unread"
-msgstr "Mark as unread"
+msgstr "Message is unread"
 
 #: apps/io.ox/contacts/edit/view-form.js:105 module:io.ox/contacts
 msgid "Messaging"
@@ -4332,10 +4309,9 @@ msgstr "My password"
 
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
 #: apps/plugins/portal/tasks/register.js:137
-#, fuzzy
 #| msgid "Print tasks"
 msgid "My tasks"
-msgstr "Print tasks"
+msgstr "My tasks"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
@@ -4529,7 +4505,7 @@ msgstr "No items found"
 #. 'no results' message for screenreaders with additional hint to adjust active filters
 #: apps/io.ox/core/desktop.js:1849 module:io.ox/core
 msgid "No items were found. Please adjust currently used facets."
-msgstr ""
+msgstr "No items were found. Please adjust currently used filters."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:234 module:io.ox/core
 msgid "No lost requests"
@@ -4738,12 +4714,11 @@ msgstr "On work days"
 #. result count for screenreaders
 #. %1$s number of items found by search feature
 #: apps/io.ox/core/desktop.js:1852 module:io.ox/core
-#, fuzzy
 #| msgid "No items found"
 msgid "One item was found."
 msgid_plural "%1$s items were found."
-msgstr[0] "No items found"
-msgstr[1] "No items found"
+msgstr[0] "One item was found."
+msgstr[1] "%1$s items were found."
 
 #: apps/io.ox/mail/write/main.js:1188 module:io.ox/mail
 msgid ""
@@ -5104,10 +5079,9 @@ msgid "Please choose a sentence below."
 msgstr "Please choose a sentence below."
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#, fuzzy
 #| msgid "Change confirmation status"
 msgid "Please comment your confirmation status."
-msgstr "Change confirmation status"
+msgstr "Please comment on your confirmation status."
 
 #: apps/io.ox/backbone/validation.js:80 module:io.ox/backbone/validation
 msgid "Please enter a date in the past"
@@ -5240,10 +5214,9 @@ msgid "Please sign in again to continue"
 msgstr "Please sign in again to continue"
 
 #: apps/io.ox/files/api.js:407 module:io.ox/files
-#, fuzzy
 #| msgid "Please specify these missing variables:"
 msgid "Please specify these missing variables: "
-msgstr "Please specify these missing variables:"
+msgstr "Please specify these missing variables: "
 
 #: apps/io.ox/core/login-i18n.js:41 module:io.ox/core/login
 msgid "Please update your browser."
@@ -5566,7 +5539,7 @@ msgstr "Redirect to"
 
 #: apps/io.ox/portal/settings/pane.js:440 module:io.ox/portal
 msgid "Reduce to widget summary"
-msgstr ""
+msgstr "Reduce to widget summary"
 
 #: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:208 module:io.ox/core/pubsub
@@ -5665,10 +5638,9 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "Remove copy from server after retrieving a message"
 
 #: apps/io.ox/search/facets/extensions.js:322 module:io.ox/core
-#, fuzzy
 #| msgid "Remove contact"
 msgid "Remove facet"
-msgstr "Remove contact"
+msgstr "Remove filter"
 
 #: apps/io.ox/core/folder/favorites.js:136 module:io.ox/core
 msgid "Remove from favorites"
@@ -5944,6 +5916,10 @@ msgid ""
 "are listed. To narrow down search result please adjust active facets or add "
 "new ones"
 msgstr ""
+"Search results page lists all active filters to allow them to be easly "
+"adjustable/removable. Below theses common filters additonal advanced filters "
+"are listed. To narrow down search result please adjust active filters or add "
+"new ones"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/fluid/perspective.js:331 module:io.ox/files
@@ -6203,10 +6179,9 @@ msgstr "Show completed tasks"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:58
 #: module:io.ox/core/pubsub
-#, fuzzy
 #| msgid "Show tiles"
 msgid "Show file"
-msgstr "Show tiles"
+msgstr "Show file"
 
 #: apps/io.ox/files/settings/pane.js:67 module:io.ox/files
 msgid "Show hidden files and folders"
@@ -6341,10 +6316,9 @@ msgid "Slow requests"
 msgstr "Slow requests"
 
 #: apps/io.ox/portal/settings/pane.js:436 module:io.ox/portal
-#, fuzzy
 #| msgid "Server settings"
 msgid "Smartphone settings:"
-msgstr "Server settings"
+msgstr "Smartphone settings:"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:91
 #: module:io.ox/settings/accounts
@@ -6526,7 +6500,7 @@ msgstr "Subscriptions"
 
 #: apps/io.ox/core/yell.js:23 module:io.ox/core
 msgid "Success"
-msgstr ""
+msgstr "Success"
 
 #: apps/plugins/portal/xing/register.js:56 module:plugins/portal
 msgid "Successfully reauthorized your %s account"
@@ -6965,6 +6939,8 @@ msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
 msgstr ""
+"The selected folder is virtual and can not be searched. Please select "
+"another folder."
 
 #: apps/io.ox/mail/common-extensions.js:545 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
@@ -7300,10 +7276,9 @@ msgid "This may take some seconds"
 msgstr "This may take a few seconds"
 
 #: apps/io.ox/mail/detail/view.js:243 module:io.ox/mail
-#, fuzzy
 #| msgid "This mail has been added to the portal"
 msgid "This message has been truncated due to size limitations."
-msgstr "This email has been added to the portal"
+msgstr "This message has been truncated due to size limitations."
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -7412,10 +7387,9 @@ msgstr "Toggle folder"
 
 #: apps/io.ox/search/facets/extensions.js:349 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:605
-#, fuzzy
 #| msgid "Sort options"
 msgid "Toggle options"
-msgstr "Sort options"
+msgstr "Toggle options"
 
 #: apps/io.ox/core/desktop.js:1905 module:io.ox/core
 msgid "Toggle search"
@@ -7764,10 +7738,9 @@ msgid "Waiting"
 msgstr "Waiting"
 
 #: apps/io.ox/core/yell.js:24 module:io.ox/core
-#, fuzzy
 #| msgid "Warnings"
 msgid "Warning"
-msgstr "Warnings"
+msgstr "Warning"
 
 #: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
@@ -7810,10 +7783,9 @@ msgstr "Weekly on %1$s"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:385 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"
-msgstr "Welcome to %s"
+msgstr "Welcome to %1$s"
 
 #: apps/plugins/wizards/mandatory/main.js:32 module:io.ox/wizards/firstStart
 msgid "Welcome to %s"
@@ -7952,12 +7924,11 @@ msgid "Yes, send without subject"
 msgstr "Yes, send without subject"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:28 module:io.ox/mail
-#, fuzzy
 #| msgctxt "plural"
 #| msgid "Hide attachment"
 #| msgid_plural "Hide attachments"
 msgid "Yes, with empty attachment"
-msgstr "Hide attachment"
+msgstr "Yes, with empty attachment"
 
 #: apps/io.ox/calendar/util.js:163 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:201 apps/io.ox/mail/util.js:72
@@ -7978,7 +7949,6 @@ msgstr ""
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:218 module:io.ox/files
-#, fuzzy
 #| msgid ""
 #| "You are currently using %1$s of your %2$s available disk space. You have "
 #| "%3$s left."
@@ -7987,7 +7957,7 @@ msgid ""
 "%3$s left. "
 msgstr ""
 "You are currently using %1$s of your %2$s available disk space. You have "
-"%3$s left."
+"%3$s left. "
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
@@ -8027,6 +7997,8 @@ msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
 "your drive. Send it anyway?"
 msgstr ""
+"You attached an empty file. This file may have been deleted on "
+"your drive. Send it anyway?"
 
 #: apps/io.ox/mail/write/view-main.js:523 module:io.ox/mail
 msgid ""
@@ -8218,7 +8190,6 @@ msgstr "Your browser's cookie functionality is disabled. Please turn it on."
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:205 module:io.ox/files
-#, fuzzy
 #| msgid ""
 #| "Your capacity is shared with all members of your group. Your group is "
 #| "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -8230,7 +8201,7 @@ msgid ""
 msgstr ""
 "Your capacity is shared with all members of your group. Your group is "
 "currently using %1$s of its %2$s available disk space. The amount of free "
-"space is %3$s."
+"space is %3$s. "
 
 #: apps/plugins/portal/userSettings/register.js:123 module:io.ox/core
 msgid "Your current password"
@@ -8422,10 +8393,9 @@ msgstr "edit own objects"
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js:521
-#, fuzzy
 #| msgid "end date"
 msgid "end date "
-msgstr "end date"
+msgstr "end date "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:730
 #: module:io.ox/calendar/edit/main
@@ -8695,10 +8665,9 @@ msgid "show image"
 msgstr "show image"
 
 #: apps/io.ox/core/tk/reminder-util.js:88 module:io.ox/core
-#, fuzzy
 #| msgid "status"
 msgid "status "
-msgstr "status"
+msgstr "status "
 
 #: apps/io.ox/core/api/folder.js:1153 module:io.ox/core
 #: apps/io.ox/core/folder/breadcrumb.js:64

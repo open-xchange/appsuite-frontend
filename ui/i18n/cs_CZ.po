@@ -1,11 +1,10 @@
 # Antje Faber, 2011, 2012, 2013.
-# Robert Krátký <kratky@rob.cz>, 2011, 2012, 2013.
-# Robert Kratky <rkratky@gmail.com>, 2013, 2014.
+# Robert Krátký <robert@bureau-cornavin.com>, 2011, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-09 19:39+0200\n"
+"PO-Revision-Date: 2015-02-14 18:30+0100\n"
 "Last-Translator: Robert Krátký <rkratky@gmail.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -108,13 +107,12 @@ msgstr[1] "%1$d hodiny a %2$s"
 msgstr[2] "%1$d hodin a %2$s"
 
 #: apps/io.ox/core/commons.js:105 module:io.ox/core
-#, fuzzy
 #| msgid "%1$d selected"
 msgid "%1$d item selected"
 msgid_plural "%1$d items selected"
-msgstr[0] "%1$d vybráno"
-msgstr[1] "%1$d vybráno"
-msgstr[2] "%1$d vybráno"
+msgstr[0] "%1$d položka vybrána"
+msgstr[1] "%1$d položky vybrány"
+msgstr[2] "%1$d položek vybráno"
 
 #: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
@@ -126,14 +124,14 @@ msgstr "%1$d zpráv vybráno"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications.js:36 module:io.ox/core
-#, fuzzy, c-format
+#, c-format
 #| msgid "You have %1$d notification."
 #| msgid_plural "You have %1$d notifications."
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
-msgstr[0] "Máte %1$d oznámení."
-msgstr[1] "Máte %1$d oznámení."
-msgstr[2] "Máte %1$d oznámení."
+msgstr[0] "%1$d oznámení."
+msgstr[1] "%1$d oznámení."
+msgstr[2] "%1$d oznámení."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js:626 module:io.ox/mail
@@ -161,7 +159,6 @@ msgstr ""
 "%5$s"
 
 #: apps/io.ox/settings/main.js:288 module:io.ox/core
-#, fuzzy
 #| msgctxt "mail address"
 #| msgid "%1$s %2$s"
 msgid "%1$s %2$s"
@@ -249,7 +246,7 @@ msgstr "%1$s doporučuje tento odkaz:"
 #. %2$s is the end time
 #: apps/io.ox/calendar/util.js:253 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:358
-#, fuzzy, c-format
+#, c-format
 #| msgid "%1$s at %2$s"
 msgid "%1$s to %2$s"
 msgstr "%1$s, %2$s"
@@ -606,7 +603,6 @@ msgid "Account settings"
 msgstr "Nastavení účtu"
 
 #: apps/io.ox/mail/accounts/settings.js:71 module:io.ox/mail/accounts/settings
-#, fuzzy
 #| msgid ""
 #| "Account settings could not be saved. Please take a look at the "
 #| "annotations in the form."
@@ -767,16 +763,14 @@ msgid "Add signature"
 msgstr "Přidat podpis"
 
 #: apps/io.ox/mail/settings/signatures/register.js:100 module:io.ox/mail
-#, fuzzy
 #| msgid "Above quoted text"
 msgid "Add signature above quoted text"
-msgstr "Nad citovaným textem"
+msgstr "Přidat podpis nad citovaným textem"
 
 #: apps/io.ox/mail/settings/signatures/register.js:101 module:io.ox/mail
-#, fuzzy
 #| msgid "Below quoted text"
 msgid "Add signature below quoted text"
-msgstr "Pod citovaným textem"
+msgstr "Přidat podpis pod citovaným textem"
 
 #: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1280
@@ -810,10 +804,9 @@ msgstr "Přidat widget"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:395 module:io.ox/portal
-#, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
-msgstr "Přidat váš účet"
+msgstr "Přidat váš účet %1$s"
 
 #: apps/plugins/portal/facebook/register.js:372 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:377
@@ -827,10 +820,9 @@ msgstr "Nový účastník byl přidán"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:75
 #: module:io.ox/core/pubsub
-#, fuzzy
 #| msgid "This may take some seconds"
 msgid "Adding subscription. This may take some seconds …"
-msgstr "Může to několik sekund trvat"
+msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:216 module:io.ox/mail
@@ -870,10 +862,9 @@ msgstr "Administrátor"
 
 #. search: clickable headline to show/hide list of advanced facets/filters
 #: apps/io.ox/core/desktop.js:1465 module:io.ox/core
-#, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced Facets"
-msgstr "Pokročilá nastavení"
+msgstr "Pokročilá kritéria"
 
 #: apps/io.ox/settings/main.js:396 module:io.ox/core
 msgid "Advanced Settings"
@@ -882,12 +873,12 @@ msgstr "Pokročilá nastavení"
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was closed."
-msgstr ""
+msgstr "Blok pokročilých kritérií byl zavřen."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was opened."
-msgstr ""
+msgstr "Blok pokročilých kritérií byl otevřen."
 
 #: apps/io.ox/search/facets/extensions.js:283 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:371
@@ -1533,10 +1524,9 @@ msgstr "Pročišťuji... To může několik sekund trvat."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:31 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:30
-#, fuzzy
 #| msgid "clear"
 msgid "Clear"
-msgstr "vymazat"
+msgstr "Vyprázdnit"
 
 #: apps/io.ox/search/autocomplete/extensions.js:193 module:io.ox/core
 msgid "Clear field"
@@ -1697,10 +1687,9 @@ msgstr "Běžné Emoji"
 
 #. search: headline for list of common facets/filters
 #: apps/io.ox/core/desktop.js:1454 module:io.ox/core
-#, fuzzy
 #| msgid "Comments"
 msgid "Common Facets"
-msgstr "Komentáře"
+msgstr "Běžná kritéria"
 
 #: apps/io.ox/mail/toolbar.js:234 module:io.ox/mail
 msgid "Compact"
@@ -2153,14 +2142,12 @@ msgid "Delete appointment"
 msgstr "Smazat schůzku"
 
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
-#, fuzzy
 #| msgid "Delete contact"
 #| msgid_plural "Delete contacts"
 msgid "Delete contact"
 msgstr "Smazat kontakt"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
-#, fuzzy
 #| msgid "Delete Task"
 msgid "Delete task"
 msgstr "Smazat úkol"
@@ -2616,7 +2603,6 @@ msgid "Edit appointment"
 msgstr "Upravit schůzku"
 
 #: apps/io.ox/contacts/toolbar.js:78 module:io.ox/contacts
-#, fuzzy
 #| msgid "Edit Contact"
 msgid "Edit contact"
 msgstr "Upravit kontakt"
@@ -3242,7 +3228,6 @@ msgstr "Jídlo"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
 #: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
-#, fuzzy
 #| msgid "For best results, please use"
 msgid "For best results, please use "
 msgstr "Chcete-li dosáhnout nejlepších výsledků, používejte "
@@ -3441,44 +3426,38 @@ msgstr "Skrýt pokročilé filtry"
 
 #: apps/plugins/notifications/calendar/register.js:30
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all appointment invitations."
 msgid "Hide all appointment invitations."
-msgstr "Stisknutím skryjete všechny pozvánky na schůzky."
+msgstr "Skrýt všechny pozvánky na schůzky."
 
 #: apps/plugins/notifications/calendar/register.js:44
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all appointment reminders."
 msgid "Hide all appointment reminders."
-msgstr "Stisknutím skryjete všechny upomínky na schůzky."
+msgstr "Skrýt všechny upomínky schůzek."
 
 #: apps/plugins/notifications/mail/register.js:33 module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all notifications for new mails."
 msgid "Hide all notifications for new mails."
-msgstr "Stisknutím skryjete všechna upozornění na nové zprávy."
+msgstr "Skrýt všechna upozornění na nové zprávy."
 
 #: apps/plugins/notifications/tasks/register.js:36
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all notifications for overdue tasks."
 msgid "Hide all notifications for overdue tasks."
-msgstr "Stisknutím skryjete všechna upozornění na zpožděné úkoly."
+msgstr "Skrýt všechna upozornění na zpožděné úkoly."
 
 #: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all task invitations."
 msgid "Hide all task invitations."
-msgstr "Stisknutím skryjete všechny pozvánky k úkolům."
+msgstr "Skrýt všechny pozvánky k úkolům."
 
 #: apps/plugins/notifications/tasks/register.js:261
 #: module:plugins/notifications
-#, fuzzy
 #| msgid "Press to hide all task reminders."
 msgid "Hide all task reminders."
-msgstr "Stisknutím skryjete všechny upomínky na úkoly."
+msgstr "Skrýt všechny upomínky na úkoly."
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
@@ -4187,14 +4166,12 @@ msgstr "Střední priorita"
 
 #: apps/io.ox/mail/common-extensions.js:400 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
 #| msgid "Mark as read"
 msgid "Message is read"
 msgstr "Označit jako přečtené"
 
 #: apps/io.ox/mail/common-extensions.js:406 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
 #| msgid "Mark as unread"
 msgid "Message is unread"
 msgstr "Označit jako nepřečtené"
@@ -4340,10 +4317,9 @@ msgstr "Moje heslo"
 
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
 #: apps/plugins/portal/tasks/register.js:137
-#, fuzzy
 #| msgid "tasks"
 msgid "My tasks"
-msgstr "úkoly"
+msgstr "Mé úkoly"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
@@ -4538,7 +4514,7 @@ msgstr "Nepodařilo se nalézt žádné položky"
 #. 'no results' message for screenreaders with additional hint to adjust active filters
 #: apps/io.ox/core/desktop.js:1849 module:io.ox/core
 msgid "No items were found. Please adjust currently used facets."
-msgstr ""
+msgstr "Nenalezeny žádné položky. Upravte, prosím, používaná kritéria."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:234 module:io.ox/core
 msgid "No lost requests"
@@ -4751,13 +4727,12 @@ msgstr "V pracovních dnech"
 #. result count for screenreaders
 #. %1$s number of items found by search feature
 #: apps/io.ox/core/desktop.js:1852 module:io.ox/core
-#, fuzzy
 #| msgid "No items found"
 msgid "One item was found."
 msgid_plural "%1$s items were found."
-msgstr[0] "Nepodařilo se nalézt žádné položky"
-msgstr[1] "Nepodařilo se nalézt žádné položky"
-msgstr[2] "Nepodařilo se nalézt žádné položky"
+msgstr[0] "Nalezena jedna položka."
+msgstr[1] "Nalezeny %1$s položky"
+msgstr[2] "Nalezeno %1$s položek."
 
 #: apps/io.ox/mail/write/main.js:1188 module:io.ox/mail
 msgid ""
@@ -5119,10 +5094,9 @@ msgid "Please choose a sentence below."
 msgstr "Vyberte, prosím, větu níže."
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#, fuzzy
 #| msgid "Change confirmation status"
 msgid "Please comment your confirmation status."
-msgstr "Změnit stav potvrzení"
+msgstr "Přidejte, prosím, komentář ke svému stavu potvrzení."
 
 #: apps/io.ox/backbone/validation.js:80 module:io.ox/backbone/validation
 msgid "Please enter a date in the past"
@@ -5254,7 +5228,6 @@ msgid "Please sign in again to continue"
 msgstr "Chcete-li pokračovat, přihlaste se, prosím, znovu"
 
 #: apps/io.ox/files/api.js:407 module:io.ox/files
-#, fuzzy
 #| msgid "Please specify these missing variables:"
 msgid "Please specify these missing variables: "
 msgstr "Zadejte, prosím, tyto chybějící proměnné: "
@@ -5580,7 +5553,7 @@ msgstr "Přesměrovat na"
 
 #: apps/io.ox/portal/settings/pane.js:440 module:io.ox/portal
 msgid "Reduce to widget summary"
-msgstr ""
+msgstr "Zmenšit na přehled widgetů"
 
 #: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:208 module:io.ox/core/pubsub
@@ -5679,10 +5652,9 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "Po stažení zprávy ze serveru odstraň kopii"
 
 #: apps/io.ox/search/facets/extensions.js:322 module:io.ox/core
-#, fuzzy
 #| msgid "Remove flag"
 msgid "Remove facet"
-msgstr "Odstranit příznak"
+msgstr "Odstranit kritérium"
 
 #: apps/io.ox/core/folder/favorites.js:136 module:io.ox/core
 msgid "Remove from favorites"
@@ -5959,6 +5931,10 @@ msgid ""
 "are listed. To narrow down search result please adjust active facets or add "
 "new ones"
 msgstr ""
+"Stránka s výsledky hledání vyjmenovává všechna aktivní kritéria, aby bylo "
+"možné je snadno upravovat/odstraňovat. Pod běžnými kritérii jsou dodatečná, "
+"pokročilá kritéria. Chcete-li vyhledávání zúžit, upravte aktivní kritéria, "
+"nebo přidejte nová"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/fluid/perspective.js:331 module:io.ox/files
@@ -6218,10 +6194,9 @@ msgstr "Zobrazit dokončené úkoly"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:58
 #: module:io.ox/core/pubsub
-#, fuzzy
 #| msgid "Show tiles"
 msgid "Show file"
-msgstr "Zobrazit dlaždice"
+msgstr "Zobrazit soubor"
 
 #: apps/io.ox/files/settings/pane.js:67 module:io.ox/files
 msgid "Show hidden files and folders"
@@ -6356,10 +6331,9 @@ msgid "Slow requests"
 msgstr "Pomalé požadavky"
 
 #: apps/io.ox/portal/settings/pane.js:436 module:io.ox/portal
-#, fuzzy
 #| msgid "Server settings"
 msgid "Smartphone settings:"
-msgstr "Nastavení serveru"
+msgstr "Nastavení chytrého telefonu:"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:91
 #: module:io.ox/settings/accounts
@@ -6542,7 +6516,7 @@ msgstr "Odběry"
 
 #: apps/io.ox/core/yell.js:23 module:io.ox/core
 msgid "Success"
-msgstr ""
+msgstr "Úspěch"
 
 #: apps/plugins/portal/xing/register.js:56 module:plugins/portal
 msgid "Successfully reauthorized your %s account"
@@ -6978,6 +6952,8 @@ msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
 msgstr ""
+"Vybraná složka je virtuální a nelze ji prohledávat. Vyberte, prosím, jinou "
+"složku."
 
 #: apps/io.ox/mail/common-extensions.js:545 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
@@ -7323,10 +7299,9 @@ msgid "This may take some seconds"
 msgstr "Může to několik sekund trvat"
 
 #: apps/io.ox/mail/detail/view.js:243 module:io.ox/mail
-#, fuzzy
 #| msgid "This mail has been added to the portal"
 msgid "This message has been truncated due to size limitations."
-msgstr "Tato zpráva byla přidána do portálu"
+msgstr "Tato zpráva byla zkrácena kvůli velikostnímu limitu."
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -7436,10 +7411,9 @@ msgstr "Přepnout složku"
 
 #: apps/io.ox/search/facets/extensions.js:349 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:605
-#, fuzzy
 #| msgid "Sort options"
 msgid "Toggle options"
-msgstr "Možnosti řazení"
+msgstr "Zapnout/vypnout volby"
 
 #: apps/io.ox/core/desktop.js:1905 module:io.ox/core
 msgid "Toggle search"
@@ -7832,10 +7806,9 @@ msgstr "Týdně v %1$s "
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:385 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"
-msgstr "Vítejte v %s"
+msgstr "Vítejte v %1$s"
 
 #: apps/plugins/wizards/mandatory/main.js:32 module:io.ox/wizards/firstStart
 msgid "Welcome to %s"
@@ -7974,12 +7947,11 @@ msgid "Yes, send without subject"
 msgstr "Ano, poslat bez předmětu"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:28 module:io.ox/mail
-#, fuzzy
 #| msgctxt "plural"
 #| msgid "Hide attachment"
 #| msgid_plural "Hide attachments"
 msgid "Yes, with empty attachment"
-msgstr "Skrýt přílohu"
+msgstr "Ano, s prázdnou přílohou"
 
 #: apps/io.ox/calendar/util.js:163 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:201 apps/io.ox/mail/util.js:72
@@ -8000,7 +7972,6 @@ msgstr ""
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:218 module:io.ox/files
-#, fuzzy
 #| msgid ""
 #| "You are currently using %1$s of your %2$s available disk space. You have "
 #| "%3$s left."
@@ -8008,8 +7979,8 @@ msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left. "
 msgstr ""
-"V tuto chvíli používáte %1$s z %2$s dostupného diskového prostoru. Zbývá vám "
-"%3$s."
+"V tuto chvíli používáte %1$s z %2$s dostupného diskového prostoru. Zbývá vám %"
+"3$s."
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
@@ -8048,6 +8019,8 @@ msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
 "your drive. Send it anyway?"
 msgstr ""
+"Připojil(a) jste prázdný soubor. Je možné, že byl tento soubor smazán z "
+"vašeho disku. Přesto poslat?"
 
 #: apps/io.ox/mail/write/view-main.js:523 module:io.ox/mail
 msgid ""
@@ -8239,7 +8212,6 @@ msgstr "Váš prohlížeč má vypnutou možnost ukládat cookie. Zapněte ji, p
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:205 module:io.ox/files
-#, fuzzy
 #| msgid ""
 #| "Your capacity is shared with all members of your group. Your group is "
 #| "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -8443,10 +8415,9 @@ msgstr "upravovat vlastní objekty"
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js:521
-#, fuzzy
 #| msgid "end date"
 msgid "end date "
-msgstr "koncové datum"
+msgstr "koncové datum "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:730
 #: module:io.ox/calendar/edit/main
@@ -8720,10 +8691,9 @@ msgid "show image"
 msgstr "zobrazit obrázek"
 
 #: apps/io.ox/core/tk/reminder-util.js:88 module:io.ox/core
-#, fuzzy
 #| msgid "status"
 msgid "status "
-msgstr "stav"
+msgstr "stav "
 
 #: apps/io.ox/core/api/folder.js:1153 module:io.ox/core
 #: apps/io.ox/core/folder/breadcrumb.js:64
