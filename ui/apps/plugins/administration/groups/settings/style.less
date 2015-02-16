@@ -1,0 +1,113 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.group-administration {
+
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+
+    .classic-toolbar-container {
+        position: absolute;
+        top: 35px;
+        width: 100%;
+    }
+
+    .classic-toolbar {
+        border: 0;
+        padding: 0;
+    }
+
+    .classic-toolbar > li > a {
+        padding: 10px 18px;
+    }
+
+    .settings-detail-pane & h1 {
+        font-size: 22px;
+        font-family: @light-font-family;
+        font-weight: 300;
+        line-height: 30px;
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .settings-detail-pane & h2 {
+        font-size: 18px;
+        font-family: @normal-font-family;
+        font-weight: bold;
+        line-height: 24px;
+        margin: 0 0 1em 0;
+    }
+
+    .below-toolbar {
+        top: 90px;
+    }
+
+    .list-view {
+        border: 1px solid #ddd;
+    }
+
+    .detail-pane {
+        padding: 10px 30px 20px 30px;
+    }
+}
+
+.administration-group-members {
+
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    min-height: 100px;
+
+    .first_name, .title { color: #777; }
+    .last_name { font-weight: bold; }
+
+    &.editable .group-member {
+        padding: 7px 10px;
+        border-bottom: 1px solid #ccc;
+        &:last-child { border-bottom: 0; }
+    }
+
+    .group-member {
+        .name {
+            vertical-align: middle;
+        }
+        .fa-user {
+            display: inline-block;
+            margin-right: 14px;
+        }
+    }
+}
+
+.administration-group-editor {
+
+    height: 350px;
+
+    input[name="display_name"] {
+        font-weight: bold;
+    }
+
+    label {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .autocomplete-item {
+        padding: 7px 10px;
+        .last_name {
+            font-weight: bold;
+        }
+    }
+}

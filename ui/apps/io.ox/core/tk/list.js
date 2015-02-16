@@ -143,7 +143,7 @@ define('io.ox/core/tk/list',
 
             this.idle();
 
-            var index = model.get('index'),
+            var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
                 children = this.getItems(),
                 li = this.renderListItem(model);
 
@@ -174,7 +174,7 @@ define('io.ox/core/tk/list',
             if (li.length === 0) return;
 
             // preserve item?
-            if (li.hasClass('selected')) {
+            if (this.options.preserve && li.hasClass('selected')) {
                 // note: preserved items are no longer part of the collection, i.e.
                 // they won't respond to model changes! They are just visible until
                 // the selection is changed by the user
@@ -253,7 +253,8 @@ define('io.ox/core/tk/list',
             // app: application
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
-            this.options = _.extend({ pagination: true, draggable: false }, options);
+            // preserve: don't remove selected items (e.g. for unseen messages)
+            this.options = _.extend({ pagination: true, draggable: false, preserve: false }, options);
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
@@ -391,6 +392,8 @@ define('io.ox/core/tk/list',
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
         },
+
+        map: _.identity,
 
         getBaton: function (model) {
             var data = this.map(model);
