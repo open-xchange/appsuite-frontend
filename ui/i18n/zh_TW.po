@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-08 00:37+0800\n"
+"PO-Revision-Date: 2015-02-04 18:28+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.7.4\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #. File size
@@ -98,12 +98,10 @@ msgstr[0] "%1$d 小時和 %2$s"
 msgstr[1] "%1$d 小時和 %2$s"
 
 #: apps/io.ox/core/commons.js:105 module:io.ox/core
-#, fuzzy
-#| msgid "%1$d selected"
 msgid "%1$d item selected"
 msgid_plural "%1$d items selected"
-msgstr[0] "已選擇 %1$d 封"
-msgstr[1] "已選擇 %1$d 封"
+msgstr[0] "已選擇 %1$d 個項目"
+msgstr[1] "已選擇 %1$d 個項目"
 
 #: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
@@ -115,13 +113,11 @@ msgstr "已選擇 %1$d 封訊息"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications.js:36 module:io.ox/core
-#, fuzzy, c-format
-#| msgid "You have %1$d notification."
-#| msgid_plural "You have %1$d notifications."
+#, c-format
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
-msgstr[0] "您有 %1$d 個通知。"
-msgstr[1] "您有 %1$d 個通知"
+msgstr[0] "%1$d 個通知。"
+msgstr[1] "%1$d 個通知。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js:626 module:io.ox/mail
@@ -147,9 +143,6 @@ msgstr ""
 "%2$s %3$s%1$s"
 
 #: apps/io.ox/settings/main.js:288 module:io.ox/core
-#, fuzzy
-#| msgctxt "mail address"
-#| msgid "%1$s %2$s"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -235,10 +228,9 @@ msgstr "%1$s 推薦此連結:"
 #. %2$s is the end time
 #: apps/io.ox/calendar/util.js:253 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:358
-#, fuzzy, c-format
-#| msgid "%1$s at %2$s"
+#, c-format
 msgid "%1$s to %2$s"
-msgstr "%2$s 的 %1$s"
+msgstr "%2$s 到 %1$s"
 
 #: apps/plugins/portal/xing/activities.js:193 module:plugins/portal
 #: apps/plugins/portal/xing/activities.js:210
@@ -581,10 +573,6 @@ msgid "Account settings"
 msgstr "帳戶設置"
 
 #: apps/io.ox/mail/accounts/settings.js:71 module:io.ox/mail/accounts/settings
-#, fuzzy
-#| msgid ""
-#| "Account settings could not be saved. Please take a look at the "
-#| "annotations in the form."
 msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form. "
@@ -740,16 +728,12 @@ msgid "Add signature"
 msgstr "新增簽名"
 
 #: apps/io.ox/mail/settings/signatures/register.js:100 module:io.ox/mail
-#, fuzzy
-#| msgid "Above quoted text"
 msgid "Add signature above quoted text"
-msgstr "引用內容上方"
+msgstr "新增簽名檔於引用內容上方"
 
 #: apps/io.ox/mail/settings/signatures/register.js:101 module:io.ox/mail
-#, fuzzy
-#| msgid "Below quoted text"
 msgid "Add signature below quoted text"
-msgstr "引用內容下方"
+msgstr "新增簽名檔於引用內容下方"
 
 #: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1280
@@ -783,10 +767,8 @@ msgstr "新增小工具"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:395 module:io.ox/portal
-#, fuzzy
-#| msgid "Add your account"
 msgid "Add your %1$s account"
-msgstr "新增您的帳號"
+msgstr "新增您的 %1$s 帳號"
 
 #: apps/plugins/portal/facebook/register.js:372 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:377
@@ -800,10 +782,8 @@ msgstr "已新增參與者"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:75
 #: module:io.ox/core/pubsub
-#, fuzzy
-#| msgid "This may take some seconds"
 msgid "Adding subscription. This may take some seconds …"
-msgstr "這可能需要幾秒鐘.."
+msgstr "正在新增訂閱，這可能需要幾秒鐘.."
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:216 module:io.ox/mail
@@ -843,10 +823,8 @@ msgstr "管理員"
 
 #. search: clickable headline to show/hide list of advanced facets/filters
 #: apps/io.ox/core/desktop.js:1465 module:io.ox/core
-#, fuzzy
-#| msgid "Advanced Settings"
 msgid "Advanced Facets"
-msgstr "進階設定"
+msgstr "進階 Facet"
 
 #: apps/io.ox/settings/main.js:396 module:io.ox/core
 msgid "Advanced Settings"
@@ -855,12 +833,12 @@ msgstr "進階設定"
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was closed."
-msgstr ""
+msgstr "進階 facet 區塊已被關閉。"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
 #: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Advanced facets block was opened."
-msgstr ""
+msgstr "進階 facet 區塊已被開啟。"
 
 #: apps/io.ox/search/facets/extensions.js:283 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:371
@@ -1500,8 +1478,6 @@ msgstr "正在清理... 可能需要幾秒鐘。"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:31 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:30
-#, fuzzy
-#| msgid "clear"
 msgid "Clear"
 msgstr "清除"
 
@@ -1663,10 +1639,8 @@ msgstr "共通表情符號"
 
 #. search: headline for list of common facets/filters
 #: apps/io.ox/core/desktop.js:1454 module:io.ox/core
-#, fuzzy
-#| msgid "Comments"
 msgid "Common Facets"
-msgstr "注釋"
+msgstr "常見 Facet"
 
 #: apps/io.ox/mail/toolbar.js:234 module:io.ox/mail
 msgid "Compact"
@@ -2115,16 +2089,12 @@ msgid "Delete appointment"
 msgstr "刪除約會"
 
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete Contact"
 msgid "Delete contact"
-msgstr "刪除聯繫人"
+msgstr "刪除聯絡人"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
-#, fuzzy
-#| msgid "Create task"
 msgid "Delete task"
-msgstr "建立任務"
+msgstr "刪除任務"
 
 #: apps/io.ox/files/actions.js:1032 module:io.ox/files
 msgid "Delete version"
@@ -2574,8 +2544,6 @@ msgid "Edit appointment"
 msgstr "編輯約會"
 
 #: apps/io.ox/contacts/toolbar.js:78 module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit Contact"
 msgid "Edit contact"
 msgstr "編輯聯絡人"
 
@@ -3196,10 +3164,8 @@ msgstr "食物"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
 #: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
-#, fuzzy
-#| msgid "For best results, please use"
 msgid "For best results, please use "
-msgstr "為了能有最佳效果，請使用"
+msgstr "為了能有最佳效果，請使用 "
 
 #: apps/io.ox/settings/accounts/settings/pane.js:99
 #: module:io.ox/settings/accounts
@@ -3393,44 +3359,32 @@ msgstr "隱藏進階過濾器"
 
 #: apps/plugins/notifications/calendar/register.js:30
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all appointment invitations."
 msgid "Hide all appointment invitations."
-msgstr "按下以隱藏所有約會邀請。"
+msgstr "隱藏所有約會邀請。"
 
 #: apps/plugins/notifications/calendar/register.js:44
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all appointment reminders."
 msgid "Hide all appointment reminders."
-msgstr "按下以隱藏所有約會提醒。"
+msgstr "隱藏所有約會提醒。"
 
 #: apps/plugins/notifications/mail/register.js:33 module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all notifications for new mails."
 msgid "Hide all notifications for new mails."
-msgstr "按下以隱藏所有新郵件通知。"
+msgstr "隱藏所有新郵件通知。"
 
 #: apps/plugins/notifications/tasks/register.js:36
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all notifications for overdue tasks."
 msgid "Hide all notifications for overdue tasks."
-msgstr "按下以隱藏所有過期任務通知。"
+msgstr "隱藏所有過期任務通知。"
 
 #: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all task invitations."
 msgid "Hide all task invitations."
-msgstr "按下以隱藏所有任務提醒。"
+msgstr "隱藏所有任務提醒。"
 
 #: apps/plugins/notifications/tasks/register.js:261
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all task reminders."
 msgid "Hide all task reminders."
-msgstr "按下以隱藏所有工作提醒。"
+msgstr "隱藏所有工作提醒。"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
@@ -4131,15 +4085,11 @@ msgstr "中優先順序"
 
 #: apps/io.ox/mail/common-extensions.js:400 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
-#| msgid "Mark as read"
 msgid "Message is read"
 msgstr "標記為已讀"
 
 #: apps/io.ox/mail/common-extensions.js:406 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:421
-#, fuzzy
-#| msgid "Mark as unread"
 msgid "Message is unread"
 msgstr "標記為未讀"
 
@@ -4284,11 +4234,8 @@ msgstr "我的密碼"
 
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
 #: apps/plugins/portal/tasks/register.js:137
-#, fuzzy
-#| msgid "%d task"
-#| msgid_plural "%d tasks"
 msgid "My tasks"
-msgstr "%d 個任務"
+msgstr "我的任務"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
@@ -4481,7 +4428,7 @@ msgstr "找不到項目"
 #. 'no results' message for screenreaders with additional hint to adjust active filters
 #: apps/io.ox/core/desktop.js:1849 module:io.ox/core
 msgid "No items were found. Please adjust currently used facets."
-msgstr ""
+msgstr "找不到項目，請調整目前使用的 facet。"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:234 module:io.ox/core
 msgid "No lost requests"
@@ -4689,12 +4636,10 @@ msgstr "工作日"
 #. result count for screenreaders
 #. %1$s number of items found by search feature
 #: apps/io.ox/core/desktop.js:1852 module:io.ox/core
-#, fuzzy
-#| msgid "No items found"
 msgid "One item was found."
 msgid_plural "%1$s items were found."
-msgstr[0] "找不到項目"
-msgstr[1] "找不到項目"
+msgstr[0] "找到 1 個項目。"
+msgstr[1] "找到 %1$s 個項目。"
 
 #: apps/io.ox/mail/write/main.js:1188 module:io.ox/mail
 msgid ""
@@ -5054,10 +4999,8 @@ msgid "Please choose a sentence below."
 msgstr "請從下方挑選一個句子"
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#, fuzzy
-#| msgid "Change confirmation status"
 msgid "Please comment your confirmation status."
-msgstr "修改確認狀態"
+msgstr "請修改確認狀態。"
 
 #: apps/io.ox/backbone/validation.js:80 module:io.ox/backbone/validation
 msgid "Please enter a date in the past"
@@ -5184,10 +5127,8 @@ msgid "Please sign in again to continue"
 msgstr "請再次登入以繼續"
 
 #: apps/io.ox/files/api.js:407 module:io.ox/files
-#, fuzzy
-#| msgid "Please specify these missing variables:"
 msgid "Please specify these missing variables: "
-msgstr "請指定這些缺少的變數:"
+msgstr "請指定這些缺少的變數: "
 
 #: apps/io.ox/core/login-i18n.js:41 module:io.ox/core/login
 msgid "Please update your browser."
@@ -5506,7 +5447,7 @@ msgstr "重導至"
 
 #: apps/io.ox/portal/settings/pane.js:440 module:io.ox/portal
 msgid "Reduce to widget summary"
-msgstr ""
+msgstr "減少為小工具的描述"
 
 #: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:208 module:io.ox/core/pubsub
@@ -5605,10 +5546,8 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "接收訊息後移除伺服器上的副本"
 
 #: apps/io.ox/search/facets/extensions.js:322 module:io.ox/core
-#, fuzzy
-#| msgid "Remove contact"
 msgid "Remove facet"
-msgstr "移除聯絡人"
+msgstr "移除 facet"
 
 #: apps/io.ox/core/folder/favorites.js:136 module:io.ox/core
 msgid "Remove from favorites"
@@ -5884,6 +5823,9 @@ msgid ""
 "are listed. To narrow down search result please adjust active facets or add "
 "new ones"
 msgstr ""
+"搜尋結果頁面會列出所有使用的中 facet 以讓其可被簡單地調整/移除。在這些常用的 "
+"facet 下方會顯示其他的進階 facet。要篩選搜尋結果請調整使用中的 facet 或新增其"
+"他 facet"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/fluid/perspective.js:331 module:io.ox/files
@@ -6143,10 +6085,8 @@ msgstr "顯示完成工作"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:58
 #: module:io.ox/core/pubsub
-#, fuzzy
-#| msgid "Show tiles"
 msgid "Show file"
-msgstr "顯示磚塊"
+msgstr "顯示檔案"
 
 #: apps/io.ox/files/settings/pane.js:67 module:io.ox/files
 msgid "Show hidden files and folders"
@@ -6281,10 +6221,8 @@ msgid "Slow requests"
 msgstr "慢速請求"
 
 #: apps/io.ox/portal/settings/pane.js:436 module:io.ox/portal
-#, fuzzy
-#| msgid "Server settings"
 msgid "Smartphone settings:"
-msgstr "伺服器設置"
+msgstr "智慧型手機設定:"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:91
 #: module:io.ox/settings/accounts
@@ -6465,7 +6403,7 @@ msgstr "訂閱"
 
 #: apps/io.ox/core/yell.js:23 module:io.ox/core
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: apps/plugins/portal/xing/register.js:56 module:plugins/portal
 msgid "Successfully reauthorized your %s account"
@@ -6888,7 +6826,7 @@ msgstr "檔名超過允許的長度。"
 msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
-msgstr ""
+msgstr "選擇的資料夾是虛擬資料夾，無法搜尋。請選擇其他資料夾。"
 
 #: apps/io.ox/mail/common-extensions.js:545 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
@@ -7209,10 +7147,8 @@ msgid "This may take some seconds"
 msgstr "這可能需要幾秒鐘.."
 
 #: apps/io.ox/mail/detail/view.js:243 module:io.ox/mail
-#, fuzzy
-#| msgid "This mail has been added to the portal"
 msgid "This message has been truncated due to size limitations."
-msgstr "此郵件已被加入入口畫面"
+msgstr "因為檔案大小限制，此郵件已被截短。"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -7318,10 +7254,8 @@ msgstr "切換文件夾"
 
 #: apps/io.ox/search/facets/extensions.js:349 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:605
-#, fuzzy
-#| msgid "Sort options"
 msgid "Toggle options"
-msgstr "排序選項"
+msgstr "切換選項"
 
 #: apps/io.ox/core/desktop.js:1905 module:io.ox/core
 msgid "Toggle search"
@@ -7667,8 +7601,6 @@ msgid "Waiting"
 msgstr "等待中"
 
 #: apps/io.ox/core/yell.js:24 module:io.ox/core
-#, fuzzy
-#| msgid "Warnings"
 msgid "Warning"
 msgstr "警告"
 
@@ -7713,10 +7645,8 @@ msgstr "每週的 %1$s"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:385 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to %1$s"
-msgstr "歡迎使用 %s"
+msgstr "歡迎使用 %1$s"
 
 #: apps/plugins/wizards/mandatory/main.js:32 module:io.ox/wizards/firstStart
 msgid "Welcome to %s"
@@ -7848,12 +7778,8 @@ msgid "Yes, send without subject"
 msgstr "是，請寄出"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:28 module:io.ox/mail
-#, fuzzy
-#| msgctxt "plural"
-#| msgid "Hide attachment"
-#| msgid_plural "Hide attachments"
 msgid "Yes, with empty attachment"
-msgstr "隱藏附件"
+msgstr "是，請清空附件"
 
 #: apps/io.ox/calendar/util.js:163 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:201 apps/io.ox/mail/util.js:72
@@ -7872,10 +7798,6 @@ msgstr "您將要修改您的確認狀態。請留言給其他參與者。"
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:218 module:io.ox/files
-#, fuzzy
-#| msgid ""
-#| "You are currently using %1$s of your %2$s available disk space. You have "
-#| "%3$s left."
 msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left. "
@@ -7915,7 +7837,7 @@ msgstr "您是發起者"
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
 "your drive. Send it anyway?"
-msgstr ""
+msgstr "您附加了一個空白檔案，可能是這個檔案已在您的電腦中刪除。還是要傳送嗎？"
 
 #: apps/io.ox/mail/write/view-main.js:523 module:io.ox/mail
 msgid ""
@@ -8102,11 +8024,6 @@ msgstr "您的瀏覽器的 cookie 功能已被停用，請開啟。"
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:205 module:io.ox/files
-#, fuzzy
-#| msgid ""
-#| "Your capacity is shared with all members of your group. Your group is "
-#| "currently using %1$s of its %2$s available disk space. The amount of free "
-#| "space is %3$s."
 msgid ""
 "Your capacity is shared with all members of your group. Your group is "
 "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -8302,8 +8219,6 @@ msgstr "編輯自己的物件"
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js:521
-#, fuzzy
-#| msgid "end date"
 msgid "end date "
 msgstr "結束日期"
 
@@ -8575,8 +8490,6 @@ msgid "show image"
 msgstr "顯示圖片"
 
 #: apps/io.ox/core/tk/reminder-util.js:88 module:io.ox/core
-#, fuzzy
-#| msgid "status"
 msgid "status "
 msgstr "狀態"
 
