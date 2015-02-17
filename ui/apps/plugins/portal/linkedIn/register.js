@@ -182,20 +182,23 @@ define('plugins/portal/linkedIn/register',
         }
     };
 
+    var refreshWidget = function () {
+        require(['io.ox/portal/main'], function (portal) {
+            var portalApp = portal.getApp(),
+                portalModels = portalApp.getWidgetCollection().filter(function (model) { return /^linkedIn_\d*/.test(model.id); });
+
+            if (portalModels.length > 0) {
+                portalApp.refreshWidget(portalModels[0], 0);
+            }
+        });
+    };
+
     ext.point('io.ox/portal/widget/linkedIn').extend({
 
         title: 'LinkedIn',
 
         initialize: function () {
-            keychain.submodules.linkedin.on('delete', function () {
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.linkedIn_0;
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
-                    }
-                });
-            });
+            keychain.submodules.linkedin.on('delete', refreshWidget);
         },
 
         isEnabled: function () {
@@ -206,18 +209,21 @@ define('plugins/portal/linkedIn/register',
             return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
         },
 
-        drawDefaultSetup: function () {
+        drawDefaultSetup: function (baton) {
+            keychain.submodules.linkedin.off('create', null, this);
+            keychain.submodules.linkedin.on('create', function () {
+                baton.model.node.find('h2 .fa-linkedin').replaceWith($('<span class="title">').text(gt('LinkedIn')));
+                baton.model.node.removeClass('requires-setup widget-color-custom color-linkedin');
+                refreshWidget();
+            }, this);
+
             this.find('h2 .title').replaceWith('<i class="fa fa-linkedin">');
             this.addClass('widget-color-custom color-linkedin');
         },
 
-        performSetUp: function (baton) {
+        performSetUp: function () {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('linkedin', win).done(function () {
-                baton.model.node.find('h2 .fa-linkedin').replaceWith($('<span class="title">').text(gt('LinkedIn')));
-                baton.model.node.removeClass('requires-setup widget-color-custom color-linkedin');
-                ox.trigger('refresh^');
-            });
+            return keychain.createInteractively('linkedin', win);
         },
 
         load: function (baton) {

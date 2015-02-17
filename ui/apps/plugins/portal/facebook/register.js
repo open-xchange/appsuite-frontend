@@ -195,12 +195,23 @@ define('plugins/portal/facebook/register',
         }
     };
 
+    var refreshWidget = function () {
+        require(['io.ox/portal/main'], function (portal) {
+            var portalApp = portal.getApp(),
+                portalModels = portalApp.getWidgetCollection().filter(function (model) { return /^facebook_\d*/.test(model.id); });
+
+            if (portalModels.length > 0) {
+                portalApp.refreshWidget(portalModels[0], 0);
+            }
+        });
+    };
+
     ext.point('io.ox/portal/widget/facebook').extend({
 
         title: gt('Facebook'),
 
         initialize: function (baton) {
-            keychain.submodules.facebook.on('update create', function () {
+            keychain.submodules.facebook.on('update', function () {
                 loadFromFacebook().done(function (data) {
                     baton.data = data;
                     if (baton.contentNode) {
@@ -209,15 +220,7 @@ define('plugins/portal/facebook/register',
                     }
                 });
             });
-            keychain.submodules.facebook.on('delete', function () {
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.facebook_0;
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
-                    }
-                });
-            });
+            keychain.submodules.facebook.on('delete', refreshWidget);
         },
 
         isEnabled: function () {
@@ -228,18 +231,21 @@ define('plugins/portal/facebook/register',
             return keychain.isEnabled('facebook') && !keychain.hasStandardAccount('facebook');
         },
 
-        drawDefaultSetup: function () {
+        drawDefaultSetup: function (baton) {
+            keychain.submodules.facebook.off('create', null, this);
+            keychain.submodules.facebook.on('create', function () {
+                baton.model.node.find('h2 .fa-facebook').replaceWith($('<span class="title">').text(gt('Facebook')));
+                baton.model.node.removeClass('requires-setup widget-color-custom color-facebook');
+                refreshWidget();
+            }, this);
+
             this.find('h2 .title').replaceWith('<i class="fa fa-facebook">');
             this.addClass('widget-color-custom color-facebook');
         },
 
-        performSetUp: function (baton) {
+        performSetUp: function () {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('facebook', win).done(function () {
-                baton.model.node.find('h2 .fa-facebook').replaceWith($('<span class="title">').text(gt('Facebook')));
-                baton.model.node.removeClass('requires-setup widget-color-custom color-facebook');
-                ox.trigger('refresh^');
-            });
+            return keychain.createInteractively('facebook', win);
         },
 
         preview: function (baton) {
