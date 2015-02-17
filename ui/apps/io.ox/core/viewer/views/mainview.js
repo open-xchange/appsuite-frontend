@@ -15,9 +15,10 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/core/viewer/eventdispatcher',
+    'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'less!io.ox/core/viewer/style'
-], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, Util) {
+], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, NodeTouch, Util) {
 
     'use strict';
 

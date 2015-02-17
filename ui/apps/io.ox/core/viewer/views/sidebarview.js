@@ -13,10 +13,11 @@
 define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
+    'io.ox/core/viewer/util',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview'
-], function (Ext, EventDispatcher, FileInfoView, FileDescriptionView, FileVersionsView) {
+], function (Ext, EventDispatcher, Util, FileInfoView, FileDescriptionView, FileVersionsView) {
 
     'use strict';
 
@@ -77,13 +78,40 @@ define('io.ox/core/viewer/views/sidebarview', [
             );
 
             this.$el.attr('tabindex', -1);
-            this.$el.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
+
+            // set device type
+            Util.setDeviceClass(this.$el);
+
+            // attach the touch handlers
+            this.$el.enableTouch({ selector: null, horSwipeHandler: this.onHorizontalSwipe });
 
             return this;
         },
 
+        /**
+         * Handles horizontal swipe events.
+         *
+         * @param {String} phase
+         *  The current swipe phase (swipeStrictMode is true, so we only get the 'end' phase)
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery tracking event.
+         *
+         * @param {Number} distance
+         *  The swipe distance in pixel, the sign determines the swipe direction (left to right or right to left)
+         *
+         */
+        onHorizontalSwipe: function (phase, event, distance) {
+            console.warn('SidebarView.onHorizontalSwipe()', 'event phase:', phase, 'distance:', distance);
+
+            if (distance > 0) {
+                EventDispatcher.trigger('viewer:toggle:sidebar');
+            }
+        },
+
         dispose: function () {
             //console.info('SidebarView.dispose()');
+            this.$el.disableTouch();
             this.stopListening();
             return this;
         }

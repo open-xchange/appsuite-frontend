@@ -87,7 +87,33 @@ define('io.ox/core/viewer/views/displayerview', [
             this.preloadSlide(startIndex, slidesToPreload, 'left');
             this.preloadSlide(startIndex, slidesToPreload, 'right');
 
+            // attach the touch handlers
+            this.$el.enableTouch({ selector: '.carousel', horSwipeHandler: this.onHorizontalSwipe });
+
             return this;
+        },
+
+        /**
+         * Handles horizontal swipe events.
+         *
+         * @param {String} phase
+         *  The current swipe phase (swipeStrictMode is true, so we only get the 'end' phase)
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery tracking event.
+         *
+         * @param {Number} distance
+         *  The swipe distance in pixel, the sign determines the swipe direction (left to right or right to left)
+         *
+         */
+        onHorizontalSwipe: function (phase, event, distance) {
+            console.warn('DisplayerView.onHorizontalSwipe()', 'event phase:', phase, 'distance:', distance);
+
+            if (distance > 0) {
+                EventDispatcher.trigger('viewer:display:previous');
+            } else if (distance < 0) {
+                EventDispatcher.trigger('viewer:display:next');
+            }
         },
 
         /**
@@ -233,6 +259,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
         dispose: function () {
             //console.info('DisplayerView.dispose()');
+            this.$el.disableTouch();
             this.stopListening();
             return this;
         }
