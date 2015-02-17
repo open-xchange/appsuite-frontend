@@ -34,6 +34,16 @@
 
 .io-ox-viewer {
 
+    /* set the text context of responsive labels according to the device and it's orientation */
+    & *.viewer-responsive-label[data-label-normal]:before {
+        content: attr(data-label-normal);
+    }
+    &.smartphone *.viewer-responsive-label[data-label-normal]:before {
+        @media(orientation: portrait) {
+            content: attr(data-label-short);
+        } 
+    }
+
     background-color: @viewer-background-color;
     z-index: 11; // just to one more than #io-ox-screens
     color: @viewer-text-color;
@@ -304,10 +314,10 @@
                             font-weight: bold;
                             color: @viewer-text-color;
                         }
-                    }
+                    }              
 
                     .version-content {
-                        padding-left: 10px;
+                        padding-left: 6px;
 
                         .last_modified {
                             float: left;
@@ -316,7 +326,7 @@
                             text-align: right;
                         }
                         .version-comment {
-                            color: lightgrey;
+                            color: lightgrey;                            
                         }
                     }
 

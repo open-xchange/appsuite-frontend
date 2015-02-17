@@ -54,6 +54,86 @@ define('io.ox/core/viewer/util', [
     };
 
     /**
+     * Shortens a String and returns a result object containing the original
+     * and two Strings clipped to normal and short max length.
+     *
+     * @param {String} str
+     *  The input String.
+     *
+     * @param {Object} options
+     *  Additional parameters
+     *
+     * @param {Number} [options.maxNormal = 40]
+     *  The max length for the String clipped to normal length.
+     *
+     * @param {Number} [options.maxShort = 26]
+     *  The max length for the String clipped to short length.
+     *
+     * @param {String} [options.charpos = 'middle']
+     *  The position of the ellipsis char, 'end' or 'middle'.
+     *
+     * @param {String} [options.char = '\u2026']
+     *  The ellipsis char.
+     *
+     * @returns {Object}
+     *  {String} title: the original or an empty String
+     *  {String} data-label-normal: the String clipped to normal length
+     *  {String} data-label-short: the String clipped to short length
+     */
+    Util.getClippedLabels = function (str, options) {
+
+        var opt = _.extend({
+                maxNormal: 40,
+                maxShort: 26,
+                charpos: 'middle'
+            }, options || {}),
+
+            normal = _.noI18n(_.ellipsis(str, _.extend(opt, { max: opt.maxNormal }))),
+            short = _.noI18n(_.ellipsis(str, _.extend(opt, { max: opt.maxShort })));
+
+        return {
+            title: String(str || '').trim(),
+            'data-label-normal': normal,
+            'data-label-short': short
+        };
+    };
+
+    /**
+     * Set a clipped label and the title to the given node according to the device type.
+     *
+     * Shortens a String and returns a result object containing the original
+     * and two clipped Strings.
+     *
+     * @param {jQuery|DOM} node
+     *  The node to be labeled.
+     *
+     * @param {String} str
+     *  The label String.
+     *
+     * @param {String} [charpos = 'middle']
+     *  The position of the ellipsis char, 'middle' or 'end'.
+     */
+    Util.setClippedLabel = function (node, str, charpos) {
+
+        var attr = Util.getClippedLabels (str, charpos);
+
+        node = (node instanceof $) ? node : $(node);
+        node.attr(attr).addClass('viewer-responsive-label');
+    };
+
+    /**
+     * Sets a CSS to indicate if current device is a 'smartphone' or 'tablet'
+     * to the given DOM node.
+     *
+     * @param {jQuery|DOM} node
+     *  The node to be labeled.
+     */
+    Util.setDeviceClass = function (node) {
+        node = (node instanceof $) ? node : $(node);
+        node.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
+    };
+
+    /**
      * Creates Bootstrap panel markup
      *
      *  @param {Object} options

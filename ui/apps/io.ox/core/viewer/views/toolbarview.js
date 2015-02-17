@@ -17,8 +17,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
+    'io.ox/core/viewer/util',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, Ext, LinksPattern, ActionsPattern, FilesAPI, gt) {
+], function (EventDispatcher, Dropdown, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -333,7 +334,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             var toolbar = this.$el.attr('role', 'menu'),
                 baton = Ext.Baton({ $el: toolbar, model: data.model, data: data.model.get('origData') });
             this.model = data.model;
-            this.$el.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
+            // set device type
+            Util.setDeviceClass(this.$el);
             toolbar.empty();
             Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
             return this;

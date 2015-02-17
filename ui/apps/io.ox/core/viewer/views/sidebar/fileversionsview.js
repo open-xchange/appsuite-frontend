@@ -112,17 +112,18 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 10,
         id: 'filename',
         draw: function (baton) {
-            baton.label = _.noI18n(_.ellipsis(baton.data.filename, { max: 40, charpos: 'middle' }));
-            var row;
+            baton.label = '';   // the label is set via CSS
+            var row,
+                $node;
 
             this.append(
                 row = $('<td>').addClass('version-content')
             );
 
             Ext.point(POINT + '/version/dropdown').invoke('draw', row, baton);
+            $node = row.find('div.dropdown > a');
 
-            row.children('div.dropdown')
-                .children('a').attr('title', baton.data.filename);
+            Util.setClippedLabel($node, baton.data.filename);
         }
     });
 
@@ -136,8 +137,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             UserAPI.getName(baton.data.created_by)
             .done(function (name) {
-                var clippedName = _.ellipsis(name, { max: 40, charpos: 'middle' });
-                $node.text(_.noI18n(clippedName)).attr('title', name);
+                Util.setClippedLabel($node, name);
             })
             .fail(function (err) {
                 console.warn('UserAPI.getName() error ', err);
@@ -168,15 +168,16 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'comment',
         index: 50,
         draw: function (baton) {
-            var comment = baton.data.version_comment,
-                clippedComment = _.ellipsis(comment, { max: 40, charpos: 'end' });
+            var $node;
 
-            if (!_.isEmpty(clippedComment)) {
+            if (!_.isEmpty(baton.data.version_comment)) {
                 this.find('td:last').append(
                     $('<div class="comment">').append(
-                        $('<span>', { title: _.noI18n(comment) }).addClass('version-comment').text(gt.noI18n(clippedComment))
+                        ($node = $('<span class="version-comment">'))
                     )
                 );
+
+                Util.setClippedLabel($node, baton.data.version_comment);
             }
         }
     });

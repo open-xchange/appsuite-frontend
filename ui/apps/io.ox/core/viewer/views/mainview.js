@@ -15,8 +15,9 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/core/viewer/eventdispatcher',
+    'io.ox/core/viewer/util',
     'less!io.ox/core/viewer/style'
-], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher) {
+], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, Util) {
 
     'use strict';
 
@@ -86,6 +87,8 @@ define('io.ox/core/viewer/views/mainview', [
             var self = this;
             // make this main view focusable and prevent focus from leaving the viewer.
             this.$el.attr('tabindex', -1);
+            // set device type
+            Util.setDeviceClass(this.$el);
             // append toolbar view
             this.$el.append(this.toolbarView.render(data).el);
             // append displayerView and sidebarView deferred, for preview image optimal height calculation
