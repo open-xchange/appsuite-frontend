@@ -25,9 +25,12 @@ define([
                 });
 
                 it('should open app specific help for mail app', function () {
+                    ox.manifests.apps['io.ox/mail'] = {
+                        'help': { 'target': 'ox.appsuite.user.chap.email.html' }
+                    };
                     var openStub = sinon.stub(window, 'open'),
                         currentAppStub = sinon.stub(ox.ui.App, 'getCurrentApp', function () {
-                            return { attributes: { name: 'io.ox/mail' } };
+                            return { getName: function () { return 'io.ox/mail'; } };
                         });
 
                     node.find('a').trigger('click');
