@@ -69,7 +69,11 @@ define('io.ox/contacts/edit/main',
                             editView.render().$el.addClass('default-content-padding container')
                         );
                         // no autofocus on smartphone
-                        if (_.device('!smartphone')) container.find('input[type=text]:visible').eq(0).focus();
+                        if (_.device('!smartphone')) {
+                            container.find('input[type=text]:visible').eq(0).focus();
+                            // focus first_name if visible
+                            container.find('[data-field="first_name"] input').eq(0).focus();
+                        }
 
                         editView.on('save:start', function () {
                             win.busy();
