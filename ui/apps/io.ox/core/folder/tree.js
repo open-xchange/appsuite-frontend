@@ -214,7 +214,7 @@ define('io.ox/core/folder/tree',
                 if (_.device('smartphone')) {
                     ul.append(
                         $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" data-toggle="dropdown" aria-haspopup="true">').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" aria-haspopup="true">').append(
                                 $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                                 $('<span class="sr-only">')
                             )
