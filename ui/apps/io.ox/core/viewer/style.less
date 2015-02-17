@@ -32,6 +32,11 @@
 @viewer-sidebar-active-bgcolor: #333333;
 @viewer-sidebar-label-text-color: #999999;
 
+/* enable iOS momentum scrolling */
+html.ios .io-ox-viewer {
+    .viewer-sidebar { -webkit-overflow-scrolling: touch; }
+}
+
 .io-ox-viewer {
 
     /* set the text context of responsive labels according to the device and it's orientation */
