@@ -427,6 +427,13 @@ define('io.ox/files/actions', [
         ref: 'io.ox/files/actions/editor-new'
     });
 
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
+        index: 300,
+        id: 'viewer',
+        label: gt('Viewer'),
+        ref: 'io.ox/files/actions/viewer'
+    });
+
     // INLINE (used in detail view / portal)
     var index = 100;
 
