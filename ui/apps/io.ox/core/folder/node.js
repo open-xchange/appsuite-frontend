@@ -192,7 +192,9 @@ define('io.ox/core/folder/node', [
                 hasSubFolders = this.hasSubFolders(),
                 isOpen = o.open && hasSubFolders;
             // update arrow
-            this.$.arrow.html(
+            this.$.arrow
+            .toggleClass('invisible', !hasSubFolders)
+            .html(
                 hasSubFolders ?
                     (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
                     '<i class="fa fa-fw">'
@@ -333,7 +335,7 @@ define('io.ox/core/folder/node', [
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
                     .css('padding-left', o.level * this.indentation)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : [],
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
                         this.$.label = $('<div class="folder-label">'),
                         this.$.counter = $('<div class="folder-counter">')
