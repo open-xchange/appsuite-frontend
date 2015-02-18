@@ -97,10 +97,16 @@ define('io.ox/files/share/view', [
         id: 'contactPicture',
         index: 100,
         draw: function (baton) {
+            var node;
             this.append(
-                $('<div class="contact-image">')
-                    .attr('data-original', baton.participantModel.getImageURL({ width: 42, height: 42, scaleType: 'contain' }))
+                node = $('<div class="contact-image">')
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
+            );
+            // apply picture halo lazy load
+            contactsAPI.pictureHalo(
+                node,
+                baton.participantModel.toJSON(),
+                { width: 42, height: 42 }
             );
         }
     });
