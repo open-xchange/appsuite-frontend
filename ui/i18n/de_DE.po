@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-29 11:15+0100\n"
+"PO-Revision-Date: 2015-02-18 12:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -175,36 +175,18 @@ msgstr "%1$s %2$s"
 #. %5$s Appointment Organizer
 #: apps/plugins/notifications/calendar/register.js:72
 #: module:plugins/notifications
-#, fuzzy, c-format
-#| msgid ""
-#| "%1$s\n"
-#| "%2$s %3$s\n"
-#| "%4$s\n"
-#| "%5$s"
+#, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr ""
-"%1$s\n"
-"%2$s %3$s\n"
-"%4$s\n"
-"%5$s"
+msgstr "%1$s %2$s %3$s %4$s %5$s."
 
 #. %1$s Appointment title
 #. %2$s Appointment date
 #. %3$s Appointment time
 #. %4$s Appointment location
 #: apps/io.ox/core/tk/reminder-util.js:109 module:io.ox/core
-#, fuzzy, c-format
-#| msgid ""
-#| "%1$s\n"
-#| "%2$s %3$s\n"
-#| "%4$s\n"
-#| "%5$s"
+#, c-format
 msgid "%1$s %2$s %3$s %4$s."
-msgstr ""
-"%1$s\n"
-"%2$s %3$s\n"
-"%4$s\n"
-"%5$s"
+msgstr "%1$s %2$s %3$s %4$s."
 
 #. %1$s task title
 #. %2$s task end date
@@ -212,19 +194,17 @@ msgstr ""
 #: apps/io.ox/core/tk/reminder-util.js:96 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:530
 #: module:plugins/notifications
-#, fuzzy, c-format
-#| msgid "%3$s %2$s, %1$s"
+#, c-format
 msgid "%1$s %2$s %3$s."
-msgstr "%3$s %2$s, %1$s"
+msgstr "%1$s %2$s %3$s."
 
 #. %1$s task title
 #. %2$s task end date
 #: apps/plugins/notifications/tasks/register.js:54
 #: module:plugins/notifications
-#, fuzzy, c-format
-#| msgid "%1$s %2$s"
+#, c-format
 msgid "%1$s %2$s."
-msgstr "%1$s %2$s"
+msgstr "%1$s %2$s."
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -858,10 +838,8 @@ msgid "Adding subscription. This may take some seconds …"
 msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
 
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
-#, fuzzy
-#| msgid "Editing settings"
 msgid "Additional settings"
-msgstr "Die Einstellungen bearbeiten"
+msgstr "Zusätzliche Einstellungen"
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:216 module:io.ox/mail
@@ -1046,10 +1024,8 @@ msgstr "Termin-Einladungen"
 
 #: apps/io.ox/calendar/month/perspective.js:418 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:367
-#, fuzzy
-#| msgid "Appointments"
 msgid "Appointment list"
-msgstr "Termine"
+msgstr "Terminliste"
 
 #: apps/plugins/notifications/calendar/register.js:42
 #: module:plugins/notifications
@@ -2034,9 +2010,8 @@ msgstr "Währung"
 
 #: apps/io.ox/core/main.js:355 module:io.ox/core
 #, fuzzy
-#| msgid "Current version"
 msgid "Currently refreshing"
-msgstr "Aktuelle Version"
+msgstr "Es wird aktualisiert"
 
 #: apps/io.ox/portal/main.js:139 module:io.ox/portal
 msgid "Customize this page"
@@ -3390,6 +3365,8 @@ msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
 msgstr ""
+"Hier erhalten Sie direkt alle Neuigkeiten aus Ihrem XING-Netzwerk. Bleiben "
+"Sie in Kontakt und entdecken Sie neue Geschäftsmöglichkeiten."
 
 #: apps/io.ox/portal/main.js:367 module:io.ox/portal
 #: apps/io.ox/portal/main.js:389
@@ -3649,10 +3626,8 @@ msgid "Import"
 msgstr "Importieren"
 
 #: apps/io.ox/core/import/import.js:170 module:io.ox/core
-#, fuzzy
-#| msgid "Export folder"
 msgid "Import from file"
-msgstr "Ordner exportieren"
+msgstr "Aus Datei importieren"
 
 #: apps/io.ox/mail/settings/signatures/register.js:311 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:495
@@ -3793,26 +3768,20 @@ msgid "Is smaller than"
 msgstr "ist kleiner als"
 
 #: apps/io.ox/contacts/main.js:719 module:io.ox/contacts
-#, fuzzy
-#| msgid "Items"
 msgid "Item List"
-msgstr "Objekte"
+msgstr "Objektliste"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:701 module:io.ox/core
 #: apps/io.ox/mail/main.js:443 module:io.ox/mail
-#, fuzzy
-#| msgid "Items"
 msgid "Item list"
-msgstr "Objekte"
+msgstr "Objektliste"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
 #: apps/io.ox/mail/main.js:446 module:io.ox/mail
-#, fuzzy
-#| msgid "Sort options"
 msgid "Item list options"
-msgstr "Sortier-Optionen"
+msgstr "Optionen für Objektliste"
 
 #: apps/io.ox/files/actions.js:193 module:io.ox/files
 msgid "Items without a file can not be downloaded."
@@ -4019,8 +3988,9 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/date.js:75 module:io.ox/core
+#, fuzzy
 msgid "MM"
-msgstr ""
+msgstr "MM"
 
 #: apps/io.ox/core/tk/folderviews.js:895 module:io.ox/core
 #: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
@@ -4069,10 +4039,9 @@ msgstr "E-Mail-Anzahl"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
-#, fuzzy, c-format
-#| msgid "Email from %1$s: %2$s"
+#, c-format
 msgid "Mail from %1$s %2$s"
-msgstr "E-Mail von %1$s: %2$s"
+msgstr "E-Mail von %1$s %2$s"
 
 #: apps/io.ox/mail/actions.js:268 module:io.ox/mail
 msgid "Mail has been copied"
@@ -4151,7 +4120,7 @@ msgstr "E-Mails pro Wochentag (%)"
 
 #: apps/io.ox/core/desktop.js:1610 module:io.ox/core
 msgid "Main window"
-msgstr ""
+msgstr "Hauptfenster"
 
 #: apps/io.ox/files/actions.js:1025 module:io.ox/files
 msgid "Make this the current version"
@@ -4383,8 +4352,9 @@ msgid "Move to folder"
 msgstr "In Ordner verschieben"
 
 #: apps/io.ox/core/tk/vgrid.js:231 module:io.ox/core
+#, fuzzy
 msgid "Multiselect"
-msgstr ""
+msgstr "Mehrfachauswahl"
 
 #: apps/io.ox/core/main.js:797 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:258
@@ -4703,7 +4673,7 @@ msgstr "Hinweis"
 
 #: apps/io.ox/core/import/import.js:140 module:io.ox/core
 msgid "Note on CSV files:"
-msgstr ""
+msgstr "Hinweis zu CSV-Dateien:"
 
 #: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -4736,10 +4706,8 @@ msgstr ""
 "Inhalt. Sie müssen deshalb einen neuen Ordner für dieses Abonnement anlegen."
 
 #: apps/io.ox/core/notifications.js:371 module:io.ox/core
-#, fuzzy
-#| msgid "No notifications"
 msgid "Notifications"
-msgstr "Keine Benachrichtigungen"
+msgstr "Benachrichtigungen"
 
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
 msgid "Notifier"
@@ -5031,10 +4999,8 @@ msgstr "Passwortlänge muss zwischen %1$d und %2$d Zeichen liegen."
 
 #: apps/io.ox/settings/accounts/settings/pane.js:97
 #: module:io.ox/settings/accounts
-#, fuzzy
-#| msgid "Password"
 msgid "Password recovery"
-msgstr "Passwort"
+msgstr "Passwort wiederherstellen"
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
 msgid "Password strength: Good"
@@ -5185,6 +5151,10 @@ msgid ""
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
 msgstr ""
+"Sie erhalten nun eine Bestätigung per E-Mail.\n"
+"\n"
+"Bitte folgen Sie den Anweisungen in der E-Mail und richten Sie dann im "
+"Widget Ihr Konto fertig ein."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:1110
 #: module:io.ox/calendar/edit/main
@@ -5341,9 +5311,6 @@ msgid "Plus"
 msgstr "Plus"
 
 #: apps/io.ox/portal/main.js:577 module:io.ox/portal
-#, fuzzy
-#| msgctxt "app"
-#| msgid "Portal"
 msgid "Portal"
 msgstr "Portal"
 
@@ -5409,7 +5376,7 @@ msgstr "Durch Drücken der Eingabetaste öffnen Sie den Twitter-Feed."
 #: apps/plugins/notifications/tasks/register.js:538
 #, fuzzy
 msgid "Press [enter] to open"
-msgstr "Durch Drücken der Eingabetaste öffnen Sie "
+msgstr "Öffnen durch Drücken der Eingabetaste"
 
 #: apps/io.ox/files/carousel.js:60 module:io.ox/files
 msgid "Prev"
@@ -6032,10 +5999,8 @@ msgstr "Suchen"
 
 #. search: leftside sidepanel container that shows active and available facets
 #: apps/io.ox/core/desktop.js:1496 module:io.ox/core
-#, fuzzy
-#| msgid "Search in"
 msgid "Search Options"
-msgstr "Suchen in"
+msgstr "Suchoptionen"
 
 #: apps/io.ox/core/desktop.js:1674 module:io.ox/core
 msgid "Search for items"
@@ -6061,10 +6026,8 @@ msgstr ""
 "Suchfilter an oder fügen Sie neue hinzu."
 
 #: apps/io.ox/core/desktop.js:1738 module:io.ox/core
-#, fuzzy
-#| msgid "Show original publication"
 msgid "Search within application"
-msgstr "Ursprüngliche Veröffentlichung anzeigen"
+msgstr "In Applikation suchen"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/fluid/perspective.js:333 module:io.ox/files
@@ -6262,9 +6225,8 @@ msgstr "Gemeinsamkeiten"
 
 #: apps/io.ox/core/folder/extensions.js:434 module:io.ox/core
 #, fuzzy
-#| msgid "You share this folder with other users"
 msgid "Shared by other users"
-msgstr "Sie teilen diesen Ordner mit anderen Benutzern"
+msgstr "Von anderen Benutzern geteilt"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -7016,10 +6978,13 @@ msgid "The first 90 days are free."
 msgstr "Die ersten 90 Tage sind kostenlos."
 
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
+#, fuzzy
 msgid ""
 "The first record of a valid CVS file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
+"Der erste Eintrag einer gültigen CSV-Datei muss richtige Spaltennamen "
+"definieren. Unterstützte Trennzeichen sind Kommas und Strichpunkte."
 
 #: apps/io.ox/core/folder/actions/common.js:34 module:io.ox/core
 msgid "The folder has been cleaned up."
@@ -7809,11 +7774,12 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:264 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:263 module:io.ox/portal
 #, fuzzy
-#| msgid "Use cursor keys to change the item position"
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
-msgstr "Verwenden Sie die Pfeiltasten zum Ändern der Objektposition."
+msgstr ""
+"Verwenden Sie die Pfeiltasten zum Ändern der Objektposition. Der virtuelle "
+"Cursor-Modus muss deaktiviert werden."
 
 #: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
@@ -7821,8 +7787,11 @@ msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
 #. helper text for slideshow widget navigation
 #: apps/io.ox/files/carousel.js:77 module:io.ox/files
+#, fuzzy
 msgid "Use left/right arrow keys to navigate and escape key to exit view."
 msgstr ""
+"Verwenden Sie die linke und rechte Pfeiltaste zum Navigieren und die Escape-"
+"Taste zum Verlassen der Ansicht. "
 
 #. Auth type. Use separate username and password
 #: apps/io.ox/mail/accounts/view-form.js:50 module:io.ox/settings
@@ -8515,9 +8484,8 @@ msgstr "Tag des Wochenendes"
 
 #: apps/io.ox/core/date.js:76 module:io.ox/core
 #, fuzzy
-#| msgid "Add"
 msgid "dd"
-msgstr "Hinzufügen"
+msgstr "tt"
 
 #: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
 msgid "declined"
@@ -8669,10 +8637,8 @@ msgid "fourth"
 msgstr "vierten"
 
 #: apps/io.ox/mail/common-extensions.js:46 module:io.ox/mail
-#, fuzzy
-#| msgid "Add attachments"
 msgid "has attachments"
-msgstr "Anlagen hinzufügen"
+msgstr "enthält Anlagen"
 
 #: apps/io.ox/core/import/import.js:60 module:io.ox/core
 msgid "iCal"
@@ -8848,15 +8814,13 @@ msgstr "vorläufig"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:419 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:221 module:io.ox/portal
-#, fuzzy
-#| msgid "File has been moved"
 msgid "the item has been moved"
-msgstr "Datei wurde verschoben"
+msgstr "das Objekt wurde verschoben"
 
 #: apps/io.ox/mail/settings/model.js:26 module:io.ox/mail
 #: apps/io.ox/mail/settings/model.js:27
 msgid "the line length must be a number"
-msgstr ""
+msgstr "die Zeilenlänge muss durch eine Ziffer angegeben werden"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
@@ -8943,8 +8907,9 @@ msgid "your platform"
 msgstr "Ihre Plattform"
 
 #: apps/io.ox/core/date.js:74 module:io.ox/core
+#, fuzzy
 msgid "yyyy"
-msgstr ""
+msgstr "jjjj"
 
 #~ msgid " is currently editing this document."
 #~ msgstr " bearbeitet gerade dieses Dokument."
