@@ -491,7 +491,7 @@ define('io.ox/calendar/main',
                                 // fluent option: do not write to user settings
                                 app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
                                 // cancel search when user changes view
-                                app.props.on('change', cancelSearch);
+                                app.props.on('change:layout', cancelSearch);
                             }
                         },
                         'search:cancel': function () {
@@ -500,7 +500,7 @@ define('io.ox/calendar/main',
                             if (lastPerspective && lastPerspective !== currentPerspective)
                                 app.props.set('layout', lastPerspective);
                             // disable
-                            app.props.off('change', cancelSearch);
+                            app.props.off('change:layout', cancelSearch);
                             // reset
                             lastPerspective = undefined;
 
