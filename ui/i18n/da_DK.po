@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-03 11:58+0100\n"
-"Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2015-02-18 12:54+0100\n"
+"Last-Translator: \n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -7030,8 +7030,8 @@ msgid ""
 "\"datePicker\">11/03/2013</a>."
 msgstr ""
 "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">slutter</a> d. <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
-"\">11/03/2013</a>."
+"\">slutter</a> d. <a href=\"#\" data-attribute=\"until\" data-widget="
+"\"datePicker\">11/03/2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:740
 #: module:io.ox/calendar/edit/main
