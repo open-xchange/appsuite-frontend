@@ -61,7 +61,7 @@ define('io.ox/mail/compose/model', [
                 to: [],
                 unread: '',
                 user: [],
-                vcard: 0
+                vcard: settings.get('appendVcard', false) ? 1 : 0
             };
         },
 
