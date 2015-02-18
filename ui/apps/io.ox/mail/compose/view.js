@@ -159,10 +159,16 @@ define('io.ox/mail/compose/view', [
             optionDropdown.$ul.addClass('pull-right');
             signatureDropdown.$ul.addClass('pull-right');
 
+            baton.view.signaturesLoading.done(function (sig) {
+                if (sig.length > 0) {
+                    signatureDropdown.$ul.addClass('pull-right');
+                    optionDropdown.$el.before(signatureDropdown.render().$el.addClass('signatures text-left'));
+                }
+            });
+
             this.append(
                 $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
                     $('<div class="pull-right text-right">').append(
-                        signatureDropdown.render().$el.addClass('signatures text-left'),
                         optionDropdown.render().$el.addClass('text-left')
                     )
                 )
