@@ -160,8 +160,10 @@ define('io.ox/core/folder/node', [
         },
 
         onArrowClick: function (e) {
-            if (!$(e.target).closest(this.$.arrow).length) return;
-            if (!this.hasArrow()) return;
+            if (!$(e.target).closest(this.$.arrow).length || !this.hasArrow()) {
+                e.preventDefault();
+                return;
+            }
             this.onToggle(e);
         },
 
