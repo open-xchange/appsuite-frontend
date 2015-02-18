@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-09 15:37+0100\n"
+"PO-Revision-Date: 2015-02-18 14:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2476,7 +2476,7 @@ msgstr "Erledigt"
 
 #: apps/io.ox/calendar/week/view.js:644 module:io.ox/calendar
 msgid "Doubleclick in this row for whole day appointment"
-msgstr "Für ganztägigen Termin auf diese Zeile klicken"
+msgstr "Für ganztägigen Termin auf diese Zeile doppelklicken"
 
 #: apps/io.ox/contacts/actions.js:553 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:476 module:io.ox/core/tk/attachments
