@@ -258,13 +258,7 @@ define('io.ox/settings/accounts/settings/pane',
                             // looks like oauth?
                             if ('reauthorize' in submodule) {
                                 var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
-                                submodule.createInteractively(win).done(function () {
-                                    if (submodule.id === 'xing') {
-                                        require(['io.ox/xing/api'], function (xingAPI) {
-                                            xingAPI.createSubscription();
-                                        });
-                                    }
-                                });
+                                submodule.createInteractively(win);
                             } else {
                                 submodule.createInteractively(e);
                             }
