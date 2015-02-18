@@ -126,9 +126,7 @@ define('io.ox/mail/detail/content',
                 return line;
             })
             .join('');
-
-        text = markupQuotes(text);
-
+        if (settings.get('isColorQuoted', true)) text = markupQuotes(text);
         return text;
     };
 
