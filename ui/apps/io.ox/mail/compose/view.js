@@ -304,7 +304,7 @@ define('io.ox/mail/compose/view', [
             this.textarea = $('<textarea class="plain-text">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
-            });
+            }).addClass(settings.get('useFixedWidthFont') ? 'monospace' : '');
 
             this.baton = ext.Baton({
                 model: this.model,
