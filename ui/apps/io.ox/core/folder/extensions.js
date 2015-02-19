@@ -116,6 +116,7 @@ define('io.ox/core/folder/extensions',
                     folder: '1',
                     headless: true,
                     open: true,
+                    icons: tree.options.icons,
                     tree: tree,
                     parent: tree
                 })
@@ -156,6 +157,7 @@ define('io.ox/core/folder/extensions',
                     folder: 'default0',
                     headless: true,
                     open: true,
+                    icons: tree.options.icons,
                     tree: tree,
                     parent: tree
                 })
