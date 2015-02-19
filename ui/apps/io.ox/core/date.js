@@ -71,6 +71,9 @@ define.async('io.ox/core/date',
 
         getInputFormat: function (format) {
             return this.getFormat(format).replace(/(y+)|(M+)|(d+)/g, function (_, y, m, d) {
+                //#. Strings to build input formats to be more accessible
+                //#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
+                //#. Sample for de_DE: TT.MM.JJJJ
                 return y ? gt('yyyy') :
                        m ? gt('MM') :
                        d ? gt('dd') :
