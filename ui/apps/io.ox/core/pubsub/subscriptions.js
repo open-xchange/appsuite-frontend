@@ -256,6 +256,42 @@ define('io.ox/core/pubsub/subscriptions',
     }
 
     ext.point(POINT + '/dialog').extend({
+        id: 'missing-oauth',
+        index: 'first',
+        draw: function (baton) {
+            // filter disabled/unavailable oauth sources without existing accounts
+            baton.services = _.filter(baton.services, function (service) {
+                var fdlength = (service.formDescription || []).length, enabled;
+
+                // process when no formDescriptions
+                if (fdlength === 0) return true;
+
+                service.formDescription = _.filter(service.formDescription, function (fd) {
+
+                    if (fd.widget !== 'oauthAccount') return true;
+
+                    var accountType = getAccountType(fd.options.type),
+                        accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+
+                    // process when at least one account exists
+                    if (accounts.length) return true;
+
+                    enabled = keychainAPI.isEnabled(accountType);
+
+                    if (!enabled)
+                        console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
+
+                    // remove formdescription entry when oauth service isn't available
+                    return enabled;
+                });
+
+                // remove service in case all formdescriptions where removed
+                return (service.formDescription || []).length;
+            });
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
         id: 'service',
         index: 100,
         draw: function (baton) {
