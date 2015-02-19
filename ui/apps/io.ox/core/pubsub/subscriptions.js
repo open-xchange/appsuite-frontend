@@ -44,6 +44,10 @@ define('io.ox/core/pubsub/subscriptions',
         return baton.data.entityModule === 'calendar';
     },
 
+    getAccountType = function (type) {
+        return type.substring(type.lastIndexOf('.') + 1);
+    },
+
     SubscriptionView = Backbone.View.extend({
         tagName: 'div',
         render: function (app) {
@@ -196,9 +200,9 @@ define('io.ox/core/pubsub/subscriptions',
             baton.model.setSource(service, { 'account': parseInt(id, 10) });
         }
 
-        function oauth() {
+        function oauth(accountType) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychainAPI.createInteractively(service.displayName.toLowerCase(), win);
+            return keychainAPI.createInteractively(accountType, win);
         }
 
         _.each(service.formDescription, function (fd) {
@@ -221,7 +225,7 @@ define('io.ox/core/pubsub/subscriptions',
                     setSource(accounts[0].id);
                 } else {
                     controls = $('<button type="button" class="btn btn-default">').text(gt('Add new account')).on('click', function () {
-                        oauth().done(function () {
+                        oauth(getAccountType(fd.options.type)).done(function () {
                             buildForm(node, baton);
                         });
                     });
