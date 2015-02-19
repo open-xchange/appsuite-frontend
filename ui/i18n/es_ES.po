@@ -7004,7 +7004,7 @@ msgstr "Los primeros 90 días son gratis."
 
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
 msgid ""
-"The first record of a valid CVS file must define proper column names. "
+"The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
 
@@ -8134,9 +8134,13 @@ msgid "You are the organizer"
 msgstr "Usted es el organizador"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "You attached an empty file. It could be, that this file has been deleted "
+#| "on your drive. Send it anyway?"
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
-"your drive. Send it anyway?"
+"your hard drive. Send it anyway?"
 msgstr ""
 "Ha adjuntado un fichero vacío. Podría ser que este fichero se haya eliminado "
 "de su unidad. ¿Enviarlo de todas formas?"

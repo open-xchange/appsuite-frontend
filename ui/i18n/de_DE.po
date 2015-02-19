@@ -6985,7 +6985,7 @@ msgstr "Die ersten 90 Tage sind kostenlos."
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
 #, fuzzy
 msgid ""
-"The first record of a valid CVS file must define proper column names. "
+"The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
 "Der erste Eintrag einer gültigen CSV-Datei muss richtige Spaltennamen "
@@ -8132,7 +8132,7 @@ msgstr "Sie sind der Organisator"
 #, fuzzy
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
-"your drive. Send it anyway?"
+"your hard drive. Send it anyway?"
 msgstr ""
 "Sie haben eine leere Datei angehängt. Diese Datei wurde möglicherweise in "
 "Drive gelöscht. Wollen Sie sie dennoch versenden? "

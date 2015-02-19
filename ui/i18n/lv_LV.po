@@ -7014,7 +7014,7 @@ msgstr "Pirmās 90 dienas ir bez maksas."
 
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
 msgid ""
-"The first record of a valid CVS file must define proper column names. "
+"The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
 
@@ -8143,9 +8143,13 @@ msgid "You are the organizer"
 msgstr "Jūs esat rīkotājs"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "You attached an empty file. It could be, that this file has been deleted "
+#| "on your drive. Send it anyway?"
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
-"your drive. Send it anyway?"
+"your hard drive. Send it anyway?"
 msgstr ""
 "Ir pievienots tukšs fails. Iespējams, ka šis fails ir no jūsu diska "
 "izdzēsts. Vai vienalga veikt nosūtīšanu?"

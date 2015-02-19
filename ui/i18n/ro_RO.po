@@ -7023,7 +7023,7 @@ msgstr "Primele 90 de zile sunt gratuite."
 
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
 msgid ""
-"The first record of a valid CVS file must define proper column names. "
+"The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
 
@@ -8166,9 +8166,13 @@ msgid "You are the organizer"
 msgstr "Sunteți organizatorul"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "You attached an empty file. It could be, that this file has been deleted "
+#| "on your drive. Send it anyway?"
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
-"your drive. Send it anyway?"
+"your hard drive. Send it anyway?"
 msgstr ""
 "Ați atașat un fișier gol. Este posibil ca acest fișier să fi fost șters de "
 "pe disc. Doriți să îl trimiteți?"

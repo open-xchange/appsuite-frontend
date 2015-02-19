@@ -6895,7 +6895,7 @@ msgstr "前 90 天內免費。"
 
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
 msgid ""
-"The first record of a valid CVS file must define proper column names. "
+"The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
 
@@ -7973,9 +7973,13 @@ msgid "You are the organizer"
 msgstr "您是發起者"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "You attached an empty file. It could be, that this file has been deleted "
+#| "on your drive. Send it anyway?"
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
-"your drive. Send it anyway?"
+"your hard drive. Send it anyway?"
 msgstr "您附加了一個空白檔案，可能是這個檔案已在您的電腦中刪除。還是要傳送嗎？"
 
 #: apps/io.ox/mail/write/view-main.js:543 module:io.ox/mail
