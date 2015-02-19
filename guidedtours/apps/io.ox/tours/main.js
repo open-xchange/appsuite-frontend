@@ -798,7 +798,7 @@ define('io.ox/tours/main',
                 }
 
                 link.append(
-                    $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
+                    $('<a target="_blank" href="" role="menuitem">').text(
                         //#. Tour name; general introduction
                         gt('Getting started')
                     )
@@ -826,7 +826,7 @@ define('io.ox/tours/main',
 
             require(['settings!io.ox/tours', 'io.ox/tours/main'], function (tourSettings, thisIsStupid) {
                 tourLink.append(
-                    $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Guided tour for this app'))
+                    $('<a target="_blank" href="" role="menuitem">').text(gt('Guided tour for this app'))
                     .on('click', function (e) {
                         var currentApp = ox.ui.App.getCurrentApp(),
                             currentType = currentApp.attributes.name;
