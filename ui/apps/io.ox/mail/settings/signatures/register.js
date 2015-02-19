@@ -361,9 +361,17 @@ define('io.ox/mail/settings/signatures/register',
                                     .append(
                                         $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
                                         $('<div class="widget-controls">').append(
-                                            $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))).attr({
+                                            $('<a class="action" tabindex="1" data-action="default">').text((
+                                                isDefault ?
+                                                /*#. This signature is set as default */ gt('(Default)') :
+                                                /*#. Action to make this signature the new default */ gt('Set as default')
+                                            )).attr({
                                                 role: 'button',
-                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), isDefault ? gt('(Default)') : gt('Set as default'))
+                                                //#. A11y for an action button, read the display name and the action
+                                                //#. %1$s is the displayable name of the signature
+                                                //#. %2$s is the action: one of the msgids "(Default)", "Edit", "Delete" or "Set as default"
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname),
+                                                                 isDefault ? gt('(Default)') : gt('Set as default'))
                                             }),
                                             $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')).attr({
                                                 role: 'button',
