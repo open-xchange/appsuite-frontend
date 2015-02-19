@@ -524,6 +524,13 @@ define('io.ox/mail/main',
          */
         'folder:change': function (app) {
 
+            // close mail detail view in list-mode on folder selection
+            app.folderView.tree.on('selection:action', function () {
+                if(app.props.get('layout') === 'list') {
+                    app.threadView.trigger('back');
+                }
+            });
+
             app.on('folder:change', function (id) {
 
                 if (app.props.get('mobileFolderSelectMode')) return;

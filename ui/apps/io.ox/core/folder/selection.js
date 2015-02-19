@@ -82,6 +82,8 @@ define('io.ox/core/folder/selection', [], function () {
                 current = $(e.currentTarget),
                 index = items.index(current) || 0;
 
+            // trigger action event
+            this.view.trigger('selection:action', items, index);
             // do nothing if already selected
             if (current.hasClass('selected')) return;
 
