@@ -85,6 +85,18 @@ module.exports = function (grunt) {
                         cwd: 'bower_components',
                         src: ['velocity/velocity.min.js'],
                         dest: 'build/apps/3rd.party/'
+                    },
+                    {
+                        expand: true,
+                        src: ['swiper.jquery.js'],
+                        cwd: 'bower_components/swiper/dist/js/',
+                        dest: 'build/static/3rd.party/swiper'
+                    },
+                    {
+                        expand: true,
+                        src: ['*.css'],
+                        cwd: 'bower_components/swiper/dist/css/',
+                        dest: 'build/apps/3rd.party/swiper'
                     }
                 ]
             }

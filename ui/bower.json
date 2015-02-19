@@ -31,7 +31,8 @@
     "typeahead.js": "0.10.5",
     "mobiscroll": "2.14.4",
     "marked": "~0.3.3",
-    "velocity": "~1.2.1"
+    "velocity": "~1.2.1",
+    "swiper": "~3.0.1"
   },
   "resolutions": {
     "bootstrap": "3.3.1"
