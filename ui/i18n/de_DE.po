@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-18 14:44+0100\n"
+"PO-Revision-Date: 2015-02-19 15:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -286,10 +286,8 @@ msgstr "%1$s haben ihr Profil aktualisiert:"
 #: apps/io.ox/mail/settings/signatures/register.js:373 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:378
 #: apps/io.ox/mail/settings/signatures/register.js:383
-#, fuzzy
-#| msgid "%1$s %2$s"
 msgid "%1$s, %2$s"
-msgstr "%1$s %2$s"
+msgstr "%1$s, %2$s"
 
 #. Name without title
 #. %1$s is the first name
@@ -1531,7 +1529,6 @@ msgstr "Es wird aufgeräumt... Dies kann eine Weile dauern."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:31 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:30
-#, fuzzy
 msgid "Clear"
 msgstr "Löschen"
 
@@ -2013,7 +2010,6 @@ msgid "Currency"
 msgstr "Währung"
 
 #: apps/io.ox/core/main.js:355 module:io.ox/core
-#, fuzzy
 msgid "Currently refreshing"
 msgstr "Es wird aktualisiert"
 
@@ -3882,8 +3878,9 @@ msgid "Layout"
 msgstr "Layout"
 
 #: apps/io.ox/core/import/import.js:149 module:io.ox/core
+#, fuzzy
 msgid "Learn more"
-msgstr ""
+msgstr "Mehr erfahren"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -3992,7 +3989,6 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/date.js:78 module:io.ox/core
-#, fuzzy
 msgid "MM"
 msgstr "MM"
 
@@ -4356,7 +4352,6 @@ msgid "Move to folder"
 msgstr "In Ordner verschieben"
 
 #: apps/io.ox/core/tk/vgrid.js:231 module:io.ox/core
-#, fuzzy
 msgid "Multiselect"
 msgstr "Mehrfachauswahl"
 
@@ -5378,9 +5373,8 @@ msgstr "Durch Drücken der Eingabetaste öffnen Sie den Twitter-Feed."
 #: module:plugins/notifications apps/plugins/notifications/mail/register.js:63
 #: apps/plugins/notifications/tasks/register.js:64
 #: apps/plugins/notifications/tasks/register.js:538
-#, fuzzy
 msgid "Press [enter] to open"
-msgstr "Öffnen durch Drücken der Eingabetaste"
+msgstr "Zum Öffnen drücken Sie bitte die Eingabetaste"
 
 #: apps/io.ox/files/carousel.js:60 module:io.ox/files
 msgid "Prev"
@@ -6983,13 +6977,12 @@ msgid "The first 90 days are free."
 msgstr "Die ersten 90 Tage sind kostenlos."
 
 #: apps/io.ox/core/import/import.js:143 module:io.ox/core
-#, fuzzy
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
-"Der erste Eintrag einer gültigen CSV-Datei muss richtige Spaltennamen "
-"definieren. Unterstützte Trennzeichen sind Kommas und Strichpunkte."
+"Der erste Eintrag einer gültigen CSV-Datei muss passende Spaltennamen "
+"definieren. Unterstütztes Trennzeichen ist das Komma und das Semikolon."
 
 #: apps/io.ox/core/folder/actions/common.js:34 module:io.ox/core
 msgid "The folder has been cleaned up."
@@ -7778,7 +7771,6 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:264 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:263 module:io.ox/portal
-#, fuzzy
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
@@ -7792,7 +7784,6 @@ msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
 #. helper text for slideshow widget navigation
 #: apps/io.ox/files/carousel.js:77 module:io.ox/files
-#, fuzzy
 msgid "Use left/right arrow keys to navigate and escape key to exit view."
 msgstr ""
 "Verwenden Sie die linke und rechte Pfeiltaste zum Navigieren und die Escape-"
@@ -8129,13 +8120,12 @@ msgid "You are the organizer"
 msgstr "Sie sind der Organisator"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
-#, fuzzy
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
 "your hard drive. Send it anyway?"
 msgstr ""
-"Sie haben eine leere Datei angehängt. Diese Datei wurde möglicherweise in "
-"Drive gelöscht. Wollen Sie sie dennoch versenden? "
+"Sie haben eine leere Datei angehängt. Diese Datei wurde möglicherweise von "
+"Ihrer Festplatte gelöscht. Wollen Sie sie dennoch versenden? "
 
 #: apps/io.ox/mail/write/view-main.js:543 module:io.ox/mail
 msgid ""
@@ -8488,9 +8478,8 @@ msgid "day of the weekend"
 msgstr "Tag des Wochenendes"
 
 #: apps/io.ox/core/date.js:79 module:io.ox/core
-#, fuzzy
 msgid "dd"
-msgstr "tt"
+msgstr "TT"
 
 #: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
 msgid "declined"
@@ -8915,9 +8904,8 @@ msgstr "Ihre Plattform"
 #. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
 #. Sample for de_DE: TT.MM.JJJJ
 #: apps/io.ox/core/date.js:77 module:io.ox/core
-#, fuzzy
 msgid "yyyy"
-msgstr "jjjj"
+msgstr "JJJJ"
 
 #~ msgid " is currently editing this document."
 #~ msgstr " bearbeitet gerade dieses Dokument."
