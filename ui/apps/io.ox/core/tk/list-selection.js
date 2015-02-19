@@ -34,7 +34,7 @@ define('io.ox/core/tk/list-selection', [
         animDuration = 625;
 
     if (_.device('smartphone')) {
-        require(['3rd.party/velocity/velocity.min.js']);
+        require(['static/3rd.party/velocity/velocity.min.js']);
     }
 
     function Selection(view) {
