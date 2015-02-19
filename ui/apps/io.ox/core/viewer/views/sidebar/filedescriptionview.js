@@ -105,6 +105,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         events: {
             'click .toggle-panel': 'onTogglePanel',
+            'click .description-label': 'onStartEdit',
             'dblclick .description-label': 'onStartEdit',
             'keyup .description-label': 'onKeyUp'
             //'blur .description-text': 'onStopEdit'
@@ -123,9 +124,12 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             }
         },
 
-        onStartEdit: function () {
+        onStartEdit: function (event) {
             //console.info('FileDescriptionView.onStartEdit()');
-            this.startEdit();
+            if (_.device('smartphone || tablet') || event.type === 'dblclick') {
+                event.preventDefault();
+                this.startEdit();
+            }
         },
 
         onStopEdit: function () {
