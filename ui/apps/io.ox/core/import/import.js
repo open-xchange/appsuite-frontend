@@ -140,7 +140,7 @@ define('io.ox/core/import/import',
                     $('<b>').text(gt('Note on CSV files:')),
                     $.txt(' '),
                     $('<span>').text(
-                        gt('The first record of a valid CVS file must define proper column names. Supported separators are comma and semi-colon.')
+                        gt('The first record of a valid CSV file must define proper column names. Supported separators are comma and semi-colon.')
                     ),
                     $.txt(' '),
                     // link to online help
