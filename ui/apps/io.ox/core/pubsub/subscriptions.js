@@ -135,17 +135,29 @@ define('io.ox/core/pubsub/subscriptions',
                     var module = self.model.get('entityModule'),
                         invalid, folder;
 
-                    _.each(popup.getBody().find('input'), function (input) {
+                    _.each(popup.getBody().find('.userform input'), function (input) {
                         if (!$(input).val()) {
-                            $(input).closest('.control-group').addClass('error');
+                            $(input).closest('.control-group').addClass('has-error');
                             popup.idle();
                             invalid = true;
                         } else {
-                            $(input).closest('.control-group').removeClass('error');
+                            $(input).closest('.control-group').removeClass('has-error');
                         }
                     });
 
-                    if (invalid) { return; }
+                    if (invalid) return;
+
+                    // needs to create an account first
+                    var createAccount = popup.getBody().find('.btn-new-account');
+                    if (createAccount.length) {
+                        createAccount
+                            .parent().addClass('has-error')
+                            .end().on('click', function () {
+                                $(this).parent().removeClass('has-error');
+                            });
+                        popup.idle();
+                        return;
+                    }
 
                     // add new folders under module's default folder!
                     folder = require('settings!io.ox/core').get('folder/' + module);
@@ -224,7 +236,7 @@ define('io.ox/core/pubsub/subscriptions',
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button type="button" class="btn btn-default">').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn btn-default btn-new-account">').text(gt('Add new account')).on('click', function () {
                         oauth(getAccountType(fd.options.type)).done(function () {
                             buildForm(node, baton);
                         });
