@@ -252,7 +252,8 @@ define('io.ox/core/tk/list',
             // ref: id of the extension point that is used to render list items
             // app: application
             // pagination: use pagination (default is true)
-            this.options = _.extend({ pagination: true }, options);
+            // draggable: add drag'n'drop support
+            this.options = _.extend({ pagination: true, draggable: false }, options);
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
@@ -263,7 +264,7 @@ define('io.ox/core/tk/list',
             this.firstReset = true;
 
             // enable drag & drop
-            dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            if (this.options.draggable) dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', _.debounce(this.onModelChange, 10), this);
