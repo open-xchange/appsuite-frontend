@@ -806,8 +806,8 @@ msgstr "Add participant"
 msgid "Add participant/resource"
 msgstr "Add participant/resource"
 
-#: apps/io.ox/files/share/view.js:166 module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:172 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -945,7 +945,7 @@ msgstr ""
 msgid "Advanced facets block was opened."
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:221 module:io.ox/files
+#: apps/io.ox/files/share/view.js:227 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -2919,8 +2919,8 @@ msgstr "End of working time"
 msgid "Ends on"
 msgstr "Ends on"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:275 module:io.ox/files
+#: apps/io.ox/files/share/view.js:278
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3061,7 +3061,7 @@ msgstr "Expand form"
 msgid "Expand timeframe by one month"
 msgstr "Expand timeframe by one month"
 
-#: apps/io.ox/files/share/view.js:313 module:io.ox/files
+#: apps/io.ox/files/share/view.js:319 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -4346,8 +4346,8 @@ msgid "Medium priority"
 msgstr "Medium priority"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193 module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:207
 #, fuzzy
 #| msgid "Mark as unread"
 msgid "Message (optional)"
@@ -5104,7 +5104,7 @@ msgstr "Password length must be between %1$d and %2$d characters."
 msgid "Password recovery"
 msgstr "Password"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:268 module:io.ox/files
 #, fuzzy
 #| msgid "Upgrade required"
 msgid "Password required"
@@ -5690,7 +5690,7 @@ msgstr "Recently changed files"
 msgid "Recently used"
 msgstr "Recently used"
 
-#: apps/io.ox/files/share/view.js:241 module:io.ox/files
+#: apps/io.ox/files/share/view.js:247 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -8772,25 +8772,25 @@ msgstr "no edit permissions"
 msgid "no read permissions"
 msgstr "no read permissions"
 
-#: apps/io.ox/files/share/view.js:293 module:io.ox/files
+#: apps/io.ox/files/share/view.js:299 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Whole day"
 
-#: apps/io.ox/files/share/view.js:295 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "every month"
 
-#: apps/io.ox/files/share/view.js:294 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "in one week"
 
-#: apps/io.ox/files/share/view.js:298 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -8863,7 +8863,7 @@ msgstr "select format"
 msgid "show image"
 msgstr "show image"
 
-#: apps/io.ox/files/share/view.js:297 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -8912,7 +8912,7 @@ msgstr "this afternoon"
 msgid "this morning"
 msgstr "this morning"
 
-#: apps/io.ox/files/share/view.js:296 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

@@ -806,8 +806,8 @@ msgstr "Tilføj deltager"
 msgid "Add participant/resource"
 msgstr "Tilføj deltager/ressource"
 
-#: apps/io.ox/files/share/view.js:166 module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:172 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -945,7 +945,7 @@ msgstr ""
 msgid "Advanced facets block was opened."
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:221 module:io.ox/files
+#: apps/io.ox/files/share/view.js:227 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -2909,8 +2909,8 @@ msgstr "Slut på arbejdstid"
 msgid "Ends on"
 msgstr "Slutter om"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:275 module:io.ox/files
+#: apps/io.ox/files/share/view.js:278
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3051,7 +3051,7 @@ msgstr "Udvid form"
 msgid "Expand timeframe by one month"
 msgstr "Udvid tidsramme med en måned"
 
-#: apps/io.ox/files/share/view.js:313 module:io.ox/files
+#: apps/io.ox/files/share/view.js:319 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -4337,8 +4337,8 @@ msgid "Medium priority"
 msgstr "Mellem prioritet"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193 module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:207
 #, fuzzy
 #| msgid "Mark as unread"
 msgid "Message (optional)"
@@ -5095,7 +5095,7 @@ msgstr "Adgangskoder skal bestå af %1$d til %2$d tegn."
 msgid "Password recovery"
 msgstr "Adgangskode"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:268 module:io.ox/files
 #, fuzzy
 #| msgid "Upgrade required"
 msgid "Password required"
@@ -5680,7 +5680,7 @@ msgstr "Nyligt ændrede filer"
 msgid "Recently used"
 msgstr "Nyligt brugt"
 
-#: apps/io.ox/files/share/view.js:241 module:io.ox/files
+#: apps/io.ox/files/share/view.js:247 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -8763,25 +8763,25 @@ msgstr "ingen ændringstilladelse"
 msgid "no read permissions"
 msgstr "ingen læsetilladelser"
 
-#: apps/io.ox/files/share/view.js:293 module:io.ox/files
+#: apps/io.ox/files/share/view.js:299 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Hel dag"
 
-#: apps/io.ox/files/share/view.js:295 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "hver måned"
 
-#: apps/io.ox/files/share/view.js:294 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "om en uge"
 
-#: apps/io.ox/files/share/view.js:298 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -8854,7 +8854,7 @@ msgstr "vælg format"
 msgid "show image"
 msgstr "vis billede"
 
-#: apps/io.ox/files/share/view.js:297 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -8903,7 +8903,7 @@ msgstr "denne eftermiddag"
 msgid "this morning"
 msgstr "denne morgen"
 
-#: apps/io.ox/files/share/view.js:296 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

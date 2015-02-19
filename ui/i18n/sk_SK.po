@@ -827,8 +827,8 @@ msgstr "Pridať účastníka"
 msgid "Add participant/resource"
 msgstr "Pridať účastníkov/zdroje"
 
-#: apps/io.ox/files/share/view.js:166 module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:172 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -966,7 +966,7 @@ msgstr ""
 msgid "Advanced facets block was opened."
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:221 module:io.ox/files
+#: apps/io.ox/files/share/view.js:227 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -2941,8 +2941,8 @@ msgstr "Koniec pracovnej doby"
 msgid "Ends on"
 msgstr "končí"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:275 module:io.ox/files
+#: apps/io.ox/files/share/view.js:278
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3083,7 +3083,7 @@ msgstr "Rozbaliť formulár"
 msgid "Expand timeframe by one month"
 msgstr "Rozšíriť časový rozsah o jeden mesiac"
 
-#: apps/io.ox/files/share/view.js:313 module:io.ox/files
+#: apps/io.ox/files/share/view.js:319 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -4373,8 +4373,8 @@ msgid "Medium priority"
 msgstr "Vysoká priorita"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193 module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:207
 #, fuzzy
 #| msgid "Mark as unread"
 msgid "Message (optional)"
@@ -5137,7 +5137,7 @@ msgstr "Heslo musí mať dĺžku medzi %1$d a %2$d znakmi."
 msgid "Password recovery"
 msgstr "Heslo"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:268 module:io.ox/files
 #, fuzzy
 #| msgid "Upgrade required"
 msgid "Password required"
@@ -5718,7 +5718,7 @@ msgstr "Nedávno zmenené súbory"
 msgid "Recently used"
 msgstr "Nedávno použité"
 
-#: apps/io.ox/files/share/view.js:241 module:io.ox/files
+#: apps/io.ox/files/share/view.js:247 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -8820,25 +8820,25 @@ msgstr "bez oprávnení na upravovanie"
 msgid "no read permissions"
 msgstr "bez oprávnení na čítanie"
 
-#: apps/io.ox/files/share/view.js:293 module:io.ox/files
+#: apps/io.ox/files/share/view.js:299 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Celodenná"
 
-#: apps/io.ox/files/share/view.js:295 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 #, fuzzy
 #| msgid "month"
 msgid "one month"
 msgstr "mesiac"
 
-#: apps/io.ox/files/share/view.js:294 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "o týždeň"
 
-#: apps/io.ox/files/share/view.js:298 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -8911,7 +8911,7 @@ msgstr "vyberte formát"
 msgid "show image"
 msgstr "zobraziť obrázok"
 
-#: apps/io.ox/files/share/view.js:297 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "month"
 msgid "six months"
@@ -8962,7 +8962,7 @@ msgstr "toto odpoludnie"
 msgid "this morning"
 msgstr "dnes ráno"
 
-#: apps/io.ox/files/share/view.js:296 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

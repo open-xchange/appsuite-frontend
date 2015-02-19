@@ -771,8 +771,8 @@ msgstr "Teilnehmer hinzufügen"
 msgid "Add participant/resource"
 msgstr "Teilnehmer/Ressource hinzufügen"
 
-#: apps/io.ox/files/share/view.js:166 module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:172 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 msgid "Add recipients ..."
 msgstr "Empfänger hinzufügen ..."
 
@@ -896,7 +896,7 @@ msgstr "Erweiterte Suchfilter wurden geschlossen."
 msgid "Advanced facets block was opened."
 msgstr "Erweiterte Suchfilter wurden geöffnet."
 
-#: apps/io.ox/files/share/view.js:221 module:io.ox/files
+#: apps/io.ox/files/share/view.js:227 module:io.ox/files
 msgid "Advanced options"
 msgstr "Erweiterte Einstellungen"
 
@@ -2849,8 +2849,8 @@ msgstr "Arbeitszeit endet um"
 msgid "Ends on"
 msgstr "Endet am"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:275 module:io.ox/files
+#: apps/io.ox/files/share/view.js:278
 msgid "Enter Password"
 msgstr "Passwort eingeben"
 
@@ -2989,7 +2989,7 @@ msgstr "Formular erweitern"
 msgid "Expand timeframe by one month"
 msgstr "Zeitrahmen um einen Monat erweitern"
 
-#: apps/io.ox/files/share/view.js:313 module:io.ox/files
+#: apps/io.ox/files/share/view.js:319 module:io.ox/files
 msgid "Expires in"
 msgstr "Läuft ab in"
 
@@ -4260,8 +4260,8 @@ msgid "Medium priority"
 msgstr "Mittlere Priorität"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193 module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:207
 msgid "Message (optional)"
 msgstr "Nachricht (optional)"
 
@@ -5012,7 +5012,7 @@ msgstr "Passwortlänge muss zwischen %1$d und %2$d Zeichen liegen."
 msgid "Password recovery"
 msgstr "Passwort wiederherstellen"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:268 module:io.ox/files
 msgid "Password required"
 msgstr "Passwort erforderlich"
 
@@ -5592,7 +5592,7 @@ msgstr "Kürzlich geänderte Dateien"
 msgid "Recently used"
 msgstr "Kürzlich verwendet"
 
-#: apps/io.ox/files/share/view.js:241 module:io.ox/files
+#: apps/io.ox/files/share/view.js:247 module:io.ox/files
 msgid "Recipients can edit"
 msgstr "Empfänger können bearbeiten"
 
@@ -8650,19 +8650,19 @@ msgstr "keine Bearbeitungsberechtigungen"
 msgid "no read permissions"
 msgstr "keine Leseberechtigungen"
 
-#: apps/io.ox/files/share/view.js:293 module:io.ox/files
+#: apps/io.ox/files/share/view.js:299 module:io.ox/files
 msgid "one day"
 msgstr "ein Tag"
 
-#: apps/io.ox/files/share/view.js:295 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 msgid "one month"
 msgstr "ein Monat"
 
-#: apps/io.ox/files/share/view.js:294 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 msgid "one week"
 msgstr "eine Woche"
 
-#: apps/io.ox/files/share/view.js:298 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 msgid "one year"
 msgstr "ein Jahr"
 
@@ -8727,7 +8727,7 @@ msgstr "Format wählen"
 msgid "show image"
 msgstr "Bild anzeigen"
 
-#: apps/io.ox/files/share/view.js:297 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 msgid "six months"
 msgstr "sechs Monate"
 
@@ -8771,7 +8771,7 @@ msgstr "heute Nachmittag"
 msgid "this morning"
 msgstr "heute Morgen"
 
-#: apps/io.ox/files/share/view.js:296 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 msgid "three months"
 msgstr "drei Monate"
 

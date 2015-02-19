@@ -6382,71 +6382,71 @@ msgstr ""
 msgid "Get a link"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:166
+#: apps/io.ox/files/share/view.js:172
 #: module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:173
 msgid "Add recipients ..."
 msgstr ""
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193
+#: apps/io.ox/files/share/view.js:199
 #: module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:207
 msgid "Message (optional)"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:221
+#: apps/io.ox/files/share/view.js:227
 #: module:io.ox/files
 msgid "Advanced options"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:241
+#: apps/io.ox/files/share/view.js:247
 #: module:io.ox/files
 msgid "Recipients can edit"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:262
+#: apps/io.ox/files/share/view.js:268
 #: module:io.ox/files
 msgid "Password required"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:269
+#: apps/io.ox/files/share/view.js:275
 #: module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:278
 msgid "Enter Password"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:293
+#: apps/io.ox/files/share/view.js:299
 #: module:io.ox/files
 msgid "one day"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:294
+#: apps/io.ox/files/share/view.js:300
 #: module:io.ox/files
 msgid "one week"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:295
+#: apps/io.ox/files/share/view.js:301
 #: module:io.ox/files
 msgid "one month"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:296
+#: apps/io.ox/files/share/view.js:302
 #: module:io.ox/files
 msgid "three months"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:297
+#: apps/io.ox/files/share/view.js:303
 #: module:io.ox/files
 msgid "six months"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:298
+#: apps/io.ox/files/share/view.js:304
 #: module:io.ox/files
 msgid "one year"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:313
+#: apps/io.ox/files/share/view.js:319
 #: module:io.ox/files
 msgid "Expires in"
 msgstr ""

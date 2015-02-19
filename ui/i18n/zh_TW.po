@@ -797,8 +797,8 @@ msgstr "添加參與者"
 msgid "Add participant/resource"
 msgstr "添加參與者/資源"
 
-#: apps/io.ox/files/share/view.js:166 module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:172 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -936,7 +936,7 @@ msgstr ""
 msgid "Advanced facets block was opened."
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:221 module:io.ox/files
+#: apps/io.ox/files/share/view.js:227 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -2887,8 +2887,8 @@ msgstr "工作時間結束"
 msgid "Ends on"
 msgstr "結束於"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:275 module:io.ox/files
+#: apps/io.ox/files/share/view.js:278
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3029,7 +3029,7 @@ msgstr "展開表單"
 msgid "Expand timeframe by one month"
 msgstr "展開時間範圍一個月"
 
-#: apps/io.ox/files/share/view.js:313 module:io.ox/files
+#: apps/io.ox/files/share/view.js:319 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -4297,8 +4297,8 @@ msgid "Medium priority"
 msgstr "中優先順序"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193 module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:207
 #, fuzzy
 #| msgid "Mark as unread"
 msgid "Message (optional)"
@@ -5054,7 +5054,7 @@ msgstr "密碼長度必須在 %1$d 到 %2$d 字元之間。"
 msgid "Password recovery"
 msgstr "密碼"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:268 module:io.ox/files
 #, fuzzy
 #| msgid "Upgrade required"
 msgid "Password required"
@@ -5628,7 +5628,7 @@ msgstr "最近修改的檔案"
 msgid "Recently used"
 msgstr "最近使用"
 
-#: apps/io.ox/files/share/view.js:241 module:io.ox/files
+#: apps/io.ox/files/share/view.js:247 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -8664,25 +8664,25 @@ msgstr "無編輯權限"
 msgid "no read permissions"
 msgstr "無閱讀權限"
 
-#: apps/io.ox/files/share/view.js:293 module:io.ox/files
+#: apps/io.ox/files/share/view.js:299 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "全天"
 
-#: apps/io.ox/files/share/view.js:295 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "每月"
 
-#: apps/io.ox/files/share/view.js:294 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "1 周內"
 
-#: apps/io.ox/files/share/view.js:298 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -8755,7 +8755,7 @@ msgstr "選擇格式"
 msgid "show image"
 msgstr "顯示圖片"
 
-#: apps/io.ox/files/share/view.js:297 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -8804,7 +8804,7 @@ msgstr "今天下午"
 msgid "this morning"
 msgstr "今天早上"
 
-#: apps/io.ox/files/share/view.js:296 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

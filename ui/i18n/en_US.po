@@ -737,8 +737,8 @@ msgstr ""
 msgid "Add participant/resource"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:166 module:io.ox/files
-#: apps/io.ox/files/share/view.js:167
+#: apps/io.ox/files/share/view.js:172 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 msgid "Add recipients ..."
 msgstr ""
 
@@ -862,7 +862,7 @@ msgstr ""
 msgid "Advanced facets block was opened."
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:221 module:io.ox/files
+#: apps/io.ox/files/share/view.js:227 module:io.ox/files
 msgid "Advanced options"
 msgstr ""
 
@@ -2762,8 +2762,8 @@ msgstr ""
 msgid "Ends on"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
-#: apps/io.ox/files/share/view.js:272
+#: apps/io.ox/files/share/view.js:275 module:io.ox/files
+#: apps/io.ox/files/share/view.js:278
 msgid "Enter Password"
 msgstr ""
 
@@ -2902,7 +2902,7 @@ msgstr ""
 msgid "Expand timeframe by one month"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:313 module:io.ox/files
+#: apps/io.ox/files/share/view.js:319 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -4127,8 +4127,8 @@ msgid "Medium priority"
 msgstr ""
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:193 module:io.ox/files
-#: apps/io.ox/files/share/view.js:201
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:207
 msgid "Message (optional)"
 msgstr ""
 
@@ -4863,7 +4863,7 @@ msgstr ""
 msgid "Password recovery"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:268 module:io.ox/files
 msgid "Password required"
 msgstr ""
 
@@ -5417,7 +5417,7 @@ msgstr ""
 msgid "Recently used"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:241 module:io.ox/files
+#: apps/io.ox/files/share/view.js:247 module:io.ox/files
 msgid "Recipients can edit"
 msgstr ""
 
@@ -8316,19 +8316,19 @@ msgstr ""
 msgid "no read permissions"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:293 module:io.ox/files
+#: apps/io.ox/files/share/view.js:299 module:io.ox/files
 msgid "one day"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:295 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 msgid "one month"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:294 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 msgid "one week"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:298 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 msgid "one year"
 msgstr ""
 
@@ -8393,7 +8393,7 @@ msgstr ""
 msgid "show image"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:297 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 msgid "six months"
 msgstr ""
 
@@ -8436,7 +8436,7 @@ msgstr ""
 msgid "this morning"
 msgstr ""
 
-#: apps/io.ox/files/share/view.js:296 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 msgid "three months"
 msgstr ""
 
