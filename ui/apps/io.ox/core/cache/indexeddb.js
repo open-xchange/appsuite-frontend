@@ -271,8 +271,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         };
         // stupid stupid workaround for stupid stupid runtime bug / or API is hard to understand
         // clear seems to return far too early; maybe browser bug.
-        // Occurred during folder tree debugging. test code:
-        // api = require('io.ox/core/api//folder'); api.caches.subFolderCache.clear().done(function () { api.caches.subFolderCache.keys().done(_.inspect); });
+        // Occurred during folder tree debugging.
         if ((type === 'clear' || type === 'delete') && request.transaction) {
             request.transaction.oncomplete = function (e) {
                 def.resolve(e.target.result);
