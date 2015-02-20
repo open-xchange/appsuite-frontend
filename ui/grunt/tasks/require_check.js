@@ -12,8 +12,6 @@
 
 'use strict';
 
-var chalk = require('chalk');
-
 module.exports = function (grunt) {
 
     grunt.config.merge({
