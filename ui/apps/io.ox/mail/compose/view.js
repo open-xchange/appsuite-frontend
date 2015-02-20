@@ -935,7 +935,7 @@ define('io.ox/mail/compose/view', [
                     var node = $(this),
                         text = node.text(),
                         unchanged = _(self.signatures).find(function (signature) {
-                            return $('<div>').html(signature.content).text() === text;
+                            return $('<div>').html(signature.content).text().replace(/\s+/g, '') === text.replace(/\s+/g, '');
                         });
 
                     // remove entire block unless it seems edited
