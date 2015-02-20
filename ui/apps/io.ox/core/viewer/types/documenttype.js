@@ -37,20 +37,20 @@ define('io.ox/core/viewer/types/documenttype', [
          */
         this.createSlide = function (model, modelIndex) {
             //console.warn('DocumentType.createSlide()');
-            var slide = $('<div class="item">'),
+            var slide = $('<div class="swiper-slide">'),
                 image = $('<img class="viewer-displayer-image">'),
                 caption = $('<div class="viewer-displayer-caption">'),
                 previewUrl = model && model.getPreviewUrl(),
                 filename = model && model.get('filename') || '',
                 slidesCount = model.collection.length,
-                displayerTopOffset = $('.viewer-toolbar').outerHeight();
+                displayerTopOffset = 45;
             if (previewUrl) {
-                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                    .css({ maxHeight: window.innerHeight - displayerTopOffset });
+                image
+                    .attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
+                    .css({ maxHeight: window.innerHeight - displayerTopOffset, maxWidth: window.innerWidth });
                 caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
                 slide.append(image, caption);
             }
-            slide.attr('data-slide', modelIndex);
             return slide;
         };
 

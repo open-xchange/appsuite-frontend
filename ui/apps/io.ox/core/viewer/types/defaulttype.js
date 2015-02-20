@@ -41,7 +41,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
          */
         this.createSlide = function (model, modelIndex) {
             //console.warn('DefaultType.createSlide()', model, modelIndex);
-            var slide = $('<div class="item">'),
+            var slide = $('<div class="swiper-slide">'),
                 displayerTopOffset = $('.viewer-toolbar').outerHeight(),
                 slideContent = $('<div class="viewer-displayer-notification">')
                     .css({ maxHeight: window.innerHeight - displayerTopOffset }),
@@ -53,7 +53,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
                 slidesCount = model.collection.length;
             slideContent.append(fileIcon, filenameEl, apology);
             caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-            slide.append(slideContent, caption).attr('data-slide', modelIndex);
+            slide.append(slideContent, caption);
             return slide;
         };
 

@@ -13,7 +13,9 @@
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/types/typefactory',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'static/3rd.party/swiper/swiper.jquery.js',
+    'css!3rd.party/swiper/swiper.css'
 ], function (EventDispatcher, TypeFactory, gt) {
 
     'use strict';
@@ -45,20 +47,43 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {DisplayerView}
          */
         render: function (data) {
-            //console.warn('DisplayerView.render() data', data);
+            //console.warn('DisplayerView.render() data', this.swiper);
             if (!data) {
                 console.error('Core.Viewer.DisplayerView.render(): no file to render');
                 return;
             }
 
-            var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
-                carouselInner = $('<div class="carousel-inner">'),
-                prevSlide = $('<a class="left carousel-control"><i class="fa fa-angle-left"></i></a>'),
-                nextSlide = $('<a class="right carousel-control"><i class="fa fa-angle-right"></i></a>'),
+            var carouselRoot = $('<div id="viewer-carousel" class="swiper-container">'),
+                carouselInner = $('<div class="swiper-wrapper">'),
+                prevSlide = $('<a class="swiper-button-prev swiper-button-control left"><i class="fa fa-angle-left"></i></a>'),
+                nextSlide = $('<a class="swiper-button-next swiper-button-control right"><i class="fa fa-angle-right"></i></a>'),
                 // preload 1 neigboring slides
                 slidesToPreload = 1,
                 startIndex = data.index,
-                self = this;
+                self = this,
+                swiperParameter = {
+                    loop: true,
+                    loopedSlides: 0,
+                    followFinger: false,
+                    simulateTouch: false,
+                    speed: 0,
+                    initialSlide: startIndex,
+                    onSlideChangeEnd: function (swiper) {
+                        self.blendSlideCaption(swiper.activeIndex);
+                        self.preloadSlide(swiper.activeIndex, slidesToPreload, 'left');
+                        self.preloadSlide(swiper.activeIndex, slidesToPreload, 'right');
+                    }
+                };
+
+            // enable touch and swiping for iOS and Android first
+            if (_.browser.iOS || _.browser.Android) {
+                swiperParameter = _.extend(swiperParameter, {
+                    followFinger: true,
+                    simulateTouch: true,
+                    speed: 300,
+                    spaceBetween: 100
+                });
+            }
 
             // create slides from file collection and append them to the carousel
             this.collection.each(function (model, modelIndex) {
@@ -68,52 +93,27 @@ define('io.ox/core/viewer/views/displayerview', [
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button' });
             nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button' });
-            carouselRoot.append(carouselInner, prevSlide, nextSlide)
-                .carousel({ keyboard: false })
-                .on('slid.bs.carousel', function (event) {
-                    var activeSlideIndex = $(event.relatedTarget).data('slide'),
-                        captionShowDuration = 3000;
-                    self.preloadSlide(activeSlideIndex, slidesToPreload, event.direction);
-                    self.blendSlideCaption(activeSlideIndex, captionShowDuration);
-                });
+            carouselRoot.append(carouselInner);
+
+            // dont show next and prev buttons on iOS and Android
+            if (!(_.browser.iOS || _.browser.Android)) {
+                carouselRoot.append(prevSlide, nextSlide);
+            }
 
             // append carousel to view
             this.$el.append(carouselRoot).attr('tabindex', -1);
             this.carouselRoot = carouselRoot;
 
-            // set the first selected file active, blend its caption, and preload its neighbours
-            carouselInner.children().eq(startIndex).addClass('active');
-            this.blendSlideCaption(startIndex, 3000);
+            // blend caption of the first slide, and preload its neighbours
+            this.blendSlideCaption(startIndex);
             this.preloadSlide(startIndex, slidesToPreload, 'left');
             this.preloadSlide(startIndex, slidesToPreload, 'right');
 
-            // attach the touch handlers
-            this.$el.enableTouch({ selector: '.carousel', horSwipeHandler: this.onHorizontalSwipe });
-
+            // initiate swiper deferred
+            _.defer(function () {
+                self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
+            });
             return this;
-        },
-
-        /**
-         * Handles horizontal swipe events.
-         *
-         * @param {String} phase
-         *  The current swipe phase (swipeStrictMode is true, so we only get the 'end' phase)
-         *
-         * @param {jQuery.Event} event
-         *  The jQuery tracking event.
-         *
-         * @param {Number} distance
-         *  The swipe distance in pixel, the sign determines the swipe direction (left to right or right to left)
-         *
-         */
-        onHorizontalSwipe: function (phase, event, distance) {
-            console.warn('DisplayerView.onHorizontalSwipe()', 'event phase:', phase, 'distance:', distance);
-
-            if (distance > 0) {
-                EventDispatcher.trigger('viewer:display:previous');
-            } else if (distance < 0) {
-                EventDispatcher.trigger('viewer:display:next');
-            }
         },
 
         /**
@@ -144,13 +144,14 @@ define('io.ox/core/viewer/views/displayerview', [
          *
          */
         preloadSlide: function (slideToLoad, preloadOffset, preloadDirection) {
+            //console.warn('DisplayerVeiw.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
             var preloadOffset = preloadOffset || 0,
                 step = preloadDirection === 'left' ? 1 : -1,
                 slideToLoad = slideToLoad || 0,
                 loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
                 collection = this.collection,
                 slidesCount = collection.length,
-                slidesList = this.$el.find('.item');
+                slidesList = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate');
             // load the load range, containing the requested slide and preload slides
             _.each(loadRange, function (slideIndex) {
                 if (slideIndex < 0) { slideIndex += slidesCount; }
@@ -173,7 +174,7 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         blendSlideCaption: function (slideIndex, duration) {
             var duration = duration || 3000,
-                slideCaption = this.$el.find('.item').eq(slideIndex).find('.viewer-displayer-caption');
+                slideCaption = this.$el.find('.swiper-slide').eq(slideIndex).find('.viewer-displayer-caption');
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();
             this.captionTimeoutId = window.setTimeout(function () {
@@ -181,85 +182,19 @@ define('io.ox/core/viewer/views/displayerview', [
             }, duration);
         },
 
-        /**
-         * Displays the next slide. Returns a promise that is:
-         *  resolved when the sliding transition of the carousel item is completed, or
-         *  rejected if the sliding transition didn't finish within the timeout.
-         *
-         * @param {Number} [timeout=2000]
-         *  The sliding transition timeout in milliseconds
-         *
-         * @return {$.Deferred}
-         *  The promise indicationg the sliding transition state.
-         */
-        prevSlideAsync: function (timeout) {
-            var def = $.Deferred(),
-                carouselRoot = this.carouselRoot;
-
-            function prevSlideResolver () {
-                def.resolve();
-                carouselRoot.off('slid.bs.carousel', prevSlideResolver);
-            }
-
-            timeout = _.isNumber(timeout) ? timeout : 2000;
-            carouselRoot.on('slid.bs.carousel', prevSlideResolver);
-            this.carouselRoot.carousel('prev');
-
-            _.delay(function () {
-                if (def.state() === 'pending') {
-                    def.reject();
-                    carouselRoot.off('slid.bs.carousel', prevSlideResolver);
-                }
-            }, timeout);
-
-            return def;
-        },
-
-        /**
-         * Displays the next slide. Returns a promise that is:
-         *  resolved when the sliding transition of the carousel item is completed, or
-         *  rejected if the sliding transition didn't finish within the timeout.
-         *
-         * @param {Number} [timeout=2000]
-         *  The sliding transition timeout in milliseconds
-         *
-         * @return {$.Deferred}
-         *  The promise indicationg the sliding transition state.
-         */
-        nextSlideAsync: function (timeout) {
-            var def = $.Deferred(),
-                carouselRoot = this.carouselRoot;
-
-            function nextSlideResolver () {
-                def.resolve();
-                carouselRoot.off('slid.bs.carousel', nextSlideResolver);
-            }
-
-            timeout = _.isNumber(timeout) ? timeout : 2000;
-            carouselRoot.on('slid.bs.carousel', nextSlideResolver);
-            carouselRoot.carousel('next');
-
-            _.delay(function () {
-                if (def.state() === 'pending') {
-                    def.reject();
-                    carouselRoot.off('slid.bs.carousel', nextSlideResolver);
-                }
-            }, timeout);
-
-            return def;
-        },
-
         prevSlide: function () {
-            this.carouselRoot.carousel('prev');
+            //console.warn('DisplayerView.prevSlide()');
+            this.swiper.slidePrev();
         },
 
         nextSlide: function () {
-            this.carouselRoot.carousel('next');
+            //console.warn('DisplayerView.nextSlide()');
+            this.swiper.slideNext();
         },
 
         dispose: function () {
-            //console.info('DisplayerView.dispose()');
-            this.$el.disableTouch();
+            //console.info('DisplayerView.dispose()', this.swiper);
+            this.swiper.destroy();
             this.stopListening();
             return this;
         }

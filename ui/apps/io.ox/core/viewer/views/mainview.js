@@ -35,8 +35,8 @@ define('io.ox/core/viewer/views/mainview', [
 
         events: {
             'keydown': 'onKeydown',
-            'click a.left.carousel-control': 'onPreviousSlide',
-            'click a.right.carousel-control': 'onNextSlide'
+            'click a.swiper-button-prev': 'onPreviousSlide',
+            'click a.swiper-button-next': 'onNextSlide'
         },
 
         initialize: function (/*options*/) {
@@ -65,7 +65,7 @@ define('io.ox/core/viewer/views/mainview', [
             EventDispatcher.trigger('viewer:displayeditem:change', displayedData);
 
             // Remove carousel a11y plugin event handler to avoid focus problems on cursor up/down key events.
-            $(document).off('keydown.carousel.data-api');
+            //$(document).off('keydown.carousel.data-api');
         },
 
         /**
@@ -91,16 +91,15 @@ define('io.ox/core/viewer/views/mainview', [
             // set device type
             Util.setDeviceClass(this.$el);
             // append toolbar view
-            this.$el.append(this.toolbarView.render(data).el);
-            // append displayerView and sidebarView deferred, for preview image optimal height calculation
+            this.$el.append(
+                this.toolbarView.render(data).el,
+                this.displayerView.render(data).el,
+                this.sidebarView.render(data).el
+            );
+            // focus this view deferred
             _.defer(function () {
-                self.$el.append(
-                    self.displayerView.render(data).el,
-                    self.sidebarView.render(data).el
-                );
                 self.$el.focus();
             });
-
             // Hotfix to prevent Halo View from stealing the focus
             // TODO: remove when Viewer replaces the Halo View
             _.delay(function () {
@@ -162,19 +161,11 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayedFileIndex = this.collection.length - 1;
             }
             // tell Bootstrap carousel to show previous slide
-            this.displayerView.prevSlideAsync()
-            .done(function () {
-                //console.warn('MainView.onPreviousSlide(), new index: ', this.displayedFileIndex);
-                EventDispatcher.trigger('viewer:displayeditem:change', {
-                    index: this.displayedFileIndex,
-                    model: this.collection.at(this.displayedFileIndex)
-                } );
-                this.$el.focus();
-            }.bind(this))
-            .fail(function () {
-                console.error('Slide transition timed out.');
-            });
-
+            this.displayerView.prevSlide();
+            EventDispatcher.trigger('viewer:displayeditem:change', {
+                index: this.displayedFileIndex,
+                model: this.collection.at(this.displayedFileIndex)
+            } );
         },
 
         onNextSlide: function () {
@@ -185,17 +176,10 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayedFileIndex = 0;
             }
             // tell Bootstrap carousel to show the next slide
-            this.displayerView.nextSlideAsync()
-            .done(function () {
-                //console.warn('MainView.onNextSlide(), new index: ', this.displayedFileIndex);
-                EventDispatcher.trigger('viewer:displayeditem:change', {
-                    index: this.displayedFileIndex,
-                    model: this.collection.at(this.displayedFileIndex)
-                });
-                this.$el.focus();
-            }.bind(this))
-            .fail(function () {
-                console.error('Slide transition timed out.');
+            this.displayerView.nextSlide();
+            EventDispatcher.trigger('viewer:displayeditem:change', {
+                index: this.displayedFileIndex,
+                model: this.collection.at(this.displayedFileIndex)
             });
         },
 
@@ -217,6 +201,8 @@ define('io.ox/core/viewer/views/mainview', [
             //console.warn('MainView.refreshViewSizes()');
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0;
             this.displayerView.$el.css({ width: window.innerWidth - rightOffset });
+            this.displayerView.$el.find('.swiper-slide img').css({ maxWidth: window.innerWidth - rightOffset });
+            this.displayerView.swiper.onResize();
         },
 
         dispose: function () {

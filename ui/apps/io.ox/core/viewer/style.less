@@ -46,7 +46,7 @@ html.ios .io-ox-viewer {
     &.smartphone *.viewer-responsive-label[data-label-normal]:before {
         @media(orientation: portrait) {
             content: attr(data-label-short);
-        } 
+        }
     }
 
     background-color: @viewer-background-color;
@@ -141,7 +141,7 @@ html.ios .io-ox-viewer {
         }
         &.smartphone > li > a {
             min-width: @viewer-toolbar-link-width-smartphone;
-        
+
             @media(orientation: portrait) {
                 &.viewer-toolbar-filename {
                     max-width: @viewer-toolbar-filename-width-smartphone-portrait;
@@ -168,38 +168,58 @@ html.ios .io-ox-viewer {
             height: 100%;
         }
 
-        .item {
-            position:relative;
-            outline: none;
-            .viewer-displayer-image {
-                position: absolute;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                margin: auto;
-                display: none;
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+            .swiper-slide {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                -webkit-justify-content: center;
+                justify-content: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                -webkit-align-items: center;
+                align-items: center;
+                overflow: auto;
             }
-            .viewer-displayer-caption {
-                position: absolute;
-                left: 0;
-                right: 0;
-                margin: auto;
-                bottom: 40px;
-                height: 2rem;
-                line-height: 2rem;
-                width: 100px;
-                text-align: center;
-                background: rgba(0,0,0,0.5);
-                .border-radius(4px);
-                display: none;
-            }
-            &.io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
+            .io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
         }
 
-        .carousel-control {
+        .viewer-displayer-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            display: none;
+        }
+
+        .viewer-displayer-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            bottom: 40px;
+            height: 2rem;
+            line-height: 2rem;
+            width: 100px;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            .border-radius(4px);
+            display: none;
+        }
+
+        .swiper-button-control {
             color: #777777;
             background: none;
+            outline: none;
+            width: 50px;
+            height: 50px;
             i {
                 position: absolute;
                 top: 50%;
@@ -208,10 +228,7 @@ html.ios .io-ox-viewer {
             }
             &.left i { left: 20px; }
             &.right i { right: 20px; }
-            &:hover,
-            &:focus {
-                color: #FFFFFF;
-            }
+            &:hover, &:focus { color: #FFFFFF; }
         }
 
         .viewer-displayer-notification {
@@ -319,7 +336,7 @@ html.ios .io-ox-viewer {
                             font-weight: bold;
                             color: @viewer-text-color;
                         }
-                    }              
+                    }
 
                     .version-content {
                         padding-left: 6px;
@@ -331,7 +348,7 @@ html.ios .io-ox-viewer {
                             text-align: right;
                         }
                         .version-comment {
-                            color: lightgrey;                            
+                            color: lightgrey;
                         }
                     }
 

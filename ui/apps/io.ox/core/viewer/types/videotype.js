@@ -37,20 +37,11 @@ define('io.ox/core/viewer/types/videotype', [
          */
         this.createSlide = function (model, modelIndex) {
             //console.warn('VideoType.createSlide()');
-            var slide = $('<div class="item">'),
-                image = $('<img class="viewer-displayer-image">'),
+            var slide = $('<div class="swiper-slide">'),
                 caption = $('<div class="viewer-displayer-caption">'),
-                previewUrl = model && model.getPreviewUrl(),
-                filename = model && model.get('filename') || '',
-                slidesCount = model.collection.length,
-                displayerTopOffset = $('.viewer-toolbar').outerHeight();
-            if (previewUrl) {
-                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                    .css({ maxHeight: window.innerHeight - displayerTopOffset });
-                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                slide.append(image, caption);
-            }
-            slide.attr('data-slide', modelIndex);
+                slidesCount = model.collection.length;
+            caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
+            slide.append(caption);
             return slide;
         };
 
@@ -65,22 +56,9 @@ define('io.ox/core/viewer/types/videotype', [
          */
         this.loadSlide = function (slideIndex, slideElement) {
             //console.warn('VideoType.loadSlide()', slideIndex, slideElement);
-            if (typeof slideIndex !== 'number' || isNaN(slideIndex)) {
+            if (typeof slideIndex !== 'number' || isNaN(slideIndex || slideElement.length === 0)) {
                 return;
             }
-            var imageToLoad = slideElement.find('img');
-            if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
-            slideElement.busy();
-            imageToLoad.attr('src', imageToLoad.attr('data-src'));
-            imageToLoad[0].onload = function () {
-                slideElement.idle();
-                imageToLoad.show();
-            };
-            imageToLoad[0].onerror = function () {
-                var notification = $('<p class="viewer-displayer-notification">')
-                    .text(gt('Sorry, there is no preview available for this file.'));
-                slideElement.idle().append(notification);
-            };
         };
     }
 
