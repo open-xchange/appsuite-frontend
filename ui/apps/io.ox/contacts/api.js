@@ -672,7 +672,8 @@ define('io.ox/contacts/api', [
                     scaleType: 'cover',
                     // lazy load block
                     lazyload: false,
-                    effect: 'show'
+                    effect: 'show',
+                    urlOnly: false
                 }, options);
 
             // use copy of data object because of delete-statements
@@ -702,7 +703,11 @@ define('io.ox/contacts/api', [
             }
 
             // already done?
-            if (url) return load(node, url, opt);
+            if (url && !opt.urlOnly) {
+                return load(node, url, opt);
+            } else if (opt.urlOnly && url) {
+                return url;
+            }
 
             // preference; internal_userid must not be undefined, null, or zero
             if (data.internal_userid || data.userid || data.user_id) {
@@ -744,12 +749,17 @@ define('io.ox/contacts/api', [
                 return node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
 
-            load(node, url, opt);
+            if (!opt.urlOnly) {
+                load(node, url, opt);
 
-            // remove data
-            data = null;
+                // remove data
+                data = null;
 
-            return node;
+                return node;
+            } else {
+                data = null;
+                return url;
+            }
         };
 
     }());
