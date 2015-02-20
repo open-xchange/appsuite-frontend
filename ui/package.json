@@ -34,5 +34,8 @@
   },
   "engines": {
     "node": ">=0.10"
+  },
+  "dependencies": {
+    "grunt-require-check": "^0.1.0"
   }
 }
