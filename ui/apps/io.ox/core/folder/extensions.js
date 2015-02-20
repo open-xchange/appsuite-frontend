@@ -117,6 +117,7 @@ define('io.ox/core/folder/extensions', [
                     folder: '1',
                     headless: true,
                     open: true,
+                    icons: tree.options.icons,
                     tree: tree,
                     parent: tree
                 })
@@ -157,6 +158,7 @@ define('io.ox/core/folder/extensions', [
                     folder: 'default0',
                     headless: true,
                     open: true,
+                    icons: tree.options.icons,
                     tree: tree,
                     parent: tree
                 })
@@ -248,6 +250,21 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'root-folders',
             draw: extensions.rootFolders
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/mail/filter').extend(
+        {
+            id: 'standard-folders',
+            draw: extensions.standardFolders
+        },
+        {
+            id: 'local-folders',
+            draw: extensions.localFolders
+        },
+        {
+            id: 'other',
+            draw: extensions.otherFolders
         }
     );
 

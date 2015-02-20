@@ -182,6 +182,8 @@
             }
         }
         if (error) return;
+        // fixes for testrunner
+        us.browser.karma = !!window.__karma__;
         for (var key in us.browser) {
             var value = us.browser[key];
             // ensure version is a number, not a string
@@ -195,10 +197,6 @@
             key = key.toLowerCase();
             us.browser[key] = browserLC[key] = value;
 
-        }
-        // fixes for testrunner
-        if (window.ox !== undefined) {
-            us.browser.karma = !!window.ox.testUtils;
         }
 
         // fixes for Windows 8 Chrome

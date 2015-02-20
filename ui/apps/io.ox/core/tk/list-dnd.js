@@ -195,6 +195,8 @@ define('io.ox/core/tk/list-dnd', [
             container.trigger('selection:dragstop');
             // revert?
             if (helper !== null) remove();
+            // clean up
+            source = selected = data = null;
         }
 
         function drop(e) {

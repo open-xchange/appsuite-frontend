@@ -308,7 +308,7 @@ define('io.ox/mail/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ app: app, ignoreFocus: true, selectionOptions: { mode: 'special' }});
+            app.listView = new MailListView({ app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
@@ -524,6 +524,13 @@ define('io.ox/mail/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+
+            // close mail detail view in list-mode on folder selection
+            app.folderView.tree.on('selection:action', function () {
+                if (app.props.get('layout') === 'list') {
+                    app.threadView.trigger('back');
+                }
+            });
 
             app.on('folder:change', function (id) {
 

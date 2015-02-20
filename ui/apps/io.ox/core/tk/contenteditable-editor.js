@@ -366,7 +366,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            textproc.texttohtml(str).done(function (content) {
+            return textproc.texttohtml(str).done(function (content) {
                 set('<p></p>' + content);
             });
         };

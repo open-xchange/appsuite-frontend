@@ -12,6 +12,7 @@
  */
 
 define('io.ox/mail/detail/view', [
+    'io.ox/backbone/disposable',
     'io.ox/mail/common-extensions',
     'io.ox/core/extensions',
     'io.ox/mail/api',
@@ -23,7 +24,7 @@ define('io.ox/mail/detail/view', [
     'gettext!io.ox/mail',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
 
@@ -212,10 +213,10 @@ define('io.ox/mail/detail/view', [
             var data = content.get(baton.data),
                 node = data.content;
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.html(), function (text, lib) {
+                emoji.processEmoji(node.innerHTML, function (html, lib) {
                     baton.processedEmoji = !lib.loaded;
                     if (baton.processedEmoji) return;
-                    node.empty().append(text);
+                    node.innerHTML = html;
                 });
             }
             this.idle().append(node);
@@ -249,7 +250,7 @@ define('io.ox/mail/detail/view', [
 
     var pool = Pool.create('mail');
 
-    var View = Backbone.View.extend({
+    var View = DisposableView.extend({
 
         className: 'list-item mail-item mail-detail f6-target',
 
@@ -384,7 +385,6 @@ define('io.ox/mail/detail/view', [
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
-            this.$el.on('dispose', this.dispose.bind(this));
 
             this.on({
                 'load': function () {
@@ -427,11 +427,14 @@ define('io.ox/mail/detail/view', [
             });
 
             this.$el.attr({
-                'aria-label': title,
-                'aria-expanded': 'false',
                 'data-cid': this.model.cid,
+                'aria-expanded': 'false',
                 'data-loaded': 'false'
             });
+
+            this.$el.prepend(
+                $('<h2 class="sr-only">').text(title)
+            );
 
             this.$el.data({ view: this, model: this.model });
 
@@ -441,12 +444,6 @@ define('io.ox/mail/detail/view', [
             ox.trigger('mail:detail:render', this);
 
             return this;
-        },
-
-        dispose: function () {
-            this.stopListening();
-            this.off();
-            this.model = this.options = this.$el = null;
         }
     });
 

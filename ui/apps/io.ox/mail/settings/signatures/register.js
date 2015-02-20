@@ -79,6 +79,18 @@ define('io.ox/mail/settings/signatures/register', [
                     baton.editor = ed;
                     baton.editor.handleShow(true);
 
+                    // replace setplaintext function to not add additional <p>-tag
+                    baton.editor.setPlainText = function (str) {
+                        // clean up
+                        str = String(str || '').replace(/[\s\xA0]+$/g, '');
+                        if (!str) return;
+                        return require(['io.ox/core/tk/textproc']).done(function (textproc) {
+                            return textproc.texttohtml(str).done(function (content) {
+                                baton.editor.setContent(content);
+                            });
+                        });
+                    };
+
                     if (looksLikeHTML(baton.content)) {
                         baton.editor.setContent(baton.content);
                     } else {
@@ -351,36 +363,42 @@ define('io.ox/mail/settings/signatures/register', [
                     //hide default signature selection, if there are no signatures
                     $node.children('.form-group').css('display', sigs.length > 0 ? '' : 'none');
                     _(sigs).each(function (signature) {
-                        //replace div and p elements to br's and remove all other tags.
-                        var content = signature.content
-                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
-                            .replace(/<(?:.|\n)*?>/gm, '')
-                            .replace(/(\n)+/g, '<br>');
                         signatures[signature.id] = signature;
                         var isDefault = settings.get('defaultSignature') === signature.id,
-                            $item = $('<li class="widget-settings-view">').attr('data-id', signature.id).append(
-                            $('<div class="selectable deletable-item">').append(
-                                $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
-                                $('<div class="widget-controls">').append(
-                                    $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))).attr({
-                                        role: 'button',
-                                        'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), isDefault ? gt('(Default)') : gt('Set as default'))
-                                    }),
-                                    $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')).attr({
-                                        role: 'button',
-                                        'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Edit'))
-                                    }),
-                                    $('<a class="remove">').attr({
-                                        'data-action': 'delete',
-                                        title: gt('Delete'),
-                                        'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Delete')),
-                                        role: 'button',
-                                        tabindex: 1
-                                    }).append($('<i class="fa fa-trash-o">'))
-                                ),
-                                $('<div class="signature-preview">').click(clickEdit).append(content)
-                            )
-                        );
+                            $item = $('<li class="widget-settings-view">')
+                                .attr('data-id', signature.id)
+                                .append(
+                                    $('<div class="selectable deletable-item">')
+                                    .append(
+                                        $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
+                                        $('<div class="widget-controls">').append(
+                                            $('<a class="action" tabindex="1" data-action="default">').text((
+                                                isDefault ?
+                                                /*#. This signature is set as default */ gt('(Default)') :
+                                                /*#. Action to make this signature the new default */ gt('Set as default')
+                                            )).attr({
+                                                role: 'button',
+                                                //#. A11y for an action button, read the display name and the action
+                                                //#. %1$s is the displayable name of the signature
+                                                //#. %2$s is the action: one of the msgids "(Default)", "Edit", "Delete" or "Set as default"
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname),
+                                                                 isDefault ? gt('(Default)') : gt('Set as default'))
+                                            }),
+                                            $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')).attr({
+                                                role: 'button',
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Edit'))
+                                            }),
+                                            $('<a class="remove">').attr({
+                                                'data-action': 'delete',
+                                                title: gt('Delete'),
+                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Delete')),
+                                                role: 'button',
+                                                tabindex: 1
+                                            }).append($('<i class="fa fa-trash-o">'))
+                                        )
+                                    )
+                                );
+
                         if (isDefault)
                             $item.addClass('default');
                         $list.append($item);
@@ -439,14 +457,6 @@ define('io.ox/mail/settings/signatures/register', [
 
             function textChange() {
                 baton.model.set('mobileSignature', signatureText.val());
-            }
-
-            function clickEdit(e) {
-                if ((e.type === 'click') || (e.which === 13)) {
-                    var id = $(this).closest('li').attr('data-id');
-                    fnEditSignature(e, signatures[id]);
-                    e.preventDefault();
-                }
             }
 
             function addSignatureList($node) {

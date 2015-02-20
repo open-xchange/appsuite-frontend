@@ -52,7 +52,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
                             ariaID = guid + '-aria',
-                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date'));
+                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + date.getInputFormat(date.DATE) + ')');
 
                         self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr({
                             id: guid,
@@ -91,7 +91,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             self.nodes.dayField,
                             self.nodes.a11yDate,
                             '&nbsp;',
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Time')),
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + date.getInputFormat(date.TIME) + ')'),
                             self.nodes.timeField,
                             self.nodes.a11yTime,
                             '&nbsp;',

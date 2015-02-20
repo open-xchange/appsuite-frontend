@@ -42,7 +42,7 @@ define([
             ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', node, baton);
 
             return waitsFor(function () {
-                return baton.editor !== undefined;
+                return baton.editor !== undefined && baton.editor.getContent() !== '';
             }).done(function () {
                 return baton.editor.done(function () {
                     expect(baton.editor.getContent()).to.equal('<p>Some unformatted text</p>');
@@ -84,7 +84,7 @@ define([
             ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', node, baton);
 
             return waitsFor(function () {
-                return baton.editor !== undefined;
+                return baton.editor !== undefined && baton.editor.getContent() !== '';
             }).done(function () {
                 return baton.editor.done(function () {
                     expect(baton.editor.getContent()).to.equal('<p>&lt;&lt;&lt;&lt;&lt;Unformated but looks like tags&gt;&gt;&gt;&gt;</p>');
