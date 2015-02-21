@@ -159,8 +159,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1088 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1257
+#: apps/io.ox/core/desktop.js:1091 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1260
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -369,9 +369,9 @@ msgstr "1 hét"
 #. A11y for an action button, read the display name and the action
 #. %1$s is the displayable name of the signature
 #. %2$s is the action: one of the msgids "(Default)", "Edit", "Delete" or "Set as default"
-#: apps/io.ox/mail/settings/signatures/register.js:389 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:384 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:389
 #: apps/io.ox/mail/settings/signatures/register.js:394
-#: apps/io.ox/mail/settings/signatures/register.js:399
 #, fuzzy
 #| msgid "%1$s %2$s"
 msgid "%1$s, %2$s"
@@ -509,8 +509,8 @@ msgid "%s is also available for other platforms:"
 msgstr "a(z) %s elérhető ás platformon is:"
 
 #. This signature is set as default
-#: apps/io.ox/mail/settings/signatures/register.js:382 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:390
+#: apps/io.ox/mail/settings/signatures/register.js:377 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:385
 msgid "(Default)"
 msgstr "(Alapértelmezett)"
 
@@ -669,7 +669,7 @@ msgstr "Fiók frissítve"
 #: apps/io.ox/backbone/mini-views/toolbar.js:43 module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:131 module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:116 module:io.ox/mail
-#: apps/io.ox/core/desktop.js:1390 apps/io.ox/core/extPatterns/links.js:362
+#: apps/io.ox/core/desktop.js:1393 apps/io.ox/core/extPatterns/links.js:362
 #: apps/io.ox/core/extPatterns/links.js:364
 #: apps/io.ox/core/extPatterns/links.js:373
 #: apps/io.ox/files/mobile-toolbar-actions.js:88
@@ -768,7 +768,7 @@ msgstr "Új résztvevő hozzáadása"
 msgid "Add new rule"
 msgstr "Új szabály hozzáadása"
 
-#: apps/io.ox/mail/settings/signatures/register.js:500 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:487 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Új aláírás hozzáadása"
 
@@ -906,8 +906,8 @@ msgid "Administrator"
 msgstr "Adminisztrátor"
 
 #. search: clickable headline to show/hide list of advanced facets/filters
-#: apps/io.ox/core/desktop.js:1377 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1381
+#: apps/io.ox/core/desktop.js:1380 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1384
 msgid "Advanced Facets"
 msgstr "Speciális lapok"
 
@@ -1013,7 +1013,7 @@ msgstr "Bármely címzett"
 msgid "Append vCard"
 msgstr "vCard hozzáadása"
 
-#: apps/io.ox/core/desktop.js:1012 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1015 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
@@ -1399,7 +1399,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:200
 #: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:723
-#: apps/io.ox/core/desktop.js:1839 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1842 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:99
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1420,7 +1420,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/files/fluid/view-detail.js:232
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
 #: apps/io.ox/files/main.js:339 apps/io.ox/files/main.js:390
-#: apps/io.ox/files/views/create.js:128
+#: apps/io.ox/files/views/create.js:125
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1691,7 +1691,7 @@ msgstr "Bezárás"
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
 
-#: apps/io.ox/core/desktop.js:1396 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1399 module:io.ox/core
 msgid "Close search"
 msgstr "Keresés bezárása"
 
@@ -1756,8 +1756,8 @@ msgid "Common Emoji"
 msgstr "Általános Emoji"
 
 #. search: headline for list of common facets/filters
-#: apps/io.ox/core/desktop.js:1365 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1369
+#: apps/io.ox/core/desktop.js:1368 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1372
 msgid "Common Facets"
 msgstr "Általános lapok"
 
@@ -2162,13 +2162,13 @@ msgstr "Alapértelmezett figyelmeztetés"
 msgid "Default sender address"
 msgstr "Alapértelmezett küldő e-mail címe"
 
-#: apps/io.ox/mail/settings/signatures/register.js:525 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:512 module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
 msgid "Default signature for new messages"
 msgstr "Nincsenek új üzenetei"
 
-#: apps/io.ox/mail/settings/signatures/register.js:532 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:519 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
 
@@ -2196,8 +2196,8 @@ msgstr "Elhalasztott"
 #: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:522
 #: apps/io.ox/mail/actions/delete.js:48 apps/io.ox/mail/actions/delete.js:67
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:398
-#: apps/io.ox/mail/settings/signatures/register.js:399
+#: apps/io.ox/mail/settings/signatures/register.js:393
+#: apps/io.ox/mail/settings/signatures/register.js:394
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:621
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -2269,7 +2269,7 @@ msgstr "Csökkenő"
 
 #: apps/io.ox/calendar/edit/extensions.js:221 module:io.ox/calendar/edit/main
 #: apps/io.ox/files/actions/edit-description.js:62 module:io.ox/files
-#: apps/io.ox/files/views/create.js:174
+#: apps/io.ox/files/views/create.js:171
 #: apps/io.ox/tasks/edit/view-template.js:126 module:io.ox/tasks/edit
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:199
@@ -2669,8 +2669,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:159
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1056
-#: apps/io.ox/mail/settings/signatures/register.js:392
-#: apps/io.ox/mail/settings/signatures/register.js:394
+#: apps/io.ox/mail/settings/signatures/register.js:387
+#: apps/io.ox/mail/settings/signatures/register.js:389
 #: apps/io.ox/portal/settings/pane.js:326 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:328
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -3132,7 +3132,7 @@ msgstr "A disztribúciós lista mentése sikertelen."
 msgid "Failed to sign in"
 msgstr "A bejelentkezés meghiúsult"
 
-#: apps/io.ox/core/desktop.js:1939 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1942 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3716,7 +3716,7 @@ msgid "Import from file"
 msgstr "Mappa exportálása"
 
 #: apps/io.ox/mail/settings/signatures/register.js:311 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:548
+#: apps/io.ox/mail/settings/signatures/register.js:535
 msgid "Import signatures"
 msgstr "Aláírások importálása"
 
@@ -3792,8 +3792,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a "
-"%3$s„Kezdőképernyőhöz adás”%4$s gombra"
+"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a %3$s"
+"„Kezdőképernyőhöz adás”%4$s gombra"
 
 #: apps/io.ox/contacts/model.js:288 module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4210,7 +4210,7 @@ msgstr "Levelek óránként (%)"
 msgid "Mails per week-day (%)"
 msgstr "Levelek naponként (%)"
 
-#: apps/io.ox/core/desktop.js:1523 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1526 module:io.ox/core
 msgid "Main window"
 msgstr ""
 
@@ -4643,8 +4643,8 @@ msgstr "Nincs elem kijelölve"
 msgid "No errors"
 msgstr "Nincs hiba"
 
-#: apps/io.ox/files/views/create.js:74 module:io.ox/files
-#: apps/io.ox/files/views/create.js:113
+#: apps/io.ox/files/views/create.js:71 module:io.ox/files
+#: apps/io.ox/files/views/create.js:110
 msgid "No file selected for upload."
 msgstr "Nincs fájl kiválasztva feltöltésre."
 
@@ -4658,7 +4658,7 @@ msgid "No items found"
 msgstr "Nem találhatók elemek"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/core/desktop.js:1752 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Egyetlen elem sem található. Módosítsa a jelenleg használt lapot."
 
@@ -4700,7 +4700,7 @@ msgstr "Nincs emlékeztető"
 #: apps/io.ox/mail/compose/view.js:154 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:359
 #: apps/io.ox/mail/settings/signatures/register.js:361
-#: apps/io.ox/mail/settings/signatures/register.js:432
+#: apps/io.ox/mail/settings/signatures/register.js:427
 msgid "No signature"
 msgstr "Nincs aláírás"
 
@@ -4881,7 +4881,7 @@ msgstr "Munkanapokon"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1758 module:io.ox/core
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Egy elem található."
@@ -5968,7 +5968,7 @@ msgstr "szombat"
 #: apps/io.ox/core/settings/user.js:81 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
 #: apps/io.ox/files/actions/edit-description.js:66 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:127
+#: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:124
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:89
@@ -6056,7 +6056,7 @@ msgid "Scheduling"
 msgstr "Ütemezés"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1571 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1574 module:io.ox/core
 #: apps/io.ox/core/main.js:752
 #: apps/io.ox/search/autocomplete/extensions.js:169
 #: apps/io.ox/search/autocomplete/extensions.js:212
@@ -6067,7 +6067,7 @@ msgid "Search"
 msgstr "Keresés"
 
 #. search: leftside sidepanel container that shows active and available facets
-#: apps/io.ox/core/desktop.js:1412 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1415 module:io.ox/core
 #, fuzzy
 #| msgid "Search in"
 msgid "Search Options"
@@ -6079,7 +6079,7 @@ msgid "Search here"
 msgstr "Keresés itt"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1599 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1602 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -6091,7 +6091,7 @@ msgstr ""
 "további speciális lapok találhatók. A keresés szűkítéséhez állítsa be a "
 "lapokat vagy adjon hozzá újakat."
 
-#: apps/io.ox/core/desktop.js:1585 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1588 module:io.ox/core
 #, fuzzy
 #| msgid "Show original publication"
 msgid "Search within application"
@@ -6229,8 +6229,8 @@ msgid "Server version"
 msgstr "Kiszolgáló verziója"
 
 #. Action to make this signature the new default
-#: apps/io.ox/mail/settings/signatures/register.js:383 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:390
+#: apps/io.ox/mail/settings/signatures/register.js:378 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:385
 msgid "Set as default"
 msgstr "Legyen alapértelmezett"
 
@@ -6472,12 +6472,12 @@ msgid "Sign out now"
 msgstr "Kijelentkezés most"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:423 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:418 module:io.ox/mail
 msgid "Signature"
 msgstr "Aláírás"
 
 #: apps/io.ox/mail/compose/view.js:153 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:450
+#: apps/io.ox/mail/settings/signatures/register.js:445
 msgid "Signatures"
 msgstr "Aláírások"
 
@@ -6617,9 +6617,9 @@ msgstr "Kezdés dátuma"
 msgid "Start of working time"
 msgstr "Munkaidő kezdete"
 
-#: apps/io.ox/core/desktop.js:1643 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1644 apps/io.ox/core/desktop.js:1691
-#: apps/io.ox/core/desktop.js:1692
+#: apps/io.ox/core/desktop.js:1646 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1647 apps/io.ox/core/desktop.js:1694
+#: apps/io.ox/core/desktop.js:1695
 msgid "Start search"
 msgstr "Keresés indítása"
 
@@ -7056,7 +7056,7 @@ msgstr ""
 msgid "The folder has been cleaned up."
 msgstr "A mappa frissítése megtörtént."
 
-#: apps/io.ox/core/folder/actions/common.js:50 module:io.ox/core
+#: apps/io.ox/core/folder/actions/common.js:49 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:44 module:io.ox/mail
 msgid "The folder has been emptied."
 msgstr "A mappa kiürítése megtörtént."
@@ -7314,7 +7314,7 @@ msgstr "Ezt a mezőt ki kell tölteni"
 msgid "This file could not be uploaded."
 msgstr "A fájlt nem sikerült feltölteni."
 
-#: apps/io.ox/files/views/create.js:99 module:io.ox/files
+#: apps/io.ox/files/views/create.js:96 module:io.ox/files
 msgid "This file has been added"
 msgstr "A fájl hozzáadva"
 
@@ -7740,7 +7740,7 @@ msgstr "Fájl feltöltése"
 msgid "Upload new file"
 msgstr "Új fájl feltöltése"
 
-#: apps/io.ox/files/views/create.js:120 module:io.ox/files
+#: apps/io.ox/files/views/create.js:117 module:io.ox/files
 msgid "Upload new files"
 msgstr "Új fájlok feltöltése"
 
