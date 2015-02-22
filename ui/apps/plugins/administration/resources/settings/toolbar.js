@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/administration/groups/settings/toolbar', [
+define('plugins/administration/resources/settings/toolbar', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/backbone/mini-views/toolbar',
-    'plugins/administration/groups/settings/edit',
-    'io.ox/core/api/group',
+    'plugins/administration/resources/settings/edit',
+    'io.ox/core/api/resource',
     'gettext!io.ox/core'
-], function (ext, links, Toolbar, edit, groupAPI, gt) {
+], function (ext, links, Toolbar, edit, resourceAPI, gt) {
 
     'use strict';
 
@@ -28,7 +28,7 @@ define('plugins/administration/groups/settings/toolbar', [
 
     var Action = links.Action;
 
-    new Action('administration/groups/create', {
+    new Action('administration/resources/create', {
         requires: function () {
             return true;
         },
@@ -37,11 +37,9 @@ define('plugins/administration/groups/settings/toolbar', [
         }
     });
 
-    new Action('administration/groups/edit', {
+    new Action('administration/resources/edit', {
         requires: function (e) {
-            if (!e.collection.has('one')) return false;
-            // not allowed for "All users" (id=0)
-            return _(e.context).pluck('id').indexOf(0) === -1;
+            return e.collection.has('one');
         },
         action: function (baton) {
             var data = baton.data[0];
@@ -49,15 +47,13 @@ define('plugins/administration/groups/settings/toolbar', [
         }
     });
 
-    new Action('administration/groups/delete', {
+    new Action('administration/resources/delete', {
         requires: function (e) {
-            if (!e.collection.has('one')) return false;
-            // not allowed for "All users" (id=0)
-            return _(e.context).pluck('id').indexOf(0) === -1;
+            return e.collection.has('one');
         },
         action: function (baton) {
             var data = baton.data[0];
-            groupAPI.remove(data.id);
+            resourceAPI.remove(data.id);
         }
     });
 
@@ -65,14 +61,14 @@ define('plugins/administration/groups/settings/toolbar', [
     // Toolbar links
     //
 
-    ext.point('administration/groups/toolbar/links').extend(
+    ext.point('administration/resources/toolbar/links').extend(
         new links.Link({
             index: 100,
             prio: 'hi',
             id: 'create',
-            label: gt('Create new group'),
+            label: gt('Create new resource'),
             drawDisabled: true,
-            ref: 'administration/groups/create'
+            ref: 'administration/resources/create'
         }),
         new links.Link({
             index: 200,
@@ -80,7 +76,7 @@ define('plugins/administration/groups/settings/toolbar', [
             id: 'edit',
             label: gt('Edit'),
             drawDisabled: true,
-            ref: 'administration/groups/edit'
+            ref: 'administration/resources/edit'
         }),
         new links.Link({
             index: 300,
@@ -88,17 +84,17 @@ define('plugins/administration/groups/settings/toolbar', [
             id: 'delete',
             label: gt('Delete'),
             drawDisabled: true,
-            ref: 'administration/groups/delete'
+            ref: 'administration/resources/delete'
         })
     );
 
-    ext.point('administration/groups/toolbar').extend(new links.InlineLinks({
+    ext.point('administration/resources/toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
         dropdown: true,
         index: 100,
         id: 'toolbar-links',
-        ref: 'administration/groups/toolbar/links'
+        ref: 'administration/resources/toolbar/links'
     }));
 
     return {
@@ -112,7 +108,7 @@ define('plugins/administration/groups/settings/toolbar', [
                     return { id: parseInt(id, 10) };
                 });
                 var baton = ext.Baton({ $el: toolbar.$list, data: data || [] }),
-                    defs = ext.point('administration/groups/toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                    defs = ext.point('administration/resources/toolbar').invoke('draw', toolbar.$list.empty(), baton);
                 $.when.apply($, defs.value()).then(function () {
                     if (toolbar.disposed) return;
                     toolbar.initButtons();

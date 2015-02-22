@@ -131,7 +131,7 @@ define('plugins/administration/groups/settings/edit', [
             new dialogs.ModalDialog({ async: true })
                 .build(function () {
                     this.header(
-                        $('<h4>').text(edit ? gt('Edit group') : gt('Create group'))
+                        $('<h4>').text(edit ? gt('Edit group') : gt('Create new group'))
                     );
                     this.getContentNode().append(
                         (this.view = new View({ model: model })).render().$el
