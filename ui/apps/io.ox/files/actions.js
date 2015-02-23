@@ -587,6 +587,8 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
+        prio: 'hi',
+        mobile: 'hi',
         label: gt('Download'),
         ref: 'io.ox/files/actions/downloadversion'
     }));
@@ -594,6 +596,8 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'makeCurrent',
         index: 250,
+        prio: 'hi',
+        mobile: 'hi',
         label: gt('Make this the current version'),
         ref: 'io.ox/files/versions/actions/makeCurrent'
     }));
@@ -601,6 +605,8 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'delete',
         index: 300,
+        prio: 'hi',
+        mobile: 'hi',
         label: gt('Delete version'),
         ref: 'io.ox/files/versions/actions/delete',
         special: 'danger'
