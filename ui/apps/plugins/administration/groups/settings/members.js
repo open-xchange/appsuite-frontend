@@ -59,6 +59,7 @@ define('plugins/administration/groups/settings/members', [
             this.$el.busy();
             this.collection.resolve(this.model.get('members'))
                 .always(function () {
+                    if (this.disposed) return;
                     this.$el.idle();
                 }.bind(this));
         },
@@ -71,12 +72,14 @@ define('plugins/administration/groups/settings/members', [
 
         renderMember: function (model) {
             return $('<li class="group-member">')
-            .attr('data-id', model.id)
+            .attr({ 'data-id': model.id })
             .append(
-                $('<i class="fa fa-user">'),
-                $('<span class="name">').html(model.getFullName()),
+                $('<i class="fa fa-user" aria-hidden="true">'),
+                $('<span class="name">').html(model.getFullNameHTML()),
                 this.editable ?
-                    $('<a href="#" class="close pull-right remove-member">&times;</a>').attr('title', gt('Remove user')) :
+                    $('<a href="#" role="button" class="close pull-right remove-member" tabindex="1"><span aria-hidden="true">&times;</span></a>')
+                    //#. %1$s is the user name of the group member
+                    .attr('aria-label', gt('Remove %1$s', model.getFullName())) :
                     []
             );
         },
@@ -95,6 +98,10 @@ define('plugins/administration/groups/settings/members', [
         },
 
         getFullName: function () {
+            return util.getFullName(this.attributes);
+        },
+
+        getFullNameHTML: function () {
             return util.getFullName(this.attributes, true);
         }
     });

@@ -44,9 +44,13 @@ define('plugins/administration/groups/settings/edit', [
                 node = $('<div class="form-group has-feedback">').append(
                     $('<label>', { 'for': guid }).text(gt('Add member')),
                     $('<input type="text" class="form-control add-participant" tabindex="1">')
-                        .attr('placeholder', gt('User name')),
+                        .attr({
+                            'aria-label': gt('Start typing to search for user names'),
+                            'id': guid,
+                            'placeholder': gt('User name')
+                        }),
                     // trick: use form-control-feedback to place icon within input field
-                    $('<i class="fa fa-search form-control-feedback" style="color: #777">')
+                    $('<i class="fa fa-search form-control-feedback" style="color: #777" aria-hidden="true">')
                 ),
                 autocomplete = new AddParticipantsView({ el: node });
 
@@ -86,20 +90,20 @@ define('plugins/administration/groups/settings/edit', [
 
         render: function () {
 
-            var guid = _.uniqueId('input');
+            var guid;
 
             this.$el.append(
                 // name
                 $('<div class="form-group">').append(
-                    $('<label>', { 'for': guid }).text(gt('Group name')),
+                    $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Group name')),
                     new common.InputView({ name: 'display_name', id: guid, model: this.model }).render().$el
                 ),
                 // auto-complete
                 this.renderAutoComplete(),
                 // members view
                 $('<div class="form-group">').append(
-                    $('<label>').text(gt('Members')),
-                    this.membersView.render().$el
+                    $('<label>', { 'for': guid = _.uniqueId('list') }).text(gt('Members')),
+                    this.membersView.render().$el.attr('id', guid)
                 )
             );
 
