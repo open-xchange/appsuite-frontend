@@ -1,5 +1,5 @@
 {
     "namespace": "io.ox/settings/main",
-    "requires": "admin",
+    "requires": "edit_resource",
     "device": "desktop"
 }
