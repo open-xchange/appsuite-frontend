@@ -971,6 +971,9 @@ define('io.ox/core/desktop', [
                 this.app = null;
                 this.detachable = false;
                 this.simple = false;
+                this.page = options.page;
+
+                if (this.page) pane = this.page;
 
                 var quitOnClose = false,
                     perspectives = {},

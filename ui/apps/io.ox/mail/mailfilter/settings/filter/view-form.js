@@ -447,7 +447,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 this.dialog.getPopup().hide();
 
                 picker({
-                    context: 'account',
+                    context: 'filter',
                     done: function (id) {
 
                         var prepared = prepareFolderForDisplay(id);

@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/tk/contenteditable-editor', [
+define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'io.ox/core/extensions',
-    'io.ox/core/tk/textproc'
+    'io.ox/core/tk/textproc',
+    '3rd.party/tinymce/jquery.tinymce.min'
 ], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';
@@ -202,7 +203,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
 
         var options = {
-            script_url: ox.base + '/apps/3rd.party/tinymce/tinymce.min.js',
+            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
 
@@ -366,7 +367,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            textproc.texttohtml(str).done(function (content) {
+            return textproc.texttohtml(str).done(function (content) {
                 set('<p></p>' + content);
             });
         };
@@ -492,9 +493,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         };
     }
 
-    // $.getScript adds cache busting query
-    return $.ajax({ url: ox.base + '/apps/3rd.party/tinymce/jquery.tinymce.min.js', cache: true, dataType: 'script' }).then(function () {
-        // publish editor class
-        return Editor;
-    });
+    return Editor;
+
 });

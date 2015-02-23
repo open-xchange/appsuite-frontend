@@ -531,37 +531,28 @@ define('io.ox/mail/api', [
         });
     };
 
-    /**
-     * deletes all mails from a specific folder
-     * @param  {string} id
-     * @fires  api#refresh.all
-     * @return { deferred }
-     */
-    api.clear = function (id) {
+    //
+    // Respond to folder API events
+    //
 
-        // clear target folder
-        resetFolder(id).each(function (collection) {
-            collection.reset();
-        });
-
-        // reset trash folders
-        resetFolderByType('trash');
-
-        // new clear
-        return http.PUT({
-            module: 'folders',
-            appendColumns: false,
-            params: {
-                action: 'clear',
-                tree: '1'
-            },
-            data: [id]
-        })
-        .done(function () {
-            folderAPI.reload(id);
-            api.trigger('refresh.all');
-        });
-    };
+    folderAPI.on({
+        'before:clear': function (e, id) {
+            // clear target folder
+            _(pool.getByFolder(id)).each(function (collection) {
+                collection.reset([]);
+            });
+        },
+        'clear remove:mail': function () {
+            // reset trash folder
+            var trashId = accountAPI.getFoldersByType('trash');
+            _(trashId).each(function (id) {
+                folderAPI.list(id, { cache: false });
+            });
+            _(pool.getByFolder(trashId)).each(function (collection) {
+                collection.expired = true;
+            });
+        }
+    });
 
     /**
      * sets color

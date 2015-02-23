@@ -34,6 +34,12 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
+                        src: ['**/*'],
+                        cwd: 'bower_components/tinymce-dist',
+                        dest: 'build/apps/3rd.party/tinymce/'
+                    },
+                    {
+                        expand: true,
                         src: ['hopscotch/*'],
                         cwd: 'lib/',
                         dest: 'build/apps/3rd.party/'
@@ -54,7 +60,8 @@ module.exports = function (grunt) {
                             'Chart.js/Chart.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
-                            'marked/lib/marked.js'
+                            'marked/lib/marked.js',
+                            'velocity/velocity.min.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
@@ -79,12 +86,6 @@ module.exports = function (grunt) {
                         src: ['*.{js,css,png}'],
                         cwd: 'lib/node_modules/emoji/lib',
                         dest: 'build/apps/3rd.party/emoji'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'bower_components',
-                        src: ['velocity/velocity.min.js'],
-                        dest: 'build/apps/3rd.party/'
                     },
                     {
                         expand: true,

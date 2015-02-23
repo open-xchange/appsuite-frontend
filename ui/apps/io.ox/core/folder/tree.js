@@ -12,24 +12,25 @@
  */
 
 define('io.ox/core/folder/tree', [
+    'io.ox/backbone/disposable',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'settings!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (Selection, api, ext, settings) {
+], function (DisposableView, Selection, api, ext, settings) {
 
     'use strict';
 
-    var TreeView = Backbone.View.extend({
+    var TreeView = DisposableView.extend({
 
         className: 'folder-tree',
 
         events: {
             'click .contextmenu-control':                    'onToggleContextMenu',
             'keydown .contextmenu-control':                  'onKeydown',
-            'contextmenu .selectable, .contextmenu-control': 'onContextMenu'
+            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -217,7 +218,7 @@ define('io.ox/core/folder/tree', [
                 if (_.device('smartphone')) {
                     ul.append(
                         $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" data-toggle="dropdown" aria-haspopup="true">').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" aria-haspopup="true">').append(
                                 $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                                 $('<span class="sr-only">')
                             )

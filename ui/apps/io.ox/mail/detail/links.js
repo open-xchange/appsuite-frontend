@@ -406,10 +406,10 @@ define('io.ox/mail/detail/links', [
             // process all text nodes unless mail is too large (> 512 KB)
             if (baton.isLarge) return;
             // don't combine these two lines via add() - very slow!
-            this.contents().each(function () {
+            $(this).contents().each(function () {
                 processTextNode(this);
             });
-            this.find('*:not(style)').contents().each(function () {
+            $(this).find('*:not(style)').contents().each(function () {
                 processTextNode(this);
             });
         }

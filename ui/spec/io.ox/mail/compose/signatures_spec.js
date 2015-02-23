@@ -82,6 +82,23 @@ define([
                         expect($el, 'number of signature paragraphs').to.have.length(0);
                     });
                 });
+                it('should support switching between complicated, long signatures and short ones', function () {
+                    settings.set('defaultSignature', '1338');
+                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
+                        expect(app.view.model.get('signature')).to.equal('1338');
+                        var $el = $('<div>').append(
+                            app.view.editor.getContent()
+                        );
+                        expect($el.text()).to.have.length.above(20);
+                        app.view.model.set('signature', '1337');
+                        expect(app.view.model.get('signature')).to.equal('1337');
+                        $el = $('<div>').append(
+                            app.view.editor.getContent()
+                        );
+                        expect($el, 'number of signature paragraphs').to.have.length(1);
+                        expect($el.text()).to.equal('elite signature');
+                    });
+                });
             });
             describe('in plain text mode', function () {
                 beforeEach(function () {

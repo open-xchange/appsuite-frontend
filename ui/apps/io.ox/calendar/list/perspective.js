@@ -218,7 +218,7 @@ define('io.ox/calendar/list/perspective', [
             id: 'dropdown',
             index: 100,
             draw: function () {
-                this.prepend(
+                this.append(
                     optDropdown = $('<div class="grid-options dropdown">')
                         .append(
                             $('<a>')

@@ -401,8 +401,22 @@ define('io.ox/core/permissions/permissions', [
                         if (_.device('desktop')) {
                             dialog.addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 }).addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
                         }
+                        var cascadePermissionsFlag = false,
+                            buildCheckbox = function () {
+                                var checkbox = $('<input type="checkbox" tabindex="1">')
+                                .on('change', function () {
+                                    cascadePermissionsFlag = checkbox.prop('checked');
+                                });
+                                checkbox.prop('checked', cascadePermissionsFlag);
+                                return checkbox;
 
-                        var node =  $('<div class="autocomplete-controls input-group">').append(
+                            },
+                            checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
+                                $('<label>').text(gt('Apply to all subfolders')).prepend(
+                                    buildCheckbox()
+                                )
+                            ),
+                            node =  $('<div class="autocomplete-controls input-group">').append(
                                 $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
                                 }),
@@ -455,9 +469,9 @@ define('io.ox/core/permissions/permissions', [
                             }
                         });
                         if (_.device('desktop')) {
-                            dialog.getFooter().prepend(node);
+                            dialog.getFooter().prepend(node, checkboxNode);
                         } else {
-                            dialog.getHeader().append(node);
+                            dialog.getHeader().append(node, checkboxNode);
                         }
 
                     } else {
@@ -467,7 +481,7 @@ define('io.ox/core/permissions/permissions', [
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
                         if (!isFolderAdmin) return dialog.idle();
-                        api.update(folder_id, { permissions: collection.toJSON() }).then(
+                        api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadePermissionsFlag }).then(
                             function success() {
                                 collection.off();
                                 dialog.close();

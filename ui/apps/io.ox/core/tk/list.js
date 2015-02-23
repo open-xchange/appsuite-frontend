@@ -32,11 +32,6 @@ define('io.ox/core/tk/list', [
     // helper
     function NOOP() { return $.when(); }
 
-    function topPosition(node, scrollpane) {
-        // fast replacement for node.position().top
-        return node[0].offsetTop - scrollpane.scrollTop;
-    }
-
     var ListView = Backbone.View.extend({
 
         tagName: 'ul',
@@ -146,8 +141,8 @@ define('io.ox/core/tk/list', [
             if (index < children.length) {
                 children.eq(index).before(li);
                 // scroll position might have changed due to insertion
-                if (topPosition(li, this.el) <= 0) {
-                    this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
+                if (li[0].offsetTop <= this.el.scrollTop) {
+                    this.el.scrollTop += li.outerHeight(true);
                 }
             } else {
                 this.$el.append(li);
@@ -161,8 +156,7 @@ define('io.ox/core/tk/list', [
 
             var children = this.getItems(),
                 cid = this.getCID(model),
-                li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
-                top = this.$el.scrollTop();
+                li = children.filter('[data-cid="' + $.escape(cid) + '"]');
 
             if (li.length === 0) return;
 
@@ -175,8 +169,10 @@ define('io.ox/core/tk/list', [
                 return;
             }
 
-            // keep scroll position
-            if (topPosition(li, this.el) < top) this.$el.scrollTop(top - li.outerHeight(true));
+            // keep scroll position if element is above viewport
+            if (li[0].offsetTop < this.el.scrollTop) {
+                this.el.scrollTop -= li.outerHeight(true);
+            }
 
             if (this.selection) this.selection.remove(cid, li);
             li.remove();
@@ -243,7 +239,8 @@ define('io.ox/core/tk/list', [
             // ref: id of the extension point that is used to render list items
             // app: application
             // pagination: use pagination (default is true)
-            this.options = _.extend({ pagination: true, selection: true, scrollable: true }, options);
+            // draggable: add drag'n'drop support
+            this.options = _.extend({ pagination: true, draggable: false, selection: true, scrollable: true }, options);
 
             var events = {};
 
@@ -281,6 +278,9 @@ define('io.ox/core/tk/list', [
                 this.setCollection(this.collection);
                 if (this.collection.length) this.onReset();
             }
+
+            // enable drag & drop
+            if (this.options.draggable) dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
 
             this.ref = this.ref || options.ref;
             this.app = options.app;

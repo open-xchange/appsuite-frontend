@@ -245,6 +245,17 @@ define('plugins/portal/xing/register', [
         return node;
     };
 
+    var refreshWidget = function () {
+        require(['io.ox/portal/main'], function (portal) {
+            var portalApp = portal.getApp(),
+                portalModels = portalApp.getWidgetCollection().filter(function (model) { return /^xing_\d*/.test(model.id); });
+
+            if (portalModels.length > 0) {
+                portalApp.refreshWidget(portalModels[0], 0);
+            }
+        });
+    };
+
     /*
      * Portal extension points: Here's where it all starts
      */
@@ -261,6 +272,13 @@ define('plugins/portal/xing/register', [
         },
 
         drawDefaultSetup: function (baton) {
+            keychain.submodules.xing.off('create', null, this);
+            keychain.submodules.xing.on('create', function () {
+                api.createSubscription();
+                baton.model.node.find('h2 .fa-xing').replaceWith($('<span class="title">').text(title));
+                baton.model.node.removeClass('requires-setup widget-color-custom color-xing');
+                refreshWidget();
+            }, this);
 
             var content = this.find('.content');
 
@@ -276,14 +294,9 @@ define('plugins/portal/xing/register', [
             );
         },
 
-        performSetUp: function (baton) {
+        performSetUp: function () {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('xing', win).done(function () {
-                api.createSubscription();
-                baton.model.node.find('h2 .fa-xing').replaceWith($('<span class="title">').text(title));
-                baton.model.node.removeClass('requires-setup widget-color-custom color-xing');
-                ox.trigger('refresh^');
-            });
+            return keychain.createInteractively('xing', win);
         },
 
         load: function (baton) {

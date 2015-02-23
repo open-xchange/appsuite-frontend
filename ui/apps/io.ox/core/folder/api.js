@@ -577,7 +577,8 @@ define('io.ox/core/folder/api', [
                 action: 'update',
                 id: id,
                 timezone: 'UTC',
-                tree: tree(id)
+                tree: tree(id),
+                cascadePermissions: options.cascadePermissions
             },
             data: changes,
             appendColumns: false
@@ -590,6 +591,7 @@ define('io.ox/core/folder/api', [
             function success(newId) {
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
+                if (options.cascadePermissions) refresh();
                 // trigger event
                 if (!options.silent) api.trigger('update', id, newId, model.toJSON());
                 // fetch subfolders of parent folder to ensure proper order after rename/move
@@ -720,6 +722,29 @@ define('io.ox/core/folder/api', [
         })
         .fail(function () {
             api.trigger('remove:fail', id);
+        });
+    }
+
+    //
+    // Clear/empty folder
+    //
+
+    function clear(id) {
+
+        api.trigger('before:clear', id);
+
+        return http.PUT({
+            module: 'folders',
+            appendColumns: false,
+            params: {
+                action: 'clear',
+                tree: tree(id)
+            },
+            data: [id]
+        })
+        .done(function () {
+            api.trigger('clear', id);
+            refresh();
         });
     }
 
@@ -905,6 +930,7 @@ define('io.ox/core/folder/api', [
         move: move,
         create: create,
         remove: remove,
+        clear: clear,
         reload: reload,
         hide: hide,
         show: show,

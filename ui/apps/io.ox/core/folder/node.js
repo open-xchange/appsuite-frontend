@@ -12,18 +12,19 @@
  */
 
 define('io.ox/core/folder/node', [
+    'io.ox/backbone/disposable',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
     'gettext!io.ox/core'
-], function (api, ext, account, gt) {
+], function (DisposableView, api, ext, account, gt) {
 
     'use strict';
 
     // angle caret chevron
     var ICON = 'caret';
 
-    var TreeNodeView = Backbone.View.extend({
+    var TreeNodeView = DisposableView.extend({
 
         tagName: 'li',
         className: 'folder selectable',
@@ -159,8 +160,10 @@ define('io.ox/core/folder/node', [
         },
 
         onArrowClick: function (e) {
-            if (!$(e.target).closest(this.$.arrow).length) return;
-            if (!this.hasArrow()) return;
+            if (!$(e.target).closest(this.$.arrow).length || !this.hasArrow()) {
+                e.preventDefault();
+                return;
+            }
             this.onToggle(e);
         },
 
@@ -189,7 +192,9 @@ define('io.ox/core/folder/node', [
                 hasSubFolders = this.hasSubFolders(),
                 isOpen = o.open && hasSubFolders;
             // update arrow
-            this.$.arrow.html(
+            this.$.arrow
+            .toggleClass('invisible', !hasSubFolders)
+            .html(
                 hasSubFolders ?
                     (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
                     '<i class="fa fa-fw">'
@@ -330,7 +335,7 @@ define('io.ox/core/folder/node', [
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
                     .css('padding-left', o.level * this.indentation)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : [],
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
                         $('<div class="folder-label">').append(
                             this.$.label = $('<div>')
@@ -378,9 +383,6 @@ define('io.ox/core/folder/node', [
 
             // simple tree-based disable callback
             if (o.tree.options.disable(data, o)) this.$el.addClass('disabled');
-
-            // register for 'dispose' event (using inline function to make this testable via spyOn)
-            this.$el.on('dispose', this.remove.bind(this));
         },
 
         getCounter: function () {

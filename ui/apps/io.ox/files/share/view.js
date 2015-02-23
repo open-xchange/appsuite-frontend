@@ -20,9 +20,10 @@ define('io.ox/files/share/view', [
     'io.ox/contacts/util',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/date',
+    'io.ox/core/yell',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, Tokenfield, date, gt) {
+], function (ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, Tokenfield, date, yell, gt) {
 
     'use strict';
 
@@ -97,10 +98,16 @@ define('io.ox/files/share/view', [
         id: 'contactPicture',
         index: 100,
         draw: function (baton) {
+            var node;
             this.append(
-                $('<div class="contact-image">')
-                    .attr('data-original', baton.participantModel.getImageURL({ width: 42, height: 42, scaleType: 'contain' }))
+                node = $('<div class="contact-image">')
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
+            );
+            // apply picture halo lazy load
+            contactsAPI.pictureHalo(
+                node,
+                baton.participantModel.toJSON(),
+                { width: 42, height: 42 }
             );
         }
     });
@@ -363,7 +370,7 @@ define('io.ox/files/share/view', [
                 if (val === 'link' && model.get('link') === '' ) {
                     model.save().then(function (url) {
                         model.set('link', url);
-                    });
+                    }, yell);
                 }
             });
 
@@ -382,7 +389,7 @@ define('io.ox/files/share/view', [
         },
 
         share: function () {
-            this.model.save();
+            this.model.save().then(yell.done, yell);
         },
 
         cancel: function () {
