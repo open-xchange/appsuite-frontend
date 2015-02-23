@@ -49,6 +49,13 @@ define('io.ox/core/api/group', [
         }
     });
 
+    // helper: simply clear "old" caches on update
+    function clearCaches() {
+        api.caches.all.clear();
+        api.caches.list.clear();
+        api.caches.get.clear();
+    }
+
     //
     // Backbone Model & Collection
     //
@@ -119,6 +126,7 @@ define('io.ox/core/api/group', [
             return api.get({ id: data.id }).done(function (data) {
                 api.collection.add(data, { parse: true });
                 api.trigger('create', data);
+                clearCaches();
             });
         });
     };
@@ -137,6 +145,7 @@ define('io.ox/core/api/group', [
             var model = api.collection.get(data.id);
             if (model) model.set(data);
             api.trigger('update', data);
+            clearCaches();
         });
     };
 
@@ -155,6 +164,7 @@ define('io.ox/core/api/group', [
             var model = api.collection.get(id);
             if (model) api.collection.remove(model);
             api.trigger('remove', id);
+            clearCaches();
         });
     };
 
