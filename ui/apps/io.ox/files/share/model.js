@@ -181,6 +181,15 @@ define('io.ox/files/share/model', [
                 case 'delete':
                     return api.destroy(model.get('token'));
             }
+        },
+
+        validate: function (attr) {
+            if (attr.type === this.TYPES.INVITE && attr.recipients.length === 0) {
+                return 'Empty receipient list';
+            }
+            if (attr.secured === true && _.isEmpty(attr.password)) {
+                return 'Please set password';
+            }
         }
 
     });

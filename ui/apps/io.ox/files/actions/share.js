@@ -27,14 +27,18 @@ define('io.ox/files/actions/share', [
             header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), insert),
             view = new ShareView({ files: files });
 
-        new dialogs.ModalDialog({ width: 600 })
+        new dialogs.ModalDialog({ width: 600, async: true })
             .header($('<h4>').text(header))
             .append(view.render().$el)
             .addPrimaryButton('share', gt('Share'), 'share')
             .addButton('cancel', gt('Cancel'), 'cancel')
-            .show()
-            .done(function (action) {
-                view[action]();
-            });
+            .on('share', function () {
+                view.share().then(this.close, this.idle);
+            })
+            .on('cancel', function () {
+                view.cancel();
+                this.close();
+            })
+            .show();
     };
 });
