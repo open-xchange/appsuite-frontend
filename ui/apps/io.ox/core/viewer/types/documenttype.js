@@ -17,7 +17,7 @@ define('io.ox/core/viewer/types/documenttype', [
      *
      * interface ViewerType {
      *    function createSlide(model, modelIndex);
-     *    function loadSlide(slideIndex, slideElement);
+     *    function loadSlide(slideElement);
      * }
      *
      * @constructor
@@ -57,19 +57,14 @@ define('io.ox/core/viewer/types/documenttype', [
         /**
          * "Loads" a document slide.
          *
-         * @param {Number} slideIndex
-         *  index of the slide to be loaded.
          *
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        this.loadSlide = function (slideIndex, slideElement) {
-            //console.warn('DocumentType.loadSlide()', slideIndex, slideElement);
-            if (typeof slideIndex !== 'number' || isNaN(slideIndex)) {
-                return;
-            }
+        this.loadSlide = function (slideElement) {
+            //console.warn('DocumentType.loadSlide()', slideElement);
             var imageToLoad = slideElement.find('img');
-            if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
+            if (imageToLoad.length === 0) { return ;}
             slideElement.busy();
             imageToLoad.attr('src', imageToLoad.attr('data-src'));
             imageToLoad[0].onload = function () {

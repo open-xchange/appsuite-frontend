@@ -17,7 +17,7 @@ define('io.ox/core/viewer/types/videotype', [
      *
      * interface ViewerType {
      *    function createSlide(model, modelIndex);
-     *    function loadSlide(slideIndex, slideElement);
+     *    function loadSlide(slideElement);
      * }
      *
      * @constructor
@@ -54,9 +54,9 @@ define('io.ox/core/viewer/types/videotype', [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        this.loadSlide = function (slideIndex, slideElement) {
+        this.loadSlide = function (slideElement) {
             //console.warn('VideoType.loadSlide()', slideIndex, slideElement);
-            if (typeof slideIndex !== 'number' || isNaN(slideIndex || slideElement.length === 0)) {
+            if (slideElement.length === 0) {
                 return;
             }
         };

@@ -31,6 +31,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
         initialize: function () {
             //console.warn('DisplayerView.initialize()');
+            this.displayedFileIndex = this.collection.getStartIndex();
             this.$el.on('dispose', this.dispose.bind(this));
             this.captionTimeoutId = null;
         },
@@ -58,10 +59,12 @@ define('io.ox/core/viewer/views/displayerview', [
                 prevSlide = $('<a class="swiper-button-prev swiper-button-control left"><i class="fa fa-angle-left"></i></a>'),
                 nextSlide = $('<a class="swiper-button-next swiper-button-control right"><i class="fa fa-angle-right"></i></a>'),
                 // preload 1 neigboring slides
-                slidesToPreload = 1,
+                slidesToPreload = 2,
                 startIndex = data.index,
                 self = this,
                 swiperParameter = {
+                    nextButton: '.swiper-button-next',
+                    prevButton: '.swiper-button-prev',
                     loop: true,
                     loopedSlides: 0,
                     followFinger: false,
@@ -69,9 +72,16 @@ define('io.ox/core/viewer/views/displayerview', [
                     speed: 0,
                     initialSlide: startIndex,
                     onSlideChangeEnd: function (swiper) {
-                        self.blendSlideCaption(swiper.activeIndex);
-                        self.preloadSlide(swiper.activeIndex, slidesToPreload, 'left');
-                        self.preloadSlide(swiper.activeIndex, slidesToPreload, 'right');
+                        var activeSlideIndex = swiper.activeIndex - 1;
+                        if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + self.collection.length; }
+                        if (activeSlideIndex >= self.collection.length) { activeSlideIndex = activeSlideIndex % self.collection.length; }
+                        self.blendSlideCaption(activeSlideIndex);
+                        self.preloadSlide(activeSlideIndex, slidesToPreload, 'left');
+                        self.preloadSlide(activeSlideIndex, slidesToPreload, 'right');
+                        EventDispatcher.trigger('viewer:displayeditem:change', {
+                            index: activeSlideIndex,
+                            model: self.collection.at(activeSlideIndex)
+                        });
                     }
                 };
 
@@ -112,6 +122,11 @@ define('io.ox/core/viewer/views/displayerview', [
             // initiate swiper deferred
             _.defer(function () {
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
+                // always load duplicate slides of the swiper plugin.
+                self.$el.find('.swiper-slide-duplicate').each(function (index, element) {
+                    var slideIndex = $(element).data('swiper-slide-index');
+                    TypeFactory.getModelType(self.collection.at(slideIndex)).loadSlide($(element));
+                });
             });
             return this;
         },
@@ -151,14 +166,18 @@ define('io.ox/core/viewer/views/displayerview', [
                 loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
                 collection = this.collection,
                 slidesCount = collection.length,
+                // filter out slide duplicates -> this looks like a bug in the swiper plugin.
                 slidesList = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate');
             // load the load range, containing the requested slide and preload slides
-            _.each(loadRange, function (slideIndex) {
-                if (slideIndex < 0) { slideIndex += slidesCount; }
-                if (slideIndex >= slidesCount) { slideIndex -= slidesCount; }
+            _.each(loadRange, function (index) {
+                var slideIndex = index;
+                if (slideIndex < 0) { slideIndex = slideIndex + slidesCount; }
+                if (slideIndex >= slidesCount) { slideIndex = slideIndex % slidesCount; }
                 var slideModel = collection.at(slideIndex),
                     slideElement = slidesList.eq(slideIndex);
-                TypeFactory.getModelType(slideModel).loadSlide(slideIndex, slideElement);
+                if (slideModel) {
+                    TypeFactory.getModelType(slideModel).loadSlide(slideElement);
+                }
             });
         },
 
@@ -173,23 +192,15 @@ define('io.ox/core/viewer/views/displayerview', [
          *
          */
         blendSlideCaption: function (slideIndex, duration) {
+            //console.warn('BlendslideCaption', slideIndex);
             var duration = duration || 3000,
-                slideCaption = this.$el.find('.swiper-slide').eq(slideIndex).find('.viewer-displayer-caption');
+                // filter swiper slide duplicates -> likely a bug from swiper plugin
+                slideCaption = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate').eq(slideIndex).find('.viewer-displayer-caption');
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();
             this.captionTimeoutId = window.setTimeout(function () {
                 slideCaption.fadeOut();
             }, duration);
-        },
-
-        prevSlide: function () {
-            //console.warn('DisplayerView.prevSlide()');
-            this.swiper.slidePrev();
-        },
-
-        nextSlide: function () {
-            //console.warn('DisplayerView.nextSlide()');
-            this.swiper.slideNext();
         },
 
         dispose: function () {

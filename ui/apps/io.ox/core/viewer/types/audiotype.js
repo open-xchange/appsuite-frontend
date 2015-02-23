@@ -17,7 +17,7 @@ define('io.ox/core/viewer/types/audiotype',  [
      *
      * interface ViewerType {
      *    function createSlide(model, modelIndex);
-     *    function loadSlide(slideIndex, slideElement);
+     *    function loadSlide(slideElement);
      * }
      *
      * @constructor
@@ -56,7 +56,7 @@ define('io.ox/core/viewer/types/audiotype',  [
          */
         this.loadSlide = function (slideIndex, slideElement) {
             //console.warn('AudioType.loadSlide()', slideIndex, slideElement);
-            if (typeof slideIndex !== 'number' || isNaN(slideIndex || slideElement.length === 0)) {
+            if (slideElement.length === 0) {
                 return;
             }
         };

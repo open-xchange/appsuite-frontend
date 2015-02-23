@@ -21,7 +21,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
      *
      * interface ViewerType {
      *    function createSlide(model, modelIndex);
-     *    function loadSlide(slideIndex, slideElement);
+     *    function loadSlide(slideElement);
      * }
      *
      * @constructor
@@ -59,9 +59,6 @@ define('io.ox/core/viewer/types/defaulttype',  [
 
         /**
          * "Loads" a default slide.
-         *
-         * @param {Number} slideIndex
-         *  index of the slide to be loaded.
          *
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.

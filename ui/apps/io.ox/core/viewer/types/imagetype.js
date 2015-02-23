@@ -18,7 +18,7 @@ define('io.ox/core/viewer/types/imagetype', [
      *
      * interface ViewerType {
      *    function createSlide(model, modelIndex);
-     *    function loadSlide(slideIndex, slideElement);
+     *    function loadSlide(slideElement);
      * }
      *
      * @constructor
@@ -59,19 +59,16 @@ define('io.ox/core/viewer/types/imagetype', [
          * "Loads" an image slide by transferring the image source from the 'data-src'
          *  to the 'src' attribute of the <img> HTMLElement.
          *
-         * @param {Number} slideIndex
-         *  index of the slide to be loaded.
-         *
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
         */
-        this.loadSlide = function (slideIndex, slideElement) {
+        this.loadSlide = function (slideElement) {
             //console.warn('ImageType.loadSlide()', slideIndex, slideElement);
-            if (typeof slideIndex !== 'number' || isNaN(slideIndex)) {
+            if (slideElement.length === 0) {
                 return;
             }
             var imageToLoad = slideElement.find('img');
-            if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
+            if (imageToLoad.length === 0) { return ;}
             slideElement.busy();
             imageToLoad.attr('src', imageToLoad.attr('data-src'));
             imageToLoad[0].onload = function () {

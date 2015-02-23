@@ -34,9 +34,7 @@ define('io.ox/core/viewer/views/mainview', [
         className: 'io-ox-viewer abs',
 
         events: {
-            'keydown': 'onKeydown',
-            'click a.swiper-button-prev': 'onPreviousSlide',
-            'click a.swiper-button-next': 'onNextSlide'
+            'keydown': 'onKeydown'
         },
 
         initialize: function (/*options*/) {
@@ -63,9 +61,6 @@ define('io.ox/core/viewer/views/mainview', [
             this.render(displayedData);
             // trigger item changed event initally for the first file
             EventDispatcher.trigger('viewer:displayeditem:change', displayedData);
-
-            // Remove carousel a11y plugin event handler to avoid focus problems on cursor up/down key events.
-            //$(document).off('keydown.carousel.data-api');
         },
 
         /**
@@ -145,42 +140,12 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    this.onPreviousSlide();
+                    this.displayerView.swiper.slidePrev();
                     break;
                 case 39: // right arrow
-                    this.onNextSlide();
+                    this.displayerView.swiper.slideNext();
                     break;
             }
-        },
-
-        onPreviousSlide: function () {
-            //console.warn('MainView.onPreviousSlide(), old index: ', this.displayedFileIndex);
-            if (this.displayedFileIndex > 0) {
-                this.displayedFileIndex--;
-            } else {
-                this.displayedFileIndex = this.collection.length - 1;
-            }
-            // tell Bootstrap carousel to show previous slide
-            this.displayerView.prevSlide();
-            EventDispatcher.trigger('viewer:displayeditem:change', {
-                index: this.displayedFileIndex,
-                model: this.collection.at(this.displayedFileIndex)
-            } );
-        },
-
-        onNextSlide: function () {
-            //console.warn('MainView.onNextSlide(), old index: ', this.displayedFileIndex);
-            if (this.displayedFileIndex < this.collection.length - 1) {
-                this.displayedFileIndex++;
-            } else {
-                this.displayedFileIndex = 0;
-            }
-            // tell Bootstrap carousel to show the next slide
-            this.displayerView.nextSlide();
-            EventDispatcher.trigger('viewer:displayeditem:change', {
-                index: this.displayedFileIndex,
-                model: this.collection.at(this.displayedFileIndex)
-            });
         },
 
         // refresh view sizes and broadcast window resize event
