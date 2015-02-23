@@ -20,7 +20,14 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
         beforeEach(function () {
 
             this.collection = new api.Collection();
-            this.list = new ListView({ threaded: true });
+            this.list = new ListView({
+                threaded: true,
+                //mail listview needs a reference to the app.props model to listenTo
+                //changes:thread event (support threaded mails)
+                app: {
+                    props: new Backbone.Model()
+                }
+            });
             this.list.model.set({ folder: 'default0/INBOX', limit: 30 });
             this.list.setCollection(this.collection);
 
@@ -409,6 +416,9 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
         });
 
         describe('keep scroll position during updates', function () {
+            //rendering is a bit slow in phantomjs
+            //FIXME: speed things up, again
+            this.timeout(10000);
 
             _([20, 50, 80]).each(function (INDEX) {
 
