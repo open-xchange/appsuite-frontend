@@ -104,7 +104,8 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d item selecionado"
 msgstr[1] "%1$d itens selecionados"
 
-#: apps/plugins/administration/groups/settings/pane.js:142 module:io.ox/core
+#. %1$d is the number of members
+#: apps/plugins/administration/groups/settings/pane.js:141 module:io.ox/core
 #, fuzzy
 #| msgid "%1$d Week"
 #| msgid_plural "%1$d Weeks"
@@ -1428,7 +1429,9 @@ msgstr "Visualização do calendário"
 #: apps/io.ox/tasks/edit/main.js:176 apps/io.ox/tasks/main.js:192
 #: apps/io.ox/tasks/main.js:206
 #: apps/plugins/administration/groups/settings/edit.js:145
+#: apps/plugins/administration/groups/settings/toolbar.js:67
 #: apps/plugins/administration/resources/settings/edit.js:90
+#: apps/plugins/administration/resources/settings/toolbar.js:63
 #: apps/plugins/core/feedback/register.js:140
 #: apps/plugins/notifications/calendar/register.js:199
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
@@ -2013,14 +2016,14 @@ msgid "Create new %1$s account"
 msgstr "Criar nova %1$s conta"
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
-#: apps/plugins/administration/groups/settings/toolbar.js:73
+#: apps/plugins/administration/groups/settings/toolbar.js:84
 #, fuzzy
 #| msgid "Create new rule"
 msgid "Create new group"
 msgstr "Criar nova regra"
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
-#: apps/plugins/administration/resources/settings/toolbar.js:69
+#: apps/plugins/administration/resources/settings/toolbar.js:80
 #, fuzzy
 #| msgid "Create new rule"
 msgid "Create new resource"
@@ -2195,8 +2198,8 @@ msgstr "Adiado"
 #: apps/io.ox/tasks/actions.js:547
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:49
 #: apps/io.ox/tasks/toolbar.js:85
-#: apps/plugins/administration/groups/settings/toolbar.js:89
-#: apps/plugins/administration/resources/settings/toolbar.js:85
+#: apps/plugins/administration/groups/settings/toolbar.js:100
+#: apps/plugins/administration/resources/settings/toolbar.js:96
 #: apps/plugins/portal/twitter/util.js:272 module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:405
 #: apps/plugins/portal/xing/actions.js:119
@@ -2216,6 +2219,21 @@ msgstr "Excluir compromisso"
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
 msgid "Delete contact"
 msgstr "Excluir contato"
+
+#: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
+#, fuzzy
+#| msgid "Delete Group"
+#| msgid_plural "Delete Groups"
+msgid "Delete group"
+msgstr "Excluir grupo"
+
+#: apps/plugins/administration/resources/settings/toolbar.js:62
+#: module:io.ox/core
+#, fuzzy
+#| msgid "Delete Resource"
+#| msgid_plural "Delete Resources"
+msgid "Delete resource"
+msgstr "Excluir recurso"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
 msgid "Delete task"
@@ -2385,6 +2403,25 @@ msgstr ""
 #: apps/io.ox/core/tk/folderviews.js:631
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Tem certeza que deseja excluir a pasta \"%s\"?"
+
+#. %1$s is the group name
+#: apps/plugins/administration/groups/settings/toolbar.js:64 module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete the group \"%1$s\"? This action cannot be "
+"undone!"
+msgstr "Você realmente deseja excluir esta conta?"
+
+#. %1$s is the resource name
+#: apps/plugins/administration/resources/settings/toolbar.js:60
+#: module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete the resource \"%1$s\"? This action cannot be "
+"undone!"
+msgstr "Você realmente deseja excluir esta conta?"
 
 #: apps/io.ox/contacts/actions.js:43 module:io.ox/contacts
 msgid "Do you really want to delete these items?"
@@ -2655,8 +2692,8 @@ msgstr "EB"
 #: apps/io.ox/tasks/main.js:187 apps/io.ox/tasks/main.js:206
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:42
 #: apps/io.ox/tasks/toolbar.js:52
-#: apps/plugins/administration/groups/settings/toolbar.js:81 module:io.ox/core
-#: apps/plugins/administration/resources/settings/toolbar.js:77
+#: apps/plugins/administration/groups/settings/toolbar.js:92 module:io.ox/core
+#: apps/plugins/administration/resources/settings/toolbar.js:88
 msgid "Edit"
 msgstr "Editar"
 
@@ -3467,7 +3504,7 @@ msgid "Group name"
 msgstr "Nome do grupo"
 
 #: apps/plugins/administration/groups/register.js:23 module:io.ox/core
-#: apps/plugins/administration/groups/settings/pane.js:115
+#: apps/plugins/administration/groups/settings/pane.js:113
 msgid "Groups"
 msgstr "Grupos"
 
@@ -5796,7 +5833,7 @@ msgid "Remove"
 msgstr "Remover"
 
 #. %1$s is the user name of the group member
-#: apps/plugins/administration/groups/settings/members.js:82 module:io.ox/core
+#: apps/plugins/administration/groups/settings/members.js:83 module:io.ox/core
 #, fuzzy
 #| msgid "Remove user"
 msgid "Remove %1$s"
@@ -5831,6 +5868,12 @@ msgstr "Remover dos favoritos"
 #: apps/io.ox/mail/write/view-main.js:1238 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "Remover da lista de destinatários"
+
+#: apps/plugins/administration/groups/settings/members.js:81 module:io.ox/core
+#, fuzzy
+#| msgid "Remove Member"
+msgid "Remove member"
+msgstr "Remover membro"
 
 #: apps/io.ox/core/folder/actions/rename.js:64 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:179
@@ -9997,11 +10040,6 @@ msgstr "M/d/aaaa"
 #~ msgid "Delete Folder"
 #~ msgstr "Excluir pasta"
 
-#~ msgid "Delete Group"
-#~ msgid_plural "Delete Groups"
-#~ msgstr[0] "Excluir grupo"
-#~ msgstr[1] "Excluir grupos"
-
 #~ msgid "Delete Items"
 #~ msgstr "Excluir itens"
 
@@ -10009,11 +10047,6 @@ msgstr "M/d/aaaa"
 #~ msgid_plural "Delete Publications"
 #~ msgstr[0] "Excluir publicação"
 #~ msgstr[1] "Excluir publicações"
-
-#~ msgid "Delete Resource"
-#~ msgid_plural "Delete Resources"
-#~ msgstr[0] "Excluir recurso"
-#~ msgstr[1] "Excluir recursos"
 
 #~ msgid "Delete Rule"
 #~ msgid_plural "Delete Rules"
@@ -12015,9 +12048,6 @@ msgstr "M/d/aaaa"
 
 #~ msgid "Reminder:"
 #~ msgstr "Lembrete:"
-
-#~ msgid "Remove Member"
-#~ msgstr "Remover membro"
 
 #~ msgid "Remove participant"
 #~ msgstr "Remover participante"

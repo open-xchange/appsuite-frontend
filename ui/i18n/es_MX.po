@@ -103,7 +103,8 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d elemento seleccionado"
 msgstr[1] "%1$d elementos seleccionados"
 
-#: apps/plugins/administration/groups/settings/pane.js:142 module:io.ox/core
+#. %1$d is the number of members
+#: apps/plugins/administration/groups/settings/pane.js:141 module:io.ox/core
 #, fuzzy
 #| msgid "Add member"
 msgid "%1$d member"
@@ -1427,7 +1428,9 @@ msgstr "Vista de calendario"
 #: apps/io.ox/tasks/edit/main.js:176 apps/io.ox/tasks/main.js:192
 #: apps/io.ox/tasks/main.js:206
 #: apps/plugins/administration/groups/settings/edit.js:145
+#: apps/plugins/administration/groups/settings/toolbar.js:67
 #: apps/plugins/administration/resources/settings/edit.js:90
+#: apps/plugins/administration/resources/settings/toolbar.js:63
 #: apps/plugins/core/feedback/register.js:140
 #: apps/plugins/notifications/calendar/register.js:199
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
@@ -2011,14 +2014,14 @@ msgid "Create new %1$s account"
 msgstr "Crear nueva cuenta de %1$s"
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
-#: apps/plugins/administration/groups/settings/toolbar.js:73
+#: apps/plugins/administration/groups/settings/toolbar.js:84
 #, fuzzy
 #| msgid "Create new rule"
 msgid "Create new group"
 msgstr "Crear nueva regla"
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
-#: apps/plugins/administration/resources/settings/toolbar.js:69
+#: apps/plugins/administration/resources/settings/toolbar.js:80
 #, fuzzy
 #| msgid "Create new rule"
 msgid "Create new resource"
@@ -2195,8 +2198,8 @@ msgstr "Retrasada"
 #: apps/io.ox/tasks/actions.js:547
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:49
 #: apps/io.ox/tasks/toolbar.js:85
-#: apps/plugins/administration/groups/settings/toolbar.js:89
-#: apps/plugins/administration/resources/settings/toolbar.js:85
+#: apps/plugins/administration/groups/settings/toolbar.js:100
+#: apps/plugins/administration/resources/settings/toolbar.js:96
 #: apps/plugins/portal/twitter/util.js:272 module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:405
 #: apps/plugins/portal/xing/actions.js:119
@@ -2216,6 +2219,18 @@ msgstr "Borrar cita"
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
 msgid "Delete contact"
 msgstr "Borrar contacto"
+
+#: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
+msgid "Delete group"
+msgstr "Borrar grupo"
+
+#: apps/plugins/administration/resources/settings/toolbar.js:62
+#: module:io.ox/core
+#, fuzzy
+#| msgid "Delete Resource"
+#| msgid_plural "Delete Resources"
+msgid "Delete resource"
+msgstr "Borrar recurso"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
 msgid "Delete task"
@@ -2385,6 +2400,25 @@ msgstr ""
 #: apps/io.ox/core/tk/folderviews.js:631
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "¿Está seguro de querer borrar la carpeta \"%s\"?"
+
+#. %1$s is the group name
+#: apps/plugins/administration/groups/settings/toolbar.js:64 module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete the group \"%1$s\"? This action cannot be "
+"undone!"
+msgstr "¿Está seguro de querer borrar esta cuenta?"
+
+#. %1$s is the resource name
+#: apps/plugins/administration/resources/settings/toolbar.js:60
+#: module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete the resource \"%1$s\"? This action cannot be "
+"undone!"
+msgstr "¿Está seguro de querer borrar esta cuenta?"
 
 #: apps/io.ox/contacts/actions.js:43 module:io.ox/contacts
 msgid "Do you really want to delete these items?"
@@ -2655,8 +2689,8 @@ msgstr "EB"
 #: apps/io.ox/tasks/main.js:187 apps/io.ox/tasks/main.js:206
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:42
 #: apps/io.ox/tasks/toolbar.js:52
-#: apps/plugins/administration/groups/settings/toolbar.js:81 module:io.ox/core
-#: apps/plugins/administration/resources/settings/toolbar.js:77
+#: apps/plugins/administration/groups/settings/toolbar.js:92 module:io.ox/core
+#: apps/plugins/administration/resources/settings/toolbar.js:88
 msgid "Edit"
 msgstr "Editar"
 
@@ -3469,7 +3503,7 @@ msgid "Group name"
 msgstr "Nombre del grupo"
 
 #: apps/plugins/administration/groups/register.js:23 module:io.ox/core
-#: apps/plugins/administration/groups/settings/pane.js:115
+#: apps/plugins/administration/groups/settings/pane.js:113
 msgid "Groups"
 msgstr "Grupos"
 
@@ -5808,7 +5842,7 @@ msgid "Remove"
 msgstr "Eliminar"
 
 #. %1$s is the user name of the group member
-#: apps/plugins/administration/groups/settings/members.js:82 module:io.ox/core
+#: apps/plugins/administration/groups/settings/members.js:83 module:io.ox/core
 #, fuzzy
 #| msgid "Remove"
 msgid "Remove %1$s"
@@ -5843,6 +5877,12 @@ msgstr "Eliminar de favoritos"
 #: apps/io.ox/mail/write/view-main.js:1238 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "Borrar de la lista de destinatarios"
+
+#: apps/plugins/administration/groups/settings/members.js:81 module:io.ox/core
+#, fuzzy
+#| msgid "Remove Member"
+msgid "Remove member"
+msgstr "Eliminar miembro"
 
 #: apps/io.ox/core/folder/actions/rename.js:64 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:179
@@ -11862,11 +11902,6 @@ msgstr "M/d/aaaa"
 #~ msgstr[0] "Borrar publicación"
 #~ msgstr[1] "Borrar publicaciones"
 
-#~ msgid "Delete Resource"
-#~ msgid_plural "Delete Resources"
-#~ msgstr[0] "Borrar recurso"
-#~ msgstr[1] "Borrar recursos"
-
 #~ msgid "Delete Rows"
 #~ msgstr "Borrar filas"
 
@@ -11901,9 +11936,6 @@ msgstr "M/d/aaaa"
 
 #~ msgid "Delete feed"
 #~ msgstr "Borrar feed"
-
-#~ msgid "Delete group"
-#~ msgstr "Borrar grupo"
 
 #~ msgid "Delete selected columns"
 #~ msgstr "Eliminar columnas seleccionadas"
@@ -14828,9 +14860,6 @@ msgstr "M/d/aaaa"
 
 #~ msgid "Remove %1$s from the appointment."
 #~ msgstr "Elimine a %1$s de la cita."
-
-#~ msgid "Remove Member"
-#~ msgstr "Eliminar miembro"
 
 #~ msgid "Remove participant"
 #~ msgstr "Eliminar participante"

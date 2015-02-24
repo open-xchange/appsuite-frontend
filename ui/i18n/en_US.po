@@ -100,7 +100,8 @@ msgid_plural "%1$d items selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/plugins/administration/groups/settings/pane.js:142 module:io.ox/core
+#. %1$d is the number of members
+#: apps/plugins/administration/groups/settings/pane.js:141 module:io.ox/core
 msgid "%1$d member"
 msgid_plural "%1$d members"
 msgstr[0] ""
@@ -1374,7 +1375,9 @@ msgstr ""
 #: apps/io.ox/tasks/edit/main.js:176 apps/io.ox/tasks/main.js:192
 #: apps/io.ox/tasks/main.js:206
 #: apps/plugins/administration/groups/settings/edit.js:145
+#: apps/plugins/administration/groups/settings/toolbar.js:67
 #: apps/plugins/administration/resources/settings/edit.js:90
+#: apps/plugins/administration/resources/settings/toolbar.js:63
 #: apps/plugins/core/feedback/register.js:140
 #: apps/plugins/notifications/calendar/register.js:199
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
@@ -1955,12 +1958,12 @@ msgid "Create new %1$s account"
 msgstr ""
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
-#: apps/plugins/administration/groups/settings/toolbar.js:73
+#: apps/plugins/administration/groups/settings/toolbar.js:84
 msgid "Create new group"
 msgstr ""
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
-#: apps/plugins/administration/resources/settings/toolbar.js:69
+#: apps/plugins/administration/resources/settings/toolbar.js:80
 msgid "Create new resource"
 msgstr ""
 
@@ -2131,8 +2134,8 @@ msgstr ""
 #: apps/io.ox/tasks/actions.js:547
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:49
 #: apps/io.ox/tasks/toolbar.js:85
-#: apps/plugins/administration/groups/settings/toolbar.js:89
-#: apps/plugins/administration/resources/settings/toolbar.js:85
+#: apps/plugins/administration/groups/settings/toolbar.js:100
+#: apps/plugins/administration/resources/settings/toolbar.js:96
 #: apps/plugins/portal/twitter/util.js:272 module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:405
 #: apps/plugins/portal/xing/actions.js:119
@@ -2151,6 +2154,15 @@ msgstr ""
 
 #: apps/io.ox/contacts/toolbar.js:86 module:io.ox/contacts
 msgid "Delete contact"
+msgstr ""
+
+#: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
+msgid "Delete group"
+msgstr ""
+
+#: apps/plugins/administration/resources/settings/toolbar.js:62
+#: module:io.ox/core
+msgid "Delete resource"
 msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
@@ -2318,6 +2330,21 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/remove.js:31 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:631
 msgid "Do you really want to delete folder \"%s\"?"
+msgstr ""
+
+#. %1$s is the group name
+#: apps/plugins/administration/groups/settings/toolbar.js:64 module:io.ox/core
+msgid ""
+"Do you really want to delete the group \"%1$s\"? This action cannot be "
+"undone!"
+msgstr ""
+
+#. %1$s is the resource name
+#: apps/plugins/administration/resources/settings/toolbar.js:60
+#: module:io.ox/core
+msgid ""
+"Do you really want to delete the resource \"%1$s\"? This action cannot be "
+"undone!"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js:43 module:io.ox/contacts
@@ -2584,8 +2611,8 @@ msgstr ""
 #: apps/io.ox/tasks/main.js:187 apps/io.ox/tasks/main.js:206
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:42
 #: apps/io.ox/tasks/toolbar.js:52
-#: apps/plugins/administration/groups/settings/toolbar.js:81 module:io.ox/core
-#: apps/plugins/administration/resources/settings/toolbar.js:77
+#: apps/plugins/administration/groups/settings/toolbar.js:92 module:io.ox/core
+#: apps/plugins/administration/resources/settings/toolbar.js:88
 msgid "Edit"
 msgstr ""
 
@@ -3374,7 +3401,7 @@ msgid "Group name"
 msgstr ""
 
 #: apps/plugins/administration/groups/register.js:23 module:io.ox/core
-#: apps/plugins/administration/groups/settings/pane.js:115
+#: apps/plugins/administration/groups/settings/pane.js:113
 msgid "Groups"
 msgstr ""
 
@@ -5644,7 +5671,7 @@ msgid "Remove"
 msgstr ""
 
 #. %1$s is the user name of the group member
-#: apps/plugins/administration/groups/settings/members.js:82 module:io.ox/core
+#: apps/plugins/administration/groups/settings/members.js:83 module:io.ox/core
 msgid "Remove %1$s"
 msgstr ""
 
@@ -5676,6 +5703,10 @@ msgstr ""
 
 #: apps/io.ox/mail/write/view-main.js:1238 module:io.ox/mail
 msgid "Remove from recipient list"
+msgstr ""
+
+#: apps/plugins/administration/groups/settings/members.js:81 module:io.ox/core
+msgid "Remove member"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/rename.js:64 module:io.ox/core
