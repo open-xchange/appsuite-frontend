@@ -1,0 +1,1010 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+/* ========================================================================= */
+/* generic variables                                                         */
+/* ========================================================================= */
+
+/* light background color for view panes */
+@light-pane-fill-color: white;
+
+/* shaded background color for view panes */
+@shaded-pane-fill-color: #f8f8f8;
+
+/* horizontal standard distance between different GUI elements */
+@standard-distance-h: 13px;
+
+/* vertical standard distance between different GUI elements */
+@standard-distance-v: 5px;
+
+/* standard font size for all GUI elements with text */
+@standard-font-size: 13px;
+
+/* standard border color for separator lines etc. on white background */
+@standard-border-color: #e0e0e0;
+
+/* standard border effect */
+@standard-border: 1px solid @standard-border-color;
+
+/* fill color for tool tip nodes */
+@tooltip-fill-color: #eeeeee;
+
+/* border radius for pop-up menu nodes */
+@popup-border-radius: 4px;
+
+/* border color for tool tip nodes */
+@tooltip-border-color: #cccccc;
+
+/* border radius for tool tip nodes */
+@tooltip-border-radius: 2px;
+
+/* color schemes ----------------------------------------------------------- */
+
+/* a color scheme with 7 different colors */
+@scheme-color-1: #6699ff;
+@scheme-color-2: #ff6666;
+@scheme-color-3: #9966cc;
+@scheme-color-4: #339933;
+@scheme-color-5: #cc3399;
+@scheme-color-6: #ff9933;
+@scheme-color-7: #336699;
+
+/* A color scheme for remote users and selections with 7 different colors, for
+ * arbitrary reordering of colors independently from the base color scheme */
+@user-color-1: @scheme-color-3;
+@user-color-2: @scheme-color-2;
+@user-color-3: @scheme-color-1;
+@user-color-4: @scheme-color-4;
+@user-color-5: @scheme-color-5;
+@user-color-6: @scheme-color-6;
+@user-color-7: @scheme-color-7;
+
+/* change track authors color scheme with 8 different colors */
+@author-color-1: #f89406;
+@author-color-2: darken(#049cdb, 5%);
+@author-color-3: #1a8d1a;
+@author-color-4: #e01cd9;
+@author-color-5: #0064cd;
+@author-color-6: #92d050;
+@author-color-7: #7e16cf;
+@author-color-8: lighten(#049cdb, 25%);
+
+/* ========================================================================= */
+/* generic mix-in classes                                                    */
+/* ========================================================================= */
+
+.absolute-with-distance(@top; @right; @bottom; @left) {
+    position: absolute;
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+}
+
+.absolute-with-distance(@top; @left-right; @bottom) {
+    .absolute-with-distance(@top; @left-right; @bottom; @left-right);
+}
+
+.absolute-with-distance(@top-bottom; @left-right) {
+    .absolute-with-distance(@top-bottom; @left-right; @top-bottom; @left-right);
+}
+
+.absolute-with-distance(@distance) {
+    .absolute-with-distance(@distance; @distance; @distance; @distance);
+}
+
+/* shadow effect for elements hovering over their background */
+.drop-shadow(@size: 5px) {
+     box-shadow: 0 @size (2 * @size) fade(black, 20%);
+}
+
+/* removes browser-internal focus outline effects from the current element */
+.focus-outline(@style) {
+    &:focus, &:active { outline: @style; }
+}
+
+/* enables flexbox layout for the formatted element */
+.display-flex() {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+}
+
+/* sets the "flex-grow" attribute at the formatted elements (descendants of flexbox containers) */
+.flex-grow(@grow) {
+    -ms-flex: @grow; /* IE10 */
+    flex-grow: @grow;
+}
+
+/* sets the "align-self" attribute at the formatted elements (descendants of flexbox containers) */
+.align-self(@align) {
+    -ms-align-self: @align; /* IE10 */
+    align-self: @align;
+}
+
+/* outer glow effect for debug mode */
+.debug-highlight-box(@color) {
+    box-shadow: 0 0 0 1px fade(@color, 60%), 0 0 8px 2px fade(@color, 40%);
+}
+
+/* inner glow effect for debug mode */
+.debug-highlight-inset-box(@color) {
+    box-shadow: 0 0 0 1px fade(@color, 60%) inset, 0 0 8px 2px fade(@color, 40%) inset;
+}
+
+/* ========================================================================= */
+/* background image for icons                                                */
+/* ========================================================================= */
+
+/* TODO: remove path and ~ escapement after bug 27700 has been fixed */
+/* Bug 30975: add custom build ID to make path different from 7.6.0 release */
+@icons-url-path: ~"v=7.6.1-3.20141008.090105/apps/io.ox/office/baseframework/view";
+
+.docs-icons-url(@color-id) {
+    background-image: ~"url(@{icons-url-path}/docs-icons-desktop-@{color-id}.png)";
+    &.retina { background-image: ~"url(@{icons-url-path}/docs-icons-retina-@{color-id}.png)"; }
+}
+
+.docs-icons(@color) when (lightness(@color) < 50%) {
+    .docs-icons-url(~"black");
+}
+
+.docs-icons(@color) when (lightness(@color) >= 50%) {
+    .docs-icons-url(~"white");
+}
+
+/* ========================================================================= */
+/* focus effects                                                             */
+/* ========================================================================= */
+
+/* standard color for focus effects on form control elements */
+@standard-focus-color: @selected-background;
+
+/*
+ * Sets the border color of the selected elements to the focus border color.
+ *
+ * @effect-color is the line color used for the focus border effect.
+ *
+ * If the Boolean flag @disabled is set to true, the opacity of the border
+ * color will be reduced to be suitable for disabled controls.
+ */
+.focus-border-effect(
+    @effect-color: @standard-focus-color;
+    @disabled: false;
+) {
+    & when not (@disabled) { border-color: @effect-color; }
+    & when (@disabled) { border-color: fade(@effect-color, 75%); }
+}
+
+/*
+ * Adds a focus glow effect (as box shadow) to the selected elements.
+ *
+ * @effect-color is the shadow color used for the focus glow effect.
+ *
+ * If the Boolean flag @disabled is set to true, the opacity of the shadow
+ * color will be reduced to be suitable for disabled controls.
+ *
+ * If the Boolean flag @glow-effect-inside is set to true, the focus glow
+ * effect will be moved into the control groups (inset shadow effect).
+ */
+.focus-glow-effect(
+    @effect-color: @standard-focus-color;
+    @disabled: false;
+    @glow-effect-inside: false;
+    @border-as-shadow: false;
+) {
+
+    /* define the variables @border-color and @shadow-color according to input parameters */
+    .define-colors() when not (@disabled) { @border-color: @effect-color; @shadow-color: fade(@effect-color, 60%); }
+    .define-colors() when (@disabled) { @border-color: fade(@effect-color, 75%); @shadow-color: fade(@effect-color, 45%); }
+    .define-colors();
+
+    /* define the variable @shadow-effect according to input parameters */
+    .define-shadow-effect() when (@glow-effect-inside) { @shadow-effect: 0 0 8px 2px @shadow-color inset; }
+    .define-shadow-effect() when not (@glow-effect-inside) { @shadow-effect: 0 0 8px 2px @shadow-color; }
+    .define-shadow-effect();
+
+    & when (@border-as-shadow) { box-shadow: 0 0 0 1px @border-color, @shadow-effect; }
+    & when not (@border-as-shadow) { box-shadow: @shadow-effect; }
+}
+
+/*
+ * Sets the border color of the selected elements to the focus border color,
+ * and adds a focus glow effect (as box shadow) to the selected elements. This
+ * mix-in is a combination of .focus-border-style() and .focus-glow-effect()
+ * for the same element.
+ *
+ * @effect-color is the color used for the focus border and glow effect.
+ *
+ * If the Boolean flag @disabled is set to true, the opacity of the border and
+ * shadow color will be reduced to be suitable for disabled controls.
+ *
+ * If the Boolean flag @glow-effect-inside is set to true, the focus glow
+ * effect will be moved into the control groups (inset shadow effect).
+ *
+ * If the Boolean flag @border-as-shadow is set to true, the focus border will
+ * be added as outer box shadow effect instead of modifying the border color.
+ */
+.focus-effects(
+    @effect-color: @standard-focus-color;
+    @disabled: false;
+    @glow-effect-inside: false;
+    @border-as-shadow: false;
+) {
+    & when not (@border-as-shadow) { .focus-border-effect(@effect-color; @disabled); }
+    .focus-glow-effect(@effect-color; @disabled; @glow-effect-inside; @border-as-shadow);
+}
+
+/* ========================================================================= */
+/* control group designs                                                     */
+/* ========================================================================= */
+
+/* space between control caption elements */
+@caption-spacing: 6px;
+
+/* standard size of icons in form controls */
+@icon-size: 18px;
+
+/* width of the drop-down caret symbol */
+@caret-width: 9px;
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * This mix-in class can be used to define various designs for control groups.
+ * The designs are customizable via various parameters.
+ *
+ * @control-distance specifies the margin between two visible control groups.
+ *
+ * @control-height is the total height of the control elements, including the
+ * focus border drawn around the controls.
+ *
+ * @control-padding is the distance between control border and caption text, or
+ * any other contents.
+ *
+ * @border-radius is the corner radius for all control groups.
+ *
+ * @text-color is the color for caption texts and FontAwesome icons.
+ *
+ * @control-hover-fade is a percentage value used to modify the lightness of
+ * the background color for a button element in the group when hovering it with
+ * the mouse, or when it is active (while clicking it with the mouse). Positive
+ * values will increase the lightness, negative values will decrease the
+ * lightness by the absolute value. Zero will disable the hover effect.
+ *
+ * @selected-fill-color is the background color for selected button controls.
+ *
+ * @selected-text-color is the color for caption texts and FontAwesome icons in
+ * selected button controls.
+ *
+ * @selected-hover-fade is a percentage value used to modify the lightness of
+ * selected button elements when hovered or activated. See @control-hover-fade
+ * for details.
+ *
+ * @focus-effect-color is the color for all focus effects on the form control
+ * elements. If set to transparent, no focus effects will be added to the form
+ * controls.
+ *
+ * If the Boolean flag @framed-mode is set to true, the selected state of
+ * button elements will be drawn as border instead of background fill.
+ *
+ * If the Boolean flag @glow-effect-inside is set to true, the focus glow
+ * effect will be moved into the control groups (inset shadow effect).
+ */
+.generic-group-design-mixin(
+    @control-distance;
+    @control-height;
+    @control-padding;
+    @border-radius;
+    @control-text-color;
+    @control-hover-fade;
+    @selected-fill-color;
+    @selected-text-color;
+    @selected-hover-fade;
+    @focus-effect-color: @standard-focus-color;
+    @framed-mode: false;
+    @glow-effect-inside: false;
+) {
+
+    /* border width according to framed mode */
+    @border-width: 1px;
+    & when (@framed-mode) { @border-width: 3px; }
+
+    /* set control distance between groups */
+    & when (@control-distance > 0) {
+        &:not(.hidden) + .group {
+            margin-left: @control-distance;
+        }
+    }
+
+    /* add padding between border and contents, and border for all control elements */
+    div.label, .button, .input-wrapper {
+        padding: 0 @control-padding;
+        border: @border-width solid transparent;
+    }
+
+    /* thick border around simple buttons in framed mode */
+    &:not(.text-field) .button when (@framed-mode) {
+        border-width: 3px;
+    }
+
+    /* set all properties related to the control height */
+    .control-height-styles(@height) {
+
+        /* base height for labels, buttons, input fields */
+        div.label, .button, .input-wrapper { height: @height; }
+
+        /* inner line height */
+        div.label, .button {
+            line-height: (@height - (2 * @border-width));
+        }
+
+        /* adjustments for bitmap icons */
+        i[class^="docs-"] {
+            /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
+            position: relative;
+            top: ((@height - @icon-size - 1px) / 2 - @border-width);
+            vertical-align: top;
+        }
+
+        /* additional settings for spin fields */
+        &.spin-field > .spin-wrapper {
+            display: inline-block;
+            height: @height;
+
+            > .button {
+                display: block;
+                height: ((@height + @border-width) / 2);
+                line-height: ((@height - 3 * @border-width) / 2);
+                &.spin-down { margin-top: (-(@border-width)); }
+            }
+        }
+    }
+
+    /* height for all control elements but text fields in the group */
+    &:not(.text-field) {
+        .control-height-styles(@control-height);
+    }
+
+    /* less height for text fields */
+    &.text-field {
+        margin-top: 3px;
+        margin-bottom: 3px;
+        .control-height-styles(@control-height - 6px);
+    }
+
+    /* add border radius to group node and its children (unless border radius is zero) */
+    & when (@border-radius > 0) {
+
+        /* left border radius for the group node, its first child, and all option buttons */
+        &, > :first-child, > .button.option-button {
+            border-top-left-radius: @border-radius;
+            border-bottom-left-radius: @border-radius;
+        }
+
+        /* right border radius for the group node, its last child, and all option buttons */
+        &, > :last-child, > .button.option-button {
+            border-top-right-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+        }
+
+        /* trailing round corners for spin buttons in a spin field */
+        &.spin-field > .spin-wrapper > .button {
+            &:first-child { border-top-right-radius: @border-radius; }
+            &:last-child { border-bottom-right-radius: @border-radius; }
+        }
+    }
+
+    /* raise focused group to make all borders visible */
+    &.focused { z-index: 1; }
+
+    /* text color for control elements in the group */
+    div.label, .button, input {
+        color: @control-text-color;
+    }
+
+    /* text color for buttons in link style */
+    &.link-style {
+        div.label, .button {
+            color: @link-color;
+        }
+    }
+
+    /* generic additions for caret symbols */
+    .button > .caret-node > i {
+        width: @caret-width;
+        font-size: 13px;
+        opacity: 0.4;
+    }
+
+    /* additions for push buttons with drop-down caret symbol */
+    .button.caret-button {
+        min-width: (2 * @control-padding + @caret-width);
+
+        > .caption {
+            padding-right: (@caption-spacing + @caret-width);
+        }
+
+        > .caret-node {
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: @control-padding;
+        }
+    }
+
+    /* hide the button label by if the specific class exists */
+    .button.hideLabel > .caption > span {
+        display: none;
+    }
+
+    /* color for bitmap icons */
+    i[class^="docs-"] {
+        .docs-icons(@control-text-color);
+    }
+
+    /* set position of the check mark in check boxes */
+    .button > .check-mark {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: @control-padding;
+        i { text-align: left; }
+
+        + .caption {
+            padding-left: @icon-size;
+            > :first-child { margin-left: @caption-spacing; }
+        }
+    }
+
+    /* fade out contents for buttons and labels in disabled groups */
+    &.disabled div.label, &.disabled .button, div.label.disabled, .button.disabled, &.text-field.disabled .input-wrapper {
+        > * { opacity: 0.4; }
+    }
+
+    /* sets the passed color as fill color or border color, depending on @framed-mode */
+    .fill-effect(@fill-color) when not (@framed-mode) {
+        background-color: @fill-color;
+    }
+    .fill-effect(@fill-color) when (@framed-mode) {
+        border-color: @fill-color;
+    }
+
+    /* background or border for selected toggle/radio buttons */
+    &:not(.disabled) .button:not(.disabled).selected, &.dropdown-open .button {
+        .fill-effect(@selected-fill-color);
+    }
+    &.disabled .button.selected, .button.disabled.selected {
+        .fill-effect(fadeout(@selected-fill-color, 40%));
+    }
+
+    /* text color for selected toggle/radio buttons (not for link-style buttons) */
+    &:not(.link-style) {
+        .button.selected, &.dropdown-open .button {
+            color: @selected-text-color;
+            i[class^="docs-"] { .docs-icons(@selected-text-color); }
+        }
+    }
+
+    /* default background for ambiguous toggle/radio buttons */
+    .button:not(.selected).ambiguous::after {
+        content: "";
+        .absolute-with-distance(0);
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAK3RFWHRDcmVhdGlvbiBUaW1lAERpIDE0IEphbiAyMDE0IDIxOjQ2OjUyICswMTAw9OL4PQAAAAd0SU1FB94BDhQvMWGyuocAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAEZ0FNQQAAsY8L/GEFAAAAPElEQVR42mNgIAAYQURaWpokkFID4luzZs16jqyABUqDJB2gbKwKbqHRxANGbILIbmLBoRHuJlwK4G4CAPIbDHnTEBvvAAAAAElFTkSuQmCC);
+        background-size: 4px 4px;
+    }
+
+    /* raise focused control element to make all borders visible */
+    :focus {
+        z-index: 2;
+    }
+
+    /* hover/active highlighting for enabled buttons (but not for link style) */
+    html:not(.touch) &:not(.link-style):not(.disabled) {
+
+        /* functional mix-in that defines the variables @hover-fill-color and @active-fill-color as "return values" */
+        .define-hover-fill-colors(@fill-color; @hover-fade) when (@hover-fade > 0%) {
+            @hover-fill-color: lighten(@fill-color, @hover-fade);
+            @active-fill-color: lighten(@fill-color, (@hover-fade + 5%));
+        }
+        .define-hover-fill-colors(@fill-color; @hover-fade) when (@hover-fade < 0%) {
+            @hover-fill-color: darken(@fill-color, (0% - @hover-fade));
+            @active-fill-color: darken(@fill-color, (5% - @hover-fade));
+        }
+        .define-hover-fill-colors(transparent; @hover-fade) when (@hover-fade > 0%) {
+            @hover-fill-color: fade(white, @hover-fade);
+            @active-fill-color: fade(white, (@hover-fade + 5%));
+        }
+        .define-hover-fill-colors(transparent; @hover-fade) when (@hover-fade < 0%) {
+            @hover-fill-color: fade(black, (0% - @hover-fade));
+            @active-fill-color: fade(black, (5% - @hover-fade));
+        }
+
+        /* helper mix-in that calls the .fill-effect() mix-in for :hover and for :active state */
+        .button-hover-fill-effects(@hover-color; @active-color) {
+            &:hover { .fill-effect(@hover-color); }
+            &:active { .fill-effect(@active-color); }
+        }
+
+        /* hover effects */
+        & when not (@control-hover-fade = 0%) {
+            .define-hover-fill-colors(transparent; @control-hover-fade);
+
+            /* fill effects for unselected enabled buttons */
+            &:not(.dropdown-open) .button:not(.disabled):not(.selected) {
+                .button-hover-fill-effects(@hover-fill-color; @active-fill-color);
+            }
+
+            /* add border hover effect on sibling buttons, e.g. in radio lists with split button */
+            &.dropdown-group:not(.text-field):not(.disabled):hover .button:not(:hover) {
+                border-color: @hover-fill-color;
+            }
+        }
+
+        /* hover effects with the selection fill color */
+        & when not (@selected-hover-fade = 0%) {
+            .define-hover-fill-colors(@selected-fill-color; @selected-hover-fade);
+
+            /* fill effects for selected buttons, and active drop-down buttons */
+            .button:not(.disabled).selected, &.dropdown-open .button {
+                .button-hover-fill-effects(@hover-fill-color; @active-fill-color);
+            }
+        }
+    }
+
+    /* hover/active effect for enabled buttons with link style (text color instead of fill color) */
+    &.link-style:not(.disabled) .button:not(.disabled):hover {
+        color: @link-hover-color;
+    }
+
+    /* display drop-down caret with full opacity when hovering the button */
+    &:not(.disabled) .button:not(.disabled) {
+        &:hover, &:active {
+            > .caret-node > i { opacity: 1; }
+        }
+    }
+
+    /* always black text on white background with border in enabled text fields */
+    &.text-field:not(.disabled) {
+        .input-wrapper, .button {
+            background-color: white;
+            border-color: @standard-border-color;
+        }
+        .input-wrapper > input, .button {
+            color: @text-color;
+        }
+    }
+
+    /* merge left border of caret buttons in combo fields and spin fields */
+    &.combo-field > .button.caret-button, &.spin-field > .spin-wrapper {
+        margin-left: (-(@border-width));
+    }
+
+    /* add all focus effects for buttons and text fields */
+    & when not (@focus-effect-color = transparent) {
+
+        /* short-cut to call the external focus effects mix-in */
+        .button-focus-effects(@disabled) {
+            &:focus:not(:active) {
+                .focus-effects(
+                    @effect-color: @focus-effect-color;
+                    @disabled: @disabled;
+                    @glow-effect-inside: @glow-effect-inside;
+                    @border-as-shadow: @framed-mode;
+                );
+            }
+        }
+        &:not(.disabled) .button:not(.disabled) { .button-focus-effects(false); }
+        &.disabled .button, .button.disabled { .button-focus-effects(true); }
+
+        /* focused text fields */
+        &.text-field.focused {
+
+            /* short-cut to call the external focus effects mix-ins */
+            .text-field-focus-effects(@disabled) {
+                .focus-glow-effect(@effect-color: @focus-effect-color; @disabled: @disabled; @glow-effect-inside: @glow-effect-inside);
+                .input-wrapper, .button {
+                    .focus-border-effect(@effect-color: @focus-effect-color; @disabled: @disabled);
+                }
+            }
+            &:not(.disabled) { .text-field-focus-effects(false); }
+            &.disabled { .text-field-focus-effects(true); }
+        }
+    }
+}
+
+/* ========================================================================= */
+
+/* standard distance between option buttons and control groups */
+@control-standard-distance: 3px;
+
+/* standard outer height for controls */
+@control-standard-height: 35px;
+
+/* horizontal padding in control elements */
+@control-standard-padding: 7px;
+
+/* standard border radius for controls */
+@control-standard-border-radius: 3px;
+
+/* standard selection fill color for all controls */
+@control-standard-selected-color: #e0e0e0;
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * This mix-in class adds standard formatting to control groups contained in
+ * view components with white background. Adds light gray borders, and uses
+ * black text color and icons.
+ *
+ * See mix-in class 'generic-group-design-mixin()' for a description of all
+ * supported parameters.
+ */
+.standard-group-design(
+    @control-distance: @control-standard-distance;
+    @control-height: @control-standard-height;
+    @control-padding: @control-standard-padding;
+) {
+
+    /* create generic styles */
+    .generic-group-design-mixin(
+        @control-distance: @control-distance;
+        @control-height: @control-height;
+        @control-padding: @control-padding;
+        @border-radius: @control-standard-border-radius;
+        @control-text-color: @text-color;
+        @control-hover-fade: -5%;
+        @selected-fill-color: @control-standard-selected-color;
+        @selected-text-color: @text-color;
+        @selected-hover-fade: -5%;
+    );
+}
+
+/* ========================================================================= */
+
+/* outer height for controls in list menus */
+@control-list-height: 33px;
+
+/* horizontal padding for control elements in list menus */
+@control-list-padding: @standard-distance-h;
+
+/* selection fill color for control elements in list menus */
+@control-list-selected-color: lighten(@selected-background, 25%);
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * This mix-in class adds formatting to control groups that are located in a
+ * container element that displays the controls in "list" design mode. The
+ * controls will be drawn with transparent background (intended to be placed on
+ * a white background container).
+ *
+ * See mix-in class 'generic-group-design-mixin()' for a description of all
+ * supported parameters.
+ */
+.list-group-design(
+    @control-height: @control-list-height;
+    @control-padding: @control-list-padding;
+) {
+
+    /* create generic styles */
+    .generic-group-design-mixin(
+        @control-distance: 0;
+        @control-height: @control-list-height;
+        @control-padding: @control-list-padding;
+        @border-radius: 0;
+        @control-text-color: @text-color;
+        @control-hover-fade: -5%;
+        @selected-fill-color: @control-list-selected-color;
+        @selected-text-color: @text-color;
+        @selected-hover-fade: -5%;
+    );
+
+    /* additional styles for text fields */
+    &.text-field {
+        border-radius: @control-standard-border-radius;
+        .input-wrapper { border-radius: @control-standard-border-radius; }
+    }
+}
+
+/* ========================================================================= */
+
+/* outer height for controls in framed menus */
+@control-framed-height: 43px;
+
+/* horizontal padding for control elements in framed menus */
+@control-framed-padding: 8px;
+
+/* border radius for control elements in framed menus */
+@control-framed-border-radius: 3px;
+
+/* selection border color for control elements in framed menus */
+@control-framed-selected-color: lighten(@selected-background, 10%);
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * This mix-in class adds formatting to control groups that are located in a
+ * container element that displays the controls in "framed" design mode. The
+ * controls will be drawn with transparent background (intended to be placed on
+ * a white background container). Hover effects and selection effects will be
+ * visualized as thick borders around the control elements, the element
+ * background will not be changed.
+ *
+ * See mix-in class 'generic-group-design-mixin()' for a description of all
+ * supported parameters.
+ */
+.framed-group-design(
+    @control-height: @control-framed-height;
+    @control-padding: @control-framed-padding;
+) {
+
+    /* create generic styles */
+    .generic-group-design-mixin(
+        @control-distance: 0;
+        @control-height: @control-framed-height;
+        @control-padding: @control-framed-padding;
+        @border-radius: 0;
+        @control-text-color: @text-color;
+        @control-hover-fade: -5%;
+        @selected-fill-color: @control-framed-selected-color;
+        @selected-text-color: @text-color;
+        @selected-hover-fade: -5%;
+        @framed-mode: true;
+    );
+
+    .button {
+        border-radius: @control-framed-border-radius !important;
+    }
+}
+
+/* ========================================================================= */
+/* selection border styles                                                   */
+/* ========================================================================= */
+
+/* fill color for the border handles */
+.border-handle-color-styles(@color; @hover-glow: false; @active-glow: false) {
+
+    /* border color */
+    > .borders > [data-pos]::before {
+        background-color: @color;
+    }
+
+    /* glow effect for hovering border handles */
+    &:not(.tracking-active) > .borders:hover > [data-pos]::before when (@hover-glow) {
+        box-shadow: 0 0 2px @color;
+    }
+
+    /* glow effect for border handles while tracking is active */
+    &.tracking-active > .borders > [data-pos]::before when (@active-glow) {
+        box-shadow: 0 0 3px @color;
+    }
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Adds formatting styles to border handle elements used e.g. in a selection
+ * box of a specific object node.
+ *
+ * This class must be applied to the root node with a child border container
+ * node marked with the CSS class "borders". The border container node must
+ * contain border handle nodes, each with the attribute "data-pos" containing
+ * the position of the border handle. Supported values are "l", "r", "t", or
+ * "b".
+ *
+ * @size is the width or height (according to the position) of the visible
+ * border line, in pixels.
+ *
+ * @padding is the additional area around the border line that will cause the
+ * hover effect, in pixels. The resulting size of the border handle nodes will
+ * include the specified line size and twice the padding size.
+ *
+ * @offset is the position offset of the border handles relative to the default
+ * position. By default, the border lines will be placed centered on top of the
+ * root node borders (if the line width is an odd number of pixels, the middle
+ * pixel of the line will be placed on the outer pixel inside the root node).
+ * Positive values for this parameter will shift the lines inside the area of
+ * the root node, negative values will shift the lines outside.
+ *
+ * @color is the color of the border line and glow effect.
+ *
+ * If @hover-glow is set to true, and one of the border handles is hovered with
+ * the mouse, all border handles will show a light glow effect.
+ *
+ * If @active-glow is set to true, all border handles will show a more intense
+ * glow effect, while the root node contains the CSS class "tracking-active".
+ *
+ * If @move-cursor is set to true, the mouse pointer of the border lines will
+ * be set to the value "move". Otherwise, the mouse pointer will be derived
+ * from the root node.
+ */
+.border-handle-styles(@size; @padding; @offset; @color; @hover-glow: false; @active-glow: false; @move-cursor: false) {
+
+    @outer-shift: (-(floor(@size / 2)) - @padding + @offset);
+    @total-size: (@size + 2 * @padding);
+
+    > .borders {
+        position: static;
+        width: 0;
+        height: 0;
+        overflow: visible;
+
+        > [data-pos] {
+            position: absolute;
+
+            &[data-pos="l"], &[data-pos="r"] { top: (@outer-shift + @size); bottom: (@outer-shift + @size); width: @total-size; }
+            &[data-pos="t"], &[data-pos="b"] { left: @outer-shift; right: @outer-shift; height: @total-size; }
+            &[data-pos="l"] { left: @outer-shift; }
+            &[data-pos="r"] { right: @outer-shift; }
+            &[data-pos="t"] { top: @outer-shift; }
+            &[data-pos="b"] { bottom: @outer-shift; }
+
+            /* add move cursor if specified */
+            & when (@move-cursor) { cursor: move; }
+
+            /* visible part of the border handle */
+            &::before {
+                content: "";
+                .absolute-with-distance(@padding);
+            }
+        }
+    }
+
+    /* add all color-dependent styles */
+    .border-handle-color-styles(@color; @hover-glow; @active-glow);
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* z-index for the border handles */
+.border-handle-z-index(@z-index) {
+    > .borders > [data-pos] { z-index: @z-index; }
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* complex background style for the border handles */
+.border-handle-background-style(@background) {
+    > .borders > [data-pos]::before { background: @background; }
+}
+
+/* ========================================================================= */
+/* selection resizer handle styles                                           */
+/* ========================================================================= */
+
+/* border color for the resizer handles */
+.resizer-handle-color-styles(@color; @hover-glow: false; @active-glow: false) {
+
+    /* border color */
+    > .resizers > [data-pos]::before {
+        border-color: @color;
+    }
+
+    /* glow effect for hovering resizer handles */
+    &:not(.tracking-active) > .resizers:hover > [data-pos]::before when (@hover-glow) {
+        box-shadow: 0 0 3px @color;
+    }
+
+    /* glow effect for resizer handles while tracking is active */
+    &.tracking-active > .resizers > [data-pos]::before when (@active-glow) {
+        box-shadow: 0 0 4px @color;
+    }
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Adds formatting styles to resizer handle elements used e.g. in a selection
+ * box of a specific object node.
+ *
+ * This class must be applied to the root node with a child resizer container
+ * node marked with the CSS class "resizers". The resizer container node must
+ * contain resizer handle nodes, each with the attribute "data-pos" containing
+ * the position of the resizer handle. Supported values are "tl", "tr", "bl",
+ * or "br" for corner positions, and "l", "r", "t", or "b" for the center
+ * positions of the root node borders.
+ *
+ * @size is the width and height of the visible area of the resizer, in pixels.
+ *
+ * @padding is the additional area around the resizer that will cause the hover
+ * effect, in pixels. The resulting size of the resizer handle nodes will
+ * include the specified visible size and twice the padding size.
+ *
+ * @offset is the position offset of the resizer handles relative to the
+ * default position. By default, the handles will be placed centered on top of
+ * the root node borders (if the size of the handles is an odd number of
+ * pixels, the middle pixel of the handle will be placed on the outer pixel
+ * inside the root node). Positive values for this parameter will shift the
+ * handles inside the area of the root node, negative values will shift the
+ * handles outside.
+ *
+ * @color is the color of the border line and glow effect of the resizer.
+ *
+ * If @hover-glow is set to true, and one of the resizer handles is hovered
+ * with the mouse, all resizer handles will show a light glow effect.
+ *
+ * If @active-glow is set to true, all resizer handles will show a more intense
+ * glow effect, while the root node contains the CSS class "tracking-active".
+ *
+ * If @move-cursor is set to true, the mouse pointer of the resizer handles
+ * will be set to appropriate values according to the position of the handles.
+ * Otherwise, the mouse pointer will be derived from the root node.
+ */
+.resizer-handle-styles(@size; @padding; @offset; @color; @hover-glow: false; @active-glow: false; @move-cursor: false) {
+
+    @outer-shift: (-(floor(@size / 2)) - @padding + @offset);
+    @total-size: (@size + 2 * @padding);
+
+    > .resizers {
+        position: static;
+        width: 0;
+        height: 0;
+        overflow: visible;
+
+        > [data-pos] {
+            position: absolute;
+            width: @total-size;
+            height: @total-size;
+
+            &[data-pos="tl"], &[data-pos="t"], &[data-pos="tr"] { top: @outer-shift; }
+            &[data-pos="l"], &[data-pos="r"] { top: 50%; margin-top: @outer-shift; }
+            &[data-pos="bl"], &[data-pos="b"], &[data-pos="br"] { bottom: @outer-shift; }
+
+            &[data-pos="tl"], &[data-pos="l"], &[data-pos="bl"] { left: @outer-shift; }
+            &[data-pos="t"], &[data-pos="b"] { left: 50%; margin-left: @outer-shift; }
+            &[data-pos="tr"], &[data-pos="r"], &[data-pos="br"] { right: @outer-shift; }
+
+            /* add move cursor if specified */
+            & when (@move-cursor) {
+                &[data-pos="tl"] { cursor: nw-resize; }
+                &[data-pos="t"]  { cursor: n-resize;  }
+                &[data-pos="tr"] { cursor: ne-resize; }
+                &[data-pos="r"]  { cursor: e-resize;  }
+                &[data-pos="br"] { cursor: se-resize; }
+                &[data-pos="b"]  { cursor: s-resize;  }
+                &[data-pos="bl"] { cursor: sw-resize; }
+                &[data-pos="l"]  { cursor: w-resize;  }
+            }
+
+            /* visible part of the resizer handle */
+            &::before {
+                content: "";
+                .absolute-with-distance(@padding);
+                background-color: white;
+                border: 1px solid black;
+                border-radius: 50%;
+                box-shadow: 0 0 0 1px fade(white, 50%);
+            }
+        }
+    }
+
+    /* add all color-dependent styles */
+    .resizer-handle-color-styles(@color; @hover-glow; @active-glow);
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* z-index for the resizer handles */
+.resizer-handle-z-index(@z-index) {
+    > .resizers > [data-pos] { z-index: @z-index; }
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* custom border line width for the resizer handles */
+.resizer-handle-border-width(@border-width) {
+    > .resizers > [data-pos]::before { border-width: @border-width; }
+}
+
+/* ========================================================================= */

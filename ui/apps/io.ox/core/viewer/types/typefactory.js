@@ -36,29 +36,37 @@ define('io.ox/core/viewer/types/typefactory', [
          */
         getModelType: function (model) {
             //console.warn('getModelType()', model.get('fileCategory'));
-            if (!model.get('fileCategory')) {
-                return new DefaultType();
-            }
+            var modelType = null;
             switch (model.get('fileCategory')) {
                 case 'AUDIO':
-                    return new AudioType();
+                    modelType = new AudioType(model);
+                    break;
                 case 'VIDEO':
-                    return new VideoType();
+                    modelType = new VideoType(model);
+                    break;
                 case 'IMAGE':
-                    return new ImageType();
+                    modelType = new ImageType(model);
+                    break;
                 case 'OFFICE':
-                    return new DocumentType();
+                    modelType = new DocumentType(model);
+                    break;
                 case 'OFFICE_TEXT':
-                    return new DocumentType();
+                    modelType = new DocumentType(model);
+                    break;
                 case 'OFFICE_SPREADSHEET':
-                    return new DocumentType();
+                    modelType = new DocumentType(model);
+                    break;
                 case 'OFFICE_PRESENTATION':
-                    return new DocumentType();
+                    modelType = new DocumentType(model);
+                    break;
                 case 'PDF':
-                    return new DocumentType();
+                    modelType = new DocumentType(model);
+                    break;
                 default:
-                    return new DefaultType();
+                    modelType = new DefaultType(model);
+                    break;
             }
+            return modelType;
         }
     };
 

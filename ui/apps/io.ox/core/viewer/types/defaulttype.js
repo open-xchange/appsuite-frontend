@@ -26,7 +26,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
      *
      * @constructor
      */
-    function DefaultType() {
+    function DefaultType(model) {
         /**
          * Creates a default slide.
          *
@@ -39,9 +39,9 @@ define('io.ox/core/viewer/types/defaulttype',  [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (model, modelIndex) {
+        this.createSlide = function (modelIndex) {
             //console.warn('DefaultType.createSlide()', model, modelIndex);
-            var slide = $('<div class="swiper-slide">'),
+            var slide = $('<div class="swiper-slide" tabindex="-1">'),
                 displayerTopOffset = $('.viewer-toolbar').outerHeight(),
                 slideContent = $('<div class="viewer-displayer-notification">')
                     .css({ maxHeight: window.innerHeight - displayerTopOffset }),

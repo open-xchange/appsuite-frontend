@@ -18,6 +18,172 @@ define('io.ox/core/viewer/util', [
 
     var Util = {};
 
+    // constants --------------------------------------------------------------
+
+    /**
+     * The Unicode character for a horizontal ellipsis.
+     *
+     * @constant
+     */
+    Util.ELLIPSIS_CHAR = '\u2026';
+
+    /**
+     * A unique object used as return value in callback functions of iteration
+     * loops to break the iteration process immediately.
+     *
+     * @constant
+     */
+    Util.BREAK = {};
+
+    /**
+     * A function that does nothing and returns its calling context (the symbol
+     * this).
+     *
+     * @constant
+     */
+    Util.NOOP = function () { return this; };
+
+    /**
+     * Number of colors in the color scheme used for highlighting of specific
+     * document contents.
+     *
+     * @constant
+     */
+    Util.SCHEME_COLOR_COUNT = 7;
+
+    /**
+     * A Boolean flag specifying whether the current display is a retina
+     * display.
+     *
+     * @constant
+     */
+    Util.RETINA = _.device('retina');
+
+    /**
+     * A Boolean flag specifying whether the current device is small (smart
+     * phones).
+     *
+     * @constant
+     */
+    Util.SMALL_DEVICE = _.device('smartphone');
+
+    /**
+     * A Boolean flag specifying whether the current device is small (smart
+     * phones) or medium sized (tablets with a width of less than 1024px).
+     *
+     * @constant
+     */
+    Util.COMPACT_DEVICE = Util.SMALL_DEVICE || _.device('tablet');
+
+    /**
+     * A Boolean flag specifying whether the Internet Explorer version 9 is
+     * running.
+     *
+     * @constant
+     */
+    Util.IE9 = _.isNumber(_.browser.IE) && (_.browser.IE < 10);
+
+    /**
+     * A Boolean flag specifying whether the current device is a Touch Device.
+     *
+     * @constant
+     */
+    Util.TOUCHDEVICE = Modernizr.touch;
+
+    /**
+     * A Boolean flag specifying whether the current device is an iPad.
+     *
+     * @constant
+     */
+    Util.IPAD = !!(Util.TOUCHDEVICE && _.browser.iOS && _.browser.Safari);
+
+    /**
+     * A Boolean flag specifying whether the current device is Android and the
+     * browser is Chrome.
+     *
+     * @constant
+     */
+    Util.CHROME_ON_ANDROID = !!(_.browser.Android && _.browser.Chrome);
+
+    /**
+     * Determines the performance level of the system using some system and
+     * browser specific values.
+     *
+     * @returns {Number}
+     *  A performance level, as percentage between 0 and 100, where the value 0
+     *  means poor performance, and the value 100 best performance.
+     */
+    Util.PERFORMANCE_LEVEL = (function () {
+
+        var // default factor for unknown devices/browsers
+            DEFAULT_FACTOR = 0.8,
+        // the resulting factor
+            resultLevel = 100;
+
+        function getAspectFactor(aspects) {
+            var aspectFactor = _.find(aspects, function (factor, key) { return _.device(key); });
+            return _.isNumber(aspectFactor) ? aspectFactor : DEFAULT_FACTOR;
+        }
+
+        // reduce performance level by device type
+        resultLevel *= getAspectFactor({ desktop: 1, tablet: 0.6, smartphone: 0.5 });
+        // reduce performance level by browser type
+        resultLevel *= getAspectFactor({ chrome: 1, safari: 1, firefox: 0.9, ie: 0.6 });
+
+        // ensure value is at least 10%
+        resultLevel = Math.max(10, resultLevel);
+        //Util.log('Util: platform performance level: ' + (Math.round(resultLevel * 10) / 10) + '%');
+        return resultLevel;
+    }());
+
+    /**
+     * A Boolean flag specifying whether the current device is considered to be
+     * slow.
+     *
+     * @constant
+     */
+    Util.SLOW_DEVICE = Util.PERFORMANCE_LEVEL <= 50;
+
+    /**
+     * The maximum explicit size of single DOM nodes, in pixels. The size is
+     * limited by browsers; by using larger sizes the elements may collapse to
+     * zero size.
+     * - IE limits this to 1,533,917 (2^31/1400) in both directions.
+     * - Firefox limits this to 17,895,696 (0x1111110) in both directions.
+     * - Chrome limits this to 33,554,428 (0x1FFFFFC) in both directions.
+     *
+     * @constant
+     */
+    Util.MAX_NODE_SIZE = _.browser.IE ? 1.5e6 : _.browser.WebKit ? 33.5e6 : 17.8e6;
+
+    /**
+     * The maximum width of a container node that can be reached by inserting
+     * multiple child nodes, in pixels. The width is limited by browsers; by
+     * inserting more nodes the width of the container node becomes incorrect
+     * or collapses to zero.
+     * - IE limits this to 10,737,418 (2^31/200) pixels.
+     * - Firefox and Chrome do not allow to extend the container node beyond
+     *   the explicit size limits of a single node (see comment for the
+     *   Util.MAX_NODE_SIZE constant above).
+     *
+     * @constant
+     */
+    Util.MAX_CONTAINER_WIDTH = _.browser.IE ? 10.7e6 : Util.MAX_NODE_SIZE;
+
+    /**
+     * The maximum height of a container node that can be reached by inserting
+     * multiple child nodes, in pixels. The height is limited by browsers; by
+     * inserting more nodes the height of the container node becomes incorrect
+     * or collapses to zero.
+     * - IE limits this to 21,474,836 (2^31/100) pixels.
+     * - Firefox and Chrome do not allow to extend the container node beyond
+     *   the explicit size limits of a single node (see comment for the
+     *   Util.MAX_NODE_SIZE constant above).
+     *
+     * @constant
+     */
+    Util.MAX_CONTAINER_HEIGHT = _.browser.IE ? 21.4e6 : Util.MAX_NODE_SIZE;
+
     /**
      * Returns a date formatted as string
      *
@@ -179,6 +345,310 @@ define('io.ox/core/viewer/util', [
         );
 
         return panel;
+    };
+
+    /**
+     * Extracts a property value from the passed object. If the property does
+     * not exist, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some properties. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the property to be returned.
+     *
+     * @param {Any} [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified property.
+     *
+     * @returns {Any}
+     *  The value of the specified property, or the default value.
+     */
+    Util.getOption = function (options, name, def) {
+        return (_.isObject(options) && (name in options)) ? options[name] : def;
+    };
+
+    /**
+     * Extracts a boolean property from the passed object. If the property does
+     * not exist, or is not a boolean value, returns the specified default
+     * value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some properties. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the boolean property to be returned.
+     *
+     * @param {Any} [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified property, or if the property is
+     *  not a boolean value. May be any value (not only booleans).
+     *
+     * @returns {Any}
+     *  The value of the specified property, or the default value.
+     */
+    Util.getBooleanOption = function (options, name, def) {
+        var value = Util.getOption(options, name);
+        return _.isBoolean(value) ? value : def;
+    };
+
+    /**
+     * Extracts a string property from the passed object. If the property does
+     * not exist, or is not a string, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some properties. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the string property to be returned.
+     *
+     * @param {Any} [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified property, or if the property is
+     *  not a string. May be any value (not only strings).
+     *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty strings will be returned from the
+     *  options object. Empty strings will be replaced with the specified
+     *  default value.
+     *
+     * @returns {Any}
+     *  The value of the specified property, or the default value.
+     */
+    Util.getStringOption = function (options, name, def, nonEmpty) {
+        var value = Util.getOption(options, name);
+        return (_.isString(value) && (!nonEmpty || (value.length > 0))) ? value : def;
+    };
+
+    /**
+     * Extracts a function from the passed object. If the property does not
+     * exist, or is not a function, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some properties. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the property to be returned.
+     *
+     * @param {Any} [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified property, or if the property is
+     *  not an object. May be any value (not only functions).
+     *
+     * @returns {Any}
+     *  The value of the specified property, or the default value.
+     */
+    Util.getFunctionOption = function (options, name, def) {
+        var value = Util.getOption(options, name);
+        return _.isFunction(value) ? value : def;
+    };
+
+    /**
+     * Creates and returns a merged options map from the passed objects. Unlike
+     * Underscore's extend() method, does not modify the passed objects, but
+     * creates and returns a clone. Additionally, extends embedded plain JS
+     * objects deeply instead of replacing them, for example, extending the
+     * objects {a:{b:1}} and {a:{c:2}} will result in {a:{b:1,c:2}}.
+     *
+     * @param {Object} [...]
+     *  One or more objects whose properties will be inserted into the
+     *  resulting object.
+     *
+     * @returns {Object}
+     *  A new object containing all properties of the passed objects.
+     */
+    Util.extendOptions = function () {
+
+        var // the resulting options
+            result = {};
+
+        function isPlainObject(value) {
+            return _.isObject(value) && (value.constructor === Object);
+        }
+
+        function extend(options, extensions) {
+            _.each(extensions, function (value, name) {
+                if (isPlainObject(value)) {
+                    // extension value is a plain object: ensure that the options map contains an embedded object
+                    if (!isPlainObject(options[name])) {
+                        options[name] = {};
+                    }
+                    extend(options[name], value);
+                } else {
+                    // extension value is not a plain object: clear old value, even if it was an object
+                    options[name] = value;
+                }
+            });
+        }
+
+        // add all objects to the clone
+        for (var index = 0; index < arguments.length; index += 1) {
+            if (_.isObject(arguments[index])) {
+                extend(result, arguments[index]);
+            }
+        }
+
+        return result;
+    };
+
+    /**
+     * Returns the current value of the specified CSS length attribute, in
+     * pixels.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose length attribute will be returned. If this object
+     *  is a jQuery collection, uses the first node it contains.
+     *
+     * @param {String} name
+     *  The name of the CSS attribute to be returned.
+     *
+     * @returns {Number}
+     *  The length value, converted to pixels, rounded to integer.
+     */
+    Util.getElementCssLength = function (node, name) {
+        return Util.convertCssLength($(node).css(name), 'px', 1);
+    };
+
+    /**
+     * Converts a CSS length value with measurement unit into a value of
+     * another absolute CSS measurement unit.
+     *
+     * @param {String} valueAndUnit
+     *  The value with its measurement unit to be converted, as string.
+     *
+     * @param {String} toUnit
+     *  The target CSS measurement unit. See method Util.convertLength() for
+     *  a list of supported units.
+     *
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
+     *
+     * @returns {Number}
+     *  The length value converted to the target measurement unit, as
+     *  floating-point number.
+     */
+    Util.convertCssLength = function (valueAndUnit, toUnit, precision) {
+        var value = parseFloat(valueAndUnit);
+        if (!_.isFinite(value)) {
+            value = 0;
+        }
+        if (value && (valueAndUnit.length > 2)) {
+            value = Util.convertLength(value, valueAndUnit.substr(-2), toUnit, precision);
+        }
+        return value;
+    };
+
+    /**
+     * Converts a length value from an absolute CSS measurement unit into
+     * another absolute CSS measurement unit.
+     *
+     * @param {Number} value
+     *  The length value to convert, as floating-point number.
+     *
+     * @param {String} fromUnit
+     *  The CSS measurement unit of the passed value, as string. Supported
+     *  units are 'px' (pixels), 'pc' (picas), 'pt' (points), 'in' (inches),
+     *  'cm' (centimeters), and 'mm' (millimeters).
+     *
+     * @param {String} toUnit
+     *  The target measurement unit.
+     *
+     * @param {Number} [precision]
+     *  If specified, the resulting length will be rounded to the nearest
+     *  multiple of this value. Must be positive.
+     *
+     * @returns {Number}
+     *  The length value converted to the target measurement unit, as
+     *  floating-point number.
+     */
+    Util.convertLength = (function () {
+
+        var // the conversion factors between pixels and other units
+            FACTORS = {
+                'px': 1,
+                'pc': 1 / 9,
+                'pt': 4 / 3,
+                'in': 96,
+                'cm': 96 / 2.54,
+                'mm': 96 / 25.4
+            };
+
+        return function convertLength(value, fromUnit, toUnit, precision) {
+            value *= (FACTORS[fromUnit] || 1) / (FACTORS[toUnit] || 1);
+            return _.isFinite(precision) ? Util.round(value, precision) : value;
+        };
+    }());
+
+    /**
+     * Rounds the passed floating-point number to the nearest multiple of the
+     * specified precision.
+     *
+     * @param {Number} value
+     *  The floating-point number to be rounded.
+     *
+     * @param {Number} precision
+     *  The precision used to round the number. The value 1 will round to
+     *  integers (exactly like the Math.round() method). Must be positive. If
+     *  less than 1, must be the inverse of an integer to prevent further
+     *  internal rounding errors.
+     *
+     * @returns {Number}
+     *  The rounded number.
+     */
+    Util.round = function (value, precision) {
+        // Multiplication with small value may result in rounding errors (e.g.,
+        // 227*0.1 results in 22.700000000000003), division by inverse value
+        // works sometimes (e.g. 227/(1/0.1) results in 22.7), rounding the
+        // inverse before division finally should work in all(?) cases, but
+        // restricts valid precisions to inverses of integer numbers.
+        value = Math.round((precision < 1) ? (value * Math.round(1 / precision)) : (value / precision));
+        return (precision < 1) ? (value / Math.round(1 / precision)) : (value * precision);
+    };
+
+    /**
+     * Sets a CSS formatting attribute with all browser-specific prefixes at
+     * the passed element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose CSS attribute will be changed. If this object is
+     *  a jQuery collection, changes all contained nodes.
+     *
+     * @param {String} name
+     *  The base name of the CSS attribute.
+     *
+     * @param {Any} value
+     *  The new value of the CSS attribute.
+     */
+    Util.setCssAttributeWithPrefixes = (function () {
+
+        var // the prefix for the current browser
+            prefix = _.browser.WebKit ? '-webkit-' : _.browser.Firefox ? '-moz-' : _.browser.IE ? '-ms-' : '';
+
+        return function (node, name, value) {
+            var props = Util.makeSimpleObject(name, value);
+            if (prefix) { props[prefix + name] = value; }
+            $(node).css(props);
+        };
+    }());
+
+    /**
+     * Returns a new object containing a single property with the specified key
+     * and value.
+     *
+     * @param {String} key
+     *  The name of the property to be inserted into the returned object.
+     *
+     * @param value
+     *  The value of the property to be inserted into the returned object.
+     *
+     * @returns {Object}
+     *  A new object with a single property.
+     */
+    Util.makeSimpleObject = function (key, value) {
+        var object = {};
+        object[key] = value;
+        return object;
     };
 
     return Util;

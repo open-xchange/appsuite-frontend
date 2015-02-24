@@ -127,6 +127,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     var slideIndex = $(element).data('swiper-slide-index');
                     TypeFactory.getModelType(self.collection.at(slideIndex)).loadSlide($(element));
                 });
+                // focus first active slide initially
+                self.focusActiveSlide();
             });
             return this;
         },
@@ -142,7 +144,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {jQuery}
          */
         createSlide: function (model, modelIndex) {
-            return TypeFactory.getModelType(model).createSlide(model, modelIndex);
+            return TypeFactory.getModelType(model).createSlide(modelIndex);
         },
 
         /**
@@ -201,6 +203,10 @@ define('io.ox/core/viewer/views/displayerview', [
             this.captionTimeoutId = window.setTimeout(function () {
                 slideCaption.fadeOut();
             }, duration);
+        },
+
+        focusActiveSlide: function () {
+            this.$el.find('.swiper-slide-active').focus();
         },
 
         dispose: function () {

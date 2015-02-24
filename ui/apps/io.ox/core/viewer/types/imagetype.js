@@ -23,7 +23,7 @@ define('io.ox/core/viewer/types/imagetype', [
      *
      * @constructor
      */
-    function ImageType() {
+    function ImageType(model) {
         /**
          * Creates a Image slide.
          *
@@ -36,9 +36,9 @@ define('io.ox/core/viewer/types/imagetype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (model, modelIndex) {
+        this.createSlide = function (modelIndex) {
             //console.warn('ImageType.createSlide()');
-            var slide = $('<div class="swiper-slide">'),
+            var slide = $('<div class="swiper-slide" tabindex="-1">'),
                 image = $('<img class="viewer-displayer-image">'),
                 caption = $('<div class="viewer-displayer-caption">'),
                 previewUrl = model && model.getPreviewUrl(),

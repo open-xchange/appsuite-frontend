@@ -91,14 +91,10 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayerView.render(data).el,
                 this.sidebarView.render(data).el
             );
-            // focus this view deferred
-            _.defer(function () {
-                self.$el.focus();
-            });
             // Hotfix to prevent Halo View from stealing the focus
             // TODO: remove when Viewer replaces the Halo View
             _.delay(function () {
-                self.$el.focus();
+                self.displayerView.focusActiveSlide();
             }, 100);
 
             return this;
@@ -141,9 +137,11 @@ define('io.ox/core/viewer/views/mainview', [
                     break;
                 case 37: // left arrow
                     this.displayerView.swiper.slidePrev();
+                    this.displayerView.$el.find('.swiper-slide-active').focus();
                     break;
                 case 39: // right arrow
                     this.displayerView.swiper.slideNext();
+                    this.displayerView.$el.find('.swiper-slide-active').focus();
                     break;
             }
         },

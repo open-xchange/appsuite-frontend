@@ -22,7 +22,7 @@ define('io.ox/core/viewer/types/videotype', [
      *
      * @constructor
      */
-    function VideoType() {
+    function VideoType(model) {
         /**
          * Creates a video slide.
          *
@@ -35,7 +35,7 @@ define('io.ox/core/viewer/types/videotype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (model, modelIndex) {
+        this.createSlide = function (modelIndex) {
             //console.warn('VideoType.createSlide()');
             var slide = $('<div class="swiper-slide">'),
                 caption = $('<div class="viewer-displayer-caption">'),

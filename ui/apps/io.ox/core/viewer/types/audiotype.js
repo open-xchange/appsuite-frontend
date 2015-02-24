@@ -22,7 +22,7 @@ define('io.ox/core/viewer/types/audiotype',  [
      *
      * @constructor
      */
-    function AudioType() {
+    function AudioType(model) {
         /**
          * Creates a audio slide.
          *
@@ -35,7 +35,7 @@ define('io.ox/core/viewer/types/audiotype',  [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (model, modelIndex) {
+        this.createSlide = function (modelIndex) {
             //console.warn('AudioType.createSlide()');
             var slide = $('<div class="swiper-slide">'),
                 caption = $('<div class="viewer-displayer-caption">'),
