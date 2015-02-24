@@ -17,8 +17,9 @@ define('plugins/administration/resources/settings/toolbar', [
     'io.ox/backbone/mini-views/toolbar',
     'plugins/administration/resources/settings/edit',
     'io.ox/core/api/resource',
+    'io.ox/core/tk/dialogs',
     'gettext!io.ox/core'
-], function (ext, links, Toolbar, edit, resourceAPI, gt) {
+], function (ext, links, Toolbar, edit, resourceAPI, dialogs, gt) {
 
     'use strict';
 
@@ -52,8 +53,18 @@ define('plugins/administration/resources/settings/toolbar', [
             return e.collection.has('one');
         },
         action: function (baton) {
-            var data = baton.data[0];
-            resourceAPI.remove(data.id);
+            var id = baton.data[0].id, model = resourceAPI.getModel(id);
+            new dialogs.ModalDialog()
+            .text(
+                //#. %1$s is the resource name
+                gt('Do you really want to delete the resource "%1$s"? This action cannot be undone!', model.get('display_name'))
+            )
+            .addPrimaryButton('delete', gt('Delete resource'), 'delete', {'tabIndex': '1'})
+            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+            .on('delete', function () {
+                resourceAPI.remove(id);
+            })
+            .show();
         }
     });
 

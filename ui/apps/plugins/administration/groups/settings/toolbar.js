@@ -17,8 +17,9 @@ define('plugins/administration/groups/settings/toolbar', [
     'io.ox/backbone/mini-views/toolbar',
     'plugins/administration/groups/settings/edit',
     'io.ox/core/api/group',
+    'io.ox/core/tk/dialogs',
     'gettext!io.ox/core'
-], function (ext, links, Toolbar, edit, groupAPI, gt) {
+], function (ext, links, Toolbar, edit, groupAPI, dialogs, gt) {
 
     'use strict';
 
@@ -56,8 +57,18 @@ define('plugins/administration/groups/settings/toolbar', [
             return _(e.context).pluck('id').indexOf(0) === -1;
         },
         action: function (baton) {
-            var data = baton.data[0];
-            groupAPI.remove(data.id);
+            var id = baton.data[0].id, model = groupAPI.getModel(id);
+            new dialogs.ModalDialog()
+            .text(
+                //#. %1$s is the group name
+                gt('Do you really want to delete the group "%1$s"? This action cannot be undone!', model.get('display_name'))
+            )
+            .addPrimaryButton('delete', gt('Delete group'), 'delete', {'tabIndex': '1'})
+            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+            .on('delete', function () {
+                groupAPI.remove(id);
+            })
+            .show();
         }
     });
 
