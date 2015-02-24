@@ -116,6 +116,10 @@ define('plugins/administration/groups/settings/members', [
 
         resolve: function (members) {
             if (!members.length) return $.when();
+            // limit member to a maximum of 1000 users; edge-case;
+            // should only affect "All users" in very large enterprise contexts
+            if (members.length > 1000) members = members.slice(0, 1000);
+            // fetch user data
             return userAPI.getList(members).done(function (list) {
                 this.reset(list, { parse: true });
             }.bind(this));
