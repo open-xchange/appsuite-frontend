@@ -43,7 +43,7 @@ define([
     describe('Tasks edit view', function () {
         beforeEach(function () {
             //set capabilities
-            return capabilities.then(function (data) {
+            return capabilities.then(function () {
                 return setup();
             });
         });
@@ -91,7 +91,8 @@ define([
                 expect(node.find('#task-edit-progress-field').length).to.equal(1);
                 expect(node.find('[data-action="plus"]').length).to.equal(1);
                 expect(node.find('[data-action="minus"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="priority"] select').length).to.equal(1);                expect(node.find('[data-extension-id="priority"] select').children().length).to.equal(4);
+                expect(node.find('[data-extension-id="priority"] select').length).to.equal(1);
+                expect(node.find('[data-extension-id="priority"] select').children().length).to.equal(4);
                 expect(node.find('.private-flag').length).to.equal(1);
                 expect(node.find('.private-flag input[type="checkbox"]').length).to.equal(1);
             });
