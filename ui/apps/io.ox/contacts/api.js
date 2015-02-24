@@ -746,7 +746,7 @@ define('io.ox/contacts/api', [
 
             // cached?
             if (cachesURLs[url]) {
-                return node.css('background-image', 'url(' + cachesURLs[url] + ')');
+                return opt.urlOnly ? cachesURLs[url] : node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
 
             if (!opt.urlOnly) {
