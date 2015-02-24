@@ -104,8 +104,6 @@ define('plugins/administration/groups/settings/pane', [
                 $('<h2>').text(model.get('display_name')),
                 // members
                 new members.View({ model: model }).render().$el
-                // // last modified
-                // $('<div class="last_modified">').text(gt('Last modified: %1$s', '21.02.2015'))
             );
         },
 
@@ -139,6 +137,7 @@ define('plugins/administration/groups/settings/pane', [
                 $('<div class="bold">').text(baton.model.get('display_name')),
                 // number of members
                 $('<div class="gray">').text(
+                    //#. %1$d is the number of members
                     gt.format(gt.ngettext('%1$d member', '%1$d members', length), length)
                 )
             );

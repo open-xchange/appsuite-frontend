@@ -107,13 +107,10 @@ msgstr[0] "%1$d Objekt markiert"
 msgstr[1] "%1$d Objekte markiert"
 
 #: apps/plugins/administration/groups/settings/pane.js:142 module:io.ox/core
-#, fuzzy
-#| msgid "%1$d Week"
-#| msgid_plural "%1$d Weeks"
 msgid "%1$d member"
 msgid_plural "%1$d members"
-msgstr[0] "%1$d Woche"
-msgstr[1] "%1$d Wochen"
+msgstr[0] "%1$d Mitglied"
+msgstr[1] "%1$d Mitglieder"
 
 #: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
@@ -744,10 +741,8 @@ msgid "Add mail account"
 msgstr "E-Mail-Account hinzufügen"
 
 #: apps/plugins/administration/groups/settings/edit.js:45 module:io.ox/core
-#, fuzzy
-#| msgid "Add feed"
 msgid "Add member"
-msgstr "Feed hinzufügen"
+msgstr "Mitglied hinzufügen"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:239 module:io.ox/core/pubsub
 msgid "Add new account"
@@ -1991,17 +1986,13 @@ msgstr "Neuen %1$s-Account anlegen"
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js:73
-#, fuzzy
-#| msgid "Create new rule"
 msgid "Create new group"
-msgstr "Neue Regel erstellen"
+msgstr "Neue Gruppe erstellen"
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
 #: apps/plugins/administration/resources/settings/toolbar.js:69
-#, fuzzy
-#| msgid "Create new rule"
 msgid "Create new resource"
-msgstr "Neue Regel erstellen"
+msgstr "Neue Ressource erstellen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Create new rule"
@@ -2687,16 +2678,12 @@ msgid "Edit draft"
 msgstr "Entwurf bearbeiten"
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
-#, fuzzy
-#| msgid "Add group"
 msgid "Edit group"
-msgstr "Gruppe hinzufügen"
+msgstr "Gruppe bearbeiten"
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
-#, fuzzy
-#| msgid "Edit rule"
 msgid "Edit resource"
-msgstr "Regel bearbeiten"
+msgstr "Ressource bearbeiten"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Edit rule"
@@ -3457,17 +3444,13 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: apps/plugins/administration/groups/settings/edit.js:98 module:io.ox/core
-#, fuzzy
-#| msgid "Your name"
 msgid "Group name"
-msgstr "Ihr Name"
+msgstr "Gruppenname"
 
 #: apps/plugins/administration/groups/register.js:23 module:io.ox/core
 #: apps/plugins/administration/groups/settings/pane.js:115
-#, fuzzy
-#| msgid "Group"
 msgid "Groups"
-msgstr "Gruppe"
+msgstr "Gruppen"
 
 #: apps/io.ox/core/permissions/permissions.js:46 module:io.ox/core
 msgid "Guest"
@@ -4088,10 +4071,8 @@ msgid "Mail address"
 msgstr "E-Mail-Adresse"
 
 #: apps/plugins/administration/resources/settings/edit.js:55 module:io.ox/core
-#, fuzzy
-#| msgid "Mail address"
 msgid "Mail address (mandatory)"
-msgstr "E-Mail-Adresse"
+msgstr "E-Mail-Adresse (Pflichtfeld)"
 
 #: apps/io.ox/contacts/view-detail.js:525 module:io.ox/contacts
 msgid "Mail and Messaging"
@@ -4306,10 +4287,8 @@ msgid "Medium priority"
 msgstr "Mittlere Priorität"
 
 #: apps/plugins/administration/groups/settings/edit.js:105 module:io.ox/core
-#, fuzzy
-#| msgid "December"
 msgid "Members"
-msgstr "Dezember"
+msgstr "Mitglieder"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
 msgid "Messaging"
@@ -5794,10 +5773,8 @@ msgstr "Entfernen"
 
 #. %1$s is the user name of the group member
 #: apps/plugins/administration/groups/settings/members.js:82 module:io.ox/core
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove %1$s"
-msgstr "Entfernen"
+msgstr "%1$s entfernen"
 
 #: apps/io.ox/backbone/mini-views/attachments.js:88
 #: module:io.ox/core/tk/attachments
@@ -5905,10 +5882,8 @@ msgid "Resource group"
 msgstr "Ressourcengruppe"
 
 #: apps/plugins/administration/resources/settings/edit.js:45 module:io.ox/core
-#, fuzzy
-#| msgid "Resource"
 msgid "Resource name"
-msgstr "Ressource"
+msgstr "Ressourcenname"
 
 #: apps/io.ox/calendar/participants.js:258 module:io.ox/calendar
 #: apps/plugins/administration/resources/register.js:23 module:io.ox/core
@@ -6632,7 +6607,7 @@ msgstr "Suche starten"
 
 #: apps/plugins/administration/groups/settings/edit.js:48 module:io.ox/core
 msgid "Start typing to search for user names"
-msgstr ""
+msgstr "Tippen Sie, um nach Benutzernamen zu suchen"
 
 #: apps/io.ox/calendar/edit/template.js:154 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core

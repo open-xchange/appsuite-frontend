@@ -78,6 +78,7 @@ define('plugins/administration/groups/settings/members', [
                 $('<span class="name">').html(model.getFullNameHTML()),
                 this.editable ?
                     $('<a href="#" role="button" class="close pull-right remove-member" tabindex="1"><span aria-hidden="true">&times;</span></a>')
+                    .attr('title', gt('Remove member'))
                     //#. %1$s is the user name of the group member
                     .attr('aria-label', gt('Remove %1$s', model.getFullName())) :
                     []
