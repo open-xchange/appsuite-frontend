@@ -739,8 +739,9 @@ define('io.ox/calendar/week/view', [
          * @return { View} thie view
          */
         adjustCellHeight: function () {
+            var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)),18);
             this.cellHeight = Math.floor(
-                Math.max(this.pane.height() / ((this.workEnd - this.workStart + 1) * this.fragmentation),
+                Math.max(this.pane.height() / (cells * this.fragmentation),
                 this.minCellHeight)
             );
 
@@ -1583,7 +1584,7 @@ define('io.ox/calendar/week/view', [
          * @param  {number} tag value of the day [0 - 6] for week view
          * @return { number}     timestamp
          */
-        getTimeFromDateTag: function (tag)  {
+        getTimeFromDateTag: function (tag) {
             return new date.Local(this.startDate.getTime()).addUTC(tag * date.DAY);
         },
 
