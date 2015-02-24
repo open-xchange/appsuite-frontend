@@ -323,8 +323,8 @@ define('io.ox/mail/listview',
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
 
-            // nothing changed
-            if (!threadlist || threadlist.length === model.get('thread').length) return;
+            // up to date
+            if (!model.get('thread') || threadlist.length === model.get('thread').length) return;
 
             // remove head property to avid accidently using old date when processThreadMessage
             _.each(threadlist, function (item) {
