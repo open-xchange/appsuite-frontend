@@ -407,8 +407,11 @@ define.async('io.ox/core/tk/html-editor',
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            textproc.texttohtml(str).done(function (content) {
-                set('<p></p>' + content);
+            return textproc.texttohtml(str).done(function (content) {
+                if (/^<blockquote\>/.test(content)) {
+                    content = '<p></p>' + content;
+                }
+                set(content);
             });
         };
 

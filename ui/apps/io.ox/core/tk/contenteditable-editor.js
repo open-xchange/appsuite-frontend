@@ -373,7 +373,10 @@ define.async('io.ox/core/tk/contenteditable-editor',
             str = trimEnd(str);
             if (!str) return;
             return textproc.texttohtml(str).done(function (content) {
-                set('<p></p>' + content);
+                if (/^<blockquote\>/.test(content)) {
+                    content = '<p></p>' + content;
+                }
+                set(content);
             });
         };
 
