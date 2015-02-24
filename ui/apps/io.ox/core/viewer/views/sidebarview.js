@@ -65,10 +65,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             //console.info('SidebarView.render() ', data);
             if (!data || !data.model) { return this; }
 
-            var sidebar = this.$el,
-                baton = Ext.Baton({ $el: sidebar, model: data.model, data: data.model.get('origData') });
+            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
 
-            Ext.point('io.ox/core/viewer/sidebar').invoke('draw', sidebar, baton);
+            Ext.point('io.ox/core/viewer/sidebar').invoke('draw', this.$el, baton);
 
             // append sub views
             this.$el.append(

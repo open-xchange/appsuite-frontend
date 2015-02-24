@@ -34,7 +34,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 versions = model && model.get('versions'),
                 numberOfVersions = model && model.get('numberOfVersions');
 
-            baton.$el.empty();
+            this.empty();
             // mail and PIM attachments don't support versions
             // display versions panel only if number of versions > 2
             if (!model || !model.isDriveFile() || numberOfVersions < 2) { return; }
@@ -47,10 +47,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             panelBody = panel.find('.panel-body');
 
             if (_.isArray(versions)) {
-                Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ $el: panelBody, model: model, data: model.get('origData') }));
+                Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ model: model, data: model.get('origData') }));
             }
 
-            baton.$el.append(panel);
+            this.append(panel);
         }
     });
 
@@ -196,6 +196,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         onTogglePanel: function (event) {
             var model = this.model,
+                panelHeading = this.$el.find('.panel>.panel-heading'),
                 panelBody = this.$el.find('.panel>.panel-body');
 
             event.preventDefault();
@@ -204,6 +205,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (panelBody.hasClass('panel-collapsed')) {
                 // get file version history
                 if (model.get('versions') === null) {
+                    panelHeading.busy();
+                    // get file versions
                     FilesAPI.versions({
                         id: model.get('id')
                     })
@@ -213,6 +216,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                     })
                     .fail(function (err) {
                         console.warn('FilesAPI.versions() error ', err);
+                    })
+                    .always(function () {
+                        panelHeading.idle();
                     });
 
                 } else {
@@ -229,7 +235,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         onModelChangeVersions: function (model) {
             //console.info('FileVersionsView.onModelChangeVersions() ', model);
             var panelBody = this.$el.find('.panel>.panel-body'),
-                baton = Ext.Baton({ $el: panelBody, model: model, data: model.get('origData') });
+                baton = Ext.Baton({ model: model, data: model.get('origData') });
 
             Ext.point(POINT + '/list').invoke('draw', panelBody, baton);
 
@@ -247,7 +253,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             //console.info('FileVersionsView.render() ', data);
             if (!data || !data.model) { return this; }
 
-            var baton = Ext.Baton({ $el: this.$el, model: data.model, data: data.model.get('origData') });
+            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
 
             // remove listener from previous model
             if (this.model) {

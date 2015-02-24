@@ -302,6 +302,10 @@ html.ios .io-ox-viewer {
                     font-weight: bold;
                     cursor: default;
                 }
+                
+                &.io-ox-busy:before {
+                    top: 185%;
+                }
             }
 
             .panel-body {
@@ -317,6 +321,12 @@ html.ios .io-ox-viewer {
                     width: 66%;
                     float: left;
                     .user-select(text);
+
+                    &.io-ox-busy:before {
+                        font-size: inherit;
+                        left: 0px;
+                        margin-left: 0px;
+                    }
                 }
 
                 .versiontable {

@@ -29,16 +29,23 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         id: 'description',
         draw: function (baton) {
             //console.info('FileDescriptionView.draw()');
-            var panel,
-                labelString,
+            var panel, panelHeading,
                 model = baton && baton.model,
                 description = model && model.get('description');
 
-            if (!model || !model.isDriveFile()) { return; } // mail and PIM attachments don't support file description
+            this.empty();
+            // mail and PIM attachments don't support file description
+            if (!model || !model.isDriveFile()) { return; }
 
-            baton.$el.empty();
+            // render panel
+            this.append(panel = Util.createPanelNode({ title: gt('Description') }));
 
-            if (!_.isString(description)) {
+            if (_.isString(description)) {
+                Ext.point(POINT + '/text').invoke('draw', panel, Ext.Baton({ data: description }));
+
+            } else {
+                panelHeading = panel.find('.panel-heading');
+                panelHeading.busy();
                 // get description
                 FilesAPI.get({
                     id: model.get('id'),
@@ -50,28 +57,40 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 })
                 .fail(function (err) {
                     console.warn('FilesAPI.get() error ', err);
+                })
+                .always(function () {
+                    panelHeading.idle();
                 });
-
-            } else {
-                labelString = (description.length > 0) ? description : gt('Add a description');
-
-                // render panel
-                panel = Util.createPanelNode({ title: gt('Description') });
-                panel.find('.panel-body').append(
-                    $('<div>').append(
-                        $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label' + ((description.length === 0) ? ' description-empty' : '')).text(labelString),
-                        $('<textarea>').addClass('description description-text').val(description)
-                    )
-                );
-
-                baton.$el.append(panel);
             }
+        }
+    });
+
+    // Extensions for the file description text
+    Ext.point(POINT + '/text').extend({
+        index: 10,
+        id: 'description-text',
+        draw: function (baton) {
+            var panelBody = this.find('.panel-body'),
+                description = baton.data,
+                labelString;
+
+            panelBody.empty();
+            if (!_.isString(description)) { return; }
+
+            labelString = (description.length > 0) ? description : gt('Add a description');
+
+            panelBody.append(
+                $('<div>').append(
+                    $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label' + ((description.length === 0) ? ' description-empty' : '')).text(labelString),
+                    $('<textarea>').addClass('description description-text').val(description)
+                )
+            );
         }
     });
 
     // Extensions for the file description edit button
     Ext.point(POINT + '/edit').extend({
-        index: 10,
+        index: 20,
         id: 'description-edit',
         ref: 'io.ox/files/actions/edit-description',
         draw: function (baton) {
@@ -157,7 +176,10 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         onModelChangeDescription: function (model) {
             //console.info('onModelChangeDescription() ', model);
-            this.render({ model: model });
+            var panel = this.$el.find('.panel'),
+                description = model.get('description');
+
+            Ext.point(POINT + '/text').invoke('draw', panel, Ext.Baton({ data: description }));
         },
 
         initialize: function () {
@@ -241,8 +263,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             //console.info('FileDescriptionView.render() ', data);
             if (!data || !data.model) { return this; }
 
-            var description = this.$el,
-                baton = Ext.Baton({ $el: description, model: data.model, data: data.model.get('origData') });
+            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
 
             // remove listener from previous model
             if (this.model) {
@@ -253,7 +274,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             this.model = data.model;
             this.listenTo(this.model, 'change:description', this.onModelChangeDescription);
 
-            Ext.point('io.ox/core/viewer/sidebar/description').invoke('draw', description, baton);
+            Ext.point('io.ox/core/viewer/sidebar/description').invoke('draw', this.$el, baton);
             return this;
         },
 

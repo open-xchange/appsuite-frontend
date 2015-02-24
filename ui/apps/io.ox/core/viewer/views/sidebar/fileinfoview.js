@@ -36,10 +36,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             /**
              * adds a row to the panel body
              */
-            function addRow(label, content) {
+            function addRow(label, content, cls) {
                 panelBody.find('dl').append(
                     $('<dt>').text(label),
-                    $('<dd>').text(content)
+                    $('<dd>').addClass(cls).text(content)
                 );
             }
 
@@ -53,9 +53,11 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             panel = Util.createPanelNode({ title: gt('General Info') });
             panelBody = panel.find('.panel-body').append($('<dl>'));
 
-            addRow(gt('Filename'), fileName);
-            addRow(gt('Size'), size);
-            addRow(gt('Modified'), modified);
+            addRow(gt('Filename'), fileName, 'file-name');
+            addRow(gt('Size'), size, 'size');
+            addRow(gt('Modified'), modified, 'modified');
+            addRow(gt('Saved in'), '\xa0', 'saved-in');
+            panelBody.find('dl>dd.saved-in').busy();
 
             FolderAPI.path(folderId)
             .done(function success(list) {
@@ -73,13 +75,16 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     }
                 });
 
-                addRow(gt('Saved in'), folderPath);
+                panelBody.find('dl>dd.saved-in').text(folderPath);
             })
             .fail(function fail() {
-                addRow(gt('Saved in'), '-');
+                panelBody.find('dl>dd.saved-in').text('-');
+            })
+            .always(function () {
+                panelBody.find('dl>dd.saved-in').idle();
             });
 
-            baton.$el.empty().append(panel);
+            this.empty().append(panel);
         }
     });
 
@@ -117,7 +122,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             //console.info('FileInfoView.render() ', data);
             if (!data || !data.model) { return this; }
 
-            var baton = Ext.Baton({ $el: this.$el, model: data.model, data: data.model.get('origData') });
+            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
 
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
             return this;
