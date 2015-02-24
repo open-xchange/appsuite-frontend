@@ -1,3 +1,9 @@
+open-xchange-appsuite-spamexperts (7.6.2-8) stable; urgency=low
+
+  * Eighth candidate for 7.6.2 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 24 Feb 2015 16:39:43 +0100
+
 open-xchange-appsuite-spamexperts (7.6.2-7) stable; urgency=low
 
   * Seventh candidate for 7.6.2 release
