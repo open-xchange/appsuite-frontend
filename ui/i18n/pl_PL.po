@@ -818,8 +818,8 @@ msgstr "Dodaj uczestnika"
 msgid "Add participant/resource"
 msgstr "Dodaj uczestnika/zasób"
 
-#: apps/io.ox/files/share/view.js:173 module:io.ox/files
-#: apps/io.ox/files/share/view.js:174
+#: apps/io.ox/files/share/view.js:159 module:io.ox/files
+#: apps/io.ox/files/share/view.js:175
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -947,7 +947,7 @@ msgstr "Blok zaawansowanych aspektów został zamknięty."
 msgid "Advanced facets block was opened."
 msgstr "Blok zaawansowanych aspektów został otwarty."
 
-#: apps/io.ox/files/share/view.js:228 module:io.ox/files
+#: apps/io.ox/files/share/view.js:230 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -2015,7 +2015,7 @@ msgstr "Kraj"
 msgid "Create"
 msgstr "Utwórz"
 
-#: apps/io.ox/files/share/view.js:34 module:io.ox/files
+#: apps/io.ox/files/share/view.js:35 module:io.ox/files
 msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
@@ -2537,6 +2537,7 @@ msgstr "Dokumenty"
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
+#: apps/io.ox/files/share/view.js:403 module:io.ox/files
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:70
@@ -2925,8 +2926,8 @@ msgstr "Koniec czasu pracy"
 msgid "Ends on"
 msgstr "Kończy się o"
 
-#: apps/io.ox/files/share/view.js:276 module:io.ox/files
-#: apps/io.ox/files/share/view.js:279
+#: apps/io.ox/files/share/view.js:278 module:io.ox/files
+#: apps/io.ox/files/share/view.js:281
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3067,7 +3068,7 @@ msgstr "Rozwiń formularz"
 msgid "Expand timeframe by one month"
 msgstr "Rozszerz przedział czasu o jeden miesiąc"
 
-#: apps/io.ox/files/share/view.js:320 module:io.ox/files
+#: apps/io.ox/files/share/view.js:322 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -3459,7 +3460,7 @@ msgstr "GB"
 msgid "Get %s"
 msgstr "Pobierz %s"
 
-#: apps/io.ox/files/share/view.js:46 module:io.ox/files
+#: apps/io.ox/files/share/view.js:47 module:io.ox/files
 #, fuzzy
 #| msgid "Direct link"
 msgid "Get a link"
@@ -3846,13 +3847,13 @@ msgstr "Zaproś"
 msgid "Invite owner"
 msgstr "Zaproś na %s"
 
-#: apps/io.ox/files/share/view.js:45 module:io.ox/files
+#: apps/io.ox/files/share/view.js:46 module:io.ox/files
 #, fuzzy
 #| msgid "Invite to %s"
 msgid "Invite people"
 msgstr "Zaproś na %s"
 
-#: apps/io.ox/files/share/view.js:33 module:io.ox/files
+#: apps/io.ox/files/share/view.js:34 module:io.ox/files
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
@@ -4354,8 +4355,8 @@ msgid "Medium priority"
 msgstr "Średni priorytet"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:200 module:io.ox/files
-#: apps/io.ox/files/share/view.js:208
+#: apps/io.ox/files/share/view.js:202 module:io.ox/files
+#: apps/io.ox/files/share/view.js:210
 #, fuzzy
 #| msgid "Message is unread"
 msgid "Message (optional)"
@@ -5117,7 +5118,7 @@ msgstr "Długość hasła musi wynosić od %1$d do %2$d znaków."
 msgid "Password recovery"
 msgstr "Hasło"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
+#: apps/io.ox/files/share/view.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "Password"
 msgid "Password required"
@@ -5698,7 +5699,7 @@ msgstr "Ostatnio zmienione pliki"
 msgid "Recently used"
 msgstr "Ostatnio używane"
 
-#: apps/io.ox/files/share/view.js:248 module:io.ox/files
+#: apps/io.ox/files/share/view.js:250 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -8814,25 +8815,25 @@ msgstr "brak uprawnień do edycji"
 msgid "no read permissions"
 msgstr "brak uprawnień do odczytu"
 
-#: apps/io.ox/files/share/view.js:300 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Całodniowe"
 
-#: apps/io.ox/files/share/view.js:302 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "co miesiąc"
 
-#: apps/io.ox/files/share/view.js:301 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "za tydzień"
 
-#: apps/io.ox/files/share/view.js:305 module:io.ox/files
+#: apps/io.ox/files/share/view.js:307 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -8905,7 +8906,7 @@ msgstr "Wybierz format"
 msgid "show image"
 msgstr "pokaż obraz"
 
-#: apps/io.ox/files/share/view.js:304 module:io.ox/files
+#: apps/io.ox/files/share/view.js:306 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -8952,7 +8953,7 @@ msgstr "tego popołudnia"
 msgid "this morning"
 msgstr "tego poranka"
 
-#: apps/io.ox/files/share/view.js:303 module:io.ox/files
+#: apps/io.ox/files/share/view.js:305 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

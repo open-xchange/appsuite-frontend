@@ -796,8 +796,8 @@ msgstr "Résztvevő hozzáadása"
 msgid "Add participant/resource"
 msgstr "Résztvevő/erőforrás hozzáadása"
 
-#: apps/io.ox/files/share/view.js:173 module:io.ox/files
-#: apps/io.ox/files/share/view.js:174
+#: apps/io.ox/files/share/view.js:159 module:io.ox/files
+#: apps/io.ox/files/share/view.js:175
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -925,7 +925,7 @@ msgstr "Speciális lapelemek bezárva."
 msgid "Advanced facets block was opened."
 msgstr "Speciális lapelemek nyitva."
 
-#: apps/io.ox/files/share/view.js:228 module:io.ox/files
+#: apps/io.ox/files/share/view.js:230 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -1992,7 +1992,7 @@ msgstr "Ország"
 msgid "Create"
 msgstr "Létrehozás"
 
-#: apps/io.ox/files/share/view.js:34 module:io.ox/files
+#: apps/io.ox/files/share/view.js:35 module:io.ox/files
 msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
@@ -2517,6 +2517,7 @@ msgstr "Dokumentumok"
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
+#: apps/io.ox/files/share/view.js:403 module:io.ox/files
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:70
@@ -2904,8 +2905,8 @@ msgstr "Munkaidő vége"
 msgid "Ends on"
 msgstr "Befejeződik"
 
-#: apps/io.ox/files/share/view.js:276 module:io.ox/files
-#: apps/io.ox/files/share/view.js:279
+#: apps/io.ox/files/share/view.js:278 module:io.ox/files
+#: apps/io.ox/files/share/view.js:281
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3046,7 +3047,7 @@ msgstr "Űrlap kibontása"
 msgid "Expand timeframe by one month"
 msgstr "Időszak kibővítése egy hónappal"
 
-#: apps/io.ox/files/share/view.js:320 module:io.ox/files
+#: apps/io.ox/files/share/view.js:322 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -3435,7 +3436,7 @@ msgstr "GB"
 msgid "Get %s"
 msgstr "%s beszerzése"
 
-#: apps/io.ox/files/share/view.js:46 module:io.ox/files
+#: apps/io.ox/files/share/view.js:47 module:io.ox/files
 #, fuzzy
 #| msgid "Direct link"
 msgid "Get a link"
@@ -3821,13 +3822,13 @@ msgstr "Meghívás"
 msgid "Invite owner"
 msgstr "Meghívás ide: %s"
 
-#: apps/io.ox/files/share/view.js:45 module:io.ox/files
+#: apps/io.ox/files/share/view.js:46 module:io.ox/files
 #, fuzzy
 #| msgid "Invite to %s"
 msgid "Invite people"
 msgstr "Meghívás ide: %s"
 
-#: apps/io.ox/files/share/view.js:33 module:io.ox/files
+#: apps/io.ox/files/share/view.js:34 module:io.ox/files
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
@@ -4327,8 +4328,8 @@ msgid "Medium priority"
 msgstr "Közepes prioritás"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:200 module:io.ox/files
-#: apps/io.ox/files/share/view.js:208
+#: apps/io.ox/files/share/view.js:202 module:io.ox/files
+#: apps/io.ox/files/share/view.js:210
 #, fuzzy
 #| msgid "Message is unread"
 msgid "Message (optional)"
@@ -5088,7 +5089,7 @@ msgstr "A jelszó hosszának %1$d és %2$d karakter között kell lennie."
 msgid "Password recovery"
 msgstr "Jelszó"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
+#: apps/io.ox/files/share/view.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "Password"
 msgid "Password required"
@@ -5671,7 +5672,7 @@ msgstr "Nemrégen módosított fájlok"
 msgid "Recently used"
 msgstr "Legutóbb használt"
 
-#: apps/io.ox/files/share/view.js:248 module:io.ox/files
+#: apps/io.ox/files/share/view.js:250 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -8756,25 +8757,25 @@ msgstr "nincs szerkesztési jogosultság"
 msgid "no read permissions"
 msgstr "nincs olvasási jogosultság"
 
-#: apps/io.ox/files/share/view.js:300 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Egész nap"
 
-#: apps/io.ox/files/share/view.js:302 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "minden hónap"
 
-#: apps/io.ox/files/share/view.js:301 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "egy héten belül"
 
-#: apps/io.ox/files/share/view.js:305 module:io.ox/files
+#: apps/io.ox/files/share/view.js:307 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -8847,7 +8848,7 @@ msgstr "formátum kiválasztása"
 msgid "show image"
 msgstr "kép megjelenítése"
 
-#: apps/io.ox/files/share/view.js:304 module:io.ox/files
+#: apps/io.ox/files/share/view.js:306 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -8894,7 +8895,7 @@ msgstr "ma délután"
 msgid "this morning"
 msgstr "ma reggel"
 
-#: apps/io.ox/files/share/view.js:303 module:io.ox/files
+#: apps/io.ox/files/share/view.js:305 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

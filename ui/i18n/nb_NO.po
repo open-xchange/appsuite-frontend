@@ -746,8 +746,8 @@ msgstr "Legg til deltaker"
 msgid "Add participant/resource"
 msgstr "Legg til deltaker/ressurs"
 
-#: apps/io.ox/files/share/view.js:173 module:io.ox/files
-#: apps/io.ox/files/share/view.js:174
+#: apps/io.ox/files/share/view.js:159 module:io.ox/files
+#: apps/io.ox/files/share/view.js:175
 msgid "Add recipients ..."
 msgstr "Legg til mottakere ..."
 
@@ -871,7 +871,7 @@ msgstr "Avanserte fasetter-området ble lukket."
 msgid "Advanced facets block was opened."
 msgstr "Avanserte fasetter-området ble åpnet."
 
-#: apps/io.ox/files/share/view.js:228 module:io.ox/files
+#: apps/io.ox/files/share/view.js:230 module:io.ox/files
 msgid "Advanced options"
 msgstr "Avanserte alternativer"
 
@@ -1907,7 +1907,7 @@ msgstr "Land"
 msgid "Create"
 msgstr "Opprett"
 
-#: apps/io.ox/files/share/view.js:34 module:io.ox/files
+#: apps/io.ox/files/share/view.js:35 module:io.ox/files
 msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
@@ -2411,6 +2411,7 @@ msgstr "Dokumenter"
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
+#: apps/io.ox/files/share/view.js:403 module:io.ox/files
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:70
@@ -2794,8 +2795,8 @@ msgstr "Slutten av arbeidstiden"
 msgid "Ends on"
 msgstr "Slutter på"
 
-#: apps/io.ox/files/share/view.js:276 module:io.ox/files
-#: apps/io.ox/files/share/view.js:279
+#: apps/io.ox/files/share/view.js:278 module:io.ox/files
+#: apps/io.ox/files/share/view.js:281
 msgid "Enter Password"
 msgstr "Skriv passordet"
 
@@ -2934,7 +2935,7 @@ msgstr "Utvid skjema"
 msgid "Expand timeframe by one month"
 msgstr "Utvid tidsrammen med én måned"
 
-#: apps/io.ox/files/share/view.js:320 module:io.ox/files
+#: apps/io.ox/files/share/view.js:322 module:io.ox/files
 msgid "Expires in"
 msgstr "Forfaller om"
 
@@ -3323,7 +3324,7 @@ msgstr "GB"
 msgid "Get %s"
 msgstr "Få %s"
 
-#: apps/io.ox/files/share/view.js:46 module:io.ox/files
+#: apps/io.ox/files/share/view.js:47 module:io.ox/files
 msgid "Get a link"
 msgstr "Få en link"
 
@@ -3699,11 +3700,11 @@ msgstr "Inviter"
 msgid "Invite owner"
 msgstr "Inviter eieren"
 
-#: apps/io.ox/files/share/view.js:45 module:io.ox/files
+#: apps/io.ox/files/share/view.js:46 module:io.ox/files
 msgid "Invite people"
 msgstr "Inviter folk"
 
-#: apps/io.ox/files/share/view.js:33 module:io.ox/files
+#: apps/io.ox/files/share/view.js:34 module:io.ox/files
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
@@ -4198,8 +4199,8 @@ msgid "Medium priority"
 msgstr "Medium prioritet"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:200 module:io.ox/files
-#: apps/io.ox/files/share/view.js:208
+#: apps/io.ox/files/share/view.js:202 module:io.ox/files
+#: apps/io.ox/files/share/view.js:210
 msgid "Message (optional)"
 msgstr "Melding (valgfritt)"
 
@@ -4947,7 +4948,7 @@ msgstr "Passordlengden må være mellom %1$d og %2$d tegn."
 msgid "Password recovery"
 msgstr "Gjenoppretting av passord"
 
-#: apps/io.ox/files/share/view.js:269 module:io.ox/files
+#: apps/io.ox/files/share/view.js:271 module:io.ox/files
 msgid "Password required"
 msgstr "Passord er påkrevd"
 
@@ -5516,7 +5517,7 @@ msgstr "Nylig endrede filer"
 msgid "Recently used"
 msgstr "Nylig brukt"
 
-#: apps/io.ox/files/share/view.js:248 module:io.ox/files
+#: apps/io.ox/files/share/view.js:250 module:io.ox/files
 msgid "Recipients can edit"
 msgstr "Mottakere kan redigere"
 
@@ -8554,19 +8555,19 @@ msgstr "ingen redigeringstillatelser"
 msgid "no read permissions"
 msgstr "ingen leserettigheter"
 
-#: apps/io.ox/files/share/view.js:300 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 msgid "one day"
 msgstr "en dag"
 
-#: apps/io.ox/files/share/view.js:302 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 msgid "one month"
 msgstr "en måned"
 
-#: apps/io.ox/files/share/view.js:301 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 msgid "one week"
 msgstr "én uke"
 
-#: apps/io.ox/files/share/view.js:305 module:io.ox/files
+#: apps/io.ox/files/share/view.js:307 module:io.ox/files
 msgid "one year"
 msgstr "ett år"
 
@@ -8631,7 +8632,7 @@ msgstr "velg format"
 msgid "show image"
 msgstr "vis bilde"
 
-#: apps/io.ox/files/share/view.js:304 module:io.ox/files
+#: apps/io.ox/files/share/view.js:306 module:io.ox/files
 msgid "six months"
 msgstr "seks måneder"
 
@@ -8674,7 +8675,7 @@ msgstr "denne ettermiddagen"
 msgid "this morning"
 msgstr "i morges"
 
-#: apps/io.ox/files/share/view.js:303 module:io.ox/files
+#: apps/io.ox/files/share/view.js:305 module:io.ox/files
 msgid "three months"
 msgstr "tre måneder"
 
