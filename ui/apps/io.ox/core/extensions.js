@@ -467,6 +467,13 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             return clone;
         },
 
+        dispose: function () {
+            for (var id in this) {
+                if (this.hasOwnProperty(id)) this[id] = null;
+            }
+            this.disposed = true;
+        },
+
         disable: function (pointId, extensionId) {
             // typical developer mistake (forget pointId actually)
             if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');

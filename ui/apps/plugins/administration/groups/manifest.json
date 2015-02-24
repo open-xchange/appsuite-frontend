@@ -1,0 +1,5 @@
+{
+    "namespace": "io.ox/settings/main",
+    "requires": "edit_group",
+    "device": "desktop"
+}

@@ -38,6 +38,8 @@ define('io.ox/backbone/disposable', [], function () {
             // if not called by the dispose event, we have to clean up this.$el manually
             // stopListening doesn't take care of the DOM element
             if (!automatic) this.$el.off().removeData();
+            // trigger event for sub-classes
+            this.trigger('dispose');
             // now we remove all handlers maintained by the view;
             // we need both off() and stopListening()
             this.off().stopListening();
