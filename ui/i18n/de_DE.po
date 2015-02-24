@@ -2194,10 +2194,8 @@ msgstr "Gruppe löschen"
 
 #: apps/plugins/administration/resources/settings/toolbar.js:62
 #: module:io.ox/core
-#, fuzzy
-#| msgid "Delete group"
 msgid "Delete resource"
-msgstr "Gruppe löschen"
+msgstr "Ressource löschen"
 
 #: apps/io.ox/tasks/toolbar.js:86 module:io.ox/mail
 msgid "Delete task"
@@ -2371,22 +2369,18 @@ msgstr "Wollen Sie den Ordner \"%s\" wirklich löschen?"
 
 #. %1$s is the group name
 #: apps/plugins/administration/groups/settings/toolbar.js:64 module:io.ox/core
-#, fuzzy
-#| msgid "Do you really want to delete this account?"
 msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Wollen Sie diesen Account wirklich löschen?"
+msgstr "Wollen Sie die Gruppe \"%1$s\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
 
 #. %1$s is the resource name
 #: apps/plugins/administration/resources/settings/toolbar.js:60
 #: module:io.ox/core
-#, fuzzy
-#| msgid "Do you really want to delete this account?"
 msgid ""
 "Do you really want to delete the resource \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Wollen Sie diesen Account wirklich löschen?"
+msgstr "Wollen Sie die Ressource \"%1$s\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
 
 #: apps/io.ox/contacts/actions.js:43 module:io.ox/contacts
 msgid "Do you really want to delete these items?"
@@ -5840,10 +5834,8 @@ msgid "Remove from recipient list"
 msgstr "Aus Empfängerliste entfernen"
 
 #: apps/plugins/administration/groups/settings/members.js:81 module:io.ox/core
-#, fuzzy
-#| msgid "November"
 msgid "Remove member"
-msgstr "November"
+msgstr "Mitglied entfernen"
 
 #: apps/io.ox/core/folder/actions/rename.js:64 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:179
