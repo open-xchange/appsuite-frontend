@@ -17,7 +17,7 @@
     "grunt-devtools": "~0.2.0",
     "grunt-karma": "^0.10.1",
     "grunt-modernizr": "~0.6.0",
-    "grunt-require-check": "^0.1.0",
+    "grunt-require-check": "^0.1.1",
     "grunt-zip": "~0.16.2",
     "karma": "^0.12.2",
     "karma-chai": "^0.1.0",
