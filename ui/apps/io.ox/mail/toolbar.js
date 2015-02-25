@@ -264,7 +264,7 @@ define('io.ox/mail/toolbar',
                 toolbar.render().$el
             );
             app.updateToolbar = _.queued(function (list) {
-                if (!list) $.when();
+                if (!list) return $.when();
                 var isThread = this.props.get('thread');
 
                 // resolve thread
