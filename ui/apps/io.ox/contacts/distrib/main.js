@@ -167,7 +167,10 @@ define('io.ox/contacts/distrib/main',
                 if (!container.find('[data-extension-id="displayname"] input').val()) {
                     container.find('.btn[data-action="save"]').prop('disabled', true);
                 }
-                container.find('input[type=text]:visible').eq(0).focus();
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (_.device('!smartphone && !iOS')) {
+                    container.find('input[type=text]:visible').eq(0).focus();
+                }
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
                     app.setTitle(_.noI18n($.trim($(this).val())) || gt('Distribution List'));
                     fnToggleSave($(this).val());

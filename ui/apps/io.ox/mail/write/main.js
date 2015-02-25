@@ -318,11 +318,10 @@ define('io.ox/mail/write/main',
                 currentSignature = text;
             }
 
-            if (_.device('!smartphone')) ed.focus();
+            if (_.device('!smartphone && !iOS')) ed.focus();
         };
 
         function focus(name) {
-            if (_.device('smartphone')) return;
             app.getWindowNode().find('input[name="' + name + '"], input[data-type="' + name + '"]').focus().select();
         }
 
@@ -807,7 +806,7 @@ define('io.ox/mail/write/main',
                 app.setMail(point).done(function () {
                     app.dirty(true);
                     win.idle();
-                    if (_.device('!smartphone')) app.getEditor().focus();
+                    if (_.device('!smartphone && !iOS')) app.getEditor().focus();
                     def.resolve();
                 });
             });
@@ -864,7 +863,7 @@ define('io.ox/mail/write/main',
                     // set to idle now; otherwise firefox doesn't set the focus
                     var ed = app.getEditor();
                     win.idle();
-                    if (_.device('!smartphone')) {
+                    if (_.device('!smartphone && !iOS')) {
                         ed.setCaretPosition(0);
                         if (mailto) {
                             ed.focus();
@@ -909,7 +908,7 @@ define('io.ox/mail/write/main',
                                 var ed = app.getEditor();
                                 ed.setCaretPosition(0);
                                 win.idle();
-                                if (_.device('!smartphone')) ed.focus();
+                                if (_.device('!smartphone && !iOS')) ed.focus();
                                 view.scrollpane.scrollTop(0);
                                 def.resolve({ app: app });
                                 if (_.device('smartphone')) {
@@ -972,7 +971,7 @@ define('io.ox/mail/write/main',
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
-                        if (_.device('!smartphone')) focus('to');
+                        if (_.device('!smartphone && !iOS')) focus('to');
                         def.resolve();
                         ox.trigger('mail:forward:ready', data, app);
                     });
@@ -1034,7 +1033,7 @@ define('io.ox/mail/write/main',
                         .done(function () {
                             app.setFrom(data || {});
                             win.idle();
-                            if (_.device('!smartphone')) app.getEditor().focus();
+                            if (_.device('!smartphone && !iOS')) app.getEditor().focus();
                             def.resolve();
                         });
                     },
@@ -1270,7 +1269,7 @@ define('io.ox/mail/write/main',
             if ($.trim(mail.data.subject) === '' || noRecipient) {
                 if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
-                    if (_.device('!smartphone')) focus('to');
+                    if (_.device('!smartphone && !iOS')) focus('to');
                     def.reject();
                 } else if ($.trim(mail.data.subject) === '') {
                     // show dialog
@@ -1288,7 +1287,7 @@ define('io.ox/mail/write/main',
                                         cont();
                                     });
                                 } else {
-                                    if (_.device('!smartphone')) focus('subject');
+                                    if (_.device('!smartphone && !iOS')) focus('subject');
                                     def.reject();
                                 }
                             });

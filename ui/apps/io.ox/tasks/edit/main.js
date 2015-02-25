@@ -112,7 +112,8 @@ define('io.ox/tasks/edit/main',
 
             win.on('show', function () {
                 if (app.dropZone) {app.dropZone.include(); }
-                if (taskView && _.device('!smartphone')) {
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (taskView && _.device('!smartphone && !iOS')) {
                     taskView.$el.find('.title-field').focus();
                 }
                 //set url parameters
