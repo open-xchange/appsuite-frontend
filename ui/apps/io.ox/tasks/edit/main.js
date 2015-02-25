@@ -111,6 +111,20 @@ define('io.ox/tasks/edit/main', [
             app.setWindow(win);
             win.nodes.main.addClass('scrollable');
 
+            win.on('show', function () {
+                if (app.dropZone) {app.dropZone.include(); }
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (taskView && _.device('!smartphone && !iOS')) {
+                    taskView.$el.find('.title-field').focus();
+                }
+                //set url parameters
+                if (taskModel.get('id')) {
+                    self.setState({ folder: taskModel.attributes.folder_id, id: taskModel.attributes.id });
+                } else {
+                    self.setState({ folder: taskModel.attributes.folder_id, id: null });
+                }
+            });
+
             win.on('hide', function () {
                 if (app && app.dropZone) {
                     app.dropZone.remove();

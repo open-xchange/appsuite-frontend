@@ -154,8 +154,8 @@ define('io.ox/mail/compose/extensions', [
                         drawOptions();
 
                         node.append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')),
-                            $('<div class="col-xs-10 col-md-11">').append(
+                            $('<label class="maillabel col-xs-2 col-sm-1">').text(gt('From')),
+                            $('<div class="col-xs-10 col-sm-11">').append(
                                 dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                             )
                         );

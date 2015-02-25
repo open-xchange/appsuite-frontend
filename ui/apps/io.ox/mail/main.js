@@ -308,7 +308,7 @@ define('io.ox/mail/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
+            app.listView = new MailListView({ app: app, draggable: true, ignoreFocus: true, preserve: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging

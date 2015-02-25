@@ -413,6 +413,7 @@ define('io.ox/settings/main', [
                 extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail');
 
             right.empty().busy();
+
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function () {
                     // again, since require makes this async

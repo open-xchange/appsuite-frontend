@@ -10,12 +10,12 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define('spec/shared/io.ox/search/util',
-        ['io.ox/mail/main',
-        'fixture!io.ox/search/autocomplete.json',
-        'fixture!io.ox/search/query.json',
-        'spec/shared/capabilities',
-        'waitsFor'], function (main, autocompleteFixture, queryFixture, caputil, waitsFor) {
+define('spec/shared/io.ox/search/util', [
+    'fixture!io.ox/search/autocomplete.json',
+    'fixture!io.ox/search/query.json',
+    'spec/shared/capabilities',
+    'waitsFor'
+], function (autocompleteFixture, queryFixture, caputil, waitsFor) {
 
     // inject logger function for test object
     var log = function (test) {
@@ -54,32 +54,31 @@ define('spec/shared/io.ox/search/util',
         // disabled: timeout
         // setCaps = caputil.preset('common').init('io.ox/mail/main', main).apply;
         // setCaps()
-        $.Deferred().resolve()
-            .done(function () {
-                main.getApp().launch().done(function () {
-                    var win = main.getApp().getWindow();
-                    self.vars = {
-                        win: win,
-                        nodes: win.nodes.facetedsearch,
-                        api: win.facetedsearch
-                    };
-                    win.on('search:loaded', function () {
-                        self.vars.view = self.vars.api.view;
-                        self.vars.model = self.vars.api.view.model;
-                        def.resolve();
-                    });
-
-                    var container = $(win.nodes.facetedsearch.container),
-                        toolbar = $(win.nodes.facetedsearch.toolbar);
-                    // append window-container to dom
-                    $(document.body).append(
-                        container.closest('.window-container').addClass('search-tmp')
-                    );
-                    // trigger lazy load
-                    toolbar.find('.search-field').focus();
-
+        require(['io.ox/mail/main'], function (main) {
+            main.getApp().launch().done(function () {
+                var win = main.getApp().getWindow();
+                self.vars = {
+                    win: win,
+                    nodes: win.nodes.facetedsearch,
+                    api: win.facetedsearch
+                };
+                win.on('search:loaded', function () {
+                    self.vars.view = self.vars.api.view;
+                    self.vars.model = self.vars.api.view.model;
+                    def.resolve();
                 });
+
+                var container = $(win.nodes.facetedsearch.container),
+                    toolbar = $(win.nodes.facetedsearch.toolbar);
+                // append window-container to dom
+                $(document.body).append(
+                    container.closest('.window-container').addClass('search-tmp')
+                );
+                // trigger lazy load
+                toolbar.find('.search-field').focus();
+
             });
+        });
         return def;
     };
 

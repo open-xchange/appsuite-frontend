@@ -4,6 +4,12 @@ open-xchange-guidedtours (7.8.0-0) unstable; urgency=medium
 
  -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 05 Nov 2014 16:22:50 +0100
 
+open-xchange-guidedtours (7.6.2-8) stable; urgency=low
+
+  * Eighth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 24 Feb 2015 16:41:49 +0100
+
 open-xchange-guidedtours (7.6.2-7) stable; urgency=low
 
   * Seventh candidate for 7.6.2 release

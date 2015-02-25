@@ -55,15 +55,15 @@ define([
             });
         });
 
-        it('should open the listview perspective', function (done) {
+        it('should open the listview perspective', function () {
+            this.timeout(10000);
             var app = main.getApp();
-            app.launch().then(function () {
+            return app.launch().then(function () {
                 return ox.ui.Perspective.show(app, 'list');
             })
             .done(function (perspective) {
                 expect(perspective.name).to.equal('list');
                 expect(perspective.rendered).to.be.true;
-                done();
             });
         });
 

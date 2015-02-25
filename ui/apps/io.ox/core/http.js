@@ -276,6 +276,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '615': 'login_info'
         },
         'group': {
+            '1':   'id',
+            '700': 'name',
+            '701': 'display_name',
+            '702': 'members'
         },
         'resource': {
         },

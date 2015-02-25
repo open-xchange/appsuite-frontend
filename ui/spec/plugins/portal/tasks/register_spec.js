@@ -21,7 +21,7 @@ define([
     describe('portal Tasks plugin', function () {
 
         describe('should', function () {
-            beforeEach(function (done) {
+            beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearch) + '}');
@@ -33,11 +33,9 @@ define([
                 this.node = $('<div>');
                 this.baton  = ext.Baton();
                 var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                def._wrapped[0].then(function () {
+                return def._wrapped[0].then(function () {
                     return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
-                }.bind(this)).done(function () {//wait till its actually drawn
-                    done();
-                });
+                }.bind(this));
             });
 
             afterEach(function () {
@@ -56,7 +54,7 @@ define([
             });
         });
         describe('should not draw', function () {
-            beforeEach(function (done) {
+            beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearchEdge) + '}');
@@ -64,11 +62,9 @@ define([
                 this.node = $('<div>');
                 this.baton  = ext.Baton();
                 var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                def._wrapped[0].then(function () {
+                return def._wrapped[0].then(function () {
                     return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
-                }.bind(this)).done(function () {//wait till its actually drawn
-                    done();
-                });
+                }.bind(this));
             });
 
             afterEach(function () {
@@ -88,7 +84,7 @@ define([
             });
         });
         describe('should', function () {
-            beforeEach(function (done) {
+            beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": []}');
@@ -96,11 +92,9 @@ define([
                 this.node = $('<div>');
                 this.baton  = ext.Baton();
                 var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                def._wrapped[0].then(function () {
+                return def._wrapped[0].then(function () {
                     return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
-                }.bind(this)).done(function () {//wait till its actually drawn
-                    done();
-                });
+                }.bind(this));
             });
 
             afterEach(function () {

@@ -196,10 +196,15 @@ define('io.ox/core/tk/autocomplete', [
                         h = self.outerHeight();
                     o.container.hide().appendTo(self.closest(o.parentSelector));
 
-                    var parent = self.closest(o.parentSelector).offsetParent(),
-                        parentOffset = parent.offset(),
-                        myTop = off.top + h - parentOffset.top + parent.scrollTop(),
-                        myLeft = off.left - parentOffset.left;
+                    var parent, parentOffset, myTop, myLeft;
+
+                    // look for proper parent node
+                    parent = self.closest(o.parentSelector);
+                    if (parent.css('position') === 'static') parent = parent.offsetParent();
+
+                    parentOffset = parent.offset();
+                    myTop = off.top + h - parentOffset.top + parent.scrollTop();
+                    myLeft = off.left - parentOffset.left;
 
                     o.container.removeClass('top-placement bottom-placement');
                     if (o.placement === 'top') {

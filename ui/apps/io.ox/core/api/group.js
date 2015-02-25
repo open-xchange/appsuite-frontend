@@ -49,6 +49,125 @@ define('io.ox/core/api/group', [
         }
     });
 
+    // helper: simply clear "old" caches on update
+    function clearCaches() {
+        api.caches.all.clear();
+        api.caches.list.clear();
+        api.caches.get.clear();
+    }
+
+    //
+    // Backbone Model & Collection
+    //
+
+    var Model = Backbone.Model.extend({
+
+        defaults: {
+            display_name: '',
+            members: [],
+            name: ''
+        },
+
+        initialize: function () {
+
+            var members = this.get('members');
+            if (_.isString(members) && members !== '') {
+                // "all" sends comma-separated string, "get" sends array; happy debugging!
+                this.set('members', members.split(',').map(function (id) {
+                    return parseInt(id, 10);
+                }), { silent: true });
+            }
+
+            this.on('change:display_name', function () {
+                this.set('name', this.getName());
+            });
+
+            this.set('name', this.getName());
+        },
+
+        getName: (function () {
+
+            var tr = { 'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'ß': 'ss' };
+
+            return function () {
+                return this.get('name') || this.get('display_name').trim().toLowerCase()
+                    .replace(/[äöüß]/g, function (match) {
+                        return tr[match];
+                    })
+                    .replace(/\W+/g, '_');
+            };
+        }())
+    });
+
+    var Collection = Backbone.Collection.extend({
+        comparator: function (model) {
+            return (model.get('display_name') || '').toLowerCase();
+        },
+        model: Model
+    });
+
+    api.collection = new Collection();
+
+    api.getModel = function (id) {
+        return api.collection.get(id) || new Model();
+    };
+
+    //
+    // Create new group
+    //
+    api.create = function (data) {
+        return http.PUT({
+            module: 'group',
+            params: { action: 'new' },
+            data: data,
+            appendColumns: false
+        })
+        .then(function (data) {
+            return api.get({ id: data.id }).done(function (data) {
+                api.collection.add(data, { parse: true });
+                api.trigger('create', data);
+                clearCaches();
+            });
+        });
+    };
+
+    //
+    // Update group
+    //
+    api.update = function (data) {
+        return http.PUT({
+            module: 'group',
+            params: { action: 'update', id: data.id, timestamp: _.then() },
+            data: _(data).pick('name', 'display_name', 'members'),
+            appendColumns: false
+        })
+        .done(function () {
+            var model = api.collection.get(data.id);
+            if (model) model.set(data);
+            api.trigger('update', data);
+            clearCaches();
+        });
+    };
+
+    //
+    // Delete group
+    //
+    api.remove = function (id) {
+        api.trigger('before:remove', id);
+        return http.PUT({
+            module: 'group',
+            params: { action: 'delete', timestamp: _.then() },
+            data: { id: id },
+            appendColumns: false
+        })
+        .done(function () {
+            var model = api.collection.get(id);
+            if (model) api.collection.remove(model);
+            api.trigger('remove', id);
+            clearCaches();
+        });
+    };
+
     /**
      * @param  {string} id
      * @return { deferred} done handler returns name (string)
