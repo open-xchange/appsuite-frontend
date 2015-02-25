@@ -53,7 +53,7 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         cleanUp: function () {
-            // we don't clear the password right now (see bug )
+            // we don't clear the password right now (see bug 36950)
             $('#io-ox-login-form')
                 .off('submit')
                 .find('input, button').prop('readonly', true);
