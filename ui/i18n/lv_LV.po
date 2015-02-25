@@ -236,7 +236,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Pagaidu)"
@@ -878,10 +878,6 @@ msgstr "Pievienot savu kontu"
 msgid "Added the new participant"
 msgstr "Jauns dalībnieks ir pievienots"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "Tiek pievienots abonements. Process var aizņemt dažas sekundes ..."
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -1013,10 +1009,6 @@ msgstr "Reģistrēta kļūda. Lūdzu mēģiniet vēlreiz."
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "Reģistrēta iekšēja kļūda"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "Reģistrēta neatpazīta kļūda"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1379,7 +1371,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
@@ -1616,8 +1608,8 @@ msgstr "Tīrīt"
 msgid "Clear field"
 msgstr "Tīrīt lauku"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "Klikšķiniet, lai izveidotu visas dienas tikšanos"
 
@@ -2057,13 +2049,6 @@ msgstr "Izveidot uzdevumu"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "Izveidots"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr "Izveidota privāta mape '%1$s' vietā %2$s ap publiskās mapes abonementu"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2811,7 +2796,7 @@ msgstr "E-pasta adreses"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "E-pasts no %1$s: %2$s"
 
@@ -6395,10 +6380,6 @@ msgstr "Rādīt detaļas"
 msgid "Show done tasks"
 msgstr "Rādīt pabeigtos uzdevumus"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "Rādīt failu"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Rādīt paslēptos failus un mapes"
@@ -6437,10 +6418,6 @@ msgstr "Rādīt kā"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "Rādīt nākošo dienu"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "Rādīt sākotnējo publikāciju"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6557,16 +6534,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Daži no laukiem satur nepareizus datus"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "Kāds ir ar jums koplietojis failu"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "Kāds ir koplietojis ar jums mapi. Vai vēlaties abonēt %1$s?"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6698,7 +6665,6 @@ msgstr "Tēma"
 msgid "Submit comment"
 msgstr "Reģistrēt komentāru"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7470,7 +7436,7 @@ msgstr "Šī vēstule ir pievienota portālam"
 msgid "This mail has no content"
 msgstr "Šai vēstulei nav satura"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Ziņojums ir saīsināts saskaņā ar apjoma ierobežojumiem."
 
@@ -8645,11 +8611,6 @@ msgstr "katru nedēļu"
 msgid "expand"
 msgstr "atritināt"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "faili"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9359,6 +9320,9 @@ msgstr "M/d/yyyy"
 #~ msgid "Adding further details"
 #~ msgstr "Pārejo detaļu pievienošana"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "Tiek pievienots abonements. Process var aizņemt dažas sekundes ..."
+
 #~ msgid "Additional:"
 #~ msgstr "Papildus:"
 
@@ -9431,6 +9395,9 @@ msgstr "M/d/yyyy"
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Reģistrēta kļūda. Paziņojums:"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Reģistrēta neatpazīta kļūda"
 
 #~ msgid "Andorra"
 #~ msgstr "Andora"
@@ -10162,6 +10129,12 @@ msgstr "M/d/yyyy"
 
 #~ msgid "Created on:"
 #~ msgstr "Izveidots:"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "Izveidota privāta mape '%1$s' vietā %2$s ap publiskās mapes abonementu"
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "Jaunas tikšanās izveide"
@@ -13094,6 +13067,9 @@ msgstr "M/d/yyyy"
 #~ msgid "Show contacts from administrator group"
 #~ msgstr "Rādīt kontaktus administratora grupā"
 
+#~ msgid "Show file"
+#~ msgstr "Rādīt failu"
+
 #~ msgid "Show first page"
 #~ msgstr "Rādīt pirmo lapu"
 
@@ -13117,6 +13093,9 @@ msgstr "M/d/yyyy"
 
 #~ msgid "Show original message"
 #~ msgstr "Rādīt sākotnējo ziņojumu"
+
+#~ msgid "Show original publication"
+#~ msgstr "Rādīt sākotnējo publikāciju"
 
 #~ msgid "Show sender image?"
 #~ msgstr "Rādīt sūtītāja attēlu?"
@@ -13187,6 +13166,13 @@ msgstr "M/d/yyyy"
 
 #~ msgid "Somalia"
 #~ msgstr "Somālija"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Kāds ir ar jums koplietojis failu"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr "Kāds ir koplietojis ar jums mapi. Vai vēlaties abonēt %1$s?"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Kļūda pie dokumenta ielādes."
@@ -14711,6 +14697,9 @@ msgstr "M/d/yyyy"
 
 #~ msgid "february"
 #~ msgstr "februāris"
+
+#~ msgid "files"
+#~ msgstr "faili"
 
 #~ msgid "forward"
 #~ msgstr "uz priekšu"

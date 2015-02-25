@@ -1695,8 +1695,8 @@ msgstr ""
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827
-#: apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828
+#: apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr ""
 
@@ -1704,7 +1704,7 @@ msgstr ""
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr ""
@@ -2403,9 +2403,9 @@ msgstr ""
 msgid "Previous Week"
 msgstr ""
 
-#: apps/io.ox/calendar/week/view.js:789
+#: apps/io.ox/calendar/week/view.js:790
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr ""
 
@@ -4860,57 +4860,6 @@ msgid_plural "Cannot print these items"
 msgstr[0] ""
 msgstr[1] ""
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39
-#: module:io.ox/core
-msgid "files"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50
-#: module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr ""
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53
-#: module:io.ox/core
-msgid "Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57
-#: module:io.ox/core
-msgid "Show file"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57
-#: module:io.ox/core
-msgid "Show original publication"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61
-#: module:io.ox/core
-#: apps/io.ox/core/sub/subscriptions.js:56
-#: module:io.ox/core/sub
-#: apps/io.ox/core/sub/subscriptions.js:59
-msgid "Subscribe"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75
-#: module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr ""
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84
-#: module:io.ox/core
-msgid "Created private folder '%1$s' in %2$s and subscribed successfully to shared folder"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89
-#: module:io.ox/core
-msgid "An unknown error occurred"
-msgstr ""
-
 #: apps/io.ox/core/relogin.js:45
 #: module:io.ox/core
 msgid "Your IP address has changed"
@@ -5376,6 +5325,12 @@ msgstr ""
 #: apps/io.ox/core/sub/settings/register.js:26
 #: module:io.ox/core/sub
 msgid "Subscriptions"
+msgstr ""
+
+#: apps/io.ox/core/sub/subscriptions.js:56
+#: module:io.ox/core/sub
+#: apps/io.ox/core/sub/subscriptions.js:59
+msgid "Subscribe"
 msgstr ""
 
 #: apps/io.ox/core/sub/subscriptions.js:70
@@ -7545,11 +7500,11 @@ msgstr ""
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222
 #: module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/detail/view.js:244
+#: apps/io.ox/mail/detail/view.js:238
 #: module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr ""

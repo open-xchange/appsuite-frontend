@@ -220,7 +220,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (暫定)"
@@ -850,10 +850,6 @@ msgstr "新增您的帳號"
 msgid "Added the new participant"
 msgstr "已新增參與者"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "正在新增訂閱，這可能需要幾秒鐘.."
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -985,10 +981,6 @@ msgstr "發生錯誤。請稍後重試。"
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "發生內部錯誤"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "發生未知錯誤"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1341,7 +1333,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "第 %1$d 週"
 
@@ -1577,8 +1569,8 @@ msgstr "清除"
 msgid "Clear field"
 msgstr "清除欄位"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "點選全天約會"
 
@@ -2014,13 +2006,6 @@ msgstr "建立任務"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "已建立"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr "於 %2$s 建立了私人資料夾「%1$s」並成功訂閱"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2757,7 +2742,7 @@ msgstr "電子郵件位址"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "來自 %1$s 的郵件: %2$d"
 
@@ -6296,10 +6281,6 @@ msgstr "顯示詳情"
 msgid "Show done tasks"
 msgstr "顯示完成工作"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "顯示檔案"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "顯示隱藏檔案與資料夾"
@@ -6338,10 +6319,6 @@ msgstr "顯示為"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "顯示下一天"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "顯示原始發佈"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6456,16 +6433,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "某些欄位包含無效資料"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "某人與您分享了檔案"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "某個人與您分享了資料夾，想要訂閱這些 %1$s 嗎？"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6596,7 +6563,6 @@ msgstr "主題"
 msgid "Submit comment"
 msgstr "送出留言"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7327,7 +7293,7 @@ msgstr "此郵件已被加入入口畫面"
 msgid "This mail has no content"
 msgstr "此郵件沒有內容"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "因為檔案大小限制，此郵件已被截短。"
 
@@ -8468,11 +8434,6 @@ msgstr "每周"
 msgid "expand"
 msgstr "展開"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "檔案"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9155,6 +9116,9 @@ msgstr ""
 #~ msgid "Adding further details"
 #~ msgstr "新增更多詳情"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "正在新增訂閱，這可能需要幾秒鐘.."
+
 #~ msgid "Additional:"
 #~ msgstr "其他："
 
@@ -9225,6 +9189,9 @@ msgstr ""
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "發生錯誤。訊息是:"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "發生未知錯誤"
 
 #~ msgid "Andorra"
 #~ msgstr "安道爾"
@@ -9908,6 +9875,11 @@ msgstr ""
 
 #~ msgid "Created on:"
 #~ msgstr "建立日期："
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr "於 %2$s 建立了私人資料夾「%1$s」並成功訂閱"
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "新增約會"
@@ -11368,6 +11340,9 @@ msgstr ""
 #~ msgid "Show contacts from administrator group"
 #~ msgstr "顯示管理員群組的聯絡人"
 
+#~ msgid "Show file"
+#~ msgstr "顯示檔案"
+
 #~ msgid "Show first page"
 #~ msgstr "顯示第一頁"
 
@@ -11385,6 +11360,9 @@ msgstr ""
 
 #~ msgid "Show original message"
 #~ msgstr "顯示原始訊息"
+
+#~ msgid "Show original publication"
+#~ msgstr "顯示原始發佈"
 
 #~ msgid "Show side panel"
 #~ msgstr "顯示側面板"
@@ -11419,6 +11397,13 @@ msgstr ""
 
 #~ msgid "Skip this step"
 #~ msgstr "略過此步驟"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "某人與您分享了檔案"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr "某個人與您分享了資料夾，想要訂閱這些 %1$s 嗎？"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "抱歉，無法成功載入文件。"
@@ -12040,6 +12025,9 @@ msgstr ""
 
 #~ msgid "february"
 #~ msgstr "二月"
+
+#~ msgid "files"
+#~ msgstr "檔案"
 
 #~ msgid "hCard Export"
 #~ msgstr "匯出為 hCard"

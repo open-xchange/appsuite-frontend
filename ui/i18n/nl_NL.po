@@ -230,7 +230,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Voorlopig)"
@@ -865,10 +865,6 @@ msgstr "Uw account toevoegen"
 msgid "Added the new participant"
 msgstr "Nieuwe deelnemer toegevoegd"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "Abonnement toevoegen. Dit kan enige seconden duren …"
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -1002,10 +998,6 @@ msgstr "Er is een fout opgetreden. Probeer het alstublieft nog eens."
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "Er is een interne fout opgetreden"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "Er is een onbekende fout opgetreden"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1368,7 +1360,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "Wk %1$d"
 
@@ -1605,8 +1597,8 @@ msgstr "Leegmaken"
 msgid "Clear field"
 msgstr "Veld leegmaken"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "Klik voor een dagafspraak"
 
@@ -2049,15 +2041,6 @@ msgstr "Taak aanmaken"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "Gecreëerd"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr ""
-"Privé map '%1$s' aangemaakt in %2$s en succesvol geabonneerd op de gedeelde "
-"map"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2806,7 +2789,7 @@ msgstr "E-mailadressen"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail van %1$s: %2$s"
 
@@ -6397,10 +6380,6 @@ msgstr "Details tonen"
 msgid "Show done tasks"
 msgstr "Toon voltooide taken"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "Toon bestand"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Verborgen bestanden en mappen tonen"
@@ -6439,10 +6418,6 @@ msgstr "Tonen als"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "Toon volgende dag"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "Toon de originele publicatie"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6559,16 +6534,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Sommige velden bevatten ongeldige gegevens"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "Iemand heeft een bestand met u gedeeld"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "Iemand heeft een map met u gedeeld. Wilt u zich abonneren op %1$s?"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6700,7 +6665,6 @@ msgstr "Onderwerp"
 msgid "Submit comment"
 msgstr "Commentaar toevoegen"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7472,7 +7436,7 @@ msgstr "Dit e-mailbericht is toegevoegd aan het portaal"
 msgid "This mail has no content"
 msgstr "Dit e-mailbericht heeft geen inhoud"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Dit e-mailbericht is ingekort vanwege afmetingsbeperkingen."
 
@@ -8641,11 +8605,6 @@ msgstr "elke week"
 msgid "expand"
 msgstr "uitvouwen"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "bestanden"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9099,6 +9058,9 @@ msgstr ""
 #~ msgid "Adding further details"
 #~ msgstr "Meer details toevoegen"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "Abonnement toevoegen. Dit kan enige seconden duren …"
+
 #~ msgid "Addresses"
 #~ msgstr "Adressen"
 
@@ -9110,6 +9072,9 @@ msgstr ""
 
 #~ msgid "An error occurred. Please try again later"
 #~ msgstr "Er is een fout opgetreden. Probeer het later nog eens"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Er is een onbekende fout opgetreden"
 
 #, fuzzy
 #~| msgid "Apply role"
@@ -9234,6 +9199,13 @@ msgstr ""
 
 #~ msgid "Create new task"
 #~ msgstr "Nieuwe taak aanmaken"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "Privé map '%1$s' aangemaakt in %2$s en succesvol geabonneerd op de "
+#~ "gedeelde map"
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "Een nieuwe afspraak maken"
@@ -9778,6 +9750,9 @@ msgstr ""
 #~ msgstr[0] "Bijlage tonen"
 #~ msgstr[1] "Bijlagen tonen"
 
+#~ msgid "Show file"
+#~ msgstr "Toon bestand"
+
 # (Reinout)
 #~ msgid "Show legal information"
 #~ msgstr "Toon juridische informatie"
@@ -9787,6 +9762,9 @@ msgstr ""
 
 #~ msgid "Show original message"
 #~ msgstr "Toon het originele bericht"
+
+#~ msgid "Show original publication"
+#~ msgstr "Toon de originele publicatie"
 
 #, fuzzy
 #~ msgid "Show/hide folder"
@@ -9806,6 +9784,13 @@ msgstr ""
 
 #~ msgid "Signing out"
 #~ msgstr "Afmelden"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Iemand heeft een bestand met u gedeeld"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr "Iemand heeft een map met u gedeeld. Wilt u zich abonneren op %1$s?"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sorteren van e-mailberichten"
@@ -10344,6 +10329,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "characters"
 #~ msgstr " tekens"
+
+#~ msgid "files"
+#~ msgstr "bestanden"
 
 #~ msgid "in blind copy"
 #~ msgstr "als blinde kopie"

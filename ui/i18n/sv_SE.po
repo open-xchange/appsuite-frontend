@@ -228,7 +228,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Preliminär)"
@@ -861,10 +861,6 @@ msgstr "Lägg till ditt konto"
 msgid "Added the new participant"
 msgstr "Lade till den nya deltagaren"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "Lägger till prenumeration. Det här kan ta en liten stund ..."
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -996,10 +992,6 @@ msgstr "Ett fel inträffade. Försök igen."
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "Ett internt fel inträffade"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "Ett okänt fel inträffade"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1358,7 +1350,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "KV %1$d"
 
@@ -1594,8 +1586,8 @@ msgstr "Rensa"
 msgid "Clear field"
 msgstr "Rensa fält"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "Klicka för heldagsmöte"
 
@@ -2034,13 +2026,6 @@ msgstr "Skapa uppgift"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "Skapades"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr "Skapade privata mappen '%1$s' i %2$s och prenumererade på delad mapp"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2777,7 +2762,7 @@ msgstr "E-postadresser"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "E-post från %1$s: %2$s"
 
@@ -6347,10 +6332,6 @@ msgstr "Visa detaljer"
 msgid "Show done tasks"
 msgstr "Visa färdiga uppgifter"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "Visa fil"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Visa dolda filer och mappar"
@@ -6389,10 +6370,6 @@ msgstr "Visa som"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "Visa nästa dag"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "Visa ursprunglig publikation"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6508,16 +6485,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Några fält innehåller ogiltig information"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "Någon delade en fil med dig"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "Någon delade en mapp med dig. Vill du prenumerera på dessa %1$s?"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6649,7 +6616,6 @@ msgstr "Rubrik"
 msgid "Submit comment"
 msgstr "Skicka kommentar"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7406,7 +7372,7 @@ msgstr "E-brevet har lagts till i portalen"
 msgid "This mail has no content"
 msgstr "E-brevet har inget innehåll"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Meddelandet har delats upp på grund av storleksbegränsningar."
 
@@ -8574,11 +8540,6 @@ msgstr "varje vecka"
 msgid "expand"
 msgstr "expandera"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "filer"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9435,6 +9396,9 @@ msgstr ""
 #~ msgid "Adding further details"
 #~ msgstr "Lägga till ytterligare detaljer"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "Lägger till prenumeration. Det här kan ta en liten stund ..."
+
 #~ msgid "Addresses"
 #~ msgstr "Adresser"
 
@@ -9607,6 +9571,9 @@ msgstr ""
 
 #~ msgid "An invalid SQL query was sent to the server."
 #~ msgstr "En ogiltig SQL-förfrågan skickades till servern."
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Ett okänt fel inträffade"
 
 #~ msgid "An uploaded file referenced by %1$s could not be found"
 #~ msgstr "En uppladdad fil refererad av %1$s kan inte bli funnen"
@@ -10213,6 +10180,12 @@ msgstr ""
 
 #~ msgid "Create new task"
 #~ msgstr "Skapa ny uppgift"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "Skapade privata mappen '%1$s' i %2$s och prenumererade på delad mapp"
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "Skapa ett nytt möte"
@@ -12288,6 +12261,9 @@ msgstr ""
 #~ msgstr[0] "Visa bilaga"
 #~ msgstr[1] "Visa bilagor"
 
+#~ msgid "Show file"
+#~ msgstr "Visa fil"
+
 #~ msgid "Show first page"
 #~ msgstr "Visa första sidan"
 
@@ -12302,6 +12278,9 @@ msgstr ""
 
 #~ msgid "Show original message"
 #~ msgstr "Visa ursprungligt meddelande"
+
+#~ msgid "Show original publication"
+#~ msgstr "Visa ursprunglig publikation"
 
 #~ msgid "Show side panel"
 #~ msgstr "Visa sidopanelen"
@@ -12347,6 +12326,13 @@ msgstr ""
 
 #~ msgid "Some fields have values, that are too long"
 #~ msgstr "Några fält har värden som är för långa."
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Någon delade en fil med dig"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr "Någon delade en mapp med dig. Vill du prenumerera på dessa %1$s?"
 
 #~ msgid "Sort field %1$s is not supported via IMAP SORT command"
 #~ msgstr "Sorteringsfält %1$s stöds inte via IMAP SORT-kommando "
@@ -14453,6 +14439,9 @@ msgstr ""
 
 #~ msgid "clientLastModified IS NULL. Abort action!"
 #~ msgstr "clientLastModified är NULL. Avbryt åtgärden!"
+
+#~ msgid "files"
+#~ msgstr "filer"
 
 #~ msgid "hCard Export"
 #~ msgstr "Exportera till hCard"

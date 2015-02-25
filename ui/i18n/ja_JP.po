@@ -216,7 +216,7 @@ msgstr "%2$s %1$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (仮の予定)"
@@ -840,10 +840,6 @@ msgstr "アカウントを追加"
 msgid "Added the new participant"
 msgstr "新規出席者が追加されました。"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "登録追加中です。この処理には数秒かかる場合があります。"
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -975,10 +971,6 @@ msgstr "エラーが発生しました。もう一度やり直してください
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "内部エラーが発生しました。"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "不明なエラーが発生しました。"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1334,7 +1326,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
@@ -1569,8 +1561,8 @@ msgstr "クリア"
 msgid "Clear field"
 msgstr "フィールドをクリア"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "終日のアポイントを作成するには、クリックしてください。"
 
@@ -2010,15 +2002,6 @@ msgstr "仕事を作成"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "作成日"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr ""
-"プライベート フォルダ '%1$s' を %2$s に作成しました。共有フォルダが正しく登録"
-"されました。"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2768,7 +2751,7 @@ msgstr "メール アドレス"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "%1$s からのメール: %2$s"
 
@@ -6337,10 +6320,6 @@ msgstr "詳細を表示"
 msgid "Show done tasks"
 msgstr "完了した仕事を表示"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "ファイルを表示"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "隠しフォルダと隠しファイルを表示"
@@ -6379,10 +6358,6 @@ msgstr "公開方法"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "次の日を表示"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "元の公開を表示"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6499,16 +6474,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "無効なデータが一部のフィールドに入力されています。"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "他のユーザとファイルを共有しています。"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "他のユーザとフォルダを共有しています。%1$s を登録しますか？"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6640,7 +6605,6 @@ msgstr "件名"
 msgid "Submit comment"
 msgstr "コメントをサブミット"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7389,7 +7353,7 @@ msgstr "このメールをポータルに追加しました。"
 msgid "This mail has no content"
 msgstr "このメールには内容がありません。"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "サイズ制限のためそれを超えたメッセージの部分は切り捨てられます。"
 
@@ -8553,11 +8517,6 @@ msgstr "毎週"
 msgid "expand"
 msgstr "展開"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "ファイル"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9287,6 +9246,9 @@ msgstr "M/d/yyyy"
 #~ msgid "Adding further details"
 #~ msgstr "詳細情報の追加"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "登録追加中です。この処理には数秒かかる場合があります。"
+
 #~ msgid "Additional"
 #~ msgstr "追加情報"
 
@@ -9728,6 +9690,9 @@ msgstr "M/d/yyyy"
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "エラーが発生しました。メッセージを次に示します:"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "不明なエラーが発生しました。"
 
 #~ msgid "Andorra"
 #~ msgstr "アンドラ"
@@ -10761,6 +10726,13 @@ msgstr "M/d/yyyy"
 
 #~ msgid "Created on:"
 #~ msgstr "作成日:"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "プライベート フォルダ '%1$s' を %2$s に作成しました。共有フォルダが正しく"
+#~ "登録されました。"
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "新規アポイントの作成"
@@ -14236,6 +14208,9 @@ msgstr "M/d/yyyy"
 #~ msgid "Show contacts from administrator group"
 #~ msgstr "管理者グループの連絡先を表示"
 
+#~ msgid "Show file"
+#~ msgstr "ファイルを表示"
+
 #~ msgid "Show first page"
 #~ msgstr "最初のページを表示"
 
@@ -14259,6 +14234,9 @@ msgstr "M/d/yyyy"
 
 #~ msgid "Show original message"
 #~ msgstr "元のメッセージを表示"
+
+#~ msgid "Show original publication"
+#~ msgstr "元の公開を表示"
 
 #~ msgid "Show sender image?"
 #~ msgstr "差出人の画像を表示"
@@ -14325,6 +14303,13 @@ msgstr "M/d/yyyy"
 
 #~ msgid "Somalia"
 #~ msgstr "ソマリア"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "他のユーザとファイルを共有しています。"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr "他のユーザとフォルダを共有しています。%1$s を登録しますか？"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "正常にドキュメントを読み込めませんでした。"
@@ -16033,6 +16018,9 @@ msgstr "M/d/yyyy"
 
 #~ msgid "february"
 #~ msgstr "2 月"
+
+#~ msgid "files"
+#~ msgstr "ファイル"
 
 #~ msgid "forward"
 #~ msgstr "進む"

@@ -237,7 +237,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (předběžně)"
@@ -880,10 +880,6 @@ msgstr "Přidat váš účet"
 msgid "Added the new participant"
 msgstr "Nový účastník byl přidán"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -1016,10 +1012,6 @@ msgstr "Došlo k chybě. Zkuste to, prosím, znovu."
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "Došlo k interní chybě"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "Došlo k neznámé chybě"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1375,7 +1367,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
@@ -1612,8 +1604,8 @@ msgstr "Vyprázdnit"
 msgid "Clear field"
 msgstr "Vyprázdnit pole"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "Kliknutím zvolíte celodenní schůzku"
 
@@ -2052,15 +2044,6 @@ msgstr "Vytvořit úkol"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "Vytvořeno"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr ""
-"Soukromá složka '%1$s' v %2$s byla vytvořena a byl přihlášen odběr sdílené "
-"složky"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2800,7 +2783,7 @@ msgstr "E-mailové adresy"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail od %1$s: %2$s"
 
@@ -6375,10 +6358,6 @@ msgstr "Zobrazit detaily"
 msgid "Show done tasks"
 msgstr "Zobrazit dokončené úkoly"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "Zobrazit soubor"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Zobrazit skryté soubory a složky"
@@ -6417,10 +6396,6 @@ msgstr "Zobrazit jako"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "Zobrazit následující den"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "Zobrazit původní publikaci"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6536,16 +6511,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Některá pole obsahují neplatné údaje"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "Někdo s vámi sdílel soubor"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "Někdo s vámi sdílel složku. Přejete si přihlásit dané %1$s?"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6677,7 +6642,6 @@ msgstr "Předmět"
 msgid "Submit comment"
 msgstr "Odeslat komentář"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7445,7 +7409,7 @@ msgstr "Tato zpráva byla přidána do portálu"
 msgid "This mail has no content"
 msgstr "Tato zpráva nemá žádný obsah"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Tato zpráva byla zkrácena kvůli velikostnímu limitu."
 
@@ -8615,11 +8579,6 @@ msgstr "každý týden"
 msgid "expand"
 msgstr "rozvinout"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "soubory"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9752,6 +9711,9 @@ msgstr "d/M/yyyy"
 #~ msgid "Adding further details"
 #~ msgstr "Doplnění dalších podrobností"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
+
 #~ msgid "Additional:"
 #~ msgstr "Dodatečné:"
 
@@ -10485,6 +10447,9 @@ msgstr "d/M/yyyy"
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Došlo k chybě. Chybová zpráva:"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Došlo k neznámé chybě"
 
 #~ msgid "Andorra"
 #~ msgstr "Andorra"
@@ -11738,6 +11703,13 @@ msgstr "d/M/yyyy"
 
 #~ msgid "Created on:"
 #~ msgstr "Vytvořeno:"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "Soukromá složka '%1$s' v %2$s byla vytvořena a byl přihlášen odběr "
+#~ "sdílené složky"
 
 #~ msgid "Created:"
 #~ msgstr "Vytvořeno:"
@@ -15332,6 +15304,9 @@ msgstr "d/M/yyyy"
 #~ msgid "Show contacts from administrator group"
 #~ msgstr "Zobrazit kontakty z administrátorské skupiny"
 
+#~ msgid "Show file"
+#~ msgstr "Zobrazit soubor"
+
 #~ msgid "Show first page"
 #~ msgstr "Zobrazit první stranu"
 
@@ -15355,6 +15330,9 @@ msgstr "d/M/yyyy"
 
 #~ msgid "Show original message"
 #~ msgstr "Zobrazit původní zprávu"
+
+#~ msgid "Show original publication"
+#~ msgstr "Zobrazit původní publikaci"
 
 #~ msgid "Show sender image?"
 #~ msgstr "Zobrazovat obrázek odesílatele?"
@@ -15428,6 +15406,13 @@ msgstr "d/M/yyyy"
 
 #~ msgid "Somalia"
 #~ msgstr "Somálsko"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Někdo s vámi sdílel soubor"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr "Někdo s vámi sdílel složku. Přejete si přihlásit dané %1$s?"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Je mi líto, dokument se nepodařilo načíst."
@@ -17707,6 +17692,9 @@ msgstr "d/M/yyyy"
 
 #~ msgid "february"
 #~ msgstr "únor"
+
+#~ msgid "files"
+#~ msgstr "soubory"
 
 #~ msgid "forward"
 #~ msgstr "přeposlat"

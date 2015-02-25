@@ -209,7 +209,7 @@ msgstr "%1$s %2$s."
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Vorläufig)"
@@ -828,10 +828,6 @@ msgstr "Fügen Sie Ihren Account hinzu"
 msgid "Added the new participant"
 msgstr "Der neue Teilnehmer wurde hinzugefügt"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 msgid "Additional settings"
 msgstr "Zusätzliche Einstellungen"
@@ -961,10 +957,6 @@ msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "Es trat ein interner Fehler auf."
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "Es trat ein unbekannter Fehler auf."
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1317,7 +1309,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "KW %1$d"
 
@@ -1550,8 +1542,8 @@ msgstr "Löschen"
 msgid "Clear field"
 msgstr "Feldeintrag löschen"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "Für ganztägigen Termin klicken"
 
@@ -1994,15 +1986,6 @@ msgstr "Aufgabe erstellen"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "Erstellt"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr ""
-"Privater Ordner '%1$s' wurde in %2$s angelegt und das Abonnement des "
-"freigegebenen Ordners war erfolgreich."
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2744,7 +2727,7 @@ msgstr "E-Mail-Adressen"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "E-Mail von %1$s: %2$s"
 
@@ -6297,10 +6280,6 @@ msgstr "Details anzeigen"
 msgid "Show done tasks"
 msgstr "Erledigte Aufgaben anzeigen"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "Datei anzeigen"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Versteckte Dateien und Ordner anzeigen"
@@ -6338,10 +6317,6 @@ msgstr "Anzeigen als"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "Nächsten Tag anzeigen"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "Ursprüngliche Veröffentlichung anzeigen"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6457,17 +6432,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Einige Felder enthalten ungültige Daten"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "Jemand hat eine Datei für Sie freigegeben"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr ""
-"Jemand hat Ihnen einen Ordner freigegeben. Möchten Sie %1$s abonnieren?"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6599,7 +6563,6 @@ msgstr "Betreff"
 msgid "Submit comment"
 msgstr "Kommentar senden"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7371,7 +7334,7 @@ msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
 msgid "This mail has no content"
 msgstr "Diese E-Mail hat keinen Inhalt"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Diese Nachricht wurde wegen Größenbeschränkungen abgeschnitten."
 
@@ -8536,11 +8499,6 @@ msgstr "jede Woche"
 msgid "expand"
 msgstr "ausklappen"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "Dateien"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9175,6 +9133,9 @@ msgstr "JJJJ"
 #~ msgid "Adding further details"
 #~ msgstr "Details hinzufügen"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
+
 #~ msgid "Addressbook chapter"
 #~ msgstr "Kapitel 'Adressbuch'"
 
@@ -9218,6 +9179,9 @@ msgstr "JJJJ"
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Es trat ein Fehler auf. Fehlermeldung:"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Es trat ein unbekannter Fehler auf."
 
 #~ msgid "Another user"
 #~ msgstr "Ein anderer Benutzer"
@@ -9500,6 +9464,13 @@ msgstr "JJJJ"
 
 #~ msgid "Create new task"
 #~ msgstr "Neue Aufgabe erstellen"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "Privater Ordner '%1$s' wurde in %2$s angelegt und das Abonnement des "
+#~ "freigegebenen Ordners war erfolgreich."
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "Einen neuen Termin anlegen"
@@ -10742,6 +10713,9 @@ msgstr "JJJJ"
 #~ msgid "Show contacts from administrator group"
 #~ msgstr "Kontakte aus Administrator-Gruppe anzeigen"
 
+#~ msgid "Show file"
+#~ msgstr "Datei anzeigen"
+
 #~ msgid "Show first page"
 #~ msgstr "Erste Seite anzeigen"
 
@@ -10759,6 +10733,9 @@ msgstr "JJJJ"
 
 #~ msgid "Show original message"
 #~ msgstr "Ursprüngliche Nachricht anzeigen"
+
+#~ msgid "Show original publication"
+#~ msgstr "Ursprüngliche Veröffentlichung anzeigen"
 
 #~ msgid "Show side panel"
 #~ msgstr "Seitenleiste anzeigen"
@@ -10793,6 +10770,14 @@ msgstr "JJJJ"
 
 #~ msgid "Skip this step"
 #~ msgstr "Diesen Schritt überspringen"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Jemand hat eine Datei für Sie freigegeben"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr ""
+#~ "Jemand hat Ihnen einen Ordner freigegeben. Möchten Sie %1$s abonnieren?"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Das Dokument konnte leider nicht erfolgreich geladen werden."
@@ -11596,6 +11581,9 @@ msgstr "JJJJ"
 
 #~ msgid "february"
 #~ msgstr "Februar"
+
+#~ msgid "files"
+#~ msgstr "Dateien"
 
 #~ msgid "friday"
 #~ msgstr "Freitag"

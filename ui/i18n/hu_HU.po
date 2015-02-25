@@ -226,7 +226,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1741
+#: apps/io.ox/calendar/week/view.js:1742
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Feltételes)"
@@ -859,10 +859,6 @@ msgstr "Fiók hozzáadása"
 msgid "Added the new participant"
 msgstr "Az új résztvevő hozzáadva"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:75 module:io.ox/core
-msgid "Adding subscription. This may take some seconds …"
-msgstr "Előfizetés hozzáadása. Ez eltarthat pár másodpercig ..."
-
 #: apps/io.ox/mail/settings/pane.js:245 module:io.ox/mail
 #, fuzzy
 #| msgid "Editing settings"
@@ -995,10 +991,6 @@ msgstr "Hiba történt. Próbálja újra."
 #: apps/plugins/portal/twitter/util.js:440
 msgid "An internal error occurred"
 msgstr "Belső hiba történt"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
-msgid "An unknown error occurred"
-msgstr "Ismeretlen hiba történt"
 
 #: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Anniversary"
@@ -1361,7 +1353,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "%1$d. hét"
 
@@ -1597,8 +1589,8 @@ msgstr "Törlés"
 msgid "Clear field"
 msgstr "Mező törlése"
 
-#: apps/io.ox/calendar/week/view.js:789 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:793
+#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:794
 msgid "Click for whole day appointment"
 msgstr "Egész napos találkozóért kattintson"
 
@@ -2039,15 +2031,6 @@ msgstr "Feladat létrehozása"
 #: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
 msgid "Created"
 msgstr "Létrehozva"
-
-#. %1$s is the publication name
-#: apps/io.ox/core/pubsub/notifications/subscription.js:84 module:io.ox/core
-msgid ""
-"Created private folder '%1$s' in %2$s and subscribed successfully to shared "
-"folder"
-msgstr ""
-"„%1$s” privát mappa létrehozva itt: %2$s, és sikeres feliratkozás a "
-"megosztott mappára"
 
 #: apps/io.ox/files/guidance/main.js:93 module:io.ox/files
 msgctxt "help"
@@ -2793,7 +2776,7 @@ msgstr "E-mail címek"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:416
+#: apps/io.ox/mail/detail/view.js:410
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail innen: %1$s: %2$s"
 
@@ -6371,10 +6354,6 @@ msgstr "Részletek megjelenítése"
 msgid "Show done tasks"
 msgstr "Kész feladatok megjelenítése"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show file"
-msgstr "Fájl megjelenítése"
-
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Rejtett fájlok és mappák megjelenítése"
@@ -6413,10 +6392,6 @@ msgstr "Megjelenítés mint:"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:63 module:io.ox/calendar
 msgid "Show next day"
 msgstr "Következő nap megjelenítése"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
-msgid "Show original publication"
-msgstr "Eredeti publikáció megjelenítése"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:73 module:io.ox/calendar
 msgid "Show previous day"
@@ -6533,17 +6508,6 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Néhány mező hibás adatokat tartalmaz"
-
-#: apps/io.ox/core/pubsub/notifications/subscription.js:50 module:io.ox/core
-msgid "Someone shared a file with you"
-msgstr "Valaki megosztott Önnel egy fájlt"
-
-#. %1$s is the (translated) type of the publication like "files", "contacts", …
-#: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
-msgid ""
-"Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr ""
-"Valaki megosztott Önnel egy mappát. Szeretne feliratkozni ezekre: %1$s?"
 
 #: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
@@ -6675,7 +6639,6 @@ msgstr "Tárgy"
 msgid "Submit comment"
 msgstr "Megjegyzés beküldése"
 
-#: apps/io.ox/core/pubsub/notifications/subscription.js:61 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:56 module:io.ox/core/sub
 #: apps/io.ox/core/sub/subscriptions.js:59
 msgid "Subscribe"
@@ -7433,7 +7396,7 @@ msgstr "A levél hozzáadva a portálhoz"
 msgid "This mail has no content"
 msgstr "A levélnek nincs tartalma"
 
-#: apps/io.ox/mail/detail/view.js:244 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:238 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "A levél a méretkorlát miatt le lett vágva."
 
@@ -8599,11 +8562,6 @@ msgstr "minden héten"
 msgid "expand"
 msgstr "kibont"
 
-#. folder publication of type 'files' (drive/infostore)
-#: apps/io.ox/core/pubsub/notifications/subscription.js:39 module:io.ox/core
-msgid "files"
-msgstr "fájlok"
-
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
@@ -9157,6 +9115,9 @@ msgstr ""
 #~ msgid "Adding further details"
 #~ msgstr "További részletek hozzáadása"
 
+#~ msgid "Adding subscription. This may take some seconds …"
+#~ msgstr "Előfizetés hozzáadása. Ez eltarthat pár másodpercig ..."
+
 #~ msgid "Addresses"
 #~ msgstr "Címek"
 
@@ -9189,6 +9150,9 @@ msgstr ""
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Hiba történt. Az üzenet:"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Ismeretlen hiba történt"
 
 #~ msgid "Another user"
 #~ msgstr "Másik felhasználó"
@@ -9445,6 +9409,13 @@ msgstr ""
 
 #~ msgid "Create new task"
 #~ msgstr "Új feladat létrehozása"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "„%1$s” privát mappa létrehozva itt: %2$s, és sikeres feliratkozás a "
+#~ "megosztott mappára"
 
 #~ msgid "Creating a new appointment"
 #~ msgstr "Új találkozó létrehozása"
@@ -10528,6 +10499,9 @@ msgstr ""
 #~ msgid "Show contacts from administrator group"
 #~ msgstr "Névjegyek megjelenítése az adminisztrátori csoportból"
 
+#~ msgid "Show file"
+#~ msgstr "Fájl megjelenítése"
+
 #~ msgid "Show first page"
 #~ msgstr "Első oldal megjelenítése"
 
@@ -10545,6 +10519,9 @@ msgstr ""
 
 #~ msgid "Show original message"
 #~ msgstr "Eredeti üzenet megjelenítése"
+
+#~ msgid "Show original publication"
+#~ msgstr "Eredeti publikáció megjelenítése"
 
 #~ msgid "Show side panel"
 #~ msgstr "Oldalpanel megjelenítése"
@@ -10578,6 +10555,14 @@ msgstr ""
 
 #~ msgid "Skip this step"
 #~ msgstr "Lépés kihagyása"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Valaki megosztott Önnel egy fájlt"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr ""
+#~ "Valaki megosztott Önnel egy mappát. Szeretne feliratkozni ezekre: %1$s?"
 
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Elnézést, a dokumentum betöltése meghiúsult."
@@ -11279,6 +11264,9 @@ msgstr ""
 
 #~ msgid "february"
 #~ msgstr "február"
+
+#~ msgid "files"
+#~ msgstr "fájlok"
 
 #~ msgid "hCard Export"
 #~ msgstr "hCard exportálás"
