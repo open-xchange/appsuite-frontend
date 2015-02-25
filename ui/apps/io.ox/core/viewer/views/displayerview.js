@@ -48,7 +48,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {DisplayerView}
          */
         render: function (data) {
-            //console.warn('DisplayerView.render() data', this.swiper);
+            //console.warn('DisplayerView.render() data', data);
             if (!data) {
                 console.error('Core.Viewer.DisplayerView.render(): no file to render');
                 return;
@@ -58,7 +58,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner = $('<div class="swiper-wrapper">'),
                 prevSlide = $('<a class="swiper-button-prev swiper-button-control left" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
                 nextSlide = $('<a class="swiper-button-next swiper-button-control right" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
-                // preload 1 neigboring slides
                 slidesToPreload = 2,
                 startIndex = data.index,
                 self = this,
@@ -71,23 +70,25 @@ define('io.ox/core/viewer/views/displayerview', [
                     simulateTouch: false,
                     speed: 0,
                     initialSlide: startIndex,
-                    onSlideChangeEnd: function (swiper) {
-                        var activeSlideIndex = swiper.activeIndex - 1;
-                        if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + self.collection.length; }
-                        if (activeSlideIndex >= self.collection.length) { activeSlideIndex = activeSlideIndex % self.collection.length; }
-                        self.blendSlideCaption(activeSlideIndex);
-                        self.preloadSlide(activeSlideIndex, slidesToPreload, 'left');
-                        self.preloadSlide(activeSlideIndex, slidesToPreload, 'right');
-                        // a11y
-                        swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
-                        swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
-
-                        EventDispatcher.trigger('viewer:displayeditem:change', {
-                            index: activeSlideIndex,
-                            model: self.collection.at(activeSlideIndex)
-                        });
-                    }
+                    onSlideChangeEnd: onSlideChangeEnd
                 };
+            // on slide change end handler of the swiper plugin
+            function onSlideChangeEnd(swiper) {
+                var activeSlideIndex = swiper.activeIndex - 1,
+                    collectionLength = self.collection.length;
+                if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
+                if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
+                self.blendSlideCaption(activeSlideIndex);
+                self.preloadSlide(activeSlideIndex, slidesToPreload, 'left');
+                self.preloadSlide(activeSlideIndex, slidesToPreload, 'right');
+                // a11y
+                swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
+                swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
+                EventDispatcher.trigger('viewer:displayeditem:change', {
+                    index: activeSlideIndex,
+                    model: self.collection.at(activeSlideIndex)
+                });
+            }
 
             // enable touch and swiping for iOS and Android first
             if (_.browser.iOS || _.browser.Android) {
@@ -118,11 +119,6 @@ define('io.ox/core/viewer/views/displayerview', [
             // append carousel to view
             this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
-
-            // blend caption of the first slide, and preload its neighbours
-            this.blendSlideCaption(startIndex);
-            this.preloadSlide(startIndex, slidesToPreload, 'left');
-            this.preloadSlide(startIndex, slidesToPreload, 'right');
 
             // initiate swiper deferred
             _.defer(function () {
@@ -166,7 +162,7 @@ define('io.ox/core/viewer/views/displayerview', [
          *
          */
         preloadSlide: function (slideToLoad, preloadOffset, preloadDirection) {
-            //console.warn('DisplayerVeiw.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
+            console.warn('DisplayerVeiw.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
             var preloadOffset = preloadOffset || 0,
                 step = preloadDirection === 'left' ? 1 : -1,
                 slideToLoad = slideToLoad || 0,
@@ -175,6 +171,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 slidesCount = collection.length,
                 // filter out slide duplicates -> this looks like a bug in the swiper plugin.
                 slidesList = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate');
+            console.warn('LoadRange', loadRange);
             // load the load range, containing the requested slide and preload slides
             _.each(loadRange, function (index) {
                 var slideIndex = index;
