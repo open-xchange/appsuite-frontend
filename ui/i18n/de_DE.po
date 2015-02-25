@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-19 15:46+0100\n"
+"PO-Revision-Date: 2015-02-25 11:03+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2372,7 +2372,9 @@ msgstr "Wollen Sie den Ordner \"%s\" wirklich löschen?"
 msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Wollen Sie die Gruppe \"%1$s\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+msgstr ""
+"Wollen Sie die Gruppe \"%1$s\" wirklich löschen? Diese Aktion kann nicht "
+"rückgängig gemacht werden!"
 
 #. %1$s is the resource name
 #: apps/plugins/administration/resources/settings/toolbar.js:60
@@ -2380,7 +2382,9 @@ msgstr "Wollen Sie die Gruppe \"%1$s\" wirklich löschen? Diese Aktion kann nich
 msgid ""
 "Do you really want to delete the resource \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Wollen Sie die Ressource \"%1$s\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+msgstr ""
+"Wollen Sie die Ressource \"%1$s\" wirklich löschen? Diese Aktion kann nicht "
+"rückgängig gemacht werden!"
 
 #: apps/io.ox/contacts/actions.js:43 module:io.ox/contacts
 msgid "Do you really want to delete these items?"
@@ -3953,9 +3957,8 @@ msgid "Layout"
 msgstr "Layout"
 
 #: apps/io.ox/core/import/import.js:149 module:io.ox/core
-#, fuzzy
 msgid "Learn more"
-msgstr "Mehr erfahren"
+msgstr "Weitere Infos"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6323,7 +6326,6 @@ msgid "Shared activity"
 msgstr "Gemeinsamkeiten"
 
 #: apps/io.ox/core/folder/extensions.js:436 module:io.ox/core
-#, fuzzy
 msgid "Shared by other users"
 msgstr "Von anderen Benutzern geteilt"
 
