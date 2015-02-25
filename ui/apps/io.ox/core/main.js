@@ -942,11 +942,16 @@ define('io.ox/core/main',
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    var logout = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
                         logout();
                     },  gt('Sign out'));
-                    logout.find('a').tooltip({ title: gt('Sign out'), placement: 'bottom' });
-                    this.append(logout);
+                    logoutButton.find('a').tooltip({
+                        title: gt('Sign out'),
+                        placement: function (tip, el) {
+                            return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'left' : 'auto';
+                        }
+                    });
+                    this.append(logoutButton);
                 }
             });
         }
