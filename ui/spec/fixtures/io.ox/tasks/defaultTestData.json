@@ -45,12 +45,14 @@
 	    	"end_date": 1368791630910,
 	        "status": 1,
 	        "folder_id": 555123456,
-	        "title": "Pommes kaufen"},
+	        "title": "Pommes kaufen",
+	        "created_by": 1337},
         {"id": 133721,
 	        "end_date": 1368791630910,
 	        "status": 1,
 	        "folder_id": 555123456,
-	        "title": "Nase putzen"}
+	        "title": "Nase putzen",
+                "created_by": 1337}
     ],
     "testSearchEdge": [
     	{"id": 13371,
