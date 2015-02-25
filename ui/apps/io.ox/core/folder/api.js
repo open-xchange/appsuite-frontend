@@ -89,7 +89,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
         },
         comparator: function (model) {
-            return model.get('index/' + this.id) || 0;
+            return model.get('index/' + this.id) || 0;
         },
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
