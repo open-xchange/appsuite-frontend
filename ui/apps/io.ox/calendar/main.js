@@ -25,12 +25,13 @@ define('io.ox/calendar/main',
      'io.ox/core/tk/vgrid',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
+     'io.ox/calendar/api',
      'io.ox/calendar/mobile-navbar-extensions',
      'io.ox/calendar/mobile-toolbar-actions',
      'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
-    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController) {
+    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
 
     'use strict';
 
@@ -459,6 +460,18 @@ define('io.ox/calendar/main',
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
                 ox.ui.Perspective.show(app, value, {disableAnimations: true});
+            });
+        },
+
+        /*
+         * Handle page change on delete on mobiles
+         */
+        'delete-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            api.on('delete', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
             });
         },
 

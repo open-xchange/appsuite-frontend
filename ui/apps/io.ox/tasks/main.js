@@ -527,6 +527,18 @@ define('io.ox/tasks/main',
             });
         },
 
+         /*
+         * Handle delete event based on keyboard shortcut
+         */
+        'delete-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            api.on('delete', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
+            });
+        },
+
         'inplace-search': function (app) {
 
             if (_.device('small') || !capabilities.has('search')) return;
