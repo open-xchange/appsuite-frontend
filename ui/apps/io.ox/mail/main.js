@@ -761,19 +761,35 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
-                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className;
+                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className,
+                    savedWidth = app.settings.get('listview/width/' + _.display()),
+                    savedHeight = app.settings.get('listview/height/' + _.display());
+
+                function applyWidth(x) {
+                    var width = x === undefined ? '' :  x + 'px';
+                    app.right.css('left', width);
+                    app.left.css('width', width);
+                }
+
+                function applyHeight(x) {
+                    var height = x === undefined ? '' :  x + 'px';
+                    app.right.css('top', height);
+                    app.left.css('height', height);
+                }
+
+                 // remove inline styles from using the resize bar
+                app.left.css({ width: '', height: '' });
+                app.right.css({ left: '', top: '' });
 
                 if (layout === 'vertical' || layout === 'compact') {
                     nodes.main.addClass('preview-right').removeClass('preview-bottom preview-none');
+                    if (!_.device('touch')) applyWidth(savedWidth);
                 } else if (layout === 'horizontal') {
                     nodes.main.addClass('preview-bottom').removeClass('preview-right preview-none');
+                    if (!_.device('touch')) applyHeight(savedHeight);
                 } else if (layout === 'list') {
                     nodes.main.addClass('preview-none').removeClass('preview-right preview-bottom');
                 }
-
-                // remove inline styles from using the resize bar
-                app.left.css({ width: '', height: '' });
-                app.right.css({ left: '', top: '' });
 
                 // relocate toolbar
                 toolbar = nodes.body.find('.classic-toolbar-container');
