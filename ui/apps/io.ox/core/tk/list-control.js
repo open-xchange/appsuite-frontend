@@ -15,12 +15,21 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
 
     'use strict';
 
+    function storeSize(app, size, type) {
+        if (size === undefined) {
+            app.settings.remove('listview/' + type + '/' + _.display());
+        } else {
+            app.settings.set('listview/' + type + '/' + _.display(), size);
+        }
+        app.settings.save();
+    }
+
     var ListViewControl = Backbone.View.extend({
 
         className: 'abs list-view-control',
 
         events: {
-            'mousedown .resizebar': 'onResize',
+            'mousedown .resizebar:not(.vertical)': 'onResize',
             'mousedown .resizebar.vertical': 'onVerticalResize'
         },
 
@@ -31,15 +40,19 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 base = e.pageX - left.width(),
                 total = left.width() + right.width(),
                 min = getLimit(ListViewControl.minWidth, total),
-                max = getLimit(ListViewControl.maxWidth, total);
+                max = getLimit(ListViewControl.maxWidth, total),
+                app = this.listView.app,
+                width;
+
             $(document).on({
                 'mousemove.resize': function (e) {
-                    var width = Math.max(min, Math.min(e.pageX - base, max));
+                    width = Math.max(min, Math.min(e.pageX - base, max));
                     left.css('width', width);
                     right.css('left', width);
                 },
                 'mouseup.resize': function () {
                     $(this).off('mousemove.resize mouseup.resize');
+                    storeSize(app, width, 'width');
                 }
             });
         },
@@ -51,15 +64,18 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 base = e.pageY - left.height(),
                 total = left.height() + right.height(),
                 min = getLimit(ListViewControl.minHeight, total),
-                max = getLimit(ListViewControl.maxHeight, total);
+                max = getLimit(ListViewControl.maxHeight, total),
+                app = this.listView.app,
+                height;
             $(document).on({
                 'mousemove.resize': function (e) {
-                    var height = Math.max(min, Math.min(e.pageY - base, max));
+                    height = Math.max(min, Math.min(e.pageY - base, max));
                     left.css('height', height);
                     right.css('top', height);
                 },
                 'mouseup.resize': function () {
                     $(this).off('mousemove.resize mouseup.resize');
+                    storeSize(app, height, 'height');
                 }
             });
         },
