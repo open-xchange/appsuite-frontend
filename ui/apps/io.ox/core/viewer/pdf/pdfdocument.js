@@ -11,10 +11,10 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/baseframework/pdf/pdfdocument', [
+define('io.ox/core/viewer/pdf/pdfdocument', [
     'io.ox/office/tk/utils',
     'io.ox/office/baseframework/lib/pdf', // TODO move to web repo
-    'io.ox/office/baseframework/pdf/pdfview'
+    'io.ox/core/viewer/pdf/pdfview'
 ], function (Utils, PDFJS, PDFView) {
 
     'use strict';

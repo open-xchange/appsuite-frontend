@@ -12,7 +12,7 @@
 define('io.ox/core/viewer/types/documenttype', [
     'io.ox/core/http',
     'io.ox/core/viewer/util',
-    'io.ox/office/baseframework/pdf/pdfdocument',
+    'io.ox/core/viewer/pdf/pdfdocument',
     'gettext!io.ox/core'
 ], function (CoreHTTP, Util, PDFDocument, gt) {
     /**
@@ -329,13 +329,13 @@ define('io.ox/core/viewer/types/documenttype', [
             //    });
             //});
             if (getServerModuleUrl && sendFileRequest) {}
-            var pageContainer = slideElement.find('.document-container');
-            // create dummy pages
-            if (pageContainer.find('.document-page').length !== 0) { return;}
-            _.times(5, function (number) {
-                var page = $('<div class="document-page">').text(number + 1);
-                pageContainer.append(page);
-            });
+            //var pageContainer = slideElement.find('.document-container');
+            //// create dummy pages
+            //if (pageContainer.find('.document-page').length !== 0) { return;}
+            //_.times(5, function (number) {
+            //    var page = $('<div class="document-page">').text(number + 1);
+            //    pageContainer.append(page);
+            //});
         };
     }
 
