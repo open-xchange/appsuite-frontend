@@ -336,7 +336,7 @@ define('io.ox/core/desktop', [
         },
 
         getWindowTitle: function () {
-            return this.has('window') ? this.has('window').getTitle() : '';
+            return this.has('window') ? this.get('window').getTitle() : '';
         },
 
         /**
