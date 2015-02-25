@@ -22,7 +22,7 @@ define('io.ox/core/viewer/types/videotype', [
      *
      * @constructor
      */
-    function VideoType(model) {
+    var videoType = (function () {
         /**
          * Creates a video slide.
          *
@@ -35,16 +35,18 @@ define('io.ox/core/viewer/types/videotype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (modelIndex) {
+        function createSlide (model, modelIndex) {
             //console.warn('VideoType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                caption = $('<div class="viewer-displayer-caption">'),
                 slidesCount = model.collection.length;
-
-            caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-            slide.append(caption);
+            function createCaption () {
+                var caption = $('<div class="viewer-displayer-caption">');
+                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
+                return caption;
+            }
+            slide.append(createCaption());
             return slide;
-        };
+        }
 
         /**
          * "Loads" a video slide.
@@ -55,14 +57,19 @@ define('io.ox/core/viewer/types/videotype', [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        this.loadSlide = function (slideElement) {
+        function loadSlide(model, slideElement) {
             //console.warn('VideoType.loadSlide()', slideIndex, slideElement);
-            if (slideElement.length === 0) {
+            if (!model || slideElement.length === 0) {
                 return;
             }
-        };
-    }
+        }
 
-    return VideoType;
+        return {
+            createSlide: createSlide,
+            loadSlide: loadSlide
+        };
+    })();
+
+    return videoType;
 
 });

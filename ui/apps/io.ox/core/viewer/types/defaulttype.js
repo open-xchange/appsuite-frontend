@@ -24,9 +24,9 @@ define('io.ox/core/viewer/types/defaulttype',  [
      *    function loadSlide(slideElement);
      * }
      *
-     * @constructor
      */
-    function DefaultType(model) {
+    var defaultType = (function () {
+        //console.warn('defaulttype()');
         /**
          * Creates a default slide.
          *
@@ -39,24 +39,26 @@ define('io.ox/core/viewer/types/defaulttype',  [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (modelIndex) {
-            //console.warn('DefaultType.createSlide()', model, modelIndex);
+        function createSlide (model, modelIndex) {
+            //console.warn('DefaultType.createSlide()', model, modelIndex, count);
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                displayerTopOffset = $('.viewer-toolbar').outerHeight(),
+                displayerTopOffset = 45,
                 slideContent = $('<div class="viewer-displayer-notification">')
                     .css({ maxHeight: window.innerHeight - displayerTopOffset }),
                 fileIcon = $('<i class="fa fa-file-o">'),
-                caption = $('<div class="viewer-displayer-caption">'),
                 filename = model && model.get('filename') || '',
                 filenameEl = $('<p>').text(filename),
                 apology = $('<p class="apology">').text(gt('Sorry, there is no preview available for this file.')),
                 slidesCount = model.collection.length;
-
+            function createCaption () {
+                var caption = $('<div class="viewer-displayer-caption">');
+                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
+                return caption;
+            }
             slideContent.append(fileIcon, filenameEl, apology);
-            caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-            slide.append(slideContent, caption);
+            slide.append(slideContent, createCaption());
             return slide;
-        };
+        }
 
         /**
          * "Loads" a default slide.
@@ -64,9 +66,14 @@ define('io.ox/core/viewer/types/defaulttype',  [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        this.loadSlide = function () {};
-    }
+        function loadSlide() {}
 
-    return DefaultType;
+        return {
+            createSlide: createSlide,
+            loadSlide: loadSlide
+        };
+    })();
+
+    return defaultType;
 
 });

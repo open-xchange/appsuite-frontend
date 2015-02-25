@@ -17,12 +17,11 @@ define('io.ox/core/viewer/types/audiotype',  [
      *
      * interface ViewerType {
      *    function createSlide(model, modelIndex);
-     *    function loadSlide(slideElement);
+     *    function loadSlide(model, slideElement);
      * }
      *
-     * @constructor
      */
-    function AudioType(model) {
+    var audioType = (function () {
         /**
          * Creates a audio slide.
          *
@@ -35,7 +34,7 @@ define('io.ox/core/viewer/types/audiotype',  [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (modelIndex) {
+        function createSlide(model, modelIndex) {
             //console.warn('AudioType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 caption = $('<div class="viewer-displayer-caption">'),
@@ -44,7 +43,7 @@ define('io.ox/core/viewer/types/audiotype',  [
             caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
             slide.append(caption);
             return slide;
-        };
+        }
 
         /**
          * "Loads" a audio slide.
@@ -55,14 +54,19 @@ define('io.ox/core/viewer/types/audiotype',  [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        this.loadSlide = function (slideIndex, slideElement) {
+        function loadSlide(model, slideElement) {
             //console.warn('AudioType.loadSlide()', slideIndex, slideElement);
-            if (slideElement.length === 0) {
+            if (!model || slideElement.length === 0) {
                 return;
             }
-        };
-    }
+        }
 
-    return AudioType;
+        return {
+            createSlide: createSlide,
+            loadSlide: loadSlide
+        };
+    })();
+
+    return audioType;
 
 });

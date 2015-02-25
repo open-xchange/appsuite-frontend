@@ -12,11 +12,11 @@
  */
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/core/viewer/types/typefactory',
+    'io.ox/core/viewer/types/typesregistry',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (EventDispatcher, TypeFactory, gt) {
+], function (EventDispatcher, TypesRegistry, gt) {
 
     'use strict';
 
@@ -34,6 +34,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.displayedFileIndex = this.collection.getStartIndex();
             this.$el.on('dispose', this.dispose.bind(this));
             this.captionTimeoutId = null;
+            this.loadedSlides = [];
         },
 
         /**
@@ -125,8 +126,9 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
                 // always load duplicate slides of the swiper plugin.
                 self.$el.find('.swiper-slide-duplicate').each(function (index, element) {
-                    var slideIndex = $(element).data('swiper-slide-index');
-                    TypeFactory.getModelType(self.collection.at(slideIndex)).loadSlide($(element));
+                    var slideIndex = $(element).data('swiper-slide-index'),
+                        slideModel = self.collection.at(slideIndex);
+                    TypesRegistry.getModelType(slideModel).loadSlide(slideModel, $(element));
                 });
                 // focus first active slide initially
                 self.focusActiveSlide();
@@ -145,7 +147,29 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {jQuery}
          */
         createSlide: function (model, modelIndex) {
-            return TypeFactory.getModelType(model).createSlide(modelIndex);
+            if (!model) { return; }
+            var modelType = TypesRegistry.getModelType(model);
+            return modelType.createSlide(model, modelIndex);
+        },
+
+        /**
+         * Loads a slide with calling loader implementations of passed
+         * file type. If a slide is already loaded, it will be skipped.
+         *
+         * @param {Object} model
+         *  the Viewer model.
+         * @param {jQuery} slideElement
+         *  the current slide element to be loaded.
+         *
+         * @returns {jQuery}
+         */
+        loadSlide: function (model, slideElement) {
+            if (!model || slideElement.length === 0) { return; }
+            var slideIndex = slideElement.data('swiper-slide-index'),
+                modelType = TypesRegistry.getModelType(model);
+            if (_.contains(this.loadedSlides, slideIndex)) { return; }
+            this.loadedSlides.push(slideIndex);
+            modelType.loadSlide(model, slideElement);
         },
 
         /**
@@ -162,7 +186,7 @@ define('io.ox/core/viewer/views/displayerview', [
          *
          */
         preloadSlide: function (slideToLoad, preloadOffset, preloadDirection) {
-            console.warn('DisplayerVeiw.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
+            //console.warn('DisplayerView.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
             var preloadOffset = preloadOffset || 0,
                 step = preloadDirection === 'left' ? 1 : -1,
                 slideToLoad = slideToLoad || 0,
@@ -170,8 +194,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 collection = this.collection,
                 slidesCount = collection.length,
                 // filter out slide duplicates -> this looks like a bug in the swiper plugin.
-                slidesList = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate');
-            console.warn('LoadRange', loadRange);
+                slidesList = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate'),
+                self = this;
             // load the load range, containing the requested slide and preload slides
             _.each(loadRange, function (index) {
                 var slideIndex = index;
@@ -179,9 +203,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 if (slideIndex >= slidesCount) { slideIndex = slideIndex % slidesCount; }
                 var slideModel = collection.at(slideIndex),
                     slideElement = slidesList.eq(slideIndex);
-                if (slideModel) {
-                    TypeFactory.getModelType(slideModel).loadSlide(slideElement);
-                }
+                self.loadSlide(slideModel, slideElement);
             });
         },
 
@@ -207,6 +229,7 @@ define('io.ox/core/viewer/views/displayerview', [
             }, duration);
         },
 
+        // focuses the swiper's current active slide
         focusActiveSlide: function () {
             this.$el.find('.swiper-slide-active').focus();
         },

@@ -23,7 +23,7 @@ define('io.ox/core/viewer/types/imagetype', [
      *
      * @constructor
      */
-    function ImageType(model) {
+    var imageType = (function () {
         /**
          * Creates a Image slide.
          *
@@ -36,25 +36,26 @@ define('io.ox/core/viewer/types/imagetype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        this.createSlide = function (modelIndex) {
+        function createSlide (model, modelIndex) {
             //console.warn('ImageType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 image = $('<img class="viewer-displayer-image">'),
-                caption = $('<div class="viewer-displayer-caption">'),
                 previewUrl = model && model.getPreviewUrl(),
                 filename = model && model.get('filename') || '',
                 slidesCount = model.collection.length,
                 displayerTopOffset = 45;
-
-            if (previewUrl) {
-                image
-                    .attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                    .css({ maxHeight: window.innerHeight - displayerTopOffset, maxWidth: window.innerWidth });
+            function createCaption () {
+                var caption = $('<div class="viewer-displayer-caption">');
                 caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                slide.append(image, caption);
+                return caption;
+            }
+            if (previewUrl) {
+                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
+                    .css({ maxHeight: window.innerHeight - displayerTopOffset, maxWidth: window.innerWidth });
+                slide.append(image, createCaption());
             }
             return slide;
-        };
+        }
 
         /**
          * "Loads" an image slide by transferring the image source from the 'data-src'
@@ -63,7 +64,7 @@ define('io.ox/core/viewer/types/imagetype', [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
         */
-        this.loadSlide = function (slideElement) {
+        function loadSlide (model, slideElement) {
             //console.warn('ImageType.loadSlide()', slideIndex, slideElement);
             if (slideElement.length === 0) {
                 return;
@@ -81,8 +82,13 @@ define('io.ox/core/viewer/types/imagetype', [
                     .text(gt('Sorry, there is no preview available for this file.'));
                 slideElement.idle().append(notification);
             };
-        };
-    }
+        }
 
-    return ImageType;
+        return {
+            createSlide: createSlide,
+            loadSlide: loadSlide
+        };
+    })();
+
+    return imageType;
 });
