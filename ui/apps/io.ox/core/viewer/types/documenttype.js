@@ -281,14 +281,17 @@ define('io.ox/core/viewer/types/documenttype', [
          */
         this.createSlide = function (modelIndex) {
             //console.warn('DocumentType.createSlide()');
-            var slide = $('<div class="swiper-slide" tabindex="-1">'),
+            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 pageContainer = $('<div class="document-container">'),
                 slidesCount = model.collection.length;
+
             function createCaption () {
                 var caption = $('<div class="viewer-displayer-caption">');
+
                 caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
                 return caption;
             }
+
             slide.append(pageContainer, createCaption());
             return slide;
         };

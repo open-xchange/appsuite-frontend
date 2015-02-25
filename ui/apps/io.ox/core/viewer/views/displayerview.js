@@ -54,10 +54,10 @@ define('io.ox/core/viewer/views/displayerview', [
                 return;
             }
 
-            var carouselRoot = $('<div id="viewer-carousel" class="swiper-container">'),
+            var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper">'),
-                prevSlide = $('<a class="swiper-button-prev swiper-button-control left"><i class="fa fa-angle-left"></i></a>'),
-                nextSlide = $('<a class="swiper-button-next swiper-button-control right"><i class="fa fa-angle-right"></i></a>'),
+                prevSlide = $('<a class="swiper-button-prev swiper-button-control left" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
+                nextSlide = $('<a class="swiper-button-next swiper-button-control right" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 // preload 1 neigboring slides
                 slidesToPreload = 2,
                 startIndex = data.index,
@@ -78,6 +78,10 @@ define('io.ox/core/viewer/views/displayerview', [
                         self.blendSlideCaption(activeSlideIndex);
                         self.preloadSlide(activeSlideIndex, slidesToPreload, 'left');
                         self.preloadSlide(activeSlideIndex, slidesToPreload, 'right');
+                        // a11y
+                        swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
+                        swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
+
                         EventDispatcher.trigger('viewer:displayeditem:change', {
                             index: activeSlideIndex,
                             model: self.collection.at(activeSlideIndex)
@@ -103,6 +107,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button' });
             nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button' });
+            carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
 
             // dont show next and prev buttons on iOS and Android
@@ -111,7 +116,7 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             // append carousel to view
-            this.$el.append(carouselRoot).attr('tabindex', -1);
+            this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
 
             // blend caption of the first slide, and preload its neighbours

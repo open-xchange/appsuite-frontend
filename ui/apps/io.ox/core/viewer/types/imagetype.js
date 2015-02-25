@@ -38,13 +38,14 @@ define('io.ox/core/viewer/types/imagetype', [
          */
         this.createSlide = function (modelIndex) {
             //console.warn('ImageType.createSlide()');
-            var slide = $('<div class="swiper-slide" tabindex="-1">'),
+            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 image = $('<img class="viewer-displayer-image">'),
                 caption = $('<div class="viewer-displayer-caption">'),
                 previewUrl = model && model.getPreviewUrl(),
                 filename = model && model.get('filename') || '',
                 slidesCount = model.collection.length,
                 displayerTopOffset = 45;
+
             if (previewUrl) {
                 image
                     .attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })

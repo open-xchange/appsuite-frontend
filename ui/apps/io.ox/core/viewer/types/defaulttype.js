@@ -41,7 +41,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
          */
         this.createSlide = function (modelIndex) {
             //console.warn('DefaultType.createSlide()', model, modelIndex);
-            var slide = $('<div class="swiper-slide" tabindex="-1">'),
+            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 displayerTopOffset = $('.viewer-toolbar').outerHeight(),
                 slideContent = $('<div class="viewer-displayer-notification">')
                     .css({ maxHeight: window.innerHeight - displayerTopOffset }),
@@ -51,6 +51,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
                 filenameEl = $('<p>').text(filename),
                 apology = $('<p class="apology">').text(gt('Sorry, there is no preview available for this file.')),
                 slidesCount = model.collection.length;
+
             slideContent.append(fileIcon, filenameEl, apology);
             caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
             slide.append(slideContent, caption);

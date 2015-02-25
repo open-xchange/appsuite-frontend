@@ -37,9 +37,10 @@ define('io.ox/core/viewer/types/videotype', [
          */
         this.createSlide = function (modelIndex) {
             //console.warn('VideoType.createSlide()');
-            var slide = $('<div class="swiper-slide">'),
+            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 caption = $('<div class="viewer-displayer-caption">'),
                 slidesCount = model.collection.length;
+
             caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
             slide.append(caption);
             return slide;
