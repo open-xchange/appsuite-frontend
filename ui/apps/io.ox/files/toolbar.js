@@ -228,19 +228,19 @@ define('io.ox/files/toolbar',
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
                 var self = this,
                     ids = this.getIds ? this.getIds() : [];
 
                 //get full data, needed for require checks for example
-                api.getList(list).done(function (data) {
+                return api.getList(list).then(function (data) {
                     // extract single object if length === 1
                     data = data.length === 1 ? data[0] : data;
                     // draw toolbar
                     var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self, allIds: ids}),
                         ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    $.when.apply($, ret.value()).then(function () {
+                    return $.when.apply($, ret.value()).then(function () {
                         toolbar.initButtons();
                     });
                 });

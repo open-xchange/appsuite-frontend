@@ -186,14 +186,14 @@ define('io.ox/calendar/toolbar',
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
                 // extract single object if length === 1
                 list = list.length === 1 ? list[0] : list;
                 // draw toolbar
                 var baton = ext.Baton({ $el: toolbar.$list, data: list, app: app }),
                     ret = ext.point('io.ox/calendar/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                $.when.apply($, ret.value()).then(function () {
+                return $.when.apply($, ret.value()).then(function () {
                     toolbar.initButtons();
                 });
             }, 10);

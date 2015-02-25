@@ -411,11 +411,12 @@ define('io.ox/core/extPatterns/links',
                 baton.$el.append(baton.$.positionDummy);
             }
 
-            drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
+            var def = drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
                 .done(_.lfo(true, processItems, baton));
 
             delete baton.$.temp;
             delete baton.$el;
+            return def;
         };
     };
 
