@@ -29,9 +29,7 @@ define('io.ox/core/viewer/types/documenttype', [
         var // all pending server requests currently running
             pendingRequests = [],
             // prevent further server requests after the quit handlers have been called
-            requestsLocked = false,
-            // current Appsuite App
-            currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID');
+            requestsLocked = false;
 
         /**
          * Creates a document slide.
@@ -67,9 +65,12 @@ define('io.ox/core/viewer/types/documenttype', [
          *  the slide jQuery element to be loaded.
          */
         function loadSlide(model, slideElement) {
-            //console.warn('DocumentType.loadSlide()', slideElement, pendingRequests);
+            // disable loading document temporarily
+            if (1) { return; }
             var // the file descriptor object
                 file = model.get('origData'),
+                // current Appsuite App
+                currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID'),
                 // generate document converter URL of the document
                 documentUrl = getServerModuleUrl(IO.CONVERTER_MODULE_NAME, {
                     action: 'getdocument',
@@ -231,7 +232,7 @@ define('io.ox/core/viewer/types/documenttype', [
 
             // wait for both promises
             $.when(pdfDocumentPromise, documentImagesPromise).then(function (pageCount) {
-                console.warn('Promise finished!');
+                //console.warn('DocumentType promises finished.');
                 _.times(pageCount, function (number) {
                     var page = $('<div class="document-page">').text(number + 1);
                     pageContainer.append(page);

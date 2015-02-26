@@ -75,6 +75,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 };
             // on slide change end handler of the swiper plugin
             function onSlideChangeEnd(swiper) {
+                //console.warn('onSlideChangeEnd()', self.loadedSlides);
                 var activeSlideIndex = swiper.activeIndex - 1,
                     collectionLength = self.collection.length;
                 if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
@@ -121,8 +122,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
 
-            // initiate swiper deferred
             _.defer(function () {
+                // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
                 // always load duplicate slides of the swiper plugin.
                 self.$el.find('.swiper-slide-duplicate').each(function (index, element) {
@@ -130,6 +131,10 @@ define('io.ox/core/viewer/views/displayerview', [
                         slideModel = self.collection.at(slideIndex);
                     TypesRegistry.getModelType(slideModel).loadSlide(slideModel, $(element));
                 });
+                // preload selected file and its neighbours initially
+                self.blendSlideCaption(data.index);
+                self.preloadSlide(data.index, slidesToPreload, 'left');
+                self.preloadSlide(data.index, slidesToPreload, 'right');
                 // focus first active slide initially
                 self.focusActiveSlide();
             });
@@ -164,6 +169,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {jQuery}
          */
         loadSlide: function (model, slideElement) {
+            //console.warn('DisplayerView.loadSlide()', this.loadedSlides);
             if (!model || slideElement.length === 0) { return; }
             var slideIndex = slideElement.data('swiper-slide-index'),
                 modelType = TypesRegistry.getModelType(model);
@@ -220,8 +226,7 @@ define('io.ox/core/viewer/views/displayerview', [
         blendSlideCaption: function (slideIndex, duration) {
             //console.warn('BlendslideCaption', slideIndex);
             var duration = duration || 3000,
-                // filter swiper slide duplicates -> likely a bug from swiper plugin
-                slideCaption = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate').eq(slideIndex).find('.viewer-displayer-caption');
+                slideCaption = this.$el.find('.swiper-slide[data-swiper-slide-index=' + slideIndex + '] .viewer-displayer-caption');
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();
             this.captionTimeoutId = window.setTimeout(function () {
