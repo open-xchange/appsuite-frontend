@@ -285,8 +285,16 @@ define('io.ox/mail/compose/model', [
 
             result.attachments = this.get('attachments').filter(function (a) {
                 return a.get('disp') === 'inline' || a.get('disp') === 'attachment';
-            }).map(function (m) {
-                return m.attributes;
+            }).map(function (m, i) {
+                var attr;
+                if (i === 0 && m.attributes.content_type === 'text/plain') {
+                    attr = m.pick('content_type', 'content');
+                    // For "text/plain" mail bodies, the JSON boolean field "raw" may be specified inside the body's JSON representation to signal that the text content shall be kept as-is; meaning to keep all formatting intact
+                    attr.raw = true;
+                } else {
+                    attr = m.attributes;
+                }
+                return attr;
             });
 
             result.infostore_ids = this.get('attachments').filter(function (a) {
