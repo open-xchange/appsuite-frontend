@@ -1,11 +1,11 @@
-<html>
+<html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>9.6. 搜索文件</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
-<link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapter 9.  磁盘">
+<link rel="up" href="ox.appsuite.user.chap.files.html" title="第 9 章 磁盘">
 <link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. 同时编辑多个文件">
 <link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. 用 WebDAV 访问文件">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
@@ -19,24 +19,27 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Prev</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.html">Next</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.multiple.html">上一页</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.html">下一页</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <div class="sect1">
+  <h1 class="sr-only"><span class="phrase">磁盘</span></h1>
+<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.files.search"></a>9.6. 搜索文件</h2></div></div></div>
-<a class="indexterm" name="idm139933748692880"></a><a class="indexterm" name="idm139933748691488"></a><div class="concept">
+<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p>为了搜寻文件，您可以使用以下搜寻准则：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>文件名称、文件描述、文件内容的搜寻词</p></li>
+<li class="listitem"><p>文件名称、文件描述的搜寻词</p></li>
 <li class="listitem"><p>文件夹</p></li>
+<li class="listitem"><p>日期</p></li>
+<li class="listitem"><p>文件大小</p></li>
 <li class="listitem"><p>文件类型</p></li>
 </ul></div>
 <p>
@@ -49,9 +52,9 @@
 <li class="step">
 <p>使用以下方法之一：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>为了以文件名称、文件描述、或文件内容搜寻，在搜寻菜单里单击搜寻词。您也可以按下 Enter 或从搜寻条里单击 <span class="guibutton"><strong>搜寻</strong></span> 图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>。</p>
+<p>为了以文件名称或文件描述搜寻，在搜寻菜单里单击搜寻词。您也可以按下 Enter 或从搜寻条里单击 <span class="guibutton"><strong>搜寻</strong></span> 图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>。</p>
 <p>为了只以文件名称搜寻，从搜寻菜单里单击 <span class="guibutton"><strong>文件名称</strong></span>。</p>
-<p>这样，您能够以文件描述或文件内容限制搜寻范围。</p>
+<p>这样，您能够以文件描述限制搜寻范围。</p>
 </li></ul></div>
 <p>
           </p>
@@ -61,10 +64,15 @@
 <p>您可以对搜寻结果作更多调整：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none">
-<p>要显示所有搜寻准则，启用<span class="guibutton"><strong>显示进阶过滤器</strong></span>。</p>
+<p>要显示所有搜寻准则，单击<span class="guibutton"><strong>显示进阶过滤器</strong></span>。</p>
 <p>为了调整一个准则，单击搜寻准则旁边的图标 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>。从菜单选择一个项目。您可以使用以下搜寻准则：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>您可以使用<span class="guilabel"><strong>文件夹</strong></span>下拉以在一个指定的文件夹里搜寻。</p></li>
+<li class="listitem" style="list-style-type: none">
+<p>您可以使用<span class="guilabel"><strong>文件夹</strong></span>下拉以在一个指定的文件夹里搜寻。</p>
+<p>如果您选择<span class="guibutton"><strong>所有文件夹</strong></span>，会搜寻所有文件夹和子文件夹。如果选择一个指定的文件夹或文件夹，只有搜寻此文件夹而不会搜寻子文件夹。</p>
+</li>
+<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>日期</strong></span>允许搜寻在指定时间前创建的文件。</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>文件大小</strong></span>允许以一个指定大小搜寻文件。</p></li>
 <li class="listitem" style="list-style-type: none"><p><span class="guilabel"><strong>文件类型</strong></span>下拉允许把搜寻限制在某个文件类型里。</p></li>
 </ul></div>
 <p>
@@ -80,5 +88,6 @@
 </ol></div>
 </div>
 </div>
-</body>
+          </div>
+        </body>
 </html>
