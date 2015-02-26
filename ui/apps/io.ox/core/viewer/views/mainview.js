@@ -162,10 +162,15 @@ define('io.ox/core/viewer/views/mainview', [
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
             //console.warn('MainView.refreshViewSizes()');
-            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0;
-            this.displayerView.$el.css({ width: window.innerWidth - rightOffset });
-            this.displayerView.$el.find('.swiper-slide img').css({ maxWidth: window.innerWidth - rightOffset });
+            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
+                displayerEl = this.displayerView.$el,
+                activeSlideIndex = displayerEl.find('.swiper-slide-active').index();
+            displayerEl.css({ width: window.innerWidth - rightOffset });
+            displayerEl.find('.swiper-slide img').css({ maxWidth: window.innerWidth - rightOffset });
             this.displayerView.swiper.onResize();
+            // workaround for a possible bug from swiper plugin that happens sporadically:
+            // After an on resize call, the plugin 'resets' the active slide to the beginning.
+            this.displayerView.swiper.slideTo(activeSlideIndex);
         },
 
         dispose: function () {
