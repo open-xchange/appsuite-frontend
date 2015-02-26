@@ -37,7 +37,13 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             this.empty();
             // mail and PIM attachments don't support versions
             // display versions panel only if number of versions > 2
-            if (!model || !model.isDriveFile() || numberOfVersions < 2) { return; }
+            if (!model || !model.isDriveFile() || numberOfVersions < 2) {
+                this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
+                return;
+            }
+
+            // a11y
+            this.attr({ role: 'tablist', 'aria-hidden': 'false' }).removeClass('hidden');
 
             // render panel
             panel = Util.createPanelNode({
@@ -92,7 +98,15 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             this.empty();
             if (!model) { return; }
 
-            table = $('<table>').addClass('versiontable table');
+            table = $('<table>').addClass('versiontable table').append(
+                        $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
+                        $('<thead>').addClass('sr-only').append(
+                            $('<tr>').append(
+                                $('<th>').text(gt('Version number')),
+                                $('<th>').text(gt('File'))
+                            )
+                        )
+                    );
 
             drawAllVersions(versions);
 

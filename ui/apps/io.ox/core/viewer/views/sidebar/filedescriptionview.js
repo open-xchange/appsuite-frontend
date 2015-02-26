@@ -35,7 +35,13 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             this.empty();
             // mail and PIM attachments don't support file description
-            if (!model || !model.isDriveFile()) { return; }
+            if (!model || !model.isDriveFile()) {
+                this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
+                return;
+            }
+
+            // a11y
+            this.attr({ role: 'tablist', 'aria-hidden': 'false' }).removeClass('hidden');
 
             // render panel
             this.append(panel = Util.createPanelNode({ title: gt('Description') }));
@@ -81,7 +87,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             panelBody.append(
                 $('<div>').append(
-                    $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label' + ((description.length === 0) ? ' description-empty' : '')).text(labelString),
+                    $('<div>', { tabindex: 1, title: gt('Description text'), 'aria-label': gt('Description text') }).addClass('description description-label' + ((description.length === 0) ? ' description-empty' : '')).text(labelString),
                     $('<textarea>').addClass('description description-text').val(description)
                 )
             );
@@ -273,6 +279,8 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             // add listener to new model
             this.model = data.model;
             this.listenTo(this.model, 'change:description', this.onModelChangeDescription);
+
+            this.$el.attr({ role: 'tablist' });
 
             Ext.point('io.ox/core/viewer/sidebar/description').invoke('draw', this.$el, baton);
             return this;

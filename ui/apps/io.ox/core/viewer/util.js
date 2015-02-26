@@ -254,11 +254,14 @@ define('io.ox/core/viewer/util', [
                 charpos: 'middle'
             }, options || {}),
 
-            normal = _.noI18n(_.ellipsis(str, _.extend(opt, { max: opt.maxNormal }))),
-            short = _.noI18n(_.ellipsis(str, _.extend(opt, { max: opt.maxShort })));
+            text = String(str || '').trim(),
+
+            normal = _.noI18n(_.ellipsis(text, _.extend(opt, { max: opt.maxNormal }))),
+            short = _.noI18n(_.ellipsis(text, _.extend(opt, { max: opt.maxShort })));
 
         return {
-            title: String(str || '').trim(),
+            title: text,
+            'aria-label': text,
             'data-label-normal': normal,
             'data-label-short': short
         };
@@ -313,9 +316,11 @@ define('io.ox/core/viewer/util', [
      */
     Util.createPanelNode = function (options) {
         var options = $.extend({ title: '', collapsed: false }, options || {}),
-            panelBody = $('<div>').addClass('panel-body ' + (options.collapsed ? 'panel-collapsed' : '')).css('display', (options.collapsed ? 'none' : 'block')),
-            toggleButton = $('<a>', { href: '#', role: 'button', tabindex: 1, title: gt('Toggle panel'), 'aria-expanded': options.collapsed ? 'false' : 'true' }).addClass('toggle-panel panel-heading-button btn'),
-            buttonIcon = $('<i>').addClass('fa fa-chevron-' + (options.collapsed ? 'right' : 'down')),
+            panelId = _.uniqueId('panel-'),
+            panelHeader,
+            panelBody,
+            toggleButton,
+            buttonIcon,
             panel;
 
         /**
@@ -327,20 +332,47 @@ define('io.ox/core/viewer/util', [
             if (panelBody.hasClass('panel-collapsed')) {
                 buttonIcon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
                 toggleButton.attr('aria-expanded', 'true');
+                panelHeader.attr('aria-expanded', 'true');
             } else {
                 buttonIcon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
                 toggleButton.attr('aria-expanded', 'false');
+                panelHeader.attr('aria-expanded', 'false');
             }
         }
 
+        toggleButton = $('<a>', {
+            'class': 'toggle-panel panel-heading-button btn',
+            href: '#',
+            tabindex: 1,
+            title: gt('Toggle panel'),
+            role: 'button',
+            'aria-label': options.title,
+            'aria-controls': panelId,
+            'aria-expanded': options.collapsed ? 'false' : 'true'
+        });
+
+        buttonIcon = $('<i>', { 'aria-hidden': 'true' }).addClass('fa fa-chevron-' + (options.collapsed ? 'right' : 'down'));
+
+        panelHeader = $('<div>', { 'class': 'panel-heading', role: 'tab', 'aria-expanded': options.collapsed ? 'false' : 'true' }).append(
+            $('<h3>').addClass('panel-title').text(options.title),
+            toggleButton.append(
+                buttonIcon
+            )
+            .on('click', onTogglePanel)
+        );
+
+        panelBody = $('<div>', {
+            'class': 'panel-body',
+            id: panelId,
+            role: 'tabpanel',
+            'aria-label': options.title,
+            'aria-hidden': (options.collapsed ? 'true' : 'false')
+        })
+        .addClass(options.collapsed ? 'panel-collapsed' : '')
+        .css('display', (options.collapsed ? 'none' : 'block'));
+
         panel = $('<div>').addClass('panel panel-default').append(
-            $('<div>').addClass('panel-heading').append(
-                $('<h3>').addClass('panel-title').text(options.title),
-                toggleButton.append(
-                    buttonIcon
-                )
-                .on('click', onTogglePanel)
-            ),
+            panelHeader,
             panelBody
         );
 

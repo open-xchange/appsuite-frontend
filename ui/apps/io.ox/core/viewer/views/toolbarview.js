@@ -74,7 +74,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
                     if (fileSource === 'file') {
-                        this.attr('title', gt('Double click to rename'))
+                        this.attr({ title: gt('Double click to rename'), 'aria-label': gt('Filename, double click to rename') })
                             .addClass('viewer-toolbar-rename');
                     }
                 }
@@ -101,7 +101,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append('<i class="fa fa-caret-down">')
                         .after(dropdownLinks.addClass('dropdown-menu-right'))
                         .addClass('dropdown-toggle viewer-toolbar-dropdown')
-                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1', 'title': gt('More functions') })
+                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1', 'title': gt('More functions'), 'aria-label': gt('More functions') })
                         .dropdown();
                     this.parent().addClass('dropdown');
                 }
@@ -112,7 +112,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 icon: 'fa fa-info-circle',
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
-                    this.addClass('viewer-toolbar-togglesidebar').attr({ tabindex: '1', title: gt('View details') });
+                    this.addClass('viewer-toolbar-togglesidebar').attr({ tabindex: '1', title: gt('View details'), 'aria-label': gt('View details') });
                 }
             },
             'close': {
@@ -121,7 +121,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 icon: 'fa fa-times',
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
-                    this.addClass('viewer-toolbar-close').attr({ tabindex: '1', title: gt('Close') });
+                    this.addClass('viewer-toolbar-close').attr({ tabindex: '1', title: gt('Close'), 'aria-label': gt('Close') });
                 }
             }
         };

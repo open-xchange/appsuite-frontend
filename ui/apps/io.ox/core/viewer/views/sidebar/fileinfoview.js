@@ -84,7 +84,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 panelBody.find('dl>dd.saved-in').idle();
             });
 
-            this.empty().append(panel);
+            this.empty().attr({ role: 'tablist' }).append(panel);
         }
     });
 

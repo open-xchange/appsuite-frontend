@@ -57,8 +57,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper">'),
-                prevSlide = $('<a class="swiper-button-prev swiper-button-control left" role="button"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
-                nextSlide = $('<a class="swiper-button-next swiper-button-control right" role="button"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                prevSlide = $('<a href="#" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
+                nextSlide = $('<a href="#" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 slidesToPreload = 2,
                 startIndex = data.index,
                 self = this,
@@ -108,8 +108,8 @@ define('io.ox/core/viewer/views/displayerview', [
             });
 
             // init the carousel and preload neighboring slides on next/prev
-            prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button' });
-            nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button' });
+            prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button', 'aria-label': gt('Previous') });
+            nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button', 'aria-label': gt('Next') });
             carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
 
