@@ -19,7 +19,7 @@ define(['io.ox/mail/detail/links'], function (links) {
         return $('<div>').append(links.processTextNode(document.createTextNode(str))).html();
     }
 
-    describe.only('Link recoginition', function () {
+    describe('Link recoginition', function () {
 
         it('does not change plain text', function () {
             var html = process('Hello World!');
