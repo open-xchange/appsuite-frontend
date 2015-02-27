@@ -10,8 +10,8 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/audiotype',  [
-    'gettext!io.ox/core'
-], function (gt) {
+    'io.ox/core/viewer/types/basetype'
+], function (BaseType) {
     /**
      * The audio file type. Implements the ViewerType interface.
      *
@@ -21,7 +21,7 @@ define('io.ox/core/viewer/types/audiotype',  [
      * }
      *
      */
-    var audioType = (function () {
+    var audioType = {
         /**
          * Creates a audio slide.
          *
@@ -34,16 +34,13 @@ define('io.ox/core/viewer/types/audiotype',  [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        function createSlide(model, modelIndex) {
+        createSlide: function (model, modelIndex) {
             //console.warn('AudioType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                caption = $('<div class="viewer-displayer-caption">'),
                 slidesCount = model.collection.length;
-
-            caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-            slide.append(caption);
+            slide.append(this.createCaption(modelIndex, slidesCount));
             return slide;
-        }
+        },
 
         /**
          * "Loads" a audio slide.
@@ -54,19 +51,15 @@ define('io.ox/core/viewer/types/audiotype',  [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        function loadSlide(model, slideElement) {
+        loadSlide: function (model, slideElement) {
             //console.warn('AudioType.loadSlide()', slideIndex, slideElement);
             if (!model || slideElement.length === 0) {
                 return;
             }
         }
+    };
 
-        return {
-            createSlide: createSlide,
-            loadSlide: loadSlide
-        };
-    })();
-
-    return audioType;
+    // returns an object which inherits BaseType
+    return _.extend(Object.create(BaseType), audioType);
 
 });

@@ -10,8 +10,9 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/defaulttype',  [
+    'io.ox/core/viewer/types/basetype',
     'gettext!io.ox/core'
-], function (gt) {
+], function (BaseType, gt) {
     /**
      * Default file type for OX Viewer. Displays a generic file icon
      * and the file name. This type acts as a fallback in cases if the
@@ -25,7 +26,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
      * }
      *
      */
-    var defaultType = (function () {
+    var defaultType = {
         //console.warn('defaulttype()');
         /**
          * Creates a default slide.
@@ -39,7 +40,7 @@ define('io.ox/core/viewer/types/defaulttype',  [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        function createSlide (model, modelIndex) {
+        createSlide: function (model, modelIndex) {
             //console.warn('DefaultType.createSlide()', model, modelIndex, count);
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 displayerTopOffset = 45,
@@ -50,15 +51,10 @@ define('io.ox/core/viewer/types/defaulttype',  [
                 filenameEl = $('<p>').text(filename),
                 apology = $('<p class="apology">').text(gt('Sorry, there is no preview available for this file.')),
                 slidesCount = model.collection.length;
-            function createCaption () {
-                var caption = $('<div class="viewer-displayer-caption">');
-                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                return caption;
-            }
             slideContent.append(fileIcon, filenameEl, apology);
-            slide.append(slideContent, createCaption());
+            slide.append(slideContent, this.createCaption(modelIndex, slidesCount));
             return slide;
-        }
+        },
 
         /**
          * "Loads" a default slide.
@@ -66,14 +62,11 @@ define('io.ox/core/viewer/types/defaulttype',  [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        function loadSlide() {}
+        loadSlide: function () {}
 
-        return {
-            createSlide: createSlide,
-            loadSlide: loadSlide
-        };
-    })();
+    };
 
-    return defaultType;
+    // returns an object which inherits BaseType
+    return _.extend(Object.create(BaseType), defaultType);
 
 });

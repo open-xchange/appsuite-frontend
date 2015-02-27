@@ -10,8 +10,8 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/videotype', [
-    'gettext!io.ox/core'
-], function (gt) {
+    'io.ox/core/viewer/types/basetype'
+], function (BaseType) {
     /**
      * The video file type. Implements the ViewerType interface.
      *
@@ -22,7 +22,7 @@ define('io.ox/core/viewer/types/videotype', [
      *
      * @constructor
      */
-    var videoType = (function () {
+    var videoType = {
         /**
          * Creates a video slide.
          *
@@ -35,18 +35,13 @@ define('io.ox/core/viewer/types/videotype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        function createSlide (model, modelIndex) {
+        createSlide: function (model, modelIndex) {
             //console.warn('VideoType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 slidesCount = model.collection.length;
-            function createCaption () {
-                var caption = $('<div class="viewer-displayer-caption">');
-                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                return caption;
-            }
-            slide.append(createCaption());
+            slide.append(this.createCaption(modelIndex, slidesCount));
             return slide;
-        }
+        },
 
         /**
          * "Loads" a video slide.
@@ -57,19 +52,15 @@ define('io.ox/core/viewer/types/videotype', [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        function loadSlide(model, slideElement) {
+        loadSlide: function (model, slideElement) {
             //console.warn('VideoType.loadSlide()', slideIndex, slideElement);
             if (!model || slideElement.length === 0) {
                 return;
             }
         }
+    };
 
-        return {
-            createSlide: createSlide,
-            loadSlide: loadSlide
-        };
-    })();
-
-    return videoType;
+    // returns an object which inherits BaseType
+    return _.extend(Object.create(BaseType), videoType);
 
 });

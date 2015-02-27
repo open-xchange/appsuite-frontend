@@ -10,8 +10,9 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/imagetype', [
+    'io.ox/core/viewer/types/basetype',
     'gettext!io.ox/core'
-], function (gt) {
+], function (BaseType, gt) {
 
     /**
      * The image file type. Implements the ViewerType interface.
@@ -23,7 +24,7 @@ define('io.ox/core/viewer/types/imagetype', [
      *
      * @constructor
      */
-    var imageType = (function () {
+    var imageType = {
         /**
          * Creates a Image slide.
          *
@@ -36,7 +37,7 @@ define('io.ox/core/viewer/types/imagetype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        function createSlide (model, modelIndex) {
+        createSlide: function (model, modelIndex) {
             //console.warn('ImageType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 image = $('<img class="viewer-displayer-image">'),
@@ -44,18 +45,13 @@ define('io.ox/core/viewer/types/imagetype', [
                 filename = model && model.get('filename') || '',
                 slidesCount = model.collection.length,
                 displayerTopOffset = 45;
-            function createCaption () {
-                var caption = $('<div class="viewer-displayer-caption">');
-                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                return caption;
-            }
             if (previewUrl) {
                 image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
                     .css({ maxHeight: window.innerHeight - displayerTopOffset, maxWidth: window.innerWidth });
-                slide.append(image, createCaption());
+                slide.append(image, this.createCaption(modelIndex, slidesCount));
             }
             return slide;
-        }
+        },
 
         /**
          * "Loads" an image slide by transferring the image source from the 'data-src'
@@ -64,7 +60,7 @@ define('io.ox/core/viewer/types/imagetype', [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
         */
-        function loadSlide (model, slideElement) {
+        loadSlide: function (model, slideElement) {
             //console.warn('ImageType.loadSlide()', slideIndex, slideElement);
             if (slideElement.length === 0) {
                 return;
@@ -83,12 +79,8 @@ define('io.ox/core/viewer/types/imagetype', [
                 slideElement.idle().append(notification);
             };
         }
+    };
 
-        return {
-            createSlide: createSlide,
-            loadSlide: loadSlide
-        };
-    })();
-
-    return imageType;
+    // returns an object which inherits BaseType
+    return _.extend(Object.create(BaseType), imageType);
 });

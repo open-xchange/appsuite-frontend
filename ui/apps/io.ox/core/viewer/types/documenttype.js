@@ -10,11 +10,11 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/documenttype', [
+    'io.ox/core/viewer/types/basetype',
     'io.ox/core/viewer/pdf/io',
     'io.ox/core/viewer/util',
-    'io.ox/core/viewer/pdf/pdfdocument',
-    'gettext!io.ox/core'
-], function (IO, Util, PDFDocument, gt) {
+    'io.ox/core/viewer/pdf/pdfdocument'
+], function (BaseType, IO, Util, PDFDocument) {
     /**
      * The document file type. Implements the ViewerType interface.
      *
@@ -24,13 +24,7 @@ define('io.ox/core/viewer/types/documenttype', [
      * }
      *
      */
-    var documentType = (function () {
-
-        var // all pending server requests currently running
-            pendingRequests = [],
-            // prevent further server requests after the quit handlers have been called
-            requestsLocked = false;
-
+    var documentType = {
         /**
          * Creates a document slide.
          *
@@ -43,19 +37,14 @@ define('io.ox/core/viewer/types/documenttype', [
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        function createSlide(model, modelIndex) {
+        createSlide: function (model, modelIndex) {
             //console.warn('DocumentType.createSlide()');
             var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
                 pageContainer = $('<div class="document-container">'),
                 slidesCount = model.collection.length;
-            function createCaption () {
-                var caption = $('<div class="viewer-displayer-caption">');
-                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                return caption;
-            }
-            slide.append(pageContainer, createCaption());
+            slide.append(pageContainer, this.createCaption(modelIndex, slidesCount));
             return slide;
-        }
+        },
 
         /**
          * "Loads" a document slide.
@@ -64,7 +53,7 @@ define('io.ox/core/viewer/types/documenttype', [
          * @param {jQuery} slideElement
          *  the slide jQuery element to be loaded.
          */
-        function loadSlide(model, slideElement) {
+        loadSlide: function (model, slideElement) {
             // disable loading document temporarily
             if (1) { return; }
             var // the file descriptor object
@@ -88,7 +77,11 @@ define('io.ox/core/viewer/types/documenttype', [
                     convert_format: 'image'
                     // convert_format: 'html'
                 }),
-                pageContainer = slideElement.find('.document-container');
+                pageContainer = slideElement.find('.document-container'),
+                // all pending server requests currently running
+                pendingRequests = [],
+                // prevent further server requests after the quit handlers have been called
+                requestsLocked = false;
 
             /**
              * Creates and returns the URL of a server request.
@@ -239,13 +232,9 @@ define('io.ox/core/viewer/types/documenttype', [
                 });
             });
         }
+    };
 
-        return {
-            createSlide: createSlide,
-            loadSlide: loadSlide
-        };
-    })();
-
-    return documentType;
+    // returns an object which inherits BaseType
+    return _.extend(Object.create(BaseType), documentType);
 
 });
