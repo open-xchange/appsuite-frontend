@@ -18,7 +18,7 @@ define('io.ox/calendar/acceptdeny',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-    ], function (api, dialogs, folderAPI, util, calSettings, gt) {
+    ], function (calApi, dialogs, folderAPI, util, calSettings, gt) {
 
     'use strict';
 
@@ -30,17 +30,14 @@ define('io.ox/calendar/acceptdeny',
                 showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
                 message = util.getConfirmationMessage(o),
                 appointmentData,
+                //use different api if provided (tasks use this)
+                api = options.api || calApi,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 defaultReminder = calSettings.get('defaultReminder', 15),
                 apiData = { folder: o.folder_id, id: o.id },
                 //appointments check for conflicts by default, tasks don't
                 checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;
-
-            //use different api if provided (tasks use this)
-            if (options.api) {
-                api = options.api;
-            }
 
             if (!options.taskmode && !series && o.recurrence_position) {
                 apiData.recurrence_position = o.recurrence_position;
