@@ -125,12 +125,26 @@ define('io.ox/core/viewer/views/displayerview', [
             _.defer(function () {
                 // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
+
                 // always load duplicate slides of the swiper plugin.
                 self.$el.find('.swiper-slide-duplicate').each(function (index, element) {
-                    var slideIndex = $(element).data('swiper-slide-index'),
+                    var slideNode = $(element),
+                        slideIndex = slideNode.data('swiper-slide-index'),
                         slideModel = self.collection.at(slideIndex);
-                    TypesRegistry.getModelType(slideModel).loadSlide(slideModel, $(element));
+
+                    TypesRegistry.getModelType(slideModel)
+                    .done(function (modelType) {
+                        // when the duplicate slide is copied, the original slide consist only of an empty <div> element.
+                        // so we need to add the slide content before loading the slide.
+                        slideNode.empty().append(modelType.createSlide(slideModel, slideIndex).children());
+                        // now load the slide.
+                        modelType.loadSlide(slideModel, slideNode);
+                    })
+                    .fail(function () {
+                        console.error('cannot require a model type for', slideModel.get('filename'));
+                    });
                 });
+
                 // preload selected file and its neighbours initially
                 self.blendSlideCaption(data.index);
                 self.preloadSlide(data.index, slidesToPreload, 'left');
@@ -142,7 +156,9 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
-         * Create a Bootstrap carousel slide element.
+         * Create a Swiper slide element.
+         * The root node is returned immediately, but the content
+         * is applied asynchronously.
          *
          * @param {Object} model
          *  the Viewer model.
@@ -153,8 +169,18 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         createSlide: function (model, modelIndex) {
             if (!model) { return; }
-            var modelType = TypesRegistry.getModelType(model);
-            return modelType.createSlide(model, modelIndex);
+
+            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">');
+
+            TypesRegistry.getModelType(model)
+            .done(function (modelType) {
+                slide.append(modelType.createSlide(model, modelIndex).children());
+            })
+            .fail(function () {
+                console.error('Displayerview.createSlide() - cannot require a model type for', model.get('filename'));
+            });
+
+            return slide;
         },
 
         /**
@@ -171,11 +197,19 @@ define('io.ox/core/viewer/views/displayerview', [
         loadSlide: function (model, slideElement) {
             //console.warn('DisplayerView.loadSlide()', this.loadedSlides);
             if (!model || slideElement.length === 0) { return; }
-            var slideIndex = slideElement.data('swiper-slide-index'),
-                modelType = TypesRegistry.getModelType(model);
+
+            var slideIndex = slideElement.data('swiper-slide-index');
             if (_.contains(this.loadedSlides, slideIndex)) { return; }
-            this.loadedSlides.push(slideIndex);
-            modelType.loadSlide(model, slideElement);
+
+            TypesRegistry.getModelType(model)
+            .done(function (modelType) {
+                this.loadedSlides.push(slideIndex);
+                modelType.loadSlide(model, slideElement);
+
+            }.bind(this))
+            .fail(function () {
+                console.error('Displayerview.loadSlide() - cannot require a model type for', model.get('filename'));
+            });
         },
 
         /**

@@ -68,7 +68,6 @@ define('io.ox/core/viewer/types/imagetype', [
             var imageToLoad = slideElement.find('img');
             if (imageToLoad.length === 0) { return ;}
             slideElement.busy();
-            imageToLoad.attr('src', imageToLoad.attr('data-src'));
             imageToLoad[0].onload = function () {
                 slideElement.idle();
                 imageToLoad.show();
@@ -78,6 +77,7 @@ define('io.ox/core/viewer/types/imagetype', [
                     .text(gt('Sorry, there is no preview available for this file.'));
                 slideElement.idle().append(notification);
             };
+            imageToLoad.attr('src', imageToLoad.attr('data-src'));
         }
     };
 
