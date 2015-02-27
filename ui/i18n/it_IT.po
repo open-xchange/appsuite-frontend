@@ -156,7 +156,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:409 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -904,7 +904,7 @@ msgstr "Amministratore"
 msgid "Advanced Facets"
 msgstr "Filtri di ricerca avanzati"
 
-#: apps/io.ox/settings/main.js:502 module:io.ox/core
+#: apps/io.ox/settings/main.js:494 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Impostazioni avanzate"
 
@@ -1267,7 +1267,7 @@ msgid "Back to appointment"
 msgstr "Torna all'appuntamento"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:393
+#: apps/io.ox/settings/main.js:385
 msgid "Basic settings"
 msgstr "Impostazioni di base"
 
@@ -4181,7 +4181,7 @@ msgid "Mail and Messaging"
 msgstr "Posta e messaggistica"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:400
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Account di posta e reti sociali"
@@ -6319,7 +6319,7 @@ msgid "Set color"
 msgstr "Imposta il colore"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:409
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
 msgid "Settings"
 msgstr "Impostazioni"
 

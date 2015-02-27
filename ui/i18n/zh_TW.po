@@ -152,7 +152,7 @@ msgstr ""
 "%5$s%4$s\n"
 "%2$s %3$s%1$s"
 
-#: apps/io.ox/settings/main.js:409 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -918,7 +918,7 @@ msgstr "管理員"
 msgid "Advanced Facets"
 msgstr "進階 Facet"
 
-#: apps/io.ox/settings/main.js:502 module:io.ox/core
+#: apps/io.ox/settings/main.js:494 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "進階設定"
 
@@ -1273,7 +1273,7 @@ msgid "Back to appointment"
 msgstr "回到約會"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:393
+#: apps/io.ox/settings/main.js:385
 msgid "Basic settings"
 msgstr "基礎設定"
 
@@ -4162,7 +4162,7 @@ msgid "Mail and Messaging"
 msgstr "郵件與訊息"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:400
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "郵件與社交帳戶"
@@ -6289,7 +6289,7 @@ msgid "Set color"
 msgstr "設定色彩"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:409
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
 msgid "Settings"
 msgstr "選項"
 

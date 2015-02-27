@@ -156,7 +156,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:409 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -905,7 +905,7 @@ msgstr "Administratör"
 msgid "Advanced Facets"
 msgstr "Avancerade facetter"
 
-#: apps/io.ox/settings/main.js:502 module:io.ox/core
+#: apps/io.ox/settings/main.js:494 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Avancerade inställningar"
 
@@ -1262,7 +1262,7 @@ msgid "Back to appointment"
 msgstr "Tillbaka till möte"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:393
+#: apps/io.ox/settings/main.js:385
 msgid "Basic settings"
 msgstr "Grundinställningar"
 
@@ -4170,7 +4170,7 @@ msgid "Mail and Messaging"
 msgstr "E-post och snabbmeddelanden"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:400
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "E-post och sociala nätverk"
@@ -6301,7 +6301,7 @@ msgid "Set color"
 msgstr "Ange färg"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:409
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
 msgid "Settings"
 msgstr "Inställningar"
 

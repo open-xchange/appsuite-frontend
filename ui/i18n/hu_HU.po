@@ -153,7 +153,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:409 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -900,7 +900,7 @@ msgstr "Adminisztrátor"
 msgid "Advanced Facets"
 msgstr "Speciális lapok"
 
-#: apps/io.ox/settings/main.js:502 module:io.ox/core
+#: apps/io.ox/settings/main.js:494 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Speciális beállítások"
 
@@ -1262,7 +1262,7 @@ msgid "Back to appointment"
 msgstr "Vissza a találkozóhoz"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:393
+#: apps/io.ox/settings/main.js:385
 msgid "Basic settings"
 msgstr "Alapbeállítások"
 
@@ -4177,7 +4177,7 @@ msgid "Mail and Messaging"
 msgstr "Levél és üzenetküldés"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:400
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Posta- és közösségi fiókok"
@@ -6312,7 +6312,7 @@ msgid "Set color"
 msgstr "Szín beállítása"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:409
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
 msgid "Settings"
 msgstr "Beállítások"
 
