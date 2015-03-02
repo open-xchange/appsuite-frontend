@@ -563,6 +563,29 @@ define('io.ox/mail/common-extensions',
             };
 
         }()),
+
+        subscriptionNotification: (function () {
+
+            // respond to publication invitation mails
+
+            function draw(model) {
+
+                if (!model.has('headers')) return;
+                if (!model.get('headers')['X-OX-PubURL']) return;
+
+                var self = this;
+
+                require(['io.ox/core/pubsub/notifications/subscription'], function (draw) {
+                    draw.call(self, model);
+                });
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                baton.view.listenToOnce(baton.model, 'change:headers', draw.bind(this));
+            };
+
+        }())
     };
 
     return extensions;

@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.6.1-15",
+  "version": "7.6.1-16",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -8,11 +8,11 @@
   "optionalDependencies": {
     "assemble": "^0.4.17",
     "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
-    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.6.4",
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.6.6",
     "underscore": "^1.6.0"
   },
   "devDependencies": {
-    "appserver": "^0.3.0",
+    "appserver": "^0.5.0",
     "grunt-contrib-connect": "^0.7.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-curl": "~1.4.0",

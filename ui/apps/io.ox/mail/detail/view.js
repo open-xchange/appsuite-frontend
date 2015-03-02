@@ -172,6 +172,12 @@ define('io.ox/mail/detail/view',
         draw: extensions.externalImages
     });
 
+    ext.point('io.ox/mail/detail/notifications').extend({
+        index: INDEX_notifications += 100,
+        id: 'subscribe',
+        draw: extensions.subscriptionNotification
+    });
+
     ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,

@@ -445,21 +445,20 @@ define('io.ox/calendar/invitations/register',
                 tempdata;
 
             if (reminder) {
-                if (reminder !== this.getDefaultReminder()) {
-                    // don't use whole data object here, because it overwrites the confirmations with it's users attribute
-                    tempdata = {
-                        id: data.id,
-                        folder_id: data.folder_id,
-                        alarm: reminder
-                    };
-                    if (data.recurrence_position) {
-                        tempdata.recurrence_position = data.recurrence_position;
-                    }
-                    if (this.task) {//tasks use absolute timestamps
-                        tempdata.alarm = _.utc() + tempdata.alarm;
-                    }
-                    this.api.update(tempdata);
+                // don't use whole data object here, because it overwrites the confirmations with it's users attribute
+                tempdata = {
+                    id: data.id,
+                    folder_id: data.folder_id,
+                    alarm: reminder
+                };
+                if (data.recurrence_position) {
+                    tempdata.recurrence_position = data.recurrence_position;
                 }
+                if (this.task) {
+                    // tasks use absolute timestamps
+                    tempdata.alarm = _.utc() + tempdata.alarm;
+                }
+                this.api.update(tempdata);
             }
 
             if (this.type === 'appointment') {

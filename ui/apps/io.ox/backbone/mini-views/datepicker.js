@@ -128,32 +128,30 @@ define('io.ox/backbone/mini-views/datepicker', [
                 });
 
                 // build and init timepicker based on combobox plugin
-                if (self.options.display === 'DATETIME') {
-                    var hours_typeahead = [],
-                        filldate = new date.Local().setHours(0, 0, 0, 0),
-                        interval = parseInt(settings.get('interval'), 10) || 30;
-                    for (var i = 0; i < 1440; i += interval) {
-                        hours_typeahead.push(filldate.format(date.TIME));
-                        filldate.add(interval * date.MINUTE);
-                    }
-
-                    var comboboxHours = {
-                        source: hours_typeahead,
-                        items: hours_typeahead.length,
-                        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-                        sorter: function (items) {
-                            items = _(items).sortBy(function (item) {
-                                var pd = date.Local.parse(item, date.TIME);
-                                return pd.getTime();
-                            });
-                            return items;
-                        },
-                        autocompleteBehaviour: false
-                    };
-
-                    this.nodes.timeField.combobox(comboboxHours);
-                    this.nodes.timeField.on('change', _.bind(this.updateModel, this));
+                var hours_typeahead = [],
+                    filldate = new date.Local().setHours(0, 0, 0, 0),
+                    interval = parseInt(settings.get('interval'), 10) || 30;
+                for (var i = 0; i < 1440; i += interval) {
+                    hours_typeahead.push(filldate.format(date.TIME));
+                    filldate.add(interval * date.MINUTE);
                 }
+
+                var comboboxHours = {
+                    source: hours_typeahead,
+                    items: hours_typeahead.length,
+                    menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+                    sorter: function (items) {
+                        items = _(items).sortBy(function (item) {
+                            var pd = date.Local.parse(item, date.TIME);
+                            return pd.getTime();
+                        });
+                        return items;
+                    },
+                    autocompleteBehaviour: false
+                };
+
+                this.nodes.timeField.combobox(comboboxHours);
+                this.nodes.timeField.on('change', _.bind(this.updateModel, this));
                 this.toggleTimeInput(self.options.display === 'DATETIME');
             }
 
