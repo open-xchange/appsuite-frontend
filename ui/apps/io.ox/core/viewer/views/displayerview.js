@@ -71,27 +71,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     simulateTouch: false,
                     speed: 0,
                     initialSlide: startIndex,
-                    onSlideChangeEnd: onSlideChangeEnd
+                    onSlideChangeEnd: this.onSlideChangeEnd.bind(this)
                 };
-            // on slide change end handler of the swiper plugin
-            function onSlideChangeEnd(swiper) {
-                //console.warn('onSlideChangeEnd()', self.loadedSlides);
-                var activeSlideIndex = swiper.activeIndex - 1,
-                    collectionLength = self.collection.length;
-                if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
-                if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
-                self.blendSlideCaption(activeSlideIndex);
-                self.preloadSlide(activeSlideIndex, slidesToPreload, 'left');
-                self.preloadSlide(activeSlideIndex, slidesToPreload, 'right');
-                // a11y
-                swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
-                swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
-                EventDispatcher.trigger('viewer:displayeditem:change', {
-                    index: activeSlideIndex,
-                    model: self.collection.at(activeSlideIndex)
-                });
-            }
-
             // enable touch and swiping for iOS and Android first
             if (_.browser.iOS || _.browser.Android) {
                 swiperParameter = _.extend(swiperParameter, {
@@ -219,7 +200,7 @@ define('io.ox/core/viewer/views/displayerview', [
          *  The current active slide to be loaded.
          *
          * @param {Number} preloadOffset
-         *  Number of neighboring slides to preload.
+         *  Number of neighboring slides to preload. Defaults to 2.
          *
          * @param {String} preloadDirection
          *  Direction of the preload: 'left' or 'right' are supported.
@@ -227,7 +208,7 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         preloadSlide: function (slideToLoad, preloadOffset, preloadDirection) {
             //console.warn('DisplayerView.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
-            var preloadOffset = preloadOffset || 0,
+            var preloadOffset = preloadOffset || 2,
                 step = preloadDirection === 'left' ? 1 : -1,
                 slideToLoad = slideToLoad || 0,
                 loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
@@ -268,9 +249,38 @@ define('io.ox/core/viewer/views/displayerview', [
             }, duration);
         },
 
-        // focuses the swiper's current active slide
+        /**
+         * Focuses the swiper's current active slide.
+         */
         focusActiveSlide: function () {
             this.$el.find('.swiper-slide-active').focus();
+        },
+
+        /**
+         * Handler for the slideChangeEnd event of the swiper plugin.
+         * - preload neighboring slides
+         * - broadcast 'viewer:displayeditem:change' event
+         * - add a11y attributes
+         *
+         * @param swiper
+         */
+        onSlideChangeEnd: function (swiper) {
+            //console.warn('onSlideChangeEnd()', swiper.activeIndex);
+            var activeSlideIndex = swiper.activeIndex - 1,
+                collectionLength = this.collection.length;
+            // recalculate swiper active slide index, disregarding duplicate slides.
+            if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
+            if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
+            this.blendSlideCaption(activeSlideIndex);
+            this.preloadSlide(activeSlideIndex, null, 'left');
+            this.preloadSlide(activeSlideIndex, null, 'right');
+            // a11y
+            swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
+            swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
+            EventDispatcher.trigger('viewer:displayeditem:change', {
+                index: activeSlideIndex,
+                model: this.collection.at(activeSlideIndex)
+            });
         },
 
         dispose: function () {
