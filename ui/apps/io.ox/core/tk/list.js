@@ -195,6 +195,9 @@ define('io.ox/core/tk/list',
             // trigger a paginate call that probably overtakes the delete request
             if (children.length > 1) this.$el.trigger('scroll');
 
+            // empty now?
+            if ((children.length - 1) === 0) this.selection.triggerChange();
+
             // forward event
             this.trigger('remove', model);
         },
