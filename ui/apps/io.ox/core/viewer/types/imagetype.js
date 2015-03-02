@@ -43,11 +43,9 @@ define('io.ox/core/viewer/types/imagetype', [
                 image = $('<img class="viewer-displayer-image">'),
                 previewUrl = model && model.getPreviewUrl(),
                 filename = model && model.get('filename') || '',
-                slidesCount = model.collection.length,
-                displayerTopOffset = 45;
+                slidesCount = model.collection.length;
             if (previewUrl) {
-                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                    .css({ maxHeight: window.innerHeight - displayerTopOffset, maxWidth: window.innerWidth });
+                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename });
                 slide.append(image, this.createCaption(modelIndex, slidesCount));
             }
             return slide;
