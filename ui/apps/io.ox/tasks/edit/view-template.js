@@ -176,7 +176,7 @@ define('io.ox/tasks/edit/view-template', [
                     attribute: 'start_date',
                     label: gt('Start date'),
                     clearButton: true
-                }).render().$el
+                }).render().$el.attr('data-extension-id', 'start_date')
             );
         }
     });
@@ -193,7 +193,7 @@ define('io.ox/tasks/edit/view-template', [
                     attribute: 'end_date',
                     label: gt('Due date'),
                     clearButton: true
-                }).render().$el
+                }).render().$el.attr('data-extension-id', 'end_date')
             );
         }
     });
@@ -242,7 +242,7 @@ define('io.ox/tasks/edit/view-template', [
                     attribute: 'alarm',
                     label: gt('Reminder date'),
                     clearButton: true
-                }).render().$el
+                }).render().$el.attr('data-extension-id', 'alarm')
             );
         }
     });

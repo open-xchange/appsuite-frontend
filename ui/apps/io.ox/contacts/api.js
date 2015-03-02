@@ -613,6 +613,14 @@ define('io.ox/contacts/api', [
         });
     };
 
+    /**
+     * show default image or assigned image (in case it's available)
+     * @param  {jquery} node    placeholder node that gets background-image OR null
+     * @param  {object} data    all available date for a person/ressource
+     * @param  {object} options
+     * @param  {object} options.urlOnly (url request may returns 1x1 'error' picture)
+     * @return {jquery|string}  opt.urlOnly ? string : node;
+     */
     api.pictureHalo = (function () {
 
         // local hash to recognize URLs that have been fetched already
@@ -746,7 +754,7 @@ define('io.ox/contacts/api', [
 
             // cached?
             if (cachesURLs[url]) {
-                return node.css('background-image', 'url(' + cachesURLs[url] + ')');
+                return opt.urlOnly ? cachesURLs[url] : node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
 
             if (!opt.urlOnly) {

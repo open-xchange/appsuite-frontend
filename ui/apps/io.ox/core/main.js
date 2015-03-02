@@ -321,7 +321,13 @@ define('io.ox/core/main', [
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + _.escape(arialabel) + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
+                return $('<a>', {
+                    href: '#',
+                    'class': 'apptitle',
+                    tabindex: 1,
+                    role: 'button',
+                    'aria-label': arialabel ? _.escape(arialabel) : null
+                }).append(label);
             } else {
                 return label;
             }
@@ -938,16 +944,22 @@ define('io.ox/core/main', [
             }
         });
 
+        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
         if (dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    this.append(
-                        addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
-                            logout();
-                        },  gt('Sign out'))
-                    );
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        logout();
+                    },  gt('Sign out'));
+                    logoutButton.find('a').tooltip({
+                        title: gt('Sign out'),
+                        placement: function (tip, el) {
+                            return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'left' : 'auto';
+                        }
+                    });
+                    this.append(logoutButton);
                 }
             });
         }

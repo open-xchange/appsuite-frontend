@@ -6,18 +6,16 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/toolbar', ['gettext!io.ox/core'], function (gt) {
+define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gettext!io.ox/core'], function (DisposableView, gt) {
 
     'use strict';
 
-    var Toolbar = Backbone.View.extend({
-
-        tagName: 'div',
+    var Toolbar = DisposableView.extend({
 
         className: 'classic-toolbar-container',
 

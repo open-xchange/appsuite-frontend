@@ -703,7 +703,7 @@
         toHash: function (array, prop) {
             var tmp = {};
             _(array).each(function (obj) {
-                if (prop && _.isString(prop))
+                if (obj && prop && _.isString(prop))
                     tmp[obj[prop]] = obj;
             });
             return tmp;

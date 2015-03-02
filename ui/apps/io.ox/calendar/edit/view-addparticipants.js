@@ -59,6 +59,7 @@ define('io.ox/calendar/edit/view-addparticipants', [
                         placement: options.placement,
                         api: autocompleteAPI,
                         name: options.name,
+                        stringify: options.stringify,
                         // reduce suggestion list
                         reduce: function (data) {
                             // updating baton-data-node
@@ -138,7 +139,7 @@ define('io.ox/calendar/edit/view-addparticipants', [
                             //return number of query hits and the filtered list
                             return { list: filterDoubletes(), hits: data.length };
                         },
-                        draw: function (obj) {
+                        draw: options.draw || function (obj) {
                             if (!_.isObject(obj)) return;
                             obj.data.image1_url = obj.data.image1_url || '';
                             var pview = new pViews.ParticipantEntryView({

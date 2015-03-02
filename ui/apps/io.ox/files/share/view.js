@@ -12,6 +12,7 @@
  */
 
 define('io.ox/files/share/view', [
+    'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/files/share/model',
     'io.ox/backbone/mini-views',
@@ -23,7 +24,7 @@ define('io.ox/files/share/view', [
     'io.ox/core/yell',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, Tokenfield, date, yell, gt) {
+], function (DisposableView, ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, Tokenfield, date, yell, gt) {
 
     'use strict';
 
@@ -155,6 +156,7 @@ define('io.ox/files/share/view', [
             // add autocomplete
             var tokenfieldView = new Tokenfield({
                 id: guid,
+                placeholder: gt('Add recipients ...'),
                 apiOptions: {
                     contacts: true,
                     users: true,
@@ -171,7 +173,7 @@ define('io.ox/files/share/view', [
             this.append(
                 baton.nodes.invite.autocomplete = $('<div class="form-group">').append(
                     $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
-                    tokenfieldView.$el.attr({ placeholder: gt('Add recipients ...') })
+                    tokenfieldView.$el
                 )
             );
 
@@ -336,7 +338,7 @@ define('io.ox/files/share/view', [
     /*
      * main view
      */
-    var ShareView = Backbone.View.extend({
+    var ShareView = DisposableView.extend({
 
         tagName: 'form',
 
@@ -368,10 +370,12 @@ define('io.ox/files/share/view', [
 
                 // generate link if empty
                 if (val === 'link' && model.get('link') === '' ) {
-                    model.save().then(function (url) {
-                        model.set('link', url);
-                    }, yell);
+                    this.share({ silent: true, validate: false });
                 }
+            });
+
+            this.listenTo(this.model, 'invalid', function (model, error) {
+                yell('error', error);
             });
 
         },
@@ -388,12 +392,29 @@ define('io.ox/files/share/view', [
             return this;
         },
 
-        share: function () {
-            this.model.save().then(yell.done, yell);
+        share: function (opt) {
+            opt = _.extend({
+                silent: false,
+                validate: true
+            }, opt);
+            var def = $.Deferred();
+            return $.when(this.model.save(null, { validate: opt.validate })).then(function (res) {
+                if (res) {
+                    if (!opt.silent) yell('success', gt('Done'));
+                    def.resolve(res);
+                } else {
+                    def.reject();
+                }
+                return def;
+            }, function () {
+                yell.apply(this, arguments);
+                return def.reject();
+            });
         },
 
         cancel: function () {
             this.model.destroy();
+            this.remove();
         }
 
     });

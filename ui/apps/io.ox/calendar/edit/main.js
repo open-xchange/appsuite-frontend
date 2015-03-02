@@ -316,8 +316,12 @@ define('io.ox/calendar/edit/main', [
                     self.getWindow().setTitle(value);
                     self.setTitle(value);
                 });
-                // focus first input element
-                $(self.getWindow().nodes.main).find('input')[0].focus();
+
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (_.device('!smartphone && !iOS')) {
+                    // focus first input element
+                    $(self.getWindow().nodes.main).find('input')[0].focus();
+                }
                 // make window scrollable
                 $(self.getWindow().nodes.main[0]).addClass('scrollable');
 
@@ -390,7 +394,7 @@ define('io.ox/calendar/edit/main', [
                 self.dispose();
                 df.resolve();
             }
-            if (_.device('!smartphone')) app.getWindow().nodes.main.find('input')[0].focus();
+            if (_.device('!smartphone && !iOS')) app.getWindow().nodes.main.find('input')[0].focus();
             return df;
         });
 

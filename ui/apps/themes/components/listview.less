@@ -124,6 +124,10 @@
         outline: 0;
     }
 
+    .list-item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
     .list-item .list-item-checkmark {
         position: absolute;
         top: 0;
@@ -263,4 +267,9 @@
     // .list-item:focus {
     //     border-color: rgba(0, 0, 0, 0.50);
     // }
+
+    .list-item {
+        .bold { font-weight: bold; }
+        .gray { opacity: 0.70; } // 0.70 has enough color contrast
+    }
 }

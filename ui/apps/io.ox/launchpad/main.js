@@ -143,11 +143,11 @@ define('io.ox/launchpad/main', [
                 extension.openStore();
                 openedStore = true;
             });
-            if (!openedStore) {
-                require(['io.ox/applications/main'], function (m) {
-                    m.getApp().launch();
-                });
-            }
+            //  if (!openedStore) {
+            //    require(['io.ox/applications/main'], function (m) {
+            //        m.getApp().launch();
+            //    });
+            //  }
         },
 
         drawApp = function (data) {

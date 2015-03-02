@@ -13,7 +13,7 @@
 define([
     'io.ox/mail/compose/main',
     'settings!io.ox/mail',
-    'fixture!io.ox/mail/write/signatures.json'
+    'fixture!io.ox/mail/compose/signatures.json'
 ], function (compose, settings, signatures) {
     'use strict';
 

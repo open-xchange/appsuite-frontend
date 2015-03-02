@@ -53,9 +53,10 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         cleanUp: function () {
-            $('#io-ox-login-form').off('submit');
-            $('#io-ox-login-password').val('********');
-            $('#io-ox-login-form').find('input, button').prop('readonly', true);
+            // we don't clear the password right now (see bug 36950)
+            $('#io-ox-login-form')
+                .off('submit')
+                .find('input, button').prop('readonly', true);
         },
 
         gotoSignin: function (hash) {

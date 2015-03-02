@@ -45,7 +45,7 @@ define([
     describe('Tasks edit view', function () {
         beforeEach(function () {
             //set capabilities
-            return capabilities.then(function (data) {
+            return capabilities.then(function () {
                 return setup();
             });
         });

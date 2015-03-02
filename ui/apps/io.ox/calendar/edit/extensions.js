@@ -558,13 +558,10 @@ define('io.ox/calendar/edit/extensions', [
         index: 1700,
         module: 1,
         finishedCallback: function (model, id) {
-            var obj = {};
+            var obj = model.attributes;
             //new objects have no id in model yet
-            obj.id = model.attributes.id || id;
+            obj.id = id || model.attributes.id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            if (model.attributes.recurrence_position !== null) {
-                obj.recurrence_position = model.attributes.recurrence_position;
-            }
             api.attachmentCallback(obj);
         }
     }), {

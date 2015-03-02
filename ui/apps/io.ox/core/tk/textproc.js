@@ -359,7 +359,13 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                 .replace(/\n{3,}/g, '\n\n');              // limit consecutive linebreaks to 2
         }
 
-        return cleanUp(string);
+        string = cleanUp(string);
+        string = string.replace(/^\s+\n\n/,'\n');
+        // only insert newline when content starts with quote
+        if (!/^\n\>\s/.test(string)) {
+            string = string.replace(/^\n/, '');
+        }
+        return string;
     };
 
     var texttohtml = function (string) {

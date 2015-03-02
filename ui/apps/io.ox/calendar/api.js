@@ -246,6 +246,7 @@ define('io.ox/calendar/api', [
                             if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
                         }
                     }
+
                     return api.get(getObj)
                         .then(function (data) {
                             if (attachmentHandlingNeeded) {
@@ -271,19 +272,31 @@ define('io.ox/calendar/api', [
          * @return { deferred }
          */
         attachmentCallback: function (o) {
-            var doCallback = api.uploadInProgress(_.ecid(o));
+            var doCallback = api.uploadInProgress(_.ecid(o)),
+                folder_id = o.folder_id || o.folder,
+                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0);
 
             // clear caches
             if (doCallback) {
+                // clear caches
                 api.caches.all = {};
-                delete api.caches.get[_.ecid(o)];
+                delete api.caches.get[key];
+                // if master, delete all appointments from cache
+                if (o.recurrence_type > 0 && !o.recurrence_position) {
+                    var deleteKey = folder_id + '.' + o.id;
+                    for ( var i in api.caches.get ) {
+                        if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
+                    }
+                }
             }
 
             return api.get(o, !doCallback)
                 .then(function (data) {
                     api.trigger('update', data);
+                    api.trigger('update:' + _.ecid(o), data);
                     //to make the detailview remove the busy animation
                     api.removeFromUploadList(_.ecid(data));
+                    return data;
                 });
         },
 

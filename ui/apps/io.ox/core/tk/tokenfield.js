@@ -118,7 +118,7 @@ define('io.ox/core/tk/tokenfield', [
             this.$el
                 .attr({
                     tabindex: this.options.tabindex,
-                    placeholder: this.options.placeholder || ''
+                    placeholder: this.options.placeholder || null
                 })
                 .addClass('tokenfield');
             this.$el.tokenfield({

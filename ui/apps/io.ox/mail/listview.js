@@ -282,10 +282,18 @@ define('io.ox/mail/listview', [
         ref: 'io.ox/mail/listview',
 
         initialize: function (options) {
+            var self = this;
             options = _.extend({ threaded: true }, options);
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
+
+            // mirror threaded state
+            this.listenTo(options.app.props, {
+                'change:thread': function (model) {
+                    self.threaded = model.get('thread');
+                }
+            });
         },
 
         lookForUnseenMessage: function () {
@@ -309,9 +317,41 @@ define('io.ox/mail/listview', [
             return !util.isDeleted(data);
         },
 
+        reprocessThread: function (model) {
+            // only used when in thread mode
+            if (!this.threaded) return;
+
+            // get full thread objects (instead of cids)
+            var threadlist = api.threads.get(model.cid);
+
+            // up to date
+            if (!model.get('thread') || threadlist.length === model.get('thread').length) return;
+
+            // remove head property to avid accidently using old date when processThreadMessage
+            _.each(threadlist, function (item) {
+                delete item.head;
+            });
+
+            // generate updated data object (similar to server response structure)
+            var obj = _.extend(model.toJSON(), threadlist[0], {
+                    thread: threadlist,
+                    threadSize: threadlist.length
+                });
+
+            // do the thread hokey-pokey-dance
+            api.processThreadMessage(obj);
+
+            // update model silently
+            model.set(obj, { silent: true });
+        },
+
         map: function (model) {
             // not threaded?
             if (!this.options.threaded) return model.toJSON();
+
+            // in case thread property has changed (e.g. latest mail of thread deleted)
+            this.reprocessThread(model);
+
             // use head data for list view
             var data = api.threads.head(model.toJSON());
             // get thread with recent data

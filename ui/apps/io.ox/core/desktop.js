@@ -193,7 +193,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(_.noI18n(data.title));
+                                    win.setTitle(_.noI18n(data.title || ''));
                                     win.updateToolbar();
                                 }
                                 // update grid?
@@ -336,7 +336,7 @@ define('io.ox/core/desktop', [
         },
 
         getWindowTitle: function () {
-            return this.has('window') ? this.has('window').getTitle() : '';
+            return this.has('window') ? this.get('window').getTitle() : '';
         },
 
         /**

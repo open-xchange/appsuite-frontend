@@ -49,12 +49,8 @@ define('io.ox/core/tk/attachments', [
 
                 function uploadOnSave(response) {
                     self.model.off('create update', uploadOnSave);
-                    var id = self.model.attributes.id,
+                    var id = response.id || self.model.attributes.id,
                         folder = self.model.attributes.folder || self.model.attributes.folder_id;
-
-                    if (id === undefined && response !== undefined) {
-                        id = response.id;
-                    }
                     if (folder && id) {
                         self.save(id, folder);
                     }
@@ -62,9 +58,11 @@ define('io.ox/core/tk/attachments', [
 
                 this.model.on('create update', uploadOnSave);
             },
+
             finishedCallback: function (model) {
                 model.trigger('finishedAttachmentHandling');
             },
+
             render: function () {
                 var self = this;
                 _(this.allAttachments).each(function (attachment) {
@@ -77,6 +75,7 @@ define('io.ox/core/tk/attachments', [
 
                 return this;
             },
+
             renderAttachment: function (attachment) {
                 var self = this;
                 var size, removeFile;
@@ -97,6 +96,7 @@ define('io.ox/core/tk/attachments', [
 
                 return $el;
             },
+
             loadAttachments: function () {
                 var self = this;
                 if (this.model.id) {
@@ -121,6 +121,7 @@ define('io.ox/core/tk/attachments', [
                 this.$el.empty();
                 this.render();
             },
+
             addFile: function (file) {
                 if (oldMode) {
                     this.addAttachment({ file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
@@ -128,6 +129,7 @@ define('io.ox/core/tk/attachments', [
                     this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
                 }
             },
+
             addAttachment: function (attachment) {
                 this.attachmentsToAdd.push(attachment);
                 this.updateState();

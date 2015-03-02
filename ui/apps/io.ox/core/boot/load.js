@@ -31,6 +31,9 @@ define('io.ox/core/boot/load', [
         loadUserTheme();
 
         ox.once('boot:done', function () {
+            // clear password (now); if cleared or set to "******" too early,
+            // Chrome won't store anything or use that dummay value (see bug 36950)
+            $('#io-ox-login-password').val('');
             // final step: launch
             require('io.ox/core/main').launch();
         });

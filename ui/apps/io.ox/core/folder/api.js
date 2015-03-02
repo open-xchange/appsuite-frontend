@@ -20,10 +20,11 @@ define('io.ox/core/folder/api', [
     'io.ox/core/folder/title',
     'io.ox/core/folder/bitmask',
     'io.ox/core/api/account',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core'
-], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, mailSettings, gt) {
+], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -88,7 +89,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
         },
         comparator: function (model) {
-            return model.get('index/' + this.id) || 0;
+            return model.get('index/' + this.id) || 0;
         },
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
@@ -303,6 +304,13 @@ define('io.ox/core/folder/api', [
         if (options.cache === true && model !== undefined && model.has('title')) return $.when(model.toJSON());
 
         if (isVirtual(id)) return $.when({ id: id });
+
+        // fetch GAB but GAB is disabled?
+        if (id === '6' && !capabilities.has('gab')) {
+            var error = gt('Accessing global address book is not permitted');
+            console.warn(error);
+            return $.Deferred().reject({ error: error });
+        }
 
         return http.GET({
             module: 'folders',
