@@ -59,7 +59,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner = $('<div class="swiper-wrapper">'),
                 prevSlide = $('<a href="#" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
                 nextSlide = $('<a href="#" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
-                slidesToPreload = 2,
                 startIndex = data.index,
                 self = this,
                 swiperParameter = {
@@ -127,9 +126,9 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
 
                 // preload selected file and its neighbours initially
-                self.blendSlideCaption(data.index);
-                self.preloadSlide(data.index, slidesToPreload, 'left');
-                self.preloadSlide(data.index, slidesToPreload, 'right');
+                self.blendSlideCaption(startIndex);
+                self.preloadSlide(startIndex, 'left');
+                self.preloadSlide(startIndex, 'right');
                 // focus first active slide initially
                 self.focusActiveSlide();
             });
@@ -199,14 +198,14 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Number} slideToLoad
          *  The current active slide to be loaded.
          *
-         * @param {Number} preloadOffset
-         *  Number of neighboring slides to preload. Defaults to 2.
-         *
          * @param {String} preloadDirection
          *  Direction of the preload: 'left' or 'right' are supported.
          *
+         * @param {Number} preloadOffset
+         *  Number of neighboring slides to preload. Defaults to 2.
+         *
          */
-        preloadSlide: function (slideToLoad, preloadOffset, preloadDirection) {
+        preloadSlide: function (slideToLoad, preloadDirection, preloadOffset) {
             //console.warn('DisplayerView.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
             var preloadOffset = preloadOffset || 2,
                 step = preloadDirection === 'left' ? 1 : -1,
@@ -267,13 +266,13 @@ define('io.ox/core/viewer/views/displayerview', [
         onSlideChangeEnd: function (swiper) {
             //console.warn('onSlideChangeEnd()', swiper.activeIndex);
             var activeSlideIndex = swiper.activeIndex - 1,
-                collectionLength = this.collection.length;
+                collectionLength = this.collection.length,
+                preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
             // recalculate swiper active slide index, disregarding duplicate slides.
             if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
             if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
             this.blendSlideCaption(activeSlideIndex);
-            this.preloadSlide(activeSlideIndex, null, 'left');
-            this.preloadSlide(activeSlideIndex, null, 'right');
+            this.preloadSlide(activeSlideIndex, preloadDirection);
             // a11y
             swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
             swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
