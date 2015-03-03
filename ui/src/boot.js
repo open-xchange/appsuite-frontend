@@ -37,12 +37,6 @@ $(window).load(function () {
     }
 
     //
-    // Turn global "ox" into an event hub
-    //
-
-    _.extend(ox, Backbone.Events);
-
-    //
     // Server down notification
     //
 
@@ -73,28 +67,31 @@ $(window).load(function () {
     // teach require.js to use deferred objects
     //
 
-    var req = window.req = window.require;
-    window.require = function (deps, success, fail) {
-        var errorHandler = function (error) {
+    (function (require) {
+
+        function fallback(error) {
             console.error('require: Error in ' + error.requireModules, error.stack);
-        };
-        if (_.isArray(deps)) {
-            // use deferred object
-            _(deps).each(function (m) {
-                $(window).trigger('require:require', m);
-            });
-            if (!fail) {
-                fail = errorHandler;
-            }
-            var def = $.Deferred().done(success).fail(fail);
-            req(deps, def.resolve, def.reject);
-            return def.promise();
-        } else {
-            // bypass
-            return req.apply(this, arguments);
         }
-    };
-    _.extend(require, req);
+
+        window.require = function (deps, success, fail) {
+
+            if (_.isArray(deps)) {
+                // use deferred object
+                _(deps).each(function (name) {
+                    $(window).trigger('require:require', name);
+                });
+                var def = $.Deferred().done(success).fail(fail || fallback);
+                require(deps, def.resolve, def.reject);
+                return def.promise();
+            } else {
+                // bypass
+                return require.apply(this, arguments);
+            }
+        };
+
+        _.extend(window.require, require);
+
+    }(window.require));
 
     require(['io.ox/core/boot/fixes', 'io.ox/core/boot/main']).then(
         function success(fixes, boot) {
