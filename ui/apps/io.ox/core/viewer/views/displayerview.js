@@ -71,6 +71,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     simulateTouch: false,
                     speed: 0,
                     initialSlide: startIndex,
+                    runCallbacksOnInit: false,
                     onSlideChangeEnd: this.onSlideChangeEnd.bind(this)
                 };
             // enable touch and swiping for iOS and Android first
