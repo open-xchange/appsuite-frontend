@@ -85,12 +85,6 @@ define.async = (function () {
 }());
 
 //
-// Turn global "ox" into an event hub (now)
-//
-
-_.extend(ox, Backbone.Events);
-
-//
 // Override define
 //
 (function () {
@@ -112,30 +106,14 @@ _.extend(ox, Backbone.Events);
             deps = [];
         }
 
-        // Approach: if we have the manifests at hand, we use them immediately to
-        // inject plugins as further dependencies. If not, each module gets a placeholder
-        // that tries that again when the module is actually required
         if (ox.manifests) {
-            // inject dependencies now
+            // if we have the manifests manager at hand, we use it immediately to
+            // inject plugins as further dependencies.
             deps = ox.manifests.withPluginsFor(name, deps);
-        } else {
-            // inject and define placeholder
-            deps.push(name + ':placeholder!');
-            define(name + ':placeholder', { load: getPluginLoader(name) });
         }
 
         return define.call(this, name, deps, callback);
     };
-
-    function getPluginLoader(name) {
-        return function loadModulePlugins(n, req, done) {
-            // still no manifests? (only applies for very basic modules)
-            if (!ox.manifests) return done();
-            // try again: require further dependencies
-            var deps = ox.manifests.pluginsFor(name);
-            if (deps.length) req(deps, done); else done();
-        };
-    }
 
     // copy other properties
     _.extend(window.define, define);

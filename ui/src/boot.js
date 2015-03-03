@@ -37,6 +37,12 @@ $(window).load(function () {
     }
 
     //
+    // Turn global "ox" into an event hub
+    //
+
+    _.extend(ox, Backbone.Events);
+
+    //
     // Server down notification
     //
 
