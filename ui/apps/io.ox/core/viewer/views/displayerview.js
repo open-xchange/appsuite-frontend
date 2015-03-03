@@ -303,8 +303,6 @@ define('io.ox/core/viewer/views/displayerview', [
             //console.warn('DisplayerView.unloadDistantSlides() start', JSON.stringify(this.loadedSlides.sort()), activeSlideIndex);
             var self = this,
                 slidesToCache = this.slidesToCache,
-                model = this.collection.at(activeSlideIndex),
-                modelTypePromise = TypesRegistry.getModelType(model),
                 slidesCount = this.collection.length,
                 cachedRange = getCachedRange(activeSlideIndex),
                 slidesWrapper = this.swiper.wrapper;
@@ -320,10 +318,11 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
                 return cachedRange;
             }
-            modelTypePromise.done(function (modelType) {
-                _.each(self.loadedSlides, function (index) {
-                    if (_.contains(cachedRange, index)) { return; }
-                    var slideToUnload = slidesWrapper.find('[data-swiper-slide-index="' + index + '"]');
+            _.each(self.loadedSlides, function (index) {
+                if (_.contains(cachedRange, index)) { return; }
+                var slideToUnload = slidesWrapper.find('[data-swiper-slide-index="' + index + '"]'),
+                    model = self.collection.at(index);
+                TypesRegistry.getModelType(model).done(function (modelType) {
                     modelType.unloadSlide(slideToUnload);
                     self.loadedSlides = _.without(self.loadedSlides, index);
                 });
