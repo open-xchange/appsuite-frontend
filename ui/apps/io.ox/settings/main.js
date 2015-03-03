@@ -127,8 +127,9 @@ define('io.ox/settings/main', [
             var apps = _.filter(installed, function (item) {
                 if (!item.settings) return false;
                 if (item.device) return _.device(item.device);
-                //special code for tasks because here settings depend on a capability
-                //could have been done in manifest, but I did not want to change the general structure because of one special case, that might even disappear in the future
+                // special code for tasks because here settings depend on a capability
+                // could have been done in manifest, but I did not want to change the general structure
+                // because of one special case, that might even disappear in the future
                 if (item.id === 'io.ox/tasks') return capabilities.has('delegate_tasks');
                 return true;
             });

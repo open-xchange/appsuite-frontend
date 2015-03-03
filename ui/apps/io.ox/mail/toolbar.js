@@ -270,8 +270,8 @@ define('io.ox/mail/toolbar', [
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
                 var isThread = this.props.get('thread');
 
                 // resolve thread
@@ -282,7 +282,7 @@ define('io.ox/mail/toolbar', [
                 // draw toolbar
                 var baton = ext.Baton({ $el: toolbar.$list, data: list, isThread: isThread, app: this }),
                     ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                $.when.apply($, ret.value()).then(function () {
+                return $.when.apply($, ret.value()).then(function () {
                     toolbar.initButtons();
                 });
             }, 10);

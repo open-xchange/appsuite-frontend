@@ -90,7 +90,8 @@ define('io.ox/core/api/group', [
             var tr = { 'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'ß': 'ss' };
 
             return function () {
-                return this.get('name') || this.get('display_name').trim().toLowerCase()
+                if (this.has('id') && this.get('name')) return this.get('name');
+                return this.get('display_name').trim().toLowerCase()
                     .replace(/[äöüß]/g, function (match) {
                         return tr[match];
                     })

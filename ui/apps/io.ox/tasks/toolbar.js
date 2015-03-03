@@ -161,20 +161,20 @@ define('io.ox/tasks/toolbar', [
                     list = list.length === 1 ? list[0] : list;
                     var baton = ext.Baton({ $el: toolbar.$list, data: list, app: this }),
                         ret = ext.point('io.ox/tasks/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    $.when.apply($, ret.value()).then(function () {
+                    return $.when.apply($, ret.value()).then(function () {
                         toolbar.initButtons();
                     });
                 };
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
                 // draw toolbar
                 if (list.length <= 100) {
-                    api.getList(list).done(cont.bind(this));
+                    return api.getList(list).done(cont.bind(this));
                 } else {
-                    cont.call(this, list);
+                    return cont.call(this, list);
                 }
             }, 10);
         }

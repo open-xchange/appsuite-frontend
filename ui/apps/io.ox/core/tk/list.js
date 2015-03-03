@@ -156,12 +156,13 @@ define('io.ox/core/tk/list', [
 
             var children = this.getItems(),
                 cid = this.getCID(model),
-                li = children.filter('[data-cid="' + $.escape(cid) + '"]');
+                li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
+                isSelected = li.hasClass('selected');
 
             if (li.length === 0) return;
 
             // preserve item?
-            if (this.options.preserve && li.hasClass('selected')) {
+            if (isSelected && this.options.preserve) {
                 // note: preserved items are no longer part of the collection, i.e.
                 // they won't respond to model changes! They are just visible until
                 // the selection is changed by the user
@@ -176,6 +177,9 @@ define('io.ox/core/tk/list', [
 
             if (this.selection) this.selection.remove(cid, li);
             li.remove();
+
+            // selection changes if removed item was selected
+            if (isSelected) this.selection.triggerChange();
 
             // simulate scroll event because the list might need to paginate.
             // Unless it's the last one! If we did scroll for the last one, we would
