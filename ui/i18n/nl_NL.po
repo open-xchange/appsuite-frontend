@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-22 16:52+0100\n"
-"Last-Translator: Ivar Snaaijer\n"
+"PO-Revision-Date: 2015-03-03 09:54+0100\n"
+"Last-Translator: \n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -1747,7 +1747,7 @@ msgstr "Bedrijf"
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 #: apps/io.ox/mail/write/main.js:216 apps/io.ox/mail/write/main.js:766
 msgid "Compose"
-msgstr "Samenstellen"
+msgstr "Nieuw bericht"
 
 #: apps/io.ox/mail/toolbar.js:44 module:io.ox/mail
 msgid "Compose new email"
@@ -3384,8 +3384,8 @@ msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
 msgstr ""
-"Krijg het nieuws aangeleverd vanuit uw XING netwerk. Blijf in contact en vind "
-"nieuwe zakelijke kansen."
+"Krijg het nieuws aangeleverd vanuit uw XING netwerk. Blijf in contact en "
+"vind nieuwe zakelijke kansen."
 
 #: apps/io.ox/portal/main.js:367 module:io.ox/portal
 #: apps/io.ox/portal/main.js:389
