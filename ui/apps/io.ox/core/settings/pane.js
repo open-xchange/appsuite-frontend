@@ -34,7 +34,7 @@ define('io.ox/core/settings/pane',
         defaults = {
             index: 0,
             labelCssClass: 'col-sm-5',
-            controlCssClass: 'col-sm-7 col-md-6',
+            controlCssClass: 'col-sm-7 col-md-6'
         },
         createSelectonGroup = function (options)  {
             // increase index
@@ -199,7 +199,6 @@ define('io.ox/core/settings/pane',
             }));
         }
     }());
-
 
     // Auto Logout
     (function () {

@@ -53,7 +53,7 @@ define('io.ox/tasks/model',
                             return;
                         }
                         resetListUpdate = true;
-                        self.set('participants', participants.toJSON());
+                        self.set('participants', participants.getAPIData());
                         resetListUpdate = false;
                     }
 
