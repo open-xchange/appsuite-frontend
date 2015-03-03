@@ -35,6 +35,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.on('dispose', this.dispose.bind(this));
             this.captionTimeoutId = null;
             this.loadedSlides = [];
+            this.slidesToCache = 3;
         },
 
         /**
@@ -175,17 +176,15 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {jQuery}
          */
         loadSlide: function (model, slideElement) {
-            //console.warn('DisplayerView.loadSlide()', this.loadedSlides);
             if (!model || slideElement.length === 0) { return; }
-
             var slideIndex = slideElement.data('swiper-slide-index');
-            if (_.contains(this.loadedSlides, slideIndex)) { return; }
-
+            //slideElement.addClass('loaded');
             TypesRegistry.getModelType(model)
             .done(function (modelType) {
+                if (_.contains(this.loadedSlides, slideIndex)) { return; }
                 this.loadedSlides.push(slideIndex);
                 modelType.loadSlide(model, slideElement);
-
+                //slideElement.addClass('loaded');
             }.bind(this))
             .fail(function () {
                 console.error('Displayerview.loadSlide() - cannot require a model type for', model.get('filename'));
@@ -207,8 +206,8 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         preloadSlide: function (slideToLoad, preloadDirection, preloadOffset) {
             //console.warn('DisplayerView.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
-            var preloadOffset = preloadOffset || 2,
-                step = preloadDirection === 'left' ? 1 : -1,
+            var preloadOffset = preloadOffset || 3,
+                step = preloadDirection === 'right' ? 1 : -1,
                 slideToLoad = slideToLoad || 0,
                 loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
                 collection = this.collection,
@@ -264,7 +263,6 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param swiper
          */
         onSlideChangeEnd: function (swiper) {
-            //console.warn('onSlideChangeEnd()', swiper.activeIndex);
             var activeSlideIndex = swiper.activeIndex - 1,
                 collectionLength = this.collection.length,
                 preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left',
@@ -285,6 +283,49 @@ define('io.ox/core/viewer/views/displayerview', [
             EventDispatcher.trigger('viewer:displayeditem:change', {
                 index: activeSlideIndex,
                 model: this.collection.at(activeSlideIndex)
+            });
+            this.unloadDistantSlides(activeSlideIndex);
+        },
+
+        /**
+         * Unloads slides that are outside of a 'cached' slide range, to prevent bloating of OX Viewer
+         * DOM Elements if we encounter a folder with a lot of files.
+         *
+         * The cached slide range is a array of slide indexes built from the current active slide index
+         * plus the preload offset in both directions.
+         * Example: if active slide is 7 with a preload offset of 3, the range would be: [4,5,6,7,8,9,10]
+         *
+         * @param activeSlideIndex
+         *  Current active swiper slide index
+         */
+        unloadDistantSlides: function (activeSlideIndex) {
+            //console.warn('DisplayerView.unloadDistantSlides() start', JSON.stringify(this.loadedSlides.sort()), activeSlideIndex);
+            var self = this,
+                slidesToCache = this.slidesToCache,
+                model = this.collection.at(activeSlideIndex),
+                modelTypePromise = TypesRegistry.getModelType(model),
+                slidesCount = this.collection.length,
+                cachedRange = getCachedRange(activeSlideIndex),
+                slidesWrapper = this.swiper.wrapper;
+            function getCachedRange(activeSlideIndex) {
+                var cachedRange = [],
+                    rightRange = _.range(activeSlideIndex, activeSlideIndex + slidesToCache + 1, 1),
+                    leftRange = _.range(activeSlideIndex, activeSlideIndex - slidesToCache - 1, -1),
+                    rangeUnion = _.union(leftRange, rightRange);
+                _.each(rangeUnion, function (index) {
+                    if (index < 0) { index = slidesCount + index; }
+                    if (index > (slidesCount - 1)) { index = index - slidesCount;}
+                    cachedRange.push(index);
+                });
+                return cachedRange;
+            }
+            modelTypePromise.done(function (modelType) {
+                _.each(self.loadedSlides, function (index) {
+                    if (_.contains(cachedRange, index)) { return; }
+                    var slideToUnload = slidesWrapper.find('[data-swiper-slide-index="' + index + '"]');
+                    modelType.unloadSlide(slideToUnload);
+                    self.loadedSlides = _.without(self.loadedSlides, index);
+                });
             });
         },
 

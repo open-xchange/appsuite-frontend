@@ -64,7 +64,7 @@ define('io.ox/core/viewer/types/imagetype', [
                 return;
             }
             var imageToLoad = slideElement.find('img');
-            if (imageToLoad.length === 0) { return ;}
+            if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
             slideElement.busy();
             imageToLoad[0].onload = function () {
                 slideElement.idle();

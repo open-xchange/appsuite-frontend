@@ -34,6 +34,12 @@ define('io.ox/core/viewer/types/basetype',  [
             var caption = $('<div class="viewer-displayer-caption">');
             caption.text(index + 1 + ' ' + gt('of') + ' ' + slidesCount);
             return caption;
+        },
+
+        // TODO define unloadslide for all viewer types in the subclasses
+        unloadSlide: function (/*slideElement*/) {
+            //console.warn('BaseType.unloadSlide()', $(slideElement).data('swiper-slide-index'));
+            //slideElement.removeClass('loaded');
         }
 
     };
