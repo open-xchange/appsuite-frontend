@@ -231,6 +231,7 @@ define('io.ox/tasks/edit/view-template',
                 new DatePicker({
                     model: baton.model,
                     display: 'DATETIME',
+                    ignoreToggle: true,
                     className: 'col-xs-6 collapsed',
                     attribute: 'alarm',
                     label: gt('Reminder date'),
