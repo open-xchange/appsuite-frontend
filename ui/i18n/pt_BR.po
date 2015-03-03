@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-08 14:08-0300\n"
-"Last-Translator: Aracele Torres <aracele@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2015-03-03 10:56+0100\n"
+"Last-Translator: \n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -6796,7 +6796,7 @@ msgid ""
 msgstr ""
 "As séries <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">terminam</a> em <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"custom\">11/03/2013</a>."
+"\"datePicker\">11/03/2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:732
 #: module:io.ox/calendar/edit/main
