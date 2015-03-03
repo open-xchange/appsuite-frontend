@@ -282,11 +282,12 @@ define('io.ox/mail/detail/links', [
     }
 
     //
-    // Mail Address
-    //
+    // Mail Address (RFC 6531 allows unicode beycond 0x7F)
+    // Until we discover real use-cases we stick to [\u0000-\u00FF] to support extended ASCII, e.g. umlauts
+    // This excludes Kanji in local part, for example (see bug 37051)
 
-    var regMail = /^([\s\S]*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i,
-        regMailMatch = /^([\s\S]*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
+    var regMail = /^([\s\S]*?)([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i,
+        regMailMatch = /^([\s\S]*?)([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processMailAddress(node) {
 
