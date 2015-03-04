@@ -69,6 +69,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     loopedSlides: 0,
                     followFinger: false,
                     simulateTouch: false,
+                    noSwiping: true,
                     speed: 0,
                     initialSlide: startIndex,
                     runCallbacksOnInit: false,
@@ -82,6 +83,13 @@ define('io.ox/core/viewer/views/displayerview', [
                     speed: 300,
                     spaceBetween: 100
                 });
+            }
+
+            // disable swiping and hide navigation if there is only one slide.
+            if (this.collection.length === 1) {
+                swiperParameter.onlyExternal = true;
+                prevSlide.hide();
+                nextSlide.hide();
             }
 
             // create slides from file collection and append them to the carousel
@@ -104,6 +112,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
 
+            // deferred render actions
             _.defer(function () {
                 // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
