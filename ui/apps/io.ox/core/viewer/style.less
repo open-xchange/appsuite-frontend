@@ -189,16 +189,31 @@ html.ios .io-ox-viewer {
             .io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
         }
 
-        .viewer-displayer-image {
+        .viewer-displayer-image,
+        .viewer-displayer-audio,
+        .viewer-displayer-video {
             position: absolute;
             top: 0;
             left: 0;
             bottom: 0;
             right: 0;
             margin: auto;
-            display: none;
             max-height: 100%;
             max-width: 100%;
+        }
+        
+        .viewer-displayer-image{
+            display: none;
+        }
+        
+        .viewer-displayer-audio,
+        .viewer-displayer-video {
+            min-height: 34px;
+            &.player-hidden {
+                // audio, video is not loading with 'display: none;', 'visibility: hidden;' or 'width: / height: 1px'
+                top: -10000px;
+                left: -10000px;
+            }
         }
 
         .document-container {

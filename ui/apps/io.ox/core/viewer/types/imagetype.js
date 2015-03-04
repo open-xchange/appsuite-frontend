@@ -39,7 +39,7 @@ define('io.ox/core/viewer/types/imagetype', [
          */
         createSlide: function (model, modelIndex) {
             //console.warn('ImageType.createSlide()');
-            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
+            var slide = this.createSlideNode(),
                 image = $('<img class="viewer-displayer-image">'),
                 previewUrl = model && model.getPreviewUrl(),
                 filename = model && model.get('filename') || '',

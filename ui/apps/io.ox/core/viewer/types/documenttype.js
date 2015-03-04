@@ -39,7 +39,7 @@ define('io.ox/core/viewer/types/documenttype', [
          */
         createSlide: function (model, modelIndex) {
             //console.warn('DocumentType.createSlide()');
-            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
+            var slide = this.createSlideNode(),
                 pageContainer = $('<div class="document-container">'),
                 slidesCount = model.collection.length;
             slide.append(pageContainer, this.createCaption(modelIndex, slidesCount));

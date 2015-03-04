@@ -42,10 +42,8 @@ define('io.ox/core/viewer/types/defaulttype',  [
          */
         createSlide: function (model, modelIndex) {
             //console.warn('DefaultType.createSlide()', model, modelIndex, count);
-            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                displayerTopOffset = 45,
-                slideContent = $('<div class="viewer-displayer-notification">')
-                    .css({ maxHeight: window.innerHeight - displayerTopOffset }),
+            var slide = this.createSlideNode(),
+                slideContent = $('<div class="viewer-displayer-notification">'),
                 fileIcon = $('<i class="fa fa-file-o">'),
                 filename = model && model.get('filename') || '',
                 filenameEl = $('<p>').text(filename),

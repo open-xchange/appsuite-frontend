@@ -36,6 +36,15 @@ define('io.ox/core/viewer/types/basetype',  [
             return caption;
         },
 
+        /**
+         * Creates the root node for a Swiper slide.
+         *
+         * @returns {jQuery}
+         */
+        createSlideNode: function () {
+            return $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">');
+        },
+
         // TODO define unloadslide for all viewer types in the subclasses
         unloadSlide: function (/*slideElement*/) {
             //console.warn('BaseType.unloadSlide()', $(slideElement).data('swiper-slide-index'));

@@ -42,14 +42,14 @@ define('io.ox/core/viewer/types/videotype', [
          */
         createSlide: function (model, modelIndex) {
             //console.warn('VideoType.createSlide()');
-            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
+            var slide = this.createSlideNode(),
                 video,
                 slidesCount = model.collection.length,
                 previewUrl = model && model.getPreviewUrl(),
                 contentType = model && model.get('contentType') || '';
 
             if (previewUrl) {
-                video = $('<video controls="true">').append(
+                video = $('<video controls="true" class="viewer-displayer-video player-hidden">').append(
                     $('<source>').attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType }),
                     $('<div>').text(gt('Your browser does not support HTML5 video.'))
                 );
@@ -63,13 +63,13 @@ define('io.ox/core/viewer/types/videotype', [
          * "Loads" a video slide.
          *
          * @param {Object} model
-         *  An OX Viewer Model object.
+         *  The OX Viewer Model of the slide to be loaded.
          *
          * @param {jQuery} slideElement
          *  The slide jQuery element to be loaded.
          */
         loadSlide: function (model, slideElement) {
-            //console.warn('VideoType.loadSlide()', slideIndex, slideElement);
+            //console.warn('VideoType.loadSlide()', slideElement);
             if (!model || !slideElement || slideElement.length === 0) {
                 return;
             }
@@ -77,22 +77,21 @@ define('io.ox/core/viewer/types/videotype', [
             var videoToLoad = slideElement.find('video'),
                 videoSource = videoToLoad.find('source');
 
-            if ((videoToLoad.length === 0) || (videoSource.length === 0)) { return; }
-            slideElement.busy();
+            if ((videoToLoad.length === 0) || (videoSource.length === 0) || (videoSource.attr('src'))) { return; }
 
-            // register play handler
-            videoToLoad[0].oncanplay = function () {
+            // register play handler, use 'onloadeddata' because 'oncanplay' is not always triggered on Firefox
+            videoToLoad[0].onloadeddata = function () {
                 slideElement.idle();
-                videoToLoad.show();
+                videoToLoad.removeClass('player-hidden');
+                console.warn('VideoType.loadSlide()-- onloadeddata --', model.get('filename'));
             };
 
             // register error handler
-            videoSource[0].onerror = function (/*e*/) {
-                //console.warn('VideoType.loadSlide() - error loading:', e.target.src);
+            videoSource[0].onerror = function (e) {
+                console.warn('VideoType.loadSlide() - error loading:', e.target.src);
                 var filename = model && model.get('filename') || '',
                     slideContent;
 
-                videoToLoad.remove();
                 slideContent = $('<div class="viewer-displayer-notification">').append(
                     $('<i class="fa fa-file-video-o">'),
                     $('<p>').text(filename),
@@ -101,15 +100,17 @@ define('io.ox/core/viewer/types/videotype', [
                 slideElement.idle().append(slideContent);
             };
 
+            slideElement.busy();
             videoSource.attr('src', videoSource.attr('data-src'));
             videoToLoad[0].load(); // reset and start selecting and loading a new media resource from scratch
+            console.info('VideoType.loadSlide() - loading:', model.get('filename'));
         },
 
         /**
-         * "Unloads" a previously loaded video slide again.
+         * "Unloads" a previously loaded video slide.
          *
          * @param {jQuery} slideElement
-         *  the slide jQuery element to be loaded.
+         *  the slide jQuery element to be unloaded.
          */
         unloadSlide: function (slideElement) {
             //console.warn('VideoType.unloadSlide()', slideElement);
@@ -120,9 +121,12 @@ define('io.ox/core/viewer/types/videotype', [
             var videoToLoad = slideElement.find('video'),
                 videoSource = videoToLoad.find('source');
 
-            videoToLoad[0].pause();
-            videoSource.attr('src', '');
+            if (videoToLoad.length > 0) {
+                videoToLoad[0].pause();
+                videoSource.attr('src', '');
+            }
         }
+
     };
 
     // returns an object which inherits BaseType

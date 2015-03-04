@@ -276,7 +276,7 @@ define('io.ox/core/viewer/views/displayerview', [
             var activeSlideIndex = swiper.activeIndex - 1,
                 collectionLength = this.collection.length,
                 preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left',
-                videoSlide;
+                mediaSlide;
             // recalculate swiper active slide index, disregarding duplicate slides.
             if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
             if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
@@ -285,10 +285,10 @@ define('io.ox/core/viewer/views/displayerview', [
             // a11y
             swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
             swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
-            // pause playback on video slides
-            videoSlide = $(swiper.slides[swiper.previousIndex]).find('video');
-            if (videoSlide.length > 0) {
-                videoSlide[0].pause();
+            // pause playback on audio and video slides
+            mediaSlide = $(swiper.slides[swiper.previousIndex]).find('audio, video');
+            if (mediaSlide.length > 0) {
+                mediaSlide[0].pause();
             }
             EventDispatcher.trigger('viewer:displayeditem:change', {
                 index: activeSlideIndex,
