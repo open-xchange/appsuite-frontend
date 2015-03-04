@@ -31,11 +31,19 @@ define('io.ox/core/viewer/views/displayerview', [
 
         initialize: function () {
             //console.warn('DisplayerView.initialize()');
+            // The slide index which this view should display at start.
+            // This index originates from the selected file in OX Drive folder.
             this.displayedFileIndex = this.collection.getStartIndex();
+            // run own disposer function at global dispose
             this.$el.on('dispose', this.dispose.bind(this));
+            // timeout object for the slide caption
             this.captionTimeoutId = null;
+            // local array of loaded slide indices.
             this.loadedSlides = [];
-            this.slidesToCache = 3;
+            // number of slides to be preloaded in the left/right direction of the active slide
+            this.preloadOffset = 3;
+            // number of slides to be kept loaded at one time in the browser.
+            this.slidesToCache = 7;
         },
 
         /**
@@ -138,8 +146,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 // preload selected file and its neighbours initially
                 self.blendSlideCaption(startIndex);
-                self.preloadSlide(startIndex, 'left');
-                self.preloadSlide(startIndex, 'right');
+                self.preloadSlide(startIndex, 'left', self.preloadOffset);
+                self.preloadSlide(startIndex, 'right', self.preloadOffset);
                 // focus first active slide initially
                 self.focusActiveSlide();
             });
@@ -281,7 +289,7 @@ define('io.ox/core/viewer/views/displayerview', [
             if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
             if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
             this.blendSlideCaption(activeSlideIndex);
-            this.preloadSlide(activeSlideIndex, preloadDirection);
+            this.preloadSlide(activeSlideIndex, preloadDirection, this.preloadOffset);
             // a11y
             swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
             swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
@@ -311,14 +319,14 @@ define('io.ox/core/viewer/views/displayerview', [
         unloadDistantSlides: function (activeSlideIndex) {
             //console.warn('DisplayerView.unloadDistantSlides() start', JSON.stringify(this.loadedSlides.sort()), activeSlideIndex);
             var self = this,
-                slidesToCache = this.slidesToCache,
+                cacheOffset = Math.floor(this.slidesToCache / 2),
                 slidesCount = this.collection.length,
                 cachedRange = getCachedRange(activeSlideIndex),
                 slidesWrapper = this.swiper.wrapper;
             function getCachedRange(activeSlideIndex) {
                 var cachedRange = [],
-                    rightRange = _.range(activeSlideIndex, activeSlideIndex + slidesToCache + 1, 1),
-                    leftRange = _.range(activeSlideIndex, activeSlideIndex - slidesToCache - 1, -1),
+                    rightRange = _.range(activeSlideIndex, activeSlideIndex + cacheOffset + 1, 1),
+                    leftRange = _.range(activeSlideIndex, activeSlideIndex - cacheOffset - 1, -1),
                     rangeUnion = _.union(leftRange, rightRange);
                 _.each(rangeUnion, function (index) {
                     if (index < 0) { index = slidesCount + index; }
