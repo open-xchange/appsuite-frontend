@@ -94,7 +94,14 @@ module.exports = function (grunt) {
             },
             precore: {
                 options: {
-                    footer: 'define(ox.base + \'/precore.js\', {});\n'
+                    banner: 'define(ox.base + "/precore.js", ["io.ox/core/boot/config", "io.ox/core/manifests"], function (config) {\n\n' +
+                                '"use strict";\n\n' +
+                                'var def = $.Deferred();\n' +
+                                'ox.once("login:success", function () {\n' +
+                                '    config.user().then(def.resolve, def.reject);\n' +
+                                '});\n' +
+                                'def.then(function () {\n',
+                    footer: '});\n});\n' //closing the precore definition and the resolve callback for def variable
                 },
                 files: [
                     {
