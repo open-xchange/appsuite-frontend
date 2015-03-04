@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-11 10:14+0900\n"
+"PO-Revision-Date: 2015-03-04 09:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: apps/io.ox/tours/main.js:456 module:io.ox/tours
 msgid "Adding attachments"
@@ -662,10 +662,6 @@ msgstr ""
 "は [目次] をクリックします。"
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
 "the menu bar. Select Settings. "

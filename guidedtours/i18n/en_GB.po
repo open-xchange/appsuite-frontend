@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-13 15:26-0600\n"
+"PO-Revision-Date: 2015-03-04 09:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: British English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: apps/io.ox/tours/main.js:456 module:io.ox/tours
 msgid "Adding attachments"
@@ -659,10 +659,6 @@ msgstr ""
 "upper part of the window."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
 "the menu bar. Select Settings. "

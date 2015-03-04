@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-14 18:49+0000\n"
+"PO-Revision-Date: 2015-03-04 09:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: apps/io.ox/tours/main.js:456 module:io.ox/tours
 msgid "Adding attachments"
@@ -645,10 +645,6 @@ msgstr ""
 "верхней части окна выберите «Начальная страница» или «Содержание»."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To open the settings, click the System menu icon on the upper right side "
-#| "of the menu bar. Select Settings."
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
 "the menu bar. Select Settings. "
