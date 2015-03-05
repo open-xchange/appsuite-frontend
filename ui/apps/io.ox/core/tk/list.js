@@ -130,7 +130,7 @@ define('io.ox/core/tk/list', [
         },
 
         onAdd: function (model) {
-
+            console.log('on add');
             this.idle();
 
             var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
@@ -178,6 +178,7 @@ define('io.ox/core/tk/list', [
             if (this.selection) this.selection.remove(cid, li);
             li.remove();
 
+            this.trigger('remove-mobile');
             // selection changes if removed item was selected
             if (isSelected) this.selection.triggerChange();
 
@@ -311,6 +312,7 @@ define('io.ox/core/tk/list', [
             if (_.device('smartphone')) {
                 var self = this,
                     timer;
+                this.selection.isScrolling = false;
                 this.$el.scroll(function () {
                     self.selection.isScrolling = true;
                     if (timer) clearTimeout(timer);
