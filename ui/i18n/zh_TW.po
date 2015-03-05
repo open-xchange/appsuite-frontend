@@ -842,7 +842,7 @@ msgstr "新增小工具"
 msgid "Add your %1$s account"
 msgstr "新增您的 %1$s 帳號"
 
-#: apps/plugins/portal/facebook/register.js:378 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:379 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:383
 #: apps/plugins/portal/twitter/register.js:394
 msgid "Add your account"
@@ -1599,7 +1599,7 @@ msgstr "點下句子修改在何時重複約會。"
 msgid "Click on the links to change the values."
 msgstr "點下鏈結修改數值。"
 
-#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:180 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:170
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -2520,10 +2520,10 @@ msgstr "文件"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
 #: apps/io.ox/files/share/view.js:403 module:io.ox/files
-#: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:70
-#: module:io.ox/mail apps/io.ox/tasks/util.js:250
+#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
+#: apps/io.ox/tasks/util.js:250
 #: apps/plugins/notifications/tasks/register.js:73
 #: module:plugins/notifications
 msgid "Done"
@@ -3105,13 +3105,13 @@ msgstr "外部參與者"
 msgid "Face"
 msgstr "臉部"
 
-#: apps/plugins/portal/facebook/register.js:211 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:237
-#: apps/plugins/portal/facebook/register.js:670
+#: apps/plugins/portal/facebook/register.js:212 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:238
+#: apps/plugins/portal/facebook/register.js:671
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:188 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:189 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook 回報錯誤:"
 
@@ -4018,7 +4018,7 @@ msgstr "亮綠"
 msgid "Like"
 msgstr "讚"
 
-#: apps/plugins/portal/facebook/register.js:498 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:499 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "對連結說讚: %s"
 
@@ -4734,10 +4734,6 @@ msgstr "無主題"
 msgid "No title."
 msgstr "無標題。"
 
-#: apps/plugins/portal/facebook/register.js:160 module:plugins/portal
-msgid "No wall posts yet."
-msgstr "尚無塗鴉牆貼文。"
-
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
@@ -4800,6 +4796,11 @@ msgid ""
 msgstr ""
 "備註：此訂閱將會以外部內容取代行事曆內容。您在此訂閱裏已經作出的更改將會被覆"
 "蓋。"
+
+#. Keep close to https://www.facebook.com/help/327131014036297/, "Neuigkeiten" in German, for example.
+#: apps/plugins/portal/facebook/register.js:161 module:plugins/portal
+msgid "Nothing in your newsfeed."
+msgstr ""
 
 #: apps/io.ox/core/notifications.js:371 module:io.ox/core
 msgid "Notifications"
@@ -5418,7 +5419,7 @@ msgstr "郵遞區號"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "按 [Enter] 以跳至完整生日清單"
 
-#: apps/plugins/portal/facebook/register.js:252 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:253 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "按 [Enter] 以跳至 Facebook 串流。"
 
@@ -6349,7 +6350,7 @@ msgid "Show carbon copy input field"
 msgstr "顯示副本欄位"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:345
+#: apps/plugins/portal/facebook/register.js:346
 msgid "Show comments"
 msgstr "顯示注釋"
 
@@ -6529,7 +6530,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "某些欄位包含無效資料"
 
-#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6761,6 +6762,22 @@ msgstr[1] "工作已刪除！"
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "工作邀請"
+
+#: apps/io.ox/tasks/actions/doneUndone.js:40 module:io.ox/tasks
+#, fuzzy
+#| msgid "Mark as done"
+msgid "Task marked as done"
+msgid_plural "Tasks marked as done"
+msgstr[0] "標示為完成"
+msgstr[1] "標示為完成"
+
+#: apps/io.ox/tasks/actions/doneUndone.js:32 module:io.ox/tasks
+#, fuzzy
+#| msgid "Mark as undone"
+msgid "Task marked as undone"
+msgid_plural "Tasks marked as undone"
+msgstr[0] "標示為未完成"
+msgstr[1] "標示為未完成"
 
 #: apps/plugins/notifications/tasks/register.js:263
 #: module:plugins/notifications
@@ -7602,7 +7619,6 @@ msgstr "未確認"
 
 #. Task: Undone like in "Mark as undone"
 #: apps/io.ox/tasks/actions.js:414 module:io.ox/tasks
-#: apps/io.ox/tasks/actions/doneUndone.js:26
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:63
 #: apps/io.ox/tasks/toolbar.js:78 module:io.ox/mail
 msgid "Undone"
@@ -8357,7 +8373,7 @@ msgstr "關閉"
 msgid "close for %1$s"
 msgstr "關閉 %1$s"
 
-#: apps/plugins/portal/facebook/register.js:314 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:315 module:plugins/portal
 msgid "collapse"
 msgstr "摺疊"
 
@@ -8522,8 +8538,8 @@ msgstr "每月"
 msgid "every week"
 msgstr "每周"
 
-#: apps/plugins/portal/facebook/register.js:309 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:318
+#: apps/plugins/portal/facebook/register.js:310 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:319
 msgid "expand"
 msgstr "展開"
 
@@ -11099,6 +11115,9 @@ msgstr "年"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "伺服器上沒有符合的範本"
+
+#~ msgid "No wall posts yet."
+#~ msgstr "尚無塗鴉牆貼文。"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "未確認"

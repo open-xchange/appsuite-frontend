@@ -845,7 +845,7 @@ msgstr "Widget hinzufügen"
 msgid "Add your %1$s account"
 msgstr "Fügen Sie Ihren %1$s-Account hinzu"
 
-#: apps/plugins/portal/facebook/register.js:378 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:379 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:383
 #: apps/plugins/portal/twitter/register.js:394
 msgid "Add your account"
@@ -1615,7 +1615,7 @@ msgstr ""
 msgid "Click on the links to change the values."
 msgstr "Zum Ändern der Werte klicken Sie auf die Links."
 
-#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:180 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:170
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -2543,10 +2543,10 @@ msgstr "Dokumente"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
 #: apps/io.ox/files/share/view.js:403 module:io.ox/files
-#: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:70
-#: module:io.ox/mail apps/io.ox/tasks/util.js:250
+#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
+#: apps/io.ox/tasks/util.js:250
 #: apps/plugins/notifications/tasks/register.js:73
 #: module:plugins/notifications
 msgid "Done"
@@ -3134,13 +3134,13 @@ msgstr "Externe Teilnehmer"
 msgid "Face"
 msgstr "Gesichter"
 
-#: apps/plugins/portal/facebook/register.js:211 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:237
-#: apps/plugins/portal/facebook/register.js:670
+#: apps/plugins/portal/facebook/register.js:212 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:238
+#: apps/plugins/portal/facebook/register.js:671
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:188 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:189 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Fehlermeldung von Facebook:"
 
@@ -4068,7 +4068,7 @@ msgstr "Hellgrün"
 msgid "Like"
 msgstr "Gefällt mir"
 
-#: apps/plugins/portal/facebook/register.js:498 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:499 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Gefiel ein Link: %s"
 
@@ -4784,10 +4784,6 @@ msgstr "Kein Betreff"
 msgid "No title."
 msgstr "Kein Titel"
 
-#: apps/plugins/portal/facebook/register.js:160 module:plugins/portal
-msgid "No wall posts yet."
-msgstr "Noch keine Mitteilungen auf der Pinnwand"
-
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
@@ -4853,6 +4849,11 @@ msgid ""
 msgstr ""
 "Hinweis: Dieses Abonnement überschreibt den Kalenderinhalt mit dem externen "
 "Inhalt. Sie müssen deshalb einen neuen Ordner für dieses Abonnement anlegen."
+
+#. Keep close to https://www.facebook.com/help/327131014036297/, "Neuigkeiten" in German, for example.
+#: apps/plugins/portal/facebook/register.js:161 module:plugins/portal
+msgid "Nothing in your newsfeed."
+msgstr ""
 
 #: apps/io.ox/core/notifications.js:371 module:io.ox/core
 msgid "Notifications"
@@ -5485,7 +5486,7 @@ msgstr ""
 "Durch Drücken der Eingabetaste öffnen Sie die komplette Liste der "
 "Geburtstage."
 
-#: apps/plugins/portal/facebook/register.js:252 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:253 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Durch Drücken der Eingabetaste öffnen Sie den Facebook-Stream."
 
@@ -6420,7 +6421,7 @@ msgid "Show carbon copy input field"
 msgstr "Cc-Eingabefeld anzeigen"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:345
+#: apps/plugins/portal/facebook/register.js:346
 msgid "Show comments"
 msgstr "Kommentar anzeigen"
 
@@ -6602,7 +6603,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "Einige Felder enthalten ungültige Daten"
 
-#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6836,6 +6837,22 @@ msgstr[1] "Die Aufgaben wurden gelöscht"
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Aufgaben-Einladungen"
+
+#: apps/io.ox/tasks/actions/doneUndone.js:40 module:io.ox/tasks
+#, fuzzy
+#| msgid "Mark as done"
+msgid "Task marked as done"
+msgid_plural "Tasks marked as done"
+msgstr[0] "Als erledigt markieren"
+msgstr[1] "Als erledigt markieren"
+
+#: apps/io.ox/tasks/actions/doneUndone.js:32 module:io.ox/tasks
+#, fuzzy
+#| msgid "Mark as undone"
+msgid "Task marked as undone"
+msgid_plural "Tasks marked as undone"
+msgstr[0] "Als unerledigt markieren"
+msgstr[1] "Als unerledigt markieren"
 
 #: apps/plugins/notifications/tasks/register.js:263
 #: module:plugins/notifications
@@ -7724,7 +7741,6 @@ msgstr "Nicht bestätigt"
 
 #. Task: Undone like in "Mark as undone"
 #: apps/io.ox/tasks/actions.js:414 module:io.ox/tasks
-#: apps/io.ox/tasks/actions/doneUndone.js:26
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:63
 #: apps/io.ox/tasks/toolbar.js:78 module:io.ox/mail
 msgid "Undone"
@@ -8512,7 +8528,7 @@ msgstr "Schließen"
 msgid "close for %1$s"
 msgstr "schließen für %1$s"
 
-#: apps/plugins/portal/facebook/register.js:314 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:315 module:plugins/portal
 msgid "collapse"
 msgstr "einklappen"
 
@@ -8677,8 +8693,8 @@ msgstr "jeden Monat"
 msgid "every week"
 msgstr "jede Woche"
 
-#: apps/plugins/portal/facebook/register.js:309 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:318
+#: apps/plugins/portal/facebook/register.js:310 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:319
 msgid "expand"
 msgstr "ausklappen"
 
@@ -10525,6 +10541,9 @@ msgstr "JJJJ"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "Dieser Server enthält keine passenden Vorlagen"
+
+#~ msgid "No wall posts yet."
+#~ msgstr "Noch keine Mitteilungen auf der Pinnwand"
 
 #~ msgid "No, rather not"
 #~ msgstr "Nein, lieber nicht"
