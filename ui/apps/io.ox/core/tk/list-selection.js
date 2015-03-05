@@ -67,7 +67,7 @@ define('io.ox/core/tk/list-selection', [
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (isTouch && _.device('android || ios')) {
+        if (isTouch && _.device('android || ios') && _.device('smartphone')) {
             this.view.$el
                 .on('touchstart', SELECTABLE, this, this.onTouchStart)
                 .on('touchmove', SELECTABLE, this, this.onTouchMove)
