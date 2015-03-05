@@ -16,7 +16,8 @@ define('io.ox/search/facets/extensions', [
     'settings!io.ox/core',
     'io.ox/core/date',
     'io.ox/search/util',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/core/tk/datepicker'
 ], function (ext, settings, dateAPI, util, gt) {
 
     //var POINT = 'io.ox/search/facets';
