@@ -682,6 +682,7 @@ define('io.ox/mail/compose/view', [
 
                     if (result.error && !result.warnings) {
                         if (win) { win.idle().show(); }
+                        self.app.launch();
                         // TODO: check if backend just says "A severe error occurred"
                         notifications.yell(result);
                         return;
