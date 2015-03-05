@@ -24,6 +24,8 @@ define('io.ox/calendar/util', [
 
     'use strict';
 
+    moment.locale('de');
+
     // day names
     var n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
         // shown as
@@ -88,146 +90,78 @@ define('io.ox/calendar/util', [
 
         getFirstWeekDay: function () {
             // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
-            return date.locale.weekStart;
+            return moment.localeData().firstDayOfWeek();
         },
 
         getDaysInMonth: function (year, month) {
             // trick: month + 1 & day = zero -> last day in month
-            return new date.Local(year, month + 1, 0).getDate();
+            return moment([year, month + 1]).daysInMonth();
         },
 
         isToday: function (timestamp) {
-            return Math.floor(timestamp / date.DAY) === Math.floor(new date.Local().getTime() / date.DAY);
+            return moment().isSame(timestamp, 'd');
         },
 
-        floor: function (timestamp, step) {
-            // set defaults
-            timestamp = timestamp || 0;
-            step = step || date.HOUR;
-            // number?
-            if (typeof step === 'number') {
-                return Math.floor(timestamp / step) * step;
-            } else {
-                if (step === 'week') {
-                    // get current date
-                    var d = new date.Local(timestamp),
-                        // get work day TODO: consider custom week start
-                        day = d.getDay(),
-                        // subtract
-                        t = d.getTime() - day * date.DAY;
-                    // round down to day and return
-                    return this.floor(t, date.DAY);
-                }
-            }
-        },
-
-        getTime: function (localDate) {
-            return localDate.format(date.TIME);
+        getTime: function (moment) {
+            return moment.format('LT');
         },
 
         getDate: function (timestamp) {
-            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
-            return d.format(date.DAYOFWEEK_DATE);
+            return moment(timestamp ? timestamp : undefined).format('ddd, l');
         },
 
-        //returns date with full weekday name
-        getDateA11y: function (timestamp) {
-            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
-            return date.locale.days[d.getDay()] + ', ' + d.format(date.DATE);
-        },
-
-        getSmartDate: function (data, showDate) {
-
-            var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
-                d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
-                now = new date.Local(),
-                showDate = showDate || false,
-                weekStart = this.floor(now.getTime(), 'week'),
-                diff = 0,
-                diffWeek = 0,
-                lastSunday;
-
-            // normalize
-            d.setHours(0, 0, 0, 0);
-            now.setHours(0, 0, 0, 0);
-
-            // get difference
-            diff = d - now;
-            diffWeek = d - weekStart;
-
-            // past?
-            if (diff < 0) {
-                // handle last sunday on next sunday
-                lastSunday = (diffWeek === -7 * date.DAY && now.t === weekStart);
-
-                if (diff >= -1 * date.DAY) {
-                    return gt('Yesterday');
-                } else if (diffWeek > -7 * date.DAY || lastSunday) {
-                    return gt('Last Week');
-                }
-            } else {
-                // future
-                if (diff < date.DAY) {
-                    return gt('Today');
-                } else if (diff < 2 * date.DAY) {
-                    return gt('Tomorrow');
-                } else if (diffWeek < 7 * date.DAY) {
-                    // this week
-                    return date.locale.days[d.getDay()];
-                } else if (diffWeek >= 7 * date.DAY && diffWeek < 14 * date.DAY) {
-                    return showDate ? d.format(date.DATE) : gt('Next Week');
-                }
-            }
-
-            // any other month
-            return showDate ? d.format(date.DATE) : date.locale.months[d.getMonth()] + ' ' + d.getYear();
+        getSmartDate: function (data) {
+            var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date);
+            return m.calendar();
         },
 
         getEvenSmarterDate: function (data) {
-
-            var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
-                d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
-                now = new date.Local(), diff = 0;
-
-            // normalize
-            d.setHours(0, 0, 0, 0);
-            now.setHours(0, 0, 0, 0);
-
-            // get difference
-            diff = d - now;
+            var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date),
+                diff = m.startOf('day').diff(moment().startOf('day'));
 
             // past?
             if (diff < 0) {
                 if (diff >= -1 * date.DAY) {
-                    return gt('Yesterday') + ', ' + d.format(date.DATE);
+                    return gt('Yesterday') + ', ' + m.format('l');
                 } else {
-                    return d.format('EE, ') + d.format(date.DATE);
+                    return m.format('ddd, l');
                 }
             } else {
                 // future
                 if (diff < date.DAY) {
-                    return gt('Today') + ', ' + d.format(date.DATE);
+                    return gt('Today') + ', ' + m.format('l');
                 } else if (diff < 2 * date.DAY) {
-                    return gt('Tomorrow') + ', ' + d.format(date.DATE);
+                    return gt('Tomorrow') + ', ' + m.format('l');
                 } else {
-                    return d.format('EE, ') + d.format(date.DATE);
+                    return m.format('ddd, l');
                 }
             }
         },
 
-        getDateInterval: function (data) {
+        getDateInterval: function (data, a11y) {
             if (data && data.start_date && data.end_date) {
-                var startDate = data.start_date,
-                    endDate = data.end_date;
+                var startDate, endDate,
+                    a11y = a11y || false,
+                    fmtstr = a11y ? 'dddd, l' : 'ddd, l';
                 if (data.full_time) {
-                    startDate = date.Local.utc(startDate);
-                    endDate = date.Local.utc(endDate);
-                    endDate -= date.DAY;
-                }
-                if (this.onSameDay(startDate, endDate)) {
-                    return this.getDate(startDate);
+                    startDate = moment.utc(data.start_date).local(true);
+                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
                 } else {
-                    return this.getDate(startDate) + ' \u2013 ' + this.getDate(endDate);
+                    startDate = moment(data.start_date);
+                    endDate = moment(data.end_date);
+                }
+                if (startDate.isSame(endDate, 'd')) {
+                    return startDate.format(fmtstr);
+                } else {
+                    if (a11y) {
+                        //#. date intervals for screenreaders
+                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                        //#. %1$s is the start date
+                        //#. %2$s is the end date
+                        //#, c-format
+                        return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
+                    }
+                    return startDate.format(fmtstr) + ' \u2013 ' + endDate.format(fmtstr);
                 }
             } else {
                 return '';
@@ -235,27 +169,7 @@ define('io.ox/calendar/util', [
         },
 
         getDateIntervalA11y: function (data) {
-            if (data && data.start_date && data.end_date) {
-                var startDate = data.start_date,
-                    endDate = data.end_date;
-                if (data.full_time) {
-                    startDate = date.Local.utc(startDate);
-                    endDate = date.Local.utc(endDate);
-                    endDate -= date.DAY;
-                }
-                if (this.onSameDay(startDate, endDate)) {
-                    return this.getDateA11y(startDate);
-                } else {
-                            //#. date intervals for screenreaders
-                            //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                            //#. %1$s is the start date
-                            //#. %2$s is the end date
-                            //#, c-format
-                    return gt('%1$s to %2$s', this.getDateA11y(startDate), this.getDateA11y(endDate));
-                }
-            } else {
-                return '';
-            }
+            return this.getDateInterval(data, true);
         },
 
         getReminderOptions: function () {
@@ -318,11 +232,11 @@ define('io.ox/calendar/util', [
         },
 
         onSameDay: function (t1, t2) {
-            return new date.Local(t1).getDays() === new date.Local(t2).getDays();
+            return moment(t1).isSame(t2, 'd');
         },
 
         getDurationInDays: function (data) {
-            return (data.end_date - data.start_date) / date.DAY >> 0;
+            return moment(data.end_date).diff(data.start_date, 'days');
         },
 
         getFullTimeInterval: function (data, smart) {
@@ -344,19 +258,18 @@ define('io.ox/calendar/util', [
                 return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
             }
         },
+
         getTimeIntervalA11y: function (data) {
             if (!data || !data.start_date || !data.end_date) return '';
             if (data.full_time) {
                 return this.getFullTimeInterval(data, true);
             } else {
-                var start = new date.Local(data.start_date),
-                    end = new date.Local(data.end_date);
-                        //#. Time intervals for screenreaders
-                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                        //#. %1$s is the start time
-                        //#. %2$s is the end time
-                        //#, c-format
-                return gt('%1$s to %2$s', start.format(date.TIME), end.format(date.TIME));
+                //#. Time intervals for screenreaders
+                //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                //#. %1$s is the start time
+                //#. %2$s is the end time
+                //#, c-format
+                return gt('%1$s to %2$s', moment(data.start_date).format('LT'), moment(data.end_date).format('LT'));
             }
         },
 
@@ -366,7 +279,7 @@ define('io.ox/calendar/util', [
             if (data.full_time) {
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
-                ret.push(new date.Local(data.start_date).format(date.TIME), new date.Local(data.end_date).format(date.TIME));
+                ret.push(moment(data.start_date).format('LT'), moment(data.end_date).format('LT'));
             }
             return ret;
         },
@@ -479,7 +392,7 @@ define('io.ox/calendar/util', [
 
             function getMonthString(i) {
                 // month names
-                return date.locale.months[i];
+                return moment.months()[i];
             }
 
             var str = '',
@@ -588,7 +501,7 @@ define('io.ox/calendar/util', [
             if (data.recurrence_type > 0) {
                 if (data.until) {
                     str += ' / ';
-                    str += gt('The series ends on %1$s', new date.Local(data.until).format(date.DATE));
+                    str += gt('The series ends on %1$s', moment(data.until).format('l'));
                 }
                 if (data.occurrences) {
                     var n = data.occurrences;
@@ -661,28 +574,29 @@ define('io.ox/calendar/util', [
         },
 
         getWeekScaffold: function (timestamp) {
-            var day = new date.Local(timestamp).setStartOfWeek(),
-                i = 0, obj, ret = {}, today = new date.Local().getDays();
-            ret.days = [];
+            var day = moment(timestamp).startOf('week'),
+                i = 0,
+                obj,
+                ret = { days: [] };
             for (; i < 7; i += 1) {
                 ret.days.push(obj = {
-                    year: day.getYear(),
-                    month: day.getMonth(),
-                    date: day.getDate(),
-                    day: day.getDay(),
-                    timestamp: day.getTime(),
-                    isToday: day.getDays() === today,
+                    year: day.year(),
+                    month: day.month(),
+                    date: day.date(),
+                    day: day.day(),
+                    timestamp: +day,
+                    isToday: moment().isSame(day, 'd'),
                     col: i % 7
                 });
                 // is weekend?
                 obj.isWeekend = obj.day === 0 || obj.day === 6;
-                obj.isFirst = day.getDate() === 1;
+                obj.isFirst = obj.date === 1;
                 if (obj.isFirst) {
                     ret.hasFirst = true;
                 }
-                day.add(date.DAY);
+                day.add(1, 'days');
 
-                obj.isLast = day.getDate() === 1;
+                obj.isLast = day.date() === 1;
                 if (obj.isLast) {
                     ret.hasLast = true;
                 }
