@@ -22,7 +22,6 @@ define('io.ox/core/viewer/types/imagetype', [
      *    function loadSlide(slideElement);
      * }
      *
-     * @constructor
      */
     var imageType = {
         /**
@@ -34,18 +33,27 @@ define('io.ox/core/viewer/types/imagetype', [
          * @param {Number} modelIndex
          *  Index of this model object in the collection.
          *
+         * @param {Boolean} isDuplicate
+         *  If this slide should be a duplicate for the swiper plugin.
+         *  Duplicate slides should be always loaded.
+         *
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        createSlide: function (model, modelIndex) {
+        createSlide: function (model, modelIndex, isDuplicate) {
             //console.warn('ImageType.createSlide()');
+            if (!model) { return; }
             var slide = this.createSlideNode(),
                 image = $('<img class="viewer-displayer-image">'),
-                previewUrl = model && model.getPreviewUrl(),
-                filename = model && model.get('filename') || '',
+                previewUrl = model.getPreviewUrl(),
+                filename = model.get('filename') || '',
                 slidesCount = model.collection.length;
             if (previewUrl) {
-                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename });
+                previewUrl = _.unescapeHTML(previewUrl);
+                image.attr({ 'data-src': previewUrl, alt: filename });
+                if (isDuplicate) {
+                    image.attr({ 'src': previewUrl }).show();
+                }
                 slide.append(image, this.createCaption(modelIndex, slidesCount));
             }
             return slide;
@@ -59,12 +67,10 @@ define('io.ox/core/viewer/types/imagetype', [
          *  the slide jQuery element to be loaded.
         */
         loadSlide: function (model, slideElement) {
-            //console.warn('ImageType.loadSlide()', slideIndex, slideElement);
-            if (slideElement.length === 0) {
-                return;
-            }
+            //console.warn('ImageType.loadSlide()', slideElement.attr('class'));
+            if (slideElement.length === 0) { return; }
             var imageToLoad = slideElement.find('img');
-            if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
+            if (imageToLoad.length === 0 || slideElement.hasClass('swiper-slide-duplicate') || slideElement.hasClass('cached')) { return;}
             slideElement.busy();
             imageToLoad[0].onload = function () {
                 slideElement.idle();
@@ -76,7 +82,27 @@ define('io.ox/core/viewer/types/imagetype', [
                 slideElement.idle().append(notification);
             };
             imageToLoad.attr('src', imageToLoad.attr('data-src'));
+            slideElement.addClass('cached');
+        },
+
+        /**
+         * Unloads an image slide by replacing the src attribute of the image to an
+         * Base64 encoded, 1x1 pixel GIF image.
+         *
+         * @param {jQuery} slideElement
+         *  the slide jQuery element to be unloaded
+         */
+        unloadSlide: function (slideElement) {
+            //console.warn('ImageType.unloadSlide()', slideElement.data('swiper-slide-index'));
+            if (slideElement.length === 0 || slideElement.hasClass('swiper-slide-duplicate') || !slideElement.hasClass('cached')) { return; }
+            var imageElement = slideElement.find('img')[0];
+            if (!imageElement) { return; }
+            imageElement.onload = null;
+            imageElement.onerror = null;
+            $(imageElement).attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
+            slideElement.removeClass('cached');
         }
+
     };
 
     // returns an object which inherits BaseType

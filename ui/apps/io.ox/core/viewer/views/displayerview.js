@@ -135,7 +135,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     .done(function (modelType) {
                         // when the duplicate slide is copied, the original slide consist only of an empty <div> element.
                         // so we need to add the slide content before loading the slide.
-                        slideNode.empty().append(modelType.createSlide(slideModel, slideIndex).children());
+                        slideNode.empty().append(modelType.createSlide(slideModel, slideIndex, true).children());
                         // now load the slide.
                         modelType.loadSlide(slideModel, slideNode);
                     })

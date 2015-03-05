@@ -45,10 +45,15 @@ define('io.ox/core/viewer/types/basetype',  [
             return $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">');
         },
 
-        // TODO define unloadslide for all viewer types in the subclasses
-        unloadSlide: function (/*slideElement*/) {
+        /**
+         * Default implementation of unloading a slide.
+         *
+         * @param {jQuery} slideElement
+         *  slide jQuery element to unload.
+         */
+        unloadSlide: function (slideElement) {
             //console.warn('BaseType.unloadSlide()', $(slideElement).data('swiper-slide-index'));
-            //slideElement.removeClass('loaded');
+            slideElement.removeClass('cached');
         }
 
     };
