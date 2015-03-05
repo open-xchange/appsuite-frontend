@@ -164,7 +164,7 @@ define('io.ox/core/tk/autocomplete', [
                 });
             },
 
-            resetFocus = function ()  {
+            resetFocus = function () {
                 // reset focus when in listMoode
                 var selected = scrollpane.find('.selected');
                 if (selected.length) {

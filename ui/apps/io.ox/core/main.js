@@ -1542,7 +1542,7 @@ define('io.ox/core/main', [
         Stage.run('io.ox/core/stages', baton);
     }
 
-    (function ()  {
+    (function () {
 
         var hash = {
             'mail-compose': 'io.ox/mail/compose/main'

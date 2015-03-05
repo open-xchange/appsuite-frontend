@@ -363,7 +363,7 @@ define('io.ox/core/tk/dialogs', [
         };
 
         this.close = function () {
-            if (!o || o.async)  {
+            if (!o || o.async) {
                 close();
             } else {
                 invoke('cancel');

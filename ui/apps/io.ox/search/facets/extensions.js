@@ -301,7 +301,7 @@ define('io.ox/search/facets/extensions', [
                     if (e.type === 'keyup' && e.which !== 13) return false;
 
                     // use custom handler
-                    if (fn)  {
+                    if (fn) {
                         fn();
                     } else {
                         baton.model.remove(value.facet || value._compact.facet, value.id);

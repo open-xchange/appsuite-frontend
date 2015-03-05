@@ -348,8 +348,8 @@ define('io.ox/mail/compose/view', [
                 // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
-                if (to)         { this.model.set('to',  parseRecipients(to),         { silent: true }); }
-                if (params.cc)  { this.model.set('cc',  parseRecipients(params.cc),  { silent: true }); }
+                if (to) { this.model.set('to',  parseRecipients(to), { silent: true }); }
+                if (params.cc) { this.model.set('cc',  parseRecipients(params.cc), { silent: true }); }
                 if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
 
                 this.setSubject(params.subject || '');

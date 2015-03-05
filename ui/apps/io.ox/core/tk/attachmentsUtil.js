@@ -269,7 +269,7 @@ define('io.ox/core/tk/attachmentsUtil', [
             }
 
             // nested message
-            if (data.type === 'eml')  {
+            if (data.type === 'eml') {
                 preview = new pre.Preview({
                     data: { nested_message: file },
                     mimetype: 'message/rfc822',

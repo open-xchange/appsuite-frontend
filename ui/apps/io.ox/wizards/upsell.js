@@ -24,7 +24,7 @@ define('io.ox/wizards/upsell', [
     'settings!plugins/upsell',
     'gettext!io.ox/wizards',
     'less!io.ox/wizards/upsell'
-], function (ext, wizards, miniViews, settings, gt)  {
+], function (ext, wizards, miniViews, settings, gt) {
 
     'use strict';
 

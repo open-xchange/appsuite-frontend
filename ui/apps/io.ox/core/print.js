@@ -175,7 +175,7 @@ define('io.ox/core/print', [
                 // stop chaining
                 args = args.value();
                 // create new callback & open print window
-                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length  }),
+                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length }),
                     url = options.file + '?' + id;
                 // defer the following (see bug #31301)
                 _.defer(function () {
