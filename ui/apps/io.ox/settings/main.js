@@ -117,7 +117,6 @@ define('io.ox/settings/main', [
 
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             'tabindex': 1,
-            'aria-describedby': 'currentsettingtitle',
             //needed or mac voice over reads the whole settings pane when an input element is focused
             'role': 'main'
         }).scrollable();
@@ -399,7 +398,7 @@ define('io.ox/settings/main', [
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
             baton.tree = tree;
-            app.get('window').setTitle(gt('%1$s %2$s', gt('Settings'), baton.data.title));
+            app.get('window').setTitle(gt('%1$s %2$s', gt('Settings'), /*#, dynamic*/gt.pgettext('app', baton.data.title)));
 
             var data = baton.data,
                 settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
@@ -411,10 +410,8 @@ define('io.ox/settings/main', [
                 return require([settingsPath], function () {
                     // again, since require makes this async
                     right.empty().idle();
-                    vsplit.right.attr('title', baton.data.title);
-                    vsplit.right.find('#currentsettingtitle').remove();
+                    vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     updateExpertMode();
                     if (focus) vsplit.right.focus();
                 });
@@ -422,9 +419,7 @@ define('io.ox/settings/main', [
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
                     // again, since require makes this async
                     right.empty().idle();
-                    vsplit.right.attr('title', baton.data.title);
-                    vsplit.right.find('#currentsettingtitle').remove();
-                    vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
+                    vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                     if (focus) vsplit.right.focus();
