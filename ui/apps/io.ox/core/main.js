@@ -18,7 +18,6 @@ define('io.ox/core/main', [
     'io.ox/core/api/apps',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
-    'io.ox/core/date',
     'io.ox/core/notifications',
     // defines jQuery plugin
     'io.ox/core/commons',
@@ -30,7 +29,7 @@ define('io.ox/core/main', [
     'gettext!io.ox/core',
     'io.ox/core/relogin',
     'io.ox/core/links'
-], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
 
