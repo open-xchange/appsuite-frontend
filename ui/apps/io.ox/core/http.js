@@ -878,7 +878,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         var args = _(arguments).map(clone);
                         _(reqs).each(function (r) {
                             r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
-                            that.trigger('stop ' + success ? 'done' : 'fail', r.xhr);
+                            that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
                         });
                         hash = null;
                     });
