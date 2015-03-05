@@ -686,6 +686,8 @@
       // custom fix: keep box in viewport
       top = Math.max(0, top);
       top = Math.min(top, $(window).height() - $(el).height());
+      left = Math.max(0, left);
+      left = Math.min(left, $(window).width() - $(el).height());
 
       el.style.top = top + 'px';
       el.style.left = left + 'px';
