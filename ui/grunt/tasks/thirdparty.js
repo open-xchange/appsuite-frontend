@@ -24,6 +24,8 @@ module.exports = function (grunt) {
                         src: [
                             'bootstrap/less/**/*.less',
                             'bootstrap-datepicker/less/datepicker3.less',
+                            'moment/min/moment-with-locales.js',
+                            'moment-timezone/builds/moment-timezone-with-data.js',
                             'font-awesome/{less,fonts}/*',
                             'open-sans-fontface/fonts/Light/*',
                             '!**/*.otf'
