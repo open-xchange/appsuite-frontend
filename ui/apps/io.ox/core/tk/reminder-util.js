@@ -19,7 +19,7 @@ define('io.ox/core/tk/reminder-util', [
 
     'use strict';
 
-    function buildActions(node, values, focusId) {
+    function buildActions(node, values) {
         if (_.device('medium')) {
             //native style for tablet
             node.append(
@@ -41,7 +41,6 @@ define('io.ox/core/tk/reminder-util', [
                     toggle = $('<a role="menuitem" tabindex="1" data-action="reminderbutton">')
                     .attr({
                         'data-toggle': 'dropdown',
-                        'focus-id': focusId + '-select',
                         'aria-haspopup': 'true'
                     })
                     .text(gt('Remind me again')).addClass('refocus')
@@ -56,7 +55,7 @@ define('io.ox/core/tk/reminder-util', [
                         return ret;
                     })
                 ),
-                $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
+                $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
                     .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
             toggle.dropdown();
@@ -110,22 +109,15 @@ define('io.ox/core/tk/reminder-util', [
                     _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('caldata'))), _.noI18n(util.getTimeIntervalA11y(model.get('caldata'))), _.noI18n(model.get('location')) || '');
         }
 
-        var focusId = model.attributes.cid;
-        if (!model.attributes.cid) {
-            focusId = _.ecid(model.attributes);
-        }
-
         node.attr({
             'data-cid': model.get('cid'),
             'model-cid': model.cid,
             'aria-label': label,
             'aria-describedby': descriptionId,
-            //calendar and task are a bit different here (recurrenceposition etc)
-            'focus-id': 'reminder-notification-' + focusId,
             role: 'listitem',
             'tabindex': 1
-        }).addClass('reminder-item refocus clearfix');
-        buildActions(actions, options, 'reminder-notification-' + focusId);
+        }).addClass('reminder-item clearfix');
+        buildActions(actions, options);
 
         node.append(info, actions);
     };

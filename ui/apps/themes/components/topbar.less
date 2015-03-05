@@ -394,12 +394,19 @@
     }
 
     .launcher a.notifications-icon {
-
-        height: 40px;
-        display: inline-block;
-        padding: 0 7px;
-
+        &.no-notifications {
+            i {
+                color: rgba(255, 255, 255, 0.3);
+            }
+            .badge {
+                display: none;
+            }
+        }
         .badge {
+
+            position: relative;
+            top: -8px;
+            left: -10px;
 
             color: @notification-icon-color;
             background-color: @notification-icon-background;
@@ -407,13 +414,6 @@
             &.active {
                 color: @notification-icon-color-active;
                 background-color: @notification-icon-background-active;
-            }
-
-            i {
-                /* avoid flicker */
-                width: 8px;
-                text-align: center;
-                display: inline-block;
             }
 
             html.high-contrast & {
@@ -425,9 +425,8 @@
 
         &:focus .badge, &:active .badge {
             color: white;
-            background-color: darken(@link-color, 10%);
+            background-color: darken(@notification-icon-background, 10%);
         }
-
     }
 
     .launcher.minimizedmediaplayer:focus {
@@ -478,7 +477,7 @@ html.ios8-standalone-ipad-fix {
 
     #io-ox-topbar {
         .launcher a.notifications-icon {
-            padding: 0 5px;
+            padding: 12px 5px;
         }
         .launchers-secondary {
             margin-right: 0px

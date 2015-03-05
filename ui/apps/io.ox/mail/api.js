@@ -1387,7 +1387,7 @@ define('io.ox/mail/api', [
     // resolve a list of composite keys
     api.resolve = (function () {
 
-        function map(cid) {
+        function map(cid) {
             // yep, also in non-threaded mails
             cid = String(cid).replace(/^thread\./, '');
             return pool.get('detail').get(cid);

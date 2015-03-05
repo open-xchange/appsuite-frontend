@@ -1068,7 +1068,8 @@ define('io.ox/core/main', [
                     height = sc.bannerHeight || 60;
 
                 // move affected viewports
-                $('#io-ox-topbar, #io-ox-screens, #io-ox-notifications').css('top', '+=' + height + 'px');
+                // #io-ox-notifications is not handled here because it's not yet attached
+                $('#io-ox-topbar, #io-ox-screens').css('top', '+=' + height + 'px');
 
                 // set title
                 banner.find('.banner-title').append(
