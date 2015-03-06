@@ -83,8 +83,9 @@ define('io.ox/core/viewer/views/displayerview', [
                     runCallbacksOnInit: false,
                     onSlideChangeEnd: this.onSlideChangeEnd.bind(this)
                 };
-            // enable touch and swiping for iOS and Android first
-            if (_.browser.iOS || _.browser.Android) {
+
+            // enable touch and swiping for 'smartphone' devices
+            if (_.device('smartphone')) {
                 swiperParameter = _.extend(swiperParameter, {
                     followFinger: true,
                     simulateTouch: true,
