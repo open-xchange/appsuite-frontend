@@ -39,21 +39,15 @@ define.async('io.ox/core/manifests', [
             return require(requirements, cb);
         },
 
-        withPluginsFor: function (pointName, requirements) {
-            requirements = requirements || [];
-            validate();
-            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
-                return requirements;
-            }
-            return requirements.concat(_(this.pluginPoints[pointName]).chain().pluck('path').uniq().value());
+        withPluginsFor: function (name, deps) {
+            return (deps || []).concat(this.pluginsFor(name));
         },
 
-        pluginsFor: function (pointName) {
+        pluginsFor: function (name) {
             validate();
-            if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
-                return [];
-            }
-            return [].concat(_(this.pluginPoints[pointName]).pluck('path'));
+            var plugins = this.pluginPoints[name];
+            if (!plugins || plugins.length === 0) return [];
+            return [].concat(_(plugins).chain().pluck('path').uniq().value());
         },
 
         wrapperFor: function (pointName, dependencies, definitionFunction) {
@@ -161,6 +155,7 @@ define.async('io.ox/core/manifests', [
     };
 
     function validate() {
+
         if (manifestManager.apps) return;
 
         manifestManager.pluginPoints = {};
@@ -173,6 +168,8 @@ define.async('io.ox/core/manifests', [
         if (_.url.hash('customManifests')) {
             _(custom).each(process);
         }
+
+        if (!_.isEmpty(manifestManager.pluginPoints)) ox.trigger('manifests');
     }
 
     var def = $.Deferred();

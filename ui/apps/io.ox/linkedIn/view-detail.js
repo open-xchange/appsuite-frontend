@@ -148,23 +148,23 @@ define('io.ox/linkedIn/view-detail', [
 
                 var open = function (popup, e, target) {
 
-                        var person = target.data('object-data');
-                        popup.append(draw(person));
-                        var busy = $('<div/>').css('min-height', '100px').busy().appendTo(popup);
+                    var person = target.data('object-data');
+                    popup.append(draw(person));
+                    var busy = $('<div/>').css('min-height', '100px').busy().appendTo(popup);
 
-                        http.GET({
-                            module: 'integrations/linkedin/portal',
-                            params: {
-                                action: 'fullProfile',
-                                id: person.id
-                            }
-                        })
-                        .done(function (completeProfile) {
-                            busy.idle();
-                            popup.empty()
-                                .append(draw(completeProfile));
-                        });
-                    };
+                    http.GET({
+                        module: 'integrations/linkedin/portal',
+                        params: {
+                            action: 'fullProfile',
+                            id: person.id
+                        }
+                    })
+                    .done(function (completeProfile) {
+                        busy.idle();
+                        popup.empty()
+                            .append(draw(completeProfile));
+                    });
+                };
 
                 new dialogs.SidePopup({ tabTrap: true })
                     .delegate($myNode, '.linkedin-profile-picture', open);

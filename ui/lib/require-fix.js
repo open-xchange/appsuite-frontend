@@ -84,58 +84,38 @@ define.async = (function () {
     };
 }());
 
-/**
-* module definitions can be extended by plugins
-**/
+//
+// Override define
+//
 (function () {
 
-    var originalDefine = define;
+    var define = window.define;
 
-    window.define = function () {
-        if (!ox.manifests) {
-            return originalDefine.apply(this, arguments);
-        }
-        // Is this a define statement we understand?
-        if (_.isString(arguments[0])) {
-            var name = arguments[0];
-            // FIXME
-            if (name === "io.ox/core/notifications") {
-                return originalDefine.apply(this, arguments);
-            }
-            var dependencies = arguments[1];
-            var definitionFunction = $.noop;
-            if (_.isFunction(dependencies)) {
-                definitionFunction = dependencies;
-                dependencies = [];
-            } else if (arguments.length > 2) {
-                definitionFunction = arguments[2];
-            }
-            // already defined?
-            if (!requirejs.defined(name)) {
-                var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
-                if (wrapper.after && wrapper.after.length) {
-                    originalDefine(name + ":init", {load: function (name, req, onLoad, config) {
-                        req(wrapper.dependencies, function () {
-                            // get module (must return deferred object)
-                            var module = wrapper.definitionFunction.apply(null, arguments);
-                            require(wrapper.after).done(function () {
-                                onLoad(module);
-                            });
-                        });
-                    }});
+    window.define = function (name, deps, callback) {
 
-                    return originalDefine(name, [name + ':init!'], _.identity);
-                }
-                return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
-            } else {
-                return;
-            }
+        // call original define if
+        // a) we don't know the name or
+        // b) it's io.ox/core/notifications (for whatever reason) or
+        // c) if the second argument is string, i.e. provides plain content, or
+        // d) or if the second argument is an object, i.e. a plugin definition.
+        if (!_.isString(name) || name === 'io.ox/core/notifications' || (!_.isFunction(deps) && !_.isArray(deps))) return define.apply(this, arguments);
+
+        // shift arguments?
+        if (arguments.length === 2) {
+            callback = deps;
+            deps = [];
         }
 
-        // Just delegate everything else
-        return originalDefine.apply(this, arguments);
+        if (ox.manifests) {
+            // if we have the manifests manager at hand, we use it immediately to
+            // inject plugins as further dependencies.
+            deps = ox.manifests.withPluginsFor(name, deps);
+        }
+
+        return define.call(this, name, deps, callback);
     };
 
-    $.extend(window.define, originalDefine);
+    // copy other properties
+    _.extend(window.define, define);
 
 })();

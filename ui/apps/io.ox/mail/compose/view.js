@@ -23,11 +23,12 @@ define('io.ox/mail/compose/view', [
     'settings!io.ox/core',
     'io.ox/core/notifications',
     'io.ox/core/api/snippets',
+    'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
+], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -347,8 +348,8 @@ define('io.ox/mail/compose/view', [
                 // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
-                if (to)         { this.model.set('to',  parseRecipients(to),         { silent: true }); }
-                if (params.cc)  { this.model.set('cc',  parseRecipients(params.cc),  { silent: true }); }
+                if (to) { this.model.set('to',  parseRecipients(to), { silent: true }); }
+                if (params.cc) { this.model.set('cc',  parseRecipients(params.cc), { silent: true }); }
                 if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
 
                 this.setSubject(params.subject || '');
@@ -396,6 +397,12 @@ define('io.ox/mail/compose/view', [
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
+                if (!_.isEmpty(data.from)) {
+                    accountAPI.getAllSenderAddresses().then(function (a) {
+                        if (_.isEmpty(a)) return;
+                        data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
+                    });
+                }
                 if (mode === 'forward') {
                     // move nested messages into attachment array
                     _(data.nested_msgs).each(function (obj) {
@@ -675,6 +682,7 @@ define('io.ox/mail/compose/view', [
 
                     if (result.error && !result.warnings) {
                         if (win) { win.idle().show(); }
+                        self.app.launch();
                         // TODO: check if backend just says "A severe error occurred"
                         notifications.yell(result);
                         return;

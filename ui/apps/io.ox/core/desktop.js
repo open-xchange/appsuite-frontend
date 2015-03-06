@@ -1075,7 +1075,7 @@ define('io.ox/core/desktop', [
                         node.show();
 
                         if (self === null) return;
-                        if (currentWindow && currentWindow !== self) {
+                        if (currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
                         }
                         currentWindow = self;

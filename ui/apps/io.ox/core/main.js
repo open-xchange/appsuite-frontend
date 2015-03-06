@@ -1068,7 +1068,8 @@ define('io.ox/core/main', [
                     height = sc.bannerHeight || 60;
 
                 // move affected viewports
-                $('#io-ox-topbar, #io-ox-screens, #io-ox-notifications').css('top', '+=' + height + 'px');
+                // #io-ox-notifications is not handled here because it's not yet attached
+                $('#io-ox-topbar, #io-ox-screens').css('top', '+=' + height + 'px');
 
                 // set title
                 banner.find('.banner-title').append(
@@ -1291,26 +1292,22 @@ define('io.ox/core/main', [
         //     }
         // });
 
-        // TODO (mattes): Solve this differently.
-        // new Stage('io.ox/core/stages', {
-        //     id: 'secretCheck',
-        //     index: 250,
-        //     run: function () {
-        //         if (ox.online) {
-        //             require(['io.ox/keychain/api'], function (keychainAPI) {
-        //                 keychainAPI.checkSecrets().done(function (analysis) {
-        //                     if (!analysis.secretWorks) {
-        //                         // Show dialog
-        //                         require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
-        //                         if (ox.debug) {
-        //                             console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
-        //                         }
-        //                     }
-        //                 });
-        //             });
-        //         }
-        //     }
-        // });
+        new Stage('io.ox/core/stages', {
+            id: 'secretCheck',
+            index: 250,
+            run: function () {
+                if (ox.online && ox.rampup && ox.rampup.oauth) {
+                    var analysis = ox.rampup.oauth.secretCheck;
+                    if (!analysis.secretWorks) {
+                        // Show dialog
+                        require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
+                        if (ox.debug) {
+                            console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
+                        }
+                    }
+                }
+            }
+        });
 
         new Stage('io.ox/core/stages', {
             id: 'restore-check',
@@ -1546,7 +1543,7 @@ define('io.ox/core/main', [
         Stage.run('io.ox/core/stages', baton);
     }
 
-    (function ()  {
+    (function () {
 
         var hash = {
             'mail-compose': 'io.ox/mail/compose/main'

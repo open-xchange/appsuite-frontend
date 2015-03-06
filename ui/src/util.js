@@ -369,12 +369,13 @@
                 var def = $.Deferred(),
                     queue = hash[fn] || (hash[fn] = [$.when()]),
                     last = _(queue).last(),
+                    self = this,
                     args = $.makeArray(arguments);
 
                 queue.push(def);
 
                 last.done(function () {
-                    fn.apply(null, args).done(function () {
+                    fn.apply(self, args).done(function () {
                         setTimeout(function () {
                             queue = _(queue).without(def);
                             def.resolve();

@@ -20,46 +20,46 @@ define('io.ox/tasks/actions/doneUndone', [
 
     return function (baton, state) {
         var mods,
+            message,
             data = baton.data;
+
         if (state === 3) {
             mods = {
-                label: gt('Undone'),
-                data: {
-                    status: 1,
-                    percent_completed: 0,
-                    date_completed: null
-                }
+                status: 1,
+                percent_completed: 0,
+                date_completed: null
             };
+            message = gt.ngettext('Task marked as undone',
+                                  'Tasks marked as undone', data.length || 1);
         } else {
             mods = {
-                label: gt('Done'),
-                data: {
-                    status: 3,
-                    percent_completed: 100,
-                    date_completed: _.now()
-                }
+                status: 3,
+                percent_completed: 100,
+                date_completed: _.now()
             };
+            message = gt.ngettext('Task marked as done',
+                                  'Tasks marked as done', data.length || 1);
         }
         require(['io.ox/tasks/api'], function (api) {
             if (data.length > 1) {
-                api.updateMultiple(data, mods.data)
+                api.updateMultiple(data, mods)
                     .done(function () {
                         _(data).each(function (item) {
                             //update detailview
                             api.trigger('update:' + _.ecid(item));
                         });
 
-                        notifications.yell('success', mods.label);
+                        notifications.yell('success', message);
                     })
                     .fail(function (result) {
                         notifications.yell('error', gt.noI18n(result));
                     });
             } else {
-                mods.data.id = data.id;
-                mods.data.folder_id = data.folder_id || data.folder;
-                api.update(mods.data)
+                mods.id = data.id;
+                mods.folder_id = data.folder_id || data.folder;
+                api.update(mods)
                     .done(function () {
-                        notifications.yell('success', mods.label);
+                        notifications.yell('success', message);
                     })
                     .fail(function (result) {
                         var errorMsg = gt('A severe error occurred!');

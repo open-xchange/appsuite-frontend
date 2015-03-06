@@ -87,7 +87,7 @@ define('io.ox/tasks/edit/main', [
             });
 
             var taskData = options.taskData,
-                startApp = function ()  {
+                startApp = function () {
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
 
                     if (_.browser.IE === undefined || _.browser.IE > 9) {

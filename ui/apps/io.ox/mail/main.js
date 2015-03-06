@@ -242,7 +242,7 @@ define('io.ox/mail/main', [
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': _.device('smartphone') ? 'vertical' : app.settings.get('layout', 'vertical'),
-                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
                 'mobileFolderSelectMode': false

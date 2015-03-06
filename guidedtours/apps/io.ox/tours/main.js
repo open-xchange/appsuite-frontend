@@ -787,7 +787,7 @@ define('io.ox/tours/main',
             var node = this,
                 link = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
 
-            if (_.device('small')) {//tablets are fine just disable phones
+            if (_.device('smartphone')) {//tablets are fine just disable phones
                 return;
             }
 
@@ -819,7 +819,7 @@ define('io.ox/tours/main',
             var node = this,
                 tourLink = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
 
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 tourLink.remove();
                 return;
             }

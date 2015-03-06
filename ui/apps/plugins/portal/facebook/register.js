@@ -157,7 +157,8 @@ define('plugins/portal/facebook/register', [
 
         if (!wall || wall.length === 0) {
             content.append(
-                $('<li class="paragraph">').text(gt('No wall posts yet.')));
+                    //#. Keep close to https://www.facebook.com/help/327131014036297/, "Neuigkeiten" in German, for example.
+                $('<li class="paragraph">').text(gt('Nothing in your newsfeed.')));
         } else {
             wall = wall.slice(0, _.device('smartphone') ? 1 : 10);
             _(wall).each(function (post) {

@@ -67,7 +67,7 @@ define('io.ox/core/tk/list-selection', [
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (isTouch && _.device('android || ios')) {
+        if (isTouch && _.device('android || ios') && _.device('smartphone')) {
             this.view.$el
                 .on('touchstart', SELECTABLE, this, this.onTouchStart)
                 .on('touchmove', SELECTABLE, this, this.onTouchMove)
@@ -514,7 +514,7 @@ define('io.ox/core/tk/list-selection', [
                     complete: function () {
                         $(self).removeAttr('style');
                         $(self).removeClass('unfolded');
-                        self.swipeCell.remove();
+                        if (self.swipeCell) self.swipeCell.remove();
                         self.swipeCell = null;
                     }
                 });
@@ -533,7 +533,7 @@ define('io.ox/core/tk/list-selection', [
             this.startX = currentX;
             this.startY = currentY;
             this.distanceX = 0;
-            this.unfold = this.remove = this.scrolling = false;
+            this.unfold = this.remove = this.scrolling = this.isMoving = false;
 
             // check if this node is already opened
             this.unfolded = t.hasClass('unfolded'); // mark current node as unfolded once
@@ -550,11 +550,12 @@ define('io.ox/core/tk/list-selection', [
         onTouchMove: function (e) {
 
             var touches = e.originalEvent.touches[0],
-                currentX = touches.pageX;
+                currentX = touches.pageX + 9;
 
             this.distanceX = (this.startX - currentX) * -1; // invert value
+            this.scrolling = false;
 
-            if (currentX > this.startX && !this.unfolded) return; // left to right is not allowed
+            if (currentX > this.startX  && !this.unfolded) return; // left to right is not allowed at the start
 
             if (e.data.isScrolling) {
                 this.scrolling = true;
@@ -566,9 +567,9 @@ define('io.ox/core/tk/list-selection', [
                 this.distanceX += -190; // add already moved pixels
             }
 
-            if (Math.abs(this.distanceX) > THRESHOLD_X) {
+            if (Math.abs(this.distanceX) > THRESHOLD_X || this.isMoving) {
                 e.preventDefault(); // prevent further scrolling
-
+                this.isMoving = true;
                 if (!this.target) {
                     // do expensive jquery select only once
                     this.target = $(e.currentTarget);
@@ -585,7 +586,7 @@ define('io.ox/core/tk/list-selection', [
                 if (this.distanceX < 0) {
                     this.target.css({
                         //'-webkit-transform': 'translateX(' + this.distanceX + 'px)',
-                        'transform': 'translate3d(' + this.distanceX + 'px,0,0)'
+                        'transform': 'translate3d(' + (this.distanceX + THRESHOLD_X) + 'px,0,0)'
                     });
                 }
                 // if delete threshold is reached, enlarge delete button over whole cell
@@ -613,16 +614,16 @@ define('io.ox/core/tk/list-selection', [
         },
 
         onTouchEnd: function (e) {
-
             if (this.scrolling) return; // return if simple list scroll
-            var distanceX = this.distanceX;
-            this.remove = this.unfold = false;
 
-            if ((distanceX > 0) && !this.unfolded) return; // left to right is not allowed
+            this.remove = this.unfold = false;
+            this.isMoving = false;
+
+            //if ((distanceX > 0) && !this.unfolded) return; // left to right is not allowed
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
-                e.data.resetSwipeCell.call(e.data.currentSelection, distanceX === 0 ? -LOCKDISTANCE : distanceX);
+                e.data.resetSwipeCell.call(e.data.currentSelection, this.distanceX === 0 ? -LOCKDISTANCE : this.distanceX);
                 return false; // don't do a select after this
             }
 
@@ -630,7 +631,7 @@ define('io.ox/core/tk/list-selection', [
                 // other cell is opened, handle this as cancel action
                 return false;
             }
-            if (Math.abs(distanceX) >= THRESHOLD_STICK) {
+            if (Math.abs(this.distanceX) >= THRESHOLD_STICK) {
                 // unfold automatically and stay at a position
                 this.unfold = true;
             }
@@ -642,11 +643,12 @@ define('io.ox/core/tk/list-selection', [
             }
 
             cell = $(this); // save for later animation
+
             if (this.unfold) {
                 this.expandDelete = false;
 
                 cell.velocity({
-                    translateX: [-LOCKDISTANCE, distanceX]
+                    translateX: [-LOCKDISTANCE, this.distanceX]
                 }, {
                     duration: 150,
                     easing: 'easeOut',
@@ -658,7 +660,15 @@ define('io.ox/core/tk/list-selection', [
                 e.data.unfold = true;
                 e.data.currentSelection = this; // save this for later use
             } else if (this.remove) {
-                var self = this;
+                var self = this,
+                    resetStyle = function () {
+                        this.removeAttr('style');
+                         // reset velocitie's transfrom cache manually
+                        _(this).each(function (listItem) {
+                            $(listItem).data('velocity').transformCache = {};
+                        });
+                        e.data.view.off('remove-mobile', resetStyle);
+                    };
 
                 $(this).velocity({
                     translateX: ['-100%', [tension, friction]]
@@ -671,30 +681,25 @@ define('io.ox/core/tk/list-selection', [
                         cell.data('velocity').transformCache = {};
                         var cellsBelow = $(self).nextAll();
                         cellsBelow.velocity({
-                            translateY: '-62px'
+                            translateY: '-63px'
                         }, {
                             duration: 250,
                             complete: function () {
                                 var node = $(self).closest(SELECTABLE),
                                 cid = node.attr('data-cid');
-                                // propagate event
+                                // bind reset event
+                                e.data.view.on('remove-mobile', resetStyle, cellsBelow);
                                 e.data.view.trigger('selection:delete', [cid]);
                                 self.swipeCell.remove();
                                 self.swipeCell = null;
-                                cellsBelow.removeAttr('style');
-                                // reset velocitie's transfrom cache manually
-                                _(cellsBelow).each(function (listItem) {
-                                    $(listItem).data('velocity').transformCache = {};
-                                });
-                                $(self).removeAttr('style');
                                 $(self).removeClass('unfolded');
                                 self.unfolded = false;
                             }
                         });
                     }
                 });
-            } else if (distanceX) {
-                e.data.resetSwipeCell.call(this, Math.abs(distanceX));
+            } else if (this.distanceX) {
+                e.data.resetSwipeCell.call(this, Math.abs(this.distanceX));
                 return false;
             }
         },

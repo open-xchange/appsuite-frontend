@@ -16,7 +16,8 @@ define('io.ox/search/facets/extensions', [
     'settings!io.ox/core',
     'io.ox/core/date',
     'io.ox/search/util',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/core/tk/datepicker'
 ], function (ext, settings, dateAPI, util, gt) {
 
     //var POINT = 'io.ox/search/facets';
@@ -300,7 +301,7 @@ define('io.ox/search/facets/extensions', [
                     if (e.type === 'keyup' && e.which !== 13) return false;
 
                     // use custom handler
-                    if (fn)  {
+                    if (fn) {
                         fn();
                     } else {
                         baton.model.remove(value.facet || value._compact.facet, value.id);

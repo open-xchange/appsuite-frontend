@@ -208,6 +208,9 @@
 
 .list-view {
     @media (max-width: 480px), (max-device-width: 480px)  {
+        .list-item {
+            background-color: #fff;
+        }
         .list-item:hover {
             background-color: rgb(238, 238, 238);
         }
@@ -375,6 +378,10 @@
         margin: 0 0 0 7px;
         float: right;
 
+    }
+
+    &.visible-selection.has-focus .list-item.selected .fa-paperclip.has-attachments {
+        opacity: 1;
     }
 
     &.visible-selection.has-focus .list-item.selected .fa-paperclip.has-attachments {

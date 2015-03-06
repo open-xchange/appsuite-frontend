@@ -119,38 +119,38 @@ define('io.ox/core/extPatterns/actions', [
         // combine actions
         var defs = ext.point(ref).map(function (action) {
 
-                var ret = true, params;
+            var ret = true, params;
 
-                if (stopped) {
-                    return $.Deferred().resolve(false);
-                }
+            if (stopped) {
+                return $.Deferred().resolve(false);
+            }
 
-                if (_.isFunction(action.requires)) {
-                    params = {
-                        baton: baton,
-                        collection: collection,
-                        context: baton.data,
-                        extension: action,
-                        point: ref,
-                        stopPropagation: stopPropagation
-                    };
-                    try {
-                        ret = action.requires(params);
-                    } catch (e) {
-                        params.exception = e;
-                        console.error(
-                            'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, params
-                        );
-                    }
+            if (_.isFunction(action.requires)) {
+                params = {
+                    baton: baton,
+                    collection: collection,
+                    context: baton.data,
+                    extension: action,
+                    point: ref,
+                    stopPropagation: stopPropagation
+                };
+                try {
+                    ret = action.requires(params);
+                } catch (e) {
+                    params.exception = e;
+                    console.error(
+                        'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, params
+                    );
                 }
+            }
 
-                // is not deferred?
-                if (ret !== undefined && !ret.promise) {
-                    ret = $.Deferred().resolve(ret);
-                }
-                return ret;
-            })
-            .value();
+            // is not deferred?
+            if (ret !== undefined && !ret.promise) {
+                ret = $.Deferred().resolve(ret);
+            }
+            return ret;
+        })
+        .value();
 
         return $.when.apply($, defs);
     };

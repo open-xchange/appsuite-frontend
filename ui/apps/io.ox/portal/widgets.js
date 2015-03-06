@@ -105,7 +105,10 @@ define('io.ox/portal/widgets', [
                     plugin: 'plugins/portal/mail/register',
                     color: 'blue',
                     userWidget: true,
-                    index: 1
+                    index: 1,
+                    props: {
+                        name: gt('Inbox')
+                    }
                 },
                 birthdays_0: {
                     plugin: 'plugins/portal/birthdays/register',

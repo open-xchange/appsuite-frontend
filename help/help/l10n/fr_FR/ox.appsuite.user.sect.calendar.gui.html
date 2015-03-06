@@ -1,4 +1,4 @@
-<html>
+<html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>7.1. Les composants de Agenda</title>
@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Chapitre 7. Agenda">
 <link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Chapitre 7. Agenda">
-<link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Vues des rendez-vous">
+<link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Afficher les rendez-vous">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -29,15 +29,16 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <div class="sect1">
+  <h1 class="sr-only"><span class="phrase">Agenda</span></h1>
+<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.calendar.gui"></a>7.1. Les composants de <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span>
 </h2></div></div></div>
-<a class="indexterm" name="idm140291084961136"></a><div class="reference">
+<a class="indexterm" name="id-1.8.8.2"></a><div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.hint"></a><p>Vous trouverez une introduction à l'interface graphique dans <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. L'interface utilisateur">L'interface utilisateur</a>.</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><p><b>Arborescence des dossiers </b>Affiche les dossiers d'agenda, et vous permet de <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">naviguer dans la structure des dossiers</a>. Afin d'ouvrir l'arborescence des dossiers, cliquez sur le bouton <span class="guibutton"><strong>Vue</strong></span> dans la <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="La barre d'outils">barre d'outils</a>. Activez la <span class="guibutton"><strong>Vue dossier</strong></span>. Les fonctions suivantes sont disponibles : </p>
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><p><b>Arborescence des dossiers </b>Affiche les dossiers d'agenda. Permet de <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.concept.folder.navigate">naviguer dans la structure des dossiers</a>. Pour ouvrir l'arborescence des dossiers, cliquez sur le bouton <span class="guibutton"><strong>Vue</strong></span> dans la <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="La barre d'outils">barre d'outils</a>. Activez la <span class="guibutton"><strong>Vue des dossiers</strong></span>. Les fonctions suivantes sont disponibles : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Lorsque l'on clique sur un dossier, les rendez-vous de ce dossier s'affichent.</p></li>
 <li class="listitem"><p>L'icône <span class="guibutton"><strong>Actions sur le dossier</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> figurant à côté du dossier sélectionné offre des fonctionnalités permettant d'<a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">organiser les données</a> et de <a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">les échanger</a>.</p></li>
@@ -51,20 +52,21 @@
 <a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><p><b>La barre d'outils </b>Contient les boutons suivants dans les vues agenda :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Nouveau</strong></span>. Crée un <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">nouveau rendez-vous</a>.</p></li>
-<li class="listitem"><p>Bouton <span class="guibutton"><strong>Planification</strong></span>. Ouvre la vue planification pour planifier des <a class="link" href="ox.appsuite.user.sect.calendar.share.freebusy.html#ox.appsuite.user.concept.calendar.freebusy">rendez-vous avec plusieurs participants</a>.</p></li>
+<li class="listitem"><p>Bouton <span class="guibutton"><strong>Planification</strong></span>. Ouvre la vue de planification pour planifier des <a class="link" href="ox.appsuite.user.sect.calendar.share.freebusy.html#ox.appsuite.user.concept.calendar.freebusy">rendez-vous avec plusieurs participants</a>.</p></li>
 <li class="listitem">
-<p>Bouton <span class="guibutton"><strong>Vue</strong></span>. Ouvre un menu avec les entrées suivantes :</p>
+<p>Bouton <span class="guibutton"><strong>Vue</strong></span>. Ouvre un menu avec les éléments suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>case à cocher <span class="guibutton"><strong>Jour</strong></span>, <span class="guibutton"><strong>Semaine ouvrée</strong></span>, <span class="guibutton"><strong>Semaine</strong></span> ou <span class="guibutton"><strong>Mois</strong></span>. Permet de sélectionner la <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Vue agenda Jour, Semaine ouvrée, Semaine ou Mois.">vue agenda</a>.</p></li>
-<li class="listitem"><p>case à cocher <span class="guibutton"><strong>Liste</strong></span>. Active la <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Liste">vue liste</a>.</p></li>
-<li class="listitem"><p>case à cocher <span class="guibutton"><strong>Vue dossier</strong></span>. Ouvre ou ferme l'<a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.foldertree" title="L'arborescence des dossiers">arborescence des dossiers</a>.</p></li>
-<li class="listitem"><p>case à cocher <span class="guibutton"><strong>Cases à cocher</strong></span>. Affiche une case à cocher à proximité de chaque courriel dans la liste. Cette option permet de sélectionner plusieurs courriels afin de <a class="link" href="ox.appsuite.user.sect.email.manage.multiple.html#ox.appsuite.user.concept.email.multiple">les modifier tous à la fois</a>.</p></li>
-<li class="listitem"><p>bouton <span class="guibutton"><strong>Imprimer</strong></span>. Ouvre l'aperçu avant impression pour l'<a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print">impression de la page de l'agenda</a>.</p></li>
+<li class="listitem"><p>Case à cocher <span class="guibutton"><strong>Liste</strong></span>. Active la <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Liste">vue en liste</a>.</p></li>
+<li class="listitem"><p>Case à cocher <span class="guibutton"><strong>Vue des dossiers</strong></span>. Ouvre ou ferme l'<a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.foldertree" title="L'arborescence des dossiers">arborescence des dossiers</a>.</p></li>
+<li class="listitem"><p>Dans la vue d'agenda : case à cocher <span class="guibutton"><strong>Couleurs sombres</strong></span>. Affiche les rendez-vous en couleurs sombres.</p></li>
+<li class="listitem"><p>Dans la vue en liste : case à cocher <span class="guibutton"><strong>Cases à cocher</strong></span>. Affiche une case à cocher à proximité de chaque rendez-vous dans la liste. Cette option permet de sélectionner plusieurs rendez-vous afin de <a class="link" href="ox.appsuite.user.sect.calendar.manage.multiple.html#ox.appsuite.user.concept.calendar.multiple">les modifier tous à la fois</a>.</p></li>
+<li class="listitem"><p>Bouton <span class="guibutton"><strong>Imprimer</strong></span>. Ouvre l'aperçu avant impression pour l'<a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print">impression de la page de l'agenda</a>.</p></li>
 </ul></div>
 <p> </p>
 </li>
 </ul></div>
-<p>Les boutons supplémentaires sont disponibles dans la vue liste :</p>
+<p>Les boutons supplémentaires sont disponibles dans la vue en liste :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Modifier</strong></span>. Modifie les <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit">données d'un rendez-vous</a>.</p></li>
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>État</strong></span>. <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.task.calendar.changestatus" title="Pour modifier l'état d'un rendez-vous :">Modifie l'état</a> de la confirmation du rendez-vous.</p></li>
@@ -141,6 +143,7 @@
             </p>
 <p>Si vous cliquez sur un rendez-vous ou un courriel, une nouvelle fenêtre s'ouvre.</p>
 </li>
+<li class="listitem"><p><a name="ox.appsuite.user.reference.calendar.gui.detailview.messenger"></a>Suivant la configuration du logiciel de travail collaboratif, un point coloré figurant à côté du nom indique l'état du contact dans <span class="phrase">Conversations</span>.</p></li>
 <li class="listitem"><p>Si le rendez-vous comporte d'autres participants, les boutons suivants sont affichés : <a class="link" href="ox.appsuite.user.sect.calendar.share.mail_participants.html#ox.appsuite.user.concept.calendar.mail_participants"><span class="guibutton"><strong>Envoyer un courriel à tous les participants</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html#ox.appsuite.user.concept.calendar.invite_newappointment"><span class="guibutton"><strong>Inviter à un nouveau rendez-vous</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html#ox.appsuite.user.concept.calendar.distributionlist_participants"><span class="guibutton"><strong>Enregistrer comme liste de diffusion</strong></span></a></p></li>
 <li class="listitem"><p>Noms de ressources existantes. Lorsque l'on clique sur une ressource, une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Fenêtres">fenêtre</a> apparaît.</p></li>
 <li class="listitem"><p>Si des participants externes sont concernés par le rendez-vous, leurs noms sont affichés en-dessous de <span class="guilabel"><strong>Participants externes</strong></span>.</p></li>
@@ -159,5 +162,6 @@
 </ul></div>
 </div>
 </div>
-</body>
+          </div>
+        </body>
 </html>

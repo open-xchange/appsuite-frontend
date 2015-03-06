@@ -202,6 +202,11 @@ define('io.ox/mail/detail/links', [
         return set;
     }
 
+    // Note on regex: [\s\S]* is intended because the dot "." does not include newlines.
+    // unfortunately, javascript doesn't support the //s modifier (dotall). [\s\S] is the proper workaround
+    // the //m modifier doesn't work in call cases becasue it would drop prefixes before a match in next line
+    // see bug 36975
+
     //
     // Deep links
     //
@@ -214,8 +219,8 @@ define('io.ox/mail/detail/links', [
             app = { contacts: 'contacts', calendar: 'calendar', task: 'tasks', infostore: 'files' },
             items = { contacts: gt('Contact'), calendar: gt('Appointment'), tasks: gt('Task'), files: gt('File') },
             folders = { contacts: gt('Address Book'), calendar: gt('Calendar'), tasks: gt('Tasks'), files: gt('Folder') },
-            regDeepLink = /^(.*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))(.*)$/im,
-            regDeepLinkAlt = /^(.*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))(.*)$/im;
+            regDeepLink = /^([\s\S]*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))([\s\S]*)$/i,
+            regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i;
 
         isDeepLink = function (str) {
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
@@ -256,8 +261,8 @@ define('io.ox/mail/detail/links', [
     // URL
     //
 
-    var regUrl = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/im,
-        regUrlMatch = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/im; /* dedicated one to avoid strange side effects */
+    var regUrl = /^([\s\S]*)((http|https|ftp|ftps)\:\/\/\S+)([\s\S]*)$/i,
+        regUrlMatch = /^([\s\S]*)((http|https|ftp|ftps)\:\/\/\S+)([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processUrl(node) {
 
@@ -277,11 +282,12 @@ define('io.ox/mail/detail/links', [
     }
 
     //
-    // Mail Address
-    //
+    // Mail Address (RFC 6531 allows unicode beycond 0x7F)
+    // Until we discover real use-cases we stick to [\u0000-\u00FF] to support extended ASCII, e.g. umlauts
+    // This excludes Kanji in local part, for example (see bug 37051)
 
-    var regMail = /^(.*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im,
-        regMailMatch = /^(.*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im; /* dedicated one to avoid strange side effects */
+    var regMail = /^([\s\S]*?)([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i,
+        regMailMatch = /^([\s\S]*?)([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processMailAddress(node) {
 
@@ -300,8 +306,8 @@ define('io.ox/mail/detail/links', [
     // Complex Mail Address: "name" <address>
     //
 
-    var regMailComplex = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/m,
-        regMailComplexMatch = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/m;
+    var regMailComplex = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/,
+        regMailComplexMatch = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/;
 
     function processComplexMailAddress(node) {
 

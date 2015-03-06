@@ -637,7 +637,7 @@ define('io.ox/mail/util', [
                     if (isWinmailDATPart(obj)) {
                         dat = obj.attachments[0];
                         attachments.push(
-                            _.extend({}, dat, { mail: mail, title: obj.filename || '' })
+                            _.extend({}, dat, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
                     } else {
                         fixIds(data, obj);
