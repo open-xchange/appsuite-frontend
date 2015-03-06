@@ -1,3 +1,9 @@
+open-xchange-guidedtours (7.6.2-11) stable; urgency=low
+
+  * Eleventh candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 06 Mar 2015 16:32:10 +0100
+
 open-xchange-guidedtours (7.6.2-10) stable; urgency=low
 
   * Tenth candidate for 7.6.2 release
