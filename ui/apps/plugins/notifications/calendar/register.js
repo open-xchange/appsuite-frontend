@@ -26,7 +26,7 @@ define('plugins/notifications/calendar/register', [
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
             var model = baton.model,
-                node = $('<li class="item">').appendTo(this),
+                node = this,
                 descriptionId = _.uniqueId('notification-description-'),
                 onClickChangeStatus = function (e) {
                     // stopPropagation could be prevented by another markup structure
@@ -82,11 +82,9 @@ define('plugins/notifications/calendar/register', [
             require(['io.ox/calendar/util'], function (util) {
                 var cid = _.cid(model.attributes);
                 node.attr({
-                    role: 'listitem',
                     'data-cid': cid,
                     'focus-id': 'calendar-invite-' + cid,
                     'aria-describedby': descriptionId,
-                    'tabindex': 1,
                     //#. %1$s Appointment title
                     //#. %2$s Appointment date
                     //#. %3$s Appointment time
@@ -128,7 +126,7 @@ define('plugins/notifications/calendar/register', [
             //build selectoptions
             var minutes = [5, 10, 15, 45],
                 options = [],
-                node = $('<li class="item" tabindex="1" role="listitem">').appendTo(this);
+                node = this;
             for (var i = 0; i < minutes.length; i++) {
                 options.push([minutes[i], gt.format(gt.npgettext('in', 'in %d minute', 'in %d minutes', minutes[i]), minutes[i])]);
             }
@@ -163,7 +161,6 @@ define('plugins/notifications/calendar/register', [
         register: function () {
             var options = {
                     id: 'io.ox/calendarreminder',
-                    max: 10,
                     api: reminderAPI,
                     apiEvents: {
                         reset: 'set:calendar:reminder'
@@ -185,6 +182,7 @@ define('plugins/notifications/calendar/register', [
             });
 
             reminderAPI.getReminders();
+            //needed
             /*function removeReminders(e, reminders) {
                 //make sure we have an array
                 reminders = reminders ? [].concat(reminders) : [];
@@ -208,9 +206,7 @@ define('plugins/notifications/calendar/register', [
                     if (obj.data.confirmation === 2) {
                         removeReminders(e, obj);
                     }
-                });
-
-            reminderAPI.getReminders();*/
+                });*/
         }
     });
 
@@ -220,7 +216,6 @@ define('plugins/notifications/calendar/register', [
         register: function () {
             var options = {
                     id: 'io.ox/calendarinvitations',
-                    max: 10,
                     api: calAPI,
                     apiEvents: {
                         reset: 'new-invites',

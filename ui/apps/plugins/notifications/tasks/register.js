@@ -36,7 +36,7 @@ define('plugins/notifications/tasks/register', [
                 var endText = '',
                     data = util.interpretTask(baton.model.attributes),
                     descriptionId = _.uniqueId('notification-description-'),
-                    node = self;
+                    node = self.addClass('taskNotification');
                 if (_.noI18n(data.end_date)) {
                     endText = gt('end date ') + _.noI18n(data.end_date);
                 }
@@ -45,9 +45,7 @@ define('plugins/notifications/tasks/register', [
                         //#, c-format
                 var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText);
 
-                node.append(
-                    $('<li class="taskNotification item" tabindex="1" role="listitem">')
-                    .attr({
+                node.attr({
                         'data-cid': _.cid(data),
                         'aria-label': label,
                         'aria-describedby': descriptionId
@@ -74,8 +72,7 @@ define('plugins/notifications/tasks/register', [
                                 baton.view.removeNotifications(data.id);
                             })
                         )
-                    )
-                );
+                    );
             });
         }
     });
@@ -86,7 +83,6 @@ define('plugins/notifications/tasks/register', [
         register: function () {
             var options = {
                     id: 'io.ox/duetasks',
-                    max: 10,
                     api: api,
                     apiEvents: {
                         reset: 'new-tasks',
@@ -122,7 +118,7 @@ define('plugins/notifications/tasks/register', [
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            var node = $('<li class="taskNotification item" tabindex="1" role="listitem">').appendTo(this);
+            var node = this.addClass('taskNotification');
             node.attr('data-cid', String(_.cid(baton.requestedModel.attributes)));
             require(['io.ox/tasks/util', 'io.ox/core/tk/reminder-util'], function (util, reminderUtil) {
                 reminderUtil.draw(node, baton.model, util.buildOptionArray());
@@ -164,7 +160,6 @@ define('plugins/notifications/tasks/register', [
         register: function () {
             var options = {
                     id: 'io.ox/remindertasks',
-                    max: 10,
                     api: reminderAPI,
                     apiEvents: {
                         reset: 'set:tasks:reminder'
@@ -198,7 +193,7 @@ define('plugins/notifications/tasks/register', [
 
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
-            var node = $('<li class="taskNotification item">').appendTo(this),
+            var node = this.addClass('taskNotification'),
                 onChangeState = function (e) {
                     e.stopPropagation();
                     //only open if click or enter is pressed
@@ -280,7 +275,6 @@ define('plugins/notifications/tasks/register', [
         register: function () {
             var options = {
                     id: 'io.ox/confirmationtasks',
-                    max: 10,
                     api: api,
                     apiEvents: {
                         reset: 'set:tasks:to-be-confirmed',

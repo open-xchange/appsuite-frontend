@@ -42,7 +42,26 @@ define('io.ox/core/notifications/subview', [
                 if ( !model.get ) {
                     model = new Backbone.Model(model);
                 }
-                ext.point(extensionPoints.item).invoke('draw', itemNode, ext.Baton({ view: view, model: model, requestedModel: requestedModel }));
+                var node = $('<li class="item" tabindex="1" role="listitem">');
+                if (view.model.get('showHideSingleButton')) {
+                    node.append(
+                        $('<div class="notification-item-actions">').append(
+                            $('<button type="button" class="btn btn-link clear-single-button fa fa-times">')
+                                .attr({
+                                    tabindex: 1,
+                                    'data-action': 'clearSingle',
+                                    'aria-label': gt ('Hide this notification')
+                                }).on('click', function () {
+                                        view.hide(requestedModel);
+                                    }
+                                )
+                            )
+                        );
+                }
+
+                node.appendTo(itemNode);
+
+                ext.point(extensionPoints.item).invoke('draw', node, ext.Baton({ view: view, model: model, requestedModel: requestedModel }));
             };
 
             if (api && !model.get('fullModel')) {
@@ -93,8 +112,9 @@ define('io.ox/core/notifications/subview', [
                 footer: ''
             },
             showHideAllButton: true,
+            showHideSingleButton: true,
             fullModel: false,
-            max: null,
+            max: 10,
             autoOpen: false,
             desktopNotificationSupport: true,
             desktopNotificationMessage: gt("You've got new Notifications"),
