@@ -233,7 +233,6 @@ define('io.ox/core/api/reminder', [
         }
     });
     calendarAPI.on('delete', function (e, item) {
-        debugger;
         handleDelete(item, 1);
     });
 
