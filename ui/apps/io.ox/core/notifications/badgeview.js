@@ -86,18 +86,33 @@ define('io.ox/core/notifications/badgeview', [
             //prevent overwriting of existing views
             if (!views[view.model.get('id')]) {
                 views[view.model.get('id')] = view;
-                view.collection.on('add reset remove', _.bind(self.updateCount, self));
+                view.collection.on('add reset remove', _.bind(self.delayedUpdate, self));
             }
             return view;
         },
+        delayedUpdate: function () {
+            //delays updating by 100ms (prevents updating the badge multiple times in a row)
+            var self = this;
+            if (!this.updateTimer) {
+                this.updateTimer = setTimeout(function () {
+                    self.updateCount();
+                    self.updateTimer = undefined;
+                }, 100);
+            }
+        },
         updateCount: function () {
-            var newCount = 0;
+            var newCount = 0,
+                oldCount = this.model.get('count');
 
             _(this.model.get('registeredViews')).each(function (view) {
                 newCount = newCount + view.collection.size();
             });
-            if (this.model.get('count') !== newCount) {
+            if (oldCount !== newCount) {
                 this.model.set('count', newCount);
+                //autoclose if count is set to 0, notificationsview handles this
+                if (newCount === 0) {
+                    this.trigger('auto-close');
+                }
             }
         }
     });
