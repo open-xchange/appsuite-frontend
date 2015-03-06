@@ -133,15 +133,6 @@ msgstr "Liczba wiadomości w konwersacji: %1$d"
 msgid "%1$d messages selected"
 msgstr "Liczba wybranych wiadomości: %1$d"
 
-#. %1$d number of notifications
-#: apps/io.ox/core/notifications.js:36 module:io.ox/core
-#, c-format
-msgid "%1$d notification."
-msgid_plural "%1$d notifications."
-msgstr[0] "%1$d powiadomienie."
-msgstr[1] "%1$d powiadomienia."
-msgstr[2] "%1$d powiadomień."
-
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js:639 module:io.ox/mail
 msgid "%1$d selected"
@@ -167,7 +158,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:402 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -193,7 +184,7 @@ msgstr "%1$s %2$s"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #. %5$s Appointment Organizer
-#: apps/plugins/notifications/calendar/register.js:73
+#: apps/plugins/notifications/calendar/register.js:96
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
@@ -203,7 +194,7 @@ msgstr "%1$s %2$s %3$s %4$s %5$s."
 #. %2$s Appointment date
 #. %3$s Appointment time
 #. %4$s Appointment location
-#: apps/io.ox/core/tk/reminder-util.js:109 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:108 module:io.ox/core
 #, c-format
 msgid "%1$s %2$s %3$s %4$s."
 msgstr "%1$s %2$s %3$s %4$s."
@@ -211,8 +202,8 @@ msgstr "%1$s %2$s %3$s %4$s."
 #. %1$s task title
 #. %2$s task end date
 #. %3$s task status
-#: apps/io.ox/core/tk/reminder-util.js:94 module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js:533
+#: apps/io.ox/core/tk/reminder-util.js:93 module:io.ox/core
+#: apps/plugins/notifications/tasks/register.js:242
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s."
@@ -220,7 +211,7 @@ msgstr "%1$s %2$s %3$s."
 
 #. %1$s task title
 #. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js:54
+#: apps/plugins/notifications/tasks/register.js:46
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s."
@@ -610,7 +601,7 @@ msgstr "Nieobecność"
 msgid "Accept"
 msgstr "Akceptuj"
 
-#: apps/plugins/notifications/calendar/register.js:88
+#: apps/plugins/notifications/calendar/register.js:111
 #: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "Przyjmij / odrzuć"
@@ -620,13 +611,13 @@ msgstr "Przyjmij / odrzuć"
 msgid "Accept changes"
 msgstr "Zaakceptuj zmiany"
 
-#: apps/plugins/notifications/calendar/register.js:91
+#: apps/plugins/notifications/calendar/register.js:115
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:554
+#: apps/plugins/notifications/tasks/register.js:265
 msgid "Accept invitation"
 msgstr "Przyjmij zaproszenie"
 
-#: apps/plugins/notifications/tasks/register.js:551
+#: apps/plugins/notifications/tasks/register.js:261
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Przyjmij/odrzuć"
@@ -833,7 +824,7 @@ msgstr "Dodaj podpis nad cytowanym tekstem"
 msgid "Add signature below quoted text"
 msgstr "Dodaj podpis pod cytowanym tekstem"
 
-#: apps/io.ox/mail/compose/view.js:765 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:766 module:io.ox/mail
 msgid "Add subject"
 msgstr "Dodaj temat"
 
@@ -905,7 +896,7 @@ msgid "Address Other"
 msgstr "Adres (inny)"
 
 #: apps/io.ox/files/util.js:250 module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:351 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:352 module:io.ox/core
 msgid "Adjust"
 msgstr "Dopasuj"
 
@@ -923,17 +914,17 @@ msgstr "Administrator"
 msgid "Advanced Facets"
 msgstr "Zaawansowane aspekty"
 
-#: apps/io.ox/settings/main.js:495 module:io.ox/core
+#: apps/io.ox/settings/main.js:490 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Ustawienia zaawansowane"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:184 module:io.ox/core
 msgid "Advanced facets block was closed."
 msgstr "Blok zaawansowanych aspektów został zamknięty."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:184 module:io.ox/core
 msgid "Advanced facets block was opened."
 msgstr "Blok zaawansowanych aspektów został otwarty."
 
@@ -943,8 +934,8 @@ msgstr "Blok zaawansowanych aspektów został otwarty."
 msgid "Advanced options"
 msgstr "Ustawienia zaawansowane"
 
-#: apps/io.ox/search/facets/extensions.js:280 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:368
+#: apps/io.ox/search/facets/extensions.js:281 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:369
 msgid "All"
 msgstr "Wszystko"
 
@@ -964,9 +955,9 @@ msgstr "Wszystkie załączniki"
 msgid "All day"
 msgstr "Cały dzień"
 
-#: apps/io.ox/search/facets/extensions.js:617 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:620
-#: apps/io.ox/search/facets/extensions.js:627
+#: apps/io.ox/search/facets/extensions.js:618 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:621
+#: apps/io.ox/search/facets/extensions.js:628
 msgid "All folders"
 msgstr "Wszystkie foldery"
 
@@ -1072,7 +1063,7 @@ msgstr "Spotkanie"
 msgid "Appointment Details"
 msgstr "Szczegóły spotkania"
 
-#: apps/plugins/notifications/calendar/register.js:27
+#: apps/plugins/notifications/calendar/register.js:229
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Zaproszenia na spotkanie"
@@ -1082,7 +1073,7 @@ msgstr "Zaproszenia na spotkanie"
 msgid "Appointment list"
 msgstr "Lista spotkań"
 
-#: apps/plugins/notifications/calendar/register.js:42
+#: apps/plugins/notifications/calendar/register.js:171
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Przypomnienia o spotkaniach"
@@ -1286,7 +1277,7 @@ msgid "Back to appointment"
 msgstr "Wróć do spotkania"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:386
+#: apps/io.ox/settings/main.js:385
 msgid "Basic settings"
 msgstr "Ustawienia podstawowe"
 
@@ -1414,7 +1405,7 @@ msgstr "Widok kalendarza"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:179
-#: apps/io.ox/core/main.js:509 apps/io.ox/core/main.js:1354
+#: apps/io.ox/core/main.js:509 apps/io.ox/core/main.js:1355
 #: apps/io.ox/core/permissions/permissions.js:369
 #: apps/io.ox/core/permissions/permissions.js:402 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
@@ -1453,7 +1444,7 @@ msgstr "Widok kalendarza"
 #: apps/plugins/administration/resources/settings/edit.js:90
 #: apps/plugins/administration/resources/settings/toolbar.js:63
 #: apps/plugins/core/feedback/register.js:140
-#: apps/plugins/notifications/calendar/register.js:202
+#: apps/plugins/notifications/calendar/register.js:65
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
 #: module:plugins/portal apps/plugins/portal/mail/register.js:206
 #: apps/plugins/portal/rss/register.js:160
@@ -1518,7 +1509,7 @@ msgstr "Zmień status potwierdzenia"
 msgid "Change due date"
 msgstr "Zmień termin"
 
-#: apps/io.ox/search/facets/extensions.js:605 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:606 module:io.ox/core
 msgid "Change folder"
 msgstr "Zmień folder"
 
@@ -1708,7 +1699,7 @@ msgid "Close search"
 msgstr "Zamknij wyszukiwanie"
 
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
-#: apps/io.ox/core/tk/reminder-util.js:60
+#: apps/io.ox/core/tk/reminder-util.js:59
 msgid "Close this reminder"
 msgstr "Zamknij przypomnienie"
 
@@ -1875,7 +1866,7 @@ msgstr "Kontakty zostały przeniesione"
 msgid "Contains"
 msgstr "Zawiera"
 
-#: apps/io.ox/core/main.js:1355 module:io.ox/core
+#: apps/io.ox/core/main.js:1356 module:io.ox/core
 msgid "Continue"
 msgstr "Kontynuuj"
 
@@ -1950,7 +1941,7 @@ msgstr "Nie można wczytać tej listy"
 msgid "Could not save settings"
 msgstr "Nie można zapisać ustawień"
 
-#: apps/io.ox/portal/widgets.js:425 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:428 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Nie można zapisać ustawień."
 
@@ -2574,7 +2565,7 @@ msgstr "Dokumenty"
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
 #: apps/io.ox/tasks/util.js:250
-#: apps/plugins/notifications/tasks/register.js:73
+#: apps/plugins/notifications/tasks/register.js:62
 #: module:plugins/notifications
 msgid "Done"
 msgstr "Wykonane"
@@ -2968,7 +2959,7 @@ msgid "End of working time"
 msgstr "Koniec czasu pracy"
 
 #: apps/io.ox/calendar/edit/extensions.js:165 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:547 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core
 msgid "Ends on"
 msgstr "Kończy się o"
 
@@ -3368,7 +3359,7 @@ msgid "Folder view"
 msgstr "Widok folderu"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1581 module:io.ox/core
+#: apps/io.ox/core/main.js:1582 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3627,35 +3618,35 @@ msgstr "Ukryte"
 msgid "Hide"
 msgstr "Ukryj"
 
-#: apps/io.ox/search/facets/extensions.js:58 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:59 module:io.ox/core
 msgid "Hide advanced filters"
 msgstr "Ukryj filtry zaawansowane"
 
-#: apps/plugins/notifications/calendar/register.js:31
+#: apps/plugins/notifications/calendar/register.js:236
 #: module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "Ukryj wszystkie zaproszenia na spotkania."
 
-#: apps/plugins/notifications/calendar/register.js:46
+#: apps/plugins/notifications/calendar/register.js:178
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Ukryj wszystkie przypomnienia o spotkaniach."
 
-#: apps/plugins/notifications/mail/register.js:33 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:90 module:plugins/notifications
 msgid "Hide all notifications for new mails."
 msgstr "Ukryj wszystkie powiadomienia o nowych wiadomościach."
 
-#: apps/plugins/notifications/tasks/register.js:36
+#: apps/plugins/notifications/tasks/register.js:103
 #: module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr "Ukryj wszystkie powiadomienia o zadaniach z przekroczonym terminem."
 
-#: apps/plugins/notifications/tasks/register.js:510
+#: apps/plugins/notifications/tasks/register.js:297
 #: module:plugins/notifications
 msgid "Hide all task invitations."
 msgstr "Ukryj wszystkie zaproszenia do zadań."
 
-#: apps/plugins/notifications/tasks/register.js:267
+#: apps/plugins/notifications/tasks/register.js:179
 #: module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Ukryj wszystkie przypomnienia o zadaniach."
@@ -3773,7 +3764,7 @@ msgstr "Ignoruj ostrzeżenia"
 #: apps/io.ox/calendar/edit/main.js:147 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116
 #: apps/io.ox/calendar/week/perspective.js:117
-#: apps/plugins/notifications/calendar/register.js:200
+#: apps/plugins/notifications/calendar/register.js:63
 #: module:plugins/notifications
 msgid "Ignore conflicts"
 msgstr "Zignoruj konflikty"
@@ -3814,6 +3805,7 @@ msgstr "Za %1$d dni"
 msgid "In progress"
 msgstr "W trakcie wykonywania"
 
+#: apps/io.ox/portal/widgets.js:110 module:io.ox/portal
 #: apps/plugins/portal/mail/register.js:65 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:190
 #: apps/plugins/portal/mail/register.js:200
@@ -4209,7 +4201,7 @@ msgid "Mail and Messaging"
 msgstr "Poczta i komunikator"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:393
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Konta e-mail i społecznościowe"
@@ -4220,7 +4212,7 @@ msgstr "Ograniczenie liczby wiadomości e-mail"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:62 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s %2$s"
 msgstr "Wiadomość od %1$s %2$s"
@@ -4237,11 +4229,11 @@ msgstr "Wiadomości zostały zaimportowane"
 msgid "Mail has been moved"
 msgstr "Poczta została przeniesiona"
 
-#: apps/io.ox/mail/compose/view.js:763 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:764 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Wiadomość ma pusty temat. Czy chcesz ją mimo tego wysłać?"
 
-#: apps/io.ox/mail/compose/view.js:756 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:757 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Wiadomość nie ma odbiorcy."
 
@@ -4497,7 +4489,7 @@ msgstr "Miesiące"
 
 #: apps/io.ox/core/extPatterns/links.js:362 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:373
-#: apps/io.ox/search/facets/extensions.js:695
+#: apps/io.ox/search/facets/extensions.js:696
 msgid "More"
 msgstr "Więcej"
 
@@ -4608,9 +4600,15 @@ msgstr "Nowy folder"
 msgid "New Mail"
 msgstr "Nowa wiadomość"
 
-#: apps/plugins/notifications/mail/register.js:28 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:82 module:plugins/notifications
 msgid "New Mails"
 msgstr "Nowe wiadomości"
+
+#: apps/io.ox/core/notifications/subview.js:101 module:io.ox/core
+#, fuzzy
+#| msgid "Notifications"
+msgid "New Notifications"
+msgstr "Powiadomienia"
 
 #: apps/io.ox/calendar/settings/pane.js:177 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
@@ -4764,7 +4762,7 @@ msgstr "Brak wiadomości w skrzynce odbiorczej"
 msgid "No message selected"
 msgstr "Brak wybranych wiadomości"
 
-#: apps/io.ox/core/notifications.js:155 module:io.ox/core
+#: apps/io.ox/core/notifications.js:75 module:io.ox/core
 msgid "No notifications"
 msgstr "Brak powiadomień"
 
@@ -4802,8 +4800,8 @@ msgstr "Bez wolnych żądań"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:388 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:62 module:plugins/notifications
-#: apps/plugins/notifications/mail/register.js:66
+#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:44
 #, c-format
 msgid "No subject"
 msgstr "Brak tematu"
@@ -4885,10 +4883,6 @@ msgstr ""
 msgid "Nothing in your newsfeed."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:371 module:io.ox/core
-msgid "Notifications"
-msgstr "Powiadomienia"
-
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
 msgid "Notifier"
 msgstr "Powiadomienia"
@@ -4913,7 +4907,7 @@ msgid "Number of items"
 msgstr "Liczba pozycji"
 
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
-#: apps/io.ox/core/tk/reminder-util.js:59
+#: apps/io.ox/core/tk/reminder-util.js:58
 msgid "OK"
 msgstr "OK"
 
@@ -5133,7 +5127,7 @@ msgstr "Serwer poczty wychodzącej (SMTP)"
 msgid "Overdue"
 msgstr "Termin przekroczony"
 
-#: apps/plugins/notifications/tasks/register.js:33
+#: apps/plugins/notifications/tasks/register.js:96
 #: module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Zadania z przekroczonym terminem"
@@ -5457,7 +5451,7 @@ msgid ""
 "account:"
 msgstr "Wybierz dane, których możemy użyć do utworzenia Twojego konta %s:"
 
-#: apps/io.ox/core/main.js:1104 module:io.ox/core
+#: apps/io.ox/core/main.js:1105 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Aby kontynuować, podpisz ponownie"
@@ -5534,12 +5528,12 @@ msgstr "Naciśnij klawisz [Enter], aby przejść do wiadomości z serwisu Tumblr
 msgid "Press [enter] to jump to the twitter feed."
 msgstr "Naciśnij klawisz [Enter], aby przejść do wiadomości z serwisu Twitter."
 
-#: apps/io.ox/core/tk/reminder-util.js:77 module:io.ox/core
-#: apps/io.ox/core/tk/reminder-util.js:98
-#: apps/plugins/notifications/calendar/register.js:78
-#: module:plugins/notifications apps/plugins/notifications/mail/register.js:64
-#: apps/plugins/notifications/tasks/register.js:66
-#: apps/plugins/notifications/tasks/register.js:543
+#: apps/io.ox/core/tk/reminder-util.js:76 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:97
+#: apps/plugins/notifications/calendar/register.js:101
+#: module:plugins/notifications apps/plugins/notifications/mail/register.js:42
+#: apps/plugins/notifications/tasks/register.js:56
+#: apps/plugins/notifications/tasks/register.js:252
 msgid "Press [enter] to open"
 msgstr "Aby otworzyć, naciśnij klawisz [Enter]."
 
@@ -5855,11 +5849,11 @@ msgid "Remind me"
 msgstr "Przypomnij mi"
 
 #: apps/io.ox/core/tk/reminder-util.js:26 module:io.ox/core
-#: apps/io.ox/core/tk/reminder-util.js:47
+#: apps/io.ox/core/tk/reminder-util.js:46
 msgid "Remind me again"
 msgstr "Przypomnij mi później"
 
-#: apps/io.ox/core/tk/reminder-util.js:54 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:53 module:io.ox/core
 msgid "Remind me again "
 msgstr "Przypomnij mi ponownie"
 
@@ -5886,7 +5880,7 @@ msgstr "Data przypomnienia: %1$s"
 msgid "Reminder has been created"
 msgstr "Przypomnienie zostało utworzone"
 
-#: apps/io.ox/search/facets/extensions.js:327 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:328 module:io.ox/core
 msgid "Remove"
 msgstr "Usuń"
 
@@ -5915,7 +5909,7 @@ msgstr "Usuń kontakt"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Po odebraniu wiadomości usuń kopię z serwera"
 
-#: apps/io.ox/search/facets/extensions.js:319 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:320 module:io.ox/core
 msgid "Remove facet"
 msgstr "Usuń aspekt"
 
@@ -6004,7 +5998,7 @@ msgstr "Zasób"
 msgid "Resources"
 msgstr "Zasoby"
 
-#: apps/io.ox/core/main.js:1347 module:io.ox/core
+#: apps/io.ox/core/main.js:1348 module:io.ox/core
 msgid "Restore applications"
 msgstr "Przywróć aplikacje"
 
@@ -6284,7 +6278,7 @@ msgid "Sender/From"
 msgstr "Nadawca/Od"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:911 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:912 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Wysłane z %s przez telefon komórkowy"
 
@@ -6347,7 +6341,7 @@ msgid "Set color"
 msgstr "Ustaw kolor"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:402
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -6424,11 +6418,11 @@ msgstr "Koszyk"
 msgid "Show"
 msgstr "Pokaż"
 
-#: apps/io.ox/search/facets/extensions.js:59 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:60 module:io.ox/core
 msgid "Show advanced filters"
 msgstr "Pokaż filtry zaawansowane"
 
-#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 msgid "Show all %1$d messages in inbox"
 msgstr "Pokaż wszystkie %1$d wiadomości w skrzynce odbiorczej"
 
@@ -6488,7 +6482,7 @@ msgstr "Pokaż ikony"
 msgid "Show images"
 msgstr "Pokaż obrazy"
 
-#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 msgid "Show inbox"
 msgstr "Pokaż skrzynkę odbiorczą"
 
@@ -6561,7 +6555,7 @@ msgid "Sign in"
 msgstr "Zaloguj"
 
 #: apps/io.ox/core/main.js:916 module:io.ox/core apps/io.ox/core/main.js:955
-#: apps/io.ox/core/main.js:957 apps/io.ox/core/main.js:1084
+#: apps/io.ox/core/main.js:957 apps/io.ox/core/main.js:1085
 msgid "Sign out"
 msgstr "Wyloguj"
 
@@ -6574,6 +6568,10 @@ msgstr "Wyloguj teraz"
 msgid "Signature"
 msgstr "Podpis"
 
+#: apps/io.ox/mail/settings/signatures/register.js:35 module:io.ox/mail
+msgid "Signature name"
+msgstr "Nazwa podpisu"
+
 #: apps/io.ox/mail/compose/view.js:154 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:445
 msgid "Signatures"
@@ -6584,7 +6582,7 @@ msgstr "Podpisy"
 msgid "Signed in as %1$s"
 msgstr "Zalogowano jako %1$s"
 
-#: apps/io.ox/core/main.js:1081 module:io.ox/core
+#: apps/io.ox/core/main.js:1082 module:io.ox/core
 #, fuzzy
 #| msgid "Signed in as %1$s"
 msgid "Signed in as:"
@@ -6716,7 +6714,7 @@ msgid "Start typing to search for user names"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:145 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:545 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:546 module:io.ox/core
 msgid "Starts on"
 msgstr "Data rozpoczęcia"
 
@@ -6863,7 +6861,7 @@ msgstr[0] "Zadanie zostało usunięte!"
 msgstr[1] "Zadania zostały usunięte!"
 msgstr[2] "Zadania zostały usunięte!"
 
-#: apps/plugins/notifications/tasks/register.js:507
+#: apps/plugins/notifications/tasks/register.js:290
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Zaproszenia do zadań"
@@ -6886,7 +6884,7 @@ msgstr[0] "Oznacz jako niewykonane"
 msgstr[1] "Oznacz jako niewykonane"
 msgstr[2] "Oznacz jako niewykonane"
 
-#: apps/plugins/notifications/tasks/register.js:263
+#: apps/plugins/notifications/tasks/register.js:172
 #: module:plugins/notifications
 msgid "Task reminders"
 msgstr "Przypomnienia o zadaniach"
@@ -7117,7 +7115,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "Adres e-mai %1$s jest już na liście"
 
-#: apps/io.ox/mail/compose/view.js:695 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:696 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Wiadomości zostały wysłane"
 
@@ -7176,7 +7174,7 @@ msgstr "Folder został oczyszczony."
 msgid "The folder has been emptied."
 msgstr "Folder został opróżniony."
 
-#: apps/io.ox/core/main.js:1349 module:io.ox/core
+#: apps/io.ox/core/main.js:1350 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7187,6 +7185,16 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js:246 module:io.ox/wizards
 msgid "The following products will be activated now:"
 msgstr "Zostaną uaktywnione następujące produkty:"
+
+#: apps/io.ox/core/notifications/badgeview.js:41 module:io.ox/core
+#: apps/io.ox/core/notifications/badgeview.js:55
+msgid "The notification area is closed"
+msgstr "Obszar powiadomień jest zamknięty"
+
+#: apps/io.ox/core/notifications/badgeview.js:41 module:io.ox/core
+#: apps/io.ox/core/notifications/badgeview.js:55
+msgid "The notification area is open"
+msgstr "Obszar powiadomień jest otwarty"
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate display name of the person
@@ -7647,7 +7655,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:171
 #: apps/io.ox/calendar/util.js:209 apps/io.ox/core/tk/datepicker.js:34
-#: module:io.ox/core apps/io.ox/search/facets/extensions.js:511
+#: module:io.ox/core apps/io.ox/search/facets/extensions.js:512
 #: apps/plugins/portal/birthdays/register.js:86 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:159
 msgid "Today"
@@ -7657,8 +7665,8 @@ msgstr "Dzisiaj"
 msgid "Toggle checkboxes"
 msgstr "Przełącz pola wyboru"
 
-#: apps/io.ox/search/facets/extensions.js:346 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:600
+#: apps/io.ox/search/facets/extensions.js:347 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:601
 msgid "Toggle options"
 msgstr "Przełącz opcje"
 
@@ -7914,7 +7922,7 @@ msgstr "Użyj łącza SSL"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:83 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:113 module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:530
+#: apps/io.ox/search/facets/extensions.js:531
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -8182,7 +8190,7 @@ msgstr "Żółty"
 msgid "Yes"
 msgstr "Tak"
 
-#: apps/io.ox/mail/compose/view.js:764 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:765 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Tak, wyślij bez tematu"
 
@@ -8297,6 +8305,17 @@ msgstr "Nie masz jeszcze żadnych subskrypcji"
 msgid "You don't have any tasks that are either due soon or overdue."
 msgstr "Nie masz żadnych zadań ze zbliżającym się lub przekroczonym terminem."
 
+#. %1$d number of notifications
+#: apps/io.ox/core/notifications/badgeview.js:40 module:io.ox/core
+#, fuzzy, c-format
+#| msgid "%1$d notification."
+#| msgid_plural "%1$d notifications."
+msgid "You have %1$d notification."
+msgid_plural "You have %1$d notifications."
+msgstr[0] "%1$d powiadomienie."
+msgstr[1] "%1$d powiadomienia."
+msgstr[2] "%1$d powiadomień."
+
 #: apps/plugins/portal/mail/register.js:117 module:plugins/portal
 msgid "You have %1$d unread messages"
 msgstr "Liczba nieprzeczytanych wiadomości: %1$d"
@@ -8402,6 +8421,51 @@ msgstr[0] "Za %1$d sekundę nastąpi automatyczne wylogowanie"
 msgstr[1] "Za %1$d sekundy nastąpi automatyczne wylogowanie"
 msgstr[2] "Za %1$d sekund nastąpi automatyczne wylogowanie"
 
+#: apps/plugins/notifications/mail/register.js:89 module:plugins/notifications
+#, fuzzy
+#| msgid "Composing a new E-Mail"
+msgid "You've got a new Mail"
+msgstr "Wysyłanie nowej wiadomości e-mail"
+
+#: apps/plugins/notifications/tasks/register.js:296
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Hide all task invitations."
+msgid "You've got a task invitation"
+msgstr "Ukryj wszystkie zaproszenia do zadań."
+
+#: apps/plugins/notifications/tasks/register.js:178
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Hide all task reminders."
+msgid "You've got a task reminder"
+msgstr "Ukryj wszystkie przypomnienia o zadaniach."
+
+#: apps/plugins/notifications/calendar/register.js:235
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Hide all appointment invitations."
+msgid "You've got an appointment invitation"
+msgstr "Ukryj wszystkie zaproszenia na spotkania."
+
+#: apps/plugins/notifications/calendar/register.js:177
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Hide all appointment reminders."
+msgid "You've got an appointment reminder"
+msgstr "Ukryj wszystkie przypomnienia o spotkaniach."
+
+#: apps/plugins/notifications/tasks/register.js:102
+#: module:plugins/notifications
+msgid "You've got an overdue task"
+msgstr ""
+
+#: apps/io.ox/core/notifications/subview.js:100 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "You've got new Notifications"
+msgstr "Brak powiadomień"
+
 #: apps/plugins/portal/xing/register.js:346 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Twój kanał informacyjny %s"
@@ -8495,7 +8559,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Wybrany obraz wyświetli się po zapisaniu"
 
-#: apps/io.ox/core/main.js:1103 module:io.ox/core
+#: apps/io.ox/core/main.js:1104 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Sesja wygasła"
@@ -8648,10 +8712,10 @@ msgstr "edycja wszystkich obiektów"
 msgid "edit own objects"
 msgstr "edycja własnych obiektów"
 
-#: apps/io.ox/core/tk/reminder-util.js:85 module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js:49
+#: apps/io.ox/core/tk/reminder-util.js:84 module:io.ox/core
+#: apps/plugins/notifications/tasks/register.js:41
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:527
+#: apps/plugins/notifications/tasks/register.js:236
 msgid "end date "
 msgstr "data zakończenia"
 
@@ -8772,7 +8836,7 @@ msgstr "ma załączniki"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/plugins/notifications/calendar/register.js:108
+#: apps/plugins/notifications/calendar/register.js:133
 #: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"
@@ -8983,7 +9047,7 @@ msgstr "pokaż obraz"
 msgid "six months"
 msgstr "Miesiące"
 
-#: apps/io.ox/core/tk/reminder-util.js:88 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:87 module:io.ox/core
 msgid "status "
 msgstr "status"
 
@@ -9360,9 +9424,6 @@ msgstr "rrrr"
 
 #~ msgid "Closing a tile"
 #~ msgstr "Zamykanie kafelka"
-
-#~ msgid "Composing a new E-Mail"
-#~ msgstr "Wysyłanie nowej wiadomości e-mail"
 
 #~ msgid "Confirm"
 #~ msgstr "Potwierdź"
@@ -10187,9 +10248,6 @@ msgstr "rrrr"
 #~ msgid "Sidebar"
 #~ msgstr "Pasek boczny"
 
-#~ msgid "Signature name"
-#~ msgstr "Nazwa podpisu"
-
 #~ msgid "Signature position"
 #~ msgstr "Umiejscowienie podpisu"
 
@@ -10355,12 +10413,6 @@ msgstr "rrrr"
 #~ msgstr ""
 #~ "Następnym krokiem jest zezwolenie temu systemowi na uzyskiwanie dostępu "
 #~ "do Twojego konta %s w Twoim imieniu."
-
-#~ msgid "The notification area is closed"
-#~ msgstr "Obszar powiadomień jest zamknięty"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Obszar powiadomień jest otwarty"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Obowiązuje ograniczenie do %1$s adresatów na pole"
