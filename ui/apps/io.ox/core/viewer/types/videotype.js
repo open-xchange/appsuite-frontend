@@ -88,7 +88,7 @@ define('io.ox/core/viewer/types/videotype', [
 
             // register error handler
             videoSource[0].onerror = function (e) {
-                console.warn('VideoType.loadSlide() - error loading:', e.target.src);
+                console.warn('VideoType.loadSlide() - error loading:', model.get('filename'), e.target.src);
                 var filename = model && model.get('filename') || '',
                     slideContent;
 
@@ -101,9 +101,9 @@ define('io.ox/core/viewer/types/videotype', [
             };
 
             slideElement.busy();
+            slideElement.find('div.viewer-displayer-notification').remove();
             videoSource.attr('src', videoSource.attr('data-src'));
             videoToLoad[0].load(); // reset and start selecting and loading a new media resource from scratch
-            console.info('VideoType.loadSlide() - loading:', model.get('filename'));
         },
 
         /**
@@ -123,6 +123,7 @@ define('io.ox/core/viewer/types/videotype', [
 
             if (videoToLoad.length > 0) {
                 videoToLoad[0].pause();
+                videoToLoad.addClass('player-hidden');
                 videoSource.attr('src', '');
             }
         }

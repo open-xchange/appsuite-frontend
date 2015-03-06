@@ -87,7 +87,7 @@ define('io.ox/core/viewer/types/audiotype',  [
 
             // register error handler
             audioSource[0].onerror = function (e) {
-                console.warn('AudioType.loadSlide() - error loading:', e.target.src);
+                console.warn('AudioType.loadSlide() - error loading:', model.get('filename'), e.target.src);
                 var filename = model && model.get('filename') || '',
                     slideContent;
 
@@ -100,10 +100,9 @@ define('io.ox/core/viewer/types/audiotype',  [
             };
 
             slideElement.busy();
-            audioToLoad.addClass('player-hidden');
+            slideElement.find('div.viewer-displayer-notification').remove();
             audioSource.attr('src', audioSource.attr('data-src'));
             audioToLoad[0].load();
-            console.info('AudioType.loadSlide() - loading:', model.get('filename'));
         },
 
         /**
@@ -123,6 +122,7 @@ define('io.ox/core/viewer/types/audiotype',  [
 
             if (audioToLoad.length > 0) {
                 audioToLoad[0].pause();
+                audioToLoad.addClass('player-hidden');
                 audioSource.attr('src', '');
             }
         }
