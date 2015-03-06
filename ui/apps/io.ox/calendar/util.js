@@ -12,19 +12,19 @@
  */
 
 define('io.ox/calendar/util', [
-    'io.ox/core/date',
-    'gettext!io.ox/calendar',
-    'settings!io.ox/calendar',
     'io.ox/core/api/user',
     'io.ox/contacts/api',
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
-    'io.ox/core/util'
-], function (date, gt, settings, userAPI, contactAPI, groupAPI, folderAPI, util) {
+    'io.ox/core/util',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar'
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, settings, gt) {
 
     'use strict';
 
     moment.locale('de');
+    moment.tz.setDefault('Europe/Berlin');
 
     // day names
     var n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
@@ -117,20 +117,19 @@ define('io.ox/calendar/util', [
 
         getEvenSmarterDate: function (data) {
             var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date),
-                diff = m.startOf('day').diff(moment().startOf('day'));
-
+                startOfDay = moment().startOf('day');
             // past?
-            if (diff < 0) {
-                if (diff >= -1 * date.DAY) {
+            if (m.isBefore(startOfDay)) {
+                if (m.isAfter(startOfDay.subtract(1,'days'))) {
                     return gt('Yesterday') + ', ' + m.format('l');
                 } else {
                     return m.format('ddd, l');
                 }
             } else {
                 // future
-                if (diff < date.DAY) {
+                if (m.isBefore(startOfDay.add(1,'days'))) {
                     return gt('Today') + ', ' + m.format('l');
-                } else if (diff < 2 * date.DAY) {
+                } else if (m.isBefore(startOfDay.add(1,'days'))) {
                     return gt('Tomorrow') + ', ' + m.format('l');
                 } else {
                     return m.format('ddd, l');
@@ -161,7 +160,7 @@ define('io.ox/calendar/util', [
                         //#, c-format
                         return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
                     }
-                    return startDate.format(fmtstr) + ' \u2013 ' + endDate.format(fmtstr);
+                    return startDate.format(fmtstr) + ' \u2013 ' + moment(data.end_date).format('LT');
                 }
             } else {
                 return '';
@@ -170,6 +169,42 @@ define('io.ox/calendar/util', [
 
         getDateIntervalA11y: function (data) {
             return this.getDateInterval(data, true);
+        },
+
+        getTimeInterval: function (data, zone, a11y) {
+            if (!data || !data.start_date || !data.end_date) return '';
+            if (data.full_time) {
+                return this.getFullTimeInterval(data, true);
+            } else {
+                var start = moment(data.start_date),
+                    end = moment(data.end_date);
+                if (zone) {
+                    start.tz(zone);
+                    end.tz(zone);
+                }
+                if (a11y) {
+                    //#. date intervals for screenreaders
+                    //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                    //#. %1$s is the start date
+                    //#. %2$s is the end date
+                    //#, c-format
+                    return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
+                }
+                return start.format('LT') + ' \u2013 ' + end.format('LT');
+            }
+        },
+
+        getTimeIntervalA11y: function (data, zone) {
+            return this.getTimeInterval(data, zone, true);
+        },
+
+        getFullTimeInterval: function (data, smart) {
+            var length = this.getDurationInDays(data);
+            return length <= 1  && smart ? gt('Whole day') : gt.format(
+                //#. General duration (nominative case): X days
+                //#. %d is the number of days
+                //#, c-format
+                gt.ngettext('%d day', '%d days', length), length);
         },
 
         getReminderOptions: function () {
@@ -239,40 +274,6 @@ define('io.ox/calendar/util', [
             return moment(data.end_date).diff(data.start_date, 'days');
         },
 
-        getFullTimeInterval: function (data, smart) {
-            var length = this.getDurationInDays(data);
-            return length <= 1  && smart ? gt('Whole day') : gt.format(
-                //#. General duration (nominative case): X days
-                //#. %d is the number of days
-                //#, c-format
-                gt.ngettext('%d day', '%d days', length), length);
-        },
-
-        getTimeInterval: function (data, D) {
-            if (!data || !data.start_date || !data.end_date) return '';
-            if (data.full_time) {
-                return this.getFullTimeInterval(data, true);
-            } else {
-                D = D || date.Local;
-                var diff = date.locale.intervals[(date.locale.h12 ? 'hm' : 'Hm') + (date.TIME & date.TIMEZONE ? 'v' : '')];
-                return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
-            }
-        },
-
-        getTimeIntervalA11y: function (data) {
-            if (!data || !data.start_date || !data.end_date) return '';
-            if (data.full_time) {
-                return this.getFullTimeInterval(data, true);
-            } else {
-                //#. Time intervals for screenreaders
-                //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                //#. %1$s is the start time
-                //#. %2$s is the end time
-                //#, c-format
-                return gt('%1$s to %2$s', moment(data.start_date).format('LT'), moment(data.end_date).format('LT'));
-            }
-        },
-
         getStartAndEndTime: function (data) {
             var ret = [];
             if (!data || !data.start_date || !data.end_date) return ret;
@@ -285,11 +286,11 @@ define('io.ox/calendar/util', [
         },
 
         addTimezoneLabel: function (parent, data) {
+            var current = moment(data.start_date);
 
-            var current = date.Local.getTTInfoLocal(data.start_date);
             parent.append(
-                $.txt(gt.noI18n(that.getTimeInterval(data))),
-                $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.abbr)).popover({
+                $.txt(gt.noI18n(this.getTimeInterval(data))),
+                $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())).popover({
                     container: '#io-ox-core',
                     content: getContent(),
                     html: true,
@@ -299,7 +300,7 @@ define('io.ox/calendar/util', [
                         // get placement
                         return 'left';
                     },
-                    title: that.getTimeInterval(data) + ' ' + current.abbr,
+                    title: this.getTimeInterval(data) + ' ' + current.zoneAbbr(),
                     trigger: 'hover focus'
                 }).on('blur', function () {
                     $(this).popover('hide');
@@ -310,28 +311,24 @@ define('io.ox/calendar/util', [
                 // hard coded for demo purposes
                 var div = $('<ul class="list-unstyled">');
 
-                $.when.apply($, _.map([
-                    'America/Los_Angeles',
+                _([ 'America/Los_Angeles',
                     'America/New_York',
                     'Europe/London',
                     'Europe/Berlin',
                     'Australia/Sydney'
-                ], date.getTimeZone))
-                    .done(function () {
-                        _(Array.prototype.slice.call(arguments)).each(function (zone) {
-                            // must use outer DIV with "clear: both" here for proper layout in firefox
-                            div.append($('<li>').append(
-                                $('<span>')
-                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, '').replace(/_/g, ' '))),
-                                $('<span>')
-                                    .addClass('label label-info')
-                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
-                                $('<span>')
-                                    .addClass('time')
-                                    .text(gt.noI18n(that.getTimeInterval(data, zone)))
-                            ));
-                        });
-                    });
+                ]).each(function (zone) {
+                    // must use outer DIV with "clear: both" here for proper layout in firefox
+                    div.append($('<li>').append(
+                        $('<span>')
+                            .text(gt.noI18n(zone.replace(/^.*?\//, '').replace(/_/g, ' '))),
+                        $('<span>')
+                            .addClass('label label-info')
+                            .text(gt.noI18n(moment.tz(zone).zoneAbbr())),
+                        $('<span>')
+                            .addClass('time')
+                            .text(gt.noI18n(that.getTimeInterval(data, zone)))
+                    ));
+                });
 
                 return div;
             }
