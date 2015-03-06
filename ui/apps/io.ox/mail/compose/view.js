@@ -651,6 +651,11 @@ define('io.ox/mail/compose/view', [
                 mail = this.model.getMail(),
                 def = $.Deferred();
 
+            // force correct content-type
+            if (mail.attachments[0].content_type === 'text/plain' && this.editorMode === 'html') {
+                mail.attachments[0].content_type = 'text/html';
+            }
+
             this.blockReuse(mail.sendtype);
 
             function cont() {
