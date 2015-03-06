@@ -112,8 +112,8 @@ define('io.ox/core/viewer/views/displayerview', [
             carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
 
-            // dont show next and prev buttons on iOS and Android
-            if (!(_.browser.iOS || _.browser.Android)) {
+            // only show next and prev buttons on desktop
+            if (_.device('desktop')) {
                 carouselRoot.append(prevSlide, nextSlide);
             }
 
