@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-25 08:39+0900\n"
-"Last-Translator: Sandrine <sandrine@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2015-03-09 12:38+0100\n"
+"Last-Translator: \n"
 "Language-Team: French <>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -5182,11 +5182,11 @@ msgid ""
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
 msgstr ""
-"Veuillez consulter votre boîte de réception : vous devriez "
-"avoir reçu un courriel de confirmation.\n"
+"Veuillez consulter votre boîte de réception : vous devriez avoir reçu un "
+"courriel de confirmation.\n"
 "\n"
-"Suivez les instructions données dans ce courriel et revenez au "
-"composant pour terminer la configuration du compte."
+"Suivez les instructions données dans ce courriel et revenez au composant "
+"pour terminer la configuration du compte."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:1110
 #: module:io.ox/calendar/edit/main
@@ -6864,7 +6864,7 @@ msgid ""
 msgstr ""
 "Le rendez-vous se répète <a href=\"#\" data-widget=\"number\" data-attribute="
 "\"interval\">toutes les <span class=\"number-control\">2</span> semaines</a> "
-"le <a href=\"#\" data-widget=\"custom\" data-attribute=\"days\">lundi</a>. "
+"le <a href=\"#\" data-widget=\"days\" data-attribute=\"days\">lundi</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:518
 #: module:io.ox/calendar/edit/main
@@ -7017,9 +7017,9 @@ msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
 msgstr ""
-"Le premier enregistrement d'un fichier CSV valide doit définir des "
-"noms de colonnes valides. Les séparateurs pris en charge sont "
-"les virgules et points-virgules."
+"Le premier enregistrement d'un fichier CSV valide doit définir des noms de "
+"colonnes valides. Les séparateurs pris en charge sont les virgules et points-"
+"virgules."
 
 #: apps/io.ox/core/folder/actions/common.js:34 module:io.ox/core
 msgid "The folder has been cleaned up."

@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-23 21:24-0300\n"
-"Last-Translator: Bianca Oliveira <bianca@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2015-03-09 12:39+0100\n"
+"Last-Translator: \n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -3362,8 +3362,8 @@ msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
 msgstr ""
-"Receba notícias da sua rede XING entregues a você. Fique em contato e "
-"saiba mais sobre novas oportunidades de negócios."
+"Receba notícias da sua rede XING entregues a você. Fique em contato e saiba "
+"mais sobre novas oportunidades de negócios."
 
 #: apps/io.ox/portal/main.js:367 module:io.ox/portal
 #: apps/io.ox/portal/main.js:389
@@ -6822,7 +6822,7 @@ msgid ""
 msgstr ""
 "O compromisso é repetido <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">a cada <span class=\"number-control\">2</span> "
-"semanas</a> na <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days"
+"semanas</a> na <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
 "\">segunda-feira</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:518
@@ -7764,8 +7764,8 @@ msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
 msgstr ""
-"Use as teclas do cursor para alterar a posição do item. O cursor virtual deve "
-"ser desativado."
+"Use as teclas do cursor para alterar a posição do item. O cursor virtual "
+"deve ser desativado."
 
 #: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
@@ -7775,8 +7775,8 @@ msgstr "Usar fonte de largura fixa para e-mails de texto"
 #: apps/io.ox/files/carousel.js:77 module:io.ox/files
 msgid "Use left/right arrow keys to navigate and escape key to exit view."
 msgstr ""
-"Use as setas esquerda/direita para navegar e a tecla ESC para sair "
-"da visualização."
+"Use as setas esquerda/direita para navegar e a tecla ESC para sair da "
+"visualização."
 
 #. Auth type. Use separate username and password
 #: apps/io.ox/mail/accounts/view-form.js:50 module:io.ox/settings
