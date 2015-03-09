@@ -206,11 +206,15 @@ define('io.ox/settings/main', [
 
         var listOfVirtualFolders = ['settings/general', 'settings/main', 'settings/external', 'settings/tools'];
 
+        var getter = function () {
+            var def = $.Deferred();
+            def.resolve(pool.getCollection(this.id).models);
+            return def;
+        };
+
         //create virtual folders
         _.each(listOfVirtualFolders, function (val) {
-            api.virtual.add('virtual/' + val, function () {
-                return [];
-            });
+            api.virtual.add('virtual/' + val, getter);
         });
 
         // tree view
@@ -314,9 +318,7 @@ define('io.ox/settings/main', [
                     });
                     _.each(sort, function (val, key) {
                         //create virtual folders
-                        api.virtual.add('virtual/io.ox/' + key, function () {
-                            return [];
-                        });
+                        api.virtual.add('virtual/io.ox/' + key, getter);
 
                         pool.addCollection('virtual/io.ox/' + key, val, { reset: true });
                     });
