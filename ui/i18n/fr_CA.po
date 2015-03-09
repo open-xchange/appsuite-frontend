@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-03 10:56+0100\n"
+"PO-Revision-Date: 2015-03-09 12:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: French <>\n"
 "Language: fr_CA\n"
@@ -6601,7 +6601,7 @@ msgid ""
 msgstr ""
 "Le rendez-vous se répète <a href=\"#\" data-widget=\"number\" data-attribute="
 "\"interval\">toutes les <span class=\"number-control\">2</span> semaines</a> "
-"le <a href=\"#\" data-widget=\"custom\" data-attribute=\"days\">lundi</a>. "
+"le <a href=\"#\" data-widget=\"days\" data-attribute=\"days\">lundi</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:504
 #: module:io.ox/calendar/edit/main

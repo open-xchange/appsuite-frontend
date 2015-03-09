@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-03 10:56+0100\n"
+"PO-Revision-Date: 2015-03-09 12:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
@@ -6533,7 +6533,7 @@ msgid ""
 msgstr ""
 "Aftalen gentages <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\">hver <span class=\"number-control\">anden</span> uge</a> på <a "
-"href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">mandage</a>."
+"href=\"#\"  data-widget=\"days\" data-attribute=\"days\">mandage</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:504
 #: module:io.ox/calendar/edit/main
