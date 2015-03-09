@@ -113,7 +113,8 @@ define('io.ox/core/api/sub', [
                 //triggered by global refresh
                 return;
             }
-            var folder = data.folder || '';
+
+            var folder = data.folder || data.attributes.folder || '';
             return clearCache(this, data).pipe(function () {
                 return http.GET({
                     module: 'subscriptions',
