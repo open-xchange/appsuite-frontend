@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-05 14:49+0100\n"
+"PO-Revision-Date: 2015-03-09 14:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -885,10 +885,8 @@ msgid "Advanced facets block was opened."
 msgstr "Erweiterte Suchfilter wurden geöffnet."
 
 #: apps/io.ox/files/share/view.js:230 module:io.ox/files
-#, fuzzy
-#| msgid "Advanced Settings"
 msgid "Advanced options"
-msgstr "Erweiterte Einstellungen"
+msgstr "Erweiterte Optionen"
 
 #: apps/io.ox/search/facets/extensions.js:281 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:369
@@ -1940,7 +1938,6 @@ msgid "Create"
 msgstr "Anlegen"
 
 #: apps/io.ox/files/share/view.js:35 module:io.ox/files
-#, fuzzy
 msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
@@ -3593,9 +3590,8 @@ msgstr "Stack trace ausblenden"
 
 #: apps/io.ox/core/notifications/subview.js:53 module:io.ox/core
 #, fuzzy
-#| msgid "Click to close this notification"
 msgid "Hide this notification"
-msgstr "Zum Schließen dieser Benachrichtigung bitte klicken"
+msgstr "Diese Benachrichtigung ausblenden"
 
 #: apps/io.ox/mail/compose/view.js:132 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
@@ -3823,7 +3819,6 @@ msgid "Invite people"
 msgstr "Andere einladen"
 
 #: apps/io.ox/files/share/view.js:34 module:io.ox/files
-#, fuzzy
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
@@ -4519,10 +4514,8 @@ msgid "New Mails"
 msgstr "Neue E-Mails"
 
 #: apps/io.ox/core/notifications/subview.js:121 module:io.ox/core
-#, fuzzy
-#| msgid "Notifications"
 msgid "New Notifications"
-msgstr "Benachrichtigungen"
+msgstr "Neue Benachrichtigungen"
 
 #: apps/io.ox/calendar/settings/pane.js:177 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
@@ -6282,10 +6275,8 @@ msgid "Shared activity"
 msgstr "Gemeinsamkeiten"
 
 #: apps/io.ox/core/folder/extensions.js:305 module:io.ox/core
-#, fuzzy
-#| msgid "Add to address book"
 msgid "Shared address books"
-msgstr "Zu Adressbuch hinzufügen"
+msgstr "Geteilte Adressbücher"
 
 #: apps/io.ox/core/folder/extensions.js:464 module:io.ox/core
 msgid "Shared by other users"
@@ -7095,7 +7086,7 @@ msgid ""
 "will generally be created on behalf of the owner."
 msgstr ""
 "Der gewählte Kalender wurde von %1$s geteilt. Termine in geteilten Kalendern "
-"werden generell im Auftrag des Eigentümers angelegt."
+"werden allgemein im Auftrag des Eigentümers angelegt."
 
 #: apps/io.ox/search/model.js:36 module:io.ox/search
 msgid ""
@@ -8176,13 +8167,11 @@ msgstr "Sie haben keine in Kürze fälligen oder überfälligen Aufgaben."
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications/badgeview.js:40 module:io.ox/core
-#, fuzzy, c-format
-#| msgid "%1$d notification."
-#| msgid_plural "%1$d notifications."
+#, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
-msgstr[0] "%1$d Benachrichtigung."
-msgstr[1] "%1$d Benachrichtigungen."
+msgstr[0] "Sie haben %1$d Benachrichtigung."
+msgstr[1] "Sie haben %1$d Benachrichtigungen."
 
 #: apps/plugins/portal/mail/register.js:117 module:plugins/portal
 msgid "You have %1$d unread messages"
@@ -8289,49 +8278,38 @@ msgstr[0] "Sie werden in %1$d Sekunde automatisch abgemeldet"
 msgstr[1] "Sie werden in %1$d Sekunden automatisch abgemeldet"
 
 #: apps/plugins/notifications/mail/register.js:85 module:plugins/notifications
-#, fuzzy
-#| msgid "Composing a new E-Mail"
 msgid "You've got a new Mail"
-msgstr "Eine neue E-Mail verfassen"
+msgstr "Sie haben eine neue E-Mail"
 
 #: apps/plugins/notifications/tasks/register.js:290
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Hide all task invitations."
 msgid "You've got a task invitation"
-msgstr "Alle Aufgaben-Einladungen ausblenden."
+msgstr "Sie haben eine Aufgaben-Einladung"
 
 #: apps/plugins/notifications/tasks/register.js:173
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Hide all task reminders."
 msgid "You've got a task reminder"
-msgstr "Alle Aufgaben-Erinnerungen ausblenden."
+msgstr "Sie haben eine Aufgaben-Erinnerung"
 
 #: apps/plugins/notifications/calendar/register.js:230
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Hide all appointment invitations."
 msgid "You've got an appointment invitation"
-msgstr "Alle Termin-Einladungen ausblenden."
+msgstr "Sie haben eine Termin-Einladung"
 
 #: apps/plugins/notifications/calendar/register.js:174
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Hide all appointment reminders."
 msgid "You've got an appointment reminder"
-msgstr "Alle Termin-Erinnerungen ausblenden."
+msgstr "Sie haben eine Termin-Erinnerung"
 
 #: apps/plugins/notifications/tasks/register.js:98
 #: module:plugins/notifications
 msgid "You've got an overdue task"
-msgstr ""
+msgstr "Sie haben eine überfällige Aufgabe"
 
 #: apps/io.ox/core/notifications/subview.js:120 module:io.ox/core
 #, fuzzy
-#| msgid "No notifications"
 msgid "You've got new Notifications"
-msgstr "Keine Benachrichtigungen"
+msgstr "Sie haben neue Benachrichtigungen"
 
 #: apps/plugins/portal/xing/register.js:346 module:plugins/portal
 msgid "Your %s newsfeed"
