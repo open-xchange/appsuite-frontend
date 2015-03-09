@@ -17,10 +17,9 @@ define('io.ox/calendar/model', [
     'gettext!io.ox/calendar',
     'io.ox/backbone/validation',
     'io.ox/participants/model',
-    'io.ox/core/date',
     'io.ox/core/folder/api',
     'settings!io.ox/calendar'
-], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
+], function (api, ModelFactory, ext, gt, Validators, pModel, folderAPI, settings) {
 
     'use strict';
 
@@ -50,11 +49,14 @@ define('io.ox/calendar/model', [
             },
 
             init: function () {
-                var defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
+                var m = moment().startOf('hour').add(1, 'hours'),
+                    defStart = m.valueOf(),
+                    defEnd = m.add(1, 'hours').valueOf();
+
                 // set default time
                 this.attributes = _.extend({
-                    start_date: defStart.getTime(),
-                    end_date: defStart.getTime() + date.HOUR
+                    start_date: defStart,
+                    end_date: defEnd
                 }, this.attributes);
 
                 // End date automatically shifts with start date
@@ -62,8 +64,8 @@ define('io.ox/calendar/model', [
 
                 // internal storage for last timestamps
                 this.cache = {
-                    start: this.get('full_time') ? defStart.getTime() : this.get('start_date'),
-                    end: this.get('full_time') ? defStart.getTime() + date.HOUR : this.get('end_date')
+                    start: this.get('full_time') ? defStart : this.get('start_date'),
+                    end: this.get('full_time') ? defEnd : this.get('end_date')
                 };
 
                 // bind events
@@ -97,34 +99,27 @@ define('io.ox/calendar/model', [
                             model.set('shown_as', fulltime ? 4 : 1, { validate: true });
                         }
 
+                        var startDate, endDate;
+
                         if (fulltime === true) {
-                            // save to cache
-                            this.cache.start = model.get('start_date');
-                            this.cache.end = model.get('end_date');
-
-                            // handle time
-                            var startDate = new date.Local(this.cache.start).setHours(0, 0, 0, 0),
-                                endDate = new date.Local(this.cache.end).setHours(0, 0, 0, 0).add(date.DAY);
-
-                            // convert to UTC and save
-                            model.set('start_date', startDate.local, { validate: true });
-                            model.set('end_date', endDate.local, { validate: true });
+                            // save to cache, convert to UTC and save
+                            startDate = moment(this.cache.start = model.get('start_date')).startOf('day').utc(true).valueOf();
+                            endDate = moment(this.cache.end = model.get('end_date')).startOf('day').add(1, 'day').utc(true).valueOf();
                         } else {
-                            var oldStart = new date.Local(this.cache.start),
-                                oldEnd = new date.Local(this.cache.end);
+                            var oldStart = moment(this.cache.start),
+                                oldEnd = moment(this.cache.end);
 
                             // save to cache
-                            this.cache.start = date.Local.utc(model.get('start_date'));
-                            this.cache.end = date.Local.utc(model.get('end_date'));
+                            this.cache.start = moment.utc(model.get('start_date')).local(true).valueOf();
+                            this.cache.end = moment.utc(model.get('end_date')).local(true).valueOf();
 
                             // handle time
-                            var startDate = new date.Local(this.cache.start).setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0),
-                                endDate = new date.Local(this.cache.end).setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0).add(-date.DAY);
-
-                            // save
-                            model.set('start_date', startDate.getTime(), { validate: true });
-                            model.set('end_date', endDate.getTime(), { validate: true });
+                            startDate = moment(this.cache.start).startOf('day').hours(oldStart.hours()).minutes(oldStart.minutes()).valueOf();
+                            endDate = moment(this.cache.end).startOf('day').hours(oldEnd.hours()).minutes(oldEnd.minutes()).subtract(1, 'day').valueOf();
                         }
+                        // save
+                        model.set('start_date', startDate, { validate: true });
+                        model.set('end_date', endDate, { validate: true });
                     }
                 });
             },
@@ -133,11 +128,12 @@ define('io.ox/calendar/model', [
             getDate: function (attr) {
                 var time = this.get.apply(this, arguments);
                 if (this.get('full_time')) {
-                    time = date.Local.utc(time);
+                    time = moment.utc(time).local(true);
                     // fake end date for datepicker
                     if (attr === 'end_date') {
-                        time = new date.Local(time).add(-date.DAY).getTime();
+                        time.subtract(1, 'day');
                     }
+                    time = time.valueOf();
                 }
                 return time;
             },
@@ -145,11 +141,12 @@ define('io.ox/calendar/model', [
             // special set function for datepicker
             setDate: function (attr, time) {
                 if (this.get('full_time')) {
+                    time = moment(time);
                     // fix fake end date for model
                     if (attr === 'end_date') {
-                        time = new date.Local(time).add(date.DAY).getTime();
+                        time.add(1, 'day');
                     }
-                    arguments[1] = date.Local.localTime(time);
+                    arguments[1] = time.utc(true).valueOf();
                 }
                 return this.set.apply(this, arguments);
             },
