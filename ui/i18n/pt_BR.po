@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-23 21:24-0300\n"
-"Last-Translator: Bianca Oliveira <bianca@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2015-03-09 12:48+0100\n"
+"Last-Translator: \n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -6979,7 +6979,7 @@ msgid ""
 msgstr ""
 "O compromisso é repetido <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">a cada <span class=\"number-control\">2</span> "
-"semanas</a> na <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days"
+"semanas</a> na <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
 "\">segunda-feira</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:504
