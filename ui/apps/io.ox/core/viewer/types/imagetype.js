@@ -33,14 +33,10 @@ define('io.ox/core/viewer/types/imagetype', [
          * @param {Number} modelIndex
          *  Index of this model object in the collection.
          *
-         * @param {Boolean} isDuplicate
-         *  If this slide should be a duplicate for the swiper plugin.
-         *  Duplicate slides should be always loaded.
-         *
          * @returns {jQuery} slide
          *  the slide jQuery element.
          */
-        createSlide: function (model, modelIndex, isDuplicate) {
+        createSlide: function (model, modelIndex) {
             //console.warn('ImageType.createSlide()');
             if (!model) { return; }
             var slide = this.createSlideNode(),
@@ -51,9 +47,6 @@ define('io.ox/core/viewer/types/imagetype', [
             if (previewUrl) {
                 previewUrl = _.unescapeHTML(previewUrl);
                 image.attr({ 'data-src': previewUrl, alt: filename });
-                if (isDuplicate) {
-                    image.attr({ 'src': previewUrl }).show();
-                }
                 slide.append(image, this.createCaption(modelIndex, slidesCount));
             }
             return slide;
@@ -70,7 +63,7 @@ define('io.ox/core/viewer/types/imagetype', [
             //console.warn('ImageType.loadSlide()', slideElement.attr('class'));
             if (slideElement.length === 0) { return; }
             var imageToLoad = slideElement.find('img');
-            if (imageToLoad.length === 0 || slideElement.hasClass('swiper-slide-duplicate') || slideElement.hasClass('cached')) { return;}
+            if (imageToLoad.length === 0 || slideElement.hasClass('cached')) { return;}
             slideElement.busy();
             imageToLoad[0].onload = function () {
                 slideElement.idle();

@@ -101,11 +101,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 nextSlide.hide();
             }
 
-            // create slides from file collection and append them to the carousel
-            this.collection.each(function (model, modelIndex) {
-                carouselInner.append(self.createSlide(model, modelIndex));
-            });
-
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button', 'aria-label': gt('Previous') });
             nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button', 'aria-label': gt('Next') });
@@ -121,8 +116,9 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
 
-            // deferred render actions
-            _.defer(function () {
+            // create slides from file collection and append them to the carousel
+            this.createSlides(this.collection, carouselInner)
+            .done(function () {
                 // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
 
@@ -134,10 +130,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
                     TypesRegistry.getModelType(slideModel)
                     .done(function (modelType) {
-                        // when the duplicate slide is copied, the original slide consist only of an empty <div> element.
-                        // so we need to add the slide content before loading the slide.
-                        slideNode.empty().append(modelType.createSlide(slideModel, slideIndex, true).children());
-                        // now load the slide.
                         modelType.loadSlide(slideModel, slideNode);
                     })
                     .fail(function () {
@@ -151,36 +143,59 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.preloadSlide(startIndex, 'right', self.preloadOffset);
                 // focus first active slide initially
                 self.focusActiveSlide();
+
+            }.bind(this))
+
+            .fail(function () {
+                console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
             });
+
             return this;
         },
 
         /**
-         * Create a Swiper slide element.
-         * The root node is returned immediately, but the content
-         * is applied asynchronously.
+         * Creates the Swiper slide elements.
+         * For each Viewer model in the Viewer collection the model type
+         * is required asynchronously and the slide content is created.
+         * After all slides where successfully created, they are appended
+         * to the given DOM node.
          *
-         * @param {Object} model
-         *  the Viewer model.
-         * @param {Number} modelIndex
-         *  the model index in the Viewer Collection.
+         * @param {Object} collection
+         *  the Viewer collection to create the slides from.
          *
-         * @returns {jQuery}
+         * @param {jQuery} node
+         *  the jQuery element to attach the created slides to.
+         *
+         * @returns {jQuery.Promise}
+         *  a Promise of a Deferred object that will be resolved with an array
+         *  of jQuery slide elements; or rejected with an array of error strings,
+         *  in case of an error.
          */
-        createSlide: function (model, modelIndex) {
-            if (!model) { return; }
+        createSlides: function (collection, node) {
+            var promises = [];
 
-            var slide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">');
+            collection.each(function (model, modelIndex) {
+                var def = new $.Deferred();
 
-            TypesRegistry.getModelType(model)
-            .done(function (modelType) {
-                slide.append(modelType.createSlide(model, modelIndex).children());
-            })
-            .fail(function () {
-                console.error('Displayerview.createSlide() - cannot require a model type for', model.get('filename'));
+                TypesRegistry.getModelType(model)
+                .then(function (modelType) {
+                    return def.resolve(modelType.createSlide(model, modelIndex));
+                },
+                function () {
+                    return def.reject('Cannot require a model type for', model.get('filename'));
+                });
+
+                promises.push(def);
             });
 
-            return slide;
+            return $.when.apply(null, promises)
+            .done(function () {
+                // in case of 'done' the arguments array contains the created slide nodes
+                for (var i = 0; i < arguments.length; i++) {
+                    node.append(arguments[i]);
+                }
+            });
+
         },
 
         /**
