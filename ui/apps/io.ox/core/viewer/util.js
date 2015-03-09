@@ -185,6 +185,20 @@ define('io.ox/core/viewer/util', [
     Util.MAX_CONTAINER_HEIGHT = _.browser.IE ? 21.4e6 : Util.MAX_NODE_SIZE;
 
     /**
+     * Maps the file categories of the OX Viewer model to Font Awesome icon classes.
+     */
+    Util.CATEGORY_ICON_MAP = {
+        'OFFICE': 'fa-file-text-o',
+        'OFFICE_TEXT': 'fa-file-word-o',
+        'OFFICE_PRESENTATION': 'fa-file-powerpoint-o',
+        'OFFICE_SPREADSHEET': 'fa-file-excel-o',
+        'IMAGE': 'fa-file-image-o',
+        'VIDEO': 'fa-file-video-o',
+        'AUDIO': 'fa-file-audio-o',
+        'PDF': 'fa-file-pdf-o'
+    };
+
+    /**
      * Returns a date formatted as string
      *
      * @param {Number} timestamp
@@ -377,6 +391,23 @@ define('io.ox/core/viewer/util', [
         );
 
         return panel;
+    };
+
+    /**
+     * Returns the Font Awesome icon class for the file category of the
+     * given OX Viewer model.
+     *
+     * @param {Object} model
+     *  The OX Viewer model.
+     *
+     * @returns {String}
+     *  The Font Awesome icon class String.
+     */
+    Util.getIconClass = function (model) {
+        var fileCategory = model && model.get('fileCategory'),
+            iconClass = Util.CATEGORY_ICON_MAP[fileCategory] || 'fa-file-o';
+
+        return iconClass;
     };
 
     /**

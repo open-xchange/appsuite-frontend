@@ -164,9 +164,11 @@ define('io.ox/core/viewer/views/mainview', [
             //console.warn('MainView.refreshViewSizes()');
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
-                activeSlideIndex = displayerEl.find('.swiper-slide-active').index();
+                activeSlide = displayerEl.find('.swiper-slide-active'),
+                activeSlideIndex = activeSlide.index();
+
             displayerEl.css({ width: window.innerWidth - rightOffset });
-            displayerEl.find('.swiper-slide img').css({ maxWidth: window.innerWidth - rightOffset });
+            activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
             this.displayerView.swiper.onResize();
             // workaround for a possible bug from swiper plugin that happens sporadically:
             // After an on resize call, the plugin 'resets' the active slide to the beginning.

@@ -10,8 +10,9 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/basetype',  [
+    'io.ox/core/viewer/util',
     'gettext!io.ox/core'
-], function (gt) {
+], function (Util, gt) {
 
     /**
      * Base object for Viewer file types.
@@ -43,6 +44,21 @@ define('io.ox/core/viewer/types/basetype',  [
          */
         createSlideNode: function () {
             return $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">');
+        },
+
+        /**
+         * Creates a file notification node with file name, icon and the notification text.
+         */
+        createNotificationNode: function (model, notification) {
+            var node = $('<div class="viewer-displayer-notification">'),
+                filename = model && model.get('filename') || '';
+
+            node.append(
+                $('<i class="fa">').addClass(Util.getIconClass(model)),
+                $('<p>').text(filename),
+                $('<p class="apology">').text(notification || '')
+            );
+            return node;
         },
 
         /**

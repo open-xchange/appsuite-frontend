@@ -40,7 +40,7 @@ define('io.ox/core/viewer/types/imagetype', [
             //console.warn('ImageType.createSlide()');
             if (!model) { return; }
             var slide = this.createSlideNode(),
-                image = $('<img class="viewer-displayer-image">'),
+                image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
                 previewUrl = model.getPreviewUrl(),
                 filename = model.get('filename') || '',
                 slidesCount = model.collection.length;
@@ -62,7 +62,8 @@ define('io.ox/core/viewer/types/imagetype', [
         loadSlide: function (model, slideElement) {
             //console.warn('ImageType.loadSlide()', slideElement.attr('class'));
             if (slideElement.length === 0) { return; }
-            var imageToLoad = slideElement.find('img');
+            var self = this,
+                imageToLoad = slideElement.find('img');
             if (imageToLoad.length === 0 || slideElement.hasClass('cached')) { return;}
             slideElement.busy();
             imageToLoad[0].onload = function () {
@@ -70,8 +71,7 @@ define('io.ox/core/viewer/types/imagetype', [
                 imageToLoad.show();
             };
             imageToLoad[0].onerror = function () {
-                var notification = $('<p class="viewer-displayer-notification">')
-                    .text(gt('Sorry, there is no preview available for this file.'));
+                var notification = self.createNotificationNode(model, gt('Sorry, there is no preview available for this image.'));
                 slideElement.idle().append(notification);
             };
             imageToLoad.attr('src', imageToLoad.attr('data-src'));

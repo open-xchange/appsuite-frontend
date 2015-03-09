@@ -43,14 +43,11 @@ define('io.ox/core/viewer/types/defaulttype',  [
         createSlide: function (model, modelIndex) {
             //console.warn('DefaultType.createSlide()', model, modelIndex, count);
             var slide = this.createSlideNode(),
-                slideContent = $('<div class="viewer-displayer-notification">'),
-                fileIcon = $('<i class="fa fa-file-o">'),
-                filename = model && model.get('filename') || '',
-                filenameEl = $('<p>').text(filename),
-                apology = $('<p class="apology">').text(gt('Sorry, there is no preview available for this file.')),
-                slidesCount = model.collection.length;
-            slideContent.append(fileIcon, filenameEl, apology);
-            slide.append(slideContent, this.createCaption(modelIndex, slidesCount));
+                slideContent = this.createNotificationNode(model, gt('Sorry, there is no preview available for this file.')),
+                slidesCount = model.collection.length,
+                slideCaption = this.createCaption(modelIndex, slidesCount);
+
+            slide.append(slideContent, slideCaption);
             return slide;
         },
 

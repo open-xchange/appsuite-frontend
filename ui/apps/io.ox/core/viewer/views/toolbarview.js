@@ -28,18 +28,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     'use strict';
 
-    // a map of file categories to Font Awesome icon classes
-    var CATEGORY_ICON_MAP = {
-            'OFFICE': 'fa-file-text-o',
-            'OFFICE_TEXT': 'fa-file-word-o',
-            'OFFICE_PRESENTATION': 'fa-file-powerpoint-o',
-            'OFFICE_SPREADSHEET': 'fa-file-excel-o',
-            'IMAGE': 'fa-file-image-o',
-            'VIDEO': 'fa-file-video-o',
-            'AUDIO': 'fa-file-audio-o',
-            'PDF': 'fa-file-pdf-o'
-        },
-        TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
+    var TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
         TOOLBAR_LINKS_DROPDOWN_ID = TOOLBAR_LINKS_ID + '/dropdown',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
@@ -66,8 +55,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
                     var fileSource = baton.model.get('source'),
-                        iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
-                        fileIcon = $('<i class="fa">').addClass(iconClass),
+                        fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
                         .attr('title', gt('File name'))

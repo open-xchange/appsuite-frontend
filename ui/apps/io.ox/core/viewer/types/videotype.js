@@ -49,7 +49,7 @@ define('io.ox/core/viewer/types/videotype', [
                 contentType = model && model.get('contentType') || '';
 
             if (previewUrl) {
-                video = $('<video controls="true" class="viewer-displayer-video player-hidden">').append(
+                video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">').append(
                     $('<source>').attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType }),
                     $('<div>').text(gt('Your browser does not support HTML5 video.'))
                 );
@@ -75,7 +75,8 @@ define('io.ox/core/viewer/types/videotype', [
             }
 
             var videoToLoad = slideElement.find('video'),
-                videoSource = videoToLoad.find('source');
+                videoSource = videoToLoad.find('source'),
+                self = this;
 
             if ((videoToLoad.length === 0) || (videoSource.length === 0) || (videoSource.attr('src'))) { return; }
 
@@ -89,15 +90,8 @@ define('io.ox/core/viewer/types/videotype', [
             // register error handler
             videoSource[0].onerror = function (e) {
                 console.warn('VideoType.loadSlide() - error loading:', model.get('filename'), e.target.src);
-                var filename = model && model.get('filename') || '',
-                    slideContent;
-
-                slideContent = $('<div class="viewer-displayer-notification">').append(
-                    $('<i class="fa fa-file-video-o">'),
-                    $('<p>').text(filename),
-                    $('<p class="apology">').text(gt('Sorry, the video could not be played.'))
-                );
-                slideElement.idle().append(slideContent);
+                var notification = self.createNotificationNode(model, gt('Sorry, the video could not be played.'));
+                slideElement.idle().append(notification);
             };
 
             slideElement.busy();

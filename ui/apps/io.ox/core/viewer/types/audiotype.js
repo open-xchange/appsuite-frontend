@@ -48,7 +48,7 @@ define('io.ox/core/viewer/types/audiotype',  [
                 contentType = model && model.get('contentType') || '';
 
             if (previewUrl) {
-                audio = $('<audio controls="true" class="viewer-displayer-audio player-hidden">').append(
+                audio = $('<audio controls="true" class="viewer-displayer-item viewer-displayer-audio player-hidden">').append(
                     $('<source>').attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType }),
                     $('<div>').text(gt('Your browser does not support HTML5 audio.'))
                 );
@@ -74,7 +74,8 @@ define('io.ox/core/viewer/types/audiotype',  [
             }
 
             var audioToLoad = slideElement.find('audio'),
-                audioSource = audioToLoad.find('source');
+                audioSource = audioToLoad.find('source'),
+                self = this;
 
             if ((audioToLoad.length === 0) || (audioSource.length === 0) || (audioSource.attr('src'))) { return; }
 
@@ -88,15 +89,8 @@ define('io.ox/core/viewer/types/audiotype',  [
             // register error handler
             audioSource[0].onerror = function (e) {
                 console.warn('AudioType.loadSlide() - error loading:', model.get('filename'), e.target.src);
-                var filename = model && model.get('filename') || '',
-                    slideContent;
-
-                slideContent = $('<div class="viewer-displayer-notification">').append(
-                    $('<i class="fa fa-file-audio-o">'),
-                    $('<p>').text(filename),
-                    $('<p class="apology">').text(gt('Sorry, the audio file could not be played.'))
-                );
-                slideElement.idle().append(slideContent);
+                var notification = self.createNotificationNode(model, gt('Sorry, the audio file could not be played.'));
+                slideElement.idle().append(notification);
             };
 
             slideElement.busy();
