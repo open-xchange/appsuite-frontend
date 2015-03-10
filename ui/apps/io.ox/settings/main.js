@@ -152,23 +152,34 @@ define('io.ox/settings/main', [
                     'redirect': 'io.ox/autoforward',
                     'vacation': 'io.ox/vacation'
                 };
-            mailfilterAPI.getConfig().done(function (config) {
-                _.each(actionPoints, function (val, key) {
-                    if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+
+            function filterAvailableSettings(point) {
+                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                if (expertmode && shown) {
+                    return true;
+                } else if (!point.advancedMode && shown) {
+                    return true;
+                }
+            }
+
+            if (capabilities.has('mailfilter')) {
+                mailfilterAPI.getConfig().done(function (config) {
+                    _.each(actionPoints, function (val, key) {
+                        if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+                    });
+                    appsInitialized.done(function () {
+                        def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
+                    });
+
+                    appsInitialized.fail(def.reject);
                 });
+            } else {
                 appsInitialized.done(function () {
-                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
-                        var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
-                        if (expertmode && shown) {
-                            return true;
-                        } else if (!point.advancedMode && shown) {
-                            return true;
-                        }
-                    }));
+                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
                 });
 
                 appsInitialized.fail(def.reject);
-            });
+            }
 
             return def;
         };
