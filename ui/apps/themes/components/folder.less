@@ -14,13 +14,15 @@
  */
 
 .folder-tree {
+
     padding: 7px 0;
     overflow: auto;
     background-color: @foldertree-sidepanel-background;
     .user-select(none);
 
     // font weights
-    @normal : 300;
+    @fontSize: 13px;
+    @normal : 400;
     @bold   : 700;
 
     // custom mobile values
@@ -106,6 +108,7 @@
         }
 
         .folder-label {
+            font-size: @fontSize;
             &:first-child { // needed when arrows are hidden
                 margin-left: 14px;
             }
@@ -234,9 +237,9 @@
 
     // shorten folder title when selected so that folder options are visible
     .selected > .folder-node > .folder-label {
+        font-weight: @bold;
         max-width: 120px;
         vertical-align: top;
-
         div {
             .ellipsis();
         }
