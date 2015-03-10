@@ -55,7 +55,8 @@ define('io.ox/core/viewer/types/documenttype', [
          */
         loadSlide: function (model, slideElement) {
             // disable loading document temporarily
-            if (1) { return; }
+            // ignore slide duplicates and already loaded documents
+            if (slideElement.hasClass('swiper-slide-duplicate') || slideElement.find('.document-page').length > 0) { return; }
             var // the file descriptor object
                 file = model.get('origData'),
                 // current Appsuite App
@@ -70,18 +71,7 @@ define('io.ox/core/viewer/types/documenttype', [
                 }),
                 // fire up PDF.JS with the document URL and get its loading promise
                 pdfDocumentPromise = new PDFDocument(documentUrl).getLoadPromise(),
-                // begin stateful image conversion for the document on the server
-                documentImagesPromise = sendFileRequest(IO.CONVERTER_MODULE_NAME, {
-                    action: 'convertdocument',
-                    convert_action: 'beginconvert',
-                    convert_format: 'image'
-                    // convert_format: 'html'
-                }),
-                pageContainer = slideElement.find('.document-container'),
-                // all pending server requests currently running
-                pendingRequests = [],
-                // prevent further server requests after the quit handlers have been called
-                requestsLocked = false;
+                pageContainer = slideElement.find('.document-container');
 
             /**
              * Creates and returns the URL of a server request.
@@ -166,69 +156,47 @@ define('io.ox/core/viewer/types/documenttype', [
             }
 
             /**
-             * Sends a request to the server and returns the Promise of a Deferred
-             * object waiting for the response. The unique identifier of this
-             * application, and the parameters of the file currently opened by the
-             * application will be added to the request parameters automatically.
-             * See method IO.sendRequest() for further details.
+             * Calculates document page numbers to render depending on visilbility of the pages
+             * in the viewport (window).
              *
-             * @param {String} module
-             *  The name of the server module that will receive the request.
+             * @param slideElement
+             *  the current slide jQuery element
              *
-             * @param {Object} [params]
-             *  Parameters that will be inserted into the request URL (method GET),
-             *  or into the request body (method POST).
-             *
-             * @param {Object} [options]
-             *  Optional parameters. See method IO.sendRequest() for details.
-             *
-             * @returns {jQuery.Promise}
-             *  The Promise of the request. Will be rejected immediately, if this
-             *  application is not connected to a document file. See method
-             *  IO.sendRequest() for details.
+             * @returns {Array} pagesToRender
+             *  an array of page numbers which should be rendered.
              */
-            function sendFileRequest(module, params, options) {
-
-                // reject immediately if no file is present
-                if (!file) {
-                    return $.Deferred().reject();
-                }
-
-                // extend parameters with file settings
-                params = _.extend({}, params, getFileParameters());
-
-                // send the request
-                return (function () {
-                    var // the AJAX request, as (abortable) jQuery promise
-                        request = null;
-
-                    // do not allow to send server requests after the quit handlers have been called
-                    if (requestsLocked) {
-                        return $.Deferred().reject('quit');
+            function getPagesToRender(pageContainer) {
+                //console.warn('DocumentType.getPagesToRender()', pageContainer);
+                var pages = pageContainer.find('.document-page'),
+                    pagesToRender = [];
+                // Whether the page element is visible in the viewport, wholly or partially.
+                function isPageVisible(pageElement) {
+                    var pageRect = pageElement.getBoundingClientRect();
+                    function isInWindow(verticalPosition) {
+                        return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
                     }
-
-                    // add the application UID to the request parameters
-                    params = _.extend({}, params, { uid: currentAppUniqueID });
-
-                    // send the request
-                    request = IO.sendRequest(module, params, options);
-
-                    // store the request internally for automatic abort on application quit
-                    pendingRequests.push(request);
-                    request.always(function () {
-                        pendingRequests = _.without(pendingRequests, request);
-                    });
-
-                    return request;
-                })();
+                    return isInWindow(pageRect.top) ||
+                        isInWindow(pageRect.bottom) ||
+                        (pageRect.top < 0 && pageRect.bottom > window.innerHeight);
+                }
+                // return the visible pages
+                _.each(pages, function (element, index) {
+                    if (!isPageVisible(element)) { return; }
+                    pagesToRender.push(index + 1);
+                });
+                return pagesToRender;
             }
 
             // wait for both promises
-            $.when(pdfDocumentPromise, documentImagesPromise).then(function (pageCount) {
+            $.when(pdfDocumentPromise).then(function (pageCount) {
                 //console.warn('DocumentType promises finished.');
                 _.times(pageCount, function (number) {
                     var page = $('<div class="document-page">').text(number + 1);
                     pageContainer.append(page);
+                });
+                // scroll test
+                slideElement.scroll(function () {
+                    console.warn('DocumentType.pagesToRender()', getPagesToRender(pageContainer));
                 });
             });
         }
