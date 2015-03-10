@@ -74,7 +74,7 @@ define('io.ox/calendar/week/perspective', [
                         // view should change week to the start of this appointment(used by deeplinks)
                         // one time only
                         self.setNewStart = false;
-                        self.app.refDate.setTime(data.start_date);
+                        self.app.refDate = moment(data.start_date);
                         if (self.view) {
                             //view is rendered already
                             self.view.setStartDate(data.start_date);

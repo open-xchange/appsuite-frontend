@@ -581,7 +581,7 @@ define('io.ox/calendar/main', [
         }));
 
         app.settings = settings;
-        app.refDate = new date.Local();
+        app.refDate = moment();
 
         win.addClass('io-ox-calendar-main');
 
