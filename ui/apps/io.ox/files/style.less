@@ -38,8 +38,8 @@
         padding: 0;
         white-space: nowrap;
         &.column-1 { width: 80%; padding-right: 10px; }
-        &.column-2 { width: 150px; padding-right: 10px; text-align: right; }
-        &.column-3 { width: 150px; text-align: right; }
+        &.column-2 { width: 120px; padding-right: 10px; text-align: right; }
+        &.column-3 { width: 120px; text-align: right; }
     }
 
     .list-item {
@@ -52,6 +52,10 @@
     &.complete > .list-item:last-child {
         margin-bottom: 0;
         border-bottom: 0;
+    }
+
+    &.visible-selection.has-focus .list-item.selected i {
+        color: rgba(255, 255, 255, 0.50);
     }
 }
 

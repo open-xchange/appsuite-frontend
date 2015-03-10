@@ -228,6 +228,18 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Default application properties
+         */
+        'props': function (app) {
+            // introduce shared properties
+            app.props = new Backbone.Model({
+                'layout': app.settings.get('layout', 'list'),
+                'folderEditMode': false,
+                'showCheckboxes': false
+            });
+        },
+
+        /*
          * Setup list view
          */
         'list-view': function (app) {
@@ -272,6 +284,63 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Get folder-based view options
+         */
+        'get-view-options': function (app) {
+            app.getViewOptions = function (folder) {
+                var options = app.settings.get(['viewOptions', folder]);
+                return _.extend({ sort: 702, order: 'asc' }, options);
+            };
+        },
+
+        /*
+         * Store view options
+         */
+        'store-view-options': function (app) {
+            app.props.on('change', _.debounce(function () {
+                var folder = app.folder.get(), data = app.props.toJSON();
+                app.settings
+                    .set(['viewOptions', folder], { sort: data.sort, order: data.order })
+                    .set('layout', data.layout);
+                if (_.device('!smartphone')) {
+                    app.settings.set('showCheckboxes', data.checkboxes);
+                }
+                app.settings.save();
+            }, 500));
+        },
+
+        /*
+         * Restore view opt
+         */
+        'restore-view-options': function (app) {
+            var data = app.getViewOptions(app.folder.get());
+            app.props.set(data);
+        },
+
+        /*
+         * Respond to changed sort option
+         */
+        'change:sort': function (app) {
+            app.props.on('change:sort', function (model, value) {
+                // set proper order first
+                var model = app.listView.model;
+                model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                app.props.set('order', model.get('order'));
+                // now change sort columns
+                model.set('sort', value);
+            });
+        },
+
+        /*
+         * Respond to changed order
+         */
+        'change:order': function (app) {
+            app.props.on('change:order', function (model, value) {
+                app.listView.model.set('order', value);
+            });
+        },
+
+        /*
          * Delete file
          * leave detailview if file is deleted
          */
@@ -285,35 +354,10 @@ define('io.ox/files/main', [
         },
 
         /*
-         * Default application properties
-         */
-        'props': function (app) {
-            // introduce shared properties
-            app.props = new Backbone.Model({
-                // mobile only
-                'folderEditMode': false,
-                // mobile only
-                'showCheckboxes': false
-            });
-        },
-
-        /*
          * Set folderview property
          */
         'prop-folderview': function (app) {
             app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
-        },
-
-        /*
-         * Store view options
-         */
-        'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function () {
-                var data = app.props.toJSON();
-                app.settings
-                    .set('view', data.layout)
-                    .save();
-            }, 500));
         },
 
         /*

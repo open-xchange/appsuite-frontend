@@ -15,6 +15,7 @@ define('io.ox/files/listview', [
     'io.ox/core/tk/list',
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
+    'io.ox/files/view-options',
     'less!io.ox/files/style'
 ], function (ListView, ext, extensions) {
 
@@ -67,7 +68,7 @@ define('io.ox/files/listview', [
             index: 200,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-2 gray">');
-                extensions.size.call(column, baton);
+                extensions.smartdate.call(column, baton);
                 this.append(column);
             }
         },
@@ -76,7 +77,7 @@ define('io.ox/files/listview', [
             index: 300,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-3 gray">');
-                extensions.date.call(column, baton);
+                extensions.size.call(column, baton);
                 this.append(column);
             }
         }
