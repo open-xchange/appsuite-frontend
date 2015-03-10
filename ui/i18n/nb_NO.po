@@ -144,7 +144,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:401 module:io.ox/core
+#: apps/io.ox/settings/main.js:403 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -170,7 +170,7 @@ msgstr "%1$s %2$s"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #. %5$s Appointment Organizer
-#: apps/plugins/notifications/calendar/register.js:96
+#: apps/plugins/notifications/calendar/register.js:94
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
@@ -189,7 +189,7 @@ msgstr "%1$s %2$s %3$s %4$s."
 #. %2$s task end date
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js:93 module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js:242
+#: apps/plugins/notifications/tasks/register.js:237
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s."
@@ -555,7 +555,7 @@ msgstr "Fraværende"
 msgid "Accept"
 msgstr "Godta"
 
-#: apps/plugins/notifications/calendar/register.js:111
+#: apps/plugins/notifications/calendar/register.js:109
 #: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "Godta / Avslå"
@@ -565,13 +565,13 @@ msgstr "Godta / Avslå"
 msgid "Accept changes"
 msgstr "Godta endringer"
 
-#: apps/plugins/notifications/calendar/register.js:115
+#: apps/plugins/notifications/calendar/register.js:113
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:265
+#: apps/plugins/notifications/tasks/register.js:260
 msgid "Accept invitation"
 msgstr "Aksepter invitasjon"
 
-#: apps/plugins/notifications/tasks/register.js:261
+#: apps/plugins/notifications/tasks/register.js:256
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Godta/Avslå"
@@ -867,7 +867,7 @@ msgstr "Administrator"
 msgid "Advanced Facets"
 msgstr "Avanserte fasetter"
 
-#: apps/io.ox/settings/main.js:490 module:io.ox/core
+#: apps/io.ox/settings/main.js:492 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Avanserte innstillinger"
 
@@ -1007,7 +1007,7 @@ msgstr "Avtale"
 msgid "Appointment Details"
 msgstr "Avtaledetaljer"
 
-#: apps/plugins/notifications/calendar/register.js:229
+#: apps/plugins/notifications/calendar/register.js:224
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Avtaleinvitasjoner"
@@ -1017,7 +1017,7 @@ msgstr "Avtaleinvitasjoner"
 msgid "Appointment list"
 msgstr "Avtaleliste"
 
-#: apps/plugins/notifications/calendar/register.js:171
+#: apps/plugins/notifications/calendar/register.js:168
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Avtalepåminnelser"
@@ -1207,7 +1207,7 @@ msgid "Back to appointment"
 msgstr "Tilbake til avtalen"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:385
+#: apps/io.ox/settings/main.js:387
 msgid "Basic settings"
 msgstr "Grunnleggende innstillinger"
 
@@ -2470,7 +2470,7 @@ msgstr "Dokumenter"
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
 #: apps/io.ox/tasks/util.js:250
-#: apps/plugins/notifications/tasks/register.js:62
+#: apps/plugins/notifications/tasks/register.js:60
 #: module:plugins/notifications
 msgid "Done"
 msgstr "Ferdig"
@@ -3507,31 +3507,31 @@ msgstr "Skjul"
 msgid "Hide advanced filters"
 msgstr "Skjul avanserte filtre"
 
-#: apps/plugins/notifications/calendar/register.js:236
+#: apps/plugins/notifications/calendar/register.js:231
 #: module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "Skjul alle avtaleinvitasjoner."
 
-#: apps/plugins/notifications/calendar/register.js:178
+#: apps/plugins/notifications/calendar/register.js:175
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Skjul alle avtalepåminnelser."
 
-#: apps/plugins/notifications/mail/register.js:90 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:86 module:plugins/notifications
 msgid "Hide all notifications for new mails."
 msgstr "Skjul varslinger for uleste eposter."
 
-#: apps/plugins/notifications/tasks/register.js:103
+#: apps/plugins/notifications/tasks/register.js:99
 #: module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr "Skjul varslinger for oppgaver som har forfalt."
 
-#: apps/plugins/notifications/tasks/register.js:297
+#: apps/plugins/notifications/tasks/register.js:291
 #: module:plugins/notifications
 msgid "Hide all task invitations."
 msgstr "Skjul alle oppgaveinvitasjoner."
 
-#: apps/plugins/notifications/tasks/register.js:179
+#: apps/plugins/notifications/tasks/register.js:174
 #: module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Skjul alle oppgavepåminnelser."
@@ -3556,6 +3556,12 @@ msgstr "Skjul innholdet i forespørselen"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:82 module:io.ox/core
 msgid "Hide stack trace"
 msgstr "Skjul stakksporing"
+
+#: apps/io.ox/core/notifications/subview.js:53 module:io.ox/core
+#, fuzzy
+#| msgid "Click to close this notification"
+msgid "Hide this notification"
+msgstr "Klikk for å lukke denne meldingen"
 
 #: apps/io.ox/mail/compose/view.js:132 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
@@ -4079,7 +4085,7 @@ msgid "Mail and Messaging"
 msgstr "E-post og meldinger"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:394
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "E-post og sosiale kontoer"
@@ -4090,7 +4096,7 @@ msgstr "Epostkvote, antall eposter"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s %2$s"
 msgstr "Epost fra %1$s %2$s"
@@ -4474,11 +4480,11 @@ msgstr "Ny mappe"
 msgid "New Mail"
 msgstr "Ny e-post"
 
-#: apps/plugins/notifications/mail/register.js:82 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:78 module:plugins/notifications
 msgid "New Mails"
 msgstr "Ny e-post"
 
-#: apps/io.ox/core/notifications/subview.js:101 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:121 module:io.ox/core
 #, fuzzy
 #| msgid "Notifications"
 msgid "New Notifications"
@@ -4674,8 +4680,8 @@ msgstr "Ingen trege forespørsler"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:388 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
-#: apps/plugins/notifications/mail/register.js:44
+#: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:42
 #, c-format
 msgid "No subject"
 msgstr "Ikke noe emne"
@@ -4997,7 +5003,7 @@ msgstr "Utgående server (SMTP)"
 msgid "Overdue"
 msgstr "Forfalt"
 
-#: apps/plugins/notifications/tasks/register.js:96
+#: apps/plugins/notifications/tasks/register.js:92
 #: module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Forfalte oppgaver"
@@ -5397,10 +5403,10 @@ msgstr "Trykk [enter] for å hoppe til twitter-strømmen."
 
 #: apps/io.ox/core/tk/reminder-util.js:76 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:97
-#: apps/plugins/notifications/calendar/register.js:101
-#: module:plugins/notifications apps/plugins/notifications/mail/register.js:42
-#: apps/plugins/notifications/tasks/register.js:56
-#: apps/plugins/notifications/tasks/register.js:252
+#: apps/plugins/notifications/calendar/register.js:99
+#: module:plugins/notifications apps/plugins/notifications/mail/register.js:40
+#: apps/plugins/notifications/tasks/register.js:54
+#: apps/plugins/notifications/tasks/register.js:247
 msgid "Press [enter] to open"
 msgstr "Trykk [enter] for å åpne"
 
@@ -6195,7 +6201,7 @@ msgid "Set color"
 msgstr "Angi farge"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:403
 msgid "Settings"
 msgstr "Innstillinger"
 
@@ -6263,7 +6269,7 @@ msgstr "Vis"
 msgid "Show advanced filters"
 msgstr "Vis avanserte filtre"
 
-#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 msgid "Show all %1$d messages in inbox"
 msgstr "Vis alle %1$d meldingene i innboksen"
 
@@ -6321,7 +6327,7 @@ msgstr "Vis ikoner"
 msgid "Show images"
 msgstr "Vis bilder"
 
-#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 msgid "Show inbox"
 msgstr "Vis innboksen"
 
@@ -6694,7 +6700,7 @@ msgid_plural "Tasks have been deleted!"
 msgstr[0] "Oppgaven ble slettet!"
 msgstr[1] "Oppgavene ble slettet!"
 
-#: apps/plugins/notifications/tasks/register.js:290
+#: apps/plugins/notifications/tasks/register.js:284
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Oppgaveinvitasjoner"
@@ -6715,7 +6721,7 @@ msgid_plural "Tasks marked as undone"
 msgstr[0] "Merk som ugjort"
 msgstr[1] "Merk som ugjort"
 
-#: apps/plugins/notifications/tasks/register.js:172
+#: apps/plugins/notifications/tasks/register.js:167
 #: module:plugins/notifications
 msgid "Task reminders"
 msgstr "Oppgavepåminnelser"
@@ -8227,44 +8233,44 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Du vil bli logget ut automatisk om %1$d sekund"
 msgstr[1] "Du vil bli logget ut automatisk om %1$d sekunder"
 
-#: apps/plugins/notifications/mail/register.js:89 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:85 module:plugins/notifications
 msgid "You've got a new Mail"
 msgstr ""
 
-#: apps/plugins/notifications/tasks/register.js:296
+#: apps/plugins/notifications/tasks/register.js:290
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task invitations."
 msgid "You've got a task invitation"
 msgstr "Skjul alle oppgaveinvitasjoner."
 
-#: apps/plugins/notifications/tasks/register.js:178
+#: apps/plugins/notifications/tasks/register.js:173
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task reminders."
 msgid "You've got a task reminder"
 msgstr "Skjul alle oppgavepåminnelser."
 
-#: apps/plugins/notifications/calendar/register.js:235
+#: apps/plugins/notifications/calendar/register.js:230
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all appointment invitations."
 msgid "You've got an appointment invitation"
 msgstr "Skjul alle avtaleinvitasjoner."
 
-#: apps/plugins/notifications/calendar/register.js:177
+#: apps/plugins/notifications/calendar/register.js:174
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all appointment reminders."
 msgid "You've got an appointment reminder"
 msgstr "Skjul alle avtalepåminnelser."
 
-#: apps/plugins/notifications/tasks/register.js:102
+#: apps/plugins/notifications/tasks/register.js:98
 #: module:plugins/notifications
 msgid "You've got an overdue task"
 msgstr ""
 
-#: apps/io.ox/core/notifications/subview.js:100 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:120 module:io.ox/core
 #, fuzzy
 #| msgid "No notifications"
 msgid "You've got new Notifications"
@@ -8517,7 +8523,7 @@ msgstr "rediger egne objekter"
 #: apps/io.ox/core/tk/reminder-util.js:84 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:41
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:236
+#: apps/plugins/notifications/tasks/register.js:231
 msgid "end date "
 msgstr "sluttdato"
 
@@ -8635,7 +8641,7 @@ msgstr "har vedlegg"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/plugins/notifications/calendar/register.js:133
+#: apps/plugins/notifications/calendar/register.js:131
 #: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"

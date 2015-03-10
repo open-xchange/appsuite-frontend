@@ -219,7 +219,6 @@ define('io.ox/core/api/reminder', [
 
     //bind some events to keep reminders up to date
     taskAPI.on('delete mark:task:confirmed', function (e, item) {
-        debugger;
         if (e.type === 'mark:task:confirmed') {
             var tasks = [];
             //remove reminders for declined tasks
@@ -234,7 +233,6 @@ define('io.ox/core/api/reminder', [
         }
     });
     calendarAPI.on('delete', function (e, item) {
-        debugger;
         handleDelete(item, 1);
     });
 

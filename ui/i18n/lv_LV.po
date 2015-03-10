@@ -155,7 +155,7 @@ msgstr ""
 "%2$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:401 module:io.ox/core
+#: apps/io.ox/settings/main.js:403 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -181,7 +181,7 @@ msgstr "%1$s %2$s"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #. %5$s Appointment Organizer
-#: apps/plugins/notifications/calendar/register.js:96
+#: apps/plugins/notifications/calendar/register.js:94
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
@@ -200,7 +200,7 @@ msgstr "%1$s %2$s %3$s %4$s."
 #. %2$s task end date
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js:93 module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js:242
+#: apps/plugins/notifications/tasks/register.js:237
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s."
@@ -597,7 +597,7 @@ msgstr "Nav"
 msgid "Accept"
 msgstr "Akceptēt"
 
-#: apps/plugins/notifications/calendar/register.js:111
+#: apps/plugins/notifications/calendar/register.js:109
 #: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "Piekrist / Atteikt"
@@ -607,13 +607,13 @@ msgstr "Piekrist / Atteikt"
 msgid "Accept changes"
 msgstr "Piekrist izmaiņām"
 
-#: apps/plugins/notifications/calendar/register.js:115
+#: apps/plugins/notifications/calendar/register.js:113
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:265
+#: apps/plugins/notifications/tasks/register.js:260
 msgid "Accept invitation"
 msgstr "Akceptēt uzaicinājumu"
 
-#: apps/plugins/notifications/tasks/register.js:261
+#: apps/plugins/notifications/tasks/register.js:256
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Piekrist / Atteikt"
@@ -911,7 +911,7 @@ msgstr "Administrators"
 msgid "Advanced Facets"
 msgstr "Papildu vienumu iestatījumi"
 
-#: apps/io.ox/settings/main.js:490 module:io.ox/core
+#: apps/io.ox/settings/main.js:492 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Papildu iestatījumi"
 
@@ -1058,7 +1058,7 @@ msgstr "Tikšanās"
 msgid "Appointment Details"
 msgstr "Tikšanās detaļas"
 
-#: apps/plugins/notifications/calendar/register.js:229
+#: apps/plugins/notifications/calendar/register.js:224
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Tikšanās uzaicinājumi"
@@ -1068,7 +1068,7 @@ msgstr "Tikšanās uzaicinājumi"
 msgid "Appointment list"
 msgstr "Mītiņu saraksts"
 
-#: apps/plugins/notifications/calendar/register.js:171
+#: apps/plugins/notifications/calendar/register.js:168
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Tikšanās atgādinājumi"
@@ -1272,7 +1272,7 @@ msgid "Back to appointment"
 msgstr "Atpakaļ uz tikšanos"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:385
+#: apps/io.ox/settings/main.js:387
 msgid "Basic settings"
 msgstr "Pamata iestatījumi"
 
@@ -2557,7 +2557,7 @@ msgstr "Dokumenti"
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
 #: apps/io.ox/tasks/util.js:250
-#: apps/plugins/notifications/tasks/register.js:62
+#: apps/plugins/notifications/tasks/register.js:60
 #: module:plugins/notifications
 msgid "Done"
 msgstr "Paveikts"
@@ -3613,31 +3613,31 @@ msgstr "Paslēpt"
 msgid "Hide advanced filters"
 msgstr "Paslēpt paplašinātu fltru"
 
-#: apps/plugins/notifications/calendar/register.js:236
+#: apps/plugins/notifications/calendar/register.js:231
 #: module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "Paslēpt visus tikšanās uzaicinājumus."
 
-#: apps/plugins/notifications/calendar/register.js:178
+#: apps/plugins/notifications/calendar/register.js:175
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Paslēpt visus tikšanās atgādinājumus."
 
-#: apps/plugins/notifications/mail/register.js:90 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:86 module:plugins/notifications
 msgid "Hide all notifications for new mails."
 msgstr "Paslēpt visus jauna pasta paziņojumus."
 
-#: apps/plugins/notifications/tasks/register.js:103
+#: apps/plugins/notifications/tasks/register.js:99
 #: module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr "Paslēpt visu nokavēto uzdevumu paziņojumus."
 
-#: apps/plugins/notifications/tasks/register.js:297
+#: apps/plugins/notifications/tasks/register.js:291
 #: module:plugins/notifications
 msgid "Hide all task invitations."
 msgstr "Paslēpt visus uzdevumu uzaicinājumus."
 
-#: apps/plugins/notifications/tasks/register.js:179
+#: apps/plugins/notifications/tasks/register.js:174
 #: module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Paslēpt visus uzdevumu atgādinājumus."
@@ -3664,6 +3664,12 @@ msgstr "Paslēpt pieprasījuma informāciju"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:82 module:io.ox/core
 msgid "Hide stack trace"
 msgstr "Paslēpt izsekošanu"
+
+#: apps/io.ox/core/notifications/subview.js:53 module:io.ox/core
+#, fuzzy
+#| msgid "Click to close this notification"
+msgid "Hide this notification"
+msgstr "Noklikšķiniet, lai aizvērtu šo paziņojumu"
 
 #: apps/io.ox/mail/compose/view.js:132 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
@@ -4190,7 +4196,7 @@ msgid "Mail and Messaging"
 msgstr "Ziņapmaiņa"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:392
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:394
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "E-pasta un sociālie konti"
@@ -4201,7 +4207,7 @@ msgstr "Vēstuļu skaita kvota"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s %2$s"
 msgstr "Vēstule no %1$s %2$s"
@@ -4589,11 +4595,11 @@ msgstr "Jauna mape"
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
-#: apps/plugins/notifications/mail/register.js:82 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:78 module:plugins/notifications
 msgid "New Mails"
 msgstr "Jaunais pasts"
 
-#: apps/io.ox/core/notifications/subview.js:101 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:121 module:io.ox/core
 #, fuzzy
 #| msgid "Notifications"
 msgid "New Notifications"
@@ -4790,8 +4796,8 @@ msgstr "Nav lēnu pieprasījumu"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:388 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:40 module:plugins/notifications
-#: apps/plugins/notifications/mail/register.js:44
+#: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:42
 #, c-format
 msgid "No subject"
 msgstr "Nav temata"
@@ -5121,7 +5127,7 @@ msgstr "Izejošais serveris (SMTP)"
 msgid "Overdue"
 msgstr "Nokavēts"
 
-#: apps/plugins/notifications/tasks/register.js:96
+#: apps/plugins/notifications/tasks/register.js:92
 #: module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Novēloti uzdevumi"
@@ -5522,10 +5528,10 @@ msgstr "Lai pārslēgtos uz Twitter straumi, piespiediet [enter]."
 
 #: apps/io.ox/core/tk/reminder-util.js:76 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:97
-#: apps/plugins/notifications/calendar/register.js:101
-#: module:plugins/notifications apps/plugins/notifications/mail/register.js:42
-#: apps/plugins/notifications/tasks/register.js:56
-#: apps/plugins/notifications/tasks/register.js:252
+#: apps/plugins/notifications/calendar/register.js:99
+#: module:plugins/notifications apps/plugins/notifications/mail/register.js:40
+#: apps/plugins/notifications/tasks/register.js:54
+#: apps/plugins/notifications/tasks/register.js:247
 msgid "Press [enter] to open"
 msgstr "Lai atvērtu, piespiediet [enter]"
 
@@ -6327,7 +6333,7 @@ msgid "Set color"
 msgstr "Iestatīt krāsu"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:401
+#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:403
 msgid "Settings"
 msgstr "Iestatījumi"
 
@@ -6408,7 +6414,7 @@ msgstr "Rādīt"
 msgid "Show advanced filters"
 msgstr "Rādīt paplašinātu filtru"
 
-#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 msgid "Show all %1$d messages in inbox"
 msgstr "Rādīt visas %1$d vēstules iesūtnē"
 
@@ -6468,7 +6474,7 @@ msgstr "Rādīt ikonas"
 msgid "Show images"
 msgstr "Rādīt attēlus"
 
-#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 msgid "Show inbox"
 msgstr "Rādīt iesūtni"
 
@@ -6845,7 +6851,7 @@ msgstr[0] "Uzdevums ir izdzēsts!"
 msgstr[1] "Uzdevumi ir izdzēsti!"
 msgstr[2] "Uzdevumi ir izdzēsti!"
 
-#: apps/plugins/notifications/tasks/register.js:290
+#: apps/plugins/notifications/tasks/register.js:284
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Uzdevumu uzaicinājumi"
@@ -6868,7 +6874,7 @@ msgstr[0] "Iezīmēt kā nepabeiktu"
 msgstr[1] "Iezīmēt kā nepabeiktu"
 msgstr[2] "Iezīmēt kā nepabeiktu"
 
-#: apps/plugins/notifications/tasks/register.js:172
+#: apps/plugins/notifications/tasks/register.js:167
 #: module:plugins/notifications
 msgid "Task reminders"
 msgstr "Uzdevumu atgādinājumi"
@@ -8397,46 +8403,46 @@ msgstr[0] "Jūs tiksiet automātiski izrakstīts pēc %1$d sekundes"
 msgstr[1] "Jūs tiksiet automātiski izrakstīts pēc %1$d sekundēm"
 msgstr[2] "Jūs tiksiet automātiski izrakstīts pēc %1$d sekundēm"
 
-#: apps/plugins/notifications/mail/register.js:89 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:85 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got a new Mail"
 msgstr "Jauna e-pasta sastādīšana"
 
-#: apps/plugins/notifications/tasks/register.js:296
+#: apps/plugins/notifications/tasks/register.js:290
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task invitations."
 msgid "You've got a task invitation"
 msgstr "Paslēpt visus uzdevumu uzaicinājumus."
 
-#: apps/plugins/notifications/tasks/register.js:178
+#: apps/plugins/notifications/tasks/register.js:173
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task reminders."
 msgid "You've got a task reminder"
 msgstr "Paslēpt visus uzdevumu atgādinājumus."
 
-#: apps/plugins/notifications/calendar/register.js:235
+#: apps/plugins/notifications/calendar/register.js:230
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all appointment invitations."
 msgid "You've got an appointment invitation"
 msgstr "Paslēpt visus tikšanās uzaicinājumus."
 
-#: apps/plugins/notifications/calendar/register.js:177
+#: apps/plugins/notifications/calendar/register.js:174
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all appointment reminders."
 msgid "You've got an appointment reminder"
 msgstr "Paslēpt visus tikšanās atgādinājumus."
 
-#: apps/plugins/notifications/tasks/register.js:102
+#: apps/plugins/notifications/tasks/register.js:98
 #: module:plugins/notifications
 msgid "You've got an overdue task"
 msgstr ""
 
-#: apps/io.ox/core/notifications/subview.js:100 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:120 module:io.ox/core
 #, fuzzy
 #| msgid "No notifications"
 msgid "You've got new Notifications"
@@ -8694,7 +8700,7 @@ msgstr "rediģēt paša objektus"
 #: apps/io.ox/core/tk/reminder-util.js:84 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:41
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:236
+#: apps/plugins/notifications/tasks/register.js:231
 msgid "end date "
 msgstr "beigu datums "
 
@@ -8815,7 +8821,7 @@ msgstr "eksistē pielikumi"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/plugins/notifications/calendar/register.js:133
+#: apps/plugins/notifications/calendar/register.js:131
 #: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"

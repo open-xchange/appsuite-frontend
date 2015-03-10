@@ -29,20 +29,17 @@ define('plugins/notifications/mail/register', [
             require(['io.ox/mail/util'], function (util) {
                 var f = data.from || [['', '']],
                     descriptionId = _.uniqueId('notification-description-');
-                node.append(
-                    $('<li class="item" tabindex="1" role="listitem">')
-                        .attr({
-                            'aria-describedby': descriptionId,
-                            'data-cid': _.cid(data),
-                            //#. %1$s mail sender
-                            //#. %2$s mail subject
-                            //#, c-format
-                            'aria-label': gt('Mail from %1$s %2$s', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
-                        }).append(
-                            $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                            $('<span class="span-to-div title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                            $('<span class="span-to-div subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                        )
+                node.attr({
+                    'aria-describedby': descriptionId,
+                    'data-cid': _.cid(data),
+                    //#. %1$s mail sender
+                    //#. %2$s mail subject
+                    //#, c-format
+                    'aria-label': gt('Mail from %1$s %2$s', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                }).append(
+                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                    $('<span class="span-to-div title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                    $('<span class="span-to-div subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
                 );
             });
         }
@@ -77,7 +74,6 @@ define('plugins/notifications/mail/register', [
 
             var options = {
                     id: 'io.ox/mail',
-                    max: 10,
                     api: api,
                     title: gt('New Mails'),
                     extensionPoints: {

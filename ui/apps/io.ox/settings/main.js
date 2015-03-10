@@ -152,23 +152,34 @@ define('io.ox/settings/main', [
                     'redirect': 'io.ox/autoforward',
                     'vacation': 'io.ox/vacation'
                 };
-            mailfilterAPI.getConfig().done(function (config) {
-                _.each(actionPoints, function (val, key) {
-                    if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+
+            function filterAvailableSettings(point) {
+                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                if (expertmode && shown) {
+                    return true;
+                } else if (!point.advancedMode && shown) {
+                    return true;
+                }
+            }
+
+            if (capabilities.has('mailfilter')) {
+                mailfilterAPI.getConfig().done(function (config) {
+                    _.each(actionPoints, function (val, key) {
+                        if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+                    });
+                    appsInitialized.done(function () {
+                        def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
+                    });
+
+                    appsInitialized.fail(def.reject);
                 });
+            } else {
                 appsInitialized.done(function () {
-                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
-                        var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
-                        if (expertmode && shown) {
-                            return true;
-                        } else if (!point.advancedMode && shown) {
-                            return true;
-                        }
-                    }));
+                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
                 });
 
                 appsInitialized.fail(def.reject);
-            });
+            }
 
             return def;
         };
@@ -206,11 +217,15 @@ define('io.ox/settings/main', [
 
         var listOfVirtualFolders = ['settings/general', 'settings/main', 'settings/external', 'settings/tools'];
 
+        var getter = function () {
+            var def = $.Deferred();
+            def.resolve(pool.getCollection(this.id).models);
+            return def;
+        };
+
         //create virtual folders
         _.each(listOfVirtualFolders, function (val) {
-            api.virtual.add('virtual/' + val, function () {
-                return [];
-            });
+            api.virtual.add('virtual/' + val, getter);
         });
 
         // tree view
@@ -314,9 +329,7 @@ define('io.ox/settings/main', [
                     });
                     _.each(sort, function (val, key) {
                         //create virtual folders
-                        api.virtual.add('virtual/io.ox/' + key, function () {
-                            return [];
-                        });
+                        api.virtual.add('virtual/io.ox/' + key, getter);
 
                         pool.addCollection('virtual/io.ox/' + key, val, { reset: true });
                     });

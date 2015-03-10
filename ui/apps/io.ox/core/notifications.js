@@ -247,15 +247,15 @@ define('io.ox/core/notifications', [
                 self.nodes.main.css('top', newHeight + 'px');
             }
 
-            /*//close if count set to 0
-            self.badgeView.on('lastItemDeleted', function () {
+            //close if count set to 0
+            badgeview.on('auto-close', function () {
                 //if there is an open popup, wait till this is closed
-                if (self.nodes.overlay.children().length > 0) {
-                    self.nodes.overlay.prop('sidepopup').one('close', _.bind(self.slowClose, self));
+                if (self.getStatus() === 'sidepopup') {
+                    self.model.get('sidepopup').one('close', _.bind(self.hide, self));
                 } else {
-                    self.hideList();
+                    self.hide();
                 }
-            });*/
+            });
 
             // load and invoke plugins with delay
             setTimeout(function () {
@@ -270,10 +270,6 @@ define('io.ox/core/notifications', [
                 $.proxy(this.toggle, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
-        /*slowClose: function () {
-            this.nodes.overlay.off('mail-detail-closed');
-            this.hideList();
-        },*/
         delayedUpdate: function () {
             //delays updating by 100ms (prevents updating the view multiple times in a row)
             var self = this;
