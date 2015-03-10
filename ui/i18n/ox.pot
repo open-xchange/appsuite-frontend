@@ -4640,7 +4640,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/main.js:937
 #: apps/io.ox/settings/main.js:115
-#: apps/io.ox/settings/main.js:401
+#: apps/io.ox/settings/main.js:403
 msgid "Settings"
 msgstr ""
 
@@ -5109,7 +5109,7 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:61
 #: module:io.ox/core
-#: apps/io.ox/settings/main.js:385
+#: apps/io.ox/settings/main.js:387
 msgid "Basic settings"
 msgstr ""
 
@@ -8587,7 +8587,7 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/main.js:392
+#: apps/io.ox/settings/main.js:394
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr ""
@@ -8602,12 +8602,12 @@ msgstr ""
 msgid "Delete account"
 msgstr ""
 
-#: apps/io.ox/settings/main.js:401
+#: apps/io.ox/settings/main.js:403
 #: module:io.ox/core
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/settings/main.js:490
+#: apps/io.ox/settings/main.js:492
 #: module:io.ox/core
 msgid "Advanced Settings"
 msgstr ""
