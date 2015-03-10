@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/delete', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
@@ -50,21 +50,20 @@ define('io.ox/files/actions/delete', [
     var single = getMessages('single'),
         multiple = getMessages('multiple');
 
-    function process(list, action) {
+    function process(list) {
         var messages = list.length ? single : multiple;
-        if (action === 'delete') {
-            api.remove(list).done(function () {
-                api.propagate('delete', list[0]);
+        api.remove(list).then(
+            function success() {
                 notifications.yell('success', messages.responseSuccess);
-            }).fail(function (e) {
+            },
+            function fail(e) {
                 if (e && e.code && e.code === 'IFO-0415') {
                     notifications.yell('error', messages.responseFailLocked);
                 } else {
                     notifications.yell('error', messages.responseFail + '\n' + e.error);
                 }
-                api.trigger('refresh:all');
-            });
-        }
+            }
+        );
     }
 
     return function (list) {
@@ -73,7 +72,9 @@ define('io.ox/files/actions/delete', [
             .text(messages.question)
             .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-            .show()
-            .done(process.bind(this, list));
+            .on('delete', function () {
+                process(list);
+            })
+            .show();
     };
 });

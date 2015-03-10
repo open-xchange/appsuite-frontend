@@ -22,6 +22,39 @@
     width: 100%;
 }
 
+// file list view
+
+.file-list-view {
+
+    .list-item.column-layout .list-item-content {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .list-item-column {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0;
+        white-space: nowrap;
+        &.column-1 { width: 80%; padding-right: 10px; }
+        &.column-2 { width: 150px; padding-right: 10px; text-align: right; }
+        &.column-3 { width: 150px; text-align: right; }
+    }
+
+    .list-item {
+
+        .filename {
+            .ellipsis();
+        }
+    }
+
+    &.complete > .list-item:last-child {
+        margin-bottom: 0;
+        border-bottom: 0;
+    }
+}
+
 .files-wrapper {
 
     @innerHeight: 110px;

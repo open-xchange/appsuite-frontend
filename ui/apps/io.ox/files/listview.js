@@ -6,73 +6,105 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/files/listview', [
-    'io.ox/files/common-extensions',
+    'io.ox/core/tk/list',
     'io.ox/core/extensions',
+    'io.ox/files/common-extensions',
     'less!io.ox/files/style'
-], function (extensions, ext) {
+], function (ListView, ext, extensions) {
 
     'use strict';
 
-    ext.point('io.ox/files/listview/item').extend({
-        id: 'default',
-        draw: function (baton) {
-            var isSmall = false;
-            ext.point('io.ox/files/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
+    var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
+
+    //
+    // Extend ListView
+    //
+
+    var FileListView = ListView.extend({
+        ref: LISTVIEW,
+        initialize: function () {
+            ListView.prototype.initialize.apply(this, arguments);
+            this.$el.addClass('file-list-view');
         }
     });
 
-    /* default */
+    //
+    // Extensions
+    //
 
-    ext.point('io.ox/files/listview/item/default').extend({
-        id: 'row1',
-        index: 100,
-        draw: function (baton) {
-            var row = $('<div class="list-item-row">');
-            ext.point('io.ox/files/listview/item/default/row1').invoke('draw', row, baton);
-            this.append(row);
+    ext.point(ITEM).extend(
+        {
+            id: 'default',
+            index: 100,
+            draw: function (baton) {
+                var layout = (baton.app && baton.app.props.get('layout')) || 'list';
+                this.closest('.list-item').toggleClass('column-layout', layout === 'list');
+                ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
+            }
         }
-    });
+    );
 
-    ext.point('io.ox/files/listview/item/default/row1').extend({
-        id: 'locked',
-        index: 100,
-        draw: extensions.locked
-    });
+    // list layout
 
-    ext.point('io.ox/files/listview/item/default/row1').extend({
-        id: 'filename',
-        index: 200,
-        draw: extensions.filename
-    });
-
-    //ROW2
-
-    ext.point('io.ox/files/listview/item/default').extend({
-        id: 'row2',
-        index: 200,
-        draw: function (baton) {
-            var row = $('<div class="list-item-row">');
-            ext.point('io.ox/files/listview/item/default/row2').invoke('draw', row, baton);
-            this.append(row);
+    ext.point(ITEM + '/list').extend(
+        {
+            id: 'col1',
+            index: 100,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-1">');
+                extensions.filename.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
+            id: 'col2',
+            index: 200,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-2 gray">');
+                extensions.size.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
+            id: 'col3',
+            index: 300,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-3 gray">');
+                extensions.date.call(column, baton);
+                this.append(column);
+            }
         }
-    });
+    );
 
-    ext.point('io.ox/files/listview/item/default/row2').extend({
-        id: 'date',
-        index: 100,
-        draw: extensions.compactdate
-    });
+    // icon layout
 
-    ext.point('io.ox/files/listview/item/default/row2').extend({
-        id: 'size',
-        index: 200,
-        draw: extensions.size
-    });
+    ext.point(ITEM + '/icon').extend(
+        {
+            id: 'default',
+            index: 100,
+            draw: function () {
+                this.append('<b>Hallo</b> Welt (icon)');
+            }
+        }
+    );
 
+    // tile layout
+
+    ext.point(ITEM + '/tile').extend(
+        {
+            id: 'default',
+            index: 100,
+            draw: function () {
+                this.append('<b>Hallo</b> Welt (tile)');
+            }
+        }
+    );
+
+    return FileListView;
 });

@@ -19,7 +19,7 @@ define('io.ox/files/toolbar', [
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/core/notifications',
     'gettext!io.ox/files',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/files/actions',
     'less!io.ox/files/style'
 ], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {
@@ -230,21 +230,17 @@ define('io.ox/files/toolbar', [
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                if (!list) return $.when();
-                var self = this,
-                    ids = this.getIds ? this.getIds() : [];
-
-                //get full data, needed for require checks for example
-                return api.getList(list).then(function (data) {
-                    // extract single object if length === 1
-                    data = data.length === 1 ? data[0] : data;
-                    // draw toolbar
-                    var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self, allIds: ids }),
-                        ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    return $.when.apply($, ret.value()).then(function () {
-                        toolbar.initButtons();
-                    });
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
+                // turn cids into proper objects
+                list = api.resolve(list);
+                // extract single object if length === 1
+                list = list.length === 1 ? list[0] : list;
+                // draw toolbar
+                var baton = ext.Baton({ $el: toolbar.$list, data: list, app: this, allIds: [] }),
+                    ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                $.when.apply($, ret.value()).then(function () {
+                    toolbar.initButtons();
                 });
             }, 10);
         }
@@ -255,17 +251,9 @@ define('io.ox/files/toolbar', [
         index: 10200,
         setup: function (app) {
             app.updateToolbar([]);
-            // update toolbar on selection change
-            app.on('selection:change', function () {
-                app.updateToolbar(app.selection.get());
-            });
-            // folder change
-            app.on('folder:change', function () {
-                app.updateToolbar(app.selection.get());
-            });
-            // file change
-            api.on('update', function () {
-                app.updateToolbar(app.selection.get());
+            // update toolbar on selection change as well as any model change
+            app.listView.on('selection:change change', function () {
+                app.updateToolbar(app.listView.selection.get());
             });
         }
     });

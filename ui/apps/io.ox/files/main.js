@@ -20,18 +20,20 @@ define('io.ox/files/main', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/files/listview',
+    'io.ox/core/tk/list-control',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/core/capabilities',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',
     'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
     'io.ox/files/toolbar'
-], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
 
@@ -224,6 +226,51 @@ define('io.ox/files/main', [
             // do once on startup
             update();
         },
+
+        /*
+         * Setup list view
+         */
+        'list-view': function (app) {
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true });
+            app.listView.model.set({ folder: app.folder.get() });
+            // for debugging
+            window.list = app.listView;
+        },
+
+        /*
+         * Setup list view control
+         */
+        'list-view-control': function (app) {
+            app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
+            app.getWindow().nodes.main.append(
+                app.listControl.render().$el
+                    //#. items list (e.g. mails)
+                    .attr('aria-label', gt('Item list'))
+                    .find('.toolbar')
+                    //#. toolbar with 'select all' and 'sort by'
+                    .attr('aria-label', gt('Item list options'))
+                    .end()
+            );
+            // make resizable
+            app.listControl.resizable();
+        },
+
+        /*
+         * Connect collection loader with list view
+         */
+        'connect-loader': function (app) {
+            app.listView.connect(api.collectionLoader);
+        },
+
+        /*
+         * Respond to folder change
+         */
+        'folder:change': function (app) {
+            app.on('folder:change', function (id) {
+                app.listView.model.set('folder', id);
+            });
+        },
+
         /*
          * Delete file
          * leave detailview if file is deleted
@@ -237,38 +284,17 @@ define('io.ox/files/main', [
             });
         },
 
-        'change:perspective': function () {
-             //use last manually choosen perspective (mode) as default
-            win.on('change:perspective', function (e, name, id) {
-                app.props.set('layout', id);
-            });
-        },
-
-        'change:perspective-mobile': function (app) {
-            if (_.device('!smartphone')) return;
-
-            win.on('change:perspective', function (e, name, id) {
-                if (id === 'fluid:list') {
-                    app.pages.getNavbar('fluid').show('.right');
-                } else {
-                    app.pages.getNavbar('fluid').hide('.right');
-                }
-            });
-        },
         /*
          * Default application properties
          */
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': settings.get('view', 'fluid:list'),
                 // mobile only
                 'folderEditMode': false,
                 // mobile only
                 'showCheckboxes': false
             });
-
-            win.trigger('change:perspective', 'fluid', app.props.get('layout'));
         },
 
         /*
@@ -408,18 +434,6 @@ define('io.ox/files/main', [
         }
     });
 
-    //map old settings/links
-    function map(pers) {
-        var mapping;
-        if (/^(icons)$/.test(pers)) {
-            //support old setting value
-            mapping = 'fluid:icon';
-        } else if (!/^(fluid:list|fluid:icon|fluid:tile)$/.test(pers)) {
-            mapping = 'fluid:list';
-        }
-        return mapping || pers;
-    }
-
     // launcher
     app.setLauncher(function (options) {
         // get window
@@ -446,12 +460,7 @@ define('io.ox/files/main', [
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
                 app.mediate();
-
                 win.show();
-            })
-            .done(function () {
-                var pers = map(options.perspective || _.url.hash('perspective') || app.props.get('layout'));
-                ox.ui.Perspective.show(app, pers);
             });
     });
 

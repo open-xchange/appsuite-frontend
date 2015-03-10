@@ -41,7 +41,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 var method = methods[type];
                 collection[method](data, { parse: true });
             });
-            if (type === 'paginate' && data.length === 0) collection.trigger('complete');
+            if (type === 'paginate' && data.length <= 1) collection.trigger('complete');
             collection.trigger(type);
         }
 
@@ -192,7 +192,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var module = this.module,
                 key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
-                virtual = this.virtual(params);
+                virtual = this.virtual(params),
+                useSlice = this.useSlice;
 
             if (rampup) {
                 delete ox.rampup[key];
@@ -204,7 +205,10 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             }
 
             return http.wait().then(function () {
-                return http.GET({ module: module, params: params });
+                return http.GET({ module: module, params: params }).then(function (data) {
+                    // useSlice helps if server request doesn't support "limit"
+                    return useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                });
             });
         },
 

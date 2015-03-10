@@ -16,12 +16,13 @@
 
 define('io.ox/files/api', [
     'io.ox/core/http',
+    'io.ox/core/event',
     'io.ox/core/folder/api',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'settings!io.ox/core',
     'gettext!io.ox/files'
-], function (http, folderAPI, Pool, CollectionLoader, coreConfig, gt) {
+], function (http, Events, folderAPI, Pool, CollectionLoader, coreConfig, gt) {
 
     'use strict';
 
@@ -97,7 +98,12 @@ define('io.ox/files/api', [
     };
 
     var api = {};
+
+    // add event hub
+    Events.extend(api);
+
     api.pool = pool;
+
     api.collectionLoader = new CollectionLoader({
         module: 'files',
         getQueryParams: function (params) {
@@ -105,12 +111,30 @@ define('io.ox/files/api', [
                 action: 'all',
                 folder: params.folder || coreConfig.get('folder/infostore'),
                 columns: allColumns,
-                extendColumns: 'io.ox/files/api/all',
                 sort: '702',
                 order: params.order || 'asc'
             };
-        }
+        },
+        // use client-side limit
+        useSlice: true
     });
+
+    api.collectionLoader.each = function (data) {
+        api.pool.add('detail', data);
+    };
+
+    // resolve a list of composite keys
+    api.resolve = (function () {
+
+        function map(cid) {
+            return pool.get('detail').get(cid);
+        }
+
+        return function (list) {
+            return _(list).chain().map(map).compact().invoke('toJSON').value();
+        };
+
+    }());
 
     api.get = function (options) {
         var model = pool.get('detail').get(_.cid(options));
@@ -266,6 +290,44 @@ define('io.ox/files/api', [
                 return v.version !== version.version;
             }));
         });
+    };
+
+    //
+    // Delete files
+    //
+
+    function prepareRemove(ids) {
+
+        var collection = pool.get('detail');
+
+        api.trigger('beforedelete', ids);
+
+        _(ids).each(function (item) {
+            var cid = _.cid(item), model = collection.get(cid);
+            if (model) collection.remove(model);
+        });
+    }
+
+    api.remove = function (ids) {
+
+        console.log('remove', ids);
+
+        prepareRemove(ids);
+
+        return http.wait(
+            http.PUT({
+                module: 'files',
+                params: { action: 'delete', timestamp: _.then() },
+                data: http.simplify(ids),
+                appendColumns: false
+            })
+            .done(function () {
+                // update folder
+                folderAPI.reload(ids);
+                // trigger delete to update notification area
+                api.trigger('delete');
+            })
+        );
     };
 
     return api;

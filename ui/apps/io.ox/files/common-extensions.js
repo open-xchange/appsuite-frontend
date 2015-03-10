@@ -44,11 +44,8 @@ define('io.ox/files/common-extensions', [
         },
 
         filename: function (baton) {
-            var data = baton.data;
             this.append(
-                $('<div class="filename">').append(
-                    data.filename || data.title
-                )
+                $('<div class="filename">').text(baton.data.filename || baton.data.title)
             );
         },
 
