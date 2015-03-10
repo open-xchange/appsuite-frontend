@@ -302,6 +302,7 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
                 app.toolbar.children().detach();
                 // append new toolbar view and show toolbar container
                 app.toolbar.append(bar.$el).show();
+                app.toolbar.trigger('show');
                 if (!secondary) {
                     bar.render();
                 }
@@ -309,6 +310,7 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
                 // if there is no toolbar defined for the current page, hide the whole container
                 app.toolbar.children().detach();
                 app.toolbar.hide();
+                app.toolbar.trigger('hide');
             }
         };
 

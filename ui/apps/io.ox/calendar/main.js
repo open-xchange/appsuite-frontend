@@ -51,21 +51,21 @@ define('io.ox/calendar/main', [
          */
         'pages-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            var c = app.getWindow().nodes.main,
+            var win = app.getWindow(),
                 navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
                 baton = ext.Baton({ app: app });
 
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
-            // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
@@ -75,7 +75,6 @@ define('io.ox/calendar/main', [
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'month',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
@@ -90,7 +89,6 @@ define('io.ox/calendar/main', [
 
             app.pages.addPage({
                 name: 'week',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
@@ -104,7 +102,6 @@ define('io.ox/calendar/main', [
 
             app.pages.addPage({
                 name: 'list',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
@@ -123,7 +120,6 @@ define('io.ox/calendar/main', [
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'

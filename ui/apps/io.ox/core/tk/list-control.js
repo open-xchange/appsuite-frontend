@@ -106,7 +106,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 topPoint.invoke('draw', top, baton);
             }
 
-            if (bottomPoint.list().length) {
+            if (bottomPoint.list().length && _.device('!smartphone')) {
                 this.$el.addClass('toolbar-bottom-visible');
                 bottomPoint.invoke('draw', bottom, baton);
             }

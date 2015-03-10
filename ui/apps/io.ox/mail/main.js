@@ -58,20 +58,22 @@ define('io.ox/mail/main', [
          */
         'pages-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">');
+            var win = app.getWindow(),
+                navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
+                baton = ext.Baton({ app: app });
+
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
-            var baton = ext.Baton({ app: app });
             // create 4 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
@@ -80,7 +82,6 @@ define('io.ox/mail/main', [
 
             app.pages.addPage({
                 name: 'listView',
-                container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
                     baton: baton,
@@ -100,7 +101,6 @@ define('io.ox/mail/main', [
 
             app.pages.addPage({
                 name: 'threadView',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
@@ -114,7 +114,6 @@ define('io.ox/mail/main', [
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/mail/mobile/navbar'
