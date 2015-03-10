@@ -130,7 +130,6 @@ define('io.ox/core/tk/list', [
         },
 
         onAdd: function (model) {
-            console.log('on add');
             this.idle();
 
             var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
