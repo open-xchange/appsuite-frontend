@@ -36,11 +36,31 @@
 
     .toolbar {
 
+        .user-select(none);
+
         &.top { .top-toolbar(); }
         &.bottom { .bottom-toolbar(); }
 
         .grid-options > a {
-            color: #555;
+            color: #777;
+        }
+
+        .select-all {
+            color: #777;
+            cursor: pointer;
+            white-space: nowrap;
+            i {
+                color: #ccc;
+                margin-right: 14px;
+                width: 16px;
+                font-size: 18px;
+                position: relative;
+                top: 2px;
+            }
+        }
+
+        .dropdown-menu {
+            font-size: 14px;
         }
     }
 
@@ -277,6 +297,6 @@
 
     .list-item {
         .bold { font-weight: bold; }
-        .gray { opacity: 0.70; } // 0.70 has enough color contrast
+        .gray { opacity: 0.50; } // 0.50 has enough color contrast
     }
 }
