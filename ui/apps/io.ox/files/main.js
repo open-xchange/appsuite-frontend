@@ -279,6 +279,8 @@ define('io.ox/files/main', [
          */
         'folder:change': function (app) {
             app.on('folder:change', function (id) {
+                var options = app.getViewOptions(id);
+                app.props.set(options);
                 app.listView.model.set('folder', id);
             });
         },
