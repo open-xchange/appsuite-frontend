@@ -39,6 +39,20 @@ define('io.ox/mail/actions/delete', [
                 list.length
             );
 
+            function remove(l, a) {
+                var spamList = _(l).filter(function (o) {
+                    return account.is('spam', o.folder_id);
+                });
+
+                if (spamList && spamList.length > 0) {
+                    return api.markRead(spamList).always(function () {
+                        return api.remove(l, a);
+                    });
+                } else {
+                    return api.remove(l, a);
+                }
+            }
+
             if (check) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
@@ -48,11 +62,11 @@ define('io.ox/mail/actions/delete', [
                         .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
                         .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .on('delete', function () {
-                            api.remove(list, all).fail(notifications.yell);
+                            remove(list, all).fail(notifications.yell);
                         }).show();
                 });
             } else {
-                api.remove(list, all).fail(function (e) {
+                remove(list, all).fail(function (e) {
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
