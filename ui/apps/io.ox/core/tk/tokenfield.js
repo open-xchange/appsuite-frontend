@@ -300,6 +300,11 @@ define('io.ox/core/tk/tokenfield', [
 
         getInput: function () {
             return this.input;
+        },
+
+        setFocus: function () {
+            var tokenfield = this.$el.parent();
+            tokenfield.find('.token-input').focus();
         }
     });
 
