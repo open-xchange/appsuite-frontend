@@ -11,29 +11,22 @@
  */
 
 define('io.ox/calendar/month/view', [
-    'io.ox/calendar/util',
-    'io.ox/core/date',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/month/style',
     'static/3rd.party/jquery-ui.min.js'
-], function (util, date, ext, folderAPI, gt, settings) {
+], function (ext, folderAPI, util, gt, settings) {
 
     'use strict';
-
-    function formatDate(d) {
-        return d.getYear() + '-' + d.getMonth() + '-' + d.getDate();
-    }
-
-    var myself = null;
 
     var View = Backbone.View.extend({
 
         className:      'week',
-        weekStart:      0,
-        weekEnd:        0,
+        weekStart:      0,      // week start moment
+        weekEnd:        0,      // week ends moment
         folder:         null,
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
@@ -49,8 +42,8 @@ define('io.ox/calendar/month/view', [
 
         initialize: function (options) {
             this.collection.on('reset', this.renderAppointments, this);
-            this.weekStart = options.day;
-            this.weekEnd = options.day + date.WEEK;
+            this.weekStart = moment(options.day);
+            this.weekEnds = moment(this.weekStart).add(1, 'week');
             this.folder = options.folder;
             this.pane = options.pane;
             this.app = options.app;
@@ -94,7 +87,6 @@ define('io.ox/calendar/month/view', [
         },
 
         onCreateAppointment: function (e) {
-
             this.app.folder.can('create').done(function (create) {
 
                 if (!create) return;
@@ -119,7 +111,7 @@ define('io.ox/calendar/month/view', [
 
         // handler for mobile month view day-change
         changeToSelectedDay: function (timestamp) {
-            var d = new date.Local(timestamp);
+            var d = moment(timestamp);
             // set refDate for app to selected day and change
             // perspective afterwards
             this.app.refDate = d;
@@ -128,16 +120,17 @@ define('io.ox/calendar/month/view', [
 
         render: function () {
             // TODO: fix this workaround
-            var list = util.getWeekScaffold(this.weekStart + date.DAY),
+            var list = util.getWeekScaffold(this.weekStart),
                 firstFound = false,
                 self = this,
                 weekinfo = $('<div>')
                     .addClass('week-info')
                     .append(
                         $('<span>').addClass('cw').text(
-                            gt('CW %1$d', new date.Local(this.weekStart + date.DAY).format('w'))
+                            gt('CW %1$d', this.weekStart.format('W'))
                         )
                     );
+
             _(list.days).each(function (day, i) {
                 if (day.isFirst) {
                     firstFound = true;
@@ -162,7 +155,7 @@ define('io.ox/calendar/month/view', [
                     this.$el.append(
                         dayCell
                         .addClass('day')
-                        .attr('id', day.year + '-' + day.month + '-' + day.date)
+                        .attr('id', moment(day.timestamp).format('YYYY-M-D'))
                         .data('date', day.timestamp)
                         .append(
                             $('<div>').addClass('list abs'),
@@ -185,8 +178,6 @@ define('io.ox/calendar/month/view', [
         },
 
         renderAppointment: function (a) {
-            myself = myself || ox.user_id;
-
             var self = this,
                 el = $('<div>')
                     .addClass('appointment')
@@ -203,7 +194,6 @@ define('io.ox/calendar/month/view', [
         },
 
         renderAppointmentIndicator: function (node) {
-
             ext.point('io.ox/calendar/month/view/appointment/mobile')
                 .invoke('draw', node);
         },
@@ -218,55 +208,45 @@ define('io.ox/calendar/month/view', [
             this.collection.each(function (model) {
 
                 // is declined?
-                if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
+                if (util.getConfirmationStatus(model.attributes) === 2 && !settings.get('showDeclinedAppointments', false)) return;
 
-                    var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
-                        endTSUTC = Math.min(model.get('end_date'), this.weekEnd),
-                        maxCount = 7;
+                var startMoment = moment(model.get('start_date')),
+                    endMoment = moment(model.get('end_date')),
+                    maxCount = 7;
 
-                    // need -1 for rendering, but destroys zero time appointments
-                    if (endTSUTC > startTSUTC) {
-                        endTSUTC--;
-                    }
+                // fix full-time values
+                if (model.get('full_time')) {
+                    startMoment.utc().local(true);
+                    endMoment.utc().local(true).subtract(1, 'millisecond');
+                }
 
-                    // fix full-time UTC timestamps
-                    if (model.get('full_time')) {
-                        startTSUTC = date.Local.utc(startTSUTC);
-                        endTSUTC = date.Local.utc(endTSUTC);
-                    }
+                // reduce to dates inside the current week
+                startMoment = moment.max(startMoment, this.weekStart).clone();
+                endMoment = moment.min(endMoment, this.weekEnds).clone();
 
-                    var startDate = new date.Local(startTSUTC),
-                        endDate = new date.Local(endTSUTC),
-                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
-                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime();
-
-                    if (_.device('smartphone')) {
-                        var cell = this.$('#' + formatDate(startDate) + ' .list');
-                        if (tempDate === undefined) {
-                            // first run, draw
-                            this.renderAppointmentIndicator(cell);
-                        } else {
-                            if (!util.onSameDay(startTSUTC, tempDate)) {
-                                // one mark per day is enough
-                                this.renderAppointmentIndicator(cell);
-                            }
-                        }
-                        // remember for next run
-                        tempDate = startTSUTC;
+                if (_.device('smartphone')) {
+                    var cell = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el);
+                    if (tempDate === undefined) {
+                        // first run, draw
+                        this.renderAppointmentIndicator(cell);
                     } else {
-                        // draw across multiple days
-                        while (maxCount >= 0) {
-                            maxCount--;
-                            this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
-
-                            // inc date
-                            if (start !== end) {
-                                startDate.setDate(startDate.getDate() + 1);
-                                startDate.setHours(0, 0, 0, 0);
-                                start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
-                            } else {
-                                break;
-                            }
+                        if (!startMoment.isSame(tempDate, 'd')) {
+                            // one mark per day is enough
+                            this.renderAppointmentIndicator(cell);
+                        }
+                    }
+                    // remember for next run
+                    tempDate = startMoment.clone();
+                } else {
+                    // draw across multiple days
+                    while (maxCount >= 0) {
+                        maxCount--;
+                        $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).append(this.renderAppointment(model));
+                        // inc date
+                        if (!startMoment.isSame(endMoment, 'd')) {
+                            startMoment.add(1, 'day').startOf('day');
+                        } else {
+                            break;
                         }
                     }
                 }
@@ -315,8 +295,8 @@ define('io.ox/calendar/month/view', [
                         ui.draggable.show()
                     );
                     var app = ui.draggable.data('app').attributes,
-                        s = new date.Local(app.start_date),
-                        start = new date.Local($(this).data('date')).setHours(s.getHours(), s.getMinutes(), s.getSeconds(), s.getMilliseconds()).getTime(),
+                        s = moment(app.start_date),
+                        start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }).valueOf(),
                         end = start + app.end_date - app.start_date;
                     if (app.start_date !== start || app.end_date !== end) {
                         app.start_date = start;
@@ -330,17 +310,17 @@ define('io.ox/calendar/month/view', [
     });
 
     View.drawScaffold = function () {
-
-        var days = date.locale.days,
+        var days = moment.weekdaysMin(),
+            dow = moment.localeData().firstDayOfWeek(),
             tmp = [];
-        days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));
+        days = days.slice(dow, days.length).concat(days.slice(0, dow));
         return $('<div>')
             .addClass('abs')
             .append(
                 $('<div>').addClass('footer-container').append(
                     $('<div>').addClass('footer').append(function () {
                         _(days).each(function (day) {
-                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day.substr(0, 2))));
+                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                         });
                         return tmp;
                     })
