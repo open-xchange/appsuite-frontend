@@ -123,6 +123,11 @@ define('io.ox/core/tk/tokenfield', [
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
+                    // use typehead autoselect feature
+                    if (self.options.autoselect && !e.attrs.model) {
+                        e.preventDefault();
+                        return;
+                    }
                     var inputData = self.getInput().data(), model;
                     if (inputData.edit === true) {
                         // edit mode

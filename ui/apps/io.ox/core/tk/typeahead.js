@@ -39,7 +39,7 @@ define('io.ox/core/tk/typeahead', [
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
-            autoselect: true,
+            autoselect: false,
             // Highlight found query characters in bold
             highlight: true,
             // Typeahead will not show a hint
