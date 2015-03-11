@@ -61,7 +61,8 @@ define('io.ox/core/tk/typeahead', [
         initialize: function (o) {
             var self = this;
 
-            o = $.extend(this.options, o || {});
+            // use a clone instead of shared default-options-object
+            o = this.options = $.extend({}, this.options, o || {});
 
             this.api = new AutocompleteAPI(o.apiOptions);
 
