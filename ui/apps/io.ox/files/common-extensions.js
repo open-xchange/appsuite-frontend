@@ -62,8 +62,45 @@ define('io.ox/files/common-extensions', [
             this.append(
                 $('<span class="locked">').append(node)
             );
-        }
+        },
 
+        icon: (function () {
+
+            function getExtension(filename) {
+                var parts = String(filename || '').split('.');
+                return parts.length === 1 ? '' : parts.pop().toLowerCase();
+            }
+
+            function getDecoration(extension) {
+                for (var type in drawIndicator.types) {
+                    if (drawIndicator.types[type].test(extension)) return type;
+                }
+            }
+
+            function drawIndicator(baton) {
+                var extension = getExtension(baton.data.filename),
+                    decoration = getDecoration(extension);
+                this.append(
+                    $('<i class="fa file-type-indicator">').addClass(decoration)
+                );
+            }
+
+            // accessible & extensible
+            drawIndicator.types = {
+                image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
+                audio: /^(mp3|ogg|m4a|m4b|aac|wav)$/,
+                video: /^(avi|m4v|mp4|ogv|ogm|webm|mov|mpeg)$/,
+                docx: /^do[ct]x?$/,
+                xlsx: /^xlsx?$/,
+                pptx: /^p[po]tx?$/,
+                pdf: /^pdf$/,
+                zip: /^(zip|gz|gzip|tgz)$/,
+                text: /^(txt|md)$/
+            };
+
+            return drawIndicator;
+
+        }())
     };
 
     return extensions;

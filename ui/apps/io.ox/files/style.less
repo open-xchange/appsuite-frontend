@@ -37,9 +37,10 @@
         vertical-align: middle;
         padding: 0;
         white-space: nowrap;
-        &.column-1 { width: 80%; padding-right: 10px; }
-        &.column-2 { width: 120px; padding-right: 10px; text-align: right; }
-        &.column-3 { width: 120px; text-align: right; }
+        &.column-1 { width: 30px; padding-right: 10px; }
+        &.column-2 { width: 70%; padding-right: 10px; }
+        &.column-3 { width: 120px; padding-right: 10px; text-align: right; }
+        &.column-4 { width: 120px; text-align: right; }
     }
 
     .list-item {
@@ -57,6 +58,48 @@
     &.visible-selection.has-focus .list-item.selected i {
         color: rgba(255, 255, 255, 0.50);
     }
+
+    &.grid-layout {
+
+        padding: 10px;
+
+        & > li {
+            padding: 10px;
+            display: inline-block;
+            background-color: #eee;
+            min-height: 120px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            .list-item-checkmark { display: none; }
+        }
+
+        &.grid-1  > li { width: 100% /  1; }
+        &.grid-2  > li { width: 100% /  2; }
+        &.grid-3  > li { width: 100% /  3; }
+        &.grid-4  > li { width: 100% /  4; }
+        &.grid-5  > li { width: 100% /  5; }
+        &.grid-6  > li { width: 100% /  6; }
+        &.grid-7  > li { width: 100% /  7; }
+        &.grid-8  > li { width: 100% /  8; }
+        &.grid-9  > li { width: 100% /  9; }
+        &.grid-10 > li { width: 100% / 10; }
+    }
+
+    .file-type-indicator {
+        font-size: 14px;
+        &:before       { content: '\f016'; color: #aaa; } // default: fa-file-o
+        &.image:before { content: '\f03e'; } // fa-image
+        &.audio:before { content: '\f028'; } // fa-volume-up
+        &.video:before { content: '\f008'; } // fa-film
+        &.docx:before  { content: '\f15c'; color: #2C5897; } // fa-file-text
+        &.xlsx:before  { content: '\f0ce'; color: #1D7047; } // fa-table
+        &.pptx:before  { content: '\f15b'; color: #D04423; } // fa-file
+        &.pdf:before   { content: '\f15b'; color: #C01E07; } // fa-file
+        &.zip:before   { content: '\f187'; color: #FF940A; } // fa-archive
+        &.text:before  { content: '\f0f6'; } // fa-file-text-o
+    }
+
+    .list-item.selected .file-type-indicator:before { color: white; }
 }
 
 .files-wrapper {

@@ -245,7 +245,13 @@ define('io.ox/core/tk/list', [
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
             // preserve: don't remove selected items (e.g. for unseen messages)
-            this.options = _.extend({ pagination: true, draggable: false, preserve: false, selection: true, scrollable: true }, options);
+            this.options = _.extend({
+                pagination: true,
+                draggable: false,
+                preserve: false,
+                selection: true,
+                scrollable: true
+            }, options);
 
             var events = {};
 

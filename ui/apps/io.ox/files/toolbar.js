@@ -209,9 +209,9 @@ define('io.ox/files/toolbar', [
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
                 .header(gt('Layout'))
-                .option('layout', 'fluid:list', gt('List'))
-                .option('layout', 'fluid:icon', gt('Icons'))
-                .option('layout', 'fluid:tile', gt('Tiles'))
+                .option('layout', 'list', gt('List'))
+                .option('layout', 'icon', gt('Icons'))
+                .option('layout', 'tile', gt('Tiles'))
                 .divider()
                 .header(gt('Options'))
                 .option('folderview', true, gt('Folder view'));

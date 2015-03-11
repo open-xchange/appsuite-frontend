@@ -45,7 +45,6 @@ define('io.ox/files/listview', [
             index: 100,
             draw: function (baton) {
                 var layout = (baton.app && baton.app.props.get('layout')) || 'list';
-                this.closest('.list-item').toggleClass('column-layout', layout === 'list');
                 ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
             }
         }
@@ -59,7 +58,7 @@ define('io.ox/files/listview', [
             index: 100,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
-                extensions.filename.call(column, baton);
+                extensions.icon.call(column, baton);
                 this.append(column);
             }
         },
@@ -67,8 +66,8 @@ define('io.ox/files/listview', [
             id: 'col2',
             index: 200,
             draw: function (baton) {
-                var column = $('<div class="list-item-column column-2 gray">');
-                extensions.smartdate.call(column, baton);
+                var column = $('<div class="list-item-column column-2">');
+                extensions.filename.call(column, baton);
                 this.append(column);
             }
         },
@@ -77,6 +76,15 @@ define('io.ox/files/listview', [
             index: 300,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-3 gray">');
+                extensions.smartdate.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
+            id: 'col4',
+            index: 500,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-4 gray">');
                 extensions.size.call(column, baton);
                 this.append(column);
             }
@@ -89,9 +97,7 @@ define('io.ox/files/listview', [
         {
             id: 'default',
             index: 100,
-            draw: function () {
-                this.append('<b>Hallo</b> Welt (icon)');
-            }
+            draw: extensions.filename
         }
     );
 
@@ -101,9 +107,7 @@ define('io.ox/files/listview', [
         {
             id: 'default',
             index: 100,
-            draw: function () {
-                this.append('<b>Hallo</b> Welt (tile)');
-            }
+            draw: $.noop
         }
     );
 

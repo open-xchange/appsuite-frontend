@@ -343,6 +343,49 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Respond to changing layout
+         */
+        'change:layout': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            function applyLayout() {
+
+                var layout = app.props.get('layout');
+
+                if (layout === 'list') {
+                    app.listView.$el.addClass('column-layout').removeClass('grid-layout');
+                } else {
+                    app.listView.$el.addClass('grid-layout').removeClass('column-layout');
+                }
+            }
+
+            app.props.on('change:layout', function () {
+                applyLayout();
+                app.listView.redraw();
+            });
+
+            applyLayout();
+        },
+
+        // respond to resize events
+        'resize': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            $(window).on('resize', function () {
+                var list = app.listView,
+                    width = list.$el.width(),
+                    // let's use 160px as average width
+                    // minimum is 1, maximum is 10
+                    column = Math.max(1, Math.min(10, width / 160 >> 0));
+                // update class name
+                list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
+                list.$el.addClass('grid-' + column);
+            });
+        },
+
+        /*
          * Delete file
          * leave detailview if file is deleted
          */
@@ -376,17 +419,6 @@ define('io.ox/files/main', [
             app.on('folderview:open', function () {
                 app.props.set('folderview', true);
             });
-        },
-
-        /*
-         * Respond to layout change
-         */
-        'change:layout': function (app) {
-            app.props.on('change:layout', function (model, value) {
-                ox.ui.Perspective.show(app, value);
-            });
-
-            window.drive = app;
         },
 
         /*

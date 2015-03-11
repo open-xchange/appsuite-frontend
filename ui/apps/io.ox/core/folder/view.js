@@ -94,6 +94,8 @@ define('io.ox/core/folder/view', [
                 applyInitialWidth();
                 sidepanel.addClass('visible');
                 app.trigger('folderview:open');
+                // trigger generic resize event so that other components can respond to it
+                $(document).trigger('resize');
             },
 
             hide: function () {
@@ -102,6 +104,8 @@ define('io.ox/core/folder/view', [
                 resetLeftPosition();
                 sidepanel.removeClass('visible').css('width', '');
                 app.trigger('folderview:close');
+                // trigger generic resize event so that other components can respond to it
+                $(document).trigger('resize');
             },
 
             toggle: function (state) {
@@ -124,7 +128,10 @@ define('io.ox/core/folder/view', [
                 }
 
                 function mouseup(e) {
-                    $(this).off('mousemove.resize mouseup.resize');
+                    $(this)
+                        .off('mousemove.resize mouseup.resize')
+                        // trigger generic resize event so that other components can respond to it
+                        .trigger('resize');
                     // auto-close?
                     if (e.pageX - base < minSidePanelWidth * 0.75) {
                         app.folderView.hide();

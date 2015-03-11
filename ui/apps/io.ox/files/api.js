@@ -154,9 +154,10 @@ define('io.ox/files/api', [
         });
     };
 
-    pool.get('detail').on('add', function (model) {
-        api.versions(model.attributes);
-    });
+    // We should *NOT* LOAD versions by default!
+    // pool.get('detail').on('add', function (model) {
+    //     api.versions(model.attributes);
+    // });
 
     var lockToggle = function (list, action) {
         // allow single object and arrays
