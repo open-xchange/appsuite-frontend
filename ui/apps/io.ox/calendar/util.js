@@ -25,6 +25,8 @@ define('io.ox/calendar/util', [
 
     moment.locale('de');
     moment.tz.setDefault('Europe/Berlin');
+    moment.relativeTimeThreshold('m', 55);
+    moment.relativeTimeThreshold('s', 55);
 
     // day names
     var n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],

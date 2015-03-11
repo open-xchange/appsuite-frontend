@@ -17,13 +17,12 @@ define('io.ox/calendar/list/perspective', [
     'io.ox/calendar/view-detail',
     'io.ox/core/commons',
     'io.ox/core/extensions',
-    'io.ox/core/date',
     'io.ox/calendar/util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (api, tmpl, viewDetail, commons, ext, date, util, actions, folderAPI, settings, gt) {
+], function (api, tmpl, viewDetail, commons, ext, util, actions, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -263,21 +262,17 @@ define('io.ox/calendar/list/perspective', [
          * @return { function}       the all request function for the vgrid
          */
         var generateAllRequest = function (dates) {
-            //var timeframe = util.getDateInterval({ start_date: dates.start, end_date: dates.end });
-            var endDate = new date.Local(dates.end).format(date.DATE);
             grid.setEmptyMessage(function () {
-                return gt.format(gt('No appointments found until %s'), endDate);
+                return gt.format(gt('No appointments found until %s'), moment(dates.end).format('LLL'));
             });
             return function () {
-                var prop = grid.prop(),
-                    start = dates.start,
-                    end = dates.end;
+                var prop = grid.prop();
 
                 return app.folder.getData().then(function () {
                     // set folder data to view and update
                     return api.getAll({
-                        start: start.getTime(),
-                        end: end.getTime(),
+                        start: dates.start,
+                        end: dates.end,
                         folder: prop.folder === 'virtual/all-my-appointments' ? 0 : prop.folder,
                         order: prop.order
                     })
@@ -326,11 +321,11 @@ define('io.ox/calendar/list/perspective', [
         // based on the months variable which will be increased each time
         // this gets called
         var getIncreasedTimeFrame = function () {
-            start = new date.Local().setHours(0, 0, 0, 0);
-            end = new date.Local(start).setMonth(start.getMonth() + months);
+            start = moment().startOf('day').valueOf();
+            end = moment(start).add(months, 'months');
             // increase for next run
             months++;
-            return { start: start, end: end };
+            return { start: start.valueOf(), end: end.valueOf() };
         };
 
         // standard call will get the first month

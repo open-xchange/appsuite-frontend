@@ -47,29 +47,20 @@ define('io.ox/calendar/settings/pane', [
             return array;
         },
 
+        minInt = [15,30,45,60,120,240,360,480,720,1440,2880,4320,5760,7200,8640,10080,20160,30240,40320],
+
         optionsReminder = [
             { label: gt('No reminder'), value: '-1' },
-            { label: gt.format(gt.ngettext('%d minute', '%d minutes', 0), 0), value: '0' },
-            { label: gt.format(gt.ngettext('%d minute', '%d minutes', 15), 15), value: '15' },
-            { label: gt.format(gt.ngettext('%d minute', '%d minutes', 30), 30), value: '30' },
-            { label: gt.format(gt.ngettext('%d minute', '%d minutes', 45), 45), value: '45' },
-            { label: gt.format(gt.ngettext('%d hour', '%d hours', 1), 1), value: '60' },
-            { label: gt.format(gt.ngettext('%d hour', '%d hours', 2), 2), value: '120' },
-            { label: gt.format(gt.ngettext('%d hour', '%d hours', 4), 4), value: '240' },
-            { label: gt.format(gt.ngettext('%d hour', '%d hours', 6), 6), value: '360' },
-            { label: gt.format(gt.ngettext('%d hour', '%d hours', 8), 8), value: '480' },
-            { label: gt.format(gt.ngettext('%d hour', '%d hours', 12), 12), value: '720' },
-            { label: gt.format(gt.ngettext('%d day', '%d days', 1), 1), value: '1440' },
-            { label: gt.format(gt.ngettext('%d day', '%d days', 2), 2), value: '2880' },
-            { label: gt.format(gt.ngettext('%d day', '%d days', 3), 3), value: '4320' },
-            { label: gt.format(gt.ngettext('%d day', '%d days', 4), 4), value: '5760' },
-            { label: gt.format(gt.ngettext('%d day', '%d days', 5), 5), value: '7200' },
-            { label: gt.format(gt.ngettext('%d day', '%d days', 6), 6), value: '8640' },
-            { label: gt.format(gt.ngettext('%d week', '%d weeks', 1), 1), value: '10080' },
-            { label: gt.format(gt.ngettext('%d week', '%d weeks', 2), 2), value: '20160' },
-            { label: gt.format(gt.ngettext('%d week', '%d weeks', 3), 3), value: '30240' },
-            { label: gt.format(gt.ngettext('%d week', '%d weeks', 4), 4), value: '40320' }
+            { label: gt.format(gt.ngettext('%d minute', '%d minutes', 0), 0), value: '0' }
         ];
+
+    _(minInt).each(function (m) {
+        var dur = moment.duration(m, 'minutes');
+        optionsReminder.push({
+            label: dur.humanize(true),
+            value: dur.asMinutes()
+        });
+    });
 
     model.on('change', function (e, path) {
         model.saveAndYell().then(
