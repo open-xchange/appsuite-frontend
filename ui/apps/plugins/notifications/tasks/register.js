@@ -18,8 +18,9 @@ define('plugins/notifications/tasks/register', [
     'io.ox/core/api/reminder',
     'io.ox/core/notifications/subview',
     'settings!io.ox/core',
+    'io.ox/tasks/util',
     'less!plugins/notifications/tasks/style'
-], function (ext, gt, api, reminderAPI, Subview, settings) {
+], function (ext, gt, api, reminderAPI, Subview, settings, util) {
 
     'use strict';
 
@@ -31,49 +32,49 @@ define('plugins/notifications/tasks/register', [
 
     ext.point('io.ox/core/notifications/due-tasks/item').extend({
         draw: function (baton) {
-            var self = this;
-            require(['io.ox/tasks/util'], function (util) {
-                var endText = '',
-                    data = util.interpretTask(baton.model.attributes),
-                    descriptionId = _.uniqueId('notification-description-'),
-                    node = self.addClass('taskNotification');
-                if (_.noI18n(data.end_date)) {
-                    endText = gt('end date ') + _.noI18n(data.end_date);
-                }
-                        //#. %1$s task title
-                        //#. %2$s task end date
-                        //#, c-format
-                var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText);
+            var self = this,
+                endText = '',
+                data = util.interpretTask(baton.model.attributes),
+                descriptionId = _.uniqueId('notification-description-'),
+                node = self.addClass('taskNotification');
+            if (_.noI18n(data.end_date)) {
+                endText = gt('end date ') + _.noI18n(data.end_date);
+            }
+                    //#. %1$s task title
+                    //#. %2$s task end date
+                    //#, c-format
+            var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText);
 
-                node.attr({
-                        'data-cid': _.cid(data),
-                        'aria-label': label,
-                        'aria-describedby': descriptionId
-                    })
-                    .append(
-                        $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                        $('<span class="span-to-div title">').text(_.noI18n(data.title)),
+            node.attr({
+                    'data-cid': _.cid(data),
+                    'aria-label': label,
+                    'aria-describedby': descriptionId
+                })
+                .append(
+                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                    $('<span class="span-to-div title">').text(_.noI18n(data.title)),
+                    $('<div class"clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(data.end_date)),
-                        $('<span class="status pull-right">').text(data.status).addClass(data.badge),
-                        $('<div class="actions">').append(
-                            $('<button type="button" tabindex="1" class="btn btn-default" data-action="done">')
-                            .text(gt('Done'))
-                            .on('click', function (e) {
-                                e.stopPropagation();
-                                api.update({
-                                    id: data.id,
-                                    folder_id: data.folder_id,
-                                    status: 3,
-                                    percent_completed: 100,
-                                    date_completed: _.now()
-                                }).done(function (result) {
-                                    api.trigger('update:' + _.ecid(data), result);
-                                });
-                                baton.view.removeNotifications(data.id);
-                            })
-                        )
-                    );
-            });
+                        $('<span class="status pull-right">').text(data.status).addClass(data.badge)
+                    ),
+                    $('<div class="actions">').append(
+                        $('<button type="button" tabindex="1" class="btn btn-default" data-action="done">')
+                        .text(gt('Done'))
+                        .on('click', function (e) {
+                            e.stopPropagation();
+                            api.update({
+                                id: data.id,
+                                folder_id: data.folder_id,
+                                status: 3,
+                                percent_completed: 100,
+                                date_completed: _.now()
+                            }).done(function (result) {
+                                api.trigger('update:' + _.ecid(data), result);
+                            });
+                            baton.view.removeNotifications(data.id);
+                        })
+                    )
+                );
         }
     });
 
@@ -95,7 +96,21 @@ define('plugins/notifications/tasks/register', [
                     },
                     detailview: 'io.ox/tasks/view-detail',
                     autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
-                    desktopNotificationMessage: gt("You've got an overdue task"),
+                    genericDesktopNotification: {
+                        title: gt('New overdue tasks'),
+                        body: gt("You've got overdue tasks"),
+                        icon: ''
+                    },
+                    specificDesktopNotification: function (model) {
+                        var data = util.interpretTask(model.attributes),
+                            endDateText = _.isEmpty(data.end_date) ? '' : ', ' + data.end_date;
+
+                        return {
+                            title: gt('New overdue task'),
+                            body: data.title + endDateText,
+                            icon: ''
+                        };
+                    },
                     hideAllLabel: gt('Hide all notifications for overdue tasks.')
                 },
                 subview = new Subview(options);
@@ -120,8 +135,9 @@ define('plugins/notifications/tasks/register', [
         draw: function (baton) {
             var node = this.addClass('taskNotification');
             node.attr('data-cid', String(_.cid(baton.requestedModel.attributes)));
-            require(['io.ox/tasks/util', 'io.ox/core/tk/reminder-util'], function (util, reminderUtil) {
-                reminderUtil.draw(node, baton.model, util.buildOptionArray());
+            require(['io.ox/core/tk/reminder-util'], function (reminderUtil) {
+                var data = util.interpretTask(baton.model.attributes);
+                reminderUtil.draw(node, new Backbone.Model(data), util.buildOptionArray(), true);
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
                     reminderAPI.deleteReminder(baton.requestedModel.attributes);
@@ -138,16 +154,14 @@ define('plugins/notifications/tasks/register', [
                         key = [model.get('folder_id') + '.' + model.get('id')];
                     if (time !== '0') {
                         //0 means 'pick a time here' was selected. Do nothing.
-                        require(['io.ox/tasks/util'], function (util) {
-                            reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, baton.requestedModel.get('id')).then(function () {
-                                //update Caches
-                                return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
-                            }).done(function () {
-                                //update detailview
-                                api.trigger('update:' + _.ecid(key[0]));
-                            });
-                            baton.view.collection.remove(baton.requestedModel);
+                        reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, baton.requestedModel.get('id')).then(function () {
+                            //update Caches
+                            return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
+                        }).done(function () {
+                            //update detailview
+                            api.trigger('update:' + _.ecid(key[0]));
                         });
+                        baton.view.collection.remove(baton.requestedModel);
                     }
                 });
             });
@@ -170,7 +184,21 @@ define('plugins/notifications/tasks/register', [
                     },
                     detailview: 'io.ox/tasks/view-detail',
                     autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
-                    desktopNotificationMessage: gt("You've got a task reminder"),
+                    genericDesktopNotification: {
+                        title: gt('New task reminders'),
+                        body: gt("You've got task reminders"),
+                        icon: ''
+                    },
+                    specificDesktopNotification: function (model) {
+                        var data = util.interpretTask(model.attributes),
+                            endDateText = _.isEmpty(data.end_date) ? '' : ', ' + data.end_date;
+
+                        return {
+                            title: gt('New task reminder'),
+                            body: data.title + endDateText,
+                            icon: ''
+                        };
+                    },
                     hideAllLabel: gt('Hide all task reminders.')
                 },
                 subview = new Subview(options);
@@ -223,49 +251,47 @@ define('plugins/notifications/tasks/register', [
                     });
                 };
 
-            require(['io.ox/tasks/util'], function (util) {
-                var task = util.interpretTask(baton.model.toJSON()),
-                    endText = '',
-                    descriptionId = _.uniqueId('notification-description-');
-                if (baton.model.get('end_date')) {
-                    endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
-                }
-                //#. %1$s task title
-                //#. %2$s task end date
-                //#. %3$s task status
-                //#, c-format
-                var label = gt('%1$s %2$s %3$s.', _.noI18n(baton.model.get('title')), endText, baton.model.get('status'));
-                node.attr({
-                    role: 'listitem',
-                    'data-cid': _.cid(baton.model.attributes),
-                    'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                    tabindex: 1,
-                    'aria-describedby': descriptionId,
-                    'aria-label': label
-                })
-                .append(
-                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                    $('<span class="span-to-div title">').text(_.noI18n(task.title)),
-                    $('<div class="clearfix">').append(
-                        $('<span class="end_date">').text(_.noI18n(task.end_date)),
-                        $('<span class="status">').text(task.status).addClass(task.badge)),
-                    $('<div class="actions">').append(
-                        $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
-                        .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
-                        .css('margin-right', '14px')
-                        .text(gt('Accept/Decline'))
-                        .on('click', onChangeState),
-                        $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                            .attr({
-                                'aria-label': gt('Accept invitation'),
-                                'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)
-                            })
-                            .append('<i class="fa fa-check">')
-                            .on('click', onClickAccept)
-                    )
-                );
-                task = null;
-            });
+            var task = util.interpretTask(baton.model.toJSON()),
+                endText = '',
+                descriptionId = _.uniqueId('notification-description-');
+            if (baton.model.get('end_date')) {
+                endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
+            }
+            //#. %1$s task title
+            //#. %2$s task end date
+            //#. %3$s task status
+            //#, c-format
+            var label = gt('%1$s %2$s %3$s.', _.noI18n(baton.model.get('title')), endText, baton.model.get('status'));
+            node.attr({
+                role: 'listitem',
+                'data-cid': _.cid(baton.model.attributes),
+                'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
+                tabindex: 1,
+                'aria-describedby': descriptionId,
+                'aria-label': label
+            })
+            .append(
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div title">').text(_.noI18n(task.title)),
+                $('<div class="clearfix">').append(
+                    $('<span class="end_date">').text(_.noI18n(task.end_date)),
+                    $('<span class="status">').text(task.status).addClass(task.badge)),
+                $('<div class="actions">').append(
+                    $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
+                    .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
+                    .css('margin-right', '14px')
+                    .text(gt('Accept/Decline'))
+                    .on('click', onChangeState),
+                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                        .attr({
+                            'aria-label': gt('Accept invitation'),
+                            'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)
+                        })
+                        .append('<i class="fa fa-check">')
+                        .on('click', onClickAccept)
+                )
+            );
+            task = null;
         }
     });
 
@@ -287,7 +313,21 @@ define('plugins/notifications/tasks/register', [
                     },
                     detailview: 'io.ox/tasks/view-detail',
                     autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
-                    desktopNotificationMessage: gt("You've got a task invitation"),
+                    genericDesktopNotification: {
+                        title: gt('New task invitations'),
+                        body: gt("You've got task invitations"),
+                        icon: ''
+                    },
+                    specificDesktopNotification: function (model) {
+                        var data = util.interpretTask(model.attributes),
+                            endDateText = _.isEmpty(data.end_date) ? '' : ', ' + data.end_date;
+
+                        return {
+                            title: gt('New task invitation'),
+                            body: data.title + endDateText,
+                            icon: ''
+                        };
+                    },
                     hideAllLabel: gt('Hide all task invitations.')
                 },
                 subview = new Subview(options);

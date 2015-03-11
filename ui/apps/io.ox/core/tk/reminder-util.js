@@ -62,7 +62,7 @@ define('io.ox/core/tk/reminder-util', [
         }
     }
 
-    var draw = function (node, model, options) {
+    var draw = function (node, model, options, taskMode) {
         var info,
             //aria label
             label,
@@ -70,7 +70,7 @@ define('io.ox/core/tk/reminder-util', [
             actions = $('<div class="reminder-actions">');
 
         //find out remindertype
-        if (model.get('reminder') && model.get('reminder').module === 4) {
+        if (taskMode) {
             //task
             info = [
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),

@@ -18,8 +18,9 @@ define('plugins/notifications/calendar/register', [
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
     'gettext!plugins/notifications',
+    'io.ox/calendar/util',
     'settings!io.ox/core'
-], function (calAPI, reminderAPI, ext, Subview, gt, settings) {
+], function (calAPI, reminderAPI, ext, Subview, gt, util, settings) {
 
     'use strict';
 
@@ -79,45 +80,43 @@ define('plugins/notifications/calendar/register', [
                     });
                 };
 
-            require(['io.ox/calendar/util'], function (util) {
-                var cid = _.cid(model.attributes);
-                node.attr({
-                    'data-cid': cid,
-                    'focus-id': 'calendar-invite-' + cid,
-                    'aria-describedby': descriptionId,
-                    //#. %1$s Appointment title
-                    //#. %2$s Appointment date
-                    //#. %3$s Appointment time
-                    //#. %4$s Appointment location
-                    //#. %5$s Appointment Organizer
-                    //#, c-format
-                    'aria-label': gt('%1$s %2$s %3$s %4$s %5$s.',
-                            _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('data'))),
-                            _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '',
-                            _.noI18n(model.get('organizer')))
-                }).append(
-                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                    $('<span class="span-to-div time">').text(model.get('time')),
-                    $('<span class="span-to-div date">').text(model.get('date')),
-                    $('<span class="span-to-div title">').text(model.get('title')),
-                    $('<span class="span-to-div location">').text(model.get('location')),
-                    $('<span class="span-to-div organizer">').text(model.get('organizer')),
-                    $('<div class="actions">').append(
-                        $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
-                            .attr('focus-id', 'calendar-invite-' + cid + '-accept-decline')
-                            .css('margin-right', '14px')
-                            .text(gt('Accept / Decline'))
-                            .on('click', onClickChangeStatus),
-                        $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                            .attr({
-                                'aria-label': gt('Accept invitation'),
-                                'focus-id': 'calendar-invite-' + cid + '-accept'
-                            })
-                            .on('click', onClickAccept)
-                            .append('<i class="fa fa-check">')
-                    )
-                );
-            });
+            var cid = _.cid(model.attributes);
+            node.attr({
+                'data-cid': cid,
+                'focus-id': 'calendar-invite-' + cid,
+                'aria-describedby': descriptionId,
+                //#. %1$s Appointment title
+                //#. %2$s Appointment date
+                //#. %3$s Appointment time
+                //#. %4$s Appointment location
+                //#. %5$s Appointment Organizer
+                //#, c-format
+                'aria-label': gt('%1$s %2$s %3$s %4$s %5$s.',
+                        _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('data'))),
+                        _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '',
+                        _.noI18n(model.get('organizer')))
+            }).append(
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div time">').text(model.get('time')),
+                $('<span class="span-to-div date">').text(model.get('date')),
+                $('<span class="span-to-div title">').text(model.get('title')),
+                $('<span class="span-to-div location">').text(model.get('location')),
+                $('<span class="span-to-div organizer">').text(model.get('organizer')),
+                $('<div class="actions">').append(
+                    $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
+                        .attr('focus-id', 'calendar-invite-' + cid + '-accept-decline')
+                        .css('margin-right', '14px')
+                        .text(gt('Accept / Decline'))
+                        .on('click', onClickChangeStatus),
+                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                        .attr({
+                            'aria-label': gt('Accept invitation'),
+                            'focus-id': 'calendar-invite-' + cid + '-accept'
+                        })
+                        .on('click', onClickAccept)
+                        .append('<i class="fa fa-check">')
+                )
+            );
         }
     });
 
@@ -171,7 +170,22 @@ define('plugins/notifications/calendar/register', [
                     },
                     detailview: 'io.ox/calendar/view-detail',
                     autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
-                    desktopNotificationMessage: gt("You've got an appointment reminder"),
+                    genericDesktopNotification: {
+                        title: gt('New appointment reminders'),
+                        body: gt("You've got appointment reminders"),
+                        icon: ''
+                    },
+                    specificDesktopNotification: function (model) {
+                        var title = model.get('title'),
+                            date = ', ' + util.getDateInterval(model.attributes),
+                            time = ', ' + util.getTimeInterval(model.attributes);
+
+                        return {
+                            title: gt('New appointment reminder'),
+                            body: title + date + time,
+                            icon: ''
+                        };
+                    },
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
                 subview = new Subview(options);
@@ -182,7 +196,7 @@ define('plugins/notifications/calendar/register', [
             });
 
             reminderAPI.getReminders();
-            //needed
+            //needed?
             /*function removeReminders(e, reminders) {
                 //make sure we have an array
                 reminders = reminders ? [].concat(reminders) : [];
@@ -227,7 +241,22 @@ define('plugins/notifications/calendar/register', [
                     },
                     detailview: 'io.ox/calendar/view-detail',
                     autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
-                    desktopNotificationMessage: gt("You've got an appointment invitation"),
+                    genericDesktopNotification: {
+                        title: gt('New appointment invitation'),
+                        body: gt("You've got appointment invitations"),
+                        icon: ''
+                    },
+                    specificDesktopNotification: function (model) {
+                        var title = model.get('title'),
+                            date = ', ' + util.getDateInterval(model.attributes),
+                            time = ', ' + util.getTimeInterval(model.attributes);
+
+                        return {
+                            title: gt('New appointment invitation'),
+                            body: title + date + time,
+                            icon: ''
+                        };
+                    },
                     hideAllLabel: gt('Hide all appointment invitations.')
                 },
                 subview = new Subview(options);

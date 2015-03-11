@@ -16,32 +16,31 @@ define('plugins/notifications/mail/register', [
     'io.ox/mail/api',
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
+    'io.ox/mail/util',
     'gettext!plugins/notifications',
     'settings!io.ox/core'
-], function (api, ext, Subview, gt, settings) {
+], function (api, ext, Subview, util, gt, settings) {
 
     'use strict';
 
     ext.point('io.ox/core/notifications/mail/item').extend({
         draw: function (baton) {
             var data = baton.model.attributes,
-                node = this;
-            require(['io.ox/mail/util'], function (util) {
-                var f = data.from || [['', '']],
-                    descriptionId = _.uniqueId('notification-description-');
-                node.attr({
-                    'aria-describedby': descriptionId,
-                    'data-cid': _.cid(data),
-                    //#. %1$s mail sender
-                    //#. %2$s mail subject
-                    //#, c-format
-                    'aria-label': gt('Mail from %1$s %2$s', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
-                }).append(
-                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                    $('<span class="span-to-div title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                    $('<span class="span-to-div subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                );
-            });
+                node = this,
+                f = data.from || [['', '']],
+                descriptionId = _.uniqueId('notification-description-');
+            node.attr({
+                'aria-describedby': descriptionId,
+                'data-cid': _.cid(data),
+                //#. %1$s mail sender
+                //#. %2$s mail subject
+                //#, c-format
+                'aria-label': gt('Mail from %1$s %2$s', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+            }).append(
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                $('<span class="span-to-div subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+            );
         }
     });
 
@@ -82,7 +81,24 @@ define('plugins/notifications/mail/register', [
                     },
                     detailview: 'io.ox/mail/detail/view',
                     autoOpen: settings.get('autoOpenNotification', 'noEmail') === 'always',
-                    desktopNotificationMessage: gt("You've got a new Mail"),
+                    genericDesktopNotification: {
+                        title: gt('New mails'),
+                        body: gt("You've got new mails"),
+                        icon: ''
+                    },
+                    specificDesktopNotification: function (model) {
+                        var data = model.attributes,
+                            from = data.from || [['', '']],
+                                    //#. %1$s mail sender
+                                    //#. %2$s mail subject
+                                    //#, c-format
+                            message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
+                        return {
+                            title: gt('New mail'),
+                            body: message,
+                            icon: ''
+                        };
+                    },
                     hideAllLabel: gt('Hide all notifications for new mails.')
                 },
                 subview = new Subview(options);
