@@ -32,7 +32,7 @@ define('io.ox/core/tk/tokenfield', [
         return $.map( this.getTokens(active), function (token) {
             if (token.model) {
                 var displayname = token.model.getDisplayName(),
-                    email = token.model.getEmail();
+                    email = token.model.getEmail ? token.model.getEmail() : undefined;
                 return displayname === email ? email : '"' + displayname + '" <' + email + '>';
             }
             return token.value;
@@ -88,8 +88,8 @@ define('io.ox/core/tk/tokenfield', [
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
 
-            // initialize participant collection
-            this.collection = new pModel.Participants();
+            // initialize collection
+            this.collection = options.collection || new pModel.Participants();
 
             // update comparator function
             this.collection.comparator = function (model) {
