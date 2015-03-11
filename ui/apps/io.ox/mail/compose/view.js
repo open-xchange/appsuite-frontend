@@ -407,7 +407,7 @@ define('io.ox/mail/compose/view', [
                     // move nested messages into attachment array
                     _(data.nested_msgs).each(function (obj) {
                         attachments.push({
-                            id: attachments.length + 1,
+                            id: obj.id,
                             filename: obj.subject,
                             content_type: 'message/rfc822',
                             msgref: obj.msgref
