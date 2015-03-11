@@ -95,8 +95,8 @@ define('io.ox/core/tk/reminder-util', [
             //appointment
             info = [
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                $('<span class="span-to-div time">').text(model.get('time')),
-                $('<span class="span-to-div date">').text(model.get('date')),
+                $('<span class="span-to-div time">').text(util.getDateInterval(model.attributes)),
+                $('<span class="span-to-div date">').text(util.getDateInterval(model.attributes)),
                 $('<span class="span-to-div title">').text(model.get('title')),
                 $('<span class="span-to-div location">').text(model.get('location'))
             ];
@@ -106,7 +106,7 @@ define('io.ox/core/tk/reminder-util', [
             //#. %4$s Appointment location
             //#, c-format
             label = gt('%1$s %2$s %3$s %4$s.',
-                    _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('caldata'))), _.noI18n(util.getTimeIntervalA11y(model.get('caldata'))), _.noI18n(model.get('location')) || '');
+                    _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.attributes)), _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '');
         }
 
         node.attr({

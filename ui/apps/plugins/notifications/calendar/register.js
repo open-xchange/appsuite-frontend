@@ -235,6 +235,7 @@ define('plugins/notifications/calendar/register', [
                         reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
                     },
+                    useListRequest: true,
                     title: gt('Appointment invitations'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/invites/item'

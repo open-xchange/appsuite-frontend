@@ -90,6 +90,7 @@ define('plugins/notifications/tasks/register', [
                         remove: 'delete unmark:overdue',
                         add: 'mark:overdue'
                     },
+                    useListRequest: true,
                     title: gt('Overdue Tasks'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/due-tasks/item'
@@ -307,6 +308,7 @@ define('plugins/notifications/tasks/register', [
                         remove: 'delete mark:task:confirmed',
                         add: 'mark:task:to-be-confirmed'
                     },
+                    useListRequest: true,
                     title: gt('Task invitations'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/task-confirmation/item'

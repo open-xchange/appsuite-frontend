@@ -81,10 +81,21 @@ define('io.ox/core/notifications/subview', [
             if (api && !model.get('fullModel')) {
                 //models are incomplete (only id, folder_id)
                 //get the data first
-                for (var i = 0; i < max && items[i]; i++) {
-                    //mail needs unseen attribute, shouldn't bother other apis
-                    //extend with empty object to not overwrite the model
-                    api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i]));
+                if (model.get('useListRequest')) {
+                    var requestData = _(items.slice(0, max)).map(function (obj) {
+                        return obj.attributes;
+                    });
+                    api.getList(requestData).then(function (data) {
+                        for (var i = 0; i < max && items[i]; i++) {
+                            drawItem(data[i], items[i]);
+                        }
+                    });
+                } else {
+                    for (var i = 0; i < max && items[i]; i++) {
+                        //mail needs unseen attribute, shouldn't bother other apis
+                        //extend with empty object to not overwrite the model
+                        api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i]));
+                    }
                 }
             } else {
                 for (var i = 0; i < max && items[i]; i++) {
@@ -119,6 +130,7 @@ define('io.ox/core/notifications/subview', [
             title: '',
             apiSupport: null,
             apiEvents: null,
+            useListRequest: false,
             extensionPoints: {
                 main: 'io.ox/core/notifications/default/main',
                 header: 'io.ox/core/notifications/default/header',

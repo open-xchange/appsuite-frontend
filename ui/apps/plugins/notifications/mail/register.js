@@ -74,6 +74,7 @@ define('plugins/notifications/mail/register', [
             var options = {
                     id: 'io.ox/mail',
                     api: api,
+                    useListRequest: true,
                     title: gt('New Mails'),
                     extensionPoints: {
                         item: 'io.ox/core/notifications/mail/item',
