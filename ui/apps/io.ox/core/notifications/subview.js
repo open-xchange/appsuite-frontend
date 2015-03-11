@@ -40,6 +40,7 @@ define('io.ox/core/notifications/subview', [
             //invoke header, items and footer
             ext.point(extensionPoints.header).invoke('draw', node, baton);
             node.append(itemNode);
+            itemNode.busy();
 
             var drawItem = function (model, requestedModel) {
                 //model is the result of a get request, requestedModel is the data passed to the api (they are usually the same)
@@ -89,18 +90,24 @@ define('io.ox/core/notifications/subview', [
                         for (var i = 0; i < max && items[i]; i++) {
                             drawItem(data[i], items[i]);
                         }
+                        itemNode.idle();
                     });
                 } else {
+                    var defs = [];
                     for (var i = 0; i < max && items[i]; i++) {
                         //mail needs unseen attribute, shouldn't bother other apis
                         //extend with empty object to not overwrite the model
-                        api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i]));
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i])));
                     }
+                    $.when.apply($, defs).then(function () {
+                        itemNode.idle();
+                    });
                 }
             } else {
                 for (var i = 0; i < max && items[i]; i++) {
                     drawItem(items[i], items[i]);
                 }
+                itemNode.idle();
             }
 
             ext.point(extensionPoints.footer).invoke('draw', node, baton);

@@ -12,10 +12,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author David Bauer <david.bauer@open-xchange.com>
  */
-#io-ox-notifications-icon {
-    //fixed width or badge makes the button to large
-    width: 60px;
-}
 
 #io-ox-notifications {
 
@@ -74,6 +70,11 @@
         // special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
         .span-to-div {
             display: block;
+        }
+
+        .items{
+            //prevent busy spinner from overlapping
+            min-height: 20px;
         }
 
         .section-title {
@@ -207,8 +208,9 @@
 
 @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
     #io-ox-notifications-icon {
-        //fixed width or badge makes the button to large
-        width: 45px;
+        i {
+            display: none;
+        }
     }
     .notifications-open { display:none; } // To hide mobile portal when notifications area is open on mobile devices
 }
