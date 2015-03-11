@@ -363,6 +363,12 @@ define('io.ox/mail/settings/signatures/register', [
                     //hide default signature selection, if there are no signatures
                     $node.children('.form-group').css('display', sigs.length > 0 ? '' : 'none');
                     _(sigs).each(function (signature) {
+                        //replace div and p elements to br's and remove all other tags.
+                        var content = signature.content
+                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
+                            .replace(/<(?:.|\n)*?>/gm, '')
+                            .replace(/(\n)+/g, '<br>');
+
                         signatures[signature.id] = signature;
                         var isDefault = settings.get('defaultSignature') === signature.id,
                             $item = $('<li class="widget-settings-view">')
@@ -372,18 +378,6 @@ define('io.ox/mail/settings/signatures/register', [
                                     .append(
                                         $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
                                         $('<div class="widget-controls">').append(
-                                            $('<a class="action" tabindex="1" data-action="default">').text((
-                                                isDefault ?
-                                                /*#. This signature is set as default */ gt('(Default)') :
-                                                /*#. Action to make this signature the new default */ gt('Set as default')
-                                            )).attr({
-                                                role: 'button',
-                                                //#. A11y for an action button, read the display name and the action
-                                                //#. %1$s is the displayable name of the signature
-                                                //#. %2$s is the action: one of the msgids "(Default)", "Edit", "Delete" or "Set as default"
-                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname),
-                                                                 isDefault ? gt('(Default)') : gt('Set as default'))
-                                            }),
                                             $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')).attr({
                                                 role: 'button',
                                                 'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Edit'))
@@ -395,7 +389,9 @@ define('io.ox/mail/settings/signatures/register', [
                                                 role: 'button',
                                                 tabindex: 1
                                             }).append($('<i class="fa fa-trash-o">'))
-                                        )
+                                        ),
+                                        // do not add a preview pane with single br-tag or empty string
+                                        (content === '<br>' || content === '') ? '' : $('<div class="signature-preview">').click(clickEdit).append(content)
                                     )
                                 );
 
@@ -457,6 +453,14 @@ define('io.ox/mail/settings/signatures/register', [
 
             function textChange() {
                 baton.model.set('mobileSignature', signatureText.val());
+            }
+
+            function clickEdit(e) {
+                if ((e.type === 'click') || (e.which === 13)) {
+                    var id = $(this).closest('li').attr('data-id');
+                    fnEditSignature(e, signatures[id]);
+                    e.preventDefault();
+                }
             }
 
             function addSignatureList($node) {
