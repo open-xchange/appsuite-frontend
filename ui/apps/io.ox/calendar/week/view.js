@@ -66,7 +66,7 @@ define('io.ox/calendar/week/view', [
             var self = this;
 
             // init options
-            _.extend(this.options, opt);
+            this.options = _.extend({}, this.options, opt);
 
             // define view events
             var events = {
