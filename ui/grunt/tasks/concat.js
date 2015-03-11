@@ -31,7 +31,7 @@ module.exports = function (grunt) {
                             //add backbone and dot.js may be a AMD-variant would be better
                             'bower_components/backbone/backbone.js',
                             'bower_components/backbone-validation/dist/backbone-validation.js',
-                            'bower_components/moment/min/moment-with-locales.min.js',
+                            'bower_components/moment/min/moment-with-locales.js',
                             'bower_components/moment-timezone/builds/moment-timezone-with-data.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
