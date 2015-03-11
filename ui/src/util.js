@@ -275,7 +275,7 @@
          * @returns {long} Timestamp
          */
         now: function () {
-            return (new Date()).getTime();
+            return +moment();
         },
 
         /**
