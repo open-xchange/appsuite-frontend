@@ -114,21 +114,14 @@ define('io.ox/core/tk/tokenfield', [
             this.collection = null;
         },
 
-        render: function () {
-            var o = this.options,
-                self = this;
+        register: function () {
+            var self = this;
+            // trigger event when token is clicked
+            this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
+                self.$el.tokenfield().trigger('tokenfield:clickedtoken', e);
+            });
 
-            this.$el
-                .attr({
-                    tabindex: this.options.tabindex,
-                    placeholder: this.options.placeholder || null
-                })
-                .addClass('tokenfield');
-            this.$el.tokenfield({
-                createTokensOnBlur: true,
-                minLength: o.minLength,
-                typeahead: self.typeaheadOptions
-            }).on({
+            this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     var inputData = self.getInput().data(), model;
                     if (inputData.edit === true) {
@@ -217,6 +210,25 @@ define('io.ox/core/tk/tokenfield', [
                     self.collection.remove(self.getModelByCID(e.attrs.value));
                 }
             });
+        },
+
+        render: function () {
+            var o = this.options,
+                self = this;
+
+            this.$el
+                .attr({
+                    tabindex: this.options.tabindex,
+                    placeholder: this.options.placeholder || null
+                })
+                .addClass('tokenfield');
+            this.$el.tokenfield({
+                createTokensOnBlur: true,
+                minLength: o.minLength,
+                typeahead: self.typeaheadOptions
+            });
+
+            this.register();
 
             // save original typeahead input
             this.input =  $(this.$el).data('bs.tokenfield').$input.on({
