@@ -50,8 +50,8 @@ define('io.ox/core/tk/typeahead', [
             },
             // Filter items
             reduce: _.identity,
-            // Object related unique string
-            stringify: _.identity,
+            // harmonize returned data from 'source'
+            harmonize: _.identity,
             // lazyload selector
             lazyload: null
         },
@@ -82,12 +82,12 @@ define('io.ox/core/tk/typeahead', [
                         })
                         .then(function (data) {
                             data = o.placement === 'top' ? data.reverse() : data;
-                            return _(data).map(o.stringify);
+                            return _(data).map(o.harmonize);
                         })
                         .then(callback);
                 },
                 templates: {
-                    suggestion: function (searchresult) {
+                    suggestion: o.suggestion || function (searchresult) {
                         var node = $('<div class="autocomplete-item">');
                         o.draw.call(node, searchresult);
                         return node;

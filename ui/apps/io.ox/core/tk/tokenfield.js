@@ -76,14 +76,17 @@ define('io.ox/core/tk/tokenfield', [
         initialize: function (options) {
             var self = this;
 
-            options.stringify = function (data) {
-                var model = new pModel.Participant(data.data);
-                return {
-                    value: model.getTarget(),
-                    label: model.getDisplayName(),
-                    model: model
-                };
-            };
+            options = _.extend({}, {
+                // hint: not the same type of stringify that was used in autocomplete
+                harmonize: function (data) {
+                    var model = new pModel.Participant(data.data);
+                    return {
+                        value: model.getTarget(),
+                        label: model.getDisplayName(),
+                        model: model
+                    };
+                }
+            }, options);
 
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
