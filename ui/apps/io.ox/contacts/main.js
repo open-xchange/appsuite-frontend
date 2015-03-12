@@ -641,6 +641,13 @@ define('io.ox/contacts/main', [
 
         },
 
+        'prop-fullnameformat': function (app) {
+            // redraw contact if fullNameFormat changes to correctly display selected contact name
+            settings.on('change:fullNameFormat', function () {
+                app.showContact(app.currentContact);
+            });
+        },
+
         /*
          * Set folderview property
          */
