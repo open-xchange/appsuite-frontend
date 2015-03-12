@@ -43,13 +43,6 @@
         &.column-4 { width: 120px; text-align: right; }
     }
 
-    .list-item {
-
-        .filename {
-            .ellipsis();
-        }
-    }
-
     &.complete > .list-item:last-child {
         margin-bottom: 0;
         border-bottom: 0;
@@ -59,18 +52,55 @@
         color: rgba(255, 255, 255, 0.50);
     }
 
+    //
+    // Column layout
+    //
+
+    &.column-layout {
+        .filename {
+            .ellipsis();
+        }
+    }
+}
+
+.file-type-icon {
+    font-size: 14px;
+    &:before { content: '\f016'; color: #aaa; } // default: fa-file-o
+    .file-type-image &:before { content: '\f03e'; } // fa-image
+    .file-type-audio &:before { content: '\f028'; } // fa-volume-up
+    .file-type-video &:before { content: '\f008'; } // fa-film
+    .file-type-doc   &:before { content: '\f15c'; color: #376CB8; } // fa-file-text
+    .file-type-xls   &:before { content: '\f0ce'; color: #26935D; } // fa-table
+    .file-type-ppt   &:before { content: '\f15b'; color: #F4502A; } // fa-file
+    .file-type-pdf   &:before { content: '\f15b'; color: #C01E07; } // fa-file
+    .file-type-zip   &:before { content: '\f187'; color: #FF940A; } // fa-archive
+    .file-type-txt   &:before { content: '\f0f6'; } // fa-file-text-o
+}
+
+.file-list-view {
+
+    &.visible-selection.has-focus .list-item.selected .file-type-icon:before { color: white; }
+
+    //
+    // Grid layout
+    //
+
     &.grid-layout {
 
-        padding: 10px;
+        padding: 20px 0 0 20px;
 
         & > li {
-            padding: 10px;
+
+            padding: 0;
             display: inline-block;
-            background-color: #eee;
-            min-height: 120px;
             border: solid white;
-            border-width: 0 2px 2px 0;
-            .list-item-checkmark { display: none; }
+            border-width: 0 20px 40px 0;
+            overflow: hidden;
+            float: left;
+
+            .list-item-checkmark {
+                display: none;
+            }
         }
 
         &.grid-1  > li { width: 100% /  1; }
@@ -83,23 +113,64 @@
         &.grid-8  > li { width: 100% /  8; }
         &.grid-9  > li { width: 100% /  9; }
         &.grid-10 > li { width: 100% / 10; }
+        &.grid-11 > li { width: 100% / 11; }
+        &.grid-12 > li { width: 100% / 12; }
     }
 
-    .file-type-indicator {
-        font-size: 14px;
-        &:before       { content: '\f016'; color: #aaa; } // default: fa-file-o
-        &.image:before { content: '\f03e'; } // fa-image
-        &.audio:before { content: '\f028'; } // fa-volume-up
-        &.video:before { content: '\f008'; } // fa-film
-        &.docx:before  { content: '\f15c'; color: #2C5897; } // fa-file-text
-        &.xlsx:before  { content: '\f0ce'; color: #1D7047; } // fa-table
-        &.pptx:before  { content: '\f15b'; color: #D04423; } // fa-file
-        &.pdf:before   { content: '\f15b'; color: #C01E07; } // fa-file
-        &.zip:before   { content: '\f187'; color: #FF940A; } // fa-archive
-        &.text:before  { content: '\f0f6'; } // fa-file-text-o
+    &.icon-layout {
+
+        // width is > 120px, so assuming a 4/3 format, we're around 120px
+        // since it's not equal but more than 120px we add a bit (just looks better on average)
+        @thumbnail_width: 120px;
+        @thumbnail_height: ceil(@thumbnail_width / 4 * 3) + 10;
+        @filename_rows: 2;
+        @filename_line_height: 16px;
+        @filename_height: @filename_rows * @filename_line_height;
+        @filename_margin: 10px;
+
+        .list-item-content {
+            width: 100%;
+            height: @thumbnail_height + 2 * @filename_margin + @filename_height;
+        }
+        .icon-thumbnail {
+            height: @thumbnail_height;
+            background-color: white;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        .filename {
+            line-height: @filename_line_height;
+            height: @filename_height;
+            overflow: hidden;
+            margin: @filename_margin 0;
+            text-align: center;
+            padding: 0 5px;
+            word-break: break-word;
+        }
     }
 
-    .list-item.selected .file-type-indicator:before { color: white; }
+    &.tile-layout {
+
+        & > li {
+            border-width: 0 20px 20px 0;
+        }
+
+        // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)
+        @thumbnail_height: 120px + 10;
+
+        .list-item-content {
+            width: 100%;
+            height: @thumbnail_height;
+        }
+        .icon-thumbnail {
+            height: @thumbnail_height;
+            background-color: white;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+    }
 }
 
 .files-wrapper {

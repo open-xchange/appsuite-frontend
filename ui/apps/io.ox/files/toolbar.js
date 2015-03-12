@@ -207,7 +207,7 @@ define('io.ox/files/toolbar', [
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li', caret: true })
                 .header(gt('Layout'))
                 .option('layout', 'list', gt('List'))
                 .option('layout', 'icon', gt('Icons'))

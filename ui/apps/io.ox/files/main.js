@@ -291,7 +291,7 @@ define('io.ox/files/main', [
         'get-view-options': function (app) {
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder]);
-                return _.extend({ sort: 702, order: 'asc' }, options);
+                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
             };
         },
 
@@ -302,8 +302,7 @@ define('io.ox/files/main', [
             app.props.on('change', _.debounce(function () {
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
-                    .set(['viewOptions', folder], { sort: data.sort, order: data.order })
-                    .set('layout', data.layout);
+                    .set(['viewOptions', folder], { sort: data.sort, order: data.order, layout: data.layout });
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -342,6 +341,27 @@ define('io.ox/files/main', [
             });
         },
 
+        // respond to resize events
+        'resize': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            $(window).on('resize', function () {
+                var list = app.listView,
+                    width = list.$el.width(),
+                    layout = app.props.get('layout'),
+                    // icon: 140px as minimum width (120 content + 20 margin/border)
+                    // tile: 180px (160 + 20)
+                    // minimum is 1, maximum is 12
+                    column = Math.max(1, Math.min(12, width / (layout === 'icon' ? 140 : 180) >> 0));
+                // update class name
+                list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
+                list.$el.addClass('grid-' + column);
+            });
+
+            $(window).trigger('resize');
+        },
+
         /*
          * Respond to changing layout
          */
@@ -354,9 +374,11 @@ define('io.ox/files/main', [
                 var layout = app.props.get('layout');
 
                 if (layout === 'list') {
-                    app.listView.$el.addClass('column-layout').removeClass('grid-layout');
+                    app.listView.$el.addClass('column-layout').removeClass('grid-layout icon-layout tile-layout');
+                } else if (layout === 'icon') {
+                    app.listView.$el.addClass('grid-layout icon-layout').removeClass('column-layout tile-layout');
                 } else {
-                    app.listView.$el.addClass('grid-layout').removeClass('column-layout');
+                    app.listView.$el.addClass('grid-layout tile-layout').removeClass('column-layout icon-layout');
                 }
             }
 
@@ -366,23 +388,6 @@ define('io.ox/files/main', [
             });
 
             applyLayout();
-        },
-
-        // respond to resize events
-        'resize': function (app) {
-
-            if (_.device('smartphone')) return;
-
-            $(window).on('resize', function () {
-                var list = app.listView,
-                    width = list.$el.width(),
-                    // let's use 160px as average width
-                    // minimum is 1, maximum is 10
-                    column = Math.max(1, Math.min(10, width / 160 >> 0));
-                // update class name
-                list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
-                list.$el.addClass('grid-' + column);
-            });
         },
 
         /*
@@ -538,7 +543,10 @@ define('io.ox/files/main', [
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
                 app.mediate();
-                win.show();
+                win.show(function () {
+                    // trigger grid resize
+                    $(window).trigger('resize');
+                });
             });
     });
 

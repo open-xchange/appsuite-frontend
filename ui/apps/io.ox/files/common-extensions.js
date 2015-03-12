@@ -64,7 +64,25 @@ define('io.ox/files/common-extensions', [
             );
         },
 
-        icon: (function () {
+        thumbnail: function (baton) {
+
+            var url = api.getUrl(baton.data, 'thumbnail', { thumbnailWidth: 200, thumbnailHeight: 150, scaletype: 'cover' }),
+                node = $('<div class="icon-thumbnail">').attr('data-original', url);
+
+            // use defer to ensure the node has already been added to the DOM
+            _.defer(function () {
+                node.lazyload({ container: node.closest('.list-view') });
+                node = null;
+            });
+
+            this.append(node);
+        },
+
+        fileTypeIcon: function () {
+            this.append('<i class="fa file-type-icon">');
+        },
+
+        fileTypeClass: (function () {
 
             function getExtension(filename) {
                 var parts = String(filename || '').split('.');
@@ -72,33 +90,31 @@ define('io.ox/files/common-extensions', [
             }
 
             function getDecoration(extension) {
-                for (var type in drawIndicator.types) {
-                    if (drawIndicator.types[type].test(extension)) return type;
+                for (var type in drawIcon.types) {
+                    if (drawIcon.types[type].test(extension)) return type;
                 }
             }
 
-            function drawIndicator(baton) {
+            function drawIcon(baton) {
                 var extension = getExtension(baton.data.filename),
                     decoration = getDecoration(extension);
-                this.append(
-                    $('<i class="fa file-type-indicator">').addClass(decoration)
-                );
+                if (decoration) this.closest('.list-item').addClass('file-type-' + decoration);
             }
 
             // accessible & extensible
-            drawIndicator.types = {
+            drawIcon.types = {
                 image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
-                audio: /^(mp3|ogg|m4a|m4b|aac|wav)$/,
-                video: /^(avi|m4v|mp4|ogv|ogm|webm|mov|mpeg)$/,
-                docx: /^do[ct]x?$/,
-                xlsx: /^xlsx?$/,
-                pptx: /^p[po]tx?$/,
+                audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
+                video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
+                doc: /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
+                xls: /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/,
+                ppt: /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
                 pdf: /^pdf$/,
-                zip: /^(zip|gz|gzip|tgz)$/,
-                text: /^(txt|md)$/
+                zip: /^(zip|tar|gz|rar|7z|bz2)$/,
+                txt: /^(txt|md)$/
             };
 
-            return drawIndicator;
+            return drawIcon;
 
         }())
     };

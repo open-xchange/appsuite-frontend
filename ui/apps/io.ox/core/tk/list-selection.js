@@ -98,8 +98,9 @@ define('io.ox/core/tk/list-selection', [
             });
         },
 
-        getItems: function () {
-            return this.view.$el.find(SELECTABLE);
+        getItems: function (filter) {
+            var items = this.view.$el.find(SELECTABLE);
+            return filter ? items.filter(filter) : items;
         },
 
         getNode: function (cid) {
@@ -298,7 +299,7 @@ define('io.ox/core/tk/list-selection', [
         },
 
         selectAll: function (items) {
-            items = items || this.getItems();
+            items = _.isString(items) ? this.getItems(items) : (items || this.getItems());
             var slice = items.slice(0, items.length);
             slice.removeClass('no-checkbox');
             this.check(slice);

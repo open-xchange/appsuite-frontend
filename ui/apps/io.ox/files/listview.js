@@ -54,11 +54,16 @@ define('io.ox/files/listview', [
 
     ext.point(ITEM + '/list').extend(
         {
+            id: 'file-type',
+            index: 10,
+            draw: extensions.fileTypeClass
+        },
+        {
             id: 'col1',
             index: 100,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
-                extensions.icon.call(column, baton);
+                extensions.fileTypeIcon.call(column, baton);
                 this.append(column);
             }
         },
@@ -95,8 +100,18 @@ define('io.ox/files/listview', [
 
     ext.point(ITEM + '/icon').extend(
         {
-            id: 'default',
+            id: 'file-type',
+            index: 10,
+            draw: extensions.fileTypeClass
+        },
+        {
+            id: 'thumbnail',
             index: 100,
+            draw: extensions.thumbnail
+        },
+        {
+            id: 'filename',
+            index: 200,
             draw: extensions.filename
         }
     );
@@ -105,9 +120,14 @@ define('io.ox/files/listview', [
 
     ext.point(ITEM + '/tile').extend(
         {
-            id: 'default',
+            id: 'file-type',
+            index: 10,
+            draw: extensions.fileTypeClass
+        },
+        {
+            id: 'thumbnail',
             index: 100,
-            draw: $.noop
+            draw: extensions.thumbnail
         }
     );
 

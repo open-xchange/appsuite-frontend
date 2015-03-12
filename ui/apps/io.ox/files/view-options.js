@@ -49,7 +49,8 @@ define('io.ox/files/view-options', [
             var dropdown = new Dropdown({
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
-                model: baton.app.props
+                model: baton.app.props,
+                caret: true
             });
 
             ext.point('io.ox/files/view-options').invoke('draw', dropdown.$el, baton);
@@ -59,44 +60,63 @@ define('io.ox/files/view-options', [
         }
     });
 
-    function toggleControl(i, state) {
-        i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
-    }
-
-    function toggleSelection(e) {
-        if (e.type === 'click' || e.keyCode === 32) {
-            e.preventDefault();
-            var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
-            if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
-        }
-    }
-
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
-        id: 'select-all',
+    ext.point('io.ox/files/select/options').extend({
+        id: 'default',
         index: 100,
         draw: function (baton) {
-            this.append(
-                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
-                    $('<i class="fa fa-square-o" aria-hidden="true">'),
-                    $.txt(gt('Select all'))
-                )
-                .on('click', { baton: baton }, toggleSelection)
-                .on('dblclick', function (e) {
-                    e.stopPropagation();
-                })
-                .on('keydown', { baton: baton }, toggleSelection)
-            );
 
-            var i = this.find('.select-all > i');
+            this.data('view')
+                .link('all', gt('All'))
+                .link('none', gt('None'))
+                .divider()
+                .link('pdf', gt('PDFs'))
+                .link('doc', gt('Documents'))
+                .link('xls', gt('Spreadsheets'))
+                .link('ppt', gt('Presentations'))
+                .divider()
+                .link('image', gt('Images'))
+                .link('audio', gt('Music'))
+                .link('video', gt('Videos'));
 
-            baton.view.listView.on({
-                'selection:all': function () {
-                    toggleControl(i, true);
-                },
-                'selection:subset': function () {
-                    toggleControl(i, false);
-                }
+            this.data('view').$ul.on('click', 'a', { selection: baton.app.listView.selection }, function (e) {
+
+                e.preventDefault();
+
+                var selection = e.data.selection,
+                    type = $(this).attr('data-name');
+
+                // need to defer that otherwise the list cannot keep the focus
+                _.defer(function () {
+                    if (type === 'all') {
+                        selection.selectAll();
+                    } else {
+                        // clear selection first
+                        selection.selectNone();
+                        // select by type
+                        if (type !== 'none') selection.selectAll('.file-type-' + type);
+                    }
+                });
             });
+        }
+    });
+
+    ext.point('io.ox/files/list-view/toolbar/top').extend({
+        id: 'select',
+        index: 2000,
+        draw: function (baton) {
+
+            var dropdown = new Dropdown({
+                //#. Sort options drop-down
+                label: gt.pgettext('dropdown', 'Select'),
+                model: baton.app.props,
+                caret: true
+            });
+
+            ext.point('io.ox/files/select/options').invoke('draw', dropdown.$el, baton);
+
+            this.append(
+                dropdown.render().$el.addClass('grid-options toolbar-item pull-right')
+            );
         }
     });
 
