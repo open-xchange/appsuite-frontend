@@ -143,8 +143,8 @@ define('io.ox/core/tk/typeahead', [
                         self.model.set('dropdown', 'closed');
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
-                    o.click.call(this, e, item.data);
-                    self.typeaheadInput.trigger('select', item.data);
+                    o.click.call(this, e, item);
+                    self.typeaheadInput.trigger('select', item);
                 },
                 'blur': o.blur
             });
