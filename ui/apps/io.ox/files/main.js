@@ -231,9 +231,13 @@ define('io.ox/files/main', [
          * Default application properties
          */
         'props': function (app) {
+            // layout
+            var layout = app.settings.get('layout');
+            if (!/^(list|icon|tile)/.test(layout)) layout = 'list';
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': app.settings.get('layout', 'list'),
+                'filter': 'none',
+                'layout': layout,
                 'folderEditMode': false,
                 'showCheckboxes': false
             });
@@ -338,6 +342,17 @@ define('io.ox/files/main', [
         'change:order': function (app) {
             app.props.on('change:order', function (model, value) {
                 app.listView.model.set('order', value);
+            });
+        },
+
+        /*
+         * Respond to changed filter
+         */
+        'change:filter': function (app) {
+            app.props.on('change:filter', function (model, value) {
+                app.listView.selection.selectNone();
+                if (value === 'none') app.listView.setFilter();
+                else app.listView.setFilter('.file-type-' + value);
             });
         },
 

@@ -73,18 +73,15 @@ define('io.ox/files/view-options', [
 
         e.preventDefault();
 
-        var selection = e.data.selection,
+        var list = e.data.list,
             type = $(this).attr('data-name');
 
         // need to defer that otherwise the list cannot keep the focus
         _.defer(function () {
             if (type === 'all') {
-                selection.selectAll();
-            } else {
-                // clear selection first
-                selection.selectNone();
-                // select by type
-                if (type !== 'none') selection.selectAll('.file-type-' + type);
+                list.selection.selectAll();
+            } else if (type === 'none') {
+                list.selection.selectNone();
             }
         });
     }
@@ -95,19 +92,21 @@ define('io.ox/files/view-options', [
         draw: function (baton) {
 
             this.data('view')
+                .header(gt('Select'))
                 .link('all', gt('All'))
                 .link('none', gt('None'))
                 .divider()
-                .link('pdf', gt('PDFs'))
-                .link('doc', gt('Documents'))
-                .link('xls', gt('Spreadsheets'))
-                .link('ppt', gt('Presentations'))
-                .divider()
-                .link('image', gt('Images'))
-                .link('audio', gt('Music'))
-                .link('video', gt('Videos'));
+                .header(gt('Filter'))
+                .option('filter', 'none', gt('None'))
+                .option('filter', 'pdf', gt('PDFs'))
+                .option('filter', 'doc', gt('Documents'))
+                .option('filter', 'xls', gt('Spreadsheets'))
+                .option('filter', 'ppt', gt('Presentations'))
+                .option('filter', 'image', gt('Images'))
+                .option('filter', 'audio', gt('Music'))
+                .option('filter', 'video', gt('Videos'));
 
-            this.data('view').$ul.on('click', 'a', { selection: baton.app.listView.selection }, changeSelection);
+            this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
         }
     });
 

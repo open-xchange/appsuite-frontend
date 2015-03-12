@@ -115,6 +115,32 @@
         &.grid-12 > li { width: 100% / 12; }
     }
 
+    .thumbnail(@height) {
+        height: @height;
+        background-color: white;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-origin: border-box;
+    }
+
+    .selection() {
+        border: 4px solid #ddd;
+        box-shadow: 0 0 1px 2px white inset;
+    }
+
+    .selection-focus() {
+        border-color: @selected-background;
+    }
+
+    .busy-indicator(@height) {
+        .busy-indicator {
+            padding-top: 40px;
+            height: @height;
+            border-bottom: 0;
+        }
+    }
+
     &.icon-layout {
 
         // width is > 120px, so assuming a 4/3 format, we're around 120px
@@ -125,18 +151,17 @@
         @filename_line_height: 16px;
         @filename_height: @filename_rows * @filename_line_height;
         @filename_margin: 10px;
+        @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
 
         .list-item-content {
             width: 100%;
-            height: @thumbnail_height + 2 * @filename_margin + @filename_height;
+            height: @height;
         }
+
         .icon-thumbnail {
-            height: @thumbnail_height;
-            background-color: white;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+            .thumbnail(@thumbnail_height);
         }
+
         .filename {
             line-height: @filename_line_height;
             height: @filename_height;
@@ -146,6 +171,8 @@
             padding: 0 5px;
             word-break: break-word;
         }
+
+        .busy-indicator(@thumbnail_height);
     }
 
     &.tile-layout {
@@ -161,12 +188,22 @@
             width: 100%;
             height: @thumbnail_height;
         }
+
         .icon-thumbnail {
-            height: @thumbnail_height;
-            background-color: white;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+            .thumbnail(@thumbnail_height);
+        }
+
+        .busy-indicator(@thumbnail_height);
+    }
+
+    &.icon-layout, &.tile-layout {
+
+        .selected .icon-thumbnail {
+            .selection();
+        }
+
+        &.has-focus .selected .icon-thumbnail {
+            .selection-focus();
         }
     }
 }

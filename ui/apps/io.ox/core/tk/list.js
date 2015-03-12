@@ -382,7 +382,17 @@ define('io.ox/core/tk/list', [
         // the filter is important, as we might have a header
         // although we could use children(), we use find() as it's still faster (see http://jsperf.com/jquery-children-vs-find/8)
         getItems: function () {
-            return this.$el.find('.list-item');
+            var items = this.$el.find('.list-item');
+            if (this.filter) items = items.filter(this.filter);
+            return items;
+        },
+
+        // optional: filter items
+        setFilter: function (selector) {
+            this.filter = selector;
+            var items = this.$el.find('.list-item');
+            items.removeClass('hidden');
+            if (this.filter) items.not(this.filter).addClass('hidden');
         },
 
         connect: function (loader) {

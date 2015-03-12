@@ -312,11 +312,6 @@ define('io.ox/mail/listview', [
             folderAPI.setUnseenMinimum(folder_id, unseen);
         },
 
-        filter: function (model) {
-            var data = model.toJSON();
-            return !util.isDeleted(data);
-        },
-
         reprocessThread: function (model) {
             // only used when in thread mode
             if (!this.threaded) return;
