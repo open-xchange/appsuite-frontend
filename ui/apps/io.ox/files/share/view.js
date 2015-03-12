@@ -18,13 +18,11 @@ define('io.ox/files/share/view', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/contacts/api',
-    'io.ox/contacts/util',
     'io.ox/core/tk/tokenfield',
-    'io.ox/core/date',
     'io.ox/core/yell',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, Tokenfield, date, yell, gt) {
+], function (DisposableView, ext, ShareModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt) {
 
     'use strict';
 

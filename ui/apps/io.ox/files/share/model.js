@@ -12,9 +12,8 @@
  */
 
 define('io.ox/files/share/model', [
-    'io.ox/core/date',
     'io.ox/files/share/api'
-], function (date, api) {
+], function (api) {
 
     'use strict';
 
@@ -47,22 +46,22 @@ define('io.ox/files/share/model', [
         },
 
         getExpiryDate: function () {
-            var now = new date.Local();
+            var now = moment();
             switch (this.get('expires')) {
                 case 0:
-                    return now.add(date.DAY).getTime();
+                    return now.add(1, 'day').valueOf();
                 case 1:
-                    return now.add(date.WEEK).getTime();
+                    return now.add(1, 'week').valueOf();
                 case 2:
-                    return now.addMonths(1).getTime();
+                    return now.add(1, 'month').valueOf();
                 case 3:
-                    return now.addMonths(3).getTime();
+                    return now.add(3, 'months').valueOf();
                 case 4:
-                    return now.addMonths(6).getTime();
+                    return now.add(6, 'months').valueOf();
                 case 5:
-                    return now.addYears(1).getTime();
+                    return now.add(1, 'year').valueOf();
                 default:
-                    return now.addMonths(1).getTime();
+                    return now.add(1, 'month').valueOf();
             }
         },
 
