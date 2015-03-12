@@ -36,7 +36,14 @@ define('io.ox/core/notifications/subview', [
             model.set('showNotificationFor', null);
 
             node.addClass('notifications notifications-main-' + model.get('id'));
-            this.append(node);
+
+            //if theres a placeholder attached use it's position
+            if (view.placeholder.parent().length) {
+                view.placeholder.after(node);
+                view.placeholder.detach();
+            } else {
+                this.append(node);
+            }
             //invoke header, items and footer
             ext.point(extensionPoints.header).invoke('draw', node, baton);
             node.append(itemNode);
@@ -177,8 +184,12 @@ define('io.ox/core/notifications/subview', [
 
             //collection to store notifications
             this.collection = new Backbone.Collection();
+            //add id to collection to distinguish them
+            this.collection.subviewId = options.model.get('id');
             //collection to store hidden notifications (for example appointment reminders that are set to remind me later)
             this.hiddenCollection = new Backbone.Collection();
+
+            this.placeholder = $('<div class="placeholder">').css('display', 'none');
 
             notifications.registerSubview(this);
             //enable api support if possible
@@ -204,8 +215,11 @@ define('io.ox/core/notifications/subview', [
             }
         },
         //clearfunction to empty the view and detach it (keeps event bindings intact)
-        clear: function () {
+        clear: function (setPlaceholder) {
             this.$el.empty();
+            if (this.$el.parent().length && setPlaceholder && !this.placeholder.parent().length) {
+                this.$el.after(this.placeholder);
+            }
             this.$el.detach();
         },
         render: function (node) {
