@@ -146,7 +146,7 @@
         position: relative;
         font-size: 13px;
         line-height: 19px;
-        padding: 9px @list-view-padding 9px (@list-view-padding + 30px);
+        padding: (@base-padding * 2) @list-view-padding (@base-padding * 2) (@list-view-padding + 32px);
         cursor: pointer;
         outline: 0;
     }
@@ -165,7 +165,7 @@
         .fa-checkmark {
             color: #ccc;
             position: absolute;
-            left: 18px;
+            left: @default-padding;
             top: 12px;
             font-size: 18px;
             &:before { content: "\f096"; } // fa-square-o

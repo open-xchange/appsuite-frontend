@@ -86,14 +86,14 @@
 
     &.grid-layout {
 
-        padding: 20px 0 0 20px;
+        padding: @default-padding 0 0 @default-padding;
 
         & > li {
 
             padding: 0;
             display: inline-block;
             border: solid white;
-            border-width: 0 20px 40px 0;
+            border-width: 0 @default-padding (@default-padding * 2) 0;
             overflow: hidden;
             float: left;
 
@@ -152,7 +152,7 @@
     &.tile-layout {
 
         & > li {
-            border-width: 0 20px 20px 0;
+            border-width: 0 @default-padding @default-padding 0;
         }
 
         // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)

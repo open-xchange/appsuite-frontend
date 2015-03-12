@@ -182,7 +182,7 @@
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     margin: 0;
-    padding: 0 0 0 5px;
+    padding: 0;
     .user-select(none);
 
     html.high-contrast & {
@@ -200,7 +200,7 @@
 
             display: inline-block;
             line-height: @toolbar-line-height;
-            padding: @toolbar-vertical-padding 20px;
+            padding: @toolbar-vertical-padding @default-padding;
             text-decoration: none;
             float: left;
             outline: 0;
@@ -212,7 +212,7 @@
 
     & > li.pull-right {
         float: right;
-        & > .dropdown-menu { right: 10px; }
+        & > .dropdown-menu { right: @default-padding; }
     }
 }
 
@@ -307,16 +307,12 @@
     }
 
     .toolbar-item {
-
         color: #333;
         display: inline-block;
         float: left;
         line-height: @height-default - 1;
-        padding: 0 20px;
+        padding: 0 @default-padding;
         text-decoration: none;
-
-        &:first-child { padding-left: 18px; }
-        &:last-child { padding-right: 18px; }
     }
 
     &.visual-focus .toolbar-item {

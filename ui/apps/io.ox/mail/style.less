@@ -13,7 +13,7 @@
 
 // definitions
 @icon-size: 18px;
-@unread-toggle-width: 40px;
+@unread-toggle-width: 48px;
 
 // phone
 @phone-font-size: 14px;
@@ -247,7 +247,7 @@
 
     .contact-picture {
         float: left;
-        margin: 0px 14px 0 0;
+        margin: 0px @default-padding 0 0;
         .picture(40px, 40px);
         html.high-contrast & {
             display: none;
@@ -595,14 +595,14 @@
 .subject() {
     font-size: 20px;
     line-height: 24px;
-    padding: 20px;
+    padding: @default-padding;
     margin: 0;
     .fontWeight(300);
 }
 
 .thread-view-list {
 
-    padding: 20px;
+    padding: @default-padding;
     background-color: #eee;
     &.scrollable { overflow: auto; }
 
@@ -681,8 +681,8 @@ textarea.inplace-editor {
         .button {
             display: table-cell;
             width: 40%;
-            padding-left: 20px;
-            i { margin-right: 14px; }
+            padding-left: @default-padding;
+            i { margin-right: @default-padding; }
         }
 
         .position {
@@ -696,8 +696,8 @@ textarea.inplace-editor {
             display: table-cell;
             text-align: right;
             width: 40%;
-            padding-right: 20px;
-            i { margin-left: 14px; }
+            padding-right: @default-padding;
+            i { margin-left: @default-padding; }
         }
 
          .fa {
@@ -833,7 +833,7 @@ textarea.inplace-editor {
     .mail-detail-decorator {
 
         position: relative;
-        padding: 20px;
+        padding: @default-padding;
         display: table;
         width: 100%;
         // to make sure the quick-reply field can scroll out of viewport
@@ -857,8 +857,7 @@ textarea.inplace-editor {
     width: 100%;
 
     @picture-width: 40px;
-    @header-padding: 19px;
-    @picture-padding: @picture-width + @header-padding;
+    @picture-padding: @picture-width + @default-padding;
 
     &.list-item:focus {
         outline: 0;
@@ -965,7 +964,7 @@ textarea.inplace-editor {
     .external-images, .disposition-notification {
         display: table;
         width: 100%;
-        .btn { float: left; margin-right: 20px; }
+        .btn { float: left; margin-right: @default-padding; }
         .comment { display: table; }
         .close { position: relative; right: -10px; }
     }
@@ -973,7 +972,7 @@ textarea.inplace-editor {
     .flag-dropdown {
 
         font-size: 22px;
-        margin: 7px 0 0 14px;
+        margin: 8px 0 0 @default-padding;
         cursor: pointer;
         float: right;
 
@@ -1024,7 +1023,7 @@ textarea.inplace-editor {
 
     .contact-picture {
         position: absolute;
-        left: 20px;
+        left: @default-padding;
         .picture(@picture-width, @picture-width);
     }
 
@@ -1132,12 +1131,12 @@ textarea.inplace-editor {
 
     .detail-view-header {
         .fontWeight(300);
-        padding: 14px (@header-padding + 1);
+        padding: @default-padding;
         padding-left: @picture-padding + @unread-toggle-width;
     }
 
     &.no-padding .detail-view-header {
-        padding-left: @picture-padding + @unread-toggle-width - 20;
+        padding-left: @picture-padding + @unread-toggle-width - @default-padding;
         padding-right: 0;
     }
 
@@ -1146,7 +1145,7 @@ textarea.inplace-editor {
     }
 
     .notification-item {
-        padding: 14px 20px;
+        padding: @default-padding;
         background-color: #f0f0f0;
         border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
@@ -1159,7 +1158,7 @@ textarea.inplace-editor {
     .alert, .well {
         margin: 0;
         border: 0;
-        padding: 14px 40px 14px 20px;
+        padding: @default-padding 40px @default-padding @default-padding;
         .border-radius(0px);
         .box-shadow(none);
     }
@@ -1519,11 +1518,11 @@ h4.mail-attachment-preview {
 
         .subject {
             font-size: @phone-font-size;
-            padding: 10px 20px;
+            padding: @default-padding;
         }
 
         .detail-view-header {
-            padding-left: 20px;
+            padding-left: @default-padding;
             .sp {
                 margin-right: 4px;
             }
