@@ -25,7 +25,7 @@ define('io.ox/core/permissions/permissions', [
     'io.ox/core/http',
     'gettext!io.ox/core',
     'less!io.ox/core/permissions/style'
-], function (ext, notifications, api, getBreadcrumb, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+], function (ext, notifications, api, BreadcrumbView, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -361,7 +361,8 @@ define('io.ox/core/permissions/permissions', [
                     }
                     var dialog = new dialogs.ModalDialog(options);
                     dialog.getHeader().append(
-                        getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
+                        $('<h4>').text(gt('Folder permissions')),
+                        new BreadcrumbView({ folder: data.id }).render().$el
                     );
                     if (_.device('!desktop')) {
                         dialog.getHeader().append(

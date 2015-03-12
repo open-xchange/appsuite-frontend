@@ -6,171 +6,97 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/breadcrumb', [
-    'io.ox/core/folder/api',
-    'io.ox/core/folder/title',
-    'gettext!io.ox/core'
-], function (api, getFolderTitle, gt) {
+define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api) {
 
     'use strict';
 
-    /**
-     * Create a Breadcrum widget for a given folder.
-     *
-     * This widget can be customized in different ways. You can pass an options parameter
-     * containing an object with these attributes:
-     *
-     * @param {string} - folder id
-     * @param {object} - options:
-     * {
-     *     exclude: { Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
-     *     leaf: { DOMnode} - An extra node that is appended as last crumb
-     *     last: { boolean} - true: last item should have the active class set (default)
-     *                     - no relevance if subfolder option is set to true and element is 'clickable' (*)
-     *                     - false: same as true if element is 'clickable' (*)
-     *                     - false: a link that reacts to the function assigned to the handler option
-     *     handler: { function} - a handler function, called with the id of the folder as parameter
-     *     module: { string} - provide a module to limit 'clickable' attribute (*) to a specific module
-     *     subfolder: { boolean} - show all subfolders of the folder as a dropdown if element is 'clickable' (*)
-     *                          - default: true
-     * }
-     * (*) - element is defined to be clickable, if a few conditions are met:
-     *         - module option equals the folder module or module option is undefined
-     *         - handler function is defined
-     *
-     * @return { Node} - an ul element that contains the list (populated later, after path is loaded via the API (async))
-     */
+    var BreadcrumbView = Backbone.DisposableView.extend({
 
-    var dropdown = function (li, id, title, options) {
-        _.defer(function () {
-            api.list(id).done(function (list) {
-                if (list.length) {
-                    li.addClass('dropdown').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">')
-                        .attr(
-                            'title', title
-                        ).append(
-                            $.txt(gt.noI18n(getFolderTitle(title, 30))),
-                            $('<b class="caret">')
-                        ),
-                        $('<ul class="dropdown-menu">')
-                        .attr({
-                            'role': 'menu',
-                            'aria-haspopup': 'true',
-                            'aria-label': gt.format(gt('subfolders of %s'), gt.noI18n(getFolderTitle(title, 30)))
-                        }).append(
-                            _(list).map(function (folder) {
-                                var $a, $li = $('<li>').append(
-                                    $a = $('<a href="#" tabindex="1" role="menuitem">')
-                                    .attr({ 'data-folder-id': folder.id }).text(gt.noI18n(getFolderTitle(folder.title, 30)))
-                                );
-                                /**
-                                 * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile
-                                 *
-                                 * on mobile devices the dropdowns are moved around in the down
-                                 * causing the click delegate to break which is defined on the "breadcrump" element
-                                 * Therfore we need to bind the handler on each dropdown href for mobile as the
-                                 * handlers will stay alive after append the whole dropdown to a new
-                                 * root node in the DOM.
-                                 */
-                                if (_.device('smartphone')) {
-                                    $a.on('click', function (e) {
-                                        e.preventDefault();
-                                        var id = $(this).attr('data-folder-id');
-                                        if (id !== undefined) {
-                                            _.call(options.handler, id, $(this).data());
-                                        }
-                                    });
-                                }
-                                return $li;
-                            })
-                        )
-                    );
-                } else {
-                    li.addClass('active').text(gt.noI18n(title));
-                }
-            });
-        });
-    };
+        className: 'breadcrumb-view',
 
-    var add = function (folder, i, list, options) {
+        events: {
+            'click .breadcrumb-link': 'onClickLink'
+        },
 
-        var li = $('<li>'), elem, isLast = i === list.length - 1,
-            properModule = options.module === undefined || folder.module === options.module,
-            clickable = properModule && options.handler !== undefined,
-            displayTitle = gt.noI18n(getFolderTitle(folder.title, 30));
+        initialize: function (options) {
 
-        if (isLast && options.subfolder && clickable) {
-            dropdown(elem = li, folder.id, folder.title, options);
-        } else if (isLast && options.last) {
-            elem = li.addClass('active').text(displayTitle);
-        } else {
-            if (!clickable) {
-                elem = li.addClass('active').text(displayTitle);
-            } else {
-                li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').attr('title', folder.title).text(displayTitle));
+            this.folder = options.folder;
+            this.label = options.label;
+            this.exclude = options.exclude;
+
+            if (options.app) {
+                this.app = options.app;
+                this.handler = function (id) { this.app.folder.set(id); };
+                this.folder = this.app.folder.get();
+                this.listenTo(this.app, 'folder:change', this.onChangeFolder);
             }
-        }
+        },
 
-        elem.attr('data-folder-id', folder.id).data(folder);
-        this.append(li);
-    };
+        onChangeFolder: function (id) {
+            this.folder = id;
+            this.render();
+        },
 
-    var draw = function (list, ul, options) {
-        var exclude = _(options.exclude);
-        _(list).each(function (o, i, list) {
-            if (!exclude.contains(o.id)) {
-                add.call(ul, o, i, list, options);
+        render: function () {
+            if (this.folder === undefined) return this;
+            api.path(this.folder).done(this.renderPath.bind(this));
+            return this;
+        },
+
+        renderPath: function (path) {
+
+            if (this.disposed) return;
+
+            // apply exclude option
+            if (this.exclude) {
+                var exclude = _(this.exclude);
+                path = _(path).filter(function (data) { return !exclude.contains(data.id); });
             }
-        });
-        ul = null;
-    };
 
-    return function getBreadcrumb(id, options) {
-        var ul;
-        options = _.extend({ subfolder: true, last: true, exclude: [] }, options);
-        try {
-            ul = $('<ul class="breadcrumb">')
-                .attr({
-                    'role': 'menubar'
-                })
-                .on('click', 'a', function (e) {
-                    e.preventDefault();
-                    var id = $(this).attr('data-folder-id');
-                    if (id !== undefined) {
-                        _.call(options.handler, id, $(this).data());
-                    }
-                });
-            if (options.prefix) {
-                ul.append($('<li class="prefix">').append(
-                    $.txt(options.prefix)
-                ));
-            }
-            return ul;
-        }
-        finally {
-            api.path(id).then(
-                function success(list) {
-                    draw(list, ul, options);
-                },
-                function fail() {
-                    api.get(id).then(
-                        function (folder) {
-                            draw([folder], ul, options);
-                        },
-                        function () {
-                            // cannot show breadcrumb, for example due to disabled GAB
-                            ul.remove();
-                            ul = null;
-                        }
-                    );
-                }
+            this.$el.empty().append(
+                // label
+                this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
+                // path
+                _(path).map(this.renderLink, this)
             );
+        },
+
+        renderLink: function (data, index, all) {
+
+            var length = all.length,
+                isLast = index === length - 1,
+                node;
+
+            // add ellipsis for more than four items
+            if (length > 4 && index > 0 && index < length - 3) {
+                return index === 1 ?
+                    $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span><i class="fa breadcrumb-divider" aria-hidden="true"></span>') :
+                    $();
+            }
+
+            // add plain text tail or clickable link
+            if (isLast) node = $('<span class="breadcrumb-tail">');
+            else if (!this.handler) node = $('<span class="breadcrumb-item">');
+            else node = $('<a href="#" role="button" class="breadcrumb-link" tabindex="1">');
+
+            node.attr('data-id', data.id).text(data.title);
+
+            if (!isLast) node = node.add($('<i class="fa breadcrumb-divider" aria-hidden="true">'));
+
+            return node;
+        },
+
+        onClickLink: function (e) {
+            e.preventDefault();
+            var id = $(e.target).attr('data-id');
+            if (this.handler) this.handler(id);
         }
-    };
+    });
+
+    return BreadcrumbView;
 });

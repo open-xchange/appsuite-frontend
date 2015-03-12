@@ -54,5 +54,8 @@ define('io.ox/backbone/disposable', [], function () {
         }
     });
 
+    // easy access to promote usage
+    Backbone.DisposableView = DisposableView;
+
     return DisposableView;
 });

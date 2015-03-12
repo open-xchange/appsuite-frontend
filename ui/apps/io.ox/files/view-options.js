@@ -14,10 +14,15 @@
 define('io.ox/files/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/files'
-], function (ext, Dropdown, gt) {
+], function (ext, Dropdown, BreadcrumbView, gt) {
 
     'use strict';
+
+    //
+    // View dropdown
+    //
 
     ext.point('io.ox/files/view-options').extend({
         id: 'sort',
@@ -60,6 +65,30 @@ define('io.ox/files/view-options', [
         }
     });
 
+    //
+    // Select dropdown
+    //
+
+    function changeSelection(e) {
+
+        e.preventDefault();
+
+        var selection = e.data.selection,
+            type = $(this).attr('data-name');
+
+        // need to defer that otherwise the list cannot keep the focus
+        _.defer(function () {
+            if (type === 'all') {
+                selection.selectAll();
+            } else {
+                // clear selection first
+                selection.selectNone();
+                // select by type
+                if (type !== 'none') selection.selectAll('.file-type-' + type);
+            }
+        });
+    }
+
     ext.point('io.ox/files/select/options').extend({
         id: 'default',
         index: 100,
@@ -78,25 +107,7 @@ define('io.ox/files/view-options', [
                 .link('audio', gt('Music'))
                 .link('video', gt('Videos'));
 
-            this.data('view').$ul.on('click', 'a', { selection: baton.app.listView.selection }, function (e) {
-
-                e.preventDefault();
-
-                var selection = e.data.selection,
-                    type = $(this).attr('data-name');
-
-                // need to defer that otherwise the list cannot keep the focus
-                _.defer(function () {
-                    if (type === 'all') {
-                        selection.selectAll();
-                    } else {
-                        // clear selection first
-                        selection.selectNone();
-                        // select by type
-                        if (type !== 'none') selection.selectAll('.file-type-' + type);
-                    }
-                });
-            });
+            this.data('view').$ul.on('click', 'a', { selection: baton.app.listView.selection }, changeSelection);
         }
     });
 
@@ -119,6 +130,24 @@ define('io.ox/files/view-options', [
             );
         }
     });
+
+    //
+    // Breadcrumb
+    //
+
+    ext.point('io.ox/files/list-view/toolbar/top').extend({
+        id: 'breadcrumb',
+        index: 300,
+        draw: function (baton) {
+            this.append(
+                new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item')
+            );
+        }
+    });
+
+    //
+    // Folder view toggle
+    //
 
     function toggleFolderView(e) {
         e.preventDefault();

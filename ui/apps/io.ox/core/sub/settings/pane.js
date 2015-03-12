@@ -22,7 +22,7 @@ define('io.ox/core/sub/settings/pane', [
     'io.ox/core/capabilities',
     'gettext!io.ox/core/sub',
     'less!io.ox/core/sub/style'
-], function (ext, model, views, folderAPI, getBreadcrumb, dialogs, yell, capabilities, gt) {
+], function (ext, model, views, folderAPI, BreadcrumbView, dialogs, yell, capabilities, gt) {
 
     'use strict';
 
@@ -100,38 +100,15 @@ define('io.ox/core/sub/settings/pane', [
         }
     });
 
-    // module mapping
-    var mapping = { contacts: 'io.ox/contacts', calendar: 'io.ox/calendar', infostore: 'io.ox/files' };
-
     function createPathInformation(model) {
-
-        var options = {
-            handler: function (id, data) {
-                if (!mapping[data.module]) {
-                    return;
-                }
-                ox.launch(mapping[data.module] + '/main', { folder: id }).done(function () {
-                    this.folder.set(id);
-                });
-            },
-            // root folder is useless
-            exclude: ['9'],
-            //don’t show subfolders for last item
-            subfolder: false,
-            // make last item a link (responding to handler function)
-            last: false
-        };
-
-        // subscriptions have a folder on top-level
-        var folder = model.get('folder');
-
-        return getBreadcrumb(folder, options);
+        return new BreadcrumbView({ folder: model.get('folder') }).render().$el;
     }
 
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,
         getShortUrlRegex = /\?secret=.+$/;
 
     function getSiteName(url) {
+        if (!url) return;
         return (url = url.match(getSiteNameRegex)) ? url[1] : '';
     }
 
@@ -153,7 +130,7 @@ define('io.ox/core/sub/settings/pane', [
     }
 
     function getDisplayName(data) {
-        return getSiteName(data.displayName) || data.displayName || '';
+        return getSiteName(data.displayName) || data.displayName || gt('Unnamed subscription');
     }
 
     function isDestructiveRefresh(data) {

@@ -144,27 +144,35 @@ a.button {
     font-size: 15.5px;
 }
 
+//
+// Folder breadcrumb
+//
 
-.breadcrumb {
+.breadcrumb-view {
+    margin: 8px 0;
+    .toolbar & { margin: 0; }
+}
 
-    &>li+li:before {
-        content: '/';
-    }
+.breadcrumb-label, .breadcrumb-item, .breadcrumb-ellipsis, .breadcrumb-divider, .breadcrumb-tail {
+    color: #777;
+    display: inline-block;
+}
 
-    &>.prefix+li:before {
-        content: '';
-    }
+.breadcrumb-label {
+    margin-right: 8px;
+}
 
+.breadcrumb-tail {
+    color: #333;
+    font-weight: bold;
+}
+
+.breadcrumb-divider {
+    margin: 0 8px;
+    &:before { content: "\f105"; } // fa-angle-right
 }
 
 .cursor-pointer, .label.pointer { cursor: pointer; }
-
-.breadcrumb > li.prefix { white-space: nowrap; }
-
-.breadcrumb.chromeless {
-    padding-left: 0;
-    background-color: transparent;
-}
 
 .badge {
 

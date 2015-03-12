@@ -187,7 +187,10 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/print.js',
                             'apps/io.ox/contacts/api.js',
                             'apps/io.ox/core/tk/flag-picker.js',
+                            'apps/io.ox/backbone/disposable.js',
+                            'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/backbone/mini-views/dropdown.js',
+                            'apps/io.ox/backbone/mini-views/toolbar.js',
                             'apps/io.ox/core/tk/upload.js',
                             'apps/io.ox/core/dropzone.js',
                             // mail app - 3rd wave
