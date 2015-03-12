@@ -679,6 +679,15 @@ define('io.ox/contacts/main',
             });
         },
 
+        'api-create-event': function (app) {
+            if (_.device('smartphone')) return;
+
+            api.on('create', function (e, data) {
+                data.folder_id = data.folder_id || data.folder;
+                app.grid.setPreSelection(data);
+            });
+        },
+
         'drag-and-drop': function (app) {
             // drag & drop
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
