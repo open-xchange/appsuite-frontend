@@ -26,12 +26,15 @@
 
 .file-list-view {
 
-    .list-item.column-layout .list-item-content {
+    //
+    // Column layout
+    //
+
+    &.column-layout .list-item-content {
         display: table;
         width: 100%;
         table-layout: fixed;
     }
-
     .list-item-column {
         display: table-cell;
         vertical-align: middle;
@@ -50,10 +53,6 @@
     .list-item .list-item-checkmark .fa-checkmark {
         top: 10px;
     }
-
-    //
-    // Column layout
-    //
 
     &.column-layout {
         .filename {

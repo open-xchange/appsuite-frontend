@@ -116,7 +116,10 @@ define('io.ox/files/api', [
             };
         },
         // use client-side limit
-        useSlice: true
+        useSlice: true,
+        // set higher limit; works much faster than mail
+        // we pick a number than looks for typical columns, so 5 * 6 * 7 = 210
+        LIMIT: 210
     });
 
     api.collectionLoader.each = function (data) {
