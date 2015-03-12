@@ -175,7 +175,7 @@ define.async('io.ox/core/manifests', [
     var def = $.Deferred();
 
     if (_.url.hash('customManifests')) {
-        require([ox.base + '/src/manifests.js?t=' + ts], function (list) {
+        require([ox.base + '/manifests/open-xchange-appsuite.json?t=' + ts], function (list) {
             custom = list;
             console.info('Loading custom manifests', _(list).pluck('path'), list);
             def.resolve(self);
