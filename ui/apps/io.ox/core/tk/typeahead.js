@@ -21,6 +21,14 @@ define('io.ox/core/tk/typeahead', [
 
     'use strict';
 
+    function customEvent (state, query, data) {
+        this.model.set({
+            source: state,
+            query: state === 'idle' ? query : this.model.get('query')
+        });
+        return data;
+    }
+
     var Typeahead = Backbone.View.extend({
 
         tagName: 'input type="text"',
@@ -61,6 +69,14 @@ define('io.ox/core/tk/typeahead', [
         initialize: function (o) {
             var self = this;
 
+            // model to unify/repair listening for different event based states
+            this.model = new Backbone.Model({
+                // [idle|requesting|processing|finished]
+                'source': 'idle',
+                'query': undefined,
+                'dropdown': 'closed'
+            });
+
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
 
@@ -73,7 +89,9 @@ define('io.ox/core/tk/typeahead', [
                 hint: o.hint
             }, {
                 source: function (query, callback) {
+                    customEvent.call(self, 'requesting', query);
                     o.source.call(self, query)
+                        .then(customEvent.bind(self, 'processing', query))
                         .then(o.reduce)
                         .then(function (data) {
                             if (o.maxResults) {
@@ -85,7 +103,19 @@ define('io.ox/core/tk/typeahead', [
                             data = o.placement === 'top' ? data.reverse() : data;
                             return _(data).map(o.harmonize);
                         })
+                        .then(customEvent.bind(self, 'finished', query))
+                        .then(customEvent.bind(self, 'idle', query))
                         .then(callback);
+                    // dirty hack to get a reliable info about open/close state
+                    if (!self.registered) {
+                        // use source function to get dateset reference
+                        this.onSync('rendered', function () {
+                            var dropdown = this.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                            if (dropdown.is(':visible'))
+                                self.model.set('dropdown', 'opened');
+                        });
+                        self.registered = true;
+                    }
                 },
                 templates: {
                     suggestion: o.suggestion || function (searchresult) {
@@ -105,6 +135,12 @@ define('io.ox/core/tk/typeahead', [
             this.$el.on({
                 'typeahead:opened': function () {
                     if (_.isFunction(o.cbshow)) o.cbshow();
+                },
+                // dirty hack to get a reliable info about open/close state
+                'typeahead:closed': function () {
+                    var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                    if (!dropdown.is(':visible'))
+                        self.model.set('dropdown', 'closed');
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item.data);
