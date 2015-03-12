@@ -43,10 +43,20 @@ define('io.ox/core/viewer/types/imagetype', [
                 image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
                 previewUrl = model.getPreviewUrl(),
                 filename = model.get('filename') || '',
-                slidesCount = model.collection.length;
+                slidesCount = model.collection.length,
+                self = this;
             if (previewUrl) {
                 previewUrl = _.unescapeHTML(previewUrl);
                 image.attr({ 'data-src': previewUrl, alt: filename });
+                slide.busy();
+                image.one('load', function () {
+                    slide.idle();
+                    image.show();
+                });
+                image.one('error', function () {
+                    var notification = self.createNotificationNode(model, gt('Sorry, there is no preview available for this image.'));
+                    slide.idle().append(notification);
+                });
                 slide.append(image, this.createCaption(modelIndex, slidesCount));
             }
             return slide;
@@ -62,18 +72,8 @@ define('io.ox/core/viewer/types/imagetype', [
         loadSlide: function (model, slideElement) {
             //console.warn('ImageType.loadSlide()', slideElement.attr('class'));
             if (slideElement.length === 0) { return; }
-            var self = this,
-                imageToLoad = slideElement.find('img');
+            var imageToLoad = slideElement.find('img');
             if (imageToLoad.length === 0 || slideElement.hasClass('cached')) { return;}
-            slideElement.busy();
-            imageToLoad[0].onload = function () {
-                slideElement.idle();
-                imageToLoad.show();
-            };
-            imageToLoad[0].onerror = function () {
-                var notification = self.createNotificationNode(model, gt('Sorry, there is no preview available for this image.'));
-                slideElement.idle().append(notification);
-            };
             imageToLoad.attr('src', imageToLoad.attr('data-src'));
             slideElement.addClass('cached');
         },
