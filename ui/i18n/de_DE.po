@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-09 14:45+0100\n"
+"PO-Revision-Date: 2015-03-12 15:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1169,13 +1169,11 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js:225 module:io.ox/calendar
 #, fuzzy
-#| msgid ""
-#| "Automatically delete a notification mail after it has been accepted or "
-#| "declined?"
 msgid ""
 "Automatically delete incoming notifications after it has been accepted or "
 "declined"
-msgstr "E-Mail-Benachrichtigung nach Bestätigen/Ablehnen automatisch löschen?"
+msgstr ""
+"Eingehende Benachrichtigungen nach Bestätigen/Ablehnen automatisch löschen?"
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
@@ -2797,10 +2795,8 @@ msgid "Email notification for task participant?"
 msgstr "E-Mail-Benachrichtigung für Aufgabenteilnehmer?"
 
 #: apps/io.ox/calendar/settings/pane.js:206 module:io.ox/calendar
-#, fuzzy
-#| msgid "Email notification for task"
 msgid "Email notifications"
-msgstr "E-Mail-Benachrichtigung für Aufgabe"
+msgstr "E-Mail-Benachrichtigungen"
 
 #: apps/io.ox/mail/actions/delete.js:78 module:io.ox/mail
 msgid ""
@@ -4122,10 +4118,9 @@ msgstr "E-Mail von %1$s %2$s"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/plugins/notifications/mail/register.js:96 module:plugins/notifications
-#, fuzzy, c-format
-#| msgid "Mail from %1$s %2$s"
+#, c-format
 msgid "Mail from %1$s, %2$s"
-msgstr "E-Mail von %1$s %2$s"
+msgstr "E-Mail von %1$s, %2$s"
 
 #: apps/io.ox/mail/actions.js:206 module:io.ox/mail
 msgid "Mail has been copied"
@@ -4521,24 +4516,18 @@ msgstr "Neuer Termin"
 #: apps/plugins/notifications/calendar/register.js:246
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:256
-#, fuzzy
-#| msgid "Appointment invitations"
 msgid "New appointment invitation"
-msgstr "Termin-Einladungen"
+msgstr "Neue Termin-Einladung"
 
 #: apps/plugins/notifications/calendar/register.js:184
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Appointment reminders"
 msgid "New appointment reminder"
-msgstr "Termin-Erinnerungen"
+msgstr "Neue Termin-Erinnerung"
 
 #: apps/plugins/notifications/calendar/register.js:174
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Appointment reminders"
 msgid "New appointment reminders"
-msgstr "Termin-Erinnerungen"
+msgstr "Neue Termin-Erinnerungen"
 
 #: apps/io.ox/core/folder/actions/add.js:66 module:io.ox/core
 msgid "New calendar"
@@ -4557,30 +4546,22 @@ msgid "New folder"
 msgstr "Neuer Ordner"
 
 #: apps/plugins/notifications/mail/register.js:98 module:plugins/notifications
-#, fuzzy
-#| msgid "New Mail"
 msgid "New mail"
-msgstr "Neue E-Mails"
+msgstr "Neue E-Mail"
 
 #: apps/plugins/notifications/mail/register.js:86 module:plugins/notifications
-#, fuzzy
-#| msgid "New Mails"
 msgid "New mails"
 msgstr "Neue E-Mails"
 
 #: apps/plugins/notifications/tasks/register.js:110
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Next due task:"
 msgid "New overdue task"
-msgstr "Nächste fällige Aufgabe:"
+msgstr "Neue überfällige Aufgabe"
 
 #: apps/plugins/notifications/tasks/register.js:101
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Overdue Tasks"
 msgid "New overdue tasks"
-msgstr "Überfällige Aufgaben"
+msgstr "Neue überfällige Aufgaben"
 
 #: apps/plugins/portal/userSettings/register.js:125 module:io.ox/core
 msgid "New password"
@@ -4625,31 +4606,23 @@ msgstr "Neue Aufgabe"
 
 #: apps/plugins/notifications/tasks/register.js:328
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Task invitations"
 msgid "New task invitation"
-msgstr "Aufgaben-Einladungen"
+msgstr "Neue Aufgaben-Einladung"
 
 #: apps/plugins/notifications/tasks/register.js:319
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Task invitations"
 msgid "New task invitations"
-msgstr "Aufgaben-Einladungen"
+msgstr "Neue Aufgaben-Einladungen"
 
 #: apps/plugins/notifications/tasks/register.js:198
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Task reminders"
 msgid "New task reminder"
-msgstr "Aufgaben-Erinnerungen"
+msgstr "Neue Aufgaben-Erinnerung"
 
 #: apps/plugins/notifications/tasks/register.js:189
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Task reminders"
 msgid "New task reminders"
-msgstr "Aufgaben-Erinnerungen"
+msgstr "Neue Aufgaben-Erinnerungen"
 
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/files/carousel.js:69 module:io.ox/files
@@ -5700,15 +5673,11 @@ msgstr "Erneut autorisieren"
 
 #: apps/io.ox/calendar/settings/pane.js:215 module:io.ox/calendar
 #, fuzzy
-#| msgid ""
-#| "Receive notification as appointment participant when other participants "
-#| "accept or decline"
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
 msgstr ""
-"Benachrichtigung als Terminteilnehmer, wenn andere Teilnehmer zusagen oder "
-"ablehnen"
+"Benachrichtigung als Terminersteller, wenn Teilnehmer zusagen oder ablehnen"
 
 #: apps/io.ox/calendar/settings/pane.js:220 module:io.ox/calendar
 msgid ""
@@ -6187,10 +6156,10 @@ msgid ""
 "mail account's default name will be used. If you want to use an address "
 "anonymously, select the checkbox and leave the field empty."
 msgstr ""
-"Bestimmen Sie einen Namen für diese Adresse, indem Sie ein Kontrollfeld "
-"markieren. Andernfalls wird der Standardname des E-Mail-Kontos verwendet. "
-"Wollen Sie eine Adresse anonym verwenden, markieren Sie das Kontrollfeld und "
-"lassen Sie das Feld leer."
+"Bestimmen Sie einen benutzerdefinierten Namen für diese Adresse, indem Sie "
+"ein Kontrollfeld markieren. Andernfalls wird der Standardname des E-Mail-"
+"Kontos verwendet. Wollen Sie eine Adresse anonym verwenden, markieren Sie "
+"das Kontrollfeld und lassen Sie das Feld leer."
 
 #: apps/io.ox/core/tk/vgrid.js:316 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:299 module:io.ox/mail
@@ -8358,17 +8327,13 @@ msgstr[1] "Sie werden in %1$d Sekunden automatisch abgemeldet"
 
 #: apps/plugins/notifications/calendar/register.js:247
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "You've got an appointment invitation"
 msgid "You've got appointment invitations"
-msgstr "Sie haben eine Termin-Einladung"
+msgstr "Sie haben Termin-Einladungen"
 
 #: apps/plugins/notifications/calendar/register.js:175
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "You've got an appointment reminder"
 msgid "You've got appointment reminders"
-msgstr "Sie haben eine Termin-Erinnerung"
+msgstr "Sie haben Termin-Erinnerungen"
 
 #: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
 #, fuzzy
@@ -8376,31 +8341,23 @@ msgid "You've got new Notifications"
 msgstr "Sie haben neue Benachrichtigungen"
 
 #: apps/plugins/notifications/mail/register.js:87 module:plugins/notifications
-#, fuzzy
-#| msgid "You've got a new Mail"
 msgid "You've got new mails"
-msgstr "Sie haben eine neue E-Mail"
+msgstr "Sie haben neue E-Mails"
 
 #: apps/plugins/notifications/tasks/register.js:102
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "You've got an overdue task"
 msgid "You've got overdue tasks"
-msgstr "Sie haben eine überfällige Aufgabe"
+msgstr "Sie haben überfällige Aufgaben"
 
 #: apps/plugins/notifications/tasks/register.js:320
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "You've got a task invitation"
 msgid "You've got task invitations"
-msgstr "Sie haben eine Aufgaben-Einladung"
+msgstr "Sie haben Aufgaben-Einladungen"
 
 #: apps/plugins/notifications/tasks/register.js:190
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "You've got a task reminder"
 msgid "You've got task reminders"
-msgstr "Sie haben eine Aufgaben-Erinnerung"
+msgstr "Sie haben Aufgaben-Erinnerungen"
 
 #: apps/plugins/portal/xing/register.js:346 module:plugins/portal
 msgid "Your %s newsfeed"
