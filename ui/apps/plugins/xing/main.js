@@ -14,13 +14,12 @@
 define('plugins/xing/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'io.ox/core/date',
     'io.ox/xing/api',
     'io.ox/core/extPatterns/links',
     'io.ox/core/notifications',
     'io.ox/keychain/api',
     'gettext!plugins/portal'
-], function (Stage, ext, date, api, links, notifications, keychain, gt) {
+], function (Stage, ext, api, links, notifications, keychain, gt) {
 
     'use strict';
 

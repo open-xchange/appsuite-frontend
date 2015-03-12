@@ -17,9 +17,8 @@ define('plugins/portal/tumblr/register', [
     'io.ox/portal/feed',
     'gettext!io.ox/portal',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/date',
     'settings!io.ox/portal'
-], function (ext, Feed, gt, dialogs, date, settings) {
+], function (ext, Feed, gt, dialogs, settings) {
 
     'use strict';
 
@@ -137,8 +136,7 @@ define('plugins/portal/tumblr/register', [
                 },
 
                 postDate = function () {
-                    var pd = new date.Local(post.timestamp * 1000);
-                    return $('<span class="post-date">').text(' ' + pd.format(date.DATE_TIME));
+                    return $('<span class="post-date">').text(' ' + moment.unix(post.timestamp).format('lll'));
                 },
                 postTags = function () {
                     var tags = [],

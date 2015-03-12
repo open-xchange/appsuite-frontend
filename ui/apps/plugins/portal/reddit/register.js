@@ -12,9 +12,8 @@
  */
 
 define('plugins/portal/reddit/register', [
-    'io.ox/core/date',
     'gettext!io.ox/portal'
-], function (date, gt) {
+], function (gt) {
 
     'use strict';
 
@@ -116,7 +115,7 @@ define('plugins/portal/reddit/register', [
                     $node.append($('<div>').addClass('mediaplugin-title').text(title));
                 }
 
-                $node.append($('<div>').addClass('mediaplugin-content mediaplugin-textbackground').text(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ''));
+                $node.append($('<div>').addClass('mediaplugin-content mediaplugin-textbackground').text(entry.created_utc ? moment.unix(entry.created_utc).format('l LT') : ''));
 
                 lastShowedPreview = entry.name;
 

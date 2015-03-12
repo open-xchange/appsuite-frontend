@@ -16,10 +16,9 @@ define('plugins/portal/facebook/register', [
     'io.ox/core/extensions',
     'io.ox/oauth/proxy',
     'io.ox/keychain/api',
-    'io.ox/core/date',
     'gettext!plugins/portal',
     'less!plugins/portal/facebook/style'
-], function (ext, proxy, keychain, date, gt) {
+], function (ext, proxy, keychain, gt) {
 
     'use strict';
 
@@ -39,7 +38,7 @@ define('plugins/portal/facebook/register', [
                     $('<div class="wall-comment-content">').append(
                         $('<a class="from">').text(from.name).attr('href', from.url),
                         $('<div class="wall-comment-text">').text(comment.text),
-                        $('<span class="datetime">').text(new date.Local(comment.time * 1000)),
+                        $('<span class="datetime">').text(moment.unix(comment.time).format('lll')),
                         addLikeInfo({ user_likes: comment.user_likes, like_count: comment.likes }))
                     )
                     .appendTo($(node));
@@ -319,7 +318,7 @@ define('plugins/portal/facebook/register', [
                                 $(this).text(gt('expand'));
                             }
                         }),
-                        $('<span class="datetime">').text(new date.Local(post.created_time * 1000)),
+                        $('<span class="datetime">').text(moment.unix(post.created_time).format('lll')),
                         addLikeInfo(post.like_info)
                     ));
 

@@ -16,7 +16,6 @@ define('io.ox/portal/main', [
     'io.ox/core/extensions',
     'io.ox/core/api/user',
     'io.ox/contacts/api',
-    'io.ox/core/date',
     'io.ox/core/tk/dialogs',
     'io.ox/portal/widgets',
     'io.ox/portal/util',
@@ -24,7 +23,7 @@ define('io.ox/portal/main', [
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
     'less!io.ox/portal/style'
-], function (ext, userAPI, contactAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
+], function (ext, userAPI, contactAPI, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -82,7 +81,7 @@ define('io.ox/portal/main', [
 
     // time-based greeting phrase
     function getGreetingPhrase(name) {
-        var hour = new date.Local().getHours();
+        var hour = moment().hour();
         // find proper phrase
         if (hour >= 4 && hour <= 11) {
             return gt('Good morning, %s', name);

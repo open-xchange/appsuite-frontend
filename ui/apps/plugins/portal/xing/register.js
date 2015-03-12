@@ -31,11 +31,9 @@ define('plugins/portal/xing/register', [
     'io.ox/core/notifications',
     'io.ox/core/tk/dialogs',
     'io.ox/keychain/api',
-    'io.ox/core/date',
     'gettext!plugins/portal',
     'less!plugins/portal/xing/xing'
-], function (ext, eventActions, activityParsers, api, userApi,
-        notifications, dialogs, keychain, date, gt) {
+], function (ext, eventActions, activityParsers, api, userApi, notifications, dialogs, keychain, gt) {
 
     'use strict';
 
@@ -217,8 +215,8 @@ define('plugins/portal/xing/register', [
             if (foundHandler) {
                 // Date
                 if (activity.created_at) {
-                    var creationDate = new date.Local(activity.created_at);
-                    dateNode.text(creationDate.format(date.DATE_TIME)).appendTo(activityNode);
+                    var creationDate = moment(activity.created_at);
+                    dateNode.text(creationDate.format('l LT')).appendTo(activityNode);
                 }
 
                 //reactions like comment, share, like

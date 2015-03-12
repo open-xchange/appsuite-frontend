@@ -14,12 +14,11 @@
 
 define('plugins/portal/calendar/register', [
     'io.ox/core/extensions',
-    'io.ox/core/date',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'gettext!plugins/portal',
-    'settings!io.ox/calendar',
-    'io.ox/calendar/api'
-], function (ext, date, util, gt, settings, api) {
+    'settings!io.ox/calendar'
+], function (ext, api, util, gt, settings) {
 
     'use strict';
 
