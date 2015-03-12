@@ -16,7 +16,6 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/model',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
-    'io.ox/contacts/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
     'settings!io.ox/mail',
@@ -28,7 +27,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -39,6 +38,18 @@ define('io.ox/mail/compose/view', [
         id: 'mailto',
         index: 100,
         setup: extensions.mailto
+    });
+
+    ext.point(POINT + '/header').extend({
+        index: 100,
+        id: 'title',
+        draw: extensions.title
+    });
+
+    ext.point(POINT + '/header').extend({
+        index: 200,
+        id: 'buttons',
+        draw: extensions.buttons
     });
 
     ext.point(POINT + '/fields').extend({
@@ -77,39 +88,22 @@ define('io.ox/mail/compose/view', [
         draw: extensions.subject
     });
 
-    ext.point(POINT + '/header').extend({
-        draw: function (baton) {
-            ext.point(POINT + '/header/title').invoke('draw', this, baton);
-            ext.point(POINT + '/header/buttons').invoke('draw', this, baton);
-        }
-    });
-
-    ext.point(POINT + '/header/title').extend({
+    ext.point(POINT + '/menu').extend({
+        id: 'signatures',
         index: 100,
-        id: 'title',
-        draw: extensions.title
-    });
-
-    ext.point(POINT + '/header/buttons').extend({
-        index: 200,
-        id: 'buttons',
-        draw: extensions.buttons
-    });
-
-    ext.point(POINT + '/composetoolbar').extend({
-        id: 'add_attachments',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
-            extensions.attachment.call(node, baton);
-            this.append(node);
-        }
+        draw: extensions.signaturemenu
     });
 
     ext.point(POINT + '/signatures').extend({
         id: 'signature',
-        index: INDEX += 100,
+        index: 100,
         draw: extensions.signature
+    });
+
+    ext.point(POINT + '/menu').extend({
+        id: 'options',
+        index: 200,
+        draw: extensions.optionsmenu
     });
 
     ext.point(POINT + '/menuoptions').extend({
@@ -147,32 +141,25 @@ define('io.ox/mail/compose/view', [
     });
 
     ext.point(POINT + '/composetoolbar').extend({
-        id: 'menu',
-        index: INDEX += 100,
+        id: 'add_attachments',
+        index: 100,
         draw: function (baton) {
-            var optionDropdown    = new Dropdown({ model: baton.model, label: gt('Options'), caret: true }),
-                signatureDropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
-                .option('signature', '', gt('No signature'));
+            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
+            extensions.attachment.call(node, baton);
+            this.append(node);
+        }
+    });
 
-            ext.point(POINT + '/menuoptions').invoke('draw', optionDropdown.$el, baton);
-            ext.point(POINT + '/signatures').invoke('draw', signatureDropdown.$el, baton);
+    ext.point(POINT + '/composetoolbar').extend({
+        id: 'menus',
+        index: 200,
+        draw: function (baton) {
+            var node = $('<div class="pull-right text-right">');
 
-            optionDropdown.$ul.addClass('pull-right');
-            signatureDropdown.$ul.addClass('pull-right');
-
-            baton.view.signaturesLoading.done(function (sig) {
-                if (sig.length > 0) {
-                    signatureDropdown.$ul.addClass('pull-right');
-                    optionDropdown.$el.before(signatureDropdown.render().$el.addClass('signatures text-left'));
-                }
-            });
+            ext.point(POINT + '/menu').invoke('draw', node, baton);
 
             this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
-                    $('<div class="pull-right text-right">').append(
-                        optionDropdown.render().$el.addClass('text-left')
-                    )
-                )
+                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
             );
         }
     });
@@ -217,53 +204,28 @@ define('io.ox/mail/compose/view', [
     /*
      * extension point for contact picture
      */
-    ext.point(POINT +  '/contactPicture').extend({
+    ext.point(POINT +  '/autoComplete').extend({
         id: 'contactPicture',
         index: 100,
-        draw: function (baton) {
-            var node;
-            this.append(
-                node = $('<div class="contact-image lazyload">')
-                    .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-            );
-            // apply picture halo lazy load
-            contactAPI.pictureHalo(
-                node,
-                baton.participantModel.toJSON(),
-                { width: 42, height: 42 }
-            );
-        }
+        draw: extensions.contactPicture
     });
 
     /*
      * extension point for display name
      */
-    ext.point(POINT +  '/displayName').extend({
+    ext.point(POINT +  '/autoComplete').extend({
         id: 'displayName',
-        index: 100,
-        draw: function (baton) {
-            this.append(
-                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
-            );
-        }
+        index: 200,
+        draw: extensions.displayName
     });
 
     // /*
     //  * extension point for halo link
     //  */
-    ext.point(POINT +  '/emailAddress').extend({
+    ext.point(POINT +  '/autoComplete').extend({
         id: 'emailAddress',
-        index: 100,
-        draw: function (baton) {
-            var model = baton.participantModel;
-            this.append(
-                $('<div class="ellipsis email">').append(
-                    $.txt(model.getTarget() + ' '),
-                    model.getFieldName() !== '' ?
-                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
-                )
-            );
-        }
+        index: 300,
+        draw: extensions.emailAddress
     });
 
     /*
@@ -274,12 +236,8 @@ define('io.ox/mail/compose/view', [
         index: 100,
         draw: function (baton) {
             this.addClass('io-ox-mail-compose-contact');
-            // contact picture
-            ext.point(POINT + '/contactPicture').invoke('draw', this, baton);
-            // display name
-            ext.point(POINT + '/displayName').invoke('draw', this, baton);
-            // email address
-            ext.point(POINT + '/emailAddress').invoke('draw', this, baton);
+            // contact picture / display name / email address
+            ext.point(POINT + '/autoComplete').invoke('draw', this, baton);
         }
     });
 
@@ -1042,7 +1000,7 @@ define('io.ox/mail/compose/view', [
             var node = $('<div class="mail-compose-fields">');
 
             // draw all extensionpoints
-            ext.point('io.ox/mail/compose/fields').invoke('draw', node, this.baton);
+            ext.point(POINT + '/fields').invoke('draw', node, this.baton);
 
             this.$el.append(node);
 

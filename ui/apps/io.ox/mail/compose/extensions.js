@@ -12,6 +12,7 @@
  */
 
 define('io.ox/mail/compose/extensions', [
+    'io.ox/contacts/api',
     'io.ox/mail/sender',
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
@@ -22,7 +23,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
+], function (contactAPI, sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -301,6 +302,30 @@ define('io.ox/mail/compose/extensions', [
             });
         },
 
+        signaturemenu: function (baton) {
+            var self = this,
+            dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
+                .option('signature', '', gt('No signature'));
+            ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
+            dropdown.$ul.addClass('pull-right');
+            baton.view.signaturesLoading.done(function (sig) {
+                if (sig.length > 0) {
+                    dropdown.$ul.addClass('pull-right');
+                    dropdown.render().$el.addClass('signatures text-left');
+                }
+            });
+            self.append(dropdown.$el);
+        },
+
+        optionsmenu: function (baton) {
+            var dropdown = new Dropdown({ model: baton.model, label: gt('Options'), caret: true });
+            ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+
+            dropdown.$ul.addClass('pull-right');
+
+            this.append(dropdown.render().$el.addClass('text-left'));
+        },
+
         attachmentPreviewList: function (baton) {
             var $el = this,
                 def = $.Deferred();
@@ -441,6 +466,37 @@ define('io.ox/mail/compose/extensions', [
                     );
                 }
             }
+        },
+
+        contactPicture: function (baton) {
+            var node;
+            this.append(
+                node = $('<div class="contact-image lazyload">')
+                    .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
+            );
+            // apply picture halo lazy load
+            contactAPI.pictureHalo(
+                node,
+                baton.participantModel.toJSON(),
+                { width: 42, height: 42 }
+            );
+        },
+
+        displayName: function (baton) {
+            this.append(
+                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
+            );
+        },
+
+        emailAddress: function (baton) {
+            var model = baton.participantModel;
+            this.append(
+                $('<div class="ellipsis email">').append(
+                    $.txt(model.getTarget() + ' '),
+                    model.getFieldName() !== '' ?
+                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
+                )
+            );
         }
     };
 
