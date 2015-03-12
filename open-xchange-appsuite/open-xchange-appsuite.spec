@@ -170,6 +170,16 @@ Provides:      open-xchange-appsuite-l10n
 %description   l10n-lv-lv
 Translation of the OX App Suite HTML5 client (lv_LV)
 
+%package       l10n-nb-no
+Group:         Applications/Productivity
+Summary:       Translation of the OX App Suite HTML5 client (nb_NO)
+Requires:      open-xchange-l10n-nb-no
+Provides:      open-xchange-appsuite-l10n
+
+%description   l10n-nb-no
+Translation of the OX App Suite HTML5 client (nb_NO)
+This localization package are driven by the community.
+
 %package       l10n-nl-nl
 Group:         Applications/Productivity
 Summary:       Translation of the OX App Suite HTML5 client (nl_NL)
@@ -263,7 +273,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 APPSUITE=/opt/open-xchange/appsuite/
 find "%{buildroot}$APPSUITE" -type d | sed -e 's,%{buildroot},%dir ,' > open-xchange-appsuite-manifest.files
 find "%{buildroot}$APPSUITE" \( -type f -o -type l \) | sed -e 's,%{buildroot},,' >> open-xchange-appsuite-manifest.files
-for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do
+for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nb_NO nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build
 done
 mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
@@ -443,6 +453,16 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/appsuite/apps/*/*/*.lv_LV.js
 /opt/open-xchange/appsuite/apps/*/*/*/*.lv_LV.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-lv-lv.properties
+
+%files l10n-nb-no
+%defattr(-,root,root)
+%dir /opt/open-xchange/etc
+%dir /opt/open-xchange/etc/languages
+%dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.nb_NO.js
+/opt/open-xchange/appsuite/apps/*/*/*.nb_NO.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.nb_NO.js
+/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-nb-no.properties
 
 %files l10n-nl-nl
 %defattr(-,root,root)

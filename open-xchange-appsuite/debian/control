@@ -118,6 +118,13 @@ Provides: open-xchange-appsuite-l10n
 Breaks: open-xchange-l10n-lv-lv (<< 7.0.1)
 Description: Translation of the OX App Suite HTML5 client (lv_LV)
 
+Package: open-xchange-appsuite-l10n-nb-no
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-nb-no
+Provides: open-xchange-appsuite-l10n
+Description: Translation of the OX App Suite HTML5 client (nb_NO)
+ This localization package are driven by the community.
+
 Package: open-xchange-appsuite-l10n-nl-nl
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-l10n-nl-nl
