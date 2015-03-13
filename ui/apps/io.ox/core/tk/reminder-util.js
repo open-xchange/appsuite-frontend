@@ -95,7 +95,7 @@ define('io.ox/core/tk/reminder-util', [
             //appointment
             info = [
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                $('<span class="span-to-div time">').text(util.getDateInterval(model.attributes)),
+                $('<span class="span-to-div time">').text(util.getTimeInterval(model.attributes)),
                 $('<span class="span-to-div date">').text(util.getDateInterval(model.attributes)),
                 $('<span class="span-to-div title">').text(model.get('title')),
                 $('<span class="span-to-div location">').text(model.get('location'))
