@@ -14,21 +14,19 @@
 define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
     'io.ox/files/api',
-    'io.ox/core/date',
     'io.ox/core/strings'
-], function (util, api, date, strings) {
+], function (util, api, strings) {
 
     'use strict';
 
     var extensions = {
 
         date: function (baton, options) {
-            var data = baton.data, t = data.last_modified, d;
+            var data = baton.data, t = data.last_modified;
             if (!_.isNumber(t)) return;
-            d = new date.Local(t);
             this.append(
                 $('<time class="date">')
-                .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
+                .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(util.getDateTime(t, options)))
             );
         },

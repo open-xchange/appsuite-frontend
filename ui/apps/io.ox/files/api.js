@@ -20,12 +20,11 @@ define('io.ox/files/api', [
     'io.ox/core/folder/api',
     'settings!io.ox/core',
     'io.ox/core/cache',
-    'io.ox/core/date',
     'io.ox/files/mediasupport',
     'settings!io.ox/files',
     'gettext!io.ox/files',
     'io.ox/filter/files'
-], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, settings, gt) {
+], function (http, ext, apiFactory, folderAPI, coreConfig, cache, mediasupport, settings, gt) {
 
     'use strict';
 
@@ -63,8 +62,8 @@ define('io.ox/files/api', [
              * @return { string|false }
              */
             getLockTime: function (obj) {
-                if (obj.locked_until < _.now() + date.WEEK) {
-                    return new date.Local(obj.locked_until).format(date.DATE_TIME);
+                if (moment(obj.locked_until).isBefore(moment().add(1, 'week'))) {
+                    return moment(obj.locked_until).format('l LT');
                 } else {
                     return false;
                 }

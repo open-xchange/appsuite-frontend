@@ -18,7 +18,6 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/core/tk/dialogs',
     'io.ox/files/api',
     'io.ox/core/folder/api',
-    'io.ox/core/date',
     'io.ox/core/tk/upload',
     'io.ox/core/extPatterns/dnd',
     'io.ox/core/extPatterns/actions',
@@ -27,7 +26,7 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/core/tk/selection',
     'io.ox/core/notifications',
     'io.ox/files/upload/main'
-], function (viewDetail, ext, commons, dialogs, api, folderAPI, date, upload, dnd, actions, util, gt, Selection, notifications, fileUpload) {
+], function (viewDetail, ext, commons, dialogs, api, folderAPI, upload, dnd, actions, util, gt, Selection, notifications, fileUpload) {
 
     'use strict';
 
@@ -131,21 +130,17 @@ define('io.ox/files/fluid/perspective', [
     }
 
     function getDateFormated(timestamp, options) {
-        if (!_.isNumber(timestamp))
-            return gt('unknown');
+        if (!_.isNumber(timestamp)) return gt('unknown');
         var opt = $.extend({ fulldate: false, filtertoday: true }, options || {}),
-            now = new date.Local(),
-            d = new date.Local(timestamp),
+            d = moment(timestamp),
             timestr = function () {
-                return d.format(date.TIME);
+                return d.format('LT');
             },
             datestr = function () {
-                return d.format(date.DATE) + (opt.fulldate ? ' ' + timestr() : '');
+                return d.format('l') + (opt.fulldate ? ' ' + timestr() : '');
             },
             isSameDay = function () {
-                return d.getDate() === now.getDate() &&
-                    d.getMonth() === now.getMonth() &&
-                    d.getYear() === now.getYear();
+                return moment().isSame(d, 'day');
             };
         return isSameDay() && opt.filtertoday ? timestr() : datestr();
     }
