@@ -12,10 +12,9 @@
  */
 
 define('io.ox/backbone/mini-views/datepicker', [
-    'io.ox/core/date',
     'settings!io.ox/calendar',
     'gettext!io.ox/core'
-], function (date, settings, gt) {
+], function (settings, gt) {
 
     'use strict';
 
@@ -53,7 +52,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
                             ariaID = guid + '-aria',
-                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + date.getInputFormat(date.DATE) + ')');
+                            dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')');
 
                         self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr({
                             id: guid,
@@ -92,7 +91,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             self.nodes.dayField,
                             self.nodes.a11yDate,
                             '&nbsp;',
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + date.getInputFormat(date.TIME) + ')'),
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
                             self.nodes.timeField,
                             self.nodes.a11yTime,
                             '&nbsp;',
@@ -128,11 +127,11 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                     // build and init timepicker based on combobox plugin
                     var hours_typeahead = [],
-                        filldate = new date.Local().setHours(0, 0, 0, 0),
+                        filldate = moment().startOf('day'),
                         interval = parseInt(settings.get('interval'), 10) || 30;
                     for (var i = 0; i < 1440; i += interval) {
-                        hours_typeahead.push(filldate.format(date.TIME));
-                        filldate.add(interval * date.MINUTE);
+                        hours_typeahead.push(filldate.format('LT'));
+                        filldate.add(interval, 'minutes');
                     }
 
                     var comboboxHours = {
@@ -141,8 +140,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
                         sorter: function (items) {
                             items = _(items).sortBy(function (item) {
-                                var pd = date.Local.parse(item, date.TIME);
-                                return pd.getTime();
+                                return +moment(item, 'LT');
                             });
                             return items;
                         }
@@ -169,9 +167,9 @@ define('io.ox/backbone/mini-views/datepicker', [
             var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             if (!this.mobileMode) {
-                this.nodes.timeField.val(new date.Local(timestamp).format(date.TIME));
+                this.nodes.timeField.val(moment(timestamp).format('LT'));
                 this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
-                this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(timestamp || _.now()).abbr));
+                this.nodes.timezoneField.text(gt.noI18n(moment(timestamp || _.now()).zoneAbbr()));
             } else {
                 this.nodes.dayField.val(this.getDateStr(timestamp));
             }
@@ -196,36 +194,36 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         getDateStr: function (timestamp) {
-            var val = new date.Local(timestamp);
+            var val = moment(timestamp);
             if (!this.isFullTime() && this.mobileMode) {
-                return val.format(date.DATE) + ' ' + val.format(date.TIME);
+                return val.format('l') + ' ' + val.format('LT');
             }
-            return val.format(date.DATE);
+            return val.format('l');
         },
 
         getTimestamp: function () {
             var dateStr = this.nodes.dayField.val(),
-                formatStr = date.getFormat(date.DATE);
+                formatStr = 'l';
 
             // empty?
             if (dateStr === '')  return null;
 
             // change format string for datetime if timefield is present
             if (!this.isFullTime()) {
-                formatStr += ' ' + date.getFormat(date.TIME);
+                formatStr += ' ' + 'LT';
                 if (!this.mobileMode) {
                     if (this.nodes.timeField && this.nodes.timeField.val() !== '') {
                         dateStr += ' ' + this.nodes.timeField.val();
                     } else {
-                        formatStr = date.getFormat(date.DATE);
+                        formatStr = 'l';
                     }
                 }
             }
 
             // parse string to timestamp
-            var parsedDate = date.Local.parse(dateStr.toUpperCase(), formatStr);
+            var parsedDate = moment(dateStr, formatStr);
             // on parse error return null
-            return !parsedDate ? undefined : parsedDate.getTime();
+            return !parsedDate ? undefined : parsedDate.valueOf();
         },
 
         onError: function (messages) {
