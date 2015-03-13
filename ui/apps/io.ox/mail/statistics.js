@@ -15,11 +15,10 @@ define('io.ox/mail/statistics', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/extensions',
-    'io.ox/core/date',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/mail',
     'static/3rd.party/Chart.js/Chart.js'
-], function (api, accountAPI, ext, date, dialogs, gt) {
+], function (api, accountAPI, ext, dialogs, gt) {
 
     'use strict';
 
@@ -171,15 +170,16 @@ define('io.ox/mail/statistics', [
 
             fetch({ folder: options.folder, columns: COLUMNS }).then(
                 function success(data) {
-
                     var days = [0, 0, 0, 0, 0, 0, 0],
                         //get localized dates
-                        tempDays = date.locale.daysShort,
-                        //adjust weekstart
-                        weekdays = tempDays.slice(date.locale.weekStart, tempDays.length).concat(tempDays.slice(0, date.locale.weekStart));
+                        weekdays = moment.weekdaysMin(),
+                        dow = moment.localeData().firstDayOfWeek();
+
+                    //adjust weekstart
+                    weekdays = weekdays.slice(dow, weekdays.length).concat(weekdays.slice(0, dow));
 
                     _(data).each(function (obj) {
-                        var day = new Date(obj.received_date).getUTCDay();
+                        var day = moment(obj.received_date).day();
                         days[day]++;
                     });
 
@@ -187,7 +187,7 @@ define('io.ox/mail/statistics', [
                         return Math.round(sum / data.length * 100);
                     });
                     //adjust weekstart
-                    days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));
+                    days = days.slice(dow, days.length).concat(days.slice(0, dow));
 
                     var chart = {
                         labels: weekdays,
@@ -226,7 +226,7 @@ define('io.ox/mail/statistics', [
                     var hours = _.times(24, function () { return 0; });
 
                     _(data).each(function (obj) {
-                        var h = new Date(obj.received_date).getUTCHours();
+                        var h = moment(obj.received_date).hours();
                         hours[h]++;
                     });
 
