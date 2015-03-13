@@ -15,22 +15,20 @@ define('io.ox/tasks/common-extensions', [
     'io.ox/tasks/util',
     'io.ox/mail/util',
     'io.ox/tasks/api',
-    'io.ox/core/date',
     'io.ox/core/strings',
     'gettext!io.ox/tasks'
-], function (util, mailUtil, api, date, strings, gt) {
+], function (util, mailUtil, api, strings, gt) {
 
     'use strict';
 
     var extensions = {
 
         date: function (baton, options) {
-            var data = baton.data, t = data.end_date || data.start_date || data.last_modified, d;
+            var data = baton.data, t = data.end_date || data.start_date || data.last_modified;
             if (!_.isNumber(t)) return;
-            d = new date.Local(t);
             this.append(
                 $('<time class="date">')
-                .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
+                .attr('datetime', moment(t).format('YYYY-MM-DD HH:mm'))
                 .text(_.noI18n(mailUtil.getDateTime(t, options)))
             );
         },

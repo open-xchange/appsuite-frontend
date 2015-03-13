@@ -12,14 +12,13 @@
  */
 
 define('io.ox/tasks/model', [
-    'io.ox/core/date',
     'io.ox/tasks/api',
     'io.ox/backbone/modelFactory',
     'io.ox/backbone/validation',
     'io.ox/core/extensions',
     'io.ox/participants/model',
     'gettext!io.ox/tasks'
-], function (date, api, ModelFactory, Validations, ext, pModel, gt) {
+], function (api, ModelFactory, Validations, ext, pModel, gt) {
 
     'use strict';
 
@@ -75,13 +74,13 @@ define('io.ox/tasks/model', [
                 getDate: function (attr) {
                     var time = this.get.apply(this, arguments);
                     if (time && _.indexOf(['start_date', 'end_date'], attr) >= 0) {
-                        time = date.Local.utc(time);
+                        time = moment.utc(time).local(true).valueOf();
                     }
                     return time;
                 },
                 setDate: function (attr, time) {
                     if (time && _.indexOf(['start_date', 'end_date'], attr) >= 0) {
-                        arguments[1] = date.Local.localTime(time);
+                        arguments[1] = moment(time).utc(true).valueOf();
                     }
                     return this.set.apply(this, arguments);
                 }
