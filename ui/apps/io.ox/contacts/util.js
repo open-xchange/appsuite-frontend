@@ -43,7 +43,6 @@ define('io.ox/contacts/util', [
     function calculateDayDifference(time) {
         var myDay = moment.utc(time).local(true),
             century, tempA, tempB;
-        debugger;
         if (myDay.month() < 2) {
             century = Math.floor((myDay.year() - 1) / 100);
         } else {

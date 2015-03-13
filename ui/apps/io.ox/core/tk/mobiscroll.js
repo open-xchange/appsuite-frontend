@@ -13,10 +13,9 @@
 
 define('io.ox/core/tk/mobiscroll', [
     'gettext!io.ox/core',
-    'io.ox/core/date',
     'static/3rd.party/mobiscroll/mobiscroll.js',
     'css!3rd.party/mobiscroll/mobiscroll.css'
-], function (gt, date) {
+], function (gt) {
 
     'use strict';
 
@@ -27,24 +26,25 @@ define('io.ox/core/tk/mobiscroll', [
         settings = {
             cancelText: gt('Cancel'),
             clearText: gt('Clear'),
-            dateOrder: date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),
-            dateFormat: date.getFormat(date.DATE).replace(/\by\b/, 'yy').toLowerCase(),
             dayText: gt('Days'),
-            display: 'bottom',
-            endYear: new Date().getFullYear() + 100,
             hourText: gt('Hours'),
             minuteText: gt('Minutes'),
-            monthNamesShort: date.locale.monthsShort,
             monthText: gt('Months'),
-            preset: 'date',
-            separator: ' ',
             setText: gt('Ok'),
-            showLabel: true,
+            yearText: gt('Years'),
+            display: 'bottom',
+            preset: 'date',
             theme: 'ios',
-            timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i').replace(/a/g, 'A'),
-            yearText: gt('Years')
+            separator: ' ',
+            showLabel: true,
+            endYear: moment().year() + 100,
+            monthNamesShort: moment.monthsShort(),
+            dateFormat: moment.localeData().longDateFormat('l').toLowerCase(),
+            timeFormat: moment.localeData().longDateFormat('LT').replace(/m/g, 'i')
         };
+        settings.dateOrder = settings.dateFormat.replace(/\W/g, '');
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
+        debugger;
         $.mobiscroll.setDefaults(settings);
     }
 
