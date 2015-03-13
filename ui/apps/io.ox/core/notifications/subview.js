@@ -28,19 +28,41 @@ define('io.ox/core/notifications/subview', [
                 items = view.collection.models,
                 max = model.get('max') || items.length,
                 itemNode = $('<ul class="items list-unstyled">'),
-                extensionPoints = model.get('extensionPoints');
+                extensionPoints = model.get('extensionPoints'),
+                desktopNotificationFor = model.get('showNotificationFor'),
+                specific = model.get('specificDesktopNotification');
+
+            //make sure it's only displayed once
+            model.set('showNotificationFor', null);
+
             node.addClass('notifications notifications-main-' + model.get('id'));
-            this.append(node);
+
+            //if theres a placeholder attached use it's position
+            if (view.placeholder.parent().length) {
+                view.placeholder.after(node);
+                view.placeholder.detach();
+            } else {
+                this.append(node);
+            }
             //invoke header, items and footer
             ext.point(extensionPoints.header).invoke('draw', node, baton);
             node.append(itemNode);
+            itemNode.busy();
 
             var drawItem = function (model, requestedModel) {
-                //item is the result of a get request, requestedItem is the provided data
-                //for example reminders need both to work correctly (reminderObject and task/appointment)
+                //model is the result of a get request, requestedModel is the data passed to the api (they are usually the same)
+                //reminders need both to work correctly (reminderObject and task/appointment)
+
                 //make sure we have a model
                 if ( !model.get ) {
                     model = new Backbone.Model(model);
+                }
+
+                if (String(requestedModel.get('id')) === String(desktopNotificationFor)) {
+                    require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
+                        //this may be to verbose...we'll see how it works
+                        desktopNotifications.show(specific(model));
+                    });
                 }
                 var node = $('<li class="item" tabindex="1" role="listitem">');
                 if (view.model.get('showHideSingleButton')) {
@@ -67,15 +89,32 @@ define('io.ox/core/notifications/subview', [
             if (api && !model.get('fullModel')) {
                 //models are incomplete (only id, folder_id)
                 //get the data first
-                for (var i = 0; i < max && items[i]; i++) {
-                    //mail needs unseen attribute, shouldn't bother other apis
-                    //extend with empty object to not overwrite the model
-                    api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i]));
+                if (model.get('useListRequest')) {
+                    var requestData = _(items.slice(0, max)).map(function (obj) {
+                        return obj.attributes;
+                    });
+                    api.getList(requestData).then(function (data) {
+                        for (var i = 0; i < max && items[i]; i++) {
+                            drawItem(data[i], items[i]);
+                        }
+                        itemNode.idle();
+                    });
+                } else {
+                    var defs = [];
+                    for (var i = 0; i < max && items[i]; i++) {
+                        //mail needs unseen attribute, shouldn't bother other apis
+                        //extend with empty object to not overwrite the model
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i])));
+                    }
+                    $.when.apply($, defs).then(function () {
+                        itemNode.idle();
+                    });
                 }
             } else {
                 for (var i = 0; i < max && items[i]; i++) {
                     drawItem(items[i], items[i]);
                 }
+                itemNode.idle();
             }
 
             ext.point(extensionPoints.footer).invoke('draw', node, baton);
@@ -105,6 +144,7 @@ define('io.ox/core/notifications/subview', [
             title: '',
             apiSupport: null,
             apiEvents: null,
+            useListRequest: false,
             extensionPoints: {
                 main: 'io.ox/core/notifications/default/main',
                 header: 'io.ox/core/notifications/default/header',
@@ -117,9 +157,12 @@ define('io.ox/core/notifications/subview', [
             max: 10,
             autoOpen: false,
             desktopNotificationSupport: true,
-            desktopNotificationMessage: gt("You've got new Notifications"),
-            desktopNotificationTitle: gt('New Notifications'),
-            desktopNotificationIcon: '',
+            genericDesktopNotification: {
+                title: gt('New Notifications'),
+                body: gt("You've got new Notifications"),
+                icon: ''
+            },
+            specificDesktopNotification: null,
             hideAllLabel: ''
         };
     }
@@ -141,8 +184,12 @@ define('io.ox/core/notifications/subview', [
 
             //collection to store notifications
             this.collection = new Backbone.Collection();
+            //add id to collection to distinguish them
+            this.collection.subviewId = options.model.get('id');
             //collection to store hidden notifications (for example appointment reminders that are set to remind me later)
             this.hiddenCollection = new Backbone.Collection();
+
+            this.placeholder = $('<div class="placeholder">').css('display', 'none');
 
             notifications.registerSubview(this);
             //enable api support if possible
@@ -168,8 +215,11 @@ define('io.ox/core/notifications/subview', [
             }
         },
         //clearfunction to empty the view and detach it (keeps event bindings intact)
-        clear: function () {
+        clear: function (setPlaceholder) {
             this.$el.empty();
+            if (this.$el.parent().length && setPlaceholder && !this.placeholder.parent().length) {
+                this.$el.after(this.placeholder);
+            }
             this.$el.detach();
         },
         render: function (node) {
@@ -230,22 +280,27 @@ define('io.ox/core/notifications/subview', [
                 oldIds = _(this.collection.models).map(function (model) {
                     return model.get('id');
                 }),
-                isNew = _.difference(newIds, oldIds).length;
-            if (isNew) {
-                if (this.model.get('autoOpen')) {
-                    this.trigger('autoopen', { numberOfNewItems: isNew, subviewId: this.model.get('id') });
+                newItems = _.difference(newIds, oldIds),
+                model = this.model;
+            if (newItems.length) {
+                if (model.get('autoOpen')) {
+                    this.trigger('autoopen', { numberOfNewItems: newItems.length, subviewId: model.get('id'), itemIds: newItems });
                 }
 
-                if (this.model.get('desktopNotificationSupport')) {
-                    var message = {
-                            title: this.model.get('desktopNotificationTitle'),
-                            body: this.model.get('desktopNotificationMessage'),
-                            icon: this.model.get('desktopNotificationIcon')
-                        };
-                    require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
-                        //this may be to verbose...we'll see how it works
-                        desktopNotifications.show(message);
-                    });
+                if (model.get('desktopNotificationSupport')) {
+                    var generic = model.get('genericDesktopNotification'),
+                        specific = model.get('specificDesktopNotification');
+                    //if theres multiple items or no specific notification given, use the generic
+                    if (newItems.length > 1 || !specific || !$.isFunction(specific)) {
+                        require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
+                            //this may be to verbose...we'll see how it works
+                            desktopNotifications.show(generic);
+                        });
+                    } else {
+                        //will be executed on drawing the notifications ('io.ox/core/notifications/default/main') to reduce requests
+                        //we can use the same data then
+                        model.set('showNotificationFor', newItems[0]);
+                    }
                 }
             }
         },

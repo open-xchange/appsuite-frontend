@@ -21,6 +21,14 @@ define('io.ox/core/tk/typeahead', [
 
     'use strict';
 
+    function customEvent (state, query, data) {
+        this.model.set({
+            source: state,
+            query: state === 'idle' ? query : this.model.get('query')
+        });
+        return data;
+    }
+
     var Typeahead = Backbone.View.extend({
 
         tagName: 'input type="text"',
@@ -39,7 +47,7 @@ define('io.ox/core/tk/typeahead', [
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
-            autoselect: true,
+            autoselect: false,
             // Highlight found query characters in bold
             highlight: true,
             // Typeahead will not show a hint
@@ -50,8 +58,8 @@ define('io.ox/core/tk/typeahead', [
             },
             // Filter items
             reduce: _.identity,
-            // Object related unique string
-            stringify: _.identity,
+            // harmonize returned data from 'source'
+            harmonize: _.identity,
             // lazyload selector
             lazyload: null
         },
@@ -61,7 +69,16 @@ define('io.ox/core/tk/typeahead', [
         initialize: function (o) {
             var self = this;
 
-            o = $.extend(this.options, o || {});
+            // model to unify/repair listening for different event based states
+            this.model = new Backbone.Model({
+                // [idle|requesting|processing|finished]
+                'source': 'idle',
+                'query': undefined,
+                'dropdown': 'closed'
+            });
+
+            // use a clone instead of shared default-options-object
+            o = this.options = $.extend({}, this.options, o || {});
 
             this.api = new AutocompleteAPI(o.apiOptions);
 
@@ -72,7 +89,9 @@ define('io.ox/core/tk/typeahead', [
                 hint: o.hint
             }, {
                 source: function (query, callback) {
+                    customEvent.call(self, 'requesting', query);
                     o.source.call(self, query)
+                        .then(customEvent.bind(self, 'processing', query))
                         .then(o.reduce)
                         .then(function (data) {
                             if (o.maxResults) {
@@ -82,12 +101,24 @@ define('io.ox/core/tk/typeahead', [
                         })
                         .then(function (data) {
                             data = o.placement === 'top' ? data.reverse() : data;
-                            return _(data).map(o.stringify);
+                            return _(data).map(o.harmonize);
                         })
+                        .then(customEvent.bind(self, 'finished', query))
+                        .then(customEvent.bind(self, 'idle', query))
                         .then(callback);
+                    // dirty hack to get a reliable info about open/close state
+                    if (!self.registered) {
+                        // use source function to get dateset reference
+                        this.onSync('rendered', function () {
+                            var dropdown = this.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                            if (dropdown.is(':visible'))
+                                self.model.set('dropdown', 'opened');
+                        });
+                        self.registered = true;
+                    }
                 },
                 templates: {
-                    suggestion: function (searchresult) {
+                    suggestion: o.suggestion || function (searchresult) {
                         var node = $('<div class="autocomplete-item">');
                         o.draw.call(node, searchresult);
                         return node;
@@ -105,9 +136,15 @@ define('io.ox/core/tk/typeahead', [
                 'typeahead:opened': function () {
                     if (_.isFunction(o.cbshow)) o.cbshow();
                 },
+                // dirty hack to get a reliable info about open/close state
+                'typeahead:closed': function () {
+                    var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                    if (!dropdown.is(':visible'))
+                        self.model.set('dropdown', 'closed');
+                },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
-                    o.click.call(this, e, item.data);
-                    self.typeaheadInput.trigger('select', item.data);
+                    o.click.call(this, e, item);
+                    self.typeaheadInput.trigger('select', item);
                 },
                 'blur': o.blur
             });

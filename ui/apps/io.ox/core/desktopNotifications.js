@@ -123,7 +123,7 @@ define('io.ox/core/desktopNotifications', [
         title e.g. 'abc' */
         show: function (message) {
             //if desktop notifications aren't supported or not wanted stop here
-            if (!supported || !settings.get('showDesktopNotifications', true)) {
+            if (!message || !supported || !settings.get('showDesktopNotifications', true)) {
                 return;
             }
 

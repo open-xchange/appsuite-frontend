@@ -581,7 +581,7 @@ define('io.ox/tasks/api', [
                 userId = ox.user_id,
                 dueTasks = [],
                 confirmTasks = [];
-            for (var i = 1; i < list.length; i++) {
+            for (var i = 0; i < list.length; i++) {
                 var filterOverdue = (list[i].end_date < now.getTime() && list[i].status !== 3 && list[i].end_date !== null);
                 if (filterOverdue) {
                     dueTasks.push(list[i]);

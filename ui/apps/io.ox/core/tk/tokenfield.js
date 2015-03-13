@@ -32,7 +32,7 @@ define('io.ox/core/tk/tokenfield', [
         return $.map( this.getTokens(active), function (token) {
             if (token.model) {
                 var displayname = token.model.getDisplayName(),
-                    email = token.model.getEmail();
+                    email = token.model.getEmail ? token.model.getEmail() : undefined;
                 return displayname === email ? email : '"' + displayname + '" <' + email + '>';
             }
             return token.value;
@@ -76,20 +76,23 @@ define('io.ox/core/tk/tokenfield', [
         initialize: function (options) {
             var self = this;
 
-            options.stringify = function (data) {
-                var model = new pModel.Participant(data.data);
-                return {
-                    value: model.getTarget(),
-                    label: model.getDisplayName(),
-                    model: model
-                };
-            };
+            options = _.extend({}, {
+                // hint: not the same type of stringify that was used in autocomplete
+                harmonize: function (data) {
+                    var model = new pModel.Participant(data.data);
+                    return {
+                        value: model.getTarget(),
+                        label: model.getDisplayName(),
+                        model: model
+                    };
+                }
+            }, options);
 
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
 
-            // initialize participant collection
-            this.collection = new pModel.Participants();
+            // initialize collection
+            this.collection = options.collection || new pModel.Participants();
 
             // update comparator function
             this.collection.comparator = function (model) {
@@ -111,22 +114,20 @@ define('io.ox/core/tk/tokenfield', [
             this.collection = null;
         },
 
-        render: function () {
-            var o = this.options,
-                self = this;
+        register: function () {
+            var self = this;
+            // trigger event when token is clicked
+            this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
+                self.$el.tokenfield().trigger('tokenfield:clickedtoken', e);
+            });
 
-            this.$el
-                .attr({
-                    tabindex: this.options.tabindex,
-                    placeholder: this.options.placeholder || null
-                })
-                .addClass('tokenfield');
-            this.$el.tokenfield({
-                createTokensOnBlur: true,
-                minLength: o.minLength,
-                typeahead: self.typeaheadOptions
-            }).on({
+            this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
+                    // use typehead autoselect feature
+                    if (self.options.autoselect && !e.attrs.model) {
+                        e.preventDefault();
+                        return;
+                    }
                     var inputData = self.getInput().data(), model;
                     if (inputData.edit === true) {
                         // edit mode
@@ -214,11 +215,37 @@ define('io.ox/core/tk/tokenfield', [
                     self.collection.remove(self.getModelByCID(e.attrs.value));
                 }
             });
+        },
+
+        render: function () {
+            var o = this.options,
+                self = this;
+
+            this.$el
+                .attr({
+                    tabindex: this.options.tabindex,
+                    placeholder: this.options.placeholder || null
+                })
+                .addClass('tokenfield');
+            this.$el.tokenfield({
+                createTokensOnBlur: true,
+                minLength: o.minLength,
+                typeahead: self.typeaheadOptions
+            });
+
+            this.register();
 
             // save original typeahead input
+            // hint: usage of prototype Typeahead.prototype.render would not work properly here
             this.input =  $(this.$el).data('bs.tokenfield').$input.on({
                 'typeahead:opened': function () {
                     if (_.isFunction(o.cbshow)) o.cbshow();
+                },
+                // dirty hack to get a reliable info about open/close state
+                'typeahead:closed': function () {
+                    var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                    if (!dropdown.is(':visible'))
+                        self.model.set('dropdown', 'closed');
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item.data);
@@ -297,6 +324,11 @@ define('io.ox/core/tk/tokenfield', [
 
         getInput: function () {
             return this.input;
+        },
+
+        setFocus: function () {
+            var tokenfield = this.$el.parent();
+            tokenfield.find('.token-input').focus();
         }
     });
 

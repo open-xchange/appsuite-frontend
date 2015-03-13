@@ -55,21 +55,22 @@ define('io.ox/contacts/main', [
          */
         'pages-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">'),
+            var win = app.getWindow(),
+                navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
                 baton = ext.Baton({ app: app });
+
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
@@ -78,7 +79,6 @@ define('io.ox/contacts/main', [
 
             app.pages.addPage({
                 name: 'listView',
-                container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
                     baton: baton,
@@ -99,7 +99,6 @@ define('io.ox/contacts/main', [
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/contacts/mobile/navbar'
@@ -642,6 +641,13 @@ define('io.ox/contacts/main', [
 
         },
 
+        'prop-fullnameformat': function (app) {
+            // redraw contact if fullNameFormat changes to correctly display selected contact name
+            settings.on('change:fullNameFormat', function () {
+                app.showContact(app.currentContact);
+            });
+        },
+
         /*
          * Set folderview property
          */
@@ -752,6 +758,15 @@ define('io.ox/contacts/main', [
         'api-events': function (app) {
             api.on('create update delete refresh.all', function () {
                 folderAPI.reload(app.folder.get());
+            });
+        },
+
+        'api-create-event': function (app) {
+            if (_.device('smartphone')) return;
+
+            api.on('create', function (e, data) {
+                data.folder_id = data.folder_id || data.folder;
+                app.grid.setPreSelection(data);
             });
         },
 

@@ -405,8 +405,9 @@
         .badge {
 
             position: relative;
-            top: -8px;
-            left: -10px;
+            top: 3px;
+            left: 42px;
+            float: left;
 
             color: @notification-icon-color;
             background-color: @notification-icon-background;
@@ -478,9 +479,14 @@ html.ios8-standalone-ipad-fix {
     #io-ox-topbar {
         .launcher a.notifications-icon {
             padding: 12px 5px;
+            .badge {
+                top: initial;
+                left: initial;
+                float: none;
+            }
         }
         .launchers-secondary {
-            margin-right: 0px
+            margin-right: 0px;
         }
     }
 

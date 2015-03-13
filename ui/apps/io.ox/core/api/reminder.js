@@ -158,6 +158,10 @@ define('io.ox/core/api/reminder', [
             if (!reminder.module || !reminder.target_id) {
                 reminder = reminderStorage[reminder.id];
             }
+            if (!reminder) {
+                //no valid reminder found
+                return $.Deferred().reject();
+            }
 
             var obj = {
                     id: reminder.target_id,

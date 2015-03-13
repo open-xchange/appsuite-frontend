@@ -70,22 +70,22 @@ define('io.ox/files/main', [
          */
         'pages-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
-                toolbar = $('<div class="mobile-toolbar">'),
+            var win = app.getWindow(),
+                navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">')
+                    .on('hide', function () { win.nodes.body.removeClass('mobile-toolbar-visible'); })
+                    .on('show', function () { win.nodes.body.addClass('mobile-toolbar-visible'); }),
                 baton = ext.Baton({ app: app });
 
             app.navbar = navbar;
             app.toolbar = toolbar;
+            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar, container: win.nodes.main });
 
-            app.pages = new PageController({ appname: app.options.name, toolbar: toolbar, navbar: navbar });
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+            win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/files/mobile/navbar'
@@ -94,7 +94,6 @@ define('io.ox/files/main', [
 
             app.pages.addPage({
                 name: 'fluid',
-                container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
                     baton: baton,
@@ -114,7 +113,6 @@ define('io.ox/files/main', [
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c,
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/files/mobile/navbar'

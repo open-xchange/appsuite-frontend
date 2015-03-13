@@ -60,7 +60,7 @@ define('io.ox/core/folder/node', [
         onReset: function () {
 
             var o = this.options,
-                models = _(this.collection.filter(this.getFilter())),
+                models = this.collection.filter(this.getFilter()),
                 exists = {};
 
             // recycle existing nodes / use detach to keep events
@@ -75,6 +75,7 @@ define('io.ox/core/folder/node', [
                 }, this)
             );
 
+            this.model.set('subfolders', models.length > 0);
             this.renderEmpty();
 
             // trigger events

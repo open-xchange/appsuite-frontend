@@ -16,8 +16,10 @@ define('io.ox/core/folder/actions/common', [
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
-    'gettext!io.ox/core'
-], function (mailAPI, folderAPI, dialogs, notifications, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/api/account',
+    'io.ox/core/http'
+], function (mailAPI, folderAPI, dialogs, notifications, gt, account, http) {
 
     'use strict';
 
@@ -45,9 +47,21 @@ define('io.ox/core/folder/actions/common', [
                     .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                     .on('delete', function () {
                         notifications.yell('busy', gt('Emptying folder... This may take a few seconds.'));
-                        folderAPI.clear(id).done(function () {
-                            notifications.yell('success', gt('The folder has been emptied.'));
-                        });
+
+                        function clear() {
+                            folderAPI.clear(id).done(function () {
+                                notifications.yell('success', gt('The folder has been emptied.'));
+                            });
+                        }
+
+                        if (account.is('spam', id)) {
+                            http.pause();
+                            mailAPI.allSeen(id);
+                            clear();
+                            http.resume();
+                        } else {
+                            clear();
+                        }
                     })
                     .show();
             });
