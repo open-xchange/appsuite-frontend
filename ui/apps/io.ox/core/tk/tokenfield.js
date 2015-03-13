@@ -85,7 +85,9 @@ define('io.ox/core/tk/tokenfield', [
                         label: model.getDisplayName(),
                         model: model
                     };
-                }
+                },
+                // autoselect also when enter was hit before dropdown was drawn
+                delayedautoselect: false
             }, options);
 
             // call super constructor
@@ -120,6 +122,24 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
                 self.$el.tokenfield().trigger('tokenfield:clickedtoken', e);
             });
+
+            // delayed autoselect
+            if (this.options.delayedautoselect) {
+                self.model.on('change:query', function (model, query) {
+                    // trigger delayed enter click after dropdown was drawn
+                    if (self.autoselect[query]) {
+                        // trigger enter key press event
+                        self.input.trigger(
+                            $.Event( 'keydown', { keyCode: 13, which: 13 } )
+                        );
+                        // remove from hash
+                        delete self.autoselect[query];
+                    }
+
+                });
+            }
+            // use hash to 'connect' enter click and query string
+            self.autoselect = {};
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
@@ -253,6 +273,19 @@ define('io.ox/core/tk/tokenfield', [
                 },
                 'blur': o.blur
             });
+
+            // workaround: register handler for delayed autoselect
+            if (this.options.delayedautoselect) {
+                this.input.on('keydown', function (e) {
+                    var enter = e.which === 13,
+                        validquery = !!self.input.val() && self.input.val().length >= o.minLength,
+                        runningrequest = self.model.get('query') !== self.input.val();
+                    // flag query string when enter was hit before drowdown was drawn
+                    if (enter && validquery && runningrequest) {
+                        self.autoselect[self.input.val()] = true;
+                    }
+                });
+            }
 
             this.$el.parent().addClass(this.options.className);
 
