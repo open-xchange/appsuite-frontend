@@ -92,6 +92,9 @@ define('io.ox/files/view-options', [
         _.defer(function () {
             if (type === 'all') {
                 list.selection.selectAll();
+            } else if (type === 'files') {
+                list.selection.selectNone();
+                list.selection.selectAll(':not(.file-type-folder)');
             } else if (type === 'none') {
                 list.selection.selectNone();
             }
@@ -106,17 +109,18 @@ define('io.ox/files/view-options', [
             this.data('view')
                 .header(gt('Select'))
                 .link('all', gt('All'))
+                .link('files', gt('All files'))
                 .link('none', gt('None'))
                 .divider()
                 .header(gt('Filter'))
-                .option('filter', 'none', gt('None'))
                 .option('filter', 'pdf', gt('PDFs'))
                 .option('filter', 'doc', gt('Documents'))
                 .option('filter', 'xls', gt('Spreadsheets'))
                 .option('filter', 'ppt', gt('Presentations'))
                 .option('filter', 'image', gt('Images'))
                 .option('filter', 'audio', gt('Music'))
-                .option('filter', 'video', gt('Videos'));
+                .option('filter', 'video', gt('Videos'))
+                .option('filter', 'none', gt('None'));
 
             this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
         }

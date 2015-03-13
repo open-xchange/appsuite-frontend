@@ -13,9 +13,10 @@
 
 define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
+    'io.ox/files/api',
     'io.ox/files/legacy_api',
     'io.ox/core/strings'
-], function (util, api, strings) {
+], function (util, api, legacy_api, strings) {
 
     'use strict';
 
@@ -51,14 +52,15 @@ define('io.ox/files/common-extensions', [
 
         size: function (baton) {
             var size = baton.data.file_size;
-            if (!_.isNumber(size)) return;
             this.append(
-                $('<span class="size">').text(!!size ? strings.fileSize(size, 1) : strings.fileSize(size, 1))
+                $('<span class="size">').text(
+                    _.isNumber(size) ? strings.fileSize(size, 1) : '\u2014'
+                )
             );
         },
 
         locked: function (baton) {
-            var node = api.tracker.isLocked(baton.data) ? $('<i class="fa fa-lock">') : '';
+            var node = legacy_api.tracker.isLocked(baton.data) ? $('<i class="fa fa-lock">') : '';
             this.append(
                 $('<span class="locked">').append(node)
             );
@@ -66,7 +68,7 @@ define('io.ox/files/common-extensions', [
 
         thumbnail: function (baton) {
 
-            var url = api.getUrl(baton.data, 'thumbnail', { thumbnailWidth: 200, thumbnailHeight: 150, scaletype: 'cover' }),
+            var url = legacy_api.getUrl(baton.data, 'thumbnail', { thumbnailWidth: 200, thumbnailHeight: 150, scaletype: 'cover' }),
                 node = $('<div class="icon-thumbnail">').attr('data-original', url);
 
             // use defer to ensure the node has already been added to the DOM
@@ -82,41 +84,10 @@ define('io.ox/files/common-extensions', [
             this.append('<i class="fa file-type-icon">');
         },
 
-        fileTypeClass: (function () {
-
-            function getExtension(filename) {
-                var parts = String(filename || '').split('.');
-                return parts.length === 1 ? '' : parts.pop().toLowerCase();
-            }
-
-            function getDecoration(extension) {
-                for (var type in drawIcon.types) {
-                    if (drawIcon.types[type].test(extension)) return type;
-                }
-            }
-
-            function drawIcon(baton) {
-                var extension = getExtension(baton.data.filename),
-                    decoration = getDecoration(extension);
-                if (decoration) this.closest('.list-item').addClass('file-type-' + decoration);
-            }
-
-            // accessible & extensible
-            drawIcon.types = {
-                image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
-                audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
-                video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
-                doc: /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
-                xls: /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/,
-                ppt: /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
-                pdf: /^pdf$/,
-                zip: /^(zip|tar|gz|rar|7z|bz2)$/,
-                txt: /^(txt|md)$/
-            };
-
-            return drawIcon;
-
-        }())
+        fileTypeClass: function (baton) {
+            var type = new api.Model(baton.data).getFileType();
+            if (type) this.closest('.list-item').addClass('file-type-' + type);
+        }
     };
 
     return extensions;

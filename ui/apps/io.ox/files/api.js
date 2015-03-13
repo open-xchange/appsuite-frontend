@@ -6,9 +6,8 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  *
@@ -18,15 +17,74 @@ define('io.ox/files/api', [
     'io.ox/core/http',
     'io.ox/core/event',
     'io.ox/core/folder/api',
+    'io.ox/core/api/backbone',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'settings!io.ox/core',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, Pool, CollectionLoader, coreConfig, gt) {
+], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, coreConfig, gt) {
 
     'use strict';
 
-    var pool = Pool.create('files');
+    var api = {};
+
+    //
+    // Backbone Model & Collection for Files
+    //
+
+    // basic model with custom cid
+    api.Model = backbone.Model.extend({
+
+        isFolder: function () {
+            return this.has('standard_folder');
+        },
+
+        isFile: function () {
+            // we cannot check for "filename", because there are files without a file; yep!
+            // so we rather check if it's not a folder
+            return !this.isFolder();
+        },
+
+        getDisplayName: function () {
+            return this.get('filename') || this.get('title') || '';
+        },
+
+        getExtension: function () {
+            var parts = String(this.get('filename') || '').split('.');
+            return parts.length === 1 ? '' : parts.pop().toLowerCase();
+        },
+
+        getFileType: function () {
+            if (!this.isFile()) return 'folder';
+            var extension = this.getExtension();
+            for (var type in this.types) {
+                if (this.types[type].test(extension)) return type;
+            }
+        },
+
+        types: {
+            image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
+            audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
+            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
+            doc: /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
+            xls: /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/,
+            ppt: /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
+            pdf: /^pdf$/,
+            zip: /^(zip|tar|gz|rar|7z|bz2)$/,
+            txt: /^(txt|md)$/
+        }
+    });
+
+    // collection using custom models
+    api.Collection = backbone.Collection.extend({
+        model: api.Model
+    });
+
+    //
+    // Pool
+    //
+
+    var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
@@ -97,8 +155,6 @@ define('io.ox/files/api', [
         return response;
     };
 
-    var api = {};
-
     // add event hub
     Events.extend(api);
 
@@ -114,6 +170,15 @@ define('io.ox/files/api', [
                 sort: params.sort || '702',
                 order: params.order || 'asc'
             };
+        },
+        httpGet: function (module, params) {
+            return $.when(
+                folderAPI.list(params.folder),
+                http.GET({ module: module, params: params })
+            )
+            .then(function (folders, files) {
+                return [].concat(folders, files[0]);
+            });
         },
         // use client-side limit
         useSlice: true,

@@ -22,8 +22,9 @@
 
     // font weights
     @fontSize: 13px;
-    @normal : 400;
-    @bold   : 700;
+    @normal: 400;
+    @bold: 700;
+    @indentation: 40px;
 
     // custom mobile values
     @mobile-line-height: 40px;
@@ -100,7 +101,7 @@
             color: #777;
             display: inline-block;
             padding-left: @default-padding;
-            width: 36px;
+            width: @indentation;
         }
 
         .folder-label, .folder-counter, .folder-options {
@@ -145,6 +146,7 @@
         }
 
         .folder-icon {
+
             display: none;
 
             &.visible {
@@ -201,7 +203,7 @@
 
         .owner {
             font-size: 12px;
-            padding-left: 36px;
+            padding-left: @indentation;
             margin-top: -10px;
             margin-bottom: 3px;
             a { color: #555; }
@@ -270,7 +272,7 @@
     .links {
 
         margin: 0;
-        padding: 0 @default-padding @default-padding 36px;
+        padding: 0 @default-padding @default-padding @indentation;
         line-height: 28px;
         font-weight: @normal;
 
@@ -285,7 +287,7 @@
     }
 
     .folder.section + .links {
-        margin: 20px 0 20px 36px;
+        margin: 20px 0 20px @indentation;
         padding: 0;
         line-height: 20px;
         &:empty {

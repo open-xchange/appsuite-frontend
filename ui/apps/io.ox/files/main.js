@@ -398,11 +398,24 @@ define('io.ox/files/main', [
             }
 
             app.props.on('change:layout', function () {
-                applyLayout();
-                app.listView.redraw();
+                _.defer(function () {
+                    applyLayout();
+                    app.listView.redraw();
+                });
             });
 
             applyLayout();
+        },
+
+        /*
+         * Add support for doubleclick
+         */
+        'selection-doubleclick': function (app) {
+            if (_.device('smartphone')) return;
+            app.listView.$el.on('dblclick', '.file-type-folder', function (e) {
+                var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                app.folder.set(obj.id);
+            });
         },
 
         /*
