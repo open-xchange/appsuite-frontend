@@ -101,7 +101,7 @@ define('io.ox/calendar/util', [
         },
 
         isToday: function (timestamp) {
-            return moment().isSame(timestamp, 'd');
+            return moment().isSame(timestamp, 'day');
         },
 
         getTime: function (moment) {
@@ -151,7 +151,7 @@ define('io.ox/calendar/util', [
                     startDate = moment(data.start_date);
                     endDate = moment(data.end_date);
                 }
-                if (startDate.isSame(endDate, 'd')) {
+                if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
                 } else {
                     if (a11y) {
@@ -269,7 +269,7 @@ define('io.ox/calendar/util', [
         },
 
         onSameDay: function (t1, t2) {
-            return moment(t1).isSame(t2, 'd');
+            return moment(t1).isSame(t2, 'day');
         },
 
         getDurationInDays: function (data) {
@@ -584,7 +584,7 @@ define('io.ox/calendar/util', [
                     date: day.date(),
                     day: day.day(),
                     timestamp: +day,
-                    isToday: moment().isSame(day, 'd'),
+                    isToday: moment().isSame(day, 'day'),
                     col: i % 7
                 });
                 // is weekend?

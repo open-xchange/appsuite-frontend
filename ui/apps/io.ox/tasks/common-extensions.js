@@ -28,7 +28,7 @@ define('io.ox/tasks/common-extensions', [
             if (!_.isNumber(t)) return;
             this.append(
                 $('<time class="date">')
-                .attr('datetime', moment(t).format('YYYY-MM-DD HH:mm'))
+                .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(mailUtil.getDateTime(t, options)))
             );
         },

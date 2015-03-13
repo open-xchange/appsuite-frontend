@@ -230,7 +230,7 @@ define('io.ox/calendar/month/view', [
                         // first run, draw
                         this.renderAppointmentIndicator(cell);
                     } else {
-                        if (!startMoment.isSame(tempDate, 'd')) {
+                        if (!startMoment.isSame(tempDate, 'day')) {
                             // one mark per day is enough
                             this.renderAppointmentIndicator(cell);
                         }
@@ -243,7 +243,7 @@ define('io.ox/calendar/month/view', [
                         maxCount--;
                         $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).append(this.renderAppointment(model));
                         // inc date
-                        if (!startMoment.isSame(endMoment, 'd')) {
+                        if (!startMoment.isSame(endMoment, 'day')) {
                             startMoment.add(1, 'day').startOf('day');
                         } else {
                             break;

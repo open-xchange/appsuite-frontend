@@ -283,8 +283,7 @@
          * @returns {long} Timestamp
          */
         utc: function () {
-            var t = new Date();
-            return t.getTime() - t.getTimezoneOffset() * 60000;
+            return +moment().utc(true);
         },
 
         // return timestamp far away in the future
