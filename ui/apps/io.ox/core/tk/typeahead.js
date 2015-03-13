@@ -21,10 +21,9 @@ define('io.ox/core/tk/typeahead', [
 
     'use strict';
 
-    function customEvent (state, query, data) {
+    function customEvent (state, data) {
         this.model.set({
-            source: state,
-            query: state === 'idle' ? query : this.model.get('query')
+            source: state
         });
         return data;
     }
@@ -89,9 +88,9 @@ define('io.ox/core/tk/typeahead', [
                 hint: o.hint
             }, {
                 source: function (query, callback) {
-                    customEvent.call(self, 'requesting', query);
+                    customEvent.call(self, 'requesting');
                     o.source.call(self, query)
-                        .then(customEvent.bind(self, 'processing', query))
+                        .then(customEvent.bind(self, 'processing'))
                         .then(o.reduce)
                         .then(function (data) {
                             if (o.maxResults) {
@@ -103,14 +102,19 @@ define('io.ox/core/tk/typeahead', [
                             data = o.placement === 'top' ? data.reverse() : data;
                             return _(data).map(o.harmonize);
                         })
-                        .then(customEvent.bind(self, 'finished', query))
-                        .then(customEvent.bind(self, 'idle', query))
+                        .then(customEvent.bind(self, 'finished'))
+                        .then(customEvent.bind(self, 'idle'))
                         .then(callback);
-                    // dirty hack to get a reliable info about open/close state
+                    // workaround: hack to get a reliable info about open/close state
                     if (!self.registered) {
-                        // use source function to get dateset reference
-                        this.onSync('rendered', function () {
-                            var dropdown = this.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                        var dateset = this;
+                        // only way to get dateset reference and listen for that event
+                        dateset.onSync('rendered', function () {
+                            var dropdown = dateset.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
+                                emptyAction = dropdown.find('.tt-dataset-0').is(':empty'),
+                                query = dropdown.find('span.info').attr('data-query');
+                            if (!emptyAction)
+                                self.model.set('query', query);
                             if (dropdown.is(':visible'))
                                 self.model.set('dropdown', 'opened');
                         });
@@ -122,6 +126,11 @@ define('io.ox/core/tk/typeahead', [
                         var node = $('<div class="autocomplete-item">');
                         o.draw.call(node, searchresult);
                         return node;
+                    },
+                    header: function (data) {
+                        // workaround: add a hidden info node that stores query
+                        return $('<span class="info hidden">')
+                                .attr('data-query', data.query);
                     }
                 }
             }];

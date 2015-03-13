@@ -123,7 +123,7 @@ define('io.ox/core/tk/tokenfield', [
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
-                    // use typehead autoselect feature
+                    // preventDefault to supress creating incomplete token
                     if (self.options.autoselect && !e.attrs.model) {
                         e.preventDefault();
                         return;
