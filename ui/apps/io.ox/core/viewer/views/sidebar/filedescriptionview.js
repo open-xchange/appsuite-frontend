@@ -11,13 +11,14 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
+    'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/files/api',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (Ext, ActionsPattern, EventDispatcher, FilesAPI, Util, gt) {
+], function (DisposableView, Ext, ActionsPattern, EventDispatcher, FilesAPI, Util, gt) {
 
     'use strict';
 
@@ -124,7 +125,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
      * The FileDescriptionView is intended as a sub view of the SidebarView and
      * is responsible for displaying the file description.
      */
-    var FileDescriptionView = Backbone.View.extend({
+    var FileDescriptionView = DisposableView.extend({
 
         className: 'viewer-filedescription',
 
@@ -190,7 +191,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         initialize: function () {
             //console.info('FileDescriptionView.initialize()');
-            this.$el.on('dispose', this.dispose.bind(this));
+            this.on('dispose', this.disposeView.bind(this));
             this.model = null;
         },
 
@@ -286,10 +287,10 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             return this;
         },
 
-        dispose: function () {
-            //console.info('FileDescriptionView.dispose()');
-
-            this.stopListening();
+        disposeView: function () {
+            //console.info('FileDescriptionView.disposeView()');
+            this.model.off().stopListening();
+            this.model = null;
             return this;
         }
     });

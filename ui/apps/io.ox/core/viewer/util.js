@@ -365,6 +365,8 @@ define('io.ox/core/viewer/util', [
             'aria-expanded': options.collapsed ? 'false' : 'true'
         });
 
+        toggleButton[0].onclick = onTogglePanel;
+
         buttonIcon = $('<i>', { 'aria-hidden': 'true' }).addClass('fa fa-chevron-' + (options.collapsed ? 'right' : 'down'));
 
         panelHeader = $('<div>', { 'class': 'panel-heading', role: 'tab', 'aria-expanded': options.collapsed ? 'false' : 'true' }).append(
@@ -372,7 +374,6 @@ define('io.ox/core/viewer/util', [
             toggleButton.append(
                 buttonIcon
             )
-            .on('click', onTogglePanel)
         );
 
         panelBody = $('<div>', {

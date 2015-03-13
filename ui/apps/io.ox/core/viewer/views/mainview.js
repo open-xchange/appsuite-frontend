@@ -15,10 +15,11 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/core/viewer/eventdispatcher',
+    'io.ox/backbone/disposable',
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'less!io.ox/core/viewer/style'
-], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, NodeTouch, Util) {
+], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, DisposableView, NodeTouch, Util) {
 
     'use strict';
 
@@ -29,7 +30,7 @@ define('io.ox/core/viewer/views/mainview', [
      * - DisplayerView
      * - SidebarView
      */
-    var MainView = Backbone.View.extend({
+    var MainView = DisposableView.extend({
 
         className: 'io-ox-viewer abs',
 
@@ -48,13 +49,11 @@ define('io.ox/core/viewer/views/mainview', [
                 this.$el.remove();
             });
             // listen to the Viewer event 'bus' for useful events
-            this.listenTo(EventDispatcher, 'viewer:display:previous', this.onPreviousSlide);
-            this.listenTo(EventDispatcher, 'viewer:display:next', this.onNextSlide);
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js
-            this.$el.on('dispose', this.dispose.bind(this));
+            this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
             this.displayedFileIndex = this.collection.getStartIndex();
             var displayedData = { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) };
@@ -175,9 +174,15 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView.swiper.slideTo(activeSlideIndex);
         },
 
-        dispose: function () {
-            //console.info('MainView.dispose()');
-            this.stopListening();
+        disposeView: function () {
+            //console.info('MainView.disposeView()');
+            this.toolbarView.remove();
+            this.displayerView.remove();
+            this.sidebarView.remove();
+            this.collection.off().stopListening().each(function (model) {
+                model.off().stopListening();
+            });
+            this.collection = null;
             this.toolbarView = null;
             this.displayerView = null;
             this.sidebarView = null;

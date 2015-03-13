@@ -11,13 +11,14 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebar/fileinfoview', [
+    'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
     'io.ox/core/date',
     'io.ox/core/folder/api',
     'gettext!io.ox/core/viewer'
-], function (Ext, EventDispatcher, Util, OXDate, FolderAPI, gt) {
+], function (DisposableView, Ext, EventDispatcher, Util, OXDate, FolderAPI, gt) {
 
     'use strict';
 
@@ -92,7 +93,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
      * The FileInfoView is intended as a sub view of the SidebarView and
      * is responsible for displaying the general file details.
      */
-    var FileInfoView = Backbone.View.extend({
+    var FileInfoView = DisposableView.extend({
 
         className: 'viewer-fileinfo',
 
@@ -115,7 +116,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         initialize: function () {
             //console.info('FileInfoView.initialize()');
-            this.$el.on('dispose', this.dispose.bind(this));
         },
 
         render: function (data) {
@@ -126,14 +126,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
             return this;
-        },
-
-        dispose: function () {
-            //console.info('FileInfoView.dispose()');
-
-            this.stopListening();
-            return this;
         }
+
     });
 
     return FileInfoView;

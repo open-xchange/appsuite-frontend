@@ -12,12 +12,13 @@
  */
 define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/extensions',
+    'io.ox/backbone/disposable',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview'
-], function (Ext, EventDispatcher, Util, FileInfoView, FileDescriptionView, FileVersionsView) {
+], function (Ext, DisposableView, EventDispatcher, Util, FileInfoView, FileDescriptionView, FileVersionsView) {
 
     'use strict';
 
@@ -34,7 +35,7 @@ define('io.ox/core/viewer/views/sidebarview', [
      * This view should show file meta information, versions, sharing/permissions
      * etc. This view should have children views (TBD)
      */
-    var SidebarView = Backbone.View.extend({
+    var SidebarView = DisposableView.extend({
 
         className: 'viewer-sidebar',
 
@@ -43,7 +44,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         initialize: function () {
             //console.info('SidebarView.initialize()');
-            this.$el.on('dispose', this.dispose.bind(this));
+            this.on('dispose', this.disposeView.bind(this));
 
             this.fileInfoView = new FileInfoView();
             this.fileDescriptionView = new FileDescriptionView();
@@ -108,10 +109,15 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
         },
 
-        dispose: function () {
-            //console.info('SidebarView.dispose()');
+        disposeView: function () {
+            //console.info('SidebarView.disposeView()');
             this.$el.disableTouch();
-            this.stopListening();
+            this.fileInfoView.remove();
+            this.fileDescriptionView.remove();
+            this.fileVersionsView.remove();
+            this.fileInfoView = null;
+            this.fileDescriptionView = null;
+            this.fileVersionsView = null;
             return this;
         }
     });

@@ -10,6 +10,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebar/fileversionsview', [
+    'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/viewer/eventdispatcher',
@@ -17,7 +18,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     'io.ox/core/api/user',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (Ext, LinksPattern, EventDispatcher, FilesAPI, UserAPI, Util, gt) {
+], function (DisposableView, Ext, LinksPattern, EventDispatcher, FilesAPI, UserAPI, Util, gt) {
 
     'use strict';
 
@@ -200,7 +201,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
      * The FileVersionsView is intended as a sub view of the SidebarView and
      * is responsible for displaying the history of file versions.
      */
-    var FileVersionsView = Backbone.View.extend({
+    var FileVersionsView = DisposableView.extend({
 
         className: 'viewer-fileversions',
 
@@ -259,7 +260,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         initialize: function () {
             //console.info('FileVersionsView.initialize()');
-            this.$el.on('dispose', this.dispose.bind(this));
+            this.on('dispose', this.disposeView.bind(this));
             this.model = null;
         },
 
@@ -282,10 +283,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             return this;
         },
 
-        dispose: function () {
-            //console.info('FileVersionsView.dispose()');
-
-            this.stopListening();
+        disposeView: function () {
+            //console.info('FileVersionsView.disposeView()');
+            this.model.off().stopListening();
+            this.model = null;
             return this;
         }
     });

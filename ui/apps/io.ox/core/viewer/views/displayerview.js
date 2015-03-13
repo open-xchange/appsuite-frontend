@@ -13,10 +13,11 @@
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/types/typesregistry',
+    'io.ox/backbone/disposable',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (EventDispatcher, TypesRegistry, gt) {
+], function (EventDispatcher, TypesRegistry, DisposableView, gt) {
 
     'use strict';
 
@@ -25,7 +26,7 @@ define('io.ox/core/viewer/views/displayerview', [
      * launching music or video players, or displaying pre-rendered OX Docs
      * document previews (TBD)
      */
-    var DisplayerView = Backbone.View.extend({
+    var DisplayerView = DisposableView.extend({
 
         className: 'viewer-displayer',
 
@@ -35,7 +36,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // This index originates from the selected file in OX Drive folder.
             this.displayedFileIndex = this.collection.getStartIndex();
             // run own disposer function at global dispose
-            this.$el.on('dispose', this.dispose.bind(this));
+            this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
             this.captionTimeoutId = null;
             // local array of loaded slide indices.
@@ -362,10 +363,14 @@ define('io.ox/core/viewer/views/displayerview', [
             });
         },
 
-        dispose: function () {
-            //console.info('DisplayerView.dispose()', this.swiper);
+        disposeView: function () {
+            //console.info('DisplayerView.disposeView()', this.swiper);
+            this.swiper.removeAllSlides();
             this.swiper.destroy();
-            this.stopListening();
+            this.swiper = null;
+            this.displayedFileIndex = null;
+            this.captionTimeoutId = null;
+            this.loadedSlides = null;
             return this;
         }
     });

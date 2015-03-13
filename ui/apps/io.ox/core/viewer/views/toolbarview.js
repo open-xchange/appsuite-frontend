@@ -13,13 +13,14 @@
 define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, gt) {
+], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -267,7 +268,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // define the Backbone view
-    var ToolbarView = Backbone.View.extend({
+    var ToolbarView = DisposableView.extend({
 
         className: 'viewer-toolbar',
 
@@ -283,7 +284,6 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         initialize: function () {
             //console.info('ToolbarView.initialize()', options);
-            this.$el.on('dispose', this.dispose.bind(this));
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
                 this.render(data);
@@ -328,12 +328,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             Util.setDeviceClass(this.$el);
             toolbar.empty();
             Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
-            return this;
-        },
-
-        dispose: function () {
-            //console.info('ToolbarView.dispose()');
-            this.stopListening();
             return this;
         }
 
