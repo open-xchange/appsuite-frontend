@@ -14,9 +14,8 @@
 define('io.ox/contacts/util', [
     'io.ox/core/util',
     'settings!io.ox/contacts',
-    'gettext!io.ox/contacts',
-    'io.ox/core/date'
-], function (util, settings, gt, date) {
+    'gettext!io.ox/contacts'
+], function (util, settings, gt) {
 
     'use strict';
 
@@ -42,18 +41,19 @@ define('io.ox/contacts/util', [
     //helper function for birthdays without year
     //calculates the difference between gregorian and julian calendar
     function calculateDayDifference(time) {
-        var myDay = new date.UTC(time),
+        var myDay = moment.utc(time).local(true),
             century, tempA, tempB;
-
-        if (myDay.getMonth() < 2) {
-            century = Math.floor((myDay.getYear() - 1) / 100);
+        debugger;
+        if (myDay.month() < 2) {
+            century = Math.floor((myDay.year() - 1) / 100);
         } else {
-            century = Math.floor(myDay.getYear() / 100);
+            century = Math.floor(myDay.year() / 100);
         }
         tempA = Math.floor(century / 4);
         tempB = century % 4;
 
-        return Math.abs((3 * tempA + tempB - 2) * date.DAY);
+        // multiply result with milliseconds of a day - 86400000
+        return Math.abs((3 * tempA + tempB - 2) * 864e5);
 
     }
 
@@ -267,11 +267,11 @@ define('io.ox/contacts/util', [
         },
         //used to change birthdays without year(we save them as year 1) from gregorian to julian calendar (year 1 is julian, current calendar is gregorian)
         gregorianToJulian: function (timestamp) {
-            return new date.UTC(timestamp - calculateDayDifference(timestamp)).getTime();
+            return moment.utc(timestamp - calculateDayDifference(timestamp)).local(true).valueOf();
         },
         //used to change birthdays without year(we save them as year 1) from julian to gregorian calendar (year 1 is julian, current calendar is gregorian)
         julianToGregorian: function (timestamp) {
-            return new date.UTC(timestamp + calculateDayDifference(timestamp)).getTime();
+            return moment.utc(timestamp + calculateDayDifference(timestamp)).local(true).valueOf();
         }
     };
 
