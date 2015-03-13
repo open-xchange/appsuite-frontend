@@ -40,7 +40,7 @@
     }
 
     .folder {
-        line-height: 30px;
+        line-height: 28px;
         overflow: visible;
         white-space: nowrap;
         width: 100%;
@@ -63,7 +63,7 @@
     }
 
     .folder-node {
-        height: 30px;
+        height: 28px;
     }
 
     &.visible-selection {
@@ -131,7 +131,7 @@
         .folder-options {
 
             padding: 0 12px;
-            line-height: 30px;
+            line-height: 28px;
             background-color: rgba(0, 0, 0, 0.05);
             outline: 0;
             display: none;
@@ -190,6 +190,10 @@
 
     .shared {
 
+        .folder-node {
+            height: 48px;
+        }
+
         .folder-options {
             line-height: 24px;
             margin-top: 3px;
@@ -197,7 +201,7 @@
 
         .owner {
             font-size: 12px;
-            padding-left: 40px;
+            padding-left: 36px;
             margin-top: -10px;
             margin-bottom: 3px;
             a { color: #555; }
@@ -266,8 +270,8 @@
     .links {
 
         margin: 0;
-        padding: 0 14px 14px 40px;
-        line-height: 30px;
+        padding: 0 @default-padding @default-padding 36px;
+        line-height: 28px;
         font-weight: @normal;
 
         &:empty {
@@ -276,12 +280,12 @@
         }
 
         & > div {
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
     }
 
     .folder.section + .links {
-        margin: 20px 0 20px 40px;
+        margin: 20px 0 20px 36px;
         padding: 0;
         line-height: 20px;
         &:empty {

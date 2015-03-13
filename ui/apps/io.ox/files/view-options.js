@@ -21,6 +21,18 @@ define('io.ox/files/view-options', [
     'use strict';
 
     //
+    // Mark as secondary toolbar
+    //
+
+    ext.point('io.ox/files/list-view/toolbar/top').extend({
+        id: 'secondary',
+        index: 100,
+        draw: function () {
+            this.addClass('secondary-toolbar');
+        }
+    });
+
+    //
     // View dropdown
     //
 
