@@ -1,3 +1,9 @@
+open-xchange-appsuite-help (7.6.2-12) stable; urgency=low
+
+  * Twelfth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 13 Mar 2015 16:27:56 +0100
+
 open-xchange-appsuite-help (7.6.2-11) stable; urgency=low
 
   * Eleventh candidate for 7.6.2 release
