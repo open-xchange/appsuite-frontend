@@ -98,6 +98,12 @@ module.exports = function (grunt) {
                         src: ['*.css'],
                         cwd: 'bower_components/swiper/dist/css/',
                         dest: 'build/apps/3rd.party/swiper'
+                    },
+                    {
+                        expand: true,
+                        src: ['*.js'],
+                        cwd: 'lib/pdf',
+                        dest: 'build/apps/3rd.party/pdf'
                     }
                 ]
             }
