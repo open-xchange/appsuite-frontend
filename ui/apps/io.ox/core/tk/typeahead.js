@@ -21,6 +21,8 @@ define('io.ox/core/tk/typeahead', [
 
     'use strict';
 
+    // https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md
+
     function customEvent (state, data) {
         this.model.set({
             source: state
@@ -153,7 +155,7 @@ define('io.ox/core/tk/typeahead', [
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item);
-                    self.typeaheadInput.trigger('select', item);
+                    self.$el.trigger('select', item);
                 },
                 'blur': o.blur
             });

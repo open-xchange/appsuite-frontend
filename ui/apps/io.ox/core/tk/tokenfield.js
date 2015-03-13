@@ -256,22 +256,12 @@ define('io.ox/core/tk/tokenfield', [
             this.register();
 
             // save original typeahead input
-            // hint: usage of prototype Typeahead.prototype.render would not work properly here
-            this.input =  $(this.$el).data('bs.tokenfield').$input.on({
-                'typeahead:opened': function () {
-                    if (_.isFunction(o.cbshow)) o.cbshow();
-                },
-                // dirty hack to get a reliable info about open/close state
-                'typeahead:closed': function () {
-                    var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
-                    if (!dropdown.is(':visible'))
-                        self.model.set('dropdown', 'closed');
-                },
-                'typeahead:selected typeahead:autocompleted': function (e, item) {
-                    o.click.call(this, e, item.data);
-                    self.input.trigger('select', item.data);
-                },
-                'blur': o.blur
+            this.input =  $(this.$el).data('bs.tokenfield').$input;
+            // call typehead render
+            Typeahead.prototype.render.call({
+                $el: this.input,
+                model: this.model,
+                options: this.options
             });
 
             // workaround: register handler for delayed autoselect
