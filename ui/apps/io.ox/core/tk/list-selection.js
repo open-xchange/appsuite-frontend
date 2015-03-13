@@ -356,11 +356,19 @@ define('io.ox/core/tk/list-selection', [
             });
         },
 
-        onCursorUpDown: function (e) {
+        onCursor: function (e) {
+
+            // cursor left/right have no effect in a plain list
+            var grid = this.view.$el.hasClass('grid-layout'),
+                cursorLeftRight = e.which === 37 || e.which === 39;
+            if (!grid && cursorLeftRight) return;
 
             var items = this.getItems(),
                 current = $(document.activeElement),
-                index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
+                cursorUpDown = e.which === 38 || e.which === 40,
+                cursorBack = e.which === 37 || e.which === 38,
+                step = grid && cursorUpDown ? parseInt(this.view.$el.attr('grid-count') || 1, 10) : 1,
+                index = (items.index(current) || 0) + (cursorBack ? -step : +step);
 
             if (index < 0) return;
             // scroll to very bottom if at end of list (to keep a11y support)
@@ -418,10 +426,12 @@ define('io.ox/core/tk/list-selection', [
                 this.view.trigger('selection:delete', this.get());
                 break;
 
-            // cursor up/down
+            // cursor left/right up/down
+            case 37:
             case 38:
+            case 39:
             case 40:
-                this.onCursorUpDown(e);
+                this.onCursor(e);
                 break;
 
             // page up/down

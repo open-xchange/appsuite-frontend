@@ -365,13 +365,14 @@ define('io.ox/files/main', [
                 var list = app.listView,
                     width = list.$el.width(),
                     layout = app.props.get('layout'),
+                    gridWidth = layout === 'icon' ? 140 : 180,
                     // icon: 140px as minimum width (120 content + 20 margin/border)
                     // tile: 180px (160 + 20)
                     // minimum is 1, maximum is 12
-                    column = Math.max(1, Math.min(12, width / (layout === 'icon' ? 140 : 180) >> 0));
+                    column = Math.max(1, Math.min(12, width / gridWidth >> 0));
                 // update class name
                 list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
-                list.$el.addClass('grid-' + column);
+                list.$el.addClass('grid-' + column).attr('grid-count', column);
             });
 
             $(window).trigger('resize');
