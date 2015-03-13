@@ -81,7 +81,8 @@ define('io.ox/core/folder/picker', [
             },
             initialize: $.noop,
             close: $.noop,
-            show: $.noop
+            show: $.noop,
+            alternative: $.noop
         }, options);
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
@@ -92,6 +93,10 @@ define('io.ox/core/folder/picker', [
             )
             .addPrimaryButton('ok', o.button, 'ok', { tabIndex: 1 })
             .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+
+        if (o.alternativeButton) {
+            dialog.addAlternativeButton('alternative', o.alternativeButton);
+        }
         dialog.getBody().css({ height: o.height });
 
         var id = o.folder;
@@ -148,6 +153,9 @@ define('io.ox/core/folder/picker', [
                 var id = tree.selection.get();
                 if (id) o.done(id, dialog, tree);
                 o.always(dialog, tree);
+            })
+            .on('alternative', function () {
+                o.alternative(dialog, tree);
             })
             .show(function () {
                 dialog.getBody().busy();
