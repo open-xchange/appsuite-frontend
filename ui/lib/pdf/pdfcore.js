@@ -17,7 +17,7 @@
 /*jshint globalstrict: false */
 /* globals PDFJS */
 
-define('3rdparty/pdf/pdfcore', function () {
+define('3rd.party/pdf/pdfcore', function () {
 
 // Initializing PDFJS global object (if still undefined)
 if (typeof PDFJS === 'undefined') {

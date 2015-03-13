@@ -13,7 +13,7 @@
 
 define('io.ox/core/pdf/pdfview', [
     '3rd.party/pdf/pdftextlayerbuilder',
-    'less!io.ox/core/pdfstyle'
+    'less!io.ox/core/pdf/pdfstyle'
 ], function (PDFTextLayerBuilder) {
 
     'use strict';
@@ -171,6 +171,20 @@ define('io.ox/core/pdf/pdfview', [
                     }
                 }
 
+                // fill/render all remaining, new page nodes
+                _.each(_.difference(curPageNumbersToRender, renderedPageNumbers), function (pageNumber) {
+                    var jqPageNode = getPageNodeHandler(pageNumber);
+
+                    if (jqPageNode) {
+                        if (jqPageNode.children().length === 0) {
+                            self.createPDFPageNode(jqPageNode, { pageZoom: self.getPageZoom(pageNumber) });
+                        }
+
+                        self.renderPDFPage(jqPageNode, pageNumber, self.getPageZoom(pageNumber));
+                        jqPageNode.css({ visibility: 'visible' });
+                    }
+                });
+
                 // clear all page nodes, that are not visible anymore
                 _.each(_.difference(renderedPageNumbers, curPageNumbersToRender), function (pageNumber) {
                     var jqPageNode = getPageNode(pageNumber);
@@ -180,32 +194,26 @@ define('io.ox/core/pdf/pdfview', [
                     }
                 });
 
-                // fill/rendet all remaining, new page nodes
-                _.each(_.difference(curPageNumbersToRender, renderedPageNumbers), function (pageNumber) {
-                    var jqPageNode = getPageNodeHandler(pageNumber);
-
-                    if (jqPageNode) {
-                        self.renderPDFPage(jqPageNode, pageNumber, self.getPageZoom(pageNumber));
-                    }
-                });
-
                 renderedPageNumbers = curPageNumbersToRender;
             }
         }
 
         // methods ------------------------------------------------------------
 
-        this.setCallbacks = function (getVisiblePageNumbers, getPageNode) {
-            this.clearCallbacks();
+        this.setRenderCallbacks = function (getVisiblePageNumbers, getPageNode) {
+            this.clearRenderCallbacks();
 
             if (_.isObject(getVisiblePageNumbers) && _.isObject(getPageNode)) {
-                window.setInterval(intervalHandler(), 250);
+                getVisiblePageNumbersHandler = getVisiblePageNumbers;
+                getPageNodeHandler = getPageNode;
+
+                window.setInterval(intervalHandler, 100);
             }
         };
 
         // ---------------------------------------------------------------------
 
-        this.clearCallbacks = function () {
+        this.clearRenderCallbacks = function () {
             window.clearInterval(intervalHandler);
             getVisiblePageNumbersHandler = getPageNodeHandler = null;
         };
@@ -241,12 +249,14 @@ define('io.ox/core/pdf/pdfview', [
 
             // set retrieved PDF page size as page node data and append correctly initialized canvas to given page node
             if (_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height)) {
-                var extentAttr = 'width="' + pageSize.width + '" height="' + pageSize.height + '" style="width:' + pageSize.width + 'px; height:' + pageSize.height + 'px"';
+                var extentAttr = 'width="' + pageSize.width + '" height="' + pageSize.height + '" style="width:' + pageSize.width + 'px; height:' + pageSize.height + 'px"',
+                    canvasNode = $('<canvas ' + extentAttr + '>');
 
-                jqParentNode.append($('<canvas class="pdf-page" ' + extentAttr + '>'));
+                jqParentNode.append(canvasNode);
 
                 if (options.textOverlay) {
-                    jqParentNode.append($('<div class="pdf-textlayer user-select-text" ' + extentAttr + '>'));
+                    var textOverlayNode = $('<div class="pdf-textlayer user-select-text" ' + extentAttr + '>');
+                    jqParentNode.append(textOverlayNode);
                 }
             }
 
@@ -274,7 +284,7 @@ define('io.ox/core/pdf/pdfview', [
 
                 if (!pageNumber) {
                     _.times(pdfDocument.getPageCount(), function (pageIndex) {
-                        this.setPageZoom(pageZoom, pageIndex + 1);
+                        self.setPageZoom(pageZoom, pageIndex + 1);
                     });
                 } else {
                     var curPageData = getPageData(pageNumber);

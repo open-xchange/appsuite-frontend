@@ -11,10 +11,11 @@
  */
 define('io.ox/core/viewer/types/documenttype', [
     'io.ox/core/pdf/pdfdocument',
+    'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/types/basetype',
-    'io.ox/core/viewer/pdf/io',
+    'io.ox/core/viewer/io',
     'io.ox/core/viewer/util'
-], function (PDFDocument, BaseType, IO, Util) {
+], function (PDFDocument, PDFView, BaseType, IO, Util) {
     /**
      * The document file type. Implements the ViewerType interface.
      *
@@ -70,8 +71,9 @@ define('io.ox/core/viewer/types/documenttype', [
                     nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
                 }),
                 // fire up PDF.JS with the document URL and get its loading promise
-                pdfDocumentPromise = new PDFDocument(documentUrl).getLoadPromise(),
-                pageContainer = slideElement.find('.document-container');
+                pageContainer = slideElement.find('.document-container'),
+                pdfDocument = null,
+                pdfView = null;
 
             /**
              * Creates and returns the URL of a server request.
@@ -159,13 +161,10 @@ define('io.ox/core/viewer/types/documenttype', [
              * Calculates document page numbers to render depending on visilbility of the pages
              * in the viewport (window).
              *
-             * @param slideElement
-             *  the current slide jQuery element
-             *
              * @returns {Array} pagesToRender
              *  an array of page numbers which should be rendered.
              */
-            function getPagesToRender(pageContainer) {
+            function getPagesToRender() {
                 //console.warn('DocumentType.getPagesToRender()', pageContainer);
                 var pages = pageContainer.find('.document-page'),
                     pagesToRender = [];
@@ -187,17 +186,40 @@ define('io.ox/core/viewer/types/documenttype', [
                 return pagesToRender;
             }
 
-            // wait for both promises
-            $.when(pdfDocumentPromise).then(function (pageCount) {
-                //console.warn('DocumentType promises finished.');
-                _.times(pageCount, function (number) {
-                    var page = $('<div class="document-page">').text(number + 1);
-                    pageContainer.append(page);
-                });
-                // scroll test
-                slideElement.scroll(function () {
-                    console.warn('DocumentType.pagesToRender()', getPagesToRender(pageContainer));
-                });
+            /**
+             * Returns the pageNode with the given pageNumber.
+             *
+             * @param pageNumber
+             *  The 1-based number of the page node to return
+             *
+             * @returns {jquery.Node} pageNode
+             *  The jquery page node for the requested page number.
+             */
+            function getPageNode(pageNumber) {
+                return (_.isNumber(pageNumber) && (pageNumber >= 1)) ? pageContainer.children().eq(pageNumber - 1) : null;
+            }
+
+            // create the PDF document model
+            pdfDocument = new PDFDocument(documentUrl);
+
+            // wait for PDF document to finish loading
+            $.when(pdfDocument.getLoadPromise()).then(function (pageCount) {
+                if (pageCount > 0) {
+                    // create the PDF view after successful loading;
+                    // the initial zoom factor is already set to 1.0
+                    pdfView = new PDFView(pdfDocument);
+
+                    //console.warn('DocumentType promises finished.');
+                    _.times(pageCount, function (index) {
+                        var jqPage = $('<div class="document-page">'),
+                            pageSize = pdfDocument.getOriginalPageSize(index + 1);
+
+                        pageContainer.append(jqPage.attr(pageSize).css(pageSize));
+                    });
+
+                    // set callbacks at PDFView to start rendering
+                    pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
+                }
             });
         }
     };

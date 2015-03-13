@@ -9,7 +9,7 @@
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
-define('io.ox/core/viewer/pdf/io', [
+define('io.ox/core/viewer/io', [
     'io.ox/core/http',
     'io.ox/core/viewer/util'
 ], function (CoreHTTP, Util) {

@@ -14,10 +14,19 @@
 /* restrict all definitions to OX Documents applications */
 .io-ox-core-pdf {
 
+.pdf-canvas {
+	position: absolute;
+	vertical-align: top;
+	top: 0;
+	left: 0;
+}
+
 /* Allow absolute positioning of the canvas and textLayer in the page. They
    will be the same size and will be placed on top of each other. */
 .pdf-page {
     position: relative;
+    background: #ffffff;
+    color: #000000;
     font-family: arial, verdana, sans-serif;
     overflow: visible;
 
