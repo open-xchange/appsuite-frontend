@@ -10,11 +10,11 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/types/documenttype', [
+    'io.ox/core/pdf/pdfdocument',
     'io.ox/core/viewer/types/basetype',
     'io.ox/core/viewer/pdf/io',
-    'io.ox/core/viewer/util',
-    'io.ox/core/viewer/pdf/pdfdocument'
-], function (BaseType, IO, Util, PDFDocument) {
+    'io.ox/core/viewer/util'
+], function (PDFDocument, BaseType, IO, Util) {
     /**
      * The document file type. Implements the ViewerType interface.
      *
