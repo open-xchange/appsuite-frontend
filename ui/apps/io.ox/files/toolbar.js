@@ -214,6 +214,7 @@ define('io.ox/files/toolbar', [
                 .option('layout', 'tile', gt('Tiles'))
                 .divider()
                 .header(gt('Options'))
+                .option('checkboxes', true, gt('Checkboxes'))
                 .option('folderview', true, gt('Folder view'));
 
             this.append(

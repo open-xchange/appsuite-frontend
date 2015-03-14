@@ -236,10 +236,10 @@ define('io.ox/files/main', [
             if (!/^(list|icon|tile)/.test(layout)) layout = 'list';
             // introduce shared properties
             app.props = new Backbone.Model({
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'filter': 'none',
                 'layout': layout,
-                'folderEditMode': false,
-                'showCheckboxes': false
+                'folderEditMode': false
             });
         },
 
@@ -420,6 +420,20 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Respond to change:checkboxes
+         */
+        'change:checkboxes': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            app.props.on('change:checkboxes', function (model, value) {
+                app.listView.toggleCheckboxes(value);
+            });
+
+            app.listView.toggleCheckboxes(app.props.get('checkboxes'));
+        },
+
+        /*
          * Delete file
          * leave detailview if file is deleted
          */
@@ -459,8 +473,10 @@ define('io.ox/files/main', [
          * mobile only
          * toggle edit mode in listview on mobiles
          */
-        'change:checkboxes': function (app) {
+        'change:checkboxes-mobile': function (app) {
+
             if (_.device('!smartphone')) return;
+
             // bind action on button
             app.pages.getNavbar('fluid').on('rightAction', function () {
                 app.props.set('showCheckboxes', !app.props.get('showCheckboxes'));
@@ -480,11 +496,11 @@ define('io.ox/files/main', [
             });
         },
 
-        'toggle-secondary-toolbar': function (app) {
-            app.props.on('change:showCheckboxes', function (model, state) {
-                app.pages.toggleSecondaryToolbar('fluid', state);
-            });
-        },
+        // 'toggle-secondary-toolbar': function (app) {
+        //     app.props.on('change:showCheckboxes', function (model, state) {
+        //         app.pages.toggleSecondaryToolbar('fluid', state);
+        //     });
+        // },
 
         /*
          * Folerview toolbar

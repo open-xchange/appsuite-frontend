@@ -380,7 +380,7 @@ define('io.ox/core/tk/list-selection', [
             index +=  cursorBack ? -step : +step;
 
             // move to very last element on cursor down?
-            if (step > 1 && e.which === 40 && index >= items.length) index = items.length - 1;
+            if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
 
             // out of bounds?
             if (index < 0) return;

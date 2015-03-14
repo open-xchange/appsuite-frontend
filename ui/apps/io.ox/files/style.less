@@ -88,18 +88,13 @@
 
         padding: @default-padding 0 0 @default-padding;
 
-        & > li {
-
+        & > li.list-item {
             padding: 0;
             display: inline-block;
             border: solid white;
             border-width: 0 @default-padding (@default-padding * 2) 0;
             overflow: hidden;
             float: left;
-
-            .list-item-checkmark {
-                display: none;
-            }
         }
 
         &.grid-1  > li { width: 100% /  1; }
@@ -154,6 +149,10 @@
         @filename_margin: 10px;
         @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
 
+        .list-item-checkmark {
+            top: 60px;
+        }
+
         .list-item-content {
             width: 100%;
             height: @height;
@@ -173,17 +172,34 @@
             height: @filename_height;
             overflow: hidden;
             margin: @filename_margin 0;
-            text-align: center;
-            padding: 0 5px;
+            text-align: left;
+            padding: 0 4px 0 32px;
             word-break: break-word;
         }
 
         .busy-indicator(@thumbnail_height);
+
+        //
+        // Checkbox handling
+        //
+
+        .list-item-checkmark {
+            top: auto;
+            bottom: 4px;
+            left: -8px;
+            height: 48px;
+            width: 40px;
+        }
+
+        &.hide-checkboxes .filename {
+            text-align: center;
+            padding: 0 4px;
+        }
     }
 
     &.tile-layout {
 
-        & > li {
+        & > li.list-item {
             border-width: 0 @default-padding @default-padding 0;
         }
 
@@ -214,6 +230,30 @@
         }
 
         .busy-indicator(@thumbnail_height);
+
+        //
+        // Checkbox handling
+        //
+
+        .list-item-checkmark {
+            top: 90px;
+            height: 40px;
+            right: 0;
+            left: auto;
+            .fa-checkmark {
+                color: #fff;
+                text-shadow: 0 0 2px #000;
+            }
+        }
+
+        .file-type-folder .list-item-checkmark .fa-checkmark {
+            color: #555;
+            text-shadow: none;
+        }
+
+        li.selected .list-item-checkmark .fa-checkmark {
+            color: #fff;
+        }
     }
 
     //
