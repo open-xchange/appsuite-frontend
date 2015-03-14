@@ -68,6 +68,14 @@ define('io.ox/files/common-extensions', [
 
         thumbnail: function (baton) {
 
+            if (baton.model.isFolder()) {
+                return this.append(
+                    $('<div class="icon-thumbnail icon-folder">').append(
+                        $('<span class="folder-name">').text(baton.model.getDisplayName())
+                    )
+                );
+            }
+
             var url = legacy_api.getUrl(baton.data, 'thumbnail', { thumbnailWidth: 200, thumbnailHeight: 150, scaletype: 'cover' }),
                 node = $('<div class="icon-thumbnail">').attr('data-original', url);
 
@@ -85,7 +93,7 @@ define('io.ox/files/common-extensions', [
         },
 
         fileTypeClass: function (baton) {
-            var type = new api.Model(baton.data).getFileType();
+            var type = baton.model.getFileType();
             if (type) this.closest('.list-item').addClass('file-type-' + type);
         }
     };

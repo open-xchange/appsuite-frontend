@@ -163,6 +163,11 @@
             .thumbnail(@thumbnail_height);
         }
 
+        .file-type-folder .icon-thumbnail {
+            background-color: #eee;
+            .folder-name { display: none; }
+        }
+
         .filename {
             line-height: @filename_line_height;
             height: @filename_height;
@@ -194,17 +199,45 @@
             .thumbnail(@thumbnail_height);
         }
 
+        .file-type-folder .icon-thumbnail {
+
+            background-color: #eee;
+            display: table;
+            width: 100%;
+
+            .folder-name {
+                color: #333;
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+            }
+        }
+
         .busy-indicator(@thumbnail_height);
     }
 
+    //
+    // Selection handling
+    //
+
     &.icon-layout, &.tile-layout {
 
-        .selected .icon-thumbnail {
+        .selected:not(.file-type-folder) .icon-thumbnail {
             .selection();
         }
 
-        &.has-focus .selected .icon-thumbnail {
-            .selection-focus();
+        .selected.file-type-folder .icon-thumbnail {
+            background-color: #ddd;
+        }
+
+        &.has-focus {
+            .selected .icon-thumbnail {
+                .selection-focus();
+            }
+            .selected.file-type-folder .icon-thumbnail {
+                background-color: @selected-background;
+                .folder-name { color: white; }
+            }
         }
     }
 }
