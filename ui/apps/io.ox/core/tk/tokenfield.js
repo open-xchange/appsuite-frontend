@@ -125,6 +125,8 @@ define('io.ox/core/tk/tokenfield', [
 
             // delayed autoselect
             if (this.options.delayedautoselect) {
+                // use hash to 'connect' enter click and query string
+                self.autoselect = {};
                 self.model.on('change:query', function (model, query) {
                     // trigger delayed enter click after dropdown was drawn
                     if (self.autoselect[query]) {
@@ -138,8 +140,6 @@ define('io.ox/core/tk/tokenfield', [
 
                 });
             }
-            // use hash to 'connect' enter click and query string
-            self.autoselect = {};
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
