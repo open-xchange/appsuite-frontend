@@ -120,7 +120,13 @@ define('io.ox/core/tk/tokenfield', [
             var self = this;
             // register custom event when token is clicked
             this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
-                self.$el.tokenfield().trigger('tokenfield:clickedtoken', e);
+                // create new event set attrs property like it's used in the non-custom events
+                var evt = $.Event(true, {}, e, {
+                    type: 'tokenfield:clickedtoken',
+                    attrs:  $(e.currentTarget).data().attrs,
+                    originalEvent: e
+                });
+                self.$el.tokenfield().trigger(evt);
             });
 
             // delayed autoselect
