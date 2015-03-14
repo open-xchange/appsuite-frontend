@@ -402,6 +402,7 @@ define('io.ox/files/main', [
                 _.defer(function () {
                     applyLayout();
                     app.listView.redraw();
+                    $(document).trigger('resize');
                 });
             });
 
@@ -431,6 +432,17 @@ define('io.ox/files/main', [
             });
 
             app.listView.toggleCheckboxes(app.props.get('checkboxes'));
+        },
+
+        /*
+         * Respond to global refresh
+         */
+        'refresh': function (app) {
+            ox.on('refresh^', function () {
+                _.defer(function () {
+                    app.listView.reload();
+                });
+            });
         },
 
         /*

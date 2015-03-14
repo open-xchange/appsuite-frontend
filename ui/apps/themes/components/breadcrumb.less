@@ -1,0 +1,54 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.breadcrumb-view {
+    margin: 8px 0;
+    .user-select-text();
+    .toolbar & { margin: 0; }
+}
+
+.breadcrumb-label, .breadcrumb-item, .breadcrumb-ellipsis, .breadcrumb-divider, .breadcrumb-tail {
+    color: #777;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.breadcrumb-link {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.breadcrumb-link, .breadcrumb-item, .breadcrumb-tail {
+    max-width: 120px;
+    .ellipsis();
+}
+
+.breadcrumb-tail {
+    max-width: 240px;
+}
+
+.breadcrumb-label {
+    margin-right: 8px;
+}
+
+.breadcrumb-tail {
+    color: #333;
+    font-weight: bold;
+}
+
+.breadcrumb-divider {
+    margin: 0 12px;
+    width: 8px;
+    text-align: center;
+    &:before { content: "\f105"; } // fa-angle-right
+}

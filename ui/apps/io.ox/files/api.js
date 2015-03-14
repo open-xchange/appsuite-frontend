@@ -174,10 +174,11 @@ define('io.ox/files/api', [
         httpGet: function (module, params) {
             return $.when(
                 folderAPI.list(params.folder),
-                http.GET({ module: module, params: params })
+                // this one might fail due to lack of permissions; error are transformed to empty array
+                http.GET({ module: module, params: params }).then(null, $.when)
             )
             .then(function (folders, files) {
-                return [].concat(folders, files[0]);
+                return [].concat(folders, files[0] || []);
             });
         },
         // use client-side limit
