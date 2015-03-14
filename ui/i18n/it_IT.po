@@ -709,7 +709,7 @@ msgstr "Aggiungi un contatto"
 msgid "Add distribution list"
 msgstr "Aggiungi una lista di distribuzione"
 
-#: apps/io.ox/files/filepicker.js:31 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:34 module:io.ox/files
 msgid "Add files"
 msgstr "Aggiungi file"
 
@@ -1380,7 +1380,7 @@ msgstr "Vista di calendario"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
 #: apps/io.ox/core/main.js:509 apps/io.ox/core/main.js:1355
 #: apps/io.ox/core/permissions/permissions.js:369
 #: apps/io.ox/core/permissions/permissions.js:402 apps/io.ox/core/print.js:113
@@ -3642,7 +3642,7 @@ msgstr "Nascondi il corpo della richiesta"
 msgid "Hide stack trace"
 msgstr "Nascondi tracciamento degli errori"
 
-#: apps/io.ox/core/notifications/subview.js:75 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:68 module:io.ox/core
 #, fuzzy
 #| msgid "Click to close this notification"
 msgid "Hide this notification"
@@ -4579,7 +4579,7 @@ msgstr "Nuovo messaggio"
 msgid "New Mails"
 msgstr "Nuovi messaggi di posta"
 
-#: apps/io.ox/core/notifications/subview.js:161 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:154 module:io.ox/core
 #, fuzzy
 #| msgid "Notifications"
 msgid "New Notifications"
@@ -4814,7 +4814,7 @@ msgstr "Nessun messaggio in posta in arrivo"
 msgid "No message selected"
 msgstr "Nessun messaggio selezionato"
 
-#: apps/io.ox/core/notifications.js:87 module:io.ox/core
+#: apps/io.ox/core/notifications.js:90 module:io.ox/core
 msgid "No notifications"
 msgstr "Nessuna notifica"
 
@@ -6131,7 +6131,7 @@ msgstr "Sabato"
 #: apps/io.ox/core/settings/user.js:81 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
 #: apps/io.ox/files/actions/edit-description.js:66 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:124
+#: apps/io.ox/files/filepicker.js:35 apps/io.ox/files/views/create.js:124
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:90
@@ -7374,6 +7374,12 @@ msgstr ""
 "Gli elementi non ripristinabili sono stati cancellati correttamente. "
 "Aggiorna questa pagina per vedere le modifiche."
 
+#: apps/io.ox/files/filepicker.js:143 module:io.ox/files
+msgid "The uploaded file does not match the requested file type."
+msgid_plural "None of the uploaded files matches the requested file type."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/permissions/permissions.js:258 module:io.ox/core
 msgid "The user has administrative rights"
 msgstr "L'utente ha diritti amministrativi"
@@ -7927,6 +7933,12 @@ msgstr "Carica una nuova versione"
 #: apps/io.ox/files/fluid/view-detail.js:230 module:io.ox/files
 msgid "Upload file"
 msgstr "Carica un file"
+
+#: apps/io.ox/files/filepicker.js:162 module:io.ox/files
+#, fuzzy
+#| msgid "Uploading a file"
+msgid "Upload local file"
+msgstr "Caricare un file"
 
 #: apps/io.ox/files/actions.js:408 module:io.ox/files
 msgid "Upload new file"
@@ -8487,7 +8499,7 @@ msgstr "Nascondere tutti gli inviti agli appuntamenti"
 msgid "You've got appointment reminders"
 msgstr "Nascondi tutti i promemoria degli appuntamenti."
 
-#: apps/io.ox/core/notifications/subview.js:162 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
 #, fuzzy
 #| msgid "No notifications"
 msgid "You've got new Notifications"
@@ -12545,9 +12557,6 @@ msgstr "aaaa"
 
 #~ msgid "Upload"
 #~ msgstr "Carica"
-
-#~ msgid "Uploading a file"
-#~ msgstr "Caricare un file"
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

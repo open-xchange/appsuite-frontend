@@ -687,7 +687,7 @@ msgstr "メンバを追加する"
 msgid "Add distribution list"
 msgstr "配布リストを追加"
 
-#: apps/io.ox/files/filepicker.js:31 module:io.ox/files
+#: apps/io.ox/files/filepicker.js:34 module:io.ox/files
 msgid "Add files"
 msgstr "ファイルを追加"
 
@@ -1351,7 +1351,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
 #: apps/io.ox/core/main.js:509 apps/io.ox/core/main.js:1355
 #: apps/io.ox/core/permissions/permissions.js:369
 #: apps/io.ox/core/permissions/permissions.js:402 apps/io.ox/core/print.js:113
@@ -3611,7 +3611,7 @@ msgstr "リクエストの本文を隠す"
 msgid "Hide stack trace"
 msgstr "スタック トレースを隠す"
 
-#: apps/io.ox/core/notifications/subview.js:75 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:68 module:io.ox/core
 #, fuzzy
 #| msgid "Click to close this notification"
 msgid "Hide this notification"
@@ -4554,7 +4554,7 @@ msgstr "新規メール"
 msgid "New Mails"
 msgstr "新規メール"
 
-#: apps/io.ox/core/notifications/subview.js:161 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:154 module:io.ox/core
 #, fuzzy
 #| msgid "Notifications"
 msgid "New Notifications"
@@ -4789,7 +4789,7 @@ msgstr "受信トレイにメールがありません。"
 msgid "No message selected"
 msgstr "メッセージが選択されていません。"
 
-#: apps/io.ox/core/notifications.js:87 module:io.ox/core
+#: apps/io.ox/core/notifications.js:90 module:io.ox/core
 msgid "No notifications"
 msgstr "通知はありません。"
 
@@ -6089,7 +6089,7 @@ msgstr "土曜日"
 #: apps/io.ox/core/settings/user.js:81 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
 #: apps/io.ox/files/actions/edit-description.js:66 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:124
+#: apps/io.ox/files/filepicker.js:35 apps/io.ox/files/views/create.js:124
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:90
@@ -7313,6 +7313,11 @@ msgstr ""
 "回復不能なアイテムが正常にクリーンアップされました。このページを最新の状態に"
 "更新し、変更を確認してください。"
 
+#: apps/io.ox/files/filepicker.js:143 module:io.ox/files
+msgid "The uploaded file does not match the requested file type."
+msgid_plural "None of the uploaded files matches the requested file type."
+msgstr[0] ""
+
 #: apps/io.ox/core/permissions/permissions.js:258 module:io.ox/core
 msgid "The user has administrative rights"
 msgstr "管理者権限の付与"
@@ -7850,6 +7855,12 @@ msgstr "新規バージョンをアップロード"
 #: apps/io.ox/files/fluid/view-detail.js:230 module:io.ox/files
 msgid "Upload file"
 msgstr "ファイルをアップロード"
+
+#: apps/io.ox/files/filepicker.js:162 module:io.ox/files
+#, fuzzy
+#| msgid "Uploading a file"
+msgid "Upload local file"
+msgstr "ファイルのアップロード"
 
 #: apps/io.ox/files/actions.js:408 module:io.ox/files
 msgid "Upload new file"
@@ -8401,7 +8412,7 @@ msgstr "アポイントへの出席依頼をすべて隠す。"
 msgid "You've got appointment reminders"
 msgstr "アポイントのアラームをすべて隠す。"
 
-#: apps/io.ox/core/notifications/subview.js:162 module:io.ox/core
+#: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
 #, fuzzy
 #| msgid "No notifications"
 msgid "You've got new Notifications"
@@ -15670,9 +15681,6 @@ msgstr "年"
 
 #~ msgid "Upload a picture"
 #~ msgstr "写真をアップロード"
-
-#~ msgid "Uploading a file"
-#~ msgstr "ファイルのアップロード"
 
 #~ msgid "Uruguay"
 #~ msgstr "ウルグアイ"
