@@ -74,7 +74,9 @@ define('io.ox/core/tk/typeahead', [
             this.model = new Backbone.Model({
                 // [idle|requesting|processing|finished]
                 'source': 'idle',
+                // [undefined|STRING]
                 'query': undefined,
+                // [closed|open]
                 'dropdown': 'closed'
             });
 
@@ -110,7 +112,7 @@ define('io.ox/core/tk/typeahead', [
                     // workaround: hack to get a reliable info about open/close state
                     if (!self.registered) {
                         var dateset = this;
-                        // only way to get dateset reference and listen for that event
+                        // only way to get dateset reference and listen for 'rendered' event
                         dateset.onSync('rendered', function () {
                             var dropdown = dateset.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
                                 emptyAction = dropdown.find('.tt-dataset-0').is(':empty'),

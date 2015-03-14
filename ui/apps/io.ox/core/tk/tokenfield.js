@@ -77,7 +77,7 @@ define('io.ox/core/tk/tokenfield', [
             var self = this;
 
             options = _.extend({}, {
-                // hint: not the same type of stringify that was used in autocomplete
+                // defines tokendata
                 harmonize: function (data) {
                     var model = new pModel.Participant(data.data);
                     return {
@@ -118,7 +118,7 @@ define('io.ox/core/tk/tokenfield', [
 
         register: function () {
             var self = this;
-            // trigger event when token is clicked
+            // register custom event when token is clicked
             this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
                 self.$el.tokenfield().trigger('tokenfield:clickedtoken', e);
             });
