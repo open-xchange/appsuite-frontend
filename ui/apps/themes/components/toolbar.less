@@ -212,7 +212,7 @@
 
     & > li.pull-right {
         float: right;
-        & > .dropdown-menu { right: @default-padding; }
+        & > .dropdown-menu { right: 4px; }
     }
 }
 
@@ -331,6 +331,8 @@
 
         &:focus > i { color: #fff; }
     }
+
+    .toolbar-item.pull-right > .dropdown-menu { right: 4px; }
 
     &.toolbar-small {
         height: @height-small;
