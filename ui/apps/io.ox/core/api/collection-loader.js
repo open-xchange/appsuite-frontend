@@ -88,14 +88,16 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         this.load = function (params) {
 
+            var collection, limit = this.LIMIT;
+
             params = this.getQueryParams(params || {});
-            params.limit = '0,' + this.LIMIT;
-            var collection = this.collection = this.getCollection(params);
+            params.limit = '0,' + limit;
+            collection = this.collection = this.getCollection(params);
             this.loading = false;
 
             if (collection.length > 0 && !collection.expired) {
                 _.defer(function () {
-                    collection.trigger('reset load');
+                    collection.trigger(collection.length < limit ? 'reset load complete' : 'reset load');
                 });
                 return collection;
             }
