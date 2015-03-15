@@ -66,12 +66,13 @@ define('io.ox/files/api', [
             image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
             audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
             video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
-            doc: /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
-            xls: /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/,
-            ppt: /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
-            pdf: /^pdf$/,
-            zip: /^(zip|tar|gz|rar|7z|bz2)$/,
-            txt: /^(txt|md)$/
+            doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
+            xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/,
+            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/,
+            pdf:   /^pdf$/,
+            zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
+            txt:   /^(txt|md)$/,
+            guard: /^grd$/
         }
     });
 

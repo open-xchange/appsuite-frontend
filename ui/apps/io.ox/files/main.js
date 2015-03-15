@@ -283,6 +283,8 @@ define('io.ox/files/main', [
          */
         'folder:change': function (app) {
             app.on('folder:change', function (id) {
+                // we clear the list now to avoid flickering due to subsequent layout changes
+                app.listView.empty();
                 var options = app.getViewOptions(id);
                 app.props.set(options);
                 app.listView.model.set('folder', id);
