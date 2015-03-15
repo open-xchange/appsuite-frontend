@@ -43,6 +43,12 @@ define('io.ox/core/folder/contextmenu', [
         return link;
     }
 
+    function header(title) {
+        this.append(
+            $('<li class="dropdown-header" role="sectionhead">').text(title)
+        );
+    }
+
     function divider() {
         this.append(
             $('<li class="divider" role="presentation" aria-hidden="true">')
@@ -119,7 +125,25 @@ define('io.ox/core/folder/contextmenu', [
                 data: { folder: baton.data.id, app: baton.app },
                 enabled: true,
                 handler: actions.markFolderSeen,
-                text: gt('Mark all mails as read')
+                text: gt('Mark all messages as read')
+            });
+        },
+
+        //
+        // Move all messages to a target folder ...
+        //
+        moveAllMessages: function (baton) {
+
+            if (baton.module !== 'mail') return;
+
+            addLink(this, {
+                action: 'move-all-messages',
+                data: { folder: baton.data.id, app: baton.app },
+                enabled: true,
+                handler: function () {
+                    alert('Available once we get the proper API action');
+                },
+                text: gt('Move all messages')
             });
         },
 
@@ -207,7 +231,7 @@ define('io.ox/core/folder/contextmenu', [
                     data: { app: baton.app, folder: baton.data.id, module: baton.module },
                     enabled: true,
                     handler: handler,
-                    text: gt('New subfolder')
+                    text: gt('Add new folder')
                 });
             };
         }()),
@@ -536,27 +560,6 @@ define('io.ox/core/folder/contextmenu', [
 
     ext.point('io.ox/core/foldertree/contextmenu/default').extend(
         {
-            id: 'mark-folder-read',
-            index: 100,
-            draw: extensions.markFolderSeen
-        },
-        {
-            id: 'expunge',
-            index: 200,
-            draw: extensions.expunge
-        },
-        {
-            id: 'archive',
-            index: 300,
-            draw: extensions.archive
-        },
-        {
-            id: 'divider-1',
-            index: 400,
-            draw: divider
-        },
-        // -----------------------------------------------
-        {
             id: 'add-folder',
             index: 1000,
             draw: extensions.add
@@ -592,7 +595,7 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.customColor
         },
         {
-            id: 'divider-3',
+            id: 'divider-1',
             index: 1600,
             draw: divider
         },
@@ -613,7 +616,7 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.zip
         },
         {
-            id: 'divider-4',
+            id: 'divider-2',
             index: 2400,
             draw: divider
         },
@@ -629,24 +632,58 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.properties
         },
         {
-            id: 'divider-5',
+            id: 'divider-3',
             index: 3300,
             draw: divider
         },
         // -----------------------------------------------
         {
-            id: 'toggle',
+            id: 'header-1',
+            index: 4000,
+            draw: function (baton) {
+                if (baton.module !== 'mail') return;
+                header.call(this, gt('Housekeeping'));
+            }
+        },
+        {
+            id: 'mark-folder-read',
             index: 4100,
-            draw: extensions.toggle
+            draw: extensions.markFolderSeen
+        },
+        {
+            id: 'move-all-messages',
+            index: 4200,
+            draw: extensions.moveAllMessages
+        },
+        {
+            id: 'expunge',
+            index: 4300,
+            draw: extensions.expunge
+        },
+        {
+            id: 'archive',
+            index: 4400,
+            draw: extensions.archive
         },
         {
             id: 'empty',
-            index: 4200,
+            index: 4500,
             draw: extensions.empty
         },
         {
+            id: 'divider-4',
+            index: 4600,
+            draw: divider
+        },
+        // -----------------------------------------------
+        {
+            id: 'toggle',
+            index: 5100,
+            draw: extensions.toggle
+        },
+        {
             id: 'delete',
-            index: 4300,
+            index: 5200,
             draw: extensions.removeFolder
         }
     );

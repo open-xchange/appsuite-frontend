@@ -28,7 +28,8 @@ define('io.ox/core/main', [
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
-    'io.ox/core/links'
+    'io.ox/core/links',
+    'io.ox/backbone/disposable'
 ], function (desktop, session, http, appAPI, ext, Stage, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
