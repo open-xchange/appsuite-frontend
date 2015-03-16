@@ -43,8 +43,9 @@ define('io.ox/tasks/view-grid-template',
 
                 set: function (data, fields, index) {
 
-                    if (!data.badge) {
-                        //data needs to be processed first
+                    if (!data.badge && data.badge !== '') {
+                        // check for empty string also to avoid double processing (see bug 36610)
+                        // data needs to be processed first
                         data = util.interpretTask(data);
                     }
 

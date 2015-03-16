@@ -671,6 +671,29 @@ define('io.ox/core/folder/api',
     }
 
     //
+    // Clear/empty folder
+    //
+
+    function clear(id) {
+
+        api.trigger('before:clear', id);
+
+        return http.PUT({
+            module: 'folders',
+            appendColumns: false,
+            params: {
+                action: 'clear',
+                tree: tree(id)
+            },
+            data: [id]
+        })
+        .done(function () {
+            api.trigger('clear', id);
+            refresh();
+        });
+    }
+
+    //
     // Provide text node
     //
 
@@ -838,6 +861,7 @@ define('io.ox/core/folder/api',
         move: move,
         create: create,
         remove: remove,
+        clear: clear,
         reload: reload,
         hide: hide,
         show: show,
