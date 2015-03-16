@@ -14,10 +14,11 @@ define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/types/typesregistry',
     'io.ox/backbone/disposable',
+    'io.ox/core/viewer/views/types/imageview',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (EventDispatcher, TypesRegistry, DisposableView, gt) {
+], function (EventDispatcher, TypesRegistry, DisposableView, ImageView,  gt) {
 
     'use strict';
 
@@ -116,6 +117,8 @@ define('io.ox/core/viewer/views/displayerview', [
             // append carousel to view
             this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
+            //var imageView = new ImageView({ model: this.model, collection: this.collection, attributes: { modelIndex: 5 } });
+            //console.warn(imageView.attributes);
 
             // create slides from file collection and append them to the carousel
             this.createSlides(this.collection, carouselInner)
