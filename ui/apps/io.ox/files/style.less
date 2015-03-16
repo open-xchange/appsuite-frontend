@@ -145,14 +145,14 @@
 
     &.icon-layout {
 
-        // width is > 120px, so assuming a 4/3 format, we're around 120px
+        // width is > 120px, so assuming a 4/3 format, we're around 90px
         // since it's not equal but more than 120px we add a bit (just looks better on average)
         @thumbnail_width: 120px;
-        @thumbnail_height: ceil(@thumbnail_width / 4 * 3) + 10;
+        @thumbnail_height: 104px;
         @filename_rows: 2;
         @filename_line_height: 16px;
         @filename_height: @filename_rows * @filename_line_height;
-        @filename_margin: 10px;
+        @filename_margin: 8px;
         @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
 
         .list-item-checkmark {
@@ -210,7 +210,7 @@
         }
 
         // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)
-        @thumbnail_height: 120px + 10;
+        @thumbnail_height: 128px;
 
         .list-item-content {
             width: 100%;

@@ -97,17 +97,25 @@
     table-layout: fixed;
 }
 
-.mail-item .list-item-column {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0;
-    @icon-width: 24px;
-    &.column-1 { width: @icon-width; text-align: center; }
-    &.column-2 { width: @icon-width; text-align: center; }
-    &.column-3 { width: @icon-width; text-align: center; }
-    &.column-4 { width: 35%; padding-right: 10px; }
-    &.column-5 { width: 55%; padding-right: 10px; }
-    &.column-6 { width: 140px; text-align: right; }
+.mail-item {
+
+    .list-item {
+        padding-top: 8px;
+        padding-bottom: 6px;
+    }
+
+    .list-item-column {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0;
+        @icon-width: 24px;
+        &.column-1 { width: @icon-width; text-align: center; }
+        &.column-2 { width: @icon-width; text-align: center; }
+        &.column-3 { width: @icon-width; text-align: center; }
+        &.column-4 { width: 35%; padding-right: 10px; }
+        &.column-5 { width: 55%; padding-right: 10px; }
+        &.column-6 { width: 140px; text-align: right; }
+    }
 }
 
 .list-view .list-item {
@@ -209,7 +217,7 @@
 .mail-detail {
     section.body {
         margin: 0;
-        padding: 20px;
+        padding: @default-padding;
         background-color: #fff;
         display: none;
         width: 100%;
@@ -306,7 +314,7 @@
         }
     }
 
-    @item-line-height: 21px;
+    @item-line-height: 20px;
 
     .list-item-content {
 
@@ -319,7 +327,7 @@
             display: inline-block;
             float: left;
             line-height: 20px;
-            margin-right: 7px;
+            margin-right: 8px;
         }
 
         i.icon-unread { color: @link-color; }
@@ -333,13 +341,13 @@
         }
 
         .drag-title {
-            opacity: 0.75;
+            opacity: 0.70;
         }
 
         i.flag {
             font-size: 18px;
             padding: 0;
-            margin: 0 0 0 7px;
+            margin: 0 0 0 8px;
             float: right;
         }
     }
@@ -384,10 +392,11 @@
     }
 
     .box() {
-        color: #888;
-        line-height: @item-line-height - 2;
-        padding: 0 7px;
-        margin: 0 0 0 7px;
+        font-size: 12px;
+        color: #777;
+        line-height: @item-line-height - 3;
+        padding: 0 4px;
+        margin: 0 0 0 8px;
         display: inline-block;
         float: right;
         overflow: visible;
@@ -403,7 +412,7 @@
 
     .thread-size {
         .box();
-        min-width: 2em;
+        min-width: 24px;
         html.high-contrast & {
             color: @hc-gray;
         }
@@ -595,7 +604,7 @@
 .subject() {
     font-size: 20px;
     line-height: 24px;
-    padding: @default-padding;
+    padding: 20px @default-padding 12px @default-padding;
     margin: 0;
     .fontWeight(300);
 }
@@ -623,7 +632,8 @@
 
             color: #888;
             font-size: 13px;
-            line-height: 16px;
+            line-height: 20px;
+            margin-top: 4px;
 
             html.high-contrast & {
                 color: @hc-gray;
@@ -1102,9 +1112,9 @@ textarea.inplace-editor {
     .blockquote-toggle {
         color: #888;
         font-size: 13px;
-        padding-left: 44px;
-        margin: 14px 0;
-        min-height: 18px;
+        padding-left: 56px;
+        margin: 16px 0;
+        min-height: 16px;
         i {
             color: #888;
             background-color: #eee;
@@ -1132,11 +1142,11 @@ textarea.inplace-editor {
     .detail-view-header {
         .fontWeight(300);
         padding: @default-padding;
-        padding-left: @picture-padding + @unread-toggle-width;
+        padding-left: @picture-padding + @default-padding;// + @unread-toggle-width;
     }
 
     &.no-padding .detail-view-header {
-        padding-left: @picture-padding + @unread-toggle-width - @default-padding;
+        padding-left: @picture-padding;// + @unread-toggle-width;
         padding-right: 0;
     }
 

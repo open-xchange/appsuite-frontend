@@ -16,7 +16,7 @@
 /* List View */
 .list-view-control {
 
-    @height-default: 45px;
+    @height-default: @toolbar-height;
     @height-small: 35px;
     background-color: #fff;
 
@@ -51,7 +51,7 @@
             white-space: nowrap;
             i {
                 color: #ccc;
-                margin-right: 14px;
+                margin-right: 16px;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
@@ -145,14 +145,14 @@
     .list-item, .list-header {
         position: relative;
         font-size: 13px;
-        line-height: 19px;
-        padding: (@base-padding * 2) @list-view-padding (@base-padding * 2) (@list-view-padding + 32px);
+        line-height: 20px;
+        padding: 6px @list-view-padding 5px (@list-view-padding + 32px);
         cursor: pointer;
         outline: 0;
     }
 
     .list-item {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.10);
     }
 
     .list-item .list-item-checkmark {

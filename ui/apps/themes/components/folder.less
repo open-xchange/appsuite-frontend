@@ -15,7 +15,7 @@
 
 .folder-tree {
 
-    padding: 7px 0;
+    padding: 8px 0;
     overflow: auto;
     background-color: @foldertree-sidepanel-background;
     .user-select(none);
@@ -25,6 +25,7 @@
     @normal: 400;
     @bold: 700;
     @indentation: 40px;
+    @height: 24px;
 
     // custom mobile values
     @mobile-line-height: 40px;
@@ -41,7 +42,7 @@
     }
 
     .folder {
-        line-height: 28px;
+        line-height: @height - 1;
         overflow: visible;
         white-space: nowrap;
         width: 100%;
@@ -64,7 +65,7 @@
     }
 
     .folder-node {
-        height: 28px;
+        height: @height;
     }
 
     &.visible-selection {
@@ -132,7 +133,7 @@
         .folder-options {
 
             padding: 0 12px;
-            line-height: 28px;
+            line-height: @height - 1;
             background-color: rgba(0, 0, 0, 0.05);
             outline: 0;
             display: none;
@@ -170,7 +171,7 @@
 
         .folder-checkbox {
             display: inline-block;
-            margin: 0 14px 0 0;
+            margin: 0 @default-padding 0 0;
         }
 
         .folder-shared {
@@ -197,7 +198,7 @@
         }
 
         .folder-options {
-            line-height: 24px;
+            line-height: @height;
             margin-top: 3px;
         }
 
@@ -222,7 +223,7 @@
     }
 
     .favorites, .unified-folders, .standard-folders, .other-folders {
-        margin-bottom: 14px;
+        margin-bottom: @default-padding;
     }
 
     .favorites > .folder-node > .folder-label {
@@ -273,7 +274,8 @@
 
         margin: 0;
         padding: 0 @default-padding @default-padding @indentation;
-        line-height: 28px;
+        font-size: @fontSize;
+        line-height: @height;
         font-weight: @normal;
 
         &:empty {
@@ -287,9 +289,9 @@
     }
 
     .folder.section + .links {
-        margin: 20px 0 20px @indentation;
+        margin: 16px 0 16px @indentation;
         padding: 0;
-        line-height: 20px;
+        line-height: @height;
         &:empty {
             margin: 0;
         }
@@ -304,8 +306,8 @@
         }
     }
 
-    .window-sidepanel.top-toolbar & { top: 45px; }
-    .window-sidepanel.bottom-toolbar & { bottom: 45px; }
+    .window-sidepanel.top-toolbar & { top: @toolbar-height; }
+    .window-sidepanel.bottom-toolbar & { bottom: @toolbar-height; }
 
     @media(max-width: 480px), (max-device-width: 480px) {
 

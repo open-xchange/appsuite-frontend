@@ -1113,7 +1113,7 @@ define('io.ox/core/main', [
                 if (sc.banner === false || _.device('!desktop')) return;
 
                 var banner = $('#io-ox-banner').toggleClass('visible'),
-                    height = sc.bannerHeight || 60;
+                    height = sc.bannerHeight || 64;
 
                 // move affected viewports
                 // #io-ox-notifications is not handled here because it's not yet attached

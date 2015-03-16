@@ -84,7 +84,9 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             else if (!this.handler) node = $('<span class="breadcrumb-item">');
             else node = $('<a href="#" role="button" class="breadcrumb-link" tabindex="1">');
 
-            node.attr('data-id', data.id).text(data.title);
+            node.attr('data-id', data.id).text(
+                _.ellipsis(data.title, { max: isLast ? 40 : 20 })
+            );
 
             if (!isLast) node = node.add($('<i class="fa breadcrumb-divider" aria-hidden="true">'));
 

@@ -199,7 +199,7 @@
         & > a {
 
             display: inline-block;
-            line-height: @toolbar-line-height;
+            line-height: @toolbar-line-height - 2;
             padding: @toolbar-vertical-padding @default-padding;
             text-decoration: none;
             float: left;
@@ -281,7 +281,7 @@
 //
 .generic-toolbar {
 
-    @height-default: 45px;
+    @height-default: @toolbar-height;
     @height-small: 30px;
 
     position: absolute;
@@ -310,7 +310,7 @@
         color: #333;
         display: inline-block;
         float: left;
-        line-height: @height-default - 1;
+        line-height: @height-default - 2;
         padding: 0 @default-padding;
         text-decoration: none;
     }
