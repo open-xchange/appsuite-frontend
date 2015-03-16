@@ -219,8 +219,26 @@ define('io.ox/core/viewer/types/documenttype', [
 
                     // set callbacks at PDFView to start rendering
                     pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
+
+                    _.extend(slideElement, { pdfDocument: pdfDocument, pdfView: pdfView });
                 }
             });
+        },
+
+        unloadSlide: function (slideElement) {
+            if (slideElement) {
+                if (slideElement.pdfView) {
+                    slideElement.pdfView.destroy();
+                    slideElement.pdfView = null;
+                }
+
+                if (slideElement.pdfDocument) {
+                    slideElement.pdfDocument.destroy();
+                    slideElement.pdfDocument = null;
+                }
+
+                slideElement.removeClass('cached');
+            }
         }
     };
 

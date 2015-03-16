@@ -200,6 +200,24 @@ define('io.ox/core/pdf/pdfview', [
 
         // methods ------------------------------------------------------------
 
+        this.destroy = function () {
+            this.clearRenderCallbacks();
+
+            if (pdfDocument && pageData) {
+                _.each(pageData, function (curPageData, pagePos) {
+                    if (!curPageData.isInRendering) {
+                        curPageData.isInRendering = true;
+                    }
+
+                    pdfDocument.getPDFJSPagePromise(pagePos + 1).destroy();
+
+                    curPageData.isInRendering = null;
+                });
+            }
+        };
+
+        // ---------------------------------------------------------------------
+
         this.setRenderCallbacks = function (getVisiblePageNumbers, getPageNode) {
             this.clearRenderCallbacks();
 

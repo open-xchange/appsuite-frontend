@@ -74,6 +74,12 @@ define('io.ox/core/pdf/pdfdocument', [
 
         // methods ------------------------------------------------------------
 
+        this.destroy = function () {
+            if (pdfDocumentPromise) {
+                pdfDocumentPromise.destroy();
+            }
+        };
+
         /**
          * @returns {jQuery.Promise}
          *  The promise of a Deferred object that will be resolved when the
