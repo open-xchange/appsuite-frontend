@@ -38,14 +38,14 @@ define('io.ox/contacts/api', [
         convertResponseToGregorian = function (response) {
             if (response.id) {
                 // single contact: convert birthdays with year 1 from julian to gregorian calendar
-                if (response.birthday && moment.utc(response.birthday).local(true).year() === 1) {
+                if (response.birthday && moment.utc(response.birthday).year() === 1) {
                     response.birthday = util.julianToGregorian(response.birthday);
                 }
                 return response;
             } else {
                 // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
                 _(response).each(function (contact) {
-                    if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
+                    if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
                         // birthday without year
                         contact.birthday = util.julianToGregorian(contact.birthday);
                     }

@@ -266,11 +266,11 @@ define('io.ox/contacts/util', [
         },
         //used to change birthdays without year(we save them as year 1) from gregorian to julian calendar (year 1 is julian, current calendar is gregorian)
         gregorianToJulian: function (timestamp) {
-            return moment.utc(timestamp - calculateDayDifference(timestamp)).local(true).valueOf();
+            return moment.utc(timestamp - calculateDayDifference(timestamp)).valueOf();
         },
         //used to change birthdays without year(we save them as year 1) from julian to gregorian calendar (year 1 is julian, current calendar is gregorian)
         julianToGregorian: function (timestamp) {
-            return moment.utc(timestamp + calculateDayDifference(timestamp)).local(true).valueOf();
+            return moment.utc(timestamp + calculateDayDifference(timestamp)).valueOf();
         }
     };
 

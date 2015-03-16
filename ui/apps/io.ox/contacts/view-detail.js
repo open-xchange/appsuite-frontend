@@ -462,10 +462,10 @@ define('io.ox/contacts/view-detail', [
                         row('birthday', function () {
                             if (baton.data.birthday) {
                                 //use utc time. birthdays must not be converted
-                                var birthday = moment.utc(baton.data.birthday).local(true);
+                                var birthday = moment.utc(baton.data.birthday);
                                 if (birthday.year() === 1) {
                                     //Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format('MMM D');
+                                    return birthday.format('MMMM D');
                                 } else {
                                     return birthday.format('l');
                                 }
