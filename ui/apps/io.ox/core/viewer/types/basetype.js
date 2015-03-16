@@ -34,6 +34,7 @@ define('io.ox/core/viewer/types/basetype',  [
         createCaption: function (index, slidesCount) {
             var caption = $('<div class="viewer-displayer-caption">');
             caption.text(index + 1 + ' ' + gt('of') + ' ' + slidesCount);
+            Util.setDeviceClass(caption);   // set device type
             return caption;
         },
 
