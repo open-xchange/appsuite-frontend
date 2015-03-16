@@ -44,7 +44,6 @@ define('io.ox/core/tk/mobiscroll', [
         };
         settings.dateOrder = settings.dateFormat.replace(/\W/g, '');
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
-        debugger;
         $.mobiscroll.setDefaults(settings);
     }
 
