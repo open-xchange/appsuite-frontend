@@ -58,6 +58,10 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 path = _(path).filter(function (data) { return !exclude.contains(data.id); });
             }
 
+            // listen to any changes on the path
+            this.stopListening(api);
+            _(path).each(this.listenToFolderChange, this);
+
             this.$el.empty().append(
                 // label
                 this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
@@ -97,6 +101,14 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             e.preventDefault();
             var id = $(e.target).attr('data-id');
             if (this.handler) this.handler(id);
+        },
+
+        onFolderChange: function (id) {
+            this.render();
+        },
+
+        listenToFolderChange: function (data) {
+            this.listenTo(api, 'update:' + data.id, this.onFolderChange.bind(this));
         }
     });
 

@@ -603,7 +603,9 @@ define('io.ox/core/folder/api', [
                 if (id !== newId) model.set('id', newId);
                 if (options.cascadePermissions) refresh();
                 // trigger event
-                if (!options.silent) api.trigger('update', id, newId, model.toJSON());
+                if (!options.silent) {
+                    api.trigger('update update:' + id, id, newId, model.toJSON());
+                }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
                     return newId;
