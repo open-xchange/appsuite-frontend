@@ -988,7 +988,7 @@ define('io.ox/mail/main', [
             });
         },
 
-         /*
+        /*
          * Add support for selection:
          */
         'selection-mobile-swipe': function (app) {

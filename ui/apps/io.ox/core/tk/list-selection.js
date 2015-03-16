@@ -27,6 +27,8 @@ define('io.ox/core/tk/list-selection', [
         THRESHOLD_STICK = 80, // threshold in px
         THRESHOLD_REMOVE = 250, //px
         LOCKDISTANCE = 190,
+        MOVE_UP_TIME = 150,
+        CELL_HEIGHT = '-63px',
         // animation support
         cell,
         tension = 350,
@@ -458,29 +460,32 @@ define('io.ox/core/tk/list-selection', [
 
         onSwipeDelete: function (e) {
             e.preventDefault();
+
             var node = $(this.currentSelection).closest(SELECTABLE),
                 cid = node.attr('data-cid'),
                 cellsBelow = node.nextAll(),
-                self = this;
-            // animate cell and delete mail afterwards
-            cellsBelow.velocity({
-                translateY: -62
-            }, {
-                duration: 300,
-                complete: function () {
-                    self.view.trigger('selection:delete', [cid]);
-                    node.closest('.swipe-option-cell').remove();
-                    cellsBelow.removeAttr('style');
-                    self.swipeCell.remove();
-                    self.swipeCell = null;
-                    cellsBelow.removeAttr('style');
-                    // reset velocitie's transfrom cache manually
-                    _(cellsBelow).each(function (listItem) {
+                self = this,
+                resetStyle = function () {
+                    this.removeAttr('style');
+                     // reset velocitie's transfrom cache manually
+                    _(this).each(function (listItem) {
                         $(listItem).data('velocity').transformCache = {};
                     });
-                    $(self).removeAttr('style');
-                    $(self).removeClass('unfolded');
-                    self.unfolded = false;
+                    self.view.off('remove-mobile', resetStyle);
+                };
+            // animate cell and delete mail afterwards
+            cellsBelow.velocity({
+                translateY: CELL_HEIGHT
+            }, {
+                duration: MOVE_UP_TIME,
+                complete: function () {
+                    self.view.trigger('selection:delete', [cid]);
+                    self.view.on('remove-mobile', resetStyle, cellsBelow);
+                    self.view.trigger('selection:delete', [cid]);
+                    self.currentSelection.swipeCell.remove();
+                    self.currentSelection.swipeCell = null;
+                    $(self.view).removeClass('unfolded');
+                    self.currentSelection.unfolded = false;
                 }
             });
         },
@@ -681,9 +686,9 @@ define('io.ox/core/tk/list-selection', [
                         cell.data('velocity').transformCache = {};
                         var cellsBelow = $(self).nextAll();
                         cellsBelow.velocity({
-                            translateY: '-63px'
+                            translateY: CELL_HEIGHT
                         }, {
-                            duration: 250,
+                            duration: MOVE_UP_TIME,
                             complete: function () {
                                 var node = $(self).closest(SELECTABLE),
                                 cid = node.attr('data-cid');
