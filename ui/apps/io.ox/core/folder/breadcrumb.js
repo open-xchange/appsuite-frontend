@@ -103,7 +103,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             if (this.handler) this.handler(id);
         },
 
-        onFolderChange: function (id) {
+        onFolderChange: function () {
             this.render();
         },
 

@@ -1347,7 +1347,7 @@ define('io.ox/mail/api', [
     });
 
     //If the folder api creates a new folder in mail, the mail api needs to be refreshed
-    folderAPI.on('create', function (e, data) {
+    folderAPI.on('create', function (data) {
         if (data.module === 'mail') api.refresh();
     });
 

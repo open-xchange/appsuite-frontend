@@ -384,6 +384,23 @@ define('io.ox/files/actions', [
         }
     });
 
+    //
+    // Add new folder
+    //
+
+    new Action('io.ox/files/actions/add-folder', {
+        requires: function (e) {
+            var model = folderAPI.pool.getModel(e.baton.app.folder.get());
+            return folderAPI.can('create:folder', model.toJSON());
+        },
+        action: function (baton) {
+            var id = baton.app.folder.get(), model = folderAPI.pool.getModel(id);
+            ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
+                add(id, { module: model.get('module') });
+            });
+        }
+    });
+
     // guidance
     new Action('io.ox/files/actions/guidance', {
         action: function (baton) {
@@ -417,6 +434,13 @@ define('io.ox/files/actions', [
             //#. more like "to notice" than "to notify".
             gt('Add note'),
         ref: 'io.ox/files/actions/editor-new'
+    });
+
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
+        index: 300,
+        id: 'add-folder',
+        label: gt('Add new folder'),
+        ref: 'io.ox/files/actions/add-folder'
     });
 
     // INLINE (used in detail view / portal)

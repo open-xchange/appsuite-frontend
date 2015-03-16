@@ -448,6 +448,25 @@ define('io.ox/files/main', [
         },
 
         /*
+         *
+         */
+        'folder:add/remove': function (app) {
+
+            folderAPI.on('create', function (data) {
+                if (data.folder_id === app.folder.get()) app.listView.reload();
+            });
+
+            folderAPI.on('remove', function (id, data) {
+                // on folder remove, the folder model is directly removed from the collection.
+                // the folder tree automatically selects the parent folder. therefore,
+                // the parent folder's collection just needs to be marked as expired
+                _(api.pool.getByFolder(data.folder_id)).each(function (collection) {
+                    collection.expired = true;
+                });
+            });
+        },
+
+        /*
          * Delete file
          * leave detailview if file is deleted
          */

@@ -71,7 +71,8 @@ define('io.ox/files/common-extensions', [
             if (baton.model.isFolder()) {
                 return this.append(
                     $('<div class="icon-thumbnail icon-folder">').append(
-                        $('<span class="folder-name">').text(baton.model.getDisplayName())
+                        $('<span class="folder-name">').text(baton.model.getDisplayName()),
+                        $('<span class="folder-icon"><i class="fa"></i></span>')
                     )
                 );
             }

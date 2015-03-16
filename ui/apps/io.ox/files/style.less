@@ -126,15 +126,6 @@
         background-origin: border-box;
     }
 
-    .selection() {
-        border: 4px solid #ddd;
-        box-shadow: 0 0 1px 2px white inset;
-    }
-
-    .selection-focus() {
-        border-color: @selected-background;
-    }
-
     .busy-indicator(@height) {
         .busy-indicator {
             padding-top: 40px;
@@ -169,8 +160,21 @@
         }
 
         .file-type-folder .icon-thumbnail {
+
             background-color: #eee;
+            display: table;
+            width: 101%; // yep, 101, fixes layout glitch in chrome
+
             .folder-name { display: none; }
+
+            .folder-icon {
+                font-size: 48px;
+                color: #ccc;
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+                i.fa:before { content: '\f07b'; } // fa-folder
+            }
         }
 
         .filename {
@@ -233,6 +237,10 @@
                 text-align: center;
                 vertical-align: middle;
             }
+
+            .folder-icon {
+                display: none;
+            }
         }
 
         .busy-indicator(@thumbnail_height);
@@ -266,10 +274,27 @@
     // Selection handling
     //
 
-    &.icon-layout, &.tile-layout {
+    &.icon-layout {
+
+        .selected .icon-thumbnail {
+            opacity: 0.70;
+        }
+
+        &.has-focus {
+            .selected .icon-thumbnail {
+                background-color: darken(@selected-background, 15%);
+                .folder-icon i.fa {
+                    color: rgba(0, 0, 0, 0.50);
+                }
+            }
+        }
+    }
+
+    &.tile-layout {
 
         .selected:not(.file-type-folder) .icon-thumbnail {
-            .selection();
+            border: 4px solid #ddd;
+            box-shadow: 0 0 1px 2px white inset;
         }
 
         .selected.file-type-folder .icon-thumbnail {
@@ -278,7 +303,7 @@
 
         &.has-focus {
             .selected .icon-thumbnail {
-                .selection-focus();
+                border-color: @selected-background;
             }
             .selected.file-type-folder .icon-thumbnail {
                 background-color: @selected-background;

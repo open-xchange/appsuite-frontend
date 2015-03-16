@@ -13,7 +13,6 @@
 
 define('io.ox/core/folder/api', [
     'io.ox/core/http',
-    'io.ox/core/event',
     'io.ox/core/folder/util',
     'io.ox/core/folder/sort',
     'io.ox/core/folder/blacklist',
@@ -24,14 +23,14 @@ define('io.ox/core/folder/api', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core'
-], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
 
     'use strict';
 
     var api = {}, pool;
 
     // add event hub
-    Events.extend(api);
+    _.extend(api, Backbone.Events);
 
     //
     // Utility functions
