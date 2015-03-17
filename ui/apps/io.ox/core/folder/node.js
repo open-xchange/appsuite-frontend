@@ -279,6 +279,7 @@ define('io.ox/core/folder/node', [
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
+                contextmenu_id: this.folder,    // use this id for the context menu
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
@@ -328,6 +329,7 @@ define('io.ox/core/folder/node', [
                     'data-id'       : this.folder,
                     'data-index'    : this.getIndex(),
                     'data-model'    : o.model_id,
+                    'data-contextmenu-id': o.contextmenu_id,
                     'role'          : 'treeitem',
                     'tabindex'      : '-1'
                 })
@@ -449,7 +451,8 @@ define('io.ox/core/folder/node', [
             this.$el.attr({
                 'data-id': this.folder,
                 'data-index': this.getIndex(),
-                'data-model': this.model_id
+                'data-model': this.options.model_id,
+                'data-contextmenu-id': this.options.contextmenu_id
             });
         },
 
