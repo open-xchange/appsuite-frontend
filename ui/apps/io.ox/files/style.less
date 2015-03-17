@@ -79,7 +79,7 @@
     .file-type-zip    &:before { content: '\f187'; color: #FF940A; } // fa-archive
     .file-type-txt    &:before { content: '\f0f6'; } // fa-file-text-o
     .file-type-guard  &:before { content: '\f023'; } // fa-lock
-    .file-type-folder &:before { content: '\f07c'; color: #777; } // fa-folder-open
+    .file-type-folder &:before { content: '\f07b'; color: #777; } // fa-folder
 }
 
 .file-list-view {
@@ -119,7 +119,7 @@
 
     .thumbnail(@height) {
         height: @height;
-        background-color: white;
+        background-color: #eee;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
@@ -139,7 +139,7 @@
         // width is > 120px, so assuming a 4/3 format, we're around 90px
         // since it's not equal but more than 120px we add a bit (just looks better on average)
         @thumbnail_width: 120px;
-        @thumbnail_height: 104px;
+        @thumbnail_height: 96px;
         @filename_rows: 2;
         @filename_line_height: 16px;
         @filename_height: @filename_rows * @filename_line_height;
@@ -159,22 +159,24 @@
             .thumbnail(@thumbnail_height);
         }
 
-        .file-type-folder .icon-thumbnail {
+        .icon-thumbnail.default-icon  {
 
-            background-color: #eee;
             display: table;
             width: 101%; // yep, 101, fixes layout glitch in chrome
 
             .folder-name { display: none; }
 
-            .folder-icon {
-                font-size: 48px;
-                color: #ccc;
+            .file-icon, .folder-icon {
                 display: table-cell;
                 text-align: center;
                 vertical-align: middle;
-                i.fa:before { content: '\f07b'; } // fa-folder
+                i.fa {
+                    font-size: 42px;
+                    width: auto;
+                }
             }
+
+            .folder-icon i.fa:before { color: #ccc; }
         }
 
         .filename {
@@ -225,22 +227,29 @@
             .thumbnail(@thumbnail_height);
         }
 
-        .file-type-folder .icon-thumbnail {
+        .icon-thumbnail {
 
-            background-color: #eee;
             display: table;
             width: 100%;
 
-            .folder-name {
-                color: #333;
+            .folder-name, .file-icon {
                 display: table-cell;
                 text-align: center;
                 vertical-align: middle;
             }
 
-            .folder-icon {
-                display: none;
+            .folder-name {
+                color: #333;
             }
+
+            .file-icon i.fa {
+                font-size: 42px;
+                width: auto;
+            }
+        }
+
+        .file-type-folder .folder-icon {
+            display: none;
         }
 
         .busy-indicator(@thumbnail_height);
@@ -283,7 +292,7 @@
         &.has-focus {
             .selected .icon-thumbnail {
                 background-color: darken(@selected-background, 15%);
-                .folder-icon i.fa {
+                .folder-icon i.fa:before {
                     color: rgba(0, 0, 0, 0.50);
                 }
             }

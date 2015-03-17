@@ -446,8 +446,7 @@
     }
 
     .attachments {
-        padding: 14px 20px;
-        border-top: 1px solid #eee;
+        padding: 10px @default-padding 9px @default-padding;
         border-bottom: 1px solid #eee;
         .io-ox-inline-links {
             display: inline;
@@ -535,7 +534,7 @@
         margin-left: 7px;
         position: relative;
         .dropdown-toggle {
-            font-size: @icon-size;
+            font-size: 14px;
             &:hover { text-decoration: none; }
         }
         .flag-dropdown-icon.flag_0 {
@@ -747,7 +746,7 @@ textarea.inplace-editor {
         background-color: white;
         clear: both;
         padding: 0;
-        margin-bottom: 7px;
+        margin-bottom: 8px;
         border-bottom: 1px solid transparent;
     }
 
@@ -1141,8 +1140,12 @@ textarea.inplace-editor {
 
     .detail-view-header {
         .fontWeight(300);
-        padding: @default-padding;
-        padding-left: @picture-padding + @default-padding;// + @unread-toggle-width;
+        padding: @default-padding @default-padding (@default-padding - 1) (@picture-padding + @default-padding);
+        //padding-left: @picture-padding + @default-padding + @unread-toggle-width;
+    }
+
+    &.expanded .detail-view-header {
+        border-bottom: 1px solid #eee;
     }
 
     &.no-padding .detail-view-header {
@@ -1214,7 +1217,7 @@ textarea.inplace-editor {
 
         * {
             // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
-            line-height: 1.4em;
+            line-height: 1.42857142857143em;
             box-sizing: content-box;
         }
 

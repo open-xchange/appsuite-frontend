@@ -66,29 +66,6 @@ define('io.ox/files/common-extensions', [
             );
         },
 
-        thumbnail: function (baton) {
-
-            if (baton.model.isFolder()) {
-                return this.append(
-                    $('<div class="icon-thumbnail icon-folder">').append(
-                        $('<span class="folder-name">').text(baton.model.getDisplayName()),
-                        $('<span class="folder-icon"><i class="fa"></i></span>')
-                    )
-                );
-            }
-
-            var url = legacy_api.getUrl(baton.data, 'thumbnail', { thumbnailWidth: 200, thumbnailHeight: 150, scaletype: 'cover' }),
-                node = $('<div class="icon-thumbnail">').attr('data-original', url);
-
-            // use defer to ensure the node has already been added to the DOM
-            _.defer(function () {
-                node.lazyload({ container: node.closest('.list-view') });
-                node = null;
-            });
-
-            this.append(node);
-        },
-
         fileTypeIcon: function () {
             this.append('<i class="fa file-type-icon">');
         },
@@ -96,7 +73,97 @@ define('io.ox/files/common-extensions', [
         fileTypeClass: function (baton) {
             var type = baton.model.getFileType();
             if (type) this.closest('.list-item').addClass('file-type-' + type);
-        }
+        },
+
+        //
+        // Thumbnail including the concept of retries
+        //
+
+        thumbnail: (function () {
+
+            function load() {
+                // 1x1 dummy or final image?
+                if (this.width === 1 && this.height === 1) reload.call(this); else finalize.call(this);
+            }
+
+            function finalize() {
+                var img = $(this), url = img.attr('src');
+                // set as background image
+                img.parent().css('background-image', 'url(' + url + ')');
+                // remove dummay image
+                img.remove();
+            }
+
+            function reload() {
+                var img = $(this),
+                    retry = img.data('retry') + 1,
+                    url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry,
+                    // 3 6 12 seconds
+                    wait = Math.pow(2, retry - 1) * 3000;
+                // stop trying after three retries
+                if (retry > 3) return;
+                setTimeout(function () {
+                    img.off('load error').on({ load: load, error: error }).attr('src', url).data('retry', retry);
+                    img = null;
+                }, wait);
+            }
+
+            function error() {
+                $(this).remove();
+            }
+
+            return function (baton) {
+
+                //
+                // Folder
+                //
+                if (baton.model.isFolder()) {
+                    return this.append(
+                        $('<div class="icon-thumbnail default-icon">').append(
+                            $('<span class="folder-name">').text(baton.model.getDisplayName()),
+                            $('<span class="folder-icon"><i class="fa file-type-icon"></i></span>')
+                        )
+                    );
+                }
+
+                //
+                // File with preview
+                //
+                var preview = baton.model.supportsPreview();
+                if (preview) {
+
+                    var retina = _.device('retina'),
+                        width = retina ? 400 : 200,
+                        height = retina ? 300 : 150,
+                        url = legacy_api.getUrl(baton.data, preview, { thumbnailWidth: width, thumbnailHeight: height, scaletype: 'cover' }),
+                        img = $('<img class="dummy-image invisible">').attr('data-original', url);
+
+                    // use defer to ensure the node has already been added to the DOM
+                    _.defer(function () {
+                        img.lazyload({
+                            container: img.closest('.list-view'),
+                            error: error,
+                            event: 'scrollstop',
+                            load: load
+                        });
+                        img = null;
+                    });
+
+                    return this.append(
+                        $('<div class="icon-thumbnail">').append(img)
+                    );
+                }
+
+                //
+                // Fallback
+                //
+                this.append(
+                    $('<div class="icon-thumbnail default-icon">').append(
+                        $('<span class="file-icon"><i class="fa file-type-icon"></i></span>')
+                    )
+                );
+            };
+        }())
     };
 
     return extensions;

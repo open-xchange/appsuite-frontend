@@ -20,9 +20,10 @@ define('io.ox/files/api', [
     'io.ox/core/api/backbone',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, coreConfig, gt) {
+], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreConfig, gt) {
 
     'use strict';
 
@@ -31,6 +32,8 @@ define('io.ox/files/api', [
     //
     // Backbone Model & Collection for Files
     //
+
+    var regUnusableType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
 
     // basic model with custom cid
     api.Model = backbone.Model.extend({
@@ -45,6 +48,31 @@ define('io.ox/files/api', [
             return !this.isFolder();
         },
 
+        isImage: function (type) {
+            return /^image\//.test(type || this.getMimeType());
+        },
+
+        isAudio: function (type) {
+            return /^audio\//.test(type || this.getMimeType());
+        },
+
+        isVideo: function (type) {
+            return /^video\//.test(type || this.getMimeType());
+        },
+
+        isOffice: function (type) {
+            return /^application\/(msword|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
+        },
+
+        isText: function (type) {
+            return /^(text\/plain|application\/rtf)$/.test(type || this.getMimeType());
+        },
+
+        isEncrypted: function () {
+            // check if file has "guard" file extension
+            return /\.grd$/.test(this.get('filename'));
+        },
+
         getDisplayName: function () {
             return this.get('filename') || this.get('title') || '';
         },
@@ -52,6 +80,20 @@ define('io.ox/files/api', [
         getExtension: function () {
             var parts = String(this.get('filename') || '').split('.');
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
+        },
+
+        getMimeType: function () {
+            // split by ; because this field might contain further unwanted data
+            var type = String(this.get('file_mimetype')).toLowerCase().split(';')[0];
+            // unusable mime type?
+            if (regUnusableType.test(type)) {
+                // return mime type based on file extension
+                return api.mimeTypes[this.getExtension()] || type;
+            }
+            // fix mime type?
+            if (type === 'audio/mp3') return 'audio/mpeg';
+            // otherwise
+            return type;
         },
 
         getFileType: function () {
@@ -73,6 +115,15 @@ define('io.ox/files/api', [
             zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
             txt:   /^(txt|md)$/,
             guard: /^grd$/
+        },
+
+        supportsPreview: function () {
+            if (this.isEncrypted()) return false;
+            var type = this.getMimeType();
+            if (this.isImage(type)) return 'thumbnail';
+            if (this.isAudio(type)) return 'cover';
+            if (capabilities.has('document_preview') && (this.isOffice(type) || this.isText(type))) return 'preview';
+            return false;
         }
     });
 
@@ -80,6 +131,75 @@ define('io.ox/files/api', [
     api.Collection = backbone.Collection.extend({
         model: api.Model
     });
+
+    //
+    // Special Mime Types
+    //
+
+    api.mimeTypes = {
+        // images
+        'jpg':  'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png':  'image/png',
+        'gif':  'image/gif',
+        'tif':  'image/tiff',
+        'tiff': 'image/tiff',
+        'bmp':  'image/bmp',
+        // audio
+        'mp3':  'audio/mpeg',
+        'ogg':  'audio/ogg',
+        'opus': 'audio/ogg',
+        'aac':  'audio/aac',
+        'm4a':  'audio/mp4',
+        'm4b':  'audio/mp4',
+        'wav':  'audio/wav',
+        // video
+        'mp4':  'video/mp4',
+        'm4v':  'video/mp4',
+        'ogv':  'video/ogg',
+        'ogm':  'video/ogg',
+        'webm': 'video/webm',
+        // CSV
+        'csv':  'text/csv',
+        // open office
+        'odc':  'application/vnd.oasis.opendocument.chart',
+        'odb':  'application/vnd.oasis.opendocument.database',
+        'odf':  'application/vnd.oasis.opendocument.formula',
+        'odg':  'application/vnd.oasis.opendocument.graphics',
+        'otg':  'application/vnd.oasis.opendocument.graphics-template',
+        'odi':  'application/vnd.oasis.opendocument.image',
+        'odp':  'application/vnd.oasis.opendocument.presentation',
+        'otp':  'application/vnd.oasis.opendocument.presentation-template',
+        'ods':  'application/vnd.oasis.opendocument.spreadsheet',
+        'ots':  'application/vnd.oasis.opendocument.spreadsheet-template',
+        'odt':  'application/vnd.oasis.opendocument.text',
+        'odm':  'application/vnd.oasis.opendocument.text-master',
+        'ott':  'application/vnd.oasis.opendocument.text-template',
+        'oth':  'application/vnd.oasis.opendocument.text-web',
+        // pdf
+        'pdf':  'application/pdf',
+        // microsoft office
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xlsm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'xltm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'pptm': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'potm': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'docm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'dotm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'doc':  'application/msword',
+        'dot':  'application/msword',
+        'xls':  'application/vnd.ms-excel',
+        'xlb':  'application/vnd.ms-excel',
+        'xlt':  'application/vnd.ms-excel',
+        'ppt':  'application/vnd.ms-powerpoint',
+        'pps':  'application/vnd.ms-powerpoint'
+    };
 
     //
     // Pool
