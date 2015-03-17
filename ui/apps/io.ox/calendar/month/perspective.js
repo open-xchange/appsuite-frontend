@@ -103,25 +103,26 @@ define('io.ox/calendar/month/perspective', [
             var apiUpdate = function (obj) {
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog({
+                        var dialog = new dialogs.ModalDialog({
                             top: '20%',
                             center: false,
                             container: self.main
-                        })
-                        .append(conflictView.drawList(con.conflicts))
-                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                        .show()
-                        .done(function (action) {
-                            if (action === 'cancel') {
-                                self.update();
-                                return;
-                            }
-                            if (action === 'ignore') {
-                                obj.ignore_conflicts = true;
-                                apiUpdate(obj);
-                            }
                         });
+
+                        dialog.append(conflictView.drawList(con.conflicts, dialog))
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
+                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    self.update();
+                                    return;
+                                }
+                                if (action === 'ignore') {
+                                    obj.ignore_conflicts = true;
+                                    apiUpdate(obj);
+                                }
+                            });
                     }
                 });
             };
