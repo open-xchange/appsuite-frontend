@@ -12,17 +12,19 @@
  */
 
 define('io.ox/core/folder/node', [
+    'io.ox/backbone/disposable',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
     'gettext!io.ox/core'
-], function (api, ext, account, gt) {
+], function (DisposableView, api, ext, account, gt) {
 
     'use strict';
 
-    var ICON = 'caret'; // angle caret chevron
+    // angle caret chevron
+    var ICON = 'caret';
 
-    var TreeNodeView = Backbone.View.extend({
+    var TreeNodeView = DisposableView.extend({
 
         tagName: 'li',
         className: 'folder selectable',
@@ -32,8 +34,9 @@ define('io.ox/core/folder/node', [
 
         events: {
             'click .folder-options'     : 'onOptions',
-            'click .folder-arrow'       : 'onToggle',
+            'click .folder-arrow'       : 'onArrowClick',
             'dblclick .folder-label'    : 'onToggle',
+            'mousedown .folder-arrow'   : 'onArrowMousedown',
             'keydown'                   : 'onKeydown'
         },
 
@@ -126,7 +129,7 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed.index !== undefined) {
+            if (model.changed[this.getIndexAttribute()] !== undefined) {
                 this.renderAttributes();
                 if (this.options.parent.onSort) this.options.parent.onSort();
             }
@@ -152,6 +155,27 @@ define('io.ox/core/folder/node', [
             this.toggle(!this.options.open);
         },
 
+        hasArrow: function () {
+            // return true if icon is not fixed-width, i.e. empty
+            return this.$.arrow.find('i.fa-fw').length === 0;
+        },
+
+        onArrowClick: function (e) {
+            if (!$(e.target).closest(this.$.arrow).length || !this.hasArrow()) {
+                e.preventDefault();
+                return;
+            }
+            this.onToggle(e);
+        },
+
+        onArrowMousedown: function (e) {
+            // just to avoid changing the focus (see bug 35802)
+            // but only if the folder shows the arrow (see bug 36424)
+            if (!$(e.target).closest(this.$.arrow).length) return;
+            if (!this.hasArrow()) return;
+            e.preventDefault();
+        },
+
         onOptions: function (e) {
             e.preventDefault();
         },
@@ -169,7 +193,9 @@ define('io.ox/core/folder/node', [
                 hasSubFolders = this.hasSubFolders(),
                 isOpen = o.open && hasSubFolders;
             // update arrow
-            this.$.arrow.html(
+            this.$.arrow
+            .toggleClass('invisible', !hasSubFolders)
+            .html(
                 hasSubFolders ?
                     (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
                     '<i class="fa fa-fw">'
@@ -199,9 +225,8 @@ define('io.ox/core/folder/node', [
             if (e.which === 39 && !o.open) {
                 o.open = true;
                 this.onChangeSubFolders();
-            }
-            // cursor left?
-            else if (e.which === 37 && o.open) {
+            } else if (e.which === 37 && o.open) {
+                // cursor left?
                 o.open = false;
                 this.onChangeSubFolders();
             }
@@ -226,7 +251,8 @@ define('io.ox/core/folder/node', [
                 if (!this.$) return;
                 // re-append to apply sorting
                 var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
-                    var index = $(node).attr('data-index'); // don't use data() here
+                    // don't use data() here
+                    var index = $(node).attr('data-index');
                     return parseInt(index, 10);
                 });
                 this.$.subfolders.append(nodes);
@@ -256,7 +282,8 @@ define('io.ox/core/folder/node', [
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
-                title: ''                       // custom title
+                title: '',                      // custom title
+                a11yDescription: []             // content for aria-description tag
             }, options);
 
             // also set: folder, parent, tree
@@ -265,6 +292,7 @@ define('io.ox/core/folder/node', [
             this.model = api.pool.getModel(o.model_id);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
+            this.describedbyID = _.uniqueId('description-');
             this.$ = {};
 
             // make accessible via DOM
@@ -293,11 +321,12 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
+                    id              : this.describedbyID,
                     'aria-label'    : '',
                     'aria-level'    : o.level + 1,
                     'aria-selected' : false,
                     'data-id'       : this.folder,
-                    'data-index'    : this.model.get('index'),
+                    'data-index'    : this.getIndex(),
                     'data-model'    : o.model_id,
                     'role'          : 'treeitem',
                     'tabindex'      : '-1'
@@ -307,11 +336,13 @@ define('io.ox/core/folder/node', [
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
                     .css('padding-left', o.level * this.indentation)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : [],
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
                         this.$.label = $('<div class="folder-label">'),
                         this.$.counter = $('<div class="folder-counter">')
                     ),
+                    // tag for screenreader only (aria-description)
+                    this.$.a11y = $('<span class="sr-only">').attr({ id: this.describedbyID }),
                     // subfolders
                     this.$.subfolders = $('<ul class="subfolders" role="group">')
                 );
@@ -329,7 +360,10 @@ define('io.ox/core/folder/node', [
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
+            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) {
+                this.$el.attr({ 'aria-haspopup': true });
+                this.renderContextControl();
+            }
 
             // get data
             if (!this.isVirtual) api.get(o.model_id);
@@ -359,7 +393,8 @@ define('io.ox/core/folder/node', [
 
         renderCounter: function () {
             var value = this.getCounter();
-            if (!value) this.$.counter.empty(); else this.$.counter.text(value);
+            this.$.selectable.toggleClass('show-counter', value > 0);
+            this.$.counter.text(value);
         },
 
         getTitle: function () {
@@ -369,25 +404,39 @@ define('io.ox/core/folder/node', [
         renderTitle: function () {
             var title = this.getTitle();
             this.$.label.text(title);
-            this.$el.attr('aria-label', title);
+        },
+
+        renderA11yNode: function () {
+            if (this.options.a11yDescription.length) {
+                this.$.a11y.text(this.options.a11yDescription.join('. '));
+            }
         },
 
         renderTooltip: function () {
-            if (this.options.title) return; // don't overwrite custom title
+            // don't overwrite custom title
+            if (this.options.title) return;
             if (!this.model.has('title')) return;
             var data = this.model.toJSON(), summary = [];
             if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
             if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
             summary = summary.join(', ');
             if (summary) summary = ' (' + summary + ')';
-            this.$el.attr('title', this.model.get('title') + summary);
+            this.$el.attr({
+                'title': this.model.get('title') + summary,
+                'aria-label': this.model.get('title') + summary
+            });
         },
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
+                $('<a>')
+                .addClass('folder-options contextmenu-control')
                 .attr({
-                    'data-contextmenu': this.options.contextmenu || 'default'
+                    'data-contextmenu': this.options.contextmenu || 'default',
+                    'aria-label': gt('Folder-specific actions'),
+                    href: '#',
+                    role: 'button',
+                    tabindex: 1
                 })
                 .append(
                     $('<i class="fa fa-bars" aria-hidden="true">'),
@@ -399,9 +448,21 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.model.get('index'),
+                'data-index': this.getIndex(),
                 'data-model': this.model_id
             });
+        },
+
+        getIndexAttribute: function () {
+            var parent = this.options.parent;
+            if (!parent || !parent.collection) return undefined;
+            return 'index/' + parent.collection.id;
+        },
+
+        getIndex: function () {
+            var attribute = this.getIndexAttribute();
+            if (attribute === undefined) return 0;
+            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {
@@ -430,6 +491,7 @@ define('io.ox/core/folder/node', [
             this.renderIcon();
             this.onChangeSubFolders();
             ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+            this.renderA11yNode();
             return this;
         },
 

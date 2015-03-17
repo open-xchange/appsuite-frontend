@@ -18,6 +18,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
 
         it('should detect the testrunner', function () {
             expect(_.browser.karma).to.be.true;
+            expect(_.device('karma')).to.be.true;
         });
 
         it('should be defined', function () {

@@ -50,7 +50,7 @@ define('io.ox/core/attachments/view',
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
 
-            this.$header = $('<header>');
+            this.$header = $('<header role="heading">');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
             this.isListRendered = false;
@@ -83,8 +83,8 @@ define('io.ox/core/attachments/view',
                 ),
                 // preview list
                 $('<div class="preview-container">').append(
-                    $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left"></i></button>'),
-                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right"></i></button>'),
+                    $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
+                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>'),
                     this.$preview
                 )
             );
@@ -99,9 +99,9 @@ define('io.ox/core/attachments/view',
         renderHeader: function () {
 
             this.$header.append(
-                $('<a href="#" class="toggle-details">').append(
-                    $('<i class="fa toggle-caret">'),
-                    $('<i class="fa fa-paperclip">'),
+                $('<a href="#" class="toggle-details" tabindex="1">').append(
+                    $('<i class="fa toggle-caret" aria-hidden="true">'),
+                    $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
                 $('<span class="links">'),
@@ -141,7 +141,7 @@ define('io.ox/core/attachments/view',
         addAttachment: function (model) {
             if (!this.isListRendered) return;
             this.$list.append(this.renderAttachment('list', model));
-            this.$preview.append(this.renderAttachment('list', model));
+            this.$preview.append(this.renderAttachment('preview', model));
         },
 
         filter: function (model) {
@@ -165,7 +165,8 @@ define('io.ox/core/attachments/view',
         onToggleMode: function (e) {
             e.preventDefault();
             this.$el.toggleClass('show-preview');
-            this.$preview.trigger('scroll'); // to provoke lazyload
+            // to provoke lazyload
+            this.$preview.trigger('scroll');
             this.updateScrollControls();
         },
 
@@ -226,11 +227,16 @@ define('io.ox/core/attachments/view',
         },
 
         getColor: function (extension) {
-            if (/^do[ct]x?$/.test(extension)) return '#2C5897'; // word blue
-            if (/^xlsx?$/.test(extension)) return '#1D7047'; // excel green
-            if (/^p[po]tx?$/.test(extension)) return '#D04423'; // powerpoint orange
-            if (/^pdf$/.test(extension)) return '#C01E07'; // pdf red
-            if (/^(zip|gz|gzip|tgz)$/.test(extension)) return '#FF940A'; // zip orange
+            // word blue
+            if (/^do[ct]x?$/.test(extension)) return '#2C5897';
+            // excel green
+            if (/^xlsx?$/.test(extension)) return '#1D7047';
+            // powerpoint orange
+            if (/^p[po]tx?$/.test(extension)) return '#D04423';
+            // pdf red
+            if (/^pdf$/.test(extension)) return '#C01E07';
+            // zip orange
+            if (/^(zip|gz|gzip|tgz)$/.test(extension)) return '#FF940A';
         },
 
         fallback: function () {

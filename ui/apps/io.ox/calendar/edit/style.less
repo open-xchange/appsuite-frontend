@@ -16,11 +16,8 @@
     div.header {
         margin-bottom: 10px;
 
-       .btn {
-            float: right;
-            &.save {
-                margin-left: 13px;
-            }
+       .btn.save {
+            margin-left: 13px;
         }
 
         h1.title {
@@ -49,7 +46,7 @@
     }
 
     legend, label {
-        color: #888;
+        color: @label-default-bg;
         margin-bottom: 5px;
         font-size: 13px;
         font-weight: 700;
@@ -69,9 +66,6 @@
     }
 
     .dateinput {
-        .label-default {
-            background-color: #aaa;
-        }
 
         .form-inline input {
             width: 90px;
@@ -169,10 +163,6 @@
 
         textarea.note {
             min-height: 0;
-        }
-
-        .participant-wrapper .participant-email {
-            display: block;
         }
     }
 }

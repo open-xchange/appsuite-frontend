@@ -18,7 +18,7 @@ define('io.ox/calendar/acceptdeny',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-    ], function (api, dialogs, folderAPI, util, calSettings, gt) {
+    ], function (calApi, dialogs, folderAPI, util, calSettings, gt) {
 
     'use strict';
 
@@ -30,15 +30,14 @@ define('io.ox/calendar/acceptdeny',
                 showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
                 message = util.getConfirmationMessage(o),
                 appointmentData,
+                //use different api if provided (tasks use this)
+                api = options.api || calApi,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 defaultReminder = calSettings.get('defaultReminder', 15),
                 apiData = { folder: o.folder_id, id: o.id },
-                checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;//appointments check for conflicts by default, tasks don't
-
-            if (options.api) {//use different api if provided (tasks use this)
-                api = options.api;
-            }
+                //appointments check for conflicts by default, tasks don't
+                checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;
 
             if (!options.taskmode && !series && o.recurrence_position) {
                 apiData.recurrence_position = o.recurrence_position;
@@ -67,7 +66,8 @@ define('io.ox/calendar/acceptdeny',
                         }
 
                         var recurrenceString = util.getRecurrenceString(data),
-                            description = $('<b>').text(data.title);
+                            description = $('<b>').text(data.title),
+                            descriptionId = _.uniqueId('confirmation-dialog-description-');
                         if (!options.taskmode) {
                             description = [
                                 $('<b>').text(data.title),
@@ -79,27 +79,32 @@ define('io.ox/calendar/acceptdeny',
                             ];
                         }
 
+                        this.getPopup().attr('aria-describedby', descriptionId);
                         this.getHeader().append(
-                            $('<h4>').text(gt('Change confirmation status'))
+                            $('<h4 id="dialog-title">').text(gt('Change confirmation status'))
                         );
                         this.getContentNode().append(
                             $('<p>').text(
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
                             ),
-                            $('<p>').append(
+                            $('<p>').attr('id', descriptionId).append(
                                 description
                             ),
                             $('<div class="form-group">').css({'margin-top': '20px'}).append(
-                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
-                                $('<input type="text" class="form-control" data-property="comment">').attr({ id: inputid, tabindex: '1' }).val(message),
+                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment'))
+                                .append($('<span class="sr-only">').text(data.title + ' ' + gt('Please comment your confirmation status.'))),
+                                $('<input type="text" class="form-control" data-property="comment">')
+                                    .attr({
+                                        id: inputid, tabindex: '1'
+                                    }).val(message),
                                 reminderSelect
                             )
                         );
                     })
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                    .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
-                    .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
                     .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
+                    .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
+                    .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                     .show(function () {
                         $(this).find('[data-property="comment"]').focus();
                     })
@@ -155,7 +160,22 @@ define('io.ox/calendar/acceptdeny',
                                         }
                                     );
                             };
-                            if (checkConflicts && action !== 'declined') {//no conflicts possible if you decline the appointment
+
+                            var previousConfirmation = 0;
+                            for (var i = 0; i < appointmentData.users.length; i++) {
+                                if (appointmentData.users[i].id === ox.user_id) {
+                                    //confirmed or tentative
+                                    previousConfirmation = appointmentData.users[i].confirmation;
+                               }
+                            }
+                            // no conflicts possible if you decline the appointment
+                            // no conflicts possible for free appointments
+                            // don't check if confirmation status did not change
+                            if (action === 'declined' || appointmentData.shown_as === 4 || apiData.data.confirmation === previousConfirmation) {
+                                checkConflicts = false;
+                            }
+
+                            if (checkConflicts) {
                                 var confirmAction = action;
                                 api.checkConflicts(appointmentData).done(function (conflicts) {
                                     if (conflicts.length === 0) {
@@ -172,7 +192,7 @@ define('io.ox/calendar/acceptdeny',
                                             dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                                 .show()
                                                 .done(function (action) {
-                                                    
+
                                                     if (action === 'cancel') {
                                                         def.resolve(action);
                                                         return;

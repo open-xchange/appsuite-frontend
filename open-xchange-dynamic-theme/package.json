@@ -1,0 +1,22 @@
+{
+<<<<<<< HEAD:help-drive/package.json
+  "name": "open-xchange-appsuite-help-drive",
+  "version": "7.6.1-17",
+=======
+  "name": "open-xchange-dynamic-theme",
+  "version": "7.6.2-12",
+>>>>>>> origin/release-7.6.2:open-xchange-dynamic-theme/package.json
+  "dependencies": {
+    "less": "1.7.3",
+    "assemble": "^0.4.41"
+  },
+  "optionalDependencies": {
+    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.5.1"
+  },
+  "devDependencies": {
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-karma": "^0.8.2",
+    "grunt-contrib-connect": "^0.7.1"
+  }
+}

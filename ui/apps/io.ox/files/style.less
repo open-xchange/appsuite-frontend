@@ -12,7 +12,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-/* App */
+// app
 
 .io-ox-files-window .foldertree-sidepanel {
     left: 0;
@@ -59,8 +59,22 @@
         outline: 0;
         padding: 15px 20px;
         width: 100%;
-        min-height: 200px; // for busy animation
+        // for busy animation
+        min-height: 200px;
     }
+
+    // simple hover (not selected)
+    //@color-hover: #F6F6F6; // light grey
+    @color-hover: #F0F0F0; // light grey
+
+    // selected (not focussed)
+    @color-selected: #ddd; // grey
+    @color-selected-hover: darken(@color-selected, 10%); // dark grey
+
+    // selected (focussed)
+    @color-focus-selected: #08c; // blue
+    @color-focus-selected-hover: darken(@color-focus-selected, 10%); // dark blue
+
 
     .files-container {
 
@@ -70,14 +84,15 @@
         }
 
         text-decoration: none;
+        // appled when container has focus (blue based colors)
         &:focus {
             outline: 0;
             &.view-list {
                 .file-cell {
                     &.selected  {
-                        background-color: #08c;
-                        &:hover {
-                            background-color: darken(#08c, 10%);
+                        background-color: @color-focus-selected;
+                        &:hover, &.marked {
+                            background-color: @color-focus-selected-hover;
                         }
                         i.icon-lock {
                             color: white
@@ -92,13 +107,10 @@
             &.view-icon {
                 .file-cell {
                     &.selected {
-                        img, .preview .fa {
-                            box-shadow: 0 0 0 3px rgba(0, 136, 204, 1);
-                        }
-                        .preview:hover {
-                            img, .fa {
-                                box-shadow: 0 0 0 3px darken(rgba(0, 136, 204, 1), 10%);
-                            }
+                        background-color: @color-focus-selected;
+                        color: white;
+                        &:hover, &.marked {
+                            background-color: @color-focus-selected-hover;
                         }
                     }
                 }
@@ -107,11 +119,15 @@
                 .file-cell {
                     &.selected {
                         .preview-cover {
-                            border-color: rgba(0, 136, 204, 1);
-                            &:hover {
-                                border-color: darken(rgba(0, 136, 204, 1), 10%);
-                            }
+                            border-color: @color-focus-selected;
                         }
+                        color: @color-focus-selected
+                    }
+                    &.selected:hover, &.selected.marked {
+                        .preview-cover {
+                            border-color: @color-focus-selected-hover;
+                        }
+                        color: @color-focus-selected-hover;
                     }
                 }
             }
@@ -136,6 +152,8 @@
                 }
             }
         }
+
+        // applied when container not focussed (grey based colors)
         &.view-list {
 
             .file-cell {
@@ -224,7 +242,7 @@
                 .title-short { display: none; }
 
                 .modified, .size {
-                    color: #777;
+                    color: #5E5E5E;
                     font-weight: 300;
                     float: right;
                     text-align: right;
@@ -240,18 +258,18 @@
 
                 //highlighting
                 &.selected {
-                    background-color: #ddd;
+                    outline: 0;
+                    background-color: @color-selected;
+                    &:hover {
+                        color: black;
+                        background-color: @color-selected-hover;
+                        .image-effect(0.9);
+                    }
+                }
+                &:hover, &.marked {
+                    background-color: @color-hover;
                     .image-effect(0.9);
                 }
-                &:hover {
-                    background-color: #F6F6F6;
-                    .image-effect(0.9);
-                }
-                &.selected:hover {
-                    background-color: #ccc;
-                    .image-effect(0.9);
-                }
-
             }
         }
 
@@ -263,7 +281,8 @@
 
                 width: @outerWidth;
                 height: @innerHeight + 59;
-                margin: 0 18px 13px 0; // 18px allows 4 columns on IPhone
+                // 18px allows 4 columns on IPhone
+                margin: 0 18px 13px 0;
                 cursor: pointer;
                 text-decoration: none;
 
@@ -322,8 +341,8 @@
                     font-size: 13px;
                     line-height: 1.25em;
                     // no shadows please!
-                    color: black;
-                    margin: 0.5em 0 0.5em 0;
+                    //color: black;
+                    margin: 0.5em 10px 0.5em 10px;
 
                     i.fa-lock {
                         margin-right: 5px;
@@ -336,36 +355,28 @@
 
                 //image
                 &.selected {
-                    img, .preview .fa {
-                        box-shadow: 0 0 0 3px #ddd;
+                    background-color: @color-selected;
+                    &:hover {
+                        background-color: @color-selected-hover;
                     }
-                    .image-effect(0.9);
-                }
-
-                &:hover {
-                    img, .preview .fa {
-                        box-shadow: 0 0 0 3px #ddd;
                     }
-                    .image-effect(0.9);
-                }
-                &.selected .preview:hover {
-                    img, .preview .fa {
-                        box-shadow: 0 0 0 3px #ccc;
-                    }
-                    .image-effect(0.9);
+                &:hover, &.marked {
+                    background-color: @color-hover;
                 }
              }
         }
 
         &.view-tile {
-            @tile: 160px;
-            @tile-border: 6px;
+            @tile: 192px;
+            @tile-border: 8px;
+            @tile-icon-size: 32px;
 
             .view-icon;
             .file-cell {
                 width: @tile;
                 height: @tile;
-                margin: 2px;
+                margin-right: 8px;
+                margin-bottom: 8px;
 
                 .img-thumbnail {
                     border: 1px solid black;
@@ -402,36 +413,54 @@
                 }
 
                 .bordered {
+                    background-color: transparent;
                     .preview-cover .fa {
                         line-height: @tile - (2 * @tile-border);
                     }
+                    .preview-cover {
+                        border: @tile-border solid #ddd;
+                        background-origin: border-box;
+                        position: relative;
+                        &:before {
+                            position: absolute;
+                            top: 2px;
+                            right: 10px;
+                            font-size: @tile-icon-size;
+                            font-family: 'FontAwesome';
+                            font-weight: 100;
+                            // fa-check-circle
+                            content: '\f05d';
+                        }
+                    }
+                    .image-effect(0.9);
                 }
 
                 &.selected {
-                    .preview-cover {
-                        border: @tile-border solid #ddd;
-                        background-origin: border-box;
-                    }
                     .bordered;
-                    .image-effect(0.9);
+                    .preview-cover {
+                        border-color: @color-selected
+                    };
+                    color: @color-selected;
                 }
                 //show short title on hover
-                &:hover {
-                    .preview-cover {
-                        border: @tile-border solid #ddd;
-                        background-origin: border-box;
-                    }
+                &:hover, &.marked {
                     .bordered;
-                    .image-effect(0.9);
+                    .preview-cover {
+                        border-color: @color-hover;
+                        // disable checked icon on hover (unselected)
+                        &:before {
+                            content: '';
+                        }
+                    }
                 }
 
-                &.selected:hover {
-                     .preview-cover {
-                        border: @tile-border solid #ccc;
-                        background-origin: border-box;
-                    }
+                &.selected:hover, &.selected.marked {
                     .bordered;
-                    .image-effect(0.9);
+                    .preview-cover {
+                       border-color: @color-selected-hover;
+                    }
+                    color: @color-selected-hover;
+
                 }
 
             }
@@ -471,6 +500,11 @@
     .versiontable,
     .uploadbutton {
         display: none;
+    }
+
+    .version-button {
+        font-weight: normal;
+        font-size: @inline-link-font-size;
     }
 
     .versiontable {
@@ -631,7 +665,8 @@ ul.breadcrumb li.prefix {
 }
 
 .files-create { margin: 0; }
-/** small screens **/
+
+// small screens
 
 .width-less-than-768 {
     .files-wrapper  {
@@ -641,6 +676,11 @@ ul.breadcrumb li.prefix {
                 .file-cell {
                     span {
                         line-height: 1.6em;
+                        &.not-selectable {
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
                     }
                     .title {
                         width: 100%;

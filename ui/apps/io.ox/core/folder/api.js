@@ -20,9 +20,10 @@ define('io.ox/core/folder/api',
      'io.ox/core/folder/title',
      'io.ox/core/folder/bitmask',
      'io.ox/core/api/account',
+     'io.ox/core/capabilities',
      'settings!io.ox/core',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, mailSettings, gt) {
+     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -42,8 +43,8 @@ define('io.ox/core/folder/api',
         return id === '1' || /^default\d+/.test(id) ? 0 : 1;
     }
 
-    function injectIndex(item, index) {
-        item.index = index;
+    function injectIndex(id, item, index) {
+        item['index/' + id] = index;
         return item;
     }
 
@@ -76,11 +77,14 @@ define('io.ox/core/folder/api',
     });
 
     var FolderCollection = Backbone.Collection.extend({
-        constructor: function () {
+        constructor: function (id) {
             Backbone.Collection.apply(this, arguments);
+            this.id = id;
             this.fetched = false;
         },
-        comparator: 'index',
+        comparator: function (model) {
+            return model.get('index/' + this.id) || 0;
+        },
         model: FolderModel
     });
 
@@ -94,15 +98,17 @@ define('io.ox/core/folder/api',
     _.extend(Pool.prototype, {
 
         addModel: function (data) {
-            var id = data.id;
-            if (this.models[id] === undefined) {
+
+            var id = data.id, model = this.models[id];
+
+            if (model === undefined) {
                 // add new model
-                this.models[id] = new FolderModel(data);
+                this.models[id] = model = new FolderModel(data);
             } else {
                 // update existing model
-                this.models[id].set(data);
+                model.set(data);
             }
-            return this.models[id];
+            return model;
         },
 
         addCollection: function (id, list, options) {
@@ -112,9 +118,11 @@ define('io.ox/core/folder/api',
             options = options || {};
             // update collection
             var collection = this.getCollection(id),
-                type = options.reset || !collection.fetched ? 'reset' : 'set';
+                type = collection.fetched ? 'set' : 'reset';
             collection[type](models);
             collection.fetched = true;
+
+            if (options.reset) collection.trigger('reset');
         },
 
         getModel: function (id) {
@@ -123,7 +131,7 @@ define('io.ox/core/folder/api',
 
         getCollection: function (id, all) {
             id = getCollectionId(id, all);
-            return this.collections[id] || (this.collections[id] = new FolderCollection());
+            return this.collections[id] || (this.collections[id] = new FolderCollection(id));
         },
 
         unfetch: function (id) {
@@ -153,7 +161,7 @@ define('io.ox/core/folder/api',
         // 2. apply custom order
         list = sort.apply(id, list);
         // 3. inject index
-        _(list).each(injectIndex);
+        _(list).each(injectIndex.bind(this, id));
         // done
         return list;
     }
@@ -214,23 +222,36 @@ define('io.ox/core/folder/api',
     // Define a virtual collection
     //
 
+    function VirtualFolder(id, getter) {
+        this.id = id;
+        this.getter = getter.bind(this);
+    }
+
+    VirtualFolder.prototype.concat = function () {
+        var id = this.id;
+        return $.when.apply($, arguments).then(function () {
+            return _(arguments).chain().flatten().map(injectIndex.bind(this, id)).value();
+        });
+    };
+
     var virtual = {
 
         hash: {},
 
         get: function (id) {
-            var getter = this.hash[id];
-            return getter !== undefined ? getter() : $.Deferred().reject();
+            var folder = this.hash[id];
+            return folder !== undefined ? folder.getter() : $.Deferred().reject();
         },
 
         add: function (id, getter) {
-            this.hash[id] = getter;
+            this.hash[id] = new VirtualFolder(id, getter);
             pool.getModel(id).set('subfolders', true);
         },
 
         concat: function () {
+            if (ox.debug) console.warn('Deprecated! Please use this.concat()');
             return $.when.apply($, arguments).then(function () {
-                return _(arguments).chain().flatten().map(injectIndex).value();
+                return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
             });
         }
     };
@@ -248,6 +269,13 @@ define('io.ox/core/folder/api',
         if (options.cache === true && model !== undefined && model.has('title')) return $.when(model.toJSON());
 
         if (/^virtual/.test(id)) return $.when({ id: id });
+
+        // fetch GAB but GAB is disabled?
+        if (id === '6' && !capabilities.has('gab')) {
+            var error = gt('Accessing global address book is not permitted');
+            console.warn(error);
+            return $.Deferred().reject({ error: error });
+        }
 
         return http.GET({
             module: 'folders',
@@ -404,12 +432,24 @@ define('io.ox/core/folder/api',
     }
 
     function getFlatCollectionId(module, section) {
-
         return 'flat/' + module + '/' + section;
     }
 
     function getFlatCollection(module, section) {
         return pool.getCollection(getFlatCollectionId(module, section));
+    }
+
+    function getFlatViews() {
+        return _(pool.collections).chain()
+            .keys()
+            .filter(function (id) {
+                return /^flat/.test(id);
+            })
+            .map(function (id) {
+                return id.split('/')[1];
+            })
+            .uniq()
+            .value();
     }
 
     function flat(options) {
@@ -608,6 +648,7 @@ define('io.ox/core/folder/api',
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
                 api.trigger('create', data);
+                api.trigger('create:' + id, data);
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
@@ -799,6 +840,15 @@ define('io.ox/core/folder/api',
 
     }());
 
+    function setUnseenCounter(id, unread) {
+        pool.getModel(id).set('unread', Math.max(0, unread));
+    }
+
+    function setUnseenMinimum(id, min) {
+        var model = pool.getModel(id);
+        model.set('unread', Math.max(min || 0, model.get('unread')));
+    }
+
     //
     // Refresh all folders
     //
@@ -806,10 +856,13 @@ define('io.ox/core/folder/api',
     function refresh() {
         // pause http layer to get one multiple
         http.pause();
-        // loop over all subfolder collection and reload
-        _(pool.collections).each(function (collection, id) {
-            // check collection.fetched; no need to fetch brand new subfolders
-            if (collection.fetched) list(id, { cache: false });
+        // loop over all folders, get all parent folders, apply unique, and reload if they have subfolders
+        _(api.pool.models).chain().invoke('get', 'folder_id').uniq().compact().without('0').each(function (id) {
+            list(id, { cache: false });
+        });
+        // loop over flat views
+        _(getFlatViews()).each(function (module) {
+            flat({ module: module, cache: false });
         });
         // go!
         http.resume();
@@ -873,6 +926,7 @@ define('io.ox/core/folder/api',
         virtual: virtual,
         isFlat: isFlat,
         getFlatCollection: getFlatCollection,
+        getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,
         getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,
@@ -880,10 +934,13 @@ define('io.ox/core/folder/api',
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,
         changeUnseenCounter: changeUnseenCounter,
+        setUnseenCounter: setUnseenCounter,
+        setUnseenMinimum: setUnseenMinimum,
         getSection: getSection,
         Bitmask: Bitmask,
         propagate: propagate,
-        altnamespace: altnamespace
+        altnamespace: altnamespace,
+        injectIndex: injectIndex
     });
 
     return api;

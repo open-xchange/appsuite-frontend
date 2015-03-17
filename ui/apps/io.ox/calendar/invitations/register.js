@@ -39,13 +39,13 @@ define('io.ox/calendar/invitations/register',
 
     var buttonClasses = {
         'accept': 'btn-success accept',
-        'accept_and_replace': 'btn-inverse',
+        'accept_and_replace': '',
         'accept_and_ignore_conflicts': 'btn-success ignore',
-        'accept_party_crasher': 'btn-inverse',
-        'create': 'pull-left btn-inverse',
-        'update': 'pull-left btn-inverse',
-        'delete': 'pull-left btn-inverse',
-        'declinecounter': 'pull-left btn-danger',
+        'accept_party_crasher': '',
+        'create': '',
+        'update': '',
+        'delete': '',
+        'declinecounter': 'btn-danger',
         'tentative': 'btn-warning',
         'decline': 'btn-danger',
         'ignore': ''
@@ -70,7 +70,7 @@ define('io.ox/calendar/invitations/register',
         3: gt('You have tentatively accepted the appointment')
     };
 
-    var priority = ['update', 'ignore', 'accept', 'tentative', 'decline', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
+    var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
 
     function analyzeIMIPAttachment(imip) {
 
@@ -130,6 +130,7 @@ define('io.ox/calendar/invitations/register',
                 $('<div class="itip-annotations">'),
                 $('<div class="itip-changes">'),
                 $('<div class="itip-conflicts">'),
+                $('<div class="itip-comment">'),
                 $('<div class="itip-controls">')
             );
         },
@@ -214,18 +215,16 @@ define('io.ox/calendar/invitations/register',
         },
 
         getButtons: function (actions) {
-            return _(priority).chain()
+            return _(priority)
+                .chain()
                 .filter(function (action) {
                     return _(actions).contains(action);
                 })
                 .map(function (action) {
-                    var button = $('<button type="button" class="btn btn-default">')
+                    return $('<button type="button" class="btn btn-default" tabindex="1">')
                         .attr('data-action', action)
                         .addClass(buttonClasses[action])
                         .text(i18n[action]);
-                    return button
-                        .add($('<span>').text('\u00A0'))
-                        .addClass(button.hasClass('pull-left') ? 'pull-left' : '');
                 })
                 .value();
         },
@@ -237,11 +236,40 @@ define('io.ox/calendar/invitations/register',
             return '';
         },
 
+        disableCurrentButton: function () {
+
+            if (this.supportsComment()) return;
+
+            var status = util.getConfirmationStatus(this.appointment),
+                selector = this.getConfirmationSelector(status);
+            // disable buttons - don't know why we have an array of appointments but just one set of buttons
+            // so, let's use the first one
+            this.$('.itip-actions').find(selector).addClass('disabled').prop('disabled', true);
+        },
+
+        supportsComment: function () {
+            // show comment field if we have a accept, tentative, or decline button
+            return this.$('[data-action="accept"], [data-action="tentative"], [data-action="decline"]').length > 0;
+        },
+
+        getUserComment: function () {
+            return this.$el.find('.itip-comment input').val();
+        },
+
+        renderComment: function () {
+            if (!this.supportsComment()) return;
+            this.$el.find('.itip-comment').append(
+                $('<input type="text" class="form-control" data-property="comment" tabindex="1">')
+                .attr('placeholder', gt('Comment'))
+                .val(util.getConfirmationMessage(this.appointment))
+            );
+        },
+
         render: function () {
 
             this.$el.empty().fadeIn(300);
 
-            var actions = this.getActions(), status, selector, accepted, buttons;
+            var actions = this.getActions(), status, accepted, buttons;
 
             this.renderScaffold();
             this.renderAnnotations();
@@ -258,7 +286,6 @@ define('io.ox/calendar/invitations/register',
             this.renderConflicts();
 
             status = util.getConfirmationStatus(this.appointment);
-            selector = this.getConfirmationSelector(status);
             accepted = status === 1;
 
             // don't offer standard buttons if appointment is already accepted
@@ -272,11 +299,10 @@ define('io.ox/calendar/invitations/register',
 
             this.$el.find('.itip-controls').append(
                 $('<div class="itip-actions">').append(buttons)
-                // disable buttons - don't know why we have an array of appointments but just one set of buttons
-                // so, let's use the first one
-                .find(selector).addClass('disabled').prop('disabled', true).end()
             );
 
+            this.disableCurrentButton();
+            this.renderComment();
             this.renderReminder();
 
             return this;
@@ -297,7 +323,13 @@ define('io.ox/calendar/invitations/register',
         events: {
             'click .show-details': 'onShowDetails',
             'click .show-conflicts': 'onShowConflicts',
-            'click .itip-actions button': 'onAction'
+            'click .itip-actions button': 'onAction',
+            'keydown': 'onKeydown'
+        },
+
+        onKeydown: function (e) {
+            // temporary fix; bootstrap a11y plugin causes problems here (space key)
+            e.stopPropagation();
         },
 
         onAction: function (e) {
@@ -311,7 +343,8 @@ define('io.ox/calendar/invitations/register',
                 params: {
                     action: action,
                     dataSource: 'com.openexchange.mail.ical',
-                    descriptionFormat: 'html'
+                    descriptionFormat: 'html',
+                    message: this.getUserComment()
                 },
                 data: {
                     'com.openexchange.mail.conversion.fullname': this.imip.mail.folder_id,
@@ -426,7 +459,8 @@ define('io.ox/calendar/invitations/register',
 
         events: {
             'click .show-details': 'onShowDetails',
-            'click button': 'onAction'
+            'click button': 'onAction',
+            'keydown': 'onKeydown'
         },
 
         initialize: function (options) {
@@ -436,6 +470,11 @@ define('io.ox/calendar/invitations/register',
             this.type = options.type === 'Appointments' ? 'appointment' : 'task';
             this.appointment = {};
             this.$el.hide();
+        },
+
+        onKeydown: function (e) {
+            // temporary fix; bootstrap a11y plugin causes problems here (space key)
+            e.stopPropagation();
         },
 
         onActionSuccess: function (action, updated) {
@@ -455,7 +494,7 @@ define('io.ox/calendar/invitations/register',
                     tempdata.recurrence_position = data.recurrence_position;
                 }
                 if (this.task) {
-                    // tasks use absolute timestamps
+                    //tasks use absolute timestamps
                     tempdata.alarm = _.utc() + tempdata.alarm;
                 }
                 this.api.update(tempdata);
@@ -491,12 +530,14 @@ define('io.ox/calendar/invitations/register',
         },
 
         onAction: function (e) {
+
             var action = $(e.currentTarget).attr('data-action'),
                 hash = { accept: 1, decline: 2, tentative: 3 },
                 confirmation = hash[action],
                 data = this.appointment || this.task,
                 status = util.getConfirmationStatus(data),
-                accepted = status === 1;
+                accepted = status === 1,
+                comment = this.getUserComment();
 
             this.reminder = accepted ? false : parseInt(this.$el.find('.reminder-select').val(), 10);
 
@@ -505,7 +546,7 @@ define('io.ox/calendar/invitations/register',
             this.api.confirm({
                 folder: data.folder_id,
                 id: data.id,
-                data: { confirmation: confirmation }
+                data: { confirmation: confirmation, confirmmessage: comment }
             })
             .then(this.onActionSuccess.bind(this, confirmation), this.onActionFail.bind(this, action));
         },
@@ -559,7 +600,7 @@ define('io.ox/calendar/invitations/register',
                 $('<div class="itip-reminder">').append(
                     $('<label class="control-label" for="reminderSelect">').text(gt('Reminder')),
                     $('<div class="controls">').append(
-                        $('<select id="reminderSelect" data-property="reminder" class="reminder-select form-control">')
+                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder" tabindex="1">')
                         .append(function () {
                             var self = $(this),
                                 options = util.getReminderOptions();

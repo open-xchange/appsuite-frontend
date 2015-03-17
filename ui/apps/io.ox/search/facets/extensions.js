@@ -24,11 +24,13 @@ define('io.ox/search/facets/extensions',
         require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
             var value = facet.values.custom,
                 id = value.custom,
-                type = baton.model.getModule();
+                type = baton.model.getModule(),
+                module = type === 'files' ? 'infostore' : type;
 
             picker({
-                folder: id,
-                module: type === 'files' ? 'infostore' : type,
+                folder: id || api.getDefaultFolder(module),
+                module: module,
+                flat: api.isFlat(module),
                 root: type === 'files' ? '9' : '1',
                 done: function (target) {
                     //get folder data
@@ -40,9 +42,7 @@ define('io.ox/search/facets/extensions',
                         });
                 },
                 disable: function (data) {
-                    var same = type === 'move' && data.id === id,
-                        create = api.can('create', data);
-                    return same || !create;
+                    return !api.can('read', data);
                 }
             });
         });
@@ -57,10 +57,11 @@ define('io.ox/search/facets/extensions',
             hide: gt('Hide advanced filters'),
             show: gt('Show advanced filters')
         },
+        phone = _.device('smartphone'),
         extensions = {
 
             item: function (baton, value, facet) {
-                var button = this.find('a');
+                var button = this.find('.facet-container');
                 ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
                 ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
                 ext.point('io.ox/search/facets/facet-dropdown').invoke('draw', button, baton, value, facet);
@@ -85,11 +86,11 @@ define('io.ox/search/facets/extensions',
                         value = facet.values[item.value];
 
                         // create facet node
-                        node = $('<li role="presentation" class="facet btn-group">').append(
+                        node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                             // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                            button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                            button = $('<div class="facet-container">')
                             .on('click', function (e) { e.preventDefault(); })
-                            .append($('<label>'))
+                            .append($('<label class="facet-label">'))
                         );
 
                         var special = ext.point('io.ox/search/facets/item/' + value.facet);
@@ -113,12 +114,15 @@ define('io.ox/search/facets/extensions',
                 var facets = baton.model.get('autocomplete'),
                     pool = baton.model.get('pool'),
                     list = baton.model.get('poollist'),
+                    headline = this.parent().find('h3.sr-only'),
                     self = this,
                     nodes = [];
 
 
-                if (!baton.model.get('showadv'))
+                if (!baton.model.get('showadv')) {
                     self.hide();
+                    headline.hide();
+                }
 
                 // add inactive advanced facets
                 nodes = _(facets).map(function (facet) {
@@ -140,11 +144,11 @@ define('io.ox/search/facets/extensions',
                     value = value || {facet: facet.id, placeholder: true};
 
                     // create facet node
-                    node = $('<li role="presentation" class="facet btn-group">').append(
+                    node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                         // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                        button = $('<div class="facet-container">')
                         .on('click', function (e) { e.preventDefault(); })
-                        .append($('<label>'))
+                        .append($('<label class="facet-label">'))
                     );
 
                     var special = ext.point('io.ox/search/facets/item/' + value.facet);
@@ -171,11 +175,18 @@ define('io.ox/search/facets/extensions',
                                     role: 'button',
                                     href: '#'
                                 })
-                                .on('click ', function () {
+                                .on('click', function () {
                                     var visible = self.is(':visible');
                                     $(this).text(visible ? LABEL.show : LABEL.hide);
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        //#. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
+                                        yell('screenreader', visible ? gt('Advanced facets block was closed.') : gt('Advanced facets block was opened.'));
+                                    });
+
                                     baton.model.set('showadv', !visible);
+
                                     self.toggle();
+                                    headline.toggle();
                                 })
                         )
                     );
@@ -193,7 +204,10 @@ define('io.ox/search/facets/extensions',
                     e.stopPropagation();
                     e.preventDefault();
                     // mobile
-                    $(this).closest('.custom-dropdown').toggle();
+                    if (phone) {
+                        $('#io-ox-core').removeClass('menu-blur');
+                        $(this).closest('.custom-dropdown').toggle();
+                    }
                     ox.idle();
 
                     $(e.target).closest('.dropdown.open').toggle();
@@ -237,7 +251,7 @@ define('io.ox/search/facets/extensions',
                     type = util.getOptionLabel(options, id);
                 // append type
                 if (facet.style !== 'simple') {
-                    this.find('label').prepend(
+                    this.find('.facet-label').prepend(
                         $('<span>')
                             .addClass('type')
                             .text(type || facet.name)
@@ -250,6 +264,8 @@ define('io.ox/search/facets/extensions',
                 var node = $('<span>').addClass('name'),
                     detail = (value.item || {}).detail,
                     label = value.name || (value.item || {}).name,
+                    labelnode = this.find('.facet-label'),
+                    labels,
                     optionslabel;
 
                 if (detail) {
@@ -265,11 +281,34 @@ define('io.ox/search/facets/extensions',
                     node.text(optionslabel || label || gt('All'));
                 }
 
-                this.find('label').append(node);
+                labelnode.append(node);
+
+                // a11y facet label
+                labels = labelnode.find('span').map(
+                    function (index, span) {
+                        // text() does not return separators (css after content)
+                        return $(span).text() + ' ';
+                    }
+                );
+                this.attr('aria-label', labels.toArray().join(''));
+
             },
 
             facetRemove: function (baton, value, facet, fn) {
-                var isMandatory = baton.model.isMandatory(value.facet), node;
+                var isMandatory = baton.model.isMandatory(value.facet), node,
+                    fnRemove = function (e) {
+
+                        if (e.type === 'keyup' && e.which !== 13) return false;
+
+                        // use custom handler
+                        if (fn)  {
+                            fn();
+                        } else {
+                            baton.model.remove(value.facet || value._compact.facet, value.id);
+
+                        }
+                        return false;
+                    };
 
                 // remove action for non mandatory facets
                 if ((isMandatory && value.facet === 'folder') || _.contains(facet.flags, 'advanced') || value.placeholder) return;
@@ -277,50 +316,40 @@ define('io.ox/search/facets/extensions',
                 this.prepend(
                     node = $('<span class="remove">')
                      .attr({
-                        'tabindex': '1',
-                        'aria-label': gt('Remove')
+                        'tabindex': 1,
+                        'aria-label': gt('Remove facet')
                     })
                     .append(
                         $('<i class="fa fa-times action">')
                     )
-                    .on('click', fn || function () {
-                        baton.model.remove(value.facet || value._compact.facet, value.id);
-                        return false;
-                    })
-
+                    .on('click mousdown keyup', fnRemove)
                 );
                 // tooltip
-                if(!_.device('touch')) {
-                    node.attr({
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'bottom',
-                        'data-animation': 'false',
-                        'data-container': 'body',
-                        'data-original-title': gt('Remove')
-                        })
-                        .tooltip()
-                        .on('click', function () {
-                            if (node.tooltip)
-                                node.tooltip('hide');
-                        });
-                }
+                util.addTooltip(node, gt('Remove'));
             },
 
             facetDropdown: function (baton, value, facet) {
                 var options = facet.options || _.values(facet.values)[0].options || [],
                     current = value._compact ? value._compact.option : '',
-                    option,
                     parent = this.parent(),
-                    menu;
+                    menu, action, option;
 
                 if (options.length) {
+                    this.addClass('dropdown-toggle');
+
                     this.attr('data-toggle', 'dropdown');
                     // add caret
                     this.prepend(
-                        $('<div class="caret-container">').append(
-                            $('<i class="fa fa-caret-down">')
-                        )
+                        $('<span class="toggle-options">').append(
+                            action =$('<i class="fa fa-caret-down action">')
+                        ).attr({
+                            'tabindex': '1',
+                            'aria-label': gt('Toggle options')
+                        })
                     );
+
+                    // tooltip
+                    util.addTooltip(action, gt('Adjust'));
 
                     // create menu
                     menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
@@ -395,7 +424,10 @@ define('io.ox/search/facets/extensions',
                 var self = this,
                     VALUE = 'daterange',
                     isUpdate = !!baton.model.get('pool')['date.custom'],
-                    data, from, to, group, current, container;
+                    data, from, to, group, current, container,
+                    facetcontainer = $('<fieldset class="facet-container">');
+
+                this.find('.facet-container').replaceWith(facetcontainer);
 
                 // add styles
                 self.addClass('timefacet');
@@ -486,24 +518,36 @@ define('io.ox/search/facets/extensions',
                     container = $('<div class="datepicker-container">').hide()
                 );
 
+
+                var getBlock = function (label, name, value) {
+                    var guid = _.uniqueId('form-control-label-');
+                    return [
+                        $('<label class="sr-only">').attr('for', guid).text(label),
+                        $('<input type="text" class="input-sm form-control" />')
+                            .attr({
+                                'name': name,
+                                'id': guid,
+                                'placeholder': label,
+                                'tabIndex': 1,
+                                'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
+                            })
+                            .val(value)
+                            .on('change', lazyApply)
+                    ];
+                };
+
+
                 // input group
-                self.find('label')
+                facetcontainer
                     .append(
                         $('<div>')
                             .addClass('type')
                             .text(facet.name),
                         group = $('<div class="input-daterange input-group" id="datepicker">')
                                     .append(
-                                        $('<input type="text" class="input-sm form-control" name="start" />')
-                                            .attr('placeholder', gt('Starts on'))
-                                            .val(from)
-                                            .on('change', lazyApply),
-                                        $('<span class="input-group-addon">')
-                                            .text('-'),
-                                        $('<input type="text" class="input-sm form-control" name="end" />')
-                                            .attr('placeholder', gt('Ends on'))
-                                            .val(to)
-                                            .on('change', lazyApply)
+                                        getBlock(gt('Starts on'), 'start', from),
+                                        $('<span class="input-group-addon">').text('-'),
+                                        getBlock(gt('Ends on'), 'start', to)
                                     )
                                     .datepicker({
                                         format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
@@ -535,9 +579,9 @@ define('io.ox/search/facets/extensions',
 
             folderFacet: function (baton, value, facet) {
                 var self = this,
-                    button = this.find('a[type="button"]'),
+                    button = this.find('.facet-container'),
                     current = value.custom,
-                    option, link,
+                    option, link, action,
                     menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
                         .attr({
                             'data-facet': 'folder',
@@ -552,10 +596,19 @@ define('io.ox/search/facets/extensions',
                     });
 
                 button.prepend(
-                    $('<div class="caret-container">').append(
-                        $('<i class="fa fa-caret-down">')
-                    )
+                    $('<span class="toggle-options">').append(
+                        action = $('<i class="fa fa-caret-down action">')
+                    ).attr({
+                        'tabindex': '1',
+                        'aria-label': gt('Toggle options')
+                    })
                 );
+
+                // tooltip
+                util.addTooltip(action, gt('Change folder'));
+
+                // disable dropdown until menu is added (mobiles custom dropdown)
+                if (phone) { button.addClass('disabled'); }
 
                 // add 'all folders'
                 var link;
@@ -660,6 +713,9 @@ define('io.ox/search/facets/extensions',
                         if (value.custom && value.custom !== 'custom')
                             // use custom click handler
                             ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, remove);
+
+                        // enable dropdown again
+                        if (phone) { button.removeClass('disabled'); }
 
                         // apply a11y
                         button.dropdown();

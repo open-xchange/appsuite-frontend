@@ -30,7 +30,8 @@ define('io.ox/rss/api', ['io.ox/core/http'], function (http) {
             var defaults = {
                 sort: 'date',
                 order: 'desc',
-                limit: 100 //not supported yet: manually spliced in plugins/portal/rss/register
+                //not supported yet: manually spliced in plugins/portal/rss/register
+                limit: 100
             };
             return http.PUT({
                 module: 'rss',

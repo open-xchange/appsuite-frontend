@@ -125,7 +125,8 @@ define('io.ox/backbone/basicModel',
                 action = 'destroy';
             }
             if ((action === 'update' || action === 'create')) {
-                if (!this.isValid({isSave: true})) {//isValid actually calls the validate function, no need to do this manually
+                // isValid actually calls the validate function, no need to do this manually
+                if (!this.isValid({isSave: true})) {
                     return $.Deferred().reject({error: gt('Invalid data'), model: this});
                 }
             }

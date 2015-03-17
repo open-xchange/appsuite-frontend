@@ -16,12 +16,13 @@ define('io.ox/files/toolbar',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/backbone/mini-views/toolbar',
      'io.ox/core/notifications',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/files/actions',
      'less!io.ox/files/style'
-    ], function (ext, links, actions, Dropdown, notifications, gt, api) {
+    ], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {
 
     'use strict';
 
@@ -47,7 +48,8 @@ define('io.ox/files/toolbar',
                 this.after(
                     links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
                         wrap: false,
-                        emptyCallback: function () {//function to call when dropdown is empty
+                        //function to call when dropdown is empty
+                        emptyCallback: function () {
                             self.addClass('disabled')
                                 .attr({ 'aria-disabled': true })
                                 .removeAttr('href');
@@ -187,7 +189,8 @@ define('io.ox/files/toolbar',
     ext.point('io.ox/files/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/files/classic-toolbar/links'
@@ -217,32 +220,31 @@ define('io.ox/files/toolbar',
         }
     });
 
-    // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
-
-    var updateToolbar = _.debounce(function (list) {
-        if (!list) return;
-        var self = this,
-            ids = this.getIds ? this.getIds() : [];
-
-        //get full data, needed for require checks for example
-        api.getList(list).done(function (data) {
-            // extract single object if length === 1
-            data = data.length === 1 ? data[0] : data;
-            // draw toolbar
-            var baton = ext.Baton({ $el: toolbar, data: data, app: self, allIds: ids});
-            ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.empty(), baton);
-        });
-    }, 10);
-
     ext.point('io.ox/files/mediator').extend({
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+                toolbar.render().$el
             );
-            app.updateToolbar = updateToolbar;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
+                var self = this,
+                    ids = this.getIds ? this.getIds() : [];
+
+                //get full data, needed for require checks for example
+                return api.getList(list).then(function (data) {
+                    // extract single object if length === 1
+                    data = data.length === 1 ? data[0] : data;
+                    // draw toolbar
+                    var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self, allIds: ids}),
+                        ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                    return $.when.apply($, ret.value()).then(function () {
+                        toolbar.initButtons();
+                    });
+                });
+            }, 10);
         }
     });
 

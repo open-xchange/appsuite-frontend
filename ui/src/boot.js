@@ -126,6 +126,11 @@ $(window).load(function () {
         $('html').addClass('ios');
     }
 
+    // ios8 ipad standalone fix (see bug 35087)
+    if (_.device('standalone && ios >= 8') && navigator.userAgent.indexOf('iPad') > -1) {
+        $('html').addClass('ios8-standalone-ipad-fix');
+    }
+
     if (_.device('Android')) {
         $('html').addClass('android');
         if (_.browser.chrome === 18 || !_.browser.chrome) {
@@ -290,19 +295,16 @@ $(window).load(function () {
                             folder: folder,
                             columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                             sort: mail.get(['viewOptions', folder, 'sort'], 610),
-                            order: mail.get(['viewOptions', folder, 'order'], 'desc')
-                        };
-                    if (thread) {
-                        _.extend(params, {
-                            includeSent: true,
-                            max: 300,
+                            order: mail.get(['viewOptions', folder, 'order'], 'desc'),
                             timezone: 'utc',
                             limit: '0,30'
-                        });
-                    };
+                        };
+                    if (thread) {
+                        _.extend(params, { includeSent: true, max: 300 });
+                    }
                     http.GET({ module: 'mail', params: params }).done(function (data) {
                         // the collection loader will check ox.rampup for this data
-                        ox.rampup['mail/' + $.param(params)] = data;
+                        ox.rampup['mail/' + _.param(params)] = data;
                     });
                 }
 
@@ -658,7 +660,7 @@ $(window).load(function () {
                         ox.secretCookie = hash.secretCookie === 'true';
                         fetchUserSpecificServerConfig().done(function () {
                             var whoami = $.Deferred();
-                            if (hash.user && hash.language && hash.user_id) {
+                            if (hash.user && hash.language && hash.user_id && hash.context_id) {
                                 whoami.resolve(hash);
                             } else {
                                 require(['io.ox/core/http'], function (http) {
@@ -735,7 +737,7 @@ $(window).load(function () {
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
                         var whoami = $.Deferred();
-                        if (hash.user && hash.language && hash.user_id) {
+                        if (hash.user && hash.language && hash.user_id && hash.context_id) {
                             whoami.resolve(hash);
                         } else {
                             require(['io.ox/core/http'], function (http) {
@@ -872,7 +874,7 @@ $(window).load(function () {
                     for (id in langSorted) {
                         i++;
                         node.attr({'role': 'menu', 'aria-labelledby': 'io-ox-languages-label'}).append(
-                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
+                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '" lang="' + langSorted[id] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])
                         );

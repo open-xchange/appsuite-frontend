@@ -109,7 +109,8 @@ define('io.ox/tasks/mobile-toolbar-actions',
             //.# Will be used as menu heading in tasks module which then show the actions which can be performed with a task like "mark as done"
             gt('Actions')
         ),
-        noCaret: true, // don't draw the caret icon beside menu link
+        // don't draw the caret icon beside menu link
+        noCaret: true,
         drawDisabled: true,
         ref: 'io.ox/tasks/mobile/actions'
     }));

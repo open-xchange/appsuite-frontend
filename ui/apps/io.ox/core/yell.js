@@ -15,6 +15,15 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
+    if (false) {
+        //make sure, translations of ariaText types are always available
+        //only for create_pot task to pickup the strings.
+        gt('Error');
+        gt('Info');
+        gt('Success');
+        gt('Warning');
+    }
+
     var validType = /^(busy|error|info|success|warning|screenreader)$/,
 
         durations = {
@@ -23,7 +32,14 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             info: 10000,
             success: 4000,
             warning: 10000,
-            screenreader: 100,
+            screenreader: 5000,
+        },
+
+        ariaText = {
+            error: 'Error',
+            info: 'Info',
+            success: 'Success',
+            warning: 'Warning'
         },
 
         icons = {
@@ -56,6 +72,46 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         if ($(e.target).closest('.close').length) return remove();
     }
 
+    function screenreaderMessage(message) {
+
+        var alert = $('.io-ox-alert');
+            function show (text) {
+                var duration = durations.screenreader || 5000,
+                    node = $.find('.io-ox-alert-screenreader'),
+                    alertmessage;
+                if (!node.length) {
+                    node = $('<div tabindex="-1" class="io-ox-alert-screenreader sr-only">');
+                    $('#io-ox-core').append(node);
+                }
+
+                // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
+                _.defer(function () {
+                    $(node).append(
+                        alertmessage = $('<div role="alert" aria-live="polite">').append(
+                            $('<span>').text(text)
+                        )
+                    );
+                });
+                setTimeout(function () {
+                   //remove message
+                   alertmessage.remove();
+                   //if the container is empty remove it too
+                   if (!$(node).children.length) {
+                       $(node).remove();
+                   }
+                }, duration);
+            }
+
+        //if an alert message exists we wait until it disappears
+        if (alert.length) {
+            alert.one('notification:removed', function () {
+                show(message);
+            });
+        } else {
+            show(message);
+        }
+    }
+
     function yell(type, message, focus) {
 
         if (type === 'destroy' || type === 'close') return remove();
@@ -86,71 +142,68 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         if (!validType.test(o.type)) return;
 
         var alert = [];
-
-        if (o.type !== 'screenreader') { //screenreader notifications should not remove standard ones, so special remove here
+        //screenreader only messages can be much simpler and don't need styling or formating (audio only)
+        if (o.type === 'screenreader') {
+            return screenreaderMessage(o.message);
+        } else {
             clearTimeout(timer);
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
             // replace existing alert?
-            alert = $('.io-ox-alert:not(.io-ox-alert-screenreader)');
+            alert = $('.io-ox-alert');
             //prevent double binding
             //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
             //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although he should not)
             $(document).off('.yell');
             _.defer(function () {
                 // use defer not to run into drag&drop
-                $(document).on(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+                $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
             });
-        } else {
-            setTimeout(function () {
-                $('.io-ox-alert-screenreader').remove();
-            }, o.duration || durations[o.type] || 100);
-        }
 
-        var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
-            className = 'io-ox-alert io-ox-alert-' + o.type + (o.type === 'screenreader' ? ' sr-only' : ''),
-            wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal',
-            node = $('<div tabindex="-1">');
+            var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
+                className = 'io-ox-alert io-ox-alert-' + o.type,
+                wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal',
+                node = $('<div tabindex="-1">');
 
-        if (alert.length) {
-            className += ' appear';
-            alert.remove();
-        }
+            if (alert.length) {
+                className += ' appear';
+                alert.remove();
+            }
 
-        node.attr('class', className).append(
-            $('<div class="icon">').append(
-                $('<i>').attr('aria-hidden', true).addClass(icons[o.type] || 'fa fa-fw')
-            )
-        );
-
-        // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
-        _.defer(function () {
-            node.append(
-                $('<div role="alert" aria-live="polite" class="message user-select-text">').append(
-                    o.headline ? $('<h2 class="headline">').text(o.headline) : [],
-                    $('<div>').css('word-break', wordbreak).html(html)
+            node.attr('class', className).append(
+                $('<div class="icon">').append(
+                    $('<i>').attr('aria-hidden', true).addClass(icons[o.type] || 'fa fa-fw')
                 )
             );
-        });
 
-        if (o.type !== 'screenreader') {
+            // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
+            _.defer(function () {
+                node.append(
+                    $('<div role="alert" aria-live="polite" class="message user-select-text">').append(
+                        ariaText[o.type] ? $('<span class="sr-only">').text(/*#, dynamic*/gt(ariaText[o.type])) : [],
+                        o.headline ? $('<h2 class="headline">').text(o.headline) : [],
+                        $('<div>').css('word-break', wordbreak).html(html)
+                    )
+                );
+            });
+
             node.append(
                 $('<a href="#" role="button" class="close" tabindex="1">').append(
                     $('<i class="fa fa-times" aria-hidden="true">'),
                     $('<span class="sr-only">').text(gt('Click to close this notification')))
             );
+
+            $('#io-ox-core').append(node);
+    
+            // put at end of stack not to run into opening click
+            setTimeout(function () {
+                // might be already added
+                node.trigger('notification:appear').addClass('appear');
+                if (o.focus) node.attr('tabindex', 1).focus();
+    
+            }, _.device('touch') ? 300 : 0);
+
+            return node;
         }
-
-        $('#io-ox-core').append(node);
-
-        // put at end of stack not to run into opening click
-        setTimeout(function () {
-
-            node.trigger('notification:appear').addClass('appear'); // might be already added
-            if (o.focus) node.attr('tabindex', 1).focus();
-
-        }, _.device('touch') ? 300 : 0);
-
-        return node;
     }
 
     // add convenience functions

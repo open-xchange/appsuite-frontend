@@ -21,7 +21,8 @@ define('io.ox/contacts/widgets/exif', function () {
 
     function findEXIFinJPEG(file) {
         if (file.getByteAt(0) !== 0xFF || file.getByteAt(1) !== 0xD8) {
-            return false; // not a valid jpeg
+            // not a valid jpeg
+            return false;
         }
 
         var offset = 2,
@@ -31,7 +32,8 @@ define('io.ox/contacts/widgets/exif', function () {
         while (offset < length) {
             if (file.getByteAt(offset) !== 0xFF) {
                 if (debug) console.log('Not a valid marker at offset ' + offset + ', found: ' + file.getByteAt(offset));
-                return false; // not a valid marker, something is wrong
+                // not a valid marker, something is wrong
+                return false;
             }
 
             marker = file.getByteAt(offset + 1);
@@ -111,8 +113,10 @@ define('io.ox/contacts/widgets/exif', function () {
             numerator, denominator;
 
         switch (type) {
-        case 1: // byte, 8-bit unsigned int
-        case 7: // undefined, 8-bit byte, value depending on field
+        case 1:
+            // byte, 8-bit unsigned int
+        case 7:
+            // undefined, 8-bit byte, value depending on field
             if (numValues === 1) {
                 return file.getByteAt(entryOffset + 8, bigEnd);
             } else {
@@ -124,12 +128,12 @@ define('io.ox/contacts/widgets/exif', function () {
                 return vals;
             }
             break;
-
-        case 2: // ascii, 8-bit byte
+        case 2:
+            // ascii, 8-bit byte
             offset = numValues > 4 ? valueOffset : (entryOffset + 8);
             return file.getStringAt(offset, numValues - 1);
-
-        case 3: // short, 16 bit int
+        case 3:
+            // short, 16 bit int
             if (numValues === 1) {
                 return file.getShortAt(entryOffset + 8, bigEnd);
             } else {
@@ -141,8 +145,8 @@ define('io.ox/contacts/widgets/exif', function () {
                 return vals;
             }
             break;
-
-        case 4: // long, 32 bit int
+        case 4:
+            // long, 32 bit int
             if (numValues === 1) {
                 return file.getLongAt(entryOffset + 8, bigEnd);
             } else {
@@ -153,8 +157,8 @@ define('io.ox/contacts/widgets/exif', function () {
                 return vals;
             }
             break;
-
-        case 5: // rational = two long values, first is numerator, second is denominator
+        case 5:
+            // rational = two long values, first is numerator, second is denominator
             if (numValues === 1) {
                 numerator = file.getLongAt(valueOffset, bigEnd);
                 denominator = file.getLongAt(valueOffset + 4, bigEnd);
@@ -174,8 +178,8 @@ define('io.ox/contacts/widgets/exif', function () {
                 return vals;
             }
             break;
-
-        case 9: // slong, 32 bit signed int
+        case 9:
+            // slong, 32 bit signed int
             if (numValues === 1) {
                 return file.getSLongAt(entryOffset + 8, bigEnd);
             } else {
@@ -186,8 +190,8 @@ define('io.ox/contacts/widgets/exif', function () {
                 return vals;
             }
             break;
-
-        case 10: // signed rational, two slongs, first is numerator, second is denominator
+        case 10:
+            // signed rational, two slongs, first is numerator, second is denominator
             if (numValues === 1) {
                 return file.getSLongAt(valueOffset, bigEnd) / file.getSLongAt(valueOffset + 4, bigEnd);
             } else {

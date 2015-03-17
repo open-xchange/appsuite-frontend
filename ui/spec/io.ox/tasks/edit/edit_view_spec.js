@@ -43,7 +43,7 @@ define([
     describe('Tasks edit view', function () {
         beforeEach(function () {
             //set capabilities
-            return capabilities.then(function (data) {
+            return capabilities.then(function () {
                 return setup();
             });
         });
@@ -66,11 +66,13 @@ define([
             });
             it('a date inputfields', function () {
                 expect(node.find('[data-extension-id="start_date"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="start_date"] label').length).to.equal(1);
-                expect(node.find('[data-extension-id="start_date"] input').length).to.equal(1);
+                //DatePicker brings 2 labels and 2 inputs
+                expect(node.find('[data-extension-id="start_date"] label').length).to.equal(2);
+                expect(node.find('[data-extension-id="start_date"] input').length).to.equal(2);
                 expect(node.find('[data-extension-id="end_date"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="end_date"] label').length).to.equal(1);
-                expect(node.find('[data-extension-id="end_date"] input').length).to.equal(1);
+                //DatePicker brings 2 labels and 2 inputs
+                expect(node.find('[data-extension-id="end_date"] label').length).to.equal(2);
+                expect(node.find('[data-extension-id="end_date"] input').length).to.equal(2);
             });
             it('a recurrence view', function () {
                 expect(node.find('[data-extension-id="recurrence"]').length).to.equal(1);
@@ -89,7 +91,8 @@ define([
                 expect(node.find('#task-edit-progress-field').length).to.equal(1);
                 expect(node.find('[data-action="plus"]').length).to.equal(1);
                 expect(node.find('[data-action="minus"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="priority"] select').length).to.equal(1);                expect(node.find('[data-extension-id="priority"] select').children().length).to.equal(4);
+                expect(node.find('[data-extension-id="priority"] select').length).to.equal(1);
+                expect(node.find('[data-extension-id="priority"] select').children().length).to.equal(4);
                 expect(node.find('.private-flag').length).to.equal(1);
                 expect(node.find('.private-flag input[type="checkbox"]').length).to.equal(1);
             });

@@ -115,7 +115,8 @@ define('io.ox/contacts/mobile-toolbar-actions',
             //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
             gt('Actions')
         ),
-        noCaret: true, // don't draw the caret icon beside menu link
+        // don't draw the caret icon beside menu link
+        noCaret: true,
         drawDisabled: true,
         ref: 'io.ox/contacts/mobile/actions'
     }));

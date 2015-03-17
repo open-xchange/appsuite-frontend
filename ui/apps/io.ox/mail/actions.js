@@ -225,7 +225,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/print', {
         requires: function (e) {
             // not on smartphones
-            if (_.device('small')) return false;
+            if (_.device('smartphone')) return false;
             // need some and either read access or being embedded
             return e.collection.has('some') && (e.collection.has('read') || !e.collection.has('toplevel'));
         },
@@ -358,7 +358,8 @@ define('io.ox/mail/actions',
                 return e.collection.has('some') && _.device('!smartphone') && _(list).reduce(function (memo, obj) {
                     return memo || new p.Preview({
                         filename: obj.filename,
-                        mimetype: String(obj.content_type || '').split(';')[0], // fixes 'audio/mp3; name="Metallica - 01 - Enter Sandman.mp3"''
+                        // fixes 'audio/mp3; name="Metallica - 01 - Enter Sandman.mp3"''
+                        mimetype: String(obj.content_type || '').split(';')[0],
                         attachment: true
                     })
                     .supportsPreview();
@@ -477,7 +478,10 @@ define('io.ox/mail/actions',
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
-            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
+            if (!e.collection.has('one')) {
+                return false;
+            }
+            var context = e.context,
                 hasRightSuffix = (/\.vcf$/i).test(context.filename),
                 isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
                 isDirectoryType = (/^text\/directory/i).test(context.content_type);
@@ -731,7 +735,7 @@ define('io.ox/mail/actions',
                             });
                             var initData = {participants: participants, title: notetext, folder_id: currentFolder};
                             this.create(initData);
-//                             to set Dirty
+                            // to set Dirty
                             this.model.toSync = initData;
                         });
                     });

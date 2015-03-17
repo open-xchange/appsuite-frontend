@@ -24,7 +24,7 @@ define('io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
      'settings!io.ox/core',
      'io.ox/core/notifications',
-     'less!io.ox/core/tk/attachments',
+     'less!io.ox/core/tk/attachments'
     ], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
@@ -49,12 +49,8 @@ define('io.ox/core/tk/attachments',
 
                 function uploadOnSave(response) {
                     self.model.off('create update', uploadOnSave);
-                    var id = self.model.attributes.id,
+                    var id = response.id || self.model.attributes.id,
                         folder = self.model.attributes.folder || self.model.attributes.folder_id;
-
-                    if (id === undefined && response !== undefined) {
-                        id = response.id;
-                    }
                     if (folder && id) {
                         self.save(id, folder);
                     }
@@ -62,13 +58,16 @@ define('io.ox/core/tk/attachments',
 
                 this.model.on('create update', uploadOnSave);
             },
+
             finishedCallback: function (model) {
                 model.trigger('finishedAttachmentHandling');
             },
+
             render: function () {
                 var self = this;
                 _(this.allAttachments).each(function (attachment) {
-                    self.$el.addClass('io-ox-core-tk-attachment-list clearfix').append(self.renderAttachment(attachment));//clearfix because all attachments have css float
+                    //clearfix because all attachments have css float
+                    self.$el.addClass('io-ox-core-tk-attachment-list clearfix').append(self.renderAttachment(attachment));
                 });
 
                 //trigger refresh of attachmentcounter
@@ -76,6 +75,7 @@ define('io.ox/core/tk/attachments',
 
                 return this;
             },
+
             renderAttachment: function (attachment) {
                 var self = this;
                 var size, removeFile;
@@ -96,6 +96,7 @@ define('io.ox/core/tk/attachments',
 
                 return $el;
             },
+
             loadAttachments: function () {
                 var self = this;
                 if (this.model.id) {
@@ -120,6 +121,7 @@ define('io.ox/core/tk/attachments',
                 this.$el.empty();
                 this.render();
             },
+
             addFile: function (file) {
                 if (oldMode) {
                     this.addAttachment({file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
@@ -127,6 +129,7 @@ define('io.ox/core/tk/attachments',
                     this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
                 }
             },
+
             addAttachment: function (attachment) {
                 this.attachmentsToAdd.push(attachment);
                 this.updateState();
@@ -148,8 +151,10 @@ define('io.ox/core/tk/attachments',
 
             save: function (id, folderId) {
                 var self = this,
-                    errors = [],//errors are saved and send to callback
-                    allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
+                    //errors are saved and send to callback
+                    errors = [],
+                    // 0 ready 1 delete 2 add 3 delete and add
+                    allDone = 0,
                     apiOptions = {
                         module: this.module,
                         id: id || this.model.id,
@@ -212,11 +217,12 @@ define('io.ox/core/tk/attachments',
     }
 
     /**
-     * gui widget collecting files user wants to upload // Only used by mail and files
+     * Only used by mail and files: gui widget collecting files user wants to upload
      * @param {object} options
      * @param {object} baton
      */
     function EditableFileList(options, baton) {
+
         var self = this,
             counter = 0,
             files = [],
@@ -232,8 +238,14 @@ define('io.ox/core/tk/attachments',
 
             init: function () {
                 // add preview side-popup
-                new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
+                this.sidepopup = new dialogs.SidePopup().delegate($el, '.attachment-preview', util.preview);
+                // destroy if removed from DOM
+                $el.on('dispose', this.destroy.bind(this));
+            },
 
+            destroy: function () {
+                this.sidepopup.undelegate($el).destroy();
+                this.sidepopup = $el = self = options = baton = null;
             },
 
             render: function () {
@@ -537,8 +549,8 @@ define('io.ox/core/tk/attachments',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
-                    attachmentMode: false,
+                    baton: { allIds: files },
+                    attachmentMode: true,
                     selector: baton.options.selector
                 });
             });
@@ -598,7 +610,7 @@ define('io.ox/core/tk/attachments',
             gguid = _.uniqueId('form-control-label-'),
             label = $('<label>').attr('for', gguid).addClass('sr-only').text(options.buttontext),
             input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ id: gguid, tabindex: options.tabindex }),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($.txt(options.buttontext)).append(label, input),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button" tabindex="1">').append($.txt(options.buttontext)).append(label, input),
             driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').attr({ tabindex: options.tabindex }).text(gt('Add from Drive'));
 
         input.on('focus', function () {

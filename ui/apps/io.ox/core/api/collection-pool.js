@@ -17,7 +17,8 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
     var pools = {},
         collections = {},
-        skip = false, // to avoid unnecessary/endless recursion
+        // to avoid unnecessary/endless recursion
+        skip = false,
         skipRemove = false;
 
     function propagateRemove(module, model) {

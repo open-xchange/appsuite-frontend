@@ -263,7 +263,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '317' : 'supported_capabilities',
             '3010' : 'com.openexchange.publish.publicationFlag',
             '3020' : 'com.openexchange.subscribe.subscriptionFlag',
-            '3030' : 'com.openexchange.folderstorage.displayName'
+            '3030' : 'com.openexchange.folderstorage.displayName',
+            // 3040 exists; around EAS; no need for it
+            '3050' : 'com.openexchange.imap.extAccount'
         },
         'user': {
             '610' : 'aliases',
@@ -274,6 +276,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '615' : 'login_info'
         },
         'group': {
+            '1'   : 'id',
+            '700' : 'name',
+            '701' : 'display_name',
+            '702' : 'members'
         },
         'resource': {
         },
@@ -361,7 +367,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
     $.extend(idMapping.files, idMapping.common);
-    delete idMapping.files['101']; // not "common" here (exception)
+    // not "common" here (exception)
+    delete idMapping.files['101'];
     delete idMapping.files['104'];
     $.extend(idMapping.tasks, idMapping.common);
     // See bug #25300
@@ -587,6 +594,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             isError = 'error' in response && !isWarning;
 
         if (isError) {
+            // forward all errors to respond to special codes
+            ox.trigger('http:error', response);
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
@@ -612,7 +621,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 if (o.module === 'multiple') {
                     var i = 0, $l = response.length, tmp;
                     for (; i < $l; i++) {
-                        if (response[i]) { // to bypass temp. [null] bug
+                        if (response[i]) {
                             // time
                             timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
                             // data/error
@@ -804,9 +813,41 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 });
         }
 
+        //
+        // limitedSend allows limiting the number of parallel requests
+        // Actually the browser should do that but apparently some have
+        // problems dealing with large timeouts
+        //
+        var limitedSend = (function () {
+
+            var pending = 0, queue = [];
+
+            return function (request) {
+                if (!ox.serverConfig.maxConnections) return send(request);
+                if (belowLimit()) send(request); else queue.push(request);
+            };
+
+            function belowLimit() {
+                return pending < ox.serverConfig.maxConnections;
+            }
+
+            function send(request) {
+                pending++;
+                request.def.always(tick);
+                lowLevelSend(request);
+            }
+
+            function tick() {
+                pending--;
+                if (belowLimit() && queue.length > 0) send(queue.shift());
+            }
+
+        }());
+
         // to avoid bugs based on passing objects by reference
         function clone(data) {
-            if (!data) return data; // null, undefined, empty string, numeric zero
+            // null, undefined, empty string, numeric zero
+            if (!data) return data;
             return JSON.parse(JSON.stringify(data));
         }
 
@@ -850,11 +891,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         delete requests[hash];
                         hash = null;
                     });
-                    lowLevelSend(r);
+                    limitedSend(r);
                     r = null;
                 }
             } else {
-                lowLevelSend(r);
+                limitedSend(r);
                 r = null;
             }
         }

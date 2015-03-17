@@ -86,7 +86,6 @@ define('io.ox/core/tk/view',
             this.model.off('change error:invalid');
             this.node.off('update.model');
             this.node.empty().remove();
-            this.model.destroy();
             this.node = this.model = null;
         }
     };
@@ -97,7 +96,8 @@ define('io.ox/core/tk/view',
             View.prototype[itemname] = function () {
                 var args = [].slice.call(arguments);
                 args[0] = args[0] || {};
-                args[0].model = args[0].model || this.model; // injecting model is allowed
+                // injecting model is allowed
+                args[0].model = args[0].model || this.model;
                 var el = item.apply(this, args);
                 return el;
             };

@@ -70,7 +70,8 @@ define('io.ox/tasks/edit/view',
             util.splitExtensionsByRow(this.point.list(), rows);
             //draw the rows
             _(rows).each(function (row, key) {
-                if (key !== 'rest') {//leave out all the rest, for now
+                //leave out all the rest, for now
+                if (key !== 'rest') {
                     util.buildExtensionRow(self.$el, row, self.baton);
                 }
             });
@@ -105,7 +106,8 @@ define('io.ox/tasks/edit/view',
                             return val;
                         });
                 if (details.length || attributes.length || self.model.get('status') !== 1 ||
-                        (self.model.get('participants') && self.model.get('participants').length)) {//check if attributes contain values other than the defaults
+                        //check if attributes contain values other than the defaults
+                        (self.model.get('participants') && self.model.get('participants').length)) {
                     self.$el.find('.expand-link').click();
                     if (details.length) {
                         self.$el.find('.expand-details-link').click();

@@ -37,7 +37,8 @@ define('io.ox/files/actions',
             return e.baton.app.folder.getData().then(function (data) {
                 //hide for virtual folders (other files root, public files root)
                 var virtual = _.contains(['14', '15'], data.id);
-                return folderAPI.can('create', data) && !virtual && !folderAPI.is('trash', data);//no new files in trash folders
+                //no new files in trash folders
+                return folderAPI.can('create', data) && !virtual && !folderAPI.is('trash', data);
             });
         },
         action: function (baton) {
@@ -83,9 +84,11 @@ define('io.ox/files/actions',
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+            } else if (e.baton.data.folder_id) {
+                //no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
+            } else {
+                //continue without foldercheck
                 return check();
             }
         },
@@ -120,15 +123,17 @@ define('io.ox/files/actions',
                 var check = function (data) {
                         data = data || {};
                         return e.collection.has('one') &&
-                            (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) &&
+                            (/\.(txt|js|css|md|tmpl|html|csv?)$/i).test(e.context.filename) &&
                             (e.baton.openedBy !== 'io.ox/mail/write') &&
                             !folderAPI.is('trash', data);
                     };
                 if (e.baton.app){
                     return e.baton.app.folder.getData().then(check);
-                } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                } else if (e.baton.data.folder_id) {
+                    //no app given, maybe the item itself has a folder
                     return folderAPI.get(e.baton.data.folder_id).then(check);
-                } else {//continue without foldercheck
+                } else {
+                    //continue without folderche    ck
                     return check();
                 }
             },
@@ -146,9 +151,11 @@ define('io.ox/files/actions',
                     };
                 if (e.baton.app){
                     return e.baton.app.folder.getData().then(check);
-                } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                } else if (e.baton.data.folder_id) {
+                    //no app given, maybe the item itself has a folder
                     return folderAPI.get(e.baton.data.folder_id).then(check);
-                } else {//continue without foldercheck
+                } else {
+                    //continue without foldercheck
                     return check();
                 }
             },
@@ -162,7 +169,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
-            if (_.device('ios')) return false; // no file-system, no download
+            // no file-system, no download
+            if (_.device('ios')) return false;
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
@@ -189,7 +197,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/downloadversion', {
         requires: function (e) {
-            if (_.device('ios')) return false; // no file-system, no download
+            // no file-system, no download
+            if (_.device('ios')) return false;
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
@@ -230,9 +239,11 @@ define('io.ox/files/actions',
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+            } else if (e.baton.data.folder_id) {
+                //no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
+            } else {
+                //continue without foldercheck
                 return check();
             }
         },
@@ -268,9 +279,11 @@ define('io.ox/files/actions',
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+            } else if (e.baton.data.folder_id) {
+                //no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
+            } else {
+                //continue without foldercheck
                 return check();
             }
         },
@@ -296,9 +309,11 @@ define('io.ox/files/actions',
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+            } else if (e.baton.data.folder_id) {
+                //no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
+            } else {
+                //continue without foldercheck
                 return check();
             }
         },
@@ -344,7 +359,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
-            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            //hide in mail write preview
+            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');
         },
         multiple: function (list) {
 
@@ -408,7 +424,8 @@ define('io.ox/files/actions',
             return _.device('!small') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some') &&
-                (e.baton.openedBy !== 'io.ox/mail/write') && // hide in mail write preview
+                // hide in mail write preview
+                (e.baton.openedBy !== 'io.ox/mail/write') &&
                 _(list).reduce(function (memo, obj) {
                     return memo || !api.tracker.isLocked(obj);
                 }, false);
@@ -440,7 +457,8 @@ define('io.ox/files/actions',
             var list = _.getArray(e.context);
             return _.device('!small') &&
                 e.collection.has('some') &&
-                (e.baton.openedBy !== 'io.ox/mail/write') && // hide in mail write preview
+                // hide in mail write preview
+                (e.baton.openedBy !== 'io.ox/mail/write') &&
                 _(list).reduce(function (memo, obj) {
                     return memo || api.tracker.isLockedByMe(obj);
                 }, false);
@@ -468,7 +486,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
-            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            //hide in mail write preview
+            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');
         },
         action: function (baton) {
 
@@ -550,7 +569,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
-            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            //hide in mail write preview
+            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');
         },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
@@ -641,9 +661,11 @@ define('io.ox/files/actions',
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+            } else if (e.baton.data.folder_id) {
+                //no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
+            } else {
+                //continue without foldercheck
                 return check();
             }
         },
@@ -666,7 +688,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
-            return !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            //hide in mail write preview
+            return !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/write');
         },
         action: function (baton) {
             var data = baton.data;
@@ -680,7 +703,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
-            return e.baton.openedBy !== 'io.ox/mail/write';//hide in mail write preview
+            //hide in mail write preview
+            return e.baton.openedBy !== 'io.ox/mail/write';
         },
         action: function (baton) {
             var data = baton.data;
@@ -1054,9 +1078,11 @@ define('io.ox/files/actions',
             };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+            } else if (e.baton.data.folder_id) {
+                //no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
+            } else {
+                //continue without foldercheck
                 return check();
             }
         },
@@ -1082,7 +1108,8 @@ define('io.ox/files/actions',
                     fullScreen: false,
                     baton: baton,
                     attachmentMode: false,
-                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
+                    //tries to start with first displayable item in the current selection
+                    useSelectionAsStart: true
                 });
             });
         }
@@ -1101,7 +1128,8 @@ define('io.ox/files/actions',
                     fullScreen: true,
                     baton: baton,
                     attachmentMode: false,
-                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
+                    //tries to start with first displayable item in the current selection
+                    useSelectionAsStart: true
                 });
             });
         }
@@ -1135,7 +1163,8 @@ define('io.ox/files/actions',
             list = [e.baton.allIds];
         }
 
-        if (!_.isArray(list)) return false; // avoid runtime errors
+        // avoid runtime errors
+        if (!_.isArray(list)) return false;
 
         //identify incomplete items
         _(list).each(function (item) {

@@ -22,11 +22,12 @@ define('plugins/portal/tasks/register',
 
     ext.point('io.ox/portal/widget/tasks').extend({
 
-        title: gt('Tasks'),
+        title: gt('My tasks'),
 
         initialize: function () {
             taskAPI.on('update create delete', function () {
-                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
                     if (portalModel) {
@@ -38,7 +39,8 @@ define('plugins/portal/tasks/register',
         },
 
         load: function (baton) {
-            return taskAPI.getAllMyTasks().done(function (data) { // super special getAll method
+            // super special getAll method
+            return taskAPI.getAllMyTasks().done(function (data) {
                 baton.data = data;
             });
         },
@@ -132,7 +134,7 @@ define('plugins/portal/tasks/register',
     });
 
     ext.point('io.ox/portal/widget/tasks/settings').extend({
-        title: gt('Tasks'),
+        title: gt('My tasks'),
         type: 'tasks',
         editable: false,
         unique: true

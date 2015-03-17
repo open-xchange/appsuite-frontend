@@ -61,6 +61,7 @@ define('io.ox/core/tk/text-editor', function () {
 
             set = function (str) {
                 val.call(textarea, trimEnd(str));
+                this.setCaretPosition();
             },
 
             clear = function () {
@@ -82,7 +83,8 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.focus = function () {
-            textarea.focus();
+            // no autofocus on smartphone and for iOS in special (see bug #36921)
+            if (_.device('!smartphone && !iOS')) textarea.focus();
         };
 
         this.clear = clear;
@@ -105,18 +107,20 @@ define('io.ox/core/tk/text-editor', function () {
             }
         };
 
-        this.setCaretPosition = function (pos) {
+        this.setCaretPosition = function () {
             var el = textarea.get(0);
-            if (el.setSelectionRange) {
-                el.focus();
-                el.setSelectionRange(pos, pos);
-            } else if (el.createTextRange) {
-                var range = el.createTextRange();
-                range.collapse(true);
-                range.moveEnd('character', pos);
-                range.moveStart('character', pos);
-                range.select();
-            }
+            // Prevent NS_ERROR_FAILURE in Firefox
+            _.defer(function () {
+                if (document.activeElement !== el) return;
+                if (el.setSelectionRange) {
+                    el.setSelectionRange(0, 0);
+                } else if (el.createTextRange) {
+                    var range = el.createTextRange();
+                    range.moveStart('character', 0);
+                    range.select();
+                }
+                textarea.scrollTop(0);
+            });
         };
 
         this.appendContent = function (str) {
@@ -161,7 +165,7 @@ define('io.ox/core/tk/text-editor', function () {
                 resizeEditorMargin();
                 $(window).on('resize.text-editor', resizeEditorMargin);
             } else {
-                textarea.parents('.window-content').find('.editable, .editable-toolbar').hide();
+                textarea.parents('.window-content').find('.editable-toolbar').hide().next().hide();
                 resizeEditorMargin();
                 $(window).on('resize.text-editor', resizeEditorMargin);
             }

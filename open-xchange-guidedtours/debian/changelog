@@ -1,3 +1,81 @@
+open-xchange-guidedtours (7.6.2-12) stable; urgency=low
+
+  * Twelfth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 13 Mar 2015 16:31:23 +0100
+
+open-xchange-guidedtours (7.6.2-11) stable; urgency=low
+
+  * Eleventh candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 06 Mar 2015 16:32:10 +0100
+
+open-xchange-guidedtours (7.6.2-10) stable; urgency=low
+
+  * Tenth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 04 Mar 2015 14:37:21 +0100
+
+open-xchange-guidedtours (7.6.2-9) stable; urgency=low
+
+  * Nineth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 03 Mar 2015 13:37:24 +0100
+
+open-xchange-guidedtours (7.6.2-8) stable; urgency=low
+
+  * Eighth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 24 Feb 2015 16:41:49 +0100
+
+open-xchange-guidedtours (7.6.2-7) stable; urgency=low
+
+  * Seventh candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 11 Feb 2015 16:09:22 +0100
+
+open-xchange-guidedtours (7.6.2-6) stable; urgency=low
+
+  * Sixth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 30 Jan 2015 16:36:04 +0100
+
+open-xchange-guidedtours (7.6.2-5) stable; urgency=low
+
+  * Fifth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 27 Jan 2015 11:49:38 +0100
+
+open-xchange-guidedtours (7.6.2-4) stable; urgency=low
+
+  * Fourth candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 12 Dec 2014 15:27:25 +0100
+
+open-xchange-guidedtours (7.6.2-3) stable; urgency=medium
+
+  * Third candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 05 Dec 2014 15:35:17 +0100
+
+open-xchange-guidedtours (7.6.2-2) stable; urgency=low
+
+  * Second candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 21 Nov 2014 11:52:30 +0100
+
+open-xchange-guidedtours (7.6.2-1) stable; urgency=medium
+
+  * First candidate for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 31 Oct 2014 14:00:59 +0100
+
+open-xchange-guidedtours (7.6.2-0) unstable; urgency=medium
+
+  * prepare for 7.6.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 17 Sep 2014 12:45:18 +0200
+
 open-xchange-guidedtours (7.6.1-17) stable; urgency=low
 
   * Build for patch 2015-03-16
@@ -105,6 +183,24 @@ open-xchange-guidedtours (7.6.1-0) unstable; urgency=medium
   * prepare for 7.6.1
 
  -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 05 Sep 2014 11:50:24 +0200
+
+open-xchange-guidedtours (7.6.0-17) stable; urgency=low
+
+  * Build for patch 2014-11-03
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 28 Oct 2014 15:12:38 +0100
+
+open-xchange-guidedtours (7.6.0-16) stable; urgency=medium
+
+  * Build for patch 2014-10-22
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 22 Oct 2014 11:35:37 +0000
+
+open-xchange-guidedtours (7.6.0-15) stable; urgency=low
+
+  * Build for patch 2014-10-20
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 13 Oct 2014 15:59:28 +0200
 
 open-xchange-guidedtours (7.6.0-14) stable; urgency=medium
 

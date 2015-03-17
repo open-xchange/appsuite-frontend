@@ -154,7 +154,8 @@ function compileLess(input, outputFile, sourceFileName) {
         paths: [
             'apps/3rd.party/bootstrap/less',
             'apps/3rd.party/font-awesome/less',
-            'apps/themes'
+            'apps/themes',
+            'apps/themes/' + themeName
         ],
         filename: '' + sourceFileName
     }).parse(input, function (e, css) {

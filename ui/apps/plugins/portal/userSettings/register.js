@@ -175,16 +175,19 @@ define('plugins/portal/userSettings/register',
                 oldPass.focus();
             });
 
-            function strengthtest(pw) {//returns the strength of a password
+            //returns the strength of a password
+            function strengthtest(pw) {
                 //length test
-                if (pw.length >= minLength && (pw.length <= maxLength || maxLength === 0)) {// between min and max length
+                // between min and max length
+                if (pw.length >= minLength && (pw.length <= maxLength || maxLength === 0)) {
                     // lower case +1; upper case +1; numbers +1; special chars +1
                     var score = 2 + /[a-z]/.test(pw) + /[A-Z]/.test(pw) + /[0-9]/.test(pw) + (new RegExp(pwRegex, 'i')).test(pw),
                         // (>6)-->2, (6-7)-->4,(8-9)-->5, (>10)-->6 or more
                         maxScore = 2 + Math.floor((Math.max(0, pw.length - 4) / 2)) + (pw.length >= 6 ? 1 : 0);
                     //legendary test for truly awesome passwords
                     if (score === 6 && pw.length > 99) {
-                        score = 7;//really legendary
+                        //really legendary
+                        score = 7;
                     }
 
                     score = Math.min(score, maxScore);
@@ -198,23 +201,27 @@ define('plugins/portal/userSettings/register',
                         notifications.yell('screenreader', pwStrengths[0].label);
                     }
                     oldScore = 0;
-                    return pwStrengths[0];// to short with no maxlength
+                    // to short with no maxlength
+                    return pwStrengths[0];
                 } else {
                     if (oldScore !== 1) {
                         notifications.yell('screenreader', pwStrengths[1].label);
                     }
                     oldScore = 1;
-                    return pwStrengths[1];// to short or to long
+                    // to short or to long
+                    return pwStrengths[1];
                 }
             }
 
-            function updateStrength() {//tests the password and draws the bar
+            //tests the password and draws the bar
+            function updateStrength() {
                 if (newPass.val() === '') {
                     strengthBarWrapper.slideUp();
                 } else {
                     var result = strengthtest(newPass.val());
                     strengthLabel.text(result.label);
-                    strengthBar.removeClass('bar-weak bar-good bar-strong bar-legendary')//cleanup
+                    //cleanup
+                    strengthBar.removeClass('bar-weak bar-good bar-strong bar-legendary')
                         .addClass(result.color).css('width', result.barLength);
                     strengthBarWrapper.slideDown();
                 }

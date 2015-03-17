@@ -35,9 +35,9 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome'  :   32,
+        'Chrome'  :   37,
         'Safari'  :    7,
-        'Firefox' :   27,
+        'Firefox' :   32,
         'IE'      :   10,
         'Android' :  4.1,
         'iOS'     :  6.0
@@ -188,6 +188,8 @@
             }
         }
         if (error) return;
+        // fixes for testrunner
+        us.browser.karma = !!window.__karma__;
         for (var key in us.browser) {
             var value = us.browser[key];
             // ensure version is a number, not a string
@@ -201,10 +203,6 @@
             key = key.toLowerCase();
             us.browser[key] = browserLC[key] = value;
 
-        }
-        // fixes for testrunner
-        if (window.ox !== undefined) {
-            us.browser.karma = !!window.ox.testUtils;
         }
 
         // fixes for Windows 8 Chrome
@@ -247,9 +245,13 @@
 
     queryScreen();
 
+    function isSmartphone() {
+        return Math.min(screen.width, screen.height) < 480 && mobileOS;
+    }
+
     var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
     // define devices as combination of screensize and OS
-    display.smartphone = display.small && mobileOS;
+    display.smartphone = isSmartphone();
     display.tablet = display.medium && mobileOS; // maybe to fuzzy...
     display.desktop = !mobileOS;
     us.displayInfo = display;
@@ -280,7 +282,7 @@
 
             mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
             // define devices as combination of screensize and OS
-            display.smartphone = display.small && mobileOS;
+            display.smartphone = isSmartphone();
             display.tablet = display.medium && mobileOS; // maybe to fuzzy...
             display.desktop = !mobileOS;
             us.displayInfo = display;

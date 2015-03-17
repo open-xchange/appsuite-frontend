@@ -133,5 +133,64 @@ define(['io.ox/core/util'], function (util) {
                 expect(util.breakableHTML('com.openexchange.0123456789012345678901234567890123456789')).to.equal('com.<wbr>openexchange.<wbr>012345678901234567890123456789<wbr>0123456789');
             });
         });
+
+        describe('breakableText()', function () {
+            it('doesnt change white space', function () {
+                expect(util.breakableText('')).to.be.empty;
+                expect(util.breakableText(' ')).to.equal(' ');
+            });
+
+            it('doesnt change short strings', function () {
+                expect(util.breakableText('Hello World')).to.equal('Hello World');
+            });
+
+            it('does not inseart breaks on text boundaries', function () {
+                expect(util.breakableText('01234567890123456789')).to.equal('01234567890123456789');
+                expect(util.breakableText('0123456789012345678901234567890123456789')).to.equal('01234567890123456789\u200B01234567890123456789');
+                expect(util.breakableText('012345678901234567890123456789012345678901')).to.equal('01234567890123456789\u200B01234567890123456789\u200B01');
+            });
+
+            it('breaks longs strings properly', function () {
+                expect(util.breakableText('com.openexchange.session.contextId=1337')).to.equal('com.openexchange.ses\u200Bsion.contextId=1337');
+            });
+        });
+
+        describe('urlify()', function () {
+
+            it('doesnt change normal text', function () {
+                expect(util.urlify('Hello World!')).to.equal('Hello World!');
+            });
+
+            it('recognizes a simple URL', function () {
+                expect(util.urlify('http://www.foo.com/path')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>');
+            });
+
+            it('recognizes a simple URL (uppercase)', function () {
+                expect(util.urlify('HTTP://www.foo.com/path')).to.equal('<a href="HTTP://www.foo.com/path" target="_blank">HTTP://www.foo.com/path</a>');
+            });
+
+            it('recognizes a secure URL', function () {
+                expect(util.urlify('https://www.foo.com/path')).to.equal('<a href="https://www.foo.com/path" target="_blank">https://www.foo.com/path</a>');
+            });
+
+            it('recognizes a simple URL within text', function () {
+                expect(util.urlify('Lorem ipsum http://www.foo.com/path Lorem ipsum')).to.equal('Lorem ipsum <a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a> Lorem ipsum');
+            });
+
+            it('recognizes multiple simple URL', function () {
+                expect(util.urlify('Lorem ipsum http://www.foo.com/path Lorem ipsum http://www.foo.com/path Lorem ipsum')).to.equal('Lorem ipsum <a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a> Lorem ipsum <a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a> Lorem ipsum');
+            });
+
+            it('recognizes a URLs across newlines', function () {
+                expect(util.urlify('Lorem ipsum\nhttp://www.foo.com/path\nLorem ipsum')).to.equal('Lorem ipsum\n<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>\nLorem ipsum');
+            });
+
+            it('handles punctuation marks properly', function () {
+                expect(util.urlify('http://www.foo.com/path.')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>.');
+                expect(util.urlify('http://www.foo.com/path!')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>!');
+                expect(util.urlify('http://www.foo.com/path?')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>?');
+                expect(util.urlify('<http://www.foo.com/path>')).to.equal('<<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>>');
+            });
+        });
     });
 });

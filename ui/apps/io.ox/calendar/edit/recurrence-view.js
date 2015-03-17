@@ -87,6 +87,24 @@ define('io.ox/calendar/edit/recurrence-view',
         }
     };
 
+    // rotate DAYS once to have a localized order
+    for (var i = 0; i < dateAPI.locale.weekStart; i++) {
+        DAYS.values.push(DAYS.values.shift());
+    }
+
+    // helper to get days bitmask
+    function getDays(additionalBits) {
+        var bits = {};
+        _(DAYS.values).each(function (bit) {
+            // need to use prefixed strings to keep order
+            bits['bit_' + DAYS[bit]] = DAYS.i18n[bit];
+        });
+        _(additionalBits).each(function (label, bit) {
+            bits['bit_' + bit] = label;
+        });
+        return bits;
+    }
+
     var Widgets = {
 
         number: function ($anchor, attribute, options) {
@@ -168,13 +186,12 @@ define('io.ox/calendar/edit/recurrence-view',
         },
 
         options: function ($anchor, attribute, options) {
+
             // First we need to wrap the anchor
             var self = this;
 
             // check options
-            if (!options || !options.options) {
-                return false;
-            }
+            if (!options || !options.options) return false;
 
             self[attribute] = options.initial;
 
@@ -195,22 +212,26 @@ define('io.ox/calendar/edit/recurrence-view',
             // Now build the menu
             var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
             _(options.options).each(function (label, value) {
-                $menu.append(
-                    $('<li>').attr({
-                        role: 'presentation'
-                    }).append($('<a>').attr({
-                            href: '#',
-                            tabindex: $anchor.attr('tabindex'),
-                            role: 'menuitem'
-                        }).text(label).on('click', function (e) {
-                            e.preventDefault();
-                            self[attribute] = value;
-                            self.trigger('change', self);
-                            self.trigger('change:' + attribute, self);
-                            drawState();
-                        })
-                    )
-                );
+                value = parseInt(String(value).replace(/^bit_/, ''), 10);
+                if (label === '') {
+                    $menu.append('<li class="divider" role="presentation">');
+                } else {
+                    $menu.append(
+                        $('<li role="presentation">').append(
+                            $('<a href="#" role="menuitem">')
+                            .attr('tabindex', $anchor.attr('tabindex'))
+                            .text(label)
+                            .on('click', function (e) {
+                                // todo: DON'T DEFINE FUNCTIONS IN A LOOP!
+                                e.preventDefault();
+                                self[attribute] = value;
+                                self.trigger('change', self);
+                                self.trigger('change:' + attribute, self);
+                                drawState();
+                            })
+                        )
+                    );
+                }
             });
             $container.append($menu);
 
@@ -252,17 +273,10 @@ define('io.ox/calendar/edit/recurrence-view',
                 self.trigger('redraw', self);
             }
 
-            // rotate on a copy
-            var array = DAYS.values.slice();
-
-            for (var i = 0; i < dateAPI.locale.weekStart; i++) {
-                array.push(array.shift());
-            }
-
             // Now build the menu
             $container.append(
                 $('<ul class="dropdown-menu no-clone" role="menu">').append(
-                    _(array).map(function (day) {
+                    _(DAYS.values).map(function (day) {
                         return (nodes[day] = $('<li>').attr({
                             role: 'presentation'
                         }).append(
@@ -451,7 +465,6 @@ define('io.ox/calendar/edit/recurrence-view',
             }
         });
 
-
         this.id = options.id;
 
     }
@@ -613,16 +626,13 @@ define('io.ox/calendar/edit/recurrence-view',
                             }
                         },
                         day: {
-                            options: {
-                                1: gt('Sunday'),
-                                2: gt('Monday'),
-                                4: gt('Tuesday'),
-                                8: gt('Wednesday'),
-                                16: gt('Thursday'),
-                                32: gt('Friday'),
-                                64: gt('Saturday'),
+                            options: getDays({
+                                0: '',
                                 62: gt('day of the week'),
                                 65: gt('day of the weekend')
+                            }),
+                            chooseLabel: function (val) {
+                                return this.options['bit_' + val];
                             },
                             initial: 2
                         },
@@ -684,16 +694,13 @@ define('io.ox/calendar/edit/recurrence-view',
                             }
                         },
                         day: {
-                            options: {
-                                1: gt('Sunday'),
-                                2: gt('Monday'),
-                                4: gt('Tuesday'),
-                                8: gt('Wednesday'),
-                                16: gt('Thursday'),
-                                32: gt('Friday'),
-                                64: gt('Saturday'),
+                            options: getDays({
+                                0: '',
                                 62: gt('day of the week'),
                                 65: gt('day of the weekend')
+                            }),
+                            chooseLabel: function (val) {
+                                return this.options['bit_' + val];
                             },
                             initial: 2
                         },

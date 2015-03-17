@@ -123,7 +123,8 @@ define('plugins/portal/quota/register',
             label.text(gt('unlimited'));
             bar.remove();
         } else {
-            if (quota.name === 'mailcount') {//mailcount must not be shown in bytes
+            if (quota.name === 'mailcount') {
+                //mailcount must not be shown in bytes
                 label.text(
                     quota.usage < quota.quota ?
                         //#. %1$s is the number of mails in use

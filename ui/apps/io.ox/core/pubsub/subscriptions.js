@@ -44,6 +44,10 @@ define('io.ox/core/pubsub/subscriptions',
         return baton.data.entityModule === 'calendar';
     },
 
+    getAccountType = function (type) {
+        return type.substring(type.lastIndexOf('.') + 1);
+    },
+
     SubscriptionView = Backbone.View.extend({
         tagName: 'div',
         render: function (app) {
@@ -131,17 +135,29 @@ define('io.ox/core/pubsub/subscriptions',
                     var module = self.model.get('entityModule'),
                         invalid, folder;
 
-                    _.each(popup.getBody().find('input'), function (input) {
+                    _.each(popup.getBody().find('.userform input'), function (input) {
                         if (!$(input).val()) {
-                            $(input).closest('.control-group').addClass('error');
+                            $(input).closest('.control-group').addClass('has-error');
                             popup.idle();
                             invalid = true;
                         } else {
-                            $(input).closest('.control-group').removeClass('error');
+                            $(input).closest('.control-group').removeClass('has-error');
                         }
                     });
 
-                    if (invalid) { return; }
+                    if (invalid) return;
+
+                    // needs to create an account first
+                    var createAccount = popup.getBody().find('.btn-new-account');
+                    if (createAccount.length) {
+                        createAccount
+                            .parent().addClass('has-error')
+                            .end().on('click', function () {
+                                $(this).parent().removeClass('has-error');
+                            });
+                        popup.idle();
+                        return;
+                    }
 
                     // add new folders under module's default folder!
                     folder = require('settings!io.ox/core').get('folder/' + module);
@@ -150,7 +166,6 @@ define('io.ox/core/pubsub/subscriptions',
                     if (module === 'infostore') folder = app.folder.get() || folder;
 
                     if (baton.newFolder) {
-
                         var service = findId(baton.services, baton.model.get('source'));
 
                         folderAPI.create(folder, {
@@ -197,9 +212,9 @@ define('io.ox/core/pubsub/subscriptions',
             baton.model.setSource(service, { 'account': parseInt(id, 10) });
         }
 
-        function oauth() {
+        function oauth(accountType) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychainAPI.createInteractively(service.displayName.toLowerCase(), win);
+            return keychainAPI.createInteractively(accountType, win);
         }
 
         _.each(service.formDescription, function (fd) {
@@ -221,8 +236,8 @@ define('io.ox/core/pubsub/subscriptions',
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button type="button" class="btn btn-default">').text(gt('Add new account')).on('click', function () {
-                        oauth().done(function () {
+                    controls = $('<button type="button" class="btn btn-default btn-new-account">').text(gt('Add new account')).on('click', function () {
+                        oauth(getAccountType(fd.options.type)).done(function () {
                             buildForm(node, baton);
                         });
                     });
@@ -251,6 +266,42 @@ define('io.ox/core/pubsub/subscriptions',
             }
         });
     }
+
+    ext.point(POINT + '/dialog').extend({
+        id: 'missing-oauth',
+        index: 'first',
+        draw: function (baton) {
+            // filter disabled/unavailable oauth sources without existing accounts
+            baton.services = _.filter(baton.services, function (service) {
+                var fdlength = (service.formDescription || []).length, enabled;
+
+                // process when no formDescriptions
+                if (fdlength === 0) return true;
+
+                service.formDescription = _.filter(service.formDescription, function (fd) {
+
+                    if (fd.widget !== 'oauthAccount') return true;
+
+                    var accountType = getAccountType(fd.options.type),
+                        accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+
+                    // process when at least one account exists
+                    if (accounts.length) return true;
+
+                    enabled = keychainAPI.isEnabled(accountType);
+
+                    if (!enabled)
+                        console.error('I do not know keys of accountType ' + accountType + '! I suppose a needed plugin was not registered in the server configuration.');
+
+                    // remove formdescription entry when oauth service isn't available
+                    return enabled;
+                });
+
+                // remove service in case all formdescriptions where removed
+                return (service.formDescription || []).length;
+            });
+        }
+    });
 
     ext.point(POINT + '/dialog').extend({
         id: 'service',

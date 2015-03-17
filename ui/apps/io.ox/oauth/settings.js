@@ -69,10 +69,10 @@ define('io.ox/oauth/settings',
                         $('<label for="displayName">').text(gt('Display Name')),
                         $('<div class="controls">').append(
                             $displayNameField = $('<input type="text" name="displayName" class="form-control" tabindex="1">').val(account.displayName)
-                        ) // End controls
-                    ) // End control-group
-                ) // End form
-            ); // End detail-pane
+                        )
+                    )
+                )
+            );
 
             dialog = new dialogs.ModalDialog();
             dialog

@@ -16,8 +16,9 @@ define('io.ox/search/model',
      'io.ox/search/items/main',
      'io.ox/backbone/modelFactory',
      'io.ox/search/util',
-     'io.ox/core/extensions'
-    ], function (api, collection, ModelFactory, util, ext) {
+     'io.ox/core/extensions',
+     'gettext!io.ox/search'
+    ], function (api, collection, ModelFactory, util, ext, gt) {
 
     'use strict';
 
@@ -29,6 +30,11 @@ define('io.ox/search/model',
     var options = {},
         items = collection.create(),
         defaults, factory, conflicts;
+
+    // custom error message
+    var error = {
+        virtual: gt('The selected folder is virtual and can not be searched. Please select another folder.')
+    };
 
     // fetch settings/options
     ext.point('io.ox/search/main').invoke('config', $(), options);
@@ -57,9 +63,7 @@ define('io.ox/search/model',
         // show advanced facets block initially
         showadv: false,
         // data container for extensions/plugins
-        extensions: {
-            history: []
-        }
+        extensions: {}
     };
 
     // resolve conflicting facets
@@ -187,12 +191,17 @@ define('io.ox/search/model',
             getModule: function () {
                 return this.getApp().split('/')[1];
             },
-            add: function (facet, value, option) {
+            add: function (facet, value, option, silent) {
                 var pool = this.get('pool'),
-                    list = this.get('poollist');
+                    list = this.get('poollist'),
+                    autocomplete = this.get('autocomplete');
+
+                // in case folder is man
+                if (!autocomplete.length)
+                    autocomplete = _.copy(options.sticky, true);
 
                 // add facet to pool
-                _.each(this.get('autocomplete'), function (data) {
+                _.each(autocomplete, function (data) {
                     if (data.id === facet) {
                         var item = _.copy(data, true),
                             itemvalue;
@@ -248,7 +257,7 @@ define('io.ox/search/model',
 
                 this.trigger('facet:add', facet, value, option);
 
-                if (facet !== 'folder')
+                if (facet !== 'folder' && !silent)
                     this.trigger('query', this.getApp());
             },
             remove: function (facet, value) {
@@ -381,6 +390,10 @@ define('io.ox/search/model',
                             data = data || {};
                             if (!self.get('pool').folder && !self.get('pooldisabled').folder)
                                 self.add('folder', 'custom', data);
+                        }, function () {
+                            return {
+                                message: error.virtual
+                            };
                         });
             },
             getFacets: function () {

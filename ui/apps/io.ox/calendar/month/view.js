@@ -62,12 +62,12 @@ define('io.ox/calendar/month/view',
                 var self = this,
                     obj = _.cid(String(cid));
 
-                if (!cT.hasClass('current')) {
+                if (!cT.hasClass('current') || _.device('smartphone')) {
                     self.trigger('showAppointment', e, obj);
                     self.pane.find('.appointment')
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
-                        .addClass('opac');
+                        .addClass(_.device('smartphone') ? '' : 'opac');
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
                 } else {
                     $('.appointment', self.pane).removeClass('opac');
@@ -92,12 +92,15 @@ define('io.ox/calendar/month/view',
         },
 
         onCreateAppointment: function (e) {
-            if (!folderAPI.can('create', this.folder)) {
-                return;
-            }
-            if ($(e.target).hasClass('list')) {
+
+            this.app.folder.can('create').done(function (create) {
+
+                if (!create) return;
+                if (!$(e.target).hasClass('list')) return;
+
                 this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
-            }
+
+            }.bind(this));
         },
 
         // handler for onmouseenter event for hover effect

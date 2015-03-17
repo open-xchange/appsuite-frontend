@@ -26,9 +26,9 @@ define('io.ox/files/guidance/main',
             quota = settings.get('properties'),
             folder;
 
-        //Remove the following line
-        //quota.quota = 1000000000000; //this is only for testing, due to unlimited disc space.
-        //ext.point('io.ox/files/guidance').enable('guidance_files_reload');
+        // DEBUGGING: this is only for testing, due to unlimited disc space.
+        // quota.quota = 1000000000000;
+        // ext.point('io.ox/files/guidance').enable('guidance_files_reload');
 
         folderAPI.get(folderID).done(function (folderObj) {
             folder = folderObj;
@@ -54,7 +54,8 @@ define('io.ox/files/guidance/main',
         var id = app.get('name'),
             folder = lastBaton.folder;
 
-        settings.load().done(function () {//force reload of settings to get updated quota
+        //force reload of settings to get updated quota
+        settings.load().done(function () {
             var quota = settings.get('properties');
             lastPopup.empty();
 

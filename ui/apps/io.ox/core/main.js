@@ -20,7 +20,8 @@ define('io.ox/core/main',
      'io.ox/core/extPatterns/stage',
      'io.ox/core/date',
      'io.ox/core/notifications',
-     'io.ox/core/commons', // defines jQuery plugin
+     // defines jQuery plugin
+     'io.ox/core/commons',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
@@ -38,6 +39,7 @@ define('io.ox/core/main',
     var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
 
     debug('core: Loaded');
+    ox.trigger('core:load');
 
     _.stepwiseInvoke = function (list, method, context) {
         if (!_.isArray(list)) return $.when();
@@ -204,7 +206,10 @@ define('io.ox/core/main',
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     topbar
-        .attr('aria-label', gt('Applications'))
+        .attr({
+            'aria-label': gt('Applications'),
+            'role': 'banner'
+        })
         // prevent dragging links
         .on('dragstart', false)
         // make system drop-down accessible
@@ -288,7 +293,8 @@ define('io.ox/core/main',
         if (fn) {
             node.on('click', function (e) {
                 e.preventDefault();
-                var self = $(this), content;
+                var self = $(this), content,
+                    focus = $(document.activeElement);
                 // set fixed width, hide label, be busy
                 content = self.contents().detach();
                 self.css('width', self.width() + 'px').text('\u00A0').busy();
@@ -296,6 +302,11 @@ define('io.ox/core/main',
                 (fn.call(this) || $.when()).done(function () {
                     // revert visual changes
                     self.idle().empty().append(content).css('width', '');
+                    //detaching results in lost focus, which is bad for keyboard support.
+                    //so we need to restore it, if it was not set manually in the mean time.
+                    if ($(document.activeElement).filter('body').length > 0) {
+                        focus.focus();
+                    }
                 });
             });
         }
@@ -305,7 +316,13 @@ define('io.ox/core/main',
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + _.escape(arialabel) + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
+                return $('<a>', {
+                    href: '#',
+                    'class': 'apptitle',
+                    tabindex: 1,
+                    role: 'button',
+                    'aria-label': arialabel ? _.escape(arialabel) : null
+                }).append(label);
             } else {
                 return label;
             }
@@ -324,6 +341,8 @@ define('io.ox/core/main',
 
         function off() {
             if (count === 0 && timer === null) {
+                $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Refresh'));
+
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                     if (refreshIcon.hasClass('fa-spin')) {
@@ -339,6 +358,8 @@ define('io.ox/core/main',
             if (count === 0) {
                 if (timer === null) {
                     if (!options.silent) {
+                        $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Currently refreshing'));
+
                         if (useSpinner) {
                             refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
                             if (!refreshIcon.hasClass('fa-spin')) {
@@ -369,7 +390,8 @@ define('io.ox/core/main',
     (function () {
 
         var next = _.now(),
-            REFRESH_THROTTLE = 10000; // only trigger every 10 seconds
+            // only trigger every 10 seconds
+            REFRESH_THROTTLE = 10000;
 
         ext.point('io.ox/core/refresh').extend({
             action: _.throttle(function () {
@@ -403,18 +425,26 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/refresh').invoke('reset');
-        setInterval(check, 10000); // check every 10 seconds
+        // check every 10 seconds
+        setInterval(check, 10000);
     }());
 
     (function () {
 
-        var CHECKINTERVAL = 10,     // check only in this interval to optimize script performance
-            WARNINGSTART = 30,      // threshold for warning dialog in sconds
-            interval = 0,           // init logout interval
-            timeout = null,         // main timeout reference
-            checker = null,         // checker timeout reference
-            timeoutStart,           // remember timeout init
-            dialog = null,          // init warning dialog
+        // check only in this interval to optimize script performance
+        var CHECKINTERVAL = 10,
+            // threshold for warning dialog in sconds
+            WARNINGSTART = 30,
+            // init logout interval
+            interval = 0,
+            // main timeout reference
+            timeout = null,
+            // checker timeout reference
+            checker = null,
+            // remember timeout init
+            timeoutStart,
+            // init warning dialog
+            dialog = null,
             changed = false;
 
         var getTimeLeft = function () {
@@ -683,33 +713,11 @@ define('io.ox/core/main',
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a.apptitle', node).text(value);
+            $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
-            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
+            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
             tabManager();
         });
-
-        // ext.point('io.ox/core/topbar/right').extend({
-        //     id: 'search-input',
-        //     index: 101,
-        //     draw: function () {
-        //         if (capabilities.has('search')) {
-        //             var placeholder = $('<span>'),
-        //                 self = this;
-        //             //add search field placeholder
-        //             self.append(
-        //                 addLauncher('right', placeholder, $.noop(), gt('Search'))
-        //                 .attr('id', 'io-ox-search-topbar')
-        //                 .addClass('io-ox-search widget-content')
-        //             );
-
-        //             //replace placeholder with concrete search field
-        //             require(['io.ox/search/main'], function (searchapp) {
-        //                 placeholder.replaceWith(searchapp.init());
-        //             });
-        //         }
-        //     }
-        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
@@ -723,47 +731,14 @@ define('io.ox/core/main',
                     self.append(notifications.attach(addLauncher, 2000));
                     tabManager();
                 } else {
-                    ox.one('connection:online', function () {//lets wait till we are online
+                    //lets wait till we are online
+                    ox.one('connection:online', function () {
                         self.append(notifications.attach(addLauncher, 2000));
                         tabManager();
                     });
                 }
             }
         });
-
-        // ext.point('io.ox/core/topbar/right').extend({
-        //     id: 'search',
-        //     index: 150,
-        //     draw: function () {
-        //         if (capabilities.has('search') && !(_.device('small'))) {
-        //             this.append(
-        //                 addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
-        //                                 var app = ox.ui.App.getCurrentApp();
-
-        //                                 // TODO: remove temporary evil hack
-        //                                 if (!app.getWindow().options.facetedsearch) {
-        //                                     // load search default app
-        //                                     var e = $.Event('click');
-        //                                     $('.launcher[data-app-name="io.ox/mail"]')
-        //                                         .find('a')
-        //                                         .trigger(e);
-        //                                     app = ox.ui.App.getCurrentApp();
-        //                                 }
-
-        //                                 if (app.props) {
-        //                                     // active app suppors search
-        //                                     if (!app.props.get('folderview'))
-        //                                         app.props.set('folderview', true);
-        //                                     app.getWindow().nodes.facetedsearch.toolbar.find('.search-field').focus();
-        //                                 }
-
-        //                     },  gt('Search'))
-        //                 .attr('id', 'io-ox-search-topbar-icon')
-        //                 .addClass('io-ox-search')
-        //             );
-        //         }
-        //     }
-        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'search-mobile',
@@ -782,7 +757,6 @@ define('io.ox/core/main',
                 }
             }
         });
-
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'refresh',
@@ -804,7 +778,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -818,9 +792,13 @@ define('io.ox/core/main',
             id: 'change-user-data',
             index: 150,
             draw: function () {
+
+                // check if users can edit their own data (see bug 34617)
+                if (settings.get('user/internalUserEdit', true) === false) return;
+
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">')
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">')
                         .text(gt('My contact data'))
                     )
                     .on('click', function (e) {
@@ -836,12 +814,13 @@ define('io.ox/core/main',
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'app-specific-help',
             index: 200,
-            draw: function () { //replaced by module
+            draw: function () {
+                //replaced by module
                 var node = this;
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li role="presentation">', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
+                        $('<a target="_blank" href="" role="menuitem" tabindex="-1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
                                 currentType = currentApp && currentApp.getName(),
@@ -890,7 +869,7 @@ define('io.ox/core/main',
                         };
                         this.append(
                             $('<li role="presentation">').append(
-                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
+                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="-1">').text(gt('Fullscreen'))
                             )
                             .on('click', function (e) {
                                 e.preventDefault();
@@ -908,7 +887,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="about" role="menuitem" tabindex="1">').text(gt('About'))
+                        $('<a href="#" data-action="about" role="menuitem" tabindex="-1">').text(gt('About'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -920,25 +899,22 @@ define('io.ox/core/main',
             }
         });
 
-        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
-        if (!dedicatedLogoutButton) {
-            ext.point('io.ox/core/topbar/right/dropdown').extend({
-                id: 'logout',
-                index: 1000,
-                draw: function () {
-                    this.append(
-                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                        $('<li role="presentation">').append(
-                            $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            logout();
-                        })
-                    );
-                }
-            });
-        }
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'logout',
+            index: 1000,
+            draw: function () {
+                this.append(
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        logout();
+                    })
+                );
+            }
+        });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'dropdown',
@@ -947,7 +923,7 @@ define('io.ox/core/main',
                 var ul, a;
                 this.append(
                     $('<li class="launcher dropdown" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
+                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
                         .append(
                             $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))
@@ -960,16 +936,22 @@ define('io.ox/core/main',
             }
         });
 
+        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
         if (dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    this.append(
-                        addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
-                            logout();
-                        },  gt('Sign out'))
-                    );
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        logout();
+                    },  gt('Sign out'));
+                    logoutButton.find('a').tooltip({
+                        title: gt('Sign out'),
+                        placement: function (tip, el) {
+                            return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'left' : 'auto';
+                        }
+                    });
+                    this.append(logoutButton);
                 }
             });
         }
@@ -998,8 +980,10 @@ define('io.ox/core/main',
                             m.show();
                         });
                     })
-                    .addClass('left-corner') // to match dimensions of side navigation
-                    .attr('data-app-name', 'launchpad'); // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
+                    // to match dimensions of side navigation
+                    .addClass('left-corner')
+                    // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
+                    .attr('data-app-name', 'launchpad');
                 }
             }
         });
@@ -1048,7 +1032,7 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<div class="launchers-secondary">');
+                var rightbar = $('<ul class="launchers-secondary">');
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
@@ -1148,7 +1132,7 @@ define('io.ox/core/main',
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose' || appURL === 'io.ox/mail/write:compose');
+                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
             if (manifest && (manifest.refreshable || mailto)) {
                 return appURL.split(/,/);
@@ -1184,7 +1168,8 @@ define('io.ox/core/main',
             if (isEmpty) {
                 drawDesktop();
                 ox.ui.screens.show('desktop');
-                ox.launch(getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app);
+                var autoStart = getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app;
+                if (autoStart !== 'none/main') ox.launch(autoStart);
             } else {
                 ox.ui.screens.show('windowmanager');
             }
@@ -1245,26 +1230,22 @@ define('io.ox/core/main',
         //     }
         // });
 
-        // TODO (mattes): Solve this differently.
-        // new Stage('io.ox/core/stages', {
-        //     id: 'secretCheck',
-        //     index: 250,
-        //     run: function () {
-        //         if (ox.online) {
-        //             require(['io.ox/keychain/api'], function (keychainAPI) {
-        //                 keychainAPI.checkSecrets().done(function (analysis) {
-        //                     if (!analysis.secretWorks) {
-        //                         // Show dialog
-        //                         require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
-        //                         if (ox.debug) {
-        //                             console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
-        //                         }
-        //                     }
-        //                 });
-        //             });
-        //         }
-        //     }
-        // });
+        new Stage('io.ox/core/stages', {
+            id: 'secretCheck',
+            index: 250,
+            run: function () {
+                if (ox.online && ox.rampup && ox.rampup.oauth) {
+                    var analysis = ox.rampup.oauth.secretCheck;
+                    if (analysis && !analysis.secretWorks) {
+                        // Show dialog
+                        require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
+                        if (ox.debug) {
+                            console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
+                        }
+                    }
+                }
+            }
+        });
 
         new Stage('io.ox/core/stages', {
             id: 'restore-check',
@@ -1483,6 +1464,15 @@ define('io.ox/core/main',
             }
         });
 
+        new Stage('io.ox/core/stages', {
+            id: 'ready',
+            index: 'last',
+            run: function () {
+                ox.trigger('core:ready');
+                baton = null;
+            }
+        });
+
         debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);
     }
@@ -1525,6 +1515,23 @@ define('io.ox/core/main',
                //#. %1$s is the filename
                gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
             );
+        }
+    });
+
+    //
+    // Respond to special http error codes (see bug 32836)
+    //
+    ox.on('http:error', function (e, error) {
+        switch (error.code) {
+            case 'MSG-1000':
+            case 'MSG-1001':
+                // IMAP-specific: 'Relogin required'
+                notifications.yell(error);
+                break;
+            case 'LGI-0016':
+                // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
+                location.href = error.error;
+                break;
         }
     });
 

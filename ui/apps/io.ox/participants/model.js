@@ -11,19 +11,21 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/participants/model',
-    ['io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/api/resource',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/util'
-    ], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
+define('io.ox/participants/model', [
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/api/resource',
+    'io.ox/contacts/api',
+    'io.ox/contacts/model',
+    'io.ox/contacts/util',
+    'io.ox/core/util',
+    'gettext!io.ox/participants/model'
+], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, coreUtil, gt) {
 
     'use strict';
     // TODO: Bulk Loading
 
-    var ParticipantModel = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
 
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
@@ -32,6 +34,15 @@ define('io.ox/participants/model',
         TYPE_EXTERNAL_USER: 5,
         TYPE_DISTLIST_USER_GROUP: 6,
 
+        TYPE_STRINGS: {
+            1: '',
+            2: gt('Group'),
+            3: gt('Resource'),
+            4: gt('Resource group'),
+            5: gt('External contact'),
+            6: gt('Distribution list')
+        },
+
         defaults: {
             display_name: '',
             email1: ''
@@ -39,41 +50,44 @@ define('io.ox/participants/model',
 
         initialize: function () {
             var self = this;
+
+            if (_.isString(this.get('type'))) {
+                this.fixType();
+            }
+
             if (this.get('internal_userid')) {
                 this.cid = 'internal_' + this.get('internal_userid');
                 this.set({
                     id: this.get('internal_userid'),
                     type: this.TYPE_USER
                 });
-            }
-            else if (this.get('entity')) {
+            } else if (this.get('entity')) {
                 this.cid = 'entity_' + parseInt(this.get('entity'), 10);
                 this.set({
                     id: parseInt(this.get('entity'), 10),
                     type: this.TYPE_USER
                 });
-            }
-            else {
+            } else {
                 switch (this.get('type')) {
-                case this.TYPE_USER:
-                    this.cid = 'internal_' + this.get('id');
-                    break;
-                case this.TYPE_USER_GROUP:
-                    this.cid = 'usergroup_' + this.get('id');
-                    break;
-                case this.TYPE_RESOURCE:
-                    this.cid = 'resource_' + this.get('id');
-                    break;
-                case this.TYPE_RESOURCE_GROUP:
-                    this.cid = 'resourcegroup_' + this.get('id');
-                    break;
-                case this.TYPE_EXTERNAL_USER:
-                    this.cid = 'external_' + this.getEmail();
-                    this.set('id', this.getEmail());
-                    break;
-                case this.TYPE_DISTLIST_USER_GROUP:
-                    this.cid = 'distlist_' + this.get('id');
-                    break;
+                    case this.TYPE_USER:
+                        this.cid = 'internal_' + this.get('id');
+                        break;
+                    case this.TYPE_USER_GROUP:
+                        this.cid = 'usergroup_' + this.get('id');
+                        break;
+                    case this.TYPE_RESOURCE:
+                        this.cid = 'resource_' + this.get('id');
+                        break;
+                    case this.TYPE_RESOURCE_GROUP:
+                        this.cid = 'resourcegroup_' + this.get('id');
+                        break;
+                    case this.TYPE_EXTERNAL_USER:
+                        this.set('id', this.getEmail());
+                        this.cid = 'external_' + this.get('id');
+                        break;
+                    case this.TYPE_DISTLIST_USER_GROUP:
+                        this.cid = 'distlist_' + this.get('id');
+                        break;
                 }
             }
 
@@ -126,21 +140,21 @@ define('io.ox/participants/model',
                 break;
             case self.TYPE_USER_GROUP:
                 //fetch user group
-                groupAPI.get({id: self.get('id')}).done(function (group) {
+                groupAPI.get({ id: self.get('id') }).done(function (group) {
                     self.set(group);
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
-                resourceAPI.get({id: self.get('id')}).done(function (resource) {
+                resourceAPI.get({ id: self.get('id') }).done(function (resource) {
                     self.set(resource);
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE_GROUP:
-                self._data = {display_name: 'resource group'};
+                self._data = { display_name: 'resource group' };
                 self.trigger('change', self);
                 df.resolve();
                 break;
@@ -184,19 +198,72 @@ define('io.ox/participants/model',
         getDisplayName: function () {
             return util.getMailFullName(this.toJSON());
         },
+
         getEmail: function () {
             return util.getMail(this.toJSON());
         },
+
+        getTarget: function () {
+            return this.get(this.get('field')) || '';
+        },
+
+        getFieldName: function () {
+            var field = this.get('field') || '';
+            return field !== '' ? ContactModel.fields[field] : '';
+        },
+
+        getTypeString: function () {
+            return this.TYPE_STRINGS[this.get('type')] || '';
+        },
+
         getImage: function () {
             console.warn('deprecated');
         },
-        markAsUnremovable: function () {
-            this.set('ui_removable', false);
+
+        fixType: function () {
+            var newType = 0;
+            switch (this.get('type')) {
+                case 'user':
+                    newType = this.TYPE_USER;
+                    break;
+                case 'group':
+                    newType = this.TYPE_USER_GROUP;
+                    break;
+                case 'resource':
+                    newType = this.TYPE_RESOURCE;
+                    break;
+                case 'contact':
+                    if (this.get('mark_as_distributionlist')) {
+                        newType = this.TYPE_DISTLIST_USER_GROUP;
+                    } else {
+                        newType = this.TYPE_EXTERNAL_USER;
+                    }
+                    break;
+            }
+            this.set('type', newType);
+        },
+
+        getAPIData: function () {
+            var ret = {
+                type: this.get('type')
+            };
+            if (this.get('type') === 5) {
+                ret.mail = this.getEmail();
+            } else if (this.has('id')) {
+                ret.id = this.get('id');
+            }
+            return ret;
         }
 
     });
 
-    var ParticipantsCollection = Backbone.Collection.extend({
+    var Collection = Backbone.Collection.extend({
+
+        model: Model,
+
+        getAPIData: function () {
+            return this.map(function (model) { return model.getAPIData(); });
+        },
 
         initialize: function () {
             var self = this;
@@ -215,9 +282,7 @@ define('io.ox/participants/model',
             });
         },
 
-        model: ParticipantModel,
-
-        addUniquely: function (models) {
+        addUniquely: function (models, opt) {
             var self = this;
             if (!_.isArray(models)) {
                 models = [models];
@@ -228,13 +293,13 @@ define('io.ox/participants/model',
                     toAdd.push(participant);
                 }
             });
-            this.add(toAdd);
+            return this.add(toAdd, opt);
         }
     });
 
     return {
-        Participant: ParticipantModel,
-        Participants: ParticipantsCollection
+        Participant: Model,
+        Participants: Collection
     };
 
 });

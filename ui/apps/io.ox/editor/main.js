@@ -105,8 +105,10 @@ define('io.ox/editor/main',
         getFilename: function () {
             var title = this.getTitle(),
                 filename = String(title || this.getContent().substr(0, 20).split('.')[0]
-                .replace(/(\r\n|\n|\r)/gm, '')//remove linebreaks
-                .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');//remove unsupported characters
+                //remove linebreaks
+                .replace(/(\r\n|\n|\r)/gm, '')
+                //remove unsupported characters
+                .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');
             // has file extension?
             if (!/\.\w{1,4}$/.test(filename)) {
                 filename += '.txt';
@@ -202,11 +204,12 @@ define('io.ox/editor/main',
                 app.create();
             }
 
+            win.setTitle(gt('Editor'));
+
             model.on('keyup:title', function (title) {
                 if (!title) {
                     title = gt('Editor');
                 }
-                win.setTitle(title);
                 app.setTitle(title);
             });
 

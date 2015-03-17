@@ -28,7 +28,8 @@ define('io.ox/portal/settings/pane',
     var POINT = 'io.ox/portal/settings/detail', pane;
 
     var collection = widgets.getCollection(),
-        list = $('<ol class="list-group list-unstyled widget-list">');
+        list = $('<ol class="list-group list-unstyled widget-list">'),
+        notificationId = _.uniqueId('notification_');
 
     collection
         .on('remove', function (model) {
@@ -99,10 +100,11 @@ define('io.ox/portal/settings/pane',
                 ),
                 $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
             ),
-            $('<div class="clearfix">')
+            $('<div class="clearfix">'),
+            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
         );
-        button.dropdown();
         repopulateAddButton();
+        button.dropdown();
     }
 
     function repopulateAddButton() {
@@ -210,23 +212,27 @@ define('io.ox/portal/settings/pane',
             items = list.children('.draggable'),
             current = node.parent(),
             index = items.index(current),
-            id = current.attr('data-widget-id');
+            id = current.attr('data-widget-id'),
+            notification = pane.find('#' + notificationId);
 
         function cont() {
             widgets.save(list);
             list.find('[data-widget-id="' + id + '"] .drag-handle').focus();
+            notification.text(gt('the item has been moved'));
         }
 
         switch (e.which) {
         case 38:
-            if (index > 0) { // up
+            if (index > 0) {
+                // up
                 e.preventDefault();
                 current.insertBefore(current.prevAll('.draggable:first'));
                 cont();
             }
             break;
         case 40:
-            if (index < items.length) { // down
+            if (index < items.length) {
+                // down
                 e.preventDefault();
                 current.insertAfter(current.nextAll('.draggable:first'));
                 cont();
@@ -254,7 +260,7 @@ define('io.ox/portal/settings/pane',
                     .attr({
                         href: '#',
                         'title': gt('Drag to reorder widget'),
-                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
+                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'),
                         role: 'button',
                         tabindex: 1
                     })
@@ -430,10 +436,12 @@ define('io.ox/portal/settings/pane',
             };
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Mobile device settings:')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Smartphone settings:'))
+                    ),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').text(gt('Only show widget summary on mobile devices')).prepend(
+                            $('<label>').text(gt('Reduce to widget summary')).prepend(
                                 buildCheckbox('showHidden')
                             )
                         )

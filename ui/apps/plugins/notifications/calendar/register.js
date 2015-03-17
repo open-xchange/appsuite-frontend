@@ -24,13 +24,14 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/invites/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Appointment invitations'))
-                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({ tabindex: 1,
-                            'aria-label': gt('Press to hide all appointment invitations.'),
-                            'data-action': 'clear',
-                            'focus-id': 'calendar-invite-clear'})),
-                $('<div class="notifications">')
+                $('<h1 class="section-title">').text(gt('Appointment invitations')),
+                $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
+                        'aria-label': gt('Hide all appointment invitations.'),
+                        'data-action': 'clear',
+                        'focus-id': 'calendar-invite-clear'
+                }),
+                $('<ul class="items list-unstyled">')
             );
         }
     });
@@ -38,53 +39,59 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Appointment reminders'))
-                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({ tabindex: 1,
-                            'aria-label': gt('Press to hide all appointment reminders.'),
-                            'data-action': 'clear',
-                            'focus-id': 'calendar-reminder-notification-clear'})),
-                $('<div class="reminder">')
+                $('<h1 class="section-title">').text(gt('Appointment reminders')),
+                $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
+                        'aria-label': gt('Hide all appointment reminders.'),
+                        'data-action': 'clear',
+                        'focus-id': 'calendar-reminder-notification-clear'
+                }),
+                $('<ul class="items list-unstyled">')
             );
         }
     });
 
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
-            var model = baton.model;
-            this.attr({
-                role: 'listitem',
-                'data-cid': model.get('cid'),
-                'focus-id': 'calendar-invite-' + model.get('cid'),
-                'tabindex': 1,
-                            //#. %1$s Appointment title
-                            //#. %2$s Appointment date
-                            //#. %3$s Appointment time
-                            //#. %4$s Appointment location
-                            //#. %5$s Appointment Organizer
-                            //#, c-format
-                'aria-label': gt('Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open',
-                        _.noI18n(model.get('title')), _.noI18n(model.get('date')),
-                        _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '',
-                        _.noI18n(model.get('organizer')))
-            }).append(
-                $('<div class="time">').text(model.get('time')),
-                $('<div class="date">').text(model.get('date')),
-                $('<div class="title">').text(model.get('title')),
-                $('<div class="location">').text(model.get('location')),
-                $('<div class="organizer">').text(model.get('organizer')),
-                $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
-                        .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
-                        .css('margin-right', '14px')
-                        .text(gt('Accept / Decline')),
-                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                        .attr({'title': gt('Accept invitation'),
-                               'aria-label': gt('Accept invitation'),
-                               'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
-                        .append('<i class="fa fa-check">')
-                )
-            );
+            var model = baton.model,
+                self = this,
+                descriptionId = _.uniqueId('notification-description-');
+            require(['io.ox/calendar/util'], function (util) {
+                self.attr({
+                    role: 'listitem',
+                    'data-cid': model.get('cid'),
+                    'focus-id': 'calendar-invite-' + model.get('cid'),
+                    'aria-describedby': descriptionId,
+                    'tabindex': 1,
+                                //#. %1$s Appointment title
+                                //#. %2$s Appointment date
+                                //#. %3$s Appointment time
+                                //#. %4$s Appointment location
+                                //#. %5$s Appointment Organizer
+                                //#, c-format
+                    'aria-label': gt('%1$s %2$s %3$s %4$s %5$s.',
+                            _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('data'))),
+                            _.noI18n(util.getTimeIntervalA11y(model.get('data'))), _.noI18n(model.get('location')) || '',
+                            _.noI18n(model.get('organizer')))
+                }).append(
+                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                    $('<span class="span-to-div time">').text(model.get('time')),
+                    $('<span class="span-to-div date">').text(model.get('date')),
+                    $('<span class="span-to-div title">').text(model.get('title')),
+                    $('<span class="span-to-div location">').text(model.get('location')),
+                    $('<span class="span-to-div organizer">').text(model.get('organizer')),
+                    $('<div class="actions">').append(
+                        $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
+                            .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
+                            .css('margin-right', '14px')
+                            .text(gt('Accept / Decline')),
+                        $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                            .attr({'aria-label': gt('Accept invitation'),
+                                   'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
+                            .append('<i class="fa fa-check">')
+                    )
+                );
+            });
         }
     });
 
@@ -106,7 +113,7 @@ define('plugins/notifications/calendar/register',
     var InviteView = Backbone.View.extend({
 
         className: 'item refocus',
-
+        tagName: 'li',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
@@ -169,7 +176,8 @@ define('plugins/notifications/calendar/register',
                 require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
                     folderAPI.get(o.folder).done(function (folder) {
                     o.data = {
-                        alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
+                        // default reminder
+                        alarm: parseInt(settings.get('defaultReminder', 15), 10),
                         confirmmessage: '',
                         confirmation: 1
                     };
@@ -222,7 +230,7 @@ define('plugins/notifications/calendar/register',
     var ReminderView = Backbone.View.extend({
 
         className: 'item',
-
+        tagName: 'li',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
@@ -284,13 +292,15 @@ define('plugins/notifications/calendar/register',
             var self = this,
                 min = $(e.target).data('value') || $(e.target).val(),
                 reminder = self.model;
-            if (min !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+            if (min !== '0') {
+                //0 means 'pick a time here' was selected. Do nothing.
                 hiddenCalReminderItems[_.ecid(reminder.get('remdata'))] = true;
                 self.collection.remove(self.model);
                 setTimeout(function () {
                     //get updated data
                     calAPI.get(reminder.get('caldata')).done(function (calObj) {
-                        if (calObj.alarm) {//alarmtime was removed in the meantime, so no reminder to add
+                        if (calObj.alarm) {
+                            //alarmtime was removed in the meantime, so no reminder to add
                             require(['io.ox/calendar/util'], function (util) {
                                 delete hiddenCalReminderItems[_.ecid(reminder.get('remdata'))];
                                 //fill in new data
@@ -323,7 +333,7 @@ define('plugins/notifications/calendar/register',
 
     var InviteNotificationsView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-calendar',
 
@@ -340,7 +350,7 @@ define('plugins/notifications/calendar/register',
                 ext.point('io.ox/core/notifications/invites/header').invoke('draw', this.$el, baton);
 
                 this.collection.each(function (model) {
-                    this.$el.append(
+                    this.$el.find('.items').append(
                         new InviteView({ model: model, collection: this.collection }).render().$el
                     );
                 }, this);
@@ -360,7 +370,7 @@ define('plugins/notifications/calendar/register',
 
     var ReminderNotificationsView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-calendar-reminder',
 
@@ -377,7 +387,7 @@ define('plugins/notifications/calendar/register',
                 ext.point('io.ox/core/notifications/reminder/header').invoke('draw', this.$el, baton);
 
                 this.collection.each(function (model) {
-                    this.$el.append(
+                    this.$el.find('.items').append(
                         new ReminderView({ model: model, collection: this.collection }).render().$el
                     );
                 }, this);
@@ -430,7 +440,8 @@ define('plugins/notifications/calendar/register',
                         }
                     });
 
-                    if (appointmentIds.length === 0) {//no reminders to display
+                    //no reminders to display
+                    if (appointmentIds.length === 0) {
                         ReminderNotifications.collection.reset([]);
                         return;
                     }
@@ -438,7 +449,8 @@ define('plugins/notifications/calendar/register',
                     $.when.apply($, _(appointmentIds).map(function (id) {
                         return calAPI.get(id);
                     })).done(function () {
-                        var appointments = appointmentIds.length === 1 ? [arguments[0]] : _.map(arguments, function (item) {//remove timestamps (cached data has no timestamp, real requests do)
+                        //remove timestamps (cached data has no timestamp, real requests do)
+                        var appointments = appointmentIds.length === 1 ? [arguments[0]] : _.map(arguments, function (item) {
                             if (_.isArray(item)) {
                                 return item[0];
                             } else {
@@ -453,7 +465,8 @@ define('plugins/notifications/calendar/register',
                             _(appointments).each(function (data) {
                                 _(reminders).each(function (rem) {
                                     if (rem.target_id === data.id) {
-                                        if (data.end_date < _.now()) {//don't show reminders for old appointments
+                                        //don't show reminders for old appointments
+                                        if (data.end_date < _.now()) {
                                             var obj = { id: rem.id };
                                             if (rem.recurrence_position) {
                                                 obj.recurrence_position = rem.recurrence_position;
@@ -474,7 +487,8 @@ define('plugins/notifications/calendar/register',
                                 });
                             });
                             if (remindersToDelete.length > 0) {
-                                reminderAPI.deleteReminder(remindersToDelete);//remove reminders correctly from server too  
+                                //remove reminders correctly from server too
+                                reminderAPI.deleteReminder(remindersToDelete);
                             }
                             ReminderNotifications.collection.reset(models);
                         });
@@ -485,7 +499,8 @@ define('plugins/notifications/calendar/register',
                         reminderAPI.getReminders();
                     })
                   .on('mark:invite:confirmed', function (e, obj) {
-                        if (obj.data.confirmation === 2) {//remove reminders for declined appointments
+                        //remove reminders for declined appointments
+                        if (obj.data.confirmation === 2) {
                             removeReminders(e, obj);
                         }
                     });

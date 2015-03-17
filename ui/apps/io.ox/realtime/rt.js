@@ -52,9 +52,12 @@ define.async('io.ox/realtime/rt',
 
     var mode = 'lazy';
     var intervals = {
-        lazy: 10000, // When traffic is low, don't ask for data as often
-        eager: 1000, // When traffic is high, ask for data more frequently
-        lazyThreshhold: 5 * 60 * 1000 // Switch from eager to lazy mode when 5 minutes without a message have elapsed
+        // When traffic is low, don't ask for data as often
+        lazy: 10000,
+        // When traffic is high, ask for data more frequently
+        eager: 1000,
+        // Switch from eager to lazy mode when 5 minutes without a message have elapsed
+        lazyThreshhold: 5 * 60 * 1000
     };
 
     var damage = {
@@ -229,7 +232,7 @@ define.async('io.ox/realtime/rt',
     // Periodically poll
     actions.poll = function () {
         // no need to poll if no one is listening for events
-        if (! someoneIsListeningForRemoveEvents()) {   
+        if (! someoneIsListeningForRemoveEvents()) {
             return;
         }
 
@@ -476,7 +479,8 @@ define.async('io.ox/realtime/rt',
                     outOfOrder = true;
                 }
                 if (stanza.seq > 0 && stanza.seq <= serverSequenceThreshhold) {
-                    return; // Discard, as we have already seen this stanza
+                    // Discard, as we have already seen this stanza
+                    return;
                 }
                 if (!outOfOrder) {
                     if (stanza.get('', 'error')) {
@@ -539,7 +543,10 @@ define.async('io.ox/realtime/rt',
 
         if (error.code === 'RT_STANZA-1007' || error.code === 1007) {
             enroled = false;
-            enrol();
+            enrol().done(function () {
+                flushAllBuffers();
+                api.trigger('reset', error);
+            });
             return;
         }
     }
@@ -732,10 +739,12 @@ define.async('io.ox/realtime/rt',
             options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
         if (_.isNumber(options.bufferinterval)) {
-            delete options.bufferinterval;  // Do not send bufferinterval to server
+            // Do not send bufferinterval to server
+            delete options.bufferinterval;
         }
         if (_.isUndefined(options.seq)) {
-            def.resolve(); // Pretend a message without sequence numbers always arrives
+            // Pretend a message without sequence numbers always arrives
+            def.resolve();
         } else {
             if (api.debug) {
                 console.log('Enqueuing in resendBuffer', options.seq);

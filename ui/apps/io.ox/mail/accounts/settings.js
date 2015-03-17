@@ -271,7 +271,7 @@ define('io.ox/mail/accounts/settings',
                     enter: 'add'
                 })
                 .header(
-                    $('<h4>').text(gt('Add mail account'))
+                    $('<h2>').text(gt('Add mail account'))
                 )
                 .build(function () {
                     // invoke extensions
@@ -333,6 +333,7 @@ define('io.ox/mail/accounts/settings',
                     successDialogbox.getFooter().find('.btn').addClass('closebutton');
                     var message = gt('Account added successfully');
                     drawMessage(alertPlaceholder, message);
+                    alertPlaceholder.find('.alert-success').attr('id', 'dialog-title');
                 });
             });
         },

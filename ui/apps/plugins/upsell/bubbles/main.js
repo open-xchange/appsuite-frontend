@@ -39,10 +39,14 @@ define('plugins/upsell/bubbles/main',
     };
 
     startBubbling = function () {
-        var skipFirstLogin = bubbleSettings.skipFirstLogin, //show on first login ever?
-            repeatPerLogins = bubbleSettings.repeatPerLogins, //every how many logins does this appear?
-            repeatInMilliseconds = bubbleSettings.repeatInMilliseconds, //after login in, how often does it appear?
-            showBubblesDuringThisLogin = repeatPerLogins === 1 ? true : false || skipFirstLogin; //TODO: determine from user settings
+        //show on first login ever?
+        var skipFirstLogin = bubbleSettings.skipFirstLogin,
+            //every how many logins does this appear?
+            repeatPerLogins = bubbleSettings.repeatPerLogins,
+            //after login in, how often does it appear?
+            repeatInMilliseconds = bubbleSettings.repeatInMilliseconds,
+            //TODO: determine from user settings
+            showBubblesDuringThisLogin = repeatPerLogins === 1 ? true : false || skipFirstLogin;
 
         if (!showBubblesDuringThisLogin) {
             return;
@@ -67,7 +71,8 @@ define('plugins/upsell/bubbles/main',
             if (bubbles[currentType]) {
                 var callout;
                 calloutMgr.removeCallout(currentType);
-                callout = calloutMgr.createCallout(bubbles[currentType]); //yes, createCallout not only creates but instantly renders this in hopscotch 0.1, as opposed to what the documentation says
+                //yes, createCallout not only creates but instantly renders this in hopscotch 0.1, as opposed to what the documentation says
+                callout = calloutMgr.createCallout(bubbles[currentType]);
 
                 $(callout.containerEl).on('click', function (e) {
                     if ($(e.target).hasClass('hopscotch-bubble-close')) {

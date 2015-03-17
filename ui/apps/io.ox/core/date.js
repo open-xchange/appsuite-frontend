@@ -27,14 +27,20 @@ define.async('io.ox/core/date',
                            'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
                            'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Md'];
 
-    var AVG_YEAR = 31556952000; // average ms / year
+    // average ms / year
+    var AVG_YEAR = 31556952000;
 
     var api = {
-        SECOND:    1000, // ms / s
-        MINUTE:   60000, // ms / min
-        HOUR:   3600000, // ms / h
-        DAY:   86400000, // ms / day
-        WEEK: 604800000, // ms / week
+        // ms / s
+        SECOND:    1000,
+        // ms / min
+        MINUTE:   60000,
+        // ms / h
+        HOUR:   3600000,
+        // ms / day
+        DAY:   86400000,
+        // ms / week
+        WEEK: 604800000,
 
         // Flags for format functions. Multiple flags can be combined through
         // addition or bitwise ORing.
@@ -61,6 +67,18 @@ define.async('io.ox/core/date',
                 format = api.locale.formats[format];
             }
             return format;
+        },
+
+        getInputFormat: function (format) {
+            return this.getFormat(format).replace(/(y+)|(M+)|(d+)/g, function (_, y, m, d) {
+                //#. Strings to build input formats to be more accessible
+                //#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
+                //#. Sample for de_DE: TT.MM.JJJJ
+                return y ? gt('yyyy') :
+                       m ? gt('MM') :
+                       d ? gt('dd') :
+                       _;
+            });
         },
 
         /**
@@ -964,7 +982,8 @@ define.async('io.ox/core/date',
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
-                D.displayName = name; // just use this for performance reasons
+                // just use this for performance reasons
+                D.displayName = name;
                 return D;
             });
     });

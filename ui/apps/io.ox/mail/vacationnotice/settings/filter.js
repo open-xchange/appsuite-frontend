@@ -103,15 +103,16 @@ define('io.ox/mail/vacationnotice/settings/filter',
 
                 ext.point('io.ox/core/vacationnotice/model').extend({
                     id: 'io.ox/core/vacationnotice/model/text',
-                    triggerChange: function () {
-                        var textarea = $(this.el).find('textarea');
+                    saveText: function () {
+                        var textarea = $(this.el).find('textarea'),
+                            model = this.model;
                         textarea.on('keyup keydown', function () {
-                            textarea.trigger('change');
+                            model.set('text', textarea.val(), { silent: true });
                         });
                     }
                 });
 
-                ext.point('io.ox/core/vacationnotice/model').invoke('triggerChange', vacationNotice, vacationNotice);
+                ext.point('io.ox/core/vacationnotice/model').invoke('saveText', vacationNotice, vacationNotice);
 
                 api.getRules().done(function (data) {
                     if (!_.isEmpty(data)) {

@@ -18,9 +18,10 @@ define('io.ox/mail/listview',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/tk/list',
+     'io.ox/core/folder/api',
      'io.ox/mail/view-options',
      'less!io.ox/mail/style'
-    ], function (extensions, ext, util, api, account, ListView) {
+    ], function (extensions, ext, util, api, account, ListView, folderAPI) {
 
     'use strict';
 
@@ -66,6 +67,11 @@ define('io.ox/mail/listview',
             id: 'unread',
             index: 110,
             draw: extensions.unreadClass
+        },
+        {
+            id: 'deleted',
+            index: 120,
+            draw: extensions.deleted
         },
         {
             id: 'col1',
@@ -276,8 +282,33 @@ define('io.ox/mail/listview',
         ref: 'io.ox/mail/listview',
 
         initialize: function (options) {
+            var self = this;
             ListView.prototype.initialize.call(this, options || {});
             this.$el.addClass('mail-item');
+            this.on('collection:load', this.lookForUnseenMessage);
+
+            // mirror threaded state
+            this.listenTo(options.app.props, {
+                'change:thread': function (model) {
+                    self.threaded = model.get('thread');
+                }
+            });
+        },
+
+        lookForUnseenMessage: function () {
+
+            if (!this.collection.length) return;
+
+            // let's take the first folder_id we see
+            var folder_id = this.collection.at(0).get('folder_id');
+
+            // run over entre collection to get number of unseen messages
+            var unseen = this.collection.reduce(function (sum, model) {
+                return sum + util.isUnseen(model.get('flags')) ? 1 : 0;
+            }, 0);
+
+            // use this number only to set the minimum (there might be more due to pagination)
+            folderAPI.setUnseenMinimum(folder_id, unseen);
         },
 
         filter: function (model) {
@@ -285,7 +316,38 @@ define('io.ox/mail/listview',
             return !util.isDeleted(data);
         },
 
+        reprocessThread: function (model) {
+            // only used when in thread mode
+            if (!this.threaded) return;
+
+            // get full thread objects (instead of cids)
+            var threadlist = api.threads.get(model.cid);
+
+            // up to date
+            if (!model.get('thread') || threadlist.length === model.get('thread').length) return;
+
+            // remove head property to avid accidently using old date when processThreadMessage
+            _.each(threadlist, function (item) {
+                delete item.head;
+            });
+
+            // generate updated data object (similar to server response structure)
+            var obj = _.extend(model.toJSON(), threadlist[0], {
+                    thread: threadlist,
+                    threadSize: threadlist.length
+                });
+
+            // do the thread hokey-pokey-dance
+            api.processThreadMessage(obj);
+
+            // update model silently
+            model.set(obj, { silent: true });
+        },
+
         map: function (model) {
+            // in case thread property has changed (e.g. latest mail of thread deleted)
+            this.reprocessThread(model);
+
             // use head data for list view
             var data = api.threads.head(model.toJSON());
             // get thread with recent data

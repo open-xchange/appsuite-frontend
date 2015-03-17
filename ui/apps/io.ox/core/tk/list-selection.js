@@ -11,15 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/list-selection', [], function () {
+define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
-    var SELECTABLE = '.selectable', isTouch = _.device('touch');
+    var SELECTABLE = '.selectable', isTouch = _.device('touch'), behavior = settings.get('selectionMode', 'normal');
 
     function Selection(view) {
 
         this.view = view;
+        this.behavior = behavior;
 
         this.view.$el
             // normal click/keybard navigation
@@ -40,7 +41,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
                 if (!this.isMultiple(e)) this.triggerAction(e);
             }, this))
-            // double clikc
+            // double click
             .on('dblclick', SELECTABLE, $.proxy(function (e) {
                 this.triggerDouble(e);
             }, this))
@@ -55,7 +56,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         }
     }
 
-    _.extend(Selection.prototype, {
+    var prototype = {
 
         // returns array of composite keys (strings)
         get: function () {
@@ -83,7 +84,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         uncheck: function (nodes) {
-            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
+            nodes.removeClass('selected no-checkbox').attr({ 'aria-selected': false, tabindex: '-1' });
         },
 
         toggle: function (node) {
@@ -181,7 +182,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         resetCheckmark: function (items) {
-            items.filter('.selected').removeClass('selected');
+            items.filter('.selected').removeClass('selected no-checkbox');
             // collect garbage: remove preserved items when selection changes
             _.defer(function () {
                 items.filter('.preserved').not('.selected').fadeOut('fast', function () { $(this).remove(); });
@@ -208,23 +209,42 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         pick: function (index, items, e) {
 
-            var start, end, node, cursor;
+            var node;
 
             items = items || this.getItems();
-            cursor = this.getPosition(items);
 
             if (this.isRange(e)) {
-                // range select
-                var start = Math.min(index, cursor),
-                    end = Math.max(index, cursor);
-                this.check(items.slice(start, end + 1));
-                this.focus(index, items);
+                //range select
+                this.pickRange(index, items);
             } else {
                 // single select
                 items.removeClass('precursor');
                 node = this.focus(index, items).addClass('precursor');
-                if (this.isMultiple(e)) this.toggle(node); else this.check(node);
+                if (this.isMultiple(e)) this.pickMultiple(node, items); else this.pickSingle(node);
             }
+        },
+
+        pickRange: function (index, items) {
+            var cursor = this.getPosition(items),
+                start = Math.min(index, cursor),
+                end = Math.max(index, cursor);
+            this.check(items.slice(start, end + 1));
+            this.focus(index, items);
+        },
+
+        pickMultiple: function (node, items) {
+            //already selected but checkbox is not yet marked
+            if (node.hasClass('selected no-checkbox')) {
+                node.removeClass('no-checkbox');
+            } else {
+                //remove selected items without checked checkbox in true multi selection
+                items.filter('.no-checkbox').removeClass('selected no-checkbox').attr('aria-selected', false);
+                this.toggle(node);
+            }
+        },
+
+        pickSingle: function (node) {
+            this.check(node);
         },
 
         // just select one item (no range; no multiple)
@@ -234,12 +254,19 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetCheckmark(items);
             this.resetTabIndex(items, items.eq(index));
             this.pick(index, items);
+            this.selectEvents(items);
+        },
+
+        //events triggered by selection function
+        selectEvents: function (items) {
             this.triggerChange(items);
         },
 
-        selectAll: function () {
-            var items = this.getItems();
-            this.check(items.slice(0, items.length));
+        selectAll: function (items) {
+            items = items || this.getItems();
+            var slice = items.slice(0, items.length);
+            slice.removeClass('no-checkbox');
+            this.check(slice);
             this.focus(0, items);
             this.triggerChange(items);
         },
@@ -309,7 +336,12 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetTabIndex(items, items.eq(index));
             this.resetCheckmark(items);
             this.pick(index, items, e);
-            this.triggerChange(items);
+            //alternative selection mode needs this, has no effect in default mode
+            if ( this.isMultiple(e) || this.isRange(e)) {
+                this.triggerChange(items);
+            } else {
+                this.selectEvents(items);
+            }
         },
 
         onPageUpDown: function (e) {
@@ -361,7 +393,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onClick: function (e) {
             if (e.type === 'tap') {
-                // prevent ghostlicks
+                // prevent ghostclicks
                 e.preventDefault();
                 e.stopPropagation();
             }
@@ -382,6 +414,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             // range select / single select
             this.pick(index, items, e);
+            //always trigger in multiple mode (sometimes only checkbox is changed)
             if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
 
@@ -405,7 +438,8 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onTapRemove: function (e) {
             e.preventDefault();
-            e.stopImmediatePropagation(); // prevent a new select happening on the deleted cell
+            // prevent a new select happening on the deleted cell
+            e.stopImmediatePropagation();
             var node = $(e.currentTarget).closest(SELECTABLE),
                 cid = node.attr('data-cid');
             // propagate event
@@ -414,8 +448,60 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onFocus: function () {
 
+        },
+        getBehavior: function () {
+            return this.behavior;
         }
-    });
+    };
+
+    var alternativeBehavior = {
+
+        pickSingle: function (node) {
+            node.addClass('selected no-checkbox').attr('aria-selected', true);
+        },
+
+        onKeydown: function (e) {
+            // spacebar
+            if (e.which === 32) {
+                e.preventDefault();
+                var selection = this.getItems().filter('.selected');
+                if (selection.length === 1) {
+                    selection.find('.list-item-checkmark').trigger('mousedown');
+                } else if (selection.length === 0) {
+                    //if the currently focussed element is in our items list we select it
+                    selection = $(this.getItems()[this.getItems().index($(document.activeElement))]);
+                    selection.find('.list-item-checkmark').trigger('mousedown');
+                }
+            } else {
+                //use standard method
+                prototype.onKeydown.call(this, e);
+            }
+        },
+
+        onClick: function (e) {
+            var previous = this.get();
+            prototype.onClick.call(this, e);
+            //trigger events (if only checkbox is changed the events are not triggered by normal function)
+            if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems());
+        },
+
+        // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
+        selectEvents: function (items) {
+            var layout = this.view.app.props.get('layout') || 'list';
+            //in list layout we need the old events or mails open when they are not supposed to (for example when moving with arrow keys)
+            if (layout === 'list') {
+                this.triggerChange(items);
+            } else {
+                this.view.trigger('selection:change selection:action', this.get());
+            }
+        }
+    };
+
+    _.extend(Selection.prototype, prototype);
+
+    if (behavior === 'alternative') {
+        _.extend(Selection.prototype, alternativeBehavior);
+    }
 
     return Selection;
 });

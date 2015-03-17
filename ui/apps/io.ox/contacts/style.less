@@ -11,15 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- @thumbIndexWidth: 45px; // was 35, but we need 45 for proper Japanese
+ // was 35, but we need 45 for proper Japanese
+ @thumbIndexWidth: 45px;
 
-/* App */
+// App
 
 .io-ox-contacts-window .foldertree-sidepanel {
     left: 0;
 }
 
-/* VGrid elements */
+// VGrid elements
 
 .contact-grid-container {
 
@@ -64,7 +65,7 @@
 
 }
 
-/* Tabs */
+// Tabs
 
 .contact-grid-index {
 
@@ -104,7 +105,7 @@
 
 }
 
-/* Detail view */
+// Detail view
 
 .contact-detail-edit  {
     width: 100%;
@@ -126,11 +127,14 @@
         .picture {
             float: left;
             display: inline-block;
-            margin-top: 5px; /* to match h1's cap-line */
+            // to match h1's cap-line
+            margin-top: 5px;
             .picture();
         }
 
-        .picture + div { // .next-to-picture but this selector works better if picture if not availabel
+        // .next-to-picture but this selector works better if picture if not availabel
+
+        .picture + div {
             display: table;
             padding-left: 20px;
         }
@@ -211,7 +215,8 @@
 
     .comment, .description {
         font-weight: 300;
-        max-width: 720px; /* twice block-width plus margin */
+        // twice block-width plus margin
+        max-width: 720px;
         margin-bottom: 26px;
         clear: both;
     }

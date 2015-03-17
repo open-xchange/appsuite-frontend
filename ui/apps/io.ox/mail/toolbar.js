@@ -18,6 +18,7 @@ define('io.ox/mail/toolbar',
      'io.ox/core/tk/flag-picker',
      'io.ox/mail/api',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/backbone/mini-views/toolbar',
      'io.ox/core/tk/upload',
      'io.ox/core/dropzone',
      'io.ox/core/notifications',
@@ -25,7 +26,7 @@ define('io.ox/mail/toolbar',
      'io.ox/mail/actions',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, Dropdown, upload, dropzone, notifications, gt) {
+    ], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
 
     'use strict';
 
@@ -196,7 +197,8 @@ define('io.ox/mail/toolbar',
     ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/mail/classic-toolbar/links'
@@ -223,7 +225,7 @@ define('io.ox/mail/toolbar',
         index: 10000,
         draw: function (baton) {
 
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
@@ -251,38 +253,32 @@ define('io.ox/mail/toolbar',
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
-
-    var updateToolbar = _.debounce(function (list) {
-
-        if (!list) return;
-
-        var isThread = this.props.get('thread'),
-            hasFocus = $.contains(toolbar[0], document.activeElement);
-
-        // resolve thread
-        list = api.resolve(list, isThread);
-
-        // extract single object if length === 1
-        list = list.length === 1 ? list[0] : list;
-
-        // draw toolbar
-        var baton = ext.Baton({ $el: toolbar, data: list, isThread: isThread, app: this });
-        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), baton);
-
-        if (hasFocus) toolbar.find('a:first').focus();
-
-    }, 10);
-
     ext.point('io.ox/mail/mediator').extend({
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
+
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+                toolbar.render().$el
             );
-            app.updateToolbar = updateToolbar;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
+                var isThread = this.props.get('thread');
+
+                // resolve thread
+                list = api.resolve(list, isThread);
+
+                // extract single object if length === 1
+                list = list.length === 1 ? list[0] : list;
+                // draw toolbar
+                var baton = ext.Baton({ $el: toolbar.$list, data: list, isThread: isThread, app: this }),
+                    ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                return $.when.apply($, ret.value()).then(function () {
+                    toolbar.initButtons();
+                });
+            }, 10);
         }
     });
 
@@ -290,7 +286,7 @@ define('io.ox/mail/toolbar',
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {

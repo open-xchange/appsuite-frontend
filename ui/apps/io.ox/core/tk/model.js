@@ -43,7 +43,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         },
         number: function (prop, val, def) {
             var regex = /^\d+$/;
-//            return _.isNumber(val) ||
+            // return _.isNumber(val) ||
             return regex.test(val) ||
             new Error(prop, _.printf('%s must be a number', def.i18n || prop));
         },
@@ -178,7 +178,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         this._previous = {};
         this._defaults = this.schema.getDefaults();
         this._memoize = {};
-        this.cid = _.uniqueId('c');  // automatically clientid
+        // automatically clientid
+        this.cid = _.uniqueId('c');
         Events.extend(this);
         // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
         this.initialize(options.data || options || {});
@@ -304,7 +305,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return JSON.stringify(this._data);
         },
         toJSON: function () {
-            return this.toString(); //just for compability with collection (backbone)
+            //just for compability with collection (backbone)
+            return this.toString();
         },
 
         // DEPRECATED

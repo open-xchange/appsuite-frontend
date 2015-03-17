@@ -56,7 +56,7 @@ define('io.ox/mail/main',
          * the state of the toolbars and navbars
          */
         'pages-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var c = app.getWindow().nodes.main;
             var navbar = $('<div class="mobile-navbar">'),
                 toolbar = $('<div class="mobile-toolbar">');
@@ -137,7 +137,7 @@ define('io.ox/mail/main',
          */
         'navbars-mobile': function (app) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             app.pages.getNavbar('listView')
                 .setLeft(gt('Folders'))
@@ -152,7 +152,7 @@ define('io.ox/mail/main',
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -167,7 +167,7 @@ define('io.ox/mail/main',
         },
 
         'toolbars-mobile': function () {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // tell each page's back button what to do
             app.pages.getNavbar('listView').on('leftAction', function () {
@@ -188,7 +188,7 @@ define('io.ox/mail/main',
         },
 
         'pages-desktop': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             // add page controller
             app.pages = new PageController(app);
@@ -214,7 +214,7 @@ define('io.ox/mail/main',
          */
         'folder-view': function (app) {
 
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             // tree view
             var tree = new TreeView({ app: app, module: 'mail', contextmenu: true });
@@ -228,7 +228,7 @@ define('io.ox/mail/main',
          * Convenience functin to toggle folder view
          */
         'folder-view-toggle': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
                 app.folderView.toggle();
             });
@@ -250,7 +250,7 @@ define('io.ox/mail/main',
 
         'toggle-folder-editmode': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             var toggle =  function () {
 
@@ -271,7 +271,7 @@ define('io.ox/mail/main',
          */
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return app;
+            if (_.device('!smartphone')) return app;
 
             var nav = app.pages.getNavbar('folderTree'),
                 page = app.pages.getPage('folderTree');
@@ -307,7 +307,7 @@ define('io.ox/mail/main',
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ app: app, ignoreFocus: true });
+            app.listView = new MailListView({ app: app, draggable: true, ignoreFocus: true, preserve: true });
             app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
@@ -316,13 +316,13 @@ define('io.ox/mail/main',
 
         'list-view-checkboxes': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.listView.toggleCheckboxes(app.props.get('checkboxes'));
         },
 
         'list-view-checkboxes-mobile': function (app) {
             // always hide checkboxes on small devices initially
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             app.props.set('checkboxes', false);
             app.listView.toggleCheckboxes(false);
         },
@@ -359,7 +359,7 @@ define('io.ox/mail/main',
          * Set folderview property
          */
         'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
         },
 
         /*
@@ -437,7 +437,15 @@ define('io.ox/mail/main',
          */
         'list-view-control': function (app) {
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
-            app.left.append(app.listControl.render().$el);
+            app.left.append(
+                app.listControl.render().$el
+                    //#. items list (e.g. mails)
+                    .attr('aria-label', gt('Item list'))
+                    .find('.toolbar')
+                    //#. toolbar with 'select all' and 'sort by'
+                    .attr('aria-label', gt('Item list options'))
+                    .end()
+            );
             // make resizable
             app.listControl.resizable();
         },
@@ -446,13 +454,13 @@ define('io.ox/mail/main',
          * Setup thread view
          */
         'thread-view': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.threadView = new ThreadView.Desktop();
             app.right.append(app.threadView.render().$el);
         },
 
         'thread-view-mobile': function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // showing single mails will be done with the plain desktop threadview
             app.threadView = new ThreadView.Mobile();
@@ -516,6 +524,13 @@ define('io.ox/mail/main',
          */
         'folder:change': function (app) {
 
+            // close mail detail view in list-mode on folder selection
+            app.folderView.tree.on('selection:action', function () {
+                if(app.props.get('layout') === 'list') {
+                    app.threadView.trigger('back');
+                }
+            });
+
             app.on('folder:change', function (id) {
 
                 if (app.props.get('mobileFolderSelectMode')) return;
@@ -541,7 +556,7 @@ define('io.ox/mail/main',
          * Change foldername on mobiles in navbar
          */
         'folder:change-mobile': function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             app.on('folder:change', function () {
                 if (app.props.get('mobileFolderSelectMode')) return;
                 app.folder.getData().done(function (d) {
@@ -554,7 +569,7 @@ define('io.ox/mail/main',
          * Define basic function to show an email
          */
         'show-mail': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.showMail = function (cid) {
                 app.threadView.show(cid, app.props.get('thread'));
             };
@@ -564,7 +579,7 @@ define('io.ox/mail/main',
          * Define basic function to show an email
          */
         'show-mail-mobile': function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             app.showMail = function (cid) {
                 // render mail view and append it to detailview's page
                 app.pages.getPage('detailView').empty().append(app.threadView.renderMail(cid));
@@ -600,7 +615,7 @@ define('io.ox/mail/main',
          * Define function to reflect multiple selection
          */
         'show-multiple': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.showMultiple = function (list) {
                 app.threadView.empty();
                 list = api.resolve(list, app.props.get('thread'));
@@ -614,7 +629,7 @@ define('io.ox/mail/main',
          * Define function to reflect multiple selection
          */
         'show-multiple-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             app.showMultiple = function (list) {
 
@@ -636,7 +651,7 @@ define('io.ox/mail/main',
 
         'selection-mobile': function (app) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             app.listView.on({
                 'selection:empty': function () {
@@ -672,7 +687,7 @@ define('io.ox/mail/main',
          */
         'selection': function (app) {
 
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             function resetRight(className) {
                 return app.right
@@ -686,7 +701,8 @@ define('io.ox/mail/main',
                     resetRight('selection-one preview-visible');
                     app.showMail(list[0]);
                     return;
-                } else if (app.props.get('layout') === 'list' && type === 'one') {//don't call show mail (an in visible detailview would be drawn which marks it as read)
+                } else if (app.props.get('layout') === 'list' && type === 'one') {
+                    //don't call show mail (an in visible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
                     return;
                 }
@@ -713,7 +729,11 @@ define('io.ox/mail/main',
                     react('empty');
                 },
                 'selection:one': function (list) {
-                    react('one', list);
+                    var type = 'one';
+                    if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                        type = 'multiple';
+                    }
+                    react(type, list);
                 },
                 'selection:multiple': function (list) {
                     react('multiple', list);
@@ -758,7 +778,7 @@ define('io.ox/mail/main',
                 app.right.css({ left: '', top: '' });
 
                 // relocate toolbar
-                toolbar = nodes.body.find('.classic-toolbar');
+                toolbar = nodes.body.find('.classic-toolbar-container');
                 className = 'classic-toolbar-visible';
                 if (layout === 'compact') {
                     nodes.body.removeClass(className);
@@ -799,10 +819,11 @@ define('io.ox/mail/main',
         'auto-select': function (app) {
 
             // no auto-selection needed on smartphones
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             app.listView.on('first-reset', function () {
-                _.defer(function () { // defer to have a visible window
+                // defer to have a visible window
+                _.defer(function () {
                     app.listView.collection.find(function (model, index) {
                         if (!util.isUnseen(model.get('flags'))) {
                             app.listView.selection.select(index);
@@ -814,7 +835,7 @@ define('io.ox/mail/main',
         },
 
         'init-navbarlabel-mobile': function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // prepare first start
             app.listView.on('first-reset', function () {
@@ -871,7 +892,8 @@ define('io.ox/mail/main',
          */
         'before-delete': function (app) {
 
-            if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
+            // fixes scrolling issue on mobiles during delete
+            if (_.device('smartphone')) return;
 
             function isSingleThreadMessage(ids, selection) {
                 if (ids.length !== 1) return false;
@@ -887,7 +909,7 @@ define('io.ox/mail/main',
         },
 
         'before-delete-mobile': function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             // if a mail will be deleted in detail view, go back one page
             api.on('beforedelete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
@@ -932,7 +954,7 @@ define('io.ox/mail/main',
         'selection-doubleclick': function (app) {
             // detail app does not make sense on small devices
             // they already see emails in full screen
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.listView.on('selection:doubleclick', function (list) {
                 ox.launch('io.ox/mail/detail/main', { cid: list[0] });
             });
@@ -942,7 +964,7 @@ define('io.ox/mail/main',
          * Respond to folder view changes
          */
         'change:folderview': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
                 app.folderView.toggle(value);
             });
@@ -959,10 +981,14 @@ define('io.ox/mail/main',
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            if (_.device('small')) return;
-            app.props.on('change:checkboxes', function (model, value) {
-                app.listView.toggleCheckboxes(value);
-            });
+            if (_.device('smartphone')) return;
+            if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                app.listView.toggleCheckboxes(true);
+            } else {
+                app.props.on('change:checkboxes', function (model, value) {
+                    app.listView.toggleCheckboxes(value);
+                });
+            }
         },
 
         /*
@@ -970,7 +996,7 @@ define('io.ox/mail/main',
          * Change "edit" to "cancel" on button
          */
         'change:checkboxes-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             // intial hide
             app.listControl.$el.toggleClass('toolbar-top-visible', false);
@@ -1025,7 +1051,7 @@ define('io.ox/mail/main',
 
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('small') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
@@ -1038,16 +1064,29 @@ define('io.ox/mail/main',
                         var collectionLoader = new CollectionLoader({
                                 module: 'mail',
                                 mode: 'search',
-                                fetch: function () {
+                                fetch: function (params) {
+                                    var limit = params.limit.split(','),
+                                        start = parseInt(limit[0]),
+                                        size = parseInt(limit[1]) - start;
+
+                                    search.model.set({
+                                        'start': start,
+                                        'size': size,
+                                        'extra': 1
+                                    }, { silent: true });
+
+                                    var self = this;
                                     var params = { sort: app.props.get('sort'), order: app.props.get('order') };
                                     return search.apiproxy.query(true, params).then(function (response) {
-                                        return response && response.results ? response.results : [];
+                                        response = response || {};
+                                        var list = response.results || [],
+                                            request = response.request || {};
+                                        // add 'more results' info to collection (compare request limits and result)
+                                        self.collection.search = {
+                                            next: list.length !== 0 && list.length === request.data.size
+                                        };
+                                        return list;
                                     });
-                                },
-                                getQueryParams: function (params) {
-                                    // paging support
-                                    search.model.set('start', params.offset || 0, {silent: true});
-                                    return {};
                                 },
                                 cid: function () {
                                     return 'search/' + search.model.getCompositeId() +
@@ -1059,6 +1098,18 @@ define('io.ox/mail/main',
                                 }
                             });
 
+                        var register = function () {
+                            var view = win.facetedsearch.view,
+                                // remember original setCollection
+                                setCollection = app.listView.setCollection;
+                            app.listView.connect(collectionLoader);
+                            // wrap setCollection
+                            app.listView.setCollection = function (collection) {
+                                view.stopListening();
+                                view.listenTo(collection, 'add reset remove', view.trigger.bind(view, 'query:resultready', collection));
+                                return setCollection.apply(this, arguments);
+                            };
+                        };
                         // events
                         win.facetedsearch.ready
                             .done(function () {
@@ -1066,10 +1117,16 @@ define('io.ox/mail/main',
                                 view.on({
                                     'query': _.debounce(function (e, appname) {
                                         if (appname === app.get('name')) {
-                                            // connect
-                                            if (app.listView.loader.mode !== 'search') {
-                                                app.listView.connect(collectionLoader);
-                                            }
+                                            // register/connect once
+                                            if (app.listView.loader.mode !== 'search') register();
+                                            // reset start index
+                                            win.facetedsearch.view.model.set(
+                                                {
+                                                    'start': 0,
+                                                    'size': 30,
+                                                    'extra': 1
+                                                }, {silent: true});
+                                            // load
                                             app.listView.load();
                                             win.facetedsearch.focus();
                                         }
@@ -1099,6 +1156,8 @@ define('io.ox/mail/main',
             chromeless: true,
             facetedsearch: capabilities.has('search')
         });
+
+        if (_.url.hash().mailto) ox.registry.call('mail-compose', 'compose');
 
         app.setWindow(win);
         app.settings = settings;

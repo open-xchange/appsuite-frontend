@@ -69,7 +69,8 @@ define('io.ox/mail/accounts/model',
             }, { fn: function (val) {
                 var temp = validation.formats.number(val);
                 if (temp === true) {
-                    return false; //strangely if the validation returns true here, it is marked as invalid...
+                    // strangely if the validation returns true here, it is marked as invalid...
+                    return false;
                 } else {
                     return temp;
                 }
@@ -88,7 +89,8 @@ define('io.ox/mail/accounts/model',
             }, { fn: function (val) {
                 var temp = validation.formats.number(val);
                 if (temp === true) {
-                    return false; //strangely if the validation returns true here, it is marked as invalid...
+                    // strangely if the validation returns true here, it is marked as invalid...
+                    return false;
                 } else {
                     return temp;
                 }

@@ -17,6 +17,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/commons',
      'io.ox/core/tk/dialogs',
      'io.ox/files/api',
+     'io.ox/core/folder/api',
      'io.ox/core/date',
      'io.ox/core/tk/upload',
      'io.ox/core/extPatterns/dnd',
@@ -27,7 +28,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'static/3rd.party/jquery-imageloader/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
+     ], function (viewDetail, ext, commons, dialogs, api, folderAPI, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -36,7 +37,7 @@ define('io.ox/files/fluid/perspective',
         dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
         filesContainer, breadcrumb, wrapper,
-        scrollpane = $('<div class="files-scrollable-pane" role="section">');
+        scrollpane = $('<div class="files-scrollable-pane">');
 
     //init
     filesContainer = wrapper = $('');
@@ -46,7 +47,7 @@ define('io.ox/files/fluid/perspective',
     function drawGenericIcon(name) {
         var node = $('<i>');
         if (/(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
-        else if (/(xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
+        else if (/(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
         else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
         else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
         else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
@@ -66,13 +67,27 @@ define('io.ox/files/fluid/perspective',
     }
 
     function dropZoneInit(app) {
-        if (_.browser.IE === undefined || _.browser.IE > 9) {
+        if (_.browser.IE && _.browser.IE < 9) return;
+
+        var init = function () {
             dropZoneOff();
             dropZone = new dnd.UploadZone({
                 ref: 'io.ox/files/dnd/actions'
             }, app);
             dropZoneOn();
-        }
+        };
+
+        // HINT: dropZoneInit is used synchroniously so dropzone takes effect a little bit delayed
+        app.folder.getData().then(function (data) {
+            //hide for virtual folders (other files root, public files root)
+            var virtual = _.contains(['14', '15'], data.id);
+            // no 'new files' in trash folders
+            if (folderAPI.can('create', data) && !virtual && !folderAPI.is('trash', data)) {
+                init();
+            } else {
+                dropZoneOff();
+            }
+        });
     }
 
     function dropZoneOn() {
@@ -161,8 +176,8 @@ define('io.ox/files/fluid/perspective',
                 // wait for transition to be done
                 dView.one('pageshow', function () {
                     dView.idle();
-                    // append preview image
-                    $('.mobile-detail-view-wrap', dView).append(viewDetail.draw(file, app));
+                    // append preview image and ensure it is really empty
+                    $('.mobile-detail-view-wrap', dView).empty().append(viewDetail.draw(file, app));
                 });
 
                 dView.empty()
@@ -173,16 +188,12 @@ define('io.ox/files/fluid/perspective',
 
             } else {
                 dialog.show(e, function (popup) {
-                    popup
-                        .append(viewDetail.draw(file, app))
-                        .attr({
-                            'role': 'complementary',
-                            'aria-label': gt('File Details')
-                        });
+                    popup.append(viewDetail.draw(file, app));
                     el = popup.closest('.io-ox-sidepopup');
                 });
 
-                _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
+                // Focus SidePopup
+                _.defer(function () { if (el) { el.focus(); } });
             }
         });
     }
@@ -200,7 +211,14 @@ define('io.ox/files/fluid/perspective',
         id: 'selection',
         register: function (baton) {
 
-            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
+            Selection.extend(this, scrollpane, {
+                    draggable: true,
+                    dragType: 'mail',
+                    scrollpane: wrapper,
+                    focus: undefined ,
+                    tabFix: false,
+                    markable: true
+                });
             //selection accessible via app
             baton.app.selection = this.selection;
 
@@ -236,7 +254,8 @@ define('io.ox/files/fluid/perspective',
                 .on('keyboard', function (selEvent, orgEvent) {
                     var sel = this.get();
                     switch (orgEvent.keyCode || orgEvent.which) {
-                    case 13: // enter: treat like click on title
+                    case 13:
+                        // enter: treat like click on title
                         if (sel.length === 1) {
                             //trigger click event on title (preview action)
                             $(orgEvent.target).find('[data-obj-id="' + _.cid(sel[0])  + '"]')
@@ -245,10 +264,12 @@ define('io.ox/files/fluid/perspective',
                                 .trigger('click');
                         }
                         break;
-                    case 37: // left: treat like up
+                    case 37:
+                        // left: treat like up
                         orgEvent.which = 38;
                         break;
-                    case 39: // right: treat like down
+                    case 39:
+                        // right: treat like down
                         orgEvent.which = 40;
                         break;
                     }
@@ -335,7 +356,12 @@ define('io.ox/files/fluid/perspective',
                     return !baton.app.folderViewIsVisible();
                 };
             this.append(
-                filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
+                filesContainer = $('<ul class="files-container list-unstyled f6-target view-' + baton.options.mode + '">')
+                    .attr({
+                        tabindex: 1,
+                        role: 'listbox',
+                        'aria-multiselectable': true
+                    })
                     .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
                     .on('click', function () {
                         //force focus on container click
@@ -383,8 +409,10 @@ define('io.ox/files/fluid/perspective',
         var img = $(this),
             retry = img.data('retry') + 1,
             url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry,
-            wait = Math.pow(2, retry - 1) * 3000; // 3 6 12 seconds
-        if (retry > 3) return; // stop trying after three retries
+            // 3 6 12 seconds
+            wait = Math.pow(2, retry - 1) * 3000;
+        // stop trying after three retries
+        if (retry > 3) return;
         setTimeout(function () {
             img.off('load error').one({ load: iconLoad, error: iconError }).attr('src', url).data('retry', retry);
         }, wait);
@@ -392,6 +420,22 @@ define('io.ox/files/fluid/perspective',
 
     function iconError() {
         $(this).remove();
+    }
+
+    function getAriaLabel (file, title, filesize, changed) {
+        var arialabel = [
+            title,
+            filesize.replace('\xA0', ' '),
+            gt.noI18n(changed)
+        ];
+        if (api.tracker.isLocked(file)) {
+            if (api.tracker.isLockedByMe(file)) {
+                arialabel.push(gt('This file is locked by you'));
+            } else {
+                arialabel.push(gt('This file is locked by %1$s'));
+            }
+        }
+        return arialabel.join(', ');
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -425,11 +469,16 @@ define('io.ox/files/fluid/perspective',
                 );
             }
 
-            var title = file.filename || file.title;
+            var title = file.filename || file.title,
+                filesize = gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''}));
 
             this.addClass('file-cell pull-left selectable')
-                .attr('data-obj-id', _.cid(file))
-                .attr('tabindex', -1)
+                .attr({
+                    'data-obj-id': _.cid(file),
+                    'role': 'option',
+                    'tabindex': '-1',
+                    'aria-label': getAriaLabel(file, title, filesize, changed)
+                })
                 .append(
                     //checkbox
                     $('<div class="checkbox">').append(
@@ -440,7 +489,7 @@ define('io.ox/files/fluid/perspective',
                     //preview
                     previewImage, previewBackground,
                     //details
-                    $('<div class="details">').append(
+                    $('<div class="details" aria-hidden="true">').append(
                         //title
                         $('<div class="text title drag-title">')
                         .attr('title', title)
@@ -455,7 +504,7 @@ define('io.ox/files/fluid/perspective',
                         //smart last modified
                         $('<span class="text modified">').text(gt.noI18n(changed)),
                         //filesize
-                        $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
+                        $('<span class="text size">').text(filesize)
                     )
                 );
             if (_.device('smartphone')) {
@@ -515,7 +564,6 @@ define('io.ox/files/fluid/perspective',
             self.main.empty().append(
                 wrapper = $('<div class="files-wrapper">')
                     .attr({
-                        'role': 'main',
                         'aria-label': gt('Files View')
                     })
                     .append(
@@ -556,9 +604,10 @@ define('io.ox/files/fluid/perspective',
                     container.addClass('width-less-than-768 width-less-than-480');
             };
             adjustWidth();
+            //let the foldertree draw or we get wrong values
             app.on('folderview:close folderview:open folderview:resize', _.debounce(function () {
                 adjustWidth();
-            }, 300));//let the foldertree draw or we get wrong values
+            }, 300));
 
             //register dnd handler
             dropZoneInit(app);
@@ -586,6 +635,14 @@ define('io.ox/files/fluid/perspective',
                     self.selection.retriggerUnlessEmpty();
                 });
             });
+
+            scrollpane.find('.files-container')
+                .on('focus', '.file-cell', function (e) {
+                    $(e.delegateTarget).removeAttr('tabindex');
+                })
+                .on('blur', '.file-cell', function (e) {
+                    $(e.delegateTarget).attr('tabindex', 1);
+                });
 
             if (_.device('!smartphone')) {
                 scrollpane.on('click', '.selectable', function (e, data) {
@@ -622,12 +679,16 @@ define('io.ox/files/fluid/perspective',
                     dropZoneInit(app);
                     app.currentFile = tmp;
                 }
+
+                // 'close' triggered via defer: do not steal focus from carousel
+                if (self.main.closest('.window-container').find('.carousel').is(':visible')) return;
+
                 //focus handling
                 filesContainer.trigger('dialog:closed');
             });
 
             drawFile = function (file, update) {
-                var node = $('<a>');
+                var node = $('<li>');
                 ext.point('io.ox/files/icons/file').invoke(
                     'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options), update: update })
                 );
@@ -641,6 +702,9 @@ define('io.ox/files/fluid/perspective',
                         return drawFile(file);
                     })
                 );
+
+                // global event for tracking purposes
+                ox.trigger('files:items:render');
             };
 
             function onScroll() {
@@ -724,7 +788,7 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons').invoke('draw', scrollpane, baton);
 
                         //anchor node
-                        if (!breadcrumb) scrollpane.prepend(breadcrumb = $('<div>'));
+                        if (!breadcrumb) scrollpane.prepend(breadcrumb = $());
 
                         displayedRows = layout.iconRows;
                         start = 0;
@@ -943,6 +1007,7 @@ define('io.ox/files/fluid/perspective',
 
                             _(changed).each(function (cid) {
                                 var data = hash[cid],
+                                    index = _.indexOf(newIds, cid),
                                     prev = indexPrevPosition(newIds, cid),
                                     outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
                                     anchor;
@@ -951,7 +1016,7 @@ define('io.ox/files/fluid/perspective',
 
                                 if (indexPrev(newIds, cid)) {
                                     anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                    if (anchor.length) {
+                                    if (anchor.length && index !== 0) {
                                         anchor.first().after(drawFile(data));
                                     } else {
                                         scrollpane.find('.files-container').prepend(drawFile(data));
@@ -974,12 +1039,13 @@ define('io.ox/files/fluid/perspective',
 
                             _(added).each(function (cid) {
                                 var data = hash[cid],
+                                    index = _.indexOf(newIds, cid),
                                     prev = indexPrevPosition(newIds, cid),
                                     anchor;
 
                                 if (indexPrev(newIds, cid)) {
                                     anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                    if (anchor.length) {
+                                    if (anchor.length && index !== 0) {
                                         anchor.first().after(drawFile(data));
                                     } else {
                                         scrollpane.find('.files-container').prepend(drawFile(data));

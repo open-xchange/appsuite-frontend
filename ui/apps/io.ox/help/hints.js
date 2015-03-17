@@ -31,7 +31,8 @@ define('io.ox/help/hints', ['io.ox/core/tk/dialogs'], function (dialogs) {
 
             var toggleExplanation = function () {
                 pane.toggle();
-                return false; // Prevent default
+                // Prevent default
+                return false;
             };
 
             $explanationLink.click(toggleExplanation);

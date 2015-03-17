@@ -42,15 +42,24 @@ define('io.ox/core/extPatterns/links',
             drawDefault = function (baton) {
                 var prio = _.device('small') ? self.mobile : self.prio;
                 var icons = self.icon && baton.options.icons !== false;
-                var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                var a = $('<a>')
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
+                        href: '#',
+                        tabindex: 1,
+                        'data-action': self.id,
+                        'draggable': options.draggable || false,
                         'role': 'menuitem',
                         'title': self.title || self.label || '',
                         'data-section': self.section || 'default',
                         'data-prio': _.device('small') ? (self.mobile || 'none') : (self.prio || 'lo'),
                         'data-ref': self.ref
                     });
+
+                //in firefox draggable=false is not enough to prevent dragging...
+                if (!options.draggable && _.device('firefox')) {
+                    a.attr('ondragstart', 'return false;');
+                }
                 // icons are prefered over labels
                 a.append(
                     (icons && prio === 'hi' && $('<i>').addClass(self.icon)) ||
@@ -67,7 +76,7 @@ define('io.ox/core/extPatterns/links',
                         'data-animation': 'false',
                         'data-container': 'body',
                         // tooltip removes title attribute
-                        'aria-label': self.title || self.label || ''
+                        'aria-label': !self.label ? self.title || null : null
                     })
                     .tooltip()
                     .on('dispose', function () {
@@ -343,6 +352,7 @@ define('io.ox/core/extPatterns/links',
                         dd = $('<a>').addClass('actionlink').attr({
                             href: '#',
                             tabindex: 1,
+                            draggable: false,
                             role: 'menuitem',
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
@@ -362,19 +372,27 @@ define('io.ox/core/extPatterns/links',
                             .append(lo)
                     )
                 );
+
+                //in firefox draggable=false is not enough to prevent dragging...
+                if (_.device('firefox')) {
+                    dd.attr('ondragstart', 'return false;');
+                }
                 dd.dropdown();
                 injectDividers(nav.find('ul'));
             }
 
             // hide if all links are disabled
             if (allDisabled) lo.hide();
-            if (extension.customizeNode) extension.customizeNode(nav); // deprecated!
+            // deprecated!
+            if (extension.customizeNode) extension.customizeNode(nav);
             if (extension.customize) extension.customize.call(nav, baton);
 
             // move to real target node at dummy's position
             if (baton.$.positionDummy) {
                 baton.$.positionDummy.before(nav.children());
-                baton.$.positionDummy.remove();//remove dummy
+                // now remove dummy
+                baton.$.positionDummy.remove();
+                delete baton.$.positionDummy;
             }
 
             // clear
@@ -388,13 +406,17 @@ define('io.ox/core/extPatterns/links',
             // use temporary container and remember real target node
             if (baton.$el) {
                 baton.$.temp = $('<div>');
-                baton.$.positionDummy = $('<div class="position-dummy">').hide();//needed to keep the position or extensionpoint index would be ignored
+                // needed to keep the position or extensionpoint index would be ignored
+                baton.$.positionDummy = $('<div class="position-dummy">').hide();
                 baton.$el.append(baton.$.positionDummy);
-                baton.$el = null;
             }
 
-            drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
+            var def = drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
                 .done(_.lfo(true, processItems, baton));
+
+            delete baton.$.temp;
+            delete baton.$el;
+            return def;
         };
     };
 
@@ -413,7 +435,8 @@ define('io.ox/core/extPatterns/links',
 
     var drawDropDownItems = function (options, baton, args) {
         var ul = this.data('ul'), closer;
-        if (!ul) return; // race-condition
+        // race-condition
+        if (!ul) return;
         // special handling for mobile menus, otherwise the "closer"
         // may be removed from menu
         if (ul.find('[data-action="close-menu"]')) {
@@ -448,13 +471,12 @@ define('io.ox/core/extPatterns/links',
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                toggle = $('<a>').attr({
-                    href: '#',
-                    tabindex: 1,
+                toggle = $('<a href="#" role="button" tabindex="1">').attr({
                     'data-toggle': 'dropdown',
                     'aria-haspopup': true,
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
-                }).append(
+                })
+                .append(
                     options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
                     options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
                 ),
@@ -572,7 +594,7 @@ define('io.ox/core/extPatterns/links',
                             'aria-haspopup': true
                         });
 
-                        div.attr('role', 'menu');
+                        div.attr('role', 'toolbar');
                         // add footer label?
                         if (extension.label) {
                             ul.append(

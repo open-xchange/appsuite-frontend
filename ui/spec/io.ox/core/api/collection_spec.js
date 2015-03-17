@@ -16,8 +16,9 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
     'use strict';
 
     function fetch(params) {
+        var result = [{ id: 10 }, { id: 20 }, { id: 30 }, { id: 40 }, { id: 50 }, { id: 60 }];
         return $.Deferred().resolve(
-            params.limit === '0,3' ? [{ id: 10 }, { id: 20 }, { id: 30 }] : [{ id: 40 }, { id: 50 }, { id: 60 }]
+            result.slice.apply(result, params.limit.split(','))
         );
     }
 
@@ -97,6 +98,8 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                 it('has a paginate method that loads more data', function (done) {
                     var loader = this.loader;
                     loader.load().once('load', function () {
+                        expect(this.pluck('id')).to.deep.equal([10, 20, 30]);
+                        expect(this.pluck('index')).to.deep.equal([0, 1, 2]);
                         loader.paginate().once('paginate', function () {
                             expect(this.pluck('id')).to.deep.equal([10, 20, 30, 40, 50, 60]);
                             expect(this.pluck('index')).to.deep.equal([0, 1, 2, 3, 4, 5]);

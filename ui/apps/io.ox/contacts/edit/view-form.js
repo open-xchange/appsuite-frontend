@@ -25,14 +25,17 @@ define('io.ox/contacts/edit/view-form',
      'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/attachments',
      'gettext!io.ox/contacts',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/util',
      'less!io.ox/contacts/edit/style'
-    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
+    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils) {
 
     'use strict';
 
     var meta = {
         sections: {
-            personal: ['title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
+            // no 'display_name' used cause end-users don't understand it (bug 27260)
+            personal: ['title', 'first_name', 'last_name',
                          'second_name', 'suffix', 'nickname', 'birthday',
                          'marital_status', 'number_of_children', 'spouse_name',
                          'anniversary', 'url'],
@@ -140,7 +143,8 @@ define('io.ox/contacts/edit/view-form',
     function createContactEdit(ref) {
         var isMyContactData = ref === 'io.ox/core/user';
 
-        if (isMyContactData) { // Remove attachment handling if view is used with user data instead of contact data
+        if (isMyContactData) {
+            // Remove attachment handling if view is used with user data instead of contact data
             delete meta.sections.attachments;
             delete meta.i18n.attachments;
         }
@@ -149,7 +153,21 @@ define('io.ox/contacts/edit/view-form',
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact'
+                className: 'edit-contact compact',
+                init: function (o) {
+                    // see Bug 36592
+                    if (o && o.model.get('folder_id')) {
+                        folderApi.get(o.model.get('folder_id')).done(function (folderData) {
+                            if (folderUtils.is('public', folderData)) {
+                                ext.point('io.ox/contacts/edit/personal').disable('private_flag');
+                            } else {
+                                ext.point('io.ox/contacts/edit/personal').enable('private_flag');
+                            }
+                        });
+                    } else {
+                        ext.point('io.ox/contacts/edit/personal').enable('private_flag');
+                    }
+                }
             });
 
         point.extend(new PictureUpload({
@@ -258,7 +276,7 @@ define('io.ox/contacts/edit/view-form',
 
             node.find('.toggle-compact')
                 .find('i').attr('class', icon).end()
-                .find('a').attr('role', 'button').text(label);
+                .find('a').attr({ 'aria-expanded': !isCompact }).text(label);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -299,9 +317,14 @@ define('io.ox/contacts/edit/view-form',
                     new FullnameView({ model: baton.model }).render().$el,
                     new JobView({ model: baton.model }).render().$el,
                     $('<nav class="toggle-compact">').append(
-                        $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
+                        $('<a>').attr({
+                            href: '#',
+                            role: 'button',
+                            tabindex: 1,
+                            'aria-expanded': false
+                        }).click(toggle).text(gt('Extended view')),
                         $.txt(' '),
-                        $('<i class="fa fa-plus-square-o">')
+                        $('<i class="fa fa-plus-square-o" aria-hidden="true">')
                     )
                 );
             }
@@ -320,11 +343,15 @@ define('io.ox/contacts/edit/view-form',
                     )
                 );
 
-                var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');//check if all non rare non attachment fields are filled
+                //check if all non rare non attachment fields are filled
+                var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');
 
-                this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">')); // wrap userfields in a row
-                if (inputs.length === 0) {//if all fields are filled the link must be compact view, not extend view
-                    link.trigger('click');//only one button must trigger this
+                // wrap userfields in a row
+                this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">'));
+                //if all fields are filled the link must be compact view, not extend view
+                if (inputs.length === 0) {
+                    //only one button must trigger this
+                    link.trigger('click');
                 }
             }
         });
@@ -466,7 +493,8 @@ define('io.ox/contacts/edit/view-form',
 
             return api.get({ id: id, folder: folder_id }, !upload)
                 .then(function (data) {
-                    if (upload) {//don't delete caches if there is no upload
+                    if (upload) {
+                        // don't delete caches if there is no upload
                         return $.when(
                             api.caches.get.add(data),
                             api.caches.all.grepRemove(folder_id + api.DELIM),

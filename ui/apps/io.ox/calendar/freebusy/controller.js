@@ -73,6 +73,7 @@ define('io.ox/calendar/freebusy/controller',
                 self.autocomplete.remove();
                 self.autocomplete = calendarViews = null;
                 cache = {};
+                api.off('create update delete refresh.all', $.proxy(self.refresh, self));
             });
 
             this.updateAppointment = function (data) {
@@ -126,7 +127,8 @@ define('io.ox/calendar/freebusy/controller',
             this.getParticipants = function () {
                 return this.participants.map(function (model) {
                     var tempParticipant = { id: model.get('id'), type: model.get('type') };
-                    if (model.get('type') === 5) { // External participants need more data for an appointment
+                    if (model.get('type') === 5) {
+                        // External participants need more data for an appointment
                         tempParticipant.id = tempParticipant.mail = model.getEmail();
                         tempParticipant.display_name = model.getDisplayName();
                         tempParticipant.image1_url = model.get('image1_url');
@@ -152,7 +154,9 @@ define('io.ox/calendar/freebusy/controller',
                     // check for weekView cause it might get null if user quits
                     if (self.getCalendarView()) {
                         cache = {};
-                        data = _(data).chain()
+                        data = _(data)
+                            .chain()
+                            .compact()
                             .map(function (request, index) {
                                 return _(request.data).chain()
                                     .filter(function (obj) {
@@ -195,7 +199,8 @@ define('io.ox/calendar/freebusy/controller',
 
             this.showAppointment = function (e, obj) {
                 var cid = _.cid(obj),
-                    folder = parseInt(obj.folder_id, 10); // otherwise '0' is true
+                    // otherwise '0' is true
+                    folder = parseInt(obj.folder_id, 10);
                 if (!folder && cid in cache) {
                     openSidePopup(e, cache[cid]);
                 } else {
@@ -215,10 +220,12 @@ define('io.ox/calendar/freebusy/controller',
                 }
             };
 
-            this.refresh = function (useCache) {
-                if (self.getCalendarView()) {
-                    self.loadAppointments(useCache);
-                }
+            this.refresh = function () {
+                this.repaint(false);
+            };
+
+            this.repaint = function (useCache) {
+                if (self.getCalendarView()) self.loadAppointments(!!useCache);
             };
 
             this.refreshChangedParticipants = _.debounce(function () {
@@ -300,9 +307,7 @@ define('io.ox/calendar/freebusy/controller',
                 view.render();
                 this.$el.append(view.$el.addClass('abs week-view'));
 
-                api.on('create refresh.all', function () {
-                    self.refresh(false);
-                });
+                api.on('create update delete refresh.all', $.proxy(self.refresh, self));
 
                 return view;
             };
@@ -331,7 +336,8 @@ define('io.ox/calendar/freebusy/controller',
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
             }
 
-            function resolveParticipants(data) { //resolves groups to it's users and adds them
+            //resolves groups to it's users and adds them
+            function resolveParticipants(data) {
 
                 if (_.isArray(data.distribution_list)) {
                     // resolve distribution lits

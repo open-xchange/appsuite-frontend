@@ -29,7 +29,8 @@ define('io.ox/mail/mailfilter/settings/filter',
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
-        grid;
+        grid,
+        notificationId = _.uniqueId('notification_');
 
     function containsStop(actioncmds) {
         var stop = false;
@@ -260,7 +261,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                     href: '#',
                                     role: 'button',
                                     tabindex: 1,
-                                    'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
+                                    'aria-label': title + ', ' + gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.')
                                 }),
                                 titleNode = $('<span>').addClass('widget-title pull-left').text(title),
                                 $('<div class="widget-controls">').append(function () {
@@ -402,7 +403,8 @@ define('io.ox/mail/mailfilter/settings/filter',
                         var self = this,
                             list = this.$el.closest('.widget-list'),
                             items = list.children(),
-                            index = items.index(this.$el);
+                            index = items.index(this.$el),
+                            notification = $node.find('#' + notificationId);
 
                         function keyHandle(dir) {
                             e.preventDefault();
@@ -414,6 +416,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             clearTimeout(self.saveTimeout);
                             self.saveTimeout = setTimeout(saveOrder, 500);
                             self.$el.find('.drag-handle').focus();
+                            notification.text(gt('the item has been moved'));
                         }
 
                         function saveOrder() {
@@ -429,12 +432,12 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                         switch (e.which) {
                         case 38:
-                            if (index > 0) { // up
+                            if (index > 0) {
                                 keyHandle('up');
                             }
                             break;
                         case 40:
-                            if (index < items.length) { // down
+                            if (index < items.length) {
                                 keyHandle('down');
                             }
                             break;
@@ -461,6 +464,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                 })
                             ),
                             $('<div class="clearfix">'),
+                            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId),
                             $('<ol>').addClass('list-group list-unstyled widget-list ui-sortable')
                         );
                         this.renderFilter();

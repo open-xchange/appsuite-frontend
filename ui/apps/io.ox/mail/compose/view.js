@@ -11,29 +11,35 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/view',
-    ['io.ox/mail/compose/extensions',
-     'io.ox/mail/compose/model',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'settings!io.ox/mail',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'io.ox/core/api/snippets',
-     'gettext!io.ox/mail',
-     'io.ox/mail/actions/attachmentEmpty',
-     'less!io.ox/mail/style',
-     'less!io.ox/mail/compose/style'
-    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
+define('io.ox/mail/compose/view', [
+    'io.ox/mail/compose/extensions',
+    'io.ox/mail/compose/model',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/extensions',
+    'io.ox/contacts/api',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'settings!io.ox/mail',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'io.ox/core/api/snippets',
+    'io.ox/core/api/account',
+    'gettext!io.ox/mail',
+    'io.ox/mail/actions/attachmentEmpty',
+    'less!io.ox/mail/style',
+    'less!io.ox/mail/compose/style'
+], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
 
     'use strict';
 
     var INDEX = 0,
         POINT = 'io.ox/mail/compose';
+
+    ext.point(POINT + '/mailto').extend({
+        id: 'mailto',
+        index: 100,
+        setup: extensions.mailto
+    });
 
     ext.point(POINT + '/fields').extend({
         id: 'header',
@@ -50,7 +56,7 @@ define('io.ox/mail/compose/view',
     ext.point(POINT + '/fields').extend({
         id: 'to',
         index: INDEX += 100,
-        draw: extensions.tokenfield('To', true)
+        draw: extensions.tokenfield('To')
     });
 
     ext.point(POINT + '/fields').extend({
@@ -94,7 +100,7 @@ define('io.ox/mail/compose/view',
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-12 col-md-5 col-md-offset-1">');
+            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
             extensions.attachment.call(node, baton);
             this.append(node);
         }
@@ -154,10 +160,16 @@ define('io.ox/mail/compose/view',
             optionDropdown.$ul.addClass('pull-right');
             signatureDropdown.$ul.addClass('pull-right');
 
+            baton.view.signaturesLoading.done(function (sig) {
+                if (sig.length > 0) {
+                    signatureDropdown.$ul.addClass('pull-right');
+                    optionDropdown.$el.before(signatureDropdown.render().$el.addClass('signatures text-left'));
+                }
+            });
+
             this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-12 col-md-6">').append(
+                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
                     $('<div class="pull-right text-right">').append(
-                        signatureDropdown.render().$el.addClass('signatures text-left'),
                         optionDropdown.render().$el.addClass('text-left')
                     )
                 )
@@ -202,28 +214,6 @@ define('io.ox/mail/compose/view',
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
-    /**
-     * mapping for getFieldLabel()
-     * @type {object}
-     */
-    var mapping = {
-        telephone_business1: gt('Phone (business)'),
-        telephone_business2: gt('Phone (business)'),
-        telephone_home1: gt('Phone (private)'),
-        telephone_home2: gt('Phone (private)'),
-        cellular_telephone1: gt('Mobile'),
-        cellular_telephone2: gt('Mobile')
-    };
-
-    /**
-     * fieldname to fieldlabel
-     * @param  {string} field
-     * @return {string} label
-     */
-    function getFieldLabel(field) {
-        return mapping[field] || '';
-    }
-
     /*
      * extension point for contact picture
      */
@@ -231,14 +221,16 @@ define('io.ox/mail/compose/view',
         id: 'contactPicture',
         index: 100,
         draw: function (baton) {
+            var node;
             this.append(
-                $('<div class="contact-image">')
-                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data , { width: 42, height: 42, scaleType: 'contain' })))
+                node = $('<div class="contact-image lazyload">')
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-                    .lazyload({
-                        effect: 'fadeIn',
-                        container: this
-                    })
+            );
+            // apply picture halo lazy load
+            contactAPI.pictureHalo(
+                node,
+                baton.participantModel.toJSON(),
+                { width: 42, height: 42 }
             );
         }
     });
@@ -251,7 +243,7 @@ define('io.ox/mail/compose/view',
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<div class="recipient-name">').text(contactsUtil.getMailFullName(baton.data))
+                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
             );
         }
     });
@@ -263,26 +255,14 @@ define('io.ox/mail/compose/view',
         id: 'emailAddress',
         index: 100,
         draw: function (baton) {
-            var data = baton.data;
-            if (baton.autocomplete) {
-                this.append(
-                    $('<div class="ellipsis email">').append(
-                        $.txt(baton.data.email + (baton.data.phone || '') + ' '),
-                        getFieldLabel(baton.data.field) !== '' ?
-                            $('<span style="color: #888;">').text('(' + getFieldLabel(baton.data.field) + ')') : []
-                    )
-                );
-            } else {
-                this.append(
-                    $('<div>').append(
-                        data.email ?
-                            $('<a href="#" class="halo-link">')
-                            .data({ email1: data.email })
-                            .text(_.noI18n(String(data.email).toLowerCase())) :
-                            $('<span>').text(_.noI18n(data.phone || ''))
-                    )
-                );
-            }
+            var model = baton.participantModel;
+            this.append(
+                $('<div class="ellipsis email">').append(
+                    $.txt(model.getTarget() + ' '),
+                    model.getFieldName() !== '' ?
+                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
+                )
+            );
         }
     });
 
@@ -294,7 +274,6 @@ define('io.ox/mail/compose/view',
         index: 100,
         draw: function (baton) {
             this.addClass('io-ox-mail-compose-contact');
-            baton.autocomplete = true;
             // contact picture
             ext.point(POINT + '/contactPicture').invoke('draw', this, baton);
             // display name
@@ -309,8 +288,7 @@ define('io.ox/mail/compose/view',
         className: 'io-ox-mail-compose container default-content-padding',
 
         events: {
-            'click [data-action="add-cc"]':     'toggleCC',
-            'click [data-action="add-bcc"]':    'toggleBCC',
+            'click [data-action="add"]': 'toggleTokenfield',
             'keyup [data-extension-id="subject"] input': 'setSubject'
         },
 
@@ -333,7 +311,7 @@ define('io.ox/mail/compose/view',
             this.textarea = $('<textarea class="plain-text">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
-            });
+            }).addClass(settings.get('useFixedWidthFont') ? 'monospace' : '');
 
             this.baton = ext.Baton({
                 model: this.model,
@@ -345,41 +323,119 @@ define('io.ox/mail/compose/view',
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
+            this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
             this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
             this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+
+            var mailto, params;
+            // triggerd by mailto?
+            if (mailto = _.url.hash('mailto')) {
+
+                var parseRecipients = function (recipients) {
+                    return recipients.split(',').map(function (recipient) {
+                        var parts = _.compact(
+                            recipient.replace(/^("([^"]*)"|([^<>]*))?\s*(<(\s*(.*?)\s*)>)?/, '$2//$3//$5').split('//')
+                        ).map(function (str) { return str.trim(); });
+                        return (parts.length === 1) ? [parts[0], parts[0]] : parts;
+                    });
+                };
+                // remove 'mailto:'' prefix and split at '?''
+                var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
+                var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
+                // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
+                for (var key in params) params[key.toLowerCase()] = params[key];
+                // save data
+                if (to)         { this.model.set('to',  parseRecipients(to),         { silent: true }); }
+                if (params.cc)  { this.model.set('cc',  parseRecipients(params.cc),  { silent: true }); }
+                if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
+
+                this.setSubject(params.subject || '');
+                this.model.setContent(params.body || '');
+                // clear hash
+                _.url.hash('mailto', null);
+            }
+
+            ext.point(POINT + '/mailto').invoke('setup');
         },
 
         filterData: function (data) {
-            if(/(compose|edit)/.test(data.mode)) return data;
-            return _.pick(data, 'id', 'folder_id', 'mode');
+            if (/(compose|edit)/.test(data.mode)) return data;
+            return _.pick(data, 'id', 'folder_id', 'mode', 'csid', 'content_type');
         },
 
         fetchMail: function (obj) {
-            var self = this;
-            if (/(compose|edit)/.test(obj.mode)) {
+
+            var self = this,
+            mode = obj.mode;
+            delete obj.mode;
+
+            if (/(compose|edit)/.test(mode)) {
                 return $.when();
+            } else if (mode === 'forward' && !obj.id) {
+                obj = _(obj).map(function (o) {
+                    return _.pick(o, 'id', 'folder_id', 'csid');
+                });
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'mode');
+                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
             }
-            return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
-                data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
-                data.mode = obj.mode;
+
+            var content_type = this.messageFormat;
+
+            if (content_type === 'alternative') {
+                content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
+            }
+
+            // use CSS sanitizing and size limit (large than detail view)
+            obj.embedded = true;
+            obj.max_size = settings.get('maxSize/compose', 1024 * 512);
+
+            return mailAPI[mode](obj, content_type).then(function (data) {
+                data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                data.mode = mode;
+                var attachments = _.clone(data.attachments);
+                delete data.attachments;
+                if (!_.isEmpty(data.from)) {
+                    accountAPI.getAllSenderAddresses().then(function (a) {
+                        if (_.isEmpty(a)) return;
+                        data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
+                    });
+                }
+                if (mode === 'forward') {
+                    // move nested messages into attachment array
+                    _(data.nested_msgs).each(function (obj) {
+                        attachments.push({
+                            id: attachments.length + 1,
+                            filename: obj.subject,
+                            content_type: 'message/rfc822',
+                            msgref: obj.msgref
+                        });
+                    });
+                    delete data.nested_msgs;
+                }
                 self.model.set(data);
-                self.model.initialize();
+                var attachmentCollection = self.model.get('attachments');
+                attachmentCollection.reset(attachments);
+                self.model.set('attachments', attachmentCollection);
             });
         },
 
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
-            this.model.set('subject', value);
-            this.app.setTitle(value || gt('Compose'));
+            this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
             this.app.setTitle(this.model.get('subject') || gt('Compose'));
+        },
+
+        parseMsgref: function (msgref) {
+            var base = _(msgref.toString().split(mailAPI.separator)),
+                id = base.last(),
+                folder = base.without(id).join(mailAPI.separator);
+            return { folder_id: folder, id: id };
         },
 
         saveDraft: function () {
@@ -389,17 +445,18 @@ define('io.ox/mail/compose/view',
                 def = new $.Deferred(),
                 old_vcard_flag;
 
-            if (mail.msgref) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
             if (_(mail.flags).isUndefined()) {
                 mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if (mail.data.flags & 4 === 0) {
+            } else if ((mail.data.flags & 4) === 0) {
                 mail.flags += mailAPI.FLAGS.DRAFT;
             }
 
@@ -408,25 +465,31 @@ define('io.ox/mail/compose/view',
             old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
-            // fix inline images
-            //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
+            return attachmentEmpty.emptinessCheck(mail.files).then(function () {
+                return mailAPI.send(mail, mail.files);
+            }).then(function (result) {
+                var opt = self.parseMsgref(result.data);
+                if (mail.attachments[0].content_type == 'text/plain') opt.view = 'raw';
 
-            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                return mailAPI.send(mail, mail.files).always(function (result) {
-                    if (result.error) {
-                        notifications.yell(result);
-                        def.reject(result);
-                    } else {
-                        self.model.set('msgref', result.data, { silent: true });
-                        self.model.dirty(false);
-                        notifications.yell('success', gt('Mail saved as draft'));
-                        def.resolve(result);
-                    }
+                return $.when(
+                    result,
+                    mailAPI.get(opt)
+                );
+            }, function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    return def.reject(result);
+                }
+            }).then(function (result, data) {
+                // Replace inline images in contenteditable with links from draft response
+                $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                    $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
                 });
+                self.model.set('msgref', result.data, { silent: true });
+                self.model.dirty(false);
+                notifications.yell('success', gt('Mail saved as draft'));
+                return result;
             });
-
-            return $.when.apply($, [def, defSend]);
-
         },
 
         autoSaveDraft: function () {
@@ -435,12 +498,28 @@ define('io.ox/mail/compose/view',
                 def = new $.Deferred(),
                 self = this;
 
-            mailAPI.autosave(mail, mail.files).always(function (result) {
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
+            }
+            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
+            }
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
+            }
+
+            mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    self.model.set('msgref', result, { silent: true });
+                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
+                        self.model.set('msgref', result, { silent: true });
+                    }
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
@@ -451,7 +530,7 @@ define('io.ox/mail/compose/view',
             return def;
         },
 
-        stopAutoSave: function() {
+        stopAutoSave: function () {
             if (this.autosave) {
                 window.clearTimeout(this.autosave.timer);
             }
@@ -461,7 +540,8 @@ define('io.ox/mail/compose/view',
 
             var timeout = settings.get('autoSaveDraftsAfter', false),
                 timerScale = {
-                    minute: 60000, //60s
+                    //60s
+                    minute: 60000,
                     minutes: 60000
                 },
                 scale,
@@ -475,7 +555,8 @@ define('io.ox/mail/compose/view',
             scale = timerScale[timeout[1]];
             timeout = timeout[0];
 
-            if (!timeout || !scale) return; // settings not parsable
+            // settings not parsable
+            if (!timeout || !scale) return;
 
             this.stopAutoSave();
 
@@ -528,17 +609,21 @@ define('io.ox/mail/compose/view',
 
             if (this.model.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    //button texts may become quite large in some languages (e. g. french, see Bug 35581)
+                    //add some extra space
+                    //TODO maybe we could use a more dynamical approach
+                    new dialogs.ModalDialog({ width: 550 })
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
-                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
+                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                self.clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                self.clean();
                                 def.resolve();
                             } else if (action === 'savedraft') {
                                 self.saveDraft().done(function () {
@@ -565,6 +650,11 @@ define('io.ox/mail/compose/view',
             var self = this,
                 mail = this.model.getMail(),
                 def = $.Deferred();
+
+            // force correct content-type
+            if (mail.attachments[0].content_type === 'text/plain' && this.editorMode === 'html') {
+                mail.attachments[0].content_type = 'text/html';
+            }
 
             this.blockReuse(mail.sendtype);
 
@@ -598,7 +688,8 @@ define('io.ox/mail/compose/view',
 
                     if (result.error && !result.warnings) {
                         if (win) { win.idle().show(); }
-                        notifications.yell(result); // TODO: check if backend just says "A severe error occurred"
+                        // TODO: check if backend just says "A severe error occurred"
+                        notifications.yell(result);
                         return;
                     }
 
@@ -652,6 +743,10 @@ define('io.ox/mail/compose/view',
                             });
                         });
                     }
+
+                    //remove sync listener
+                    //causes problems with inline images that are already deleted on the backend (see Bug 32599)
+                    self.stopListening(self.model, 'needsync', self.syncMail);
                     self.model.dirty(false);
                     self.app.quit();
                 })
@@ -663,34 +758,31 @@ define('io.ox/mail/compose/view',
 
             // ask for empty to,cc,bcc and/or empty subject
             var noRecipient = _.isEmpty(mail.to) && _.isEmpty(mail.cc) && _.isEmpty(mail.bcc);
-            if ($.trim(mail.subject) === '' || noRecipient) {
-                if (noRecipient) {
-                    notifications.yell('error', gt('Mail has no recipient.'));
-                    focus('to');
-                    def.reject();
-                } else if ($.trim(mail.subject) === '') {
-                    // show dialog
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt('Mail has empty subject. Send it anyway?'))
-                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', {tabIndex: '1'})
-                            .addButton('subject', gt('Add subject'), 'subject', {tabIndex: '1'})
-                            .show(function () {
-                                def.notify('empty subject');
-                            })
-                            .done(function (action) {
-                                if (action === 'send') {
-                                    attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                                        cont();
-                                    });
-                                } else {
-                                    focus('subject');
-                                    def.reject();
-                                }
-                            });
-                    });
-                }
-
+            if (noRecipient) {
+                notifications.yell('error', gt('Mail has no recipient.'));
+                self.$el.find('.tokenfield:first .token-input').focus();
+                def.reject();
+            } else if ($.trim(mail.subject) === '') {
+                // show dialog
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({ focus: false })
+                        .text(gt('Mail has empty subject. Send it anyway?'))
+                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
+                        .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
+                        .show(function () {
+                            def.notify('empty subject');
+                        })
+                        .done(function (action) {
+                            if (action === 'send') {
+                                attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                                    cont();
+                                });
+                            } else {
+                                self.$el.find('input[name="subject"]').focus();
+                                def.reject();
+                            }
+                        });
+                });
             } else {
                 attachmentEmpty.emptinessCheck(mail.files).done(function () {
                     cont();
@@ -720,40 +812,23 @@ define('io.ox/mail/compose/view',
             return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
         },
 
-        toggleCC: function () {
-            return this.toggleInput('cc');
-        },
-
-        toggleBCC: function () {
-            return this.toggleInput('bcc');
-        },
-
-        toggleInput: function (type, show) {
-            var button = $('[data-action="add-' + type + '"]'),
+        toggleTokenfield: function (e) {
+            var isString = typeof e === 'string',
+                type = isString ? e : $(e.target).attr('data-type'),
+                button = this.$el.find('[data-type="' + type + '"]'),
                 input = this.$el.find('[data-extension-id="' + type + '"]');
-            if (input.hasClass('hidden') || show) {
-                this.showInput(type, input);
+            if (!isString) e.preventDefault();
+            if (input.hasClass('hidden') || isString) {
+                input.removeClass('hidden');
                 button.addClass('active').attr('aria-checked', true);
-            } else {
-                this.closeInput(type, input);
+            } else if (this.model.get(type).length === 0) {
+                //We don't want to close it automatically! Bug: 35730
+                this.model.set(type, []);
+                input.addClass('hidden');
+                $(window).trigger('resize.tinymce');
                 button.removeClass('active').attr('aria-checked', false);
             }
             return input;
-        },
-
-        showInput: function (type, input) {
-            var type = type || 'cc',
-                input = input || this.$el.find('[data-extension-id="' + type + '"]');
-            input.removeClass('hidden');
-        },
-
-        closeInput: function (type, input) {
-            var type = type || 'cc',
-                input = input || this.$el.find('[data-extension-id="' + type + '"]');
-
-            this.model.set(type, []);
-            input.addClass('hidden');
-            $(window).trigger('resize.tinymce');
         },
 
         loadEditor: function (content) {
@@ -831,9 +906,7 @@ define('io.ox/mail/compose/view',
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature();
-            this.prependNewLine();
-
+            this.setSelectedSignature(this.model.get('signature'));
         },
 
         getMobileSignature: function () {
@@ -846,39 +919,42 @@ define('io.ox/mail/compose/view',
             return value;
         },
 
-        setSelectedSignature: function () {
-            var ds = _.where(this.signatures, { id: String(this.model.get('signature')) })[0];
-            if (ds) {
+        setSelectedSignature: function (model, id) {
+
+            if (_.isString(model)) id = model;
+
+            var newSignature = _.where(this.signatures, { id: String(id) })[0],
+                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
+
+            if (prevSignature) {
+                this.removeSignature(prevSignature);
+            }
+            if (newSignature) {
+                var ds = newSignature;
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
-            } else {
-                this.removeSignature();
             }
+            this.prependNewLine();
         },
 
-        removeSignature: function () {
+        removeSignature: function (signature) {
+
             var self = this,
                 isHTML = !!this.editor.find,
-                currentSignature = this.model.get('currentSignature');
+                currentSignature = mailUtil.signatures.cleanAdd(signature.content, isHTML);
 
             // remove current signature from editor
-
             if (isHTML) {
                 this.editor.find('.io-ox-signature').each(function () {
-                    var node = $(this),
-                        text = node.html()
-                            //remove added image urls(tiny adds them automatically)
-                            .replace(/ data-mce-src="[^"]+"\s?/, '')
-                            //remove empty alt attribute(added by tiny)
-                            .replace(/ alt=""/, '');
 
-                    if (self.isSignature(text)) {
-                        // remove entire node
-                        node.remove();
-                    } else {
-                        // was modified so remove class
-                        node.removeClass('io-ox-signature');
-                    }
+                    var node = $(this),
+                        text = node.text(),
+                        unchanged = _(self.signatures).find(function (signature) {
+                            return $('<div>').html(signature.content).text().replace(/\s+/g, '') === text.replace(/\s+/g, '');
+                        });
+
+                    // remove entire block unless it seems edited
+                    if (unchanged) node.remove(); else node.removeClass('io-ox-signature');
                 });
             } else {
                 if (currentSignature) {
@@ -893,10 +969,9 @@ define('io.ox/mail/compose/view',
         },
 
         setSignature: function (signature) {
+
             var text,
                 isHTML = !!this.editor.find;
-
-            this.removeSignature();
 
             // add signature?
             if (this.signatures.length > 0) {
@@ -910,7 +985,6 @@ define('io.ox/mail/compose/view',
                     this.editor.prependContent(text);
                     this.editor.scrollTop('top');
                 }
-                this.model.set('currentSignature', text);
             }
         },
 
@@ -937,13 +1011,19 @@ define('io.ox/mail/compose/view',
 
             this.model.setInitialMailContentType();
 
-            return this.changeEditorMode().done(function () {
+            return this.changeEditorMode().then(function () {
+                return self.signaturesLoading;
+            }).done(function () {
                 if (data.replaceBody !== 'no') {
-                    // control focus in compose mode
-                    if (self.model.get('mode') === 'compose') {
+                    var mode = self.model.get('mode');
+                    // set focus in compose and forward mode to recipient tokenfield
+                    if (/(compose|forward)/.test(mode)) {
                         self.$el.find('.tokenfield:first .token-input').focus();
                     } else {
                         self.editor.focus();
+                    }
+                    if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
+                        self.toggleTokenfield('cc');
                     }
                     self.setBody(self.model.getContent());
                     self.model.dirty(false);
@@ -1001,10 +1081,10 @@ define('io.ox/mail/compose/view',
                             $(this).typeahead('val', '');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleInput('cc', true).find('.token-input').focus();
+                            self.toggleTokenfield('cc').find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleInput('bcc', true).find('.token-input').focus();
+                            self.toggleTokenfield('bcc').find('.token-input').focus();
                         }
                     }
                 });
@@ -1038,8 +1118,7 @@ define('io.ox/mail/compose/view',
                         $(window).trigger('resize.tinymce');
                         fixed = true;
                     }
-                }
-                else if (fixed) {
+                } else if (fixed) {
                     toolbar.removeClass('fixed');
                     editor.css('margin-top', 0);
                     fixed = false;

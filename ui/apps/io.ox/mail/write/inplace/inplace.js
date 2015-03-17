@@ -73,7 +73,7 @@ define('io.ox/mail/write/inplace/inplace',
                     _(list).map(function (recipient) {
                         return recipient[0] ? util.unescapeDisplayName(recipient[0]) : recipient[1];
                     })
-                    .join('\u00A0\u2022 ') // &bull;
+                    .join('\u00A0\u2022 ')
                 );
             }
         },
@@ -103,7 +103,8 @@ define('io.ox/mail/write/inplace/inplace',
                 async: true,
                 container: options.container || $('body'),
                 easyOut: false,
-                width: 572 // 572 fits input-xxlarge,
+                // 572 fits input-xxlarge,
+                width: 572
             });
 
             // show dialog instantly

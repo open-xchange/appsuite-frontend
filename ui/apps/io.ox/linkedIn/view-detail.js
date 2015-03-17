@@ -47,7 +47,8 @@ define('io.ox/linkedIn/view-detail',
         actionPoint.each(function (ext) {
             if (!ext.available || ext.available(data)) {
                 $actionsNode.append($('<a>', { href: '#' }).text(ext.label).click(function (e) {
-                    e.preventDefault(); // don't change url hash
+                    // don't change url hash
+                    e.preventDefault();
                     ext.action(data);
                 }));
             }
@@ -140,7 +141,8 @@ define('io.ox/linkedIn/view-detail',
             if (data.relationToViewer && data.relationToViewer.connections && data.relationToViewer.connections.values && data.relationToViewer.connections.values !== 0) {
 
                 $('<div>')
-                    .css({ marginBottom: '5px', fontWeight: 'bold' }) // TODO: make CSS class
+                    // TODO: make CSS class
+                    .css({ marginBottom: '5px', fontWeight: 'bold' })
                     .text('Connections you share with ' + data.firstName + ' ' + data.lastName)
                     .appendTo($myNode);
 

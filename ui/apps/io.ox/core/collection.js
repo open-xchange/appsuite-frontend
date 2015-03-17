@@ -78,10 +78,14 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                     item = collection[i];
                     if ((folder = hash[getFolderId(item)])) {
                         // get properties
-                        props.read = props.read && getRight(folder, item.created_by, 7); // read
-                        props.modify = props.modify && getRight(folder, item.created_by, 14); // write
-                        props['delete'] = props['delete'] && getRight(folder, item.created_by, 21); // delete
-                        props.create = props.create && (folder.own_rights & 127) >= 2; // create new objects
+                        // read
+                        props.read = props.read && getRight(folder, item.created_by, 7);
+                        // write
+                        props.modify = props.modify && getRight(folder, item.created_by, 14);
+                        // delete
+                        props['delete'] = props['delete'] && getRight(folder, item.created_by, 21);
+                        // create new objects
+                        props.create = props.create && (folder.own_rights & 127) >= 2;
                     } else {
                         // folder unknown
                         props.unknown = true;

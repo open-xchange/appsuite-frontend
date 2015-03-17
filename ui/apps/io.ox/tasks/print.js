@@ -25,7 +25,8 @@ define('io.ox/tasks/print',
 
     function getDate(data, prop, format) {
         var t = data[prop];
-        return _.isNumber(t) ? new date.Local(t).format(format) : ''; // setting right format and timezone
+        // setting right format and timezone
+        return _.isNumber(t) ? new date.Local(t).format(format) : '';
     }
 
     var states = { 1: gt('Not started'), 2: gt('In progress'), 3: gt('Done'), 4: gt('Waiting'), 5: gt('Deferred') },
@@ -42,7 +43,8 @@ define('io.ox/tasks/print',
     function getPriority(data) {
         if (data.priority) {
             return priorities[data.priority];
-        } else {//use medium priority as default
+        } else {
+            //use medium priority as default
             return priorities[1];
         }
     }

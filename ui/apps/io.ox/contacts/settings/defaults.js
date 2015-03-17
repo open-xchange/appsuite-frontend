@@ -16,7 +16,8 @@ define('io.ox/contacts/settings/defaults', function () {
     'use strict';
 
     var settingsDefault = {
-            showAdmin: false
+            showAdmin: false,
+            fullNameFormat: 'auto'
         };
 
     return settingsDefault;

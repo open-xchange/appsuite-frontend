@@ -20,14 +20,19 @@ define('io.ox/core/tk/dialogs',
     'use strict';
 
     // scaffolds
-    var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
-        popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
+    function getUnderlay() {
+        return $('<div class="abs io-ox-dialog-underlay">').hide();
+    }
+
+    function getPopup() {
+        return $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $('<div class="modal-header">'),
+                $('<div class="modal-header" id="dialog-title">'),
                 $('<div class="modal-body">'),
                 $('<div class="clearfix">'),
                 $('<div class="modal-footer">')
             );
+    }
 
     var Dialog = function (options) {
 
@@ -38,7 +43,8 @@ define('io.ox/core/tk/dialogs',
                 easyOut: true,
                 center: true,
                 async: false,
-                noBusy: false,//prevents busy function even in asyncmode (needed for IE9 uploads)
+                //prevents busy function even in asyncmode (needed for IE9 uploads)
+                noBusy: false,
                 maximize: false,
                 top: '50%',
                 container: $('#io-ox-core'),
@@ -48,9 +54,9 @@ define('io.ox/core/tk/dialogs',
 
             nodes = {
                 buttons: [],
-                underlay: underlay.clone(),
-                popup: popup.clone(),
-                wrapper: $('<div>').addClass('abs io-ox-dialog-wrapper')
+                underlay: getUnderlay(),
+                popup: getPopup(),
+                wrapper: $('<div class="abs io-ox-dialog-wrapper">')
             },
 
             lastFocus = $(),
@@ -63,37 +69,37 @@ define('io.ox/core/tk/dialogs',
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
                 // so we cannot just refocus the current popup
-                var insidePopup = $(e.target).closest('.io-ox-dialog-popup').length > 0;
-                var sidePopups = $(e.target).closest('.io-ox-sidepopup').length > 0;
-                if (!insidePopup && !sidePopups) {
-                    if (nodes.popup.is(':visible')) {
-                        e.stopPropagation();
-                        nodes.popup.focus();
-                    }
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window').length > 0;
+                if (insidePopup) return;
+                if (nodes.popup.is(':visible')) {
+                    e.stopPropagation();
+                    nodes.popup.focus();
                 }
             },
 
             close = function () {
-                if (!self) {
-                    //already closed
-                    return;
-                }
+
+                // already closed?
+                if (!self) return;
 
                 // disable scrollblocker - Bug 29011
                 o.container.removeClass('blockscroll');
 
                 self.trigger('close');
-                document.removeEventListener('focus', keepFocus, true); // not via jQuery!
+                // not via jQuery!
+                document.removeEventListener('focus', keepFocus, true);
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
                 nodes.wrapper.remove();
 
                 // restore focus
                 lastFocus = lastFocus.closest(':visible');
-                if (lastFocus.hasClass('dropdown')) {
-                    lastFocus.children().first().focus();
-                } else {
-                    lastFocus.focus();
+                if (o.focus) {
+                    if (lastFocus.hasClass('dropdown')) {
+                        lastFocus.children().first().focus();
+                    } else {
+                        lastFocus.focus();
+                    }
                 }
                 // self destruction
                 self.events.destroy();
@@ -101,7 +107,8 @@ define('io.ox/core/tk/dialogs',
                     delete self[prop];
                 }
                 self.close = self.idle = $.noop;
-                nodes.header = nodes.body = nodes.footer = null;
+                nodes.header = nodes.body = nodes.footer = nodes.underlay = nodes.wrapper = null;
+                nodes.buttons = lastFocus = innerFocus = null;
                 nodes = deferred = self = data = o = null;
             },
 
@@ -170,15 +177,16 @@ define('io.ox/core/tk/dialogs',
                 var items, focus, index;
 
                 switch (e.which || e.keyCode) {
-                case 27: // ESC
+                case 27:
+                    // ESC
                     if (!isBusy) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) invoke('cancel');
                     }
                     break;
-
-                case 13: // Enter
+                case 13:
+                    // Enter
                     if (!isBusy && $(e.target).is('input:text, input:password')) {
                         if (!o.enter) return false;
                         if (_.isFunction(o.enter)) return o.enter.call(self);
@@ -186,11 +194,11 @@ define('io.ox/core/tk/dialogs',
                         return false;
                     }
                     break;
-
-                case 9: // tab
+                case 9:
+                    // tab
                     if (o.tabTrap) {
                         // get items first
-                        items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                        items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
                         if (items.length) {
                             e.preventDefault();
                             focus = $(document.activeElement);
@@ -206,7 +214,6 @@ define('io.ox/core/tk/dialogs',
                         }
                     }
                     break;
-
                 default:
                     break;
                 }
@@ -276,7 +283,7 @@ define('io.ox/core/tk/dialogs',
         this.text = function (str) {
             var p = nodes.body;
             p.find('.plain-text').remove();
-            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ''));
+            p.append($('<h4 class="plain-text">').text(str || ''));
             return this;
         };
 
@@ -308,7 +315,7 @@ define('io.ox/core/tk/dialogs',
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse,
-                tabIndex: options.tabIndex
+                tabIndex: options.tabIndex || options.tabindex
             };
 
             if (options.type) {
@@ -316,7 +323,10 @@ define('io.ox/core/tk/dialogs',
             }
             var button = $.button(opt);
             nodes.buttons.push(button);
-            return button.addClass(options.classes).attr('role', 'button');
+            return button.addClass(options.classes).attr({
+                role: 'button',
+                type: 'button'
+            });
         };
 
         this.addButton = function (action, label, dataaction, options) {
@@ -380,10 +390,12 @@ define('io.ox/core/tk/dialogs',
 
             // enable scrollblocker - Bug 29011
             o.container.addClass('blockscroll');
-
-            // remember focussed element
-            lastFocus = $(document.activeElement);
-            document.addEventListener('focus', keepFocus, true); // not via jQuery!
+            if (o.focus) {
+                // remember focussed element
+                lastFocus = $(document.activeElement);
+                // not via jQuery!
+                document.addEventListener('focus', keepFocus, true);
+            }
 
             // empty header?
             if (nodes.header.children().length === 0) {
@@ -418,7 +430,8 @@ define('io.ox/core/tk/dialogs',
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
+                    //not window here, or we might overlap ads or sth
+                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -550,7 +563,8 @@ define('io.ox/core/tk/dialogs',
         options = _.extend({
             modal: false,
             arrow: true,
-            closely: false, // closely positon to click/touch location
+            // closely positon to click/touch location
+            closely: false,
             tabTrap: true
         }, options || {});
 
@@ -561,7 +575,8 @@ define('io.ox/core/tk/dialogs',
             closeAll,
             closeByEscapeKey,
             closeByClick,
-            closeByEvent, //for example: The view within this SidePopup closes itself
+            // for example: The view within this SidePopup closes itself
+            closeByEvent,
             previousProp,
             timer = null,
             lastFocus = $(),
@@ -575,7 +590,7 @@ define('io.ox/core/tk/dialogs',
                         .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, pane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(
@@ -709,12 +724,15 @@ define('io.ox/core/tk/dialogs',
 
         closer.find('.btn-sidepopup')
             .on('click', function (e) {
-                pane.trigger('click'); // route click to 'pane' since closer is above pane
-                close(e); // close side popup
+                // route click to 'pane' since closer is above pane
+                pane.trigger('click');
+                // close side popup
+                close(e);
                 return false;
             })
             .on('keydown', function (e) {
-                if ((e.keyCode || e.which) === 13) { // enter
+                // enter
+                if ((e.keyCode || e.which) === 13) {
                     $(this).trigger('click');
                 }
             });
@@ -838,18 +856,24 @@ define('io.ox/core/tk/dialogs',
         };
 
         this.delegate = function (node, selector, handler) {
-            $(node).on('click', selector, function (e) {
+
+            $(node).on('click.sidepopup', selector, function (e) {
                 if ((e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
             });
 
-            $(node).on('keypress', selector, function (e) {
+            $(node).on('keypress.sidepopup', selector, function (e) {
                 if (e.which === 13 && (e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
             });
 
+            return this;
+        };
+
+        this.undelegate = function (node) {
+            $(node).off('.sidepopup');
             return this;
         };
 
@@ -867,6 +891,12 @@ define('io.ox/core/tk/dialogs',
 
         this.close = function (e) {
             close(e);
+        };
+
+        this.destroy = function () {
+            close();
+            this.nodes = overlay = pane = closer = popup = arrow = null;
+            return this;
         };
     };
 
@@ -897,8 +927,8 @@ define('io.ox/core/tk/dialogs',
     };
 });
 
-/* Test
-
+// DEBUGGING
+/*
 require(['io.ox/core/tk/dialogs'], function (dialogs) {
     new dialogs.ModalDialog()
         .text('Are you really sure about your decision? Are you aware of all consequences you have to live with?')

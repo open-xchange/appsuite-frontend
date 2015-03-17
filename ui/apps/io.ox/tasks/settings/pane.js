@@ -59,7 +59,9 @@ define('io.ox/tasks/settings/pane',
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for task')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Email notification for task'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('row').append(
                             $('<div>').addClass('col-sm-8').append(
@@ -73,7 +75,9 @@ define('io.ox/tasks/settings/pane',
                     )
                 ),
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Email notification for Accept/Declined'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('row').append(
                             $('<div>').addClass('col-sm-8').append(

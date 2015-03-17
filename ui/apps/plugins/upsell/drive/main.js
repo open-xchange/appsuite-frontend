@@ -31,7 +31,8 @@ define('plugins/upsell/drive/main',
     extendDrive = function () {
         ext.point('io.ox/files/details').extend({
             id: 'upsellad',
-            index: 201, //after the title, right?
+            //after the title, right?
+            index: 201,
             draw: function () {
                 this.append(
                     $('<div>').html(adSettings)

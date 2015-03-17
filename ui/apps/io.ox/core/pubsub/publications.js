@@ -40,7 +40,8 @@ define('io.ox/core/pubsub/publications',
             api.publicationTargets.getAll().done(function (data) {
                 var target = '',
                     targetObj = {},
-                    module = baton.data.module || 'infostore/object';//infostore baton has no module etc...maybe it will be added later
+                    //infostore baton has no module etc...maybe it will be added later
+                    module = baton.data.module || 'infostore/object';
 
                 _(data).each(function (obj) {
                     if (obj.module === module)   {
@@ -162,12 +163,13 @@ define('io.ox/core/pubsub/publications',
                 .fail(function (error) {
                     popup.idle();
                     if (!self.model.valid) {
-                        if (!error.model) { //backend Error
+                        if (!error.model) {
+                            //backend Error
                             if (error.code === 'PUB-0006') {
                                 popup.getBody().find('.siteName-control').addClass('has-error').find('.help-block').text(gt('Name already taken'));
                             }
-                        } else { //validation gone wrong
-                            //must be namefield empty because other fields are correctly filled by default
+                        } else {
+                            // validation gone wrong: must be namefield empty because other fields are correctly filled by default
                             var errMsg = gt('Publications must have a name');
                             error.model.errors.each(function (msg) {
                                 errMsg = msg.join(' ');
@@ -186,7 +188,8 @@ define('io.ox/core/pubsub/publications',
             }
 
             if (!this.infostoreItem) {
-                templAPI.getNames().done(function (data) {//get the templates if needed
+                templAPI.getNames().done(function (data) {
+                    //get the templates if needed
                     baton.templates = data;
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
                     // get folder first to have its name
@@ -269,13 +272,15 @@ define('io.ox/core/pubsub/publications',
                             baton.target.template = node.val();
                         }))));
                 buildTemplates(node, templates);
-            } else {//no matching templates found on server
+            } else {
+                //no matching templates found on server
                 baton.popup.close();
                 notifications.yell('error', gt('No matching templates on this Server'));
             }
 
             //prefill
-            if (baton.target.template === '') {//set to first item in selection
+            if (baton.target.template === '') {
+                //set to first item in selection
                 baton.target.template = node.val();
             } else {
                 node.val(baton.target.template);
@@ -394,7 +399,8 @@ define('io.ox/core/pubsub/publications',
                                 }));
 
                 var wrapper = this.find('div.checkboxes');
-                if (wrapper.length === 0)  {//build wrapper
+                if (wrapper.length === 0)  {
+                    // build wrapper
                     wrapper = this.append($('<div>').addClass('control-group').append(
                             $('<div>').addClass('controls').append(temp)));
                 } else {

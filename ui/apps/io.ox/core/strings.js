@@ -47,7 +47,8 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
         fileSize: function (size, decimalPlaces) {
             if (!n_size) init_n_size();
             var i = 0, $i = n_size.length;
-            if (decimalPlaces > 10) {//for security so math.pow doesn't get really high values
+            if (decimalPlaces > 10) {
+                //for security so math.pow doesn't get really high values
                 decimalPlaces = 10;
             }
             var dp = Math.pow(10, decimalPlaces || 0);

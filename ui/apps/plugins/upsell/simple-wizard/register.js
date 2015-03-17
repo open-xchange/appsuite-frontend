@@ -50,7 +50,8 @@ define('plugins/upsell/simple-wizard/register',
                 context_id: ox.context_id,
                 hostname: location.hostname,
                 id: options.id || '',
-                imap_login: '', // missing
+                // missing
+                imap_login: '',
                 language: ox.language,
                 mail: mailSettings.get('defaultaddress', ''),
                 missing: options.missing || '',
@@ -58,7 +59,8 @@ define('plugins/upsell/simple-wizard/register',
                 type: options.type || '',
                 user: ox.user,
                 user_id: ox.user_id,
-                user_login: '' // missing
+                // missing
+                user_login: ''
             };
         },
 
@@ -186,6 +188,7 @@ define('plugins/upsell/simple-wizard/register',
 
     // register for event
     that.enable();
-    //upsell.demo(true); // useful during development
+    // DEBUGGING; useful during development
+    // upsell.demo(true);
     return that;
 });

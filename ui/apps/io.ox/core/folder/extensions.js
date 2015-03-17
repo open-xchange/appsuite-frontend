@@ -29,7 +29,7 @@ define('io.ox/core/folder/extensions',
 
     // define virtual/standard
     api.virtual.add('virtual/standard', function () {
-        return api.virtual.concat(
+        return this.concat(
             // inbox
             api.get(INBOX),
             // sent, drafts, spam, trash, archive
@@ -46,7 +46,8 @@ define('io.ox/core/folder/extensions',
                 new TreeNodeView({
                     empty: false,
                     filter: function (id, model) {
-                        return account.isUnified(model.id);
+                        // we check for ^default to make sure we only consider mail folders
+                        return /^default/.test(model.id) && account.isUnified(model.id);
                     },
                     folder: '1',
                     headless: true,
@@ -82,12 +83,14 @@ define('io.ox/core/folder/extensions',
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
+                empty: false,
                 filter: function (id, model) {
                     if (account.isStandardFolder(model.id)) return false;
                     if (api.is('public|shared', model.toJSON())) return false;
                     return true;
                 },
-                folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
+                // convention! virtual folders are identified by their id starting with "virtual"
+                folder: 'virtual/default0',
                 icons: tree.options.icons,
                 model_id: defaultId,
                 parent: tree,
@@ -96,7 +99,7 @@ define('io.ox/core/folder/extensions',
             });
 
             // open "My folders" whenever a folder is added to INBOX/root
-            api.pool.getCollection(defaultId).on('add', function () {
+            api.on('create:' + defaultId, function () {
                 node.toggle(true);
             });
 
@@ -113,6 +116,7 @@ define('io.ox/core/folder/extensions',
                     folder: '1',
                     headless: true,
                     open: true,
+                    icons: tree.options.icons,
                     tree: tree,
                     parent: tree
                 })
@@ -153,6 +157,7 @@ define('io.ox/core/folder/extensions',
                     folder: 'default0',
                     headless: true,
                     open: true,
+                    icons: tree.options.icons,
                     tree: tree,
                     parent: tree
                 })
@@ -247,6 +252,21 @@ define('io.ox/core/folder/extensions',
         }
     );
 
+    ext.point('io.ox/core/foldertree/mail/filter').extend(
+        {
+            id: 'standard-folders',
+            draw: extensions.standardFolders
+        },
+        {
+            id: 'local-folders',
+            draw: extensions.localFolders
+        },
+        {
+            id: 'other',
+            draw: extensions.otherFolders
+        }
+    );
+
     //
     // Files / Drive
     //
@@ -286,19 +306,33 @@ define('io.ox/core/folder/extensions',
                     baton = ext.Baton({ module: module, view: tree, context: tree.context }),
                     folder = 'virtual/flat/' + module,
                     model_id = 'flat/' + module,
-                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree };
+                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
+                    privateFolders,
+                    publicFolders;
 
                 ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
 
+                privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }));
+
+                // open private folder whenever a folder is added to it
+                api.pool.getCollection('flat/' + module + '/private').on('add', function () {
+                    privateFolders.toggle(true);
+                });
+
+                // open public folder whenever a folder is added to it
+                api.pool.getCollection('flat/' + module + '/public').on('add', function () {
+                    privateFolders.toggle(true);
+                });
+
+                publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }));
+
                 this.append(
                     // private folders
-                    new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private'), virtual: true }))
-                    .render().$el.addClass('section'),
+                    privateFolders.render().$el.addClass('section'),
                     // links
                     links,
                     // public folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }))
-                    .render().$el.addClass('section'),
+                    publicFolders.render().$el.addClass('section'),
                     // shared with me
                     new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: gt('Shared') }))
                     .render().$el.addClass('section'),
@@ -399,6 +433,7 @@ define('io.ox/core/folder/extensions',
                             userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
                         )
                     );
+                    baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }
             },
             {
@@ -406,15 +441,16 @@ define('io.ox/core/folder/extensions',
                 index: 200,
                 draw: function (baton) {
 
-                    this.find('.folder-shared').remove();
+                    this.find('.folder-node:first .folder-shared:first').remove();
 
                     if (_.device('smartphone')) return;
                     if (!api.is('unlocked', baton.data)) return;
 
-                    this.find('.folder-node').append(
+                    this.find('.folder-node:first').append(
                         $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
                         .on('click', { id: baton.data.id }, openPermissions)
                     );
+                    baton.view.options.a11yDescription.push(gt('You share this folder with other users'));
                 }
             },
             {
@@ -422,15 +458,17 @@ define('io.ox/core/folder/extensions',
                 index: 300,
                 draw: function (baton) {
 
-                    this.find('.folder-pubsub').remove();
+                    this.find('.folder-pubsub:first').remove();
 
-                    if (api.is('shared', baton.data)) return; // ignore shared folders
+                    // ignore shared folders
+                    if (api.is('shared', baton.data)) return;
                     if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
 
-                    this.find('.folder-node').append(
+                    this.find('.folder-node:first').append(
                         $('<i class="fa folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
                         .on('click', { folder: baton.data }, openPubSubSettings)
                     );
+                    baton.view.options.a11yDescription.push(gt('This folder has publications and/or subscriptions'));
                 }
             }
         );

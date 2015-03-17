@@ -35,7 +35,8 @@ define('io.ox/mail/settings/defaults', [], function () {
         'selectFirstMessage': true,
         'defaultSignature': false,
         'mobileSignature': undefined,
-        'mobileSignatureType': 'none', // one of 'none', 'custom'
+        // one of 'none', 'custom'
+        'mobileSignatureType': 'none',
         'threadSupport': true,
         //for persistent sort
         'sort': 'thread',

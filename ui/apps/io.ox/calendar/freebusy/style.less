@@ -29,7 +29,8 @@
     }
 
     .popover {
-        left: 13px !important;//needed to keep the popup inside the screen
+        // needed to keep the popup inside the screen
+        left: 13px !important;
         max-width: 380px;
 
         .arrow {
@@ -92,10 +93,6 @@
         }
     }
 
-    .participants-view .participant-wrapper .participant-email {
-        display: block;
-    }
-
     .participants-view:after {
         content: '\00a0';
     }
@@ -147,7 +144,7 @@
         z-index: 0 !important;
     }
 
-    /* copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste */
+    // copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste
     .striped(@angle: 45deg) {
         background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
         background-image: -webkit-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
@@ -161,7 +158,7 @@
         opacity: @opacity - 0.1;
     }
 
-    /* colors are in custom order: not rainbow */
+    // colors are in custom order: not rainbow
     .color-index-0 { background-color: #333; }
     .color-index-1 { background-color: darken(@blue-light, 20%); }
     .color-index-2 { background-color: @green-light; }
@@ -169,9 +166,9 @@
     .color-index-4 { background-color: #CA2929; } /* custom red */
     .color-index-5 { background-color: @orange; }
     .color-index-6 { background-color: darken(@blue, 10%); }
-    .color-index-7 { background-color: #FF3AB8; } /* pink */
-    .color-index-8 { background-color: #378137; } /* green */
-    .color-index-9 { background-color: #590F8A; } /* purple */
+    .color-index-7 { background-color: #FF3AB8; }
+    .color-index-8 { background-color: #378137; }
+    .color-index-9 { background-color: #590F8A; }
 
     .color-index-3 .appointment-content { color: #333; }
  }

@@ -59,7 +59,8 @@ define('io.ox/core/tk/flag-picker',
                 $('<ul class="dropdown-menu" role="menu">')
                 .on('click', 'a', { data: data }, that.change)
                 .append(
-                    _(order).map(function (index, color) { // alternative: api.COLORS for rainbow colors
+                    _(order).map(function (index, color) {
+                        // alternative: api.COLORS for rainbow colors
                         return $('<li>').append(
                             $('<a href="#" tabindex="1" role="menuitem">').append(
                                 index > 0 ? $('<span class="flag-example">').addClass('flag_bg_' + index) : $(),
@@ -84,7 +85,8 @@ define('io.ox/core/tk/flag-picker',
         draw: function (node, baton) {
 
             var data = baton.data,
-                color = Math.max(0, data.color_label || 0), // to fix buggy -1
+                // to fix buggy -1
+                color = Math.max(0, data.color_label || 0),
                 link;
 
             node.append(

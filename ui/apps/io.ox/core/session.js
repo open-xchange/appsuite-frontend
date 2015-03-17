@@ -19,7 +19,7 @@ define('io.ox/core/session',
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 };
+    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 }, CLIENT = 'open-xchange-appsuite';
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -36,7 +36,8 @@ define('io.ox/core/session',
 
     var set = function (data, language) {
         if ('session' in data) ox.session = data.session || '';
-        if ('user' in data) ox.user = data.user || ''; // might have a domain; depends on what the user entered on login
+        // might have a domain; depends on what the user entered on login
+        if ('user' in data) ox.user = data.user || '';
         if ('user_id' in data) ox.user_id = data.user_id || 0;
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
@@ -65,7 +66,7 @@ define('io.ox/core/session',
                     action: 'autologin',
                     client: that.client(),
                     rampup: true,
-                    rampupFor: 'open-xchange-appsutie',
+                    rampupFor: CLIENT,
                     version: that.version()
                 }
             })
@@ -109,6 +110,8 @@ define('io.ox/core/session',
             })
             .then(function (data) {
                 set(data);
+                // global event
+                ox.trigger('login', data);
                 // call store for token-based login / not for pure auto-login
                 return store ? that.store().then(function () { return data; }) : data;
             });
@@ -162,9 +165,14 @@ define('io.ox/core/session',
                             }
                         })
                         .done(function (data) {
+
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);
+
+                            // global event
+                            ox.trigger('login', data);
+
                             if (store) {
                                 that.store().done(function () { def.resolve(data); });
                             } else {
@@ -193,7 +201,7 @@ define('io.ox/core/session',
                 params: {
                     action: 'rampup',
                     rampup: true,
-                    rampupFor: 'open-xchange-appsuite'
+                    rampupFor: CLIENT
                 },
                 appendColumns: false,
                 processResponse: false
@@ -251,7 +259,7 @@ define('io.ox/core/session',
         },
 
         client: function () {
-            return 'open-xchange-appsuite';
+            return CLIENT;
         },
 
         version: function () {

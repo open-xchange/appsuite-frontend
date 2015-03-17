@@ -17,29 +17,19 @@ define('io.ox/core/import/import',
      'io.ox/core/tk/dialogs',
      'io.ox/core/tk/attachments',
      'io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
      'io.ox/core/api/import',
      'io.ox/core/notifications',
      'gettext!io.ox/core',
      'less!io.ox/core/import/style'
-    ], function (ext, dialogs, attachments, folderAPI, getBreadcrumb, api, notifications, gt) {
+    ], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
 
     'use strict';
 
-    //body: breadcrumb
-    ext.point('io.ox/core/import/breadcrumb').extend({
-        id: 'default',
-        draw: function (id, prefix) {
-            this.append(
-                getBreadcrumb(id, { prefix: prefix || '' }),
-                $('<input type="hidden" name="folder">').val(id)
-            );
-        }
-    });
-
-    ext.point('io.ox/core/import/select').extend({
+    ext.point('io.ox/core/import').extend({
         id: 'select',
+        index: 100,
         draw: function (baton) {
+
             var nodes = {}, formats;
             nodes.row = $('<div class="form-group">').appendTo($(this));
 
@@ -98,74 +88,106 @@ define('io.ox/core/import/import',
         }
     });
 
-    ext.point('io.ox/core/import/file_upload').extend({
-        id: 'default',
+    ext.point('io.ox/core/import').extend({
+        id: 'file',
+        index: 200,
         draw: function (baton) {
-            baton.nodes.file_upload = attachments.fileUploadWidget({ displayLabel: true, tabindex: 0, multi: false });
+            var label = $('<span class="filename">');
             this.append(
-                baton.nodes.file_upload
+                baton.nodes.file_upload = attachments.fileUploadWidget({ tabindex: 0, multi: false }).append(label)
+            );
+            var $input = baton.nodes.file_upload.find('input[type="file"]');
+            $input.on('change', function (e) {
+                e.preventDefault();
+                var buttonText = '';
+                if ($input[0].files && $input[0].files.length > 0) {
+                    buttonText = $input[0].files[0].name;
+                }
+                label.text(buttonText);
+            });
+        }
+    });
+
+    ext.point('io.ox/core/import').extend({
+        id: 'checkbox',
+        index: 200,
+        draw: function (baton) {
+
+            // show option only for ical imports in calendar
+            if (baton.module !== 'calendar') return;
+
+            this.append(
+                $('<div class="checkbox">').append(
+                    $('<label>').append(
+                        $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
+                        gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
+                    )
+                )
             );
         }
     });
 
-    ext.point('io.ox/core/import/ignore_uuids').extend({
-        id: 'default',
+    ext.point('io.ox/core/import').extend({
+        id: 'help',
+        index: 300,
         draw: function (baton) {
-            this.append(
-                //show option only for ical imports
-                _.contains(['calendar', 'tasks'], baton.module) ?
-                $('<label class="checkbox">').append(
-                    $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
-                    gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
-                ) : $()
-            );
-        }
-    });
 
-    //buttons
-    ext.point('io.ox/core/import/buttons').extend({
-        id: 'default',
-        draw: function () {
-            this.addPrimaryButton('import', gt('Import'), 'import', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
+            if (baton.module !== 'contacts') return;
+
+            this.append(
+                $('<div class="help-block">').append(
+                    // inline help
+                    $('<b>').text(gt('Note on CSV files:')),
+                    $.txt(' '),
+                    $('<span>').text(
+                        gt('The first record of a valid CSV file must define proper column names. Supported separators are comma and semi-colon.')
+                    ),
+                    $.txt(' '),
+                    // link to online help
+                    $('<a href="" target="help" style="white-space: nowrap">')
+                        .attr('href', 'help/l10n/' + ox.language + '/ox.appsuite.user.sect.datainterchange.import.contactscsv.html')
+                        .text(gt('Learn more'))
+                )
+            );
         }
     });
 
     return {
+
         show: function (module, id) {
 
-            var id = String(id),
-                dialog = new dialogs.ModalDialog(),
-                baton = {id: id, module: module, format: {}, nodes: {}},
-                form;
+            id = String(id);
+
+            var baton = { id: id, module: module, format: {}, nodes: {} };
 
             //get folder and process
             folderAPI.get(id).done(function () {
-                dialog.build(function () {
-                    form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
-                    this.getContentNode().append(form);
 
-                    //body
-                    ext.point('io.ox/core/import/breadcrumb')
-                        .invoke('draw', form, id, gt('Import into'));
-                    ext.point('io.ox/core/import/select')
-                        .invoke('draw', form, baton);
-                    ext.point('io.ox/core/import/ignore_uuids')
-                        .invoke('draw', form, baton);
-                    ext.point('io.ox/core/import/file_upload')
-                        .invoke('draw', form, baton);
+                new dialogs.ModalDialog()
+                .build(function () {
 
-                    //buttons
-                    ext.point('io.ox/core/import/buttons')
-                        .invoke('draw', this);
+                    this.getHeader().append(
+                        $('<h4>').text(gt('Import from file'))
+                    );
+
+                    this.form = $('<form method="post" accept-charset="UTF-8" enctype="multipart/form-data">');
+                    this.getContentNode().append(this.form);
+
+                    ext.point('io.ox/core/import').invoke('draw', this.form, baton);
+
+                    this.addPrimaryButton('import', gt('Import'), 'import', {'tabIndex': '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
+
                     this.getPopup().addClass('import-dialog');
-                });
-                dialog.on('import', function () {
+                })
+                .on('import', function () {
+
                     var type = baton.nodes.select.val() || '',
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
                         failHandler = function (data) {
-                            var list = _(data).chain()
+                            var list = _(data)
+                                .chain()
                                 .map(function (item) {
                                     if (item && item.code === 'CON-0600') {
                                         //append first value which caused conversion error (csv import)
@@ -173,12 +195,16 @@ define('io.ox/core/import/import',
                                     }
                                     return item && item.error;
                                 })
-                                .compact();
-                            notifications.yell('error', list.length ?
-                                list.join('\n\n') :
-                                //#. Error message if calender import failed
-                                gt('There was no appointment data to import')
-                            );
+                                .compact()
+                                .value();
+                            notifications.yell({
+                                type: 'error',
+                                message: list.length ?
+                                    list.join('\n\n') :
+                                    //#. Error message if calender import failed
+                                    gt('There was no appointment data to import'),
+                                duration: -1
+                            });
                             popup.idle();
                         };
 
@@ -194,7 +220,7 @@ define('io.ox/core/import/import',
 
                     api.importFile({
                         file: file[0].files ? file[0].files[0] : [],
-                        form: form,
+                        form: this.form,
                         type: type,
                         ignoreUIDs: popup.getContentNode().find('input[name="ignore_uuids"]').prop('checked'),
                         folder: id
@@ -206,12 +232,17 @@ define('io.ox/core/import/import',
                         });
                         //cache
                         try {
-                            baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
-                                baton.api.trigger('refresh.all');
-                            });
+                            // todo: clean that up; fails for calendar
+                            if (baton.api.caches.all.grepRemove) {
+                                baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
+                                    baton.api.trigger('refresh.all');
+                                });
+                            } else if (baton.api.refresh) {
+                                baton.api.refresh();
+                            }
                         } catch (e) {
                             // if api is unknown, refresh everything
-                            console.warn('import triggering global refresh because of unknown API', e);
+                            if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
                             ox.trigger('refresh^');
                         }
                         //partially failed?
@@ -224,6 +255,9 @@ define('io.ox/core/import/import',
                         popup.close();
                     })
                     .fail(failHandler);
+                })
+                .on('close', function () {
+                    this.form = baton = baton.nodes = null;
                 })
                 .show(function () {
                     //focus

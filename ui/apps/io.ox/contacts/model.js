@@ -220,7 +220,8 @@ define('io.ox/contacts/model',
     }
 
     var fields = {
-        display_name: gt('Display name'), // noun
+        // noun
+        display_name: gt('Display name'),
         first_name: gt('First name'),
         last_name: gt('Last name'),
         second_name: gt('Middle name'),

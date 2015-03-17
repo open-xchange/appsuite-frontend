@@ -59,7 +59,8 @@ define('io.ox/contacts/widgets/canvasresize',
          */
         detectSubsampling: function (img) {
             var iw = img.width, ih = img.height;
-            if (iw * ih > 1048576) { // subsampling may happen over megapixel image
+            if (iw * ih > 1048576) {
+                // subsampling may happen over megapixel image
                 var canvas = document.createElement('canvas');
                 canvas.width = canvas.height = 1;
                 var ctx = canvas.getContext('2d');
@@ -263,7 +264,8 @@ define('io.ox/contacts/widgets/canvasresize',
                         iw /= 2;
                         ih /= 2;
                     }
-                    var d = 1024; // size of tiling canvas
+                    // size of tiling canvas
+                    var d = 1024;
                     var tmpCanvas = document.createElement('canvas');
                     tmpCanvas.width = tmpCanvas.height = d;
                     var tmpCtx = tmpCanvas.getContext('2d');

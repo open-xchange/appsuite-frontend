@@ -43,6 +43,23 @@ define('io.ox/search/util',
     };
 
     return {
+        addTooltip: function (node, title) {
+            if(!_.device('touch')) {
+                node.attr({
+                    'data-toggle': 'tooltip',
+                    'data-placement': 'bottom',
+                    'data-animation': 'false',
+                    'data-container': 'body',
+                    'data-original-title': title
+                    })
+                    .tooltip(/*{delay: { 'show': 500, 'hide': 200 }}*/)
+                    .on('click', function () {
+                        if (node.tooltip)
+                            node.tooltip('hide');
+                    });
+            }
+            return node;
+        },
         getOptionLabel: function (options, id) {
             var current = _.find(options, function (item) {
                     return item.id === id;
@@ -109,7 +126,7 @@ define('io.ox/search/util',
                         return _.map(args, function (folder) {
                             return {
                                 id: folder.id,
-                                title: folder.title || folder.id, // folderAPI.getFolderTitle(folder.title, 15),
+                                title: folder.title || folder.id,
                                 type: mapping[folder.id],
                                 data: folder
                             };
@@ -131,27 +148,50 @@ define('io.ox/search/util',
             var module = model.getModule(),
                 id = model.getFolder(),
                 def = $.Deferred(),
-                value = function (id, folder) {
-                    folder = folder || {};
-                    // use id as fallback
-                    def.resolve({
-                        custom: folder.id || id,
-                        name: folder.title || id
-                    });
-                };
+                defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString(),
+                isMandatory = model.isMandatory('folder');
 
             // infostore hack
             module = module === 'files' ? 'infostore' : module;
 
-            //'all folders' when not mandatory and not default folder
-            if (model.isMandatory('folder') || id !== (folderAPI.getDefaultFolder(module) || '').toString()) {
-                // 'preselected folder'
-                folderAPI.get(id).always(value.bind(this, id));
-                return def.promise();
-            } else {
-                // 'all folders'
-                return $.Deferred().resolve({});
+            function cont (type, data) {
+                var types = {
+                    'all': def.resolve.bind(this, {}),
+                    'selected': def.resolve.bind(this, {
+                                custom: data.id || id,
+                                name: data.title || id
+                            }),
+                    'invalid': def.reject
+                };
+                types[type]();
             }
+
+            // be robust (mobile)
+            id = id || defaultfolder;
+
+            folderAPI.get(id)
+                .then(function (data) {
+                    data = data || {};
+                    // conditions
+                    var isDefault = data.id === defaultfolder,
+                        isVirtual = module === 'mail' && !folderAPI.can('read', data);
+                    // conditions mapping
+                    if (!isMandatory) {
+                        if (isDefault || isVirtual) {
+                            cont('all', data);
+                        } else {
+                            cont('selected', data);
+                        }
+                    } else {
+                        if (isVirtual) {
+                            cont('invalid', data);
+                        } else {
+                            cont('selected', data);
+                        }
+                    }
+                });
+
+            return def.promise();
         }
 
     };

@@ -55,9 +55,9 @@ define('io.ox/core/folder/actions/properties',
                         gt('Number of items'), model.get('total')
                     )
                 );
-                // show CalDAV URL for calendar folders
+                // show CalDAV URL for calendar and task folders
                 // users requires "caldav" capability
-                if (module === 'calendar' && capabilities.has('caldav')) {
+                if ((module === 'calendar' || module === 'tasks') && capabilities.has('caldav')) {
                     node.append(
                         group(gt('CalDAV URL'), _.noI18n(
                             caldavConfig.get('url')

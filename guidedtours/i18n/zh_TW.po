@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-11 23:24+0800\n"
+"PO-Revision-Date: 2015-03-04 09:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: apps/io.ox/tours/main.js:456 module:io.ox/tours
 msgid "Adding attachments"
@@ -607,7 +607,7 @@ msgstr ""
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
 
 #: apps/io.ox/tours/main.js:187 module:io.ox/tours

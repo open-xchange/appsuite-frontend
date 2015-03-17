@@ -32,8 +32,10 @@
         }
     }
 
-    .toggle-details > .toggle-caret:before { content: '\f0da'; } // caret right
-    &.open .toggle-details > .toggle-caret:before { content: '\f0d7'; } // caret down
+    // caret right
+    .toggle-details > .toggle-caret:before { content: '\f0da'; }
+    // caret down
+    &.open .toggle-details > .toggle-caret:before { content: '\f0d7'; }
 
     .toggle-mode {
 
@@ -114,8 +116,8 @@
 
         padding: 0;
         margin: 0;
-        max-height: 120px; // multiple of line-height/height (20px)
-        overflow: auto;
+        // multiple of line-height/height (20px)
+        max-height: 120px;
 
         li.item {
 
@@ -191,8 +193,10 @@
 
     ul.inline-items.preview {
 
-        height: 120px; // no clue but helps keeping proper scrollHeight
-        margin: 0 21px; // yep, 20 + 1
+        // no clue but helps keeping proper scrollHeight
+        height: 120px;
+        // yep, 20 + 1
+        margin: 0 21px;
         white-space: nowrap;
         overflow: hidden;
 

@@ -69,9 +69,7 @@ define('io.ox/calendar/edit/main',
 
                 function cont(data) {
                     self.model = appointmentModel.factory.create(data);
-                    appointmentModel.applyAutoLengthMagic(self.model);
-                    appointmentModel.fullTimeChangeBindings(self.model);
-                    appointmentModel.setDefaultParticipants(self.model, { create: opt.mode === 'create' }).done(function () {
+                    self.model.setDefaultParticipants({ create: opt.mode === 'create' }).done(function () {
 
                         var baton = { model: self.model, mode: opt.mode, app: self, callbacks: {} };
                         baton.callbacks.extendDescription = app.extendDescription;
@@ -89,8 +87,9 @@ define('io.ox/calendar/edit/main',
                                 try {
                                     self.getWindow().idle();
                                 } catch (e) {
-                                    if (response.code === 'UPL-0005') {//uploadsize to big
-                                        api.removeFromUploadList(_.ecid(this.attributes));//remove busy animation
+                                    if (response.code === 'UPL-0005') {
+                                        //uploadsize to big; remove busy animation
+                                        api.removeFromUploadList(_.ecid(this.attributes));
                                     }
                                 }
                                 if (response.conflicts) {
@@ -116,7 +115,7 @@ define('io.ox/calendar/edit/main',
                                         })
                                         .header(conflictView.drawHeader());
 
-                                        dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
+                                    dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
                                     if (hardConflict) {
                                         dialog.prepend(
                                             $('<div class="alert alert-info hard-conflict">')
@@ -160,7 +159,8 @@ define('io.ox/calendar/edit/main',
                         }
 
                         win.on('show', function () {
-                            if (self.model.get('id')) {//set url parameters
+                            if (self.model.get('id')) {
+                                //set url parameters
                                 self.setState({ folder: self.model.attributes.folder_id, id: self.model.attributes.id });
                             } else {
                                 self.setState({ folder: self.model.attributes.folder_id, id: null});
@@ -196,7 +196,8 @@ define('io.ox/calendar/edit/main',
                             }
 
                             // init alarm
-                            if (self.model.get('alarm') === undefined || self.model.get('alarm') === null) {//0 is valid don't change to -1 then
+                            if (self.model.get('alarm') === undefined || self.model.get('alarm') === null) {
+                                //0 is valid don't change to -1 then
                                 self.model.set('alarm', -1, { silent: true, validate: true });
                             }
 
@@ -216,7 +217,8 @@ define('io.ox/calendar/edit/main',
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
-                        $(app).trigger('finishedCreating');//used by guided tours so they can show the next step when everything is ready
+                        //used by guided tours so they can show the next step when everything is ready
+                        $(app).trigger('finishedCreating');
                     });
                 }
 
@@ -282,9 +284,10 @@ define('io.ox/calendar/edit/main',
                     self.getWindow().setTitle(self.model.get('title'));
                     self.setTitle(self.model.get('title'));
                 }
-                self.model.on('change:title', function (model, value) {
+                self.model.on('keyup:title', function (value) {
+
                     if (!value) {
-                        if (model.get('id')) {
+                        if (self.model.get('id')) {
                             value = gt('Edit appointment');
                         } else {
                             value = gt('Create appointment');
@@ -293,8 +296,14 @@ define('io.ox/calendar/edit/main',
                     self.getWindow().setTitle(value);
                     self.setTitle(value);
                 });
-                $(self.getWindow().nodes.main).find('input')[0].focus(); // focus first input element
-                $(self.getWindow().nodes.main[0]).addClass('scrollable'); // make window scrollable
+
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (_.device('!smartphone && !iOS')) {
+                    // focus first input element
+                    $(self.getWindow().nodes.main).find('input')[0].focus();
+                }
+                // make window scrollable
+                $(self.getWindow().nodes.main[0]).addClass('scrollable');
 
                 var controlsBlock = $(self.getWindow().nodes.main).find('.controls'),
                     list = controlsBlock.find('ul'),
@@ -365,7 +374,7 @@ define('io.ox/calendar/edit/main',
                 self.dispose();
                 df.resolve();
             }
-            if (_.device('!smartphone')) app.getWindow().nodes.main.find('input')[0].focus();
+            if (_.device('!smartphone && !iOS')) app.getWindow().nodes.main.find('input')[0].focus();
             return df;
         });
 

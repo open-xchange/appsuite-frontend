@@ -35,7 +35,8 @@ define('io.ox/core/folder/selection', [], function () {
 
         byId: function (id, items) {
             items = items || this.getItems();
-            return items.filter('[data-id="' + $.escape(id) + '"]').first(); // use first, we might have duplicates
+            // use first, we might have duplicates
+            return items.filter('[data-id="' + $.escape(id) + '"]').first();
         },
 
         get: function (attribute) {
@@ -81,6 +82,8 @@ define('io.ox/core/folder/selection', [], function () {
                 current = $(e.currentTarget),
                 index = items.index(current) || 0;
 
+            // trigger action event
+            this.view.trigger('selection:action', items, index);
             // do nothing if already selected
             if (current.hasClass('selected')) return;
 

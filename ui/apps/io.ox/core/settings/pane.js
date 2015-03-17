@@ -29,7 +29,20 @@ define('io.ox/core/settings/pane',
 
     var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme'];
+        reloadMe = ['language', 'timezone', 'theme'],
+        // selectionGroup
+        defaults = {
+            index: 0,
+            labelCssClass: 'col-sm-5',
+            controlCssClass: 'col-sm-7 col-md-6'
+        },
+        createSelectonGroup = function (options)  {
+            // increase index
+            defaults.index = (defaults || options).index + 100;
+            // apply defaults and create group
+            options = _.extend({}, defaults, options);
+            return new forms.SelectControlGroup(options);
+        };
 
     ext.point('io.ox/core/settings/detail').extend({
         index: 50,
@@ -63,63 +76,9 @@ define('io.ox/core/settings/pane',
         }
     });
 
-    //
-    // My contact data
-    //
-
-    point.basicExtend({
-        id: 'my-contact-data',
-        index: '10000',
-        draw: function () {
-            this.append(
-                $('<div data-extension-id="my-contact-data">').append(
-                    $('<div class="form-group">').append(
-                        $('<label class="control-label col-sm-4">'),
-                        $('<div class="col-sm-4">').append(
-                            $('<button type="button" class="btn btn-default" tabindex="1">')
-                            .text(gt('My contact data') + ' ...')
-                            .on('click', function () {
-                                require(['io.ox/core/settings/user'], function (userSettings) {
-                                    userSettings.openModalDialog();
-                                });
-                            })
-                        )
-                    )
-                )
-            );
-        }
-    });
-
-    //
-    // Change password
-    //
-
-    if (capabilities.has('edit_password')) {
-        point.basicExtend({
-            id: 'change-password',
-            index: '11000',
-            draw: function () {
-                this.append(
-                    $('<div data-extension-id="change-password">').append(
-                        $('<div class="form-group">').append(
-                            $('<label class="control-label col-sm-4">'),
-                            $('<div class="col-sm-4">').append(
-                                $('<button type="button" class="btn btn-default" tabindex="1">')
-                                .text(gt('Change password') + ' ...')
-                                .on('click', userSettings.changePassword)
-                            )
-                        )
-                    )
-                );
-            }
-        });
-    }
-
-    point.extend(new forms.SelectControlGroup({
+    // Language
+    point.extend(createSelectonGroup({
         id: 'language',
-        index: 100,
-        labelCssClass: 'col-sm-4',
-        controlCssClass: 'col-sm-4',
         attribute: 'language',
         label: gt('Language'),
         selectOptions: ox.serverConfig.languages || {},
@@ -130,8 +89,8 @@ define('io.ox/core/settings/pane',
         }
     }));
 
+    // Timezones
     (function () {
-        // Timezones
         var available = settingOptions.get('availableTimeZones'),
             technicalNames = _(available).keys(),
             userTZ = settings.get('timezone', 'UTC'),
@@ -165,47 +124,16 @@ define('io.ox/core/settings/pane',
             }
         }
 
-        point.extend(new forms.SelectControlGroup({
+        point.extend(createSelectonGroup({
             id: 'timezones',
-            index: 200,
-            labelCssClass: 'col-sm-4',
-            controlCssClass: 'col-sm-4',
             attribute: 'timezone',
             label: gt('Time zone'),
             selectOptions: sorted
         }));
 
-        // Themes
-        var availableThemes = settingOptions.get('themes') || {};
-
-        //  until we get translated themes from backend
-        if (availableThemes['default']) {
-            availableThemes['default'] = gt('Default Theme');
-        }
-
-        if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
-            point.extend(new forms.SelectControlGroup({
-                id: 'theme',
-                index: 400,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
-                attribute: 'theme',
-                label: gt('Theme'),
-                selectOptions: availableThemes
-            }));
-        }
-
-        point.extend(new forms.CheckControlGroup({
-            id: 'highcontrast',
-            index: 401,
-            labelCssClass: 'col-sm-4',
-            controlCssClass: 'col-sm-4',
-            attribute: 'highcontrast',
-            label: gt('High contrast theme')
-        }));
-
     }());
 
+    // Refresh interval
     (function () {
         if (settings.isConfigurable('refreshInterval')) {
             var MINUTES = 60000;
@@ -216,11 +144,8 @@ define('io.ox/core/settings/pane',
             options[15 * MINUTES] = gt('15 minutes');
             options[30 * MINUTES] = gt('30 minutes');
 
-            point.extend(new forms.SelectControlGroup({
+            point.extend(createSelectonGroup({
                 id: 'refreshInterval',
-                index: 300,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
                 attribute: 'refreshInterval',
                 label: gt('Refresh interval'),
                 selectOptions: options
@@ -228,8 +153,36 @@ define('io.ox/core/settings/pane',
         }
     }());
 
-    // Auto Start App
+    // Themes
+    (function () {
+        var availableThemes = settingOptions.get('themes') || {};
 
+        //  until we get translated themes from backend
+        if (availableThemes['default']) {
+            availableThemes['default'] = gt('Default Theme');
+        }
+
+        if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
+            point.extend(createSelectonGroup({
+                id: 'theme',
+                attribute: 'theme',
+                label: gt('Theme'),
+                selectOptions: availableThemes
+            }));
+        }
+
+        point.extend(new forms.CheckControlGroup({
+            id: 'highcontrast',
+            index: defaults.index + 1,
+            labelCssClass: defaults.labelCssClass,
+            controlCssClass: defaults.controlCssClass,
+            attribute: 'highcontrast',
+            label: gt('High contrast theme')
+        }));
+
+    }());
+
+    // Auto Start App
     (function () {
         if (settings.isConfigurable('autoStart')) {
             var options = {};
@@ -238,11 +191,8 @@ define('io.ox/core/settings/pane',
             });
 
             options.none = gt('None');
-            point.extend(new forms.SelectControlGroup({
+            point.extend(createSelectonGroup({
                 id: 'autoStart',
-                index: 500,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
                 attribute: 'autoStart',
                 label: gt('Default app after sign in'),
                 selectOptions: options
@@ -250,29 +200,7 @@ define('io.ox/core/settings/pane',
         }
     }());
 
-    // Auto open notification area
-    (function () {
-        var options = {};
-
-        options.never = gt('Never');
-        options.noEmail = gt('On new notifications except mails');
-        options.always = gt('On every new notification');
-
-        if (settings.isConfigurable('autoOpenNotificationarea')) {
-            point.extend(new forms.SelectControlGroup({
-                id: 'autoOpenNotfication',
-                index: 700,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
-                attribute: 'autoOpenNotification',
-                label: gt('Automatic opening of notification area'),
-                selectOptions: options
-            }));
-        }
-    }());
-
     // Auto Logout
-
     (function () {
         var MINUTES = 60000,
             options = {};
@@ -283,11 +211,8 @@ define('io.ox/core/settings/pane',
         options[15 * MINUTES] = gt('15 minutes');
         options[30 * MINUTES] = gt('30 minutes');
 
-        point.extend(new forms.SelectControlGroup({
+        point.extend(createSelectonGroup({
             id: 'autoLogout',
-            index: 600,
-            labelCssClass: 'col-sm-4',
-            controlCssClass: 'col-sm-4',
             attribute: 'autoLogout',
             label: gt('Automatic sign out'),
             selectOptions: options,
@@ -299,6 +224,73 @@ define('io.ox/core/settings/pane',
 
     }());
 
+    // Auto open notification area
+    (function () {
+        var options = {};
+
+        options.never = gt('Never');
+        options.noEmail = gt('On new notifications except mails');
+        options.always = gt('On every new notification');
+
+        if (settings.isConfigurable('autoOpenNotificationarea')) {
+            point.extend(createSelectonGroup({
+                id: 'autoOpenNotfication',
+                attribute: 'autoOpenNotification',
+                label: gt('Automatic opening of notification area'),
+                selectOptions: options
+            }));
+        }
+    }());
+
+    // Button: My contact data
+    point.basicExtend({
+        id: 'my-contact-data',
+        index: '10000',
+        draw: function () {
+            this.append(
+                $('<div data-extension-id="my-contact-data">').append(
+                    $('<div class="form-group">').append(
+                        $('<label class="control-label">')
+                            .addClass(defaults.labelCssClass),
+                        $('<div class="col-sm-4">').append(
+                            $('<button type="button" class="btn btn-default" tabindex="1">')
+                            .text(gt('My contact data') + ' ...')
+                            .on('click', function () {
+                                require(['io.ox/core/settings/user'], function (userSettings) {
+                                    userSettings.openModalDialog();
+                                });
+                            })
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+    // Button: Change password
+    if (capabilities.has('edit_password')) {
+        point.basicExtend({
+            id: 'change-password',
+            index: '11000',
+            draw: function () {
+                this.append(
+                    $('<div data-extension-id="change-password">').append(
+                        $('<div class="form-group">').append(
+                            $('<label class="control-label">')
+                                .addClass(defaults.labelCssClass),
+                            $('<div class="col-sm-4">').append(
+                                $('<button type="button" class="btn btn-default" tabindex="1">')
+                                .text(gt('Change password') + ' ...')
+                                .on('click', userSettings.changePassword)
+                            )
+                        )
+                    )
+                );
+            }
+        });
+    }
+
+    // DEBUGGING: Button: clear cache
     // point.basicExtend({
     //     id: 'clearCache',
     //     index: 200000,

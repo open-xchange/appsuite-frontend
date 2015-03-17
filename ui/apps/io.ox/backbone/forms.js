@@ -119,7 +119,8 @@ define('io.ox/backbone/forms',
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
         this.modelEvents['valid:' + options.attribute] = 'removeError';
 
-        _.extend(this, options); // May override any of the above aspects
+        // May override any of the above aspects
+        _.extend(this, options);
     }
 
     function SelectControlGroup(options) {
@@ -183,15 +184,25 @@ define('io.ox/backbone/forms',
 
         _.extend(object, {
             showError: function (messages) {
+                var errorId = _.uniqueId('error-help_'),
+                    inputField = this.$el.find('input');
+
                 this.$el.find('.help-block').remove();
-                var helpBlock = $('<div class="help-block error">');
+                var helpBlock = $('<div class="help-block error" aria-live="assertive" role="alert">').attr('id', errorId);
                 _(messages).each(function (msg) {
                     helpBlock.append($.txt(msg));
                 });
                 this.$el.append(helpBlock);
                 this.$el.addClass('error');
+                inputField.attr({
+                    'aria-invalid': 'true',
+                    'aria-describedby': errorId
+                });
+                inputField.focus();
             },
             clearError: function () {
+                var inputField = this.$el.find('input');
+                inputField.removeAttr('aria-invalid aria-describedby');
                 this.$el.removeClass('error');
                 this.$el.find('.help-block').remove();
             }

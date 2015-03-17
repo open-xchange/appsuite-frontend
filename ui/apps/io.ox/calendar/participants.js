@@ -62,7 +62,13 @@ define('io.ox/calendar/participants',
         }
 
         var isResource = looksLikeResource(obj);
-        node = $('<li class="participant">').addClass(isResource ? 'halo-resource-link' : 'halo-link');
+        node = $('<li class="participant" tabindex="1">')
+            .addClass(isResource ? 'halo-resource-link' : 'halo-link')
+            .on('keydown', function (e) {
+                if (e.which === 13) {
+                    $(this).click();
+                }
+            });
 
         if (isResource) {
             node.append(
@@ -86,9 +92,10 @@ define('io.ox/calendar/participants',
     function ParticipantsView(baton, options) {
 
         options = _.extend({
-            summary: true,//show summary
-            inlineLinks: false,//no inline links (provide extensionpoint id here to make them show)
-            //inlineLinks: true
+            //show summary
+            summary: true,
+            //no inline links (provide extensionpoint id here to make them show)
+            inlineLinks: false
         }, options);
 
         this.draw = function () {
@@ -150,7 +157,8 @@ define('io.ox/calendar/participants',
                     })
                     .value();
 
-                if (baton.data.confirmations === undefined || baton.data.confirmations.length === 0) {//workaround for tasks
+                if (baton.data.confirmations === undefined || baton.data.confirmations.length === 0) {
+                    //workaround for tasks
                     confirmations = util.getConfirmations({users: baton.data.users, confirmations: external});
                 } else {
                     confirmations = util.getConfirmations(baton.data);
@@ -163,7 +171,9 @@ define('io.ox/calendar/participants',
                     if (userList.length > 0) {
                         participants.append(
                             $('<fieldset>').append(
-                                $('<legend>').addClass('io-ox-label').text(gt('Participants')),
+                                $('<legend>').addClass('io-ox-label').append(
+                                    $('<h2>').text(gt('Participants'))
+                                ),
                                 intList = $('<ul>').addClass('participant-list list-inline')
                             )
                         );
@@ -187,7 +197,9 @@ define('io.ox/calendar/participants',
                     if (external.length > 0) {
                         participants.append(
                             $('<fieldset>').append(
-                                $('<legend>').addClass('io-ox-label').text(gt('External participants')),
+                                $('<legend>').addClass('io-ox-label').append(
+                                    $('<h2>').text(gt('External participants'))
+                                ),
                                 extList = $('<ul>').addClass('participant-list list-inline')
                             )
                         );
@@ -211,7 +223,9 @@ define('io.ox/calendar/participants',
                                 // new section
                                 participants.append(
                                     $('<fieldset>').append(
-                                        $('<legend>').addClass('group io-ox-label').text(gt.noI18n(obj.display_name + ':')),
+                                        $('<legend>').addClass('group io-ox-label').append(
+                                            $('<h2>').text(gt.noI18n(obj.display_name + ':'))
+                                        ),
                                         glist = $('<ul>').addClass('participant-list list-inline')
                                     )
                                 );
@@ -240,7 +254,9 @@ define('io.ox/calendar/participants',
                         var plist;
                         participants.append(
                             $('<fieldset>').append(
-                                $('<legend>').addClass('io-ox-label').text(gt('Resources')),
+                                $('<legend>').addClass('io-ox-label').append(
+                                    $('<h2>').text(gt('Resources'))
+                                ),
                                 plist = $('<ul>').addClass('participant-list list-inline')
                             )
                         );
@@ -300,7 +316,8 @@ define('io.ox/calendar/participants',
                         });
                         participants.find('legend').first().append(sum);
                     }
-                    if (changedBaton) {//remove temporary changes
+                    if (changedBaton) {
+                        //remove temporary changes
                         delete baton.data;
                     }
                     // draw action links if extension point is provided

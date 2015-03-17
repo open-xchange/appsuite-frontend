@@ -100,7 +100,9 @@ define('io.ox/mail/vacationnotice/settings/view-form',
 
                 this.append(
                     $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').text(model.fields.headlineAdresses),
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(model.fields.headlineAdresses)
+                        ),
                         checkboxes
                     )
                 );
@@ -141,11 +143,19 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                     index: 425,
                     id: ref + '/edit/view/timeframecheckbox',
                     draw: function (baton) {
+                        var checkboxView = new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model });
+
+                        baton.model.off('change:' + checkboxView.name, null,  ext.point(ref + '/edit/view'));
+                        baton.model.on('change:' + checkboxView.name, function (model, checked) {
+                            $('.dateFrom').find('.form-control').attr('disabled', !checked);
+                            $('.dateUntil').find('.form-control').attr('disabled', !checked);
+                        }, ext.point(ref + '/edit/view'));
+
                         this.append(
                             $('<fieldset>').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(model.fields.activateTimeFrame).append(
-                                        new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model }).render().$el
+                                        checkboxView.render().$el
                                     )
                                 )
                             )
@@ -162,11 +172,17 @@ define('io.ox/mail/vacationnotice/settings/view-form',
 
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateFrom">').append(
-                                $('<legend class="simple">').text(model.fields.dateFrom),
+                                $('<legend class="simple">').append(
+                                    $('<h2>').text(model.fields.dateFrom)
+                                ),
                                 // don't wrap the date control with a label (see bug #27559)
                                 dateView.render().$el
                             )
                         );
+
+                        if (!baton.model.get('activateTimeFrame')) {
+                            dateView.$el.find('.form-control').attr('disabled', true);
+                        }
                     }
                 });
 
@@ -179,11 +195,17 @@ define('io.ox/mail/vacationnotice/settings/view-form',
 
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateUntil">').append(
-                                $('<legend class="simple">').text(model.fields.dateUntil),
+                                $('<legend class="simple">').append(
+                                    $('<h2>').text(model.fields.dateUntil)
+                                ),
                                 // don't wrap the date control with a label (see bug #27559)
                                 dateView.render().$el
                             )
                         );
+
+                        if (!baton.model.get('activateTimeFrame')) {
+                            dateView.$el.find('.form-control').attr('disabled', true);
+                        }
                     }
                 });
 

@@ -62,7 +62,8 @@ define('io.ox/core/commons',
                     // inline links
                     var node = $('<div>'), id = baton.id, opt = baton.opt || {};
                     (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', dropdown: opt.dropdown })))
-                        .draw.call(node, { data: baton.selection, grid: baton.grid }); // needs grid to add busy animations without using global selectors
+                        // needs grid to add busy animations without using global selectors
+                        .draw.call(node, { data: baton.selection, grid: baton.grid });
                     this.append(
                         node.children().first()
                     );
@@ -93,13 +94,16 @@ define('io.ox/core/commons',
         }()),
 
         simpleMultiSelection: function (node, selection) {
+            var length = selection.length;
 
-            if (selection.length <= 1) return;
+            if (length <= 1) return;
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
                     $('<div>').text(
-                        gt('%1$d messages selected', selection.length)
+                        gt.format(
+                            gt.ngettext('%1$d item selected', '%1$d items selected', length), length
+                        )
                     )
                 )
             );
@@ -132,7 +136,8 @@ define('io.ox/core/commons',
 
             return function (id, node, selection, api, grid) {
 
-                var context = $(node).closest('.window-container'),  // get current app's window container as context
+                // get current app's window container as context
+                var context = $(node).closest('.window-container'),
                     buttons = $('.window-toolbar .toolbar-button', context),
                     toolbar = $('.window-toolbar', context),
                     toolbarID = 'multi-select-toolbar',
@@ -196,7 +201,8 @@ define('io.ox/core/commons',
                         if (simple) {
                             commons.simpleMultiSelection(node, this.unique(this.unfold()));
                         } else {
-                            commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
+                            //grid is needed to apply busy animations correctly
+                            commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);
                         }
                     } else {
                         // empty
@@ -659,7 +665,8 @@ define('io.ox/core/commons',
 
             var click = function (e) {
                 e.preventDefault();
-                if (selectionInProgress) {//prevent execution of selection to prevent window from flipping back
+                if (selectionInProgress) {
+                    //prevent execution of selection to prevent window from flipping back
                     selectionInProgress = false;
                 }
                 $(this).parent().find('.rightside-inline-actions').empty();
@@ -676,7 +683,8 @@ define('io.ox/core/commons',
                 var node = $(this);
                 selectionInProgress = true;
                 setTimeout(function () {
-                    if (selectionInProgress) {//if still valid
+                    if (selectionInProgress) {
+                        // still valid
                         node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
                         selectionInProgress = false;
                     }
@@ -689,8 +697,8 @@ define('io.ox/core/commons',
                     // left
                     sides.left = $('<div class="leftside">')
                     .attr({
-                        'role': 'main',
-                        'aria-label': gt('Items')
+                        'role': 'navigation',
+                        'aria-label': gt('Item list')
                     })
                     .on('select', select),
                     // navigation
@@ -749,7 +757,7 @@ define('io.ox/core/commons',
 
             target.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" tabindex="1">')
+                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))

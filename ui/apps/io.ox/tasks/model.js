@@ -30,7 +30,8 @@ define('io.ox/tasks/model',
             folder_id: api.getDefaultFolder(),
             recurrence_type: 0,
             private_flag: false,
-            notification: true//set always (OX6 does this too)
+            //set always (OX6 does this too)
+            notification: true
         },
         factory = new ModelFactory({
             ref: 'io.ox/tasks/model',
@@ -52,7 +53,7 @@ define('io.ox/tasks/model',
                             return;
                         }
                         resetListUpdate = true;
-                        self.set('participants', participants.toJSON());
+                        self.set('participants', participants.getAPIData());
                         resetListUpdate = false;
                     }
 
@@ -100,8 +101,10 @@ define('io.ox/tasks/model',
         status: {format: 'number'},
         percent_completed: {format: 'number'},
         number_of_attachments: {format: 'number'},
-        actual_costs: {format: 'anyFloat'},//floats with , or . as separator
-        target_costs: {format: 'anyFloat'},//floats with , or . as separator
+        //floats with , or . as separator
+        actual_costs: {format: 'anyFloat'},
+        //floats with , or . as separator
+        target_costs: {format: 'anyFloat'},
         actual_duration: {format: 'number'},
         target_duration: {format: 'number'},
         private_flag: { format: 'boolean'}
@@ -110,8 +113,8 @@ define('io.ox/tasks/model',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {//start_date = end_date is valid
-                //this.add('start_date', gt('The start date must be before the end date.')); // see Bug 27742
+            //start_date = end_date is valid
+            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
                 this.add('end_date', gt('The start date must be before the due date.'));
             }
         }
@@ -163,7 +166,8 @@ define('io.ox/tasks/model',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'recurrence-needs-start-date',
         validate: function (attributes) {
-            if (attributes.recurrence_type && (attributes.start_date === undefined || attributes.start_date === null)) {//0 is a valid number so check precisely
+            //0 is a valid number so check precisely
+            if (attributes.recurrence_type && (attributes.start_date === undefined || attributes.start_date === null)) {
                 this.add('start_date', gt('Recurring tasks need a valid start date.'));
             }
         }
@@ -172,7 +176,8 @@ define('io.ox/tasks/model',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'recurrence-needs-end-date',
         validate: function (attributes) {
-            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
+            //0 is a valid number so check precisely
+            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {
                 this.add('end_date', gt('Recurring tasks need a valid due date.'));
             }
         }

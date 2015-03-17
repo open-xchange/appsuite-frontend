@@ -35,15 +35,18 @@ define('io.ox/contacts/api',
             fax: ['544', '550', '554'],
             addresses: '506 507 508 509 510 523 525 526 527 528 538 539 540 541'.split(' ')
         },
-        convertResponseToGregorian = function (response) {//helper function
-            if (response.id) {//we have only one contact
-                if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {//convert birthdays with year 1 from julian to gregorian calendar
+        convertResponseToGregorian = function (response) {
+            if (response.id) {
+                // single contact: convert birthdays with year 1 from julian to gregorian calendar
+                if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {
                     response.birthday = util.julianToGregorian(response.birthday);
                 }
                 return response;
-            } else {//we have an array of contacts
-                _(response).each(function (contact) {//convert birthdays with year 1 from julian to gregorian calendar
-                    if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {//birthday without year
+            } else {
+                // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
+                _(response).each(function (contact) {
+                    if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {
+                        // birthday without year
                         contact.birthday = util.julianToGregorian(contact.birthday);
                     }
                 });
@@ -51,7 +54,7 @@ define('io.ox/contacts/api',
             }
         };
 
-    //mapped ids for msisdn
+    // mapped ids for msisdn
     mapping.msisdn =  settings.get('msisdn/columns', mapping.cellular);
 
     // generate basic API
@@ -64,7 +67,8 @@ define('io.ox/contacts/api',
                 folder: '6',
                 columns: '20,1,101,607',
                 extendColumns: 'io.ox/contacts/api/all',
-                sort: '607', // 607 = magic field
+                // 607 = magic field
+                sort: '607',
                 order: 'asc',
                 admin: function () {
                     return settings.get('showAdmin', false);
@@ -82,7 +86,8 @@ define('io.ox/contacts/api',
                 action: 'search',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
-                sort: '609', // magic sort field - ignores asc/desc
+                // magic sort field: ignores asc/desc
+                sort: '609',
                 getData: function (query, opt) {
                     opt = opt || {};
                     query = query + '*';
@@ -160,7 +165,8 @@ define('io.ox/contacts/api',
                 action: 'advancedSearch',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
                 extendColumns: 'io.ox/contacts/api/list',
-                sort: '607', // magic sort field - ignores asc/desc
+                // magic sort field: ignores asc/desc
+                sort: '607',
                 getData: function (query, opt) {
                     var queryFields = {
                             names: ('display_name first_name last_name yomiFirstName yomiLastName company yomiCompany ' +
@@ -179,7 +185,7 @@ define('io.ox/contacts/api',
                         defaultBehaviour = true;
 
                     opt = opt || {};
-                    //add wildcards to front and back if none is specified
+                    // add wildcards to front and back if none is specified
                     if ((query.indexOf('*') + query.indexOf('?')) < -1) {
                         query = '*' + query + '*';
                     }
@@ -285,7 +291,8 @@ define('io.ox/contacts/api',
         wat(data, 'email2');
         wat(data, 'email3');
 
-        if (data.birthday && new date.UTC(data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+        if (data.birthday && new date.UTC(data.birthday).getYear() === 1) {
+            // convert birthdays with year 1 (birthdays without year) from gregorian to julian calendar
             data.birthday = util.gregorianToJulian(data.birthday);
         }
 
@@ -332,7 +339,8 @@ define('io.ox/contacts/api',
                 )
                 .then(function () {
                     if (attachmentHandlingNeeded) {
-                        api.addToUploadList(_.ecid(d)); // to make the detailview show the busy animation
+                        // to make the detailview show the busy animation
+                        api.addToUploadList(_.ecid(d));
                     }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
@@ -358,7 +366,8 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().then(function () {
-                    api.addToUploadList(_.ecid(o));//to make the detailview show the busy animation
+                    // to make the detailview show the busy animation
+                    api.addToUploadList(_.ecid(o));
                     api.trigger('update:' + _.ecid(o));
                     api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
@@ -367,7 +376,8 @@ define('io.ox/contacts/api',
                 return $.when();
             }
         } else {
-            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+            // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {
                 o.data.birthday = util.gregorianToJulian(o.data.birthday);
             }
             // go!
@@ -427,7 +437,9 @@ define('io.ox/contacts/api',
             )
             .then(function () {
                 api.trigger('refresh.list');
-                api.trigger('update:image', { // TODO needs a switch for created by hand or by test
+                api.trigger('update:' + _.ecid(o));
+                // TODO: needs a switch for created by hand or by test
+                api.trigger('update:image', {
                     id: o.id,
                     folder: o.folder_id
                 });
@@ -592,8 +604,7 @@ define('io.ox/contacts/api',
             uniq = _.now();
         });
 
-        function load(node, url, options) {
-            var hideOnFallback = options.hideOnFallback || false;
+        function load(node, url) {
             _.defer(function () {
                 // use lazyload?
                 var scrollpane = node.closest('.scrollpane');
@@ -603,7 +614,6 @@ define('io.ox/contacts/api',
                         effect: 'show',
                         error: function () {
                             node.css('background-image', 'url(' + fallback + ')');
-                            if (hideOnFallback) node.hide();
                             node = scrollpane = null;
                         },
                         load: function (elements_left, settings, image) {
@@ -613,12 +623,12 @@ define('io.ox/contacts/api',
                         }
                     });
                 } else {
-                    $(new Image()).one('load error', function (e) {
+                    $(new Image()).on('load error', function (e) {
                         var fail = this.width === 1 || e.type === 'error';
                         if (!fail) cachesURLs[url] = url;
-                        if (fail && hideOnFallback) node.hide();
                         node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                        node = null;
+                        node = scrollpane = null;
+                        $(this).off();
                     })
                     .attr('src', url);
                 }
@@ -752,8 +762,10 @@ define('io.ox/contacts/api',
 
         // clear vars after call stack has cleared
         clear = function () {
-            _.defer(function () { // use defer! otherwise we return null on cache hit
-                node = set = clear = cont = options = null; // don't leak
+            // use defer! otherwise we return null on cache hit
+            _.defer(function () {
+                // don't leak
+                node = set = clear = cont = options = null;
             });
         };
 
@@ -807,7 +819,8 @@ define('io.ox/contacts/api',
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     timezone: 'UTC',
-                    timestamp: o.timestamp || _.then() // mandatory for 'update'
+                    // mandatory for 'update'
+                    timestamp: o.timestamp || _.then()
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
@@ -873,7 +886,8 @@ define('io.ox/contacts/api',
             params = _.extend({
             action: 'birthdays',
             start: now,
-            end: now + 604800000, // now + WEEK
+            // now + WEEK
+            end: now + 604800000,
             columns: '1,20,500,501,502,503,504,505,511',
             timezone: 'UTC'
         }, options || {});
@@ -917,7 +931,8 @@ define('io.ox/contacts/api',
      * @return {boolean}
      */
     api.uploadInProgress = function (key) {
-        return uploadInProgress[key] || false;//return true boolean
+        //return true boolean
+        return uploadInProgress[key] || false;
     };
 
     /**
@@ -947,7 +962,8 @@ define('io.ox/contacts/api',
     //
     api.autocomplete = (function () {
 
-        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)), // should be >= 1!
+        // should be >= 1!
+        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
             // use these fields for local lookups
             fields = 'display_name email1 email2 email3 first_name last_name'.split(' ');
 
@@ -966,14 +982,16 @@ define('io.ox/contacts/api',
 
             var key = getHashKey(query), def = search.cache[key], words = query.split(' ');
 
-            if (!def) return; // cache miss
+            // cache miss
+            if (!def) return;
 
             // local lookup:
             return def.then(function (data) {
                 return _(data).filter(function (item) {
                     return _(words).every(function (word) {
                         return _(item.fulltext).some(function (str) {
-                            return str.indexOf(word) === 0; // server also uses startsWith() / not contains()
+                            // server also uses startsWith() / not contains()
+                            return str.indexOf(word) === 0;
                         });
                     });
                 });
@@ -1014,7 +1032,8 @@ define('io.ox/contacts/api',
                 module: 'contacts',
                 params: {
                     action: 'autocomplete',
-                    query: getHashKey(query), // we just look for the shortest word
+                    // we just look for the shortest word
+                    query: getHashKey(query),
                     admin: options.admin,
                     email: options.email,
                     sort: options.sort,
@@ -1029,7 +1048,7 @@ define('io.ox/contacts/api',
         // export cache for debugging/clearing
         search.cache = {};
 
-        // use this to debug bad results:
+        // DEBUGGING: use this to debug bad results:
         // search.inspect = function () {
         //     var pairs = _(search.cache).pairs();
         //     $.when.apply($, _(pairs).pluck(1)).then(function () {

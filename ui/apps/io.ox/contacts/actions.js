@@ -178,7 +178,8 @@ define('io.ox/contacts/actions',
 
         requires: function (e) {
             var ctx = e.context;
-            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
+            if (ctx.id === 0 || ctx.folder_id === 0) {
+                // e.g. non-existing contacts in halo view
                 return false;
             } else {
                 var list = [].concat(ctx);
@@ -251,68 +252,14 @@ define('io.ox/contacts/actions',
         }
     });
 
-    new Action('io.ox/contacts/actions/print-disabled', {
-
-        requires: 'some read',
-
-        multiple: function (list) {
-            var win;
-            api.getList(list).done(function (list) {
-                var cleanedList = [];
-
-                _(list).each(function (contact) {
-                    if (contact.mark_as_distributionlist !== true) {
-                        var clean = {};
-                        clean.folder = contact.folder_id;
-                        clean.id = contact.id;
-                        cleanedList.push(clean);
-
-                    }
-                });
-
-                require(['io.ox/core/print'], function (print) {
-                    win = print.openURL();
-                    win.document.title = gt('Print');
-
-                    require(['io.ox/core/http'], function (http) {
-
-                        var getPrintable = function (cleanedList) {
-                            return http.PUT({
-                                module: 'contacts',
-                                dataType: 'text',
-                                params: {
-                                    action: 'list',
-//                                    template: 'infostore://70170', // dev
-//                                    template: 'infostore://70213', //  ui-dev
-                                    template: 'infostore://12495', // tobias
-                                    view: 'text',
-                                    format: 'template',
-                                    columns: '501,502,519,526,542,543,547,548,549,551,552'
-                                },
-                                data: cleanedList
-                            });
-                        };
-
-                        getPrintable(cleanedList)
-                        .done(function (print) {
-                            var $content = $('<div>').append(print);
-                            win.document.write($content.html());
-                            win.print();
-                        });
-
-                    });
-                });
-            });
-        }
-    });
-
     new Action('io.ox/contacts/actions/invite', {
 
         capabilities: 'calendar',
 
         requires: function (e) {
             var ctx = e.context;
-            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
+            // e.g. non-existing contacts in halo view
+            if (ctx.id === 0 || ctx.folder_id === 0) {
                 return false;
             } else {
                 var list = [].concat(ctx);
@@ -375,7 +322,8 @@ define('io.ox/contacts/actions',
                 distLists = _.difference(distLists, externalParticipants);
 
                 api.getList(distLists).done(function (obj) {
-                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);//put everyone back in
+                    //put everyone back in
+                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);
                     def.resolve();
                 });
 
@@ -384,9 +332,6 @@ define('io.ox/contacts/actions',
                     resolvedContacts = _.chain(resolvedContacts).map(mapContact).flatten(true).filter(filterContact).value();
 
                     participants = participants.concat(resolvedContacts);
-//                    participants = _.uniq(participants, false, function (single) {
-//                        return single.id;
-//                    });
 
                     require(['io.ox/calendar/edit/main'], function (m) {
                         m.getApp().launch().done(function () {
@@ -487,8 +432,8 @@ define('io.ox/contacts/actions',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
-                    attachmentMode: false,
+                    baton: { allIds: files },
+                    attachmentMode: true,
                     selector: '.window-container.io-ox-contacts-window'
                 });
             });
@@ -556,7 +501,8 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/download-attachment', {
         id: 'download',
         requires: function (e) {
-            return e.collection.has('some') && _.device('!ios');
+            //browser support for downloading more than one file at once is pretty bad (see Bug #36212)
+            return e.collection.has('one') && _.device('!ios');
         },
         multiple: function (list) {
             require(['io.ox/core/api/attachment', 'io.ox/core/download'], function (attachmentAPI, download) {

@@ -69,10 +69,13 @@ define('io.ox/calendar/week/perspective',
                             });
                         });
                     }
-                    if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
-                        self.setNewStart = false;//one time only
+                    if (self.setNewStart) {
+                        // view should change week to the start of this appointment(used by deeplinks)
+                        // one time only
+                        self.setNewStart = false;
                         self.app.refDate.setTime(data.start_date);
-                        if (self.view) {//if view is rendered already
+                        if (self.view) {
+                            //view is rendered already
                             self.view.setStartDate(data.start_date);
                         }
                     }
@@ -338,8 +341,10 @@ define('io.ox/calendar/week/perspective',
         followDeepLink: function () {
             var cid = _.url.hash('id'), e;
             if (cid) {
+                cid = cid.split(',',1)[0];
                 e = $.Event('click', { target: this.main });
-                this.setNewStart = true; //marker to make the view open in the correct week
+                //marker to make the view open in the correct week
+                this.setNewStart = true;
                 this.showAppointment(e, _.cid(cid), { arrow: false });
             }
         },
@@ -358,7 +363,8 @@ define('io.ox/calendar/week/perspective',
                 .addClass('week-view')
                 .empty()
                 .attr({
-                    'role': 'main'
+                    'role': 'navigation',
+                    'aria-label': gt('Appointment list')
                 });
 
             this.collection = new Backbone.Collection([]);

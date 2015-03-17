@@ -24,7 +24,7 @@ define('io.ox/mail/actions/attachmentEmpty', [
 
         if (emptyFile) {
             new dialogs.ModalDialog()
-                .text(gt('You attached an empty file. It could be, that this file has been deleted on your drive. Send it anyway?'))
+                .text(gt('You attached an empty file. It could be, that this file has been deleted on your hard drive. Send it anyway?'))
                 .addPrimaryButton('send', gt('Yes, with empty attachment'), 'send', {tabIndex: '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                 .show(function () {

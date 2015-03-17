@@ -11,20 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/compose/extensions',
-    ['io.ox/mail/sender',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/extensions',
-     'io.ox/core/api/autocomplete',
-     'io.ox/core/tk/typeahead',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/dropzone',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail',
-     'static/3rd.party/jquery-ui.min.js'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
+define('io.ox/mail/compose/extensions', [
+    'io.ox/mail/sender',
+    'io.ox/backbone/mini-views/common',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/extensions',
+    'io.ox/core/tk/tokenfield',
+    'io.ox/core/dropzone',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail',
+    'static/3rd.party/jquery-ui.min.js'
+], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -46,17 +44,11 @@ define('io.ox/mail/compose/extensions',
 
     var POINT = 'io.ox/mail/compose';
 
-    var autocompleteAPI = new AutocompleteAPI({
-        id: 'mailwrite',
-        contacts: true,
-        msisdn: true
-    });
-
     //make strings accessible to translators
     var tokenfieldTranslations = {
-        To: gt('To'),
-        CC: gt('CC'),
-        BCC: gt('BCC')
+        to: gt('To'),
+        cc: gt('CC'),
+        bcc: gt('BCC')
     };
 
     var extensions = {
@@ -121,8 +113,8 @@ define('io.ox/mail/compose/extensions',
                         }
 
                         node.append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')),
-                            $('<div class="col-xs-10 col-md-11">').append(
+                            $('<label class="maillabel col-xs-2 col-sm-1">').text(gt('From')),
+                            $('<div class="col-xs-10 col-sm-11">').append(
                                 dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                             )
                         );
@@ -140,35 +132,47 @@ define('io.ox/mail/compose/extensions',
             this.append(node);
         },
 
-        tokenfield: function (label, addActions) {
+        tokenfield: function (label) {
 
-            addActions = addActions || false;
-            label = String(label);
-            var attr = label.toLowerCase();
+            var attr = String(label).toLowerCase();
 
             return function (baton) {
                 var guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
                     // display tokeninputfields if necessary
-                    cls = 'row' + (addActions || value.length ? '' : ' hidden'),
-                    input;
+                    cls = 'row' + (attr === 'to' || value.length ? '' : ' hidden'),
+                    tokenfieldView = new Tokenfield({
+                        id: guid,
+                        className: attr,
+                        placeholder: tokenfieldTranslations[attr],
+                        apiOptions: {
+                            contacts: true,
+                            distributionlists: true,
+                            msisdn: true,
+                            emailAutoComplete: true
+                        },
+                        maxResults: 20,
+                        draw: function (token) {
+                            baton.participantModel = token.model;
+                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
+                        }
+                    });
+
                 this.append(
                     $('<div data-extension-id="' + attr + '">')
                         .addClass(cls)
                         .append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(tokenfieldTranslations[label]).attr({
+                            $('<label class="maillabel hidden-xs col-sm-1">').text(tokenfieldTranslations[attr]).attr({
                                 'for': guid
                             }),
-                            $('<div class="col-xs-10 col-md-11">').append(
-                                input = $('<input type="text" class="form-control tokenfield">').attr({
-                                    id: guid,
-                                    tabindex: 1
-                                }),
-                                addActions ? $('<div class="recipient-actions">').append(
+                            $('<div class="col-xs-12 col-sm-11">').append(
+                                tokenfieldView.$el,
+                                attr === 'to' ? $('<div class="recipient-actions">').append(
                                     $('<a>').attr({
                                         href: '#',
                                         tabindex: 1,
-                                        'data-action': 'add-cc',
+                                        'data-action': 'add',
+                                        'data-type': 'cc',
                                         role: 'checkbox',
                                         'aria-checked': false,
                                         'aria-label': gt('Show carbon copy input field')
@@ -176,7 +180,8 @@ define('io.ox/mail/compose/extensions',
                                     $('<a>').attr({
                                         href: '#',
                                         tabindex: 1,
-                                        'data-action': 'add-bcc',
+                                        'data-action': 'add',
+                                        'data-type': 'bcc',
                                         role: 'checkbox',
                                         'aria-checked': false,
                                         'aria-label': gt('Show blind carbon copy input field')
@@ -186,99 +191,60 @@ define('io.ox/mail/compose/extensions',
                         )
                     );
 
-                input.autocompleteNew({
-                    api: autocompleteAPI,
-                    maxResults: 20,
-                    autoselect: true,
-                    tokenfield: true,
-                    highlight: true,
-                    reduce: function (data) {
-                        return data;
-                    },
-                    stringify: function (data) {
+                tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
+                    // extension point for validation etc.
+                    ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+                });
+
+                // bind model to collection
+                tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
+                    var recArray = _(recipients).map(function (recipient) {
                         return {
-                            value: data.email || data.phone || '',
-                            label: contactsUtil.getMailFullName(data)
+                            type: 5,
+                            display_name: recipient[0],
+                            email1: recipient[1],
+                            token: {
+                                label: recipient[0],
+                                value: recipient[1]
+                            }
                         };
-                    },
-                    draw: function (data) {
-                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, _.extend(baton, { data: data }));
-                    }
-                }).on({
-                    'tokenfield:createdtoken': function (e) {
-                        // for validation etc.
-                        ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
-                        // add contact picture
-                        if (e.attrs) {
-                            var data = e.attrs.data ? e.attrs.data : { email: e.attrs.value };
-                            _.extend(data, { width: 16, height: 16, scaleType: 'contain' });
-                            $(e.relatedTarget).prepend(
-                                contactsAPI.pictureHalo($('<div class="contact-image">'), data)
-                            );
-                        }
-                    },
-                    'change': function () {
-                        baton.model.setTokens(attr, $(this).tokenfield('getTokens'));
-                    }
-                });
-
-                // bind tokeninput to model and set initial values
-                baton.model.on('change:' + attr, function () {
-                    input.tokenfield('setTokens', this.getTokens(attr), false, false);
-                }).trigger('change:' + attr);
-
-                // add class to tokenfield wrapper
-                input.parent().addClass(attr);
-
-                input.getOriginalInput().data('ttTypeahead').dropdown.onAsync('datasetRendered', function() {
-                    $('div.contact-image', this.$menu).lazyload({
-                        container: this.$menu
                     });
+                    this.collection.reset(recArray);
                 });
 
-                // init drag 'n' drop sort
-                input.closest('div.tokenfield').sortable({
-                    items: '> .token',
-                    connectWith: 'div.tokenfield',
-                    cancel: 'a.close',
-                    placeholder: 'token placeholder',
-                    revert: 0,
-                    forcePlaceholderSize: true,
-                    update: function () {
-                        baton.model.setTokens(attr, input.tokenfield('getTokens'));
-                    }
-                }).droppable({
-                    hoverClass: 'drophover'
+                baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
+
+                tokenfieldView.collection.on('change add remove sort', function () {
+                    var recipients = this.map(function (model) {
+                        var token = model.get('token');
+                        return [token.label, token.value];
+                    });
+                    baton.model.set(attr, recipients, { silent: true });
                 });
             };
         },
 
         subject: function (baton) {
-            var guid = _.uniqueId('form-control-label-'),
-                input;
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="row subject" data-extension-id="subject">').append(
-                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('Subject')).attr({
+                    $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
-                    $('<div class="col-xs-10 col-md-11">').append(
-                        input = $('<input type="text" class="form-control">').val(baton.model.get('subject')).attr({
-                            id: guid,
-                            tabindex: 1
-                        })
+                    $('<div class="col-xs-12 col-sm-11">').append(
+                        new mini.InputView({ model: baton.model, id: guid, name: 'subject' }).render().$el.attr({ placeholder: gt('Subject') })
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:subject', function() {
-                input.val(baton.model.get('subject'));
-            });
         },
 
         signature: function (baton) {
             var self = this;
+            baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                snippetAPI.getAll('signature').done(function (signatures) {
+                snippetAPI.getAll('signature').always(function (signatures) {
                     baton.view.signatures = signatures;
+                    baton.view.signaturesLoading.resolve(signatures);
                     var sa = _.map(signatures, function (o) {
                         return { 'id': o.id, 'displayName': o.displayname };
                     });
@@ -323,12 +289,12 @@ define('io.ox/mail/compose/extensions',
                     }
                 });
 
-                view.listenToOnce(view.collection, 'add remove reset', function () {
+                view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
                         if (!this.isListRendered) this.renderList();
                     }
-                });
+                }));
 
                 view.render();
                 if (view.getValidModels().length > 0) {
@@ -362,7 +328,7 @@ define('io.ox/mail/compose/extensions',
                         primaryButtonText: gt('Add'),
                         cancelButtonText: gt('Cancel'),
                         header: gt('Add attachments'),
-                        multiselect: true,
+                        multiselect: true
                     })
                     .done(function (files) {
                         model.attachFiles(
@@ -426,7 +392,7 @@ define('io.ox/mail/compose/extensions',
                 if (navigator.registerProtocolHandler && !_.browser.Firefox) {
                     var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                     navigator.registerProtocolHandler(
-                        'mailto', url + '#app=io.ox/mail/compose:compose&mailto=%s', ox.serverConfig.productNameMail
+                        'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
                     );
                 }
             }

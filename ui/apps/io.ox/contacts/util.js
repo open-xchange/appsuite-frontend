@@ -61,7 +61,8 @@ define('io.ox/contacts/util',
 
         // variant of getFullName without title, all lowercase
         getSortName: function (obj) {
-            obj = _.extend(obj, { title: '' });
+            // use a copy without title
+            obj = _.pick(obj, 'first_name', 'last_name', 'display_name');
             return this.getFullName(obj).toLowerCase();
         },
 

@@ -49,9 +49,10 @@
     .nav-tabs { margin-top: 20px; }
     .tab-content { margin-top: 13px; }
 
-    .collapsed, .task-edit-details {//hide collapsed and details on startup
+    //hide collapsed and details on startup
+    .collapsed, .task-edit-details {
         display: none;
-        }
+    }
     .cancel         { float: right;       }
     .progress-field { text-align: center; }
 
@@ -123,12 +124,21 @@
     }
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
-    	.form-control[readonly] {//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
-    		background-color: #fff;//white
+	//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
+    .form-inline input {
+        padding: 4px 6px;
+        &.datepicker-day-field {
+            width: 100%;
+        }
+    }
+
+    .form-control[readonly] {
+		background-color: #fff;
     	}
 
         .clear-title {
-            width: 100%; //to push the buttons under the title
+            //to push the buttons under the title
+            width: 100%;
         }
         .cancel {
             float: none;
@@ -145,12 +155,6 @@
         }
         //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
         .form-control[readonly] { background-color: #fff; }
-
-        .participant-wrapper {
-            .participant-email {
-                display: block;
-            }
-        }
     }
 }
 

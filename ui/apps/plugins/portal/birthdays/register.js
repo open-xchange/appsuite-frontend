@@ -74,18 +74,24 @@ define('plugins/portal/birthdays/register',
             } else {
                 $list.addClass('pointer');
                 _(contacts.slice(0, numOfItems)).each(function (contact) {
-                    var birthday = new date.UTC(contact.birthday).setHours(0, 0, 0, 0),//just to be sure hours are the same
+                    //just to be sure hours are the same
+                    var birthday = new date.UTC(contact.birthday).setHours(0, 0, 0, 0),
                         birthdayText = '',
-                        today = new date.UTC().setHours(0, 0, 0, 0).setYear(birthday.getYear()),//it's not really today, its today in the year of the birthday
+                        //it's not really today, its today in the year of the birthday
+                        today = new date.UTC().setHours(0, 0, 0, 0).setYear(birthday.getYear()),
                         name = util.getFullName(contact);
 
-                    if (birthday.getTime() === today.getTime()) {//today
+                    if (birthday.getTime() === today.getTime()) {
+                        //today
                         birthdayText = gt('Today');
-                    } else if (birthday.getTime() === today.getTime() + date.DAY) {//tomorrow
+                    } else if (birthday.getTime() === today.getTime() + date.DAY) {
+                        //tomorrow
                         birthdayText = gt('Tomorrow');
-                    } else if (birthday.getTime() === today.getTime() - date.DAY) {//yesterday
+                    } else if (birthday.getTime() === today.getTime() - date.DAY) {
+                        //yesterday
                         birthdayText = gt('Yesterday');
-                    } else if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
+                    } else if (birthday.getYear() === 1) {
+                        //Year 0 is special for birthdays without year (backend changes this to 1...)
                         birthdayText = birthday.format(date.DATE_NOYEAR);
                     } else {
                         birthdayText = birthday.format(date.DATE);

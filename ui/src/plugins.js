@@ -36,7 +36,7 @@
     // needs to be reviewed: "force websql for mobile" (July 2013)
     // plus: don't know why Safari is explicitly excluded as it doesn't support indexedDB at all
     // for example, IDBVersionChangeEvent is always undefined for Safari
-    if (_.device('desktop && !safari') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    if (Modernizr.indexeddb && window.indexedDB && _.device('desktop && !safari') && window.IDBVersionChangeEvent !== undefined) {
 
         // IndexedDB
         (function () {
@@ -48,7 +48,7 @@
 
             function fail(e) {
                 if (ox.debug) {
-                    console.warn('Failed to initiliaze IndexedDB file cache', e);
+                    console.warn('Failed to initialize IndexedDB file cache', e);
                 }
                 window.indexedDB.deleteDatabase('appsuite.filecache'); // delete, so maybe this works next time
                 fileCache = dummyFileCache;
@@ -74,7 +74,7 @@
                             // Clear the filecache
                             tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
                             if (ox.debug === true) {
-                                console.warn('FileCache: Clearing persistent file cache due to UI update');
+                                console.warn('FileCache: Clearing persistent file cache due to UI update (IndexedDB)');
                             }
                             // Save the new version number
                             tx.objectStore('version').put({ name: 'version', version: ox.version });
@@ -93,7 +93,6 @@
 
             request.onerror = function () {
                 // fallback
-                // console.log('request error outerlevel', e);
                 fileCache = dummyFileCache;
                 initialization.reject();
             };
@@ -163,20 +162,43 @@
                 return;
             }
 
-            db.transaction(function fetch(tx) {
-                tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
-                tx.executeSql('SELECT 1 FROM version WHERE version = ?', [ox.version], function (tx, result) {
-                    if (result.rows.length === 0) {
-                        tx.executeSql('DROP TABLE IF EXISTS files');
-                        tx.executeSql('CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)');
-                        tx.executeSql('DELETE FROM version');
-                        tx.executeSql('INSERT INTO version VALUES (?)', [ox.version]);
-                    }
-                    initialization.resolve();
-                });
-            }, function fetchFail() {
+            function reset(tx) {
+                try {
+                    tx.executeSql('DROP TABLE IF EXISTS files');
+                    tx.executeSql('CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)');
+                    tx.executeSql('DELETE FROM version');
+                    tx.executeSql('INSERT INTO version VALUES (?)', [ox.version]);
+                } catch (e) {
+                    if (ox.debug) console.error('Failed to reset WebSQL file cache', e);
+                }
+            }
+
+            function initializationFail(e) {
+                if (ox.debug) console.error('Failed to initialize WebSQL file cache', e);
                 initialization.reject();
-            });
+            }
+
+            db.transaction(
+                function success(tx) {
+                    try {
+                        tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
+                        tx.executeSql('SELECT 1 FROM version WHERE version = ?', [ox.version], function (tx, result) {
+                            if (result.rows.length === 0) {
+                                reset(tx);
+                                if (ox.debug === true) {
+                                    console.warn('FileCache: Clearing persistent file cache due to UI update (WebSQL)');
+                                }
+                            }
+                            initialization.resolve();
+                        });
+                    } catch (e) {
+                        initializationFail(e);
+                    }
+                },
+                function fail(e) {
+                    initializationFail(e);
+                }
+            );
 
             fileCache.retrieve = function (name) {
                 var def = $.Deferred();
@@ -216,13 +238,32 @@
                         function fail(e) {
                             // this might be called if current quota is exceeded
                             // and the user denies more quota
-                            if (e && e.code === 4) quotaExceeded = true;
+                            if (e && e.code === 4) {
+                                quotaExceeded = true;
+                                if (ox.debug) console.error('WebSQL quota exceeded', e);
+                                catchException(e);
+                            }
                         }
                     )
                 });
             };
+
+            ox.clearFileCache = function () {
+                initialization.done(function () {
+                    db.transaction(
+                        reset,
+                        function fail(e) {
+                            console.error('Failed to clear WebSQL file cache', e);
+                        }
+                    );
+                });
+            };
+
         })();
-    } else if (_.device('android') && Modernizr.localstorage) {
+
+    }
+    else if (_.device('android') && Modernizr.localstorage) {
+
         // use localstorage on android as this is still the fastest storage
         (function () {
 

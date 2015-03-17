@@ -76,16 +76,18 @@ define('io.ox/tasks/actions',
                                                                           'Tasks have been deleted!', numberOfTasks));
                                 popup.close();
                             }).fail(function (result) {
-                                if (result.code === 'TSK-0019') { //task was already deleted somewhere else. everythings fine, just show info
+                                if (result.code === 'TSK-0019') {
+                                    //task was already deleted somewhere else. everythings fine, just show info
                                     notifications.yell('info', gt('Task was already deleted!'));
                                     popup.close();
-                                } else if (result.error) {//there is an error message from the backend
+                                } else if (result.error) {
+                                    //there is an error message from the backend
                                     popup.idle();
                                     popup.getBody().empty().append($.fail(result.error, function () {
                                         popup.trigger('deleteTask', data);
                                     })).find('h4').remove();
-                                } else {//show generic error message
-                                    //show retrymessage and enable buttons again
+                                } else {
+                                    //show generic error message, show retrymessage and enable buttons again
                                     popup.idle();
                                     popup.getBody().empty().append($.fail(gt.ngettext('The task could not be deleted.',
                                                                               'The tasks could not be deleted.', numberOfTasks), function () {
@@ -164,7 +166,7 @@ define('io.ox/tasks/actions',
                     })
                     .fail(function (result) {
                         var errorMsg = gt('A severe error occurred!');
-                        if (result.code === 'TSK-0007') {//task was modified before
+                        if (result.code === 'TSK-0007') {
                             errorMsg = gt('Task was modified before, please reload');
                         }
                         notifications.yell('error', errorMsg);
@@ -183,15 +185,10 @@ define('io.ox/tasks/actions',
         requires: function (e) {
             if (!e.collection.has('some')) return false;
             if (!e.collection.has('delete')) return false;
-            if (e.baton.app) {//app object is not available when opened from notification area
-                if (isShared(e.baton.app.folder.get())) {
-                    return false;
-                }
-            } else if (e.data.folder_id) {
-                isShared(e.data.folder_id);
-            } else {
-                return false;
-            }
+            // app object is not available when opened from notification area
+            if (e.baton.app && isShared(e.baton.app.folder.get())) return false;
+            // look for folder_id in task data
+            if (e.baton.data.folder_id && isShared(e.baton.data.folder_id)) return false;
             return true;
         },
         multiple: function (list, baton) {
@@ -270,41 +267,6 @@ define('io.ox/tasks/actions',
         }
     });
 
-    new Action('io.ox/tasks/actions/print-disabled', {
-        id: 'print',
-        requires: function () {
-            return _.device('!small');
-        },
-        multiple: function (list) {
-            if (list.length === 1) {
-                print.open('tasks', list[0], { template: 'infostore://12496', id: list[0].id, folder: list[0].folder_id || list[0].folder }).print();
-            } else if (list.length > 1) {
-                ox.load(['io.ox/core/http']).done(function (http) {
-                    var win = print.openURL();
-                    win.document.title = gt('Print tasks');
-                    http.PUT({
-                        module: 'tasks',
-                        params: {
-                            action: 'list',
-                            template: 'infostore://12500',
-                            format: 'template',
-                            columns: '200,201,202,203,220,300,301,302,303,305,307,308,309,312,313,314,315,221,226',
-                            timezone: 'UTC'
-                        },
-                        data: http.simplify(list)
-                    }).done(function (result) {
-                        var content = $('<div>').append(result),
-                            head = $('<div>').append(content.find('style')),
-                            body = $('<div>').append(content.find('.print-tasklist'));
-                        win.document.write(head.html() + body.html());
-                        win.print();
-                    });
-                });
-
-            }
-        }
-    });
-
     //attachment actions
     new links.Action('io.ox/tasks/actions/slideshow-attachment', {
         id: 'slideshow',
@@ -322,8 +284,8 @@ define('io.ox/tasks/actions',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
-                    attachmentMode: false,
+                    baton: { allIds: files },
+                    attachmentMode: true,
                     selector: '.window-container.io-ox-tasks-window'
                 });
             });
@@ -390,7 +352,8 @@ define('io.ox/tasks/actions',
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
         requires: function (e) {
-            return e.collection.has('some') && _.device('!ios');
+            //browser support for downloading more than one file at once is pretty bad (see Bug #36212)
+            return e.collection.has('one') && _.device('!ios');
         },
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {

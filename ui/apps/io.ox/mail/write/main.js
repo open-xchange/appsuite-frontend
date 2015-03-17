@@ -69,7 +69,8 @@ define('io.ox/mail/write/main',
     var UUID = 1,
         blocked = {},
         timerScale = {
-            minute: 60000, //60s
+            //60s
+            minute: 60000,
             minutes: 60000
         },
         convertAllToUnified = emoji.converterFor({
@@ -94,7 +95,8 @@ define('io.ox/mail/write/main',
         scale = timerScale[timeout[1]];
         timeout = timeout[0];
 
-        if (!timeout || !scale) return; // settings not parsable
+        // settings not parsable
+        if (!timeout || !scale) return;
 
         stopAutoSave(app);
 
@@ -107,8 +109,10 @@ define('io.ox/mail/write/main',
             if (app.dirty()) {
                 app.autoSaveDraft().done(function (data) {
                     app.refId = data;
-                    app.setSendType(mailAPI.SENDTYPE.DRAFT);
-                    app.setMsgRef(data);
+                    if (app.getMail().mode !== 'forward') {
+                        app.setSendType(mailAPI.SENDTYPE.DRAFT);
+                        app.setMsgRef(data);
+                    }
                     app.dirty(false);
                 });
             } else {
@@ -151,7 +155,7 @@ define('io.ox/mail/write/main',
         // move nested messages into attachment array
         _(mail.data.nested_msgs).each(function (obj) {
             mail.data.attachments.push({
-                id: mail.data.attachments.length + 1,
+                id: obj.id,
                 filemname: obj.subject,
                 content_type: 'message/rfc822',
                 msgref: obj.msgref
@@ -178,7 +182,8 @@ define('io.ox/mail/write/main',
 
         // don’t force text on phantomjs, because phantomjs reports as a touch device
         // see https://github.com/ariya/phantomjs/issues/10375
-        if (!_.device('phantomjs') && Modernizr.touch) messageFormat = 'text'; // See Bug 24802
+        // See Bug 24802 - iPad: Cannot write email
+        if (!_.device('phantomjs') && Modernizr.touch) messageFormat = 'text';
 
         function blockReuse(sendtype) {
             blocked[sendtype] = (blocked[sendtype] || 0) + 1;
@@ -313,11 +318,10 @@ define('io.ox/mail/write/main',
                 currentSignature = text;
             }
 
-            if (_.device('!smartphone')) ed.focus();
+            if (_.device('!smartphone && !iOS')) ed.focus();
         };
 
         function focus(name) {
-            if (_.device('smartphone')) return;
             app.getWindowNode().find('input[name="' + name + '"], input[data-type="' + name + '"]').focus().select();
         }
 
@@ -433,6 +437,11 @@ define('io.ox/mail/write/main',
             return _.queued(function (mode) {
                 // change?
                 mode = getEditorMode(mode);
+
+                if (view.sections.format) {
+                    view.sections.format.find('input[name="format"]').val([mode]);
+                }
+
                 return (mode === editorMode ?
                     $.when() :
                     changeMode(mode || editorMode).done(function () {
@@ -698,7 +707,8 @@ define('io.ox/mail/write/main',
 
         app.dirty = function (flag) {
             if (flag === true) {
-                previous = null; // always dirty this way
+                // always dirty this way
+                previous = null;
                 return this;
             } else if (flag === false) {
                 previous = app.getMail();
@@ -721,7 +731,8 @@ define('io.ox/mail/write/main',
             // default data
             var data = mail.data = _.extend({
                 vcard: settings.get('appendVcard'),
-                csid: mailAPI.csid() // composition space id
+                // composition space id
+                csid: mailAPI.csid()
             }, mail.data);
 
             // Allow extensions to have a go at the data
@@ -751,6 +762,7 @@ define('io.ox/mail/write/main',
             win.nodes.main.find('h1.title').text(title);
             title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
+            win.setTitle(gt('Compose'));
             // set signature
             currentSignature = mail.signature || '';
             // set format
@@ -794,7 +806,7 @@ define('io.ox/mail/write/main',
                 app.setMail(point).done(function () {
                     app.dirty(true);
                     win.idle();
-                    if (_.device('!smartphone')) app.getEditor().focus();
+                    if (_.device('!smartphone && !iOS')) app.getEditor().focus();
                     def.resolve();
                 });
             });
@@ -825,7 +837,7 @@ define('io.ox/mail/write/main',
                 // remove 'mailto:'' prefix and split at '?''
                 var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
                 var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
-                // Bug: 31345
+                // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
                 data = {
@@ -851,7 +863,7 @@ define('io.ox/mail/write/main',
                     // set to idle now; otherwise firefox doesn't set the focus
                     var ed = app.getEditor();
                     win.idle();
-                    if (_.device('!smartphone')) {
+                    if (_.device('!smartphone && !iOS')) {
                         ed.setCaretPosition(0);
                         if (mailto) {
                             ed.focus();
@@ -861,7 +873,8 @@ define('io.ox/mail/write/main',
                             focus('to');
                         }
                     }
-                    def.resolve({app: app});
+                    def.resolve({ app: app });
+                    ox.trigger('mail:compose:ready', data, app);
                 })
                 .fail(function (e) {
                     notifications.yell(e);
@@ -895,9 +908,9 @@ define('io.ox/mail/write/main',
                                 var ed = app.getEditor();
                                 ed.setCaretPosition(0);
                                 win.idle();
-                                if (_.device('!smartphone')) ed.focus();
+                                if (_.device('!smartphone && !iOS')) ed.focus();
                                 view.scrollpane.scrollTop(0);
-                                def.resolve({app: app});
+                                def.resolve({ app: app });
                                 if (_.device('smartphone')) {
                                     // trigger keyup to resize the textarea
                                     view.textarea.trigger('keyup');
@@ -911,6 +924,7 @@ define('io.ox/mail/write/main',
                                     if (_.device('!ios')) view.textarea.focus();
                                     app.getWindow().nodes.main.scrollTop(0);
                                 }
+                                ox.trigger('mail:reply:ready', data, app);
                             });
                         })
                         .fail(function (e) {
@@ -957,9 +971,9 @@ define('io.ox/mail/write/main',
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
-                        if (_.device('!smartphone')) focus('to');
+                        if (_.device('!smartphone && !iOS')) focus('to');
                         def.resolve();
-
+                        ox.trigger('mail:forward:ready', data, app);
                     });
                 })
                 .fail(function (e) {
@@ -976,9 +990,11 @@ define('io.ox/mail/write/main',
 
             var def = $.Deferred();
 
-            _.url.hash('app', 'io.ox/mail/write:compose'); // yep, edit is same as compose
+            // yep, edit is same as compose
+            _.url.hash('app', 'io.ox/mail/write:compose');
 
-            app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+            // here, for reuse it's edit!
+            app.cid = 'io.ox/mail:edit.' + _.cid(data);
             data.msgref = data.folder_id + '/' + data.id;
 
             function getMail(data) {
@@ -1013,11 +1029,11 @@ define('io.ox/mail/write/main',
                 getMail(data).then(
                     function success(data) {
                         data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                        app.setMail({ data: data, mode: 'compose', initial: false, format: data.format })
+                        app.setMail({ data: data, mode: 'compose', initial: false, format: (data.content_type === 'text/plain' ? 'text' : 'html') })
                         .done(function () {
                             app.setFrom(data || {});
                             win.idle();
-                            if (_.device('!smartphone')) app.getEditor().focus();
+                            if (_.device('!smartphone && !iOS')) app.getEditor().focus();
                             def.resolve();
                         });
                     },
@@ -1036,8 +1052,7 @@ define('io.ox/mail/write/main',
          * Get mail
          */
         app.getMail = function () {
-            var // get relevant fields
-                fields = view.form
+            var fields = view.form
                     .find(':input[name]')
                     .filter('textarea, [type=text], [type=hidden], [type=radio]:checked, [type=checkbox]:checked'),
                 // get raw data
@@ -1185,7 +1200,8 @@ define('io.ox/mail/write/main',
 
                     if (result.error && !result.warnings) {
                         win.idle().show();
-                        notifications.yell(result); // TODO: check if backend just says "A severe error occurred"
+                        // TODO: check if backend just says "A severe error occurred"
+                        notifications.yell(result);
                         return;
                     }
 
@@ -1253,7 +1269,7 @@ define('io.ox/mail/write/main',
             if ($.trim(mail.data.subject) === '' || noRecipient) {
                 if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
-                    if (_.device('!smartphone')) focus('to');
+                    if (_.device('!smartphone && !iOS')) focus('to');
                     def.reject();
                 } else if ($.trim(mail.data.subject) === '') {
                     // show dialog
@@ -1271,7 +1287,7 @@ define('io.ox/mail/write/main',
                                         cont();
                                     });
                                 } else {
-                                    if (_.device('!smartphone')) focus('subject');
+                                    if (_.device('!smartphone && !iOS')) focus('subject');
                                     def.reject();
                                 }
                             });
@@ -1306,6 +1322,9 @@ define('io.ox/mail/write/main',
                     notifications.yell(result);
                     def.reject(result);
                 } else {
+                    _(view.fileList.get()).each(function (o) {
+                        o.atmsgref = result;
+                    });
                     app.dirty(false);
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
@@ -1315,6 +1334,13 @@ define('io.ox/mail/write/main',
             _.defer(initAutoSaveAsDraft, this);
 
             return def;
+        };
+
+        app.parseMsgref = function (msgref) {
+            var base = _(msgref.toString().split(mailAPI.separator)),
+                id = base.last(),
+                folder = base.without(id).join(mailAPI.separator);
+            return { folder_id: folder, id: id };
         };
 
         app.saveDraft = function () {
@@ -1356,6 +1382,14 @@ define('io.ox/mail/write/main',
                             def.reject(result);
                         } else {
                             app.setMsgRef(result.data);
+                            mailAPI.get(app.parseMsgref(result.data)).then(function (data) {
+                                // Replace inline images in contenteditable with links from draft response
+                                var t = editor.getContainer().contents().find('body');
+                                $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                                    $('img:not(.emoji):eq(' + index + ')', t).attr('src', $(el).attr('src'));
+                                });
+                                editor.setContent(t.html());
+                            });
                             app.dirty(false);
                             notifications.yell('success', gt('Mail saved as draft'));
                             def.resolve(result);
@@ -1415,8 +1449,10 @@ define('io.ox/mail/write/main',
                 // clear timer for autosave
                 stopAutoSave(app);
                 app.clearKeepalive();
+                // destroy view
+                view.destroy();
                 // clear all private vars
-                app = win = editor = currentSignature = editorHash = null;
+                app = win = view = editor = currentSignature = editorHash = null;
             };
 
             if (app.dirty()) {
@@ -1431,7 +1467,8 @@ define('io.ox/mail/write/main',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                clean();
                                 def.resolve();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function () {

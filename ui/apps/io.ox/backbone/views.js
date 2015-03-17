@@ -129,7 +129,8 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
         options.close = options.close || function () {
             this.$el.remove();
-            this.$el.trigger('dispose'); // Can't hurt
+            // Can't hurt
+            this.$el.trigger('dispose');
         };
 
         options.observeModel = options.observeModel || function (evt, handler, context) {

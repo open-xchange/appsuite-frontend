@@ -12,24 +12,25 @@
  */
 
 define('io.ox/core/folder/tree',
-    ['io.ox/core/folder/selection',
+    ['io.ox/backbone/disposable',
+     'io.ox/core/folder/selection',
      'io.ox/core/folder/api',
      'io.ox/core/extensions',
      'settings!io.ox/core',
      'io.ox/core/folder/favorites',
      'io.ox/core/folder/extensions',
-     'less!io.ox/core/folder/style'], function (Selection, api, ext, settings) {
+     'less!io.ox/core/folder/style'], function (DisposableView, Selection, api, ext, settings) {
 
     'use strict';
 
-    var TreeView = Backbone.View.extend({
+    var TreeView = DisposableView.extend({
 
-        className: 'folder-tree abs',
+        className: 'folder-tree',
 
         events: {
-            'click .contextmenu-control'    : 'onToggleContextMenu',
-            'keydown .contextmenu-control'  : 'onKeydown',
-            'contextmenu .selectable'       : 'onContextMenu'
+            'click .contextmenu-control'                    : 'onToggleContextMenu',
+            'keydown .contextmenu-control'                  : 'onKeydown',
+            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control'  : 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -39,8 +40,11 @@ define('io.ox/core/folder/tree',
                 contextmenu: false,
                 customize: $.noop,
                 disable: $.noop,
+                abs: true,
                 icons: settings.get('features/folderIcons', false),
-                root: 'default0/INBOX'
+                root: 'default0/INBOX',
+                highlight: _.device('!smartphone'),
+                highlightclass: 'visible-selection'
             }, options);
 
             this.all = !!options.all;
@@ -57,10 +61,16 @@ define('io.ox/core/folder/tree',
             this.$dropdownMenu = $();
             this.options = options;
 
-            this.$el.toggleClass('visible-selection', _.device('!smartphone'));
+            this.$el.toggleClass(options.highlightclass, !!options.highlight);
             this.$el.append(this.$container);
 
+            this.$el.attr({
+                'role': 'navigation'
+            });
+
             this.selection = new Selection(this);
+
+            if (options.abs) this.$el.addClass('abs');
 
             // add contextmenu?
             if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
@@ -134,8 +144,10 @@ define('io.ox/core/folder/tree',
 
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
                 this.$dropdown
-                    .data('previous-focus', target) // helps to restore focus (see renderContextMenu)
-                    .find('.dropdown-toggle').dropdown('toggle'); // use official method
+                    // helps to restore focus (see renderContextMenu)
+                    .data('previous-focus', target)
+                    // use official method
+                    .find('.dropdown-toggle').dropdown('toggle');
 
             }.bind(this));
         },
@@ -152,8 +164,14 @@ define('io.ox/core/folder/tree',
         },
 
         onContextMenu: function (e) {
-            e.stopPropagation(); // clicks bubbles. right-click not
+            // clicks bubbles. right-click not
+            e.stopPropagation();
+            e.preventDefault();
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
+            if (target.is('.contextmenu-control')) {
+                top = target.offset().top;
+                left = target.offset().left + 40;
+            }
             this.toggleContextMenu(target, top, left);
         },
 
@@ -166,19 +184,16 @@ define('io.ox/core/folder/tree',
         onKeydown: function (e) {
 
             var dropdown = this.$dropdown;
-            if (!dropdown.hasClass('open')) return; // done if not open
-            if (e.shiftKey && e.which === 9) return; // shift-tab
-
+            // done if not open
+            // if (!dropdown.hasClass('open')) return;
+            // shift-tab
+            // if (e.shiftKey && e.which === 9) return;
             switch (e.which) {
-            case 9:  // tab
-            case 40: // cursor down
+            case 32:
+                // cursor down
                 e.preventDefault();
+                $(e.currentTarget).click();
                 return dropdown.find('.dropdown-menu > li:first > a').focus();
-            case 38: // cursor up
-                e.preventDefault();
-                return dropdown.find('.dropdown-menu > li:last > a').focus();
-            case 27: // escape
-                return dropdown.find('.dropdown-toggle').dropdown('toggle');
             }
         },
 
@@ -199,7 +214,7 @@ define('io.ox/core/folder/tree',
                 if (_.device('smartphone')) {
                     ul.append(
                         $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" aria-haspopup="true">').append(
                                 $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                                 $('<span class="sr-only">')
                             )
@@ -238,12 +253,13 @@ define('io.ox/core/folder/tree',
                 this.$el.after(
                     this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
                         $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
                         this.$dropdownMenu = $('<ul class="dropdown-menu" role="menu">')
                     )
                     .on('show.bs.dropdown', show.bind(this))
                     .on('hidden.bs.dropdown', hide)
                 );
+                this.$dropdownToggle.dropdown();
             };
         }()),
 

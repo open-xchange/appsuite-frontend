@@ -80,9 +80,12 @@ define('io.ox/core/api/account',
     api.isUnified = function (id) {
         // extend if number
         if (/^\d+$/.test(id)) id = 'default' + id;
+        // get identifier (might be null)
+        var identifier = settings.get('unifiedInboxIdentifier');
+        if (!identifier || identifier === 'null') return false;
         // compare against unifiedInboxIdentifier (having just a number would be smarter)
         var match = String(id).match(/^(default\d+)/);
-        return !!match && settings.get('unifiedInboxIdentifier') === (match[1] + separator + 'INBOX');
+        return !!match && identifier === (match[1] + separator + 'INBOX');
     };
 
     /**
@@ -168,7 +171,8 @@ define('io.ox/core/api/account',
             } else {
                 // loop of all types to also check if a subfolder is of a type
                 return _(typeHash).some(function (defaultType, defaultId) {
-                    return defaultType === type && id.indexOf(defaultId) === 0;
+                    var isSubfolder = (id).indexOf(defaultId + separator) === 0;
+                    return defaultType === type && (defaultId === id || isSubfolder);
                 });
             }
         }
@@ -307,8 +311,9 @@ define('io.ox/core/api/account',
     // make sure account's personal is set
     var ensureDisplayName = function (account) {
 
-                // no account given or account already has "personal"
-        if (!account || (account.personal && $.trim(account.personal) !== '')) {
+        // no account given or account already has "personal"
+        // one space is a special marker not to use any default display name
+        if (!account || (account.personal && (account.personal === ' ' || $.trim(account.personal) !== ''))) {
             return $.Deferred().resolve(account);
         }
 
@@ -340,7 +345,7 @@ define('io.ox/core/api/account',
         // just for robustness
         if (!account) return [];
 
-        if (!account.addresses) { // null, undefined, empty
+        if (!account.addresses) {
             return [getAddressArray(account.personal, account.primary_address)];
         }
 
@@ -349,7 +354,10 @@ define('io.ox/core/api/account',
 
         // build common array of [display_name, email]
         return _(addresses).map(function (address) {
-            return getAddressArray(account.personal, address);
+            var isAlias = address !== account.primary_address,
+                anonymouse = isAlias && settings.get('features/anonymousAliases', false),
+                display_name = anonymouse ? '' : account.personal;
+            return getAddressArray(display_name, address);
         });
     }
 
@@ -533,7 +541,8 @@ define('io.ox/core/api/account',
             appendColumns: false,
             params: params,
             data: data,
-            processData: false//needed or http.js does not give the warnings back
+            //needed or http.js does not give the warnings back
+            processData: false
         })
         //make it always successful but either true or false, if false we give the warnings back
         .then(

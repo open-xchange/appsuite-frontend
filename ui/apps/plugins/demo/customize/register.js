@@ -196,7 +196,8 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         value = value === 0 ? 0 : 30 + 20 + value * 5;
         $('#io-ox-core').css('top', value);
         $('#customize-text').css({ fontSize: Math.floor(value / 3.0) + 'px', lineHeight: (value - 20) + 'px', height: value + 'px', padding: '10px' });
-        updateLogo(); // maybe we need to toggle the header logo
+        // maybe we need to toggle the header logo
+        updateLogo();
     });
 
     //
@@ -254,7 +255,8 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
     var initialize = function () {
         var data = settings.get('presets/default', {});
         if (_.isEmpty(data)) applyPreset(0); else model.set(data);
-        updateStylesheet(); // make sure this is called once!
+        // make sure this is called once!
+        updateStylesheet();
     };
 
     var url = '';

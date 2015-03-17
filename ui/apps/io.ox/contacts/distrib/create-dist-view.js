@@ -72,8 +72,9 @@ define('io.ox/contacts/distrib/create-dist-view',
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<div>').addClass('form-group col-md-12').append(
+                    // see Bug 31073 - [L3] Field "List name" is mentioned as Display Name in the error message appears on create distribution list page
                     //#. Name of distribution list
-                    $('<label>').addClass('control-label').attr('for', guid).text(gt('Name')), // mind bug #31073
+                    $('<label>').addClass('control-label').attr('for', guid).text(gt('Name')),
                     new mini.InputView({ name: 'display_name', model: this.baton.model, className: 'form-control control', id: guid }).render().$el
                 )
             );
@@ -142,6 +143,12 @@ define('io.ox/contacts/distrib/create-dist-view',
                     );
                 });
             }
+
+            // draw empty item again
+            this.listenTo(this.model, 'change:distribution_list', function () {
+                if (self.model.get('distribution_list').length === 0)
+                    self.drawEmptyItem(self.$el.find('.item-list'));
+            });
         },
 
        /**

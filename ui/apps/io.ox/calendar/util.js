@@ -129,6 +129,12 @@ define('io.ox/calendar/util',
             return d.format(date.DAYOFWEEK_DATE);
         },
 
+        //returns date with full weekday name
+        getDateA11y: function (timestamp) {
+            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
+            return date.locale.days[d.getDay()] + ', ' + d.format(date.DATE);
+        },
+
         getSmartDate: function (data, showDate) {
 
             var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
@@ -155,7 +161,7 @@ define('io.ox/calendar/util',
 
                 if (diff >= -1 * date.DAY) {
                     return gt('Yesterday');
-                } else if (diffWeek > -7 * date.DAY || lastSunday) {
+                } else if (diffWeek > -7 * date.DAY || lastSunday) {
                     return gt('Last Week');
                 }
             } else {
@@ -165,7 +171,8 @@ define('io.ox/calendar/util',
                 } else if (diff < 2 * date.DAY) {
                     return gt('Tomorrow');
                 } else if (diffWeek < 7 * date.DAY) {
-                    return date.locale.days[d.getDay()]; // this week
+                    // this week
+                    return date.locale.days[d.getDay()];
                 } else if (diffWeek >= 7 * date.DAY && diffWeek < 14 * date.DAY) {
                     return showDate ? d.format(date.DATE) : gt('Next Week');
                 }
@@ -220,6 +227,30 @@ define('io.ox/calendar/util',
                     return this.getDate(startDate);
                 } else {
                     return this.getDate(startDate) + ' \u2013 ' + this.getDate(endDate);
+                }
+            } else {
+                return '';
+            }
+        },
+
+        getDateIntervalA11y: function (data) {
+            if (data && data.start_date && data.end_date) {
+                var startDate = data.start_date,
+                    endDate = data.end_date;
+                if (data.full_time) {
+                    startDate = date.Local.utc(startDate);
+                    endDate = date.Local.utc(endDate);
+                    endDate -= date.DAY;
+                }
+                if (this.onSameDay(startDate, endDate)) {
+                    return this.getDateA11y(startDate);
+                } else {
+                            //#. date intervals for screenreaders
+                            //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                            //#. %1$s is the start date
+                            //#. %2$s is the end date
+                            //#, c-format
+                    return gt('%1$s to %2$s', this.getDateA11y(startDate), this.getDateA11y(endDate));
                 }
             } else {
                 return '';
@@ -312,6 +343,21 @@ define('io.ox/calendar/util',
                 return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
             }
         },
+        getTimeIntervalA11y: function (data) {
+            if (!data || !data.start_date || !data.end_date) return '';
+            if (data.full_time) {
+                return this.getFullTimeInterval(data, true);
+            } else {
+                var start = new date.Local(data.start_date),
+                    end = new date.Local(data.end_date);
+                        //#. Time intervals for screenreaders
+                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                        //#. %1$s is the start time
+                        //#. %2$s is the end time
+                        //#, c-format
+                return gt('%1$s to %2$s', start.format(date.TIME), end.format(date.TIME));
+            }
+        },
 
         getStartAndEndTime: function (data) {
             var ret = [];
@@ -329,7 +375,7 @@ define('io.ox/calendar/util',
             var current = date.Local.getTTInfoLocal(data.start_date);
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data))),
-                $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.abbr)).popover({
                     container: '#io-ox-core',
                     content: getContent(),
                     html: true,
@@ -340,7 +386,7 @@ define('io.ox/calendar/util',
                         return 'left';
                     },
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
-                    trigger: 'hover'
+                    trigger: 'hover focus'
                 }).on('blur', function () {
                     $(this).popover('hide');
                 })
@@ -536,13 +582,12 @@ define('io.ox/calendar/util',
         },
 
         getNote: function (data) {
-            return $.trim(gt.noI18n(data.note) || '')
+
+            var text = $.trim(gt.noI18n(data.note) || '')
                 .replace(/\n{3,}/g, '\n\n')
-                .replace(/</g, '&lt;')
-                .replace(/(https?\:\/\/\S+)/g, function ($1) {
-                    // soft-break long words (like long URLs)
-                    return '<a href="' + $1 + '" target="_blank">' + util.breakableHTML($1) + '</a>';
-                });
+                .replace(/</g, '&lt;');
+
+            return util.urlify(text);
         },
 
         getConfirmations: function (data) {
@@ -640,13 +685,16 @@ define('io.ox/calendar/util',
         },
 
         resolveParticipants: function (participants, mode) {
+
             var groupIDs = [],
                 userIDs = [],
                 result = [];
+
             mode = mode || 'dist';
 
             _.each(participants, function (participant) {
-                if (participant.type === 5) { // external user
+                if (participant.type === 5) {
+                    // external user
                     if (mode === 'dist') {
                         result.push({
                             display_name: participant.display_name,
@@ -656,9 +704,11 @@ define('io.ox/calendar/util',
                     } else {
                         result.push([participant.display_name, participant.mail]);
                     }
-                } else if (participant.type === 2) { // group
+                } else if (participant.type === 2) {
+                    // group
                     groupIDs.push(participant.id);
-                } else if (participant.type === 1) { // internal user
+                } else if (participant.type === 1) {
+                    // internal user
                     userIDs.push(participant.id);
                 }
             });
@@ -668,9 +718,12 @@ define('io.ox/calendar/util',
                     return _([].concat(result, users)).uniq();
                 } else {
                     _.each(users, function (user) {
-                        if (user.id !== ox.user_id) {
-                            result.push([user.display_name, user.mail]);
-                        }
+                        // don't add myself
+                        if (user.id === ox.user_id) return;
+                        // don't add if mail address is missing (yep, edge-case)
+                        if (!user.mail) return;
+                        // add to result
+                        result.push([user.display_name, user.mail]);
                     });
                     return result;
                 }

@@ -200,19 +200,30 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         render: function () {
             var self = this;
             _.defer(function () {
-                var container = self.getContainer();
+                var container = self.getContainer(),
+                    errorId = _.uniqueId('error-help_');
                 container.on({
                     invalid: function (e, message) {
                         // check if already invalid to avoid endless focus calls
                         if ($(this).hasClass('has-error')) return;
                         $(this).addClass('has-error');
+                        self.$el.attr({
+                            'id': errorId
+                        });
                         self.$el.text(message).show().end();
-                        $(this).find('input').attr('aria-invalid', true).focus();
+                        $(this).find('input').attr({
+                            'aria-invalid': true,
+                            'aria-describedby': errorId
+                        });
+                        _.defer(function () {
+                            $(container).find('input').focus();
+                        });
                     },
                     valid: function () {
                         $(this).removeClass('has-error');
+                        self.$el.removeAttr('id role');
                         self.$el.text('').hide().end();
-                        $(this).find('input').removeAttr('aria-invalid');
+                        $(this).find('input').removeAttr('aria-invalid aria-describedby');
                     }
                 });
             });

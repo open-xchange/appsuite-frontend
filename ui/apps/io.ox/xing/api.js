@@ -23,7 +23,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         likeActivity, unlikeActivity, getLikes, showActivity,
         shareActivity, deleteActivity, changeStatus, createProfile,
         initiateContactRequest, revokeContactRequest, invite,
-        shareLink;
+        shareLink, createSubscription;
 
     /*
      * Helpers
@@ -131,6 +131,45 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         return xingPost('share_link', params, body);
     };
 
+    /*
+     * Create a folder in contacts with name 'XING' and corresponding subscription
+     */
+    createSubscription = function () {
+        require([
+            'io.ox/core/api/pubsub',
+            'io.ox/core/pubsub/model',
+            'io.ox/core/folder/api',
+            'io.ox/keychain/api',
+            'io.ox/core/notifications'
+        ], function (subAPI, subModel, folderAPI, keychainAPI, notifications) {
+            subAPI.sources.getAll().done(function (subscriptions) {
+                var subs = _(subscriptions).filter(function (s) { return s.id.match('.*xing.*') && s.module === 'contacts'; });
+
+                if (subs.length > 0) {
+                    var sub = subs[0],
+                        folder = require('settings!io.ox/core').get('folder/' + sub.module);
+
+                    folderAPI.create(folder, {
+                        title: sub.displayName || 'XING'
+                    }).done(function (folder) {
+                        var account = keychainAPI.getStandardAccount('xing'),
+                            model = new subModel.Subscription({
+                                folder: folder.id,
+                                entity: { folder: folder.id },
+                                entityModule: sub.module
+                            });
+
+                        model.setSource(sub, { 'account': parseInt(account.id, 10) });
+
+                        model.save().then(function saveSucess(id) {
+                            subAPI.subscriptions.refresh({ id: id, folder: folder }).fail(notifications.yell);
+                        }, notifications.yell);
+                    });
+                }
+            });
+        });
+    };
+
     return {
         getUserfeed: getUserfeed,
         getComments: getComments,
@@ -147,6 +186,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         initiateContactRequest: initiateContactRequest,
         revokeContactRequest: revokeContactRequest,
         invite: invite,
-        findByMail: findByMail
+        findByMail: findByMail,
+        createSubscription: createSubscription
     };
 });

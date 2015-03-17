@@ -130,8 +130,9 @@ define('io.ox/calendar/actions',
             var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
                 allowed = e.collection.has('one', 'create');
             if (allowed) {
-                //if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
-                if (!e.baton.data.folder_id) {//you need to have a folder id to edit
+                // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
+                if (!e.baton.data.folder_id) {
+                    // you need to have a folder id to edit
                     allowed = false;
                 }
             }
@@ -266,8 +267,8 @@ define('io.ox/calendar/actions',
                         if (hasRec) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                                .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment', {tabIndex: '1'})
                                 .addPrimaryButton('series', gt('Delete whole series'), 'series', {tabIndex: '1'})
+                                .addButton('appointment', gt('Delete appointment'), 'appointment', {tabIndex: '1'})
                                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                 .show()
                                 .done(function (action) {
@@ -361,16 +362,6 @@ define('io.ox/calendar/actions',
         }
     });
 
-    new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
-        requires: 'one',
-        capabilities: 'printing',
-        action: function (baton) {
-            var options = { template: 'print.appointment.tmpl' }, POS = 'recurrence_position';
-            if (baton.data[POS]) options[POS] = baton.data[POS];
-            print.open('calendar', baton.data, options);
-        }
-    });
-
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'printing',
         id: 'print',
@@ -378,7 +369,7 @@ define('io.ox/calendar/actions',
             var win = e.baton.window;
             if (_.device('!small') && win && win.getPerspective) {
                 var pers = win.getPerspective();
-                return pers && pers.name !== 'list';
+                return pers && pers.print;
             } else {
                 return false;
             }

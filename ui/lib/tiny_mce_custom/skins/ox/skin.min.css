@@ -4,6 +4,8 @@
 .mce-flow-layout-item { margin:0; }
 .mce-toolbar-grp { padding-bottom:0; border:0; }
 .mce-btn-group .mce-btn { border:0; background:transparent; padding-bottom:2px; padding-top:1px; }
+.mce-btn-group .mce-btn:focus { background-color: #ddd; outline: 1px solid blue; }
+.mce-btn-group .mce-btn:hover { background-color: #ddd; }
 .mce-toolbar-grp .mce-btn.mce-active, .mce-toolbar-grp .mce-btn.mce-active:hover { background-color: #e6e6e6; }
 .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; }
 .mce-panel.mce-edit-area { border:1px solid #ccc !important; }

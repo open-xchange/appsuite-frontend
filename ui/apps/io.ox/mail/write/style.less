@@ -122,6 +122,7 @@
 
 .io-ox-mail-write input[type=text],
 .io-ox-mail-write input[type=text].discreet:focus {
+
     font-size: @font-size-base;
     line-height: 18px;
     height: 29px;
@@ -134,6 +135,11 @@
     width: 100%;
     -webkit-border-radius: 0;
     -webkit-appearance: none;
+
+    &:-ms-input-placeholder {
+        color: #aaa;
+    }
+
 }
 
 .touch .io-ox-mail-write input[type=text],
@@ -202,6 +208,9 @@
     white-space: nowrap;
     line-height: 1em;
     margin-bottom: 1em;
+    i.fa {
+        margin-right: 5px;
+    }
 }
 
 .io-ox-mail-write .section[data-section='All']{
@@ -242,6 +251,19 @@
     background-color: white;
     margin-bottom: 2px;
     padding: 4px 2.5em 4px 5px;
+
+    legend {
+        font-size: @font-size-base;
+        border: 0;
+        margin: 0;
+        position: relative;
+        bottom: 10px;
+        left: -6px;
+        &.group-label {
+            left: 0px;
+            top: 13px;
+        }
+    }
 
     &.pointer {
         cursor: pointer;
@@ -343,12 +365,6 @@
     z-index: 1;
 }
 
-.io-ox-mail-write .editor-print-margin {
-    top: 4px; bottom: 4px;
-    border-right: 1px dotted #ccc;
-    z-index: 2;
-}
-
 .io-ox-mail-write .editor-inner-container {
     padding: 4px;
     z-index: 3;
@@ -389,7 +405,7 @@
 }
 
 
-/* Proofread */
+// Proofread
 
 .io-ox-mail-proofread {
     background-color: #555;
@@ -398,42 +414,36 @@
     overflow: auto;
 }
 
-/* tinyMCE polishing */
+// tinyMCE polishing
 
-/*.editor-inner-container {
+// .editor-inner-container {
+//     .oxSkin table.mceLayout.focused tr.mceLast td {
+//         border-color: rgba(82, 168, 236, 0.8);
+//         .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
+//     }
+//     .oxSkin table.mceLayout {
+//         border: 0 none;
+//         border-left: 0 none;
+//         border-right: 0 none;
+//     }
+//     .oxSkin table.mceLayout tr.mceLast > td {
+//         border: 1px solid #ccc;
+//         border-bottom: 1px solid #ccc;
+//     }
+//     .oxSkin table.mceLayout tr.mceFirst > td {
+//         border-top: 0 none;
+//         padding: 4px 0 12px 0;
+//     }
+//     .oxSkin table.mceSplitButtonEnabled:hover a.mceAction,
+//     .oxSkin a.mceButtonEnabled:hover,
+//     .oxSkin table.mceSplitButtonEnabled:hover a.mceOpen,
+//     .oxSkin table.mceListBoxEnabled:hover .mceText,
+//     .oxSkin table.mceListBoxEnabled:hover .mceOpen {
+//         border-color: rgba(82, 168, 236, 0.8); background-color: rgba(82, 168, 236, 0.2);
+//     }
+// }
 
-    .oxSkin table.mceLayout.focused tr.mceLast td {
-        border-color: rgba(82, 168, 236, 0.8);
-        .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
-    }
-
-    .oxSkin table.mceLayout {
-        border: 0 none;
-        border-left: 0 none;
-        border-right: 0 none;
-    }
-
-    .oxSkin table.mceLayout tr.mceLast > td {
-        border: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
-    }
-
-    .oxSkin table.mceLayout tr.mceFirst > td {
-        border-top: 0 none;
-        padding: 4px 0 12px 0;
-    }
-
-    .oxSkin table.mceSplitButtonEnabled:hover a.mceAction,
-    .oxSkin a.mceButtonEnabled:hover,
-    .oxSkin table.mceSplitButtonEnabled:hover a.mceOpen,
-    .oxSkin table.mceListBoxEnabled:hover .mceText,
-    .oxSkin table.mceListBoxEnabled:hover .mceOpen {
-        border-color: rgba(82, 168, 236, 0.8); background-color: rgba(82, 168, 236, 0.2);
-    }
-}
-*/
-
-/* tablet */
+// tablet
 @media (max-width: 1024px), (max-device-width: 1024px) {
     .io-ox-mail-write-window {
         .textarea-shift{
@@ -479,7 +489,7 @@
             width: 100%;
         }
 
-        /* only apply this adjustments on tablet, therefore checking for .touch */
+        // only apply this adjustments on tablet, therefore checking for .touch
         .touch & .mceEmojiPane {
             position: absolute;
             right: 0;
@@ -488,7 +498,6 @@
             height: auto;
             z-index: 1000;
 
-            /*height: 100%;*/
             width: 255px;
             vertical-align: top;
 
@@ -686,7 +695,8 @@
             bottom: 50px;
             top: 1px;
             padding: 5px;
-            margin-bottom: 60px;//to prevent buttons to overlap inputfield
+            //to prevent buttons to overlap inputfield
+            margin-bottom: 60px;
             &:focus {
                 box-shadow: none;
                 -webkit-box-shadow: none;
@@ -705,14 +715,16 @@
             padding-right: 30px;
         }
         .leftside {
-            background: #fff; /* let's make it flat */
+            // let's make it flat
+            background: #fff;
             .title {
                 display: none;
             }
             padding: 5px;
         }
         .rightside {
-            background: #fff; /* let's make it flat */
+            // let's make it flat
+            background: #fff;
             padding: 5px;
             height: auto;
 
@@ -734,9 +746,6 @@
 
             }
 
-            .editor-print-margin {
-                display: none !important;
-            }
             .priority-overlay {
                 display: none;
             }
@@ -921,7 +930,7 @@
             }
         }
 
-        /* bootstrap re-resets */
+        // bootstrap re-resets
 
         .dropdown-toggle, .dropdown-toggle * { cursor: pointer; }
 

@@ -62,13 +62,18 @@ define('io.ox/contacts/edit/main',
                     function cont(contact) {
                         var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
                         app.setTitle(appTitle || gt('Create contact'));
+                        win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact });
                         container.append(
                             editView.render().$el.addClass('default-content-padding container')
                         );
-                        // no autofocus on smartphone
-                        if (_.device('!smartphone')) container.find('input[type=text]:visible').eq(0).focus();
+                        // no autofocus on smartphone and for iOS in special (see bug #36921)
+                        if (_.device('!smartphone && !iOS')) {
+                            container.find('input[type=text]:visible').eq(0).focus();
+                            // focus first_name if visible
+                            container.find('[data-field="first_name"] input').eq(0).focus();
+                        }
 
                         editView.on('save:start', function () {
                             win.busy();
@@ -158,7 +163,8 @@ define('io.ox/contacts/edit/main',
                             });
                         }
                         win.on('show', function () {
-                            if (contact.get('id')) {//set url parameters
+                            if (contact.get('id')) {
+                                //set url parameters
                                 app.setState({ folder: contact.get('folder_id'), id: contact.get('id') });
                             } else {
                                 app.setState({ folder: contact.get('folder_id'), id: null});

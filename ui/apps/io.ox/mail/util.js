@@ -220,8 +220,7 @@ define('io.ox/mail/util',
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
                 recipient = this.parseRecipient(match[0]);
-                //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly
-                //look Bug 23983
+                //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly (Bug 23983)
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
                 if (msExchange || recipient[1].indexOf('@') > -1 || that.getChannel(recipient[1]) === 'phone') {
@@ -265,7 +264,7 @@ define('io.ox/mail/util',
 
                 if (i < $i - 1) {
                     tmp.append(
-                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2014 '))) // '&nbsp;&mdash; '
+                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2014 ')))
                     );
                 }
             }
@@ -290,7 +289,7 @@ define('io.ox/mail/util',
                 if (i < $i - 1) {
                     tmp = tmp.add(
                         $('<span>').addClass('delimiter')
-                            .append($.txt(_.noI18n('\u00A0\u2022 '))) // '&nbsp;&bull; '
+                            .append($.txt(_.noI18n('\u00A0\u2022 ')))
                     );
                 }
             }
@@ -320,18 +319,40 @@ define('io.ox/mail/util',
             return data && _.isArray(data.from) && data.from.length > 0 && !!data.from[0][1];
         },
 
+        // returns jquery set
         getFrom: function (data, field) {
+
+            data = data || {};
             field = field || 'from';
-            var list = data[field] || [['', '']],
-                dn = that.getDisplayName(list[0]);
-            if (field === 'from' && dn === '') {
-                dn = gt('Unknown sender');
-            } else if (field === 'to' && dn === '') {
-                dn = gt('No recipients');
-            } else {
-                dn = _.noI18n(dn);
+
+            // get list
+            var list = _(data[field])
+                .chain()
+                .map(function (item) {
+                    // reduce to display name
+                    return that.getDisplayName(item);
+                })
+                .filter(function (name) {
+                    // skip empty names
+                    return name !== '';
+                })
+                .value();
+
+            // empty?
+            if (list.length === 0) {
+                return $().add(
+                    $.txt(field === 'from' ? gt('Unknown sender') : gt('No recipients'))
+                );
             }
-            return util.renderPersonalName({ name: dn }).addClass('person');
+
+            list = _(list).reduce(function (set, name) {
+                return set
+                    .add(util.renderPersonalName({ name: name }).addClass('person'))
+                    .add($.txt(', '));
+            }, $());
+
+            // drop last item
+            return list.slice(0, -1);
         },
 
         /**
@@ -513,58 +534,78 @@ define('io.ox/mail/util',
         },
 
         signatures: (function () {
-            var htmltags = /(<([^>]+)>)/ig,
-                nothing = /.^/,
+
+            var looksLikeHTML = function (text) {
+                    return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
+                },
                 general = function (text) {
                     return String(text || '')
-                        //replace white-space and evil \r
+                        // replace white-space and evil \r
                         .replace(/(\r\n|\n|\r)/g, '\n')
-                        //replace subsequent white-space (except linebreaks)
+                        // replace subsequent white-space (except linebreaks)
                         .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
                         .trim();
                 },
                 add = function (text, isHTML) {
-                    var clean = general(text)
-                                //remove html tags (for plaintext emails)
-                                .replace(isHTML ? nothing : htmltags, '');
-                    //special entities like '&'/&amp;
-                    return isHTML ? $('<dummy>').html(clean).html() : clean;
+                    var clean = general(text);
+                    // special entities like '&'/&amp;
+                    var $parsed = $('<dummy>').html(clean);
+                    if (isHTML) {
+                        if (!looksLikeHTML(clean)) {
+                            $parsed.text(clean);
+                        }
+                        return $parsed.html();
+                    } else {
+                        if (!looksLikeHTML(clean)) {
+                            $parsed.text(clean);
+                        }
+                        $parsed.find('p').replaceWith(function () {
+                            return $(this).html() + '\n\n';
+                        });
+                        $parsed.find('br').replaceWith(function () {
+                            return $(this).html() + '\n';
+                        });
+                        return $parsed.text().trim();
+                    }
                 },
                 preview = function (text) {
                     return general(text)
-                        //remove ASCII art (intended to remove separators like '________')
+                        // remove ASCII art (intended to remove separators like '________')
                         .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                        //remove htmltags
-                        .replace(htmltags, '')
+                        // remove htmltags
+                        .replace(/(<\/?\w+(\s[^<>]*)?>)/g, '')
                         .trim();
                 };
+
             return {
+
                 cleanAdd: function (text, isHTML) {
                     return add(text, !!isHTML);
                 },
+
                 cleanPreview: function (text) {
                     return preview(text);
                 },
+
                 is: function (text, list, isHTML) {
-                    var clean,
-                        signatures = _(list).map(function (signature) {
-                            //consider changes applied by appsuite
-                            clean = add(signature.content, !!isHTML);
-                            //consider changes applied by tiny
-                            if (clean === '')
-                                return '<br>';
-                            else {
-                                return clean
-                                        //replace surrounding white-space (except linebreaks)
-                                        .replace(/>[\t\f\v ]+/g, '>')
-                                        .replace(/[\t\f\v ]+</g, '<')
-                                        //set breaks
-                                        .replace(/(\r\n|\n|\r)/g, '<br>')
-                                        //remove empty alt attribute(added by tiny)
-                                        .replace(/ alt=""/, '');
-                            }
-                        });
-                    return _(signatures).indexOf(text) > - 1;
+                    var signatures = _(list).map(function (signature) {
+                        // consider changes applied by appsuite
+                        var clean = add(signature.content, !!isHTML);
+                        // consider changes applied by tiny
+                        if (clean === '')
+                            return '<br>';
+                        else {
+                            return clean
+                                // set breaks
+                                .replace(/(\r\n|\n|\r)/g, '<br>')
+                                // replace surrounding white-space (except linebreaks)
+                                .replace(/>[\t\f\v ]+/g, '>')
+                                .replace(/[\t\f\v ]+</g, '<')
+                                // remove empty alt attribute(added by tiny)
+                                .replace(/ alt=""/, '');
+                        }
+                    });
+                    return _(signatures).indexOf(add(text, !!isHTML)) > - 1;
                 }
             };
         })(),
@@ -597,7 +638,7 @@ define('io.ox/mail/util',
                     if (isWinmailDATPart(obj)) {
                         dat = obj.attachments[0];
                         attachments.push(
-                            _.extend({}, dat, { mail: mail, title: obj.filename || '' })
+                            _.extend({}, dat, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
                     } else {
                         fixIds(data, obj);
@@ -605,7 +646,8 @@ define('io.ox/mail/util',
                             id: obj.id,
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}), // remove consecutive white-space
+                                      // remove consecutive white-space
+                                      _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}),
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

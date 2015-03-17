@@ -52,7 +52,8 @@ define('io.ox/mail/write/view-main',
     ext.point(POINT + '/toolbar').extend(new links.Button({
         id: 'draft',
         index: 200,
-        label: gt('Save'), // is 'Save as draft' but let's keep it short for small devices
+        // is 'Save as draft' but let's keep it short for small devices
+        label: gt('Save'),
         cssClasses: 'btn btn-default',
         ref: POINT + '/actions/draft',
         tabIndex: '6'
@@ -107,17 +108,30 @@ define('io.ox/mail/write/view-main',
             });
         },
 
+        destroy: function () {
+            ViewClass.prototype.destroy.call(this);
+            // too many internal references!
+            this.sections = this.app = null;
+            this.baton = this.baton.app = this.baton.view = null;
+            this.scrollpane = this.rightside = this.leftside = this.editor = this.emoji = null;
+            this.priorityOverlay = this.subject = this.spacer = null;
+            this.textarea = this.form = this.emojiview = this.signatures = null;
+        },
+
         createLink: function (id, label, show) {
+
             return (this.sections[id + 'Link'] = $('<div>'))
                 .addClass('section-link')
                 .append(
                     $('<a>', { href: '#', tabindex: '7', role: 'button' })
                     .attr({
                         'data-section-link': id,
-                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label
+                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label,
+                        'aria-expanded': !!show
                     })
                     .data('label', label)
                     .text(label)
+                    .prepend($('<i class="fa fa-caret-' + (show ? 'down' : 'right') + '" aria-hidden="true">'))
                     .on('click', { id: id }, $.proxy(this.fnToggleSection, this))
                 );
         },
@@ -165,11 +179,18 @@ define('io.ox/mail/write/view-main',
             e.preventDefault();
             var id = e.data.id,
                 link = this.sections[id + 'Link'].find('a');
+                link.find('i').toggleClass('fa-caret-down fa-caret-right');
             if (this.sections[id].is(':visible')) {
-                link.attr('aria-label', gt('open') + ' ' + link.data('label'));
+                link.attr({
+                    'aria-label': gt('open') + ' ' + link.data('label'),
+                    'aria-expanded': false
+                });
                 this.hideSection(id, e.target);
             } else {
-                link.attr('aria-label', gt('close') + ' ' + link.data('label'));
+                link.attr({
+                    'aria-label': gt('close') + ' ' + link.data('label'),
+                    'aria-expanded': true
+                });
                 this.showSection(id, e.target);
             }
         },
@@ -186,7 +207,8 @@ define('io.ox/mail/write/view-main',
                     .attr({
                         tabindex: (id === 'to' ? '2' : '7'),
                         id: 'writer_field_' + id,
-                        'data-type': id // not name=id!
+                        // not name=id!
+                        'data-type': id
                     })
                     .autocomplete({
                         api: autocompleteAPI,
@@ -495,7 +517,7 @@ define('io.ox/mail/write/view-main',
             // sections
 
             // TO
-            this.addSection('to').append(
+            this.addSection('to', true, null, false).append(
                 this.createRecipientList('to'),
                 this.createField('to', gt('To'))
                     .find('input').attr('placeholder', gt.format('%1$s ...', gt('To'))).placeholder().end()
@@ -573,8 +595,10 @@ define('io.ox/mail/write/view-main',
                 e.preventDefault();
                 require(['io.ox/files/filepicker']).done(function (Picker) {
                     var picker = new Picker({
-                        point: POINT,                   // prefix for custom ext. point
-                        filter: function () {           // filter function
+                        // prefix for custom ext. point
+                        point: POINT,
+                        // filter function
+                        filter: function () {
                             return true;
                         },
                         primaryButtonText: gt('Add'),
@@ -590,7 +614,7 @@ define('io.ox/mail/write/view-main',
 
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
-                    this.createLink('attachments', gt('Attachments')),
+                    this.createLink('attachments', gt('Attachments'), true),
                     uploadSection.append(
                         $inputWrap,
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
@@ -668,7 +692,7 @@ define('io.ox/mail/write/view-main',
             }());
 
             // FROM
-            this.addSection('sender', false, gt('Sender'), true)
+            this.addSection('sender', true, gt('Sender'), true)
                 .append(this.createSenderField())
                 .append(this.createReplyToField());
 
@@ -685,10 +709,10 @@ define('io.ox/mail/write/view-main',
             // Options
             this.addSection('options', false, gt('More'), true).append(
                 // Priority
-                $('<div>').addClass('section-item')
-                .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
+                $('<fieldset>').addClass('section-item')
+                .css({ paddingTop: '1em', paddingBottom: '0.5em' })
                 .append(
-                    $('<span>').addClass('group-label').text(gt('Priority'))
+                    $('<legend>').addClass('group-label').text(gt('Priority'))
                 )
                 .append(createRadio('priority', '1', gt('High')))
                 .append(createRadio('priority', '3', gt('Normal'), true))
@@ -709,9 +733,10 @@ define('io.ox/mail/write/view-main',
 
             if (_.device('!touch')) {
                 var format = settings.get('messageFormat', 'html');
-                this.addSection('format', true, gt('Text format'), false).append(
+                this.addSection('format', true, null , false).append(
 
-                    $('<div class="section-item">').append(
+                    $('<fieldset class="section-item">').append(
+                        $('<legend>').text(gt('Text format')),
                         createRadio('format', 'text', gt('Text'), format === 'text'),
                         createRadio('format', 'html', gt('HTML'), format === 'html' || format === 'alternative')
                     )
@@ -801,8 +826,6 @@ define('io.ox/mail/write/view-main',
                     return $('<div class="abs editor-outer-container">').append(
                         // white background
                         $('<div>').addClass('abs editor-background'),
-                        // editor's print margin
-                        $('<div>').addClass('abs editor-print-margin'),
                         // inner div
                         $('<div>').addClass('abs editor-inner-container')
                         .css('overflow', 'hidden')
@@ -827,8 +850,10 @@ define('io.ox/mail/write/view-main',
                                         self.spacer.show();
                                         self.scrollEmoji();
                                     }
-                                    if (_.device('android')) {//android needs special handling here
-                                        setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
+                                    //android needs special handling here
+                                    if (_.device('android')) {
+                                        //use timeout because the onscreen keyboard resizes the window
+                                        setTimeout(function () {
                                             self.form.parent().scrollTop(self.form.parent().height());
                                         }, 500);
 
@@ -837,7 +862,8 @@ define('io.ox/mail/write/view-main',
                                             self.spacer.hide();
                                         });
                                     } else {
-                                        self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
+                                        //show spacer to prevent onscreen keyboard from overlapping
+                                        self.spacer.show();
                                         self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
                                     }
                                 }
@@ -864,8 +890,8 @@ define('io.ox/mail/write/view-main',
                                 tabindex: '3',
                                 placeholder: gt('Subject')
                             })
-                            /* no padding-right for input fields in IE9
-                               -> Bug 27069 - Subject does not scroll properly for long strings in IE9 */
+                            // no padding-right for input fields in IE9
+                            // see Bug 27069 - Subject does not scroll properly for long strings in IE9
                             .css('width', function () {
                                 return _.device('desktop') && _.browser.IE < 10 ? '85%' : null;
                             })
@@ -937,8 +963,8 @@ define('io.ox/mail/write/view-main',
 
             // iOS 7 has problems with rotation changes while the keyboard is shown (on iPad)
             // blur to dismiss the keyboard
-            // fix for bug 29386
-            // PLEASE REMOVE THIS UGLY PIECE OF CODE ASA APPLE HAS FIXED THIS BUG
+            // see bug 29386
+            // TODO: PLEASE REMOVE THIS UGLY PIECE OF CODE ASA APPLE HAS FIXED THIS BUG
             if (_.browser.ios >= 7 && _.device('medium')) {
                 $(this.leftside, this.tightside).on('orientationchange', function () {
                     $('input, textarea', this.leftside).blur();
@@ -1051,7 +1077,8 @@ define('io.ox/mail/write/view-main',
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
                 display_name: util.unescapeDisplayName(elem.full_name || elem.display_name).replace(/"/g, ''),
-                email: elem.email || elem.mail || '', // distribution lists just have "mail"
+                // distribution lists just have "mail"
+                email: elem.email || elem.mail || '',
                 phone: elem.phone || '',
                 field: elem.field || '',
                 image1_url: elem.image1_url || '',
@@ -1234,11 +1261,6 @@ define('io.ox/mail/write/view-main',
              '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + (obj.phone || '') + '>' : '<' + obj.email + (obj.phone || '') + '>';
     }
 
-    // function clickRadio(e) {
-    //     var node = $(this).parent();
-    //     node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-    // }
-
     function createRadio(name, value, text, isChecked) {
         var label, radio;
         radio = $('<input>', { type: 'radio', name: name, value: value, tabindex: '7' });
@@ -1248,16 +1270,8 @@ define('io.ox/mail/write/view-main',
         if (isChecked) {
             radio.prop('checked', true);
         }
-        // if (Modernizr.touch) {
-        //     label.on('click', clickRadio);
-        // }
         return label;
     }
-
-    // function clickCheckbox(e) {
-    //     var node = $(this).parent();
-    //     node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-    // }
 
     function createCheckbox(name, text, isChecked) {
         var label, box;
@@ -1268,9 +1282,6 @@ define('io.ox/mail/write/view-main',
         if (isChecked) {
             box.prop('checked', true);
         }
-        // if (Modernizr.touch) {
-        //     label.on('click', clickCheckbox);
-        // }
         return label;
     }
 

@@ -68,7 +68,8 @@ define('io.ox/core/extPatterns/dnd',
                 actions: actions
             });
 
-            if (_.isFunction(dropZone.on)) { // temp. fix: avoids strange opera runtime error
+            if (_.isFunction(dropZone.on)) {
+                // temp. fix: avoids strange opera runtime error
                 dropZone.on('drop', handleDrop);
                 dropZone.on('drop-multiple', handleMultiDrop);
             }

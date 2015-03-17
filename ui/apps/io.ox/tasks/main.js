@@ -85,7 +85,8 @@ define('io.ox/tasks/main',
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'detailView', // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    page: 'detailView',
                     extension: 'io.ox/tasks/mobile/toolbar'
                 })
             });
@@ -152,7 +153,8 @@ define('io.ox/tasks/main',
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -278,7 +280,8 @@ define('io.ox/tasks/main',
             },
             listRequest = function (ids) {
                 return api.getList(ids).pipe(function (list) {
-                    var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
+                    //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
+                    var listcopy = _.copy(_.compact(list), true),
                         i = 0;
                     for (; i < listcopy.length; i++) {
                         listcopy[i] = util.interpretTask(listcopy[i], {noOverdue: grid.prop('sort') !== 'urgency'});
@@ -333,7 +336,8 @@ define('io.ox/tasks/main',
             showTask = function (obj) {
                 // be busy
                 app.right.busy(true);
-                obj = {folder: obj.folder || obj.folder_id, id: obj.id}; //remove unnecessary information
+                //remove unnecessary information
+                obj = {folder: obj.folder || obj.folder_id, id: obj.id};
                 api.get(obj)
                     .done(_.lfo(drawTask))
                     .fail(_.lfo(drawFail, obj));
@@ -513,9 +517,31 @@ define('io.ox/tasks/main',
             });
         },
 
+        /*
+         * Handle delete event based on keyboard shortcut
+         */
+        'selection-delete': function (app) {
+            app.grid.selection.on('selection:delete', function (e, list) {
+                var baton = ext.Baton({ data: list });
+                actions.invoke('io.ox/tasks/actions/delete', null, baton);
+            });
+        },
+
+         /*
+         * Handle delete event based on keyboard shortcut
+         */
+        'delete-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            api.on('delete', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
+            });
+        },
+
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('small') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
@@ -533,8 +559,7 @@ define('io.ox/tasks/main',
     // launcher
     app.setLauncher(function (options) {
 
-        var // app window
-            win,
+        var win,
             grid,
             showSwipeButton = false,
             hasDeletePermission;
@@ -608,7 +633,8 @@ define('io.ox/tasks/main',
             showToggle: _.device('smartphone'),
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
-            toolbarPlacement: 'top' // if it's shown, it should be on the top
+            // if it's shown, it should be on the top
+            toolbarPlacement: 'top'
         });
 
         app.grid = grid;

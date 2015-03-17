@@ -47,7 +47,8 @@ define('io.ox/core/tk/selection',
             dropType: '',
             scrollpane: container,
             focus: '[tabindex]',
-            tabFix: 1
+            tabFix: 1,
+            markable: false
         }, options);
 
         this.classFocus = 'focussed';
@@ -92,7 +93,10 @@ define('io.ox/core/tk/selection',
             selectPrevious,
             selectLast,
             selectNext,
-            lastIndex = -1, // trick for smooth updates
+            // marker mode
+            isMarker = $.noop,
+            // trick for smooth updates
+            lastIndex = -1,
             lastValidIndex = 0,
             fnKey,
             hasMultiple,
@@ -155,7 +159,11 @@ define('io.ox/core/tk/selection',
                 last = id;
             } else {
                 // single selection
-                toggle(id);
+                if (isMarker(e)) {
+                    mark(id);
+                } else {
+                    toggle(id);
+                }
                 // remember
                 last = prev = id;
                 lastValidIndex = getIndex(id);
@@ -179,7 +187,7 @@ define('io.ox/core/tk/selection',
         selectFirst = function (e) {
             if (bHasIndex && observedItems.length) {
                 var item = observedItems[0];
-                clear();
+                clear(e);
                 apply(item.data, e);
                 self.trigger('select:first', item.data);
             }
@@ -190,7 +198,7 @@ define('io.ox/core/tk/selection',
                 var index = getIndex(last) - 1, item;
                 if (index >= 0) {
                     item = observedItems[index];
-                    clear();
+                    clear(e);
                     apply(item.data, e);
                     self.trigger('select:previous', item.data);
                 }
@@ -201,7 +209,7 @@ define('io.ox/core/tk/selection',
             if (bHasIndex && observedItems.length) {
                 var index = observedItems.length - 1,
                     item = observedItems[index];
-                clear();
+                clear(e);
                 apply(item.data, e);
                 self.trigger('select:last', item.data);
             }
@@ -212,7 +220,7 @@ define('io.ox/core/tk/selection',
                 var index = getIndex(last) + 1, item;
                 if (index < observedItems.length) {
                     item = observedItems[index];
-                    clear();
+                    clear(e);
                     apply(item.data, e);
                     self.trigger('select:next', item.data);
                 }
@@ -236,6 +244,13 @@ define('io.ox/core/tk/selection',
                     selectPrevious(e);
                 }
                 break;
+            case 32:
+                // last is the current selected/focussed
+                if (options.markable) {
+                    e.preventDefault();
+                    toggle(last);
+                }
+                break;
             case 40:
                 e.preventDefault();
                 if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
@@ -245,6 +260,16 @@ define('io.ox/core/tk/selection',
                 } else {
                     selectNext(e);
                 }
+                break;
+            case 9:
+                if (options.markable)
+                    clearMarks();
+                break;
+            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+            case 8:
+            case 46:
+                e.preventDefault();
+                self.trigger('selection:delete', self.get());
                 break;
             }
         };
@@ -447,6 +472,75 @@ define('io.ox/core/tk/selection',
             });
             container.find('.selectable input.reflect-selection').prop('checked', false);
         };
+
+        // mark option block
+        if (options.markable) {
+
+            this.classMarked = 'marked';
+
+            isMarker = function (e) {
+                return multiple && e && (e.which === 38 || e.which === 40);
+            };
+
+            var clearOrginal = clear,
+                markedItem,
+                // clear wrapper
+                clear = function (e) {
+                    // clear mark
+                    clearMarks();
+                    if (isMarker(e)) return;
+                    // call orignale clear
+                    clearOrginal(e);
+                },
+                fastMark = function (id, node) {
+                    var key = self.serialize(id);
+                    markedItem = id;
+                    var $node = (node || getNode(key));
+                    // set focus?
+                    if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+                    var guid = $node.attr('id') || _.uniqueId('option-');
+
+                    return $node
+                            .addClass(self.classMarked)
+                            .attr({
+                                'tabindex': options.tabFix !== false ? options.tabFix : null,
+                                id: guid
+                            })
+                            // apply a11y
+                            // TODO: when descent attribute was set voiceover doesn't notifies user about changed selection when using 'select with space'
+                            .parent('[role="listbox"]')
+                            .attr('aria-activedescendant', guid)
+                            .end();
+                },
+                mark = function (id, silent) {
+                    if (id) {
+                        fastMark(id).intoViewport(options.scrollpane);
+                        last = id;
+                        lastIndex = getIndex(id);
+                        if (prev === empty) {
+                            prev = id;
+                            lastValidIndex = lastIndex;
+                        }
+                        if (silent !== true) {
+                            self.trigger('mark', self.serialize(id));
+                        }
+                    }
+                },
+                clearMarks = function () {
+                    if (markedItem) {
+                        var key = self.serialize(markedItem);
+                        markedItem = undefined;
+                        getNode(key)
+                            .removeClass(self.classMarked)
+                            .attr({
+                                tabindex: options.tabFix !== false ? -1 : null
+                            })
+                            .parent('[role="listbox"]')
+                            .removeAttr('aria-activedescendant');
+                        markedItem = undefined;
+                    }
+                };
+        }
 
         /**
          * Serialize object to get a flat key
@@ -1131,7 +1225,8 @@ define('io.ox/core/tk/selection',
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
                 // prevent text selection and kills the focus
-                if (!_.browser.IE) { // Not needed in IE - See #27981
+                if (!_.browser.IE) {
+                    // Not needed in IE - See #27981
                     (options.focus ? container.find(options.focus).first() : container).focus();
                 }
             }

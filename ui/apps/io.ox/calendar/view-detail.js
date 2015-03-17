@@ -153,7 +153,9 @@ define('io.ox/calendar/view-detail',
             this.append(
                 $('<fieldset>').addClass('details')
                     .append(
-                        $('<legend>').addClass('io-ox-label').text(gt('Details')),
+                        $('<legend>').addClass('io-ox-label').append(
+                            $('<h2>').text(gt('Details'))
+                        ),
                         node.addClass('dl-horizontal')
                 )
             );
@@ -320,7 +322,9 @@ define('io.ox/calendar/view-detail',
         index: 550,
         draw: function (baton) {
             var $node = $('<fieldset>').append(
-                $('<legend>').addClass('io-ox-label').text(gt('Attachments'))
+                $('<legend>').addClass('io-ox-label').append(
+                    $('<h2>').text(gt('Attachments'))
+                )
             );
 
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {

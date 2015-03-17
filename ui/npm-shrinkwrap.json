@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.6.1-14",
+  "version": "7.6.2-6",
   "dependencies": {
     "assemble": {
       "version": "0.4.42",
@@ -121,7 +121,7 @@
                           "dependencies": {
                             "inherits": {
                               "version": "2.0.1",
-                              "from": "inherits@>=2.0.1 <2.1.0",
+                              "from": "inherits@>=2.0.0 <3.0.0",
                               "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                             },
                             "minimatch": {
@@ -1391,7 +1391,7 @@
                             },
                             "inherits": {
                               "version": "2.0.1",
-                              "from": "inherits@>=2.0.0 <3.0.0",
+                              "from": "inherits@>=2.0.1 <2.1.0",
                               "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                             }
                           }
@@ -1600,7 +1600,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@>=0.2.1 <0.3.0",
+                      "from": "ansi-regex@>=0.2.0 <0.3.0",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -1764,7 +1764,7 @@
               "dependencies": {
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@>=2.0.0 <3.0.0",
+                  "from": "inherits@>=2.0.1 <2.1.0",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 },
                 "minimatch": {
@@ -3017,7 +3017,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@>=0.2.1 <0.3.0",
+                      "from": "ansi-regex@>=0.2.0 <0.3.0",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -3029,7 +3029,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@>=0.2.1 <0.3.0",
+                      "from": "ansi-regex@>=0.2.0 <0.3.0",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -3043,7 +3043,7 @@
             },
             "findup-sync": {
               "version": "0.1.3",
-              "from": "findup-sync@>=0.1.2 <0.2.0",
+              "from": "findup-sync@>=0.1.3 <0.2.0",
               "resolved": "https://registry.npmjs.org/findup-sync/-/findup-sync-0.1.3.tgz",
               "dependencies": {
                 "glob": {
@@ -3079,7 +3079,7 @@
             },
             "lodash": {
               "version": "2.4.1",
-              "from": "lodash@>=2.4.1 <2.5.0",
+              "from": "lodash@>=2.4.1 <3.0.0",
               "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz"
             },
             "semver": {
@@ -3402,7 +3402,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@>=0.2.1 <0.3.0",
+                  "from": "ansi-regex@>=0.2.0 <0.3.0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3414,7 +3414,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@>=0.2.1 <0.3.0",
+                  "from": "ansi-regex@>=0.2.0 <0.3.0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3484,7 +3484,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@>=0.2.1 <0.3.0",
+                  "from": "ansi-regex@>=0.2.0 <0.3.0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3496,7 +3496,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@>=0.2.1 <0.3.0",
+                  "from": "ansi-regex@>=0.2.0 <0.3.0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3739,7 +3739,7 @@
     },
     "jshint": {
       "version": "2.5.0",
-      "from": "../../../../../var/folders/qp/wqyv9yv157n7qtm3tstfqbr80000gn/T/npm-67080-43a5cc9f/git-cache-8459e59d7830/0ffee4a9ae1480198aff523ef2a84a4802201956",
+      "from": "jshint@git+https://github.com/Open-Xchange-Frontend/jshint#0ffee4a9ae",
       "resolved": "git+https://github.com/Open-Xchange-Frontend/jshint#0ffee4a9ae1480198aff523ef2a84a4802201956",
       "dependencies": {
         "shelljs": {
@@ -3904,7 +3904,7 @@
     },
     "shared-grunt-config": {
       "version": "0.6.6",
-      "from": "../../../../../var/folders/qp/wqyv9yv157n7qtm3tstfqbr80000gn/T/npm-67080-43a5cc9f/git-cache-bf3332809a0e/a35030081d8d6d4da2a4d0d4a51b2980f0156728",
+      "from": "shared-grunt-config@git+https://github.com/Open-Xchange-Frontend/shared-grunt-config#v0.6.6",
       "resolved": "git+https://github.com/Open-Xchange-Frontend/shared-grunt-config#a35030081d8d6d4da2a4d0d4a51b2980f0156728",
       "dependencies": {
         "appserver": {

@@ -18,13 +18,15 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
     var util = {
         splitExtensionsByRow: function (extensions, rows) {
             _(extensions).each(function (extension) {
-                if (extension.row) {//seperate extensions with rows
+                //seperate extensions with rows
+                if (extension.row) {
                     if (!rows[extension.row]) {
                         rows[extension.row] = [];
                     }
                     rows[extension.row].push(extension);
-                } else {//all the rest
-                    if (!rows.rest) {//rest is used for extension points without row
+                } else {
+                    //rest is used for extension points without row
+                    if (!rows.rest) {
                         rows.rest = [];
                     }
                     rows.rest.push(extension);
@@ -96,7 +98,8 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
             //check for valid widths
             if (!widths || nodes.length !== widths.length) {
                 var temp = 12 / nodes.length;
-                temp = parseInt(temp, 10); //we don't want floats
+                //we don't want floats
+                temp = parseInt(temp, 10);
                 widths = [];
                 for (var i = 0; i < nodes.length; i++) {
                     widths.push(temp);

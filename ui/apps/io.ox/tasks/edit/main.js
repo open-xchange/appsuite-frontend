@@ -88,7 +88,7 @@ define('io.ox/tasks/edit/main',
             var taskData = options.taskData,
                 startApp = function ()  {
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
-    
+
                     if (_.browser.IE === undefined || _.browser.IE > 9) {
                         self.dropZone = new dnd.UploadZone({
                             ref: 'io.ox/tasks/edit/dnd/actions'
@@ -112,10 +112,12 @@ define('io.ox/tasks/edit/main',
 
             win.on('show', function () {
                 if (app.dropZone) {app.dropZone.include(); }
-                if (taskView && _.device('!smartphone')) {
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (taskView && _.device('!smartphone && !iOS')) {
                     taskView.$el.find('.title-field').focus();
                 }
-                if (taskModel.get('id')) {//set url parameters
+                //set url parameters
+                if (taskModel.get('id')) {
                     self.setState({ folder: taskModel.attributes.folder_id, id: taskModel.attributes.id });
                 } else {
                     self.setState({ folder: taskModel.attributes.folder_id, id: null});
@@ -142,8 +144,10 @@ define('io.ox/tasks/edit/main',
             } else {
                 app.attributes.title = gt('Create task');
                 app.model = taskModel = model.factory.create();
-                if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
-                    options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
+                //on reload there is no options.folderid so it would crash on saving. Leave default
+                if (options.folderid) {
+                    //folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
+                    options.folderid = parseInt(options.folderid, 10);
                     taskModel.set('folder_id', options.folderid, {validate: true});
                 }
 
@@ -157,7 +161,8 @@ define('io.ox/tasks/edit/main',
             var clean = function () {
                 // clear private vars
                 taskView.trigger('dispose');
-                taskModel.off();//important so no events are executed on non existing models
+                //important so no events are executed on non existing models
+                taskModel.off();
                 if (app.dropZone) {app.dropZone.remove(); }
                 app = win = taskModel = taskView = null;
             };
@@ -173,8 +178,10 @@ define('io.ox/tasks/edit/main',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                clean(); // clean before resolve
-                                model.factory.realm('edit').release();//old model no longer needed
+                                // clean before resolve
+                                clean();
+                                //old model no longer needed
+                                model.factory.realm('edit').release();
                                 def.resolve();
                             } else {
                                 def.reject();
@@ -184,7 +191,8 @@ define('io.ox/tasks/edit/main',
             } else {
                 if (app.edit) {
                     clean();
-                    model.factory.realm('edit').release();//old model no longer needed
+                    //old model no longer needed
+                    model.factory.realm('edit').release();
                     def.resolve();
                 } else {
                     clean();

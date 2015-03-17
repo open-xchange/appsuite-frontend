@@ -90,9 +90,9 @@ define('io.ox/core/folder/picker',
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
-            .addPrimaryButton('ok', o.button, 'ok', { tabindex: '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: '1' });
 
+            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
         dialog.getBody().css({ height: o.height });
 
         var id = o.folder;
@@ -111,10 +111,14 @@ define('io.ox/core/folder/picker',
             flat: !!o.flat,
             indent: o.indent,
             module: o.module,
+            abs: o.abs,
             open: open,
             root: o.root,
             customize: o.customize,
-            disable: o.disable
+            disable: o.disable,
+            // highlight current selection
+            highlight: true,
+            highlightclass: _.device('smartphone') ? 'visible-selection-smartphone' : 'visible-selection'
         });
 
         if (o.settings && _.isString(o.persistent)) {
@@ -161,7 +165,7 @@ define('io.ox/core/folder/picker',
                     )
                     // path might fail so we use always to con
                     .always(function () {
-                        dialog.getBody().idle().append(tree.render().$el);
+                        dialog.getBody().idle().prepend(tree.render().$el);
                         tree.$el.focus();
                         o.show(dialog, tree);
                     });

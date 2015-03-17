@@ -129,9 +129,11 @@ define('plugins/portal/xing/register',
                     notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your %s account has been created. Expect a confirmation mail from %s soon.', XING_NAME, XING_NAME));
-                    notifications.yell('success', gt('The next step is allowing this system to access your %s account for you.', XING_NAME));
-                    addXingAccount(e);
+                    notifications.yell({
+                        type: 'success',
+                        duration: 60000,
+                        message: gt('Please check your inbox for a confirmation email.\n\nFollow the instructions in the email and then return to the widget to complete account setup.')
+                    });
                 });
             }
         );
@@ -144,7 +146,8 @@ define('plugins/portal/xing/register',
         return keychain.createInteractively('xing', win).done(function () {
             var model = baton.model;
             $(model.node).find('.setup-questions').remove();
-            model.changed.props = baton.model.drawn = true; //hack to provoke loadAndPreview()
+            //hack to provoke loadAndPreview()
+            model.changed.props = baton.model.drawn = true;
             ox.trigger('refresh^');
         });
     };
@@ -244,6 +247,16 @@ define('plugins/portal/xing/register',
         return node;
     };
 
+    var refreshWidget = function () {
+        require(['io.ox/portal/main'], function (portal) {
+            var portalApp = portal.getApp(),
+                portalModels = portalApp.getWidgetCollection().filter(function (model) { return /^xing_\d*/.test(model.id); });
+
+            if (portalModels.length > 0) {
+                portalApp.refreshWidget(portalModels[0], 0);
+            }
+        });
+    };
 
     /*
      * Portal extension points: Here's where it all starts
@@ -261,10 +274,20 @@ define('plugins/portal/xing/register',
         },
 
         drawDefaultSetup: function (baton) {
+            keychain.submodules.xing.off('create', null, this);
+            keychain.submodules.xing.on('create', function () {
+                api.createSubscription();
+                baton.model.node.find('h2 .fa-xing').replaceWith($('<span class="title">').text(title));
+                baton.model.node.removeClass('requires-setup widget-color-custom color-xing');
+                refreshWidget();
+            }, this);
+
+            var content = this.find('.content');
 
             this.find('h2 .title').replaceWith('<i class="fa fa-xing">');
             this.addClass('widget-color-custom color-xing');
-            this.find('.content').append(
+            content.find('.paragraph').empty().text(gt('Get news from your XING network delivered to you. Stay in touch and find out about new business opportunities.'));
+            content.append(
                 $('<a href="#" class="action" tabindex="1" role="button">').text(
                     //#. %1$s is social media name, e.g. Facebook
                     gt('Create new %1$s account', XING_NAME)
@@ -273,19 +296,16 @@ define('plugins/portal/xing/register',
             );
         },
 
-        performSetUp: function (baton) {
+        performSetUp: function () {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('xing', win).done(function () {
-                baton.model.node.find('h2 .fa-xing').replaceWith($('<span class="title">').text(title));
-                baton.model.node.removeClass('requires-setup widget-color-custom color-xing');
-                ox.trigger('refresh^');
-            });
+            return keychain.createInteractively('xing', win);
         },
 
         load: function (baton) {
             var def = $.Deferred();
             api.getUserfeed({
-                    user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
+                    //name variations, page_name and picture
+                    user_fields: '0,1,2,3,4,8,23'
                 }).then(function (xingResponse) {
                     baton.data = xingResponse;
                     def.resolve(xingResponse);
@@ -317,7 +337,7 @@ define('plugins/portal/xing/register',
                     $('<div class="content preview io-ox-xing pointer">').append(
                         makeNewsfeed(baton.data.network_activities, {maxCount: MAX_ITEMS_PREVIEW, limitLength: true})
                     ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
-                );                
+                );
             }
         },
 

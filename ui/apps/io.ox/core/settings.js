@@ -48,7 +48,8 @@ define('io.ox/core/settings',
         return clone(tmp);
     };
 
-    var pending = {};       // pending requests?
+    // pending requests?
+    var pending = {};
 
     var Settings = function (path, tree, meta) {
 
@@ -68,7 +69,8 @@ define('io.ox/core/settings',
 
         this.isConfigurable = function (path) {
             var meta = this.meta(path);
-            return 'configurable' in meta ? meta.configurable : true; // default is true!
+            // default is true!
+            return 'configurable' in meta ? meta.configurable : true;
         };
 
         this.contains = function (path) {
@@ -257,7 +259,8 @@ define('io.ox/core/settings',
                         delete pending[path];
                     });
                 },
-                save = _.throttle(sendRequest, 5000); // limit to 5 seconds
+                // limit to 5 seconds
+                save = _.throttle(sendRequest, 5000);
 
             return function (custom, options) {
 

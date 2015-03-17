@@ -26,7 +26,7 @@
     "karma-chrome-launcher": "^0.1.2",
     "karma-junit-reporter": "^0.2.1",
     "karma-mocha": "^0.1.3",
-    "karma-ox-ui": "0.0.2",
+    "karma-ox-ui": "0.0.3",
     "karma-phantomjs-launcher": "^0.1.2",
     "karma-sinon": "^1.0.3",
     "karma-spec-reporter": "0.0.12",

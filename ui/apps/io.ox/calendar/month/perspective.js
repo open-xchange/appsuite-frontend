@@ -267,6 +267,18 @@ define('io.ox/calendar/month/perspective',
         },
 
         /**
+         * Called after the perspective is shown.
+         */
+        afterShow: function () {
+            // See Bug 36417 - calendar jumps to wrong month with IE10
+            // If month perspectice is rendered the first time after another perspective was already rendered, the tops will all be 0.
+            // That happens, because the perspective is made visible after rendering but only when there was already another calendar perspective rendered;
+            if (_.keys(this.tops).length <= 1) {
+                this.getFirsts();
+            }
+        },
+
+        /**
          * scroll to given month
          * @param  {object} opt
          *          string|LocalDate date: date target as LocalDate or string (next|prev|today)
@@ -362,11 +374,13 @@ define('io.ox/calendar/month/perspective',
                 start: self.current.local,
                 end: end.local
             });
-            if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+            // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+            if (_.browser.firefox) {
                 var limit = 50,
                 counter = 0,
                 interval;
-                interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                // onLoad does not work with firefox on mac, so ugly polling is used
+                interval = setInterval(function () {
                     counter++;
                     if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
                         win.print();
@@ -400,8 +414,8 @@ define('io.ox/calendar/month/perspective',
                 .addClass('month-view')
                 .empty()
                 .attr({
-                    'role': 'main',
-                    'aria-label': gt('Month View')
+                    'role': 'navigation',
+                    'aria-label': gt('Appointment list')
                 })
                 .append(this.scaffold = View.drawScaffold());
 
@@ -519,19 +533,22 @@ define('io.ox/calendar/month/perspective',
             this.main
                 .on('keydown', function (e) {
                 switch (e.which) {
-                case 37: // left
+                case 37:
+                    // left
                     self.gotoMonth({
                         duration: _.device('desktop') ? 400 : 0,
                         date: 'prev'
                     });
                     break;
-                case 39: // right
+                case 39:
+                    // right
                     self.gotoMonth({
                         duration: _.device('desktop') ? 400 : 0,
                         date: 'next'
                     });
                     break;
-                case 13: // enter
+                case 13:
+                    // enter
                     $(e.target).click();
                     break;
                 default:

@@ -111,7 +111,7 @@ define('io.ox/contacts/view-detail',
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="contact-header">')
+                node = $('<header class="contact-header" role="heading">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
@@ -211,7 +211,8 @@ define('io.ox/contacts/view-detail',
         id: 'contact-content',
         draw: function (baton) {
 
-            var node = $('<article class="clearfix">').appendTo(this),//clearfix needed or halo design is broken
+            //clearfix needed or halo design is broken
+            var node = $('<article class="clearfix">').appendTo(this),
                 id = baton.data.mark_as_distributionlist ?
                     'io.ox/contacts/detail/list' :
                     'io.ox/contacts/detail/content';
@@ -415,7 +416,8 @@ define('io.ox/contacts/view-detail',
                         $('<address>').text($.trim(text)),
                         $('<p>').append(
                             $('<i class="fa fa-external-link">'),
-                            $.txt(' Google Maps \u2122') // \u2122 = &trade;
+                            // \u2122 = &trade;
+                            $.txt(' Google Maps \u2122')
                         )
                     )
             );
@@ -459,8 +461,10 @@ define('io.ox/contacts/view-detail',
                         simple(data, 'nickname'),
                         row('birthday', function () {
                             if (baton.data.birthday) {
-                                var birthday = new date.UTC(baton.data.birthday);//use utc time. birthdays must not be converted
-                                if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
+                                //use utc time. birthdays must not be converted
+                                var birthday = new date.UTC(baton.data.birthday);
+                                if (birthday.getYear() === 1) {
+                                    //Year 0 is special for birthdays without year (backend changes this to 1...)
                                     return birthday.format(date.DATE_NOYEAR);
                                 } else {
                                     return birthday.format(date.DATE);
@@ -469,7 +473,8 @@ define('io.ox/contacts/view-detail',
                         }),
                         row('url', function () {
                             if (baton.data.url) {
-                                if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {//fix urls
+                                if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {
+                                    //fix urls
                                     return $('<a>', { href: 'http://' + baton.data.url, target: '_blank' }).text(baton.data.url);
                                 } else {
                                     return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
@@ -655,7 +660,7 @@ define('io.ox/contacts/view-detail',
 
     ext.point('io.ox/contacts/detail/content').extend({
         index: 'last',
-        id: 'description', //
+        id: 'description',
         draw: function (baton) {
 
             var str = $.trim(baton.data.description || ''), isHTML;
@@ -758,7 +763,8 @@ define('io.ox/contacts/view-detail',
 
     function redraw(e, data) {
         var baton = e.data.baton;
-        baton.data = data;//use old baton with new data(keep disabled extensionpoints)
+        //use old baton with new data(keep disabled extensionpoints)
+        baton.data = data;
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
@@ -775,11 +781,7 @@ define('io.ox/contacts/view-detail',
 
                 var node = $.createViewContainer(baton.data, api)
                     .on('redraw', { view: this, data: baton.data , baton: baton}, redraw)
-                    .addClass('contact-detail view')
-                    .attr({
-                        'role': 'complementary',
-                        'aria-label': gt('Contact Details')
-                    });
+                    .addClass('contact-detail view');
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
 
                 return node;

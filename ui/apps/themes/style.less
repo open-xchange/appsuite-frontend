@@ -329,6 +329,9 @@ div.hopscotch-bubble {
     .launchers-secondary {
         float:right;
         position:relative;
+        @media (max-width: 480px), (max-device-width: 480px) {
+            padding-left: 0;
+        }
     }
 
     html.high-contrast & {
@@ -336,6 +339,25 @@ div.hopscotch-bubble {
         background-color: #fff; // HC
         background-image: none; // HC
         border-bottom: 1px solid @hc-border-color; // HC
+    }
+}
+
+//
+// iOS 8 on Ipad needs some extra top padding for its status bar in standalone mode
+// IPhone is not (yet) affected
+//
+
+html.ios8-standalone-ipad-fix {
+
+    @height: 20px;
+
+    #io-ox-topbar {
+        border-top: @height solid @topbar-launcher-background-active;
+        height: 40 + @height;
+    }
+
+    #io-ox-screens {
+        top: 40 + @height;
     }
 }
 
@@ -543,7 +565,6 @@ div.hopscotch-bubble {
 
             &.closable {
                 .apptitle i.fa {
-                    padding: 0 5px;
                     color: rgba(255, 255, 255, 0.80);
                 }
                 i.fa {
@@ -567,7 +588,6 @@ div.hopscotch-bubble {
                     float: left;
                     line-height: 16px;
                 }
-
             }
 
             i {
@@ -577,6 +597,7 @@ div.hopscotch-bubble {
                     top: 0;
                     margin-right: 7px;
                     color: #ccc;
+                    padding: 0 5px;
                 }
 
                 &.fa-times {
@@ -722,7 +743,7 @@ div.hopscotch-bubble {
 
     i.fa-refresh {
 
-        @color: rgba(255, 255, 255, 0.30);
+        @color: rgba(255, 255, 255, 0.9);
 
         color: @color;
         .transition(color 0.2s linear);
@@ -847,6 +868,11 @@ div.hopscotch-bubble {
 
     #io-ox-notifications-display {
 
+        //special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
+        .span-to-div {
+            display: block;
+        }
+
         padding: 24px 14px;
 		list-style-type: none; //no dots here
 
@@ -859,6 +885,7 @@ div.hopscotch-bubble {
             margin: 14px 0 7px 0;
             padding: 0 14px;
             border: 0;
+            display: inline-block;
 
             html.high-contrast & {
                 color: @white;
@@ -868,9 +895,10 @@ div.hopscotch-bubble {
 
         .clear-button {
             float: right;
-            line-height: inherit;
+            line-height: 24px;
+            margin: 14px 14px 0 0;
             padding: 0;
-            color: #ccc;
+            color: #767676;
             font-size: 14px;
         }
 
@@ -880,7 +908,7 @@ div.hopscotch-bubble {
 
         .item {
 
-            color: #888;
+            color: #767676;
             padding: 10px 14px;
             cursor: pointer;
 
@@ -966,8 +994,10 @@ div.hopscotch-bubble {
 
 .io-ox-alert {
 
-    position: absolute;
-    top: 30px;
+    // we use position fixed and top:15px so to be independent of scroll positions esp. on mobile devices
+    position: fixed;
+    top: 15px;
+
     left: 50%;
     margin-left: -230px;
     width: 460px;
@@ -1482,7 +1512,7 @@ div.hopscotch-bubble {
     }
 }
 
-.classic-toolbar-visible .window-content { top: @toolbar-height; }
+.classic-toolbar-visible .window-content, .abs.below-toolbar { top: @toolbar-height; }
 
 .classic-toolbar, .inline-toolbar, .mobile-navbar {
 
@@ -1637,6 +1667,11 @@ a.button {
 
     }
 
+}
+
+.window-sidepanel.visible {
+    width: 250px;
+    + .window-body { left: 250px; }
 }
 
 .window-container.toolbar-right {
@@ -1840,6 +1875,10 @@ a.button {
         outline: 0;
     }
 
+    .list-item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
     .list-item .list-item-checkmark {
 
         position: absolute;
@@ -1865,7 +1904,7 @@ a.button {
         }
     }
 
-    .list-item.selected {
+    .list-item.selected:not(.no-checkbox) {
         .fa-checkmark {
 
             color: #08c;
@@ -1909,7 +1948,8 @@ a.button {
         margin-bottom: 0;
     }
 
-    .list-item.busy-indicator {
+    .busy-indicator {
+        .list-item();
         color: #aaa;
         background-color: #f5f5f5;
         font-size: 20px;
@@ -1920,12 +1960,12 @@ a.button {
         margin-bottom: 0px;
     }
 
-    .list-item.busy-indicator.io-ox-busy {
+    .busy-indicator.io-ox-busy {
         text-align: left;
     }
 
     // use this for empty list
-    .list-item.busy-indicator:first-child {
+    .busy-indicator:first-child {
         height: 100%;
         background-color: transparent;
     }
@@ -1975,6 +2015,11 @@ a.button {
     // .list-item:focus {
     //     border-color: rgba(0, 0, 0, 0.50);
     // }
+
+    .list-item {
+        .bold { font-weight: bold; }
+        .gray { opacity: 0.70; } // 0.70 has enough color contrast
+    }
 }
 
 /* vGrid */
@@ -2105,6 +2150,11 @@ a.button {
             line-height: 40px;
             padding-left: 18px;
             display: none;
+            input {
+                // proper alignment for IE (see bug 35940)
+                margin: 0;
+                vertical-align: middle;
+            }
         }
 
         .select-all-toggle {
@@ -2474,7 +2524,11 @@ input[type=search] {
     .border-radius(5px 5px 5px 5px);
 
     .modal-header {
-        h3, h4 { margin: 0; }
+        h2, h3, h4 { margin: 0; }
+
+        h2 {
+            font-size: 18px;
+        }
     }
 
     .modal-body {
@@ -2867,7 +2921,7 @@ ul.io-ox-inline-links + header {
 
         display: inline-block;
         background-color: #eee;
-        color: #aaa;
+        color: #676767;
         padding: 6px 13px;
         margin-left: 7px;
         border-radius: 0 0 5px 5px;
@@ -2878,8 +2932,8 @@ ul.io-ox-inline-links + header {
             color: @white;
         }
 
-        &:hover {
-            background-color: #aaa;
+        &:hover, &:focus {
+            background-color: #676767;
             color: #eee;
             text-decoration: none;
 
@@ -2896,7 +2950,7 @@ ul.io-ox-inline-links + header {
 
 /* auto complete */
 
-.autocomplete-popup, .tt-dropdown-menu {
+.autocomplete-popup {
 
     @width: 3px;
 
@@ -2917,6 +2971,7 @@ ul.io-ox-inline-links + header {
         padding: 2px @width 2px @width;
         line-height: 1.5em;
         cursor: pointer;
+        outline: none;
     }
 
     .tt-suggestion > .autocomplete-item:hover,
@@ -3714,7 +3769,7 @@ a.toolbar-action, .toolbar-action > a {
     &.abs { position: absolute; z-index: 2; }
 
     .dropzone-caption, .dropzone-dragover {
-        color: #888;
+        color: #767676;
         text-align: center;
         top: 50%;
         width: 100%;
@@ -4090,6 +4145,38 @@ input.flat-input {
     }
 }
 
+.app-bottom-toolbar {
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #ddd;
+    z-index: 666;
+
+    a.btn {
+        padding: 0;
+        line-height: 40px;
+        border: 0;
+        border-radius: 0;
+        margin: 0;
+        height: 40px;
+        width: 50%;
+
+    }
+
+    button.btn {
+        border: 0;
+        border-radius: 0;
+        margin: 0;
+        height: 40px;
+        width: 50%;
+    }
+
+}
+
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
@@ -4100,42 +4187,12 @@ input.flat-input {
         padding: 5px 10px 5px 10px;
     }
 
+
+
     #io-ox-topbar {
         .launcher a.notifications-icon {
             padding: 0 5px;
         }
-    }
-
-    .app-bottom-toolbar {
-
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 40px;
-        background-color: #ddd;
-        z-index: 666;
-
-        a.btn {
-            padding: 0;
-            line-height: 40px;
-            border: 0;
-            border-radius: 0;
-            margin: 0;
-            height: 40px;
-            width: 50%;
-
-        }
-
-        button.btn {
-            border: 0;
-            border-radius: 0;
-            margin: 0;
-            height: 40px;
-            width: 50%;
-        }
-
     }
 
     // flat input fields

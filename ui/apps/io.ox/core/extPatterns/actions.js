@@ -83,7 +83,8 @@ define('io.ox/core/extPatterns/actions',
             // apply filter
             if (_.isFunction(extension.filter)) {
                 tmp = _(baton.tracker).filter(extension.filter);
-                baton.tracker = _(baton.tracker).filter(without, tmp); // _.without does not work here
+                // _.without does not work here
+                baton.tracker = _(baton.tracker).filter(without, tmp);
             } else {
                 tmp = baton.tracker.slice();
             }

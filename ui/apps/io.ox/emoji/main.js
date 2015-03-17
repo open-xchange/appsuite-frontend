@@ -178,10 +178,11 @@ define('io.ox/emoji/main',
         },
 
         getCategories: function () {
+            // return copy
             return (categories[this.currentCollection].meta || []).slice()
             .filter(function (cat) {
                 return cat.name !== 'recently';
-            }); // return copy
+            });
         },
 
         getDefaultCategory: function () {
@@ -249,7 +250,6 @@ define('io.ox/emoji/main',
 
         // HTML related API
         unifiedToImageTag: function (text, options) {
-
             var pos,
                 oldpos = -1,
                 searchText = '<span class="emoji',
@@ -307,7 +307,12 @@ define('io.ox/emoji/main',
                 if (text.substr(endpos, 7) === '</span>') {
                     endpos += 7;
                 }
-                text = text.replace(text.slice(pos, endpos), createImageTag(css, unicode));
+                var regex = new RegExp('("[^">]+)' + text.slice(pos, endpos), 'g');
+                text = text
+                    // Replace with unicode character if match is in attribute (See Bug: 36796)
+                    .replace(regex, '$1' + unicode)
+                    // Replace with unicode character again if match is not in attribute
+                    .replace(text.slice(pos, endpos), createImageTag(css, unicode));
             }
 
             return text;

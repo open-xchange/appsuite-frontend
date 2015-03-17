@@ -42,9 +42,12 @@ define('io.ox/core/permissions/permissions',
         folder_id,
 
         presets = [
-            { label: gt('Guest'), bits: 257 }, // view folder + read all
-            { label: gt('Author'), bits: 4227332 }, // create folder + read/write/delete all
-            { label: gt('Administrator'), bits: 272662788 } // plus admin
+            // view folder + read all
+            { label: gt('Guest'), bits: 257 },
+            // create folder + read/write/delete all
+            { label: gt('Author'), bits: 4227332 },
+            // plus admin
+            { label: gt('Administrator'), bits: 272662788 }
         ],
 
         Permission = Backbone.Model.extend({
@@ -84,7 +87,8 @@ define('io.ox/core/permissions/permissions',
                 return this;
             },
 
-            removeEntity: function () {
+            removeEntity: function (e) {
+                e.preventDefault();
                 this.collection.remove(this.model);
                 this.remove();
             },
@@ -252,7 +256,8 @@ define('io.ox/core/permissions/permissions',
                 options.addClass('readwrite');
             } else {
                 options.addClass('readonly');
-                options.find('span.dropdown a').attr({'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled'});//disable dropdown
+                //disable dropdown
+                options.find('span.dropdown a').attr({'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled'});
             }
             node.append(
                 addRemoveButton(baton.model.get('entity')),
@@ -305,7 +310,8 @@ define('io.ox/core/permissions/permissions',
             ul = $('<ul class="dropdown-menu" role="menu">')
         );
         _(menus[permission]).each(function (item, value) {
-            if (value === '64') return true; // Skip maximum rights
+            // Skip maximum rights
+            if (value === '64') return true;
             ul.append(
                 $('<li>').append(
                     $('<a>', { href: '#', 'data-value': value, role: 'menuitem'}).addClass('bit').text(item)
@@ -386,22 +392,13 @@ define('io.ox/core/permissions/permissions',
 
                     dialog.getContentNode().addClass('scrollpane').busy();
 
-                    userAPI.getList(ids, true, { allColumns: true }).done(function () {
-                        // stop being busy
-                        dialog.getContentNode().idle();
-                        // draw users
-                        collection.reset(_(data.permissions).map(function (obj) {
-                            return new Permission(obj);
-                        }));
-                    });
-
                     if (isFolderAdmin) {
                         if (_.device('desktop')) {
-                            dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
+                            dialog.addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 }).addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
                         }
 
                         var node =  $('<div class="autocomplete-controls input-group">').append(
-                                $('<input type="text" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
+                                $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
                                 }),
                                 $('<span class="input-group-btn">').append(
@@ -434,13 +431,16 @@ define('io.ox/core/permissions/permissions',
                             var isGroup = data.type === 2,
                                 obj = {
                                     entity: isGroup ? data.id : data.internal_userid,
-                                    bits: 257, // default is 'view folder' plus 'read all'
+                                    // default is 'view folder' plus 'read all'
+                                    bits: 257,
                                     group: isGroup
                                 };
                             if (!('entity' in obj)) {
                                 notifications.yell(
                                     'error',
-                                    data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.')
+                                    //#. permissions dialog
+                                    //#. error message when selected user or group can not be used
+                                    gt('This is not a valid user or group.')
                                 );
                             } else {
                                 // duplicate check
@@ -456,23 +456,39 @@ define('io.ox/core/permissions/permissions',
                         }
 
                     } else {
-                        dialog.addPrimaryButton('ok', gt('Close'));
+                        dialog.addPrimaryButton('cancel', gt('Close'));
                     }
+
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
-                        if (isFolderAdmin) {
-                            api.update(folder_id, { permissions: collection.toJSON() }).then(function success () {
+                        if (!isFolderAdmin) return dialog.idle();
+                        api.update(folder_id, { permissions: collection.toJSON() }).then(
+                            function success () {
+                                collection.off();
                                 dialog.close();
-                            }, function fail (error) {
+                            },
+                            function fail (error) {
                                 dialog.idle();
                                 notifications.yell(error);
-                            });
-                        }
-                    }).on('close', function () {
+                            }
+                        );
+                    })
+                    .on('cancel', function () {
                         collection.off();
-                    }).show(function () {
-                        this.find('input').focus();
+                    })
+                    .show();
+
+                    // load user data after opening the dialog
+                    userAPI.getList(ids, true, { allColumns: true }).done(function () {
+                        // stop being busy
+                        dialog.getContentNode().idle();
+                        // draw users
+                        collection.reset(_(data.permissions).map(function (obj) {
+                            return new Permission(obj);
+                        }));
+                        dialog.getPopup().find('[tabindex="1"]:first').focus();
                     });
+
                 } catch (e) {
                     console.error('Error', e);
                 }

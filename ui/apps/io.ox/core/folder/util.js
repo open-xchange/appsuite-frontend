@@ -66,7 +66,8 @@ define('io.ox/core/folder/util',
         case 'private':
             return data.type === 1;
         case 'public':
-            return data.type === 2 || /^(10|14|15)$/.test(data.id); // special file folder: regard as public
+            // special file folder: regard as public
+            return data.type === 2 || /^(10|14|15)$/.test(data.id);
         case 'shared':
             return data.type === 3;
         case 'system':
@@ -103,7 +104,8 @@ define('io.ox/core/folder/util',
             // get default folder
             var folders = mailSettings.get('folder');
             for (id in folders) {
-                if (data.id.indexOf(folders[id]) === 0) return true; // folder starts with defaultfolder id
+                // folder starts with defaultfolder id
+                if (data.id.indexOf(folders[id]) === 0) return true;
             }
             return false;
         case 'published':
@@ -172,7 +174,8 @@ define('io.ox/core/folder/util',
             isSystem = data.standard_folder || is('system', data),
             isAdmin = perm(rights, 28) === 1,
             isMail = data.module === 'mail',
-            compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0; // is my folder ?
+            // is my folder ?
+            compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0;
         // switch
         switch (action) {
         case 'read':
@@ -194,8 +197,10 @@ define('io.ox/core/folder/util',
             return perm(rights, 21) > compareValue;
         case 'rename':
             // can rename?
-            if (!isAdmin || isSystem) return false; // missing admin privileges or system folder
-            if (perm(rights, 30) === 1) return true; // special new rename bit
+            // missing admin privileges or system folder
+            if (!isAdmin || isSystem) return false;
+            // special new rename bit
+            if (perm(rights, 30) === 1) return true;
             if (!isMail) return true;
             // default folder cannot be renamed
             return !is('defaultfolder', data);
@@ -237,8 +242,10 @@ define('io.ox/core/folder/util',
             // check rights
             return (/^(contacts|calendar|infostore)$/).test(data.module) && can('write', data);
         case 'subscribe:imap':
-            // can subscribe
-            return isMail && Boolean(data.capabilities & Math.pow(2, 4));
+            // subscription works for mail only, not for standard folders, and only if the mail system supports it
+            if (!isMail) return false;
+            if (data.standard_folder) return false;
+            return Boolean(data.capabilities & Math.pow(2, 4));
         default:
             return false;
         }

@@ -11,15 +11,15 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/model',
-    ['io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/api/account',
-     'io.ox/emoji/main',
-     'io.ox/core/attachments/backbone',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
+define('io.ox/mail/compose/model', [
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/api/account',
+    'io.ox/emoji/main',
+    'io.ox/core/attachments/backbone',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/mail/compose/model',
                 editorMode: settings.get('messageFormat', 'html'),
                 account_name: '',
                 attachment: '',
-                attachments: [],
+                attachments: new Attachments.Collection(),
                 bcc: [],
                 cc: [],
                 color_label: '',
@@ -55,19 +55,31 @@ define('io.ox/mail/compose/model',
                 sent_date: '',
                 signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
                 currentSignature: '',
+                csid: mailAPI.csid(),
                 size: '',
                 subject: '',
                 to: [],
                 unread: '',
                 user: [],
-                vcard: 0
+                vcard: settings.get('appendVcard', false) ? 1 : 0
             };
         },
 
         initialize: function () {
             var list = this.get('attachments');
+            if (_.isObject(list) && !_.isEmpty(list)) {
+                var editorMode = this.get('editorMode') === 'text' ? 'text' : 'html';
+                if (editorMode in list) {
+                    list = [{
+                        content: list[editorMode][0].content,
+                        content_type: this.getContentType(),
+                        disp: 'inline'
+                    }];
+                }
+            }
+
             if (_.isArray(list)) {
-                this.set('attachments', new Attachments.Collection(list), {silent: true});
+                this.set('attachments', new Attachments.Collection(list), { silent: true });
                 list = this.get('attachments');
             }
             var content = list.at(0);
@@ -101,10 +113,9 @@ define('io.ox/mail/compose/model',
             }
 
             if (settings.get('messageFormat', 'html') === 'alternative') {
-                if (content && content.get('content_type') === 'text/plain') {
+                this.set('editorMode', 'html', { silent: true });
+                if (this.get('content_type') === 'text/plain') {
                     this.set('editorMode', 'text', { silent: true });
-                } else {
-                    this.set('editorMode', 'html', { silent: true });
                 }
             }
 
@@ -112,6 +123,10 @@ define('io.ox/mail/compose/model',
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
                     this.set('from', [address]);
                 }.bind(this));
+            }
+
+            if (this.get('mode') === 'edit') {
+                this.set({ 'signature': '' });
             }
 
             this.updateShadow();
@@ -131,7 +146,8 @@ define('io.ox/mail/compose/model',
             // sync mail editor content to model
             this.trigger('needsync');
             if (flag === true) {
-                this._shadowAttributes = {}; // always dirty this way
+                // always dirty this way
+                this._shadowAttributes = {};
             } else if (flag === false) {
                 this.updateShadow();
             } else {
@@ -195,14 +211,6 @@ define('io.ox/mail/compose/model',
                 });
         },
 
-        setTokens: function (type, tokens, opt) {
-            this.set(type, _.map(tokens, function (o) { return [o.label, o.value]; }), opt);
-        },
-
-        getTokens: function (type) {
-            return this.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; });
-        },
-
         getFailSave: function () {
             this.trigger('needsync');
             var mail = this.toJSON();
@@ -217,10 +225,10 @@ define('io.ox/mail/compose/model',
             };
         },
 
-        getMail: function() {
+        getMail: function () {
             this.trigger('needsync');
             var result;
-            var convert = emoji.converterFor({to: emoji.sendEncoding()});
+            var convert = emoji.converterFor({ to: emoji.sendEncoding() });
             var content = this.get('attachments').at(0).get('content');
             // get flat ids for data.infostore_ids
             /*if (mail.data.infostore_ids) {
@@ -230,22 +238,12 @@ define('io.ox/mail/compose/model',
             if (mail.data.contacts_ids) {
                 mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
             }
-            // move nested messages into attachment array
-            _(mail.data.nested_msgs).each(function (obj) {
-                mail.data.attachments.push({
-                    id: mail.data.attachments.length + 1,
-                    filemname: obj.subject,
-                    content_type: 'message/rfc822',
-                    msgref: obj.msgref
-                });
-            });
-            delete mail.data.nested_msgs;
             */
 
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
                 //convert to send encoding (NOOP, if target encoding is 'unified')
-                this.set('subject', convert(this.get('subject')), {silent: true});
+                this.set('subject', convert(this.get('subject')), { silent: true });
 
                 content = convert(content, this.get('editorMode'));
             }
@@ -253,7 +251,7 @@ define('io.ox/mail/compose/model',
             // fix inline images
             content = mailUtil.fixInlineImages(content);
 
-            this.get('attachments').at(0).set('content', content, {silent: true});
+            this.get('attachments').at(0).set('content', content, { silent: true });
 
             result = this.pick(
                 'from',
@@ -265,7 +263,9 @@ define('io.ox/mail/compose/model',
                 'subject',
                 'priority',
                 'vcard',
-                'nested_msgs'
+                'nested_msgs',
+                'sendtype',
+                'csid'
             );
 
             if (this.get('msgref')) {
@@ -285,8 +285,16 @@ define('io.ox/mail/compose/model',
 
             result.attachments = this.get('attachments').filter(function (a) {
                 return a.get('disp') === 'inline' || a.get('disp') === 'attachment';
-            }).map(function (m) {
-                return m.attributes;
+            }).map(function (m, i) {
+                var attr;
+                if (i === 0 && m.attributes.content_type === 'text/plain') {
+                    attr = m.pick('content_type', 'content');
+                    // For "text/plain" mail bodies, the JSON boolean field "raw" may be specified inside the body's JSON representation to signal that the text content shall be kept as-is; meaning to keep all formatting intact
+                    attr.raw = true;
+                } else {
+                    attr = m.attributes;
+                }
+                return attr;
             });
 
             result.infostore_ids = this.get('attachments').filter(function (a) {

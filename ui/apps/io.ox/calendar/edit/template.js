@@ -53,10 +53,11 @@ define('io.ox/calendar/edit/template',
 
     ext.point('io.ox/calendar/edit/section/header').extend({
         draw: function (baton) {
-            var row = $('<div class="col-lg-12 header">');
-            ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
-            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
-            this.append($('<div class="row">').append(row));
+            var headerCol = $('<div class="col-sm-6 hidden-xs">'),
+                buttonCol = $('<div class="col-xs-12 col-sm-6 text-right">');
+            ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
+            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', buttonCol, baton);
+            this.append($('<div class="row header">').append(headerCol, buttonCol));
         }
     });
 
@@ -72,24 +73,6 @@ define('io.ox/calendar/edit/template',
     // buttons
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
-        id: 'save',
-        draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
-                .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
-                .on('click', function () {
-                    //check if attachments are changed
-                    if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
-                        baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
-                    }
-                    baton.model.save().then(_.bind(baton.app.onSave, baton.app));
-                })
-            );
-
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 200,
         id: 'discard',
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
@@ -97,6 +80,25 @@ define('io.ox/calendar/edit/template',
                     baton.app.quit();
                 })
             );
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 200,
+        id: 'save',
+        draw: function (baton) {
+            this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+                .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
+                .on('click', function () {
+                    //check if attachments are changed
+                    if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
+                        //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                        baton.model.attributes.tempAttachmentIndicator = true;
+                    }
+                    baton.model.save().then(_.bind(baton.app.onSave, baton.app));
+                })
+            );
+
         }
     });
 
@@ -111,12 +113,20 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'title',
         index: 200,
-        className: 'col-xs-12',
-        labelClassName: 'control-label',
-        control: '<input type="text" class="form-control">',
-        attribute: 'title',
-        label: gt('Subject'),
-        changeAppTitleOnKeyUp: true
+        render: function () {
+            var self = this, input;
+            this.$el.append(
+                $('<label class="control-label col-xs-12">').append(
+                    $.txt(gt('Subject')),
+                    input = new mini.InputView({ name: 'title', model: self.model }).render().$el,
+                    new mini.ErrorView({ name: 'title', model: self.model }).render().$el
+                )
+            );
+            input.on('keyup', function () {
+                // update title on keyup
+                self.model.trigger('keyup:title', $(this).val());
+            });
+        }
     }));
 
     // location input
@@ -389,7 +399,7 @@ define('io.ox/calendar/edit/template',
                     userId;
                     alreadyParticipant = collection.any(function (item) {
                         if (data.type === 5) {
-                            return (item.get('mail') === data.mail && item.get('type') === data.type) || (item.get('mail') === data.email1 && item.get('type') === data.type);
+                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
                         } else if (data.type === 1) {
                             return item.get('id') ===  data.internal_userid;
                         } else {
@@ -465,12 +475,10 @@ define('io.ox/calendar/edit/template',
         index: 1700,
         module: 1,
         finishedCallback: function (model, id) {
-            var obj = {};
-            obj.id = model.attributes.id || id;//new objects have no id in model yet
+            var obj = model.attributes;
+            //new objects have no id in model yet
+            obj.id = id || model.attributes.id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            if (model.attributes.recurrence_position !== null) {
-                obj.recurrence_position = model.attributes.recurrence_position;
-            }
             api.attachmentCallback(obj);
         }
     }), {
@@ -543,12 +551,25 @@ define('io.ox/calendar/edit/template',
     });
 
     function openFreeBusyView(e) {
-        var app = e.data.app, model = e.data.model;
+        var app = e.data.app,
+            model = e.data.model,
+            start = model.get('start_date'),
+            end = model.get('end_date');
         e.preventDefault();
+
+        //when editing a series we are not interested in the past (see Bug 35492)
+        if (model.get('recurrence_type') !== 0) {
+            start = _.now();
+            //prevent end_date before start_date
+            if (start > end) {
+                //just add an hour
+                end = start + 3600000;
+            }
+        }
         ox.launch('io.ox/calendar/freebusy/main', {
             app: app,
-            start_date: model.get('start_date'),
-            end_date: model.get('end_date'),
+            start_date: start,
+            end_date: end,
             folder: model.get('folder_id'),
             participants: model.get('participants'),
             model: model

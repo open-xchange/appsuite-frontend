@@ -28,11 +28,37 @@ define('io.ox/mail/detail/links',
         if (data.id) {
             // open file in side-popup
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail','io.ox/core/notifications']).done(function (dialogs, api, view, notifications) {
-                var sidePopup = new dialogs.SidePopup({ tabTrap: true });
+                var sidePopup = new dialogs.SidePopup({ tabTrap: true }),
+                    // this pseudo app is used instead of the real files app to save resources. Because the real files app is not required when displaying a side popup.
+                    pseudoApp = {
+                        getName: function() { return 'io.ox/files'; },
+                        folder: _.extend({
+                            set: function (folderId) {
+                                ox.launch('io.ox/files/main', { folder: folderId, perspective: 'fluid:list' }).done(function () {
+                                    var app = this;
+                                    // switch to proper perspective
+                                    ox.ui.Perspective.show(app, 'fluid:list').done(function () {
+                                        // set proper folder
+                                        if (app.folder.get() === folderId) {
+                                            app.selection.set(folderId);
+                                        } else {
+                                            app.folder.set(folderId).done(function () {
+                                                app.selection.set(folderId);
+                                            });
+                                        }
+                                    });
+                                });
+                            },
+                            getData: function () {
+                                return $.Deferred().resolve(data);
+                            }
+                        }, data)
+                    };
+
                 sidePopup.show(e, function (popupNode) {
                     popupNode.busy();
                     api.get(_.cid(data.id)).done(function (data) {
-                        popupNode.idle().append(view.draw(data));
+                        popupNode.idle().append(view.draw(data, pseudoApp));
                     }).fail(function (e) {
                         sidePopup.close();
                         notifications.yell(e);
@@ -176,6 +202,11 @@ define('io.ox/mail/detail/links',
         return set;
     }
 
+    // Note on regex: [\s\S]* is intended because the dot "." does not include newlines.
+    // unfortunately, javascript doesn't support the //s modifier (dotall). [\s\S] is the proper workaround
+    // the //m modifier doesn't work in call cases becasue it would drop prefixes before a match in next line
+    // see bug 36975
+
     //
     // Deep links
     //
@@ -188,8 +219,8 @@ define('io.ox/mail/detail/links',
             app = { contacts: 'contacts', calendar: 'calendar', task: 'tasks', infostore: 'files' },
             items = { contacts: gt('Contact'), calendar: gt('Appointment'), tasks: gt('Task'), files: gt('File') },
             folders = { contacts: gt('Address Book'), calendar: gt('Calendar'), tasks: gt('Tasks'), files: gt('Folder') },
-            regDeepLink = /^(.*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))(.*)$/im,
-            regDeepLinkAlt = /^(.*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))(.*)$/im;
+            regDeepLink = /^([\s\S]*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))([\s\S]*)$/i,
+            regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i;
 
         isDeepLink = function (str) {
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
@@ -230,8 +261,8 @@ define('io.ox/mail/detail/links',
     // URL
     //
 
-    var regUrl = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/im,
-        regUrlMatch = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/im; /* dedicated one to avoid strange side effects */
+    var regUrl = /^([\s\S]*)((http|https|ftp|ftps)\:\/\/\S+)([\s\S]*)$/i,
+        regUrlMatch = /^([\s\S]*)((http|https|ftp|ftps)\:\/\/\S+)([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processUrl(node) {
 
@@ -245,7 +276,7 @@ define('io.ox/mail/detail/links',
             return '';
         });
 
-        var link = $('<a href="#" target="_blank">').attr('href', _.escape(url)).text(url);
+        var link = $('<a href="#" target="_blank">').attr('href', url).text(url);
 
         return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }
@@ -254,8 +285,8 @@ define('io.ox/mail/detail/links',
     // Mail Address
     //
 
-    var regMail = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im,
-        regMailMatch = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im; /* dedicated one to avoid strange side effects */
+    var regMail = /^([\s\S]*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i,
+        regMailMatch = /^([\s\S]*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})([\s\S]*)$/i; /* dedicated one to avoid strange side effects */
 
     function processMailAddress(node) {
 
@@ -274,8 +305,8 @@ define('io.ox/mail/detail/links',
     // Complex Mail Address: "name" <address>
     //
 
-    var regMailComplex = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/m,
-        regMailComplexMatch = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/m;
+    var regMailComplex = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/,
+        regMailComplexMatch = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/;
 
     function processComplexMailAddress(node) {
 
@@ -380,10 +411,10 @@ define('io.ox/mail/detail/links',
             // process all text nodes unless mail is too large (> 512 KB)
             if (baton.isLarge) return;
             // don't combine these two lines via add() - very slow!
-            this.contents().each(function () {
+            $(this).contents().each(function () {
                 processTextNode(this);
             });
-            this.find('*').not('style').contents().each(function () {
+            $(this).find('*:not(style)').contents().each(function () {
                 processTextNode(this);
             });
         }

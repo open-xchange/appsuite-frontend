@@ -67,8 +67,10 @@ define('io.ox/mail/detail/content',
             ';)': '&#x1F609;',
             ':-D': '&#x1F603;',
             ':D': '&#x1F603;',
-            ':-|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
-            ':|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':-|': '&#x1F614;',
+            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':|': '&#x1F614;',
             ':-(': '&#x1F61E;',
             ':(': '&#x1F61E;'
         };
@@ -124,13 +126,13 @@ define('io.ox/mail/detail/content',
                 return line;
             })
             .join('');
-
-        text = markupQuotes(text);
-
+        if (settings.get('isColorQuoted', true)) text = markupQuotes(text);
         return text;
     };
 
-    // source
+    //
+    // Source
+    //
 
     ext.point('io.ox/mail/detail/source').extend({
         id: 'empty',
@@ -201,7 +203,8 @@ define('io.ox/mail/detail/content',
         id: 'white-space',
         index: 600,
         process: function (baton) {
-            if (baton.isLarge) return; // espeically firefox doesn't like those regex for large messages
+            // espeically firefox doesn't like those regex for large messages
+            if (baton.isLarge) return;
             baton.source = baton.source
                 // remove leading white-space
                 .replace(/^(<div[^>]+>)(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '$1')
@@ -212,7 +215,24 @@ define('io.ox/mail/detail/content',
         }
     });
 
-    // content
+    //
+    // Content
+    //
+
+    // helper: use native functions to avoid jQuery caches;
+    // also avoids "Maximum call stack size exceeded" for huge contents
+    function each(elem, selector, callback) {
+        _(elem.querySelectorAll(selector)).each(callback);
+    }
+
+    // helper: check if an element has a certain parent element
+    function hasParent(elem, selector) {
+        while (elem) {
+            elem = elem.parentNode;
+            if (elem && elem.matches(selector)) return true;
+        }
+        return false;
+    }
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'pseudo-blockquotes',
@@ -220,74 +240,12 @@ define('io.ox/mail/detail/content',
         process: function (baton) {
             if (!baton.isHTML) return;
             // transform outlook's pseudo blockquotes
-            this.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
-                $(this).replaceWith($('<blockquote type="cite">').append($(this).contents()));
+            each(this, 'div[style*="none none none solid"][style*="1.5pt"]', function (node) {
+                $(node).replaceWith($('<blockquote type="cite">').append($(node).contents()));
             });
         }
     });
 
-    ext.point('io.ox/mail/detail/content').extend({
-        id: 'blockquotes',
-        index: 200,
-        process: function (baton) {
-            if (!baton.isHTML) return;
-            this.find('blockquote')
-                // remove white-space: pre/nowrap
-                .find('[style*="white-space: "]').css('whiteSpace', '').end();
-        }
-    });
-
-    // Both fixes, images and tables were moved to the backend
-    // sanitizer on 01.08.2014
-
-    /*
-    ext.point('io.ox/mail/detail/content').extend({
-        id: 'images',
-        index: 300,
-        process: function (baton) {
-            if (!baton.isHTML) return;
-            // images with attribute width/height
-            this.find('img[width], img[height]').each(function () {
-                var node = $(this), w = node.attr('width'), h = node.attr('height'),
-                    pat = /%/;
-                node.removeAttr('width height');
-                // just set width; max-width=100% should still apply
-                if (w) { node.css({ width: pat.test(w) ? w : w + 'px'}); }
-                if (h) { node.css({ height: pat.test(h) ? h : h + 'px'}); }
-            });
-        }
-    });
-    */
-    /*
-    ext.point('io.ox/mail/detail/content').extend({
-        id: 'tables',
-        index: 400,
-        process: function (baton) {
-            if (!baton.isHTML) return;
-            // tables with bgcolor attribute
-            this.find('table[bgcolor]').each(function () {
-                var node = $(this), bgcolor = node.attr('bgcolor');
-                node.css('background-color', bgcolor);
-            });
-            // loop over tables in reverse order
-            // so that tables are processed inside-out
-            $.each(this.find('table[cellpadding]').get().reverse(), function () {
-                var node = $(this), cellpadding = node.attr('cellpadding');
-                if (node.attr('cellspacing') === '0') {
-                    node.css('border-collapse', 'collapse');
-                }
-                node.find('th, td').each(function () {
-                    var node = $(this), style = node.attr('style') || '';
-                    // style might already contain padding or padding-top/right/bottom/left.
-                    if (style.indexOf('padding:') > -1) return;
-                    // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
-                    if (style) style = ' ' + style;
-                    node.attr('style', 'padding: ' + cellpadding + 'px;' + style);
-                });
-            });
-        }
-    });
-    */
     ext.point('io.ox/mail/detail/content').extend({
         id: 'nested',
         index: 500,
@@ -297,15 +255,15 @@ define('io.ox/mail/detail/content',
             var data = baton.data;
             if ('folder_id' in data || !('filename' in data)) return;
             // fix inline images in nested message
-            this.find('img[src^="cid:"]').each(function () {
-                var node = $(this), cid = '<' + String(node.attr('src') || '').substr(4) + '>', src,
+            each(this, 'img[src^="cid:"]', function (node) {
+                var cid = '<' + String(node.getAttribute('src') || '').substr(4) + '>', src,
                     // get proper attachment
                     attachment = _.chain(baton.data.attachments).filter(function (a) {
                         return a.cid === cid;
                     }).first().value();
                 if (attachment) {
                     src = api.getUrl(_.extend(attachment, { mail: data.parent }), 'view');
-                    node.attr('src', src);
+                    node.setAttribute('src', src);
                 }
             });
         }
@@ -315,7 +273,7 @@ define('io.ox/mail/detail/content',
         id: 'fixed-width',
         index: 600,
         process: function (baton) {
-            if (baton.isText && settings.get('useFixedWidthFont', false)) this.addClass('fixed-width-font');
+            if (baton.isText && settings.get('useFixedWidthFont', false)) $(this).addClass('fixed-width-font');
         }
     });
 
@@ -323,7 +281,7 @@ define('io.ox/mail/detail/content',
         id: 'color-quotes',
         index: 700,
         process: function () {
-            if (settings.get('isColorQuoted', true)) this.addClass('colorQuoted');
+            if (settings.get('isColorQuoted', true)) $(this).addClass('colorQuoted');
         }
     });
 
@@ -331,9 +289,7 @@ define('io.ox/mail/detail/content',
         id: 'clean-blockquotes',
         index: 800,
         process: function () {
-            // for support for very large mails we do the following stuff manually,
-            // otherwise jQuery explodes with "Maximum call stack size exceeded"
-            _(this.get(0).getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+            each(this, 'blockquote', function (node) {
                 node.removeAttribute('style');
                 node.removeAttribute('type');
             });
@@ -344,18 +300,18 @@ define('io.ox/mail/detail/content',
         id: 'link-target',
         index: 900,
         process: function () {
-            // for support for very large mails we do the following stuff manually,
-            // otherwise jQuery explodes with "Maximum call stack size exceeded"
-            _(this.get(0).getElementsByTagName('A')).each(function (node) {
+            each(this, 'a', function (node) {
                 var link = $(node)
                         .filter('[href^="mailto:"]')
                         .addClass('mailto-link')
-                        .attr('target', '_blank'), // to be safe
+                        // to be safe
+                        .attr('target', '_blank'),
                     text = link.text();
-                // trim text if it contains mailto:...
                 if (text.search(/^mailto:/) > -1) {
-                    text = text.substring(7);//cut of mailto
-                    text = text.split(/\?/, 2)[0];//cut of additional parameters
+                    //cut of mailto
+                    text = text.substring(7);
+                    //cut of additional parameters
+                    text = text.split(/\?/, 2)[0];
                     link.text(text);
                 }
             });
@@ -387,13 +343,16 @@ define('io.ox/mail/detail/content',
         index: 1000,
         process: function (baton) {
             // auto-collapse blockquotes?
-            if (baton.options.autoCollapseBlockquotes === false) return; // use by printing, for example
+            // use by printing, for example
+            if (baton.options.autoCollapseBlockquotes === false) return;
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)
-            this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
-                var text = getText(this);
+            each(this, 'blockquote', function (node) {
+                // ignore nested blockquotes
+                if (hasParent(node, 'blockquote')) return;
+                var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
-                $(this).addClass('collapsed-blockquote').after(
+                $(node).addClass('collapsed-blockquote').after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         $('<i class="fa fa-ellipsis-h" tabindex="1">')
@@ -403,38 +362,50 @@ define('io.ox/mail/detail/content',
                 );
             });
             // delegate
-            this.on('click', '.blockquote-toggle', explandBlockquote);
+            $(this).on('click', '.blockquote-toggle', explandBlockquote);
         }
     });
 
-    function isBlockquoteToggle(node) {
-        return node.parent().hasClass('blockquote-toggle');
+    function isBlockquoteToggle(elem) {
+        return $(elem).parent().hasClass('blockquote-toggle');
     }
 
-    function findFarthestElement(memo, node) {
-        var pos;
-        if (node.css('position') === 'absolute' && !isBlockquoteToggle(node) && (pos = node.position())) {
-            memo.x = Math.max(memo.x, pos.left + node.width());
-            memo.y = Math.max(memo.y, pos.top + node.height());
+    function findFarthestElement(memo, elem) {
+
+        if (getComputedStyle(elem).position !== 'absolute') return memo;
+        if (isBlockquoteToggle(elem)) return memo;
+
+        var pos = $(elem).position();
+
+        if (pos) {
+            memo.x = Math.max(memo.x, pos.left + elem.offsetWidth);
+            memo.y = Math.max(memo.y, pos.top + elem.offsetHeight);
             memo.found = true;
         }
+
         return memo;
     }
 
-    function fixAbsolutePositions(content, isLarge) {
-        var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
-            width = content.width(), height = content.height();
-        if (!isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
-            farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
+    function fixAbsolutePositions(elem, isLarge) {
+
+        var farthest = { x: elem.scrollWidth, y: elem.scrollHeight, found: false },
+            width = elem.offsetWidth,
+            height = elem.offsetHeight;
+
+        // FF18 is behaving oddly correct, but impractical
+        if (!isLarge && (farthest.x >= width || farthest.y >= height)) {
+            farthest = _(elem.querySelectorAll('*')).reduce(findFarthestElement, farthest);
         }
+
         // only do this for absolute elements
         if (farthest.found) {
-            content.css('overflow-x', 'auto');
-            if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
+            $(elem).css('overflow-x', 'auto');
+            if (farthest.y > height) $(elem).css('height', Math.round(farthest.y) + 'px');
         }
+
         // look for resize event
-        content.one('resize', function () {
-            fixAbsolutePositions($(this), isLarge);
+        $(elem).one('resize', function () {
+            fixAbsolutePositions(this, isLarge);
         });
     }
 
@@ -480,21 +451,23 @@ define('io.ox/mail/detail/content',
                 ext.point('io.ox/mail/detail/source').invoke('process', $(), baton);
 
                 if (baton.isHTML) {
-                    // robust constructor for large HTML
+                    // robust constructor for large HTML -- no jQuery here to avoid its caches
                     content = document.createElement('DIV');
                     content.className = 'content noI18n';
                     content.innerHTML = baton.source;
-                    content = $(content);
                     // last line of defense
-                    content.find('script, base, meta').remove();
+                    each(content, 'script, base, meta', function (node) {
+                        node.parentNode.remove(node);
+                    });
                 } else {
                     // plain TEXT
-                    content = $('<div class="content plain-text noI18n">');
-                    content.html(beautifyText(baton.source));
+                    content = document.createElement('DIV');
+                    content.className = 'content plain-text noI18n';
+                    content.innerHTML = beautifyText(baton.source);
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {
                             baton.processedEmoji = !lib.loaded;
-                            content.html(beautifyText(text));
+                            content.innerHTML = beautifyText(text);
                         });
                     }
                 }
@@ -502,7 +475,11 @@ define('io.ox/mail/detail/content',
                 // process content unless too large
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
 
-                setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
+                // fix absolute positions
+                // heuristic: the source must at least contain the word "absolute" somewhere
+                if ((/absolute/i).test(baton.source)) {
+                    setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
+                }
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);

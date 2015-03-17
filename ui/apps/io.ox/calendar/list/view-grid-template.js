@@ -60,7 +60,8 @@ define('io.ox/calendar/list/view-grid-template',
                     tmpStr = '',
                     timeSplits = util.getStartAndEndTime(data);
 
-                if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
+                if (data.folder_id) {
+                    //conflicts with appointments, where you aren't a participant don't have a folder_id.
                     var folder = folderAPI.get(data.folder_id);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
@@ -87,11 +88,11 @@ define('io.ox/calendar/list/view-grid-template',
                     fields.date.show();
                 }
 
-                tmpStr = gt.noI18n(util.getTimeInterval(data));
+                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
 
                 a11yLabel += ', ' + tmpStr;
 
-                tmpStr = gt.noI18n(util.getDateInterval(data));
+                tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
                 a11yLabel += ', ' + tmpStr;
 
                 if (data.private_flag === true) {

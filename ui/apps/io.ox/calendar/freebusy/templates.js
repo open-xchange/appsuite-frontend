@@ -46,7 +46,8 @@ define('io.ox/calendar/freebusy/templates',
                 used[i] = 0;
             }
             collection.each(function (model) {
-                if (model.index !== undefined) { // due to the one that asks for a color
+                if (model.index !== undefined) {
+                    // due to the one that asks for a color
                     used[model.index % MAX_COLOR]++;
                 }
             });

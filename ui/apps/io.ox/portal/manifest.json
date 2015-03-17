@@ -4,7 +4,7 @@
     "icon": "portal.png",
     "category": "Productivity",
     "settings": true,
-    "requires": "!deniedPortal",
+    "requires": "portal",
     "refreshable": true,
     "index": 100,
     "help": {

@@ -42,7 +42,7 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
         });
 
         it('should have a title', function () {
-            expect(this.node.find('#dialog-title').text()).to.equal(dialogTitle);
+            expect(this.node.find('.modal-body .plain-text').text()).to.equal(dialogTitle);
         });
 
         it('should have a cancel button', function () {

@@ -43,7 +43,8 @@ define('io.ox/calendar/list/perspective',
             grid,
             findRecurrence = false,
             optDropdown = null,
-            months = 1; // how many months do we display
+            // how many months do we display
+            months = 1;
 
         if (_.device('smartphone')) {
             app.left.addClass('calendar-list-view vsplit');
@@ -71,8 +72,10 @@ define('io.ox/calendar/list/perspective',
 
         this.grid = grid = app.getGrid();
 
-        if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
-            findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
+        // use only for single items
+        if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {
+            //check if recurrencePosition is missing
+            findRecurrence = _.url.hash('id').split('.').length === 2;
         }
 
         // fix selection's serialize
@@ -106,7 +109,8 @@ define('io.ox/calendar/list/perspective',
             return $.Deferred().resolve(ids);
         });
 
-        var directAppointment;//directly linked appointments are stored here
+        //directly linked appointments are stored here
+        var directAppointment;
 
         //function to check for a selection change to prevent refresh from overiding direct links
         function checkDirectlink(e, list) {
@@ -154,12 +158,15 @@ define('io.ox/calendar/list/perspective',
             if (_.device('smartphone')) {
                 app.pages.changePage('detailView');
                 var p = app.pages.getPage('detailView');
+                // clear selection after page is left, otherwise the selection
+                // will not fire an event if the user click on the same appointment again
+                p.one('pagehide', function () {
+                    app.grid.selection.clear();
+                });
                 // draw details to page
-
                 p.idle().empty().append(viewDetail.draw(data));
                 // update toolbar with new baton
                 app.pages.getToolbar('detailView').setBaton(baton);
-
 
             } else {
                 right.idle().empty().append(viewDetail.draw(baton));
@@ -212,7 +219,7 @@ define('io.ox/calendar/list/perspective',
             id: 'dropdown',
             index: 100,
             draw: function () {
-                this.prepend(
+                this.append(
                     optDropdown = $('<div class="grid-options dropdown">')
                         .append(
                             $('<a>').attr({
@@ -296,11 +303,13 @@ define('io.ox/calendar/list/perspective',
                             //found valid recurrence, append it
                             if (foundRecurrence !== false) {
                                 _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
-                            } else {//ok its not in the list lets show it directly
+                            } else {
+                                //ok its not in the list lets show it directly
                                 app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
                             }
 
-                            findRecurrence = false;//only search once
+                            //only search once
+                            findRecurrence = false;
                         }
                         return data;
                     });
@@ -327,6 +336,7 @@ define('io.ox/calendar/list/perspective',
             // set new all request with extend range
             grid.setAllRequest(generateAllRequest(getIncreasedTimeFrame()));
             // refresh the grid
+            grid.selection.clear();
             grid.refresh();
         });
 

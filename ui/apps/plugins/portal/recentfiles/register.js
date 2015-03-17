@@ -106,8 +106,10 @@ define('plugins/portal/recentfiles/register',
                             $('<b>').text(_.noI18n(filename)), $.txt(' '),
                             $('<span class="gray">').text(
                                 type === 'recentfiles' ?
-                                    _.noI18n(file.modified_by.display_name) : // show WHO changed it
-                                    new date.Local(file.last_modified).format(date.DATE_TIME) // show WHEN it was changed
+                                    // show WHO changed it
+                                    _.noI18n(file.modified_by.display_name) :
+                                    // show WHEN it was changed
+                                    new date.Local(file.last_modified).format(date.DATE_TIME)
                             )
                         )
                     );

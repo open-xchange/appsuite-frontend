@@ -152,7 +152,8 @@ define('io.ox/files/main',
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -263,8 +264,10 @@ define('io.ox/files/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': settings.get('view', 'fluid:list'),
-                'folderEditMode': false, // mobile only
-                'showCheckboxes': false  // mobile only
+                // mobile only
+                'folderEditMode': false,
+                // mobile only
+                'showCheckboxes': false
             });
 
             win.trigger('change:perspective', 'fluid', app.props.get('layout'));
@@ -338,10 +341,8 @@ define('io.ox/files/main',
                 } else {
                     $view.addClass('checkboxes-hidden');
                     app.pages.getNavbar('fluid').setRight(gt('Edit')).show('.left');
-
                 }
             });
-
         },
 
         'toggle-secondary-toolbar': function (app) {
@@ -365,7 +366,7 @@ define('io.ox/files/main',
             side.find('.foldertree-container').addClass('bottom-toolbar');
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" tabindex="1">')
+                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))

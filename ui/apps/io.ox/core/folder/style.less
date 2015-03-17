@@ -83,7 +83,24 @@
                 color: rgba(255, 255, 255, 0.50);
             }
             .folder-options {
-                background-color: rgba(0, 0, 0, 0.20);
+                background-color: rgba(0, 0, 0, 0.30);
+            }
+        }
+    }
+
+    &.visible-selection-smartphone {
+        // visually ignore hover/focus/blur
+        .selected > .folder-node {
+            // using &.visible-selection .selectable:focus > .folder-node
+            background-color: @foldertree-selected-focus-background;
+            * {
+                color: @foldertree-focused-label-color;
+            }
+            .folder-counter {
+                color: rgba(255, 255, 255, 0.50);
+            }
+            .folder-options {
+                background-color: rgba(0, 0, 0, 0.30);
             }
         }
     }
@@ -108,7 +125,8 @@
 
         .folder-label {
 
-            &:first-child { // needed when arrows are hidden
+            // needed when arrows are hidden
+            &:first-child {
                 margin-left: 14px;
             }
         }
@@ -116,6 +134,11 @@
         .folder-counter {
             color: #08c;
             font-weight: @bold;
+            display: none;
+        }
+
+        &.show-counter .folder-counter {
+            display: inline-block;
         }
 
         .folder-options {
@@ -138,17 +161,18 @@
             display: none;
             &.visible {
                 display: inline-block;
-                margin: 0 12px 0 0; // yep, 12
+                // yep, 12
+                margin: 0 12px 0 0;
             }
             i {
                 text-align: left;
-                &:before { content: '\f114'; } // fa-folder-o
+                &:before { content: '\f114'; }          // fa-folder-o
             }
-            &.inbox { i:before { content: '\f01c'; }} // fa-inbox
-            &.sent { i:before { content: '\f1d8'; }} // fa-paper-plane
-            &.drafts { i:before { content: '\f15b'; }} // fa-file
-            &.trash { i:before { content: '\f1f8'; }} // fa-trash
-            &.spam { i:before { content: '\f05e'; }} // fa-ban
+            &.inbox { i:before { content: '\f01c'; }}   // fa-inbox
+            &.sent { i:before { content: '\f1d8'; }}    // fa-paper-plane
+            &.drafts { i:before { content: '\f15b'; }}  // fa-file
+            &.trash { i:before { content: '\f1f8'; }}   // fa-trash
+            &.spam { i:before { content: '\f05e'; }}    // fa-ban
             &.archive { i:before { content: '\f187'; }} // fa-archive
             &.default { i { color: #aaa; }}
         }
@@ -289,4 +313,13 @@
         }
     }
 
+}
+
+// subscribe dialog
+.io-ox-dialog-popup {
+    .has-error .btn-new-account {
+        color: #a94442;
+        border-color: #a94442;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
 }

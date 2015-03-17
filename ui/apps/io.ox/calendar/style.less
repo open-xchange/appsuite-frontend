@@ -105,7 +105,7 @@
 
     }
 
-    /* Mobile */
+    // Mobile
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         .toolbar {
@@ -153,8 +153,12 @@
 
         &.reserved { .background(@appointment-reserved); }
         &.absent { .background(@appointment-absent); }
-        &.temporary { .background(@appointment-temporary); }
-        &.free { .background(@appointment-free); }
+        &.temporary {
+            .background(@appointment-temporary);
+            //white text would fail contrast requirements
+            .title { color: #321900; }
+        }
+        &.free { .background(@appointment-free-dark); }
         &.private { .background(@appointment-private); }
 
         &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
@@ -197,7 +201,7 @@
 
         &.reserved {
 
-            @r: #D0EAFF; // lighten(@appointment-reserved, 50%);
+            @r: #D0EAFF;
             border-color: lighten(@appointment-reserved, 10%);
             color: darken(@appointment-reserved, 5%);
             background-color: @r;
@@ -218,6 +222,7 @@
 
             &.hover {
                 background-color: darken(@t, @appointment-hover-pct);
+                color: darken(darken(@appointment-temporary, 15%), @appointment-hover-pct);
             }
 
             .common();
@@ -232,6 +237,7 @@
 
             &.hover {
                 background-color: darken(@a, @appointment-hover-pct);
+                color: darken(@appointment-absent, @appointment-hover-pct);
             }
 
             .common();
@@ -298,9 +304,7 @@
     }
 }
 
-/* Grid , only used in conflicts. Listview styles are located under
-   list/style.less
-*/
+// Grid , only used in conflicts. Listview styles are located under list/style.less
 .vgrid-cell {
 
     &.calendar {
@@ -383,7 +387,7 @@
 
         &.absent {
             background-color: @appointment-absent;
-        } /* red */
+        }
 
         &.free {
             background-color: @appointment-free;
@@ -391,7 +395,7 @@
     }
 }
 
-/* Conflicts */
+// Conflicts
 .additional-info {
 
     .vgrid-cell.calendar {
@@ -416,7 +420,7 @@
     .conflicts .person-link {
 
         &.accepted {
-            color: #799952;  /* green */
+            color: #5C7F31;
         }
 
         &.declined {
@@ -425,14 +429,14 @@
         }
 
         &.tentative {
-            color: #c80; /* orange */
+            color: #c80;
         }
 
     }
 
 }
 
-/* Detail view */
+// Detail view
 .calendar-detail {
 
     @media (max-width: 480px), (max-device-width: 480px) {
@@ -504,9 +508,18 @@
     }
 
     .io-ox-label {
-        font-size: 0.9em;
+
+        font-size: 14px;
         padding: 1em 0 0.25em 0em;
         margin-bottom: 0.5em;
+
+        h2 {
+            display: inline;
+            font-size: 14px;
+            font-weight: 300;
+            margin: 10px 0;
+        }
+
     }
     .attachment-list .dropdown.attachment-link {
         display: inline-block;
@@ -571,16 +584,10 @@
 
 .participants-view {
 
-    @participant-unconfirmed:   #428BCA; /* blue */
-    @participant-accepted:      #799952; /* green */
-    @participant-declined:      #913F3F; /* red */
-    @participant-tentative:     #cc8800; /* orange */
-
-    .io-ox-label {
-        font-size: 0.9em;
-        padding: 1em 0 0.25em 0em;
-        margin-bottom: 0.5em;
-    }
+    @participant-unconfirmed:   #428BCA;
+    @participant-accepted:      #5C7F31;
+    @participant-declined:      #913F3F;
+    @participant-tentative:     #cc8800;
 
     min-height: 2em;
 
@@ -604,8 +611,6 @@
             color: @participant-accepted;
 
             i {
-
-                opacity: 0.35;
 
                 html.high-contrast & {
                     opacity: 1;
@@ -681,12 +686,21 @@
             margin: 0 20px 0em 0;
             cursor: pointer;
 
+            &:focus, &:hover {
+                .person {
+                    &.accepted, &.declined {
+                        color: black;
+                    }
+                }
+            }
+
             .person {
 
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                max-width: 222px; //icons and padding need 28px
+                // icons and padding need 28px
+                max-width: 222px;
                 display: inline-block;
 
                 &.accepted {
@@ -723,7 +737,7 @@
     float: none;
 }
 
-/* Timezone popups */
+// Timezone popups
 .popover {
 
     &.timezones {
@@ -746,22 +760,26 @@
     }
 }
 
-/* Invitations */
+// Invitations
 .itip-section.io-ox-busy {
     min-height: 60px;
 }
 
 .itip-actions {
     text-align: right;
-    margin: 14px 0 0 14px;
+    margin: 14px 0 0 0;
     white-space: nowrap;
     display: inline-block;
+    .btn {
+        margin-left: 7px;
+    }
 }
 
 .itip-item {
     padding: 20px;
     min-height: 80px;
-    background-color: #F5F5F5; // same color as .well
+    // same color as .well
+    background-color: #F5F5F5;
 }
 
 .itip-item + .itip-item {
@@ -787,8 +805,8 @@
 }
 
 .itip-details {
+    margin: 14px 0;
     .confirmation-status {
-        margin: 7px 0;
         &.accepted { color: @green; }
         &.declined { color: @red; }
         &.tentative { color: @orange; }
@@ -820,7 +838,7 @@
 
 }
 
-//io.ox/calendar/listview, io.ox/calendar/common-extensions
+// io.ox/calendar/listview, io.ox/calendar/common-extensions
 .calendar-item {
 
     .title {

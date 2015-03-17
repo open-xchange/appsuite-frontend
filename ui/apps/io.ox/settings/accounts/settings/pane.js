@@ -93,6 +93,10 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
+        drawRecoveryButtonHeadline = function () {
+            return $('<h2 class="sr-only">').text(gt('Password recovery'));
+        },
+
         drawRecoveryButton = function () {
             return $('<div class="hint">').append(
                 $.txt(
@@ -225,49 +229,54 @@ define('io.ox/settings/accounts/settings/pane',
                         this.collection.bind('add', this.render);
                         this.collection.bind('remove', this.render);
                     },
+
                     render: function () {
 
-                        var self = this, $dropDown;
+                        this.$el.empty().append(drawPane);
 
-                        self.$el.empty().append(drawPane);
-
-                        self.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);
+                        this.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);
 
                         if (this.collection.length > 1) {
-                            self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButton);
+                            this.$el.find('.io-ox-accounts-settings').append(drawRecoveryButtonHeadline(), drawRecoveryButton());
                         }
 
-                        this.collection.each(function (item) {
-                            self.$el.find('.widget-list').append(
-                                new AccountSelectView({ model: item }).render().el
-                            );
+                        this.$el.find('.widget-list').append(
+                            this.collection.map(function (item) {
+                                return new AccountSelectView({ model: item }).render().el;
+                            })
+                        );
+
+                        var submodules = _(api.submodules).filter(function (submodule) {
+                            return !submodule.canAdd || submodule.canAdd.apply(this);
                         });
 
                         // Enhance Add... options
-                        $dropDown = this.$el.find('.dropdown-menu');
 
-                        _(api.submodules).chain()
-                        .select(function (submodule) {
-                            return !submodule.canAdd || submodule.canAdd.apply(this);
-                        })
-                        .each(function (submodule) {
-                            $dropDown.append(
-                                $('<li>').append(
-                                    $('<a>', { tabindex: 1, role: 'menuitem', href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
+                        function add(e) {
+                            e.preventDefault();
+                            var submodule = e.data.submodule;
+                            // looks like oauth?
+                            if ('reauthorize' in submodule) {
+                                var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
+                                submodule.createInteractively(win);
+                            } else {
+                                submodule.createInteractively(e);
+                            }
+                        }
+
+                        this.$el.find('.dropdown-menu').append(
+                            _(submodules).map(function (submodule) {
+                                return $('<li role="presentation">').append(
+                                    $('<a href="#" role="menuitem" tabindex="1">')
+                                    .attr('data-actionname', submodule.actionName || submodule.id || '')
                                     .text(submodule.displayName)
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        // looks like oauth?
-                                        if ('reauthorize' in submodule) {
-                                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
-                                            submodule.createInteractively(win);
-                                        } else {
-                                            submodule.createInteractively(e);
-                                        }
-                                    })
-                                )
-                            );
-                        }).value();
+                                    .on('click', { submodule: submodule }, add)
+                                );
+                            })
+                        );
+
+                        var toggle = this.$el.find('.dropdown-toggle').dropdown();
+                        if (submodules.length === 0) toggle.hide();
 
                         return this;
                     },
@@ -286,10 +295,15 @@ define('io.ox/settings/accounts/settings/pane',
 
             redraw();
 
+            function onChange(e, list) {
+                if (!list || list.length === 0 || list[0].id !== 'io.ox/settings/accounts') {
+                    api.off('refresh.all refresh.list', redraw);
+                    data.grid.selection.off('change', onChange);
+                }
+            }
+
             api.on('refresh.all refresh.list', redraw);
-            data.grid.selection.on('change', function () {
-                api.off('refresh.all refresh.list', redraw);
-            });
+            data.grid.selection.on('change', onChange);
         },
         save: function () {
             // TODO

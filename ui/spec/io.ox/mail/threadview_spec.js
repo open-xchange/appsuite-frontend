@@ -115,8 +115,8 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
             it('should be an unordered list with three <li> elements', function () {
                 var list = this.view.$el.find('.thread-view.list-view');
                 expect(list.length).to.equal(1);
-                expect(list.is('ul')).to.be.true;
-                expect(list.children('li').length).to.equal(3);
+                expect(list.is('div')).to.be.true;
+                expect(list.children('article').length).to.equal(3);
             });
 
             it('should have a proper headline', function (done) {

@@ -49,13 +49,14 @@ define('io.ox/files/fluid/view-detail',
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<div tabindex="1">').addClass('title clear-title')
+                $('<h1>').addClass('title clear-title')
                 .text(gt.noI18n(baton.data.filename || baton.data.title || '\u00A0'))
                 .on('dblclick', function () {
                     actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                 })
                 .on('keydown', function (e) {
-                    if ((e.keyCode || e.which) === 13) { // enter
+                    if ((e.keyCode || e.which) === 13) {
+                        // enter
                         actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                     }
                 }),
@@ -122,7 +123,8 @@ define('io.ox/files/fluid/view-detail',
                     var width = $previewNode.innerWidth();
                     if (width === lastWidth) return;
                     $previewNode.empty();
-                    lastWidth = width; // Must only recalculate once we get bigger
+                    // Must only recalculate once we get bigger
+                    lastWidth = width;
                     var file = parseArguments(baton.data);
                     // get proper URL
                     file.previewURL = filesAPI.getUrl(file, 'thumbnail', {
@@ -140,9 +142,11 @@ define('io.ox/files/fluid/view-detail',
                     $previewNode = $('<div class="preview">')
                 );
 
-                if (_.device('small && android')) {//ugly hack for samsung galaxy s4 stock browser. Cannot exclude chrome because the stock browser says it's chrome
-                    //delayed drawing of to large previews does not make the sidepane scrollable
-                    this.css('height', window.innerHeight + 1 + 'px');//make it 1 pixel to big to force the s4 stockbrowser into scrolling mode
+                // HACK: ugly hack for samsung galaxy s4 stock browser. Cannot exclude chrome because the stock browser says it's chrome
+                if (_.device('small && android')) {
+                    // delayed drawing of to large previews does not make the sidepane scrollable
+                    // make it 1 pixel to big to force the s4 stockbrowser into scrolling mode
+                    this.css('height', window.innerHeight + 1 + 'px');
                 }
                 drawResizedPreview = _.debounce(fnDrawPreview, 300);
                 $(window).on('resize', drawResizedPreview);
@@ -198,7 +202,8 @@ define('io.ox/files/fluid/view-detail',
         id: 'upload',
         index: 600,
         draw: function (baton) {
-            if (baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
+            // no uploads in mail preview
+            if (baton.openedBy === 'io.ox/mail/write') return;
             var file = baton.data,
             $node,
             $commentArea,
@@ -208,7 +213,8 @@ define('io.ox/files/fluid/view-detail',
             $progressBarWrapper,
             $progressBar,
             $input = attachments.fileUploadWidget({
-                multi: false,//two new versions at the same time makes no sense
+                // two new versions at the same time makes no sense
+                multi: false,
                 buttontext: gt('Upload a new version')
             });
 
@@ -260,7 +266,8 @@ define('io.ox/files/fluid/view-detail',
                 $commentArea.addClass('disabled');
 
                 if (_.browser.IE !== 9) {
-                    $progressBarWrapper.addClass('progress');//show progressbar
+                    // show progressbar
+                    $progressBarWrapper.addClass('progress');
                     var files = $input.find('input[type="file"]')[0].files || [];
 
                     filesAPI.uploadNewVersion({
@@ -369,7 +376,9 @@ define('io.ox/files/fluid/view-detail',
                     });
 
                 this.append(
-                    $historyButton,
+                    $('<h2 class="version-button">').append(
+                        $historyButton
+                    ),
                     $content
                 );
             }
@@ -451,7 +460,8 @@ define('io.ox/files/fluid/view-detail',
         baton = ext.Baton.ensure(baton);
         baton.app = app;
 
-        if (app) { //save the appname so the extensions know what opened them (to disable some options for example)
+        if (app) {
+            // save the appname so the extensions know what opened them (to disable some options for example)
             baton.openedBy = app.getName();
         }
 
@@ -466,6 +476,9 @@ define('io.ox/files/fluid/view-detail',
         return function (e, data) {
             var replacement = draw(data, app);
             if ('former_id' in data) replacement.attr('former-id', data.former_id);
+            if (node.find('.versiontable:visible')) {//keep versionhistory status (expanded/collapsed)
+                replacement.find('[data-action="history"]').click();
+            }
             node.replaceWith(replacement);
         };
     };

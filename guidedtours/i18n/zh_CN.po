@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-14 03:43+1000\n"
+"PO-Revision-Date: 2015-03-04 09:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: apps/io.ox/tours/main.js:456 module:io.ox/tours
 msgid "Adding attachments"
@@ -608,7 +608,7 @@ msgstr ""
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings."
+"the menu bar. Select Settings. "
 msgstr "要打开设置，请单击菜单条右上方的系统菜单图标。选择设置。"
 
 #: apps/io.ox/tours/main.js:187 module:io.ox/tours

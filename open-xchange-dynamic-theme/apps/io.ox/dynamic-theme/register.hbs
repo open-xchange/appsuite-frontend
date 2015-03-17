@@ -1,0 +1,54 @@
+// NOJSHINT
+
+define('io.ox/dynamic-theme/register', [
+    'settings!io.ox/dynamic-theme',
+    'text!io.ox/dynamic-theme/theme.less.in',
+], function (settings, theme) {
+    'use strict';
+    
+    var less = (function () {
+        var less = { tree: {} }, exports = less;
+        function require(name) {
+            return less[name.split("/")[1]];
+        }
+        (function () {
+            var window; // pretend we're not in a browser
+            {{>parser}}
+        }());
+        {{>functions}}
+        {{>colors}}
+        {{>tree}}
+        {{glob "lib/node_modules/less/lib/less/tree/*.js"}}
+        {{>env}}
+        {{>visitor}}
+        {{>import-visitor}}
+        {{>join-selector-visitor}}
+        {{>to-css-visitor}}
+        {{>extend-visitor}}
+        {{>browser}}
+        {{>source-map-output}}
+        return less;
+    }());
+    
+    var data = [], colors = settings.get();
+    colors.logoWidth = colors.logoWidth + 'px';
+    colors.logoURL = 'url(' + colors.logoURL + ')';
+    for (var i in colors) {
+        data.push('@io-ox-dynamic-theme-' + i + ': ' + colors[i] + ';\n');
+    }
+    data.push(theme);
+    
+    new less.Parser().parse(data.join(''), function (e, root) {
+        if (e) {
+            if (('console' in window) && console.error) console.error(e);
+            throw e;
+        }
+        try {
+            $('<style type="text/css">').text(root.toCSS()).insertAfter('#custom');
+        } catch (e) {
+            if (('console' in window) && console.error) console.error(e);
+            throw e;
+        }
+    });
+    
+});

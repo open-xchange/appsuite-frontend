@@ -25,13 +25,17 @@ define('io.ox/files/carousel',
     'use strict';
 
     var regIsImage = /\.(gif|tiff|jpe?g|bmp|png)$/i,
-        regIsPlainText = /\.(txt|asc|js|md|json)$/i,//list from our text preview renderer
-        regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
+        //list from our text preview renderer
+        regIsPlainText = /\.(txt|asc|js|md|json)$/i,
+        regIsDocument = /\.(csv|pdf|docx?|xlsx?|pptx?)$/i;
+
+    var guid = _.uniqueId('carousel-');
 
     var carouselSlider = {
 
         app: null,
         win: null,
+        lastfocused: null,
 
         defaults: {
             start: 0,
@@ -44,7 +48,7 @@ define('io.ox/files/carousel',
 
         firstStart: true,
         list: [],
-        container:      $('<div class="abs carousel slide">').attr({ 'data-ride': 'carousel' }),
+        container:      $('<div class="abs carousel slide">').attr({ 'tabIndex': 1, 'data-ride': 'carousel', 'aria-describedby': guid }),
         inner:          $('<div class="abs carousel-inner" role="listbox">'),
         prevControl:    $('<a class="left carousel-control">')
                             .attr({
@@ -69,6 +73,8 @@ define('io.ox/files/carousel',
                                 $('<i class="fa fa-times" aria-hidden="true" >'),
                                 $('<span class="sr-only">').text(gt('Close'))
                             ),
+        //#. helper text for slideshow widget navigation
+        info:           $('<div class="sr-only">').attr('id', guid).text(gt('Use left/right arrow keys to navigate and escape key to exit view.')),
 
        /**
         * The config parameter used to initialize a carousel.
@@ -137,9 +143,11 @@ define('io.ox/files/carousel',
                 }
                 this.pos = _.defaults({cur: index}, this.defaults );
             } else {
-                this.pos = _.extend({}, this.defaults); // get a fresh copy
+                // get a fresh copy
+                this.pos = _.extend({}, this.defaults);
             }
-            this.firstStart = true; // should have a better name
+            // should have a better name
+            this.firstStart = true;
 
             // fill with proper amount of DIVs (need to be fast here)
             var frag = document.createDocumentFragment(), i = 0, $i = this.list.length;
@@ -153,6 +161,10 @@ define('io.ox/files/carousel',
 
             this.show();
             this.eventHandler();
+
+            // set focus
+            this.lastfocused = $(document.activeElement);
+            this.container.focus();
 
             // no automatic animation
             this.container.carousel({ interval: false });
@@ -221,7 +233,7 @@ define('io.ox/files/carousel',
             this.nextControl.on('click', $.proxy(this.nextItem, this));
             this.closeControl.on('click', $.proxy(this.close, this));
 
-            $(document).keyup(function (e) {
+            this.container.keyup(function (e) {
                 if (e.keyCode === 27) self.close();
                 if (e.keyCode === 39) self.nextItem();
                 if (e.keyCode === 37) self.prevItem();
@@ -261,7 +273,8 @@ define('io.ox/files/carousel',
             $(this).parent().idle();
         },
 
-        getItems: function (loadBoth) {//if we start in the middle of our slideshow we need to preload both directions
+        // if we start in the middle of our slideshow we need to preload both directions
+        getItems: function (loadBoth) {
 
             var self = this;
             var pos = this.pos,
@@ -301,7 +314,8 @@ define('io.ox/files/carousel',
                 self = null;
             }
 
-            if (this.firstStart && this.pos.cur === index) {//support starting the slideshow in the middle
+            // support starting the slideshow in the middle
+            if (this.firstStart && this.pos.cur === index) {
                 item.addClass('active');
                 this.firstStart = false;
             }
@@ -381,6 +395,7 @@ define('io.ox/files/carousel',
             win.busy();
             win.append(
                 this.container.append(
+                    this.info,
                     this.inner,
                     this.prevControl,
                     this.nextControl,
@@ -390,7 +405,8 @@ define('io.ox/files/carousel',
             );
             if (this.list.length === 1) this.nextControl.hide();
             win.idle();
-            this.getItems(this.pos.cur !== 0);//if we start in the middle we need to preload both directions
+            // if we start in the middle we need to preload both directions
+            this.getItems(this.pos.cur !== 0);
         },
 
         close: function () {
@@ -413,6 +429,7 @@ define('io.ox/files/carousel',
                 this.container.empty().remove();
                 this.list = [];
             }
+            this.lastfocused.focus();
         }
     };
 

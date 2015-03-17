@@ -10,17 +10,17 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/calendar/model',
-    ['io.ox/calendar/api',
-     'io.ox/backbone/modelFactory',
-     'io.ox/core/extensions',
-     'gettext!io.ox/calendar',
-     'io.ox/backbone/validation',
-     'io.ox/participants/model',
-     'io.ox/core/date',
-     'io.ox/core/folder/api',
-     'settings!io.ox/calendar'
-    ], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
+define('io.ox/calendar/model', [
+    'io.ox/calendar/api',
+    'io.ox/backbone/modelFactory',
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar',
+    'io.ox/backbone/validation',
+    'io.ox/participants/model',
+    'io.ox/core/date',
+    'io.ox/core/folder/api',
+    'settings!io.ox/calendar'
+], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
     'use strict';
 
@@ -35,65 +35,98 @@ define('io.ox/calendar/model',
                 folder: model.get('folder_id') || model.get('folder')
             };
             if (model.attributes.recurrence_position) {
-                _.extend(options, {recurrence_position: model.get('recurrence_position')});
+                _.extend(options, { recurrence_position: model.get('recurrence_position') });
             }
             return api.remove(options);
         },
         model: {
+
+            idAttribute: 'id',
+
             defaults: {
                 recurrence_type: 0,
                 notification: true,
                 shown_as: 1
             },
-            init: function () {
-                var self = this,
-                    defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
 
+            init: function () {
+                var defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
                 // set default time
-                self.attributes = _.extend({
+                this.attributes = _.extend({
                     start_date: defStart.getTime(),
                     end_date: defStart.getTime() + date.HOUR
-                }, self.attributes);
+                }, this.attributes);
 
-                self.on('create:fail update:fail', function (response) {
-                    if (response.conflicts) {
-                        self.trigger('conflicts', response.conflicts);
+                // End date automatically shifts with start date
+                var length = this.get('end_date') - this.get('start_date');
+
+                // internal storage for last timestamps
+                this.cache = {
+                    start: this.get('full_time') ? defStart.getTime() : this.get('start_date'),
+                    end: this.get('full_time') ? defStart.getTime() + date.HOUR : this.get('end_date')
+                };
+
+                // bind events
+                this.on({
+                    'create:fail update:fail': function (response) {
+                        if (response.conflicts) {
+                            this.trigger('conflicts', response.conflicts);
+                        }
+                    },
+                    'change:start_date': function (model, startDate) {
+                        if (length < 0) {
+                            return;
+                        }
+                        if (startDate && _.isNumber(length)) {
+                            model.set('end_date', startDate + length, { validate: true });
+                        }
+                    },
+                    'change:end_date': function (model, endDate) {
+                        var tmpLength = endDate - model.get('start_date');
+                        if (tmpLength < 0) {
+                            if (endDate && _.isNumber(length)) {
+                                model.set('start_date', endDate - length, { validate: true });
+                            }
+                        } else {
+                            length = tmpLength;
+                        }
+                    },
+                    'change:full_time': function (model, fulltime) {
+                        // handle shown as
+                        if (settings.get('markFulltimeAppointmentsAsFree', false)) {
+                            model.set('shown_as', fulltime ? 4 : 1, { validate: true });
+                        }
+
+                        if (fulltime === true) {
+                            // save to cache
+                            this.cache.start = model.get('start_date');
+                            this.cache.end = model.get('end_date');
+
+                            // handle time
+                            var startDate = new date.Local(this.cache.start).setHours(0, 0, 0, 0),
+                                endDate = new date.Local(this.cache.end).setHours(0, 0, 0, 0).add(date.DAY);
+
+                            // convert to UTC and save
+                            model.set('start_date', startDate.local, { validate: true });
+                            model.set('end_date', endDate.local, { validate: true });
+                        } else {
+                            var oldStart = new date.Local(this.cache.start),
+                                oldEnd = new date.Local(this.cache.end);
+
+                            // save to cache
+                            this.cache.start = date.Local.utc(model.get('start_date'));
+                            this.cache.end = date.Local.utc(model.get('end_date'));
+
+                            // handle time
+                            var startDate = new date.Local(this.cache.start).setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0),
+                                endDate = new date.Local(this.cache.end).setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0).add(-date.DAY);
+
+                            // save
+                            model.set('start_date', startDate.getTime(), { validate: true });
+                            model.set('end_date', endDate.getTime(), { validate: true });
+                        }
                     }
                 });
-            },
-            getParticipants: function () {
-                if (this._participants) {
-                    return this._participants;
-                }
-                var self = this,
-                    resetListUpdate = false,
-                    changeParticipantsUpdate = false,
-                    participants = this._participants = new pModel.Participants(this.get('participants'));
-
-                participants.invoke('fetch');
-
-                function resetList() {
-                    if (changeParticipantsUpdate) {
-                        return;
-                    }
-                    resetListUpdate = true;
-                    self.set('participants', participants.toJSON(), {validate: true});
-                    resetListUpdate = false;
-                }
-
-                participants.on('add remove reset', resetList);
-
-                this.on('change:participants', function () {
-                    if (resetListUpdate) {
-                        return;
-                    }
-                    changeParticipantsUpdate = true;
-                    participants.reset(self.get('participants'));
-                    participants.invoke('fetch');
-                    changeParticipantsUpdate = false;
-                });
-
-                return participants;
             },
 
             // special get function for datepicker
@@ -119,6 +152,71 @@ define('io.ox/calendar/model',
                     arguments[1] = date.Local.localTime(time);
                 }
                 return this.set.apply(this, arguments);
+            },
+
+            getParticipants: function () {
+                if (this._participants) {
+                    return this._participants;
+                }
+                var self = this,
+                    resetListUpdate = false,
+                    changeParticipantsUpdate = false,
+                    participants = this._participants = new pModel.Participants(this.get('participants'));
+
+                participants.invoke('fetch');
+
+                function resetList() {
+                    if (changeParticipantsUpdate) {
+                        return;
+                    }
+                    resetListUpdate = true;
+                    self.set('participants', participants.getAPIData(), { validate: true });
+                    resetListUpdate = false;
+                }
+
+                participants.on('add remove reset', resetList);
+
+                this.on('change:participants', function () {
+                    if (resetListUpdate) {
+                        return;
+                    }
+                    changeParticipantsUpdate = true;
+                    participants.reset(self.get('participants'));
+                    participants.invoke('fetch');
+                    changeParticipantsUpdate = false;
+                });
+
+                return participants;
+            },
+
+            setDefaultParticipants: function (options) {
+                var self = this;
+                return folderAPI.get(self.get('folder_id')).done(function (folder) {
+                    var userID = ox.user_id;
+                    if (folderAPI.is('private', folder)) {
+                        if (options.create) {
+                            // it's a private folder for the current user, add him by default
+                            // as participant
+                            self.getParticipants().addUniquely({ id: userID, type: 1 });
+
+                            // use a new, custom and unused property in his model to specify that he can't be removed
+                            self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
+                        } else {
+                            if (self.get('organizerId') === userID) {
+                                self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
+                            }
+                        }
+                    } else if (folderAPI.is('public', folder)) {
+                        if (options.create) {
+                            // if public folder, current user will be added
+                            self.getParticipants().addUniquely({ id: userID, type: 1 });
+                        }
+                    } else if (folderAPI.is('shared', folder)) {
+                        // in a shared folder the owner (created_by) will be added by default
+                        self.getParticipants().addUniquely({ id: folder.created_by, type: 1 });
+                    }
+
+                });
             }
         },
         getUpdatedAttributes: function (model) {
@@ -162,115 +260,11 @@ define('io.ox/calendar/model',
 
     Validators.validationFor('io.ox/calendar/model', {
         title: { format: 'string', mandatory: true },
-        start_date : { format: 'date', mandatory: true },
+        start_date: { format: 'date', mandatory: true },
         end_date: { format: 'date', mandatory: true }
     });
 
     return {
-        setDefaultParticipants: function (model, options) {
-            return folderAPI.get(model.get('folder_id')).done(function (folder) {
-                var userID = ox.user_id;
-                if (folderAPI.is('private', folder)) {
-                    if (options.create) {
-                        // it's a private folder for the current user, add him by default
-                        // as participant
-                        model.getParticipants().addUniquely({id: userID, type: 1});
-
-                        // use a new, custom and unused property in his model to specify that he can't be removed
-                        model.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                    } else {
-                        if (model.get('organizerId') === userID) {
-                            model.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                        }
-                    }
-                } else if (folderAPI.is('public', folder)) {
-                    if (options.create) {
-                        // if public folder, current user will be added
-                        model.getParticipants().addUniquely({id: userID, type: 1});
-                    }
-                } else if (folderAPI.is('shared', folder)) {
-                    // in a shared folder the owner (created_by) will be added by default
-                    model.getParticipants().addUniquely({id: folder.created_by, type: 1});
-                }
-
-            });
-        },
-        applyAutoLengthMagic: function (model) {
-            // End date automatically shifts with start date
-            var length = model.get('end_date') - model.get('start_date'),
-                updatingStart = false,
-                updatingEnd = false;
-
-            model.on('change:start_date', function () {
-                if (length < 0 || updatingStart) {
-                    return;
-                }
-                updatingEnd = true;
-                if (model.get('start_date') && _.isNumber(length)) {
-                    model.set('end_date', model.get('start_date') + length, { validate: true });
-                }
-                updatingEnd = false;
-            });
-
-            model.on('change:end_date', function () {
-                if (updatingEnd) {
-                    return;
-                }
-                var tmpLength = model.get('end_date') - model.get('start_date');
-                if (tmpLength < 0) {
-                    updatingStart = true;
-                    if (model.get('end_date') && _.isNumber(length)) {
-                        model.set('start_date', model.get('end_date') - length, { validate: true });
-                    }
-                    updatingStart = false;
-                } else {
-                    length = tmpLength;
-                }
-            });
-        },
-        fullTimeChangeBindings: function (model) {
-            // internal storage for last timestamps
-            model.cache = {
-                start: model.get('full_time') ? date.Local.utc(model.get('start_date')) : model.get('start_date'),
-                end: model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date')
-            };
-
-            model.on('change:full_time', function (model, fulltime) {
-               // handle shown as
-                if (settings.get('markFulltimeAppointmentsAsFree', false)) {
-                    model.set('shown_as', fulltime ? 4 : 1, { validate: true });
-                }
-
-                if (fulltime === true) {
-                    // save to cache
-                    this.cache.start = model.get('start_date');
-                    this.cache.end = model.get('end_date');
-
-                    // handle time
-                    var startDate = new date.Local(this.cache.start).setHours(0, 0, 0, 0),
-                        endDate = new date.Local(this.cache.end).setHours(0, 0, 0, 0).add(date.DAY);
-
-                    // convert to UTC and save
-                    model.set('start_date', startDate.local, { validate: true });
-                    model.set('end_date', endDate.local, { validate: true });
-                } else {
-                    var oldStart = new date.Local(this.cache.start),
-                        oldEnd = new date.Local(this.cache.end);
-
-                    // save to cache
-                    this.cache.start = date.Local.utc(model.get('start_date'));
-                    this.cache.end = date.Local.utc(model.get('end_date'));
-
-                    // handle time
-                    var startDate = new date.Local(this.cache.start).setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0),
-                        endDate = new date.Local(this.cache.end).setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0).add(-date.DAY);
-
-                    // save
-                    model.set('start_date', startDate.getTime(), { validate: true });
-                    model.set('end_date', endDate.getTime(), { validate: true });
-                }
-            });
-        },
         factory: factory
     };
 });

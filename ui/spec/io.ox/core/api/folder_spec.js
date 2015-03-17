@@ -254,7 +254,9 @@ define(['shared/examples/for/api',
                 });
 
                 it('can create folder', function () {
-                    expect(api.can('create:folder', {own_rights: 0x10000000})).to.be.true;
+                    expect(api.can('create:folder', {own_rights: 64})).to.be.true;
+                    expect(api.can('create:folder', {own_rights: 4})).to.be.true;
+                    expect(api.can('create:folder', {own_rights: 68})).to.be.true;
                     expect(api.can('create:folder', {own_rights: 0, permissions: 0})).to.be.false;
                 });
 

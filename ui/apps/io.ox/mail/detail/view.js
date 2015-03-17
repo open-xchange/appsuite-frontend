@@ -12,7 +12,8 @@
  */
 
 define('io.ox/mail/detail/view',
-    ['io.ox/mail/common-extensions',
+    ['io.ox/backbone/disposable',
+     'io.ox/mail/common-extensions',
      'io.ox/core/extensions',
      'io.ox/mail/api',
      'io.ox/mail/util',
@@ -23,7 +24,7 @@ define('io.ox/mail/detail/view',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'io.ox/mail/actions'
-    ], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
+    ], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define('io.ox/mail/detail/view',
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
-            var header = $('<header class="detail-view-header">');
+            var header = $('<header class="detail-view-header" role="heading">');
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -212,19 +213,44 @@ define('io.ox/mail/detail/view',
             var data = content.get(baton.data),
                 node = data.content;
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.html(), function (text, lib) {
+                emoji.processEmoji(node.innerHTML, function (html, lib) {
                     baton.processedEmoji = !lib.loaded;
                     if (baton.processedEmoji) return;
-                    node.empty().append(text);
+                    node.innerHTML = html;
                 });
             }
             this.idle().append(node);
         }
     });
 
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'max-size',
+        after: 'content',
+        draw: function (baton) {
+
+            var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
+            if (!isTruncated) return;
+
+            var url = 'api/mail?' + $.param({
+                action: 'get',
+                view: 'document',
+                folder: baton.data.folder_id,
+                id: baton.data.id,
+                session: ox.session
+            });
+
+            this.append(
+                $('<div class="max-size-warning">').append(
+                    $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
+                    $('<a role="button" target="_blank">').attr('href', url).text('Show entire message')
+                )
+            );
+        }
+    });
+
     var pool = Pool.create('mail');
 
-    var View = Backbone.View.extend({
+    var View = DisposableView.extend({
 
         className: 'list-item mail-item mail-detail f6-target',
 
@@ -243,14 +269,17 @@ define('io.ox/mail/detail/view',
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
             ext.point('io.ox/mail/detail/attachments').invoke('draw', node, baton);
+            // global event for tracking purposes
+            ox.trigger('mail:detail:attachments:render', this);
         },
 
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.body').empty();
-
             ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
+            // global event for tracking purposes
+            ox.trigger('mail:detail:body:render', this);
         },
 
         onToggle: function (e) {
@@ -356,7 +385,6 @@ define('io.ox/mail/detail/view',
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
-            this.$el.on('dispose', this.dispose.bind(this));
 
             this.on({
                 'load': function () {
@@ -399,23 +427,23 @@ define('io.ox/mail/detail/view',
             });
 
             this.$el.attr({
-                'aria-label': title,
-                'aria-expanded': 'false',
                 'data-cid': this.model.cid,
+                'aria-expanded': 'false',
                 'data-loaded': 'false'
             });
+
+            this.$el.prepend(
+                $('<h2 class="sr-only">').text(title)
+            );
 
             this.$el.data({ view: this, model: this.model });
 
             ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
 
-            return this;
-        },
+            // global event for tracking purposes
+            ox.trigger('mail:detail:render', this);
 
-        dispose: function () {
-            this.stopListening();
-            this.off();
-            this.model = this.options = this.$el = null;
+            return this;
         }
     });
 

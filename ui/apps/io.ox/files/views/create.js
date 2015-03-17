@@ -24,17 +24,30 @@ define('io.ox/files/views/create',
         'use strict';
 
         var POINT = 'io.ox/files/create',
-            baton = new ext.Baton(),
             oldMode = _.browser.IE < 10,
             dndInfo = $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')),
 
             show = function (app) {
                 var dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
                     $form = $('<form>', { 'class': 'files-create col-lg-12', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
-                    description = '';
+                    description = '',
+                    baton = new ext.Baton();
                 ext.point(POINT + '/form').invoke('draw', $form, baton);
-                ext.point(POINT + '/filelist').invoke();
 
+                //referenced via baton.fileList
+                ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
+                            id: 'attachment_list',
+                            itemClasses: 'col-md-6',
+                            fileClasses: 'background',
+                            preview: false,
+                            labelmax: 18,
+                            registerTo: baton,
+                            index: 300
+                        },
+                        baton
+                    )
+                );
+                ext.point(POINT + '/filelist').invoke();
                 //clear file list
                 baton.fileList.clear();
 
@@ -171,20 +184,6 @@ define('io.ox/files/views/create',
                     );
                 }
             });
-
-        //referenced via baton.fileList
-        ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
-                    id: 'attachment_list',
-                    itemClasses: 'col-md-6',
-                    fileClasses: 'background',
-                    preview: false,
-                    labelmax: 18,
-                    registerTo: baton,
-                    index: 300
-                },
-                baton
-            )
-        );
 
         return {
             show: show

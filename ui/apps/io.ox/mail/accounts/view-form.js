@@ -124,7 +124,7 @@ define.async('io.ox/mail/accounts/view-form',
                 Backbone.Validation.bind(this, { selector: 'name', forceUpdate: true });
             },
             render: function () {
-                var self = this;                    // hideAccountDetails = self.model.isHidden();
+                var self = this;
                 model = self.model;
                 self.$el.empty().append(
                     $('<div>').addClass('settings-detail-pane').append(
@@ -158,7 +158,8 @@ define.async('io.ox/mail/accounts/view-form',
                     model.set('login', value, {validate: true});
                 }
 
-                if (self.model.get('id') !== 0) {//check for primary account
+                //check for primary account
+                if (self.model.get('id') !== 0) {
 
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
@@ -188,7 +189,8 @@ define.async('io.ox/mail/accounts/view-form',
                     //react to loginchange
                     self.model.on('change:login', function (model, value) {
                         if (value === model.get('primary_address')) {
-                            if (!self.inSync) {//no need to sync if its allready synced...would cause multiple events to be triggerd
+                            //no need to sync if its allready synced...would cause multiple events to be triggerd
+                            if (!self.inSync) {
                                 self.model.on('change:primary_address', syncLogin);
                                 self.inSync = true;
                             }
@@ -258,9 +260,11 @@ define.async('io.ox/mail/accounts/view-form',
                     // revert default display name
                     var personal = self.model.get('personal');
                     if (personal === defaultDisplayName) {
-                        self.model.set('personal', null, { silent: true }); // empty!
+                        // empty!
+                        self.model.set('personal', null, { silent: true });
                     } else if ($.trim(personal) === '') {
-                        self.model.set('personal', ' ', { silent: true }); // yep, one space!
+                        // yep, one space!
+                        self.model.set('personal', ' ', { silent: true });
                     }
 
                     self.model.save().then(
@@ -276,7 +280,8 @@ define.async('io.ox/mail/accounts/view-form',
                             }
                         },
                         function fail(data) {
-                            if (data.code === 'ACC-0004' && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                            //string comparison is ugly, maybe backend has a translated version of this
+                            if (data.code === 'ACC-0004' && data.error_params[0].substring(8, 13) === 'login') {
                                 notifications.yell('error', gt('Username must not be empty.'));
                             } else if (data.code === 'SVL-0002') {
                                 notifications.yell('error',
@@ -552,7 +557,8 @@ define.async('io.ox/mail/accounts/view-form',
                     // add four input fields
                     _('sent trash drafts spam archive'.split(' ')).map(function (folder) {
 
-                        var text = folderLabels[folder], id = model.get('id'), enabled = !!id; // neither 0 nor undefined
+                        // neither 0 nor undefined
+                        var text = folderLabels[folder], id = model.get('id'), enabled = !!id;
                         folder = folder + '_fullname';
 
                         return group(

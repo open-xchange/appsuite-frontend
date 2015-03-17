@@ -71,10 +71,12 @@ define('io.ox/core/capabilities', function () {
     api.reset();
 
     // custom cap
-    var cap = [];
+    var cap = [], cookie = _.getCookie('cap');
     // via local.conf?
     if (ox.cap) cap = ox.cap.split(/\s*[, ]\s*/);
-    // via URL parameter
+    // via cookie?
+    if (cookie) cap = cap.concat(cookie.split(/\s*[, ]\s*/));
+    // via URL parameter?
     var hash = _.url.hash('ref') ? _.deserialize(_.url.hash('ref')) : _.url.hash();
     if (hash.cap) cap = cap.concat(hash.cap.split(/\s*[, ]\s*/));
 

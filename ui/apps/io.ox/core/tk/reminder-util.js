@@ -13,13 +13,15 @@
 
 define('io.ox/core/tk/reminder-util',
     ['gettext!io.ox/core',
+     'io.ox/calendar/util',
      'less!io.ox/core/tk/reminder-util'
-    ], function (gt) {
+    ], function (gt, util) {
 
     'use strict';
 
     function buildActions(node, values, focusId) {
-        if (_.device('medium')) {//native style for tablet
+        if (_.device('medium')) {
+            //native style for tablet
             node.append(
                     $('<div>').text(gt('Remind me again')),
                     $('<select tabindex="1" class="dateselect" data-action="selector">').append(function () {
@@ -35,10 +37,15 @@ define('io.ox/core/tk/reminder-util',
                 );
         } else {
             // special link dropdown
+            var toggle;
             node.append(
                 $('<div>').addClass('dropdown').css({float: 'left'}).append(
-                    $('<a href="#" role="listbox" aria-label="' + gt('Press [enter] to select a time when you want to be reminded again') + '"tabindex="1" data-action="reminderbutton" aria-haspopup="true">')
-                    .attr({'data-toggle': 'dropdown', 'focus-id': focusId + '-select'})
+                    toggle = $('<a role="menuitem" tabindex="1" data-action="reminderbutton">')
+                    .attr({
+                        'data-toggle': 'dropdown',
+                        'focus-id': focusId + '-select',
+                        'aria-haspopup': 'true',
+                    })
                     .text(gt('Remind me again')).addClass('refocus')
                     .append(
                         $('<i class="fa fa-chevron-down">').css({ paddingLeft: '5px', textDecoration: 'none' })
@@ -46,7 +53,7 @@ define('io.ox/core/tk/reminder-util',
                     $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
                         var ret = [];
                         for (var i = 0; i < values.length; i++) {
-                            ret.push('<li><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' +
+                            ret.push('<li role="presentation"><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' +
                                 values[i][1] +
                                 '</a></li>');
                         }
@@ -56,19 +63,24 @@ define('io.ox/core/tk/reminder-util',
                 $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
                 .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
+            toggle.dropdown();
         }
     }
 
     var draw = function (node, model, options) {
         var info,
-            label,//aria label
+            //aria label
+            label,
+            descriptionId = _.uniqueId('notification-description-'),
             actions = $('<div class="reminder-actions">');
 
         //find out remindertype
-        if (model.get('reminder') && model.get('reminder').module === 4) {//task
-            info = [$('<div class="title">').text(_.noI18n(model.get('title'))),
-                    $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
-                    $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge'))];
+        if (model.get('reminder') && model.get('reminder').module === 4) {
+            //task
+            info = [$('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                    $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
+                    $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
+                    $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))];
             var endText = '',
                 statusText = '';
             if (_.noI18n(model.get('end_date'))) {
@@ -81,19 +93,21 @@ define('io.ox/core/tk/reminder-util',
                     //#. %2$s task end date
                     //#. %3$s task status
                     //#, c-format
-            label = gt('Task reminder. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(model.get('title')), endText, statusText);
-        } else {//appointment
-            info = [$('<div class="time">').text(model.get('time')),
-                    $('<div class="date">').text(model.get('date')),
-                    $('<div class="title">').text(model.get('title')),
-                    $('<div class="location">').text(model.get('location'))];
+            label = gt('%1$s %2$s %3$s.', _.noI18n(model.get('title')), endText, statusText);
+        } else {
+            //appointment
+            info = [$('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                    $('<span class="span-to-div time">').text(model.get('time')),
+                    $('<span class="span-to-div date">').text(model.get('date')),
+                    $('<span class="span-to-div title">').text(model.get('title')),
+                    $('<span class="span-to-div location">').text(model.get('location'))];
                     //#. %1$s Appointment title
                     //#. %2$s Appointment date
                     //#. %3$s Appointment time
                     //#. %4$s Appointment location
                     //#, c-format
-            label = gt('Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open',
-                    _.noI18n(model.get('title')), _.noI18n(model.get('date')), _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '');
+            label = gt('%1$s %2$s %3$s %4$s.',
+                    _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('caldata'))), _.noI18n(util.getTimeIntervalA11y(model.get('caldata'))), _.noI18n(model.get('location')) || '');
         }
 
         var focusId = model.attributes.cid;
@@ -104,7 +118,9 @@ define('io.ox/core/tk/reminder-util',
         node.attr({'data-cid': model.get('cid'),
                    'model-cid': model.cid,
                    'aria-label': label,
-                   'focus-id': 'reminder-notification-' + focusId,//calendar and task are a bit different here (recurrenceposition etc)
+                   'aria-describedby': descriptionId,
+                   //calendar and task are a bit different here (recurrenceposition etc)
+                   'focus-id': 'reminder-notification-' + focusId,
                    role: 'listitem',
                    'tabindex': 1
         }).addClass('reminder-item refocus clearfix');

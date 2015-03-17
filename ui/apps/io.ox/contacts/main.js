@@ -90,7 +90,8 @@ define('io.ox/contacts/main',
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'detailView', // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    page: 'detailView',
                     extension: 'io.ox/contacts/mobile/toolbar'
                 })
             });
@@ -167,7 +168,12 @@ define('io.ox/contacts/main',
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target').attr('tabindex', 1).scrollable();
+            app.right = right.addClass('default-content-padding f6-target')
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Contact Details')
+                }).scrollable();
         },
 
         'vgrid': function (app) {
@@ -202,7 +208,8 @@ define('io.ox/contacts/main',
                         if (fullname) {
                             name = fullname;
                             fields.name.empty().append(
-                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data) // use html output
+                                // use html output
+                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data)
                             );
                         } else {
                             name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
@@ -237,6 +244,8 @@ define('io.ox/contacts/main',
             // add label template
             grid.addLabelTemplate({
                 build: function () {
+                    //need to apply this here or label is not affected by correct css when height is calculated
+                    this.addClass('vgrid-label');
                 },
                 set: function (data) {
                     this.text(_.noI18n(getLabel(data)));
@@ -309,7 +318,8 @@ define('io.ox/contacts/main',
 
             app.Thumb = Thumb;
 
-            app.left.append( // thumb index
+            app.left.append(
+                // thumb index
                 app.thumbs = $('<div class="atb contact-grid-index">')
                     .on('click', '.thumb-index', thumbClick)
                     .on('touchmove', thumbMove)
@@ -360,7 +370,7 @@ define('io.ox/contacts/main',
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -398,71 +408,8 @@ define('io.ox/contacts/main',
         },
 
         'swipe-mobile': function () {
-            // helper to remove button from grid
-
-            /*var removeButton = function () {
-                if (showSwipeButton) {
-                    var g = grid.getContainer();
-                    $('.swipeDelete', g).remove();
-                    showSwipeButton = false;
-                }
-            };
-
-            app.grid.selection.on('change', removeButton);
-
-            app.grid.selection.on('change', function () {
-                if (showSwipeButton) {
-                    removeButton();
-                }
-            });
-
-            ext.point('io.ox/contacts/swipeDelete').extend({
-                index: 666,
-                id: 'deleteButton',
-                draw: function (baton) {
-                    // remove old buttons first
-                    if (showSwipeButton) {
-                        removeButton();
-                    }
-                    this.append(
-                        $('<div class="mail cell-button swipeDelete fadein fast">')
-                            .text(gt('Delete'))
-                            .on('mousedown', function (e) {
-                                // we have to use mousedown as the selection listens to this, too
-                                // otherwise we are to late to get the event
-                                e.stopImmediatePropagation();
-                            }).on('tap', function (e) {
-                                e.preventDefault();
-                                removeButton();
-                                showSwipeButton = false;
-                                actions.invoke('io.ox/contacts/actions/delete', null, baton);
-                            })
-                    );
-                    showSwipeButton = true;
-                }
-            });
-
-            // swipe handler
-            var swipeRightHandler = function (e, id, cell) {
-                var obj = _.cid(id);
-
-                if (hasDeletePermission === undefined) {
-                    folderAPI.get({folder: obj.folder_id, cache: true}).done(function (data) {
-                        if (folderAPI.can('delete', data)) {
-                            hasDeletePermission = true;
-                            api.getList([obj]).done(function (list) {
-                                ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
-                            });
-                        }
-                    });
-                } else if (hasDeletePermission) {
-                    api.getList([obj]).done(function (list) {
-                        ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
-                    });
-                }
-            };
-            */
-
+            // introduced with cb6b821f33c07a0a47711f639819b9d6c65d960f but does not contain any executable code
+            // TODO: remove property in case it's useless
         },
 
         'show-contact': function (app) {
@@ -669,8 +616,10 @@ define('io.ox/contacts/main',
             // No way to use tap here since folderselection really messes up the event chain
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if (app.props.get('mobileFolderSelectMode') === true) {
-                    $(e.currentTarget).trigger('contextmenu'); // open menu
-                    return; // do not change page in edit mode
+                    // open menu
+                    $(e.currentTarget).trigger('contextmenu');
+                    // do not change page in edit mode
+                    return;
                 }
                 app.pages.changePage('listView');
             });
@@ -764,7 +713,11 @@ define('io.ox/contacts/main',
         app.setWindow(win);
         app.settings = settings;
 
-        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">');
+        app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
+            .attr({
+                role: 'navigation',
+                'aria-label': gt('Item List')
+            });
 
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,

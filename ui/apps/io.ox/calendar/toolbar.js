@@ -16,13 +16,14 @@ define('io.ox/calendar/toolbar',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/backbone/mini-views/toolbar',
      'io.ox/core/tk/upload',
      'io.ox/core/dropzone',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
+    ], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
 
     'use strict';
 
@@ -55,6 +56,7 @@ define('io.ox/calendar/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Edit'),
+            title: gt('Edit appointment'),
             ref: 'io.ox/calendar/detail/actions/edit'
         },
         'changestatus': {
@@ -68,6 +70,7 @@ define('io.ox/calendar/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Delete'),
+            title: gt('Delete appointment'),
             ref: 'io.ox/calendar/detail/actions/delete'
         },
         //
@@ -103,7 +106,8 @@ define('io.ox/calendar/toolbar',
     ext.point('io.ox/calendar/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/calendar/classic-toolbar/links'
@@ -124,10 +128,20 @@ define('io.ox/calendar/toolbar',
         li.toggle(layout !== 'list');
     }
 
-    function print(app, e) {
+    function updatePrintLink(baton) {
+        if (baton.app.getWindow().currentPerspective !== 'list') return;
+        var link = this.$el.find('[data-name="print"]');
+        link.toggleClass('disabled', baton.data && _.isEmpty(baton.data));
+    }
+
+    function print(baton, e) {
         e.preventDefault();
-        var baton = ext.Baton({ app: app, window: app.getWindow() });
-        actions.invoke('io.ox/calendar/detail/actions/print', null, baton);
+        if (baton.app.getWindow().currentPerspective === 'list') {
+            if (!baton.data || _.isEmpty(baton.data)) return;
+            actions.invoke('io.ox/calendar/detail/actions/print-appointment', null, baton);
+        } else {
+            actions.invoke('io.ox/calendar/detail/actions/print', null, ext.Baton({ app: baton.app, window: baton.app.getWindow() }));
+        }
     }
 
     // view dropdown
@@ -135,7 +149,6 @@ define('io.ox/calendar/toolbar',
         id: 'view-dropdown',
         index: 10000,
         draw: function (baton) {
-
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
@@ -150,7 +163,7 @@ define('io.ox/calendar/toolbar',
             .option('checkboxes', true, gt('Checkboxes'))
             .option('darkColors', true, gt('Dark colors'))
             .divider()
-            .link('print', gt('Print'), print.bind(null, baton.app))
+            .link('print', gt('Print'), print.bind(null, baton))
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
@@ -158,31 +171,32 @@ define('io.ox/calendar/toolbar',
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
 
+            updatePrintLink.call(dropdown, baton);
             updateCheckboxOption.call(dropdown);
             updateColorOption.call(dropdown);
         }
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
-
-    var updateToolbar = _.debounce(function (list) {
-        if (!list) return;
-        // extract single object if length === 1
-        list = list.length === 1 ? list[0] : list;
-        // draw toolbar
-        var baton = ext.Baton({ $el: toolbar, data: list, app: this });
-        ext.point('io.ox/calendar/classic-toolbar').invoke('draw', toolbar.empty(), baton);
-    }, 10);
-
     ext.point('io.ox/calendar/mediator').extend({
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+                toolbar.render().$el
             );
-            app.updateToolbar = updateToolbar;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
+                // extract single object if length === 1
+                list = list.length === 1 ? list[0] : list;
+                // draw toolbar
+                var baton = ext.Baton({ $el: toolbar.$list, data: list, app: app }),
+                    ret = ext.point('io.ox/calendar/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                return $.when.apply($, ret.value()).then(function () {
+                    toolbar.initButtons();
+                });
+            }, 10);
         }
     });
 

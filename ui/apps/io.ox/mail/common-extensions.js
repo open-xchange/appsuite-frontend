@@ -42,7 +42,8 @@ define('io.ox/mail/common-extensions',
                 fromlist = data.from || [['', '']],
                 subject = _.escape($.trim(data.subject)),
                 unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
-                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize;
+                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize +
+                    (data.attachment ? ', ' + gt('has attachments') : '');
 
             this.attr({
                 'aria-hidden': true
@@ -112,7 +113,8 @@ define('io.ox/mail/common-extensions',
         flag: function (baton) {
 
             var color = baton.data.color_label;
-            if (color <= 0) return; // 0 and a buggy -1
+            // 0 and a buggy -1
+            if (color <= 0) return;
 
             this.append(
                 $('<i class="flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
@@ -232,7 +234,11 @@ define('io.ox/mail/common-extensions',
                     show = showTO || showCC || showBCC,
                     container = $('<div class="recipients">');
 
-                if (!show) return;
+                if (!show) {
+                    // fix broken layout when mail has only 'to' and 'attachments'
+                    this.append(container.append($.txt(_.noI18n('\u00A0'))));
+                    return;
+                }
 
                 if (showTO) {
                     container.append(
@@ -304,7 +310,7 @@ define('io.ox/mail/common-extensions',
                         noCaret: true,
                         ref: 'io.ox/mail/attachment/links'
                     })
-                    .draw.call(node, ext.Baton({ data: data, $el: node }));
+                    .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
 
                     // support for fixed position
                     // TODO: introduce as general solution

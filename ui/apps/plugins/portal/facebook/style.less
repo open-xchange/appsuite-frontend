@@ -13,11 +13,18 @@
 
 // special color scheme if widget has no account yet
 .io-ox-portal {
+    @color: #435F9C;
     .widget.widget-color-custom.color-facebook {
-        @color: #435F9C;
         .decoration { background-color: @color; }
         &:focus {
             .decoration { background-color: darken(@color, 10%); }
+        }
+    }
+
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .widget.widget-color-custom.color-facebook {
+            background-color: @color;
+            .decoration { background-color: transparent; }
         }
     }
 }

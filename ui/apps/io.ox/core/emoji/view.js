@@ -101,10 +101,12 @@ define('io.ox/core/emoji/view', [
                         // we directly use the Japanese terms; no translation
                         $('<a href="#" class="emoji-tab left abs" tabindex="5">')
                             .attr('data-collection', 'japan_carrier')
-                            .text(this.emoji.getTitle('commonEmoji')), // 他社共通絵文字
+                            // 他社共通絵文字
+                            .text(this.emoji.getTitle('commonEmoji')),
                         $('<a href="#" class="emoji-tab right abs" tabindex="5">')
                             .attr('data-collection', 'softbank')
-                            .text(this.emoji.getTitle('allEmoji')) // 全絵文字
+                            // 全絵文字
+                            .text(this.emoji.getTitle('allEmoji'))
                     )
                 );
             }

@@ -29,6 +29,8 @@ define('io.ox/core/api/folder',
 
     if (ox.debug) console.warn('Module "io.ox/core/api/folder" is deprecated. Please migrate to "io.ox/core/folder/api".');
 
+
+
     var // folder object cache
         folderCache = new cache.SimpleCache('folder'),
         subFolderCache = new cache.SimpleCache('subfolder'),
@@ -323,7 +325,8 @@ define('io.ox/core/api/folder',
 
                         // rearrange on multiple ???
                         if (data.timestamp) {
-                            timestamp = _.then(); // force update
+                            // force update
+                            timestamp = _.then();
                             data = data.data;
                         }
 
@@ -464,7 +467,8 @@ define('io.ox/core/api/folder',
                                     .map(makeObject)
                                     .filter(blacklisted)
                                     .filter(canReadOrIsAdmin)
-                                    .map(addToCache) // since each doesn't chain
+                                    // since each doesn't chain
+                                    .map(addToCache)
                                     .value();
                                 // empty?
                                 if (folders.length > 0) {
@@ -764,7 +768,8 @@ define('io.ox/core/api/folder',
                     case 'private':
                         return data.type === 1;
                     case 'public':
-                        return data.type === 2 || /^(10|14|15)$/.test(data.id); // special file folder: regard as public
+                        // special file folder: regard as public
+                        return data.type === 2 || /^(10|14|15)$/.test(data.id);
                     case 'shared':
                         return data.type === 3;
                     case 'system':
@@ -803,7 +808,8 @@ define('io.ox/core/api/folder',
                         // get default folder
                         var folders = mailSettings.get('folder');
                         for (id in folders) {
-                            if (data.id.indexOf(folders[id]) === 0) {//folder starts with defaultfolder id
+                            //folder starts with defaultfolder id
+                            if (data.id.indexOf(folders[id]) === 0) {
                                 return true;
                             }
                         }
@@ -840,7 +846,8 @@ define('io.ox/core/api/folder',
                 isSystem = data.standard_folder || this.is('system', data),
                 isAdmin = perm(rights, 28) === 1,
                 isMail = data.module === 'mail',
-                compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0; // is my folder ?
+                // is my folder ?
+                compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0;
             // switch
             switch (action) {
             case 'read':
@@ -934,8 +941,10 @@ define('io.ox/core/api/folder',
                     node.nodeValue = _.noI18n(data.title || data.id);
                 })
                 .always(function () {
-                    _.defer(function () { // use defer! otherwise we return null on cache hit
-                        node = null; // don't leak
+                    // use defer! otherwise we return null on cache hit
+                    _.defer(function () {
+                        // don't leak
+                        node = null;
                     });
                 });
             return node;

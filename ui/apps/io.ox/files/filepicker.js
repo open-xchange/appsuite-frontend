@@ -39,12 +39,11 @@ define('io.ox/files/filepicker',
             }
         }, options);
 
-        var container = $('<div>'),
-            filesPane = $('<ul class="io-ox-fileselection list-unstyled" tabindex="0">'),
+        var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
             def = $.Deferred(),
             self = this;
 
-        Selection.extend(this, filesPane, {});
+        Selection.extend(this, filesPane, { markable: true });
 
         this.selection.keyboard(filesPane, true);
         this.selection.setMultiple(options.multiselect);
@@ -98,6 +97,7 @@ define('io.ox/files/filepicker',
             settings: settings,
             title: options.header,
             width: options.width,
+            abs: false,
 
             done: function () {
                 def.resolve(
@@ -110,8 +110,7 @@ define('io.ox/files/filepicker',
             filter: options.tree.filter,
 
             initialize: function (dialog, tree) {
-
-                dialog.getContentNode().append(container, filesPane);
+                dialog.getContentNode().append(filesPane);
 
                 filesPane.on('dblclick', '.file', function () {
                     var file = $('input', this).data('file');

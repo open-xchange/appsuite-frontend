@@ -138,6 +138,40 @@
                     "misc": {
                         "insertion": "below"
                     }
+                },
+                {
+                    "displayname": "Elite",
+                    "content": "elite signature",
+                    "shared": false,
+                    "id": "1337",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1107857077.404.1389171824428.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2701_2010031979.1389090431122\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "content": "Lord Lightbringer\r\nFrontend-Team\n\nOpen-Xchange GmbH\r\n\r\n--\r\nPhone: 02761 75252 - xy, Fax: +49 2761 838530\r\n\r\n--------------------------------------------------------------------------------\r\nOpen-Xchange AG,  Rollnerstr. 14, 90408 Nürnberg, Amtsgericht Nürnberg HRB 24738\nVorstand: Rafael Laguna de la Vera, Carsten Dirks, \r\nAufsichtsratsvorsitzender: Richard Seibt \n\nEuropean Office: Open-Xchange GmbH, Martinstr. 41, D-57462 Olpe, Germany\nAmtsgericht Siegen, HRB 8718, Geschäftsführer: Frank Hoberg, Martin Kauss\r\n\r\nUS Office: Open-Xchange Inc., P.O. Box 143, Ardsely on Hudson, New York 10503\r\n--------------------------------------------------------------------------------\r\n",
+                    "createdby": 395,
+                    "displayname": "OX Standard",
+                    "id": "1338",
+                    "misc": {
+                        "insertion": "below"
+                    },
+                    "module": "io.ox/mail",
+                    "props": {
+                        "MIME-Version": "1.0",
+                        "Message-ID": "<936486943.903.1424427378177.JavaMail.open-xchange@appsuite-dev-gw1>",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_52_868657602.1373960667831\""
+                    },
+                    "shared": false,
+                    "type": "signature"
                 }
             ]
 

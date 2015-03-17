@@ -49,6 +49,7 @@ define('io.ox/search/apiproxy',
             id: 'custom-facet-daterange',
             index: 200,
             customize: function (baton) {
+                if (_.device('small')) return;
                 if (baton.args[0].params.module !== 'mail') return;
 
                 // for mail only
@@ -106,23 +107,9 @@ define('io.ox/search/apiproxy',
             id: 'folder',
             index: 350,
             customize: function (baton) {
-                baton.data.push({
-                    id: 'folder',
-                    name: gt('Folder'),
-                    style: 'custom',
-                    custom: true,
-                    hidden: true,
-                    flags: [
-                        _.device('small') ? '' : 'advanced',
-                        'conflicts:folder_type'
-                    ],
-                    values: [{
-                        facet: 'folder',
-                        id: 'custom',
-                        custom: '',
-                        filter: {}
-                    }]
-                });
+                baton.data = baton.data.concat(
+                    _.copy(baton.app.view.model.getOptions().sticky, true)
+                );
             }
         });
 
@@ -145,7 +132,7 @@ define('io.ox/search/apiproxy',
          */
         function autocomplete () {
             var args = [{}].concat(Array.prototype.slice.call(arguments)),
-                opt = $.extend.apply(undefined, args);
+                opt = $.extend.apply(undefined, [true].concat(args));
             // call api
             return api.autocomplete(opt).then(extend.bind(this, args));
         }
@@ -174,29 +161,13 @@ define('io.ox/search/apiproxy',
                             })
                             .then(undefined, function (error) {
                                 // fallback when app doesn't support search
-                                if (error.code === 'SVL-0010') {
+                                if (error && error.code === 'SVL-0010') {
                                     var app = model.getApp();
                                     // add temporary mapping (default app)
                                     model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
                                     return autocomplete(standard, options, { params: {module: model.getModule()} });
                                 }
                                 return error;
-                            })
-                            .then(function (data) {
-
-                                var pool = model.get('pool'),
-                                    hash = {};
-
-                                _.each(data, function (facet) {
-                                    hash[facet.id] = true;
-                                });
-
-                                // add
-                                _.each(pool, function (facet) {
-                                    if (!hash[facet.id])
-                                        data.unshift(facet);
-                                });
-                                return data;
                             })
                             .then(function (data) {
                                 // match convention in autocomplete tk
@@ -215,8 +186,9 @@ define('io.ox/search/apiproxy',
                 },
                 query: (function () {
 
-                    function filterFacets(opt, facets) {
+                    function filterFacets(opt, view, facets) {
                         // extend options
+                        view.trigger('query:running');
                         opt.data.facets = _.filter(facets, function (facet) {
                             // TODO: remove hack to ingore folder facet when empty
                             return !('value' in facet) || (facet.value !== 'custom');
@@ -230,18 +202,28 @@ define('io.ox/search/apiproxy',
                         return folderOnly ? $.Deferred().resolve(undefined) : api.query(opt);
                     }
 
+                    function enrich(opt, result) {
+                        // add requst params to result
+                        if (result) result.request = opt;
+                        return result;
+                    }
+
                     function drawResults(result) {
                         var start = Date.now();
                         if (result) {
                             model.setItems(result, start);
                             app.view.trigger('query:result', result);
+                            app.view.model.trigger('query:result', result);
                         }
                         app.view.trigger('query:stop');
+                        app.view.model.trigger('query:stop');
                         return result;
                     }
 
                     function fail(result) {
                         notifications.yell(result);
+                        app.view.model.trigger('query:fail');
+                        app.view.model.trigger('query:stop');
                         app.view.trigger('query:stop');
                         app.view.trigger('query:fail');
                     }
@@ -257,9 +239,11 @@ define('io.ox/search/apiproxy',
                             }
                         };
                         app.view.trigger('query:start');
+                        app.view.model.trigger('query:start');
                         return model.getFacets()
-                            .done(filterFacets.bind(this, opt))
+                            .done(filterFacets.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))
+                            .then(enrich.bind(this, opt))
                             .then(
                                 // success
                                 sync ? drawResults : _.lfo(drawResults),

@@ -31,14 +31,17 @@ define('io.ox/core/tk/vgrid',
         // default options
         o = _.extend({
             tagName: 'div',
-            defaultClassName: 'vgrid-cell'
+            defaultClassName: 'vgrid-cell',
+            //container to draw templates for height measuring
+            //normally the the actual vgrid container is used(so css styles are applied correct)
+            tempDrawContainer: document.body
         }, o);
 
         var template = [],
 
             getHeight = function (node) {
                 node.css('visibility', 'hidden').show()
-                    .appendTo(document.body);
+                    .appendTo(o.tempDrawContainer);
                 var height = Math.max(1, node.outerHeight(true));
                 node.remove();
                 return height;
@@ -224,7 +227,8 @@ define('io.ox/core/tk/vgrid',
             secondToolbar: false,
             swipeLeftHandler: false,
             swipeRightHandler: false,
-            selectSmart: true
+            selectSmart: true,
+            containerLabel: gt('Multiselect')
         }, options || {});
 
         if (options.settings) {
@@ -244,7 +248,13 @@ define('io.ox/core/tk/vgrid',
             firstRun = true,
             // inner container / added role="presentation" because screen reader runs amok
             scrollpane = $('<div class="abs vgrid-scrollpane">').appendTo(node),
-            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox" aria-multiselectable="true" aria-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            ariaAttributesContainer = function () {
+                var obj = {};
+                if (options.multiple) obj['aria-multiselectable'] = 'true';
+                obj['aria-label'] = options.containerLabel;
+                return obj;
+            },
+            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar
@@ -265,7 +275,8 @@ define('io.ox/core/tk/vgrid',
             },
 
             updateSelectAll = function (list) {
-                var check = (list.length >= 1) && (list.length >= all.length);//list can be larger if threads are expanded in the grid
+                //list can be larger if threads are expanded in the grid
+                var check = (list.length >= 1) && (list.length >= all.length);
 
                 ignoreCheckbox = true;
                 node.find('.select-all input').prop('checked', check);
@@ -289,8 +300,13 @@ define('io.ox/core/tk/vgrid',
             },
 
             topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
-                .prependTo(node),
+                .appendTo(node),
             toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
+                .attr({
+                    role: 'toolbar',
+                    //#. toolbar with 'select all' and 'sort by'
+                    'aria-label': gt('Item list options')
+                })
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?
@@ -308,11 +324,11 @@ define('io.ox/core/tk/vgrid',
                             .append($('<i class="fa fa-th-list">'))
                             .on('click', { grid: this }, fnToggleEditable)
                 )
-                .appendTo(node),
+                .prependTo(node),
             // item template
-            template = new Template(),
+            template = new Template({tempDrawContainer: container}),
             // label template
-            label = new Template(),
+            label = new Template({tempDrawContainer: container}),
             // item pool
             pool = [],
             // heights
@@ -523,7 +539,9 @@ define('io.ox/core/tk/vgrid',
                 // get clone
                 return template.getClone(function () {
                     // add checkbox for edit mode
-                    return createCheckbox.call(this);
+                    if (options.editable) {
+                        return createCheckbox.call(this);
+                    }
                 });
             };
         }());
@@ -669,7 +687,7 @@ define('io.ox/core/tk/vgrid',
         resize = function () {
             // get num of rows
             numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
-            numRows = CHUNK_SIZE; //Math.max(numVisible * mult >> 0, minRows);
+            numRows = CHUNK_SIZE;
             // prepare pool
             var  i = 0, clone, frag = document.createDocumentFragment();
             for (; i < numRows; i++) {
@@ -767,7 +785,8 @@ define('io.ox/core/tk/vgrid',
                     cid = _(ids).first();
                     index = self.selection.getIndex(cid) || 0;
                     if (!isVisible(index)) {
-                        setIndex(index - 2); // not at the very top
+                        // not at the very top
+                        setIndex(index - 2);
                     }
                 }
             }
@@ -805,7 +824,8 @@ define('io.ox/core/tk/vgrid',
                         //console.debug('case #2 select() >> index', i);
                         self.selection.set(all[i]);
                         if (!isVisible(i)) {
-                            setIndex(i - 2); // not at the very top
+                            // not at the very top
+                            setIndex(i - 2);
                         }
                     }
                     else if (_.isArray(i)) {
@@ -1214,7 +1234,8 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getIds = function () {
-            return all.slice(); // return shallow copy
+            // return shallow copy
+            return all.slice();
         };
 
         this.isVisible = isVisible;
@@ -1230,7 +1251,8 @@ define('io.ox/core/tk/vgrid',
                 node.detach();
             });
             pool = [];
-            if (!initialized) return; // no need to update if not yet initialized
+            // no need to update if not yet initialized
+            if (!initialized) return;
             init();
             this.repaint();
         };
@@ -1266,7 +1288,6 @@ define('io.ox/core/tk/vgrid',
             toolbar.show();
         } else {
             this.selection.setMultiple(false);
-            //toolbar.detach(); // makes no sense to disable because the toolbar is used for sorting, too
         }
 
         // process some options on toolbars

@@ -65,7 +65,8 @@ define('io.ox/files/mediaplayer',
             if (this.app) {
                 this.win = this.app.getWindow();
             } else {
-                this.win = {nodes: { outer: $('.window-container:visible').first()}};//get active window by hand
+                //get active window by hand
+                this.win = {nodes: { outer: $('.window-container:visible').first()}};
             }
             this.lastActiveElement = $(document.activeElement);
 
@@ -190,7 +191,8 @@ define('io.ox/files/mediaplayer',
                 pauseOtherPlayers: true,
                 keyActions: [
                     {
-                        keys: [32, 179], // SPACE
+                        // SPACE
+                        keys: [32, 179],
                         action: function (player, media) {
                             if (media.paused || media.ended) {
                                 media.play();
@@ -200,27 +202,31 @@ define('io.ox/files/mediaplayer',
                         }
                     },
                     {
-                        keys: [39, 228], // RIGHT
+                        // RIGHT
+                        keys: [39, 228],
                         action: function (player, media) {
                             var newVolume = Math.min(media.volume + 0.1, 1);
                             media.setVolume(newVolume);
                         }
                     },
                     {
-                        keys: [37, 227], // LEFT
+                        // LEFT
+                        keys: [37, 227],
                         action: function (player, media) {
                             var newVolume = Math.max(media.volume - 0.1, 0);
                             media.setVolume(newVolume);
                         }
                     },
                     {
-                        keys: [38], // UP
+                        // UP
+                        keys: [38],
                         action: function () {
                             self.select('prev');
                         }
                     },
                     {
-                        keys: [40], // DOWN
+                        // DOWN
+                        keys: [40],
                         action: function () {
                             self.select('next');
                         }
@@ -326,8 +332,8 @@ define('io.ox/files/mediaplayer',
 
         minimize: function () {
             var minimizedPlayerLauncher;
-            $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
-            $('#io-ox-topbar > div.launchers-secondary').prepend(
+            $('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').remove();
+            $('#io-ox-topbar > ul.launchers-secondary').prepend(
                 minimizedPlayerLauncher = $('<li class="launcher minimizedmediaplayer">').append(
                     $('<a href="#" tabindex="1">').append($('<i>').addClass('fa fa-play'))
                 ).one('click', function () {
@@ -336,7 +342,8 @@ define('io.ox/files/mediaplayer',
                     $(this).remove();
                 })
                 .on('keydown', function (e) {
-                    if ((e.keyCode || e.which) === 13) { // enter
+                    // enter
+                    if ((e.keyCode || e.which) === 13) {
                         ox.launch('io.ox/files/main');
                         $('.mediaplayer_container').show();
                         $(this).remove();
@@ -348,8 +355,8 @@ define('io.ox/files/mediaplayer',
         },
 
         restore: function () {
-            if ($('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').length > 0) {
-                $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
+            if ($('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').length > 0) {
+                $('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').remove();
                 this.list = [];
                 this.container.show();
                 _.defer(function () { $('#io-ox-mediaplayer').focus(); });

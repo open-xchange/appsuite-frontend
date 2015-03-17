@@ -37,20 +37,21 @@ define('io.ox/core/folder/favorites',
             store(collection.pluck('id'));
         }
 
-        collection.on('add remove', storeCollection);
-
-        function initialize(id) {
-            api.multiple(favorites).done(function (response) {
+        // define virtual folder
+        api.virtual.add(id, function () {
+            return api.multiple(favorites).then(function (response) {
                 // compact() removes non-existent entries
                 var list = _(response).compact();
-                // update collection
-                list = api.processListResponse(id, list);
-                collection.reset(list);
-                model.set('subfolders', true);
-                // // if there was an error we update settings
+                _(list).each(api.injectIndex.bind(api, id));
+                model.set('subfolders', list.length > 0);
+                // if there was an error we update settings
                 if (list.length !== response.length) storeCollection();
+                return list;
             });
-        }
+        });
+
+        // respond to change events
+        collection.on('add remove', storeCollection);
 
         var extension = {
             id: 'favorites',
@@ -72,8 +73,6 @@ define('io.ox/core/folder/favorites',
 
                 // store new order
                 tree.on('sort:' + id, store);
-
-                if (favorites.length > 0) initialize(id);
             }
         };
 
@@ -89,7 +88,9 @@ define('io.ox/core/folder/favorites',
         var id = e.data.id,
             module = e.data.module,
             model = api.pool.getModel(id),
-            collection = api.pool.getCollection('virtual/favorites/' + module);
+            collectionId = 'virtual/favorites/' + module,
+            collection = api.pool.getCollection(collectionId);
+        model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
     }
@@ -105,7 +106,8 @@ define('io.ox/core/folder/favorites',
     function a(action, text) {
         return $('<a href="#" tabindex="1" role="menuitem">')
             .attr('data-action', action).text(text)
-            .on('click', $.preventDefault); // always prevent default
+            // always prevent default
+            .on('click', $.preventDefault);
     }
 
     function disable(node) {

@@ -52,7 +52,8 @@ module.exports = function (grunt) {
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
-                            'typeahead.js/dist/typeahead.jquery.js'
+                            'typeahead.js/dist/typeahead.jquery.js',
+                            'marked/lib/marked.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
@@ -94,9 +95,10 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    src: ['bower_components/bootstrap-tokenfield/less/bootstrap-tokenfield.less'],
-                    rename: function (dest) { return dest; },
-                    dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
+                    ext: '.css',
+                    cwd: 'bower_components/bootstrap-tokenfield/less/',
+                    src: ['*.less'],
+                    dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/'
                 }]
             }
         }

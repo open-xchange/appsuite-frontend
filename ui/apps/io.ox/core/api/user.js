@@ -21,15 +21,22 @@ define('io.ox/core/api/user',
 
     'use strict';
 
-    var convertResponseToGregorian = function (response) {//helper function
-        if (response.id) {//we have only one user
-            if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {//convert birthdays with year 1 from julian to gregorian calendar
+    //helper function
+
+    var convertResponseToGregorian = function (response) {
+        //we have only one user
+        if (response.id) {
+            //convert birthdays with year 1 from julian to gregorian calendar
+            if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {
                 response.birthday = util.julianToGregorian(response.birthday);
             }
             return response;
-        } else {//we have an array of users
-            _(response).each(function (contact) {//convert birthdays with year 1 from julian to gregorian calendar
-                if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {//birthday without year
+        //we have an array of users
+        } else {
+            //convert birthdays with year 1 from julian to gregorian calendar
+            _(response).each(function (contact) {
+                //birthday without year
+                if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {
                     contact.birthday = util.julianToGregorian(contact.birthday);
                 }
             });
@@ -47,7 +54,8 @@ define('io.ox/core/api/user',
             all: {
                 columns: '1,20,500',
                 extendColumns: 'io.ox/core/api/user/all',
-                sort: '500', // display_name
+                // display_name
+                sort: '500',
                 order: 'asc'
             },
             list: {
@@ -93,7 +101,8 @@ define('io.ox/core/api/user',
             return $.when();
         } else {
             require(['io.ox/contacts/api'], function (contactsApi) {
-                if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                //convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {
                     o.data.birthday = util.gregorianToJulian(o.data.birthday);
                 }
                 return http.PUT({
@@ -116,7 +125,8 @@ define('io.ox/core/api/user',
                                     api.caches.all.clear(),
                                     api.caches.list.remove({ id: o.id }),
                                     // update contact caches
-                                    contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),//no add here because this userdata not contactdata (similar but not equal)
+                                    //no add here because this userdata not contactdata (similar but not equal)
+                                    contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),
                                     contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
                                     contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
                                     contactsApi.clearFetchCache()
@@ -223,8 +233,10 @@ define('io.ox/core/api/user',
                 node.nodeValue = _.noI18n(data.display_name || data.email1);
             })
             .always(function () {
-                _.defer(function () { // use defer! otherwise we return null on cache hit
-                    node = null; // don't leak
+                // use defer! otherwise we return null on cache hit
+                _.defer(function () {
+                    // don't leak
+                    node = null;
                 });
             });
         return node;

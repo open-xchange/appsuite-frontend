@@ -244,33 +244,24 @@ define('plugins/portal/twitter/register',
         }
     };
 
+    var refreshWidget = function () {
+        require(['io.ox/portal/main'], function (portal) {
+            var portalApp = portal.getApp(),
+                portalModels = portalApp.getWidgetCollection().filter(function (model) { return /^twitter_\d*/.test(model.id); });
+
+            if (portalModels.length > 0) {
+                portalApp.refreshWidget(portalModels[0], 0);
+            }
+        });
+    };
+
     ext.point('io.ox/portal/widget/twitter').extend({
 
         title: gt('Twitter'),
 
-        initialize: function (baton) {
-            keychain.submodules.twitter.on('update create', function () {
-                loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
-                    baton.data = data;
-                    if (baton.contentNode) {
-                        baton.contentNode.empty();
-                        drawPreview(baton);
-                    }
+        initialize: function () {
+            keychain.submodules.twitter.on('update delete', refreshWidget);
 
-                    network.fetchUserID().then(function success(id) {
-                        util.setCurrentUserID(id);
-                    });
-                });
-            });
-            keychain.submodules.twitter.on('delete', function () {
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.twitter_0;
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
-                    }
-                });
-            });
             network.fetchUserID().then(function success(id) {
                 util.setCurrentUserID(id);
             });
@@ -288,19 +279,22 @@ define('plugins/portal/twitter/register',
             return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
-        drawDefaultSetup: function () {
+        drawDefaultSetup: function (baton) {
+            keychain.submodules.twitter.off('create', null, this);
+            keychain.submodules.twitter.on('create', function () {
+                baton.model.node.find('h2 .fa-twitter').replaceWith($('<span class="title">').text(gt('Twitter')));
+                baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
+                refreshWidget();
+            }, this);
+
             this.find('h2 .title').replaceWith('<i class="fa fa-twitter">');
             this.addClass('widget-color-custom color-twitter');
         },
 
-        performSetUp: function (baton) {
+        performSetUp: function () {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
 
-            return keychain.createInteractively('twitter', win).done(function () {
-                baton.model.node.find('h2 .fa-twitter').replaceWith($('<span class="title">').text(gt('Twitter')));
-                baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
-                ox.trigger('refresh^');
-            });
+            return keychain.createInteractively('twitter', win);
         },
 
         load: function (baton) {
@@ -361,12 +355,14 @@ define('plugins/portal/twitter/register',
                 };
             }
             script.type = 'text/javascript';
-            script.src = 'https://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
+            //TODO must be stored locally, even if the Twitter guys hate us
+            script.src = 'https://platform.twitter.com/widgets.js';
             this.empty().append(
                 $('<div>').addClass('clear-title io-ox-twitter-title').text('Twitter'),
                 getComposeBox()
             );
-            this[0].appendChild(script);//need to use native methos here to trigger onload
+            //need to use native methos here to trigger onload
+            this[0].appendChild(script);
 
             this.append($tweets.empty(), $busyIndicator);
 

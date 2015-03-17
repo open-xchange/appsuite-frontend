@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/* definitions */
+// definitions
 @icon-size: 18px;
 @unread-toggle-width: 40px;
 
-/* phone */
+// phone
 @phone-font-size: 14px;
 @phone-line-height: 24px;
 
-/* preview panes */
+// preview panes
 
 .flag-picker-view {
     position: absolute;
@@ -37,6 +37,7 @@
     .select-all {
         color: #555;
         cursor: pointer;
+        white-space: nowrap;
         i {
             color: #ccc;
             margin-right: 14px;
@@ -98,10 +99,6 @@
     .leftside { top: 0; left: 0; right: 0; bottom: 0; width: auto !important; z-index: 1; }
     .rightside { top: 0; right: 0; bottom: 0; left: 0 !important; width: auto; display: none; z-index: 2; }
     .rightside.preview-visible { display: block; }
-}
-
-.list-item {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .list-item.small {
@@ -270,7 +267,8 @@
 
     &.expanded {
         section.attachments, section.notifications { display: block; }
-        section.body { display: table; /* for proper overflow behavior */ }
+        // for proper overflow behavior */
+        section.body { display: table; }
         section.attachments:empty { display: none; }
     }
 
@@ -293,9 +291,12 @@
         position: static;
         min-height: 100%;
     }
+    .thread-view-list {
+        overflow: visible !important;
+    }
 }
 
-/* ListView */
+// ListView
 
 .mail-item {
 
@@ -330,9 +331,19 @@
         float: right;
     }
 
+    &.visible-selection.has-focus .selected {
+        .date {
+            opacity: 1;
+        }
+
+        .list-item-content .drag-title {
+            opacity: 1;
+        }
+    }
+
     .date {
 
-        opacity: 0.50;
+        opacity: 0.75;
 
         html.high-contrast & {
             opacity: 1;
@@ -354,7 +365,8 @@
 
     .list-item-content {
 
-        line-height: @item-line-height; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
+        // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
+        line-height: @item-line-height;
         .ellipsis();
 
         i {
@@ -376,7 +388,7 @@
         }
 
         .drag-title {
-            opacity: 0.70;
+            opacity: 0.75;
         }
 
         i.flag {
@@ -389,7 +401,7 @@
 
     &.visible-selection.has-focus .list-item.selected i {
         opacity: 0.9;
-        &:not(.flag) {
+        &:not(.flag):not(.has-attachments) {
             color: rgba(255, 255, 255, 0.50);
         }
     }
@@ -400,6 +412,11 @@
         height: 18px;
         margin: 0 0 0 7px;
         float: right;
+
+    }
+
+    &.visible-selection.has-focus .list-item.selected .fa-paperclip.has-attachments {
+        opacity: 1;
     }
 
     &.visible-selection.has-focus .list-item.selected .fa-paperclip.has-attachments {
@@ -443,7 +460,7 @@
         .box();
         min-width: 2em;
         html.high-contrast & {
-            color: @hc-gray; //HC
+            color: @hc-gray;
         }
     }
 
@@ -546,16 +563,16 @@
         height: 40px;
         text-align: center;
         font-size: 14px;
-        color: #ccc;
+        color: #767676;
         &:hover { text-decoration: none; color: #aaa; }
-        i.fa:before { content: "\f003"; /* fa-envelope-o */ }
+        i.fa:before { content: "\f003"; } // fa-envelope-o
     }
 
     &.no-padding .unread-toggle { left: 40px; }
 
     &.unread .unread-toggle {
-        color: #08c;
-        i.fa:before { content: "\f0e0"; /* fa-envelope */ }
+        color: @link-color;
+        i.fa:before { content: "\f0e0"; } // fa-envelope
     }
 
     .flag-picker {
@@ -568,7 +585,7 @@
             &:hover { text-decoration: none; }
         }
         .flag-dropdown-icon.flag_0 {
-            color: #ccc;
+            color: #767676;
         }
     }
 }
@@ -738,7 +755,7 @@ textarea.inplace-editor {
             i { margin-left: 14px; }
         }
 
-         .fa { // was [class^="icon-"]
+         .fa {
             color: inherit;
             display: inline-block;
             vertical-align: middle;
@@ -830,10 +847,8 @@ textarea.inplace-editor {
 
     .vgrid-cell {
         .touch-helper {
-            /*
-            a transparent div to enlarge the touchable area around the
-            thread-size badge - aka "can't touch this, dadada-dada-dada"
-            */
+            // a transparent div to enlarge the touchable area around the
+            // thread-size badge - aka "can't touch this, dadada-dada-dada"
             height: 40px;
             width: 40px;
             position: absolute;
@@ -850,7 +865,7 @@ textarea.inplace-editor {
     }
 }
 
-/* Detail view */
+// Detail view
 
 .rightside.mail-detail-pane {
 
@@ -865,7 +880,8 @@ textarea.inplace-editor {
 
     .scrollable-pane {
         margin-bottom: 20px;
-        height: 110%; /* allows hiding "Entire thread" */
+        // allows hiding "Entire thread"
+        height: 110%;
     }
 }
 
@@ -879,7 +895,8 @@ textarea.inplace-editor {
         padding: 20px;
         display: table;
         width: 100%;
-        min-height: 100%; // to make sure the quick-reply field can scroll out of viewport
+        // to make sure the quick-reply field can scroll out of viewport
+        min-height: 100%;
 
         .mail-detail {
             background-color: white;
@@ -1060,8 +1077,7 @@ textarea.inplace-editor {
             color: @mail-priority;
         }
         .low {
-            i:first-child { color: #888; }
-            color: #ccc;
+            color: @mail-priority-low;
         }
     }
 
@@ -1074,7 +1090,7 @@ textarea.inplace-editor {
     &.no-padding .contact-picture { left: 0; }
 
     .io-ox-label {
-        color: #888;
+        color: #767676;
         .fontWeight(300);
         white-space: nowrap;
 
@@ -1124,15 +1140,15 @@ textarea.inplace-editor {
     }
 
     .colorQuoted blockquote blockquote {
-        border-left: @colorQuotedWidth solid #EE0889; // pink
+        border-left: @colorQuotedWidth solid #EE0889;
     }
 
     .colorQuoted blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #08C4FF; // cyan
+        border-left: @colorQuotedWidth solid #08C4FF;
     }
 
     .colorQuoted blockquote blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #aaa; // gray
+        border-left: @colorQuotedWidth solid #aaa;
     }
 
     blockquote p {
@@ -1168,7 +1184,7 @@ textarea.inplace-editor {
         }
     }
 
-    /* label dropdown */
+    // label dropdown
     .active-label {
         .fontWeight(bold);
     }
@@ -1217,7 +1233,8 @@ textarea.inplace-editor {
 
     article {
         padding: 19px;
-        border: 1px solid white; // to work with outline
+        // to work with outline
+        border: 1px solid white;
         display: table;
         background-color: white;
     }
@@ -1225,7 +1242,8 @@ textarea.inplace-editor {
     article.text-html.horizontal-scrolling {
         max-width: 100%;
         overflow-x: auto;
-        margin-right: -10000px; /* funky trick */
+        // funky trick
+        margin-right: -10000px;
     }
 
     .content {
@@ -1234,26 +1252,29 @@ textarea.inplace-editor {
         .fontWeight(400);
         font-size: 14px;
         line-height: 20px;
-        /* max-width: 1000px; */ /* Max-width does not work here, see Bug #24505 */
+        // Max-width does not work here, see Bug #24505
+        // max-width: 1000px;
         width: 100%;
         cursor: auto;
-        display: block; /* for large images (see bug #22756 and #25033) */
+        // for large images (see bug #22756 and #25033)
+        display: block;
         position: relative;
-        overflow: hidden; /* helper for absolutely positioned elements */
+        // helper for absolutely positioned elements
+        overflow: hidden;
 
         * {
-            /* fixes https://bugs.open-xchange.com/show_bug.cgi?id=25737 */
+            // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
             line-height: 1.4em;
             box-sizing: content-box;
         }
 
-        /* TODO: remove / temp. fix for bootstrap */
+        // TODO: remove / temp. fix for bootstrap
         [class*="span"] {
             float: none;
             margin-left: 0;
         }
 
-        /* TODO: remove / temp. fix for sanitized HTML */
+        // TODO: remove / temp. fix for sanitized HTML
         padding: 0;
         & > div > [class$="-content"] { padding: 0; }
 
@@ -1279,14 +1300,16 @@ textarea.inplace-editor {
         h6 { font-size: 0.67 * @base; }
 
         a {
-            word-break: break-word; // fix long links
+            // fix long links
+            word-break: break-word;
             text-decoration: none;
             color: inherit;
             &:hover { color: inherit; }
         }
 
         a[href] {
-            color: #007dbc; // not @linkColor!
+            // not @linkColor!
+            color: #007dbc;
             text-decoration: underline;
             &:hover { color: #08c; }
         }
@@ -1336,7 +1359,8 @@ textarea.inplace-editor {
         }
 
         pre {
-            word-break: keep-all; // for firefox
+            // for firefox
+            word-break: keep-all;
             word-break: initial;
             white-space: pre-wrap;
             background-color: transparent;
@@ -1349,9 +1373,14 @@ textarea.inplace-editor {
             text-align: center;
         }
 
+        th[align="left"] {
+            // special case, see bug 37082
+            text-align: left;
+        }
+
         ul, ol { padding-left: 25px; }
 
-        /* Fix for Bug 24995 */
+        // see Bug 24995 - Strange boxes shown for invitation mails
         .calendar-detail .label {
             display: block;
             text-shadow: none;
@@ -1360,10 +1389,22 @@ textarea.inplace-editor {
         }
 
         img.emoji-softbank { margin: 0 2px; }
+
+        // See 36097 - This issue may have to be revisited, see also "breakableHTML"
+        div {
+            word-break: break-word;
+        }
+    }
+
+    .max-size-warning {
+        color: #777;
+        margin: 10px -20px 0 -20px;
+        padding: 20px 20px 0 20px;
+        border-top: 1px solid #ddd;
     }
 }
 
-/* flag colors */
+// flag colors
 .flag_1  { color: @red; } /* red */
 .flag_7  { color: @orange; } /* orange */
 .flag_10 { color: @yellow; } /* yellow */
@@ -1386,7 +1427,7 @@ textarea.inplace-editor {
 .flag_bg_8  { background-color: @pink; } /* pink */
 .flag_bg_4  { background-color: @gray-light; } /* dark gray */
 
-/* multi selection */
+// multi selection
 
 .multi-selection-flag {
 
@@ -1418,7 +1459,7 @@ textarea.inplace-editor {
 
 }
 
-/* attachment preview */
+// attachment preview
 
 h4.mail-attachment-preview {
     height: 3em;
@@ -1491,7 +1532,7 @@ h4.mail-attachment-preview {
     }
 }
 
-/* smartphone */
+// smartphone
 @media (max-width: 480px), (max-device-width: 480px)  {
 
     .thread-view-list {

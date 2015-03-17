@@ -169,7 +169,8 @@ define('io.ox/core/api/attachment',
             // inject filename for more convenient file downloads
             url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +
                 $.param({
-                    session: ox.session,//needs to be added manually
+                    //needs to be added manually
+                    session: ox.session,
                     action: 'document',
                     folder: data.folder,
                     id: data.id,
@@ -206,7 +207,8 @@ define('io.ox/core/api/attachment',
                 // 137: 'Saved Infostore attachment'
             };
 
-            target = (target || coreConfig.get('folder/infostore')).toString();//make sure we have a string or target + api.DELIM results in NaN
+            //make sure we have a string or target + api.DELIM results in NaN
+                target = (target || coreConfig.get('folder/infostore')).toString();
 
             http.PUT({
                 module: 'files',

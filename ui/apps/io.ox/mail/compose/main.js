@@ -46,6 +46,10 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 search: false,
                 chromeless: true
             }));
+
+            // use main role on 'outer' to include actions in header
+            win.nodes.body.removeAttr('role');
+            win.nodes.outer.attr('role', 'main');
         });
 
         app.failSave = function () {
@@ -76,7 +80,9 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                             app.view.setMail()
                             .done(function () {
                                 win.idle();
+                                win.setTitle(gt('Compose'));
                                 def.resolve({ app: app });
+                                ox.trigger('mail:' + type + ':ready', obj, app);
                             });
                         })
                         .fail(function (e) {
@@ -104,10 +110,14 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         app.replyall = compose('replyall');
         app.edit     = compose('edit');
 
+        // for debugging purposes
+        window.compose = app;
+
         return app;
     }
 
     return {
+
         getApp: createInstance,
 
         reuse: function (type, data) {

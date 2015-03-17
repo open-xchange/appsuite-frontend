@@ -91,7 +91,8 @@ define('io.ox/backbone/mini-views/date',
                 this.model.set(this.name, d.getTime());
             } else {
                 this.model.set(this.name, null);
-                this.$el.find('.date').children().prop('disabled', false);//enable all
+                //enable all
+                this.$el.find('.date').children().prop('disabled', false);
             }
         },
 

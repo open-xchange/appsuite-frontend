@@ -55,7 +55,7 @@ define('io.ox/mail/settings/pane',
     var MailSettingsView = Backbone.View.extend({
         tagName: 'div',
 
-        render: function () {
+        render: function (baton) {
             var self = this, accounts, msisdns;
             /* TODO: only the default account (id: 0) can have multiple aliases for now
              * all other accounts can only have one address (the primary address)
@@ -91,7 +91,7 @@ define('io.ox/mail/settings/pane',
             $.when(accounts, msisdns).then(function (addresses, numbers) {
 
                 optionsAllAccounts = [].concat(addresses, numbers);
-                ext.point(POINT + '/pane').invoke('draw', self.$el);
+                ext.point(POINT + '/pane').invoke('draw', self.$el, baton);
 
                 // hide non-configurable sections
                 self.$el.find('[data-property-section]').each(function () {
@@ -114,18 +114,15 @@ define('io.ox/mail/settings/pane',
             this.addClass('io-ox-mail-settings');
             mailViewSettings = new MailSettingsView({model: mailSettings});
 
-            // var holder = $('<div>'),
-            //     pane = $('<div class="io-ox-mail-settings">');
+            this.append(mailViewSettings.render(baton).$el);
 
-            // this.append(holder.append(pane.append(mailViewSettings.render().$el)));
-
-            this.append(mailViewSettings.render().$el);
-
-            if (Modernizr.touch) { // See Bug 24802
+            if (Modernizr.touch) {
+                // see Bug 24802 - iPad: Cannot write email
                 this.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
             }
 
-            if (!capabilities.has('emoji')) { // see Bug 25537
+            if (!capabilities.has('emoji')) {
+                // see Bug 25537 - Emotes not working as advertised
                 this.find('[name="displayEmoticons"]').parent().parent().hide();
             }
         },
@@ -167,7 +164,9 @@ define('io.ox/mail/settings/pane',
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend class="sectiontitle expertmode">').text(gt('Common')),
+                    $('<legend class="sectiontitle expertmode">').append(
+                        $('<h2>').text(gt('Common'))
+                    ),
                     $('<div class="form-group">').append(
                         // Permanently remove
                         $('<div class="checkbox expertmode">').append(
@@ -207,7 +206,9 @@ define('io.ox/mail/settings/pane',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Compose')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Compose'))
+                    ),
                     $('<div>').addClass('controls').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').text(gt('Append vCard')).prepend(
@@ -222,20 +223,27 @@ define('io.ox/mail/settings/pane',
                     )
                 ),
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Forward emails as')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Forward emails as'))
+                    ),
                     new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: mailSettings}).render().$el
                 ),
 
                 (function () {
                     if (_.device('smartphone || tablet')) return $();
                     return $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').text(gt('Format emails as')),
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(gt('Format emails as'))
+                        ),
                         new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: mailSettings}).render().$el
                     );
                 })(),
 
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle sr-only').append(
+                        $('<h2>').text(gt('Additional settings'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
 
                         $('<label for="lineWrapAfter">').addClass('control-label').text(
@@ -247,6 +255,9 @@ define('io.ox/mail/settings/pane',
                             $('<div>').addClass('row').append(
                                 $('<div>').addClass('col-md-2').append(
                                     new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el
+                                ),
+                                $('<div>').addClass('col-md-10').append(
+                                    new mini.ErrorView({ selector: '.form-group.expertmode' }).render().$el
                                 )
                             )
                         )
@@ -282,7 +293,9 @@ define('io.ox/mail/settings/pane',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Display')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Display'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').text(gt('Allow html formatted emails')).prepend(
@@ -315,8 +328,11 @@ define('io.ox/mail/settings/pane',
         }
     });
 
-    ext.point('io.ox/mail/settings/detail').extend({
-        index: 500,
+    // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
+    // and displays signature settings
+
+    ext.point(POINT + '/pane').extend({
+        index: 600,
         id: 'imap-subscription',
         draw: function () {
 
@@ -324,7 +340,9 @@ define('io.ox/mail/settings/pane',
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
+                    $('<legend class="sectiontitle">').append(
+                        $('<h2>').text(gt('IMAP folder subscription'))
+                    ),
                     $('<div class="sectioncontent">').append(
                         $('<button type="button" class="btn btn-primary" tabindex="1">')
                         .on('click', changeIMAPSubscription)

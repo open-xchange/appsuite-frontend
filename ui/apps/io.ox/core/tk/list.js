@@ -29,7 +29,8 @@ define('io.ox/core/tk/list',
         40: 'cursor:down'
     };
 
-    var NOOP = function () { return $.when(); };
+    // helper
+    function NOOP() { return $.when(); }
 
     var ListView = Backbone.View.extend({
 
@@ -45,7 +46,7 @@ define('io.ox/core/tk/list',
             '</li>'
         ),
 
-        busyIndicator: $('<li class="list-item busy-indicator"><i class="fa fa-chevron-down"/></li>'),
+        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
         events: {
             'focus .list-item': 'onItemFocus',
@@ -142,17 +143,23 @@ define('io.ox/core/tk/list',
 
             this.idle();
 
-            var index = model.get('index'),
+            var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
                 children = this.getItems(),
                 li = this.renderListItem(model);
 
             // insert or append
-            if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
-            this.selection.add(this.getCID(model), li);
-
-            if (li.position().top <= 0) {
-                this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
+            if (index < children.length) {
+                children.eq(index).before(li);
+                // scroll position might have changed due to insertion
+                if (li[0].offsetTop <= this.el.scrollTop) {
+                    this.el.scrollTop += li.outerHeight(true);
+                }
+            } else {
+                this.$el.append(li);
             }
+
+            // add to selection
+            this.selection.add(this.getCID(model), li);
 
             // forward event
             this.trigger('add', model, index);
@@ -163,12 +170,12 @@ define('io.ox/core/tk/list',
             var children = this.getItems(),
                 cid = this.getCID(model),
                 li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
-                top = this.$el.scrollTop();
+                isSelected = li.hasClass('selected');
 
             if (li.length === 0) return;
 
             // preserve item?
-            if (li.hasClass('selected')) {
+            if (isSelected && this.options.preserve) {
                 // note: preserved items are no longer part of the collection, i.e.
                 // they won't respond to model changes! They are just visible until
                 // the selection is changed by the user
@@ -176,11 +183,16 @@ define('io.ox/core/tk/list',
                 return;
             }
 
-            // keep scroll position
-            if (li.position().top < top) this.$el.scrollTop(top - li.outerHeight(true));
+            // keep scroll position if element is above viewport
+            if (li[0].offsetTop < this.el.scrollTop) {
+                this.el.scrollTop -= li.outerHeight(true);
+            }
 
             this.selection.remove(cid, li);
             li.remove();
+
+            // selection changes if removed item was selected
+            if (isSelected) this.selection.triggerChange();
 
             // simulate scroll event because the list might need to paginate.
             // Unless it's the last one! If we did scroll for the last one, we would
@@ -191,19 +203,39 @@ define('io.ox/core/tk/list',
             this.trigger('remove', model);
         },
 
-        onSort: function () {
-            // sort all nodes by index
-            var nodes = $(_(this.getItems()).sortBy(function (node) {
-                var index = $(node).attr('data-index'); // don't use data() here
-                return parseInt(index, 10);
-            }));
-            // store focus & scroll position
-            var active = nodes.index(document.activeElement), top = this.$el.scrollTop();
-            // re-append to apply sorting
-            this.$el.append(nodes);
-            // restore focus
-            if (active > -1) { nodes.eq(active).focus(); this.$el.scrollTop(top); }
-        },
+        onSort: (function () {
+
+            function getIndex(node) {
+                // don't use data() here
+                return node && parseInt(node.getAttribute('data-index'), 10);
+            }
+
+            return function () {
+
+                var dom, sorted, i, j, length, node, reference, index, done = {};
+
+                // sort all nodes by index
+                dom = this.getItems().toArray();
+                sorted = _(dom).sortBy(getIndex);
+
+                // apply sorting (step by step to keep focus)
+                // the arrays "dom" and "sorted" always have the same length
+                for (i = 0, j = 0, length = sorted.length; i < length; i++) {
+                    node = sorted[i];
+                    reference = dom[j];
+                    // mark as processed
+                    done[i] = true;
+                    // same element?
+                    if (node === reference) {
+                        // fast forward "j" if pointing at processed items
+                        do index = getIndex(dom[++j]); while (done[index]);
+                    } else if (reference) {
+                        // change position in dom
+                        this.el.insertBefore(node, reference);
+                    }
+                }
+            };
+        }()),
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
@@ -224,7 +256,9 @@ define('io.ox/core/tk/list',
             // ref: id of the extension point that is used to render list items
             // app: application
             // pagination: use pagination (default is true)
-            this.options = _.extend({ pagination: true }, options);
+            // draggable: add drag'n'drop support
+            // preserve: don't remove selected items (e.g. for unseen messages)
+            this.options = _.extend({ pagination: true, draggable: false, preserve: false }, options);
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
@@ -235,7 +269,7 @@ define('io.ox/core/tk/list',
             this.firstReset = true;
 
             // enable drag & drop
-            dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            if (this.options.draggable) dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', _.debounce(this.onModelChange, 10), this);
@@ -247,12 +281,20 @@ define('io.ox/core/tk/list',
             if (_.device('!smartphone')) this.$el.addClass('visible-selection');
         },
 
+        forwardCollectionEvents: function (name) {
+            var args = _(arguments).toArray().slice(1);
+            args.unshift('collection:' + name);
+            this.trigger.apply(this, args);
+        },
+
         setCollection: function (collection) {
             // remove listeners
             this.stopListening(this.collection);
             this.collection = collection;
             this.toggleComplete(false);
             this.listenTo(collection, {
+                // forward events
+                'all': this.forwardCollectionEvents,
                 // backbone
                 'add': this.onAdd,
                 'change': this.onChange,
@@ -267,9 +309,12 @@ define('io.ox/core/tk/list',
                 'before:paginate': this.busy,
                 'paginate': this.idle,
                 'paginate:fail': this.idle,
-                'complete': this.onComplete
+                'complete': this.onComplete,
+                // reload
+                'reload': this.idle
             });
             this.selection.reset();
+            this.trigger('collection:set');
             return this;
         },
 
@@ -288,8 +333,9 @@ define('io.ox/core/tk/list',
 
         // return alls items of this list
         // the filter is important, as we might have a header
+        // although we could use children(), we use find() as it's still faster (see http://jsperf.com/jquery-children-vs-find/8)
         getItems: function () {
-            return this.$el.children('.list-item');
+            return this.$el.find('.list-item');
         },
 
         connect: function (loader) {
@@ -351,13 +397,15 @@ define('io.ox/core/tk/list',
             return li;
         },
 
+        map: _.identity,
+
         getBaton: function (model) {
             var data = this.map(model);
             return ext.Baton({ data: data, model: model, app: this.app, options: this.options });
         },
 
         getBusyIndicator: function () {
-            return this.$el.find('.list-item.busy-indicator');
+            return this.$el.find('.busy-indicator');
         },
 
         addBusyIndicator: function () {

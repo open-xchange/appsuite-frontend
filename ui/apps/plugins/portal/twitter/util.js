@@ -42,7 +42,8 @@ define('plugins/portal/twitter/util',
         _(linkMatches).each(function (myLink) {
             var index = text.indexOf(myLink),
                 length = myLink.length;
-            if (_(offsets).keys().indexOf(index.toString()) === -1) { //make sure there is nothing planned for this part already
+            //make sure there is nothing planned for this part already
+            if (_(offsets).keys().indexOf(index.toString()) === -1) {
                 offsets[index] = {
                     elem: $('<a>', {href: myLink}).text(myLink),
                     indices: [index, index + length]
@@ -507,8 +508,10 @@ define('plugins/portal/twitter/util',
 
         function updateTextLength() {
             var linkRegexp = /\b(https?:\/\/|www.)\S+\.\S+\b/gi,
-                linkLength = (textArea.val().match(linkRegexp) || [] ).length * 22, //calculate the length of links (twitter makes every link 22 chars long)
-                nonLinkLength = textArea.val().replace(linkRegexp, '').length; //cut out links
+                //calculate the length of links (twitter makes every link 22 chars long)
+                linkLength = (textArea.val().match(linkRegexp) || [] ).length * 22,
+                //cut out links
+                nonLinkLength = textArea.val().replace(linkRegexp, '').length;
 
             tweetCounter.text((140 - (linkLength + nonLinkLength)));
 

@@ -152,8 +152,10 @@ define('io.ox/backbone/mini-views/attachments',
         save: function (id, folderId) {
 
             var self = this,
-                allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
-                errors = [], //store errormessages
+                // 0 ready 1 delete 2 add 3 delete and add
+                allDone = 0,
+                //store errormessages
+                errors = [],
                 apiOptions = {
                 module: this.options.module,
                 id: id || this.model.id,

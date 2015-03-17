@@ -16,9 +16,10 @@ define('io.ox/calendar/week/view',
      'io.ox/core/extensions',
      'gettext!io.ox/calendar',
      'io.ox/core/folder/api',
+     'io.ox/core/print',
      'settings!io.ox/calendar',
      'static/3rd.party/jquery-ui.min.js'
-    ], function (util, date, ext, gt, folderAPI, settings) {
+    ], function (util, date, ext, gt, folderAPI, print, settings) {
 
     'use strict';
 
@@ -342,21 +343,25 @@ define('io.ox/calendar/week/view',
                 return false;
             }
             switch (e.which) {
-            case 27: // ESC
+            case 27:
+                // ESC
                 this.cleanUpLasso();
                 $('.week-container .day>.appointment.modify', this.$el)
                     .draggable({ 'revert': true })
                     .trigger( 'mouseup' );
                 break;
-            case 37: // left
+            case 37:
+                // left
                 this.setStartDate('prev');
                 this.trigger('onRefresh');
                 break;
-            case 39: // right
+            case 39:
+                // right
                 this.setStartDate('next');
                 this.trigger('onRefresh');
                 break;
-            case 13: // enter
+            case 13:
+                // enter
                 this.onClickAppointment(e);
                 break;
             default:
@@ -373,11 +378,12 @@ define('io.ox/calendar/week/view',
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = _.cid(String(cT.data('cid')));
-                if (!cT.hasClass('current')) {
+                if (!cT.hasClass('current') || _.device('smartphone')) {
+                    // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
-                        .addClass('opac');
+                        .addClass(_.device('smartphone') ? '' : 'opac'); // do not add opac class on phones
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
                     self.trigger('showAppointment', e, obj);
                 } else {
@@ -784,7 +790,14 @@ define('io.ox/calendar/week/view',
                 tmpDate = new date.Local(this.startDate.getTime());
 
             // something new?
-            if (this.startDate.getTime() === this.startLabelRef && today.getTime() === this.dayLabelRef) return;
+            if (this.startDate.getTime() === this.startLabelRef && today.getTime() === this.dayLabelRef) {
+                if (this.options.todayClass && this.columns > 1) {
+                    var weekViewContainer = $('.week-view-container');
+                    weekViewContainer.find('.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
+                    weekViewContainer.find('.day[date="' + (today.getDays() - this.startDate.getDays()) + '"]', this.$el).addClass(this.options.todayClass);
+                }
+                return;
+            }
 
             if (this.options.todayClass) {
                 $('.week-view-container').find('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
@@ -1066,7 +1079,8 @@ define('io.ox/calendar/week/view',
                 .resizable({
                     handles: 'n, s',
                     grid: [0, self.gridHeight()],
-                    minHeight: self.gridHeight() - 2, // bug #32753
+                    // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
+                    minHeight: self.gridHeight() - 2,
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');
@@ -1250,13 +1264,13 @@ define('io.ox/calendar/week/view',
                     scroll: true,
                     revertDuration: 0,
                     revert: function (drop) {
-                        //if false then no socket object drop occurred.
                         if (drop === false) {
-                            //revert the appointment by returning true
+                            // no socket object drop occurred.
+                            // revert the appointment by returning true
                             $(this).show();
                             return true;
                         } else {
-                            //return false so that the appointment does not revert
+                            // return false so that the appointment does not revert
                             return false;
                         }
                     },
@@ -1285,19 +1299,24 @@ define('io.ox/calendar/week/view',
                     },
                     drag: function (e, ui) {
                         var d = $(this).data('ui-draggable'),
-                            left = ui.position.left -= ui.originalPosition.left, // normalize to colWith
+                            // normalize to colWith
+                            left = ui.position.left -= ui.originalPosition.left,
                             move = Math.floor(left / colWidth),
                             day = d.my.initPos + move,
                             top = ui.position.top;
 
                         // correct position
-                        if (d.my.firstPos === d.my.lastPos) { // start and end on same day
+                        if (d.my.firstPos === d.my.lastPos) {
+                            // start and end on same day
                             d.my.mode = 4;
-                        } else if (day === d.my.firstPos + move) { // drag first element
+                        } else if (day === d.my.firstPos + move) {
+                            // drag first element
                             d.my.mode = 3;
-                        } else if (day === d.my.lastPos + move) { // drag last element
+                        } else if (day === d.my.lastPos + move) {
+                            // drag last element
                             d.my.mode = 2;
-                        } else { // drag in all other cases
+                        } else {
+                            // drag in all other cases
                             d.my.mode = 1;
                         }
 
@@ -1483,11 +1502,11 @@ define('io.ox/calendar/week/view',
                         app.old_end_date = app.end_date;
                         el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
 
-                        if (el.position().left !== ui.originalPosition.left) {
+                        if (parseInt(el.position().left, 10) !== parseInt(ui.originalPosition.left, 10)) {
                             _.extend(app, {
                                 start_date: app.end_date - (newDayCount * date.DAY)
                             });
-                        } else if (el.width() !== ui.originalSize.width) {
+                        } else if (parseInt(el.width(), 10) !== parseInt(ui.originalSize.width, 10)) {
                             _.extend(app, {
                                 end_date: app.start_date + (newDayCount * date.DAY)
                             });
@@ -1496,6 +1515,9 @@ define('io.ox/calendar/week/view',
                         self.onUpdateAppointment(app);
                     }
                 });
+
+            // global event for tracking purposes
+            ox.trigger('calendar:items:render', this);
         },
 
         /**
@@ -1678,29 +1700,29 @@ define('io.ox/calendar/week/view',
             if (folder.id || folder.folder) {
                 data = {folder_id: folder.id || folder.folder};
             }
-            ox.load(['io.ox/core/print']).done(function (print) {
-                var win = print.open('printCalendar', data, {
-                    template: tmpl.name,
-                    start: start,
-                    end: end,
-                    work_day_start_time: self.workStart * date.HOUR,
-                    work_day_end_time: self.workEnd * date.HOUR
-                });
-                if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-                    var limit = 50,
-                        counter = 0,
-                        interval;
-                    interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
-                        counter++;
-                        if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                            win.print();
-                            clearInterval(interval);
-                        }
-                    }, 100);
-                } else {
-                    win.print();
-                }
+            var win = print.open('printCalendar', data, {
+                template: tmpl.name,
+                start: start,
+                end: end,
+                work_day_start_time: self.workStart * date.HOUR,
+                work_day_end_time: self.workEnd * date.HOUR
             });
+            if (_.browser.firefox) {
+                // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                var limit = 50,
+                    counter = 0,
+                    interval;
+                // onLoad does not work with firefox on mac, so ugly polling is used
+                interval = setInterval(function () {
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
+            } else {
+                win.print();
+            }
         }
     });
 

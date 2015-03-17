@@ -44,21 +44,30 @@ define('plugins/portal/mail/register',
         });
     }
 
+    // need debounce here, otherwise we get tons of refresh calls
+    var refreshWidgets = _.debounce(function (type, cache) {
+            require(['io.ox/portal/main'], function (portal) {
+                var app = portal.getApp(),
+                    collection = app.getWidgetCollection();
+                collection.chain()
+                    .filter(function (model) {
+                        return model.get('type') === type;
+                    })
+                    .each(function (model) {
+                        (model.get('baton') || {}).cache = !!cache;
+                    })
+                    .each(app.refreshWidget);
+            });
+    }, 10);
+
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
 
         initialize: function () {
-            api.on('update create delete', function () {
-                //refresh portal
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.mail_0;
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
-                    }
-                });
-            });
+            // list relevant events
+            var cache = false;
+            api.on('refresh.list delete', refreshWidgets.bind(this, 'mail', cache));
         },
 
         load: function (baton) {
@@ -117,21 +126,8 @@ define('plugins/portal/mail/register',
         },
 
         preview: function (baton) {
-            var $content = $('<ul class="content list-unstyled">');
-
-            // need debounce here, otherwise we get tons of refresh calls
-            var updater = _.debounce(function () {
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        model = portalApp.getWidgetCollection()._byId.mail_0;
-                    if (model) {
-                        model.get('baton').cache = true;
-                        portalApp.refreshWidget(model, 0);
-                    }
-                });
-            }, 10);
-
-            var list = baton.data;
+            var $content = $('<ul class="content list-unstyled">'),
+                list = baton.data;
 
             // unregister all old update handlers in this namespace
             _(trackedMails).each(function (ecid) {
@@ -143,12 +139,12 @@ define('plugins/portal/mail/register',
             if (list && list.length) {
                 $content.append(
                     _(list).map(function (mail) {
-
-                        var ecid = _.ecid(mail);
+                        var ecid = _.ecid(mail),
+                            cache = true;
                         // store tracked ecids for unregistering
                         trackedMails.push(ecid);
                         // track updates for the mail
-                        api.on('update:' + ecid + '.portalTile', updater);
+                        api.on('update:' + ecid + '.portalTile', refreshWidgets.bind(this, 'mail', cache));
 
                         var received = new date.Local(mail.received_date).format(date.DATE);
                         var $node = $('<li class="item" tabindex="1">')
@@ -256,16 +252,18 @@ define('plugins/portal/mail/register',
 
         // called right after initialize. Should return a deferred object when done
         load: function (baton) {
-            var props = baton.model.get('props') || {};
+            var props = baton.model.get('props') || {},
+                remove = function (event, list) {
+                    var removed = _(list).chain().map(_.cid).contains(_.cid(props)).value();
+                    if (!removed) return;
+                    api.off('deleted-mails', remove);
+                    portalWidgets.getCollection().remove(baton.model);
+                };
             return api.get({ folder: props.folder_id, id: props.id, view: 'text' }).then(
                 function success(data) {
                     baton.data = data;
-                    api.on('delete', function (event, elements) {
-                        if (_(elements).any(function (element) { return (element.id === props.id && element.folder_id === props.folder_id); })) {
-                            var widgetCol = portalWidgets.getCollection();
-                            widgetCol.remove(baton.model);
-                        }
-                    });
+                    // remove widget when mail is deleted
+                    api.on('deleted-mails', remove);
                 },
                 function fail(e) {
                     return e.code === 'MSG-0032' ? 'remove' : e;

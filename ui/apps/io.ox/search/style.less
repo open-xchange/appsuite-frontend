@@ -45,14 +45,23 @@
             padding-top: 9px;
             margin-top: 9px;
             border-top: 1px solid rgba(128, 128, 128, 0.25);
-            max-width: inherit; // reset bootstrap
+            // reset bootstrap
+            max-width: inherit;
         }
         &.dropdown-header:first-child {
             margin-top: 0;
             border-top: 0;
         }
         &.unselectable {
+            cursor: default;
             color: rgba(128, 128, 128, 0.71);
+        }
+
+        .name {
+            word-break: break-all;
+            i {
+                word-break: break-word;
+            }
         }
 
         &.contacts, &.contact, &.participant, &.task_participants {
@@ -142,7 +151,7 @@
     // block buttons on mobile
     .io-ox-search.window-content .facet {
         width: 100%;
-        a[type="button"] {
+        .facet-container {
             text-align: left;
             width: 100%;
             overflow: hidden;
@@ -224,18 +233,16 @@
 
 // GLOBAL STYLES
 
+// applies for desktop and mobile
 .search-facets {
     // 6px + 8px facet (used when facets are stacked)
 
-    .fa-caret-down {
-        font-size: 16px;
-    }
     margin-bottom: 6px;
     li.facet {
         margin-right: 8px;
         margin-bottom: 8px;
         max-width: 470px;
-        a[type="button"] {
+        .facet-container {
             background-color: #E6E6E6;
             border: transparent;
             text-align: left;
@@ -244,48 +251,50 @@
             box-shadow: none;
             max-height: 28px;
             max-width: 470px;
-        }
-        html.high-contrast & a {
-            color: #333;
-        }
-        label>span {
-            overflow: hidden;
-            .ellipsis();
-        }
-    }
 
-    .dropdown-toggle {
-        border-radius: 0;
-        .type {
-            color: rgba(0,0,0,.5);
-            &:after {
-                // divider
-                content: ':\00a0';
+            border-radius: 0;
+
+            // action icons
+            .toggle-options {
+                float: right;
+                    // 10px minus caret border
+                    margin-left: 6px;
+                    font-size: 16px;
+            }
+            .remove {
+                margin-left: 10px;
+                float: right;
+            }
+            .facet-label {
+                font-weight: initial;
+                overflow: hidden;
+                display: inline;
+                text-overflow: ellipsis;
+                // overwrite bootstrap label defaults
+                padding-top: 0;
+                margin-bottom: 0;
+                // ellipsis color
+                color: rgba(0,0,0,.5);
+                &>span {
+                    color: #000000;
+                    overflow: hidden;
+                    .ellipsis();
+                }
+               .type {
+                    color: rgba(0,0,0,.5);
+                    &:after {
+                        // divider
+                        content: ':\00a0';
+                    }
+                }
+                .name:after {
+                    content: '\00a0';
+                }
+
             }
         }
-        .name:after {
-            content: '\00a0';
-        }
-        // action icons
-        .caret-container {
-            float: right;
-            .caret {
-                // 10px minus caret border
-                margin-left: 6px;
-            }
-        }
-        .remove {
-            margin-left: 10px;
-            float: right;
-        }
-        label {
-            font-weight: initial;
-            overflow: hidden;
-            display: inline;
-            text-overflow: ellipsis;
-            // overwrite bootstrap label defaults
-            padding-top: 0;
-            margin-bottom: 0;
+        html.high-contrast & .facet-container {
+            color: #333;
         }
     }
 
@@ -293,8 +302,16 @@
     .dropdown-menu {
         margin-top: 0;
     }
+
+    i.action {
+        opacity: .8;
+        &:hover, &:focus {
+            opacity: .4;
+        }
+    }
 }
 
+// applies for desktop only
 .search-container {
 
     top: 45px;
@@ -308,38 +325,39 @@
             // border: 1px solid red;
             width: 100%;
             margin: 0 0 7px 0;
-            & > a[type="button"] {
+            .facet-container {
                 width: 100%;
-                max-height: initial;
+                max-height: none;
                 // 13px for a vertical alignment with search toolbar
                 padding: 10px 13px;
-            }
-            label {
-                font-weight: bold;
-                display: block;
-                text-align: left;
-                i, .type {
-                    font-weight: normal;
-                    font-style: normal;
-                    color: rgba(0, 0, 0, 0.5);
+                .facet-label {
+                    font-weight: bold;
+                    display: block;
+                    text-align: left;
+                    i, .type {
+                        font-weight: normal;
+                        font-style: normal;
+                        color: rgba(0, 0, 0, 0.555);
+                    }
                 }
             }
         }
 
         .timefacet {
-            .input-daterange {
-                height: 24px;
-                overflow: hidden;
+            .facet-container {
                 .type {
                     padding-bottom: 4px;
+                    color: rgba(0,0,0,.5);
                 }
-                .input {
-                    height: '24px';
-                    min-width: '90px';
-                }
-                .input-group-addon {
-                    height: 24px;
-                    padding: 0 8px;
+                .input-daterange {
+                    .input {
+                        height: 24px;
+                        min-width: 90px;
+                    }
+                    .input-group-addon {
+                        height: 24px;
+                        padding: 0 8px;
+                    }
                 }
             }
         }

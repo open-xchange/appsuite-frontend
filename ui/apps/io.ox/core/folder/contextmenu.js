@@ -28,7 +28,8 @@ define('io.ox/core/folder/contextmenu',
     function a(action, text) {
         return $('<a href="#" tabindex="1" role="menuitem">')
             .attr('data-action', action).text(text)
-            .on('click', $.preventDefault); // always prevent default
+            // always prevent default
+            .on('click', $.preventDefault);
     }
 
     function disable(node) {
@@ -471,7 +472,8 @@ define('io.ox/core/folder/contextmenu',
 
             return function (baton) {
 
-                if (!baton.data.id) return; // if data is empty we have nothing to do here
+                // if data is empty we have nothing to do here
+                if (!baton.data.id) return;
                 if (!/^(contacts|calendar|tasks)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (baton.data.standard_folder) return;

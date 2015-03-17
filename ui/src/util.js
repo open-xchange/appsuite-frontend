@@ -105,7 +105,7 @@
                     tmp.push(e(id) + (obj[id] !== undefined ? '=' + e(obj[id]) : ''));
                 }
             }
-            return tmp.join(delimiter === undefined ? '&' : delimiter);
+            return tmp.sort().join(delimiter === undefined ? '&' : delimiter);
         },
 
         /**
@@ -118,7 +118,15 @@
          * @example
          * _.deserialize('a=1&b=2&c=text');
          */
-        deserialize: deserialize
+        deserialize: deserialize,
+
+        /**
+         * Convenience function; similar to jQuery's $.param but sorted;
+         * different delimiter; not escaped; useful for composite keys
+         */
+        param: function (obj) {
+            return this.serialize(obj, ' / ', _.identity);
+        }
     });
 
     $(window).resize(_.recheckDevice);
@@ -361,12 +369,13 @@
                 var def = $.Deferred(),
                     queue = hash[fn] || (hash[fn] = [$.when()]),
                     last = _(queue).last(),
+                    self = this,
                     args = $.makeArray(arguments);
 
                 queue.push(def);
 
                 last.done(function () {
-                    fn.apply(null, args).done(function () {
+                    fn.apply(self, args).done(function () {
                         setTimeout(function () {
                             queue = _(queue).without(def);
                             def.resolve();
@@ -695,7 +704,7 @@
         toHash: function (array, prop) {
             var tmp = {};
             _(array).each(function (obj) {
-                if (prop && _.isString(prop))
+                if (obj && prop && _.isString(prop))
                     tmp[obj[prop]] = obj;
             });
             return tmp;

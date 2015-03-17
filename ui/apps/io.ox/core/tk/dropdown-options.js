@@ -193,7 +193,8 @@ define('io.ox/core/tk/dropdown-options',
                         )
                         .on('click', function (e) {
                             e.preventDefault();
-                            e.stopPropagation(); // to keep down-down open
+                            // to keep down-down open
+                            e.stopPropagation();
                             toggleValue(item);
                         })
                     )
@@ -208,7 +209,8 @@ define('io.ox/core/tk/dropdown-options',
                         .text(gt('close'))
                         .on('click', function (e) {
                             e.preventDefault();
-                            e.stopPropagation(); // to keep down-down open
+                            // to keep down-down open
+                            e.stopPropagation();
                             self.toggle();
                         })
                     )

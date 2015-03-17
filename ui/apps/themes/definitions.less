@@ -36,10 +36,10 @@
 //----------------------
 @white:                                 #fff;
 @black:                                 #000;
-@blue:                                  darken(#049cdb, 5%);
+@blue:                                  #017FB3; //was darken(#049cdb, 5%)
 @blue-dark:                             #0064cd;
 @blue-light:                            lighten(#049cdb, 25%);
-@green:                                 #1a8d1a;
+@green:                                 #198819; //was #1a8d1a
 @green-light:                           #92d050;
 @red:                                   #cc0000;
 @yellow:                                #f8e400;
@@ -49,9 +49,11 @@
 
 // Bootstrap overwites
 //----------------------
+@brand-primary:                         #3C73AA; //@link-color uses this
 @badge-color:                           @white;
 @badge-bg:                              #aaa;   // used by folder tree for unread messages, for example
 @label-info-bg:                         #3a87ad;
+@label-default-bg:                      #767676;
 
 // Basic colors
 //----------------------
@@ -74,9 +76,10 @@
 //----------------------
 @btn-primary-bg:                @link-color;
 @btn-info-bg:                   #5bc0de;
-@btn-success-bg:                #62c462;
-@btn-warning-bg:                lighten(@orange, 15%);
-@btn-danger-bg:                 #ee5f5b;
+@btn-success-bg:                #198819;
+@btn-warning-bg:                #fbb450;
+@btn-warning-color:             #764500;
+@btn-danger-bg:                 #DF332E;
 @btn-inverse-bg:                #444;
 
 // High contrast colors
@@ -92,7 +95,7 @@
 
 @background:                            #fff;
 
-@selected-background:                   #428BCA; // was #39a9e1;
+@selected-background:                   #3C73AA;
 @selected-color:                        #f0faff;
 
 // Componets
@@ -121,19 +124,19 @@
 @foldertree-passive-label-color:        @hc-gray;
 @foldertree-hover-background:           rgba(0, 0, 0, 0.05);
 @foldertree-selected-background:        rgba(0, 0, 0, 0.10);
-@foldertree-selected-focus-background:  #428BCA;
+@foldertree-selected-focus-background:  @selected-background;
 @foldertree-badge-background:           @badge-bg;
 @foldertree-badge-focus-background:     #006597;
 @foldertree-badge-color:                @badge-color;
 
 // topbar
-@topbar-launcher-color:                 rgba(255, 255, 255, 0.70);
+@topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
 @topbar-launcher-color-hover:           #fff;
 @topbar-launcher-color-active:          #fff;
 @topbar-launcher-background-hover:      rgba(0, 0, 0, 0.20);
 @topbar-launcher-background-active:     rgba(0, 0, 0, 0.30);
 @topbar-icon-color:                     #fff;
-@topbar-background:                     #3774A8;
+@topbar-background:                     #3C73AA;
 
 // toolbar
 @toolbar:                               #08c;
@@ -165,6 +168,7 @@
 @appointment-temporary:                 #ffbb00;    /* yellow */
 @appointment-absent:                    #913f3f;    /* red */
 @appointment-free:                      #8eb360;    /* green */
+@appointment-free-dark:                 #198819;    /* dark green */
 @appointment-private:                   #555;       /* dark gray */
 @appointment-unconfirmed-font:          #555;       /* dark gray */
 @appointment-declined-font:             #888;       /* gray */

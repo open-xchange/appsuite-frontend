@@ -1,1 +1,0 @@
-dpkg-buildpackage -us -uc -rfakeroot $DSC_BUILD_JOBS

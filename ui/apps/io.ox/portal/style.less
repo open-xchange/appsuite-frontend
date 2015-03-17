@@ -687,8 +687,11 @@
 
         }
 
-        .widget.with-summary {//apply summary styles only on smartphone
-    	    &.generic-summary:not(.photo-stream) {//remove some padding here
+        //apply summary styles only on smartphone
+        .widget.with-summary {
+
+            //remove some padding here
+	    &.generic-summary:not(.photo-stream) {
     		    h2 {
     		    	height: initial;
     			   padding: 0;

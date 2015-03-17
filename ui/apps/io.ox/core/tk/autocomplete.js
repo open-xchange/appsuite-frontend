@@ -80,6 +80,8 @@ define('io.ox/core/tk/autocomplete',
             // state
             isOpen = false,
 
+            disableBlurHandler = false,
+
             reposition = _.debounce(function () {
                     //popup stays next to input
                     var left = parseInt(o.container.css('left').replace('px', ''), 10),
@@ -89,9 +91,20 @@ define('io.ox/core/tk/autocomplete',
 
             update = function () {
                 // get data from current item and update input field
-                var data = scrollpane.children().eq(Math.max(0, index)).data();
-                lastValue = data !== undefined ? String(o.stringify(data)) : lastValue;
-                self.val(lastValue);
+                var data = scrollpane.children().eq(Math.max(0, index)).data(),
+                    current = self.val(),
+                    changed = false;
+
+                if (data !== undefined) {
+                    lastValue = String(o.stringify(data));
+                    changed = lastValue !== current;
+                    if (changed) self.val(lastValue);
+
+                    // ignore blur hanlder when moving focus
+                    disableBlurHandler = true;
+                    scrollpane.children().eq(Math.max(0, index)).focus();
+                    disableBlurHandler = false;
+                }
 
                 // if two related Fields are needed
                 if (_.isFunction(o.related)) {
@@ -101,6 +114,8 @@ define('io.ox/core/tk/autocomplete',
                     relatedField.val(relatedValue);
                     dataHolder.data(data);
                 }
+
+                return changed;
             },
 
             select = function (i, processData) {
@@ -135,7 +150,8 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnBlur = function () {
-                    setTimeout(close, 200);
+                    if (!disableBlurHandler)
+                        setTimeout(close, 200);
                 },
 
             blurOff = function () {
@@ -148,8 +164,29 @@ define('io.ox/core/tk/autocomplete',
                     });
                 },
 
+            resetFocus = function ()  {
+                    // reset focus when in listMoode
+                    var selected = scrollpane.find('.selected');
+                    if (selected.length) {
+                        self.focus();
+                    }
+                },
+
+            listModeOff = function () {
+                    $('.autocomplete-popup').off('blur', '.autocomplete-item', fnBlur);
+                    $('.autocomplete-popup').off('keydown', '.autocomplete-item', fnKeyDown);
+                },
+
+            listModeOn = function () {
+                    _.defer(function () {
+                        $('.autocomplete-popup').on('blur', '.autocomplete-item', fnBlur);
+                        $('.autocomplete-popup').on('keydown', '.autocomplete-item', fnKeyDown);
+                    });
+                },
+
             open = function () {
                     if (!isOpen) {
+                        isOpen = true;
                         // toggle blur handlers
                         self.off('blur', o.blur).on('blur', fnBlur);
                         $(window).on('resize', reposition);
@@ -159,12 +196,18 @@ define('io.ox/core/tk/autocomplete',
                             h = self.outerHeight();
                         o.container.hide().appendTo(self.closest(o.parentSelector));
 
-                        var parent = self.closest(o.parentSelector).offsetParent(),
-                            parentOffset = parent.offset(),
-                            myTop = off.top + h - parentOffset.top + parent.scrollTop(),
-                            myLeft = off.left - parentOffset.left;
+                        var parent, parentOffset, myTop, myLeft;
+
+                        // look for proper parent node
+                        parent = self.closest(o.parentSelector);
+                        if (parent.css('position') === 'static') parent = parent.offsetParent();
+
+                        parentOffset = parent.offset();
+                        myTop = off.top + h - parentOffset.top + parent.scrollTop();
+                        myLeft = off.left - parentOffset.left;
 
                         o.container.removeClass('top-placement bottom-placement');
+
                         if (o.placement === 'top') {
                             // top
                             o.container.addClass('top-placement').css({ top: myTop - h - o.container.outerHeight(), left: myLeft + 4, width: w });
@@ -174,16 +217,18 @@ define('io.ox/core/tk/autocomplete',
                         }
 
                         o.container.show();
+
+                        listModeOn();
+
                         if (_.isFunction(o.cbshow)) o.cbshow();
 
                         window.container = o.container;
-
-                        isOpen = true;
                     }
                 },
 
             close = function () {
                     if (isOpen) {
+                        isOpen = false;
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
                         //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
@@ -193,9 +238,12 @@ define('io.ox/core/tk/autocomplete',
                             self.trigger('blur');
                         }
                         $(window).off('resize', reposition);
+
+                        listModeOff();
+                        resetFocus();
+
                         scrollpane.empty();
                         o.container.detach();
-                        isOpen = false;
                         index = -1;
                     }
                 },
@@ -224,7 +272,7 @@ define('io.ox/core/tk/autocomplete',
                         node.appendTo(scrollpane);
                     });
                 } else {
-                    var count = 0, regular, childs;
+                    var regular, childs;
 
                     //apply style
                     o.container
@@ -239,13 +287,11 @@ define('io.ox/core/tk/autocomplete',
                     _(list).each(function (facet) {
                         regular = facet.style !== 'simple' && !!facet.name;
                         childs = facet.values && facet.values.length > 0;
-                        //facet
-                        count++;
+                        //facet separator
                         if (facet.name && childs && regular) {
-                            $('<div class="autocomplete-item unselectable dropdown-header">')
+                            $('<div class="autocomplete-item dropdown-header unselectable">')
                                 .html(facet.name)
                                 .data({
-                                    index: count,
                                     id: facet.id,
                                     label: facet.name,
                                     type: 'group'
@@ -272,7 +318,8 @@ define('io.ox/core/tk/autocomplete',
 
             fnSelectItem = function (e) {
                 e.data = $(this).data();
-                select(e.data.index);
+                if (o.mode === 'participant')
+                    select(e.data.index);
                 o.click.call(self.get(0), e);
                 close();
             },
@@ -333,7 +380,8 @@ define('io.ox/core/tk/autocomplete',
                 },
 
             autoSelectFirst = function () {
-                scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+                scrollpane.find('.autocomplete-item:visible:not(.unselectable),' +
+                                '.autocomplete-item.default').first().click();
             },
 
             //waits for finished server call/drawn dropdown
@@ -364,16 +412,20 @@ define('io.ox/core/tk/autocomplete',
 
                 if (isOpen) {
                     switch (e.which) {
-                    case 27: // escape
+                    case 27:
+                        // escape
                         close();
                         break;
-                    case 39: // cursor right
+                    case 39:
+                        // cursor right
                         if (!e.shiftKey && o.mode === 'participant') {
-                            e.preventDefault();
-                            update();
+                            // only prevent cursor movement when changing the content
+                            // otherwise its not possible to use the cursor keys properly
+                            if (update()) e.preventDefault();
                         }
                         break;
-                    case 13: // enter
+                    case 13:
+                        // enter
 
                         // two different behaviors are possible:
                         // 1. use the exact value that is in the input field
@@ -399,8 +451,10 @@ define('io.ox/core/tk/autocomplete',
                         if (value.length > 0) $(this).trigger('selected', val, (val || '').length >= o.minLength);
 
                         break;
-                    case 9:  // tab
-                        if (!e.shiftKey) { // ignore back-tab
+                    case 9:
+                        // tab
+                        // ignore back-tab
+                        if (!e.shiftKey) {
                             selected = scrollpane.find('.selected');
                             if (selected.length) {
                                 e.preventDefault();
@@ -411,24 +465,29 @@ define('io.ox/core/tk/autocomplete',
                             }
                         }
                         break;
-                    case 38: // cursor up
+                    case 38:
+                        // cursor up
                         e.preventDefault();
                         if (index > 0) {
                             select(index - 1);
                         }
                         break;
-                    case 40: // cursor down
+                    case 40:
+                        // cursor down
                         e.preventDefault();
                         select(index + 1);
                         break;
                     }
                 } else {
                     switch (e.which) {
-                    case 27: // escape
-                        $(this).val(''); //empty it
+                    case 27:
+                        // escape
+                        //empty it
+                        $(this).val('');
                         close();
                         break;
-                    /*case 39: // cursor right
+                    /*case 39:
+                        // cursor right
                         e.preventDefault();
                         if (!e.shiftKey) {
                             update();
@@ -436,11 +495,13 @@ define('io.ox/core/tk/autocomplete',
                         }
                         break;*/
                     case 13:
+                        // enter
                         if (o.mode !== 'participant') {
                             autoSelectFirstWait();
                         }
                         /* falls through */
                     case 9:
+                        // tab
                         var val = $.trim($(this).val());
                         if (val.length > 0) {
                             $(this).trigger('selected', val, (val || '').length >= o.minLength);
@@ -450,8 +511,19 @@ define('io.ox/core/tk/autocomplete',
                 }
             },
 
+            fnSearch = function () {
+                var val = $.trim($(this).val());
+                lastSearch = $.Deferred();
+                lastValue = val;
+                o.container.busy();
+                o.source(val)
+                    .then(o.reduce)
+                    .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
+            },
+
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, options) {
+
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
                 this.focus();
@@ -465,12 +537,7 @@ define('io.ox/core/tk/autocomplete',
                 if (val.length >= o.minLength && !opt.keepClosed) {
                     //request data?
                     if (opt.isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
-                        lastSearch = $.Deferred();
-                        lastValue = val;
-                        o.container.busy();
-                        o.source(val)
-                            .then(o.reduce)
-                            .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
+                        fnSearch.call(this);
                     }
                 } else {
                     lastValue = val;
@@ -494,18 +561,24 @@ define('io.ox/core/tk/autocomplete',
             var isModalPopup = o.parentSelector.indexOf('.permissions-dialog') > -1;
 
             $.each(this, function () {
+                // avoid multiple instances
+                if ($(this).data('autocomplete') === true) return;
                 // bind fundamental handlers
                 $(this)
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
-                    .on('compositionend', fnKeyUp) // for IME support
+                    // for IME support
+                    .on('compositionend', fnKeyUp)
                     .on('blur', o.blur)
                     .on('blur', fnBlur)
+                    .on('search', fnSearch)
                     .attr({
                         autocapitalize: 'off',
-                        autocomplete: 'off', //naming conflict with function
-                        autocorrect: 'off'
-                    });
+                        //naming conflict with function
+                        autocomplete: 'off',
+                        autocorrect: 'off',
+                    })
+                    .data('autocomplete', true);
             });
 
             //internet explorer needs this fix too or it closes if you try to scroll

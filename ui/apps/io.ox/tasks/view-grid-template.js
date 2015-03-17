@@ -52,7 +52,8 @@ define('io.ox/tasks/view-grid-template',
                     var a11yLabel = '';
                     fields.title.text(a11yLabel = _.noI18n(data.title));
                     fields.end_date.text(_.noI18n(data.end_date));
-                    fields.status.attr('class', 'status ' + data.badge) //important. with addClass old classes aren't removed correctly
+                    //important. with addClass old classes aren't removed correctly
+                    fields.status.attr('class', 'status ' + data.badge)
                         .text(data.status || _.noI18n('\u00A0'));
                     fields.user[data.participants && data.participants.length ? 'show' : 'hide']();
                     if (data.private_flag) {

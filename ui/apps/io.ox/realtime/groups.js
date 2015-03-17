@@ -38,8 +38,8 @@ define('io.ox/realtime/groups',
         });
 
         function relayEvent(name) {
-            return function () {
-                self.trigger(name);
+            return function (event, data) {
+                self.trigger(name, data);
             };
         }
 
@@ -117,7 +117,8 @@ define('io.ox/realtime/groups',
         this.leave = function (options) {
             checkState();
             if (!heartbeat) {
-                return $.when(); // Already left
+                // Already left
+                return $.when();
             }
             options = options || {};
             clearInterval(heartbeat);

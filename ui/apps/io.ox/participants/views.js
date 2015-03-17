@@ -29,7 +29,6 @@ define('io.ox/participants/views',
         },
 
         render: function () {
-
             var self = this;
 
             // we set the class this way because some controller pass an existing node
@@ -41,9 +40,14 @@ define('io.ox/participants/views',
             this.nodes = {
                 $img: $('<div>'),
                 $text: $('<div class="participant-name">'),
-                $mail: $('<a class="participant-email">'),
-                $extra: $('<a class="extra-decorator">'),
-                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="fa fa-trash-o"></i></div></a>')
+                $mail: $('<a>'),
+                $extra: $('<a>'),
+                $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
+                    $('<div class="icon">').append(
+                        $('<i class="fa fa-trash-o" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
+                    )
+                )
             };
 
             this.setDisplayName();
@@ -65,8 +69,8 @@ define('io.ox/participants/views',
             this.$el.append(
                 this.nodes.$img,
                 this.nodes.$text,
-                $('<div>').append(this.nodes.$mail),
-                $('<div>').append(this.nodes.$extra),
+                $('<div class="participant-email">').append(this.nodes.$mail),
+                $('<div class="extra-decorator">').append(this.nodes.$extra),
                 this.nodes.$removeButton
             );
 
@@ -136,8 +140,7 @@ define('io.ox/participants/views',
 
             switch (type) {
             case 1:
-                // uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                mail = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
+                mail = this.model.get('field') ? this.model.get(this.model.get('field')) : this.model.getEmail();
                 this.setRows(mail, this.model.get('external') ? gt('External contact') : '');
                 if (this.options.halo) {
                     this.nodes.$mail
@@ -180,7 +183,8 @@ define('io.ox/participants/views',
         },
 
         fnKey: function (e) {
-            if (e.which === 46) this.onRemove(e); // DEL
+            // DEL
+            if (e.which === 46) this.onRemove(e);
         },
 
         onRemove: function (e) {
@@ -210,7 +214,8 @@ define('io.ox/participants/views',
             // bring organizer up
             this.collection.each(function (participant) {
                 if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
+                    // 0 is reserved for the organizer
+                    self.nodes[0] = self.createParticipantNode(participant);
                 } else {
                     self.nodes[counter] = self.createParticipantNode(participant);
                     counter++;

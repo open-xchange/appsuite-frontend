@@ -74,11 +74,13 @@ define('io.ox/preview/main',
 
                 if (!options.omitClick) {
                     $node = clickableLink(file);
-                    if (supportsDragOut) {
-                        $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
-                    } else {
-                        $node.attr('title', gt('Click to open.'));
-                    }
+                    var label = supportsDragOut ?
+                        gt('Click to open. Drag to your desktop to download.') :
+                        gt('Click to open.');
+                    $node.attr({
+                        'title': label,
+                        'aria-label': $node.attr('aria-label') || label
+                    });
                 } else {
                     $node = $('<div>');
                 }
@@ -155,7 +157,8 @@ define('io.ox/preview/main',
                         enablePluginDebug: true,
                         pauseOtherPlayers: true,
                         keyActions: [{
-                            keys: [32, 179], // SPACE
+                            // SPACE
+                            keys: [32, 179],
                             action: function (player, media) {
                                 if (media.paused || media.ended) {
                                     media.play();
@@ -165,14 +168,16 @@ define('io.ox/preview/main',
                             }
                         },
                         {
-                            keys: [39, 228], // RIGHT
+                            // RIGHT
+                            keys: [39, 228],
                             action: function (player, media) {
                                 var newVolume = Math.min(media.volume + 0.1, 1);
                                 media.setVolume(newVolume);
                             }
                         },
                         {
-                            keys: [37, 227], // LEFT
+                            // LEFT
+                            keys: [37, 227],
                             action: function (player, media) {
                                 var newVolume = Math.max(media.volume - 0.1, 0);
                                 media.setVolume(newVolume);
@@ -188,7 +193,8 @@ define('io.ox/preview/main',
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
         verify: function (file) {
-            return !file.pim; // doesn't work for pim attachments
+            // doesn't work for pim attachments
+            return !file.pim;
         },
         draw: function (file) {
             var self = this.busy();
@@ -218,7 +224,7 @@ define('io.ox/preview/main',
 
     Renderer.point.extend(new Engine({
         id: 'text',
-        supports: ['txt', 'plain/text', 'asc', 'js', 'md', 'json'],
+        supports: ['txt', 'plain/text', 'asc', 'js', 'md', 'json', 'csv'],
         draw: function (file) {
             var node = this;
             require(['io.ox/core/emoji/util', 'less!io.ox/preview/style'], function (emoji) {
@@ -237,7 +243,8 @@ define('io.ox/preview/main',
 
         var self = this;
 
-        this.file = _.copy(file, true); // work with a copy
+        // work with a copy
+        this.file = _.copy(file, true);
         this.options = options || {};
 
         //ensure integer (if numeric) for valid url params

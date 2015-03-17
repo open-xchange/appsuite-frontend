@@ -17,7 +17,8 @@ define('io.ox/mail/actions/attachmentSave',
      'io.ox/core/tk/dialogs',
      'io.ox/core/folder/picker',
      'io.ox/core/folder/api',
-     'settings!io.ox/files', // yep, files not mail!
+     // yep, files not mail!
+     'settings!io.ox/files',
      'settings!io.ox/core',
      'gettext!io.ox/mail'], function (api, notifications, dialogs, picker, folderAPI, settings, settingsCore, gt) {
 

@@ -39,15 +39,19 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
     //     }
     // });
 
-    return {
+    var regUrl = /((https?|ftps?)\:\/\/[^\s"]+)/gim;
+
+    var that = {
 
         // render a person's name
         renderPersonalName: function (options, data) {
 
             options = _.extend({
                 $el: undefined,
-                html: false, // must be properly escaped!
-                tagName: 'span' // to support different tags
+                // must be properly escaped!
+                html: false,
+                // to support different tags
+                tagName: 'span'
             }, options);
 
             var halo = {
@@ -92,6 +96,21 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return str;
         },
 
+        // detect URLs in plain text
+        urlify: function (text) {
+
+            return text.replace(regUrl, function ($1) {
+                var suffix = '';
+                // fix punctuation marks
+                $1 = $1.replace(/([.,;!?>]+)$/, function (all, marks) {
+                    suffix = marks;
+                    return '';
+                });
+                // soft-break long words (like long URLs)
+                return '<a href="' + $1 + '" target="_blank">' + that.breakableHTML($1) + '</a>' + suffix;
+            });
+        },
+
         // split long character sequences
         breakableHTML: function (text) {
             // inject zero width space and replace by <wbr>
@@ -111,7 +130,11 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         breakableText: function (text) {
-            return String(text || '').replace(/(\S{20})/g, '$1\u200B');
+            var result = String(text || '').replace(/(\S{20})/g, '$1\u200B');
+            if (result[result.length - 1] === '\u200B') {
+                result = result.slice(0, -1);
+            }
+            return result;
         },
 
         isValidMailAddress: (function () {
@@ -122,7 +145,8 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                 regDot = /^\./,
                 regDoubleDots = /\.\./,
                 regDomainIPAddress = /^\[(\d{1,3}\.){3}\d{1,3}\]$/,
-                regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i, // yep, vage
+                // yep, vage
+                regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i,
                 regDomain = /[a-z0-9]$/i;
 
             // email address validation is not trivial
@@ -173,4 +197,6 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             };
         }())
     };
+
+    return that;
 });

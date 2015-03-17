@@ -37,16 +37,15 @@ define('io.ox/settings/main',
                             .addClass('title')
                     );
                 if (_.device('smartphone')) {
-                    title.css('margin', '4px 0'); // must use inline styles because vgrid's height calculon-o-mat does not respect any css values bound via classes for its calculation..
+                    // must use inline styles because vgrid's height calculon-o-mat does not
+                    // respect any css values bound via classes for its calculation
+                    title.css('margin', '4px 0');
                     title.prepend($('<i class="fa fa-chevron-right pull-right">'));
                 }
                 return { title: title };
             },
             set: function (data, fields) {
                 var title = /*#, dynamic*/gt.pgettext('app', data.title);
-                this.attr({
-                    'aria-label': title
-                });
                 //clean template
                 fields.title.empty();
                 fields.title.append($.txt(
@@ -148,13 +147,20 @@ define('io.ox/settings/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
+
+        left.attr({
+            'role': 'navigation',
+            'aria-label': gt('Settings')
+        });
+
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             'tabindex': 1,
             'aria-describedby': 'currentsettingtitle',
-            'role': 'main' //needed or mac voice over reads the whole settings pane when an input element is focused
+            //needed or mac voice over reads the whole settings pane when an input element is focused
+            'role': 'main'
         }).scrollable();
 
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
+        grid = new VGrid(left, { editable: false, containerLabel: gt('Select'), multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -287,15 +293,18 @@ define('io.ox/settings/main',
 
             baton = ext.Baton.ensure(baton);
             baton.grid = grid;
+            app.get('window').setTitle(gt('%1$s %2$s', gt('Settings'), baton.data.title));
 
             var data = baton.data,
                 settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
                 extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail');
 
             right.empty().busy();
+
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function () {
-                    right.empty().idle(); // again, since require makes this async
+                    // again, since require makes this async
+                    right.empty().idle();
                     vsplit.right.attr('title', baton.data.title);
                     vsplit.right.find('#currentsettingtitle').remove();
                     ext.point(extPointPart).invoke('draw', right, baton);
@@ -304,7 +313,8 @@ define('io.ox/settings/main',
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
-                    right.empty().idle(); // again, since require makes this async
+                    // again, since require makes this async
+                    right.empty().idle();
                     vsplit.right.attr('title', baton.data.title);
                     vsplit.right.find('#currentsettingtitle').remove();
                     vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
@@ -375,7 +385,7 @@ define('io.ox/settings/main',
             draw: function () {
 
                 var buildCheckbox = function () {
-                    var checkbox = $('<input type="checkbox">')
+                    var checkbox = $('<input type="checkbox" tabindex="1">')
                     .on('change', function () {
 
                         expertmode = checkbox.prop('checked');

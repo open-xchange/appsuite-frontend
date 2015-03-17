@@ -55,7 +55,8 @@ define('io.ox/core/api/snippets',
                 return cache;
             },
             function fail() {
-                return (cache = []);
+                cache = null;
+                return [];
             }
         );
     };

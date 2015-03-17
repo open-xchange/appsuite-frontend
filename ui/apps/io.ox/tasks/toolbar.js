@@ -16,6 +16,7 @@ define('io.ox/tasks/toolbar',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/backbone/mini-views/toolbar',
      'io.ox/core/tk/upload',
      'io.ox/core/dropzone',
      'io.ox/core/notifications',
@@ -24,7 +25,7 @@ define('io.ox/tasks/toolbar',
      'gettext!io.ox/mail',
      'io.ox/tasks/actions',
      'less!io.ox/tasks/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, extensions, api, gt) {
+    ], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, extensions, api, gt) {
 
     'use strict';
 
@@ -49,6 +50,7 @@ define('io.ox/tasks/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Edit'),
+            title: gt('Edit task'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/edit'
         },
@@ -81,6 +83,7 @@ define('io.ox/tasks/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Delete'),
+            title: gt('Delete task'),
             ref: 'io.ox/tasks/actions/delete'
         },
         //
@@ -122,7 +125,8 @@ define('io.ox/tasks/toolbar',
     ext.point('io.ox/tasks/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/tasks/classic-toolbar/links'
@@ -147,29 +151,32 @@ define('io.ox/tasks/toolbar',
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
-
-    var invoke = function (list) {
-        // extract single object if length === 1
-        list = list.length === 1 ? list[0] : list;
-        var baton = ext.Baton({ $el: toolbar, data: list, app: this });
-        ext.point('io.ox/tasks/classic-toolbar').invoke('draw', toolbar.empty(), baton);
-    };
-
-    var updateToolbar = _.debounce(function (list) {
-        if (!list) return;
-        // draw toolbar
-        if (list.length <= 100) api.getList(list).done(invoke.bind(this)); else invoke.call(this, list);
-    }, 10);
-
     ext.point('io.ox/tasks/mediator').extend({
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 }),
+                cont = function (list) {
+                    // extract single object if length === 1
+                    list = list.length === 1 ? list[0] : list;
+                    var baton = ext.Baton({ $el: toolbar.$list, data: list, app: this }),
+                        ret = ext.point('io.ox/tasks/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                    return $.when.apply($, ret.value()).then(function () {
+                        toolbar.initButtons();
+                    });
+                };
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+                toolbar.render().$el
             );
-            app.updateToolbar = updateToolbar;
+            app.updateToolbar = _.queued(function (list) {
+                if (!list) return $.when();
+                // draw toolbar
+                if (list.length <= 100) {
+                    return api.getList(list).done(cont.bind(this));
+                } else {
+                    return cont.call(this, list);
+                }
+            }, 10);
         }
     });
 

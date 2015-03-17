@@ -43,7 +43,8 @@ define('plugins/portal/facebook/register',
                         addLikeInfo({user_likes: comment.user_likes, like_count: comment.likes}))
                     )
                     .appendTo($(node));
-            if ($(node).find('.wall-comment:visible').length === 0) {//only hide if comments are hidden
+            //only hide if comments are hidden
+            if ($(node).find('.wall-comment:visible').length === 0) {
                 comment.hide();
             }
         };
@@ -59,7 +60,8 @@ define('plugins/portal/facebook/register',
                        );
             }
         },
-        generalRenderer = function (post) {//Renderer that should be able to draw most posts correctly
+        //Renderer that should be able to draw most posts correctly
+        generalRenderer = function (post) {
             var media = post.attachment.media ? post.attachment.media[0] : false,
                 link = post.attachment.href;
 
@@ -75,7 +77,8 @@ define('plugins/portal/facebook/register',
 
     var addCommentlink = function (postComments, nextIndex, profiles, wall_content) {
         var link = $('<button tabindex=1 class="comment-link btn-link", nextIndex=' + nextIndex + '>').text(gt('Show more comments')).hide().click(function () {
-            link.detach();//remove link from dom but don't delete it yet
+            //remove link from dom but don't delete it yet
+            link.detach();
             var tempIndex = parseInt(link.attr('nextIndex'));
             //render next 25 comments
             _(postComments.slice(tempIndex, tempIndex + 25)).each(createCommentIterator(profiles, wall_content));
@@ -98,7 +101,8 @@ define('plugins/portal/facebook/register',
     //returns array of nodes
     var parseMessageText = function (text) {
         var linkRegexp = /\b(https?:\/\/|www.)\S+\.\S+\b/gi,
-            links = (text.match(linkRegexp) || [] ), //extract links
+            //extract links
+            links = (text.match(linkRegexp) || [] ),
             nodes = [],
             tempText = text;
 
@@ -191,12 +195,23 @@ define('plugins/portal/facebook/register',
         }
     };
 
+    var refreshWidget = function () {
+        require(['io.ox/portal/main'], function (portal) {
+            var portalApp = portal.getApp(),
+                portalModels = portalApp.getWidgetCollection().filter(function (model) { return /^facebook_\d*/.test(model.id); });
+
+            if (portalModels.length > 0) {
+                portalApp.refreshWidget(portalModels[0], 0);
+            }
+        });
+    };
+
     ext.point('io.ox/portal/widget/facebook').extend({
 
         title: gt('Facebook'),
 
         initialize: function (baton) {
-            keychain.submodules.facebook.on('update create', function () {
+            keychain.submodules.facebook.on('update', function () {
                 loadFromFacebook().done(function (data) {
                     baton.data = data;
                     if (baton.contentNode) {
@@ -205,15 +220,7 @@ define('plugins/portal/facebook/register',
                     }
                 });
             });
-            keychain.submodules.facebook.on('delete', function () {
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId.facebook_0;
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
-                    }
-                });
-            });
+            keychain.submodules.facebook.on('delete', refreshWidget);
         },
 
         isEnabled: function () {
@@ -224,18 +231,21 @@ define('plugins/portal/facebook/register',
             return keychain.isEnabled('facebook') && !keychain.hasStandardAccount('facebook');
         },
 
-        drawDefaultSetup: function () {
+        drawDefaultSetup: function (baton) {
+            keychain.submodules.facebook.off('create', null, this);
+            keychain.submodules.facebook.on('create', function () {
+                baton.model.node.find('h2 .fa-facebook').replaceWith($('<span class="title">').text(gt('Facebook')));
+                baton.model.node.removeClass('requires-setup widget-color-custom color-facebook');
+                refreshWidget();
+            }, this);
+
             this.find('h2 .title').replaceWith('<i class="fa fa-facebook">');
             this.addClass('widget-color-custom color-facebook');
         },
 
-        performSetUp: function (baton) {
+        performSetUp: function () {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('facebook', win).done(function () {
-                baton.model.node.find('h2 .fa-facebook').replaceWith($('<span class="title">').text(gt('Facebook')));
-                baton.model.node.removeClass('requires-setup widget-color-custom color-facebook');
-                ox.trigger('refresh^');
-            });
+            return keychain.createInteractively('facebook', win);
         },
 
         preview: function (baton) {
@@ -295,13 +305,16 @@ define('plugins/portal/facebook/register',
                         !onOwnWall ? $('<span class="io-ox-facebook-onOwnWall">').html(' &#9654; ') : '',
                         !onOwnWall ? $('<a class="io-ox-facebook-onWall">').attr('href', source.url).text(source.name) : '',
                         $('<div class="wall-post-content">'),
-                        $('<button class="facebook-content-expand btn-link">').hide().text(gt('expand')).on('click', function () {//add expand link for long content
+                        //add expand link for long content
+                        $('<button class="facebook-content-expand btn-link">').hide().text(gt('expand')).on('click', function () {
                             var content = wall_content.find('.wall-post-content');
                             if (content.css('max-height') !== content.prop('scrollHeight') + 'px') {
-                                content.animate({'max-height': content.prop('scrollHeight') + 'px'}, 'fast');//sliding animation
+                                //sliding animation
+                                content.animate({'max-height': content.prop('scrollHeight') + 'px'}, 'fast');
                                 $(this).text(gt('collapse'));
                             } else {
-                                content.animate({'max-height': '350px'}, 'fast');//sliding animation
+                                //sliding animation
+                                content.animate({'max-height': '350px'}, 'fast');
                                 $(this).text(gt('expand'));
                             }
                         }),
@@ -312,8 +325,10 @@ define('plugins/portal/facebook/register',
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && !foundHandler) {
-                        content_container.attr('renderer', renderer.id);//for better identifing the contenttype later on
-                        //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
+                        //for better identifing the contenttype later on
+                        content_container.attr('renderer', renderer.id);
+                        //this is too useful to delete it, just uncomment it
+                        //console.log(profile.name, ' Renderer: ', renderer.id, post);
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -345,7 +360,8 @@ define('plugins/portal/facebook/register',
                 wall_content.find('a').attr('target', '_blank');
 
                 wall_content.find('img').one('load', function () {
-                    if (parseInt(wall_content.find('.wall-post-content').css('height')) >= 350) {//parseInt cuts of the px part too
+                    //parseInt cuts of the px part too
+                    if (parseInt(wall_content.find('.wall-post-content').css('height')) >= 350) {
                         wall_content.find('.facebook-content-expand').show();
                     }
                 });
@@ -523,11 +539,13 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('io.ox/plugins/portal/facebook/renderer').extend({//special renderer for undocumented types
+    //special renderer for undocumented types
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'Undocumented',
         index: 128,
         accepts: function (post) {
-            return post.type === 55;//maybe an event
+            //maybe an event
+            return post.type === 55;
         },
         draw: function (post) {
             $(this).append(
@@ -596,7 +614,8 @@ define('plugins/portal/facebook/register',
     });
 
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
-        id: 'friend-timeline-post-to-other-friend',//really strange type
+        //really strange type
+        id: 'friend-timeline-post-to-other-friend',
         index: 196,
         accepts: function (post) {
             return post.type === 295;

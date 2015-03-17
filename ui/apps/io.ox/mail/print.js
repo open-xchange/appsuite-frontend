@@ -33,7 +33,7 @@ define('io.ox/mail/print',
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
         } else {
-            return content.get(data, { autoCollapseBlockquotes: false }).content.html();
+            return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;
         }
     }
 

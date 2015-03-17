@@ -14,11 +14,18 @@
 
 // special color scheme if widget has no account yet
 .io-ox-portal {
+    @color: #01AEEB;
     .widget.widget-color-custom.color-twitter {
-        @color: #01AEEB;
         .decoration { background-color: @color; }
         &:focus {
             .decoration { background-color: darken(@color, 10%); }
+        }
+    }
+
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .widget.widget-color-custom.color-twitter {
+            background-color: @color;
+            .decoration { background-color: transparent; }
         }
     }
 }

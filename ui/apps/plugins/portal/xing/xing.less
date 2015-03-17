@@ -13,11 +13,19 @@
 
 // special color scheme if widget has no account yet
 .io-ox-portal {
+    @color: #126567;
+
     .widget.widget-color-custom.color-xing {
-        @color: #126567;
         .decoration { background-color: @color; }
         &:focus {
             .decoration { background-color: darken(@color, 10%); }
+        }
+    }
+
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .widget.widget-color-custom.color-xing {
+            background-color: @color;
+            .decoration { background-color: transparent; }
         }
     }
 }
@@ -29,7 +37,8 @@
     }
 
     .padding {
-        margin-top: 1.5em; //matches the widget title padding
+        //matches the widget title padding
+        margin-top: 1.5em;
     }
 
     .mini-profile, .extended-profile {

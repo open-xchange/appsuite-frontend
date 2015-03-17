@@ -19,6 +19,21 @@ define('io.ox/search/autocomplete/extensions',
 
     var POINT = 'io.ox/search/autocomplete';
 
+    ext.point(POINT + '/handler/click').extend({
+        id: 'default',
+        index: 'last',
+        flow: function (baton) {
+            baton.data.deferred.done(function (value) {
+                // exclusive: define used option (type2 default is index 0 of options)
+                var option = _.find(value.options, function (item) {
+                    return item.id === value.id;
+                });
+
+                baton.data.model.add(value.facet, value.id, (option || {}).id);
+            });
+        }
+    });
+
     var extensions = {
 
         searchfieldLogic: function (baton) {
@@ -74,18 +89,18 @@ define('io.ox/search/autocomplete/extensions',
 
                         // apply selected filter
                         var node = $(e.target).closest('.autocomplete-item'),
-                            value = node.data();
+                            value = node.data(),
+                            baton = ext.Baton.ensure({
+                                deferred: $.Deferred().resolve(value),
+                                model: model,
+                                view: view
+                            });
 
                         // empty input field
-                        if (!(model.getOptions().switches || {}).keepinput)
+                        if (!(model.getOptions().switches || {}).keepinput)
                             ref.val('');
 
-                        // exclusive: define used option (type2 default is index 0 of options)
-                        var option = _.find(value.options, function (item) {
-                            return item.id === value.id;
-                        });
-
-                        model.add(value.facet, value.id, (option || {}).id);
+                        ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                     }
                 })
                 .on('focus focus:custom click', function (e, opt) {
@@ -145,6 +160,9 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         searchfieldMobile: function (baton) {
+
+            if (!_.device('small')) return;
+
             var group,
                 label = gt('Search'),
                 id = 'search-search-field';
@@ -156,6 +174,7 @@ define('io.ox/search/autocomplete/extensions',
                         $('<input type="text">')
                         .attr({
                             class: 'form-control search-field',
+                            role: 'search',
                             tabindex: 1,
                             id: id,
                             placeholder: label + ' ...'
@@ -222,6 +241,8 @@ define('io.ox/search/autocomplete/extensions',
             ext.point(POINT + '/name').invoke('draw', this, baton);
             // email address
             ext.point(POINT + '/detail').invoke('draw', this, baton);
+            // aria lebel
+            ext.point(POINT + '/a11y').invoke('draw', this, baton);
         },
 
         image: function (baton) {
@@ -274,7 +295,14 @@ define('io.ox/search/autocomplete/extensions',
                     $('<i>').text('\u00A0' + detail)
                 );
             }
+        },
 
+        a11y: function () {
+            var text = this.find('.name').text() + ' ' +  this.find('.detail').text();
+            this.attr({
+                'aria-label': text,
+                'tabIndex': 1
+            });
         }
 
     };

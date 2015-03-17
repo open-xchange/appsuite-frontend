@@ -22,7 +22,8 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-    var lastSearchResults = [],//last results, used to identify internal Users
+    var //last results, used to identify internal Users
+        lastSearchResults = [],
         blackList = {},
         AddParticipantView = Backbone.View.extend({
         events: {
@@ -57,6 +58,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                     placement: options.placement,
                     api: autocompleteAPI,
                     name: options.name,
+                    stringify: options.stringify,
                     // reduce suggestion list
                     reduce: function (data) {
                         // updating baton-data-node
@@ -85,26 +87,28 @@ define('io.ox/calendar/edit/view-addparticipants',
                                     if (obj.data.internal_userid) {
                                         obj.sort = 1;
                                     } else if (obj.data.mark_as_distributionlist) {
-                                        obj.sort = 4; //distlistunsergroup
+                                        //distlistunsergroup
+                                        obj.sort = 4;
                                     } else {
                                         obj.sort = 5;
                                     }
-                                    if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
+                                    if (!obj.data.type) {
+                                        //only change if no type is there or type 5 will be made to type 1 on the second run
                                         obj.data.external = true;
                                         if (obj.data.internal_userid && obj.data.email1 === obj.email) {
-                                            obj.data.type = 1; //user
+                                            //user
+                                            obj.data.type = 1;
                                             obj.data.external = false;
                                             if (!options.keepId) {
                                                 obj.data.id = obj.data.internal_userid;
                                             }
                                         } else if (obj.data.mark_as_distributionlist) {
-                                            obj.data.type = 6; //distlistunsergroup
+                                            //distlistunsergroup
+                                            obj.data.type = 6;
                                         } else {
                                             obj.data.type = 5;
-                                            // h4ck
+                                            // HACK
                                             obj.data.email1 = obj.email;
-                                            //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                                            obj.data.emailparam = obj.email;
                                         }
                                     }
                                     obj.type = 5;
@@ -135,7 +139,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                         //return number of query hits and the filtered list
                         return { list: filterDoubletes(), hits: data.length };
                     },
-                    draw: function (obj) {
+                    draw: options.draw || function (obj) {
                         if (!_.isObject(obj)) return;
                         obj.data.image1_url = obj.data.image1_url || '';
                         var pview = new pViews.ParticipantEntryView({
@@ -145,6 +149,12 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 halo: false
                             });
                         this.append(pview.render().el);
+
+                        // apply a11y
+                        this.attr({
+                            'aria-label': pview.nodes.$text.text() + ' ' + pview.nodes.$mail.text() ,
+                            'tabIndex': 1
+                        });
                     },
                     click: function () {
                         self.autoparticipants.trigger('selected', self.autoparticipants.getSelectedItem());
@@ -224,7 +234,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                     display_name: elem[0],
                     mail: elem[1],
                     image1_url: '',
-                    type: 5 // TYPE_EXTERNAL_USER
+                    // TYPE_EXTERNAL_USER
+                    type: 5
                 });
             });
         },

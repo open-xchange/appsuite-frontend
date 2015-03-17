@@ -69,7 +69,8 @@ define('io.ox/portal/main',
             }
             else if (!containsData(type)) {
                 if (hasDataShown(type)) {
-                    //settings.set('settings/hadData', []).save(); // reset for debugging
+                    // reset for debugging
+                    // settings.set('settings/hadData', []).save();
                     return false;
                 } else {
                     return true;
@@ -334,8 +335,16 @@ define('io.ox/portal/main',
                 return;
             }
         }
-
-        appBaton.$.widgets.append(node);
+        if (add) {
+            var lastProtected = appBaton.$.widgets.find('li.protected').last();
+            if (lastProtected.length) {
+                lastProtected.after(node);
+            } else {
+                appBaton.$.widgets.prepend(node);
+            }
+        } else {
+            appBaton.$.widgets.append(node);
+        }
     };
 
     app.getWidgetNode = function (model) {
@@ -419,13 +428,14 @@ define('io.ox/portal/main',
             function success() {
                 var widgetType = _.last(baton.point.split('/'));
                 node.find('.content').remove();
-                // draw summary only on small devices, i.e. smartphones
+                // draw summary only on smartphones (please adjust settings pane when adjusting this check)
                 if (_.device('smartphone') && settings.get('mobile/summaryView')) {
                     if (point.all()[0].summary) {
                         //invoke special summary if there is one
                         point.invoke('summary', node, baton);
                     }
-                    else if(!node.hasClass('generic-summary')) {//add generic open close if it's not added yet
+                    else if(!node.hasClass('generic-summary')) {
+                        //add generic open close if it's not added yet
                         node.addClass('with-summary show-summary generic-summary');
                         node.on('tap', 'h2', function (e) {
                             $(e.delegateTarget).toggleClass('show-summary generic-summary');
@@ -540,10 +550,11 @@ define('io.ox/portal/main',
         _.defer(function () {
             _.delay(function () {
                 node.find('.decoration').addClass('pending');
+                // CSS Transition delay 0.3s
                 _.delay(function () {
                     loadAndPreview(point, node, baton);
                     node = baton = point = null;
-                }, 300); // CSS Transition delay 0.3s
+                }, 300);
             }, delay);
         });
     };
@@ -568,10 +579,10 @@ define('io.ox/portal/main',
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr({
-            'tabindex': '1',
-            'role': 'main',
-            'aria-label': gt('Portal Widgets')
+            'tabindex': '1'
         });
+
+        win.setTitle(gt('Portal'));
 
         ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 
@@ -590,6 +601,7 @@ define('io.ox/portal/main',
 
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);
+                ox.trigger('portal:items:render');
             });
 
             // add side popup
@@ -658,7 +670,8 @@ define('io.ox/portal/main',
                         delay: 150,
                         items: '> li.draggable:visible',
                         scroll: true,
-                        tolerance: 'pointer', // default 'intersect' by 50%
+                        // default 'intersect' by 50%
+                        tolerance: 'pointer',
                         update: function () {
                             widgets.save(appBaton.$.widgets);
                         }
