@@ -1450,8 +1450,7 @@ define('io.ox/calendar/week/view', [
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)
                             });
-
-                            if (app.start_date !==  app.old_start_date) {
+                            if (app.start_date !== app.old_start_date) {
                                 self.onUpdateAppointment(app);
                             } else {
                                 self.renderAppointments();
@@ -1481,7 +1480,7 @@ define('io.ox/calendar/week/view', [
                         if (parseInt(el.position().left, 10) !== parseInt(ui.originalPosition.left, 10)) {
                             app.start_date = moment(app.end_date).subtract(newDayCount, 'days').valueOf();
                         } else if (parseInt(el.width(), 10) !== parseInt(ui.originalSize.width, 10)) {
-                            app.end_date = moment(app.end_date).add(newDayCount, 'days').valueOf();
+                            app.end_date = moment(app.start_date).add(newDayCount, 'days').valueOf();
                         }
 
                         el.resizable('disable').busy();
