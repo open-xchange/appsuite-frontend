@@ -42,8 +42,8 @@ define('io.ox/core/folder/api',
         return id === '1' || /^default\d+/.test(id) ? 0 : 1;
     }
 
-    function injectIndex(item, index) {
-        item.index = index;
+    function injectIndex(id, item, index) {
+        item['index/' + id] = index;
         return item;
     }
 
@@ -54,6 +54,10 @@ define('io.ox/core/folder/api',
 
     function unfetch(model) {
         pool.unfetch(model.id);
+    }
+
+    function isVirtual(id) {
+        return /^virtual/.test(id);
     }
 
     function isFlat(id) {
@@ -153,7 +157,7 @@ define('io.ox/core/folder/api',
         // 2. apply custom order
         list = sort.apply(id, list);
         // 3. inject index
-        _(list).each(injectIndex);
+        _(list).each(injectIndex.bind(null, id));
         // done
         return list;
     }
@@ -214,24 +218,49 @@ define('io.ox/core/folder/api',
     // Define a virtual collection
     //
 
+    function VirtualFolder(id, getter) {
+        this.id = id;
+        this.getter = getter;
+    }
+
+    VirtualFolder.prototype.concat = function () {
+        return $.when.apply($, arguments).then(function () {
+            return _(arguments).flatten();
+        });
+    };
+
+    VirtualFolder.prototype.list = function () {
+        var id = this.id;
+        return this.getter().done(function (array) {
+            _(array).each(injectIndex.bind(null, id));
+            pool.addCollection(getCollectionId(id), array);
+            pool.getModel(id).set('subfolders', array.length > 0);
+        });
+    };
+
     var virtual = {
 
         hash: {},
 
-        get: function (id) {
-            var getter = this.hash[id];
-            return getter !== undefined ? getter() : $.Deferred().reject();
+        list: function (id) {
+            var folder = this.hash[id];
+            return folder !== undefined ? folder.list() : $.Deferred().reject();
         },
 
         add: function (id, getter) {
-            this.hash[id] = getter;
+            this.hash[id] = new VirtualFolder(id, getter);
             pool.getModel(id).set('subfolders', true);
         },
 
         concat: function () {
+            if (ox.debug) console.warn('Deprecated! Please use this.concat()');
             return $.when.apply($, arguments).then(function () {
-                return _(arguments).chain().flatten().map(injectIndex).value();
+                return _(arguments).chain().flatten().map(injectIndex.bind(null, 'concat')).value();
             });
+        },
+
+        refresh: function () {
+            _(this.hash).invoke('list');
         }
     };
 
@@ -322,9 +351,7 @@ define('io.ox/core/folder/api',
         }
 
         // special handling for virtual folders
-        if (/^virtual/.test(id)) return virtual.get(id).done(function (array) {
-            pool.addCollection(collectionId, array);
-        });
+        if (isVirtual(id)) return virtual.list(id);
 
         return http.GET({
             module: 'folders',
@@ -872,6 +899,7 @@ define('io.ox/core/folder/api',
         can: util.can,
         virtual: virtual,
         isFlat: isFlat,
+        isVirtual: isVirtual,
         getFlatCollection: getFlatCollection,
         getDefaultFolder: util.getDefaultFolder,
         getStandardMailFolders: getStandardMailFolders,

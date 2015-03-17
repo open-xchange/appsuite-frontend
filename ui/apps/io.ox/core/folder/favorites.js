@@ -89,7 +89,9 @@ define('io.ox/core/folder/favorites',
         var id = e.data.id,
             module = e.data.module,
             model = api.pool.getModel(id),
-            collection = api.pool.getCollection('virtual/favorites/' + module);
+            collectionId = 'virtual/favorites/' + module,
+            collection = api.pool.getCollection(collectionId);
+        model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
     }
