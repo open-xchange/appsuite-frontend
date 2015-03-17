@@ -421,10 +421,17 @@ define('io.ox/files/main', [
          * Add support for doubleclick
          */
         'selection-doubleclick': function (app) {
+
             if (_.device('smartphone')) return;
+
             app.listView.$el.on('dblclick', '.file-type-folder', function (e) {
                 var obj = _.cid($(e.currentTarget).attr('data-cid'));
                 app.folder.set(obj.id);
+            });
+
+            app.listView.$el.on('dblclick', '.list-item:not(.file-type-folder)', function (e) {
+                var cid = $(e.currentTarget).attr('data-cid');
+                ox.launch('io.ox/files/detail/main', { cid: cid });
             });
         },
 
