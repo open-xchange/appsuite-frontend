@@ -30,20 +30,7 @@ define('io.ox/core/settings/pane', [
 
     var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal' }),
-        reloadMe = ['language', 'timezone', 'theme'],
-        // selectionGroup
-        defaults = {
-            index: 0,
-            labelCssClass: 'col-sm-5',
-            controlCssClass: 'col-sm-7 col-md-6'
-        },
-        createSelectonGroup = function (options)  {
-            // increase index
-            defaults.index = (defaults || options).index + 100;
-            // apply defaults and create group
-            options = _.extend({}, defaults, options);
-            return new forms.SelectControlGroup(options);
-        };
+        reloadMe = ['language', 'timezone', 'theme'];
 
     ext.point('io.ox/core/settings/detail').extend({
         index: 50,

@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/tk/contenteditable-editor',
-    ['io.ox/core/emoji/util',
-     'io.ox/core/capabilities',
-     'settings!io.ox/core',
-     'io.ox/core/extensions',
-     'io.ox/core/tk/textproc',
-     '3rd.party/tinymce/jquery.tinymce.min'
-    ], function (emoji, capabilities, settings, ext, textproc) {
+define.async('io.ox/core/tk/contenteditable-editor', [
+    'io.ox/core/emoji/util',
+    'io.ox/core/capabilities',
+    'settings!io.ox/core',
+    'io.ox/core/extensions',
+    'io.ox/core/tk/textproc',
+    '3rd.party/tinymce/jquery.tinymce.min'
+], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';
 
