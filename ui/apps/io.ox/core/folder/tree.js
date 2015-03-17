@@ -143,7 +143,7 @@ define('io.ox/core/folder/tree', [
             _.defer(function () {
 
                 // skip virtual folders
-                var id = this.selection.get('data-model');
+                var id = this.selection.get('data-contextmenu-id');
                 if (api.isVirtual(id)) return;
 
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
@@ -206,7 +206,7 @@ define('io.ox/core/folder/tree', [
         },
 
         renderContextMenuItems: function (contextmenu) {
-            var id = this.selection.get('data-model'),
+            var id = this.selection.get('data-contextmenu-id'),
                 app = this.app,
                 module = this.module,
                 ul = this.$dropdownMenu.empty(),

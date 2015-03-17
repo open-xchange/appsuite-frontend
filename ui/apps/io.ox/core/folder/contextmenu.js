@@ -652,7 +652,6 @@ define('io.ox/core/folder/contextmenu', [
     //
     // Special extensions
     //
-
     ext.point('io.ox/core/foldertree/contextmenu/myfolders').extend(
         {
             id: 'add-folder',
