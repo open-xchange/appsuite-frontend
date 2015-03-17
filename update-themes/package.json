@@ -1,12 +1,12 @@
 {
   "name": "update-themes",
-  "version": "7.6.1-17",
+  "version": "7.6.2-12",
   "description": "A tool to manually update a set of themes for Open-Xchange Appsuite",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Julian B??ume",
+  "author": "Julian Bäume",
   "license": "CC-BY-NC",
   "dependencies": {
     "grunt-contrib-clean": "^0.6.0",
