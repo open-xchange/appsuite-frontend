@@ -84,8 +84,7 @@ define('io.ox/core/tk/text-editor', function () {
 
         this.focus = function () {
             // no autofocus on smartphone and for iOS in special (see bug #36921)
-            if (_.device('!smartphone && !iOS')) return;
-            textarea.focus();
+            if (_.device('!smartphone && !iOS')) textarea.focus();
         };
 
         this.clear = clear;

@@ -238,6 +238,7 @@ define('io.ox/tasks/edit/view-template', [
                 new DatePicker({
                     model: baton.model,
                     display: 'DATETIME',
+                    ignoreToggle: true,
                     className: 'col-xs-6 collapsed',
                     attribute: 'alarm',
                     label: gt('Reminder date'),
@@ -455,7 +456,7 @@ define('io.ox/tasks/edit/view-template', [
                     userId;
                     alreadyParticipant = collection.any(function (item) {
                         if (data.type === 5) {
-                            return (item.get('mail') === data.mail && item.get('type') === data.type) || (item.get('mail') === data.email1 && item.get('type') === data.type);
+                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
                         } else if (data.type === 1) {
                             return item.get('id') ===  data.internal_userid;
                         } else {

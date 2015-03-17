@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/contenteditable-editor', [
-    'io.ox/core/emoji/util',
-    'io.ox/core/capabilities',
-    'settings!io.ox/core',
-    'io.ox/core/extensions',
-    'io.ox/core/tk/textproc',
-    '3rd.party/tinymce/jquery.tinymce.min'
-], function (emoji, capabilities, settings, ext, textproc) {
+define.async('io.ox/core/tk/contenteditable-editor',
+    ['io.ox/core/emoji/util',
+     'io.ox/core/capabilities',
+     'settings!io.ox/core',
+     'io.ox/core/extensions',
+     'io.ox/core/tk/textproc',
+     '3rd.party/tinymce/jquery.tinymce.min'
+    ], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';
 
@@ -496,5 +496,9 @@ define('io.ox/core/tk/contenteditable-editor', [
         };
     }
 
-    return Editor;
+    // $.getScript adds cache busting query
+    return $.ajax({ url: ox.base + '/apps/3rd.party/tinymce/jquery.tinymce.min.js', cache: true, dataType: 'script' }).then(function () {
+        // publish editor class
+        return Editor;
+    });
 });
