@@ -55,7 +55,10 @@
         left: 0;
         right: 0;
         bottom: 0;
-        top: @calendar-toolbar-height + @weekview-footer-height;
+        // top: was @calendar-toolbar-height + @calendar-toolbar-top-padding;
+        // but that doesn't make sense, result is close however
+        top: 67px;
+
         // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
         z-index: 1;
 
@@ -215,7 +218,7 @@
         }
 
         .week-view-container {
-            top: @calendar-toolbar-height + @calendar-toolbar-top-padding;
+            top: 67px;
         }
 
         .footer-container {
