@@ -87,7 +87,9 @@ define('io.ox/core/tk/tokenfield', [
                     };
                 },
                 // autoselect also when enter was hit before dropdown was drawn
-                delayedautoselect: false
+                delayedautoselect: false,
+                // tokenfield default
+                allowEditing: true
             }, options);
 
             // call super constructor
@@ -121,7 +123,7 @@ define('io.ox/core/tk/tokenfield', [
             // register custom event when token is clicked
             this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
                 // create new event set attrs property like it's used in the non-custom events
-                var evt = $.Event(true, {}, e, {
+                var evt = $.extend(true, {}, e, {
                     type: 'tokenfield:clickedtoken',
                     attrs:  $(e.currentTarget).data().attrs,
                     originalEvent: e
@@ -256,6 +258,7 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield({
                 createTokensOnBlur: true,
                 minLength: o.minLength,
+                allowEditing: o.allowEditing,
                 typeahead: self.typeaheadOptions
             });
 
