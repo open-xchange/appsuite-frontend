@@ -37,11 +37,8 @@ define('io.ox/core/pdf/pdfdocument', [
 
             loadDef = $.Deferred(),
 
-            // the PDF.js document promise object {PDF.js promise object}
-            pdfDocumentPromise = null,
-
             // the resulting PDF.js document after loading
-            pdfjsDocumentPromise = null,
+            pdfjsDocument = null,
 
             // the total page count of the document {Number}
             pageCount = 0,
@@ -52,8 +49,14 @@ define('io.ox/core/pdf/pdfdocument', [
             // the size of the first page is treated as default page size {[{width, height}, ...]}
             pageSizes = [];
 
-        // disable range requests with Chrome on small devices
-        if (_.browser.Chrome && _.device('smartphone')) {
+        /**
+         * TODO (KA): check reenabling range request,
+         * but ATM, we're running into into rate limits
+         * much too often
+         *
+         * Disable range requests with Chrome on small devices
+         */
+        if (true/*_.browser.Chrome /*&& _.device('smartphone')*/) {
             PDFJS.disableRange = true;
         }
 
@@ -63,7 +66,7 @@ define('io.ox/core/pdf/pdfdocument', [
             var def = $.Deferred();
 
             if (_.isNumber(pageNumber) && (pageNumber > 0) && (pageNumber <= pageCount)) {
-                self.getPDFJSPagePromise(pageNumber).then( function (pdfjsPage) {
+                self.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
                     var viewport = pdfjsPage.getViewport(PDFView.getAdjustedZoom(1.0));
                     return def.resolve(PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }));
                 });
@@ -73,6 +76,12 @@ define('io.ox/core/pdf/pdfdocument', [
         }
 
         // methods ------------------------------------------------------------
+
+        this.destroy = function () {
+            if (pdfjsDocument) {
+                pdfjsDocument.destroy();
+            }
+        };
 
         /**
          * @returns {jQuery.Promise}
@@ -90,8 +99,8 @@ define('io.ox/core/pdf/pdfdocument', [
          *  The promise of a Deferred object that will be resolved when the
          *  PDF document has been loaded completely.
          */
-        this.getPDFJSDocumentPromise = function () {
-            return pdfjsDocumentPromise;
+        this.getPDFJSDocument = function () {
+            return pdfjsDocument;
         };
 
         // ---------------------------------------------------------------------
@@ -104,8 +113,8 @@ define('io.ox/core/pdf/pdfdocument', [
          * @returns {PDF.js promise}
          *  The PDF.js page promise.
          */
-        this.getPDFJSPagePromise = function (pageNumber) {
-            return pdfjsDocumentPromise.getPage(pageNumber);
+        this.getPDFJSPage = function (pageNumber) {
+            return pdfjsDocument.getPage(pageNumber);
         };
 
         // ---------------------------------------------------------------------
@@ -168,10 +177,10 @@ define('io.ox/core/pdf/pdfdocument', [
         // ---------------------------------------------------------------------
 
         // convert document to PDF
-        (pdfDocumentPromise = PDFJS.getDocument(pdfConverterURL).promise).then( function (pdfjsDocument) {
-            if (pdfjsDocument) {
-                pdfjsDocumentPromise = pdfjsDocument;
-                pageCount = pdfjsDocumentPromise.numPages;
+        PDFJS.getDocument(pdfConverterURL).promise.then( function (document) {
+            if (document) {
+                pdfjsDocument = document;
+                pageCount = pdfjsDocument.numPages;
 
                 if (pageCount > 0) {
                     initializePageSize(1).then( function (pageSize) {

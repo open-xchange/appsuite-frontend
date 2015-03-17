@@ -44,7 +44,9 @@ define('io.ox/core/pdf/pdfview', [
 
             renderedPageNumbers = [],
 
-            blockRenderCount = 0;
+            blockRenderCount = 0,
+
+            intervalId = 0;
 
         // ---------------------------------------------------------------------
 
@@ -200,6 +202,12 @@ define('io.ox/core/pdf/pdfview', [
 
         // methods ------------------------------------------------------------
 
+        this.destroy = function () {
+            this.clearRenderCallbacks();
+        };
+
+        // ---------------------------------------------------------------------
+
         this.setRenderCallbacks = function (getVisiblePageNumbers, getPageNode) {
             this.clearRenderCallbacks();
 
@@ -207,14 +215,17 @@ define('io.ox/core/pdf/pdfview', [
                 getVisiblePageNumbersHandler = getVisiblePageNumbers;
                 getPageNodeHandler = getPageNode;
 
-                window.setInterval(intervalHandler, 100);
+                intervalId = window.setInterval(intervalHandler, 100);
             }
         };
 
         // ---------------------------------------------------------------------
 
         this.clearRenderCallbacks = function () {
-            window.clearInterval(intervalHandler);
+            if (intervalId) {
+                window.clearInterval(intervalId);
+            }
+
             getVisiblePageNumbersHandler = getPageNodeHandler = null;
         };
 
@@ -464,7 +475,7 @@ define('io.ox/core/pdf/pdfview', [
                 pageData[pagePos].curPageZoom = pageZoom;
                 pageData[pagePos].isInRendering = true;
 
-                return pdfDocument.getPDFJSPagePromise(pageNumber).then( function (pdfjsPage) {
+                return pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
                     var viewport = getPageViewport(pdfjsPage, pageZoom),
                         pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
                         overlayDeferred = textOverlay ? pdfjsPage.getTextContent() : $.Deferred().resolve(),
