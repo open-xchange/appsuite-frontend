@@ -126,7 +126,7 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed.index !== undefined) {
+            if (model.changed[this.getIndexAttribute()] !== undefined) {
                 this.renderAttributes();
                 if (this.options.parent.onSort) this.options.parent.onSort();
             }
@@ -253,6 +253,7 @@ define('io.ox/core/folder/node', [
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
+                contextmenu_id: this.folder,    // use this id for the context menu
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
@@ -293,14 +294,15 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
-                    'aria-label'    : '',
-                    'aria-level'    : o.level + 1,
-                    'aria-selected' : false,
-                    'data-id'       : this.folder,
-                    'data-index'    : this.model.get('index'),
-                    'data-model'    : o.model_id,
-                    'role'          : 'treeitem',
-                    'tabindex'      : '-1'
+                    'aria-label':    '',
+                    'aria-level':    o.level + 1,
+                    'aria-selected': false,
+                    'data-id':       this.folder,
+                    'data-index':    this.getIndex(),
+                    'data-model':    o.model_id,
+                    'data-contextmenu-id': o.contextmenu_id,
+                    'role':         'treeitem',
+                    'tabindex':     '-1'
                 })
                 .append(
                     // folder
@@ -399,9 +401,22 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.model.get('index'),
-                'data-model': this.model_id
+                'data-index': this.getIndex(),
+                'data-model': this.options.model_id,
+                'data-contextmenu-id': this.options.contextmenu_id
             });
+        },
+
+        getIndexAttribute: function () {
+            var parent = this.options.parent;
+            if (!parent || !parent.collection) return undefined;
+            return 'index/' + parent.collection.id;
+        },
+
+        getIndex: function () {
+            var attribute = this.getIndexAttribute();
+            if (attribute === undefined) return 0;
+            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {
