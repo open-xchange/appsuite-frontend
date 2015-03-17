@@ -71,9 +71,7 @@ define('io.ox/core/viewer/types/documenttype', [
                     nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
                 }),
                 // fire up PDF.JS with the document URL and get its loading promise
-                pageContainer = slideElement.find('.document-container'),
-                pdfDocument = null,
-                pdfView = null;
+                pageContainer = slideElement.find('.document-container');
 
             /**
              * Creates and returns the URL of a server request.
@@ -190,7 +188,7 @@ define('io.ox/core/viewer/types/documenttype', [
              * Returns the pageNode with the given pageNumber.
              *
              * @param pageNumber
-             *  The 1-based number of the page node to return
+             *  The 1-based number of the page nod to return
              *
              * @returns {jquery.Node} pageNode
              *  The jquery page node for the requested page number.
@@ -200,43 +198,51 @@ define('io.ox/core/viewer/types/documenttype', [
             }
 
             // create the PDF document model
-            pdfDocument = new PDFDocument(documentUrl);
+            var pdfData = {
+                    pdfDocument: new PDFDocument(documentUrl),
+                    pdfView: null
+                };
 
             // wait for PDF document to finish loading
-            $.when(pdfDocument.getLoadPromise()).then(function (pageCount) {
+            $.when(pdfData.pdfDocument.getLoadPromise()).then(function (pageCount) {
                 if (pageCount > 0) {
+                    // set pdfdata at slide element
+                    pageContainer.data('data-pdf', pdfData);
+
                     // create the PDF view after successful loading;
                     // the initial zoom factor is already set to 1.0
-                    pdfView = new PDFView(pdfDocument);
+                    pdfData.pdfView = new PDFView(pdfData.pdfDocument);
 
                     //console.warn('DocumentType promises finished.');
                     _.times(pageCount, function (index) {
                         var jqPage = $('<div class="document-page">'),
-                            pageSize = pdfDocument.getOriginalPageSize(index + 1);
+                            pageSize = pdfData.pdfDocument.getOriginalPageSize(index + 1);
 
                         pageContainer.append(jqPage.attr(pageSize).css(pageSize));
                     });
 
                     // set callbacks at PDFView to start rendering
-                    pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
-
-                    _.extend(slideElement, { pdfDocument: pdfDocument, pdfView: pdfView });
+                    pdfData.pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
                 }
             });
         },
 
         unloadSlide: function (slideElement) {
             if (slideElement) {
-                if (slideElement.pdfView) {
-                    slideElement.pdfView.destroy();
-                    slideElement.pdfView = null;
+                var pageContainer = slideElement.find('.document-container'),
+                    pdfData = pageContainer.data('data-pdf') ||  {};
+
+                if (pdfData.pdfView) {
+                    pdfData.pdfView.destroy();
+                    pdfData.pdfView = null;
                 }
 
-                if (slideElement.pdfDocument) {
-                    slideElement.pdfDocument.destroy();
-                    slideElement.pdfDocument = null;
+                if (pdfData.pdfDocument) {
+                    pdfData.pdfDocument.destroy();
+                    pdfData.pdfDocument = null;
                 }
 
+                pageContainer.removeData('data-pdf');
                 slideElement.removeClass('cached');
             }
         }
