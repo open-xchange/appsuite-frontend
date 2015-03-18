@@ -298,7 +298,7 @@ define('io.ox/core/pdf/pdfview', [
                         self.setPageZoom(pageZoom, pageIndex + 1);
                     });
                 } else {
-                    var curPageData = getPageData(pageNumber);
+                    var curPageData = getPageData(pageNumber - 1);
 
                     if (curPageData.pageZoom !== pageZoom) {
                         var curPageNode = getPageNode(pageNumber);
