@@ -429,7 +429,7 @@ define('io.ox/mail/compose/extensions', [
                 } else {
                     this.append($('<button type="button" class="btn btn-link hidden-file-picker">').append(
                         $('<span class="hidden">'),
-                        $.txt(gt('Attachments')),
+                        $('<span>').text(gt('Attachments')),
                         // file input
                         $('<input type="file" name="file" tabindex="1" capture="camera">')
                             .on('change', addLocalFile.bind(this, baton.model))
