@@ -275,7 +275,7 @@
          * @returns {long} Timestamp
          */
         now: function () {
-            return +moment();
+            return new Date().getTime();
         },
 
         /**
@@ -283,7 +283,8 @@
          * @returns {long} Timestamp
          */
         utc: function () {
-            return +moment().utc(true);
+            var t = new Date();
+            return t.getTime() - t.getTimezoneOffset() * 60000;
         },
 
         // return timestamp far away in the future
