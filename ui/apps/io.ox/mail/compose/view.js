@@ -426,9 +426,12 @@ define('io.ox/mail/compose/view', [
             return attachmentEmpty.emptinessCheck(mail.files).then(function () {
                 return mailAPI.send(mail, mail.files);
             }).then(function (result) {
+                var opt = self.parseMsgref(result.data);
+                if (mail.attachments[0].content_type == 'text/plain') opt.view = 'raw';
+
                 return $.when(
                     result,
-                    mailAPI.get(self.parseMsgref(result.data))
+                    mailAPI.get(opt)
                 );
             }, function (result) {
                 if (result.error) {
@@ -607,6 +610,11 @@ define('io.ox/mail/compose/view', [
             var self = this,
                 mail = this.model.getMail(),
                 def = $.Deferred();
+
+            // force correct content-type
+            if (mail.attachments[0].content_type === 'text/plain' && this.editorMode === 'html') {
+                mail.attachments[0].content_type = 'text/html';
+            }
 
             this.blockReuse(mail.sendtype);
 

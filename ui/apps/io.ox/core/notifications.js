@@ -27,7 +27,7 @@ define('io.ox/core/notifications', [
             subviews: {},
             status: 'closed', //possible states 'closed', 'open', 'sidepopup'
             sidepopup: null,
-            markedForRedraw: []
+            markedForRedraw: {}
         }
     });
     var NotificationsView = Backbone.View.extend({
@@ -56,12 +56,14 @@ define('io.ox/core/notifications', [
             //prevent overwriting of existing subviews
             if (!subviews[subview.model.get('id')]) {
                 subviews[subview.model.get('id')] = subview;
+                //always draw at least one time (to keep the order )
+                self.model.get('markedForRedraw')[subview.model.get('id')] = true;
                 subview.collection.on('add reset remove', function (collection) {
                     if (!collection.subviewId) {
                         //sometimes the first parameter is a model and not a collection (add event)
                         collection = collection.collection;
                     }
-                    self.model.get('markedForRedraw').push(collection.subviewId);
+                    self.model.get('markedForRedraw')[collection.subviewId] = true;
                     self.delayedUpdate.call(self);
                 });
                 subview.on('autoopen', _.bind(self.show, self));
@@ -72,18 +74,19 @@ define('io.ox/core/notifications', [
         render: function () {
             var self = this,
                 subviews = this.model.get('subviews'),
-                markedForRedraw = _.uniq(this.model.get('markedForRedraw'));
+                markedForRedraw = this.model.get('markedForRedraw');
 
-            this.model.set('markedForRedraw', []);
+            this.model.set('markedForRedraw', {});
 
             //remove old empty message to avoid duplicates
             self.$el.find('.no-news-message').remove();
-            _(markedForRedraw).each(function (id) {
-                subviews[id].clear(true);
-                subviews[id].render(self.$el);
+            _(markedForRedraw).each(function (value, id) {
+                if (value) {
+                    subviews[id].render(self.$el);
+                }
             });
 
-            if (self.$el.children(':not(.placeholder)').length === 0) {
+            if (self.$el.children(':not(.notification-placeholder)').length === 0) {
                 self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
             }
 

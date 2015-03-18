@@ -77,7 +77,7 @@ define('io.ox/core/tk/tokenfield', [
             var self = this;
 
             options = _.extend({}, {
-                // hint: not the same type of stringify that was used in autocomplete
+                // defines tokendata
                 harmonize: function (data) {
                     var model = new pModel.Participant(data.data);
                     return {
@@ -85,7 +85,11 @@ define('io.ox/core/tk/tokenfield', [
                         label: model.getDisplayName(),
                         model: model
                     };
-                }
+                },
+                // autoselect also when enter was hit before dropdown was drawn
+                delayedautoselect: false,
+                // tokenfield default
+                allowEditing: true
             }, options);
 
             // call super constructor
@@ -116,14 +120,38 @@ define('io.ox/core/tk/tokenfield', [
 
         register: function () {
             var self = this;
-            // trigger event when token is clicked
+            // register custom event when token is clicked
             this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
-                self.$el.tokenfield().trigger('tokenfield:clickedtoken', e);
+                // create new event set attrs property like it's used in the non-custom events
+                var evt = $.extend(true, {}, e, {
+                    type: 'tokenfield:clickedtoken',
+                    attrs:  $(e.currentTarget).data().attrs,
+                    originalEvent: e
+                });
+                self.$el.tokenfield().trigger(evt);
             });
+
+            // delayed autoselect
+            if (this.options.delayedautoselect) {
+                // use hash to 'connect' enter click and query string
+                self.autoselect = {};
+                self.model.on('change:query', function (model, query) {
+                    // trigger delayed enter click after dropdown was drawn
+                    if (self.autoselect[query]) {
+                        // trigger enter key press event
+                        self.input.trigger(
+                            $.Event( 'keydown', { keyCode: 13, which: 13 } )
+                        );
+                        // remove from hash
+                        delete self.autoselect[query];
+                    }
+
+                });
+            }
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
-                    // use typehead autoselect feature
+                    // preventDefault to supress creating incomplete token
                     if (self.options.autoselect && !e.attrs.model) {
                         e.preventDefault();
                         return;
@@ -230,29 +258,33 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield({
                 createTokensOnBlur: true,
                 minLength: o.minLength,
+                allowEditing: o.allowEditing,
                 typeahead: self.typeaheadOptions
             });
 
             this.register();
 
             // save original typeahead input
-            // hint: usage of prototype Typeahead.prototype.render would not work properly here
-            this.input =  $(this.$el).data('bs.tokenfield').$input.on({
-                'typeahead:opened': function () {
-                    if (_.isFunction(o.cbshow)) o.cbshow();
-                },
-                // dirty hack to get a reliable info about open/close state
-                'typeahead:closed': function () {
-                    var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
-                    if (!dropdown.is(':visible'))
-                        self.model.set('dropdown', 'closed');
-                },
-                'typeahead:selected typeahead:autocompleted': function (e, item) {
-                    o.click.call(this, e, item.data);
-                    self.input.trigger('select', item.data);
-                },
-                'blur': o.blur
+            this.input =  $(this.$el).data('bs.tokenfield').$input;
+            // call typehead render
+            Typeahead.prototype.render.call({
+                $el: this.input,
+                model: this.model,
+                options: this.options
             });
+
+            // workaround: register handler for delayed autoselect
+            if (this.options.delayedautoselect) {
+                this.input.on('keydown', function (e) {
+                    var enter = e.which === 13,
+                        validquery = !!self.input.val() && self.input.val().length >= o.minLength,
+                        runningrequest = self.model.get('query') !== self.input.val();
+                    // flag query string when enter was hit before drowdown was drawn
+                    if (enter && validquery && runningrequest) {
+                        self.autoselect[self.input.val()] = true;
+                    }
+                });
+            }
 
             this.$el.parent().addClass(this.options.className);
 

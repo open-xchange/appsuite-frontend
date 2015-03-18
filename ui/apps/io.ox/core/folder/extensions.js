@@ -39,6 +39,27 @@ define('io.ox/core/folder/extensions', [
         );
     });
 
+    // myfolders
+    api.virtual.add('virtual/myfolders', function () {
+        var id = api.altnamespace ? 'default0' : INBOX;
+        return api.list(id).then(function (list) {
+            return _(list).filter(function (data) {
+                if (account.isStandardFolder(data.id)) return false;
+                if (api.is('public|shared', data)) return false;
+                return true;
+            });
+        });
+    });
+
+    // remote folders
+    api.virtual.add('virtual/remote', function () {
+        return api.list('1').then(function (list) {
+            return _(list).filter(function (data) {
+                return account.isExternal(data.id);
+            });
+        });
+    });
+
     var extensions = {
 
         unifiedFolders: function (tree) {
@@ -84,16 +105,10 @@ define('io.ox/core/folder/extensions', [
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
-                empty: false,
-                filter: function (id, model) {
-                    if (account.isStandardFolder(model.id)) return false;
-                    if (api.is('public|shared', model.toJSON())) return false;
-                    return true;
-                },
                 // convention! virtual folders are identified by their id starting with "virtual"
-                folder: 'virtual/default0',
+                folder: 'virtual/myfolders',
                 icons: tree.options.icons,
-                model_id: defaultId,
+                contextmenu_id: defaultId,
                 parent: tree,
                 title: gt('My folders'),
                 tree: tree
@@ -111,10 +126,7 @@ define('io.ox/core/folder/extensions', [
             this.append(
                 new TreeNodeView({
                     //empty: false,
-                    filter: function (id, model) {
-                        return account.isExternal(model.get('id'));
-                    },
-                    folder: '1',
+                    folder: 'virtual/remote',
                     headless: true,
                     open: true,
                     icons: tree.options.icons,
@@ -472,6 +484,8 @@ define('io.ox/core/folder/extensions', [
                     this.find('.folder-node:first .folder-shared:first').remove();
 
                     if (_.device('smartphone')) return;
+                    // drive has virtual folder 'Shared by me'
+                    if (baton.data.module === 'infostore') return;
                     if (!api.is('unlocked', baton.data)) return;
 
                     this.find('.folder-node:first').append(

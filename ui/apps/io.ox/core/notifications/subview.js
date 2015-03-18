@@ -37,13 +37,6 @@ define('io.ox/core/notifications/subview', [
 
             node.addClass('notifications notifications-main-' + model.get('id'));
 
-            //if theres a placeholder attached use it's position
-            if (view.placeholder.parent().length) {
-                view.placeholder.after(node);
-                view.placeholder.detach();
-            } else {
-                this.append(node);
-            }
             //invoke header, items and footer
             ext.point(extensionPoints.header).invoke('draw', node, baton);
             node.append(itemNode);
@@ -189,7 +182,9 @@ define('io.ox/core/notifications/subview', [
             //collection to store hidden notifications (for example appointment reminders that are set to remind me later)
             this.hiddenCollection = new Backbone.Collection();
 
-            this.placeholder = $('<div class="placeholder">').css('display', 'none');
+            //placeholder to keep the position if view has no notifications to display.
+            this.placeholder = $('<div class="notification-placeholder">').css('display', 'none');
+            this.placeholderInUse = false;
 
             notifications.registerSubview(this);
             //enable api support if possible
@@ -215,17 +210,35 @@ define('io.ox/core/notifications/subview', [
             }
         },
         //clearfunction to empty the view and detach it (keeps event bindings intact)
-        clear: function (setPlaceholder) {
+        clear: function () {
             this.$el.empty();
-            if (this.$el.parent().length && setPlaceholder && !this.placeholder.parent().length) {
-                this.$el.after(this.placeholder);
-            }
             this.$el.detach();
         },
+        //renderfunction, will either render the view or leave a placeholder if the collection has no items(to keep the order intact)
         render: function (node) {
             this.$el.empty();
+
             if (this.collection.size() > 0) {
+                //if there is a placeholder attached use it's position
+                if (this.placeholderInUse) {
+                    this.placeholderInUse = false;
+                    this.placeholder.after(this.$el);
+                    this.placeholder.detach();
+                } else if (this.$el.parents().length === 0) {
+                    //only append if it is detached
+                    node.append(this.$el);
+                }
                 ext.point(this.model.get('extensionPoints').main).invoke('draw', node, ext.Baton({ view: this }));
+            } else if (!this.placeholderInUse) {
+                //leave placeholder to keep the correct order and detach the view
+                if (this.$el.parents().length === 0) {
+                    node.append(this.placeholder);
+                    this.placeholderInUse = true;
+                } else {
+                    this.$el.after(this.placeholder);
+                    this.placeholderInUse = true;
+                    this.$el.detach();
+                }
             }
         },
         hideAll: function () {

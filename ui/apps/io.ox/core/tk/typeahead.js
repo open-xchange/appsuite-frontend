@@ -21,10 +21,11 @@ define('io.ox/core/tk/typeahead', [
 
     'use strict';
 
-    function customEvent (state, query, data) {
+    // https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md
+
+    function customEvent (state, data) {
         this.model.set({
-            source: state,
-            query: state === 'idle' ? query : this.model.get('query')
+            source: state
         });
         return data;
     }
@@ -73,7 +74,9 @@ define('io.ox/core/tk/typeahead', [
             this.model = new Backbone.Model({
                 // [idle|requesting|processing|finished]
                 'source': 'idle',
+                // [undefined|STRING]
                 'query': undefined,
+                // [closed|open]
                 'dropdown': 'closed'
             });
 
@@ -89,9 +92,9 @@ define('io.ox/core/tk/typeahead', [
                 hint: o.hint
             }, {
                 source: function (query, callback) {
-                    customEvent.call(self, 'requesting', query);
+                    customEvent.call(self, 'requesting');
                     o.source.call(self, query)
-                        .then(customEvent.bind(self, 'processing', query))
+                        .then(customEvent.bind(self, 'processing'))
                         .then(o.reduce)
                         .then(function (data) {
                             if (o.maxResults) {
@@ -103,14 +106,19 @@ define('io.ox/core/tk/typeahead', [
                             data = o.placement === 'top' ? data.reverse() : data;
                             return _(data).map(o.harmonize);
                         })
-                        .then(customEvent.bind(self, 'finished', query))
-                        .then(customEvent.bind(self, 'idle', query))
+                        .then(customEvent.bind(self, 'finished'))
+                        .then(customEvent.bind(self, 'idle'))
                         .then(callback);
-                    // dirty hack to get a reliable info about open/close state
+                    // workaround: hack to get a reliable info about open/close state
                     if (!self.registered) {
-                        // use source function to get dateset reference
-                        this.onSync('rendered', function () {
-                            var dropdown = this.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
+                        var dateset = this;
+                        // only way to get dateset reference and listen for 'rendered' event
+                        dateset.onSync('rendered', function () {
+                            var dropdown = dateset.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
+                                emptyAction = dropdown.find('.tt-dataset-0').is(':empty'),
+                                query = dropdown.find('span.info').attr('data-query');
+                            if (!emptyAction)
+                                self.model.set('query', query);
                             if (dropdown.is(':visible'))
                                 self.model.set('dropdown', 'opened');
                         });
@@ -122,6 +130,11 @@ define('io.ox/core/tk/typeahead', [
                         var node = $('<div class="autocomplete-item">');
                         o.draw.call(node, searchresult);
                         return node;
+                    },
+                    header: function (data) {
+                        // workaround: add a hidden info node that stores query
+                        return $('<span class="info hidden">')
+                                .attr('data-query', data.query);
                     }
                 }
             }];
@@ -144,7 +157,7 @@ define('io.ox/core/tk/typeahead', [
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item);
-                    self.typeaheadInput.trigger('select', item);
+                    self.$el.trigger('select', item);
                 },
                 'blur': o.blur
             });

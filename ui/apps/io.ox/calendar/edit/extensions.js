@@ -473,7 +473,7 @@ define('io.ox/calendar/edit/extensions', [
                     userId;
                     alreadyParticipant = collection.any(function (item) {
                         if (data.type === 5) {
-                            return (item.get('mail') === data.mail && item.get('type') === data.type) || (item.get('mail') === data.email1 && item.get('type') === data.type);
+                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
                         } else if (data.type === 1) {
                             return item.get('id') ===  data.internal_userid;
                         } else {

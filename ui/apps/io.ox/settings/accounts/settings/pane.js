@@ -19,9 +19,11 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/listutils',
+    'io.ox/backbone/disposable',
     'gettext!io.ox/settings/accounts',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, gt) {
 
     'use strict';
 
@@ -31,49 +33,6 @@ define('io.ox/settings/accounts/settings/pane', [
             if (args.data.id !== undefined && args.data.accountType !== undefined) {
                 ext.point('io.ox/settings/accounts/' + args.data.accountType + '/settings/detail').invoke('draw', args.data.node, args);
             }
-        },
-
-        drawItem = function (o) {
-            return $('<div class="selectable deletable-item">')
-                .attr({
-                    'data-id': o.get('id'),
-                    'data-accounttype': o.get('accountType')
-                })
-                .append(
-                    $('<span data-property="displayName" class="list-title pull-left">'),
-                    $('<div class="widget-controls">').append(
-                        // edit
-                        $('<a class="action">').text(gt('Edit')).attr({
-                            href: '#',
-                            tabindex: 1,
-                            role: 'button',
-                            title: gt('Edit'),
-                            'data-action': 'edit',
-                            'aria-label': o.get('displayName') + ', ' + gt('Edit')
-                        }),
-                        // delete
-                        o.get('id') !== 0 ?
-                            // trash icon
-                            $('<a class="remove">').attr({
-                                href: '#',
-                                tabindex: 1,
-                                role: 'button',
-                                title: gt('Delete'),
-                                'data-action': 'delete',
-                                'aria-label': o.get('displayName') + ', ' + gt('Delete')
-                            })
-                            .append($('<i class="fa fa-trash-o">')) :
-                            // empty dummy
-                            $('<a class="remove" style="display: none">').attr({
-                                href: '#',
-                                tabindex: -1,
-                                role: 'button',
-                                title: gt('Delete'),
-                                'aria-label': o.get('displayName') + ', ' + gt('Delete')
-                            })
-                            .append($('<i class="fa fa-trash-o" >'))
-                    )
-                );
         },
 
         drawAddButton = function () {
@@ -129,7 +88,7 @@ define('io.ox/settings/accounts/settings/pane', [
             );
         },
 
-        AccountSelectView = Backbone.View.extend({
+        AccountSelectView = DisposableView.extend({
 
             tagName: 'li',
 
@@ -145,9 +104,19 @@ define('io.ox/settings/accounts/settings/pane', [
             },
 
             render: function () {
-                var self = this;
-                self.$el.empty().append(drawItem(self.model));
-                self.$el.find('[data-property="displayName"]').text(self.model.attributes.displayName);
+                var self = this,
+                    title = self.model.get('displayName');
+                self.$el.attr({
+                    'data-id': self.model.get('id'),
+                    'data-accounttype': self.model.get('accountType')
+                });
+                self.$el.append(
+                    listUtils.widgetTitle(title),
+                    listUtils.widgetControlls().append(
+                        listUtils.controlsDelete(title, gt('Delete'), self.model.get('id')),
+                        listUtils.controlsEdit(title, gt('Edit'))
+                    )
+                );
 
                 return self;
             },
@@ -170,6 +139,11 @@ define('io.ox/settings/accounts/settings/pane', [
                             api.remove(account).then(
                                 function success() {
                                     folderAPI.list('1', { cache: false });
+                                    if (self.disposed) {
+                                        popup.close();
+                                        return;
+                                    }
+
                                     self.model.collection.remove(self.model);
                                     popup.close();
                                 },
@@ -193,7 +167,6 @@ define('io.ox/settings/accounts/settings/pane', [
                 createExtpointForSelectedAccount(e);
             }
         });
-
     /**
      * Extension point for account settings detail view
      *
@@ -231,7 +204,6 @@ define('io.ox/settings/accounts/settings/pane', [
                     },
 
                     render: function () {
-
                         this.$el.empty().append(drawPane);
 
                         this.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);

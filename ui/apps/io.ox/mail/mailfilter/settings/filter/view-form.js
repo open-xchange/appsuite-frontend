@@ -123,7 +123,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             return arrayOfParts.join('/');
         },
 
-        AccountDetailView = Backbone.View.extend({
+        FilterDetailView = Backbone.View.extend({
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
 
@@ -830,5 +830,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         }
     });
 
-    return AccountDetailView;
+    return FilterDetailView;
+
 });

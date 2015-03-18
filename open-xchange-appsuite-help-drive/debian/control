@@ -1,0 +1,81 @@
+Source: open-xchange-appsuite-help-drive
+Section: oldlibs
+Priority: extra
+Maintainer: Harald Petry <harald.petry@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), ant-optional (>= 1.7.0), default-jdk
+Standards-Version: 3.9.2
+Homepage: http://open-xchange.com
+Vcs-Git: https://git.open-xchange.com/git/client/drive-help
+Vcs-Browser: https://gitweb.open-xchange.com/?p=client/drive-help
+
+Package: open-xchange-appsuite-help-drive-de-de
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-de-de
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-en-gb
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-en-gb
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-en-us
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-en-us
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-es-es
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-es-es
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-es-mx
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-es-mx
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-fr-fr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-fr-fr
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-it-it
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-it-it
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-ja-jp
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-ja-jp
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-nl-nl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-nl-nl
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-pl-pl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-pl-pl
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-zh-cn
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-zh-cn
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package
+
+Package: open-xchange-appsuite-help-drive-zh-tw
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-drive-help-zh-tw
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive transitional package

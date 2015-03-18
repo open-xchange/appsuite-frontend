@@ -209,16 +209,24 @@ define('io.ox/core/api/reminder', [
                 api.getReminders();
             }
         }
+
+        if (find(item, type, true)) {
+            checkReminders();
+        }
+    }
+    //function returns true if there is a reminder for the task or appointment
+    //setting remove to true also removes it
+    function find(item, type, remove) {
         var found = false;
         _(reminderStorage).each(function (reminder, key) {
             if ( reminder.module === type && reminder.target_id === item.id ) {
-                delete reminderStorage[key];
+                if (remove) {
+                    delete reminderStorage[key];
+                }
                 found = true;
             }
         });
-        if (found) {
-            checkReminders();
-        }
+        return found;
     }
 
     //bind some events to keep reminders up to date
@@ -236,6 +244,21 @@ define('io.ox/core/api/reminder', [
             handleDelete(item, 4);
         }
     });
+
+    taskAPI.on('update', function (e, item) {
+        if (find(item, 4)) {
+            //get fresh data to be consistent(name, due date change etc)
+            api.getReminders();
+        }
+    });
+
+    calendarAPI.on('update', function (e, item) {
+        if (find(item, 1)) {
+            //get fresh data to be consistent(name, due date change etc)
+            api.getReminders();
+        }
+    });
+
     calendarAPI.on('delete', function (e, item) {
         handleDelete(item, 1);
     });

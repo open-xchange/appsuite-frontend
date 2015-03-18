@@ -18,12 +18,13 @@ define('io.ox/portal/settings/widgetview', [
     'io.ox/core/manifests',
     'io.ox/core/upsell',
     'gettext!io.ox/portal',
+    'io.ox/backbone/disposable',
     'less!io.ox/portal/style'
-], function (ext, dialogs, manifests, upsell, gt) {
+], function (ext, dialogs, manifests, upsell, gt, DisposableView) {
 
     'use strict';
 
-    var WidgetSettingsView = Backbone.View.extend({
+    var WidgetSettingsView = DisposableView.extend({
 
         tagName: 'li',
 
@@ -33,7 +34,7 @@ define('io.ox/portal/settings/widgetview', [
             'click [data-action="edit"]': 'onEdit',
             'click [data-action="change-color"]': 'onChangeColor',
             'click [data-action="toggle"]': 'onToggle',
-            'click [data-action="remove"]': 'onRemove'
+            'click [data-action="delete"]': 'onDelete'
         },
 
         initialize: function () {
@@ -51,6 +52,10 @@ define('io.ox/portal/settings/widgetview', [
 
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
+
+            if (this.disposed) {
+                return this;
+            }
             ext.point('io.ox/portal/settings/detail/view').invoke('draw', this.$el.empty(), baton);
             return this;
         },
@@ -101,7 +106,7 @@ define('io.ox/portal/settings/widgetview', [
             this.model.collection.remove(this.model);
         },
 
-        onRemove: function (e) {
+        onDelete: function (e) {
             e.preventDefault();
             var self = this, dialog;
             // do we have custom data that might be lost?

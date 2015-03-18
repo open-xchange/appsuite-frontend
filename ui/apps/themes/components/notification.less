@@ -110,14 +110,25 @@
         .item {
 
             .notification-item-actions {
-                height: 13px;
+                height: 15px;
 
                 .clear-single-button {
                     float: right;
-                    line-height: 11px;
+                    line-height: 13px;
                     padding: 0;
                     color: #767676;
                     font-size: 14px;
+                    display: none;
+
+                    &:focus {
+                        display: inline-block;
+                        text-decoration: underline;
+                    }
+
+                    &:hover {
+                        display: inline-block;
+                        text-decoration: underline;
+                    }
                 }
             }
 
@@ -132,10 +143,16 @@
             &:focus {
                 outline: 1px solid rgba(0, 0, 0, 0.30);
                 background-color: rgba(0, 0, 0, 0.05);
+                .clear-single-button {
+                    display: inline-block;
+                }
             }
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.05);
+                .clear-single-button {
+                    display: inline-block;
+                }
             }
 
             .title {
@@ -191,6 +208,11 @@
             padding: 0px 14px 14px 14px;
         }
     }
+}
+
+.touch #io-ox-notifications #io-ox-notifications-display .item .clear-single-button {
+     //no hover on touch devices, so always show single hide buttons
+     display: inline-block;
 }
 
 #io-ox-notifications-popups {

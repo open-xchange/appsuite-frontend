@@ -21,8 +21,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/mail/mailfilter/settings/filter/view-form',
     'gettext!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
+    'io.ox/backbone/mini-views/listutils',
+    'io.ox/backbone/disposable',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS) {
+], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, DisposableView) {
 
     'use strict';
 
@@ -150,38 +152,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
             }
 
             $(this).append(
-                $('<a>').addClass('action').text(gt('Edit')).attr({
-                    title: gt('Edit'),
-                    href: '#',
-                    role: 'button',
-                    'data-action': actionValue,
-                    tabindex: 1,
-                    'aria-label': title + ', ' + gt('Edit')
-                }),
-                $('<a>').addClass('action').text(texttoggle).attr({
-                    title: texttoggle,
-                    href: '#',
-                    role: 'button',
-                    'data-action': 'toggle',
-                    tabindex: 1,
-                    'aria-label': title + ', ' + (texttoggle)
-                }),
-                $('<a>').append($('<i/>').addClass('fa ' + faClass)).attr({
-                    title: gt('process subsequent rules'),
-                    href: '#',
-                    role: 'button',
-                    'data-action': 'toogleProcessSub',
-                    tabindex: 1,
-                    'aria-label': title + ', ' + gt('process subsequent rules')
-                }),
-                $('<a>').append($('<i/>').addClass('fa fa-trash-o')).attr({
-                    title: gt('remove'),
-                    href: '#',
-                    role: 'button',
-                    'data-action': 'delete',
-                    tabindex: 1,
-                    'aria-label': title + ', ' + gt('remove')
-                })
+                listUtils.controlsEdit(title, gt('Edit'), actionValue),
+                listUtils.controlsToggle(texttoggle),
+                listUtils.controlProcessSub(title, gt('process subsequent rules'), faClass),
+                listUtils.controlsDelete(title, gt('remove'))
             );
         }
     });
@@ -223,9 +197,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     return model.get('position');
                 };
 
-                var AccountSelectView = Backbone.View.extend({
+                var FilterSettingsView = DisposableView.extend({
 
                     tagName: 'li',
+
+                    className: 'widget-settings-view',
 
                     saveTimeout: 0,
 
@@ -233,6 +209,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,
                             actions = (this.model.get('actioncmds') || []);
+
+                        if (this.disposed) {
+                            return;
+                        }
 
                         function checkForUnknown() {
                             var unknown = false;
@@ -255,18 +235,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         this.$el.attr({
                             'data-id': self.model.get('id')
                         })
-                        .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                        .addClass('draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                         .append(
-                            $('<a>').addClass('drag-handle ' + (this.model.collection.length <= 1 ? 'hidden' : '')).append(
-                                $('<i class="fa fa-bars">')
-                            ).attr({
-                                href: '#',
-                                role: 'button',
-                                tabindex: 1,
-                                'aria-label': title + ', ' + gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.')
-                            }),
-                            titleNode = $('<span>').addClass('widget-title pull-left').text(title),
-                            $('<div class="widget-controls">').append(function () {
+
+                            listUtils.dragHandle(title, gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'), this.model.collection.length <= 1 ? 'hidden' : ''),
+                            titleNode = listUtils.widgetTitle(title),
+                            listUtils.widgetControlls().append(function () {
                                 var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
                                 point.invoke('draw', $(this), self.model);
                             })
@@ -480,7 +454,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         } else {
                             this.collection.each(function (item) {
                                 list.append(
-                                    new AccountSelectView({ model: item }).render().el
+                                    new FilterSettingsView({ model: item }).render().el
                                 );
                             });
                             this.makeSortable();
