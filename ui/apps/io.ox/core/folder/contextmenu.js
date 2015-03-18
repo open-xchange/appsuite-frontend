@@ -511,24 +511,21 @@ define('io.ox/core/folder/contextmenu', [
                 if (!/^calendar$/.test(baton.module)) return;
                 if (!api.is('private', baton.data)) return;
 
-                var listItem;
+                if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
+                    var listItem;
 
-                this.append(
-                    listItem = $('<li role="presentation">')
-                );
+                    this.append(
+                        listItem = $('<li role="presentation">')
+                    );
 
-                require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (settings, calendarUtil) {
-                    if (settings.get('colorScheme') === 'custom') {
-                        //util = calendarUtil;
+                    require(['io.ox/calendar/util'], function (calendarUtil) {
                         listItem.append(
                             new ColorSelectionView({
                                 model: api.pool.getModel(baton.data.id)
                             }).render(calendarUtil).$el
                         );
-                    } else {
-                        listItem.remove();
-                    }
-                });
+                    });
+                }
             };
         })()
     };

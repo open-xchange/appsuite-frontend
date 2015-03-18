@@ -363,6 +363,9 @@ define('io.ox/calendar/main', [
                 'colorScheme': app.settings.get('colorScheme', 'custom'),
                 'mobileFolderSelectMode': false
             });
+
+            // store colorScheme in settings to ensure that 'colorScheme' is not undefined
+            app.settings.set('colorScheme', app.props.get('colorScheme'));
         },
 
         'vgrid-checkboxes': function (app) {
