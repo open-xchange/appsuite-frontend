@@ -290,16 +290,13 @@ $(window).load(function () {
                             folder: folder,
                             columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                             sort: mail.get(['viewOptions', folder, 'sort'], 610),
-                            order: mail.get(['viewOptions', folder, 'order'], 'desc')
-                        };
-                    if (thread) {
-                        _.extend(params, {
-                            includeSent: true,
-                            max: 300,
+                            order: mail.get(['viewOptions', folder, 'order'], 'desc'),
                             timezone: 'utc',
                             limit: '0,30'
-                        });
-                    };
+                        };
+                    if (thread) {
+                        _.extend(params, { includeSent: true, max: 300 });
+                    }
                     http.GET({ module: 'mail', params: params }).done(function (data) {
                         // the collection loader will check ox.rampup for this data
                         ox.rampup['mail/' + $.param(params)] = data;
