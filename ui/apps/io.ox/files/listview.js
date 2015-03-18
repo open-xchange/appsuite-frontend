@@ -28,10 +28,16 @@ define('io.ox/files/listview', [
     //
 
     var FileListView = ListView.extend({
+
         ref: LISTVIEW,
+
         initialize: function () {
             ListView.prototype.initialize.apply(this, arguments);
             this.$el.addClass('file-list-view');
+        },
+
+        getCompositeKey: function (model) {
+            return model.isFolder() ? 'folder.' + model.get('id') : model.cid;
         }
     });
 

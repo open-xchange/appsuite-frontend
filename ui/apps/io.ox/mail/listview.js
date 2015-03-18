@@ -370,9 +370,7 @@ define('io.ox/mail/listview', [
             return data;
         },
 
-        // support for custom cid attributes
-        // needed to identify threads
-        getCID: function (model) {
+        getCompositeKey: function (model) {
             return this.options.threaded ? 'thread.' + model.cid : model.cid;
         }
     });

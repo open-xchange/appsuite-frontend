@@ -234,11 +234,13 @@ define('io.ox/files/toolbar', [
             app.updateToolbar = _.debounce(function (list) {
                 if (!list) return;
                 // turn cids into proper objects
-                list = api.resolve(list);
+                var cids = list, models = api.resolve(cids, false);
+                list = _(models).invoke('toJSON');
                 // extract single object if length === 1
-                list = list.length === 1 ? list[0] : list;
+                var data = list.length === 1 ? list[0] : list;
                 // draw toolbar
-                var baton = ext.Baton({ $el: toolbar.$list, data: list, app: this, allIds: [] }),
+                console.debug('toolbar: keys %o models %o data %o', cids, models, list);
+                var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, app: this, allIds: [] }),
                     ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
                 $.when.apply($, ret.value()).then(function () {
                     toolbar.initButtons();

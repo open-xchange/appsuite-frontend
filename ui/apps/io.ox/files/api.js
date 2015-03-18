@@ -317,11 +317,15 @@ define('io.ox/files/api', [
     api.resolve = (function () {
 
         function map(cid) {
-            return pool.get('detail').get(cid);
+            // return either folder or file models
+            return /^folder\./.test(cid) ?
+                folderAPI.pool.getModel(cid.substr(7)) :
+                pool.get('detail').get(cid);
         }
 
-        return function (list) {
-            return _(list).chain().map(map).compact().invoke('toJSON').value();
+        return function (list, json) {
+            var models = _(list).chain().map(map).compact().value();
+            return json === false ? models : _(models).invoke('toJSON');
         };
 
     }());
