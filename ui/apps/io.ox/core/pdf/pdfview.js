@@ -261,7 +261,7 @@ define('io.ox/core/pdf/pdfview', [
             // set retrieved PDF page size as page node data and append correctly initialized canvas to given page node
             if (_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height)) {
                 var extentAttr = 'width="' + pageSize.width + '" height="' + pageSize.height + '" style="width:' + pageSize.width + 'px; height:' + pageSize.height + 'px"',
-                    canvasNode = $('<canvas ' + extentAttr + '>');
+                    canvasNode = $('<canvas class="pdf-page" ' + extentAttr + '>');
 
                 jqParentNode.append(canvasNode);
 
