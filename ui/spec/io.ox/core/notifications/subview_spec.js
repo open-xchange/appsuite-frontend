@@ -14,8 +14,21 @@
 define([
     'waitsFor',
     'io.ox/core/notifications/subview',
-    'io.ox/core/notifications'
-], function (waitsFor, Subview, notifications) {
+    'io.ox/core/notifications',
+    'io.ox/core/extensions'
+], function (waitsFor, Subview, notifications, ext) {
+
+    ext.point('io.ox/notificationtest/item').extend({
+        draw: function (baton) {
+            var self = this,
+                endText = '',
+                data = baton.model.attributes,
+                descriptionId = _.uniqueId('notification-description-'),
+                node = self.addClass('testviewNotification');
+            node.attr('data-cid', _.cid(data)).append($('<div class="testTitle">').text(data.title));
+        }
+    });
+
     var options = {
             id: 'testview',
             title: 'Test View',
@@ -49,9 +62,10 @@ define([
             },
         subview = new Subview(options);
 
-    describe('The Notification Subview', function () {
+    describe.only('The Notification Subview', function () {
         afterEach(function () {
             subview.resetNotifications([]);
+            subview.hiddenCollection.reset();
         });
         describe('should', function () {
             it('correctly add notifications', function () {
@@ -81,9 +95,11 @@ define([
             it('draw header and apply strings', function () {
                 subview.resetNotifications(testModel1);
                 notifications.update();
-                var node = $('.notifications-main-testview');
+                var node = $('.notifications-main-testview'),
+                    placeholder = $('.notification-placeholder');
 
                 expect(node.length).to.equal(1);
+                expect(placeholder.length).to.equal(0);
 
                 expect($(node.find('.section-title')).length).to.equal(1);
                 expect($(node.find('.section-title')).text()).to.equal('Test View');
@@ -92,8 +108,30 @@ define([
                 expect($(node.find('.clear-button')).attr('aria-label')).to.equal('Hide all test notifications');
             });
             it('draw notifications', function () {
+                subview.resetNotifications(testModel1);
+                notifications.update();
+                var node = $('.notifications-main-testview');
+
+                expect($(node.find('.testviewNotification')).length).to.equal(1);
+                expect($(node.find('.testTitle')).text()).to.equal('Testmodel1');
             });
             it('hide notifications', function () {
+                subview.resetNotifications([testModel1, testModel2]);
+                notifications.update();
+                var node = $('.notifications-main-testview');
+
+                expect($(node.find('.testviewNotification')[0]).length).to.equal(1);
+
+                $(node.find('.clear-single-button')[0]).click();
+
+                expect(subview.collection.size()).to.equal(1);
+                expect(subview.hiddenCollection.size()).to.equal(1);
+
+                //clear all button
+                $(node.find('.clear-button')).click();
+
+                expect(subview.collection.size()).to.equal(0);
+                expect(subview.hiddenCollection.size()).to.equal(2);
             });
             it('show desktop notifications', function () {
             });
