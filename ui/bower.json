@@ -24,7 +24,7 @@
     "bigscreen": "2.0.4",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "requirejs": "2.1.15",
+    "requirejs": "2.1.16",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#90a9ca94ab7712915d0416102837f8a638fc2819",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
     "bootstrap-tokenfield": "0.12.1",
