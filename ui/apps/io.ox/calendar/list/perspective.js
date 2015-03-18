@@ -41,6 +41,10 @@ define('io.ox/calendar/list/perspective', [
         });
     };
 
+    perspective.selectAppointment = function (obj) {
+        this.grid.selection.set(obj);
+    };
+
     perspective.render = function (app) {
 
         var win = app.getWindow(),

@@ -658,7 +658,7 @@ msgstr "実際の時間 (分)"
 msgid "Add"
 msgstr "追加"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:82
+#: apps/io.ox/settings/accounts/settings/pane.js:41
 #: module:io.ox/settings/accounts
 msgid "Add account"
 msgstr "アカウントを追加"
@@ -725,7 +725,7 @@ msgstr "この登録用に新規フォルダを追加"
 msgid "Add new participant"
 msgstr "新規出席者を追加"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:461 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:435 module:io.ox/mail
 msgid "Add new rule"
 msgstr "新規のルールを追加"
 
@@ -801,7 +801,7 @@ msgstr "お気に入りに追加"
 msgid "Add to portal"
 msgstr "ポータルに追加"
 
-#: apps/io.ox/portal/settings/pane.js:102 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:103 module:io.ox/portal
 msgid "Add widget"
 msgstr "ウィジェットを追加"
 
@@ -1244,13 +1244,13 @@ msgstr "支払い条件"
 msgid "Birthdays"
 msgstr "誕生日"
 
-#: apps/io.ox/portal/settings/pane.js:162 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:146 module:io.ox/portal
 msgid "Black"
 msgstr "黒"
 
 #: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:169
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "青"
@@ -1375,13 +1375,13 @@ msgstr "予定表ビュー"
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:397
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:581
-#: apps/io.ox/mail/mailfilter/settings/filter.js:102
+#: apps/io.ox/mail/mailfilter/settings/filter.js:104
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1067
 #: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:623 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:166
+#: apps/io.ox/portal/settings/widgetview.js:121
+#: apps/io.ox/settings/accounts/settings/pane.js:135
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:95
 #: apps/io.ox/tasks/edit/main.js:178 apps/io.ox/tasks/main.js:195
@@ -1657,8 +1657,8 @@ msgstr "フォームを折りたたむ"
 
 #: apps/io.ox/calendar/edit/extensions.js:357 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js:36 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:183 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:185
+#: apps/io.ox/portal/settings/pane.js:167 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:169
 msgid "Color"
 msgstr "色"
 
@@ -1986,7 +1986,7 @@ msgstr "新規のルールを作成"
 msgid "Create new resource"
 msgstr "新規のルールを作成"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:55 module:io.ox/mail
 msgid "Create new rule"
 msgstr "新規のルールを作成"
 
@@ -2153,14 +2153,10 @@ msgstr "延期"
 #: apps/io.ox/mail/settings/signatures/register.js:387
 #: apps/io.ox/mail/settings/signatures/register.js:388
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:621
-#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
-#: apps/io.ox/settings/accounts/settings/pane.js:61
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:63
-#: apps/io.ox/settings/accounts/settings/pane.js:71
-#: apps/io.ox/settings/accounts/settings/pane.js:72
-#: apps/io.ox/tasks/actions.js:424 module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js:27
+#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
+#: apps/io.ox/settings/accounts/settings/pane.js:116
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:424
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js:27
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:49
 #: apps/io.ox/tasks/toolbar.js:85
 #: apps/plugins/administration/groups/settings/toolbar.js:100
@@ -2171,7 +2167,7 @@ msgstr "延期"
 msgid "Delete"
 msgstr "削除"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:165
+#: apps/io.ox/settings/accounts/settings/pane.js:134
 #: module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "アカウントを削除"
@@ -2210,7 +2206,7 @@ msgid "Delete whole series"
 msgstr "アポイント全体を削除"
 
 #: apps/io.ox/portal/main.js:617 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:110
+#: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr "ウィジェットを削除"
 
@@ -2268,9 +2264,9 @@ msgstr "ダイレクト リンク: %1$s"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:310
-#: apps/io.ox/portal/settings/pane.js:345 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:141 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
 msgid "Disable"
 msgstr "無効"
 
@@ -2399,7 +2395,7 @@ msgstr "このアカウントを削除しますか？"
 msgid "Do you really want to delete these items?"
 msgstr "これらのアイテムを削除しますか？"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:164
+#: apps/io.ox/settings/accounts/settings/pane.js:133
 #: module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "このアカウントを削除しますか？"
@@ -2434,7 +2430,7 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "この仕事を削除しますか？"
 
 #: apps/io.ox/portal/main.js:618 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:111
+#: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr "このウィジェットを削除しますか？"
 
@@ -2561,7 +2557,7 @@ msgctxt "folder"
 msgid "Drafts"
 msgstr "下書き"
 
-#: apps/io.ox/portal/settings/pane.js:267 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:247 module:io.ox/portal
 msgid "Drag to reorder widget"
 msgstr "ドラッグしてウィジェットの順番を変更できます。"
 
@@ -2657,23 +2653,18 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/main.js:145
 #: apps/io.ox/files/main.js:151 apps/io.ox/files/main.js:340
 #: apps/io.ox/files/main.js:388 apps/io.ox/mail/actions.js:512
-#: apps/io.ox/mail/mailfilter/settings/filter.js:153
-#: apps/io.ox/mail/mailfilter/settings/filter.js:154
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159
+#: apps/io.ox/mail/mailfilter/settings/filter.js:155
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1071
 #: apps/io.ox/mail/settings/signatures/register.js:381
 #: apps/io.ox/mail/settings/signatures/register.js:383
-#: apps/io.ox/portal/settings/pane.js:326 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:328
-#: apps/io.ox/settings/accounts/settings/pane.js:46
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:50
-#: apps/io.ox/settings/accounts/settings/pane.js:52
-#: apps/io.ox/tasks/actions.js:283 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:150 apps/io.ox/tasks/main.js:156
-#: apps/io.ox/tasks/main.js:190 apps/io.ox/tasks/main.js:209
-#: apps/io.ox/tasks/mobile-toolbar-actions.js:42
+#: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:289
+#: apps/io.ox/settings/accounts/settings/pane.js:117
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:283
+#: module:io.ox/tasks apps/io.ox/tasks/main.js:150
+#: apps/io.ox/tasks/main.js:156 apps/io.ox/tasks/main.js:190
+#: apps/io.ox/tasks/main.js:209 apps/io.ox/tasks/mobile-toolbar-actions.js:42
 #: apps/io.ox/tasks/toolbar.js:52
 #: apps/plugins/administration/groups/settings/toolbar.js:92 module:io.ox/core
 #: apps/plugins/administration/resources/settings/toolbar.js:88
@@ -2741,7 +2732,7 @@ msgstr "編集して名前を設定"
 msgid "Edit resource"
 msgstr "ルールを編集"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:55 module:io.ox/mail
 msgid "Edit rule"
 msgstr "ルールを編集"
 
@@ -2879,9 +2870,9 @@ msgstr "フォルダを空にしています... 数秒かかる場合があり�
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:310
-#: apps/io.ox/portal/settings/pane.js:349 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:141 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:310 module:io.ox/portal
 msgid "Enable"
 msgstr "有効"
 
@@ -3346,7 +3337,7 @@ msgstr "食べ物"
 msgid "For best results, please use "
 msgstr "最良の結果を得るには、次を使用することをお勧めします。 "
 
-#: apps/io.ox/settings/accounts/settings/pane.js:103
+#: apps/io.ox/settings/accounts/settings/pane.js:62
 #: module:io.ox/settings/accounts
 msgid ""
 "For security reasons, all account passwords are encrypted with your primary "
@@ -3474,14 +3465,14 @@ msgstr "おはようございます、%s さん。"
 
 #: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "グレー"
 
 #: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:167
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
 msgid "Green"
 msgstr "緑"
@@ -3931,7 +3922,7 @@ msgstr "6 月"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js:627 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:120
+#: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
 msgstr "ウィジェットを無効化"
 
@@ -4010,14 +4001,14 @@ msgstr "日常"
 
 #: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:168
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "薄い青"
 
 #: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "薄い緑"
@@ -4115,7 +4106,7 @@ msgstr "メール"
 msgid "Mail Details"
 msgstr "メールの詳細"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:459 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:433 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr "メール フィルタ ルール"
@@ -4138,7 +4129,7 @@ msgstr "メール アドレス"
 msgid "Mail and Messaging"
 msgstr "メールとメッセージング"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:125
+#: apps/io.ox/settings/accounts/settings/pane.js:84
 #: module:io.ox/settings/accounts apps/io.ox/settings/main.js:405
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
@@ -5118,7 +5109,7 @@ msgstr "オプション"
 
 #: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "オレンジ"
@@ -5187,7 +5178,7 @@ msgstr "パスワード:"
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "パスワードは %1$d 文字以上 %2$d 文字以下にしてください。"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:97
+#: apps/io.ox/settings/accounts/settings/pane.js:56
 #: module:io.ox/settings/accounts
 msgid "Password recovery"
 msgstr "パスワードの復元"
@@ -5305,7 +5296,7 @@ msgstr "時間を選択してください。"
 
 #: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:171
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "ピンク"
@@ -5500,7 +5491,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "ポータル"
 
-#: apps/io.ox/portal/settings/pane.js:70 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:71 module:io.ox/portal
 msgid "Portal settings"
 msgstr "ポータルの設定"
 
@@ -5679,7 +5670,7 @@ msgstr "購入の確認"
 
 #: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:170
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫"
@@ -5784,10 +5775,10 @@ msgid "Recover"
 msgstr "復元"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:28 module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js:108
+#: apps/io.ox/settings/accounts/settings/pane.js:67
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:110
-#: apps/io.ox/settings/accounts/settings/pane.js:111
+#: apps/io.ox/settings/accounts/settings/pane.js:69
+#: apps/io.ox/settings/accounts/settings/pane.js:70
 msgid "Recover passwords"
 msgstr "パスワードを復元"
 
@@ -5805,7 +5796,7 @@ msgstr "定期的な仕事には、有効な開始日が必要です。"
 
 #: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
 msgid "Red"
 msgstr "赤"
@@ -5815,7 +5806,7 @@ msgstr "赤"
 msgid "Redirect to"
 msgstr "次へ転送"
 
-#: apps/io.ox/portal/settings/pane.js:449 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:403 module:io.ox/portal
 msgid "Reduce to widget summary"
 msgstr "ウィジェットの概要へ縮小"
 
@@ -6094,7 +6085,7 @@ msgstr "土曜日"
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:90
 #: apps/io.ox/mail/compose/names.js:162
-#: apps/io.ox/mail/mailfilter/settings/filter.js:101
+#: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/settings/signatures/register.js:178
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
@@ -6618,11 +6609,11 @@ msgstr "スライドショー"
 msgid "Slow requests"
 msgstr "リクエストを表示"
 
-#: apps/io.ox/portal/settings/pane.js:445 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:399 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "スマートフォン設定："
 
-#: apps/io.ox/settings/accounts/settings/pane.js:91
+#: apps/io.ox/settings/accounts/settings/pane.js:50
 #: module:io.ox/settings/accounts
 msgid "Social accounts are only used to download contact and/or calendar data"
 msgstr ""
@@ -6801,7 +6792,7 @@ msgstr "成功"
 msgid "Successfully reauthorized your %s account"
 msgstr "%s アカウントが正しく再認証されました。"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:92
+#: apps/io.ox/settings/accounts/settings/pane.js:51
 #: module:io.ox/settings/accounts
 msgid "Such data will never be uploaded"
 msgstr "この種類のデータは、アップロードされません。"
@@ -7340,7 +7331,7 @@ msgstr[0] "この期間には既に %1$d 件のアポイントがあります。
 msgid "There is no recent activity in your Xing network."
 msgstr "ご利用の Xing ネットワークでのアクティビティはありません。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:479 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:453 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "定義されているルールはありません。"
 
@@ -7920,8 +7911,8 @@ msgstr ""
 "キーと同時に押すと年を、また、カーソル キーと Shift キーを同時に押すと月を変"
 "更できます。日付の選択ウィンドウを閉じるには、Esc キーを押してください。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:266 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:268 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:241 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:247 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
@@ -8955,8 +8946,7 @@ msgstr "オレンジ"
 msgid "pink"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:170 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:175
+#: apps/io.ox/mail/mailfilter/settings/filter.js:157 module:io.ox/mail
 msgid "process subsequent rules"
 msgstr "次のルールも処理"
 
@@ -8983,9 +8973,8 @@ msgstr "自分のオブジェクトのみを表示"
 msgid "red"
 msgstr "赤"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:178 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:183
-#: apps/io.ox/portal/settings/pane.js:360 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:158 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:315 module:io.ox/portal
 msgid "remove"
 msgstr "削除"
 
@@ -9030,8 +9019,8 @@ msgstr "%s のサブフォルダ"
 msgid "tentative"
 msgstr "仮承諾"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:420 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:226 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:394 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:210 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "アイテムを移動しました。"
 

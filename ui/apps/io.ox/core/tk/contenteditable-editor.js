@@ -16,8 +16,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'io.ox/core/extensions',
-    'io.ox/core/tk/textproc',
-    '3rd.party/tinymce/jquery.tinymce.min'
+    'io.ox/core/tk/textproc'
 ], function (emoji, capabilities, settings, ext, textproc) {
 
     'use strict';

@@ -97,53 +97,63 @@ define('io.ox/core/notifications', [
         //a renderer can be an object with a draw function or an object that contains a View constructor
         //data may be an object or a deferred object returning valid data (for example our api.get() functions)
         openSidepopup: function (cid, renderer, data) {
-            var self = this;
-            // open dialog first to be visually responsive
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                self.nodes.sidepopup.attr('data-cid', cid).appendTo(document.body);
-                // open SidePopup without arrow
-                var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
-                    .setTarget(self.nodes.sidepopup.empty())
-                    .show({ target: self.nodes.sidepopup.empty() }, function (popup) {
-                        var node = popup.closest('.io-ox-sidepopup');
-                        if (!_.device('smartphone')) {
-                            var top = self.bannerHeight + 50;
-                            node.css({
-                                right: '400px',
-                                top: top + 'px'
-                            });
-                        }
-                        node.addClass('io-ox-notifications-sidepopup first');
-                        var cont = function (data) {
-                                //work with real model view or just draw method with baton
-                                if (renderer.View) {
-                                    var view = new renderer.View({ data: data });
-                                    popup.idle().append(view.render().expand().$el.addClass('no-padding'));
-                                } else {
-                                    popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
+            var self = this,
+                cont = function () {
+                    // open dialog first to be visually responsive
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        self.nodes.sidepopup.attr('data-cid', cid).appendTo(document.body);
+                        // open SidePopup without arrow
+                        var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
+                            .setTarget(self.nodes.sidepopup.empty())
+                            .show({ target: self.nodes.sidepopup.empty() }, function (popup) {
+                                var node = popup.closest('.io-ox-sidepopup');
+                                if (!_.device('smartphone')) {
+                                    var top = self.bannerHeight + 50;
+                                    node.css({
+                                        right: '400px',
+                                        top: top + 'px'
+                                    });
                                 }
+                                node.addClass('io-ox-notifications-sidepopup first');
+                                var cont = function (data) {
+                                        //work with real model view or just draw method with baton
+                                        if (renderer.View) {
+                                            var view = new renderer.View({ data: data });
+                                            popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                                        } else {
+                                            popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
+                                        }
 
-                                if (_.device('smartphone')) {
-                                    self.nodes.main.removeClass('active');
+                                        if (_.device('smartphone')) {
+                                            self.nodes.main.removeClass('active');
+                                        }
+                                        return data;
+                                    };
+                                //check if data is deferred
+                                if (data.then) {
+                                    // fetch proper item now
+                                    popup.busy();
+                                    data.then(cont);
+                                } else {
+                                    cont(data);
                                 }
-                                return data;
-                            };
-                        //check if data is deferred
-                        if (data.then) {
-                            // fetch proper item now
-                            popup.busy();
-                            data.then(cont);
-                        } else {
-                            cont(data);
-                        }
+                            });
+                        self.model.set('status', 'sidepopup');
+                        self.model.set('sidepopup', popup);
+                        popup.on('close', $.proxy(self.onCloseSidepopup, self));
                     });
-                self.model.set('status', 'sidepopup');
-                self.model.set('sidepopup', popup);
-                popup.on('close', $.proxy(self.onCloseSidepopup, self));
-            });
+                };
+            //if there is a sidepopup that is about to close we wait for this to avoid sideeffects
+            if (self.model.get('sidepopup') && self.sidepopupIsClosing) {
+                self.model.get('sidepopup').one('close', cont);
+            } else {
+                cont();
+            }
+
         },
 
         onCloseSidepopup: function () {
+            this.sidepopupIsClosing = false;
             this.model.set('status', 'open');
             if (_.device('smartphone')) {
                 this.nodes.main.addClass('active');
@@ -162,6 +172,8 @@ define('io.ox/core/notifications', [
 
         closeSidepopup: function () {
             if (this.model.get('sidepopup')) {
+                //popups close with a delay of 100ms, causes strange behavior if we open a new one during that time
+                this.sidepopupIsClosing = true;
                 this.model.get('sidepopup').close();
             }
         },

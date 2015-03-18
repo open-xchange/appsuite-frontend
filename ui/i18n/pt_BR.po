@@ -679,7 +679,7 @@ msgstr "Duração atual em minutos"
 msgid "Add"
 msgstr "Adicionar"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:82
+#: apps/io.ox/settings/accounts/settings/pane.js:41
 #: module:io.ox/settings/accounts
 msgid "Add account"
 msgstr "Adicionar conta"
@@ -746,7 +746,7 @@ msgstr "Adicionar nova pasta para essa inscrição"
 msgid "Add new participant"
 msgstr "Adicionar novo participante"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:461 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:435 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Adicionar nova regra"
 
@@ -822,7 +822,7 @@ msgstr "Adicionar aos favoritos"
 msgid "Add to portal"
 msgstr "Adicionar ao portal"
 
-#: apps/io.ox/portal/settings/pane.js:102 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:103 module:io.ox/portal
 msgid "Add widget"
 msgstr "Adicionar widget"
 
@@ -1272,13 +1272,13 @@ msgstr "Informação de faturamento"
 msgid "Birthdays"
 msgstr "Aniversários"
 
-#: apps/io.ox/portal/settings/pane.js:162 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:146 module:io.ox/portal
 msgid "Black"
 msgstr "Preto"
 
 #: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:169
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Azul"
@@ -1403,13 +1403,13 @@ msgstr "Visualização do calendário"
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:397
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:581
-#: apps/io.ox/mail/mailfilter/settings/filter.js:102
+#: apps/io.ox/mail/mailfilter/settings/filter.js:104
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1067
 #: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:623 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:166
+#: apps/io.ox/portal/settings/widgetview.js:121
+#: apps/io.ox/settings/accounts/settings/pane.js:135
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:95
 #: apps/io.ox/tasks/edit/main.js:178 apps/io.ox/tasks/main.js:195
@@ -1685,8 +1685,8 @@ msgstr "Recolher formulário"
 
 #: apps/io.ox/calendar/edit/extensions.js:357 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js:36 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:183 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:185
+#: apps/io.ox/portal/settings/pane.js:167 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:169
 msgid "Color"
 msgstr "Cor"
 
@@ -2015,7 +2015,7 @@ msgstr "Criar nova regra"
 msgid "Create new resource"
 msgstr "Criar nova regra"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:55 module:io.ox/mail
 msgid "Create new rule"
 msgstr "Criar nova regra"
 
@@ -2181,14 +2181,10 @@ msgstr "Adiado"
 #: apps/io.ox/mail/settings/signatures/register.js:387
 #: apps/io.ox/mail/settings/signatures/register.js:388
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:621
-#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
-#: apps/io.ox/settings/accounts/settings/pane.js:61
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:63
-#: apps/io.ox/settings/accounts/settings/pane.js:71
-#: apps/io.ox/settings/accounts/settings/pane.js:72
-#: apps/io.ox/tasks/actions.js:424 module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js:27
+#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
+#: apps/io.ox/settings/accounts/settings/pane.js:116
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:424
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js:27
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:49
 #: apps/io.ox/tasks/toolbar.js:85
 #: apps/plugins/administration/groups/settings/toolbar.js:100
@@ -2199,7 +2195,7 @@ msgstr "Adiado"
 msgid "Delete"
 msgstr "Excluir"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:165
+#: apps/io.ox/settings/accounts/settings/pane.js:134
 #: module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Excluir conta"
@@ -2241,7 +2237,7 @@ msgid "Delete whole series"
 msgstr "Excluir série inteira"
 
 #: apps/io.ox/portal/main.js:617 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:110
+#: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr "Excluir widget"
 
@@ -2300,9 +2296,9 @@ msgstr "Link direto: %1$s"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:310
-#: apps/io.ox/portal/settings/pane.js:345 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:141 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
 msgid "Disable"
 msgstr "Desabilitar"
 
@@ -2432,7 +2428,7 @@ msgstr "Você realmente deseja excluir esta conta?"
 msgid "Do you really want to delete these items?"
 msgstr "Você realmente deseja excluir estes itens?"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:164
+#: apps/io.ox/settings/accounts/settings/pane.js:133
 #: module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "Você realmente deseja excluir esta conta?"
@@ -2469,7 +2465,7 @@ msgstr[0] "Você realmente deseja excluir essa tarefa?"
 msgstr[1] "Você realmente deseja excluir essas tarefas?"
 
 #: apps/io.ox/portal/main.js:618 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:111
+#: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr "Deseja realmente excluir este widget?"
 
@@ -2595,7 +2591,7 @@ msgctxt "folder"
 msgid "Drafts"
 msgstr "Rascunhos"
 
-#: apps/io.ox/portal/settings/pane.js:267 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:247 module:io.ox/portal
 msgid "Drag to reorder widget"
 msgstr "Arraste para reordenar o widget"
 
@@ -2683,23 +2679,18 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/main.js:145
 #: apps/io.ox/files/main.js:151 apps/io.ox/files/main.js:340
 #: apps/io.ox/files/main.js:388 apps/io.ox/mail/actions.js:512
-#: apps/io.ox/mail/mailfilter/settings/filter.js:153
-#: apps/io.ox/mail/mailfilter/settings/filter.js:154
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159
+#: apps/io.ox/mail/mailfilter/settings/filter.js:155
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1071
 #: apps/io.ox/mail/settings/signatures/register.js:381
 #: apps/io.ox/mail/settings/signatures/register.js:383
-#: apps/io.ox/portal/settings/pane.js:326 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:328
-#: apps/io.ox/settings/accounts/settings/pane.js:46
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:50
-#: apps/io.ox/settings/accounts/settings/pane.js:52
-#: apps/io.ox/tasks/actions.js:283 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:150 apps/io.ox/tasks/main.js:156
-#: apps/io.ox/tasks/main.js:190 apps/io.ox/tasks/main.js:209
-#: apps/io.ox/tasks/mobile-toolbar-actions.js:42
+#: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:289
+#: apps/io.ox/settings/accounts/settings/pane.js:117
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:283
+#: module:io.ox/tasks apps/io.ox/tasks/main.js:150
+#: apps/io.ox/tasks/main.js:156 apps/io.ox/tasks/main.js:190
+#: apps/io.ox/tasks/main.js:209 apps/io.ox/tasks/mobile-toolbar-actions.js:42
 #: apps/io.ox/tasks/toolbar.js:52
 #: apps/plugins/administration/groups/settings/toolbar.js:92 module:io.ox/core
 #: apps/plugins/administration/resources/settings/toolbar.js:88
@@ -2767,7 +2758,7 @@ msgstr "Edite para definir um nome."
 msgid "Edit resource"
 msgstr "Editar regra"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:55 module:io.ox/mail
 msgid "Edit rule"
 msgstr "Editar regra"
 
@@ -2907,9 +2898,9 @@ msgstr "Esvaziando pasta... Isto pode levar alguns segundos."
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:310
-#: apps/io.ox/portal/settings/pane.js:349 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:141 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:310 module:io.ox/portal
 msgid "Enable"
 msgstr "Habilitar"
 
@@ -3376,7 +3367,7 @@ msgstr "Comida"
 msgid "For best results, please use "
 msgstr "Para melhores resultados, use"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:103
+#: apps/io.ox/settings/accounts/settings/pane.js:62
 #: module:io.ox/settings/accounts
 msgid ""
 "For security reasons, all account passwords are encrypted with your primary "
@@ -3504,14 +3495,14 @@ msgstr "Bom dia, %s"
 
 #: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Cinza"
 
 #: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:167
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Verde"
@@ -3961,7 +3952,7 @@ msgstr "Junho"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js:627 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:120
+#: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
 msgstr "Apenas desabilitar o widget"
 
@@ -4040,14 +4031,14 @@ msgstr "Vida"
 
 #: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:168
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Azul claro"
 
 #: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "Verde claro"
@@ -4144,7 +4135,7 @@ msgstr "E-mail"
 msgid "Mail Details"
 msgstr "Detalhes de e-mail"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:459 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:433 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr "Regras de filtro de e-mail"
@@ -4167,7 +4158,7 @@ msgstr "Endereço de e-mail"
 msgid "Mail and Messaging"
 msgstr "E-mail e Mensagem"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:125
+#: apps/io.ox/settings/accounts/settings/pane.js:84
 #: module:io.ox/settings/accounts apps/io.ox/settings/main.js:405
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
@@ -5146,7 +5137,7 @@ msgstr "Opções"
 
 #: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "Laranja"
@@ -5215,7 +5206,7 @@ msgstr "Senha"
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "O comprimento da senha deve ser entre %1$d e %2$d caracteres."
 
-#: apps/io.ox/settings/accounts/settings/pane.js:97
+#: apps/io.ox/settings/accounts/settings/pane.js:56
 #: module:io.ox/settings/accounts
 msgid "Password recovery"
 msgstr "Recuperação de senha"
@@ -5333,7 +5324,7 @@ msgstr "Escolha uma hora aqui"
 
 #: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:171
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Rosa"
@@ -5532,7 +5523,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/portal/settings/pane.js:70 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:71 module:io.ox/portal
 msgid "Portal settings"
 msgstr "Configurações do portal"
 
@@ -5711,7 +5702,7 @@ msgstr "Obter confirmação"
 
 #: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:170
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Roxo"
@@ -5817,10 +5808,10 @@ msgid "Recover"
 msgstr "Recuperar"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:28 module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js:108
+#: apps/io.ox/settings/accounts/settings/pane.js:67
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:110
-#: apps/io.ox/settings/accounts/settings/pane.js:111
+#: apps/io.ox/settings/accounts/settings/pane.js:69
+#: apps/io.ox/settings/accounts/settings/pane.js:70
 msgid "Recover passwords"
 msgstr "Recuperar senhas"
 
@@ -5838,7 +5829,7 @@ msgstr "Tarefas recorrentes necessitam de uma data de início válida. "
 
 #: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Vermelho"
@@ -5848,7 +5839,7 @@ msgstr "Vermelho"
 msgid "Redirect to"
 msgstr "Redirecionar para"
 
-#: apps/io.ox/portal/settings/pane.js:449 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:403 module:io.ox/portal
 msgid "Reduce to widget summary"
 msgstr "Reduzir para o resumo do widget"
 
@@ -6127,7 +6118,7 @@ msgstr "Sábado"
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:90
 #: apps/io.ox/mail/compose/names.js:162
-#: apps/io.ox/mail/mailfilter/settings/filter.js:101
+#: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/settings/signatures/register.js:178
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
@@ -6653,11 +6644,11 @@ msgstr "Apresentação de slides"
 msgid "Slow requests"
 msgstr "Requisições lentas"
 
-#: apps/io.ox/portal/settings/pane.js:445 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:399 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "Configurações do celular:"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:91
+#: apps/io.ox/settings/accounts/settings/pane.js:50
 #: module:io.ox/settings/accounts
 msgid "Social accounts are only used to download contact and/or calendar data"
 msgstr ""
@@ -6835,7 +6826,7 @@ msgstr "Sucesso"
 msgid "Successfully reauthorized your %s account"
 msgstr "Sua conta %s for reautorizada com sucesso"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:92
+#: apps/io.ox/settings/accounts/settings/pane.js:51
 #: module:io.ox/settings/accounts
 msgid "Such data will never be uploaded"
 msgstr "Estes dados não serão enviados"
@@ -7390,7 +7381,7 @@ msgstr[1] "Já existe %1$d compromissos neste intervalo de tempo."
 msgid "There is no recent activity in your Xing network."
 msgstr "Não houve atividades recentes em sua rede Xing."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:479 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:453 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Não existe regra definida"
 
@@ -7977,8 +7968,8 @@ msgstr ""
 "tempo para alterar ano ou Shift+tecla para alterar mês. Feche o selecionador "
 "de data pressionando Esc+tecla."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:266 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:268 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:241 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:247 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
@@ -9025,8 +9016,7 @@ msgstr "Laranja"
 msgid "pink"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:170 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:175
+#: apps/io.ox/mail/mailfilter/settings/filter.js:157 module:io.ox/mail
 msgid "process subsequent rules"
 msgstr "processar regras subsequentes"
 
@@ -9053,9 +9043,8 @@ msgstr "ler objetos próprios"
 msgid "red"
 msgstr "Vermelho"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:178 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:183
-#: apps/io.ox/portal/settings/pane.js:360 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:158 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:315 module:io.ox/portal
 msgid "remove"
 msgstr "remover"
 
@@ -9100,8 +9089,8 @@ msgstr "subpastas de %s"
 msgid "tentative"
 msgstr "provisório"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:420 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:226 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:394 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:210 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "O item foi movido"
 

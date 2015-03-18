@@ -274,7 +274,7 @@ define('io.ox/core/pdf/pdfview', [
             return pageSize;
         };
 
-	// ---------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         /**
          * Sets the zoom factor for one or all pages
@@ -298,86 +298,7 @@ define('io.ox/core/pdf/pdfview', [
                         self.setPageZoom(pageZoom, pageIndex + 1);
                     });
                 } else {
-                    var curPageData = getPageData(pageNumber);
-
-                    if (curPageData.pageZoom !== pageZoom) {
-                        var curPageNode = getPageNode(pageNumber);
-
-                        if (curPageNode) {
-                            curPageNode.empty();
-                        }
-
-                        curPageData.pageZoom = pageZoom;
-                    }
-                }
-
-                --blockRenderCount;
-            }
-        };
-
-        /**
-         * Returns zoom factor of the page
-         *
-         * @param {Number} pageNumber
-         *  The 1-based page number of the page
-         *
-         *  returns {Number}
-         *   The current pageZoom or 1.0, if no zoom has been set before
-         */
-        this.getPageZoom = function (pageNumber) {
-            var curPageData = getPageData(pageNumber - 1);
-
-            return _.isNumber(pageNumber) ? (curPageData.pageZoom ? curPageData.pageZoom : 1.0) : 1.0;
-        };
-
-        // ---------------------------------------------------------------------
-
-        /**
-         * Returns the size of the zoomed page in pixels
-         *
-         * @param {Number} pageNumber
-         *  The 1-based page number of the page
-         *
-         * @param {Number} [pageZoom]
-         *  The optional zoom of the page for which the page size
-         *  is to be calculated. If no pageZoom is given, the current/last
-         *  pageZoom is returned.
-         *
-         *  returns { width, height }
-         *   The real size of the page in pixels, based on the original size and the pageZoom
-         */
-        this.getRealPageSize = function (pageNumber, pageZoom) {
-            var pageSize = _.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize(),
-                curPageZoom = this.getPageZoom(pageNumber, pageZoom);
-
-            return { width: Math.floor(curPageZoom * pageSize.width), height: Math.floor(curPageZoom * pageSize.height) };
-        };
-
-        // ---------------------------------------------------------------------
-
-        /**
-         * Sets the zoom factor for one or all pages
-         *
-         * @param {Number} pageZoom
-         *  The zoom to set at one or all pages
-         *
-         * @param {Number} [pageNumber]
-         *  The optional 1-based page number of the page to set the zoom for.
-         *  If not given, the zoom of all pages is set to the given zoom factor
-         *
-         *  returns {Number}
-         *   The current pageZoom or 1.0, if no zoom has been set before
-         */
-        this.setPageZoom = function (pageZoom, pageNumber) {
-            if (_.isNumber(pageZoom)) {
-                ++blockRenderCount;
-
-                if (!pageNumber) {
-                    _.times(pdfDocument.getPageCount(), function (pageIndex) {
-                        this.setPageZoom(pageZoom, pageIndex + 1);
-                    });
-                } else {
-                    var curPageData = getPageData(pageNumber);
+                    var curPageData = getPageData(pageNumber - 1);
 
                     if (curPageData.pageZoom !== pageZoom) {
                         var curPageNode = getPageNode(pageNumber);

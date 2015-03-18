@@ -135,7 +135,7 @@ define('io.ox/core/notifications/subview', [
         return {
             id: '',
             title: '',
-            apiSupport: null,
+            api: null,
             apiEvents: null,
             useListRequest: false,
             extensionPoints: {
@@ -347,21 +347,31 @@ define('io.ox/core/notifications/subview', [
             }
             var cid = String($(e.currentTarget).data('cid')),
                 api = this.model.get('api'),
+                fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.nodes.sidepopup,
-                status = notifications.getStatus;
+                status = notifications.getStatus();
             // toggle?
-            if (status === 'sidepopup' && cid === sidepopupNode.find('[data-cid]').data('cid')) {
+            if (status === 'sidepopup' && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
                 //sidepopup.close();
                 notifications.closeSidepopup();
             } else {
                 notifications.closeSidepopup();
+                var data;
+                if (api && !fullModel) {
+                    data = api.get(_.extend({}, _.cid(cid), { unseen: true }));
+                } else {
+                    data = this.collection.get(_.cid(cid)).attributes;
+                }
+                if (!data) {
+                    return;
+                }
                 if (_.isString(this.model.get('detailview'))) {
                     require([this.model.get('detailview')], function (detailview) {
                         //extend with empty object to not overwrite the model
-                        notifications.openSidepopup(cid, detailview, api.get(_.extend({}, _.cid(cid), { unseen: true })));
+                        notifications.openSidepopup(cid, detailview, data);
                     });
                 } else {
-                    notifications.openSidepopup(cid, this.model.get('detailview'), api.get(_.extend(_.cid(cid), { unseen: true })));
+                    notifications.openSidepopup(cid, this.model.get('detailview'), data);
                 }
             }
         }

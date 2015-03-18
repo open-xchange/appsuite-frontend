@@ -28,7 +28,8 @@ define('io.ox/core/main', [
     'io.ox/core/folder/api',
     'settings!io.ox/core',
     'gettext!io.ox/core',
-    'io.ox/core/relogin'
+    'io.ox/core/relogin',
+    'io.ox/core/links'
 ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';

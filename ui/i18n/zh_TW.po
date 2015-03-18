@@ -672,7 +672,7 @@ msgstr "實際持續分鐘數"
 msgid "Add"
 msgstr "新增"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:82
+#: apps/io.ox/settings/accounts/settings/pane.js:41
 #: module:io.ox/settings/accounts
 msgid "Add account"
 msgstr "新增帳號"
@@ -739,7 +739,7 @@ msgstr "為此訂閱新增資料夾"
 msgid "Add new participant"
 msgstr "添加參與者"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:461 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:435 module:io.ox/mail
 msgid "Add new rule"
 msgstr "新增規則"
 
@@ -815,7 +815,7 @@ msgstr "新增至最愛"
 msgid "Add to portal"
 msgstr "新增至入口"
 
-#: apps/io.ox/portal/settings/pane.js:102 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:103 module:io.ox/portal
 msgid "Add widget"
 msgstr "新增小工具"
 
@@ -1257,13 +1257,13 @@ msgstr "帳務資訊"
 msgid "Birthdays"
 msgstr "生日"
 
-#: apps/io.ox/portal/settings/pane.js:162 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:146 module:io.ox/portal
 msgid "Black"
 msgstr "黑色"
 
 #: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:169
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "藍色"
@@ -1386,13 +1386,13 @@ msgstr "日曆視圖"
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:397
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:581
-#: apps/io.ox/mail/mailfilter/settings/filter.js:102
+#: apps/io.ox/mail/mailfilter/settings/filter.js:104
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1067
 #: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:623 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:166
+#: apps/io.ox/portal/settings/widgetview.js:121
+#: apps/io.ox/settings/accounts/settings/pane.js:135
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:95
 #: apps/io.ox/tasks/edit/main.js:178 apps/io.ox/tasks/main.js:195
@@ -1666,8 +1666,8 @@ msgstr "摺疊表單"
 
 #: apps/io.ox/calendar/edit/extensions.js:357 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/view-options.js:36 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:183 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:185
+#: apps/io.ox/portal/settings/pane.js:167 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:169
 msgid "Color"
 msgstr "顏色"
 
@@ -1994,7 +1994,7 @@ msgstr "建立新規則"
 msgid "Create new resource"
 msgstr "建立新規則"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:55 module:io.ox/mail
 msgid "Create new rule"
 msgstr "建立新規則"
 
@@ -2160,14 +2160,10 @@ msgstr "延遲"
 #: apps/io.ox/mail/settings/signatures/register.js:387
 #: apps/io.ox/mail/settings/signatures/register.js:388
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:621
-#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
-#: apps/io.ox/settings/accounts/settings/pane.js:61
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:63
-#: apps/io.ox/settings/accounts/settings/pane.js:71
-#: apps/io.ox/settings/accounts/settings/pane.js:72
-#: apps/io.ox/tasks/actions.js:424 module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js:27
+#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
+#: apps/io.ox/settings/accounts/settings/pane.js:116
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:424
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js:27
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:49
 #: apps/io.ox/tasks/toolbar.js:85
 #: apps/plugins/administration/groups/settings/toolbar.js:100
@@ -2178,7 +2174,7 @@ msgstr "延遲"
 msgid "Delete"
 msgstr "刪除"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:165
+#: apps/io.ox/settings/accounts/settings/pane.js:134
 #: module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "刪除帳號"
@@ -2217,7 +2213,7 @@ msgid "Delete whole series"
 msgstr "刪除整個系列"
 
 #: apps/io.ox/portal/main.js:617 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:110
+#: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr "刪除小工具"
 
@@ -2275,9 +2271,9 @@ msgstr "直接鏈結：%1$s"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:310
-#: apps/io.ox/portal/settings/pane.js:345 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:141 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:306 module:io.ox/portal
 msgid "Disable"
 msgstr "禁用"
 
@@ -2406,7 +2402,7 @@ msgstr "確定要刪除此帳號？"
 msgid "Do you really want to delete these items?"
 msgstr "確定要刪除這些項目？"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:164
+#: apps/io.ox/settings/accounts/settings/pane.js:133
 #: module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "確定要刪除此帳號？"
@@ -2443,7 +2439,7 @@ msgstr[0] "確定要刪除此工作嗎？"
 msgstr[1] "確定要刪除此工作嗎？"
 
 #: apps/io.ox/portal/main.js:618 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:111
+#: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr "確定要刪除此小工具嗎？"
 
@@ -2565,7 +2561,7 @@ msgctxt "folder"
 msgid "Drafts"
 msgstr "草稿"
 
-#: apps/io.ox/portal/settings/pane.js:267 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:247 module:io.ox/portal
 msgid "Drag to reorder widget"
 msgstr "拖曳以重新排序小工具"
 
@@ -2652,23 +2648,18 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/main.js:145
 #: apps/io.ox/files/main.js:151 apps/io.ox/files/main.js:340
 #: apps/io.ox/files/main.js:388 apps/io.ox/mail/actions.js:512
-#: apps/io.ox/mail/mailfilter/settings/filter.js:153
-#: apps/io.ox/mail/mailfilter/settings/filter.js:154
-#: apps/io.ox/mail/mailfilter/settings/filter.js:159
+#: apps/io.ox/mail/mailfilter/settings/filter.js:155
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1071
 #: apps/io.ox/mail/settings/signatures/register.js:381
 #: apps/io.ox/mail/settings/signatures/register.js:383
-#: apps/io.ox/portal/settings/pane.js:326 module:io.ox/portal
-#: apps/io.ox/portal/settings/pane.js:328
-#: apps/io.ox/settings/accounts/settings/pane.js:46
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:50
-#: apps/io.ox/settings/accounts/settings/pane.js:52
-#: apps/io.ox/tasks/actions.js:283 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:150 apps/io.ox/tasks/main.js:156
-#: apps/io.ox/tasks/main.js:190 apps/io.ox/tasks/main.js:209
-#: apps/io.ox/tasks/mobile-toolbar-actions.js:42
+#: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:289
+#: apps/io.ox/settings/accounts/settings/pane.js:117
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:283
+#: module:io.ox/tasks apps/io.ox/tasks/main.js:150
+#: apps/io.ox/tasks/main.js:156 apps/io.ox/tasks/main.js:190
+#: apps/io.ox/tasks/main.js:209 apps/io.ox/tasks/mobile-toolbar-actions.js:42
 #: apps/io.ox/tasks/toolbar.js:52
 #: apps/plugins/administration/groups/settings/toolbar.js:92 module:io.ox/core
 #: apps/plugins/administration/resources/settings/toolbar.js:88
@@ -2736,7 +2727,7 @@ msgstr "編輯以設定名稱。"
 msgid "Edit resource"
 msgstr "編輯規則"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:55 module:io.ox/mail
 msgid "Edit rule"
 msgstr "編輯規則"
 
@@ -2874,9 +2865,9 @@ msgstr "正在清空資料夾... 可能需要幾秒鐘。"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
-#: apps/io.ox/mail/mailfilter/settings/filter.js:139 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:310
-#: apps/io.ox/portal/settings/pane.js:349 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:141 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:284
+#: apps/io.ox/portal/settings/pane.js:310 module:io.ox/portal
 msgid "Enable"
 msgstr "啟用"
 
@@ -3334,7 +3325,7 @@ msgstr "食物"
 msgid "For best results, please use "
 msgstr "為了能有最佳效果，請使用 "
 
-#: apps/io.ox/settings/accounts/settings/pane.js:103
+#: apps/io.ox/settings/accounts/settings/pane.js:62
 #: module:io.ox/settings/accounts
 msgid ""
 "For security reasons, all account passwords are encrypted with your primary "
@@ -3458,14 +3449,14 @@ msgstr "%s 早安"
 
 #: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "灰色"
 
 #: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:167
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
 msgid "Green"
 msgstr "綠色"
@@ -3911,7 +3902,7 @@ msgstr "六月"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js:627 module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js:120
+#: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
 msgstr "僅停用小工具"
 
@@ -3989,14 +3980,14 @@ msgstr "生活"
 
 #: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:168
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "亮藍"
 
 #: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "亮綠"
@@ -4093,7 +4084,7 @@ msgstr "郵件"
 msgid "Mail Details"
 msgstr "郵件詳細資訊"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:459 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:433 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr "郵件篩選規則"
@@ -4116,7 +4107,7 @@ msgstr "郵件地址"
 msgid "Mail and Messaging"
 msgstr "郵件與訊息"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:125
+#: apps/io.ox/settings/accounts/settings/pane.js:84
 #: module:io.ox/settings/accounts apps/io.ox/settings/main.js:405
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
@@ -5093,7 +5084,7 @@ msgstr "選項"
 
 #: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "橘色"
@@ -5162,7 +5153,7 @@ msgstr "密碼"
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "密碼長度必須在 %1$d 到 %2$d 字元之間。"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:97
+#: apps/io.ox/settings/accounts/settings/pane.js:56
 #: module:io.ox/settings/accounts
 msgid "Password recovery"
 msgstr "密碼救援"
@@ -5280,7 +5271,7 @@ msgstr "請在此選擇一個時間"
 
 #: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:171
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "粉紅色"
@@ -5472,7 +5463,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "入口"
 
-#: apps/io.ox/portal/settings/pane.js:70 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:71 module:io.ox/portal
 msgid "Portal settings"
 msgstr "入口設定"
 
@@ -5653,7 +5644,7 @@ msgstr "確認購買"
 
 #: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:170
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫色"
@@ -5755,10 +5746,10 @@ msgid "Recover"
 msgstr "復原"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:28 module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js:108
+#: apps/io.ox/settings/accounts/settings/pane.js:67
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/accounts/settings/pane.js:110
-#: apps/io.ox/settings/accounts/settings/pane.js:111
+#: apps/io.ox/settings/accounts/settings/pane.js:69
+#: apps/io.ox/settings/accounts/settings/pane.js:70
 msgid "Recover passwords"
 msgstr "找回密碼"
 
@@ -5776,7 +5767,7 @@ msgstr "重複發生的任務需要有效開始日期。"
 
 #: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
-#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
+#: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
 msgid "Red"
 msgstr "紅紅"
@@ -5786,7 +5777,7 @@ msgstr "紅紅"
 msgid "Redirect to"
 msgstr "重導至"
 
-#: apps/io.ox/portal/settings/pane.js:449 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:403 module:io.ox/portal
 msgid "Reduce to widget summary"
 msgstr "減少為小工具的描述"
 
@@ -6067,7 +6058,7 @@ msgstr "星期六"
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:90
 #: apps/io.ox/mail/compose/names.js:162
-#: apps/io.ox/mail/mailfilter/settings/filter.js:101
+#: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/settings/signatures/register.js:178
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
@@ -6592,11 +6583,11 @@ msgstr "幻燈片"
 msgid "Slow requests"
 msgstr "慢速請求"
 
-#: apps/io.ox/portal/settings/pane.js:445 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:399 module:io.ox/portal
 msgid "Smartphone settings:"
 msgstr "智慧型手機設定:"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:91
+#: apps/io.ox/settings/accounts/settings/pane.js:50
 #: module:io.ox/settings/accounts
 msgid "Social accounts are only used to download contact and/or calendar data"
 msgstr "社交帳戶將只會用來下載聯絡人與/或行事曆資料"
@@ -6772,7 +6763,7 @@ msgstr "成功"
 msgid "Successfully reauthorized your %s account"
 msgstr "已成功重新授權您的 %s 帳號"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:92
+#: apps/io.ox/settings/accounts/settings/pane.js:51
 #: module:io.ox/settings/accounts
 msgid "Such data will never be uploaded"
 msgstr "這類資料將不會被上傳"
@@ -7296,7 +7287,7 @@ msgstr[1] "此時段內您有 %1$s 場約會。"
 msgid "There is no recent activity in your Xing network."
 msgstr "您的 Xing 網路中沒有近期活動。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:479 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:453 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "沒有定義規則"
 
@@ -7867,8 +7858,8 @@ msgstr ""
 "使用方向鍵變更日期。同時按下 Ctrl 以變更年度，或按下 Shift 變更月份，按下 "
 "Esc 鍵關閉日期選擇器。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:266 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:268 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:241 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:247 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
@@ -8887,8 +8878,7 @@ msgstr "橘色"
 msgid "pink"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:170 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:175
+#: apps/io.ox/mail/mailfilter/settings/filter.js:157 module:io.ox/mail
 msgid "process subsequent rules"
 msgstr "處理後續規則"
 
@@ -8915,9 +8905,8 @@ msgstr "讀取自己的物件"
 msgid "red"
 msgstr "紅紅"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:178 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:183
-#: apps/io.ox/portal/settings/pane.js:360 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:158 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:315 module:io.ox/portal
 msgid "remove"
 msgstr "刪除"
 
@@ -8962,8 +8951,8 @@ msgstr "%s 的子資料夾"
 msgid "tentative"
 msgstr "暫定"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:420 module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js:226 module:io.ox/portal
+#: apps/io.ox/mail/mailfilter/settings/filter.js:394 module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js:210 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "此項目已被移動"
 
