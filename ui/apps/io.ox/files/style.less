@@ -98,7 +98,7 @@
             padding: 0;
             display: inline-block;
             border: solid white;
-            border-width: 0 @default-padding (@default-padding * 2) 0;
+            border-width: 0 @default-padding @default-padding 0;
             overflow: hidden;
             float: left;
         }
@@ -143,7 +143,7 @@
         @filename_rows: 2;
         @filename_line_height: 16px;
         @filename_height: @filename_rows * @filename_line_height;
-        @filename_margin: 8px;
+        @filename_margin: 12px;
         @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
 
         .list-item-checkmark {
@@ -197,7 +197,7 @@
 
         .list-item-checkmark {
             top: auto;
-            bottom: 4px;
+            bottom: 7px;
             left: -8px;
             height: 48px;
             width: 40px;

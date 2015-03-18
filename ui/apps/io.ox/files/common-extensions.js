@@ -132,7 +132,9 @@ define('io.ox/files/common-extensions', [
                 var preview = baton.model.supportsPreview();
                 if (preview) {
 
-                    var retina = _.device('retina'),
+                    // no clue if we should use double size for retina; impacts network traffic
+                    // var retina = _.device('retina'),
+                    var retina = false,
                         width = retina ? 400 : 200,
                         height = retina ? 300 : 150,
                         url = legacy_api.getUrl(baton.data, preview, { thumbnailWidth: width, thumbnailHeight: height, scaletype: 'cover' }),
