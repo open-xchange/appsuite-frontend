@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-12 15:33+0100\n"
+"PO-Revision-Date: 2015-03-18 14:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -227,7 +227,6 @@ msgstr "%1$s haben ihren Status geändert:"
 #: apps/io.ox/files/fluid/perspective.js:453 module:io.ox/files
 #: apps/io.ox/files/fluid/perspective.js:925
 #: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
-#, fuzzy
 msgid "%1$s completed"
 msgstr "%1$s hochgeladen"
 
@@ -2102,7 +2101,6 @@ msgid "Default signature for new messages"
 msgstr "Standardsignatur für neue Nachrichten"
 
 #: apps/io.ox/mail/settings/signatures/register.js:523 module:io.ox/mail
-#, fuzzy
 msgid "Default signature for replies or forwardings"
 msgstr "Standardsignatur für Antworten und Weiterleitungen"
 
@@ -3555,7 +3553,6 @@ msgid "Hide details"
 msgstr "Details ausblenden"
 
 #: apps/io.ox/mail/compose/extensions.js:151 module:io.ox/mail
-#, fuzzy
 msgid "Hide names"
 msgstr "Namen ausblenden"
 
@@ -3568,7 +3565,6 @@ msgid "Hide stack trace"
 msgstr "Stack trace ausblenden"
 
 #: apps/io.ox/core/notifications/subview.js:68 module:io.ox/core
-#, fuzzy
 msgid "Hide this notification"
 msgstr "Diese Benachrichtigung ausblenden"
 
@@ -5663,7 +5659,6 @@ msgid "Reauthorize"
 msgstr "Erneut autorisieren"
 
 #: apps/io.ox/calendar/settings/pane.js:215 module:io.ox/calendar
-#, fuzzy
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
@@ -6141,7 +6136,6 @@ msgid "Select"
 msgstr "Wählen"
 
 #: apps/io.ox/mail/compose/names.js:91 module:io.ox/mail
-#, fuzzy
 msgid ""
 "Select a checkbox to define a custom name for that address; otherwise the "
 "mail account's default name will be used. If you want to use an address "
@@ -6294,7 +6288,6 @@ msgid "Share"
 msgstr "Teilen"
 
 #: apps/io.ox/files/toolbar.js:74 module:io.ox/files
-#, fuzzy
 msgid "Share selected files"
 msgstr "Markierte Dateien teilen"
 
@@ -7234,7 +7227,10 @@ msgstr ""
 msgid "The uploaded file does not match the requested file type."
 msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] ""
+"Die hochgeladene Datei stimmt nicht mit dem angeforderten Dateityp überein."
 msgstr[1] ""
+"Keine der hochgeladenen Dateien stimmt mit dem angeforderten Dateityp "
+"überein."
 
 #: apps/io.ox/core/permissions/permissions.js:258 module:io.ox/core
 msgid "The user has administrative rights"
@@ -7787,10 +7783,8 @@ msgid "Upload file"
 msgstr "Datei hochladen"
 
 #: apps/io.ox/files/filepicker.js:162 module:io.ox/files
-#, fuzzy
-#| msgid "Uploading a file"
 msgid "Upload local file"
-msgstr "Eine Datei hochladen"
+msgstr "Lokale Datei hochladen"
 
 #: apps/io.ox/files/actions.js:408 module:io.ox/files
 msgid "Upload new file"
