@@ -22,7 +22,7 @@ define('io.ox/core/notifications/subview', [
     ext.point('io.ox/core/notifications/default/main').extend({
         draw: function (baton) {
             var view = baton.view,
-                node = view.$el,
+                viewNode = view.$el,
                 model = view.model,
                 api = model.get('api'),
                 items = view.collection.models,
@@ -35,11 +35,11 @@ define('io.ox/core/notifications/subview', [
             //make sure it's only displayed once
             model.set('showNotificationFor', null);
 
-            node.addClass('notifications notifications-main-' + model.get('id'));
+            viewNode.addClass('notifications notifications-main-' + model.get('id'));
 
             //invoke header, items and footer
-            ext.point(extensionPoints.header).invoke('draw', node, baton);
-            node.append(itemNode);
+            ext.point(extensionPoints.header).invoke('draw', viewNode, baton);
+            viewNode.append(itemNode);
             itemNode.busy();
 
             var drawItem = function (model, requestedModel) {
@@ -110,7 +110,7 @@ define('io.ox/core/notifications/subview', [
                 itemNode.idle();
             }
 
-            ext.point(extensionPoints.footer).invoke('draw', node, baton);
+            ext.point(extensionPoints.footer).invoke('draw', viewNode, baton);
         }
     });
 
@@ -151,8 +151,8 @@ define('io.ox/core/notifications/subview', [
             autoOpen: false,
             desktopNotificationSupport: true,
             genericDesktopNotification: {
-                title: gt('New Notifications'),
-                body: gt("You've got new Notifications"),
+                title: gt('New notifications'),
+                body: gt("You've got new notifications"),
                 icon: ''
             },
             specificDesktopNotification: null,

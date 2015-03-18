@@ -166,7 +166,7 @@ define([
             it('should set alarmtime', function () {
                 expect(model.get('alarm')).to.equal(undefined);
                 var testtime = new date.Local();
-                node.find('#task-edit-reminder-select').val('t').trigger('change');//tomorrow
+                $(node.find('#task-edit-reminder-select')).val('t').trigger('change');//tomorrow
                 expect(model.get('alarm')).to.be.above(testtime.getTime());
             });
             it('should remove alarmtime', function () {

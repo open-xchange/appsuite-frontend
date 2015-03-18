@@ -74,7 +74,7 @@ define([
 
                     //beforeEach(util.openDropdown);
 
-                    function getDropdown ()  {
+                    function getDropdown () {
                         return $('.autocomplete-popup>.scrollable-pane').children();
                     }
 
