@@ -90,22 +90,6 @@ define('io.ox/core/links', [], function () {
                     });
                 });
             });
-
-        } else {
-            ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
-                var app = this, folder = data.folder;
-                // switch to proper perspective
-                ox.ui.Perspective.show(app, 'week:week').done(function (p) {
-                    // set proper folder
-                    if (app.folder.get() === folder) {
-                        p.view.trigger('showAppointment', e, data);
-                    } else {
-                        app.folder.set(folder).done(function () {
-                            p.view.trigger('showAppointment', e, data);
-                        });
-                    }
-                });
-            });
         }
     });
 

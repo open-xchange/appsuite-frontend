@@ -580,6 +580,11 @@ define('io.ox/calendar/month/perspective', [
                 .on('change:perspective', function () {
                     self.dialog.close();
                 });
+        },
+
+        // called when an appointment detail-view opens the according appointment
+        selectAppointment: function (obj) {
+            this.gotoMonth(new date.Local(obj.start_date));
         }
     });
 

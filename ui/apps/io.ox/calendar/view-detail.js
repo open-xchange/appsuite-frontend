@@ -271,13 +271,54 @@ define('io.ox/calendar/view-detail', [
                         $('<a role="button">').attr({
                             href: url,
                             target: '_blank',
-                            class: 'deep-link btn btn-primary btn-xs deep-link-calendar',
+                            class: 'deep-link btn btn-primary btn-xs',
                             style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
-                        }).text(gt('Appointment'))
+                        }).text(gt('Appointment')).on('click', function (e) {
+                            e.preventDefault();
+
+                            var folder = String(baton.data.folder_id);
+
+                            ox.launch('io.ox/calendar/main', { folder: folder }).done(function () {
+                                var app = this,
+                                    perspective = app.props.get('layout') || 'week:week';
+
+                                ox.ui.Perspective.show(app, perspective).done(function (p) {
+                                    function cont() {
+                                        if (p.selectAppointment) {
+                                            p.selectAppointment(baton.data);
+                                        }
+                                    }
+
+                                    if (app.folder.get() === folder) {
+                                        cont();
+                                    } else {
+                                        app.folder.set(folder).done(cont);
+                                    }
+                                });
+                            });
+                        })
                     );
                 this.append(label, link);
             }
         }
+        /*
+        else {
+            ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
+                var app = this, folder = data.folder;
+                // switch to proper perspective
+                ox.ui.Perspective.show(app, 'week:week').done(function (p) {
+                    // set proper folder
+                    if (app.folder.get() === folder) {
+                        p.view.trigger('showAppointment', e, data);
+                    } else {
+                        app.folder.set(folder).done(function () {
+                            p.view.trigger('showAppointment', e, data);
+                        });
+                    }
+                });
+            });
+        }
+        */
     });
 
     // created on/by

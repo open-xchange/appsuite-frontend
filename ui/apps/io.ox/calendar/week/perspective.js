@@ -421,6 +421,14 @@ define('io.ox/calendar/week/perspective', [
                 });
 
             this.followDeepLink();
+        },
+
+        // called when an appointment detail-view opens the according appointment
+        selectAppointment: function (obj) {
+            if (this.view) {
+                this.view.setStartDate(obj.start_date);
+                this.view.trigger('onRefresh');
+            }
         }
     });
 
