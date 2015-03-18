@@ -454,6 +454,15 @@ define('io.ox/core/folder/extensions', [
             });
         }
 
+        function openColorSelection(e) {
+            // check, if clicked on the :before element
+            if (e.offsetX < 0 || e.clientX < $(e.target).offset().left) {
+                // process as context-menu event to view
+                e.type = 'contextmenu';
+                e.data.view.$el.trigger(e);
+            }
+        }
+
         ext.point('io.ox/core/foldertree/node').extend(
             {
                 id: 'shared-by',
@@ -521,14 +530,20 @@ define('io.ox/core/folder/extensions', [
                     if (!api.is('private', baton.data)) return;
                     if (/^virtual/.test(baton.data.id)) return;
 
-                    var folderColor = calendarUtil.getFolderColor(baton.data);
+                    var folderColor = calendarUtil.getFolderColor(baton.data),
+                        folderLabel = this.find('.folder-label');
 
                     // remove any color-label.* classes from folder.
-                    this.find('.folder-label').each(function (index, node) {
+                    folderLabel.each(function (index, node) {
                         node.className = _(node.className.split(' ')).filter(function (c) {
                             return !c.match(/color-label(-\d{1,2})?/);
                         }).join(' ');
                     }).addClass('color-label color-label-' + folderColor);
+
+                    if (_.device('!smartphone')) {
+                        folderLabel.off('click', openColorSelection)
+                            .on('click', { view: baton.view, folder: baton.data }, openColorSelection);
+                    }
                 }
             }
         );
