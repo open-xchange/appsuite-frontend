@@ -572,7 +572,7 @@ define('io.ox/mail/compose/view', [
                     //button texts may become quite large in some languages (e. g. french, see Bug 35581)
                     //add some extra space
                     //TODO maybe we could use a more dynamical approach
-                    new dialogs.ModalDialog({ width: 550 })
+                    new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
