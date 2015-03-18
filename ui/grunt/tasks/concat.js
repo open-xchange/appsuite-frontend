@@ -154,6 +154,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/tk/selection.js',
                             // core
                             'apps/io.ox/core/main.js',
+                            'apps/io.ox/core/links.js',
                             // mail app
                             'apps/io.ox/mail/util.js',
                             'apps/io.ox/mail/api.js',
