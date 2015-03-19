@@ -11,10 +11,10 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
-define(['io.ox/calendar/util', 'io.ox/core/date', 'io.ox/core/moment'], function (util, date, moment) {
+define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
     'use strict';
 
-    describe.only('Util for calendar', function () {
+    describe('Util for calendar', function () {
 
         moment.locale('de');
         moment.tz.setDefault('Europe/Berlin');

@@ -117,7 +117,7 @@ define('io.ox/calendar/util', [
                 startOfDay = moment().startOf('day');
             // past?
             if (m.isBefore(startOfDay)) {
-                if (m.isAfter(startOfDay.subtract(1,'days'))) {
+                if (m.isAfter(startOfDay.subtract(1, 'day'))) {
                     return gt('Yesterday') + ', ' + m.format('l');
                 } else {
                     return m.format('ddd, l');
@@ -126,7 +126,7 @@ define('io.ox/calendar/util', [
                 // future
                 if (m.isBefore(startOfDay.add(1,'days'))) {
                     return gt('Today') + ', ' + m.format('l');
-                } else if (m.isBefore(startOfDay.add(1,'days'))) {
+                } else if (m.isBefore(startOfDay.add(1, 'day'))) {
                     return gt('Tomorrow') + ', ' + m.format('l');
                 } else {
                     return m.format('ddd, l');
