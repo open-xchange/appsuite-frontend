@@ -10,17 +10,17 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/viewer/types/typesregistry', function () {
+define('io.ox/core/viewer/views/types/typesregistry', function () {
 
     // a map of supported file types to their implementations
     var typesMap = {
-            IMAGE: 'imagetype',
-            OFFICE: 'documenttype',
-            OFFICE_TEXT: 'documenttype',
-            OFFICE_SPREADSHEET: 'documenttype',
-            PDF: 'documenttype',
-            AUDIO: 'audiotype',
-            VIDEO: 'videotype'
+            IMAGE: 'imageview',
+            OFFICE: 'documentview',
+            OFFICE_TEXT: 'documentview',
+            OFFICE_SPREADSHEET: 'documentview',
+            PDF: 'documentview',
+//            AUDIO: 'audioview',
+            VIDEO: 'videoview'
         };
 
     /**
@@ -40,14 +40,14 @@ define('io.ox/core/viewer/types/typesregistry', function () {
          *  file type object it could be required; or rejected, in case of an error.
          */
         getModelType: function (model) {
-            //console.warn('getModelType()', model.get('fileCategory'));
+            console.warn('getModelType()', model.get('fileCategory'));
             if (!model) { return $.Deferred().reject(); }
 
-            var modelType = typesMap[model.get('fileCategory')] || 'defaulttype';
+            var modelType = typesMap[model.get('fileCategory')] || 'defaultview';
 
-            return require(['io.ox/core/viewer/types/' + modelType]).then(
+            return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {
-                    //console.info('getModelType() loaded', modelType);
+                    console.info('getModelType() loaded', modelType);
                     return $.Deferred().resolve(Type);
                 },
                 function () {

@@ -8,19 +8,24 @@
  * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/baseview', [
+    'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core'
-], function (Util,  gt) {
+], function (DisposableView, Util,  gt) {
 
     /**
      * The base class for filetype views.
      */
-    var BaseView =  Backbone.View.extend({
+    var BaseView =  DisposableView.extend({
+
+        className: 'swiper-slide',
+        attributes: { tabindex: -1, role: 'option', 'aria-selected': 'false' },
 
         initialize: function () {
-            console.warn('BaseView.initialize()');
+            //console.warn('BaseView.initialize()');
         },
 
         /**
@@ -62,24 +67,6 @@ define('io.ox/core/viewer/views/types/baseview', [
                 $('<p class="apology">').text(notification || '')
             );
             return node;
-        },
-
-        /**
-         * Default implementation of unloading a slide.
-         *
-         * @param {jQuery} slideElement
-         *  slide jQuery element to unload.
-         */
-        unloadSlide: function (slideElement) {
-            //console.warn('BaseType.unloadSlide()', $(slideElement).data('swiper-slide-index'));
-            slideElement.removeClass('cached');
-        },
-
-        /**
-         * Destructor function of this view.
-         */
-        dispose: function () {
-            console.warn('BaseView.dispose()');
         }
 
     });

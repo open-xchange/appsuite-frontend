@@ -12,13 +12,12 @@
  */
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/core/viewer/types/typesregistry',
+    'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
-    'io.ox/core/viewer/views/types/imageview',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (EventDispatcher, TypesRegistry, DisposableView, ImageView,  gt) {
+], function (EventDispatcher, TypesRegistry, DisposableView, gt) {
 
     'use strict';
 
@@ -40,6 +39,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
             this.captionTimeoutId = null;
+            // array of all slide content Backbone Views
+            this.slideViews = [];
             // local array of loaded slide indices.
             this.loadedSlides = [];
             // number of slides to be preloaded in the left/right direction of the active slide
@@ -133,12 +134,15 @@ define('io.ox/core/viewer/views/displayerview', [
                         slideModel = self.collection.at(slideIndex);
 
                     TypesRegistry.getModelType(slideModel)
-                    .done(function (modelType) {
-                        modelType.loadSlide(slideModel, slideNode);
-                    })
-                    .fail(function () {
-                        console.error('cannot require a model type for', slideModel.get('filename'));
+                    .then(function (ModelType) {
+                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
+                        view.render({ modelIndex: slideIndex });
+                        view.load();
+                    },
+                    function () {
+                        console.warn('Cannot require a view type for', slideModel.get('filename'));
                     });
+
                 });
 
                 // preload selected file and its neighbours initially
@@ -176,30 +180,37 @@ define('io.ox/core/viewer/views/displayerview', [
          *  in case of an error.
          */
         createSlides: function (collection, node) {
-            var promises = [];
+            var promises = [],
+                resultDef;
 
             collection.each(function (model, modelIndex) {
                 var def = new $.Deferred();
 
                 TypesRegistry.getModelType(model)
-                .then(function (modelType) {
-                    return def.resolve(modelType.createSlide(model, modelIndex));
+                .then(function (ModelType) {
+                    var view = new ModelType({ model: model, collection: collection });
+                    view.render({ modelIndex: modelIndex });
+                    return def.resolve(view);
                 },
                 function () {
-                    return def.reject('Cannot require a model type for', model.get('filename'));
+                    return def.reject('Cannot require a view type for', model.get('filename'));
                 });
 
                 promises.push(def);
             });
 
-            return $.when.apply(null, promises)
-            .done(function () {
-                // in case of 'done' the arguments array contains the created slide nodes
-                for (var i = 0; i < arguments.length; i++) {
-                    node.append(arguments[i]);
-                }
-            });
+            resultDef = $.when.apply(null, promises);
 
+            resultDef.done(function () {
+                // in case of 'done' the arguments array contains the View instances
+                for (var i = 0; i < arguments.length; i++) {
+                    var view = arguments[i];
+                    this.slideViews.push(view);
+                    node.append(view.el);
+                }
+            }.bind(this));
+
+            return resultDef;
         },
 
         /**
@@ -213,20 +224,12 @@ define('io.ox/core/viewer/views/displayerview', [
          *
          * @returns {jQuery}
          */
-        loadSlide: function (model, slideElement) {
+        loadSlide: function (slideIndex, model, slideElement) {
             if (!model || slideElement.length === 0) { return; }
-            var slideIndex = slideElement.data('swiper-slide-index');
-            //slideElement.addClass('loaded');
-            TypesRegistry.getModelType(model)
-            .done(function (modelType) {
-                if (_.contains(this.loadedSlides, slideIndex)) { return; }
-                this.loadedSlides.push(slideIndex);
-                modelType.loadSlide(model, slideElement);
-                //slideElement.addClass('loaded');
-            }.bind(this))
-            .fail(function () {
-                console.error('Displayerview.loadSlide() - cannot require a model type for', model.get('filename'));
-            });
+            if (_.contains(this.loadedSlides, slideIndex)) { return; }
+
+            this.slideViews[slideIndex].load();
+            this.loadedSlides.push(slideIndex);
         },
 
         /**
@@ -260,7 +263,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 if (slideIndex >= slidesCount) { slideIndex = slideIndex % slidesCount; }
                 var slideModel = collection.at(slideIndex),
                     slideElement = slidesList.eq(slideIndex);
-                self.loadSlide(slideModel, slideElement);
+                self.loadSlide(slideIndex, slideModel, slideElement);
             });
         },
 
@@ -341,8 +344,8 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 cacheOffset = Math.floor(this.slidesToCache / 2),
                 slidesCount = this.collection.length,
-                cachedRange = getCachedRange(activeSlideIndex),
-                slidesWrapper = this.swiper.wrapper;
+                cachedRange = getCachedRange(activeSlideIndex);
+
             function getCachedRange(activeSlideIndex) {
                 var cachedRange = [],
                     rightRange = _.range(activeSlideIndex, activeSlideIndex + cacheOffset + 1, 1),
@@ -357,12 +360,9 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             _.each(self.loadedSlides, function (index) {
                 if (_.contains(cachedRange, index)) { return; }
-                var slideToUnload = slidesWrapper.find('[data-swiper-slide-index="' + index + '"]'),
-                    model = self.collection.at(index);
-                TypesRegistry.getModelType(model).done(function (modelType) {
-                    modelType.unloadSlide(slideToUnload);
-                    self.loadedSlides = _.without(self.loadedSlides, index);
-                });
+
+                self.slideViews[index].unload();
+                self.loadedSlides = _.without(self.loadedSlides, index);
             });
         },
 
