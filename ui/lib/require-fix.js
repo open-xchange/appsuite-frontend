@@ -106,14 +106,37 @@ define.async = (function () {
             deps = [];
         }
 
-        if (ox.manifests) {
-            // if we have the manifests manager at hand, we use it immediately to
-            // inject plugins as further dependencies.
-            deps = ox.manifests.withPluginsFor(name, deps);
+        if (!ox.manifests || ox.manifests.hasPluginsFor(name)) {
+            // we always resolve injected dependencies via a placeholder
+            // in order to avoid UI freezes just because a plugin is missing
+            deps.push(name + ':placeholder!');
+            define(name + ':placeholder', { load: getPluginLoader(name) });
         }
 
         return define.call(this, name, deps, callback);
     };
+
+    function getPluginLoader(name) {
+
+        return function resolveInjectedDependecies(n, req, done) {
+            // still no manifests? (only applies for very basic modules)
+            if (!ox.manifests) return done();
+            // try again: require further dependencies
+            var deps = ox.manifests.pluginsFor(name);
+            if (deps.length) {
+                // resolve dependencies and respond to failures
+                req(deps, done, function fail(e) {
+                    // print error message but continue!
+                    // not restricted to ox.debug; a missing dependency should be recognizable
+                    console.error('Unable to resolve injected dependencies for module "' + name + '". Dependencies:', deps, e.message);
+                    done();
+                });
+            } else {
+                // we're done if nothing to inject
+                done();
+            }
+        };
+    }
 
     // copy other properties
     _.extend(window.define, define);
