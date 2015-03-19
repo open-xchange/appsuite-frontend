@@ -58,7 +58,7 @@ define('io.ox/core/viewer/views/types/audioview',  [
             });
 
             // register error handler
-            audio.on('error', function () {
+            source.on('error', function () {
                 // console.warn('AudioView.loadSlide() - error loading:', self.model.get('filename'));
 
                 self.$el.idle().append(

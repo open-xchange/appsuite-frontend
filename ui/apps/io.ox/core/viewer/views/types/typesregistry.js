@@ -19,9 +19,11 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
             OFFICE_TEXT: 'documentview',
             OFFICE_SPREADSHEET: 'documentview',
             PDF: 'documentview',
-//            AUDIO: 'audioview',
+            AUDIO: 'audioview',
             VIDEO: 'videoview'
-        };
+    },
+    // a list of types only available in debug mode
+    debugOnlyList = ['audioview', 'videoview'];
 
     /**
      * A central registry of file types which are supported by OX Viewer.
@@ -43,7 +45,7 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
             // console.warn('getModelType()', model.get('fileCategory'));
             if (!model) { return $.Deferred().reject(); }
 
-            var modelType = typesMap[model.get('fileCategory')] || 'defaultview';
+            var modelType = this.checkModelTypeForDebug(typesMap[model.get('fileCategory')]);
 
             return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {
@@ -54,6 +56,26 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
                     return $.Deferred().reject('could not require ' + modelType);
                 }
             );
+        },
+
+        /**
+         * In non debug mode, returns 'defaultview' for model types
+         * that are listed in the debugOnlyList.
+         *
+         * @param {String} type
+         *  the model type to check
+         *
+         * @returns {String}
+         *  the resulting model type.
+         */
+        checkModelTypeForDebug: function (type) {
+            if (!type) {
+                return 'defaultview';
+            } else if (!ox.debug && (_.contains(debugOnlyList, type))) {
+                return 'defaultview';
+            }
+
+            return type;
         }
 
     };
