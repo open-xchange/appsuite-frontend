@@ -24,6 +24,18 @@ define('plugins/notifications/calendar/register', [
 
     'use strict';
 
+    var autoOpen = settings.get('autoOpenNotification', true);
+    //change old settings values to new ones
+    if (autoOpen === 'always' || autoOpen === 'noEmail') {
+        autoOpen = true;
+        settings.set('autoOpenNotification', true);
+        settings.save();
+    } else if (autoOpen === 'Never') {
+        autoOpen = false;
+        settings.set('autoOpenNotification', false);
+        settings.save();
+    }
+
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
             var model = baton.model,
@@ -169,7 +181,7 @@ define('plugins/notifications/calendar/register', [
                         item: 'io.ox/core/notifications/calendar-reminder/item'
                     },
                     detailview: 'io.ox/calendar/view-detail',
-                    autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
+                    autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New appointment reminders'),
                         body: gt("You've got appointment reminders"),
@@ -192,7 +204,7 @@ define('plugins/notifications/calendar/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value !== 'never');
+                subview.model.set('autoOpen', value );
             });
 
             reminderAPI.getReminders();
@@ -241,7 +253,7 @@ define('plugins/notifications/calendar/register', [
                         item: 'io.ox/core/notifications/invites/item'
                     },
                     detailview: 'io.ox/calendar/view-detail',
-                    autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
+                    autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New appointment invitation'),
                         body: gt("You've got appointment invitations"),
@@ -264,7 +276,7 @@ define('plugins/notifications/calendar/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value !== 'never');
+                subview.model.set('autoOpen', value );
             });
 
             calAPI.getInvites();

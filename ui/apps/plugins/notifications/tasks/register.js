@@ -24,6 +24,18 @@ define('plugins/notifications/tasks/register', [
 
     'use strict';
 
+    var autoOpen = settings.get('autoOpenNotification', true);
+    //change old settings values to new ones
+    if (autoOpen === 'always' || autoOpen === 'noEmail') {
+        autoOpen = true;
+        settings.set('autoOpenNotification', true);
+        settings.save();
+    } else if (autoOpen === 'Never') {
+        autoOpen = false;
+        settings.set('autoOpenNotification', false);
+        settings.save();
+    }
+
     // this file builds three notification views: OVERDUE TASKS, TASK REMINDERS and TASK CONFIRMATIONS
 
     /*
@@ -96,7 +108,7 @@ define('plugins/notifications/tasks/register', [
                         item: 'io.ox/core/notifications/due-tasks/item'
                     },
                     detailview: 'io.ox/tasks/view-detail',
-                    autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
+                    autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New overdue tasks'),
                         body: gt("You've got overdue tasks"),
@@ -118,7 +130,7 @@ define('plugins/notifications/tasks/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value !== 'never');
+                subview.model.set('autoOpen', value );
             });
 
             api.getTasks();
@@ -184,7 +196,7 @@ define('plugins/notifications/tasks/register', [
                         item: 'io.ox/core/notifications/task-reminder/item'
                     },
                     detailview: 'io.ox/tasks/view-detail',
-                    autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
+                    autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New task reminders'),
                         body: gt("You've got task reminders"),
@@ -206,7 +218,7 @@ define('plugins/notifications/tasks/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value !== 'never');
+                subview.model.set('autoOpen', value );
             });
 
             reminderAPI.getReminders();
@@ -314,7 +326,7 @@ define('plugins/notifications/tasks/register', [
                         item: 'io.ox/core/notifications/task-confirmation/item'
                     },
                     detailview: 'io.ox/tasks/view-detail',
-                    autoOpen: settings.get('autoOpenNotification', 'noEmail') !== 'never',
+                    autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New task invitations'),
                         body: gt("You've got task invitations"),
@@ -336,7 +348,7 @@ define('plugins/notifications/tasks/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value !== 'never');
+                subview.model.set('autoOpen', value );
             });
         }
     });

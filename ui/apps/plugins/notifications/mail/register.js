@@ -17,9 +17,8 @@ define('plugins/notifications/mail/register', [
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
     'io.ox/mail/util',
-    'gettext!plugins/notifications',
-    'settings!io.ox/core'
-], function (api, ext, Subview, util, gt, settings) {
+    'gettext!plugins/notifications'
+], function (api, ext, Subview, util, gt) {
 
     'use strict';
 
@@ -81,7 +80,6 @@ define('plugins/notifications/mail/register', [
                         footer: 'io.ox/core/notifications/mail/footer'
                     },
                     detailview: 'io.ox/mail/detail/view',
-                    autoOpen: settings.get('autoOpenNotification', 'noEmail') === 'always',
                     genericDesktopNotification: {
                         title: gt('New mails'),
                         body: gt("You've got new mails"),
@@ -103,11 +101,6 @@ define('plugins/notifications/mail/register', [
                     hideAllLabel: gt('Hide all notifications for new mails.')
                 },
                 subview = new Subview(options);
-
-            //react to changes in settings
-            settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value === 'always');
-            });
 
             //special add function to consider mails that might have been read elsewhere (didn't throw update:set-seen in appsuite)
             api.on('new-mail', function (e, recent, unseen) {

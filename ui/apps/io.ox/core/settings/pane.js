@@ -352,17 +352,20 @@ define('io.ox/core/settings/pane', [
     // Auto open notification area
     (function () {
         if (settings.isConfigurable('autoOpenNotificationarea')) {
-            var options = [
-                    { label: gt('Never'), value: 'never' },
-                    { label: gt('On new notifications except mails'), value: 'noEmail' },
-                    { label: gt('On every new notification'), value: 'always' }
-                ];
-
             point.extend({
                 id: 'autoOpenNotification',
                 index: 700,
                 className: 'form-group',
                 render: function () {
+
+                    //change old settings values to new ones
+                    var value = this.baton.model.get('autoOpenNotification');
+                    if (value === 'always' || value === 'noEmail') {
+                        this.baton.model.set('autoOpenNotification', true);
+                    } else if (value === 'Never') {
+                        this.baton.model.set('autoOpenNotification', false);
+                    }
+
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
                         $('<label>').attr({
@@ -370,12 +373,10 @@ define('io.ox/core/settings/pane', [
                             for: guid
                         }).text(gt('Automatic opening of notification area')),
                         $('<div>').addClass('col-sm-4').append(
-                            new miniViews.SelectView({
-                                list: options,
+                            new miniViews.CheckboxView({
                                 name: 'autoOpenNotification',
                                 model: this.baton.model,
-                                id: guid,
-                                className: 'form-control'
+                                id: guid
                             }).render().$el
                         )
                     );
