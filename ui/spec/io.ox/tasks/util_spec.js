@@ -10,8 +10,8 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
-], function (util, gt, date) {
+define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
+], function (util, gt, moment) {
     describe('Tasks Utilities', function () {
         var options = {
             testData: {
@@ -81,34 +81,34 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             });
 
             it('should not contain past daytimes', function () {
-                var myDate = new date.Local(),
+                var myDate = moment(),
                     result, stub;
 
-                myDate.setHours(7);
+                myDate.hours(7);
                 //super special UI time hack
-                stub = sinon.stub(date, 'Local');
+                stub = sinon.stub(window, 'moment');
                 stub.returns(myDate);
 
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d0');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(13);
+                myDate.hours(13);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d1');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(16);
+                myDate.hours(16);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d2');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(19);
+                myDate.hours(19);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d3');
                 expect(result).to.include.key('5');
 
-                myDate.setHours(23);
+                myDate.hours(23);
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d4');
                 expect(result).to.include.key('5');
@@ -117,45 +117,45 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             });
 
             it('should set weekdays correctly', function () {
-                var myDate = new date.Local(),
+                var myDate = moment(),
                     result, stub;
 
                 //super special UI time hack
-                stub = sinon.stub(date, 'Local');
+                stub = sinon.stub(window, 'moment');
                 stub.returns(myDate);
 
                 //today and tomorrow are special and should not be included in standard next ...day
-                myDate.setDate(myDate.getDate() - myDate.getDay());//sunday
+                myDate.day(0);//sunday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w0', 'w1']);
                 expect(result).to.include.keys(['w2', 'w3', 'w4', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//monday
+                myDate.day(1);//monday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w1', 'w2']);
                 expect(result).to.include.keys(['w0', 'w3', 'w4', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//tuesday
+                myDate.day(2);//tuesday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w2', 'w3']);
                 expect(result).to.include.keys(['w0', 'w1', 'w4', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//wednesday
+                myDate.day(3);//wednesday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w3', 'w4']);
                 expect(result).to.include.keys(['w0', 'w1', 'w2', 'w5', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//thursday
+                myDate.day(4);//thursday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w4', 'w5']);
                 expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w6']);
 
-                myDate.setDate(myDate.getDate() + 1);//friday
+                myDate.day(5);//friday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w5', 'w6']);
                 expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w4']);
 
-                myDate.setDate(myDate.getDate() + 1);//saturday
+                myDate.day(6);//saturday
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.keys(['w6', 'w0']);
                 expect(result).to.include.keys(['w1', 'w2', 'w3', 'w4', 'w5']);
@@ -181,12 +181,12 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
         describe('computePopupTime', function () {
 
             it('should only return full days', function () {
-                var result = new date.Local(util.computePopupTime('t').endDate);
+                var result = moment.utc(util.computePopupTime('t').endDate);
 
-                expect(result.getHours()).to.equal(0);
-                expect(result.getMinutes()).to.equal(0);
-                expect(result.getSeconds()).to.equal(0);
-                expect(result.getMilliseconds()).to.equal(0);
+                expect(result.hours()).to.equal(0);
+                expect(result.minutes()).to.equal(0);
+                expect(result.seconds()).to.equal(0);
+                expect(result.milliseconds()).to.equal(0);
             });
         });
         describe('sortTasks', function () {
