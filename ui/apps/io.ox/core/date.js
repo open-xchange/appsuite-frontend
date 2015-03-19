@@ -1008,6 +1008,8 @@ define.async('io.ox/core/date', [
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
 
+    console.warn('date is deprecated: please use moment.js instead');
+
     // TODO: get default from local clock
     return $.when(
         api.getTimeZone('UTC'),
