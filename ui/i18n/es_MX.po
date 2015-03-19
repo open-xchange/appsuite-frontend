@@ -553,7 +553,7 @@ msgstr ""
 msgid "A severe error occurred!"
 msgstr "¡Se ha producido un error grave!"
 
-#: apps/io.ox/core/main.js:895 module:io.ox/core
+#: apps/io.ox/core/main.js:896 module:io.ox/core
 msgid "About"
 msgstr "Acerca de"
 
@@ -843,11 +843,11 @@ msgid "Additional settings"
 msgstr "Ajustes adicionales"
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Address Book"
 msgstr "Libreta de direcciones"
 
-#: apps/io.ox/core/main.js:230 module:io.ox/core
+#: apps/io.ox/core/main.js:231 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:31
 msgctxt "app"
 msgid "Address Book"
@@ -993,7 +993,7 @@ msgstr ""
 "La aplicación puede no funcionar como debería hasta que se resuelva este "
 "problema."
 
-#: apps/io.ox/core/main.js:215 module:io.ox/core
+#: apps/io.ox/core/main.js:216 module:io.ox/core
 msgid "Applications"
 msgstr "Aplicaciones"
 
@@ -1022,13 +1022,13 @@ msgstr "Todas las carpetas"
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:345
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:276
 #: apps/io.ox/calendar/week/perspective.js:160
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 msgid "Appointment"
 msgstr "Cita"
 
 #: apps/io.ox/calendar/detail/main.js:38 module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js:64
-#: apps/io.ox/calendar/list/perspective.js:75
+#: apps/io.ox/calendar/list/perspective.js:68
+#: apps/io.ox/calendar/list/perspective.js:79
 #: apps/io.ox/calendar/month/perspective.js:64
 #: apps/io.ox/calendar/week/perspective.js:69
 msgid "Appointment Details"
@@ -1113,7 +1113,7 @@ msgstr "¿Está seguro de querer borrar este tuit?"
 msgid "As incoming mail server"
 msgstr "Como servidor de correo entrante"
 
-#: apps/io.ox/calendar/list/perspective.js:239 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:243 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
 msgid "Ascending"
@@ -1138,7 +1138,7 @@ msgstr[0] "El adjunto se ha guardado"
 msgstr[1] "Los adjuntos se han guardado"
 
 #: apps/io.ox/calendar/edit/extensions.js:546 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/view-detail.js:335 module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js:376 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js:413 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:432
@@ -1181,7 +1181,7 @@ msgstr "Guardar automáticamente borradores de correo electrónico"
 msgid "Automatic opening of notification area"
 msgstr "Apertura automática del área de notificación"
 
-#: apps/io.ox/core/main.js:506 module:io.ox/core
+#: apps/io.ox/core/main.js:507 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "Desconexión automática"
@@ -1341,12 +1341,12 @@ msgstr "Sem %1$d"
 msgid "CalDAV URL"
 msgstr "URL de CalDAV"
 
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Calendar"
 msgstr "Calendario"
 
 #: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
-#: apps/io.ox/core/main.js:231 module:io.ox/core
+#: apps/io.ox/core/main.js:232 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
 msgid "Calendar"
@@ -1379,7 +1379,7 @@ msgstr "Vista de calendario"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
-#: apps/io.ox/core/main.js:509 apps/io.ox/core/main.js:1355
+#: apps/io.ox/core/main.js:510 apps/io.ox/core/main.js:1356
 #: apps/io.ox/core/permissions/permissions.js:369
 #: apps/io.ox/core/permissions/permissions.js:402 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
@@ -1796,7 +1796,7 @@ msgid "Connector for Microsoft Outlook®"
 msgstr "Conector para Microsoft Outlook®"
 
 #: apps/io.ox/contacts/edit/main.js:278 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 msgid "Contact"
 msgstr "Contacto"
 
@@ -1838,7 +1838,7 @@ msgstr "Los contactos se han movido"
 msgid "Contains"
 msgstr "Contiene"
 
-#: apps/io.ox/core/main.js:1356 module:io.ox/core
+#: apps/io.ox/core/main.js:1357 module:io.ox/core
 msgid "Continue"
 msgstr "Continuar"
 
@@ -1846,7 +1846,7 @@ msgstr "Continuar"
 msgid "Conversations"
 msgstr "Conversaciones"
 
-#: apps/io.ox/core/main.js:235 module:io.ox/core
+#: apps/io.ox/core/main.js:236 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:36
 msgctxt "app"
 msgid "Conversations"
@@ -1925,7 +1925,7 @@ msgstr ""
 "No se pudo guardar la configuración. Debe haber al menos un usuario con "
 "derechos de administración."
 
-#: apps/io.ox/calendar/list/perspective.js:182 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:186 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "No se pudieron cargar los datos de la cita."
 
@@ -2027,7 +2027,7 @@ msgstr "Crear recordatorio"
 msgid "Create task"
 msgstr "Crear tarea"
 
-#: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js:332 module:io.ox/calendar
 msgid "Created"
 msgstr "Creado"
 
@@ -2040,7 +2040,7 @@ msgstr "Creación de archivos"
 msgid "Currency"
 msgstr "Moneda"
 
-#: apps/io.ox/core/main.js:366 module:io.ox/core
+#: apps/io.ox/core/main.js:367 module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Actualizando en este momento"
 
@@ -2252,7 +2252,7 @@ msgstr ""
 msgid "Department"
 msgstr "Departamento"
 
-#: apps/io.ox/calendar/list/perspective.js:240 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:244 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
 msgid "Descending"
@@ -2589,7 +2589,7 @@ msgstr "Borradores"
 msgid "Drag to reorder widget"
 msgstr "Arrastrar para reubicar el widget"
 
-#: apps/io.ox/core/main.js:234 module:io.ox/core
+#: apps/io.ox/core/main.js:235 module:io.ox/core
 #: apps/io.ox/files/settings/pane.js:52 module:io.ox/files
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
@@ -3044,7 +3044,7 @@ msgstr "Fechas exactas"
 msgid "Executive"
 msgstr "Ejecutivo"
 
-#: apps/io.ox/core/main.js:870 module:io.ox/core
+#: apps/io.ox/core/main.js:871 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Salir del modo de pantalla completa"
 
@@ -3224,7 +3224,7 @@ msgid "Feeling • Decoration"
 msgstr "Sensación • Decoración"
 
 #: apps/io.ox/files/fluid/view-detail.js:357 module:io.ox/files
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 msgid "File"
 msgstr "Archivo"
 
@@ -3287,7 +3287,7 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:237 module:io.ox/calendar
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 #: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Carpeta"
@@ -3316,7 +3316,7 @@ msgid "Folder view"
 msgstr "Vista de carpeta"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1582 module:io.ox/core
+#: apps/io.ox/core/main.js:1583 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3426,7 +3426,7 @@ msgstr "viernes"
 msgid "From"
 msgstr "De"
 
-#: apps/io.ox/core/main.js:873 module:io.ox/core apps/io.ox/core/main.js:877
+#: apps/io.ox/core/main.js:874 module:io.ox/core apps/io.ox/core/main.js:878
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
@@ -3545,7 +3545,7 @@ msgid "Hello World"
 msgstr "Hola Mundo"
 
 #: apps/io.ox/calendar/freebusy/templates.js:113
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:828
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:829
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Ayuda"
@@ -3995,7 +3995,7 @@ msgstr "Apellidos"
 msgid "Last name, First name"
 msgstr "Apellidos, Nombre"
 
-#: apps/io.ox/core/main.js:222 module:io.ox/core
+#: apps/io.ox/core/main.js:223 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr ""
 "Lanzador desplegable. Presione [Intro] para pasar a la lista desplegable."
@@ -4121,7 +4121,7 @@ msgstr "MM"
 msgid "Mail"
 msgstr "Correo"
 
-#: apps/io.ox/core/main.js:229 module:io.ox/core
+#: apps/io.ox/core/main.js:230 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:153
 #: module:io.ox/mail
 msgctxt "app"
@@ -4418,7 +4418,7 @@ msgstr "Otros"
 msgid "Model is incomplete."
 msgstr "El modelo está incompleto."
 
-#: apps/io.ox/calendar/view-detail.js:314 module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js:355 module:io.ox/calendar
 msgid "Modified"
 msgstr "Modificado"
 
@@ -4504,7 +4504,7 @@ msgstr "Añadir a libreta de direcciones"
 msgid "My calendars"
 msgstr "Nuevo calendario"
 
-#: apps/io.ox/core/main.js:807 module:io.ox/core
+#: apps/io.ox/core/main.js:808 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
@@ -4567,12 +4567,6 @@ msgstr "Nuevo correo"
 msgid "New Mails"
 msgstr "Nuevos correos electrónicos"
 
-#: apps/io.ox/core/notifications/subview.js:154 module:io.ox/core
-#, fuzzy
-#| msgid "Notifications"
-msgid "New Notifications"
-msgstr "Notificaciones"
-
 #: apps/io.ox/calendar/settings/pane.js:177 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
@@ -4627,6 +4621,12 @@ msgstr "Nuevo correo"
 #| msgid "New Mails"
 msgid "New mails"
 msgstr "Nuevos correos electrónicos"
+
+#: apps/io.ox/core/notifications/subview.js:154 module:io.ox/core
+#, fuzzy
+#| msgid "Notifications"
+msgid "New notifications"
+msgstr "Notificaciones"
 
 #: apps/plugins/notifications/tasks/register.js:110
 #: module:plugins/notifications
@@ -4732,7 +4732,7 @@ msgstr "Apodo"
 
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js:137 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:129
+#: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:130
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:176
 msgid "No"
 msgstr "No"
@@ -4745,7 +4745,7 @@ msgstr "No se encontraron feeds RSS."
 msgid "No Tweets yet."
 msgstr "Aún no hay tuits."
 
-#: apps/io.ox/calendar/list/perspective.js:265 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:269 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "No se encontraron citas hasta %s"
 
@@ -4972,7 +4972,7 @@ msgstr "octubre"
 msgid "Off"
 msgstr "Desconectado"
 
-#: apps/io.ox/core/main.js:194 module:io.ox/core
+#: apps/io.ox/core/main.js:195 module:io.ox/core
 msgid "Offline"
 msgstr "Desconectado"
 
@@ -5501,7 +5501,7 @@ msgstr ""
 "Por favor, seleccione cuál de los siguientes datos se pueden usar para crear "
 "su cuenta de %s:"
 
-#: apps/io.ox/core/main.js:1105 module:io.ox/core
+#: apps/io.ox/core/main.js:1106 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Por favor, inicie de nuevo la sesión para continuar"
@@ -5524,7 +5524,7 @@ msgstr "Más"
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/core/main.js:228 module:io.ox/core
+#: apps/io.ox/core/main.js:229 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:29
 msgctxt "app"
 msgid "Portal"
@@ -5851,7 +5851,7 @@ msgstr "Redirigir a"
 msgid "Reduce to widget summary"
 msgstr "Reducir a resumen de widgets"
 
-#: apps/io.ox/core/main.js:349 module:io.ox/core apps/io.ox/core/main.js:774
+#: apps/io.ox/core/main.js:350 module:io.ox/core apps/io.ox/core/main.js:775
 #: apps/io.ox/core/sub/settings/pane.js:193 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:194
 msgid "Refresh"
@@ -6049,7 +6049,7 @@ msgstr "Nombre del recurso"
 msgid "Resources"
 msgstr "Recursos"
 
-#: apps/io.ox/core/main.js:1348 module:io.ox/core
+#: apps/io.ox/core/main.js:1349 module:io.ox/core
 msgid "Restore applications"
 msgstr "Restaurar las aplicaciones"
 
@@ -6204,7 +6204,7 @@ msgstr[1] "Guardar adjunto"
 msgid "Scheduling"
 msgstr "Planificación"
 
-#: apps/io.ox/core/main.js:232 module:io.ox/core
+#: apps/io.ox/core/main.js:233 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:33
 msgctxt "app"
 msgid "Scheduling"
@@ -6212,7 +6212,7 @@ msgstr "Planificación"
 
 #. search feature help text for screenreaders
 #: apps/io.ox/core/desktop.js:1574 module:io.ox/core
-#: apps/io.ox/core/main.js:758
+#: apps/io.ox/core/main.js:759
 #: apps/io.ox/search/autocomplete/extensions.js:169
 #: apps/io.ox/search/autocomplete/extensions.js:212
 #: apps/io.ox/search/main.js:197 module:io.ox/search
@@ -6371,7 +6371,7 @@ msgid "Server type"
 msgstr "Tipo de servidor"
 
 #: apps/io.ox/backbone/basicModel.js:145 module:io.ox/core
-#: apps/io.ox/core/main.js:201
+#: apps/io.ox/core/main.js:202
 msgid "Server unreachable"
 msgstr "Servidor no alcanzable"
 
@@ -6385,7 +6385,7 @@ msgstr "Versión del servidor"
 msgid "Set color"
 msgstr "Asignar color"
 
-#: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
+#: apps/io.ox/core/main.js:787 module:io.ox/core apps/io.ox/core/main.js:938
 #: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:414
 msgid "Settings"
 msgstr "Configuración"
@@ -6430,12 +6430,12 @@ msgstr "Actividad compartida"
 msgid "Shared address books"
 msgstr "Libreta de direcciones compartida"
 
-#: apps/io.ox/core/folder/extensions.js:476 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:485 module:io.ox/core
 msgid "Shared by other users"
 msgstr "Compartido por otros usuarios"
 
 #. %1$s is the folder owner
-#: apps/io.ox/core/folder/extensions.js:471 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:480 module:io.ox/core
 #, fuzzy
 #| msgid "Searched for: %1$s"
 msgctxt "owner"
@@ -6598,12 +6598,12 @@ msgstr "Mostrado como"
 msgid "Sign in"
 msgstr "Conectarse"
 
-#: apps/io.ox/core/main.js:916 module:io.ox/core apps/io.ox/core/main.js:955
-#: apps/io.ox/core/main.js:957 apps/io.ox/core/main.js:1085
+#: apps/io.ox/core/main.js:917 module:io.ox/core apps/io.ox/core/main.js:956
+#: apps/io.ox/core/main.js:958 apps/io.ox/core/main.js:1086
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
-#: apps/io.ox/core/main.js:510 module:io.ox/core
+#: apps/io.ox/core/main.js:511 module:io.ox/core
 msgid "Sign out now"
 msgstr "Cerrar sesión ahora"
 
@@ -6626,7 +6626,7 @@ msgstr "Firmas"
 msgid "Signed in as %1$s"
 msgstr "Conectado como %1$s"
 
-#: apps/io.ox/core/main.js:1082 module:io.ox/core
+#: apps/io.ox/core/main.js:1083 module:io.ox/core
 #, fuzzy
 #| msgid "Signed in as %1$s"
 msgid "Signed in as:"
@@ -6709,7 +6709,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Ordenar por"
 
-#: apps/io.ox/calendar/list/perspective.js:231 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:235 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:684 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Opciones de ordenación"
@@ -6887,7 +6887,7 @@ msgstr "DTS"
 msgid "Tag mail with"
 msgstr "Etiquetar correo con"
 
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:211 module:io.ox/tasks
 msgid "Task"
 msgstr "Tarea"
@@ -6937,11 +6937,11 @@ msgstr "La tarea ya había sido borrada"
 msgid "Task was modified before, please reload"
 msgstr "La tarea ya había sido modificada. Por favor, cárguela de nuevo"
 
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Tasks"
 msgstr "Tareas"
 
-#: apps/io.ox/core/main.js:233 module:io.ox/core
+#: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:34 apps/io.ox/tasks/settings/pane.js:50
 #: module:io.ox/tasks
 msgctxt "app"
@@ -7214,7 +7214,7 @@ msgstr "La carpeta se ha limpiado."
 msgid "The folder has been emptied."
 msgstr "La carpeta se ha vaciado."
 
-#: apps/io.ox/core/main.js:1350 module:io.ox/core
+#: apps/io.ox/core/main.js:1351 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7561,11 +7561,11 @@ msgstr ""
 msgid "This folder has no subscriptions"
 msgstr "Esta carpeta no tiene suscripciones"
 
-#: apps/io.ox/core/folder/extensions.js:513 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:522 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Esta carpeta tiene publicaciones y/o suscripciones"
 
-#: apps/io.ox/core/folder/extensions.js:510 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:519 module:io.ox/core
 #, fuzzy
 #| msgid "This folder has no subscriptions"
 msgid "This folder has subscriptions"
@@ -7865,7 +7865,7 @@ msgstr "No leido"
 msgid "Unread: %1$d"
 msgstr "No leídos: %1$d"
 
-#: apps/io.ox/core/main.js:127 module:io.ox/core
+#: apps/io.ox/core/main.js:128 module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Los documentos no guardados se perderán. ¿Desea salir ahora?"
 
@@ -8230,7 +8230,7 @@ msgstr "Amarillo"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:136 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:153 apps/io.ox/core/main.js:128
+#: apps/io.ox/calendar/week/perspective.js:153 apps/io.ox/core/main.js:129
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:178
 #: apps/io.ox/files/util.js:249 module:io.ox/files
 msgid "Yes"
@@ -8436,8 +8436,8 @@ msgstr "Es necesario usar Android %n o posterior."
 msgid "You need to use iOS %n or higher."
 msgstr "Es necesario usar iOS %n o posterior."
 
-#: apps/io.ox/core/folder/extensions.js:492 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:495
+#: apps/io.ox/core/folder/extensions.js:501 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:504
 msgid "You share this folder with other users"
 msgstr "Usted comparte esta carpeta con otros usuarios"
 
@@ -8458,7 +8458,7 @@ msgstr ""
 "Volverá automáticamente a la ventana de la cita. Se aplicarán las horas de "
 "inicio y fin seleccionadas, además de la lista de participantes actual."
 
-#: apps/io.ox/core/main.js:487 module:io.ox/core
+#: apps/io.ox/core/main.js:488 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Será desconectado automáticamente en %1$d segundo"
@@ -8478,17 +8478,17 @@ msgstr "Ocultar todas las invitaciones a citas."
 msgid "You've got appointment reminders"
 msgstr "Ocultar todos los recordatorios de citas."
 
-#: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
-#, fuzzy
-#| msgid "No notifications"
-msgid "You've got new Notifications"
-msgstr "No hay notificaciones"
-
 #: apps/plugins/notifications/mail/register.js:87 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got new mails"
 msgstr "Componer una nuevo correo electrónico"
+
+#: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "You've got new notifications"
+msgstr "No hay notificaciones"
 
 #: apps/plugins/notifications/tasks/register.js:102
 #: module:plugins/notifications
@@ -8515,7 +8515,7 @@ msgstr "Ocultar todos los recordatorios de tareas."
 msgid "Your %s newsfeed"
 msgstr "Su fuente de noticias %s"
 
-#: apps/io.ox/core/main.js:983 module:io.ox/core
+#: apps/io.ox/core/main.js:984 module:io.ox/core
 msgid "Your Applications"
 msgstr "Sus aplicaciones"
 
@@ -8607,7 +8607,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "La foto seleccionada se mostrará después de ser guardada"
 
-#: apps/io.ox/core/main.js:1104 module:io.ox/core
+#: apps/io.ox/core/main.js:1105 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "La sesión ha expirado"
@@ -8668,7 +8668,7 @@ msgid "close"
 msgstr "cerrar"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:620 module:io.ox/core
+#: apps/io.ox/core/main.js:621 module:io.ox/core
 msgid "close for %1$s"
 msgstr "cerrar por %1$s"
 
