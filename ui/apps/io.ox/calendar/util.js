@@ -139,6 +139,7 @@ define('io.ox/calendar/util', [
                 var startDate, endDate,
                     a11y = a11y || false,
                     fmtstr = a11y ? 'dddd, l' : 'ddd, l';
+
                 if (data.full_time) {
                     startDate = moment.utc(data.start_date).local(true);
                     endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
@@ -157,7 +158,7 @@ define('io.ox/calendar/util', [
                         //#, c-format
                         return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
                     }
-                    return startDate.format(fmtstr) + ' \u2013 ' + moment(data.end_date).format('LT');
+                    return startDate.format(fmtstr) + ' \u2013 ' + endDate.format(fmtstr);
                 }
             } else {
                 return '';
