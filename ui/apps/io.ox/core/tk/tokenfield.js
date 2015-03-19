@@ -89,7 +89,9 @@ define('io.ox/core/tk/tokenfield', [
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,
                 // tokenfield default
-                allowEditing: true
+                allowEditing: true,
+                // dnd sort
+                dnd: true
             }, options);
 
             // call super constructor
@@ -206,8 +208,9 @@ define('io.ox/core/tk/tokenfield', [
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
-                        // a11y: set title
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value);
+
+                        // a11y: set title
                         $(e.relatedTarget).attr('title', function () {
                             var token = model.get('token'),
                                 title = token.label;
@@ -289,30 +292,32 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.parent().addClass(this.options.className);
 
             // init drag 'n' drop sort
-            this.$el.closest('div.tokenfield').sortable({
-                items: '> .token',
-                connectWith: 'div.tokenfield',
-                cancel: 'a.close',
-                placeholder: 'token placeholder',
-                revert: 0,
-                forcePlaceholderSize: true,
-                // update: _.bind(this.resort, this),
-                stop: function () {
-                    self.resort.call(self);
-                },
-                receive: function (e, ui) {
-                    var tokenData = ui.item.data();
-                    self.collection.addUniquely(tokenData.attrs.model);
-                    self.resort.call(self);
-                },
-                remove: function (e, ui) {
-                    var tokenData = ui.item.data();
-                    self.collection.remove(tokenData.attrs.model);
-                    self.resort.call(self);
-                }
-            }).droppable({
-                hoverClass: 'drophover'
-            });
+            if (this.options.dnd) {
+                this.$el.closest('div.tokenfield').sortable({
+                    items: '> .token',
+                    connectWith: 'div.tokenfield',
+                    cancel: 'a.close',
+                    placeholder: 'token placeholder',
+                    revert: 0,
+                    forcePlaceholderSize: true,
+                    // update: _.bind(this.resort, this),
+                    stop: function () {
+                        self.resort.call(self);
+                    },
+                    receive: function (e, ui) {
+                        var tokenData = ui.item.data();
+                        self.collection.addUniquely(tokenData.attrs.model);
+                        self.resort.call(self);
+                    },
+                    remove: function (e, ui) {
+                        var tokenData = ui.item.data();
+                        self.collection.remove(tokenData.attrs.model);
+                        self.resort.call(self);
+                    }
+                }).droppable({
+                    hoverClass: 'drophover'
+                });
+            }
 
             // Remove on cut
             this.$el.closest('div.tokenfield').on('keydown', function (e) {
