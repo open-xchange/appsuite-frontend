@@ -419,18 +419,14 @@ define('io.ox/core/permissions/permissions', [
                             node =  $('<div class="autocomplete-controls input-group">').append(
                                 $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
-                                }),
-                                $('<span class="input-group-btn">').append(
-                                    $('<button type="button" class="btn btn-default" data-action="add">')
-                                        .append($('<i class="fa fa-plus">'))
-                                )
+                                })
                             ),
                             autocomplete = new AddParticipantsView({ el: node });
 
                         autocomplete.render({
                             autoselect: true,
-                            parentSelector: (_.device('desktop') ? '.permissions-dialog > .modal-footer' : '.permissions-dialog > .modal-header'),
-                            placement: (_.device('desktop') ? 'top' : 'bottom'),
+                            parentSelector: '.permissions-dialog > .modal-header',
+                            placement: 'bottom',
                             contacts: false,
                             distributionlists: false,
                             groups: true,
@@ -469,7 +465,8 @@ define('io.ox/core/permissions/permissions', [
                             }
                         });
                         if (_.device('desktop')) {
-                            dialog.getFooter().prepend(node, checkboxNode);
+                            dialog.getHeader().append(node);
+                            dialog.getFooter().prepend(checkboxNode);
                         } else {
                             dialog.getHeader().append(node, checkboxNode);
                         }
