@@ -35,53 +35,28 @@ define('jquery', function () { return $; });
 define.async = (function () {
 
     var getLoader = function (name, deps, callback) {
-            return function (n, req, onLoad, config) {
-                // resolve module dependencies
-                req(deps, function () {
-                    // get module (must return deferred object)
-                    var def = callback.apply(null, arguments);
-                    if (def && def.done) {
-                        def.done(onLoad);
-                    } else {
-                        console.error('Module "' + name + '" does not return a deferred object!');
-                    }
-                    name = deps = callback = null;
-                });
-            };
+        return function (n, req, onLoad, config) {
+            // resolve module dependencies
+            req(deps, function () {
+                // get module (must return deferred object)
+                var def = callback.apply(null, arguments);
+                if (def && def.done) {
+                    def.done(onLoad);
+                } else {
+                    console.error('Module "' + name + '" does not return a deferred object!');
+                }
+                name = deps = callback = null;
+            });
         };
+    };
 
     return function (name, deps, callback) {
         // use loader plugin to defer module definition
-        var wrapper = null;
-        if (ox.manifests) {
-            wrapper = ox.manifests.wrapperFor(name, deps, callback);
-        } else {
-            wrapper = {
-                dependencies: deps,
-                definitionFunction: callback
-            };
-        }
-        if (wrapper.after && wrapper.after.length) {
-            (function () {
-                var definitionFunction = wrapper.definitionFunction;
-                wrapper.definitionFunction = function () {
-                    var def = definitionFunction.apply(window, arguments);
-                    var allLoaded = $.Deferred();
-
-                    def.done(function (module) {
-                        require(wrapper.after).done(function () {
-                            allLoaded.resolve(module);
-                        });
-                    }).fail(allLoaded.reject);
-
-                    return allLoaded;
-                };
-            }());
-        }
-        define(name + ':init', { load: getLoader(name, wrapper.dependencies, wrapper.definitionFunction) });
+        define(name + ':async', { load: getLoader(name, deps, callback) });
         // define real module - will wait for promise
-        define(name, [name + ':init!'], _.identity);
+        define(name, [name + ':async!'], _.identity);
     };
+
 }());
 
 //
