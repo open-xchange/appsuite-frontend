@@ -23,9 +23,10 @@ define('io.ox/mail/api', [
     'io.ox/mail/util',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
+    'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, settings, gt) {
+], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -1360,7 +1361,11 @@ define('io.ox/mail/api', [
         var interval = null, alt = false;
 
         function tick() {
-            document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
+            if (visibilityApi.isHidden) {
+                document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
+            } else {
+                document.title = document.customTitle;
+            }
         }
 
         function blink() {

@@ -38,6 +38,7 @@ define([
             fullmodel: true,
             detailview: {},
             autoOpen: true,
+            showHideAllButton: true,
             genericDesktopNotification: {
                 title: 'New test notifications',
                 body: 'This is a test',

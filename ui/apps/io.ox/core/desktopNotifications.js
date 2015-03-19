@@ -20,21 +20,14 @@ define('io.ox/core/desktopNotifications', [
     'use strict';
 
     var desktopNotifications,
-        supported = !!Notification,
-        isHidden = visibilityApi.isHidden;
-
-    if (visibilityApi.isSupported) {
-        $(visibilityApi).on('visibility-changed', function (e, data) {
-            isHidden = data.currentState;
-        });
-    }
+        supported = !!Notification;
 
     //actually draws the message
     function draw(message) {
         //only show if page is hidden (minimized etc)
         //no need to show them otherwise
         //if visibility api is not supported, we always show desktop notifications because we cannot be sure
-        if (!isHidden && !message.ignoreVisibility) {
+        if (!visibilityApi.isHidden && !message.ignoreVisibility) {
             return;
         }
         //defaults

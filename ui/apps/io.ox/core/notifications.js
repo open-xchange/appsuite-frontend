@@ -33,6 +33,9 @@ define('io.ox/core/notifications', [
     var NotificationsView = Backbone.View.extend({
         tagName: 'div',
         id: 'io-ox-notifications-display',
+        events: {
+            'click .clear-area-button': 'hideAll'
+        },
         initialize: function () {
             var self = this;
             self.bannerHeight = 0;
@@ -78,8 +81,7 @@ define('io.ox/core/notifications', [
 
             this.model.set('markedForRedraw', {});
 
-            //remove old empty message to avoid duplicates
-            self.$el.find('.no-news-message').remove();
+            self.$el.find(':not(.notification-placeholder, .notifications)').remove();
             _(markedForRedraw).each(function (value, id) {
                 if (value) {
                     subviews[id].render(self.$el);
@@ -88,6 +90,18 @@ define('io.ox/core/notifications', [
 
             if (self.$el.children(':not(.notification-placeholder)').length === 0) {
                 self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
+            } else {
+                //draw headline
+                self.$el.prepend(
+                    $('<div class=notification-area-header>').append(
+                        $('<h1 class="notification-area-title">').text(gt('Notifications')),
+                        $('<button class="btn btn-link clear-area-button fa fa-times">')
+                            .attr({
+                                tabindex: 1,
+                                'aria-label': gt('Hide all notifications')
+                            })
+                        )
+                    );
             }
 
             return self;
@@ -168,6 +182,12 @@ define('io.ox/core/notifications', [
                 self.nodes.sidepopup.attr('data-cid', null).detach();
             }
             this.model.set('sidepopup', null);
+        },
+
+        hideAll: function () {
+            _(this.model.get('subviews')).each(function (view) {
+                view.hideAll();
+            });
         },
 
         closeSidepopup: function () {
