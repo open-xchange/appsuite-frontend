@@ -133,11 +133,37 @@ define([
                 expect(subview.collection.size()).to.equal(0);
                 expect(subview.hiddenCollection.size()).to.equal(2);
             });
-            it('show desktop notifications', function () {
+            //karma won't load desktopNotifications because it misses the global browservariable Notifications (see http://www.w3.org/TR/notifications)
+            //todoo: finish this when desktopNotification is loadable
+            xit('show desktop notifications', function () {
+                /*var spy = sinon.spy(desktopNotifications, 'show');
+                subview.resetNotifications([testModel1, testModel2]);
+                var message = spy.args[0];
+                */
             });
-            it('autoopen and autoclose correctly', function () {
+            it(' trigger autoopen', function () {
+                var triggered = false;
+                function test () {
+                    triggered = true;
+                }
+                subview.on('autoopen', test);
+
+                subview.resetNotifications(testModel1);
+                expect(triggered).to.be.true;
+                subview.off('autoopen', test);
             });
             it('open detailview', function () {
+                subview.resetNotifications(testModel1);
+                notifications.update();
+                var node = $('.notifications-main-testview .item');
+
+                expect(node.length).to.equal(1);
+                expect($('#io-ox-notifications-sidepopup').length).to.equal(0);
+
+                node.click();
+                waitsFor(function () {
+                    return $('#io-ox-notifications-sidepopup').length === 1;
+                });
             });
         });
     });
