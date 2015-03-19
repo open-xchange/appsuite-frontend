@@ -91,7 +91,10 @@ define('io.ox/core/tk/tokenfield', [
                 // tokenfield default
                 allowEditing: true,
                 // dnd sort
-                dnd: true
+                dnd: true,
+                // token view
+                tokenview: undefined
+
             }, options);
 
             // call super constructor
@@ -228,6 +231,11 @@ define('io.ox/core/tk/tokenfield', [
                                 { width: 16, height: 16, scaleType: 'contain' }
                             )
                         );
+
+                        // init and render view for each token (if available)
+                        if (!self.options.tokenview) return;
+                        var view = e.attrs.view = e.attrs.view || new self.options.tokenview({ model: model, el: e.relatedTarget });
+                        view.render();
                     }
                 },
                 'tokenfield:edittoken': function (e) {
