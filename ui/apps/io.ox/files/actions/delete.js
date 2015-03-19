@@ -20,56 +20,40 @@ define('io.ox/files/actions/delete', [
 
     'use strict';
 
-    function getMessages (type) {
-        var plural = (type === 'multiple');
-        return {
-            question: gt.ngettext(
-                    'Do you really want to delete this file?',
-                    'Do you really want to delete these files?',
-                    plural
-            ),
-            responseSuccess: gt.ngettext(
-                    'This file has been deleted',
-                    'These files have been deleted',
-                    plural
-            ),
-            responseFail: gt.ngettext(
-                    'This file has not been deleted',
-                    'These files have not been deleted',
-                    plural
-            ),
-            responseFailLocked: gt.ngettext(
-                    'This file has not been deleted, as it is locked by its owner.',
-                    'These files have not been deleted, as they are locked by their owner.',
-                    plural
-            )
-        };
-    }
-
-    // store labels once
-    var single = getMessages('single'),
-        multiple = getMessages('multiple');
-
     function process(list) {
-        var messages = list.length ? single : multiple;
         api.remove(list).then(
             function success() {
-                notifications.yell('success', messages.responseSuccess);
+                notifications.yell('success', gt.ngettext(
+                    'This file has been deleted',
+                    'These files have been deleted',
+                    list.length
+                ));
             },
             function fail(e) {
                 if (e && e.code && e.code === 'IFO-0415') {
-                    notifications.yell('error', messages.responseFailLocked);
+                    notifications.yell('error', gt.ngettext(
+                        'This file has not been deleted, as it is locked by its owner.',
+                        'These files have not been deleted, as they are locked by their owner.',
+                        list.length
+                    ));
                 } else {
-                    notifications.yell('error', messages.responseFail + '\n' + e.error);
+                    notifications.yell('error', gt.ngettext(
+                        'This file has not been deleted',
+                        'These files have not been deleted',
+                        list.length
+                    ) + '\n' + e.error);
                 }
             }
         );
     }
 
     return function (list) {
-        var messages = list.length ? single : multiple;
         new dialogs.ModalDialog()
-            .text(messages.question)
+            .text(gt.ngettext(
+                'Do you really want to delete this file?',
+                'Do you really want to delete these files?',
+                list.length
+            ))
             .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
             .on('delete', function () {
