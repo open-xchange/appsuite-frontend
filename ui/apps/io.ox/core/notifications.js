@@ -81,14 +81,14 @@ define('io.ox/core/notifications', [
 
             this.model.set('markedForRedraw', {});
 
-            self.$el.find(':not(.notification-placeholder, .notifications)').remove();
+            self.$el.find('.no-news-message,.notification-area-header').remove();
             _(markedForRedraw).each(function (value, id) {
                 if (value) {
                     subviews[id].render(self.$el);
                 }
             });
 
-            if (self.$el.children(':not(.notification-placeholder)').length === 0) {
+            if (self.$el.children(':not(.notification-placeholder,.notifications)').length === 0) {
                 self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
             } else {
                 //draw headline
