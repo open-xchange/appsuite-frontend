@@ -30,10 +30,6 @@ define('io.ox/core/viewer/views/types/defaultview',  [
      */
     var DefaultView = BaseView.extend({
 
-        initialize: function () {
-            //console.warn('DefaultView.initialize()');
-        },
-
         /**
          * Creates and renders a Default slide.
          *

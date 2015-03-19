@@ -40,14 +40,14 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
          *  file type object it could be required; or rejected, in case of an error.
          */
         getModelType: function (model) {
-            console.warn('getModelType()', model.get('fileCategory'));
+            // console.warn('getModelType()', model.get('fileCategory'));
             if (!model) { return $.Deferred().reject(); }
 
             var modelType = typesMap[model.get('fileCategory')] || 'defaultview';
 
             return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {
-                    console.info('getModelType() loaded', modelType);
+                    // console.info('getModelType() loaded', modelType);
                     return $.Deferred().resolve(Type);
                 },
                 function () {

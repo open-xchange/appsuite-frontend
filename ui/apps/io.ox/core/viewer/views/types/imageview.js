@@ -27,10 +27,6 @@ define('io.ox/core/viewer/views/types/imageview', [
      */
     var ImageView =  BaseView.extend({
 
-        initialize: function () {
-            //console.warn('ImageView.initialize()');
-        },
-
         /**
          * Creates and renders an Image slide.
          *

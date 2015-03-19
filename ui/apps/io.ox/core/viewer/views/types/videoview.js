@@ -14,11 +14,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
     'gettext!io.ox/core'
 ], function (BaseView, gt) {
     /**
-     * Default file type for OX Viewer. Displays a generic file icon
-     * and the file name. This type acts as a fallback in cases if the
-     * current file is not supported by OX Viewer.
-     *
-     * Implements the ViewerType interface.
+     * The video file type. Implements the ViewerType interface.
      *
      * interface ViewerType {
      *    function render();
@@ -29,10 +25,6 @@ define('io.ox/core/viewer/views/types/videoview',  [
      */
     var VideoView = BaseView.extend({
 
-        initialize: function () {
-            //console.warn('VideoView.initialize()');
-        },
-
         /**
          * Creates and renders a video slide.
          *
@@ -40,22 +32,42 @@ define('io.ox/core/viewer/views/types/videoview',  [
          *  the VideoView instance.
          */
         render: function () {
-            //console.warn('VideoView.render()');
+            // console.warn('VideoView.render()');
 
-            var video,
+            var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
+                source = $('<source>'),
+                fallback = $('<div>').text(gt('Your browser does not support HTML5 video.')),
                 previewUrl = this.model.getPreviewUrl() || '',
                 contentType = this.model.get('contentType') || '',
-                caption = this.createCaption();
+                caption = this.createCaption(),
+                self = this;
+
+            // run own disposer function on dispose event from DisposableView
+            this.on('dispose', this.disposeView.bind(this));
 
             // remove content of the slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) {
                 this.$el.empty();
             }
 
-            video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">').append(
-                    $('<source>').attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType }),
-                    $('<div>').text(gt('Your browser does not support HTML5 video.'))
-            );
+            // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
+            video.on('loadeddata', function () {
+                self.$el.idle();
+                video.removeClass('player-hidden');
+                // console.warn('VideoType.loadSlide() - loaded:', self.model.get('filename'));
+            });
+
+            // register error handler
+            source.on('error', function () {
+                // console.warn('VideoType.loadSlide() - error loading:', self.model.get('filename'));
+
+                self.$el.idle().append(
+                    self.createNotificationNode(gt('Sorry, the video could not be played.'))
+                );
+            });
+
+            source.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
+            video.append(source, fallback);
 
             this.$el.append(video, caption);
             return this;
@@ -69,52 +81,36 @@ define('io.ox/core/viewer/views/types/videoview',  [
          *  the VideoView instance.
          */
         load: function () {
-            //console.warn('VideoView.load()', this.model.get('filename'));
+            // console.warn('VideoView.load()', this.model.get('filename'));
             var videoToLoad = this.$el.find('video'),
-                videoSource = videoToLoad.find('source'),
-                self = this;
+                videoSource = videoToLoad.find('source');
 
-            if ((videoToLoad.length === 0) || (videoSource.length === 0) || (videoSource.attr('src'))) { return; }
-
-            // register play handler, use 'onloadeddata' because 'oncanplay' is not always triggered on Firefox
-            videoToLoad[0].onloadeddata = function () {
-                self.$el.idle();
-                videoToLoad.removeClass('player-hidden');
-                //console.warn('VideoType.loadSlide()-- onloadeddata --', self.model.get('filename'));
-            };
-
-            // register error handler
-            videoSource[0].onerror = function (e) {
-                console.warn('VideoType.loadSlide() - error loading:', self.model.get('filename'), e.target.src);
-                var notification = self.createNotificationNode(self.model, gt('Sorry, the video could not be played.'));
-                self.$el.idle().append(notification);
-            };
-
-            this.$el.busy();
-            this.$el.find('div.viewer-displayer-notification').remove();
-            videoSource.attr('src', videoSource.attr('data-src'));
-            videoToLoad[0].load(); // reset and start selecting and loading a new media resource from scratch
+            if ((videoToLoad.length > 0) && (videoSource.length > 0)) {
+                this.$el.busy();
+                this.$el.find('div.viewer-displayer-notification').remove();
+                videoSource.attr('src', videoSource.attr('data-src'));
+                videoToLoad[0].load(); // reset and start selecting and loading a new media resource from scratch
+            }
 
             return this;
         },
 
         /**
-         * Unloads a video slide by replacing the src attribute of
+         * "Unloads" a video slide by replacing the src attribute of
          * the source element to an empty String.
          *
          * @returns {VideoView}
          *  the VideoView instance.
          */
         unload: function () {
-            //console.warn('VideoView.unload()', this.model.get('filename'));
-            var videoToUnLoad = this.$el.find('video'),
-                videoSource = videoToUnLoad.find('source');
+            // console.warn('VideoView.unload()', this.model.get('filename'));
+            var videoToUnLoad = this.$el.find('video');
 
             // never unload slide duplicates
             if (!this.$el.hasClass('swiper-slide-duplicate') && videoToUnLoad.length > 0) {
                 videoToUnLoad[0].pause();
                 videoToUnLoad.addClass('player-hidden');
-                videoSource.attr('src', '');
+                videoToUnLoad.find('source').attr('src', '');
             }
         },
 
@@ -125,8 +121,10 @@ define('io.ox/core/viewer/views/types/videoview',  [
          *  the VideoView instance.
          */
         disposeView: function () {
-            //console.warn('ImageView.disposeView()');
-
+            // console.warn('ImageView.disposeView()');
+            var video = this.$el.find('video');
+            // remove event listeners from video and source element
+            video.off().find('source').off();
             return this;
         }
 
