@@ -21,7 +21,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
      * Implements the ViewerType interface.
      *
      * interface ViewerType {
-     *    function render({model: model, modelIndex: modelIndex});
+     *    function render();
      *    function load();
      *    function unload();
      * }
@@ -36,24 +36,16 @@ define('io.ox/core/viewer/views/types/videoview',  [
         /**
          * Creates and renders a video slide.
          *
-         * @param {Object} data
-         *  @param {Object} data.model
-         *      An OX Viewer Model object.
-         *  @param {Number} data.modelIndex
-         *      Index of the model object in the collection.
-         *
          * @returns {VideoView}
          *  the VideoView instance.
          */
-        render: function (data) {
+        render: function () {
             //console.warn('VideoView.render()');
 
             var video,
                 previewUrl = this.model.getPreviewUrl() || '',
-                slidesCount = this.collection.length,
-                modelIndex = data && data.modelIndex || 0,
                 contentType = this.model.get('contentType') || '',
-                caption = this.createCaption(modelIndex, slidesCount);
+                caption = this.createCaption();
 
             // remove content of the slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) {
@@ -118,7 +110,8 @@ define('io.ox/core/viewer/views/types/videoview',  [
             var videoToUnLoad = this.$el.find('video'),
                 videoSource = videoToUnLoad.find('source');
 
-            if (videoToUnLoad.length > 0) {
+            // never unload slide duplicates
+            if (!this.$el.hasClass('swiper-slide-duplicate') && videoToUnLoad.length > 0) {
                 videoToUnLoad[0].pause();
                 videoToUnLoad.addClass('player-hidden');
                 videoSource.attr('src', '');

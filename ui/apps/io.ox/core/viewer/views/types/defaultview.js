@@ -22,7 +22,7 @@ define('io.ox/core/viewer/views/types/defaultview',  [
      * Implements the ViewerType interface.
      *
      * interface ViewerType {
-     *    function render({model: model, modelIndex: modelIndex});
+     *    function render();
      *    function load();
      *    function unload();
      * }
@@ -37,29 +37,22 @@ define('io.ox/core/viewer/views/types/defaultview',  [
         /**
          * Creates and renders a Default slide.
          *
-         * @param {Object} data
-         *  @param {Object} data.model
-         *      An OX Viewer Model object.
-         *  @param {Number} data.modelIndex
-         *      Index of the model object in the collection.
-         *
          * @returns {DefaultView}
          *  the DefaultView instance.
          */
-        render: function (data) {
+        render: function () {
             //console.warn('DefaultView.render()');
-
-            var slidesCount = this.collection.length,
-                modelIndex = data && data.modelIndex || 0,
-                notification = this.createNotificationNode(this.model, gt('Sorry, there is no preview available for this file.')),
-                caption = this.createCaption(modelIndex, slidesCount);
 
             // remove content of the slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) {
                 this.$el.empty();
             }
 
-            this.$el.append(notification, caption);
+            this.$el.append(
+                this.createNotificationNode(gt('Sorry, there is no preview available for this file.')),
+                this.createCaption()
+            );
+
             return this;
         },
 
@@ -75,7 +68,7 @@ define('io.ox/core/viewer/views/types/defaultview',  [
         },
 
         /**
-         * Unloads a default slide.
+         * "Unloads" a default slide.
          *
          * @returns {DefaultView}
          *  the DefaultView instance.

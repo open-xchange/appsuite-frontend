@@ -21,6 +21,8 @@ define('io.ox/core/viewer/views/types/baseview', [
      */
     var BaseView =  DisposableView.extend({
 
+        // create slide root node
+        // <div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">
         className: 'swiper-slide',
         attributes: { tabindex: -1, role: 'option', 'aria-selected': 'false' },
 
@@ -29,40 +31,39 @@ define('io.ox/core/viewer/views/types/baseview', [
         },
 
         /**
-         * Creates a slide caption element.
-         *
-         * @param index
-         *  index of the slide this caption is in
-         *
-         * @param slidesCount
-         *  total count of slides
+         * Creates a slide caption element,
+         * indicating current slide index and the total count of slides.
          *
          * @returns {jQuery}
+         *  the caption node
          */
-        createCaption: function (index, slidesCount) {
-            var caption = $('<div class="viewer-displayer-caption">');
-            caption.text(index + 1 + ' ' + gt('of') + ' ' + slidesCount);
-            return caption;
-        },
+        createCaption: function () {
+            var slideCount = this.collection.length,
+                slideIndex = this.collection.indexOf(this.model),
+                slideCaption = $('<div class="viewer-displayer-caption">');
 
-        /**
-         * Creates the root node for a Swiper slide.
-         *
-         * @returns {jQuery}
-         */
-        createSlideNode: function () {
-            return $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">');
+            slideCaption.text(
+                //#. text of a viewer slide caption
+                //#. Example result: "1 of 10"
+                //#. %1$d is the slide index of the current
+                //#. %2$d is the total slide count
+                gt('%1$d of %2$d', (slideIndex + 1), slideCount)
+            );
+            return slideCaption;
         },
 
         /**
          * Creates a file notification node with file name, icon and the notification text.
+         *
+         * @param {String} [notification='']
+         *  the notification String, if omitted no notification text will be added.
          */
-        createNotificationNode: function (model, notification) {
+        createNotificationNode: function (notification) {
             var node = $('<div class="viewer-displayer-notification">'),
-                filename = model && model.get('filename') || '';
+                filename = this.model.get('filename') || '';
 
             node.append(
-                $('<i class="fa">').addClass(Util.getIconClass(model)),
+                $('<i class="fa">').addClass(Util.getIconClass(this.model)),
                 $('<p>').text(filename),
                 $('<p class="apology">').text(notification || '')
             );

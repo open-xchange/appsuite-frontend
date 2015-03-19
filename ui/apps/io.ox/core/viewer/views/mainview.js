@@ -46,7 +46,7 @@ define('io.ox/core/viewer/views/mainview', [
             this.sidebarView = new SidebarView();
             // clean Viewer element and all event handlers on viewer close
             this.listenTo(this.toolbarView, 'close', function () {
-                this.$el.remove();
+                this.remove();
             });
             // listen to the Viewer event 'bus' for useful events
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
@@ -131,7 +131,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
                     if ( !isDropdownMenuItem && !isDropdownToggler ) {
-                        this.$el.remove();
+                        this.remove();
                     }
                     break;
                 case 37: // left arrow

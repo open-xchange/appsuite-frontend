@@ -136,8 +136,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     TypesRegistry.getModelType(slideModel)
                     .then(function (ModelType) {
                         var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
-                        view.render({ modelIndex: slideIndex });
-                        view.load();
+                        view.render().load();
                     },
                     function () {
                         console.warn('Cannot require a view type for', slideModel.get('filename'));
@@ -183,13 +182,13 @@ define('io.ox/core/viewer/views/displayerview', [
             var promises = [],
                 resultDef;
 
-            collection.each(function (model, modelIndex) {
+            collection.each(function (model) {
                 var def = new $.Deferred();
 
                 TypesRegistry.getModelType(model)
                 .then(function (ModelType) {
                     var view = new ModelType({ model: model, collection: collection });
-                    view.render({ modelIndex: modelIndex });
+                    view.render();
                     return def.resolve(view);
                 },
                 function () {

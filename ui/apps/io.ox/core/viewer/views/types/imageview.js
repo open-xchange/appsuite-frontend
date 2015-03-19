@@ -19,7 +19,7 @@ define('io.ox/core/viewer/views/types/imageview', [
      * The image file type. Implements the ViewerType interface.
      *
      * interface ViewerType {
-     *    function render({model: model, modelIndex: modelIndex});
+     *    function render();
      *    function load();
      *    function unload();
      * }
@@ -34,23 +34,15 @@ define('io.ox/core/viewer/views/types/imageview', [
         /**
          * Creates and renders an Image slide.
          *
-         * @param {Object} data
-         *  @param {Object} data.model
-         *      An OX Viewer Model object.
-         *  @param {Number} data.modelIndex
-         *      Index of the model object in the collection.
-         *
          * @returns {ImageView}
          *  the ImageView instance.
          */
-        render: function (data) {
+        render: function () {
             //console.warn('ImageView.render()');
 
             var image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
                 previewUrl = this.model.getPreviewUrl(),
                 filename = this.model.get('filename') || '',
-                slidesCount = this.model.collection.length,
-                modelIndex = data && data.modelIndex || 0,
                 self = this;
 
             // remove content of the slide duplicates
@@ -67,10 +59,10 @@ define('io.ox/core/viewer/views/types/imageview', [
                     image.show();
                 });
                 image.one('error', function () {
-                    var notification = self.createNotificationNode(this.model, gt('Sorry, there is no preview available for this image.'));
+                    var notification = self.createNotificationNode(gt('Sorry, there is no preview available for this image.'));
                     self.$el.idle().append(notification);
                 });
-                this.$el.append(image, this.createCaption(modelIndex, slidesCount));
+                this.$el.append(image, this.createCaption());
             }
 
             return this;
@@ -95,7 +87,7 @@ define('io.ox/core/viewer/views/types/imageview', [
         },
 
         /**
-         * Unloads an image slide by replacing the src attribute of the image to an
+         * "Unloads" an image slide by replacing the src attribute of the image to an
          * Base64 encoded, 1x1 pixel GIF image.
          *
          * @returns {ImageView}
@@ -112,18 +104,6 @@ define('io.ox/core/viewer/views/types/imageview', [
                     imageToUnLoad.attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 }
             }
-
-            return this;
-        },
-
-        /**
-         * Destructor function of this view.
-         *
-         * @returns {ImageView}
-         *  the ImageView instance.
-         */
-        disposeView: function () {
-            //console.warn('ImageView.disposeView()');
 
             return this;
         }
