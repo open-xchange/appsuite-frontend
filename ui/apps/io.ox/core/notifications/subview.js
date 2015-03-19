@@ -144,7 +144,7 @@ define('io.ox/core/notifications/subview', [
                 item: '',
                 footer: ''
             },
-            showHideAllButton: true,
+            showHideAllButton: false,
             showHideSingleButton: true,
             fullModel: false,
             max: 10,
