@@ -1190,7 +1190,7 @@ define('io.ox/core/main', [
             }
 
             // clean up
-            _.url.hash({ m: null, f: null, i: null });
+            _.url.hash({ m: null, f: null, i: null, '!!': undefined, '!': null });
 
             // always use portal on small devices!
             if (_.device('small')) mobileAutoLaunchArray();
