@@ -383,7 +383,7 @@
                         $.ajax({
                             url: url,
                             type: 'get',
-                            contentType: 'text'
+                            dataType: 'text'
                         }).done(function (sourceText) {
                             if (_.url.hash('debug-filecache')) console.log('FileCache: Cache MISS for static file: ', modulename);
                             runCode(modulename, sourceText);
