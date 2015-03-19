@@ -66,6 +66,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             var dropdown = new Dropdown({
+                caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
                 model: baton.app.props
