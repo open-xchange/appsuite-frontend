@@ -634,6 +634,8 @@ define('io.ox/core/folder/api', [
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
+            // add folder to collection
+            pool.getCollection(target).add(model);
             // trigger event
             api.trigger('move', id, newId);
         });
