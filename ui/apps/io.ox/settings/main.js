@@ -24,10 +24,11 @@ define('io.ox/settings/main', [
     'io.ox/core/folder/node',
     'io.ox/core/folder/api',
     'io.ox/core/api/mailfilter',
+    'io.ox/core/notifications',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, mailfilterAPI) {
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, mailfilterAPI, notifications) {
 
     'use strict';
 
@@ -167,6 +168,14 @@ define('io.ox/settings/main', [
                     _.each(actionPoints, function (val, key) {
                         if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
                     });
+                    appsInitialized.done(function () {
+                        def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
+                    });
+
+                    appsInitialized.fail(def.reject);
+                }).fail(function (response) {
+                    notifications.yell('error', response.error_desc);
+                }).always(function () {
                     appsInitialized.done(function () {
                         def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
                     });
