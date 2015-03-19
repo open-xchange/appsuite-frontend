@@ -31,8 +31,6 @@ module.exports = function (grunt) {
                             //add backbone and dot.js may be a AMD-variant would be better
                             'bower_components/backbone/backbone.js',
                             'bower_components/backbone-validation/dist/backbone-validation.js',
-                            'bower_components/moment/min/moment-with-locales.js',
-                            'bower_components/moment-timezone/builds/moment-timezone-with-data.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',
@@ -73,6 +71,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/cache/simple.js',
                             'apps/plugins/halo/register.js',
                             'apps/io.ox/core/settings/defaults.js',
+                            'apps/io.ox/core/moment.js',
                             // missing for signin
                             'apps/io.ox/core/boot/config.js',
                             'apps/io.ox/core/boot/fixes.js',
@@ -112,7 +111,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/desktop.js',
                             'apps/io.ox/core/api/apps.js',
                             'apps/io.ox/core/extPatterns/stage.js',
-                            'apps/io.ox/core/date.js',
                             'apps/io.ox/core/yell.js',
                             'apps/io.ox/core/notifications.js',
                             'apps/io.ox/core/commons.js',

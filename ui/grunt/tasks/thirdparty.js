@@ -24,8 +24,6 @@ module.exports = function (grunt) {
                         src: [
                             'bootstrap/less/**/*.less',
                             'bootstrap-datepicker/less/datepicker3.less',
-                            'moment/min/moment-with-locales.js',
-                            'moment-timezone/builds/moment-timezone-with-data.js',
                             'font-awesome/{less,fonts}/*',
                             'open-sans-fontface/fonts/Light/*',
                             '!**/*.otf'
@@ -54,9 +52,11 @@ module.exports = function (grunt) {
                         dest: 'build/static/3rd.party/'
                     },
                     {
-                        // static lib
+                        // static bower_components
                         expand: true,
                         src: [
+                            'moment/min/moment-with-locales.js',
+                            'moment-timezone/builds/moment-timezone-with-data.js',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',
