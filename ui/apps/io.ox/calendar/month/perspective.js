@@ -585,7 +585,7 @@ define('io.ox/calendar/month/perspective', [
 
         // called when an appointment detail-view opens the according appointment
         selectAppointment: function (obj) {
-            this.gotoMonth(new date.Local(obj.start_date));
+            this.gotoMonth(moment(obj.start_date));
         }
     });
 
