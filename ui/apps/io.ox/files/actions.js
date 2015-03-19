@@ -192,9 +192,9 @@ define('io.ox/files/actions', [
             // hide in mail compose preview
             return e.collection.has('some') && e.collection.has('delete') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/delete']).done(function (action) {
-                action(list);
+                action(baton.models);
             });
         }
     });

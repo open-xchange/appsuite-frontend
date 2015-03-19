@@ -13,15 +13,28 @@
 
 define('io.ox/files/actions/delete', [
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
-], function (api, dialogs, notifications, gt) {
+], function (api, folderAPI, dialogs, notifications, gt) {
 
     'use strict';
 
+    function isFile(o) {
+        // isFile is only defined on file models
+        return o.isFile && o.isFile();
+    }
+
     function process(list) {
-        api.remove(list).then(
+        var folderIds = list.filter(function (o) {
+            return !isFile(o);
+        });
+        $.when([
+            api.remove(list)
+        ].concat(folderIds.map(function (folder) {
+            return folderAPI.remove(folder.id);
+        }))).then(
             function success() {
                 notifications.yell('success', gt.ngettext(
                     'This file has been deleted',

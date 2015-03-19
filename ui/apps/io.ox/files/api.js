@@ -503,9 +503,14 @@ define('io.ox/files/api', [
         });
     }
 
-    api.remove = function (ids) {
+    api.remove = function (list) {
 
-        console.log('remove', ids);
+        //only remove file objects
+        var ids = list.filter(function (o) {
+            return o.isFile && o.isFile();
+        }).map(function (model) {
+            return model.toJSON();
+        });
 
         prepareRemove(ids);
 
