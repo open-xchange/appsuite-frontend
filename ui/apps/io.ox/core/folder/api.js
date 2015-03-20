@@ -269,6 +269,12 @@ define('io.ox/core/folder/api',
 
         refresh: function () {
             _(this.hash).invoke('list');
+        },
+
+        getCollections: function () {
+            return _(this.hash).keys().map(function (id) {
+                return api.pool.getCollection(id);
+            });
         }
     };
 
@@ -662,19 +668,20 @@ define('io.ox/core/folder/api',
 
     function removeFromCollection(model) {
         // flat folders are different
-        var module = model.get('module'), section, parent, collection;
+        var module = model.get('module'), section, collections;
         if (isFlat(module)) {
             // contacts, calendar, tasks
             section = getSection(model.get('type'));
-            collection = getFlatCollection(module, section);
-            collection.remove(model);
+            getFlatCollection(module, section).remove(model);
         } else {
-            // mail and drive
-            parent = model.get('folder_id');
-            collection = pool.getCollection(parent);
-            collection.remove(model);
-            // update parent folder; subfolders might have changed
-            pool.getModel(parent).set('subfolders', collection.length > 0);
+            // mail and drive; consider virtual folders
+            collections = api.virtual.getCollections();
+            collections.push(pool.getCollection(model.get('folder_id')));
+            // remove and update parent folder; subfolders might have changed
+            _(collections).each(function (collection) {
+                collection.remove(model);
+                pool.getModel(collection.id).set('subfolders', collection.length > 0);
+            });
         }
     }
 
