@@ -310,7 +310,7 @@ define('io.ox/calendar/month/view', [
     });
 
     View.drawScaffold = function () {
-        var days = moment.weekdaysMin(),
+        var days = moment.weekdaysShort(),
             dow = moment.localeData().firstDayOfWeek(),
             tmp = [];
         days = days.slice(dow, days.length).concat(days.slice(0, dow));
