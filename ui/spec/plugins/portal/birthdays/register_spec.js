@@ -13,16 +13,16 @@
 define([
     'plugins/portal/birthdays/register',
     'io.ox/core/extensions',
-    'io.ox/core/date',
+    'io.ox/core/moment',
     'waitsFor',
     'fixture!plugins/portal/birthdays/birthdaysTestData.json'
-], function (birthdayPlugin, ext, date, waitsFor, testData) {
+], function (birthdayPlugin, ext, moment, waitsFor, testData) {
     'use strict';
 
     //update testdata
-    testData[0].birthday = new date.UTC().getTime() - date.DAY;//yesterday
-    testData[1].birthday = new date.UTC().getTime();//today
-    testData[2].birthday = new date.UTC().getTime() + date.DAY;//tomorrow
+    testData[0].birthday = new moment.utc().subtract(1, 'day').valueOf();   //yesterday
+    testData[1].birthday = new moment.utc().valueOf();                      //today
+    testData[2].birthday = new moment.utc().add(1, 'day').valueOf();        //tomorrow
 
     describe('portal Birthday plugin', function () {
 
@@ -55,7 +55,7 @@ define([
                 expect(this.node.find('li')).to.have.length(5);
             });
             it('not draw year if its year 1', function () {
-                expect($(this.node.find('.accent')[4]).text()).to.equal('12.6.');
+                expect($(this.node.find('.accent')[4]).text()).to.equal('Jun. 12');
             });
             it('recognize yesterday/today/tomorrow', function () {
                 expect($(this.node.find('.accent')[0]).text()).to.equal('Gestern');
