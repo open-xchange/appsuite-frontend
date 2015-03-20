@@ -14,10 +14,11 @@ define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
+    'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (EventDispatcher, TypesRegistry, DisposableView, gt) {
+], function (EventDispatcher, TypesRegistry, DisposableView, Util, gt) {
 
     'use strict';
 
@@ -88,7 +89,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 };
 
             // enable touch and swiping for 'smartphone' devices
-            if (_.device('smartphone')) {
+            if (Util.COMPACT_DEVICE) {
                 swiperParameter = _.extend(swiperParameter, {
                     followFinger: true,
                     simulateTouch: true,
