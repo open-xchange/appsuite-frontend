@@ -24,16 +24,6 @@ define('io.ox/tasks/util', [
             gt('late in the evening')
         ],
 
-        lookupWeekdayStrings = [
-            gt('next Sunday'),
-            gt('next Monday'),
-            gt('next Tuesday'),
-            gt('next Wednesday'),
-            gt('next Thursday'),
-            gt('next Friday'),
-            gt('next Saturday')
-        ],
-
         util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
@@ -212,7 +202,9 @@ define('io.ox/tasks/util', [
                 result.push(['t', gt('tomorrow')]);
 
                 for (i = (now.day() + 2) % 7;i !== now.day(); i = ++i % 7) {
-                    result.push(['w' + i, lookupWeekdayStrings[i]]);
+                    //#. reminder date selection
+                    //#. %1$s is a weekdays, like 'next Monday'
+                    result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
                 }
 
                 result.push(['ww', gt('in one week')]);
