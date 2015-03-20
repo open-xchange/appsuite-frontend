@@ -623,8 +623,8 @@ define('io.ox/core/tk/list-selection', [
 
             this.remove = this.unfold = false;
             this.isMoving = false;
-
-            //if ((distanceX > 0) && !this.unfolded) return; // left to right is not allowed
+            // left to right on closed cells is not allowed, we have to check this in touchmove and touchend
+            if ((this.distanceX > 0) && !this.unfolded) return;
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
