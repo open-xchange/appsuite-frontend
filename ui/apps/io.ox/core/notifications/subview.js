@@ -296,7 +296,7 @@ define('io.ox/core/notifications/subview', [
                 newItems = _.difference(newIds, oldIds),
                 model = this.model;
             if (newItems.length) {
-                if (model.get('autoOpen')) {
+                if (!_.device('smartphone') && model.get('autoOpen')) {
                     this.trigger('autoopen', { numberOfNewItems: newItems.length, subviewId: model.get('id'), itemIds: newItems });
                 }
 
