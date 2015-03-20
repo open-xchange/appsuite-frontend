@@ -80,11 +80,19 @@ define('io.ox/core/folder/api',
     });
 
     var FolderCollection = Backbone.Collection.extend({
-        constructor: function () {
+        constructor: function (id) {
             Backbone.Collection.apply(this, arguments);
+            this.id = id;
             this.fetched = false;
+            this.on('remove', this.onRemove, this);
         },
-        comparator: 'index',
+        comparator: function (model) {
+            return model.get('index/' + this.id) || 0;
+        },
+        onRemove: function (model) {
+            if (isFlat(model.get('module'))) return;
+            pool.getModel(this.id).set('subfolders', this.length > 0);
+        },
         model: FolderModel
     });
 
@@ -127,7 +135,7 @@ define('io.ox/core/folder/api',
 
         getCollection: function (id, all) {
             id = getCollectionId(id, all);
-            return this.collections[id] || (this.collections[id] = new FolderCollection());
+            return this.collections[id] || (this.collections[id] = new FolderCollection(id));
         },
 
         unfetch: function (id) {
@@ -585,6 +593,10 @@ define('io.ox/core/folder/api',
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
+            // update all virtual folders
+            virtual.refresh();
+            // add folder to collection
+            pool.getCollection(target).add(model);
             // trigger event
             api.trigger('move', id, newId);
         });
@@ -634,7 +646,9 @@ define('io.ox/core/folder/api',
             })
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
+                virtual.refresh();
                 api.trigger('create', data);
+                api.trigger('create:' + id, data);
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
