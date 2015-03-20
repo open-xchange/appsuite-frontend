@@ -64,7 +64,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             if (this.$el.hasClass('swiper-slide-duplicate') || this.$el.find('.document-page').length > 0) {
                 return;
             }
-            var // the file descriptor object
+            var self = this,
+                // the file descriptor object
                 file = this.model.get('origData'),
                 // generate document converter URL of the document
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, file, {
@@ -145,7 +146,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              * Error handler for the PDF loading process.
              */
             function pdfDocumentLoadError() {
-                console.error('Core.Viewer.DocumentView.load(): failed loading PDF document.');
+                console.error('Core.Viewer.DocumentView.load(): failed loading PDF document.', self.model.get('filename'));
             }
 
             // create the PDF document model

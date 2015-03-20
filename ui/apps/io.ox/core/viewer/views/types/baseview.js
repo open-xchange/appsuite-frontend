@@ -49,6 +49,8 @@ define('io.ox/core/viewer/views/types/baseview', [
                 //#. %2$d is the total slide count
                 gt('%1$d of %2$d', (slideIndex + 1), slideCount)
             );
+            // set device type
+            Util.setDeviceClass(slideCaption);
             return slideCaption;
         },
 
