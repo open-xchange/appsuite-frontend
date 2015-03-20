@@ -48,10 +48,8 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         render: function () {
             //console.warn('DocumentType.render()');
-            var pageContainer = $('<div class="document-container">'),
-                slidesCount = this.collection.length,
-                modelIndex = this.collection.at(this.model);
-            this.$el.append(pageContainer, this.createCaption(modelIndex, slidesCount));
+            var pageContainer = $('<div class="document-container">');
+            this.$el.append(pageContainer, this.createCaption());
             return this;
         },
 
@@ -61,7 +59,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         load: function () {
             // ignore slide duplicates and already loaded documents
-            if (this.$el.hasClass('swiper-slide-duplicate') || this.$el.find('.document-page').length > 0) {
+            if (this.$el.find('.document-page').length > 0) {
                 return;
             }
             var self = this,
@@ -127,19 +125,29 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  page count of the pdf document delivered by the PDF.js library.
              */
             function pdfDocumentLoadSuccess(pageCount) {
-                if (pageCount > 0) {
-                    var pdfDocument = this.pdfDocument;
-                    // create the PDF view after successful loading;
-                    // the initial zoom factor is already set to 1.0
-                    this.pdfView = new PDFView(pdfDocument);
-                    _.times(pageCount, function (index) {
-                        var jqPage = $('<div class="document-page">'),
-                            pageSize = pdfDocument.getOriginalPageSize(index + 1);
-                        pageContainer.append(jqPage.attr(pageSize).css(pageSize));
-                    });
-                    // set callbacks at this.pdfView to start rendering
-                    this.pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
-                }
+                var pdfDocument = this.pdfDocument,
+                    defaultScale = (function () {
+                        var sideMargin = 30,
+                            maxWidth = window.innerWidth - (sideMargin * 2),
+                            pageDefaultSizeWidth = pdfDocument.getDefaultPageSize().width;
+                        if (maxWidth >= pageDefaultSizeWidth) {
+                            return 1;
+                        }
+                        return PDFView.round(maxWidth / pageDefaultSizeWidth, 1 / 100);
+                    })();
+                // create the PDF view after successful loading;
+                // the initial zoom factor is already set to 1.0
+                this.pdfView = new PDFView(pdfDocument);
+                // set default scale/zoom, according to device's viewport width
+                this.pdfView.setPageZoom(defaultScale);
+                // draw page nodes and apply css sizes
+                _.times(pageCount, function (index) {
+                    var jqPage = $('<div class="document-page">'),
+                        pageSize = self.pdfView.getRealPageSize(index + 1);
+                    pageContainer.append(jqPage.css(pageSize));
+                });
+                // set callbacks at this.pdfView to start rendering
+                this.pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
             }
 
             /**
