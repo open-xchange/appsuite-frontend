@@ -29,7 +29,7 @@ define('io.ox/core/folder/extensions',
 
     // define virtual/standard
     api.virtual.add('virtual/standard', function () {
-        return api.virtual.concat(
+        return this.concat(
             // inbox
             api.get(INBOX),
             // sent, drafts, spam, trash, archive
