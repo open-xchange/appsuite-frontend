@@ -336,6 +336,40 @@ define('io.ox/core/main', [
         return node.appendTo(side === 'left' ? launchers : topbar);
     };
 
+    var badges = {},
+        addBadge = function (id, text) {
+            if (!badges[id]) {
+                //check if this app has a topbar node
+                var node = $('li.launcher[data-app-name="' + id + '"] .apptitle');
+                if (!node) return;
+                var badge = $('<span class="badge topbar-launcherbadge">').text(text);
+                if (!text) {
+                    badge.hide();
+                }
+                badges[id] = badge;
+                node.append(badge);
+                return badge;
+            } else {
+                return badges[id];
+            }
+        },
+
+        getBadge = function (id) {
+            return (badges[id]);
+        },
+
+        setBadgeText = function (id, text) {
+            if (badges[id]) {
+                var badge = badges[id];
+                badge.text(text);
+                if (!text) {
+                    badge.hide();
+                } else {
+                    badge.show();
+                }
+            }
+        };
+
     function initRefreshAnimation() {
 
         var count = 0,
@@ -609,6 +643,10 @@ define('io.ox/core/main', [
                 placeholder = container.children('.placeholder[data-app-name="' + $.escape(model.get('name')) + '"]');
                 if (placeholder.length) {
                     node.insertBefore(placeholder);
+                    //if the placeholder had a badge, move it to the new node
+                    if (placeholder.find('.topbar-launcherbadge').length) {
+                        node.find('.apptitle').append(placeholder.find('.topbar-launcherbadge')[0]);
+                    }
                 }
                 placeholder.remove();
             }
@@ -1000,9 +1038,9 @@ define('io.ox/core/main', [
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
             draw: function () {
-
                 var favorites = appAPI.getAllFavorites(),
                     topbar = settings.get('topbar/order'),
+                    self = this,
                     hash = {};
 
                 // use custom order?
@@ -1032,6 +1070,15 @@ define('io.ox/core/main', [
                             requires: obj.requires
                         }));
                     }
+                });
+
+                //load and draw badges
+                ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
+                    ext.point('io.ox/core/notifications/badge').invoke('register', self, {
+                        addBadge: addBadge,
+                        getBadge: getBadge,
+                        setBadgeText: setBadgeText
+                    });
                 });
             }
         });
