@@ -34,6 +34,24 @@ define('io.ox/mail/compose/view', [
     var INDEX = 0,
         POINT = 'io.ox/mail/compose';
 
+    ext.point(POINT + '/buttons').extend({
+        index: 100,
+        id: 'send',
+        draw: extensions.buttons.send
+    });
+
+    ext.point(POINT + '/buttons').extend({
+        index: 200,
+        id: 'save',
+        draw: extensions.buttons.save
+    });
+
+    ext.point(POINT + '/buttons').extend({
+        index: 300,
+        id: 'discard',
+        draw: extensions.buttons.discard
+    });
+
     ext.point(POINT + '/mailto').extend({
         id: 'mailto',
         index: 100,
@@ -49,7 +67,9 @@ define('io.ox/mail/compose/view', [
     ext.point(POINT + '/header').extend({
         index: 200,
         id: 'buttons',
-        draw: extensions.buttons
+        draw: function (baton) {
+            ext.point(POINT + '/buttons').invoke('draw', this, baton);
+        }
     });
 
     ext.point(POINT + '/fields').extend({
@@ -182,7 +202,7 @@ define('io.ox/mail/compose/view', [
         id: 'attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div class="row attachments">');
+            var node = $('<div data-extension-id="attachments" class="row attachments">');
             ext.point(POINT + '/attachments').invoke('draw', node, baton);
             this.append(node);
         }
@@ -190,9 +210,9 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/attachments').extend({
         id: 'attachmentPreview',
-        index: 200,
+        index: 100,
         draw: function (baton) {
-            var node = $('<div class="col-xs-12">');
+            var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
             node.appendTo(this);
         }
@@ -204,7 +224,7 @@ define('io.ox/mail/compose/view', [
     /*
      * extension point for contact picture
      */
-    ext.point(POINT +  '/autoComplete').extend({
+    ext.point(POINT + '/autoComplete').extend({
         id: 'contactPicture',
         index: 100,
         draw: extensions.contactPicture
@@ -213,7 +233,7 @@ define('io.ox/mail/compose/view', [
     /*
      * extension point for display name
      */
-    ext.point(POINT +  '/autoComplete').extend({
+    ext.point(POINT + '/autoComplete').extend({
         id: 'displayName',
         index: 200,
         draw: extensions.displayName
@@ -222,7 +242,7 @@ define('io.ox/mail/compose/view', [
     // /*
     //  * extension point for halo link
     //  */
-    ext.point(POINT +  '/autoComplete').extend({
+    ext.point(POINT + '/autoComplete').extend({
         id: 'emailAddress',
         index: 300,
         draw: extensions.emailAddress
@@ -231,7 +251,7 @@ define('io.ox/mail/compose/view', [
     /*
      * extension point for autocomplete item
      */
-    ext.point(POINT +  '/autoCompleteItem').extend({
+    ext.point(POINT + '/autoCompleteItem').extend({
         id: 'autoCompleteItem',
         index: 100,
         draw: function (baton) {

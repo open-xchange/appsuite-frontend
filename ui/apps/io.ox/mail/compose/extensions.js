@@ -72,12 +72,15 @@ define('io.ox/mail/compose/extensions', [
             );
         },
 
-        buttons: function (baton) {
-            this.append(
-                $('<button type="button" class="btn btn-default" data-action="discard">')
-                    .on('click', function () { baton.view.app.quit(); })
-                    .text(gt('Discard')),
-                $('<button type="button" class="btn btn-default" data-action="save">')
+        buttons: {
+            discard: function (baton) {
+                this.append(
+                    $('<button type="button" class="btn btn-default" data-action="discard">')
+                        .on('click', function () { baton.view.app.quit(); })
+                        .text(gt('Discard')));
+            },
+            save: function (baton) {
+                this.append($('<button type="button" class="btn btn-default" data-action="save">')
                     .on('click', function () {
                         if (baton.view.isSaving === true) return false;
                         baton.view.isSaving = true;
@@ -87,11 +90,13 @@ define('io.ox/mail/compose/extensions', [
                             baton.view.isSaving = false;
                         });
                     })
-                    .text(gt('Save')),
-                $('<button type="button" class="btn btn-primary" data-action="send">')
+                    .text(gt('Save')));
+            },
+            send: function (baton) {
+                this.append($('<button type="button" class="btn btn-primary" data-action="send">')
                     .on('click', function () { baton.view.send(); })
-                    .text(gt('Send'))
-        );
+                    .text(gt('Send')));
+            }
         },
 
         sender: function (baton) {
@@ -271,7 +276,7 @@ define('io.ox/mail/compose/extensions', [
         subject: function (baton) {
             var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="row subject" data-extension-id="subject">').append(
+                $('<div data-extension-id="subject" class="row subject">').append(
                     $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
