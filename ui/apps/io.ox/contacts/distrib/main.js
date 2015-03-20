@@ -116,7 +116,7 @@ define('io.ox/contacts/distrib/main', [
                 // set title, init model/view
                 win.setTitle(gt('Edit distribution list'));
 
-                view = new ContactCreateDistView({ model: model });
+                view = new ContactCreateDistView({ model: model, app: app });
 
                 model.on({
                     'sync:start': function () {
