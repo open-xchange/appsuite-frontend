@@ -12,47 +12,22 @@
  */
 
 define('io.ox/core/desktopNotifications', [
-    'settings!io.ox/core'
-], function (settings) {
+    'settings!io.ox/core',
+    'io.ox/core/tk/visibility-api-util'
+], function (settings, visibilityApi) {
     //see http://www.w3.org/TR/notifications for information
 
     'use strict';
 
     var desktopNotifications,
-        supported = !!Notification,
-        //variables used by visibility api
-        isHidden = true,
-        hiddenAttribute, visibilityChangeEvent;
-
-    //try to find the visibility api attributes
-    //using some code modified code snippets from https://developer.mozilla.org/en-US/docs/Web/Guide/User_experience/Using_the_Page_Visibility_API
-    if (typeof document.hidden !== 'undefined') {
-        hiddenAttribute = 'hidden';
-        visibilityChangeEvent = 'visibilitychange';
-    } else if (typeof document.mozHidden !== 'undefined') {
-        hiddenAttribute = 'mozHidden';
-        visibilityChangeEvent = 'mozvisibilitychange';
-    } else if (typeof document.msHidden !== 'undefined') {
-        hiddenAttribute = 'msHidden';
-        visibilityChangeEvent = 'msvisibilitychange';
-    } else if (typeof document.webkitHidden !== 'undefined') {
-        hiddenAttribute = 'webkitHidden';
-        visibilityChangeEvent = 'webkitvisibilitychange';
-    }
-
-    if (typeof document[hiddenAttribute] !== 'undefined') {
-        isHidden = document[hiddenAttribute] ? true : false;
-        $(document).on(visibilityChangeEvent, function handleVisibilityChange() {
-            isHidden = document[hiddenAttribute] ? true : false;
-        });
-    }
+        supported = !!Notification;
 
     //actually draws the message
     function draw(message) {
         //only show if page is hidden (minimized etc)
         //no need to show them otherwise
         //if visibility api is not supported, we always show desktop notifications because we cannot be sure
-        if (!isHidden && !message.ignoreVisibility) {
+        if (!visibilityApi.isHidden && !message.ignoreVisibility) {
             return;
         }
         //defaults

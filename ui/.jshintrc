@@ -32,6 +32,7 @@
         "_": false,
         "Modernizr": false,
         "define": false,
+        "moment": false,
         "require": false,
         "requirejs": false,
         "assert": false,

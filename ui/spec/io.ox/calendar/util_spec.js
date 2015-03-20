@@ -11,90 +11,38 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
-define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
+define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
     'use strict';
 
     describe('Util for calendar', function () {
 
-        describe('can convert timestamp to smart dates', function () {
-
-            var testDate = new date.Local(),
-                data = {
-                    full_time: false,
-                    start_date: testDate.setHours(0, 0, 0, 0).getTime()
-                };
-
-            it('last week', function () {
-                data.start_date = testDate.add(-7 * date.DAY).getTime();
-                expect(util.getSmartDate(data, true)).to.equal('Letzte Woche');
-            });
-
-            it('yesterday', function () {
-                data.start_date = testDate.add(6 * date.DAY).getTime();
-                expect(util.getSmartDate(data, true)).to.equal('Gestern');
-            });
-
-            it('same day', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('Heute');
-            });
-
-            it('tomorrow', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('Morgen');
-            });
-
-            it('next week', function () {
-                data.start_date = testDate.add(6 * date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('Nächste Woche');
-            });
-
-            it('next week with showdate option', function () {
-                data.start_date = testDate.getTime();
-                expect(util.getSmartDate(data, true)).to.equal(testDate.format(date.DATE));
-            });
-
-            it('after next week', function () {
-                data.start_date = testDate.add(7 * date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).to.equal(date.locale.months[testDate.getMonth()] + ' ' + testDate.getYear());
-            });
-
-            it('date in the past', function () {
-                data.start_date = testDate.setYear(2012, 10, 11).getTime();
-                expect(util.getSmartDate(data, false)).to.equal('November 2012');
-            });
-
-            it('date in the past with showdate option', function () {
-                expect(util.getSmartDate(data, true)).to.equal('11.11.2012');
-            });
-
-        });
+        moment.locale('de');
+        moment.tz.setDefault('Europe/Berlin');
 
         describe('can convert timestamp to even smarter dates', function () {
 
-            var testDate = new date.Local(),
+            var testDate = moment(),
                 data = {
-                    full_time: false,
-                    start_date: testDate.setHours(0, 0, 0, 0).getTime()
+                    full_time: false
                 };
 
             it('yesterday', function () {
-                data.start_date = testDate.add(-date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format(date.DATE));
+                data.start_date = testDate.subtract(1, 'day').valueOf();
+                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format('l'));
             });
 
             it('same day', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format(date.DATE));
+                data.start_date = testDate.add(1, 'day').valueOf();
+                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format('l'));
             });
 
             it('tomorrow', function () {
-                data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format(date.DATE));
+                data.start_date = testDate.add(1, 'day').valueOf();
+                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format('l'));
             });
 
             it('date in the past', function () {
-                data.start_date = testDate.setYear(2012, 10, 11).getTime();
+                data.start_date = testDate.set({ 'year': 2012, 'month': 10, 'date': 11 }).valueOf();
                 expect(util.getEvenSmarterDate(data)).to.equal('So., 11.11.2012');
             });
 
@@ -107,13 +55,13 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             });
 
             it('same day', function () {
-                var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start })).to.equal('So., 11.11.2012');
+                var start = moment([2012, 10, 11]);
+                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('So., 11.11.2012');
             });
 
             it('same day', function () {
-                var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK })).to.equal('So., 11.11.2012 – So., 18.11.2012');
+                var start = moment([2012, 10, 11]);
+                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -125,13 +73,13 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             });
 
             it('same time', function () {
-                var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start })).to.equal('11:11-11:11');
+                var start = moment([2012, 10, 11, 11, 11, 0]);
+                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('11:11 \u2013 11:11');
             });
 
             it('same day', function () {
-                var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start + date.HOUR })).to.equal('11:11-12:11');
+                var start = moment([2012, 10, 11, 11, 11, 0]);
+                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11 \u2013 12:11');
             });
 
         });

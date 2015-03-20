@@ -1,9 +1,8 @@
 define('plugins/portal/twitter/util', [
     'plugins/portal/twitter/network',
     'gettext!plugins/portal',
-    'io.ox/core/notifications',
-    'io.ox/core/date'
-], function (network, gt, notifications, date) {
+    'io.ox/core/notifications'
+], function (network, gt, notifications) {
 
     'use strict';
 
@@ -151,13 +150,6 @@ define('plugins/portal/twitter/util', [
         });
     };
 
-    function parseDate(str) {
-        var v = str.split(' ');
-        return new Date(Date.parse(v[1] + ' ' + v[2] + ', ' + v[5] + ' ' + v[3] + ' UTC'));
-        // thx for having exactly the same problem:
-        // http://stackoverflow.com/questions/3243546/problem-with-javascript-date-function-in-ie-7-returns-nan
-    }
-
     var showTweet = function (tweet, opt) {
         if (tweet.retweeted_status) {
             var $temp = renderTweet(tweet.retweeted_status, opt);
@@ -176,7 +168,7 @@ define('plugins/portal/twitter/util', [
     var renderTweet = function (tweet, opt) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str,
             profileLink = 'https://twitter.com/' + tweet.user.screen_name,
-            tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME),
+            tweeted = moment(tweet.created_at).format('l LT'),
             $myTweet = $('<li class="tweet">').data('entry', tweet),
             isCurrentUser = tweet.user.id_str === currentUserID,
             hideFollowButton = (opt === undefined || opt.hideFollowButton === undefined || !opt.hideFollowButton),

@@ -16,12 +16,11 @@ define('plugins/portal/mail/register', [
     'io.ox/core/extensions',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/core/date',
     'io.ox/core/api/account',
     'io.ox/portal/widgets',
     'io.ox/core/tk/dialogs',
     'gettext!plugins/portal'
-], function (ext, api, util, date, accountAPI, portalWidgets, dialogs, gt) {
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt) {
 
     'use strict';
 
@@ -146,7 +145,7 @@ define('plugins/portal/mail/register', [
                         // track updates for the mail
                         api.on('update:' + ecid + '.portalTile', refreshWidgets.bind(this, 'mail', cache));
 
-                        var received = new date.Local(mail.received_date).format(date.DATE);
+                        var received = moment(mail.received_date).format('l');
                         var $node = $('<li class="item" tabindex="1">')
                             .data('item', mail)
                             .append(
@@ -273,7 +272,7 @@ define('plugins/portal/mail/register', [
 
         preview: function (baton) {
             var data = baton.data,
-                received = new date.Local(data.received_date).format(date.DATE),
+                received = moment(data.received_date).format('l'),
                 content = '',
                 source = _(data.attachments).reduce(function (memo, a) {
                     return memo + (a.content_type === 'text/plain' ? a.content : '');

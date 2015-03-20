@@ -13,9 +13,9 @@
 define([
     'plugins/portal/tasks/register',
     'io.ox/core/extensions',
-    'io.ox/core/date',
+    'io.ox/core/moment',
     'fixture!io.ox/tasks/defaultTestData.json'
-], function (tasksPlugin, ext, date, testData) {
+], function (tasksPlugin, ext, moment, testData) {
     'use strict';
 
     describe('portal Tasks plugin', function () {
@@ -49,8 +49,8 @@ define([
                 expect(this.node.find('li.item')).to.have.length(2);
                 expect($(this.node.find('.bold')[0]).text()).to.equal('Pommes kaufen');
                 expect($(this.node.find('.bold')[1]).text()).to.equal('Nase putzen');
-                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am ' + new date.Local(1368791630910).format(date.DATE));
-                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am ' + new date.Local(1368791630910).format(date.DATE));
+                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am ' + moment(1368791630910).format('l'));
+                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am ' + moment(1368791630910).format('l'));
             });
         });
         describe('should not draw', function () {

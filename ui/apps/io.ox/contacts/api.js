@@ -20,9 +20,8 @@ define('io.ox/contacts/api', [
     'io.ox/contacts/util',
     'l10n/ja_JP/io.ox/collation',
     'settings!io.ox/contacts',
-    'io.ox/core/date',
     'io.ox/core/capabilities'
-], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date, capabilities) {
+], function (ext, http, apiFactory, notifications, cache, util, collation, settings, capabilities) {
 
     'use strict';
 
@@ -39,14 +38,14 @@ define('io.ox/contacts/api', [
         convertResponseToGregorian = function (response) {
             if (response.id) {
                 // single contact: convert birthdays with year 1 from julian to gregorian calendar
-                if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {
+                if (response.birthday && moment.utc(response.birthday).year() === 1) {
                     response.birthday = util.julianToGregorian(response.birthday);
                 }
                 return response;
             } else {
                 // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
                 _(response).each(function (contact) {
-                    if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {
+                    if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
                         // birthday without year
                         contact.birthday = util.julianToGregorian(contact.birthday);
                     }
@@ -312,7 +311,7 @@ define('io.ox/contacts/api', [
         wat(data, 'email2');
         wat(data, 'email3');
 
-        if (data.birthday && new date.UTC(data.birthday).getYear() === 1) {
+        if (data.birthday && moment.utc(data.birthday).local(true).year() === 1) {
             // convert birthdays with year 1 (birthdays without year) from gregorian to julian calendar
             data.birthday = util.gregorianToJulian(data.birthday);
         }
@@ -398,7 +397,7 @@ define('io.ox/contacts/api', [
             }
         } else {
             // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {
+            if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
                 o.data.birthday = util.gregorianToJulian(o.data.birthday);
             }
             // go!

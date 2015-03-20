@@ -74,7 +74,7 @@ define('io.ox/calendar/week/perspective', [
                         // view should change week to the start of this appointment(used by deeplinks)
                         // one time only
                         self.setNewStart = false;
-                        self.app.refDate.setTime(data.start_date);
+                        self.app.refDate = moment(data.start_date);
                         if (self.view) {
                             //view is rendered already
                             self.view.setStartDate(data.start_date);
@@ -108,25 +108,26 @@ define('io.ox/calendar/week/perspective', [
                 obj = clean(obj);
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog({
+                        var dialog = new dialogs.ModalDialog({
                             top: '20%',
                             center: false,
                             container: self.main
-                        })
-                        .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
-                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                        .show()
-                        .done(function (action) {
-                            if (action === 'cancel') {
-                                self.refresh();
-                                return;
-                            }
-                            if (action === 'ignore') {
-                                obj.ignore_conflicts = true;
-                                apiUpdate(obj);
-                            }
                         });
+                        dialog
+                            .append(conflictView.drawList(con.conflicts, dialog).addClass('additional-info'))
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
+                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    self.refresh();
+                                    return;
+                                }
+                                if (action === 'ignore') {
+                                    obj.ignore_conflicts = true;
+                                    apiUpdate(obj);
+                                }
+                            });
                     }
                 });
             };

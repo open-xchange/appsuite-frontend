@@ -19,25 +19,25 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
-#: apps/io.ox/calendar/util.js:308 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:262 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
 msgstr[0] "%1$d päivä"
 msgstr[1] "%1$d päivää"
 
-#: apps/io.ox/calendar/util.js:304 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:258 module:io.ox/calendar
 msgid "%1$d Hour"
 msgid_plural "%1$d Hours"
 msgstr[0] "%1$d tunti"
 msgstr[1] "%1$d tuntia"
 
-#: apps/io.ox/calendar/util.js:300 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:254 module:io.ox/calendar
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
 msgstr[0] "%1$d minuutti"
 msgstr[1] "%1$d minuuttia"
 
-#: apps/io.ox/calendar/util.js:312 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:266 module:io.ox/calendar
 msgid "%1$d Week"
 msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d viikko"
@@ -70,7 +70,7 @@ msgid_plural "%1$d days, %2$s"
 msgstr[0] "%1$d päivä, %2$s"
 msgstr[1] "%1$d päivää, %2$s"
 
-#: apps/plugins/portal/recentfiles/register.js:75 module:plugins/portal
+#: apps/plugins/portal/recentfiles/register.js:74 module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$s tiedostoa on hiljattain muutettu"
 
@@ -131,8 +131,8 @@ msgstr "%1$d valittuna"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:153 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:409
-#: apps/plugins/halo/xing/register.js:69 module:plugins/portal
+#: apps/io.ox/contacts/view-detail.js:408
+#: apps/plugins/halo/xing/register.js:65 module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -144,14 +144,14 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:414 module:io.ox/core
+#: apps/io.ox/settings/main.js:423 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #. Name in mail addresses
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:178 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:177 module:io.ox/contacts
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -170,7 +170,7 @@ msgstr "%1$s %2$s"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #. %5$s Appointment Organizer
-#: apps/plugins/notifications/calendar/register.js:94
+#: apps/plugins/notifications/calendar/register.js:106
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
@@ -189,7 +189,7 @@ msgstr "%1$s %2$s %3$s %4$s."
 #. %2$s task end date
 #. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js:93 module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js:265
+#: apps/plugins/notifications/tasks/register.js:277
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s."
@@ -197,7 +197,7 @@ msgstr "%1$s %2$s %3$s."
 
 #. %1$s task title
 #. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js:46
+#: apps/plugins/notifications/tasks/register.js:58
 #: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s."
@@ -205,15 +205,15 @@ msgstr "%1$s %2$s."
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js:390 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1742
+#: apps/io.ox/calendar/month/view.js:370 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:1735
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Alustava)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:180 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:176 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s %2$s"
 
@@ -222,8 +222,8 @@ msgid "%1$s changed their status:"
 msgstr "%1$s muutti tilaansa:"
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/fluid/perspective.js:453 module:io.ox/files
-#: apps/io.ox/files/fluid/perspective.js:925
+#: apps/io.ox/files/fluid/perspective.js:448 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:920
 #: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
 #, fuzzy
 #| msgid "Date completed"
@@ -320,11 +320,8 @@ msgstr "toisena"
 #. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
 #. %1$s is the start date
 #. %2$s is the end date
-#. Time intervals for screenreaders
-#. %1$s is the start time
-#. %2$s is the end time
-#: apps/io.ox/calendar/util.js:254 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:359
+#: apps/io.ox/calendar/util.js:159 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:189
 #, c-format
 msgid "%1$s to %2$s"
 msgstr "%1$s viiva %2$s"
@@ -346,15 +343,15 @@ msgstr "1 viikko"
 msgid "%1$s weeks"
 msgstr "1 viikko"
 
-#: apps/io.ox/mail/settings/signatures/register.js:383 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:388
+#: apps/io.ox/mail/settings/signatures/register.js:345 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:350
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
 #. Name without title
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:106 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:105 module:io.ox/contacts
 msgid "%2$s, %1$s"
 msgstr "%1$s, %2$s"
 
@@ -362,18 +359,13 @@ msgstr "%1$s, %2$s"
 #. %1$s is the first name
 #. %2$s is the last name
 #. %3$s is the title
-#: apps/io.ox/contacts/util.js:102 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:101 module:io.ox/contacts
 msgid "%3$s %2$s, %1$s"
 msgstr "%3$s %1$s, %2$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js:63
-#: apps/io.ox/calendar/settings/pane.js:64
-#: apps/io.ox/calendar/settings/pane.js:65
-#: apps/io.ox/calendar/settings/pane.js:66
-#: apps/io.ox/calendar/settings/pane.js:67 apps/io.ox/calendar/util.js:334
+#: apps/io.ox/calendar/util.js:205 module:io.ox/calendar
 #: apps/io.ox/core/date.js:126 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -393,13 +385,7 @@ msgstr[1] "%d päivää"
 
 #. General duration (nominative case): X hours
 #. %d is the number of hours
-#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js:57
-#: apps/io.ox/calendar/settings/pane.js:58
-#: apps/io.ox/calendar/settings/pane.js:59
-#: apps/io.ox/calendar/settings/pane.js:60
-#: apps/io.ox/calendar/settings/pane.js:61 apps/io.ox/core/date.js:158
-#: module:io.ox/core
+#: apps/io.ox/core/date.js:158 module:io.ox/core
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -418,11 +404,8 @@ msgstr[1] "%d tuntia"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js:53
-#: apps/io.ox/calendar/settings/pane.js:54
-#: apps/io.ox/calendar/settings/pane.js:55 apps/io.ox/core/date.js:184
-#: module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
+#: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -441,11 +424,7 @@ msgstr[1] "%d minuuttia"
 
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
-#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js:69
-#: apps/io.ox/calendar/settings/pane.js:70
-#: apps/io.ox/calendar/settings/pane.js:71 apps/io.ox/core/date.js:107
-#: module:io.ox/core
+#: apps/io.ox/core/date.js:107 module:io.ox/core
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -482,7 +461,7 @@ msgstr "%s asiakasohjelmisto iOSille"
 msgid "%s is also available for other platforms:"
 msgstr "%s on saatavana myös muille alustoille:"
 
-#: apps/plugins/portal/recentfiles/register.js:73 module:plugins/portal
+#: apps/plugins/portal/recentfiles/register.js:72 module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "yhtä tiedostoa on muutettu hiljattain"
 
@@ -497,8 +476,8 @@ msgstr[1] "%1$d kohtaa"
 msgid "1 minute"
 msgstr "1 minuutti"
 
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:251 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:322 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minuuttia"
@@ -509,8 +488,8 @@ msgstr "10 minuuttia"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:252 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:323
 msgid "15 minutes"
 msgstr "15 minuuttia"
 
@@ -518,13 +497,13 @@ msgstr "15 minuuttia"
 msgid "3 minutes"
 msgstr "3 minuuttia"
 
-#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:340
+#: apps/io.ox/core/settings/pane.js:253 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:324
 msgid "30 minutes"
 msgstr "30 minuuttia"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:250 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:321 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minuuttia"
@@ -534,7 +513,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> valittua kohdetta"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:526 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Ilmoitus viestin lukemisesta lähetetty"
 
@@ -555,7 +534,7 @@ msgid "About"
 msgstr "Tietoja"
 
 #: apps/io.ox/calendar/edit/extensions.js:289 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
 msgid "Absent"
 msgstr "Muualla"
 
@@ -563,11 +542,11 @@ msgstr "Muualla"
 #: apps/io.ox/calendar/invitations/register.js:27 module:io.ox/calendar/main
 #: apps/io.ox/calendar/invitations/register.js:29
 #: apps/io.ox/calendar/invitations/register.js:31
-#: apps/plugins/portal/xing/register.js:114 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:112 module:plugins/portal
 msgid "Accept"
 msgstr "Hyväksy"
 
-#: apps/plugins/notifications/calendar/register.js:109
+#: apps/plugins/notifications/calendar/register.js:121
 #: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "Hyväksy / Kieltäydy"
@@ -577,19 +556,19 @@ msgstr "Hyväksy / Kieltäydy"
 msgid "Accept changes"
 msgstr "Hyväksy muutokset"
 
-#: apps/plugins/notifications/calendar/register.js:113
+#: apps/plugins/notifications/calendar/register.js:125
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:288
+#: apps/plugins/notifications/tasks/register.js:300
 msgid "Accept invitation"
 msgstr "Hyväksy kutsu"
 
-#: apps/plugins/notifications/tasks/register.js:284
+#: apps/plugins/notifications/tasks/register.js:296
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Hyväksy/Kieltäydy"
 
 #: apps/io.ox/calendar/print.js:196 module:io.ox/calendar
-#: apps/io.ox/tasks/print.js:92 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:91 module:io.ox/tasks
 msgid "Accepted"
 msgstr "Hyväksytty"
 
@@ -598,12 +577,12 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Tiedostoihin pääsy WebDAV kautta"
 
-#: apps/io.ox/core/folder/api.js:310 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:314 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "Pääsy yhteiseen osoitekirjaan evätty"
 
 #: apps/io.ox/core/sub/subscriptions.js:251 module:io.ox/core/sub
-#: apps/plugins/portal/mail/register.js:195 module:plugins/portal
+#: apps/plugins/portal/mail/register.js:194 module:plugins/portal
 msgid "Account"
 msgstr "Tili"
 
@@ -656,13 +635,13 @@ msgid "Actions"
 msgstr "Toimenpiteet"
 
 #: apps/io.ox/tasks/edit/view-template.js:663 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:99 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:98 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:122
 msgid "Actual costs"
 msgstr "Todelliset kustannukset"
 
 #: apps/io.ox/tasks/edit/view-template.js:635 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:97 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:96 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:120
 msgid "Actual duration in minutes"
 msgstr "Todellinen kesto minuuteissa"
@@ -670,7 +649,7 @@ msgstr "Todellinen kesto minuuteissa"
 #: apps/io.ox/core/folder/actions/add.js:98 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:396 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:401 module:io.ox/mail
 msgid "Add"
 msgstr "Lisää"
 
@@ -684,7 +663,7 @@ msgstr "Lisää tili"
 msgid "Add action"
 msgstr "Lisää toimenpide"
 
-#: apps/io.ox/mail/compose/extensions.js:398 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:403 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Lisää liitteitä"
 
@@ -708,11 +687,11 @@ msgid "Add files"
 msgstr "Lisää tiedostoja"
 
 #: apps/io.ox/core/tk/attachments.js:616 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:431 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Lisää Driveltä"
 
-#: apps/io.ox/mail/compose/extensions.js:422 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:427 module:io.ox/mail
 msgid "Add local file"
 msgstr "Lisää paikallinen tiedosto"
 
@@ -743,7 +722,7 @@ msgstr "Lisää uusi osallistuja"
 msgid "Add new rule"
 msgstr "Lisää uusi sääntö"
 
-#: apps/io.ox/mail/settings/signatures/register.js:491 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:453 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Lisää uusi allekirjoitus"
 
@@ -753,8 +732,8 @@ msgstr "Lisää uusi allekirjoitus"
 msgid "Add note"
 msgstr "Lisää merkintä"
 
-#: apps/plugins/xing/main.js:146 module:plugins/portal
-#: apps/plugins/xing/main.js:153 apps/plugins/xing/main.js:161
+#: apps/plugins/xing/main.js:145 module:plugins/portal
+#: apps/plugins/xing/main.js:152 apps/plugins/xing/main.js:160
 msgid "Add on %s"
 msgstr "%s lisää"
 
@@ -771,8 +750,8 @@ msgstr "Lisää osallistuja"
 msgid "Add participant/resource"
 msgstr "Lisää osallistuja/resurssi"
 
-#: apps/io.ox/files/share/view.js:159 module:io.ox/files
-#: apps/io.ox/files/share/view.js:175
+#: apps/io.ox/files/share/view.js:157 module:io.ox/files
+#: apps/io.ox/files/share/view.js:173
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -790,7 +769,7 @@ msgstr "Lisää allekirjoitus ennen lainattua tekstiä"
 msgid "Add signature below quoted text"
 msgstr "Lisää allekirjoitus lainatun tekstin jälkeen"
 
-#: apps/io.ox/mail/compose/view.js:732 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:752 module:io.ox/mail
 msgid "Add subject"
 msgstr "Lisää aihe"
 
@@ -820,11 +799,11 @@ msgid "Add widget"
 msgstr "Lisää widget"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:402 module:io.ox/portal
+#: apps/io.ox/portal/main.js:401 module:io.ox/portal
 msgid "Add your %1$s account"
 msgstr "Lisää  %1$s -tilisi"
 
-#: apps/plugins/portal/facebook/register.js:379 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:378 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:383
 #: apps/plugins/portal/twitter/register.js:394
 msgid "Add your account"
@@ -839,7 +818,7 @@ msgid "Additional settings"
 msgstr "Lisäasetukset"
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Address Book"
 msgstr "Osoitekirja"
 
@@ -862,11 +841,11 @@ msgid "Address Other"
 msgstr "Muu osoite"
 
 #: apps/io.ox/files/util.js:250 module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:352 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:351 module:io.ox/core
 msgid "Adjust"
 msgstr "Säädä"
 
-#: apps/io.ox/tasks/common-extensions.js:96 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:94 module:io.ox/tasks
 msgid "Adjust start date"
 msgstr "Säädä aloituspäivämäärää"
 
@@ -880,28 +859,28 @@ msgstr "Ylläpitäjä"
 msgid "Advanced Facets"
 msgstr "Tarkemmat hakuasetukset"
 
-#: apps/io.ox/settings/main.js:503 module:io.ox/core
+#: apps/io.ox/settings/main.js:512 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Edistyneet asetukset"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:184 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
 msgid "Advanced facets block was closed."
 msgstr "Tarkempien asetusten blokkaus on suljettu."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:184 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
 msgid "Advanced facets block was opened."
 msgstr "Tarkempien hakuasetusten blokkaus avattu."
 
-#: apps/io.ox/files/share/view.js:230 module:io.ox/files
+#: apps/io.ox/files/share/view.js:228 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
 msgstr "Edistyneet asetukset"
 
-#: apps/io.ox/search/facets/extensions.js:281 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:369
+#: apps/io.ox/search/facets/extensions.js:280 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:368
 msgid "All"
 msgstr "Kaikki"
 
@@ -911,7 +890,7 @@ msgstr "Kaikki"
 msgid "All Emoji"
 msgstr "Kaikki emoji merkit"
 
-#: apps/io.ox/contacts/view-detail.js:191 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:190 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:434 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/view-detail.js:234 module:io.ox/tasks
 msgid "All attachments"
@@ -921,9 +900,9 @@ msgstr "Kaikki liitteet"
 msgid "All day"
 msgstr "Koko päivän"
 
-#: apps/io.ox/search/facets/extensions.js:618 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:621
-#: apps/io.ox/search/facets/extensions.js:628
+#: apps/io.ox/search/facets/extensions.js:600 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:603
+#: apps/io.ox/search/facets/extensions.js:610
 msgid "All folders"
 msgstr "Kaikki kansiot"
 
@@ -945,22 +924,22 @@ msgstr "Salli html muotoillut sähköpostit"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
-#: apps/io.ox/portal/main.js:466 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Tapahtui virhe."
 
 #: apps/io.ox/calendar/detail/main.js:46 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:86
-#: apps/io.ox/calendar/week/perspective.js:222
+#: apps/io.ox/calendar/week/perspective.js:223
 msgid "An error occurred. Please try again."
 msgstr "Tapahtui virhe. Yritä uudelleen."
 
 #: apps/plugins/portal/twitter/register.js:166 module:plugins/portal
-#: apps/plugins/portal/twitter/util.js:105
-#: apps/plugins/portal/twitter/util.js:146
-#: apps/plugins/portal/twitter/util.js:264
-#: apps/plugins/portal/twitter/util.js:395
-#: apps/plugins/portal/twitter/util.js:440
+#: apps/plugins/portal/twitter/util.js:104
+#: apps/plugins/portal/twitter/util.js:145
+#: apps/plugins/portal/twitter/util.js:256
+#: apps/plugins/portal/twitter/util.js:387
+#: apps/plugins/portal/twitter/util.js:432
 msgid "An internal error occurred"
 msgstr "Tapahtui virhe"
 
@@ -1014,36 +993,36 @@ msgstr "Kaikki kansiot"
 #: apps/io.ox/calendar/actions/acceptdeny.js:222 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:345
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:276
-#: apps/io.ox/calendar/week/perspective.js:160
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/calendar/week/perspective.js:161
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 msgid "Appointment"
 msgstr "Tapaaminen"
 
 #: apps/io.ox/calendar/detail/main.js:38 module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js:64
-#: apps/io.ox/calendar/list/perspective.js:75
-#: apps/io.ox/calendar/month/perspective.js:64
+#: apps/io.ox/calendar/list/perspective.js:67
+#: apps/io.ox/calendar/list/perspective.js:78
+#: apps/io.ox/calendar/month/perspective.js:63
 #: apps/io.ox/calendar/week/perspective.js:69
 msgid "Appointment Details"
 msgstr "Tapaamisen yksityiskohdat"
 
-#: apps/plugins/notifications/calendar/register.js:239
+#: apps/plugins/notifications/calendar/register.js:251
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Tapaamiskutsut"
 
-#: apps/io.ox/calendar/month/perspective.js:453 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:381
+#: apps/io.ox/calendar/month/perspective.js:454 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:382
 msgid "Appointment list"
 msgstr "Tapaamisluettelo"
 
-#: apps/plugins/notifications/calendar/register.js:167
+#: apps/plugins/notifications/calendar/register.js:179
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Tapaamismuistutukset"
 
-#: apps/plugins/portal/calendar/register.js:28 module:plugins/portal
-#: apps/plugins/portal/calendar/register.js:137
+#: apps/plugins/portal/calendar/register.js:27 module:plugins/portal
+#: apps/plugins/portal/calendar/register.js:129
 msgid "Appointments"
 msgstr "Tapaamiset"
 
@@ -1058,9 +1037,9 @@ msgstr "Tapaamismuistutukset"
 msgid "Approximate Duration for Subscriptions"
 msgstr "Tilausten arvioitu kesto"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:652
+#: apps/io.ox/calendar/edit/recurrence-view.js:649
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:698
+#: apps/io.ox/calendar/edit/recurrence-view.js:695
 msgid "April"
 msgstr "huhtikuu"
 
@@ -1097,7 +1076,7 @@ msgstr "Arkistoi viestit"
 msgid "Archiving messages ..."
 msgstr "Viestejä arkistoidaan"
 
-#: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:402 module:plugins/portal
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Oletko varma että haluat poistaa tämän tweetin?"
 
@@ -1106,7 +1085,7 @@ msgstr "Oletko varma että haluat poistaa tämän tweetin?"
 msgid "As incoming mail server"
 msgstr "Saapuvan postin palvelimena"
 
-#: apps/io.ox/calendar/list/perspective.js:239 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:242 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
 msgid "Ascending"
@@ -1116,7 +1095,7 @@ msgstr "Nouseva"
 msgid "Assistant"
 msgstr "Assistentti"
 
-#: apps/io.ox/mail/compose/view.js:138 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "Liitä vCard "
 
@@ -1131,10 +1110,10 @@ msgstr[0] "Liite tallennettu"
 msgstr[1] "Liitteet tallennettu"
 
 #: apps/io.ox/calendar/edit/extensions.js:546 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/view-detail.js:335 module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js:376 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:413 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:432
+#: apps/io.ox/mail/compose/extensions.js:418 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:437
 #: apps/io.ox/tasks/edit/view-template.js:506 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:226
@@ -1147,9 +1126,9 @@ msgstr "Liitteet"
 msgid "Attachments have been saved!"
 msgstr "Liitteet tallennettu!"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:656
+#: apps/io.ox/calendar/edit/recurrence-view.js:653
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:702
+#: apps/io.ox/calendar/edit/recurrence-view.js:699
 msgid "August"
 msgstr "elokuu"
 
@@ -1170,12 +1149,12 @@ msgstr "Automaattinen välitys"
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
-#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Ilmoitusalueen automaattinen avaus"
 
 #: apps/io.ox/core/main.js:506 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:353
+#: apps/io.ox/core/settings/pane.js:337
 msgid "Automatic sign out"
 msgstr "Automaattinen uloskirjautuminen"
 
@@ -1195,7 +1174,7 @@ msgstr ""
 "Lähetettäessä automaattisesti kerää yhteystietoja kansioon \"Collected "
 "addresses\""
 
-#: apps/io.ox/calendar/settings/pane.js:225 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:216 module:io.ox/calendar
 #, fuzzy
 #| msgid ""
 #| "Automatically delete a notification mail after it has been accepted or "
@@ -1212,7 +1191,7 @@ msgstr ""
 msgid "Automatically wrap plain text after character:"
 msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:134 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:133 module:io.ox/core
 msgid "Average time: %1$s ms"
 msgstr "Keskimääräinen aika: %1$s ms"
 
@@ -1222,13 +1201,13 @@ msgid "B"
 msgstr "T"
 
 #: apps/io.ox/mail/compose/extensions.js:57 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:232
+#: apps/io.ox/mail/compose/extensions.js:237
 msgid "BCC"
 msgstr "Piilokopio"
 
 #. Used as button label for a navigation action, like the browser back button
-#: apps/io.ox/calendar/main.js:208 module:io.ox/calendar
-#: apps/io.ox/calendar/main.js:229 apps/io.ox/contacts/main.js:376
+#: apps/io.ox/calendar/main.js:207 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:228 apps/io.ox/contacts/main.js:376
 #: module:io.ox/contacts apps/io.ox/core/commons.js:697 module:io.ox/core
 #: apps/io.ox/files/main.js:158 module:io.ox/files apps/io.ox/mail/main.js:158
 #: module:io.ox/mail apps/io.ox/mail/main.js:163
@@ -1243,23 +1222,23 @@ msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
 #: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
-#: apps/io.ox/settings/main.js:398
+#: apps/io.ox/settings/main.js:407
 msgid "Basic settings"
 msgstr "Perusasetukset"
 
-#: apps/io.ox/mail/common-extensions.js:270 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
 msgid "Bcc"
 msgstr "Piilokopio"
 
 #: apps/io.ox/tasks/edit/view-template.js:718 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:101 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:100 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:124
 msgid "Billing information"
 msgstr "Laskutustiedot"
 
-#: apps/plugins/portal/birthdays/register.js:47 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:120
-#: apps/plugins/portal/birthdays/register.js:196
+#: apps/plugins/portal/birthdays/register.js:46 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:121
+#: apps/plugins/portal/birthdays/register.js:195
 msgid "Birthdays"
 msgstr "Syntymäpäivät"
 
@@ -1278,16 +1257,16 @@ msgstr "Sininen"
 msgid "Branches"
 msgstr "Sivutoimipisteet"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:123 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:122 module:io.ox/core
 msgid "Browser"
 msgstr "Selain"
 
-#: apps/io.ox/contacts/view-detail.js:572 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:571 module:io.ox/contacts
 msgid "Business Address"
 msgstr "Työosoite"
 
 #: apps/io.ox/contacts/edit/view-form.js:125 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:155 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:151 module:plugins/portal
 msgid "Business address"
 msgstr "Työosoite"
 
@@ -1303,8 +1282,8 @@ msgstr "Osta lahja"
 msgid "Buy now!"
 msgstr "Osta heti!"
 
-#: apps/io.ox/calendar/month/perspective.js:135 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:152
+#: apps/io.ox/calendar/month/perspective.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:153
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
@@ -1313,7 +1292,7 @@ msgstr ""
 "tapahtumiin Haluatko jatkaa?"
 
 #: apps/io.ox/mail/compose/extensions.js:56 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:223
+#: apps/io.ox/mail/compose/extensions.js:228
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1324,8 +1303,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #. %1$d = Calendar week
-#: apps/io.ox/calendar/month/view.js:138 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:828 apps/io.ox/calendar/week/view.js:836
+#: apps/io.ox/calendar/month/view.js:130 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
 msgid "CW %1$d"
 msgstr "Vk %1$d"
 
@@ -1333,11 +1312,11 @@ msgstr "Vk %1$d"
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Calendar"
 msgstr "Kalenteri"
 
-#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:97 module:io.ox/calendar
 #: apps/io.ox/core/main.js:231 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -1356,10 +1335,10 @@ msgstr "Kalenterinäkymä"
 #: apps/io.ox/calendar/actions/delete.js:91
 #: apps/io.ox/calendar/actions/edit.js:42 apps/io.ox/calendar/edit/main.js:149
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:381
-#: apps/io.ox/calendar/main.js:248 apps/io.ox/calendar/main.js:314
-#: apps/io.ox/calendar/month/perspective.js:117
-#: apps/io.ox/calendar/week/perspective.js:118
-#: apps/io.ox/calendar/week/perspective.js:161
+#: apps/io.ox/calendar/main.js:247 apps/io.ox/calendar/main.js:313
+#: apps/io.ox/calendar/month/perspective.js:114
+#: apps/io.ox/calendar/week/perspective.js:119
+#: apps/io.ox/calendar/week/perspective.js:162
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:729
@@ -1375,13 +1354,13 @@ msgstr "Kalenterinäkymä"
 #: apps/io.ox/core/permissions/permissions.js:369
 #: apps/io.ox/core/permissions/permissions.js:402 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
-#: module:io.ox/core/sub apps/io.ox/core/tk/mobiscroll.js:28
+#: module:io.ox/core/sub apps/io.ox/core/tk/mobiscroll.js:27
 #: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:349
 #: module:io.ox/editor apps/io.ox/files/actions/delete.js:75
 #: module:io.ox/files apps/io.ox/files/actions/edit-description.js:67
 #: apps/io.ox/files/actions/rename.js:96 apps/io.ox/files/actions/share.js:34
 #: apps/io.ox/files/actions/versions-delete.js:26
-#: apps/io.ox/files/fluid/view-detail.js:232
+#: apps/io.ox/files/fluid/view-detail.js:231
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
 #: apps/io.ox/files/main.js:337 apps/io.ox/files/main.js:388
 #: apps/io.ox/files/views/create.js:125
@@ -1392,17 +1371,18 @@ msgstr "Kalenterinäkymä"
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
 #: apps/io.ox/mail/actions/delete.js:63 apps/io.ox/mail/actions/delete.js:82
 #: apps/io.ox/mail/actions/reminder.js:35
-#: apps/io.ox/mail/compose/extensions.js:397
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:581
+#: apps/io.ox/mail/compose/extensions.js:402
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:601
 #: apps/io.ox/mail/mailfilter/settings/filter.js:104
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1067
 #: apps/io.ox/mail/settings/signatures/register.js:179
+#: apps/io.ox/mail/settings/signatures/register.js:273
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:623 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:135
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
-#: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:95
+#: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:93
 #: apps/io.ox/tasks/edit/main.js:178 apps/io.ox/tasks/main.js:195
 #: apps/io.ox/tasks/main.js:209
 #: apps/plugins/administration/groups/settings/edit.js:145
@@ -1410,19 +1390,19 @@ msgstr "Kalenterinäkymä"
 #: apps/plugins/administration/resources/settings/edit.js:90
 #: apps/plugins/administration/resources/settings/toolbar.js:63
 #: apps/plugins/core/feedback/register.js:140
-#: apps/plugins/notifications/calendar/register.js:66
+#: apps/plugins/notifications/calendar/register.js:78
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
-#: module:plugins/portal apps/plugins/portal/mail/register.js:206
-#: apps/plugins/portal/rss/register.js:160
-#: apps/plugins/portal/tumblr/register.js:261
-#: apps/plugins/portal/twitter/util.js:123
-#: apps/plugins/portal/twitter/util.js:420
+#: module:plugins/portal apps/plugins/portal/mail/register.js:205
+#: apps/plugins/portal/rss/register.js:157
+#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/twitter/util.js:122
+#: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:141
-#: apps/plugins/portal/xing/register.js:113
+#: apps/plugins/portal/xing/register.js:111
 msgid "Cancel"
 msgstr "Peru"
 
-#: apps/io.ox/tasks/common-extensions.js:108 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:106 module:io.ox/tasks
 msgid "Canceled"
 msgstr "Peruttu"
 
@@ -1474,7 +1454,7 @@ msgstr "Muuta vahvistustilanne"
 msgid "Change due date"
 msgstr "Vaihda valmistumispäivämäärää"
 
-#: apps/io.ox/search/facets/extensions.js:606 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:588 module:io.ox/core
 msgid "Change folder"
 msgstr "Vaihda kansio"
 
@@ -1500,8 +1480,8 @@ msgstr "Muuta tilausta"
 msgid "Change view"
 msgstr "Muuta näkymää"
 
-#: apps/io.ox/tasks/common-extensions.js:112 module:io.ox/tasks
-#: apps/io.ox/tasks/common-extensions.js:118
+#: apps/io.ox/tasks/common-extensions.js:110 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:116
 msgid "Changed due date"
 msgstr "Valmistumispäivämäärä muutettu"
 
@@ -1557,8 +1537,8 @@ msgstr "Siivoa"
 msgid "Cleaning up ..."
 msgstr "Siivoa"
 
-#: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
-#: apps/io.ox/core/tk/mobiscroll.js:29
+#: apps/io.ox/core/tk/datepicker.js:34 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:28
 msgid "Clear"
 msgstr "tyhjennä"
 
@@ -1566,8 +1546,8 @@ msgstr "tyhjennä"
 msgid "Clear field"
 msgstr "Tyhjennä kenttä"
 
-#: apps/io.ox/calendar/week/view.js:790 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:794
+#: apps/io.ox/calendar/week/view.js:788 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:792
 msgid "Click for whole day appointment"
 msgstr "Valitse koko päivän tapaaminen"
 
@@ -1579,28 +1559,28 @@ msgstr "Ilmainen koeversio tästä napsauttamalla."
 msgid "Click here to quit the help center"
 msgstr "Napsauta tästä sulkeaksesi help center"
 
-#: apps/plugins/portal/xing/register.js:328 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:326 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Napsauta tästä luodaksesi uusi yhteys Xing-tilillesi, jotta näet tapahtumat."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:503
+#: apps/io.ox/calendar/edit/recurrence-view.js:500
 #: module:io.ox/calendar/edit/main
 msgid "Click on a sentence to choose when to repeat the appointment."
 msgstr "Napsauta lausetta määritelläksesi tapaamisen toistuminen."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:502
+#: apps/io.ox/calendar/edit/recurrence-view.js:499
 #: module:io.ox/calendar/edit/main
 msgid "Click on the links to change the values."
 msgstr "Napsauta linkkejä muuttaaksesi arvoja."
 
-#: apps/plugins/portal/facebook/register.js:180 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:170
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
 msgstr "Napsauta valtuuttaaksesi tilisi uudestaan"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:475
+#: apps/io.ox/calendar/edit/recurrence-view.js:472
 #: module:io.ox/calendar/edit/main
 msgid "Click to close the recurrence view"
 msgstr "Napsauta sulkeaksesi toistonäkymä"
@@ -1625,7 +1605,7 @@ msgstr "Napsauta yrittääksesi uudelleen."
 msgid "Click to retry later."
 msgstr "Napsauta yrittääksesi uudelleen myöhemmin."
 
-#: apps/io.ox/portal/main.js:469 module:io.ox/portal
+#: apps/io.ox/portal/main.js:468 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Napsauta yrittääksesi uudestaan."
 
@@ -1636,7 +1616,7 @@ msgstr "Napsauta ladataksesi kuva"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
-#: apps/io.ox/core/permissions/permissions.js:478
+#: apps/io.ox/core/permissions/permissions.js:475
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:49 module:io.ox/files
@@ -1691,7 +1671,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js:94 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:263 module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:242 apps/io.ox/contacts/view-detail.js:440
+#: apps/io.ox/contacts/model.js:242 apps/io.ox/contacts/view-detail.js:439
 #: apps/plugins/portal/xing/actions.js:68 module:plugins/portal
 msgid "Comment"
 msgstr "Viesti"
@@ -1700,7 +1680,7 @@ msgstr "Viesti"
 msgid "Comment has been successfully posted on XING"
 msgstr "XING-kommentti on lähetetty onnistuneesti"
 
-#: apps/plugins/portal/reddit/register.js:175 module:io.ox/portal
+#: apps/plugins/portal/reddit/register.js:174 module:io.ox/portal
 msgid "Comments"
 msgstr "Kommentit"
 
@@ -1737,7 +1717,7 @@ msgid "Compact view"
 msgstr "Tiivis näkymä"
 
 #: apps/io.ox/tasks/edit/view-template.js:732 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:102 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:101 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:125
 msgid "Companies"
 msgstr "Yritykset"
@@ -1747,7 +1727,7 @@ msgid "Company"
 msgstr "Yhtiö"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:82 apps/io.ox/mail/compose/view.js:389
+#: apps/io.ox/mail/compose/main.js:82 apps/io.ox/mail/compose/view.js:409
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -1788,12 +1768,12 @@ msgid "Connector for Microsoft Outlook®"
 msgstr "Connector Microsoft Outlook® järjestelmille"
 
 #: apps/io.ox/contacts/edit/main.js:278 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 msgid "Contact"
 msgstr "Yhteystieto"
 
 #: apps/io.ox/contacts/detail/main.js:34 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:175 apps/io.ox/contacts/view-detail.js:741
+#: apps/io.ox/contacts/main.js:175 apps/io.ox/contacts/view-detail.js:740
 msgid "Contact Details"
 msgstr "Yhteystiedon yksityiskohdat"
 
@@ -1809,7 +1789,7 @@ msgstr "Yhteystieto siirretty"
 msgid "Contact pictures"
 msgstr "Yhteystiedon kuvat"
 
-#: apps/plugins/xing/main.js:109 module:plugins/portal
+#: apps/plugins/xing/main.js:108 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Yhteystietopyyntö lähetetty"
 
@@ -1856,23 +1836,23 @@ msgstr "Keskustelut"
 msgid "Copy"
 msgstr "Kopioi"
 
-#: apps/io.ox/mail/common-extensions.js:259 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
 msgstr "Kopioi"
 
-#: apps/io.ox/contacts/view-detail.js:688 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:687 module:io.ox/contacts
 msgid "Copy to description"
 msgstr "Kopioi kuvaukseen"
 
-#: apps/io.ox/tasks/model.js:129 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:138
+#: apps/io.ox/tasks/model.js:128 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:137
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "Kustannusten tulee olla väliltä -%1$d ja %1$d."
 
-#: apps/io.ox/tasks/model.js:150 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:153
+#: apps/io.ox/tasks/model.js:149 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:152
 msgid "Costs must only have two decimal places."
 msgstr "Kustannuksella voi olla vain kaksi desimaalia."
 
@@ -1880,7 +1860,7 @@ msgstr "Kustannuksella voi olla vain kaksi desimaalia."
 msgid "Could not get a default folder for this application."
 msgstr "Oletuskansion noutaminen tälle sovellukselle ei onnistunut."
 
-#: apps/io.ox/contacts/view-detail.js:197 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:196 module:io.ox/contacts
 msgid "Could not load attachments for this contact."
 msgstr "Tämän yhteystiedon liitteitä ei voitu ladata."
 
@@ -1909,7 +1889,7 @@ msgstr "Asetuksia ei voitu tallentaa"
 msgid "Could not save settings."
 msgstr "Asetuksia ei voitu tallentaa."
 
-#: apps/io.ox/core/folder/api.js:612 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:614 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1917,7 +1897,7 @@ msgstr ""
 "Asetuksia ei voitu tallentaa. Vähintään yhdellä käyttäjällä tulee olla "
 "pääkäyttäjän valtuudet."
 
-#: apps/io.ox/calendar/list/perspective.js:182 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:185 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "Tapaamisen tietoja ei voitu ladata."
 
@@ -1961,7 +1941,7 @@ msgstr "Maa"
 msgid "Create"
 msgstr "Luo"
 
-#: apps/io.ox/files/share/view.js:35 module:io.ox/files
+#: apps/io.ox/files/share/view.js:33 module:io.ox/files
 msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
@@ -1987,7 +1967,7 @@ msgid "Create list"
 msgstr "Luo lista"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/plugins/portal/xing/register.js:291 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:289 module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Luo uusi %1$s tili"
 
@@ -2015,11 +1995,11 @@ msgstr "Luo muistutus"
 
 #: apps/io.ox/tasks/edit/main.js:146 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:42 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:97 apps/io.ox/tasks/edit/view.js:145
+#: apps/io.ox/tasks/edit/view-template.js:97 apps/io.ox/tasks/edit/view.js:144
 msgid "Create task"
 msgstr "Luo tehtävä"
 
-#: apps/io.ox/calendar/view-detail.js:291 module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js:332 module:io.ox/calendar
 msgid "Created"
 msgstr "Luotu"
 
@@ -2048,7 +2028,7 @@ msgstr "Aseta väri"
 msgid "Custom name"
 msgstr "Mukautettu"
 
-#: apps/io.ox/portal/main.js:138 module:io.ox/portal
+#: apps/io.ox/portal/main.js:137 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Mukauta tätä sivua"
 
@@ -2064,39 +2044,39 @@ msgstr "Data tuotu onnistuneesti"
 msgid "Data only partially imported ( %1$s of %2$s records)"
 msgstr "Data vain osittain tuotu (%1$s %2$s tietueesta)"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:56 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:119
+#: apps/io.ox/backbone/mini-views/datepicker.js:55 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:118
 #: apps/io.ox/mail/view-options.js:31 module:io.ox/mail
 msgid "Date"
 msgstr "Päivämäärä"
 
-#: apps/io.ox/tasks/print.js:103 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:102 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:126
 msgid "Date completed"
 msgstr "Valmistumispäivämäärä"
 
 #: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:146 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:142 module:plugins/portal
 msgid "Date of birth"
 msgstr "Syntymäaika"
 
-#: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
 #: apps/io.ox/calendar/freebusy/templates.js:79 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:161 module:io.ox/calendar
 msgid "Day"
 msgstr "Päivä"
 
-#: apps/io.ox/calendar/week/perspective.js:313 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:314 module:io.ox/calendar
 msgid "Day View"
 msgstr "Päivänäkymä"
 
-#: apps/io.ox/core/tk/mobiscroll.js:32 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:29 module:io.ox/core
 msgid "Days"
 msgstr "Päivää"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:660
+#: apps/io.ox/calendar/edit/recurrence-view.js:657
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:706
+#: apps/io.ox/calendar/edit/recurrence-view.js:703
 msgid "December"
 msgstr "joulukuu"
 
@@ -2106,11 +2086,11 @@ msgid "Decline"
 msgstr "Kieltäydy"
 
 #: apps/io.ox/calendar/print.js:197 module:io.ox/calendar
-#: apps/io.ox/tasks/print.js:93 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:92 module:io.ox/tasks
 msgid "Declined"
 msgstr "Evätty"
 
-#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:193 module:io.ox/core
 msgid "Default Theme"
 msgstr "Oletusteema"
 
@@ -2118,15 +2098,15 @@ msgstr "Oletusteema"
 msgid "Default address"
 msgstr "oletusosoite"
 
-#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:300 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Oletussovellus kirjautumisen jälkeen"
 
-#: apps/io.ox/calendar/settings/pane.js:156 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:147 module:io.ox/calendar
 msgid "Default calendar view"
 msgstr "Kalenterin oletusnäkymä"
 
-#: apps/io.ox/calendar/settings/pane.js:181 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:172 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Oletusmuistutus"
 
@@ -2134,19 +2114,19 @@ msgstr "Oletusmuistutus"
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
-#: apps/io.ox/mail/settings/signatures/register.js:516 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:478 module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
 msgid "Default signature for new messages"
 msgstr "Sinulla ei ole uusia viestejä"
 
-#: apps/io.ox/mail/settings/signatures/register.js:523 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:485 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js:264 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:258
+#: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:251
 msgid "Deferred"
 msgstr "Lykätty"
 
@@ -2168,9 +2148,9 @@ msgstr "Lykätty"
 #: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:522
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:387
-#: apps/io.ox/mail/settings/signatures/register.js:388
-#: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:621
+#: apps/io.ox/mail/settings/signatures/register.js:349
+#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:620
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:116
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:424
@@ -2179,8 +2159,8 @@ msgstr "Lykätty"
 #: apps/io.ox/tasks/toolbar.js:85
 #: apps/plugins/administration/groups/settings/toolbar.js:100
 #: apps/plugins/administration/resources/settings/toolbar.js:96
-#: apps/plugins/portal/twitter/util.js:281 module:plugins/portal
-#: apps/plugins/portal/twitter/util.js:419
+#: apps/plugins/portal/twitter/util.js:273 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:411
 #: apps/plugins/portal/xing/actions.js:119
 msgid "Delete"
 msgstr "Poista"
@@ -2224,7 +2204,7 @@ msgstr "Poista versio"
 msgid "Delete whole series"
 msgstr "Poista koko sarja"
 
-#: apps/io.ox/portal/main.js:617 module:io.ox/portal
+#: apps/io.ox/portal/main.js:616 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr "Poista widget"
@@ -2244,7 +2224,7 @@ msgstr "Paikallisten viestien poistaminen poistaa ne myös palvelimelta"
 msgid "Department"
 msgstr "Osasto"
 
-#: apps/io.ox/calendar/list/perspective.js:240 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:243 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
 msgid "Descending"
@@ -2256,9 +2236,9 @@ msgstr "Laskeva"
 #: apps/io.ox/tasks/edit/view-template.js:126 module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50 module:io.ox/core
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
-#: apps/plugins/portal/mail/register.js:199
-#: apps/plugins/portal/rss/register.js:153 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:253
+#: apps/plugins/portal/mail/register.js:198
+#: apps/plugins/portal/rss/register.js:150 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:251
 msgid "Description"
 msgstr "Kuvaus"
 
@@ -2267,7 +2247,7 @@ msgid "Description has been copied"
 msgstr "Kuvaus on kopioitu"
 
 #: apps/io.ox/calendar/view-detail.js:169 module:io.ox/calendar
-#: apps/io.ox/files/fluid/perspective.js:433 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:428 module:io.ox/files
 msgid "Details"
 msgstr "Yksityiskohdat"
 
@@ -2289,8 +2269,8 @@ msgstr "Suora linkki: %1$s"
 msgid "Disable"
 msgstr "Kytke pois"
 
-#: apps/io.ox/portal/main.js:199 module:io.ox/portal
-#: apps/io.ox/portal/main.js:200 apps/io.ox/portal/main.js:510
+#: apps/io.ox/portal/main.js:198 module:io.ox/portal
+#: apps/io.ox/portal/main.js:199 apps/io.ox/portal/main.js:509
 msgid "Disable widget"
 msgstr "Poista widget käytöstä"
 
@@ -2299,7 +2279,7 @@ msgstr "Poista widget käytöstä"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:233
 #: apps/io.ox/core/settings/user.js:82
-#: apps/io.ox/mail/compose/extensions.js:79 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:80 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:86
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
@@ -2319,7 +2299,7 @@ msgstr "Hylkää muutokset"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:579 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:599 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Hylkää viesti"
@@ -2345,7 +2325,7 @@ msgid "Display of names"
 msgstr "Nimien esitysmuoto"
 
 #: apps/io.ox/tasks/edit/view-template.js:704 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:100 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:99 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:123
 msgid "Distance"
 msgstr "Etäisyys"
@@ -2363,7 +2343,7 @@ msgstr "Jakelulista"
 
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:315
-#: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/model.js:43
+#: apps/io.ox/contacts/view-detail.js:48 apps/io.ox/participants/model.js:43
 #: module:io.ox/participants/model apps/io.ox/participants/views.js:185
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
@@ -2450,7 +2430,7 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Haluatko varmasti poistaa tämän tehtävän?"
 msgstr[1] "Haluatko varmasti poistaa nämä tehtävät?"
 
-#: apps/io.ox/portal/main.js:618 module:io.ox/portal
+#: apps/io.ox/portal/main.js:617 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr "Haluatko varmasti poistaa tämä widgetin?"
@@ -2462,7 +2442,7 @@ msgstr "Haluatko varmasti poistaa tämä widgetin?"
 msgid "Do you really want to discard your changes?"
 msgstr "Haluatko varmasti hylätä muutoksesi?"
 
-#: apps/io.ox/mail/compose/view.js:576 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:596 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Haluatko varmasti hylätä viestisi?"
 
@@ -2493,7 +2473,7 @@ msgid "Do you want to delete this appointment?"
 msgstr "Haluatko poistaa tämän tapaamisen?"
 
 #: apps/io.ox/calendar/actions/edit.js:37 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:157
+#: apps/io.ox/calendar/week/perspective.js:158
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -2513,12 +2493,12 @@ msgstr "Asiakirjat"
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
-#: apps/io.ox/files/share/view.js:403 module:io.ox/files
+#: apps/io.ox/files/share/view.js:401 module:io.ox/files
 #: apps/io.ox/tasks/edit/view-template.js:262 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
-#: apps/io.ox/tasks/util.js:250
-#: apps/plugins/notifications/tasks/register.js:62
+#: apps/io.ox/tasks/util.js:243
+#: apps/plugins/notifications/tasks/register.js:74
 #: module:plugins/notifications
 msgid "Done"
 msgstr "Valmis"
@@ -2593,7 +2573,7 @@ msgstr "Driven asetukset"
 msgid "Drop EML file here for import"
 msgstr "Tuodaksesi EML-tiedosto tiputa se tähän"
 
-#: apps/io.ox/mail/compose/extensions.js:341 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:346 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Pudota liitteet tähän"
 
@@ -2621,7 +2601,7 @@ msgid ""
 msgstr "Tiputa tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
 
 #. Task: "Due" like in "Change due date"
-#: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:89 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:61 module:io.ox/mail
 msgid "Due"
 msgstr "Valmis"
@@ -2650,8 +2630,8 @@ msgstr "ET"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:397 module:io.ox/calendar
-#: apps/io.ox/calendar/main.js:217 apps/io.ox/calendar/main.js:223
-#: apps/io.ox/calendar/main.js:243 apps/io.ox/calendar/main.js:314
+#: apps/io.ox/calendar/main.js:216 apps/io.ox/calendar/main.js:222
+#: apps/io.ox/calendar/main.js:242 apps/io.ox/calendar/main.js:313
 #: apps/io.ox/calendar/toolbar.js:64 apps/io.ox/contacts/actions.js:480
 #: module:io.ox/contacts apps/io.ox/contacts/main.js:364
 #: apps/io.ox/contacts/main.js:370 apps/io.ox/contacts/main.js:729
@@ -2663,8 +2643,8 @@ msgstr "ET"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:155
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1071
-#: apps/io.ox/mail/settings/signatures/register.js:381
-#: apps/io.ox/mail/settings/signatures/register.js:383
+#: apps/io.ox/mail/settings/signatures/register.js:343
+#: apps/io.ox/mail/settings/signatures/register.js:345
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:289
 #: apps/io.ox/settings/accounts/settings/pane.js:117
@@ -2686,7 +2666,7 @@ msgstr "Muokkaa yhteystietoa"
 msgid "Edit Flickr photo stream"
 msgstr "Muokka Flickr kuvavirtaa"
 
-#: apps/plugins/portal/tumblr/register.js:242 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:240 module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Muokkaa Tumblr syötettä"
 
@@ -2721,7 +2701,7 @@ msgstr "Muokkaa luonnosta"
 msgid "Edit group"
 msgstr "Muokkaa sääntöä"
 
-#: apps/io.ox/mail/compose/extensions.js:152 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:157 module:io.ox/mail
 #, fuzzy
 #| msgid "List name"
 msgid "Edit names"
@@ -2750,7 +2730,7 @@ msgstr "Muokkaa allekirjoitusta"
 #: apps/io.ox/tasks/edit/main.js:27 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/main.js:228 apps/io.ox/tasks/edit/view-template.js:47
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:94
-#: apps/io.ox/tasks/edit/view.js:145 apps/io.ox/tasks/toolbar.js:53
+#: apps/io.ox/tasks/edit/view.js:144 apps/io.ox/tasks/toolbar.js:53
 #: module:io.ox/mail
 msgid "Edit task"
 msgstr "Muokkaa tehtävää"
@@ -2761,7 +2741,7 @@ msgstr "Muokkaa asettaaksesi nimi."
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:211
-#: apps/io.ox/editor/main.js:315 apps/io.ox/mail/compose/view.js:114
+#: apps/io.ox/editor/main.js:315 apps/io.ox/mail/compose/view.js:134
 #: module:io.ox/mail
 msgid "Editor"
 msgstr "Editori"
@@ -2821,7 +2801,7 @@ msgstr "Sähköposti-ilmoitus tehtävän luojalle?"
 msgid "Email notification for task participant?"
 msgstr "Sähköposti-ilmoitus tehtävän osallistujalle?"
 
-#: apps/io.ox/calendar/settings/pane.js:206 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:197 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for task"
 msgid "Email notifications"
@@ -2833,7 +2813,7 @@ msgid ""
 msgstr ""
 "Viestikiintiön ollessa ylitettynä, et voi siirtää viestejä roskakansioon."
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:35 module:plugins/portal
 msgid "Employee"
 msgstr "Työntekijä"
 
@@ -2845,7 +2825,7 @@ msgstr "Työntekijätunnus"
 msgid "Employee type"
 msgstr "Työntekijän tyyppi"
 
-#: apps/plugins/halo/xing/register.js:190 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:186 module:plugins/portal
 msgid "Employment"
 msgstr "Työ"
 
@@ -2896,17 +2876,17 @@ msgstr "Käytössä seuraaville osoitteille"
 msgid "End"
 msgstr "Loppu"
 
-#: apps/io.ox/calendar/settings/pane.js:138 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:129 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Työajan loppu"
 
 #: apps/io.ox/calendar/edit/extensions.js:165 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:536 module:io.ox/core
 msgid "Ends on"
 msgstr "Päättyy"
 
-#: apps/io.ox/files/share/view.js:278 module:io.ox/files
-#: apps/io.ox/files/share/view.js:281
+#: apps/io.ox/files/share/view.js:276 module:io.ox/files
+#: apps/io.ox/files/share/view.js:279
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -2918,7 +2898,7 @@ msgid "Enter document title here"
 msgstr "Syötä asiakirjan otsikko tähän"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "Yrittäjä"
 
@@ -2933,8 +2913,8 @@ msgstr "Kuori"
 msgid "Error"
 msgstr "Virhe"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:348
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:26 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
 msgid "Error log"
 msgstr "Virhelogi"
 
@@ -2943,32 +2923,32 @@ msgstr "Virhelogi"
 msgid "Error:"
 msgstr "Virhe:"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:224 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:223 module:io.ox/core
 msgid "Errors"
 msgstr "Virheet"
 
 #: apps/io.ox/tasks/edit/view-template.js:649 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:98 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:97 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:121
 msgid "Estimated costs"
 msgstr "Arvioidut kustannukset"
 
 #: apps/io.ox/tasks/edit/view-template.js:621 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:96 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:95 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:119
 msgid "Estimated duration in minutes"
 msgstr "Arvioitu kesto minuuteissa"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:414 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "Joka %1$d päivä"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:541 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:456 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Joka %1$d kuukauden %2$d päivänä"
 
@@ -2976,26 +2956,26 @@ msgstr "Joka %1$d kuukauden %2$d päivänä"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:552 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:467 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Joka %1$d kuukauden %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:526 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:441 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Joka %1$d viikon %2$s"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:510 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:425 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "Päivittäin joka %1$d viikko"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:517 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:432 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Työpäivinä joka %1$d viikko"
 
@@ -3003,7 +2983,7 @@ msgstr "Työpäivinä joka %1$d viikko"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:569 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Joka %1$d vuosi %2$s %3$d"
 
@@ -3012,12 +2992,12 @@ msgstr "Joka %1$d vuosi %2$s %3$d"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:582 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:497 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Joka %1$d vuosi %2$s %3$s %4$d"
 
-#: apps/io.ox/calendar/util.js:496 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:507
+#: apps/io.ox/calendar/util.js:411 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:422
 msgid "Every day"
 msgstr "Päivittäin"
 
@@ -3025,7 +3005,7 @@ msgstr "Päivittäin"
 msgid "Exact dates"
 msgstr "Tarkat päivämäärät"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
 msgid "Executive"
 msgstr "Johtaja"
 
@@ -3043,11 +3023,11 @@ msgstr "Laajenna lomake"
 #. Label for a button which shows more upcoming
 #. appointments in a listview by extending the search
 #. by one month in the future
-#: apps/io.ox/calendar/main.js:274 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:273 module:io.ox/calendar
 msgid "Expand timeframe by one month"
 msgstr "Laajenna aikaväliä kuukaudella"
 
-#: apps/io.ox/files/share/view.js:322 module:io.ox/files
+#: apps/io.ox/files/share/view.js:320 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -3072,7 +3052,7 @@ msgstr "Laajenna näkymä"
 msgid "External contact"
 msgstr "Ulkoinen yhteystieto"
 
-#: apps/io.ox/mail/common-extensions.js:473 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Viestissä olevia kuvia ei näytetä yksityisyytesi suojaamiseksi."
@@ -3092,13 +3072,13 @@ msgstr "Ulkoiset osallistujat"
 msgid "Face"
 msgstr "Kasvot"
 
-#: apps/plugins/portal/facebook/register.js:212 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:238
-#: apps/plugins/portal/facebook/register.js:671
+#: apps/plugins/portal/facebook/register.js:211 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:237
+#: apps/plugins/portal/facebook/register.js:670
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:189 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:188 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook virhe:"
 
@@ -3155,13 +3135,13 @@ msgid ""
 msgstr ""
 "Vahvistustilannetta ei voitu päivittää. Tehtävä on luultavasti poistettu."
 
-#: apps/plugins/portal/twitter/util.js:94 module:plugins/portal
-#: apps/plugins/portal/twitter/util.js:297
+#: apps/plugins/portal/twitter/util.js:93 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:289
 msgid "Favorite"
 msgstr "Suosikki"
 
-#: apps/plugins/portal/twitter/util.js:89 module:plugins/portal
-#: apps/plugins/portal/twitter/util.js:216
+#: apps/plugins/portal/twitter/util.js:88 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:208
 msgid "Favorited"
 msgstr "Suosikit"
 
@@ -3181,13 +3161,13 @@ msgstr "Faksi (koti)"
 msgid "Fax (alt)"
 msgstr "Faksi (vaihtoehtoinen)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:650
+#: apps/io.ox/calendar/edit/recurrence-view.js:647
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:696
+#: apps/io.ox/calendar/edit/recurrence-view.js:693
 msgid "February"
 msgstr "helmikuu"
 
-#: apps/plugins/portal/tumblr/register.js:247 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:245 module:io.ox/portal
 msgid "Feed URL"
 msgstr "Syötteen URL"
 
@@ -3204,8 +3184,8 @@ msgstr "Palaute"
 msgid "Feeling • Decoration"
 msgstr "Tunne • Koriste"
 
-#: apps/io.ox/files/fluid/view-detail.js:357 module:io.ox/files
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/files/fluid/view-detail.js:356 module:io.ox/files
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 msgid "File"
 msgstr "Tiedosto"
 
@@ -3230,7 +3210,7 @@ msgstr "Tiedostokiintiö"
 msgid "File: %1$s"
 msgstr "Tiedosto: %1$s"
 
-#: apps/io.ox/files/fluid/perspective.js:617 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:612 module:io.ox/files
 msgid "Files View"
 msgstr "Tiedostonäkymä"
 
@@ -3249,7 +3229,7 @@ msgid "Find a free time"
 msgstr "Löydä vapaa aika"
 
 #: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js:86 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:84 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:80 module:io.ox/wizards/firstStart
 msgid "First name"
 msgstr "Etunimi"
@@ -3268,7 +3248,7 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:237 module:io.ox/calendar
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 #: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Kansio"
@@ -3310,8 +3290,8 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr "Kansiokohtaiset toimenpiteet"
 
-#: apps/io.ox/calendar/main.js:202 module:io.ox/calendar
-#: apps/io.ox/calendar/main.js:214 apps/io.ox/calendar/main.js:221
+#: apps/io.ox/calendar/main.js:201 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:213 apps/io.ox/calendar/main.js:220
 #: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:368 apps/io.ox/core/folder/view.js:281
 #: module:io.ox/core apps/io.ox/files/main.js:142 module:io.ox/files
@@ -3322,12 +3302,12 @@ msgid "Folders"
 msgstr "Kansiot"
 
 #. twitter: Follow this person
-#: apps/plugins/portal/twitter/util.js:330 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:322 module:plugins/portal
 msgid "Follow"
 msgstr "Seuraa"
 
 #. twitter: already following this person
-#: apps/plugins/portal/twitter/util.js:348 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:340 module:plugins/portal
 msgid "Following"
 msgstr "Seuraat"
 
@@ -3385,23 +3365,23 @@ msgid "Forward emails as"
 msgstr "Viestien välitys"
 
 #: apps/io.ox/calendar/edit/extensions.js:290 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
 msgid "Free"
 msgstr "Vapaa"
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 msgid "Freelancer"
 msgstr "Freelancer"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:49
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:468
+#: apps/io.ox/calendar/edit/recurrence-view.js:48
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:383
 #: module:io.ox/calendar
 msgid "Friday"
 msgstr "perjantai"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:112
-#: apps/io.ox/mail/compose/extensions.js:158 apps/io.ox/mail/main.js:549
+#: apps/io.ox/mail/compose/extensions.js:117
+#: apps/io.ox/mail/compose/extensions.js:163 apps/io.ox/mail/main.js:549
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Lähettäjä"
@@ -3435,7 +3415,7 @@ msgstr "GT"
 msgid "Get %s"
 msgstr "Nouda %s"
 
-#: apps/io.ox/files/share/view.js:47 module:io.ox/files
+#: apps/io.ox/files/share/view.js:45 module:io.ox/files
 #, fuzzy
 #| msgid "Direct link"
 msgid "Get a link"
@@ -3445,7 +3425,7 @@ msgstr "Suora linkki"
 msgid "Get free upgrade"
 msgstr "Ilmainen päivitys"
 
-#: apps/plugins/portal/xing/register.js:287 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:285 module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
@@ -3453,8 +3433,8 @@ msgstr ""
 "Uutiset XING-verkostostasi voidaan toimittaa sinulle. Pysy yhteydessä ja saa "
 "tietoa uusista liiketoimintamahdollisuuksista."
 
-#: apps/io.ox/portal/main.js:374 module:io.ox/portal
-#: apps/io.ox/portal/main.js:396
+#: apps/io.ox/portal/main.js:373 module:io.ox/portal
+#: apps/io.ox/portal/main.js:395
 msgid "Get started here"
 msgstr "Aloita tästä"
 
@@ -3462,11 +3442,11 @@ msgstr "Aloita tästä"
 msgid "Give feedback"
 msgstr "Anna palautetta"
 
-#: apps/io.ox/portal/main.js:90 module:io.ox/portal
+#: apps/io.ox/portal/main.js:89 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Hyvää iltaa, %s"
 
-#: apps/io.ox/portal/main.js:88 module:io.ox/portal
+#: apps/io.ox/portal/main.js:87 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Hyvää huomenta, %s"
 
@@ -3506,7 +3486,7 @@ msgstr "Ryhmä"
 msgid "Guest"
 msgstr "Vieras"
 
-#: apps/io.ox/mail/compose/view.js:116 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:136 module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr "HTML"
@@ -3520,7 +3500,7 @@ msgstr "HTML ja teksti"
 msgid "Header"
 msgstr "Otsake"
 
-#: apps/io.ox/portal/main.js:92 module:io.ox/portal
+#: apps/io.ox/portal/main.js:91 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Hei %s"
 
@@ -3556,41 +3536,47 @@ msgstr "Piilotettu"
 msgid "Hide"
 msgstr "Piilota"
 
-#: apps/io.ox/search/facets/extensions.js:59 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:58 module:io.ox/core
 msgid "Hide advanced filters"
 msgstr "Piilota laajat suodattimet"
 
-#: apps/plugins/notifications/calendar/register.js:261
+#: apps/plugins/notifications/calendar/register.js:273
 #: module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "Paina piilottaaksesi kaikki tapaamiskutsut."
 
-#: apps/plugins/notifications/calendar/register.js:189
+#: apps/plugins/notifications/calendar/register.js:201
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Paina piilottaaksesi kaikki tapaamismuistutukset."
 
-#: apps/plugins/notifications/mail/register.js:103
+#: apps/io.ox/core/notifications.js:101 module:io.ox/core
+#, fuzzy
+#| msgid "Click to close this notification"
+msgid "Hide all notifications"
+msgstr "Napsauta sulkeaksesi ilmoituksen"
+
+#: apps/plugins/notifications/mail/register.js:101
 #: module:plugins/notifications
 msgid "Hide all notifications for new mails."
 msgstr "Paina piilottaaksesi ilmoitukset uusista posteista."
 
-#: apps/plugins/notifications/tasks/register.js:115
+#: apps/plugins/notifications/tasks/register.js:127
 #: module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr "Paina piilottaaksesi kaikki ilmoitukset erääntyneistä tehtävistä."
 
-#: apps/plugins/notifications/tasks/register.js:333
+#: apps/plugins/notifications/tasks/register.js:345
 #: module:plugins/notifications
 msgid "Hide all task invitations."
 msgstr "Paina piilottaaksesi kaikki tehtäväkutsut."
 
-#: apps/plugins/notifications/tasks/register.js:203
+#: apps/plugins/notifications/tasks/register.js:215
 #: module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Paina piilottaaksesi kaikki tehtävämuistutukset."
 
-#: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
 msgid "Hide comments"
 msgstr "Piilota kommentit"
 
@@ -3599,17 +3585,17 @@ msgstr "Piilota kommentit"
 msgid "Hide details"
 msgstr "Piilota yksityiskohdat"
 
-#: apps/io.ox/mail/compose/extensions.js:151 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:156 module:io.ox/mail
 #, fuzzy
 #| msgid "Middle name"
 msgid "Hide names"
 msgstr "Muut nimet"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:72 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:71 module:io.ox/core
 msgid "Hide request body"
 msgstr "Piilota pyynnön runko"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:82 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:81 module:io.ox/core
 msgid "Hide stack trace"
 msgstr "Piilota stack trace"
 
@@ -3619,17 +3605,17 @@ msgstr "Piilota stack trace"
 msgid "Hide this notification"
 msgstr "Napsauta sulkeaksesi ilmoituksen"
 
-#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:146 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
 msgstr "Korkea"
 
-#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:232 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Korkean kontrastin teema"
 
-#: apps/io.ox/mail/util.js:402 module:io.ox/core apps/io.ox/tasks/util.js:374
+#: apps/io.ox/mail/util.js:391 module:io.ox/core apps/io.ox/tasks/util.js:369
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Tärkeä"
@@ -3641,7 +3627,7 @@ msgstr "Tärkeä"
 msgid "Hobby"
 msgstr "Harrastus"
 
-#: apps/io.ox/contacts/view-detail.js:590 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:589 module:io.ox/contacts
 msgid "Home Address"
 msgstr "Kotiosoite"
 
@@ -3653,11 +3639,11 @@ msgstr "Kotiosoite"
 msgid "Horizontal"
 msgstr "Vaakasuora"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:120 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:119 module:io.ox/core
 msgid "Host"
 msgstr "Isäntäkone"
 
-#: apps/io.ox/core/tk/mobiscroll.js:35 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:30 module:io.ox/core
 msgid "Hours"
 msgstr "Tuntia"
 
@@ -3706,9 +3692,9 @@ msgstr "Älä huomioi varoituksia"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:188 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/main.js:147 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js:116
-#: apps/io.ox/calendar/week/perspective.js:117
-#: apps/plugins/notifications/calendar/register.js:64
+#: apps/io.ox/calendar/month/perspective.js:113
+#: apps/io.ox/calendar/week/perspective.js:118
+#: apps/plugins/notifications/calendar/register.js:76
 #: module:plugins/notifications
 msgid "Ignore conflicts"
 msgstr "Älä huomioi ristiriitoja"
@@ -3727,6 +3713,7 @@ msgstr "Kuva 1"
 
 #: apps/io.ox/core/folder/contextmenu.js:369 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:272 module:io.ox/mail
 msgid "Import"
 msgstr "Tuo"
 
@@ -3734,27 +3721,27 @@ msgstr "Tuo"
 msgid "Import from file"
 msgstr "Tuo tiedostosta"
 
-#: apps/io.ox/mail/settings/signatures/register.js:311 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:539
+#: apps/io.ox/mail/settings/signatures/register.js:249 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:501
 msgid "Import signatures"
 msgstr "Tuo allekirjoituksia"
 
-#: apps/plugins/portal/birthdays/register.js:159 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158 module:plugins/portal
 msgid "In %1$d days"
 msgstr "%1$d päivän kuluttua"
 
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:246
+#: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:239
 msgid "In progress"
 msgstr "Meneillään"
 
 #: apps/io.ox/portal/widgets.js:110 module:io.ox/portal
-#: apps/plugins/portal/mail/register.js:65 module:plugins/portal
-#: apps/plugins/portal/mail/register.js:190
-#: apps/plugins/portal/mail/register.js:200
-#: apps/plugins/portal/mail/register.js:211
-#: apps/plugins/portal/mail/register.js:241
+#: apps/plugins/portal/mail/register.js:64 module:plugins/portal
+#: apps/plugins/portal/mail/register.js:189
+#: apps/plugins/portal/mail/register.js:199
+#: apps/plugins/portal/mail/register.js:210
+#: apps/plugins/portal/mail/register.js:240
 msgid "Inbox"
 msgstr "Saapuneet"
 
@@ -3766,7 +3753,7 @@ msgstr "Sisällytä jakelulistat"
 msgid "Incoming server"
 msgstr "Saapuvan postin palvelin"
 
-#: apps/io.ox/tasks/common-extensions.js:99 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:97 module:io.ox/tasks
 msgid "Inconsistent dates"
 msgstr "Ristiriitaiset päivämäärät"
 
@@ -3823,7 +3810,7 @@ msgstr "Pikaviestin 2"
 msgid "Invalid data"
 msgstr "Epäkelpo tieto"
 
-#: apps/plugins/xing/main.js:75 module:plugins/portal
+#: apps/plugins/xing/main.js:74 module:plugins/portal
 msgid "Invitation sent"
 msgstr "Kutsu lähetetty"
 
@@ -3837,20 +3824,20 @@ msgstr "Kutsu"
 msgid "Invite owner"
 msgstr "Kutsu %s:in"
 
-#: apps/io.ox/files/share/view.js:46 module:io.ox/files
+#: apps/io.ox/files/share/view.js:44 module:io.ox/files
 #, fuzzy
 #| msgid "Invite to %s"
 msgid "Invite people"
 msgstr "Kutsu %s:in"
 
-#: apps/io.ox/files/share/view.js:34 module:io.ox/files
+#: apps/io.ox/files/share/view.js:32 module:io.ox/files
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
 msgstr ""
 
-#: apps/plugins/xing/main.js:123 module:plugins/portal
-#: apps/plugins/xing/main.js:130 apps/plugins/xing/main.js:138
+#: apps/plugins/xing/main.js:122 module:plugins/portal
+#: apps/plugins/xing/main.js:129 apps/plugins/xing/main.js:137
 msgid "Invite to %s"
 msgstr "Kutsu %s:in"
 
@@ -3899,9 +3886,9 @@ msgstr "Kohdeluettelovaihtoehdot"
 msgid "Items without a file can not be downloaded."
 msgstr "Kohdetta ilman tiedostoa ei voi ladata."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:649
+#: apps/io.ox/calendar/edit/recurrence-view.js:646
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:695
+#: apps/io.ox/calendar/edit/recurrence-view.js:692
 msgid "January"
 msgstr "tammikuu"
 
@@ -3910,7 +3897,7 @@ msgstr "tammikuu"
 msgid "Japanese Carrier"
 msgstr "Japanese Carrier"
 
-#: apps/io.ox/contacts/view-detail.js:499 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:498 module:io.ox/contacts
 msgid "Job"
 msgstr "Toimi"
 
@@ -3918,20 +3905,20 @@ msgstr "Toimi"
 msgid "Job description"
 msgstr "Toimenkuva"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:655
+#: apps/io.ox/calendar/edit/recurrence-view.js:652
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:701
+#: apps/io.ox/calendar/edit/recurrence-view.js:698
 msgid "July"
 msgstr "heinäkuu"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:654
+#: apps/io.ox/calendar/edit/recurrence-view.js:651
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:700
+#: apps/io.ox/calendar/edit/recurrence-view.js:697
 msgid "June"
 msgstr "kesäkuu"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:627 module:io.ox/portal
+#: apps/io.ox/portal/main.js:626 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
 msgstr "Poista widget käytöstä"
@@ -3951,7 +3938,7 @@ msgid "Keep a copy of the message"
 msgstr "Säilytä kopio viestistä"
 
 #: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
-#: apps/plugins/portal/xing/register.js:94 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:92 module:plugins/portal
 msgid "Language"
 msgstr "Kieli"
 
@@ -3964,12 +3951,8 @@ msgstr "Kielikohtainen oletusarvo"
 msgid "Languages"
 msgstr "Kielet"
 
-#: apps/io.ox/calendar/util.js:166 module:io.ox/calendar
-msgid "Last Week"
-msgstr "Viime viikolla"
-
 #: apps/io.ox/contacts/model.js:226 module:io.ox/contacts
-#: apps/plugins/portal/xing/register.js:90 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
 msgid "Last name"
 msgstr "Sukunimi"
@@ -4026,7 +4009,7 @@ msgstr "Vaaleanvihreä"
 msgid "Like"
 msgstr "Tykkää"
 
-#: apps/plugins/portal/facebook/register.js:499 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:498 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Tykkäsit linkistä: %s"
 
@@ -4071,21 +4054,21 @@ msgstr "Sijainti"
 msgid "Lock"
 msgstr "Lukitse"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:226 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:225 module:io.ox/core
 msgid "Loss"
 msgstr "Kadotetut pyynnöt"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:135 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:134 module:io.ox/core
 msgid "Loss: %1$s %"
 msgstr "Kadotetut: %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:128 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:148 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
 msgstr "Matala"
 
-#: apps/io.ox/mail/util.js:403 module:io.ox/core apps/io.ox/tasks/util.js:368
+#: apps/io.ox/mail/util.js:392 module:io.ox/core apps/io.ox/tasks/util.js:363
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Vähemmän tärkeä"
@@ -4123,7 +4106,7 @@ msgstr "Postisuodatinsäännöt"
 msgid "Mail account"
 msgstr "Postitili"
 
-#: apps/plugins/portal/xing/register.js:82 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:80 module:plugins/portal
 msgid "Mail address"
 msgstr "Postiosoite"
 
@@ -4133,12 +4116,12 @@ msgstr "Postiosoite"
 msgid "Mail address (mandatory)"
 msgstr "Postiosoite"
 
-#: apps/io.ox/contacts/view-detail.js:526 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:525 module:io.ox/contacts
 msgid "Mail and Messaging"
 msgstr "Posti ja viestiminen"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:84
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:405
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:414
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Posti ja Some-tilit"
@@ -4149,14 +4132,14 @@ msgstr "Viestien kappalemäärän kiintiö"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:37 module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s %2$s"
 msgstr "Viesti lähettäjältä %1$s: %2$s"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:96 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:94 module:plugins/notifications
 #, fuzzy, c-format
 #| msgid "Mail from %1$s %2$s"
 msgid "Mail from %1$s, %2$s"
@@ -4174,11 +4157,11 @@ msgstr "Viesti tuotu"
 msgid "Mail has been moved"
 msgstr "Viesti on siirretty"
 
-#: apps/io.ox/mail/compose/view.js:730 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:750 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Viestin aihe on tyhjä. Lähetä silti?"
 
-#: apps/io.ox/mail/compose/view.js:723 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:743 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Viestillä ei ole vastaanottajia."
 
@@ -4198,8 +4181,8 @@ msgstr "Postimuistutus"
 msgid "Mail reminder for"
 msgstr "Postimuistutus"
 
-#: apps/io.ox/mail/compose/view.js:448 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:483
+#: apps/io.ox/mail/compose/view.js:468 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:503
 msgid "Mail saved as draft"
 msgstr "Viesti tallennettu luonnoksena"
 
@@ -4229,7 +4212,7 @@ msgstr "Viestit on siirretty"
 msgid "Mails per hour (%)"
 msgstr "Posti tunneittain (5)"
 
-#: apps/io.ox/mail/statistics.js:168 module:io.ox/mail
+#: apps/io.ox/mail/statistics.js:167 module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Posti viikonpäivittäin (%)"
 
@@ -4259,9 +4242,9 @@ msgstr "Tiedostojen hallinnointi"
 msgid "Manual"
 msgstr "Manuaalinen"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:651
+#: apps/io.ox/calendar/edit/recurrence-view.js:648
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:697
+#: apps/io.ox/calendar/edit/recurrence-view.js:694
 msgid "March"
 msgstr "maaliskuu"
 
@@ -4269,7 +4252,7 @@ msgstr "maaliskuu"
 msgid "Marital status"
 msgstr "Aviosääty"
 
-#: apps/io.ox/calendar/settings/pane.js:189 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Näytä koko päivän tapaamiset vapaana"
 
@@ -4334,18 +4317,18 @@ msgstr "Merkitse lukemattomaksi"
 msgid "Matches"
 msgstr "Vastaa merkkejä"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:653
+#: apps/io.ox/calendar/edit/recurrence-view.js:650
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:699
+#: apps/io.ox/calendar/edit/recurrence-view.js:696
 msgid "May"
 msgstr "toukokuu"
 
 #: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Medium"
 msgstr "Media"
 
-#: apps/io.ox/tasks/util.js:371 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:366 module:io.ox/tasks
 msgid "Medium priority"
 msgstr "Keskiverto tärkeys"
 
@@ -4356,8 +4339,8 @@ msgid "Members"
 msgstr "joulukuu"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:202 module:io.ox/files
-#: apps/io.ox/files/share/view.js:210
+#: apps/io.ox/files/share/view.js:200 module:io.ox/files
+#: apps/io.ox/files/share/view.js:208
 #, fuzzy
 #| msgid "Message is unread"
 msgid "Message (optional)"
@@ -4367,7 +4350,7 @@ msgstr "Merkitse lukemattomaksi"
 msgid "Messaging"
 msgstr "Viestimet"
 
-#: apps/io.ox/contacts/view-detail.js:389 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:388 module:io.ox/contacts
 msgid "Messenger"
 msgstr "Viestin"
 
@@ -4389,12 +4372,12 @@ msgstr "Salasanan vähimmäispituus on %1$d."
 msgid "Minus"
 msgstr "Miinus"
 
-#: apps/io.ox/core/tk/mobiscroll.js:36 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:31 module:io.ox/core
 msgid "Minutes"
 msgstr "Minuuttia"
 
 #. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js:627 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:626 module:io.ox/contacts
 msgid "Miscellaneous"
 msgstr "Muuta"
 
@@ -4402,41 +4385,41 @@ msgstr "Muuta"
 msgid "Model is incomplete."
 msgstr "Malli on keskeneräinen."
 
-#: apps/io.ox/calendar/view-detail.js:314 module:io.ox/calendar
+#: apps/io.ox/calendar/view-detail.js:355 module:io.ox/calendar
 msgid "Modified"
 msgstr "Muutettu"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:45
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:464
+#: apps/io.ox/calendar/edit/recurrence-view.js:44
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:379
 #: module:io.ox/calendar
 msgid "Monday"
 msgstr "maanantai"
 
-#: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/date.js:23 module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js:164 module:io.ox/calendar
 msgid "Month"
 msgstr "Kuukausi"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:537 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:452 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Joka kuukauden %1$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:547 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:462 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Joka kuukauden %1$s %2$s"
 
-#: apps/io.ox/core/tk/mobiscroll.js:38 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:32 module:io.ox/core
 msgid "Months"
 msgstr "Kuukautta"
 
 #: apps/io.ox/core/extPatterns/links.js:362 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:373
-#: apps/io.ox/search/facets/extensions.js:696
+#: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr "Lisää"
 
@@ -4498,7 +4481,7 @@ msgstr "Omat yhteystietoni"
 msgid "My folders"
 msgstr "Omat kansiot"
 
-#: apps/plugins/portal/recentfiles/register.js:35 module:plugins/portal
+#: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
 msgstr "Uusimmat tiedostoni"
 
@@ -4514,7 +4497,7 @@ msgstr "Minun tehtäväni"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:76 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:459
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:458
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:542
 #: module:io.ox/settings/settings
 msgid "Name"
@@ -4525,10 +4508,6 @@ msgstr "Nimi"
 msgid "Nature"
 msgstr "Luonto"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
-msgid "Never"
-msgstr "Ei koskaan"
-
 #: apps/io.ox/calendar/toolbar.js:42 module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:33 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:40 module:io.ox/contacts
@@ -4538,46 +4517,40 @@ msgstr "Ei koskaan"
 msgid "New"
 msgstr "Uusi"
 
-#: apps/io.ox/core/folder/api.js:654 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:660 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Uusi kansio"
 
-#: apps/io.ox/mail/api.js:1363 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1365 module:io.ox/mail
 msgid "New Mail"
 msgstr "Uusi viesti"
 
-#: apps/plugins/notifications/mail/register.js:78 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:77 module:plugins/notifications
 msgid "New Mails"
 msgstr "Uudet viestit"
 
-#: apps/io.ox/core/notifications/subview.js:154 module:io.ox/core
-#, fuzzy
-#| msgid "Notifications"
-msgid "New Notifications"
-msgstr "Ilmoitukset"
-
-#: apps/io.ox/calendar/settings/pane.js:177 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:168 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Uusi tapaaminen"
 
-#: apps/plugins/notifications/calendar/register.js:246
+#: apps/plugins/notifications/calendar/register.js:258
 #: module:plugins/notifications
-#: apps/plugins/notifications/calendar/register.js:256
+#: apps/plugins/notifications/calendar/register.js:268
 #, fuzzy
 #| msgid "Appointment invitations"
 msgid "New appointment invitation"
 msgstr "Tapaamiskutsut"
 
-#: apps/plugins/notifications/calendar/register.js:184
+#: apps/plugins/notifications/calendar/register.js:196
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Appointment reminders"
 msgid "New appointment reminder"
 msgstr "Tapaamismuistutukset"
 
-#: apps/plugins/notifications/calendar/register.js:174
+#: apps/plugins/notifications/calendar/register.js:186
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Appointment reminders"
@@ -4600,26 +4573,32 @@ msgstr "Uusi tiedosto"
 msgid "New folder"
 msgstr "Uusi kansio"
 
-#: apps/plugins/notifications/mail/register.js:98 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:96 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mail"
 msgid "New mail"
 msgstr "Uusi viesti"
 
-#: apps/plugins/notifications/mail/register.js:86 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:84 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mails"
 msgid "New mails"
 msgstr "Uudet viestit"
 
-#: apps/plugins/notifications/tasks/register.js:110
+#: apps/io.ox/core/notifications/subview.js:154 module:io.ox/core
+#, fuzzy
+#| msgid "Notifications"
+msgid "New notifications"
+msgstr "Ilmoitukset"
+
+#: apps/plugins/notifications/tasks/register.js:122
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Overdue Tasks"
 msgid "New overdue task"
 msgstr "Erääntyneet tehtävät"
 
-#: apps/plugins/notifications/tasks/register.js:101
+#: apps/plugins/notifications/tasks/register.js:113
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Overdue Tasks"
@@ -4667,28 +4646,28 @@ msgstr "Uusi tilaus"
 msgid "New task"
 msgstr "Uusi tehtävä"
 
-#: apps/plugins/notifications/tasks/register.js:328
+#: apps/plugins/notifications/tasks/register.js:340
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Task invitations"
 msgid "New task invitation"
 msgstr "Tehtäväkutsut"
 
-#: apps/plugins/notifications/tasks/register.js:319
+#: apps/plugins/notifications/tasks/register.js:331
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Task invitations"
 msgid "New task invitations"
 msgstr "Tehtäväkutsut"
 
-#: apps/plugins/notifications/tasks/register.js:198
+#: apps/plugins/notifications/tasks/register.js:210
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Task reminders"
 msgid "New task reminder"
 msgstr "Tehtävämuistutukset"
 
-#: apps/plugins/notifications/tasks/register.js:189
+#: apps/plugins/notifications/tasks/register.js:201
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Task reminders"
@@ -4701,12 +4680,11 @@ msgstr "Tehtävämuistutukset"
 msgid "Next"
 msgstr "Seuraava"
 
-#: apps/io.ox/calendar/week/view.js:674 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:673 module:io.ox/calendar
 msgid "Next Day"
 msgstr "Seuraava päivä"
 
-#: apps/io.ox/calendar/util.js:178 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:674
+#: apps/io.ox/calendar/week/view.js:673 module:io.ox/calendar
 msgid "Next Week"
 msgstr "Seuraava viikko"
 
@@ -4715,13 +4693,13 @@ msgid "Nickname"
 msgstr "Kutsumanimi"
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:137 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:129
+#: apps/io.ox/calendar/month/perspective.js:134 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:155 apps/io.ox/core/main.js:129
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:176
 msgid "No"
 msgstr "Ei"
 
-#: apps/plugins/portal/rss/register.js:72 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:71 module:io.ox/portal
 msgid "No RSS feeds found."
 msgstr "Ei RSS syötteitä"
 
@@ -4729,12 +4707,12 @@ msgstr "Ei RSS syötteitä"
 msgid "No Tweets yet."
 msgstr "Ei vielä tweettejä."
 
-#: apps/io.ox/calendar/list/perspective.js:265 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:266 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "Tapaamisia ei löytynyt ennen %s"
 
-#: apps/plugins/portal/birthdays/register.js:72 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:125
+#: apps/plugins/portal/birthdays/register.js:74 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:126
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Ei syntymäpäiviä seuraavan %1$d viikon aikana"
 
@@ -4749,7 +4727,7 @@ msgstr ""
 msgid "No elements selected"
 msgstr "Ei valittuja kohteita"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:231 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:230 module:io.ox/core
 msgid "No errors"
 msgstr "Ei virheitä"
 
@@ -4758,8 +4736,8 @@ msgstr "Ei virheitä"
 msgid "No file selected for upload."
 msgstr "Ladattavia tiedostoja ei valittuna."
 
-#: apps/plugins/portal/recentfiles/register.js:71 module:plugins/portal
-#: apps/plugins/portal/recentfiles/register.js:92
+#: apps/plugins/portal/recentfiles/register.js:70 module:plugins/portal
+#: apps/plugins/portal/recentfiles/register.js:91
 msgid "No files have been changed recently"
 msgstr "Mitään tiedostoja ei ole hiljattain muutettu"
 
@@ -4772,11 +4750,11 @@ msgstr "Kohteita ei löytynyt"
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Kohteita ei löytynyt. Säädä käyttämäsi hakuasetukset."
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:235 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:234 module:io.ox/core
 msgid "No lost requests"
 msgstr "Ei kadotettuja pyyntöjä"
 
-#: apps/plugins/portal/mail/register.js:168 module:plugins/portal
+#: apps/plugins/portal/mail/register.js:167 module:plugins/portal
 msgid "No mails in your inbox"
 msgstr "Ei viestejä saapuneet laatikossasi"
 
@@ -4784,7 +4762,7 @@ msgstr "Ei viestejä saapuneet laatikossasi"
 msgid "No message selected"
 msgstr "Ei valittuja viestejä"
 
-#: apps/io.ox/core/notifications.js:90 module:io.ox/core
+#: apps/io.ox/core/notifications.js:92 module:io.ox/core
 msgid "No notifications"
 msgstr "Ei ilmoituksia"
 
@@ -4794,48 +4772,48 @@ msgstr "Ei ilmoituksia"
 msgid "No preview available"
 msgstr "Esikatselu ei saatavissa"
 
-#: apps/io.ox/tasks/util.js:365 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:360 module:io.ox/tasks
 msgid "No priority"
 msgstr "Ei asetettua tärkeyttä"
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:332 module:io.ox/core
 msgid "No recipients"
 msgstr "Ei vastaanottajia"
 
-#: apps/io.ox/calendar/settings/pane.js:51 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:297
+#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:251
 msgid "No reminder"
 msgstr "Ei muistutusta"
 
-#: apps/io.ox/mail/compose/extensions.js:308 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:359
-#: apps/io.ox/mail/settings/signatures/register.js:361
-#: apps/io.ox/mail/settings/signatures/register.js:423
+#: apps/io.ox/mail/compose/extensions.js:313 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:321
+#: apps/io.ox/mail/settings/signatures/register.js:323
+#: apps/io.ox/mail/settings/signatures/register.js:385
 msgid "No signature"
 msgstr "Ei allekirjoitusta"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:233 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:232 module:io.ox/core
 msgid "No slow requests"
 msgstr "Ei hitaita pyyntöjä"
 
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
-#: apps/io.ox/mail/util.js:388 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
-#: apps/plugins/notifications/mail/register.js:42
-#: apps/plugins/notifications/mail/register.js:96
+#: apps/io.ox/mail/util.js:377 module:io.ox/core
+#: apps/plugins/notifications/mail/register.js:37 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:41
+#: apps/plugins/notifications/mail/register.js:94
 #, c-format
 msgid "No subject"
 msgstr "Ei aihetta"
 
-#: apps/plugins/portal/reddit/register.js:114 module:io.ox/portal
-#: apps/plugins/portal/reddit/register.js:143
+#: apps/plugins/portal/reddit/register.js:113 module:io.ox/portal
+#: apps/plugins/portal/reddit/register.js:142
 msgid "No title."
 msgstr "Ei otsikkoa."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:288 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4845,7 +4823,7 @@ msgstr "Ei otsikkoa."
 msgid "None"
 msgstr "Ei tunnistetta"
 
-#: apps/io.ox/mail/compose/view.js:127 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:147 module:io.ox/mail
 msgid "Normal"
 msgstr "Tavallinen"
 
@@ -4855,8 +4833,8 @@ msgid "Not spam"
 msgstr "Ei roskapostia"
 
 #: apps/io.ox/tasks/edit/view-template.js:260 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:242
+#: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:235
 msgid "Not started"
 msgstr "Ei aloitettu"
 
@@ -4900,9 +4878,15 @@ msgstr ""
 "sinun pitää luoda uusi kansio tälle tilaukselle."
 
 #. Keep close to https://www.facebook.com/help/327131014036297/, "Neuigkeiten" in German, for example.
-#: apps/plugins/portal/facebook/register.js:161 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:160 module:plugins/portal
 msgid "Nothing in your newsfeed."
 msgstr ""
+
+#: apps/io.ox/core/notifications.js:97 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Notifications"
+msgstr "Ei ilmoituksia"
 
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
 msgid "Notifier"
@@ -4912,9 +4896,9 @@ msgstr "Ilmoitin"
 msgid "Notify all participants by email."
 msgstr "Ilmoita osallistujille sähköpostitse."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:659
+#: apps/io.ox/calendar/edit/recurrence-view.js:656
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:705
+#: apps/io.ox/calendar/edit/recurrence-view.js:702
 msgid "November"
 msgstr "marraskuu"
 
@@ -4941,13 +4925,13 @@ msgstr "Kohteen oikeudet"
 msgid "Objects"
 msgstr "Esineet"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:658
+#: apps/io.ox/calendar/edit/recurrence-view.js:655
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:704
+#: apps/io.ox/calendar/edit/recurrence-view.js:701
 msgid "October"
 msgstr "lokakuu"
 
-#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:320 module:io.ox/core
 msgid "Off"
 msgstr "Pois"
 
@@ -4961,7 +4945,7 @@ msgid "Offline mode"
 msgstr "Offline tila"
 
 #: apps/io.ox/core/folder/picker.js:63 module:io.ox/core
-#: apps/io.ox/core/tk/mobiscroll.js:41
+#: apps/io.ox/core/tk/mobiscroll.js:33
 msgid "Ok"
 msgstr "Ok"
 
@@ -4969,16 +4953,8 @@ msgstr "Ok"
 msgid "On behalf of the owner"
 msgstr ""
 
-#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
-msgid "On every new notification"
-msgstr "Kaikista uusista ilmoituksista"
-
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
-msgid "On new notifications except mails"
-msgstr "Uusista ilmoituksista paitsi posteista"
-
 #. recurrence string
-#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:429 module:io.ox/calendar
 msgid "On work days"
 msgstr "Työpäivinä"
 
@@ -4999,7 +4975,7 @@ msgstr "Näytetään vain kansioon %1$s liittyvät kohdat"
 msgid "Open"
 msgstr "Avaa"
 
-#: apps/plugins/portal/tumblr/register.js:192 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:190 module:io.ox/portal
 msgid "Open external link"
 msgstr "Avaa ulkoinen linkki"
 
@@ -5107,8 +5083,8 @@ msgstr "Vapaavalintainen 20"
 #: apps/io.ox/contacts/toolbar.js:168 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:216 module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js:321 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:137 apps/io.ox/mail/toolbar.js:245
+#: apps/io.ox/mail/compose/extensions.js:326 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:157 apps/io.ox/mail/toolbar.js:245
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "Vaihtoehdot"
@@ -5129,7 +5105,7 @@ msgstr "Järjestys"
 msgid "Organizer"
 msgstr "Järjestelijä"
 
-#: apps/io.ox/contacts/view-detail.js:608 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:607 module:io.ox/contacts
 msgid "Other Address"
 msgstr "Muu osoite"
 
@@ -5141,11 +5117,11 @@ msgstr "Muu osoite"
 msgid "Outgoing server (SMTP)"
 msgstr "Lähtevän postin palvelin (SMTP)"
 
-#: apps/io.ox/tasks/util.js:237 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:230 module:io.ox/tasks
 msgid "Overdue"
 msgstr "Myöhässä"
 
-#: apps/plugins/notifications/tasks/register.js:94
+#: apps/plugins/notifications/tasks/register.js:106
 #: module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Erääntyneet tehtävät"
@@ -5189,7 +5165,7 @@ msgstr "Salasanan pituuden tulee olla väliltä %1$d ja %2$d merkkiä."
 msgid "Password recovery"
 msgstr "Salasanan palautus"
 
-#: apps/io.ox/files/share/view.js:271 module:io.ox/files
+#: apps/io.ox/files/share/view.js:269 module:io.ox/files
 #, fuzzy
 #| msgid "Password recovery"
 msgid "Password required"
@@ -5240,7 +5216,7 @@ msgstr "Poista poistetut viestit pysyvästi"
 msgid "Permissions"
 msgstr "Oikeudet"
 
-#: apps/io.ox/contacts/view-detail.js:457 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:456 module:io.ox/contacts
 msgid "Personal"
 msgstr "Henkilökohtainen"
 
@@ -5292,7 +5268,7 @@ msgstr "Puhelin (muu)"
 msgid "Phone list"
 msgstr "Puhelinluettelo"
 
-#: apps/io.ox/contacts/view-detail.js:546 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:545 module:io.ox/contacts
 msgid "Phone numbers"
 msgstr "Puhelinnumerot"
 
@@ -5312,7 +5288,7 @@ msgstr "Vaaleanpunainen"
 msgid "Places"
 msgstr "Paikat"
 
-#: apps/io.ox/mail/compose/view.js:115 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:135 module:io.ox/mail
 msgid "Plain Text"
 msgstr "Teksti"
 
@@ -5328,7 +5304,7 @@ msgstr "Soita äänitiedostoja"
 msgid "Play video files"
 msgstr "Toista videotiedostoja"
 
-#: apps/plugins/portal/xing/register.js:134 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:132 module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
 "\n"
@@ -5340,7 +5316,7 @@ msgstr ""
 "Seuraa sähköpostiviestin ohjeita ja palaa widgetiin viimeistelläksesi tilin "
 "perustamisen."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1096
+#: apps/io.ox/calendar/edit/recurrence-view.js:1093
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
 msgstr "Valitse alta lause."
@@ -5357,11 +5333,11 @@ msgstr "Ole hyvä ja syötä mennyt päivämäärä"
 msgid "Please enter a description"
 msgstr "Syötä kuvaus"
 
-#: apps/plugins/portal/tumblr/register.js:291 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:289 module:io.ox/portal
 msgid "Please enter a description."
 msgstr "Anna kuvaus."
 
-#: apps/plugins/portal/rss/register.js:180 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:177 module:io.ox/portal
 msgid "Please enter a feed URL."
 msgstr "Anna syötteen URL."
 
@@ -5369,7 +5345,7 @@ msgstr "Anna syötteen URL."
 msgid "Please enter a search query"
 msgstr "Syötä hakulauseke"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:186 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:184 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -5404,7 +5380,7 @@ msgstr "Ole hyvä ja syötä käypä puhelinnumero. Sallitut merkit ovat: %1$s"
 msgid "Please enter a value"
 msgstr "Syötä arvo"
 
-#: apps/plugins/portal/tumblr/register.js:288 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:286 module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr "Anna blogin URL."
 
@@ -5463,7 +5439,7 @@ msgstr "Valitse tuotava tiedosto"
 msgid "Please select a valid iCal File to import"
 msgstr "Valitse tuotava iCal-tiedosto"
 
-#: apps/plugins/portal/xing/register.js:79 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:77 module:plugins/portal
 msgid ""
 "Please select which of the following data we may use to create your %s "
 "account:"
@@ -5476,7 +5452,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Uudelleenkirjaudu jatkaaksesi"
 
-#: apps/io.ox/files/api.js:410 module:io.ox/files
+#: apps/io.ox/files/api.js:409 module:io.ox/files
 msgid "Please specify these missing variables: "
 msgstr "Määrittele nämä puuttuvat muuttujat:"
 
@@ -5490,7 +5466,7 @@ msgstr "Ole hyvä ja päivitä selaimesi."
 msgid "Plus"
 msgstr "Plus"
 
-#: apps/io.ox/portal/main.js:583 module:io.ox/portal
+#: apps/io.ox/portal/main.js:582 module:io.ox/portal
 msgid "Portal"
 msgstr "Portaali"
 
@@ -5508,7 +5484,7 @@ msgstr "Portaalin asetukset"
 msgid "Position"
 msgstr "Asema"
 
-#: apps/plugins/portal/xing/register.js:157 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:155 module:plugins/portal
 msgid "Post a status update"
 msgstr "Postaa tilapäivitys"
 
@@ -5517,11 +5493,11 @@ msgstr "Postaa tilapäivitys"
 msgid "Postcode"
 msgstr "Postinumero"
 
-#: apps/plugins/portal/birthdays/register.js:59 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:61 module:plugins/portal
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "Paina [enter] siirtyäksesi syntymäpäivien listaan."
 
-#: apps/plugins/portal/facebook/register.js:253 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:252 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Paina [enter] siirtyäksesi facebook-virtaan."
 
@@ -5533,12 +5509,12 @@ msgstr "Paina [enter] siirtyäksesi flicker-virtaan."
 msgid "Press [enter] to jump to the linkedin stream."
 msgstr "Paina [enter] siirtyäksesi linkedin-virtaan."
 
-#: apps/plugins/portal/rss/register.js:69 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:68 module:io.ox/portal
 msgid "Press [enter] to jump to the rss stream."
 msgstr "Paina [enter] siirtyäksesi rss-virtaan."
 
-#: apps/plugins/portal/tumblr/register.js:95 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:116
+#: apps/plugins/portal/tumblr/register.js:94 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:115
 msgid "Press [enter] to jump to the tumblr feed."
 msgstr "Paina [enter] siirtyäksesi tumblr-virtaan."
 
@@ -5548,10 +5524,10 @@ msgstr "Paina [enter] siirtyäksesi twitter-virtaan."
 
 #: apps/io.ox/core/tk/reminder-util.js:76 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:97
-#: apps/plugins/notifications/calendar/register.js:99
-#: module:plugins/notifications apps/plugins/notifications/mail/register.js:40
-#: apps/plugins/notifications/tasks/register.js:54
-#: apps/plugins/notifications/tasks/register.js:275
+#: apps/plugins/notifications/calendar/register.js:111
+#: module:plugins/notifications apps/plugins/notifications/mail/register.js:39
+#: apps/plugins/notifications/tasks/register.js:66
+#: apps/plugins/notifications/tasks/register.js:287
 msgid "Press [enter] to open"
 msgstr "Paina [enter] avataksesi "
 
@@ -5571,15 +5547,15 @@ msgstr "Esikatselu"
 msgid "Previous"
 msgstr "Edellinen"
 
-#: apps/io.ox/calendar/week/view.js:675 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:674 module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Edellinen päivä"
 
-#: apps/io.ox/calendar/week/view.js:675 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:674 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Edellinen viikko"
 
-#: apps/io.ox/mail/util.js:409 module:io.ox/core
+#: apps/io.ox/mail/util.js:398 module:io.ox/core
 msgid "Primary account"
 msgstr "Ensisijainen tili"
 
@@ -5603,22 +5579,22 @@ msgstr "Muokkaa tehtävää"
 msgid "Printout"
 msgstr "Tuloste"
 
-#: apps/io.ox/mail/compose/view.js:125 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:145 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:689 module:io.ox/tasks
-#: apps/io.ox/tasks/print.js:105
+#: apps/io.ox/tasks/print.js:104
 msgid "Priority"
 msgstr "Prioriteetti"
 
 #: apps/io.ox/calendar/edit/extensions.js:324 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:81 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:75
-#: apps/io.ox/contacts/view-detail.js:152 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:151 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:372 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Yksityinen"
 
-#: apps/plugins/halo/xing/register.js:164 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:160 module:plugins/portal
 msgid "Private address"
 msgstr "Yksityisosoite"
 
@@ -5631,8 +5607,8 @@ msgstr "Suorita myös muut säännöt"
 msgid "Profession"
 msgstr "Ammatti"
 
-#: apps/io.ox/tasks/common-extensions.js:69 module:io.ox/tasks
-#: apps/io.ox/tasks/print.js:37
+#: apps/io.ox/tasks/common-extensions.js:67 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:36
 msgid "Progress"
 msgstr "Edistys"
 
@@ -5646,7 +5622,7 @@ msgstr "Valmiina %1$s %"
 msgid "Progress in %"
 msgstr "Edistyminen %"
 
-#: apps/io.ox/tasks/model.js:162 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:161 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "Edistymisen täytyy olla numero väliltä 0 ja 100"
 
@@ -5667,7 +5643,7 @@ msgstr "Lisää osoitekirjaan"
 msgid "Public calendars"
 msgstr "Uusi julkinen kalenteri"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Public servant"
 msgstr "Virkamies"
 
@@ -5698,13 +5674,13 @@ msgstr "Lopeta"
 msgid "Quota"
 msgstr "Kiintiö"
 
-#: apps/plugins/portal/rss/register.js:31 module:io.ox/portal
-#: apps/plugins/portal/rss/register.js:59
-#: apps/plugins/portal/rss/register.js:207
+#: apps/plugins/portal/rss/register.js:30 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:58
+#: apps/plugins/portal/rss/register.js:204
 msgid "RSS Feed"
 msgstr "RSS syöte"
 
-#: apps/plugins/portal/rss/register.js:145 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:142 module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS syötteet"
 
@@ -5730,7 +5706,7 @@ msgstr ""
 "Arvio %1$d %2$d mahdollisesta. Paina [Enter] vahvistaaksesi arvio tai käytä "
 "nuolinäppäimiä muuttaaksesi arviotasi."
 
-#: apps/plugins/portal/tumblr/register.js:189 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:187 module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr "Lue tumblr.com artikkeli"
 
@@ -5738,7 +5714,7 @@ msgstr "Lue tumblr.com artikkeli"
 msgid "Reauthorize"
 msgstr "Uudelleenvaltuuta"
 
-#: apps/io.ox/calendar/settings/pane.js:215 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:206 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid ""
@@ -5746,13 +5722,13 @@ msgid ""
 "decline"
 msgstr "Sähköposti-ilmoitus tapaamisesta"
 
-#: apps/io.ox/calendar/settings/pane.js:220 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:211 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:210 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:201 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid "Receive notification for appointment changes"
@@ -5770,7 +5746,7 @@ msgstr "Äskettäiset tapahtumat"
 msgid "Recent conversations"
 msgstr "Tuoreimmat keskustelut"
 
-#: apps/plugins/portal/recentfiles/register.js:35 module:plugins/portal
+#: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "Recently changed files"
 msgstr "Hiljattain muutetut tiedostot"
 
@@ -5778,7 +5754,7 @@ msgstr "Hiljattain muutetut tiedostot"
 msgid "Recently used"
 msgstr "Hiljattain käytetty"
 
-#: apps/io.ox/files/share/view.js:250 module:io.ox/files
+#: apps/io.ox/files/share/view.js:248 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -5796,15 +5772,15 @@ msgstr "Palauta"
 msgid "Recover passwords"
 msgstr "Palauta salasanoja"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Recruiter"
 msgstr "Rekrytoija"
 
-#: apps/io.ox/tasks/model.js:182 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:181 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr "Toistuvat tehtävät tarvitsevat valmistumispäivämäärän."
 
-#: apps/io.ox/tasks/model.js:172 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:171 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "Toistuvat tehtävät tarvitsevat alkupäivämäärän."
 
@@ -5830,7 +5806,7 @@ msgstr "Pienennä widget-yhteenvedoksi."
 msgid "Refresh"
 msgstr "Päivitä"
 
-#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Päivitysväli"
 
@@ -5856,13 +5832,13 @@ msgstr "Hylkää käyttäen syytä"
 msgid "Related articles"
 msgstr "Samankaltaiset artikkelit"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:139 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:138 module:io.ox/core
 #: apps/io.ox/files/guidance/main.js:188 module:io.ox/files
 msgid "Reload statistics"
 msgstr "Päivitä tilastot"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/fluid/perspective.js:930 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:925 module:io.ox/files
 #, fuzzy
 #| msgid "Reminder date %1$s"
 msgid "Remaining time: %1$s"
@@ -5892,7 +5868,7 @@ msgid "Reminder"
 msgstr "Muistutus"
 
 #: apps/io.ox/tasks/edit/view-template.js:244 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:104 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:103 module:io.ox/tasks
 msgid "Reminder date"
 msgstr "Muistutuspäivämäärä"
 
@@ -5906,7 +5882,7 @@ msgstr "Muistutus %1$s"
 msgid "Reminder has been created"
 msgstr "Muistutus luotu"
 
-#: apps/io.ox/search/facets/extensions.js:328 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:327 module:io.ox/core
 msgid "Remove"
 msgstr "Poista"
 
@@ -5935,7 +5911,7 @@ msgstr "Poista yhteystieto"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Poista kopio palvelimelta viestin hakemisen jälkeen"
 
-#: apps/io.ox/search/facets/extensions.js:320 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:319 module:io.ox/core
 msgid "Remove facet"
 msgstr "Poista asetus"
 
@@ -5960,7 +5936,7 @@ msgstr "Uudelleennimeä"
 msgid "Rename folder"
 msgstr "Uudelleennimeä kansio"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1217
+#: apps/io.ox/calendar/edit/recurrence-view.js:1215
 #: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Toista"
@@ -5970,7 +5946,7 @@ msgid "Repeat new password"
 msgstr "Toista salasana"
 
 #: apps/io.ox/mail/actions.js:480 module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js:233 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:225 module:plugins/portal
 msgid "Reply"
 msgstr "Vastaa"
 
@@ -5988,12 +5964,12 @@ msgstr "Vastaa kaikille"
 msgid "Reply to sender"
 msgstr "Vastaa lähettäjälle"
 
-#: apps/io.ox/mail/compose/view.js:139 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:159 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Pyydä lukukuittaus"
 
 #: apps/io.ox/calendar/edit/extensions.js:287 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
 msgid "Reserved"
 msgstr "Varattu"
 
@@ -6001,7 +5977,7 @@ msgstr "Varattu"
 msgid "Reset this list"
 msgstr "Tyhjennä tämä lista"
 
-#: apps/io.ox/contacts/view-detail.js:53 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:52 module:io.ox/contacts
 #: apps/io.ox/participants/model.js:40 module:io.ox/participants/model
 #: apps/io.ox/participants/views.js:161 module:io.ox/calendar/edit/main
 msgid "Resource"
@@ -6032,7 +6008,7 @@ msgstr "Keskeneräisiä toimintoja"
 msgid "Results"
 msgstr "Tulokset"
 
-#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Retired"
 msgstr "Eläköitynyt"
 
@@ -6041,22 +6017,22 @@ msgstr "Eläköitynyt"
 msgid "Retry"
 msgstr "Yritä uudelleen"
 
-#: apps/plugins/portal/twitter/util.js:122 module:plugins/portal
-#: apps/plugins/portal/twitter/util.js:243
-#: apps/plugins/portal/twitter/util.js:255
+#: apps/plugins/portal/twitter/util.js:121 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:235
+#: apps/plugins/portal/twitter/util.js:247
 msgid "Retweet"
 msgstr "Retweettaa"
 
-#: apps/plugins/portal/twitter/util.js:113 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:112 module:plugins/portal
 msgid "Retweet this to your followers?"
 msgstr "Retweettaa tämä seuraajillesi?"
 
-#: apps/plugins/portal/twitter/util.js:135 module:plugins/portal
-#: apps/plugins/portal/twitter/util.js:219
+#: apps/plugins/portal/twitter/util.js:134 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:211
 msgid "Retweeted"
 msgstr "Retweetattu"
 
-#: apps/plugins/portal/twitter/util.js:168 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:160 module:plugins/portal
 msgid "Retweeted by %s"
 msgstr "%s retweettaama"
 
@@ -6081,8 +6057,8 @@ msgstr "Käynnissä olevat sovellukset"
 msgid "Sales Volume"
 msgstr "Liikevaihto"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:50
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:469
+#: apps/io.ox/calendar/edit/recurrence-view.js:49
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:384
 #: module:io.ox/calendar
 msgid "Saturday"
 msgstr "lauantai"
@@ -6099,7 +6075,7 @@ msgstr "lauantai"
 #: apps/io.ox/files/filepicker.js:35 apps/io.ox/files/views/create.js:124
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:90
+#: apps/io.ox/mail/compose/extensions.js:93
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/settings/signatures/register.js:178
@@ -6109,9 +6085,9 @@ msgstr "lauantai"
 #: apps/plugins/administration/groups/settings/edit.js:144
 #: apps/plugins/administration/resources/settings/edit.js:89
 #: apps/plugins/portal/flickr/register.js:234 module:plugins/portal
-#: apps/plugins/portal/mail/register.js:205
-#: apps/plugins/portal/rss/register.js:159 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:260
+#: apps/plugins/portal/mail/register.js:204
+#: apps/plugins/portal/rss/register.js:156 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:258
 #: apps/plugins/portal/userSettings/register.js:44
 msgid "Save"
 msgstr "Tallenna"
@@ -6121,7 +6097,7 @@ msgstr "Tallenna"
 msgid "Save as distribution list"
 msgstr "Tallenna jakelulistana"
 
-#: apps/io.ox/mail/compose/view.js:580 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:600 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Tallenna luonnos"
 
@@ -6153,12 +6129,12 @@ msgstr "Tallennettu liite"
 msgid "Saved contact attachment"
 msgstr "Tallennettu yhteystietoliite"
 
-#: apps/io.ox/contacts/view-detail.js:702 module:io.ox/contacts
-#: apps/io.ox/files/fluid/view-detail.js:195 module:io.ox/files
+#: apps/io.ox/contacts/view-detail.js:701 module:io.ox/contacts
+#: apps/io.ox/files/fluid/view-detail.js:194 module:io.ox/files
 msgid "Saved in"
 msgstr "Tallennettu"
 
-#: apps/io.ox/mail/api.js:1094 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1095 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Tallennettu viestin liite"
 
@@ -6235,8 +6211,7 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js:316 module:io.ox/core
-#: apps/io.ox/mail/settings/signatures/register.js:299 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:100
+#: apps/io.ox/mail/view-options.js:100 module:io.ox/mail
 msgid "Select all"
 msgstr "Valitse kaikki"
 
@@ -6250,12 +6225,12 @@ msgstr "Valitse kansio"
 msgid "Selection Details"
 msgstr "Valinnan yksityiskohdat"
 
-#: apps/io.ox/mail/compose/extensions.js:93 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:98 module:io.ox/mail
 msgid "Send"
 msgstr "Lähetä"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:556 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Lähetä ilmoitus viestin lukemisesta"
 
@@ -6303,7 +6278,7 @@ msgid "Sender/From"
 msgstr "Lähettäjä"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:878 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:898 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Lähetetty kohteesta %s mobiililaitteella"
 
@@ -6317,16 +6292,16 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "Lähetetyt viestit"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:657
+#: apps/io.ox/calendar/edit/recurrence-view.js:654
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:703
+#: apps/io.ox/calendar/edit/recurrence-view.js:700
 msgid "September"
 msgstr "syyskuu"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js:221 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
-#: apps/io.ox/calendar/week/perspective.js:159
+#: apps/io.ox/calendar/week/perspective.js:160
 msgid "Series"
 msgstr "Sarja"
 
@@ -6350,7 +6325,7 @@ msgid "Server unreachable"
 msgstr "Palvelin ei saatavilla"
 
 #: apps/io.ox/core/about/about.js:32 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:122
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:121
 msgid "Server version"
 msgstr "Palvelimen versio"
 
@@ -6360,7 +6335,7 @@ msgid "Set color"
 msgstr "Aseta väri"
 
 #: apps/io.ox/core/main.js:786 module:io.ox/core apps/io.ox/core/main.js:937
-#: apps/io.ox/settings/main.js:115 apps/io.ox/settings/main.js:414
+#: apps/io.ox/settings/main.js:116 apps/io.ox/settings/main.js:423
 msgid "Settings"
 msgstr "Asetukset"
 
@@ -6404,12 +6379,12 @@ msgstr "Jaettu aktiviteetti"
 msgid "Shared address books"
 msgstr "Lisää osoitekirjaan"
 
-#: apps/io.ox/core/folder/extensions.js:476 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:485 module:io.ox/core
 msgid "Shared by other users"
 msgstr "Jaat tämän muiden käyttäjien kanssa"
 
 #. %1$s is the folder owner
-#: apps/io.ox/core/folder/extensions.js:471 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:480 module:io.ox/core
 #, fuzzy
 #| msgid "Searched for: %1$s"
 msgctxt "owner"
@@ -6436,11 +6411,11 @@ msgstr "Ostoskori"
 msgid "Show"
 msgstr "Näytä"
 
-#: apps/io.ox/search/facets/extensions.js:60 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:59 module:io.ox/core
 msgid "Show advanced filters"
 msgstr "Näytä laajat suodattimet"
 
-#: apps/plugins/notifications/mail/register.js:55 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:54 module:plugins/notifications
 msgid "Show all %1$d messages in inbox"
 msgstr "Näytä kaikki saapuneet laatikon %1$d viestiä"
 
@@ -6452,16 +6427,16 @@ msgstr "Näytä kaikki kohdat"
 msgid "Show appointment details"
 msgstr "Näytä tapaamisen yksityiskohdat"
 
-#: apps/io.ox/mail/compose/extensions.js:231 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:236 module:io.ox/mail
 msgid "Show blind carbon copy input field"
 msgstr "Näytä piilokopion vastaanottajan määrittelykenttä"
 
-#: apps/io.ox/mail/compose/extensions.js:222 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:227 module:io.ox/mail
 msgid "Show carbon copy input field"
 msgstr "Näytä kopion vastaanottajan määrittelykenttä"
 
-#: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:346
+#: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:345
 msgid "Show comments"
 msgstr "Näytä kommentit"
 
@@ -6469,11 +6444,11 @@ msgstr "Näytä kommentit"
 msgid "Show conflicts"
 msgstr "Näytä ristiriidat"
 
-#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:151 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Näytä tapaamiset joista kieltäydytty"
 
-#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:410 module:io.ox/core
 #, fuzzy
 #| msgid "No notifications"
 msgid "Show desktop notifications"
@@ -6496,11 +6471,11 @@ msgstr "Näytä piilotetut tiedostot ja kansiot"
 msgid "Show icons"
 msgstr "Näytä kuvakkeet"
 
-#: apps/io.ox/mail/common-extensions.js:472 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
 msgid "Show images"
 msgstr "Näytä kuvat"
 
-#: apps/plugins/notifications/mail/register.js:55 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:54 module:plugins/notifications
 msgid "Show inbox"
 msgstr "Näytä saapuneet"
 
@@ -6513,11 +6488,11 @@ msgstr "Näytä sisäinen linkki"
 msgid "Show list"
 msgstr "Näytä luettelo"
 
-#: apps/plugins/portal/facebook/register.js:79 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:78 module:plugins/portal
 msgid "Show more comments"
 msgstr "Näytä lisää kommentteja"
 
-#: apps/io.ox/mail/compose/extensions.js:151 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:156 module:io.ox/mail
 #, fuzzy
 #| msgid "Shown as"
 msgid "Show names"
@@ -6535,8 +6510,8 @@ msgstr "Näytä edellinen päivä"
 msgid "Show quoted text"
 msgstr "Näytä lainattu teksti"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:70 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:328
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:69 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:327
 msgid "Show request body"
 msgstr "Näytä pyynnön runko"
 
@@ -6544,8 +6519,8 @@ msgstr "Näytä pyynnön runko"
 msgid "Show requests for read receipts"
 msgstr "Näytä lukukuittauspyynnöt"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:80 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:334
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:79 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:333
 msgid "Show stack trace"
 msgstr "Näytä stack trace"
 
@@ -6557,7 +6532,7 @@ msgstr "Näytä tehtävän yksityiskohdat"
 msgid "Show tiles"
 msgstr "Näytä sovellusikkunat"
 
-#: apps/io.ox/files/fluid/view-detail.js:369 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:368 module:io.ox/files
 msgid "Show version history"
 msgstr "Näytä versiohistoria"
 
@@ -6582,7 +6557,7 @@ msgid "Sign out now"
 msgstr "Kirjaudu heti ulos"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:414 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
 msgid "Signature"
 msgstr "Allekirjoitus"
 
@@ -6590,13 +6565,13 @@ msgstr "Allekirjoitus"
 msgid "Signature name"
 msgstr "Allekirjoituksen nimi"
 
-#: apps/io.ox/mail/compose/extensions.js:307 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:441
+#: apps/io.ox/mail/compose/extensions.js:312 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:403
 msgid "Signatures"
 msgstr "Allekirjoitukset"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:118 module:io.ox/portal
+#: apps/io.ox/portal/main.js:117 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Kirjautuneena käyttäjänä %1$s"
 
@@ -6623,7 +6598,7 @@ msgstr "Koko (tavuina)"
 msgid "Slideshow"
 msgstr "Diaesitys"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:225 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:224 module:io.ox/core
 msgid "Slow requests"
 msgstr "Hitaat pyynnöt"
 
@@ -6647,7 +6622,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "Jotkin kentät sisältävät epäkelpoa tietoa"
 
-#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:174
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6661,11 +6636,11 @@ msgstr "Jotakin meni pieleen uudelleenvaltuutettaessa tiliä."
 msgid "Something went wrong saving your changes."
 msgstr "Jotakin meni pieleen muutoksiasi tallennettaessa."
 
-#: apps/plugins/halo/xing/register.js:245 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:240 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "%s ei juuri nyt saada yhteyttä."
 
-#: apps/plugins/halo/xing/register.js:269 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:264 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s:ssa ei ole tietoja sinun saatavillasi."
 
@@ -6683,7 +6658,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Lajittele"
 
-#: apps/io.ox/calendar/list/perspective.js:231 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:234 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:684 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Lajitteluvaihtoehdot"
@@ -6707,7 +6682,7 @@ msgid "Standard folders"
 msgstr "Vakiokansiot"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
-#: apps/io.ox/tasks/print.js:91 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
 msgid "Start"
 msgstr "Aloitus"
 
@@ -6716,7 +6691,7 @@ msgstr "Aloitus"
 msgid "Start date"
 msgstr "Aloituspäivämäärä"
 
-#: apps/io.ox/calendar/settings/pane.js:130 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:121 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Työajan alku"
 
@@ -6731,7 +6706,7 @@ msgid "Start typing to search for user names"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:145 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:546 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:534 module:io.ox/core
 msgid "Starts on"
 msgstr "Alkaa"
 
@@ -6760,14 +6735,14 @@ msgstr "Pysy kirjautuneena"
 msgid "Street"
 msgstr "Katu"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Student"
 msgstr "Opiskelija"
 
 #: apps/io.ox/calendar/edit/extensions.js:108 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:275
-#: apps/io.ox/mail/compose/extensions.js:279
+#: apps/io.ox/mail/compose/extensions.js:280
+#: apps/io.ox/mail/compose/extensions.js:284
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
@@ -6806,7 +6781,7 @@ msgstr "Tilaukset"
 msgid "Success"
 msgstr "Onnistuminen"
 
-#: apps/plugins/portal/xing/register.js:56 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:54 module:plugins/portal
 msgid "Successfully reauthorized your %s account"
 msgstr "%-tilisi uudelleenvaltuutettiin onnistuneesti"
 
@@ -6823,8 +6798,8 @@ msgstr "Jälkiliite"
 msgid "Summary"
 msgstr "Yhteenveto"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:44
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:463
+#: apps/io.ox/calendar/edit/recurrence-view.js:43
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:378
 #: module:io.ox/calendar
 msgid "Sunday"
 msgstr "sunnuntai"
@@ -6860,7 +6835,7 @@ msgstr "kaukokirjoitin/tekstipuhelin"
 msgid "Tag mail with"
 msgstr "Aseta avainsana"
 
-#: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:63 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:211 module:io.ox/tasks
 msgid "Task"
 msgstr "Tehtävä"
@@ -6876,7 +6851,7 @@ msgid_plural "Tasks have been deleted!"
 msgstr[0] "Tehtävä poistettu!"
 msgstr[1] "Tehtävät poistettu!"
 
-#: apps/plugins/notifications/tasks/register.js:312
+#: apps/plugins/notifications/tasks/register.js:324
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Tehtäväkutsut"
@@ -6897,7 +6872,7 @@ msgid_plural "Tasks marked as undone"
 msgstr[0] "Merkitse tekemättömäksi"
 msgstr[1] "Merkitse tekemättömäksi"
 
-#: apps/plugins/notifications/tasks/register.js:182
+#: apps/plugins/notifications/tasks/register.js:194
 #: module:plugins/notifications
 msgid "Task reminders"
 msgstr "Tehtävämuistutukset"
@@ -6910,7 +6885,7 @@ msgstr "Tehtävä oli jo poistettu!"
 msgid "Task was modified before, please reload"
 msgstr "Tehtävää muutettu aiemmin. Ole hyvä ja päivitä."
 
-#: apps/io.ox/mail/detail/links.js:221 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Tasks"
 msgstr "Tehtävät"
 
@@ -6946,7 +6921,7 @@ msgid "Telex"
 msgstr "Teleksi"
 
 #: apps/io.ox/calendar/edit/extensions.js:288 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
 msgid "Temporary"
 msgstr "Tilapäinen"
 
@@ -6956,7 +6931,7 @@ msgid "Tentative"
 msgstr "Alustava"
 
 #: apps/io.ox/calendar/print.js:198 module:io.ox/calendar
-#: apps/io.ox/tasks/print.js:94 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:93 module:io.ox/tasks
 msgid "Tentatively accepted"
 msgstr "Alustavasti hyväksytty"
 
@@ -6992,7 +6967,7 @@ msgstr "Tili täytyy nimetä"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteetti on poistettu onnistuneesti"
 
-#: apps/io.ox/files/api.js:370 module:io.ox/files
+#: apps/io.ox/files/api.js:369 module:io.ox/files
 msgid "The allowed quota is reached."
 msgstr "Sallittu kiintiö on täynnä."
 
@@ -7008,7 +6983,7 @@ msgstr "Tapaaminen poistettu"
 msgid "The appointment has been updated"
 msgstr "Tapaaminen päivitetty"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:518
+#: apps/io.ox/calendar/edit/recurrence-view.js:515
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -7018,7 +6993,7 @@ msgstr ""
 "Tapaaminen toistuu <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\">joka <span class=\"number-control\">2</span> päivä</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:539
+#: apps/io.ox/calendar/edit/recurrence-view.js:536
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -7029,7 +7004,7 @@ msgstr ""
 "\"interval\">joka <span class=\"number-control\">2</span> viikko</a> <a href="
 "\"#\"  data-widget=\"custom\" data-attribute=\"days\">maanantaisin</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:504
+#: apps/io.ox/calendar/edit/recurrence-view.js:501
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
@@ -7038,7 +7013,7 @@ msgstr ""
 "Tapaaminen toistuu <a href=\"#\" data-attribute=\"recurrenceType\" data-"
 "widget=\"options\">viikoittain</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:665
+#: apps/io.ox/calendar/edit/recurrence-view.js:662
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
@@ -7051,7 +7026,7 @@ msgstr ""
 "\"ordinal\">ensimmäinen</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">keskiviikko</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:637
+#: apps/io.ox/calendar/edit/recurrence-view.js:634
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
@@ -7063,7 +7038,7 @@ msgstr ""
 "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
 "href=\"#\" data-widget=\"options\" data-attribute=\"month\">lokakuu</a>ta."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:561
+#: apps/io.ox/calendar/edit/recurrence-view.js:558
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
@@ -7076,7 +7051,7 @@ msgstr ""
 "href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class="
 "\"number-control\">10</span></a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:590
+#: apps/io.ox/calendar/edit/recurrence-view.js:587
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
@@ -7090,7 +7065,7 @@ msgstr ""
 "href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">toinen</a> <a "
 "href=\"#\" data-widget=\"options\" data-attribute=\"day\">keskiviikko</a>."
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:156 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:155 module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
 "gray graph shows a trivial network ping to recognize slow connections."
@@ -7114,7 +7089,7 @@ msgstr "Kommentti on poistettu onnistuneesti"
 
 #. If the user changes the duedate of a task, it may be before the start date, which is not allowed
 #. If this happens the user gets the option to change the start date so it matches the due date
-#: apps/io.ox/tasks/common-extensions.js:103 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:101 module:io.ox/tasks
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr ""
 "Valmistumispäivämäärä ei voi olla ennen aloituspäivämäärää. Säädä "
@@ -7126,7 +7101,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "Sähköpostiosoite %1$s on jo listassa"
 
-#: apps/io.ox/mail/compose/view.js:662 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:682 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Sähköposti lähetetty"
 
@@ -7209,7 +7184,7 @@ msgstr "Ilmoitusalue on avoinna"
 msgid "The person %1$s is already in the list"
 msgstr "Henkilö %1$s on jo listassa"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:364 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
 msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
 
@@ -7226,12 +7201,12 @@ msgid ""
 msgstr ""
 "Valittu kansio on virtuaalinen eikä siitä voi hakea. Valitse toinen kansio."
 
-#: apps/io.ox/mail/common-extensions.js:559 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "Lähettäjä haluaisi saada vahvistuksen, kun olet lukenut tämän sähköpostin"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:745
+#: apps/io.ox/calendar/edit/recurrence-view.js:742
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -7243,7 +7218,7 @@ msgstr ""
 "a><a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
 "\">kuluttua ."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:735
+#: apps/io.ox/calendar/edit/recurrence-view.js:732
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -7254,7 +7229,7 @@ msgstr ""
 "\"options\">päättyy</a> <a href=\"#\" data-attribute=\"until\" data-widget="
 "\"custom\">11/03/2013</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:726
+#: apps/io.ox/calendar/edit/recurrence-view.js:723
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -7263,7 +7238,7 @@ msgstr ""
 "Toistuva tapahtuma <a href=\"#\" data-attribute=\"ending\" data-widget="
 "\"options\">ei pääty koskaan</a>."
 
-#: apps/io.ox/calendar/util.js:596 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:511 module:io.ox/calendar
 #, fuzzy
 #| msgid "after %1$d appointment"
 #| msgid_plural "after %1$d appointments"
@@ -7272,13 +7247,13 @@ msgid_plural "The series ends after %1$d appointments"
 msgstr[0] "%1$d tapaamisen jälkeen"
 msgstr[1] "%1$d tapaamisen jälkeen"
 
-#: apps/io.ox/calendar/util.js:591 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:506 module:io.ox/calendar
 #, fuzzy
 #| msgid "This file is locked by %1$s"
 msgid "The series ends on %1$s"
 msgstr "Tiedoston on lukinnut %1$s"
 
-#: apps/io.ox/calendar/settings/pane.js:83 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:74 module:io.ox/calendar
 #: apps/io.ox/contacts/settings/pane.js:38 module:io.ox/contacts
 msgid ""
 "The setting has been saved and will become active when you enter the "
@@ -7293,14 +7268,14 @@ msgstr ""
 "Asetus vaatii uudelleenlatauksen tai uudelleenkirjautumisen alkaakseen "
 "toimia."
 
-#: apps/io.ox/tasks/model.js:118 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:117 module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "Alkupäivämäärän tulee olla ennen valmistumispäivämäärää."
 
-#: apps/io.ox/calendar/model.js:255 module:io.ox/calendar
-#: apps/io.ox/calendar/model.js:256
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:98 module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:99
+#: apps/io.ox/calendar/model.js:252 module:io.ox/calendar
+#: apps/io.ox/calendar/model.js:253
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:91
 msgid "The start date must be before the end date."
 msgstr "Alkupäivämäärän tulee olla ennen loppupäivämäärää."
 
@@ -7336,7 +7311,7 @@ msgstr[1] ""
 msgid "The user has administrative rights"
 msgstr "Käyttäjällä on ylläpitäjän oikeuksia"
 
-#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:207 module:io.ox/core
 msgid "Theme"
 msgstr "Teema"
 
@@ -7350,8 +7325,8 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Tällä ajanjaksolla on jo %1$d tapaaminen."
 msgstr[1] "Tällä ajanjaksolla on jo %1$d tapaamista."
 
-#: apps/plugins/portal/xing/register.js:188 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:243
+#: apps/plugins/portal/xing/register.js:186 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:241
 msgid "There is no recent activity in your Xing network."
 msgstr "Xing-verkostossasi ei ole viimeaikaisia tapahtumia"
 
@@ -7359,9 +7334,9 @@ msgstr "Xing-verkostossasi ei ole viimeaikaisia tapahtumia"
 msgid "There is no rule defined"
 msgstr "Ei sääntöjä määriteltynä"
 
-#: apps/plugins/portal/xing/register.js:59 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:128 apps/plugins/xing/main.js:72
-#: apps/plugins/xing/main.js:106
+#: apps/plugins/portal/xing/register.js:57 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:126 apps/plugins/xing/main.js:71
+#: apps/plugins/xing/main.js:105
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr "Tapahtui %s virhe. Virheviesti oli:\"%s\""
 
@@ -7399,13 +7374,13 @@ msgstr ""
 "Näihin tilastoihin sisätyvät vain kansiot, jotka ovat hakemistopuussa neljä "
 "tai vähemmän askelta kansiosta %1$s."
 
-#: apps/io.ox/mail/common-extensions.js:429 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:440
+#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Tämä sähköposti on luettu, paina merkitäksesi se lukemattomaksi."
 
-#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:440
+#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
 
@@ -7449,7 +7424,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Tämä kenttä pitää täyttää"
 
-#: apps/io.ox/files/api.js:375 module:io.ox/files
+#: apps/io.ox/files/api.js:374 module:io.ox/files
 msgid "This file could not be uploaded."
 msgstr "Tiedostoa ei voitu ladata."
 
@@ -7505,13 +7480,13 @@ msgid_plural "These files have not been unlocked"
 msgstr[0] "Tämän tiedoston lukitusta ei ole avattu"
 msgstr[1] "Näiden tiedostojen lukitusta ei ole avattu"
 
-#: apps/io.ox/files/fluid/perspective.js:471 module:io.ox/files
-#: apps/io.ox/files/fluid/view-detail.js:81
+#: apps/io.ox/files/fluid/perspective.js:466 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:80
 msgid "This file is locked by %1$s"
 msgstr "Tiedoston on lukinnut %1$s"
 
-#: apps/io.ox/files/fluid/perspective.js:469 module:io.ox/files
-#: apps/io.ox/files/fluid/view-detail.js:79
+#: apps/io.ox/files/fluid/perspective.js:464 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:78
 msgid "This file is locked by you"
 msgstr "Tiedosto on sinun lukitsemasi"
 
@@ -7524,11 +7499,11 @@ msgstr ""
 msgid "This folder has no subscriptions"
 msgstr "Tässä kansiossa ei ole tilauksia"
 
-#: apps/io.ox/core/folder/extensions.js:513 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:522 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Tässä kansiossa on julkaisuja ja/tai tilauksia"
 
-#: apps/io.ox/core/folder/extensions.js:510 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:519 module:io.ox/core
 #, fuzzy
 #| msgid "This folder has no subscriptions"
 msgid "This folder has subscriptions"
@@ -7556,12 +7531,12 @@ msgstr "Tämä ei ole käypä postiosoite"
 
 #. permissions dialog
 #. error message when selected user or group can not be used
-#: apps/io.ox/core/permissions/permissions.js:462 module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js:458 module:io.ox/core
 msgid "This is not a valid user or group."
 msgstr "Tämä ei ole käypä käyttäjä tai ryhmä."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:202 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:256
+#: apps/io.ox/contacts/view-detail.js:255
 msgid "This list has no contacts yet"
 msgstr "Tällä listalla ei vielä ole yhteystietoja"
 
@@ -7590,7 +7565,7 @@ msgstr ""
 "Tämä sääntö koskee kaikkia viestejä. Aseta ehto rajaamaan sääntö tiettyihin "
 "viesteihin."
 
-#: apps/io.ox/tasks/print.js:106 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:105 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:133
 msgid "This task recurs"
 msgstr "Tämä tehtävä toistuu"
@@ -7604,8 +7579,8 @@ msgstr "Tämä widget on offline, koska twitter nopeusrajoitus ylittyi."
 msgid "Thread"
 msgstr "Keskustelu"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:48
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:467
+#: apps/io.ox/calendar/edit/recurrence-view.js:47
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:382
 #: module:io.ox/calendar
 msgid "Thursday"
 msgstr "torstai"
@@ -7614,16 +7589,16 @@ msgstr "torstai"
 msgid "Tiles"
 msgstr "Sovellusikkunat"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:95 module:io.ox/core
-#: apps/io.ox/calendar/settings/pane.js:118 module:io.ox/calendar
+#: apps/io.ox/backbone/mini-views/datepicker.js:94 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:109 module:io.ox/calendar
 msgid "Time"
 msgstr "Aika"
 
-#: apps/io.ox/calendar/settings/pane.js:122 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:113 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Aika-asteikko minuuteissa"
 
-#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:172 module:io.ox/core
 msgid "Time zone"
 msgstr "Aikavyöhyke"
 
@@ -7636,7 +7611,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titteli"
 
-#: apps/io.ox/mail/common-extensions.js:248 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:547
@@ -7654,11 +7629,10 @@ msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:82 module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
-#: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:171
-#: apps/io.ox/calendar/util.js:209 apps/io.ox/core/tk/datepicker.js:34
-#: module:io.ox/core apps/io.ox/search/facets/extensions.js:512
-#: apps/plugins/portal/birthdays/register.js:86 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:159
+#: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:128
+#: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
 msgstr "Tänään"
 
@@ -7666,15 +7640,14 @@ msgstr "Tänään"
 msgid "Toggle checkboxes"
 msgstr "Vaihtele valintaruutua"
 
-#: apps/io.ox/search/facets/extensions.js:347 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:601
+#: apps/io.ox/search/facets/extensions.js:346 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:583
 msgid "Toggle options"
 msgstr "Vaihteluvaihtoehdot"
 
-#: apps/io.ox/calendar/util.js:173 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:211
-#: apps/plugins/portal/birthdays/register.js:89 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:159
+#: apps/io.ox/calendar/util.js:130 module:io.ox/calendar
+#: apps/plugins/portal/birthdays/register.js:90 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Tomorrow"
 msgstr "Huomenna"
 
@@ -7693,11 +7666,11 @@ msgstr "Kymmenen tavallisinta tiedostotyyppiä"
 msgid "Top 10 folder size"
 msgstr "Kymmenen suurinta kansiota"
 
-#: apps/io.ox/mail/statistics.js:108 module:io.ox/mail
+#: apps/io.ox/mail/statistics.js:107 module:io.ox/mail
 msgid "Top 10 you got mail from"
 msgstr "Top 10 sähköpostiesi lähdettä"
 
-#: apps/io.ox/mail/statistics.js:108 module:io.ox/mail
+#: apps/io.ox/mail/statistics.js:107 module:io.ox/mail
 msgid "Top 10 you sent mail to"
 msgstr "Top 10 sähköpostiesi kohdetta"
 
@@ -7709,7 +7682,7 @@ msgstr "Yhteensä"
 msgid "Total: %1$d"
 msgstr "Yhteensä %1$d"
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:133 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:132 module:io.ox/core
 msgid "Total: %1$s requests"
 msgstr "Yhteensä %1$s pyyntöä"
 
@@ -7723,13 +7696,13 @@ msgstr "Kaupunki"
 msgid "Trying to auto-configure your mail account"
 msgstr "Yritetään auto-konfiguroida postitilisi"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:46
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:465
+#: apps/io.ox/calendar/edit/recurrence-view.js:45
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:380
 #: module:io.ox/calendar
 msgid "Tuesday"
 msgstr "tiistai"
 
-#: apps/plugins/portal/tumblr/register.js:334 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:332 module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
 
@@ -7749,12 +7722,12 @@ msgid "Type"
 msgstr "Tyyppi"
 
 #: apps/io.ox/core/about/about.js:31 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:121
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:120
 msgid "UI version"
 msgstr "KL versio"
 
 #: apps/io.ox/contacts/model.js:281 module:io.ox/contacts
-#: apps/plugins/portal/rss/register.js:149 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:146 module:io.ox/portal
 msgid "URL"
 msgstr "URL"
 
@@ -7778,7 +7751,7 @@ msgid "Unable to load mail filter settings."
 msgstr "Postisuodattimien asetuksia ei voitu ladata."
 
 #: apps/io.ox/calendar/print.js:199 module:io.ox/calendar
-#: apps/io.ox/tasks/print.js:95 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:94 module:io.ox/tasks
 msgid "Unconfirmed"
 msgstr "Vahvistamaton"
 
@@ -7789,12 +7762,12 @@ msgstr "Vahvistamaton"
 msgid "Undone"
 msgstr "Tekemätön"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Unemployed"
 msgstr "Työtön"
 
 #. twitter: Stop following this person
-#: apps/plugins/portal/twitter/util.js:340 module:plugins/portal
+#: apps/plugins/portal/twitter/util.js:332 module:plugins/portal
 msgid "Unfollow"
 msgstr "Lakkaa seuraamasta"
 
@@ -7803,12 +7776,12 @@ msgstr "Lakkaa seuraamasta"
 msgid "Unified"
 msgstr "Perus"
 
-#: apps/plugins/portal/tumblr/register.js:304 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:309
+#: apps/plugins/portal/tumblr/register.js:302 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:307
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Tuntematon virhe tumblr blogia tarkistettaessa."
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:332 module:io.ox/core
 msgid "Unknown sender"
 msgstr "Tuntematon lähettäjä"
 
@@ -7817,7 +7790,7 @@ msgstr "Tuntematon lähettäjä"
 msgid "Unlock"
 msgstr "Avaa lukitus"
 
-#: apps/io.ox/mail/common-extensions.js:44 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:43 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:33
 msgid "Unread"
 msgstr "Lukematon"
@@ -7865,12 +7838,12 @@ msgstr "Päivitä premium-versioon"
 msgid "Upgrade to premium edition"
 msgstr "Päivitä premium-versioon"
 
-#: apps/io.ox/files/fluid/view-detail.js:221 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:220 module:io.ox/files
 msgid "Upload a new version"
 msgstr "Lataa uusi versio"
 
 #: apps/io.ox/core/tk/attachments.js:605 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/fluid/view-detail.js:230 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:229 module:io.ox/files
 msgid "Upload file"
 msgstr "Lataa tiedosto"
 
@@ -7888,7 +7861,7 @@ msgstr "Lataa uusi tiedosto"
 msgid "Upload new files"
 msgstr "Lataa uusia tiedostoja"
 
-#: apps/io.ox/files/fluid/view-detail.js:244 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:243 module:io.ox/files
 msgid "Upload new version"
 msgstr "Lataa uusi versio"
 
@@ -7899,7 +7872,7 @@ msgid "Upload progress"
 msgstr "Meneillään"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/fluid/perspective.js:905 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:900 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
 msgid "Uploading %1$s"
@@ -7909,11 +7882,11 @@ msgstr "Ladataan..."
 msgid "Uploading folders is not supported."
 msgstr "Kansioiden lataamista ei tueta."
 
-#: apps/io.ox/files/fluid/view-detail.js:268 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:267 module:io.ox/files
 msgid "Uploading..."
 msgstr "Ladataan..."
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:136 module:io.ox/core
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:135 module:io.ox/core
 msgid "Uptime: %1$s minutes"
 msgstr "Käynnissä: %1$s minuuttia"
 
@@ -7926,9 +7899,9 @@ msgstr "Kiireellisyys"
 msgid "Use SSL connection"
 msgstr "Käytä SSL yhteyttä"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:84 module:io.ox/core
-#: apps/io.ox/calendar/week/view.js:113 module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:531
+#: apps/io.ox/backbone/mini-views/datepicker.js:83 module:io.ox/core
+#: apps/io.ox/calendar/week/view.js:112 module:io.ox/calendar
+#: apps/io.ox/search/facets/extensions.js:519
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -7972,7 +7945,7 @@ msgstr "Käytä erillistä käyttäjätunnusta ja salasanaa"
 msgid "Use unified mail for this account"
 msgstr "Käytä tälle tilille yhtenäistä postia"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:88 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:87 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr "Muuta aikaa nuolinäppäimillä. Sulje valitsin painamalla [Esc]."
@@ -8006,11 +7979,11 @@ msgstr "Käyttäjätunnus ei voi olla tyhjä."
 msgid "Vacation Notice"
 msgstr "Lomailmoitus"
 
-#: apps/io.ox/files/fluid/view-detail.js:236 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:235 module:io.ox/files
 msgid "Version Comment"
 msgstr "Version kommentti"
 
-#: apps/io.ox/files/fluid/view-detail.js:375 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:374 module:io.ox/files
 msgid "Version history"
 msgstr "Versiohistoria"
 
@@ -8038,8 +8011,8 @@ msgid "View source"
 msgstr "Näytä lähdekoodi"
 
 #: apps/io.ox/tasks/edit/view-template.js:263 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:254
+#: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:247
 msgid "Waiting"
 msgstr "Odottaa"
 
@@ -8047,7 +8020,7 @@ msgstr "Odottaa"
 msgid "Warning"
 msgstr "Varoitus"
 
-#: apps/io.ox/mail/common-extensions.js:499 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varoitus: Tämä viesti voi olla urkinta- tai huijausposti"
 
@@ -8064,8 +8037,8 @@ msgstr "Varoitukset"
 msgid "Weather • Season"
 msgstr "Sää • Vuodenaika"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:47
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:466
+#: apps/io.ox/calendar/edit/recurrence-view.js:46
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/util.js:381
 #: module:io.ox/calendar
 msgid "Wednesday"
 msgstr "keskiviikko"
@@ -8075,18 +8048,18 @@ msgstr "keskiviikko"
 msgid "Week"
 msgstr "Viikko"
 
-#: apps/io.ox/calendar/week/perspective.js:324 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:325 module:io.ox/calendar
 msgid "Week View"
 msgstr "Viikkonäkymä"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:522 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Viikoittain %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:392 module:io.ox/portal
+#: apps/io.ox/portal/main.js:391 module:io.ox/portal
 msgid "Welcome to %1$s"
 msgstr "Tervetuloa %s järjestelmään"
 
@@ -8095,22 +8068,22 @@ msgid "Welcome to %s"
 msgstr "Tervetuloa %s järjestelmään"
 
 #. Default greeting for portal widget
-#: apps/io.ox/portal/main.js:36 module:io.ox/portal
+#: apps/io.ox/portal/main.js:35 module:io.ox/portal
 msgid "Welcome to your calendar"
 msgstr "Tervetuloa kalenteriisi"
 
 #. Default greeting for portal widget
-#: apps/io.ox/portal/main.js:40 module:io.ox/portal
+#: apps/io.ox/portal/main.js:39 module:io.ox/portal
 msgid "Welcome to your files"
 msgstr "Tervetuloa tiedostoihisi"
 
 #. Default greeting for portal widget
-#: apps/io.ox/portal/main.js:34 module:io.ox/portal
+#: apps/io.ox/portal/main.js:33 module:io.ox/portal
 msgid "Welcome to your inbox"
 msgstr "Tervetuloa saapuneen postin postilaatikkoosi"
 
 #. Default greeting for portal widget
-#: apps/io.ox/portal/main.js:38 module:io.ox/portal
+#: apps/io.ox/portal/main.js:37 module:io.ox/portal
 msgid "Welcome to your tasks"
 msgstr "Tervetuloa tehtäviisi"
 
@@ -8131,7 +8104,7 @@ msgstr ""
 "asiakasohjelmasta. Päivittäjä ilmoittaa automaattisesti uusista "
 "päivityksistä. Uusimmat päivitykset voit ladata päivittäjän kautta."
 
-#: apps/io.ox/calendar/util.js:330 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:201 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Koko päivän"
 
@@ -8140,13 +8113,13 @@ msgstr "Koko päivän"
 msgid "Workweek"
 msgstr "Työviikko"
 
-#: apps/io.ox/calendar/week/perspective.js:318 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:319 module:io.ox/calendar
 msgid "Workweek View"
 msgstr "Työviikkonäkymä"
 
-#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:46
-#: apps/plugins/portal/xing/register.js:49 apps/plugins/xing/main.js:27
+#: apps/plugins/halo/xing/register.js:30 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:44
+#: apps/plugins/portal/xing/register.js:47 apps/plugins/xing/main.js:26
 msgid "XING"
 msgstr "XING"
 
@@ -8155,14 +8128,14 @@ msgstr "XING"
 msgid "YB"
 msgstr "YT"
 
-#: apps/io.ox/backbone/mini-views/date.js:23 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/date.js:22 module:io.ox/core
 msgid "Year"
 msgstr "Vuosi"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:564 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:479 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Vuosittain %1$s %2$d"
 
@@ -8170,11 +8143,11 @@ msgstr "Vuosittain %1$s %2$d"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:576 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:491 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Joka vuosi %1$s %2$s %3$d"
 
-#: apps/io.ox/core/tk/mobiscroll.js:45 module:io.ox/core
+#: apps/io.ox/core/tk/mobiscroll.js:34 module:io.ox/core
 msgid "Years"
 msgstr "Vuotta"
 
@@ -8185,14 +8158,14 @@ msgid "Yellow"
 msgstr "Keltainen"
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:136 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:153 apps/io.ox/core/main.js:128
+#: apps/io.ox/calendar/month/perspective.js:133 module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js:154 apps/io.ox/core/main.js:128
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js:178
 #: apps/io.ox/files/util.js:249 module:io.ox/files
 msgid "Yes"
 msgstr "Kyllä"
 
-#: apps/io.ox/mail/compose/view.js:731 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:751 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Kyllä, lähetä ilman aihetta."
 
@@ -8200,10 +8173,10 @@ msgstr "Kyllä, lähetä ilman aihetta."
 msgid "Yes, with empty attachment"
 msgstr "Kyllä, tyhjän liitteen kanssa"
 
-#: apps/io.ox/calendar/util.js:164 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:202 apps/io.ox/mail/util.js:72
-#: module:io.ox/core apps/plugins/portal/birthdays/register.js:92
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:159
+#: apps/io.ox/calendar/util.js:121 module:io.ox/calendar
+#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "Eilen"
 
@@ -8247,7 +8220,7 @@ msgstr ""
 "Sinulla ei ole valtuuksia luoda tapaamisia kohteeseen \"%1$s\". Tapaamiset "
 "luodaan siksi yksityiseen kalenteriisi."
 
-#: apps/plugins/halo/xing/register.js:77 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
@@ -8274,6 +8247,12 @@ msgstr ""
 "Siirrä ja tipauta tiedostoja koneeltasi ladataksesi uuden tiedoston tai "
 "uuden version tiedostosta."
 
+#: apps/io.ox/mail/settings/signatures/register.js:251 module:io.ox/mail
+msgid ""
+"You can import existing signatures from the previous product generation. "
+"Your signatures will be copied - not moved."
+msgstr ""
+
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Pikatallenna muutoksesi Ctrl+Enter"
@@ -8290,8 +8269,8 @@ msgstr "Kieltäydyit tästä tapaamisesta"
 msgid "You declined this task"
 msgstr "Kieltäydyit tästä tehtävästä"
 
-#: apps/plugins/portal/calendar/register.js:61 module:plugins/portal
-#: apps/plugins/portal/calendar/register.js:89
+#: apps/plugins/portal/calendar/register.js:60 module:plugins/portal
+#: apps/plugins/portal/calendar/register.js:85
 msgid "You don't have any appointments in the near future."
 msgstr "Sinulla ei ole tapaamisia lähitulevaisuudessa."
 
@@ -8314,11 +8293,11 @@ msgid_plural "You have %1$d notifications."
 msgstr[0] "Sinulla on %1$d ilmoitus."
 msgstr[1] "Sinulla on %1$d ilmoitusta."
 
-#: apps/plugins/portal/mail/register.js:117 module:plugins/portal
+#: apps/plugins/portal/mail/register.js:116 module:plugins/portal
 msgid "You have %1$d unread messages"
 msgstr "Sinulla on %1$s lukematonta viestiä"
 
-#: apps/plugins/portal/mail/register.js:115 module:plugins/portal
+#: apps/plugins/portal/mail/register.js:114 module:plugins/portal
 msgid "You have 1 unread message"
 msgstr "Sinulla on yksi lukematon viesti"
 
@@ -8351,7 +8330,7 @@ msgstr "Kieltäydyit tapaamisesta"
 msgid "You have no new messages"
 msgstr "Sinulla ei ole uusia viestejä"
 
-#: apps/plugins/portal/mail/register.js:113 module:plugins/portal
+#: apps/plugins/portal/mail/register.js:112 module:plugins/portal
 msgid "You have no unread messages"
 msgstr "Sinulla ei ole lukemattomia viestejä"
 
@@ -8373,7 +8352,7 @@ msgstr "Alustavasti hyväksyit tämän tapaamisen"
 msgid "You have to enter a username and password to subscribe."
 msgstr "Syötä käyttäjätunnus ja salasana tilataksesi."
 
-#: apps/plugins/portal/facebook/register.js:57 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:56 module:plugins/portal
 msgid "You like this"
 msgstr "Sinä pidät tästä"
 
@@ -8389,8 +8368,8 @@ msgstr "Sinun tulee käyttää Android versiota %n tai uudempaa."
 msgid "You need to use iOS %n or higher."
 msgstr "Sinun tulee käyttää iOS versiota %n tai uudempaa."
 
-#: apps/io.ox/core/folder/extensions.js:492 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:495
+#: apps/io.ox/core/folder/extensions.js:501 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:504
 msgid "You share this folder with other users"
 msgstr "Jaat tämän kansion muiden käyttäjien kanssa"
 
@@ -8417,54 +8396,54 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 msgstr[1] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 
-#: apps/plugins/notifications/calendar/register.js:247
+#: apps/plugins/notifications/calendar/register.js:259
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all appointment invitations."
 msgid "You've got appointment invitations"
 msgstr "Paina piilottaaksesi kaikki tapaamiskutsut."
 
-#: apps/plugins/notifications/calendar/register.js:175
+#: apps/plugins/notifications/calendar/register.js:187
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all appointment reminders."
 msgid "You've got appointment reminders"
 msgstr "Paina piilottaaksesi kaikki tapaamismuistutukset."
 
-#: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
-#, fuzzy
-#| msgid "No notifications"
-msgid "You've got new Notifications"
-msgstr "Ei ilmoituksia"
-
-#: apps/plugins/notifications/mail/register.js:87 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:85 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got new mails"
 msgstr "Uuden viestin laatiminen"
 
-#: apps/plugins/notifications/tasks/register.js:102
+#: apps/io.ox/core/notifications/subview.js:155 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "You've got new notifications"
+msgstr "Ei ilmoituksia"
+
+#: apps/plugins/notifications/tasks/register.js:114
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task reminders."
 msgid "You've got overdue tasks"
 msgstr "Paina piilottaaksesi kaikki tehtävämuistutukset."
 
-#: apps/plugins/notifications/tasks/register.js:320
+#: apps/plugins/notifications/tasks/register.js:332
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task invitations."
 msgid "You've got task invitations"
 msgstr "Paina piilottaaksesi kaikki tehtäväkutsut."
 
-#: apps/plugins/notifications/tasks/register.js:190
+#: apps/plugins/notifications/tasks/register.js:202
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "Hide all task reminders."
 msgid "You've got task reminders"
 msgstr "Paina piilottaaksesi kaikki tehtävämuistutukset."
 
-#: apps/plugins/portal/xing/register.js:346 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:344 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "%s uutissyötteesi"
 
@@ -8564,17 +8543,17 @@ msgstr "Valitsemasi kuva tulee näkyviin tallentamisen jälkeen"
 msgid "Your session is expired"
 msgstr "Istuntosi on vanhentunut"
 
-#: apps/plugins/halo/xing/register.js:101 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:97 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Jaetut yhteystietosi:"
 
-#: apps/plugins/portal/xing/register.js:168 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:166 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
 "Tilapäivitystäsi ei voitu postata palveluun %s. Virheviesti oli: \"%s\""
 
-#: apps/plugins/portal/xing/register.js:172 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:170 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
 msgstr "Tilapäivityksesi on onnistuneesti postattu palveluun %s"
 
@@ -8587,13 +8566,13 @@ msgstr "Aikavyöhykkeesi"
 msgid "ZB"
 msgstr "ZT"
 
-#: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
 msgid "accepted"
 msgstr "hyväksynyt"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:462
+#: apps/io.ox/calendar/edit/recurrence-view.js:459
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:752
+#: apps/io.ox/calendar/edit/recurrence-view.js:749
 msgid "after %1$d appointment"
 msgid_plural "after %1$d appointments"
 msgstr[0] "%1$d tapaamisen jälkeen"
@@ -8601,16 +8580,16 @@ msgstr[1] "%1$d tapaamisen jälkeen"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:390 module:io.ox/calendar
 msgid "and"
 msgstr "ja"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:285 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "ja %1$d muuta"
 
-#: apps/io.ox/tasks/util.js:23 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:21 module:io.ox/tasks
 msgid "by noon"
 msgstr "aamupäivällä"
 
@@ -8623,7 +8602,7 @@ msgstr "sulje"
 msgid "close for %1$s"
 msgstr "sulje %1$s"
 
-#: apps/plugins/portal/facebook/register.js:315 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:314 module:plugins/portal
 msgid "collapse"
 msgstr "pienennä"
 
@@ -8638,18 +8617,18 @@ msgstr "luo kohteita"
 msgid "create objects and subfolders"
 msgstr "luo uusia kohteita ja alikansioita"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:509
+#: apps/io.ox/calendar/edit/recurrence-view.js:506
 #: module:io.ox/calendar/edit/main
 msgid "daily"
 msgstr "päivittäin"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Mark unread"
 msgid "dark blue"
 msgstr "Merkitse lukemattomaksi"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Mark read"
 msgid "dark green"
@@ -8659,15 +8638,15 @@ msgstr "Merkitse luetuksi"
 msgid "date range"
 msgstr "päivämäärävalikoima"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:617
+#: apps/io.ox/calendar/edit/recurrence-view.js:614
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:685
+#: apps/io.ox/calendar/edit/recurrence-view.js:682
 msgid "day of the week"
 msgstr "työpäivä"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:618
+#: apps/io.ox/calendar/edit/recurrence-view.js:615
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:686
+#: apps/io.ox/calendar/edit/recurrence-view.js:683
 msgid "day of the weekend"
 msgstr "viikonlopun päivä"
 
@@ -8675,7 +8654,7 @@ msgstr "viikonlopun päivä"
 msgid "dd"
 msgstr "pp"
 
-#: apps/io.ox/calendar/util.js:38 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
 msgid "declined"
 msgstr "hylännyt"
 
@@ -8711,33 +8690,33 @@ msgid "edit own objects"
 msgstr "muokkaa omia kohteita"
 
 #: apps/io.ox/core/tk/reminder-util.js:84 module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js:41
+#: apps/plugins/notifications/tasks/register.js:53
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:259
+#: apps/plugins/notifications/tasks/register.js:271
 msgid "end date "
 msgstr "loppupäivämäärä"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:722
+#: apps/io.ox/calendar/edit/recurrence-view.js:719
 #: module:io.ox/calendar/edit/main
 msgid "ends"
 msgstr "päättyy"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:719
+#: apps/io.ox/calendar/edit/recurrence-view.js:716
 #: module:io.ox/calendar/edit/main
 msgid "ends after a certain number of appointments"
 msgstr "päättyy tietyn määrän tapaamisia jälkeen"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:718
+#: apps/io.ox/calendar/edit/recurrence-view.js:715
 #: module:io.ox/calendar/edit/main
 msgid "ends on a specific date"
 msgstr "päättyy määriteltynä päivämääränä"
 
 #. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:459
+#: apps/io.ox/calendar/edit/recurrence-view.js:456
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/recurrence-view.js:527
 #: apps/io.ox/calendar/edit/recurrence-view.js:530
-#: apps/io.ox/calendar/edit/recurrence-view.js:533
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "joka %1$d päivä"
@@ -8745,11 +8724,11 @@ msgstr[1] "joka %1$d päivä"
 
 #. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:461
+#: apps/io.ox/calendar/edit/recurrence-view.js:458
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:574
-#: apps/io.ox/calendar/edit/recurrence-view.js:576
-#: apps/io.ox/calendar/edit/recurrence-view.js:631
+#: apps/io.ox/calendar/edit/recurrence-view.js:571
+#: apps/io.ox/calendar/edit/recurrence-view.js:573
+#: apps/io.ox/calendar/edit/recurrence-view.js:628
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "joka %1$d kuukausi"
@@ -8757,10 +8736,10 @@ msgstr[1] "joka %1$d kuukausi"
 
 #. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:460
+#: apps/io.ox/calendar/edit/recurrence-view.js:457
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/recurrence-view.js:548
 #: apps/io.ox/calendar/edit/recurrence-view.js:551
-#: apps/io.ox/calendar/edit/recurrence-view.js:554
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "joka %1$d viikko"
@@ -8768,37 +8747,37 @@ msgstr[1] "joka %1$d viikko"
 
 #. as in: The appointment is repeated every day
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:525
+#: apps/io.ox/calendar/edit/recurrence-view.js:522
 #: module:io.ox/calendar/edit/main
 msgid "every day"
 msgstr "joka päivä"
 
 #. as in: The appointment is repeated every month
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:570
+#: apps/io.ox/calendar/edit/recurrence-view.js:567
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:629
+#: apps/io.ox/calendar/edit/recurrence-view.js:626
 msgid "every month"
 msgstr "kuukausittain"
 
 #. as in: The appointment is repeated every week
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:547
+#: apps/io.ox/calendar/edit/recurrence-view.js:544
 #: module:io.ox/calendar/edit/main
 msgid "every week"
 msgstr "viikoittain"
 
-#: apps/plugins/portal/facebook/register.js:310 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:319
+#: apps/plugins/portal/facebook/register.js:309 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:318
 msgid "expand"
 msgstr "laajenna"
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:599
+#: apps/io.ox/calendar/edit/recurrence-view.js:596
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:671
-#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
+#: apps/io.ox/calendar/edit/recurrence-view.js:668
+#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
 msgid "first"
 msgstr "ensimmäisenä"
 
@@ -8812,18 +8791,18 @@ msgstr "flickr.photos.search"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:608
+#: apps/io.ox/calendar/edit/recurrence-view.js:605
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:677
-#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
+#: apps/io.ox/calendar/edit/recurrence-view.js:674
+#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
 msgid "fourth"
 msgstr "neljäntenä"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 msgid "gray"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:46 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:45 module:io.ox/mail
 msgid "has attachments"
 msgstr "on liitteitä"
 
@@ -8831,7 +8810,7 @@ msgstr "on liitteitä"
 msgid "iCal"
 msgstr "iCal"
 
-#: apps/plugins/notifications/calendar/register.js:130
+#: apps/plugins/notifications/calendar/register.js:142
 #: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"
@@ -8839,91 +8818,91 @@ msgid_plural "in %d minutes"
 msgstr[0] "minuutin kuluttua"
 msgstr[1] "%d minuutin kuluttua"
 
-#: apps/io.ox/tasks/util.js:195 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:188 module:io.ox/tasks
 msgid "in 15 minutes"
 msgstr "15 minuutin kuluttua"
 
-#: apps/io.ox/tasks/util.js:196 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:189 module:io.ox/tasks
 msgid "in 30 minutes"
 msgstr "30 minuutin kuluttua"
 
-#: apps/io.ox/tasks/util.js:194 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:187 module:io.ox/tasks
 msgid "in 5 minutes"
 msgstr "5 minuutin kuluttua"
 
-#: apps/io.ox/tasks/util.js:197 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:190 module:io.ox/tasks
 msgid "in one hour"
 msgstr "tunnin kuluttua"
 
-#: apps/io.ox/tasks/util.js:225 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:218 module:io.ox/tasks
 msgid "in one week"
 msgstr "viikon kuluttua"
 
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:596
+#: apps/io.ox/calendar/edit/recurrence-view.js:593
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:679
-#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
+#: apps/io.ox/calendar/edit/recurrence-view.js:676
+#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
 msgid "last"
 msgstr "viimeisenä"
 
-#: apps/io.ox/tasks/util.js:26 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:24 module:io.ox/tasks
 msgid "late in the evening"
 msgstr "myöhään illalla"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Light blue"
 msgid "light blue"
 msgstr "Vaaleansininen"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Light green"
 msgid "light green"
 msgstr "Vaaleanvihreä"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:511
+#: apps/io.ox/calendar/edit/recurrence-view.js:508
 #: module:io.ox/calendar/edit/main
 msgid "monthly"
 msgstr "kuukausittain"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:717
+#: apps/io.ox/calendar/edit/recurrence-view.js:714
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:731
+#: apps/io.ox/calendar/edit/recurrence-view.js:728
 msgid "never ends"
 msgstr "ei pääty koskaan"
 
-#: apps/io.ox/tasks/util.js:35 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:33 module:io.ox/tasks
 msgid "next Friday"
 msgstr "ensi perjantaina"
 
-#: apps/io.ox/tasks/util.js:31 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:29 module:io.ox/tasks
 msgid "next Monday"
 msgstr "ensi maanantaina"
 
-#: apps/io.ox/tasks/util.js:36 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:34 module:io.ox/tasks
 msgid "next Saturday"
 msgstr "ensi lauantaina"
 
-#: apps/io.ox/tasks/util.js:30 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:28 module:io.ox/tasks
 msgid "next Sunday"
 msgstr "ensi sunnuntaina"
 
-#: apps/io.ox/tasks/util.js:34 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:32 module:io.ox/tasks
 msgid "next Thursday"
 msgstr "ensi torstaina"
 
-#: apps/io.ox/tasks/util.js:32 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:30 module:io.ox/tasks
 msgid "next Tuesday"
 msgstr "ensi tiistaina"
 
-#: apps/io.ox/tasks/util.js:33 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:31 module:io.ox/tasks
 msgid "next Wednesday"
 msgstr "ensi keskiviikkona"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Set color"
 msgid "no color"
@@ -8944,37 +8923,37 @@ msgstr "ei muokkausoikeuksia"
 msgid "no read permissions"
 msgstr "ei lukuoikeuksia"
 
-#: apps/io.ox/files/share/view.js:302 module:io.ox/files
+#: apps/io.ox/files/share/view.js:300 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Koko päivän"
 
-#: apps/io.ox/files/share/view.js:304 module:io.ox/files
+#: apps/io.ox/files/share/view.js:302 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "kuukausittain"
 
-#: apps/io.ox/files/share/view.js:303 module:io.ox/files
+#: apps/io.ox/files/share/view.js:301 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "viikon kuluttua"
 
-#: apps/io.ox/files/share/view.js:307 module:io.ox/files
+#: apps/io.ox/files/share/view.js:305 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
 msgstr "Puhelin (auto)"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Orange"
 msgid "orange"
 msgstr "Oranssi"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 msgid "pink"
 msgstr ""
 
@@ -8982,7 +8961,7 @@ msgstr ""
 msgid "process subsequent rules"
 msgstr "suorita myös muut säännöt"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Purple"
 msgid "purple"
@@ -8999,7 +8978,7 @@ msgstr "lue kaikki kohteet"
 msgid "read own objects"
 msgstr "lue omat kohteet"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Red"
 msgid "red"
@@ -9012,10 +8991,10 @@ msgstr "poista"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:602
+#: apps/io.ox/calendar/edit/recurrence-view.js:599
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:673
-#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
+#: apps/io.ox/calendar/edit/recurrence-view.js:670
+#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
 msgid "second"
 msgstr "toisena"
 
@@ -9029,11 +9008,11 @@ msgstr "nähty"
 msgid "select format"
 msgstr "valitse muotoilu"
 
-#: apps/plugins/portal/rss/register.js:101 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:98 module:io.ox/portal
 msgid "show image"
 msgstr "näytä kuva"
 
-#: apps/io.ox/files/share/view.js:306 module:io.ox/files
+#: apps/io.ox/files/share/view.js:304 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -9047,7 +9026,7 @@ msgstr "tila"
 msgid "subfolders of %s"
 msgstr "%s alikansioita"
 
-#: apps/io.ox/calendar/util.js:39 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:38 module:io.ox/calendar
 msgid "tentative"
 msgstr "alustava"
 
@@ -9063,42 +9042,42 @@ msgstr "rivin pituuden pitää olla numero"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:605
+#: apps/io.ox/calendar/edit/recurrence-view.js:602
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:675
-#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
+#: apps/io.ox/calendar/edit/recurrence-view.js:672
+#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
 msgid "third"
 msgstr "kolmantena"
 
-#: apps/io.ox/tasks/util.js:24 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
 msgid "this afternoon"
 msgstr "iltapäivällä"
 
-#: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:20 module:io.ox/tasks
 msgid "this morning"
 msgstr "tänä aamuna"
 
-#: apps/io.ox/files/share/view.js:305 module:io.ox/files
+#: apps/io.ox/files/share/view.js:303 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"
 msgstr "kuukausittain"
 
-#: apps/io.ox/tasks/util.js:219 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:212 module:io.ox/tasks
 msgid "tomorrow"
 msgstr "huomenna"
 
-#: apps/io.ox/tasks/util.js:25 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:23 module:io.ox/tasks
 msgid "tonight"
 msgstr "illalla"
 
-#: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:35 module:io.ox/calendar
 msgid "unconfirmed"
 msgstr "vahvistamaton"
 
-#: apps/io.ox/files/fluid/perspective.js:135 module:io.ox/files
-#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:424
-#: apps/io.ox/mail/util.js:437
+#: apps/io.ox/files/fluid/perspective.js:133 module:io.ox/files
+#: apps/io.ox/mail/util.js:42 module:io.ox/core apps/io.ox/mail/util.js:413
+#: apps/io.ox/mail/util.js:428
 msgid "unknown"
 msgstr "tuntematon"
 
@@ -9115,7 +9094,7 @@ msgid "vacation notice"
 msgstr "lomailmoitus"
 
 #. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js:257 module:io.ox/core
+#: apps/io.ox/mail/util.js:246 module:io.ox/core
 msgid "via"
 msgstr "kautta"
 
@@ -9124,22 +9103,22 @@ msgstr "kautta"
 msgid "view the folder"
 msgstr "näytä kansio"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:510
+#: apps/io.ox/calendar/edit/recurrence-view.js:507
 #: module:io.ox/calendar/edit/main
 msgid "weekly"
 msgstr "viikoittain"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:375 module:io.ox/calendar
 msgid "work days"
 msgstr "työpäivää"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:512
+#: apps/io.ox/calendar/edit/recurrence-view.js:509
 #: module:io.ox/calendar/edit/main
 msgid "yearly"
 msgstr "vuosittain"
 
-#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 #, fuzzy
 #| msgid "Yellow"
 msgid "yellow"
@@ -9692,6 +9671,9 @@ msgstr "vvvv"
 #~ msgid "Label"
 #~ msgstr "Tunniste"
 
+#~ msgid "Last Week"
+#~ msgstr "Viime viikolla"
+
 #~ msgid "Launching an app"
 #~ msgstr "Sovelluksen käynnistäminen"
 
@@ -9732,6 +9714,9 @@ msgstr "vvvv"
 #~ msgid "Navigation bar"
 #~ msgstr "Navigointipalkki"
 
+#~ msgid "Never"
+#~ msgstr "Ei koskaan"
+
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Uusi viesti %1$s %2$s. Paina [enter] avataksesi"
 
@@ -9762,6 +9747,12 @@ msgstr "vvvv"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "Vahvistamaton"
+
+#~ msgid "On every new notification"
+#~ msgstr "Kaikista uusista ilmoituksista"
+
+#~ msgid "On new notifications except mails"
+#~ msgstr "Uusista ilmoituksista paitsi posteista"
 
 #~ msgid ""
 #~ "One or more attached files exceed the size limit per email. Therefore, "

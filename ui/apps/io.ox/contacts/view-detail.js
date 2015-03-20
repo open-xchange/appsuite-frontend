@@ -20,11 +20,10 @@ define('io.ox/contacts/view-detail', [
     'io.ox/contacts/model',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/extPatterns/links',
-    'io.ox/core/date',
     'io.ox/core/util',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, gt) {
+], function (ext, util, api, actions, model, getBreadcrumb, links, coreUtil, gt) {
 
     'use strict';
 
@@ -463,12 +462,12 @@ define('io.ox/contacts/view-detail', [
                         row('birthday', function () {
                             if (baton.data.birthday) {
                                 //use utc time. birthdays must not be converted
-                                var birthday = new date.UTC(baton.data.birthday);
-                                if (birthday.getYear() === 1) {
+                                var birthday = moment.utc(baton.data.birthday);
+                                if (birthday.year() === 1) {
                                     //Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format(date.DATE_NOYEAR);
+                                    return birthday.format('MMMM D');
                                 } else {
-                                    return birthday.format(date.DATE);
+                                    return birthday.format('l');
                                 }
                             }
                         }),

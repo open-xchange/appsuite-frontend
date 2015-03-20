@@ -17,19 +17,13 @@ define('io.ox/calendar/api', [
     'io.ox/core/event',
     'settings!io.ox/core',
     'io.ox/core/notifications',
-    'io.ox/core/date',
     'io.ox/core/api/factory',
     'io.ox/core/capabilities'
-], function (http, Events, coreConfig, notifications, date, factory, capabilities) {
+], function (http, Events, coreConfig, notifications, factory, capabilities) {
 
     'use strict';
 
     var api = {
-
-        MINUTE: date.MINUTE,
-        HOUR: date.HOUR,
-        DAY: date.DAY,
-        WEEK: date.WEEK,
 
         // fluent caches
         caches: {
@@ -76,7 +70,7 @@ define('io.ox/calendar/api', [
 
             o = $.extend({
                 start: _.now(),
-                end: _.now() + (28 * date.DAY),
+                end: moment().add(28, 'days').valueOf(),
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
@@ -128,8 +122,8 @@ define('io.ox/calendar/api', [
         getUpdates: function (o) {
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * 1 * date.DAY,
-                timestamp:  _.now() - (2 * date.DAY),
+                end: moment().add(28, 'days').valueOf(),
+                timestamp:  moment().subtract(2, 'days').valueOf(),
                 ignore: 'deleted',
                 recurrence_master: false
             }, o || {});
@@ -547,8 +541,8 @@ define('io.ox/calendar/api', [
         getInvites: function () {
 
             var now = _.now(),
-                start = now - 2 * date.HOUR,
-                end = new date.Local().addYears(5).getTime();
+                start = moment(now).subtract(2, 'hours').valueOf(),
+                end = moment(now).add(5, 'years').valueOf();
 
             return this.getUpdates({
                 folder: 'all',
@@ -601,7 +595,7 @@ define('io.ox/calendar/api', [
 
             options = _.extend({
                 start: _.now(),
-                end: _.now() + date.DAY
+                end: moment().add(1, 'day').valueOf()
             }, options);
 
             var result = [], requests = [];

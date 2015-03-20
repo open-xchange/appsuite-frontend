@@ -14,12 +14,11 @@
 
 define('plugins/portal/calendar/register', [
     'io.ox/core/extensions',
-    'io.ox/core/date',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'gettext!plugins/portal',
-    'settings!io.ox/calendar',
-    'io.ox/calendar/api'
-], function (ext, date, util, gt, settings, api) {
+    'settings!io.ox/calendar'
+], function (ext, api, util, gt, settings) {
 
     'use strict';
 
@@ -60,13 +59,10 @@ define('plugins/portal/calendar/register', [
             if (baton.data.length === 0) {
                 sum.text(gt('You don\'t have any appointments in the near future.'));
             } else {
-                var obj = _(baton.data).first(),
-                    start = new date.Local(obj.start_date),
-                    timespan = util.getSmartDate(obj, true);
-                if (!obj.full_time) timespan += ' ' + start.format(date.TIME);
+                var obj = _(baton.data).first();
 
                 sum.append(
-                    $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
+                    $('<span class="normal accent">').text(_.noI18n(util.getSmartDate(obj, true))), $.txt(gt.noI18n('\u00A0')),
                     $('<span class="bold">').text(_.noI18n(obj.title || '')), $.txt(gt.noI18n('\u00A0')),
                     $('<span class="gray">').text(_.noI18n(obj.location || ''))
                 );
@@ -93,10 +89,6 @@ define('plugins/portal/calendar/register', [
                     var declined = util.getConfirmationStatus(nextApp) === 2;
                     if (settings.get('showDeclinedAppointments', false) || !declined) {
                         var timespan = util.getSmartDate(nextApp, true);
-
-                        if (!nextApp.full_time) {
-                            timespan += ' ' + new date.Local(nextApp.start_date).format(date.TIME);
-                        }
 
                         $content.append(
                             $('<li class="item" tabindex="1">')

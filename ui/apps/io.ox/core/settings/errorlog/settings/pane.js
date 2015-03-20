@@ -14,11 +14,10 @@
 define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/core/http',
-    'io.ox/core/date',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'static/3rd.party/Chart.js/Chart.js'
-], function (ext, http, date, settings, gt) {
+], function (ext, http, settings, gt) {
 
     'use strict';
 
@@ -116,7 +115,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             this.$el.append(
                 $('<section class="summary">').append(
                     $('<div>').append(
-                        $.txt(gt('Date') + ': ' + (new date.Local()).format(date.DATE_TIME)), $.txt(', '),
+                        $.txt(gt('Date') + ': ' + moment().format('l LT')), $.txt(', '),
                         $.txt(gt('Host') + ': '), $('<b>').text(location.hostname), $.txt(', '),
                         $.txt(gt('UI version') + ': '), $('<b>').text(ox.serverConfig.version), $.txt(', '),
                         $.txt(gt('Server version') + ': '), $('<b>').text(ox.serverConfig.serverVersion), $.txt(', '),
@@ -286,7 +285,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
         },
 
         getTime: function (model) {
-            return new date.Local(model.get('timestamp')).format(date.DATETIME);
+            return moment(model.get('timestamp')).format('l LT');
         },
 
         getTabId: function (model) {

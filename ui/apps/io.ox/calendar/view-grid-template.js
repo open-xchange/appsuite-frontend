@@ -145,26 +145,6 @@ define('io.ox/calendar/view-grid-template', [
             }
         },
 
-        // template for labels
-        label: {
-            build: function () {
-                this.addClass('calendar-label');
-            },
-            set: function (data) {
-                var d = util.getSmartDate(data);
-                this.text(gt.noI18n(d));
-            }
-        },
-
-        // detect new labels
-        requiresLabel: function (i, data, current) {
-            if (!data) {
-                return false;
-            }
-            var d = util.getSmartDate(data);
-            return (i === 0 || d !== current) ? d : false;
-        },
-
         // simple grid-based list for portal & halo
         drawSimpleGrid: function (list) {
 

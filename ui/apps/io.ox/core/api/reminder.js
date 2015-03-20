@@ -14,9 +14,8 @@ define('io.ox/core/api/reminder', [
     'io.ox/core/http',
     'io.ox/tasks/api',
     'io.ox/calendar/api',
-    'io.ox/core/date',
     'io.ox/core/event'
-], function (http, taskAPI, calendarAPI, date, Events) {
+], function (http, taskAPI, calendarAPI, Events) {
 
     'use strict';
 
@@ -139,7 +138,7 @@ define('io.ox/core/api/reminder', [
                     action: 'range',
                     timezone: 'UTC',
                     // if no range given, get the reminders an our ahead(to be independent of global refresh)
-                    end: range || (_.now() + date.HOUR)
+                    end: range || moment().add(1, 'hour').valueOf()
                 }
             }).pipe(function (list) {
                 updateReminders(list);

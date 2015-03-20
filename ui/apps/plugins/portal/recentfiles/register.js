@@ -15,11 +15,10 @@ define('plugins/portal/recentfiles/register', [
     'io.ox/core/extensions',
     'io.ox/files/api',
     'io.ox/core/api/user',
-    'io.ox/core/date',
     'gettext!plugins/portal',
     'settings!io.ox/core',
     'less!plugins/portal/recentfiles/style'
-], function (ext, filesAPI, userAPI, date, gt, settings) {
+], function (ext, filesAPI, userAPI, gt, settings) {
 
     'use strict';
 
@@ -110,7 +109,7 @@ define('plugins/portal/recentfiles/register', [
                                     // show WHO changed it
                                     _.noI18n(file.modified_by.display_name) :
                                     // show WHEN it was changed
-                                    new date.Local(file.last_modified).format(date.DATE_TIME)
+                                    moment(file.last_modified).format('l LT')
                             )
                         )
                     );

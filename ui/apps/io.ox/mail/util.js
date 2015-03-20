@@ -14,22 +14,17 @@
 
 define('io.ox/mail/util', [
     'io.ox/core/extensions',
-    'io.ox/core/date',
     'io.ox/core/util',
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'settings!io.ox/contacts',
     'gettext!io.ox/core'
-], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
+], function (ext, util, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
     var that,
-        format = _.printf,
-        MINUTE = 60 * 1000,
-        HOUR = MINUTE * 60,
-        DAY = HOUR * 24,
 
         ngettext = function (s, p, n) {
             return n > 1 ? p : s;
@@ -47,29 +42,23 @@ define('io.ox/mail/util', [
             if (!_.isNumber(timestamp)) return gt('unknown');
 
             var opt = $.extend({ fulldate: false, filtertoday: true }, options || {}),
-                now = new date.Local(),
-                d = new date.Local(timestamp),
-                base, delta,
+                d = moment(timestamp),
 
                 timestr = function () {
-                    return d.format(date.TIME);
+                    return d.format('LT');
                 },
                 datestr = function () {
-                    return d.format(date.DATE) + (opt.fulldate ? ' ' + timestr() : '');
+                    return d.format('l') + (opt.fulldate ? ' ' + timestr() : '');
                 },
                 isSameDay = function () {
-                    return d.getDate() === now.getDate() &&
-                        d.getMonth() === now.getMonth() &&
-                        d.getYear() === now.getYear();
+                    return moment().isSame(d, 'day');
                 };
 
             if (opt.filtertoday && isSameDay()) return timestr();
 
             if (opt.smart) {
-                base = Math.floor(timestamp / DAY) * DAY;
-                now = Math.floor(_.utc() / DAY) * DAY;
-                delta = Math.floor((now - base) / DAY);
-                if (delta === 1) { return gt('Yesterday'); } else if (delta <= 6) { return d.format('EEEE'); }
+                var delta = moment().startOf('day').diff(moment(timestamp).startOf('day'), 'day');
+                if (delta === 1) { return gt('Yesterday'); } else if (delta <= 6) { return d.format('dddd'); }
             }
 
             return datestr();
@@ -422,8 +411,7 @@ define('io.ox/mail/util', [
         getFullDate: function (timestamp) {
             if (!_.isNumber(timestamp))
                 return gt('unknown');
-            var t = new date.Local(timestamp);
-            return t.format(date.DATE_TIME);
+            return moment(timestamp).format('l LT');
         },
 
         getSmartTime: function (timestamp) {
@@ -432,6 +420,9 @@ define('io.ox/mail/util', [
             //without the page being reloaded. This might confuse the user and therefore we decided not
             //to use this method any longer. It has not been removed, yet but should so in the future.
             //The following warning is there to inform potential 3rd-party developers about the change.
+            var format = _.printf,
+                MINUTE = 60 * 1000,
+                HOUR = MINUTE * 60;
             console.warn('This method is deprecated and will be removed with 7.6.0 or at any random date later');
             if (!_.isNumber(timestamp))
                 return gt('unknown');

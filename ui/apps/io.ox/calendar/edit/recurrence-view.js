@@ -11,11 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/calendar/edit/recurrence-view', [
-    'io.ox/core/date',
     'io.ox/core/tk/keys',
     'gettext!io.ox/calendar/edit/main',
     'less!io.ox/calendar/edit/recurrence-view-style'
-], function (dateAPI, KeyListener, gt) {
+], function (KeyListener, gt) {
 
     'use strict';
 
@@ -88,7 +87,7 @@ define('io.ox/calendar/edit/recurrence-view', [
     };
 
     // rotate DAYS once to have a localized order
-    for (var i = 0; i < dateAPI.locale.weekStart; i++) {
+    for (var i = 0; i < moment.localeData().firstDayOfWeek(); i++) {
         DAYS.values.push(DAYS.values.shift());
     }
 
@@ -247,10 +246,9 @@ define('io.ox/calendar/edit/recurrence-view', [
 
             var self = this,
                 nodes = {},
-                now = new dateAPI.Local(),
                 $container = $('<span class="dropdown">');
 
-            self[attribute] = Math.pow(2, now.getDay());
+            self[attribute] = Math.pow(2, moment().day());
             $anchor.after($container);
             $container.append($anchor);
 
@@ -330,11 +328,11 @@ define('io.ox/calendar/edit/recurrence-view', [
             function renderDate() {
                 var value = self[attribute];
                 if (value) {
-                    var myTime = dateAPI.Local.utc(parseInt(value, 10));
-                    if (_.isNull(myTime)) {
-                        value = '';
+                    var myTime = moment.utc(parseInt(value, 10)).local(true);
+                    if (myTime.isValid()) {
+                        value = myTime.format('l');
                     } else {
-                        value = new dateAPI.Local(myTime).format(dateAPI.DATE);
+                        value = '';
                     }
                 } else {
                     value = '';
@@ -355,8 +353,7 @@ define('io.ox/calendar/edit/recurrence-view', [
 
             $anchor.on('click', function (e) {
                 e.preventDefault();
-                var now = new dateAPI.Local(),
-                    minDate = new Date(now.getYear(), now.getMonth(), now.getDate()),
+                var minDate = moment().startOf('day').toDate(),
                     $dateInput = $('<input type="text" class="form-control dateinput no-clone">').val(renderDate);
 
                 if (_.device('smartphone')) {
@@ -386,9 +383,9 @@ define('io.ox/calendar/edit/recurrence-view', [
 
                 // On change
                 function updateValue() {
-                    var value = dateAPI.Local.parse($dateInput.val(), dateAPI.DATE);
-                    if (!_.isNull(value) && value.getTime() !== 0) {
-                        self[attribute] = dateAPI.Local.localTime(value.getTime());
+                    var value = moment($dateInput.val(), 'l');
+                    if (!_.isNull(value) && value.valueOf() !== 0 && value.isValid()) {
+                        self[attribute] = value.utc(true).valueOf();
                         self.trigger('change', self);
                         self.trigger('change:' + attribute, self);
                         drawState();
@@ -739,7 +736,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         model: self.model,
                         initial: function () {
                             //tasks may not have a start date at this point
-                            return (self.model.get('start_date') || _.now()) + (4 * dateAPI.WEEK);
+                            return moment(self.model.get('start_date') || _.now()).add(4, 'weeks').valueOf();
                         }
                     }).on('change:ending', this.endingChanged, this).on('change', this.updateModel, this),
                     after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
@@ -1129,11 +1126,12 @@ define('io.ox/calendar/edit/recurrence-view', [
                     return;
                 }
                 var self = this,
-                    startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get('start_date'))),
-                    dayBits = 1 << startDate.getDay(),
-                    dayInMonth = startDate.getDate(),
-                    month = startDate.getMonth(),
-                    ordinal = Math.ceil(startDate.getDate() / 7),
+
+                    startDate = moment.utc(this.model.get('start_date')).local(true),
+                    dayBits = 1 << startDate.day(),
+                    dayInMonth = startDate.date(),
+                    month = startDate.month(),
+                    ordinal = Math.ceil(startDate.date() / 7),
 
                     canUpdate = function (sentence) {
                         // Don't update the chosen sentence carelessly
@@ -1142,10 +1140,10 @@ define('io.ox/calendar/edit/recurrence-view', [
 
                 if (this.previousStartDate) {
                     var previousAttributes = {
-                        dayBits: 1 << this.previousStartDate.getDay(),
-                        dayInMonth: this.previousStartDate.getDate(),
-                        month: this.previousStartDate.getMonth(),
-                        ordinal: Math.ceil(this.previousStartDate.getDate() / 7)
+                        dayBits: 1 << this.previousStartDate.day(),
+                        dayInMonth: this.previousStartDate.date(),
+                        month: this.previousStartDate.month(),
+                        ordinal: Math.ceil(this.previousStartDate.date() / 7)
                     };
                     canUpdate = function (sentence) {
                         if (sentence !== self.choice) {
@@ -1202,7 +1200,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     this.sentences.yearlyDate.set('month', month);
                 }
 
-                this.previousStartDate = startDate;
+                this.previousStartDate = startDate.clone();
 
             },
             render: function () {

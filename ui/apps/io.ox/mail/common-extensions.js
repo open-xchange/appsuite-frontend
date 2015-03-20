@@ -19,7 +19,6 @@ define('io.ox/mail/common-extensions', [
     'io.ox/mail/util',
     'io.ox/mail/api',
     'io.ox/core/api/account',
-    'io.ox/core/date',
     'io.ox/core/strings',
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
@@ -29,7 +28,7 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, date, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+], function (ext, links, actions, emoji, util, api, account, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -65,12 +64,11 @@ define('io.ox/mail/common-extensions', [
         },
 
         date: function (baton, options) {
-            var data = baton.data, t = data.received_date, d;
+            var data = baton.data, t = data.received_date;
             if (!_.isNumber(t)) return;
-            d = new date.Local(t);
             this.append(
                 $('<time class="date">')
-                .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
+                .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(util.getDateTime(t, options)))
             );
         },

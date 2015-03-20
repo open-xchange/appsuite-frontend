@@ -13,11 +13,11 @@
 
 define([
     'io.ox/tasks/edit/main',
-    'io.ox/core/date',
+    'io.ox/core/moment',
     'gettext!io.ox/tasks/edit',
     'spec/shared/capabilities',
     'waitsFor'
-], function (edit, date, gt, caputil, waitsFor) {
+], function (edit, moment, gt, caputil, waitsFor) {
 
     var app,
         view,
@@ -165,9 +165,8 @@ define([
         describe('reminder selector', function () {
             it('should set alarmtime', function () {
                 expect(model.get('alarm')).to.equal(undefined);
-                var testtime = new date.Local();
-                node.find('#task-edit-reminder-select').val('t').trigger('change');//tomorrow
-                expect(model.get('alarm')).to.be.above(testtime.getTime());
+                $(node.find('#task-edit-reminder-select')).val('t').trigger('change');//tomorrow
+                expect(model.get('alarm')).to.be.above(moment().valueOf());
             });
             it('should remove alarmtime', function () {
                 expect(model.get('alarm')).not.to.be.null;

@@ -15,9 +15,8 @@
 define('plugins/upsell/bubbles/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'io.ox/core/date',
     'settings!plugins/upsell'
-], function (Stage, ext, date, settings) {
+], function (Stage, ext, settings) {
 
     'use strict';
 

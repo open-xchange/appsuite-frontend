@@ -15,9 +15,8 @@ define('io.ox/core/api/user', [
     'io.ox/core/http',
     'io.ox/core/api/factory',
     'io.ox/contacts/util',
-    'io.ox/core/date',
     'io.ox/core/capabilities'
-], function (http, apiFactory, util, date, capabilities) {
+], function (http, apiFactory, util, capabilities) {
 
     'use strict';
 
@@ -27,7 +26,7 @@ define('io.ox/core/api/user', [
         //we have only one user
         if (response.id) {
             //convert birthdays with year 1 from julian to gregorian calendar
-            if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {
+            if (response.birthday && moment.utc(response.birthday).local(true).year() === 1) {
                 response.birthday = util.julianToGregorian(response.birthday);
             }
             return response;
@@ -36,7 +35,7 @@ define('io.ox/core/api/user', [
             //convert birthdays with year 1 from julian to gregorian calendar
             _(response).each(function (contact) {
                 //birthday without year
-                if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {
+                if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
                     contact.birthday = util.julianToGregorian(contact.birthday);
                 }
             });
@@ -102,7 +101,7 @@ define('io.ox/core/api/user', [
         } else {
             require(['io.ox/contacts/api'], function (contactsApi) {
                 //convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-                if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {
+                if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
                     o.data.birthday = util.gregorianToJulian(o.data.birthday);
                 }
                 return http.PUT({

@@ -582,12 +582,17 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.subscribe
         },
         {
+            id: 'divider-2',
+            index: 1450,
+            draw: divider
+        },
+        {
             id: 'customColor',
             index: 1500,
             draw: extensions.customColor
         },
         {
-            id: 'divider-2',
+            id: 'divider-3',
             index: 1600,
             draw: divider
         },
@@ -608,7 +613,7 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.zip
         },
         {
-            id: 'divider-3',
+            id: 'divider-4',
             index: 2400,
             draw: divider
         },
@@ -624,7 +629,7 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.properties
         },
         {
-            id: 'divider-4',
+            id: 'divider-5',
             index: 3300,
             draw: divider
         },

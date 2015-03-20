@@ -14,11 +14,10 @@
 define('io.ox/search/facets/extensions', [
     'io.ox/core/extensions',
     'settings!io.ox/core',
-    'io.ox/core/date',
     'io.ox/search/util',
     'gettext!io.ox/core',
     'io.ox/core/tk/datepicker'
-], function (ext, settings, dateAPI, util, gt) {
+], function (ext, settings, util, gt) {
 
     //var POINT = 'io.ox/search/facets';
 
@@ -437,10 +436,9 @@ define('io.ox/search/facets/extensions', [
 
             // predefined values
             data = value.options && value.options[0] ? value.options[0] : {};
-            from = data.from ? (new dateAPI.Local(data.from)).format(dateAPI.DATE) : undefined;
-            to = data.to ? (new dateAPI.Local(data.to)).format(dateAPI.DATE) : undefined;
+            from = data.from ? (moment(data.from)).format('l') : undefined;
+            to = data.to ? (moment(data.to)).format('l') : undefined;
             current = data.id || undefined;
-
             // data from inputs
             function getData () {
                 var nodes = group.find('input'),
@@ -454,9 +452,9 @@ define('io.ox/search/facets/extensions', [
 
                     if (value !== '') {
                         // standard date format
-                        value = (dateAPI.Local.parse(value, dateAPI.DATE));
+                        value = moment(value, 'l');
                         // use 23:59:59 for end date
-                        value = type === 'start' ? value : value.setHours(0,0,0,0).add(dateAPI.DAY-1);
+                        value = type === 'start' ? value : value.endOf('day');
                     } else {
                         // use wildcard
                         value = value !== '' ? value : WILDCARD;
@@ -502,16 +500,6 @@ define('io.ox/search/facets/extensions', [
                 }
             }
 
-            //i18n: just localize the picker, use en as default with current languages
-            $.fn.datepicker.dates.en = {
-                days: dateAPI.locale.days,
-                daysShort: dateAPI.locale.daysShort,
-                daysMin: dateAPI.locale.daysStandalone,
-                months: dateAPI.locale.months,
-                monthsShort: dateAPI.locale.monthsShort,
-                today: gt('Today')
-            };
-
             // used to handle overlow when datepicker is shown
             $('body>.datepicker-container').remove();
             $('body').append(
@@ -548,15 +536,9 @@ define('io.ox/search/facets/extensions', [
                                     getBlock(gt('Ends on'), 'start', to)
                                 )
                                 .datepicker({
-                                    format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
                                     parentEl: container,
-                                    weekStar: dateAPI.locale.weekStart,
                                     //orientation: 'top left auto',
-                                    autoclose: true,
-                                    clearBtn: false,
-                                    todayHighlight: true,
-                                    //insert date when clicked
-                                    todayBtn: 'linked'
+                                    clearBtn: false
                                 })
                                 .on('show', function (e) {
                                     // position container (workaround)

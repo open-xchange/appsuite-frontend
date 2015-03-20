@@ -17,24 +17,16 @@ define('io.ox/mail/vacationnotice/settings/filter', [
     'io.ox/mail/vacationnotice/settings/model',
     'io.ox/mail/vacationnotice/settings/view-form',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/date',
     'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
+], function (ext, api, mailfilterModel, ViewForm, dialogs, gt) {
 
     'use strict';
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/vacationnotice/model', api);
 
     function createDateDefaults(vacationData) {
-        var myDateStart = new date.Local(date.Local.utc(_.now())),
-            myDateEnd = new date.Local(date.Local.utc(_.now()));
-
-        myDateStart = myDateStart.addUTC(date.DAY);
-        myDateEnd = myDateEnd.addUTC(date.DAY + date.WEEK);
-
-        vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
-        vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
-
+        vacationData.dateFrom = moment().add(1, 'day').valueOf();
+        vacationData.dateUntil = moment(vacationData.dateFrom).add(1, 'week').valueOf();
         vacationData.activateTimeFrame = false;
     }
 

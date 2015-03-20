@@ -23,13 +23,12 @@ define('io.ox/calendar/freebusy/controller', [
     'io.ox/contacts/util',
     'io.ox/calendar/api',
     'io.ox/core/notifications',
-    'io.ox/core/date',
     'io.ox/calendar/view-detail',
     'gettext!io.ox/calendar/freebusy',
     'settings!io.ox/core',
     'less!io.ox/calendar/week/style',
     'less!io.ox/calendar/freebusy/style'
-], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
+], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
 
     'use strict';
 
@@ -57,7 +56,7 @@ define('io.ox/calendar/freebusy/controller', [
             if (options.baton && options.baton.app) {
                 refDate = options.baton.app.refDate;
             } else {
-                refDate = new date.Local(options.start_date || _.now());
+                refDate = moment(options.start_date || _.now());
             }
 
             // create container node

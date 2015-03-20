@@ -143,37 +143,21 @@ define('io.ox/core/settings/pane', [
     // Timezones
     (function () {
         var available = settingOptions.get('availableTimeZones'),
-            technicalNames = _(available).keys(),
-            userTZ = settings.get('timezone', 'UTC'),
-            sorted = {};
+            now = moment();
 
-        // Sort the technical names by the GMT offset
-        technicalNames.sort(function (a, b) {
-            var va = available[a],
-                vb = available[b],
-                diff = Number(va.substr(4, 3)) - Number(vb.substr(4, 3));
-            if (diff === 0 || _.isNaN(diff)) {
-                return (vb === va) ? 0 : (va < vb) ? -1 : 1;
-            } else {
-                return diff;
-            }
-        });
-
-        // filter double entries and sum up results in 'sorted' array
-        for (var i = 0; i < technicalNames.length; i++) {
-            var key = technicalNames[i],
-                key2 = technicalNames[i + 1];
-            if (key2 && available[key] === available[key2]) {
-                if (key2 === userTZ) {
-                    sorted[key2] = available[key2];
-                } else {
-                    sorted[key] = available[key];
-                }
-                i++;
-            } else {
-                sorted[key] = available[key];
-            }
-        }
+        var timezones = _(moment.tz._zones)
+            .chain()
+            .filter(function (tz) {
+                tz.displayName = moment.tz(tz.name).format('([GMT]Z) ') + tz.name;
+                return !!available[tz.name];
+            })
+            .sortBy(function (tz) {
+                return tz.offset(now) * -1;
+            })
+            .map(function (tz) {
+                return { label: tz.displayName, value: tz.name };
+            })
+            .value();
 
         point.extend({
             id: 'timezones',
@@ -188,7 +172,7 @@ define('io.ox/core/settings/pane', [
                     }).text(gt('Time zone')),
                     $('<div>').addClass('col-sm-4').append(
                         new miniViews.SelectView({
-                            list: _.map(sorted, function (key, val) { return { label: key, value: val }; }),
+                            list: timezones,
                             name: 'timezone',
                             model: this.baton.model,
                             id: guid,
@@ -368,17 +352,20 @@ define('io.ox/core/settings/pane', [
     // Auto open notification area
     (function () {
         if (settings.isConfigurable('autoOpenNotificationarea')) {
-            var options = [
-                    { label: gt('Never'), value: 'never' },
-                    { label: gt('On new notifications except mails'), value: 'noEmail' },
-                    { label: gt('On every new notification'), value: 'always' }
-                ];
-
             point.extend({
                 id: 'autoOpenNotification',
                 index: 700,
                 className: 'form-group',
                 render: function () {
+
+                    //change old settings values to new ones
+                    var value = this.baton.model.get('autoOpenNotification');
+                    if (value === 'always' || value === 'noEmail') {
+                        this.baton.model.set('autoOpenNotification', true);
+                    } else if (value === 'Never') {
+                        this.baton.model.set('autoOpenNotification', false);
+                    }
+
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
                         $('<label>').attr({
@@ -386,12 +373,10 @@ define('io.ox/core/settings/pane', [
                             for: guid
                         }).text(gt('Automatic opening of notification area')),
                         $('<div>').addClass('col-sm-4').append(
-                            new miniViews.SelectView({
-                                list: options,
+                            new miniViews.CheckboxView({
                                 name: 'autoOpenNotification',
                                 model: this.baton.model,
-                                id: guid,
-                                className: 'form-control'
+                                id: guid
                             }).render().$el
                         )
                     );

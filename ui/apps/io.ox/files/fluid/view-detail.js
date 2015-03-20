@@ -16,7 +16,6 @@ define('io.ox/files/fluid/view-detail', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
-    'io.ox/core/date',
     'io.ox/files/actions',
     'io.ox/files/api',
     'io.ox/preview/main',
@@ -26,7 +25,7 @@ define('io.ox/files/fluid/view-detail', [
     'gettext!io.ox/files',
     'io.ox/files/util',
     'less!io.ox/files/style'
-], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, getBreadcrumb, attachments, gt, util) {
+], function (ext, links, actionPerformer, actions, filesAPI, preview, userAPI, getBreadcrumb, attachments, gt, util) {
 
     'use strict';
 
@@ -442,8 +441,8 @@ define('io.ox/files/fluid/view-detail', [
         id: 'last_modified',
         index: 30,
         draw: function (baton) {
-            var d = new date.Local(baton.data.last_modified);
-            this.find('td:last').append($('<span class="pull-right last_modified">').text(gt.noI18n(d.format(date.DATE_TIME))));
+            var d = moment(baton.data.last_modified);
+            this.find('td:last').append($('<span class="pull-right last_modified">').text(gt.noI18n(d.format('l LT'))));
         }
     });
 

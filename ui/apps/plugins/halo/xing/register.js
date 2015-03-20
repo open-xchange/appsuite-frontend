@@ -20,13 +20,9 @@ define('plugins/halo/xing/register', [
     'io.ox/core/extensions',
     'plugins/portal/xing/actions',
     'plugins/portal/xing/activities',
-    'io.ox/xing/api',
-    'io.ox/core/api/user',
-    'io.ox/contacts/api',
-    'io.ox/core/date',
     'gettext!plugins/portal',
     'less!plugins/portal/xing/xing'
-], function (ext, eventActions, activityParsers, api, userApi, contactApi, date, gt) {
+], function (ext, eventActions, activityParsers, gt) {
 
     'use strict';
 
@@ -139,12 +135,12 @@ define('plugins/halo/xing/register', [
 
         if (contact.birth_date && !isEmpty(contact.birth_date)) {
             var b = contact.birth_date,
-                birthday = new date.UTC(b.year, b.month, b.day, 0, 0);
+                birthday = moment({ year: b.year, month: b.month, day: b.day });
 
             node.append(
                 $('<div>').addClass('birthdate extended-profile-block').append(
                     $('<legend>').addClass('header').text(gt('Date of birth')),
-                    $('<p>').text(birthday.format(date.DATE))
+                    $('<p>').text(birthday.format('l'))
                 )
             );
         }
@@ -205,7 +201,6 @@ define('plugins/halo/xing/register', [
         },
 
         draw: function (baton) {
-
             var node = this,
                 def = $.Deferred(),
                 data = baton.data.values ? baton.data.values[0] : baton.data,

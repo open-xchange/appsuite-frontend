@@ -14,7 +14,6 @@
 define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
     'io.ox/calendar/api',
-    'io.ox/core/date',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
@@ -23,7 +22,7 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/folder/api',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (View, api, date, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -31,20 +30,20 @@ define('io.ox/calendar/month/perspective', [
 
     _.extend(perspective, {
 
-        scaffold: $(),      // perspective
-        pane: $(),          // scrollpane
-        monthInfo: $(),     //
-        tops: {},           // scrollTop positions of the shown weeks
-        firstWeek: 0,       // timestamp of the first week
-        lastWeek: 0,        // timestamp of the last week
-        updateLoad: 8,      // amount of weeks to be loaded on scroll events
-        initLoad: 2,        // amount of initial called updates
-        scrollOffset: _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
-        collections: {},    // all week collections of appointments
-        current: null,      // current month as date object
-        folder: null,
-        app: null,          // the current application
-        dialog: $(),        // sidepopup
+        scaffold:       $(),    // perspective
+        pane:           $(),    // scrollpane
+        monthInfo:      $(),    //
+        tops:           {},     // scrollTop positions of the shown weeks
+        firstWeek:      0,      // moment of the first week
+        lastWeek:       0,      // moment of the last week
+        updateLoad:     8,      // amount of weeks to be loaded on scroll events
+        initLoad:       2,      // amount of initial called updates
+        scrollOffset:   _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
+        collections:    {},     // all week collections of appointments
+        current:        null,   // current month as date object
+        folder:         null,
+        app:            null,   // the current application
+        dialog:         $(),    // sidepopup
 
         /**
          * open sidepopup to show appointment
@@ -72,14 +71,11 @@ define('io.ox/calendar/month/perspective', [
          * @param  {Event}  e        given event
          * @param  {number} startTS  timestamp of the day
          */
-        createAppointment: function (e, startTS) {
+        createAppointment: function (e, start) {
             // add current time to start timestamp
-            var now = new date.Local(),
-                offset = 30 * date.MINUTE;
-            startTS += Math.ceil((now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE) / offset) * offset;
-
+            start = moment(start).add(Math.ceil((moment().hours() * 60 + moment().minutes()) / 30) * 30, 'minutes');
             ext.point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, { app: this.app }, { start_date: startTS, end_date: startTS + date.HOUR });
+                .invoke('action', this, { app: this.app }, { start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() });
         },
 
         /**
@@ -107,25 +103,26 @@ define('io.ox/calendar/month/perspective', [
             var apiUpdate = function (obj) {
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog({
+                        var dialog = new dialogs.ModalDialog({
                             top: '20%',
                             center: false,
                             container: self.main
-                        })
-                        .append(conflictView.drawList(con.conflicts))
-                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                        .show()
-                        .done(function (action) {
-                            if (action === 'cancel') {
-                                self.update();
-                                return;
-                            }
-                            if (action === 'ignore') {
-                                obj.ignore_conflicts = true;
-                                apiUpdate(obj);
-                            }
                         });
+
+                        dialog.append(conflictView.drawList(con.conflicts, dialog))
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
+                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    self.update();
+                                    return;
+                                }
+                                if (action === 'ignore') {
+                                    obj.ignore_conflicts = true;
+                                    apiUpdate(obj);
+                                }
+                            });
                     }
                 });
             };
@@ -148,29 +145,37 @@ define('io.ox/calendar/month/perspective', [
             }
         },
 
-        updateWeeks: function (obj, useCache) {
+        updateWeeks: function (opt, useCache) {
             // fetch appointments
-            var self = this;
-            obj = $.extend({
-                weeks: this.updateLoad
-            }, obj);
+            var self = this,
+                weeks = opt.weeks || this.updateLoad,
+                apiData = {
+                    start: opt.start,
+                    end: moment(opt.start).add(weeks, 'weeks').valueOf()
+                };
             // do folder magic
             if (this.folder.id !== 'virtual/all-my-appointments') {
-                obj.folder = this.folder.id;
+                apiData.folder = this.folder.id;
             }
-            obj.end = obj.start + obj.weeks * date.WEEK;
-            return api.getAll(obj, useCache).done(function (list) {
+
+            return api.getAll(apiData, useCache).done(function (list) {
                 // update single week view collections
-                var start = obj.start;
-                for (var i = 1; i <= obj.weeks; i++) {
-                    var end = start + date.WEEK,
+                var start = opt.start;
+                for (var i = 1; i <= weeks; i++) {
+                    var end = moment(start).add(1, 'week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
                         var retList = [];
                         if (list.length > 0) {
                             for (var j = 0; j < list.length; j++) {
-                                var mod = list[j];
-                                if ((mod.start_date > start && mod.start_date < end) || (mod.end_date > start && mod.end_date < end) || (mod.start_date < start && mod.end_date > end)) {
+                                var mod = list[j],
+                                    tmpStart = mod.start_date,
+                                    tmpEnd = mod.end_date;
+                                if (mod.full_time) {
+                                    tmpStart = moment.utc(tmpStart).local(true).valueOf();
+                                    tmpEnd = moment.utc(tmpEnd).local(true).valueOf();
+                                }
+                                if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
                                     var m = new Backbone.Model(mod);
                                     m.id = _.cid(mod);
                                     retList.push(m);
@@ -179,38 +184,36 @@ define('io.ox/calendar/month/perspective', [
                         }
                         collection.reset(retList);
                     }
-                    start += date.WEEK;
+                    start = moment(start).add(1, 'week').valueOf();
                     collection = null;
                 }
             });
         },
 
         drawWeeks: function (opt) {
-            var param = $.extend({
+            var self = this,
+                param = $.extend({
                     up: false,
                     multi: 1
                 }, opt),
-                self = this,
                 views = [],
                 weeks = param.multi * self.updateLoad,
-                day = param.up ? self.firstWeek -= (weeks) * date.WEEK : self.lastWeek,
-                start = day;
+                curWeek = param.up ? self.firstWeek.subtract(weeks, 'weeks').clone() : self.lastWeek.clone(),
+                start = curWeek.valueOf();
 
             function createView(options) {
-                var view = new View(options);
-
-                view.on('showAppointment', self.showAppointment, self)
+                return new View(options)
+                    .on('showAppointment', self.showAppointment, self)
                     .on('createAppoinment', self.createAppointment, self)
                     .on('openEditAppointment', self.openEditAppointment, self)
                     .on('updateAppointment', self.updateAppointment, self);
-
-                return view;
             }
+
             // draw all weeks
-            for (var i = 1; i <= weeks; i++, day += date.WEEK) {
-                var startDate = new date.Local(day + date.DAY).setStartOfWeek(),
-                    endDate = new date.Local(day + date.DAY + date.WEEK).setStartOfWeek(),
-                    monthDelimiter = startDate.getDate() > endDate.getDate();
+            for (var i = 1; i <= weeks; i++, curWeek.add(1, 'week')) {
+                var day = curWeek.valueOf(),
+                    endDate = moment(curWeek).add(1, 'week'),
+                    monthDelimiter = curWeek.date() > endDate.date();
 
                 // add collection for week
                 self.collections[day] = new Backbone.Collection([]);
@@ -228,10 +231,10 @@ define('io.ox/calendar/month/perspective', [
                 // seperate last days if month before and first days of next month
                 if (monthDelimiter) {
                     // add an
-                    views.push($('<div class="week month-name">').attr('id', endDate.getYear() + '-' + endDate.getMonth()).append($('<div>').text(gt.noI18n(endDate.format('MMMM y')))));
+                    views.push($('<div class="week month-name">').attr('id', endDate.year() + '-' + endDate.month()).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
                     view.$el.addClass('no-border');
 
-                    if (endDate.getDate() != 1) {
+                    if (endDate.date() != 1) {
                         views.push(createView({
                             collection: self.collections[day],
                             day: day,
@@ -244,21 +247,22 @@ define('io.ox/calendar/month/perspective', [
                 }
             }
 
-            if (!param.up) {
-                self.lastWeek += date.WEEK * weeks;
-            }
-
             // add and render view
             if (param.up) {
                 var firstWeek = $('.week:first', this.pane),
                     curOffset = firstWeek.offset().top - this.scrollTop();
                 this.pane.prepend(views).scrollTop(firstWeek.offset().top - curOffset);
             } else {
+                this.lastWeek.add(weeks, 'weeks');
                 this.pane.append(views);
             }
+
             // update first positions
             self.getFirsts();
-            this.updateWeeks({ start: start, weeks: weeks });
+            this.updateWeeks({
+                start: start,
+                weeks: weeks
+            });
             return $.when();
         },
 
@@ -279,14 +283,17 @@ define('io.ox/calendar/month/perspective', [
         },
 
         update: function (useCache) {
-            var today = new date.Local(),
-                day = $('#' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate(), this.pane);
+            var day = $('#' + moment().format('YYYY-M-D'), this.pane);
+
             if (!day.hasClass('today')) {
                 $('.day.today', this.pane).removeClass('today');
                 day.addClass('today');
             }
-            var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
-            this.updateWeeks({ start: this.firstWeek, weeks: weeks }, useCache);
+
+            this.updateWeeks({
+                start: this.firstWeek.valueOf(),
+                weeks: this.lastWeek.diff(this.firstWeek, 'week')
+            }, useCache);
 
             if (this.folderModel) {
                 this.folderModel.off('change:meta', this.updateColor);
@@ -331,20 +338,20 @@ define('io.ox/calendar/month/perspective', [
         gotoMonth: function (target) {
             var self = this;
 
-            target = target || self.app.refDate || new date.Local();
+            target = target || self.app.refDate || moment();
 
             if (typeof target === 'string') {
                 if (target === 'today') {
-                    target = new date.Local();
+                    target = moment();
                 } else if (target === 'prev') {
-                    target = new date.Local(self.previous);
+                    target = moment(self.previous);
                 } else {
-                    target = new date.Local(self.current).addMonths(1);
+                    target = moment(self.current).add(1, 'month');
                 }
             }
 
-            var firstDay = $('#' + target.getYear() + '-' + target.getMonth(), self.pane),
-                nextFirstDay = $('#' + target.getYear() + '-' + (target.getMonth() + 1), self.pane),
+            var firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
+                nextFirstDay = $('#' + target.year() + '-' + (target.month() + 1), self.pane),
                 scrollToDate = function () {
                     // scroll to position
                     if (firstDay.length === 0) return;
@@ -354,14 +361,14 @@ define('io.ox/calendar/month/perspective', [
             if (firstDay.length > 0 && nextFirstDay.length > 0) {
                 scrollToDate();
             } else {
-                if (target.getTime() < self.current.getTime()) {
+                if (target.valueOf() < self.current.valueOf()) {
                     this.drawWeeks({ up: true }).done(function () {
-                        firstDay = $('#' + target.getYear() + '-' + target.getMonth(), self.pane);
+                        firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
                         scrollToDate();
                     });
                 } else {
                     this.drawWeeks().done(function () {
-                        firstDay = $('#' + target.getYear() + '-' + target.getMonth(), self.pane);
+                        firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
                         scrollToDate();
                     });
                 }
@@ -396,23 +403,20 @@ define('io.ox/calendar/month/perspective', [
          * print current month
          */
         print: function () {
-            var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
-                data = null,
-                win,
-                self = this;
-            if (self.folder.id || self.folder.folder) {
-                data = { folder_id: self.folder.id || self.folder.folder };
+            var win, data = null;
+            if (this.folder.id || this.folder.folder) {
+                data = { folder_id: this.folder.id || this.folder.folder };
             }
             win = print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
-                start: self.current.local,
-                end: end.local
+                start: moment(this.current).utc(true).valueOf(),
+                end: moment(this.current).add(1, 'month').utc(true).valueOf()
             });
             // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
             if (_.browser.firefox) {
                 var limit = 50,
-                counter = 0,
-                interval;
+                    counter = 0,
+                    interval;
                 // onLoad does not work with firefox on mac, so ugly polling is used
                 interval = setInterval(function () {
                     counter++;
@@ -435,15 +439,12 @@ define('io.ox/calendar/month/perspective', [
 
         render: function (app) {
 
-            var start = app.refDate || new date.Local(),
-                year = start.getYear(),
-                month = start.getMonth(),
-                self = this;
-
+            var self = this;
             this.app = app;
-            this.previous = new date.Local(year, month - 1, 1);
-            this.current = new date.Local(year, month, 1);
-            this.lastWeek = this.firstWeek = new date.Local(year, month - 1, 1).setStartOfWeek().getTime();
+            this.current = moment(app.refDate || moment()).startOf('month');
+            this.previous = moment(this.current).subtract(1, 'month');
+            this.firstWeek = moment(this.previous).startOf('week');
+            this.lastWeek = this.firstWeek.clone();
 
             this.main
                 .addClass('month-view')
@@ -517,13 +518,13 @@ define('io.ox/calendar/month/perspective', [
                         month = this.tops[y].data('date');
                     }
 
-                    if (prevMonth != this.previous.getTime()) {
-                        this.previous.setTime(prevMonth);
+                    if (prevMonth != this.previous.valueOf()) {
+                        this.previous = moment(prevMonth);
                     }
 
-                    if (month !== this.current.getTime()) {
-                        this.current.setTime(month);
-                        self.app.refDate.setYear(this.current.getYear(), this.current.getMonth(), self.app.refDate.getDate());
+                    if (month !== this.current.valueOf()) {
+                        this.current = moment(month);
+                        self.app.refDate.year(this.current.year()).month(this.current.month());
                     }
                 }, this));
 
@@ -584,7 +585,7 @@ define('io.ox/calendar/month/perspective', [
 
         // called when an appointment detail-view opens the according appointment
         selectAppointment: function (obj) {
-            this.gotoMonth(new date.Local(obj.start_date));
+            this.gotoMonth(moment(obj.start_date));
         }
     });
 

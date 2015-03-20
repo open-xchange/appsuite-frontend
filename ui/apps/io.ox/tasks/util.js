@@ -11,10 +11,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/util', [
-    'io.ox/core/date',
-    'settings!io.ox/tasks',
     'gettext!io.ox/tasks'
-], function (date, settings, gt) {
+], function (gt) {
 
     'use strict';
 
@@ -39,87 +37,87 @@ define('io.ox/tasks/util', [
         util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
-                var alarmDate = new date.Local(),
+                var alarmDate = moment(),
                     endDate;
 
                 switch (value) {
                 // in 5 minutes
                 case '5':
-                    alarmDate.add(date.MINUTE * 5);
+                    alarmDate.add(5, 'minutes');
                     break;
                 // in 15 minutes
                 case '15':
-                    alarmDate.add(date.MINUTE * 15);
+                    alarmDate.add(15, 'minutes');
                     break;
                 // in 30 minutes
                 case '30':
-                    alarmDate.add(date.MINUTE * 30);
+                    alarmDate.add(30, 'minutes');
                     break;
                 // in 60 minutes
                 case '60':
-                    alarmDate.add(date.HOUR);
+                    alarmDate.add(1, 'hour');
                     break;
                 default:
-                    alarmDate.setMinutes(0, 0, 0);
+                    alarmDate.startOf('hour');
                     switch (value) {
                     // this morning
                     case 'd0':
-                        alarmDate.setHours(6);
+                        alarmDate.hours(6);
                         break;
                     // by noon
                     case 'd1':
-                        alarmDate.setHours(12);
+                        alarmDate.hours(12);
                         break;
                     // this afternoon
                     case 'd2':
-                        alarmDate.setHours(15);
+                        alarmDate.hours(15);
                         break;
                     // tonight
                     case 'd3':
-                        alarmDate.setHours(18);
+                        alarmDate.hours(18);
                         break;
                     // late in the evening
                     case 'd4':
-                        alarmDate.setHours(22);
+                        alarmDate.hours(22);
                         break;
                     default:
-                        alarmDate.setHours(6);
+                        alarmDate.hours(6);
                         switch (value) {
                         // tomorrow
                         case 't':
-                            alarmDate.add(date.DAY);
+                            alarmDate.add(1, 'day');
                             break;
                         // next week
                         case 'ww':
-                            alarmDate.add(date.WEEK);
+                            alarmDate.add(1, 'week');
                             break;
                         // next Sunday
                         case 'w0':
-                            alarmDate.add(date.DAY * (7 - alarmDate.getDay()));
+                            alarmDate.day(7);
                             break;
                         // next Monday
                         case 'w1':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 6) % 7)));
+                            alarmDate.day(8);
                             break;
                         // next Tuesday
                         case 'w2':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 5) % 7)));
+                            alarmDate.day(9);
                             break;
                         // next Wednesday
                         case 'w3':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 4) % 7)));
+                            alarmDate.day(10);
                             break;
                         // next Thursday
                         case 'w4':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 3) % 7)));
+                            alarmDate.day(11);
                             break;
                         // next Friday
                         case 'w5':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 2) % 7)));
+                            alarmDate.day(12);
                             break;
                         // next Saturday
                         case 'w6':
-                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 1) % 7)));
+                            alarmDate.day(13);
                             break;
                         default:
                             //cannot identify selector...set time now
@@ -131,33 +129,28 @@ define('io.ox/tasks/util', [
                 }
 
                 // set endDate
-                endDate = new date.Local(alarmDate.getTime());
+                endDate = moment(alarmDate);
 
                 if (smartEndDate) {
                     // 0 for Sunday to 6 for Saturday
-                    var weekDay = endDate.getDay();
-                    // if weekend, shift to next Monday
-                    if (weekDay < 1 || weekDay > 5) {
-                        endDate.add(date.DAY * (7 - ((endDate.getDay() + 6) % 7)));
-                    // next Friday
-                    } else {
-                        endDate.add(date.DAY * (7 - ((endDate.getDay() + 2) % 7)));
-                    }
+                    var weekDay = endDate.day();
+                    // if weekend, shift to next Monday, otherwise to Friday
+                    endDate.day(weekDay < 1 || weekDay > 5 ? 8 : 12);
                 }
 
                 // endDate should not be before alarmDate
-                if (alarmDate.getTime() > endDate.getTime()) {
-                    endDate.add(date.WEEK);
+                if (alarmDate.valueOf() > endDate.valueOf()) {
+                    endDate.add(1, 'week');
                 }
 
                 // end Date does not have a time
-                endDate.setHours(0, 0, 0, 0);
+                endDate.startOf('day');
 
                 return {
                     // UTC
-                    endDate: endDate.local,
+                    endDate: endDate.utc(true).valueOf(),
                     // Localtime
-                    alarmDate: alarmDate.getTime()
+                    alarmDate: alarmDate.valueOf()
                 };
             },
 
@@ -186,8 +179,8 @@ define('io.ox/tasks/util', [
             buildOptionArray: function (o) {
                 o = o || {};
                 var result = [],
-                    now = new date.Local(),
-                    i = now.getHours();
+                    now = moment(),
+                    i = now.hours();
 
                 if (!o.daysOnly) {
                     result = [
@@ -218,7 +211,7 @@ define('io.ox/tasks/util', [
                 // tomorrow
                 result.push(['t', gt('tomorrow')]);
 
-                for (i = (now.getDay() + 2) % 7;i !== now.getDay(); i = ++i % 7) {
+                for (i = (now.day() + 2) % 7;i !== now.day(); i = ++i % 7) {
                     result.push(['w' + i, lookupWeekdayStrings[i]]);
                 }
 
@@ -270,23 +263,25 @@ define('io.ox/tasks/util', [
 
                 if (task.end_date !== undefined && task.end_date !== null) {
                     // convert UTC timestamp to local time
-                    task.end_date = new date.Local(date.Local.utc(task.end_date)).format(date.DATE);
+                    task.end_date = moment.utc(task.end_date).local(true).format('l');
+
                 } else {
                     task.end_date = '';
                 }
 
                 if (options.detail) {
                     if (task.start_date !== undefined && task.start_date !== null) {
-                        task.start_date = new date.Local(date.Local.utc(task.start_date)).format(date.DATE);
+                        task.start_date = moment.utc(task.start_date).local(true).format('l');
+
                     } else {
                         task.start_date = '';
                     }
                     if (task.date_completed) {
-                        task.date_completed = new date.Local(task.date_completed).format();
+                        task.date_completed = moment(task.date_completed).format('l LT');
                     }
 
                     if (task.alarm !== undefined && task.alarm !== null) {
-                        task.alarm = new date.Local(task.alarm).format();
+                        task.alarm = moment(task.alarm).format('l LT');
                     } else {
                         task.alarm = '';
                     }

@@ -15,11 +15,10 @@ define('io.ox/tasks/edit/view', [
     'gettext!io.ox/tasks/edit',
     'io.ox/tasks/edit/view-template',
     'io.ox/tasks/model',
-    'io.ox/core/date',
     'io.ox/core/extensions',
     'io.ox/backbone/views',
     'io.ox/core/capabilities'
-], function (gt, template, model, date, ext, views, capabilities) {
+], function (gt, template, model, ext, views, capabilities) {
 
     'use strict';
 
@@ -39,13 +38,13 @@ define('io.ox/tasks/edit/view', [
                 if (value) {
                     if (!(model.get('start_date')) && model.get('start_date') !== 0) {
                         if (model.get('end_date') !== undefined && model.get('end_date') !== null) {
-                            model.set('start_date',  model.get('end_date') - date.DAY, { validate: true });
+                            model.set('start_date',  moment(model.get('end_date')).subtract(1, 'day').valueOf(), { validate: true });
                         } else {
                             model.set('start_date', _.now(), { validate: true });
                         }
                     }
                     if (!(model.get('end_date')) && model.get('end_date') !== 0) {
-                        model.set('end_date', model.get('start_date') + date.DAY, { validate: true });
+                        model.set('end_date', moment(model.get('start_date')).add(1, 'day').valueOf(), { validate: true });
                     }
                 }
             });

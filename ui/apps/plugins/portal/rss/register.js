@@ -19,10 +19,9 @@ define('plugins/portal/rss/register', [
     'io.ox/messaging/messages/api',
     'io.ox/keychain/api',
     'io.ox/rss/api',
-    'io.ox/core/date',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/portal'
-], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
+], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, dialogs, gt) {
 
     'use strict';
 
@@ -93,9 +92,7 @@ define('plugins/portal/rss/register', [
         draw: (function () {
 
             function drawItem(item) {
-
-                var publishedDate = new date.Local(item.date).format(date.DATE),
-                    $body = $('<div class="text-body noI18n">').html(item.body);
+                var $body = $('<div class="text-body noI18n">').html(item.body);
 
                 // replace img tags with empty src
                 $body.find('img[src=""]').replaceWith(gt('show image'));
@@ -108,7 +105,7 @@ define('plugins/portal/rss/register', [
                         $('<h4>').text(_.noI18n(item.subject)),
                         $body,
                         $('<div class="rss-url">').append(
-                            $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
+                            $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + moment(item.date).format('l')))
                         )
                     )
                 );

@@ -16,7 +16,8 @@ define('io.ox/core/boot/load', [
     'io.ox/core/boot/util',
     'io.ox/core/http',
     'settings!io.ox/core',
-    'settings!io.ox/mail'
+    'settings!io.ox/mail',
+    'io.ox/core/moment'
 ], function (themes, util, http, coreSettings, mailSettings) {
 
     'use strict';

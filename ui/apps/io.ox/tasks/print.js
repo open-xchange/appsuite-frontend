@@ -17,16 +17,15 @@ define('io.ox/tasks/print', [
     'io.ox/tasks/api',
     'io.ox/tasks/util',
     'io.ox/calendar/util',
-    'io.ox/core/date',
     'gettext!io.ox/tasks'
-], function (print, calendarPrint, api, util, calendarUtil, date, gt) {
+], function (print, calendarPrint, api, util, calendarUtil, gt) {
 
     'use strict';
 
     function getDate(data, prop, format) {
         var t = data[prop];
         // setting right format and timezone
-        return _.isNumber(t) ? new date.Local(t).format(format) : '';
+        return _.isNumber(t) ? moment(t).format(format) : '';
     }
 
     var states = { 1: gt('Not started'), 2: gt('In progress'), 3: gt('Done'), 4: gt('Waiting'), 5: gt('Deferred') },
@@ -54,8 +53,8 @@ define('io.ox/tasks/print', [
             return _.extend(unified, {
                 original: data,
                 subject: data.title,
-                start: getDate(data, 'start_date', date.DATE),
-                due: getDate(data, 'end_date', date.DATE),
+                start: getDate(data, 'start_date', 'l'),
+                due: getDate(data, 'end_date', 'l'),
                 recurrence: calendarUtil.getRecurrenceString(data),
                 state: getState(data),
                 content: $.trim(data.note),
@@ -68,8 +67,8 @@ define('io.ox/tasks/print', [
                 trip_meter: data.trip_meter,
                 billing_information: data.billing_information,
                 companies: data.companies,
-                date_completed: getDate(data, 'date_completed', date.DATETIME),
-                alarm: getDate(data, 'alarm', date.DATETIME)
+                date_completed: getDate(data, 'date_completed', 'l LT'),
+                alarm: getDate(data, 'alarm', 'l LT')
             });
         });
     }
