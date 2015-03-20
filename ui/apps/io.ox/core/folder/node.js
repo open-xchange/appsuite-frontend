@@ -372,7 +372,8 @@ define('io.ox/core/folder/node', [
             if (!this.isVirtual) api.get(o.model_id);
 
             // fetch subfolders if not open but "empty" is false
-            if (o.empty === false && o.open === false) this.reset();
+            // or if it's a virtual folder and we're not sure if it has subfolders
+            if ((o.empty === false && o.open === false) || this.isVirtual) this.reset();
 
             // run through some custom callbacks
             var data = this.model.toJSON(), baton = ext.Baton({ view: this, data: data });
