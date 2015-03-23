@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-09 23:33+0900\n"
-"Last-Translator: Sandrine <sandrine@bureau-cornavin.fr>\n"
+"PO-Revision-Date: 2015-03-09 12:19+0100\n"
+"Last-Translator: \n"
 "Language-Team: French <>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -1455,8 +1455,7 @@ msgstr "Cliquez ici pour quitter le centre d'aide"
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
-"Cliquez ici pour vous reconnecter à votre compte Xing et voir "
-"les activités."
+"Cliquez ici pour vous reconnecter à votre compte Xing et voir les activités."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -6602,7 +6601,7 @@ msgid ""
 msgstr ""
 "Le rendez-vous se répète <a href=\"#\" data-widget=\"number\" data-attribute="
 "\"interval\">toutes les <span class=\"number-control\">2</span> semaines</a> "
-"le <a href=\"#\" data-widget=\"custom\" data-attribute=\"days\">lundi</a>. "
+"le <a href=\"#\" data-widget=\"days\" data-attribute=\"days\">lundi</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:504
 #: module:io.ox/calendar/edit/main
@@ -6832,7 +6831,7 @@ msgid ""
 msgstr ""
 "La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">s'arrête</a> le <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"custom\">11/03/2013</a>."
+"\"datePicker\">11/03/2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:732
 #: module:io.ox/calendar/edit/main

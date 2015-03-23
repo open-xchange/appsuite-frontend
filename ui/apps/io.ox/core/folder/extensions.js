@@ -219,6 +219,10 @@ define('io.ox/core/folder/extensions',
             draw: extensions.standardFolders
         },
         {
+            id: 'local-folders',
+            draw: extensions.localFolders
+        },
+        {
             id: 'other',
             draw: extensions.otherFolders
         },

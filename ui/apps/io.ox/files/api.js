@@ -22,9 +22,10 @@ define('io.ox/files/api',
      'io.ox/core/cache',
      'io.ox/core/date',
      'io.ox/files/mediasupport',
+     'settings!io.ox/files',
      'gettext!io.ox/files',
      'io.ox/filter/files'
-    ], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
+    ], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, settings, gt) {
 
     'use strict';
 
@@ -986,32 +987,20 @@ define('io.ox/files/api',
         return lockToggle(list, 'lock');
     };
 
-    /**
-     * deletes all files from a specific folder
-     * @param  {string} folder_id
-     * @fires  api#refresh.all
-     * @return {deferred}
-     */
-    api.clear = function (folder_id) {
-        // new clear
-        return http.PUT({
-            module: 'folders',
-            appendColumns: false,
-            params: {
-                action: 'clear',
-                tree: '1'
-            },
-            data: [folder_id]
-        })
-        .then(function () {
-            return api.caches.all.grepRemove(folder_id + api.DELIM);
-        })
-        .done(function () {
-            folderAPI.reload(folder_id);
-            folderAPI.refresh();
-            api.trigger('refresh.all');
-        });
-    };
+    //
+    // Respond to folder API
+    //
+    folderAPI.on({
+        'clear': function (e, id) {
+            api.caches.all.grepRemove(id + api.DELIM).done(function () {
+                api.trigger('refresh.all');
+            });
+        },
+        'remove:infostore': function (e, id) {
+            var id = settings.get('folder/trash');
+            if (id) folderAPI.list(id, { cache: false });
+        }
+    });
 
     //
     // Download zipped content of a folder
