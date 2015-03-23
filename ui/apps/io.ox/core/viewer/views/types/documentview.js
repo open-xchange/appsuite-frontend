@@ -61,7 +61,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          * Loads a document (Office, PDF) with the PDF.js library.
          */
         load: function () {
-            // ignore slide duplicates and already loaded documents
+            // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 return;
             }
@@ -142,6 +142,14 @@ define('io.ox/core/viewer/views/types/documentview', [
                 });
                 // set callbacks at this.pdfView to start rendering
                 this.pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
+                pageContainer.idle();
+            }
+
+            /**
+             * Actions which always have to be done after pdf document loading process
+             */
+            function pdfDocumentLoadFinished() {
+                pageContainer.idle();
             }
 
             /**
@@ -154,9 +162,13 @@ define('io.ox/core/viewer/views/types/documentview', [
             // create the PDF document model
             this.pdfDocument = new PDFDocument(documentUrl);
 
-            // wait for PDF document to finish loading
-            $.when(this.pdfDocument.getLoadPromise()).then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError);
+            // display loading animation
+            pageContainer.busy();
 
+            // wait for PDF document to finish loading
+            $.when(this.pdfDocument.getLoadPromise())
+                .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError)
+                .always(pdfDocumentLoadFinished);
         },
 
         /**
