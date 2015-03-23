@@ -278,6 +278,15 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var resizeEditor = _.debounce(function () {
             if (el === null) return;
 
+            // TODO: Cleanup resize handling for tinyMCE
+            // This is a hack for the mobileapp
+            if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
+                var composeFieldsHeight = el.parent().find('.mail-compose-fields').height(),
+                    containerHeight = el.parent().parent().height();
+                el.css('min-height', containerHeight - composeFieldsHeight - 30);
+                return;
+            }
+
             var h = $(window).height(),
                 top = el.offset().top;
 
