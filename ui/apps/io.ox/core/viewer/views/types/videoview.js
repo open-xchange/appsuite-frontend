@@ -13,6 +13,9 @@ define('io.ox/core/viewer/views/types/videoview',  [
     'io.ox/core/viewer/views/types/baseview',
     'gettext!io.ox/core'
 ], function (BaseView, gt) {
+
+    'use strict';
+
     /**
      * The video file type. Implements the ViewerType interface.
      *

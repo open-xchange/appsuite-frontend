@@ -16,6 +16,8 @@ define('io.ox/core/viewer/views/types/baseview', [
     'gettext!io.ox/core'
 ], function (DisposableView, Util,  gt) {
 
+    'use strict';
+
     /**
      * The base class for filetype views.
      */

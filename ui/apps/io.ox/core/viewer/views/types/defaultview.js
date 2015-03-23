@@ -14,6 +14,9 @@ define('io.ox/core/viewer/views/types/defaultview',  [
     'io.ox/core/viewer/views/types/baseview',
     'gettext!io.ox/core'
 ], function (BaseView, gt) {
+
+    'use strict';
+
     /**
      * Default file type for OX Viewer. Displays a generic file icon
      * and the file name. This type acts as a fallback in cases if the

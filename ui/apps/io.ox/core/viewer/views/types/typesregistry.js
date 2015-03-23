@@ -12,6 +12,8 @@
  */
 define('io.ox/core/viewer/views/types/typesregistry', function () {
 
+    'use strict';
+
     // a map of supported file types to their implementations
     var typesMap = {
             IMAGE: 'imageview',
