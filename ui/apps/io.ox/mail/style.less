@@ -12,7 +12,7 @@
  */
 
 // definitions
-@icon-size: 18px;
+@icon-size: 16px;
 @unread-toggle-width: 48px;
 
 // phone
@@ -361,9 +361,7 @@
 
     .fa-paperclip.has-attachments {
         font-size: @icon-size;
-        width: 18px;
-        height: 18px;
-        margin: 0 0 0 7px;
+        margin: 0 0 0 8px;
         float: right;
 
     }
@@ -394,16 +392,16 @@
     .box() {
         font-size: 12px;
         color: #777;
-        line-height: @item-line-height - 3;
+        line-height: 14px;
         padding: 0 4px;
-        margin: 0 0 0 8px;
+        margin: 2px 0 0 8px;
         display: inline-block;
         float: right;
         overflow: visible;
         text-align: center;
-        border: 1px solid rgba(0, 0, 0, 0.10);
+        border: 1px solid rgba(0, 0, 0, 0.15);
         .fontWeight(normal);
-        .border-radius(3px);
+        .border-radius(2px);
     }
 
     .account-name {
@@ -603,7 +601,7 @@
 .subject() {
     font-size: 20px;
     line-height: 24px;
-    padding: 20px @default-padding 12px @default-padding;
+    padding: 12px @default-padding 4px @default-padding;
     margin: 0;
     .fontWeight(300);
 }
@@ -629,7 +627,7 @@
 
         .summary {
 
-            color: #888;
+            color: #777;
             font-size: 13px;
             line-height: 20px;
             margin-top: 4px;
@@ -1032,6 +1030,7 @@ textarea.inplace-editor {
 
     .contact-picture {
         position: absolute;
+        top: @default-padding;
         left: @default-padding;
         .picture(@picture-width, @picture-width);
     }
@@ -1076,28 +1075,39 @@ textarea.inplace-editor {
     }
 
     blockquote {
+        color: #555;
         font-size: 13px;
-        border-left: 1px solid #08c;
-        padding: 7px 0 7px 20px;
-        margin: 10px 0;
+        border-left: 2px solid #ddd;
+        padding: 0 0 0 16px;
+        margin: 8px 0 8px 38px;
     }
 
-    @colorQuotedWidth: 1px;
+    blockquote blockquote {
+        border-color: #3C73AA;
+        margin: 8px 0;
+    }
 
-    .colorQuoted blockquote {
-        border-left: @colorQuotedWidth solid #08c;
+    .blockquote(@color) {
+        color: @color !important;
+        border-left: 2px solid @color;
+        a[href] { color: @color; }
+        a[href]:hover { color: darken(@color, 10%); }
     }
 
     .colorQuoted blockquote blockquote {
-        border-left: @colorQuotedWidth solid #EE0889;
+        .blockquote(#3C73AA);
     }
 
     .colorQuoted blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #08C4FF;
+        .blockquote(#DD0880);
     }
 
     .colorQuoted blockquote blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #aaa;
+        .blockquote(#8F09C7);
+    }
+
+    .colorQuoted blockquote blockquote blockquote blockquote blockquote {
+        .blockquote(#777);
     }
 
     blockquote p {
@@ -1140,8 +1150,9 @@ textarea.inplace-editor {
 
     .detail-view-header {
         .fontWeight(300);
-        padding: @default-padding @default-padding (@default-padding - 1) (@picture-padding + @default-padding);
-        //padding-left: @picture-padding + @default-padding + @unread-toggle-width;
+        line-height: 16px;
+        padding: (@default-padding + 3) @default-padding @default-padding (@picture-padding + @default-padding);
+        min-height: 71px;
     }
 
     &.expanded .detail-view-header {
@@ -1149,7 +1160,7 @@ textarea.inplace-editor {
     }
 
     &.no-padding .detail-view-header {
-        padding-left: @picture-padding;// + @unread-toggle-width;
+        padding-left: @picture-padding;
         padding-right: 0;
     }
 
@@ -1201,10 +1212,7 @@ textarea.inplace-editor {
 
     .content {
 
-        font-family: @normal-font-family;
-        .fontWeight(400);
-        font-size: 14px;
-        line-height: 20px;
+        font: normal e('13px/normal') @normal-font-family;
         // Max-width does not work here, see Bug #24505
         // max-width: 1000px;
         width: 100%;
@@ -1217,7 +1225,7 @@ textarea.inplace-editor {
 
         * {
             // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
-            line-height: 1.42857142857143em;
+            line-height: normal;
             box-sizing: content-box;
         }
 
@@ -1281,7 +1289,7 @@ textarea.inplace-editor {
 
         p {
             font-family: @normal-font-family;
-            margin: 0 0 14px 0;
+            margin: 0 0 1em 0;
         }
 
         small {
@@ -1299,7 +1307,7 @@ textarea.inplace-editor {
 
         ul {
             padding: 0;
-            margin: 10px 0 10px 25px;
+            margin: 1em 0 1em 24px;
         }
 
         ul { list-style-type: disc; }
@@ -1307,7 +1315,7 @@ textarea.inplace-editor {
         ul ul ul { list-style-type: square; }
 
         li {
-            line-height: 1.33333em;
+            line-height: normal;
             margin-bottom: 0.5em;
         }
 
@@ -1331,7 +1339,7 @@ textarea.inplace-editor {
             text-align: left;
         }
 
-        ul, ol { padding-left: 25px; }
+        ul, ol { padding-left: 16px; }
 
         // see Bug 24995 - Strange boxes shown for invitation mails
         .calendar-detail .label {
@@ -1351,8 +1359,8 @@ textarea.inplace-editor {
 
     .max-size-warning {
         color: #777;
-        margin: 10px -20px 0 -20px;
-        padding: 20px 20px 0 20px;
+        margin: 10px -16px 0 -16px;
+        padding: 16px 16px 0 16px;
         border-top: 1px solid #ddd;
     }
 }

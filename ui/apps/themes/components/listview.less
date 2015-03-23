@@ -51,7 +51,7 @@
             white-space: nowrap;
             i {
                 color: #ccc;
-                margin-right: 16px;
+                margin-right: 8px;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
@@ -217,6 +217,11 @@
 
     .list-item-row {
         clear: right;
+    }
+
+    .list-item-row + .list-item-row {
+        position: relative;
+        top: -4px;
     }
 
     & > .list-item:last-child {

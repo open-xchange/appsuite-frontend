@@ -357,7 +357,12 @@ define('io.ox/mail/detail/content', [
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         $('<i class="fa fa-ellipsis-h" tabindex="1">')
                         .attr('title', gt('Show quoted text')),
-                        $.txt(text)
+                        $.txt(
+                            text.replace(/<\s/g, '<')
+                                .replace(/\s>/g, '>')
+                                .replace(/("'\s?|\s?'")/g, '')
+                                .replace(/[-_]{3,}/g, '')
+                        )
                     )
                 );
             });
