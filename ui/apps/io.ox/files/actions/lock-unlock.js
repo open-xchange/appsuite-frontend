@@ -12,58 +12,42 @@
  */
 
 define('io.ox/files/actions/lock-unlock', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
 ], function (api, notifications, gt) {
 
     'use strict';
 
-    function getMessages (type) {
-        var plural = (type === 'multiple');
-        return {
-            lockSuccess: gt.ngettext(
-                'This file has been locked',
-                'These files have been locked',
-                plural
-            ),
-            lockFail: gt.ngettext(
-                'This file has not been locked',
-                'These files have not been locked',
-                plural
-            ),
-            unlockSuccess: gt.ngettext(
-                'This file has been unlocked',
-                'These files have been unlocked',
-                plural
-            ),
-            unlockFail: gt.ngettext(
-                'This file has not been unlocked',
-                'These files have not been unlocked',
-                plural
-            )
-        };
-    }
-
-    // store labels once
-    var single = getMessages('single'),
-        multiple = getMessages('multiple');
-
     return {
         lock: function (list) {
-            var messages = list.length ? single : multiple;
             api.lock(list).done(function () {
-                notifications.yell('success', messages.lockSuccess );
+                notifications.yell('success', gt.ngettext(
+                    'This file has been locked',
+                    'These files have been locked',
+                    list.length
+                ));
             }).fail(function () {
-                notifications.yell('error', messages.lockFail);
+                notifications.yell('error', gt.ngettext(
+                    'This file has not been locked',
+                    'These files have not been locked',
+                    list.length
+                ));
             });
         },
         unlock: function (list) {
-            var messages = list.length ? single : multiple;
             api.unlock(list).done(function () {
-                notifications.yell('success', messages.unlockSuccess);
+                notifications.yell('success', gt.ngettext(
+                    'This file has been unlocked',
+                    'These files have been unlocked',
+                    list.length
+                ));
             }).fail(function () {
-                notifications.yell('error', messages.unlockFail);
+                notifications.yell('error', gt.ngettext(
+                    'This file has not been unlocked',
+                    'These files have not been unlocked',
+                    list.length
+                ));
             });
         }
     };

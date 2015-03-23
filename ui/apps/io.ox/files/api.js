@@ -359,8 +359,10 @@ define('io.ox/files/api', [
         // pause http layer
         http.pause();
         // process all updates
-        _(list).map(function (o) {
-            return http.PUT({
+        list.map(function (m) {
+            return m.toJSON();
+        }).forEach(function (o) {
+            http.PUT({
                 module: 'files',
                 params: {
                     action: action,
@@ -375,9 +377,7 @@ define('io.ox/files/api', [
         });
 
         // resume & trigger refresh
-        return http.resume().done(function () {
-            api.collectionLoader.reload(list[0]);
-        });
+        return http.resume();
     };
 
     /**
@@ -386,14 +386,7 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.unlock = function (list) {
-        list = _.isArray(list) ? list : [list];
-        http.pause();
-        list.forEach(function (o) {
-            pool.propagate('change', _.extend({
-                locked_until: 0
-            }, o));
-        });
-        return http.resume();
+        return lockToggle(list, 'unlock');
     };
 
     /**

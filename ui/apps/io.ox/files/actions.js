@@ -209,9 +209,9 @@ define('io.ox/files/actions', [
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
-                action.lock(list);
+                action.lock(baton.models);
             });
         }
     });
@@ -226,9 +226,9 @@ define('io.ox/files/actions', [
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('lockedByMe', e);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
-                action.unlock(list);
+                action.unlock(baton.models);
             });
         }
     });

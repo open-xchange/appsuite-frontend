@@ -61,6 +61,7 @@ define('io.ox/files/actions/delete', [
     }
 
     return function (list) {
+        list = _.isArray(list) || [list];
         new dialogs.ModalDialog()
             .text(gt.ngettext(
                 'Do you really want to delete this file?',
