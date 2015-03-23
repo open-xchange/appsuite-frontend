@@ -157,46 +157,48 @@ define('io.ox/core/pdf/pdfview', [
         // ---------------------------------------------------------------------
 
         function intervalHandler() {
-            var curPageNumbersToRender = getVisiblePageNumbersHandler();
+            if (blockRenderCount < 1) {
+                var curPageNumbersToRender = getVisiblePageNumbersHandler();
 
-            if (_.isArray(curPageNumbersToRender) && (curPageNumbersToRender.length > 0)) {
-                curPageNumbersToRender = _.sortBy(curPageNumbersToRender);
+                if (_.isArray(curPageNumbersToRender) && (curPageNumbersToRender.length > 0)) {
+                    curPageNumbersToRender = _.sortBy(curPageNumbersToRender);
 
-                // determine complete range of pages to render (visible pages + 2 before + 2 after);
-                for (var i = 0; i < 2; ++i) {
-                    if (curPageNumbersToRender[0] > 1) {
-                        curPageNumbersToRender.unshift(curPageNumbersToRender[0] - 1);
-                    }
-
-                    if (curPageNumbersToRender[curPageNumbersToRender.length - 1] < pdfDocument.getPageCount()) {
-                        curPageNumbersToRender.push(curPageNumbersToRender[curPageNumbersToRender.length - 1] + 1);
-                    }
-                }
-
-                // fill/render all remaining, new page nodes
-                _.each(_.difference(curPageNumbersToRender, renderedPageNumbers), function (pageNumber) {
-                    var jqPageNode = getPageNodeHandler(pageNumber);
-
-                    if (jqPageNode) {
-                        if (jqPageNode.children().length === 0) {
-                            self.createPDFPageNode(jqPageNode, { pageZoom: self.getPageZoom(pageNumber) });
+                    // determine complete range of pages to render (visible pages + 2 before + 2 after);
+                    for (var i = 0; i < 2; ++i) {
+                        if (curPageNumbersToRender[0] > 1) {
+                            curPageNumbersToRender.unshift(curPageNumbersToRender[0] - 1);
                         }
 
-                        self.renderPDFPage(jqPageNode, pageNumber, self.getPageZoom(pageNumber));
-                        jqPageNode.css({ visibility: 'visible' });
+                        if (curPageNumbersToRender[curPageNumbersToRender.length - 1] < pdfDocument.getPageCount()) {
+                            curPageNumbersToRender.push(curPageNumbersToRender[curPageNumbersToRender.length - 1] + 1);
+                        }
                     }
-                });
 
-                // clear all page nodes, that are not visible anymore
-                _.each(_.difference(renderedPageNumbers, curPageNumbersToRender), function (pageNumber) {
-                    var jqPageNode = getPageNode(pageNumber);
+                    // fill/render all remaining, new page nodes
+                    _.each(_.difference(curPageNumbersToRender, renderedPageNumbers), function (pageNumber) {
+                        var jqPageNode = getPageNodeHandler(pageNumber);
 
-                    if (jqPageNode) {
-                        jqPageNode.css({ visibility: 'hidden' }).empty();
-                    }
-                });
+                        if (jqPageNode) {
+                            if (jqPageNode.children().length === 0) {
+                                self.createPDFPageNode(jqPageNode, { pageZoom: self.getPageZoom(pageNumber) });
+                            }
 
-                renderedPageNumbers = curPageNumbersToRender;
+                            self.renderPDFPage(jqPageNode, pageNumber, self.getPageZoom(pageNumber));
+                            jqPageNode.css({ visibility: 'visible' });
+                        }
+                    });
+
+                    // clear all page nodes, that are not visible anymore
+                    _.each(_.difference(renderedPageNumbers, curPageNumbersToRender), function (pageNumber) {
+                        var jqPageNode = getPageNode(pageNumber);
+
+                        if (jqPageNode) {
+                            jqPageNode.css({ visibility: 'hidden' }).empty();
+                        }
+                    });
+
+                    renderedPageNumbers = curPageNumbersToRender;
+                }
             }
         }
 
@@ -229,7 +231,29 @@ define('io.ox/core/pdf/pdfview', [
             getVisiblePageNumbersHandler = getPageNodeHandler = null;
         };
 
-        // methods ------------------------------------------------------------
+        /**
+         * There will be no rendering calls made/possible, if
+         * rendering callbacks are set and as long  as resumeRendering
+         * ultimately sets the internal semaphore back to 0.
+         * A suspend call needs to be followed by a resume call
+         * in standard use cases to reenable rendering again.
+         * Calling this function increases the internal semaphore by 1.
+         *
+         */
+        this.suspendRendering = function () {
+            ++blockRenderCount;
+        };
+
+        /**
+         * Rendering calls are made/possible again, if rendering
+         * callbacks are set and the internal semaphore reaches 0.
+         * A resume call needs to be preceded by a suspend call
+         * in standard use cases.
+         * Calling this function decreases the internal semaphore by 1.
+         */
+        this.resumeRendering = function () {
+            --blockRenderCount;
+        };
 
         /**
          * creates the necessary nodes to render a single PDF page
@@ -291,7 +315,7 @@ define('io.ox/core/pdf/pdfview', [
          */
         this.setPageZoom = function (pageZoom, pageNumber) {
             if (_.isNumber(pageZoom)) {
-                ++blockRenderCount;
+                this.suspendRendering();
 
                 if (!pageNumber) {
                     _.times(pdfDocument.getPageCount(), function (pageIndex) {
@@ -311,7 +335,7 @@ define('io.ox/core/pdf/pdfview', [
                     }
                 }
 
-                --blockRenderCount;
+                this.resumeRendering();
             }
         };
 
