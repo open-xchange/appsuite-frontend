@@ -16,6 +16,8 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/viewer/util'
 ], function (BaseView, PDFDocument, PDFView, Util) {
 
+    'use strict';
+
     /**
      * The image file type. Implements the ViewerType interface.
      *
@@ -32,6 +34,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             //console.warn('ImageView.initialize()');
             //The name of the document converter server module.
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
+            // amount of page side margins in pixels
+            this.PAGE_SIDE_MARGIN = 30;
             // the PDFView instance
             this.pdfView = null;
             // the PDFDocument instance
@@ -55,7 +59,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
         /**
          * Loads a document (Office, PDF) with the PDF.js library.
-         *
          */
         load: function () {
             // ignore slide duplicates and already loaded documents
@@ -125,21 +128,12 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  page count of the pdf document delivered by the PDF.js library.
              */
             function pdfDocumentLoadSuccess(pageCount) {
-                var pdfDocument = this.pdfDocument,
-                    defaultScale = (function () {
-                        var sideMargin = 30,
-                            maxWidth = window.innerWidth - (sideMargin * 2),
-                            pageDefaultSizeWidth = pdfDocument.getDefaultPageSize().width;
-                        if (maxWidth >= pageDefaultSizeWidth) {
-                            return 1;
-                        }
-                        return PDFView.round(maxWidth / pageDefaultSizeWidth, 1 / 100);
-                    })();
+                var pdfDocument = this.pdfDocument;
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument);
                 // set default scale/zoom, according to device's viewport width
-                this.pdfView.setPageZoom(defaultScale);
+                this.pdfView.setPageZoom(this.getDefaultScale());
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var jqPage = $('<div class="document-page">'),
@@ -166,8 +160,24 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Unloads an document slide by destroying the pdf view and model instances
+         * Calculates a default scale number for documents, taking
+         * current viewport width and the document's default size
+         * into account.
          *
+         * @returns {Number} scale
+         *  Document zoom scale in floating point number.
+         */
+        getDefaultScale: function () {
+            var maxWidth = window.innerWidth - (this.PAGE_SIDE_MARGIN * 2),
+                pageDefaultSizeWidth = this.pdfDocument.getDefaultPageSize().width;
+            if (maxWidth >= pageDefaultSizeWidth) {
+                return 1;
+            }
+            return PDFView.round(maxWidth / pageDefaultSizeWidth, 1 / 100);
+        },
+
+        /**
+         * Unloads an document slide by destroying the pdf view and model instances
          */
         unload: function () {
             //console.warn('DocumentType.unload()', this.pdfView, this.pdfDocument);
@@ -183,7 +193,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
         /**
          * Destructor function of this view.
-         *
          */
         disposeView: function () {
             //console.warn('DocumentView.disposeView()');
