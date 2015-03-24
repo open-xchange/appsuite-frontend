@@ -34,8 +34,14 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
             }
         },
 
+        isFolder = function (obj) {
+            return 'standard_folder' in obj || obj.folder_id === 'folder';
+        },
+
         getFolderId = function (obj) {
-            return obj ? obj.folder_id || obj.folder : undefined;
+            if (!_.isObject(obj)) return undefined;
+            if (isFolder(obj)) return obj.id;
+            return obj.folder_id || obj.folder;
         },
 
         // get properties of object collection (async)
@@ -47,14 +53,24 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                  * Property object
                  */
                 props = {
+                    // item permissions
                     'read': true,
                     'modify': true,
                     'delete': true,
                     'create': true,
+                    // folder permissions
+                    'create:folder': true,
+                    'rename:folder': true,
+                    'delete:folder': true,
+                    // quantity
                     'none': $l === 0,
                     'some': $l > 0,
                     'one': $l === 1,
-                    'multiple': $l > 1
+                    'multiple': $l > 1,
+                    // quality
+                    'items': false,
+                    'folders': false,
+                    'mixed': false
                 },
 
                 // get all folders first
@@ -68,16 +84,30 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
             if (folders.length === 0) {
                 props.unknown = true;
-                props.read = props.modify = props['delete'] = false;
-                return $.Deferred().resolve(props);
+                'read modify delete create:folder rename:folder delete:folder'.split(' ').forEach(function (id) {
+                    props[id] = false;
+                });
+                return $.when(props);
             }
 
             return api.multiple(folders).then(function (array) {
-                var i = 0, item = null, folder = null, hash = _.toHash(array, 'id');
+
+                var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false;
+
                 for (; i < $l; i++) {
+
                     item = collection[i];
-                    if ((folder = hash[getFolderId(item)])) {
+
+                    if (isFolder(item)) {
+
+                        folders = true;
+                        props['create:folder'] = props['create:folder'] && api.can('create:folder', item);
+                        props['rename:folder'] = props['rename:folder'] && api.can('rename:folder', item);
+                        props['delete:folder'] = props['delete:folder'] && api.can('delete:folder', item);
+
+                    } else if ((folder = hash[getFolderId(item)])) {
                         // get properties
+                        items = true;
                         // read
                         props.read = props.read && getRight(folder, item.created_by, 7);
                         // write
@@ -93,6 +123,25 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                         break;
                     }
                 }
+
+                if (!folders) {
+                    'create:folder rename:folder delete:folder'.split(' ').forEach(function (id) {
+                        props[id] = false;
+                    });
+                }
+
+                if (!items) {
+                    'create read modify delete'.split(' ').forEach(function (id) {
+                        props[id] = false;
+                    });
+                }
+
+                // items and folders are exclusive,
+                // so it's EITHER items OR folders OR mixed
+                props.items = items && !folders;
+                props.folders = folders && !items;
+                props.mixed = folders && items;
+
                 return props;
             });
         };
