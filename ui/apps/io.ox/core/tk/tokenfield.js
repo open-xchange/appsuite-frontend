@@ -15,12 +15,11 @@
 define('io.ox/core/tk/tokenfield', [
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
-    'io.ox/contacts/api',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (Typeahead, pModel, contactsAPI) {
+], function (Typeahead, pModel) {
 
     'use strict';
 
@@ -223,14 +222,7 @@ define('io.ox/core/tk/tokenfield', [
                             return title;
                         });
 
-                        // add contact picture
-                        $(e.relatedTarget).prepend(
-                            contactsAPI.pictureHalo(
-                                $('<div class="contact-image">'),
-                                model.toJSON(),
-                                { width: 16, height: 16, scaleType: 'contain' }
-                            )
-                        );
+                        self.options.drawToken.call(e.relatedTarget, model);
 
                         // init and render view for each token (if available)
                         if (!self.options.tokenview) return;

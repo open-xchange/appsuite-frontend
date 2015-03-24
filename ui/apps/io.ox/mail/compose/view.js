@@ -261,6 +261,15 @@ define('io.ox/mail/compose/view', [
         }
     });
 
+    /*
+     * extension point for a token
+     */
+    ext.point(POINT + '/token').extend({
+        id: 'token',
+        index: 100,
+        draw: extensions.tokenPicture
+    });
+
     var MailComposeView = Backbone.View.extend({
 
         className: 'io-ox-mail-compose container default-content-padding',

@@ -181,6 +181,17 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
+        tokenPicture: function (model) {
+            // add contact picture
+            $(this).prepend(
+                contactAPI.pictureHalo(
+                    $('<div class="contact-image">'),
+                    model.toJSON(),
+                    { width: 16, height: 16, scaleType: 'contain' }
+                )
+            );
+        },
+
         tokenfield: function (label) {
 
             var attr = String(label).toLowerCase();
@@ -190,6 +201,7 @@ define('io.ox/mail/compose/extensions', [
                     value = baton.model.get(attr) || [],
                     // display tokeninputfields if necessary
                     cls = 'row' + (attr === 'to' || value.length ? '' : ' hidden'),
+                    redrawLock = false,
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
@@ -201,9 +213,12 @@ define('io.ox/mail/compose/extensions', [
                             emailAutoComplete: true
                         },
                         maxResults: 20,
-                        draw: function (token) {
-                            baton.participantModel = token.model;
+                        drawAutocompleteItem: function (result) {
+                            baton.participantModel = result.model;
                             ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
+                        },
+                        drawToken: function (model) {
+                            ext.point(POINT + '/token').invoke('draw', this, model);
                         }
                     });
 
@@ -247,6 +262,7 @@ define('io.ox/mail/compose/extensions', [
 
                 // bind model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
+                    if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {
                         return {
                             type: 5,
@@ -268,7 +284,9 @@ define('io.ox/mail/compose/extensions', [
                         var token = model.get('token');
                         return [token.label, token.value];
                     });
-                    baton.model.set(attr, recipients, { silent: true });
+                    redrawLock = true;
+                    baton.model.set(attr, recipients);
+                    redrawLock = false;
                 });
             };
         },
