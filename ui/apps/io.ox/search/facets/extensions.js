@@ -89,7 +89,7 @@ define('io.ox/search/facets/extensions', [
                     // create facet node
                     node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                         // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                        button = $('<div class="facet-container">')
+                        button = $('<div class="facet-container btn">')
                         .on('click', function (e) { e.preventDefault(); })
                         .append($('<label class="facet-label">'))
                     );
@@ -146,7 +146,7 @@ define('io.ox/search/facets/extensions', [
                 // create facet node
                 node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                     // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                    button = $('<div class="facet-container">')
+                    button = $('<div class="facet-container btn">')
                     .on('click', function (e) { e.preventDefault(); })
                     .append($('<label class="facet-label">'))
                 );
@@ -424,7 +424,7 @@ define('io.ox/search/facets/extensions', [
                 VALUE = 'daterange',
                 isUpdate = !!baton.model.get('pool')['date.custom'],
                 data, from, to, group, current, container,
-                facetcontainer = $('<fieldset class="facet-container">');
+                facetcontainer = $('<fieldset class="facet-container btn">');
 
             this.find('.facet-container').replaceWith(facetcontainer);
 
