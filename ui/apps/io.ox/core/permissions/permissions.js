@@ -343,6 +343,7 @@ define('io.ox/core/permissions/permissions', [
 
     return {
         show: function (folder) {
+            var promise = $.Deferred();
             folder_id = String(folder);
             api.get(folder_id, { cache: false }).done(function (data) {
                 try {
@@ -477,20 +478,26 @@ define('io.ox/core/permissions/permissions', [
 
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
-                        if (!isFolderAdmin) return dialog.idle();
+                        if (!isFolderAdmin) {
+                            promise.reject();
+                            return dialog.idle();
+                        }
                         api.update(folder_id, { permissions: collection.toJSON() }, { cascadePermissions: cascadePermissionsFlag }).then(
                             function success() {
                                 collection.off();
                                 dialog.close();
+                                promise.resolve();
                             },
                             function fail(error) {
                                 dialog.idle();
                                 notifications.yell(error);
+                                promise.reject();
                             }
                         );
                     })
                     .on('cancel', function () {
                         collection.off();
+                        promise.reject();
                     })
                     .show();
 
@@ -509,6 +516,7 @@ define('io.ox/core/permissions/permissions', [
                     console.error('Error', e);
                 }
             });
+            return promise;
         }
     };
 });
