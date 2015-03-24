@@ -1638,9 +1638,11 @@ define('io.ox/core/main', [
 
     ox.on('http:error', function (error) {
         switch (error.code) {
+            // IMAP-specific: 'Relogin required'
             case 'MSG-1000':
             case 'MSG-1001':
-                // IMAP-specific: 'Relogin required'
+            // INUSE (see bug 37218)
+            case 'MSG-1031':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':
