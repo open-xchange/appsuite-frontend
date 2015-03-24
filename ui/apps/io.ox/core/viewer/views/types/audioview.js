@@ -29,13 +29,13 @@ define('io.ox/core/viewer/views/types/audioview',  [
     var AudioView = BaseView.extend({
 
         /**
-         * Creates and renders a audio slide.
+         * Creates and renders the audio slide.
          *
          * @returns {AudioView}
          *  the AudioView instance.
          */
         render: function () {
-            // console.warn('AudioView.render()');
+            //console.warn('AudioView.render()', this.model.get('filename'));
 
             var audio = $('<audio controls="true" class="viewer-displayer-item viewer-displayer-audio player-hidden">'),
                 source = $('<source>'),
@@ -77,58 +77,68 @@ define('io.ox/core/viewer/views/types/audioview',  [
         },
 
         /**
-         * "Loads" an audio slide by transferring the audio source from the 'data-src'
+         * "Prefetches" the audio slide.
+         * In order to save memory and network bandwidth audio files are not prefetched.
+         *
+         * @returns {AudioView}
+         *  the AudioView instance.
+         */
+        prefetch: function () {
+            //console.warn('AudioView.prefetch()', this.model.get('filename'));
+            return this;
+        },
+
+        /**
+         * "Shows" the audio slide by transferring the audio source from the 'data-src'
          *  to the 'src' attribute of the <source> HTMLElement.
          *
          * @returns {AudioView}
          *  the AudioView instance.
          */
-        load: function () {
-            // console.warn('AudioView.load()', this.model.get('filename'));
-            var audioToLoad = this.$el.find('audio'),
-                audioSource = audioToLoad.find('source');
+        show: function () {
+            //console.warn('AudioView.load()', this.model.get('filename'));
 
-            if ((audioToLoad.length > 0) && (audioSource.length > 0)) {
+            var audio = this.$el.find('audio.viewer-displayer-audio'),
+                audioSource = audio.find('source');
+
+            if ((audio.length > 0) && (audioSource.length > 0)) {
                 this.$el.busy();
                 this.$el.find('div.viewer-displayer-notification').remove();
                 audioSource.attr('src', audioSource.attr('data-src'));
-                audioToLoad[0].load();
+                audio[0].load();
             }
 
             return this;
         },
 
         /**
-         * "Unloads" an audio slide by replacing the src attribute of
+         * "Unloads" the audio slide by replacing the src attribute of
          * the source element to an empty String.
          *
          * @returns {AudioView}
          *  the AudioView instance.
          */
         unload: function () {
-            // console.warn('AudioView.unload()', this.model.get('filename'));
-            var audioToUnLoad = this.$el.find('audio');
+            //onsole.warn('AudioView.unload()', this.model.get('filename'));
+            var audio = this.$el.find('audio.viewer-displayer-audio');
 
             // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') && audioToUnLoad.length > 0) {
-                audioToUnLoad[0].pause();
-                audioToUnLoad.addClass('player-hidden');
-                audioToUnLoad.find('source').attr('src', '');
+            if (!this.$el.hasClass('swiper-slide-duplicate') && audio.length > 0) {
+                audio[0].pause();
+                audio.addClass('player-hidden');
+                audio.find('source').attr('src', '');
             }
         },
 
         /**
          * Destructor function of this view.
-         *
-         * @returns {AudioView}
-         *  the AudioView instance.
          */
         disposeView: function () {
-            // console.warn('ImageView.disposeView()');
-            var audio = this.$el.find('audio');
+            //console.warn('ImageView.disposeView()', this.model.get('filename'));
+
+            var audio = this.$el.find('audio.viewer-displayer-audio');
             // remove event listeners from audio and source element
             audio.off().find('source').off();
-            return this;
         }
 
     });

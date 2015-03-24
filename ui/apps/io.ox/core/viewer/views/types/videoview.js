@@ -29,13 +29,13 @@ define('io.ox/core/viewer/views/types/videoview',  [
     var VideoView = BaseView.extend({
 
         /**
-         * Creates and renders a video slide.
+         * Creates and renders the video slide.
          *
          * @returns {VideoView}
          *  the VideoView instance.
          */
         render: function () {
-            // console.warn('VideoView.render()');
+            //console.warn('VideoView.render()', this.model.get('filename'));
 
             var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
                 source = $('<source>'),
@@ -77,58 +77,71 @@ define('io.ox/core/viewer/views/types/videoview',  [
         },
 
         /**
-         * "Loads" a video slide by transferring the video source from the 'data-src'
+         * "Prefetches" the video slide.
+         * In order to save memory and network bandwidth videos are not prefetched.
+         *
+         * @returns {VideoView}
+         *  the VideoView instance.
+         */
+        prefetch: function () {
+            //console.warn('VideoView.prefetch()', this.model.get('filename'));
+            return this;
+        },
+
+        /**
+         * "Shows" the video slide by transferring the video source from the 'data-src'
          *  to the 'src' attribute of the <source> HTMLElement.
          *
          * @returns {VideoView}
          *  the VideoView instance.
          */
-        load: function () {
-            // console.warn('VideoView.load()', this.model.get('filename'));
-            var videoToLoad = this.$el.find('video'),
-                videoSource = videoToLoad.find('source');
+        show: function () {
+            //console.warn('VideoView.show()', this.model.get('filename'));
 
-            if ((videoToLoad.length > 0) && (videoSource.length > 0)) {
+            var video = this.$el.find('video.viewer-displayer-video'),
+                videoSource = video.find('source');
+
+            if ((video.length > 0) && (videoSource.length > 0)) {
                 this.$el.busy();
                 this.$el.find('div.viewer-displayer-notification').remove();
                 videoSource.attr('src', videoSource.attr('data-src'));
-                videoToLoad[0].load(); // reset and start selecting and loading a new media resource from scratch
+                video[0].load(); // reset and start selecting and loading a new media resource from scratch
             }
 
             return this;
         },
 
         /**
-         * "Unloads" a video slide by replacing the src attribute of
-         * the source element to an empty String.
+         * "Unloads" the video slide by replacing the src attribute of
+         * the <source> element to an empty String.
          *
          * @returns {VideoView}
          *  the VideoView instance.
          */
         unload: function () {
-            // console.warn('VideoView.unload()', this.model.get('filename'));
-            var videoToUnLoad = this.$el.find('video');
+            //console.warn('VideoView.unload()', this.model.get('filename'));
+
+            var video = this.$el.find('video.viewer-displayer-video');
 
             // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') && videoToUnLoad.length > 0) {
-                videoToUnLoad[0].pause();
-                videoToUnLoad.addClass('player-hidden');
-                videoToUnLoad.find('source').attr('src', '');
+            if (!this.$el.hasClass('swiper-slide-duplicate') && video.length > 0) {
+                video[0].pause();
+                video.addClass('player-hidden');
+                video.find('source').attr('src', '');
             }
+
+            return this;
         },
 
         /**
          * Destructor function of this view.
-         *
-         * @returns {VideoView}
-         *  the VideoView instance.
          */
         disposeView: function () {
-            // console.warn('ImageView.disposeView()');
-            var video = this.$el.find('video');
+            //console.warn('ImageView.disposeView()', this.model.get('filename'));
+
+            var video = this.$el.find('video.viewer-displayer-video');
             // remove event listeners from video and source element
             video.off().find('source').off();
-            return this;
         }
 
     });

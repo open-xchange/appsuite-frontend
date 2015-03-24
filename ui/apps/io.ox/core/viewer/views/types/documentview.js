@@ -31,7 +31,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     var DocumentView =  BaseView.extend({
 
         initialize: function () {
-            //console.warn('ImageView.initialize()');
+            //console.warn('DocumentView.initialize()', this.model.get('filename'));
             //The name of the document converter server module.
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
@@ -51,16 +51,37 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         render: function () {
-            //console.warn('DocumentType.render()');
+            //console.warn('DocumentView.render()', this.model.get('filename'));
             var pageContainer = $('<div class="document-container">');
+
+            // remove content of the slide duplicates
+            if (this.$el.hasClass('swiper-slide-duplicate')) {
+                this.$el.empty();
+            }
             this.$el.append(pageContainer, this.createCaption());
             return this;
         },
 
         /**
-         * Loads a document (Office, PDF) with the PDF.js library.
+         * "Prefetches" the document slide.
+         * In order to save memory and network bandwidth documents are not prefetched.
+         *
+         * @returns {DocumentView}
+         *  the DocumentView instance.
          */
-        load: function () {
+        prefetch: function () {
+            //console.warn('DocumentView.prefetch()', this.model.get('filename'));
+            return this;
+        },
+
+        /**
+         * "Shows" the document (Office, PDF) with the PDF.js library.
+         *
+         * @returns {DocumentView}
+         *  the DocumentView instance.
+         */
+        show: function () {
+            //console.warn('DocumentView.show()', this.model.get('filename'));
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 return;
@@ -87,7 +108,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  an array of page numbers which should be rendered.
              */
             function getPagesToRender() {
-                //console.warn('DocumentType.getPagesToRender()', pageContainer);
+                //console.warn('DocumentView.getPagesToRender()', pageContainer);
                 var pages = pageContainer.find('.document-page'),
                     pagesToRender = [];
                 // Whether the page element is visible in the viewport, wholly or partially.
@@ -169,6 +190,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             $.when(this.pdfDocument.getLoadPromise())
                 .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError)
                 .always(pdfDocumentLoadFinished);
+
+            return this;
         },
 
         /**
@@ -189,18 +212,29 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Unloads an document slide by destroying the pdf view and model instances
+         * Unloads the document slide by destroying the pdf view and model instances
+         *
+         * @param {Boolean} dispose
+         *  If true also Swiper slide duplicates will be unloaded.
          */
-        unload: function () {
-            //console.warn('DocumentType.unload()', this.pdfView, this.pdfDocument);
-            if (this.pdfView) {
-                this.pdfView.destroy();
-                this.pdfView = null;
+        unload: function (dispose) {
+            //console.warn('DocumentView.unload()', this.pdfView, this.pdfDocument);
+
+            // never unload slide duplicates
+            if (!this.$el.hasClass('swiper-slide-duplicate') || dispose) {
+                if (this.pdfView) {
+                    this.pdfView.destroy();
+                    this.pdfView = null;
+                }
+                if (this.pdfDocument) {
+                    this.pdfDocument.destroy();
+                    this.pdfDocument = null;
+                }
+                // clear document container content
+                this.$el.find('div.document-container').empty();
             }
-            if (this.pdfDocument) {
-                this.pdfDocument.destroy();
-                this.pdfDocument = null;
-            }
+
+            return this;
         },
 
         /**
@@ -208,7 +242,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         disposeView: function () {
             //console.warn('DocumentView.disposeView()');
-            this.unload();
+            this.unload(true);
         }
 
     });

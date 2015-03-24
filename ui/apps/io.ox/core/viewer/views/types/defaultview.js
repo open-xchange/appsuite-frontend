@@ -34,13 +34,13 @@ define('io.ox/core/viewer/views/types/defaultview',  [
     var DefaultView = BaseView.extend({
 
         /**
-         * Creates and renders a Default slide.
+         * Creates and renders the default slide.
          *
          * @returns {DefaultView}
          *  the DefaultView instance.
          */
         render: function () {
-            //console.warn('DefaultView.render()');
+            //console.warn('DefaultView.render()', this.model.get('filename'));
 
             // remove content of the slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) {
@@ -56,24 +56,35 @@ define('io.ox/core/viewer/views/types/defaultview',  [
         },
 
         /**
-         * "Loads" a default slide.
+         * "Prefetches" the default slide.
          *
          * @returns {DefaultView}
          *  the DefaultView instance.
          */
-        load: function () {
-            //console.warn('DefaultView.load()');
+        prefetch: function () {
+            //console.warn('DefaultView.prefetch()', this.model.get('filename'));
             return this;
         },
 
         /**
-         * "Unloads" a default slide.
+         * "Shows" the default slide.
+         *
+         * @returns {DefaultView}
+         *  the DefaultView instance.
+         */
+        show: function () {
+            //console.warn('DefaultView.show()', this.model.get('filename'));
+            return this;
+        },
+
+        /**
+         * "Unloads" the default slide.
          *
          * @returns {DefaultView}
          *  the DefaultView instance.
          */
         unload: function () {
-            //console.warn('DefaultView.unload()');
+            //console.warn('DefaultView.unload()', this.model.get('filename'));
             return this;
         }
 

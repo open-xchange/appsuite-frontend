@@ -44,7 +44,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews = [];
             // local array of loaded slide indices.
             this.loadedSlides = [];
-            // number of slides to be preloaded in the left/right direction of the active slide
+            // number of slides to be prefetched in the left/right direction of the active slide
             this.preloadOffset = 3;
             // number of slides to be kept loaded at one time in the browser.
             this.slidesToCache = 7;
@@ -135,7 +135,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     TypesRegistry.getModelType(slideModel)
                     .then(function (ModelType) {
                         var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
-                        view.render().load();
+                        view.render().prefetch().show();
                     },
                     function () {
                         console.warn('Cannot require a view type for', slideModel.get('filename'));
@@ -145,13 +145,11 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 // preload selected file and its neighbours initially
                 self.blendSlideCaption(startIndex);
-                self.preloadSlide(startIndex, 'left', self.preloadOffset);
-                self.preloadSlide(startIndex, 'right', self.preloadOffset);
+                self.loadSlide(startIndex, 'both');
                 // focus first active slide initially
                 self.focusActiveSlide();
 
-            }.bind(this))
-
+            })
             .fail(function () {
                 console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
             });
@@ -191,7 +189,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     return def.resolve(view);
                 },
                 function () {
-                    return def.reject('Cannot require a view type for', model.get('filename'));
+                    return def.reject('Cannot require a view type for ', model.get('filename'));
                 });
 
                 promises.push(def);
@@ -212,57 +210,76 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
-         * Loads a slide with calling loader implementations of passed
-         * file type. If a slide is already loaded, it will be skipped.
-         *
-         * @param {Object} model
-         *  the Viewer model.
-         * @param {jQuery} slideElement
-         *  the current slide element to be loaded.
-         *
-         * @returns {jQuery}
-         */
-        loadSlide: function (slideIndex, model, slideElement) {
-            if (!model || slideElement.length === 0) { return; }
-            if (_.contains(this.loadedSlides, slideIndex)) { return; }
-
-            this.slideViews[slideIndex].load();
-            this.loadedSlides.push(slideIndex);
-        },
-
-        /**
          * Load the given slide index and additionally number of neigboring slides in the given direction.
          *
          * @param {Number} slideToLoad
-         *  The current active slide to be loaded.
+         *  The index of the current active slide to be loaded.
          *
-         * @param {String} preloadDirection
-         *  Direction of the preload: 'left' or 'right' are supported.
-         *
-         * @param {Number} preloadOffset
-         *  Number of neighboring slides to preload. Defaults to 2.
-         *
+         * @param {String} [prefetchDirection = 'right']
+         *  Direction of the prefetch: 'left', 'right' or 'both' are supported.
+         *  Example: if slideToLoad is 7 with a preloadOffset of 3, the range to load would be for
+         *      'left': [4,5,6,7]
+         *      'right':      [7,8,9,10]
+         *      'both': [4,5,6,7,8,9,10]
          */
-        preloadSlide: function (slideToLoad, preloadDirection, preloadOffset) {
-            //console.warn('DisplayerView.preloadSlide()', slideToLoad, preloadOffset, preloadDirection);
-            var preloadOffset = preloadOffset || 3,
-                step = preloadDirection === 'right' ? 1 : -1,
+        loadSlide: function (slideToLoad, prefetchDirection) {
+            //console.warn('DisplayerView.loadSlide()', slideToLoad, preloadDirection);
+
+            var self = this,
                 slideToLoad = slideToLoad || 0,
-                loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
-                collection = this.collection,
-                slidesCount = collection.length,
-                // filter out slide duplicates -> this looks like a bug in the swiper plugin.
-                slidesList = this.$el.find('.swiper-slide').not('.swiper-slide-duplicate'),
-                self = this;
-            // load the load range, containing the requested slide and preload slides
+                slidesCount = this.collection.length,
+                rightRange,
+                leftRange,
+                loadRange;
+
+            switch (prefetchDirection) {
+            case 'left':
+                loadRange = _.range(slideToLoad, slideToLoad - (this.preloadOffset + 1), -1);
+                break;
+
+            case 'right':
+                loadRange = _.range(slideToLoad, slideToLoad + this.preloadOffset + 1, 1);
+                break;
+
+            case 'both':
+                rightRange = _.range(slideToLoad, slideToLoad + this.preloadOffset + 1, 1);
+                leftRange = _.range(slideToLoad, slideToLoad - (this.preloadOffset + 1), -1);
+                loadRange = _.union(leftRange, rightRange);
+                break;
+
+            default:
+                loadRange = [slideToLoad];
+                break;
+            }
+
+            // prefetch data of the slides within the preload offset range
             _.each(loadRange, function (index) {
                 var slideIndex = index;
-                if (slideIndex < 0) { slideIndex = slideIndex + slidesCount; }
-                if (slideIndex >= slidesCount) { slideIndex = slideIndex % slidesCount; }
-                var slideModel = collection.at(slideIndex),
-                    slideElement = slidesList.eq(slideIndex);
-                self.loadSlide(slideIndex, slideModel, slideElement);
+                if (slideIndex < 0) {
+                    slideIndex = slideIndex + slidesCount;
+                } else if (slideIndex >= slidesCount) {
+                    slideIndex = slideIndex % slidesCount;
+                }
+
+                if ((slideIndex >= 0) && !self.isSlideLoaded(slideIndex)) {
+                    self.slideViews[slideIndex].prefetch();
+                    self.loadedSlides.push(slideIndex);
+                }
             });
+
+            // show active slide
+            this.slideViews[slideToLoad].show();
+        },
+
+        /**
+         * Returns true if the slide has been loaded (by prefetching it's data or showing the slide).
+         * Otherwise false.
+         *
+         * @return {Boolean}
+         *  returns true if the slide is loaded.
+         */
+        isSlideLoaded: function (slideIndex) {
+            return _.contains(this.loadedSlides, slideIndex);
         },
 
         /**
@@ -310,7 +327,7 @@ define('io.ox/core/viewer/views/displayerview', [
             if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
             if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
             this.blendSlideCaption(activeSlideIndex);
-            this.preloadSlide(activeSlideIndex, preloadDirection, this.preloadOffset);
+            this.loadSlide(activeSlideIndex, preloadDirection);
             // a11y
             swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
             swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
@@ -342,7 +359,8 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 cacheOffset = Math.floor(this.slidesToCache / 2),
                 slidesCount = this.collection.length,
-                cachedRange = getCachedRange(activeSlideIndex);
+                cachedRange = getCachedRange(activeSlideIndex),
+                slidesToUnload;
 
             function getCachedRange(activeSlideIndex) {
                 var cachedRange = [],
@@ -356,12 +374,12 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
                 return cachedRange;
             }
-            _.each(self.loadedSlides, function (index) {
-                if (_.contains(cachedRange, index)) { return; }
 
+            slidesToUnload = _.difference(self.loadedSlides, cachedRange);
+            _.each(slidesToUnload, function (index) {
                 self.slideViews[index].unload();
-                self.loadedSlides = _.without(self.loadedSlides, index);
             });
+            this.loadedSlides = cachedRange;
         },
 
         disposeView: function () {
@@ -372,6 +390,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.displayedFileIndex = null;
             this.captionTimeoutId = null;
             this.loadedSlides = null;
+            this.slideViews = null;
             return this;
         }
     });
