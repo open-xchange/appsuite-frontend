@@ -399,40 +399,17 @@ define('io.ox/core/folder/extensions', [
 
                     if (baton.context !== 'app') return;
 
-                    var module = baton.module, folder = api.getDefaultFolder(module);
+                    var module = baton.module,
+                        folder = api.getDefaultFolder(module),
+                        title = module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
 
                     this.append(
                         $('<div>').append(
                             $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                            .text(
-                                module === 'calendar' ? gt('New private calendar') : gt('New private folder')
-                            )
+                            .text(title)
                             .on('click', { folder: folder, module: module }, addFolder)
                         )
                     );
-                }
-            },
-            {
-                index: 300,
-                id: 'public',
-                draw: function (baton) {
-
-                    if (baton.context !== 'app') return;
-                    if (!capabilities.has('edit_public_folders')) return;
-
-                    var node = $('<div>'), module = baton.module;
-                    this.append(node);
-
-                    api.get('2').done(function (public_folder) {
-                        if (!api.can('create', public_folder)) return;
-                        node.append(
-                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                            .text(
-                                module === 'calendar' ? gt('New public calendar') : gt('New public folder')
-                            )
-                            .on('click', { folder: '2', module: module }, addFolder)
-                        );
-                    });
                 }
             }
         );
