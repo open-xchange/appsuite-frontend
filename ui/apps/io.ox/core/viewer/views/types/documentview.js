@@ -187,6 +187,26 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             /**
+             * Gets called just before pages get rendered.
+             *
+             * @param pageNumbers
+             *  The array of 1-based page numbers to be rendered
+             */
+            function beginPageRendering(pageNumbers) {
+                console.log('Begin PDF rendering: ' + pageNumbers);
+            }
+
+            /**
+             * Gets called just after pages are rendered.
+             *
+             * @param pageNumbers
+             *  The array of 1-based page numbers that have been rendered
+             */
+            function endPageRendering(pageNumbers) {
+                console.log('End PDF rendering: ' + pageNumbers);
+            }
+
+            /**
              * Success handler for the PDF loading process.
              *
              * @param {Number} pageCount
@@ -203,10 +223,17 @@ define('io.ox/core/viewer/views/types/documentview', [
                 _.times(pageCount, function (index) {
                     var jqPage = $('<div class="document-page">'),
                         pageSize = self.pdfView.getRealPageSize(index + 1);
-                    pageContainer.append(jqPage.css(pageSize));
+                    pageContainer.append(jqPage.attr(pageSize).css(pageSize));
                 });
                 // set callbacks at this.pdfView to start rendering
-                this.pdfView.setRenderCallbacks(getPagesToRender, getPageNode);
+                var renderCallbacks = {
+                    getVisiblePageNumbers: getPagesToRender,
+                    getPageNode: getPageNode,
+                    beginRendering: beginPageRendering,
+                    endRendering: endPageRendering
+                };
+
+                this.pdfView.setRenderCallbacks(renderCallbacks);
                 pageContainer.idle();
             }
 

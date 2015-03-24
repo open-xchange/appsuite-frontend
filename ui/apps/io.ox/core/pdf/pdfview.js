@@ -18,9 +18,29 @@ define('io.ox/core/pdf/pdfview', [
 
     'use strict';
 
-    var DEFAULT_PDFPAGE_SCALING = 96.0 / 72.0;
+    var PDFPAGE_SCALING = 96.0 / 72.0,
 
-    // class PDFView =======================================================
+        DEVICE_PIXEL_RATIO = (function () {
+            var devicePixelRatio = 1;
+
+            if (('deviceXDPI' in screen) && ('logicalXDPI' in screen) && (screen.logicalXDPI > 0)) {
+                // IE mobile or IE
+                devicePixelRatio = screen.deviceXDPI / screen.logicalXDPI;
+            } else if (window.hasOwnProperty('devicePixelRatio')) {
+                // other devices
+                devicePixelRatio = window.devicePixelRatio;
+            }
+            return devicePixelRatio;
+        })(),
+
+        MAX_DEVICE_PIXEL_RATIO = DEVICE_PIXEL_RATIO,
+
+        DEVICE_PDFPAGE_SCALING = PDFPAGE_SCALING * Math.min(DEVICE_PIXEL_RATIO, MAX_DEVICE_PIXEL_RATIO),
+
+        // render the optional text layer with a timeout of 200ms
+        TEXT_LAYER_RENDER_DELAY = 200;
+
+    // - class PDFView ---------------------------------------------------------
 
     /**
      * The PDF view of a PDF document.
@@ -38,15 +58,15 @@ define('io.ox/core/pdf/pdfview', [
 
             pageData = [],
 
-            getVisiblePageNumbersHandler = null,
-
-            getPageNodeHandler = null,
+            renderCallbacks = null,
 
             renderedPageNumbers = [],
 
             blockRenderCount = 0,
 
             intervalId = 0;
+
+        console.log('DEVICE_PDFPAGE_SCALING: ' + DEVICE_PDFPAGE_SCALING);
 
         // ---------------------------------------------------------------------
 
@@ -150,15 +170,15 @@ define('io.ox/core/pdf/pdfview', [
          *  The page's data object.
          */
         function getPageNode(pageNumber) {
-            var pageNode = _.isObject(getPageNodeHandler) ? getPageNodeHandler(pageNumber) : null;
+            var pageNode = renderCallbacks ? renderCallbacks.getPageNode(pageNumber) : null;
             return (pageNode ? $(pageNode) : null);
         }
 
         // ---------------------------------------------------------------------
 
         function intervalHandler() {
-            if (blockRenderCount < 1) {
-                var curPageNumbersToRender = getVisiblePageNumbersHandler();
+            if ((blockRenderCount < 1) && _.isObject(renderCallbacks)) {
+                var curPageNumbersToRender = renderCallbacks.getVisiblePageNumbers();
 
                 if (_.isArray(curPageNumbersToRender) && (curPageNumbersToRender.length > 0)) {
                     curPageNumbersToRender = _.sortBy(curPageNumbersToRender);
@@ -174,28 +194,55 @@ define('io.ox/core/pdf/pdfview', [
                         }
                     }
 
-                    // fill/render all remaining, new page nodes
-                    _.each(_.difference(curPageNumbersToRender, renderedPageNumbers), function (pageNumber) {
-                        var jqPageNode = getPageNodeHandler(pageNumber);
+                    // do the final page rendering/removal step
+                    var pagesToRender = _.difference(curPageNumbersToRender, renderedPageNumbers),
+                        pagesToClear = _.difference(renderedPageNumbers, curPageNumbersToRender);
 
-                        if (jqPageNode) {
-                            if (jqPageNode.children().length === 0) {
-                                self.createPDFPageNode(jqPageNode, { pageZoom: self.getPageZoom(pageNumber) });
+                    // fill/render all new page nodes
+                    if (pagesToRender && (pagesToRender.length > 0)) {
+                        var renderDefs = [];
+
+                        // notify possible <code>renderCallbacks.beginRendering</code> callback function
+                        if (_.isFunction(renderCallbacks.beginRendering)) {
+                            $.when.apply($, renderDefs).always( function () {
+                                renderCallbacks.beginRendering(pagesToRender);
+                            });
+                        }
+
+                        _.each(pagesToRender, function (pageNumber) {
+                            var jqPageNode = renderCallbacks.getPageNode(pageNumber);
+
+                            if (jqPageNode) {
+                                if (jqPageNode.children().length === 0) {
+                                    self.createPDFPageNode(jqPageNode, { pageZoom: self.getPageZoom(pageNumber) });
+                                }
+
+                                // do async. rendering and save all render Deferreds to be
+                                // able to notify when rendering will have been finished
+                                renderDefs.push(self.renderPDFPage(jqPageNode, pageNumber, self.getPageZoom(pageNumber)));
+
+                                jqPageNode.css({ visibility: 'visible' });
                             }
+                        });
 
-                            self.renderPDFPage(jqPageNode, pageNumber, self.getPageZoom(pageNumber));
-                            jqPageNode.css({ visibility: 'visible' });
+                        // notify possible <code>renderCallbacks.endRendering</code> callback function
+                        if (_.isFunction(renderCallbacks.endRendering)) {
+                            $.when.apply($, renderDefs).always( function () {
+                                renderCallbacks.endRendering(pagesToRender);
+                            });
                         }
-                    });
+                    }
 
-                    // clear all page nodes, that are not visible anymore
-                    _.each(_.difference(renderedPageNumbers, curPageNumbersToRender), function (pageNumber) {
-                        var jqPageNode = getPageNode(pageNumber);
+                    // clear all invisible page nodes
+                    if (pagesToClear && (pagesToClear.length > 0)) {
+                        _.each(pagesToClear, function (pageNumber) {
+                            var jqPageNode = getPageNode(pageNumber);
 
-                        if (jqPageNode) {
-                            jqPageNode.css({ visibility: 'hidden' }).empty();
-                        }
-                    });
+                            if (jqPageNode) {
+                                jqPageNode.css({ visibility: 'hidden' }).empty();
+                            }
+                        });
+                    }
 
                     renderedPageNumbers = curPageNumbersToRender;
                 }
@@ -210,25 +257,60 @@ define('io.ox/core/pdf/pdfview', [
 
         // ---------------------------------------------------------------------
 
-        this.setRenderCallbacks = function (getVisiblePageNumbers, getPageNode) {
+        /**
+         * Set an object with callback functions to enable
+         * automatic rendering.
+         *
+         * @param {Object} callbacks
+         * The object, containing all callback functions.
+         * Functions, that  need to be set are
+         * <code>callbacks.getVisiblePageNumbers</code> and
+         * <code>callbacks.getPageNode</code>.
+         * All other callback functions are optional.
+         *  @param {Function} callbacks.getVisiblePageNumbers
+         *  The callback function that returns an array of
+         *  <code>Integer Numbers</code>, containing all currently
+         *  visible pages. The page numbers are 1-based.
+         *  If no pages are currently visible, the return value is
+         *  either <code>null</code> or an empty array.
+         *  @param {Function} callbacks.getPageNode
+         *  The callback function that returns a <code>jquery.Node</code>
+         *  object for the requested page number or null.
+         *  The given page number is 1-based.
+         *  @param {Function} [callbacks.beginRendering]
+         *  The callback function that is called before an range of pages
+         *  is going to be rendered. The callback function is called
+         *  with an array, containing the 1-based <code>Integer Numbers</code>
+         *  of the rendering pages.
+         *  @param {Function} [callbacks.endRendering]
+         *  The callback function that is called after a range of pages
+         *  has been rendered. The callback function is called
+         *  with an array, containing the 1-based <code>Integer Numbers</code>
+         *  of the rendered pages.
+         */
+
+        this.setRenderCallbacks = function (callbacks) {
             this.clearRenderCallbacks();
 
-            if (_.isObject(getVisiblePageNumbers) && _.isObject(getPageNode)) {
-                getVisiblePageNumbersHandler = getVisiblePageNumbers;
-                getPageNodeHandler = getPageNode;
-
+            if (_.isObject(callbacks) && _.isFunction(callbacks.getVisiblePageNumbers) &&  _.isFunction(callbacks.getPageNode)) {
+                this.suspendRendering();
+                renderCallbacks = callbacks;
                 intervalId = window.setInterval(intervalHandler, 100);
+                this.resumeRendering();
             }
         };
 
         // ---------------------------------------------------------------------
 
         this.clearRenderCallbacks = function () {
+            this.suspendRendering();
+
             if (intervalId) {
                 window.clearInterval(intervalId);
             }
 
-            getVisiblePageNumbersHandler = getPageNodeHandler = null;
+            renderCallbacks = null;
+            this.resumeRendering();
         };
 
         /**
@@ -290,7 +372,7 @@ define('io.ox/core/pdf/pdfview', [
                 jqParentNode.append(canvasNode);
 
                 if (options.textOverlay) {
-                    var textOverlayNode = $('<div class="pdf-textlayer user-select-text" ' + extentAttr + '>');
+                    var textOverlayNode = $('<div class="textLayer" ' + extentAttr + '>');
                     jqParentNode.append(textOverlayNode);
                 }
             }
@@ -382,7 +464,7 @@ define('io.ox/core/pdf/pdfview', [
         /**
          * Renders the PDF page
          *
-         * @param {jquery.Node} parentNode
+         * @param {Node} parentNode
          *  The parent node to be rendered within.
          *
          * @param {Number} pageNumber
@@ -415,7 +497,7 @@ define('io.ox/core/pdf/pdfview', [
 
             if (!pageData[pagePos].isInRendering && (jqParentNode.children().length > 0)) {
                 var canvas = jqParentNode.children('canvas'),
-                    textOverlay = jqParentNode.children('.pdf-textlayer');
+                    textOverlay = jqParentNode.children('.textLayer');
 
                 pageData[pagePos].curPageZoom = pageZoom;
                 pageData[pagePos].isInRendering = true;
@@ -430,24 +512,31 @@ define('io.ox/core/pdf/pdfview', [
                         if (jqParentNode.children().length > 0) {
                             (canvas = jqParentNode.children('canvas')).empty().attr(pageSize).css(pageSize);
 
-                            if (textContent && (textOverlay = jqParentNode.children('.pdf-textlayer'))) {
+                            if (textContent && (textOverlay = jqParentNode.children('.textLayer'))) {
                                 textOverlay.empty().attr(pageSize).css(pageSize);
 
-                                (pdfTextBuilder = new PDFTextLayerBuilder({
+                                pdfTextBuilder = new PDFTextLayerBuilder({
                                     textLayerDiv: textOverlay[0],
                                     viewport: viewport,
-                                    pageIndex: pageNumber })).setTextContent(textContent);
+                                    pageIndex: pageNumber });
                             }
 
                             var canvasCtx = canvas[0].getContext('2d');
 
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,
-                                viewport: viewport,
-                                textlayer: pdfTextBuilder
+                                viewport: viewport
                             }).then( function () {
-                                prepareTextLayerForTextSelection(textOverlay);
-                                return def.resolve();
+                                if (pdfTextBuilder) {
+                                    return pdfjsPage.getTextContent().then( function (pdfTextContent) {
+                                        pdfTextBuilder.setTextContent(pdfTextContent);
+                                        pdfTextBuilder.render(TEXT_LAYER_RENDER_DELAY);
+                                        prepareTextLayerForTextSelection(textOverlay);
+                                        return def.resolve();
+                                    });
+                                } else {
+                                    return def.resolve();
+                                }
                             });
                         } else {
                             return def.reject();
@@ -468,13 +557,13 @@ define('io.ox/core/pdf/pdfview', [
     // ---------------------------------------------------------------------
 
     PDFView.getAdjustedZoom = function (zoom) {
-        return (_.isNumber(zoom) ? zoom * DEFAULT_PDFPAGE_SCALING : 1.0);
+        return (_.isNumber(zoom) ? zoom * DEVICE_PDFPAGE_SCALING : 1.0);
     };
 
     // ---------------------------------------------------------------------
 
     PDFView.getZoom = function (adjustedZoom) {
-        return (_.isNumber(adjustedZoom) ? adjustedZoom / DEFAULT_PDFPAGE_SCALING : 1.0);
+        return (_.isNumber(adjustedZoom) ? adjustedZoom / DEVICE_PDFPAGE_SCALING : 1.0);
     };
 
     // ---------------------------------------------------------------------

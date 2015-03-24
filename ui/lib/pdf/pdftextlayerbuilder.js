@@ -17,10 +17,6 @@
 
 define('3rd.party/pdf/pdftextlayerbuilder', function () {
 
- // --------------------------
- // - ui_utils.js -
- // --------------------------
-
 'use strict';
 
 var CSS_UNITS = 96.0 / 72.0;
@@ -112,81 +108,35 @@ function getOutputScale(ctx) {
 }
 
 /**
- * Scrolls specified element into view of its parent.
- * element {Object} The element to be visible.
- * spot {Object} An object with optional top and left properties,
- *               specifying the offset from the top left edge.
+ * Use binary search to find the index of the first item in a given array which
+ * passes a given condition. The items are expected to be sorted in the sense
+ * that if the condition is true for one item in the array, then it is also true
+ * for all following items.
+ *
+ * @returns {Number} Index of the first array element to pass the test,
+ *                   or |items.length| if no such element exists.
  */
-function scrollIntoView(element, spot) {
-  // Assuming offsetParent is available (it's not available when viewer is in
-  // hidden iframe or object). We have to scroll: if the offsetParent is not set
-  // producing the error. See also animationStartedClosure.
-  var parent = element.offsetParent;
-  var offsetY = element.offsetTop + element.clientTop;
-  var offsetX = element.offsetLeft + element.clientLeft;
-  if (!parent) {
-    console.error('offsetParent is not set -- cannot scroll');
-    return;
+function binarySearchFirstItem(items, condition) {
+  var minIndex = 0;
+  var maxIndex = items.length - 1;
+
+  if (items.length === 0 || !condition(items[maxIndex])) {
+    return items.length;
   }
-  while (parent.clientHeight === parent.scrollHeight) {
-    if (parent.dataset._scaleY) {
-      offsetY /= parent.dataset._scaleY;
-      offsetX /= parent.dataset._scaleX;
-    }
-    offsetY += parent.offsetTop;
-    offsetX += parent.offsetLeft;
-    parent = parent.offsetParent;
-    if (!parent) {
-      return; // no need to scroll
+  if (condition(items[minIndex])) {
+    return minIndex;
+  }
+
+  while (minIndex < maxIndex) {
+    var currentIndex = (minIndex + maxIndex) >> 1;
+    var currentItem = items[currentIndex];
+    if (condition(currentItem)) {
+      maxIndex = currentIndex;
+    } else {
+      minIndex = currentIndex + 1;
     }
   }
-  if (spot) {
-    if (spot.top !== undefined) {
-      offsetY += spot.top;
-    }
-    if (spot.left !== undefined) {
-      offsetX += spot.left;
-      parent.scrollLeft = offsetX;
-    }
-  }
-  parent.scrollTop = offsetY;
-}
-
-/**
- * Helper function to start monitoring the scroll event and converting them into
- * PDF.js friendly one: with scroll debounce and scroll direction.
- */
-function watchScroll(viewAreaElement, callback) {
-  var debounceScroll = function debounceScroll(evt) {
-    if (rAF) {
-      return;
-    }
-    // schedule an invocation of scroll for next animation frame.
-    rAF = window.requestAnimationFrame(function viewAreaElementScrolled() {
-      rAF = null;
-
-      var currentY = viewAreaElement.scrollTop;
-      var lastY = state.lastY;
-      if (currentY > lastY) {
-        state.down = true;
-      } else if (currentY < lastY) {
-        state.down = false;
-      }
-      state.lastY = currentY;
-      // else do nothing and use previous value
-      callback(state);
-    });
-  };
-
-  var state = {
-    down: true,
-    lastY: viewAreaElement.scrollTop,
-    _eventHandler: debounceScroll
-  };
-
-  var rAF = null;
-  viewAreaElement.addEventListener('scroll', debounceScroll, true);
-  return state;
+  return minIndex; /* === maxIndex */
 }
 
 /**
@@ -196,30 +146,45 @@ function getVisibleElements(scrollEl, views, sortByVisibility) {
   var top = scrollEl.scrollTop, bottom = top + scrollEl.clientHeight;
   var left = scrollEl.scrollLeft, right = left + scrollEl.clientWidth;
 
-  var visible = [], view;
+  function isElementBottomBelowViewTop(view) {
+    var element = view.div;
+    var elementBottom =
+      element.offsetTop + element.clientTop + element.clientHeight;
+    return elementBottom > top;
+  }
+
+  var visible = [], view, element;
   var currentHeight, viewHeight, hiddenHeight, percentHeight;
   var currentWidth, viewWidth;
-  for (var i = 0, ii = views.length; i < ii; ++i) {
+  var firstVisibleElementInd = (views.length === 0) ? 0 :
+    binarySearchFirstItem(views, isElementBottomBelowViewTop);
+
+  for (var i = firstVisibleElementInd, ii = views.length; i < ii; i++) {
     view = views[i];
-    currentHeight = view.el.offsetTop + view.el.clientTop;
-    viewHeight = view.el.clientHeight;
-    if ((currentHeight + viewHeight) < top) {
-      continue;
-    }
+    element = view.div;
+    currentHeight = element.offsetTop + element.clientTop;
+    viewHeight = element.clientHeight;
+
     if (currentHeight > bottom) {
       break;
     }
-    currentWidth = view.el.offsetLeft + view.el.clientLeft;
-    viewWidth = view.el.clientWidth;
-    if ((currentWidth + viewWidth) < left || currentWidth > right) {
+
+    currentWidth = element.offsetLeft + element.clientLeft;
+    viewWidth = element.clientWidth;
+    if (currentWidth + viewWidth < left || currentWidth > right) {
       continue;
     }
     hiddenHeight = Math.max(0, top - currentHeight) +
       Math.max(0, currentHeight + viewHeight - bottom);
     percentHeight = ((viewHeight - hiddenHeight) * 100 / viewHeight) | 0;
 
-    visible.push({ id: view.id, x: currentWidth, y: currentHeight,
-      view: view, percent: percentHeight });
+    visible.push({
+      id: view.id,
+      x: currentWidth,
+      y: currentHeight,
+      view: view,
+      percent: percentHeight
+    });
   }
 
   var first = visible[0];
@@ -360,10 +325,7 @@ var ProgressBar = (function ProgressBarClosure() {
 // - PDFTextLayerBuilder.js -
 // --------------------------
 
-var FIND_SCROLL_OFFSET_TOP = -50;
-var FIND_SCROLL_OFFSET_LEFT = -400;
 var MAX_TEXT_DIVS_TO_RENDER = 100000;
-var RENDER_DELAY = 200; // ms
 
 var NonWhitespaceRegexp = /\S/;
 
@@ -376,9 +338,6 @@ function isAllWhitespace(str) {
  * @property {HTMLDivElement} textLayerDiv - The text layer container.
  * @property {number} pageIndex - The page index.
  * @property {PageViewport} viewport - The viewport of the text layer.
- * @property {ILastScrollSource} lastScrollSource - The object that records when
- *   last time scroll happened.
- * @property {boolean} isViewerInPresentationMode
  * @property {PDFFindController} findController
  */
 
@@ -392,18 +351,27 @@ function isAllWhitespace(str) {
 var TextLayerBuilder = (function TextLayerBuilderClosure() {
   function TextLayerBuilder(options) {
     this.textLayerDiv = options.textLayerDiv;
-    this.layoutDone = false;
+    this.renderingDone = false;
     this.divContentDone = false;
     this.pageIdx = options.pageIndex;
+    this.pageNumber = this.pageIdx + 1;
     this.matches = [];
-    this.lastScrollSource = options.lastScrollSource || null;
     this.viewport = options.viewport;
-    this.isViewerInPresentationMode = options.isViewerInPresentationMode;
     this.textDivs = [];
     this.findController = options.findController || null;
   }
 
   TextLayerBuilder.prototype = {
+    _finishRendering: function TextLayerBuilder_finishRendering() {
+      this.renderingDone = true;
+
+      var event = document.createEvent('CustomEvent');
+      event.initCustomEvent('textlayerrendered', true, true, {
+        pageNumber: this.pageNumber
+      });
+      this.textLayerDiv.dispatchEvent(event);
+    },
+
     renderLayer: function TextLayerBuilder_renderLayer() {
       var textLayerFrag = document.createDocumentFragment();
       var textDivs = this.textDivs;
@@ -414,6 +382,7 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       // No point in rendering many divs as it would make the browser
       // unusable even after the divs are rendered.
       if (textDivsLength > MAX_TEXT_DIVS_TO_RENDER) {
+        this._finishRendering();
         return;
       }
 
@@ -456,31 +425,34 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         }
       }
 
-      if (this.textLayerDiv) {
-          this.textLayerDiv.appendChild(textLayerFrag);
-      }
-
-      this.renderingDone = true;
+      this.textLayerDiv.appendChild(textLayerFrag);
+      this._finishRendering();
       this.updateMatches();
     },
 
-    setupRenderLayoutTimer:
-        function TextLayerBuilder_setupRenderLayoutTimer() {
-      // Schedule renderLayout() if the user has been scrolling,
-      // otherwise run it right away.
-      var self = this;
-      var lastScroll = (this.lastScrollSource === null ?
-                        0 : this.lastScrollSource.lastScroll);
+    /**
+     * Renders the text layer.
+     * @param {number} timeout (optional) if specified, the rendering waits
+     *   for specified amount of ms.
+     */
+    render: function TextLayerBuilder_render(timeout) {
+      if (!this.divContentDone || this.renderingDone) {
+        return;
+      }
 
-      if (Date.now() - lastScroll > RENDER_DELAY) { // Render right away
+      if (this.renderTimer) {
+        clearTimeout(this.renderTimer);
+        this.renderTimer = null;
+      }
+
+      if (!timeout) { // Render right away
         this.renderLayer();
       } else { // Schedule
-        if (this.renderTimer) {
-          clearTimeout(this.renderTimer);
-        }
+        var self = this;
         this.renderTimer = setTimeout(function() {
-          self.setupRenderLayoutTimer();
-        }, RENDER_DELAY);
+          self.renderLayer();
+          self.renderTimer = null;
+        }, timeout);
       }
     },
 
@@ -488,12 +460,6 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       var style = styles[geom.fontName];
       var textDiv = document.createElement('div');
       this.textDivs.push(textDiv);
-
-      // IE10 => ensure that a non null dataset is available
-      if (!textDiv.dataset) {
-          textDiv.dataset = {};
-      }
-
       if (isAllWhitespace(geom.str)) {
         textDiv.dataset.isWhitespace = true;
         return;
@@ -556,7 +522,6 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         this.appendText(textItems[i], textContent.styles);
       }
       this.divContentDone = true;
-      this.setupRenderLayoutTimer();
     },
 
     convertMatches: function TextLayerBuilder_convertMatches(matches) {
@@ -618,8 +583,9 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       var bidiTexts = this.textContent.items;
       var textDivs = this.textDivs;
       var prevEnd = null;
+      var pageIdx = this.pageIdx;
       var isSelectedPage = (this.findController === null ?
-        false : (this.pageIdx === this.findController.selected.pageIdx));
+        false : (pageIdx === this.findController.selected.pageIdx));
       var selectedMatchIdx = (this.findController === null ?
                               -1 : this.findController.selected.matchIdx);
       var highlightAll = (this.findController === null ?
@@ -665,10 +631,9 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         var isSelected = (isSelectedPage && i === selectedMatchIdx);
         var highlightSuffix = (isSelected ? ' selected' : '');
 
-        if (isSelected && !this.isViewerInPresentationMode) {
-          scrollIntoView(textDivs[begin.divIdx],
-                         { top: FIND_SCROLL_OFFSET_TOP,
-                           left: FIND_SCROLL_OFFSET_LEFT });
+        if (this.findController) {
+          this.findController.updateMatchPosition(pageIdx, i, textDivs,
+                                                  begin.divIdx, end.divIdx);
         }
 
         // Match inside new div.
