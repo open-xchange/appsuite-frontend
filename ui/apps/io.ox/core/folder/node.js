@@ -321,16 +321,16 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
-                    id:              this.describedbyID,
-                    'aria-label':    '',
-                    'aria-level':    o.level + 1,
+                    id: this.describedbyID,
+                    'aria-label': '',
+                    'aria-level': o.level + 1,
                     'aria-selected': false,
-                    'data-id':       this.folder,
-                    'data-index':    this.getIndex(),
-                    'data-model':    o.model_id,
+                    'data-id': this.folder,
+                    'data-index': this.getIndex(),
+                    'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
-                    'role':         'treeitem',
-                    'tabindex':     '-1'
+                    'role': 'treeitem',
+                    'tabindex': '-1'
                 })
                 .append(
                     // folder

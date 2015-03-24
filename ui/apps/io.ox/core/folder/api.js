@@ -292,6 +292,12 @@ define('io.ox/core/folder/api', [
 
         refresh: function () {
             _(this.hash).invoke('list');
+        },
+
+        getCollections: function () {
+            return _(this.hash).keys().map(function (id) {
+                return api.pool.getCollection(id);
+            });
         }
     };
 
