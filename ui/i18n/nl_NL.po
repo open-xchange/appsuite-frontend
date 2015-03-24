@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-08 23:24+0200\n"
-"Last-Translator: Ivar Snaaijer\n"
+"PO-Revision-Date: 2015-03-23 12:03+0100\n"
+"Last-Translator: \n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -966,7 +966,7 @@ msgstr "Archief"
 #: apps/io.ox/core/folder/contextmenu.js:106
 msgctxt "verb"
 msgid "Archive"
-msgstr "Archief"
+msgstr "Archiveren"
 
 #: apps/io.ox/core/folder/actions/archive.js:36 module:io.ox/core
 msgid "Archive messages"
@@ -1454,7 +1454,8 @@ msgstr "Klik hier om Hulp te sluiten"
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
-"Klik hier om opnieuw met uw xing account te verbinden om activiteiten te zien."
+"Klik hier om opnieuw met uw xing account te verbinden om activiteiten te "
+"zien."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -1618,7 +1619,7 @@ msgstr "Bedrijf"
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:210
 msgid "Compose"
-msgstr "Samenstellen"
+msgstr "Nieuw bericht"
 
 #: apps/io.ox/mail/toolbar.js:43 module:io.ox/mail
 msgid "Compose new email"
