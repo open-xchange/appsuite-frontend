@@ -90,8 +90,8 @@ define('plugins/portal/oxdriveclients/register', [
             var def = $.Deferred();
             // .# String will include a product name and a platform forming a sentence like "Download OX Drive for Windows now."
             baton.message = gt.format(gt('Download %s for %s now'), settings.get('productName'), getPlatform());
-            baton.teaser = gt.format(gt('The %s client lets you store and share your photos, files, documents and videos, anytime,' +
-                'anywhere. Access any file you save to OX Drive from all your computers, iPhone, iPad or from within OX App Suite itself.'), settings.get('productName'));
+            baton.teaser = gt.format(gt('The %s client lets you store and share your photos, files, documents and videos, anytime, ' +
+                'anywhere. Access any file you save to %s from all your computers, iPhone, iPad or from within %s itself.'), settings.get('productName'), settings.get('productName'), ox.serverConfig.productName);
             baton.link = settings.get('linkTo/' + getPlatform());
 
             return def.resolve();
