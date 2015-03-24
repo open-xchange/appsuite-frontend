@@ -154,6 +154,7 @@ define('io.ox/mail/compose/view', [
         id: 'editor',
         index: 100,
         draw: function () {
+            if (_.device('smartphone')) return;
             this.data('view')
                 .header(gt('Editor'))
                 .option('editorMode', 'text', gt('Plain Text'))
