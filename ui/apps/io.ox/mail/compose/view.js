@@ -120,6 +120,12 @@ define('io.ox/mail/compose/view', [
         draw: extensions.recipientActionLink('bcc')
     });
 
+    ext.point(POINT + '/recipientActionLinkMobile').extend({
+        id: 'mobile',
+        index: 100,
+        draw: extensions.recipientActionLinkMobile
+    });
+
     ext.point(POINT + '/recipientActions').extend({
         id: 'recipientActions',
         index: 100,
@@ -821,6 +827,20 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleTokenfield: function (e) {
+            if (_.device('smartphone')) {
+                e.preventDefault();
+                var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
+                if (input.hasClass('hidden')) {
+                    input.removeClass('hidden');
+                } else {
+                    if (this.model.get('cc').length === 0 && this.model.get('bcc').length === 0) {
+                        this.model.set('cc', []);
+                        this.model.set('bcc', []);
+                        input.addClass('hidden');
+                    }
+                }
+                return input;
+            }
             var isString = typeof e === 'string',
                 type = isString ? e : $(e.target).attr('data-type'),
                 button = this.$el.find('[data-type="' + type + '"]'),
@@ -1083,6 +1103,7 @@ define('io.ox/mail/compose/view', [
                     // shortcuts (to/cc/bcc)
                     keyup: function (e) {
                         if (e.which === 13) return;
+                        if (_.device('smartphone')) return;
                         // look for special prefixes
                         var val = $(this).val();
                         if ((/^to:?\s/i).test(val)) {

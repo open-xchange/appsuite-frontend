@@ -204,9 +204,19 @@ define('io.ox/mail/compose/extensions', [
             };
         },
 
+        recipientActionLinkMobile: function () {
+            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-down">'));
+            this.append(node);
+        },
+
         recipientActions: function () {
             var node = $('<div class="recipient-actions">');
-            ext.point(POINT + '/recipientActionLink').invoke('draw', node);
+            if (_.device('!smartphone')) {
+                ext.point(POINT + '/recipientActionLink').invoke('draw', node);
+            } else {
+                ext.point(POINT + '/recipientActionLinkMobile').invoke('draw', node);
+            }
+
             this.append(node);
         },
 
@@ -223,7 +233,7 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        placeholder: tokenfieldTranslations[attr],
+                        placeholder: _.device('smartphone') ? '' : tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
@@ -240,7 +250,7 @@ define('io.ox/mail/compose/extensions', [
                         }
                     });
 
-                var node = $('<div class="col-xs-12 col-sm-11">').append(
+                var node = $('<div class="col-xs-11">').append(
                     tokenfieldView.$el
                 );
                 if (attr === 'to') {
@@ -250,7 +260,7 @@ define('io.ox/mail/compose/extensions', [
                 this.append(
                     $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
-                            $('<label class="maillabel hidden-sm col-sm-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
+                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
                             node
                         )
                     );
