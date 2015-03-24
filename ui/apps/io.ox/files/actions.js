@@ -205,7 +205,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
-                e.collection.has('some', 'items') &&
+                e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
@@ -222,7 +222,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
-                e.collection.has('some', 'items') &&
+                e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('lockedByMe', e);
@@ -238,7 +238,7 @@ define('io.ox/files/actions', [
         capabilities: 'portal',
         requires: function (e) {
             return util.conditionChain(
-                e.collection.has('one', 'item'),
+                e.collection.has('one', 'items'),
                 !_.isEmpty(e.baton.data),
                 util.isFolderType('!trash', e.baton)
             );
@@ -253,7 +253,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'item') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/rename']).done(function (action) {
@@ -265,7 +265,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'item') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
@@ -278,7 +278,7 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/' + type, {
             id: type,
             requires:  function (e) {
-                return e.collection.has('some', 'item') &&
+                return e.collection.has('some', 'items') &&
                         (e.baton.openedBy !== 'io.ox/mail/compose') &&
                         (type === 'move' ? e.collection.has('delete') &&
                         util.hasStatus('!lockedByOthers', e) : e.collection.has('read'));
@@ -363,7 +363,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'item') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'items') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             var data = baton.data;
@@ -378,7 +378,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'item') && e.baton.openedBy !== 'io.ox/mail/compose';
+            return e.collection.has('one', 'items') && e.baton.openedBy !== 'io.ox/mail/compose';
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {
