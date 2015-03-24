@@ -192,6 +192,24 @@ define('io.ox/mail/compose/extensions', [
             );
         },
 
+        recipientActionLink: function (type) {
+            return function () {
+                var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">');
+                if (type === 'cc') {
+                    node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
+                } else {
+                    node.attr({ 'data-type': 'bcc', 'aria-label': gt('Show blind carbon copy input field') }).text(gt('BCC'));
+                }
+                this.append(node);
+            };
+        },
+
+        recipientActions: function () {
+            var node = $('<div class="recipient-actions">');
+            ext.point(POINT + '/recipientActionLink').invoke('draw', node);
+            this.append(node);
+        },
+
         tokenfield: function (label) {
 
             var attr = String(label).toLowerCase();
@@ -222,36 +240,18 @@ define('io.ox/mail/compose/extensions', [
                         }
                     });
 
+                var node = $('<div class="col-xs-12 col-sm-11">').append(
+                    tokenfieldView.$el
+                );
+                if (attr === 'to') {
+                    ext.point(POINT + '/recipientActions').invoke('draw', node);
+                }
+
                 this.append(
-                    $('<div data-extension-id="' + attr + '">')
-                        .addClass(cls)
+                    $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
-                            $('<label class="maillabel hidden-xs col-sm-1">').text(tokenfieldTranslations[attr]).attr({
-                                'for': guid
-                            }),
-                            $('<div class="col-xs-12 col-sm-11">').append(
-                                tokenfieldView.$el,
-                                attr === 'to' ? $('<div class="recipient-actions">').append(
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'cc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show carbon copy input field')
-                                    }).text(gt('CC')),
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'bcc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show blind carbon copy input field')
-                                    }).text(gt('BCC'))
-                                ) : $()
-                            )
+                            $('<label class="maillabel hidden-sm col-sm-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
+                            node
                         )
                     );
 

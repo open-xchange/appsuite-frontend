@@ -108,6 +108,24 @@ define('io.ox/mail/compose/view', [
         draw: extensions.subject
     });
 
+    ext.point(POINT + '/recipientActionLink').extend({
+        id: 'cc',
+        index: 100,
+        draw: extensions.recipientActionLink('cc')
+    });
+
+    ext.point(POINT + '/recipientActionLink').extend({
+        id: 'bcc',
+        index: 200,
+        draw: extensions.recipientActionLink('bcc')
+    });
+
+    ext.point(POINT + '/recipientActions').extend({
+        id: 'recipientActions',
+        index: 100,
+        draw: extensions.recipientActions
+    });
+
     ext.point(POINT + '/menu').extend({
         id: 'signatures',
         index: 100,
