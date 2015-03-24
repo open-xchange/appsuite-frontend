@@ -240,7 +240,7 @@ define('io.ox/contacts/edit/view-form', [
 
         point.basicExtend({
             id: 'autoExpand',
-            index: 'last',
+            index: 1000000000000,
             draw: function (baton) {
                 baton.parentView.on('restore', function () {
                     var diff = _.chain(baton.model.changed)
@@ -356,7 +356,7 @@ define('io.ox/contacts/edit/view-form', [
 
         point.basicExtend({
             id: 'final',
-            index: 'last',
+            index: 1000000000000,
             draw: function () {
                 var link;
                 this.append(

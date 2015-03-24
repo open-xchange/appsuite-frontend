@@ -106,7 +106,7 @@ define('io.ox/core/main', [
     // trigger all apps to save restorepoints
     ext.point('io.ox/core/logout').extend({
         id: 'saveRestorePoint',
-        index: 'first',
+        index: 1,
         logout: function (baton) {
             http.pause();
             var def = $.Deferred();
@@ -161,7 +161,7 @@ define('io.ox/core/main', [
     // wait for all pending settings
     ext.point('io.ox/core/logout').extend({
         id: 'savePendingSettings',
-        index: 'last',
+        index: 1000000000000,
         logout: function () {
             // force save requests for all pending settings
             http.pause();
@@ -1578,7 +1578,7 @@ define('io.ox/core/main', [
 
         new Stage('io.ox/core/stages', {
             id: 'ready',
-            index: 'last',
+            index: 1000000000000,
             run: function () {
                 debug('DONE!');
                 ox.trigger('core:ready');

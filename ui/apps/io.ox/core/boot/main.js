@@ -155,7 +155,7 @@ define('io.ox/core/boot/main', [
         },
         {
             id: 'default',
-            index: 'last',
+            index: 1000000000000,
             login: function () {
                 this.invoke('useCookie');
             }

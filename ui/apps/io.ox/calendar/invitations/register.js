@@ -696,7 +696,7 @@ define('io.ox/calendar/invitations/register', [
     });
 
     ext.point('io.ox/mail/detail/notifications').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'accept-decline',
         draw: function (baton) {
             var view = new ItipView({ model: baton.model });

@@ -659,7 +659,7 @@ define('io.ox/contacts/view-detail', [
         regClean = /[^+0-9]/g;
 
     ext.point('io.ox/contacts/detail/content').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'description',
         draw: function (baton) {
 
@@ -694,7 +694,7 @@ define('io.ox/contacts/view-detail', [
     });
 
     ext.point('io.ox/contacts/detail').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'breadcrumb',
         draw: function (baton) {
 

@@ -268,7 +268,7 @@ define('io.ox/core/sub/subscriptions', [
 
     ext.point(POINT + '/dialog').extend({
         id: 'missing-oauth',
-        index: 'first',
+        index: 1,
         draw: function (baton) {
             // filter disabled/unavailable oauth sources without existing accounts
             baton.services = _.filter(baton.services, function (service) {

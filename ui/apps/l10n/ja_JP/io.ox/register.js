@@ -25,7 +25,7 @@ define('l10n/ja_JP/io.ox/register', [
     // Detail view
 
     ext.point('io.ox/contacts/detail/head').extend({
-        index: 'last',
+        index: 1000000000000,
         id: 'furigana',
         draw: function (baton) {
 
@@ -96,7 +96,7 @@ define('l10n/ja_JP/io.ox/register', [
 
             ext.point(ref + '/edit/' + point).extend({
                 id: yomiID,
-                index: 'last',
+                index: 1000000000000,
                 draw: function (baton) {
                     var input = this.find('input[name="' + id + '"]');
                     // insert furigana field before orginal field
@@ -112,7 +112,7 @@ define('l10n/ja_JP/io.ox/register', [
         }
 
         ext.point(ref + '/edit').extend({
-            index: 'last',
+            index: 1000000000000,
             draw: function () {
                 // auto-complete for furigana fields?
                 if (settings.get('features/furiganaAutoComplete', false) === true) {

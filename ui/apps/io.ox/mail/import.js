@@ -24,7 +24,7 @@ define('io.ox/mail/import', [
 
     ext.point('io.ox/mail/mediator').extend({
         id: 'import-eml',
-        index: 'last',
+        index: 1000000000000,
         setup: function (app) {
 
             if (app.settings.get('features/importEML') === false) return;
