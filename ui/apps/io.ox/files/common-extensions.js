@@ -60,10 +60,7 @@ define('io.ox/files/common-extensions', [
         },
 
         locked: function (baton) {
-            var node = legacy_api.tracker.isLocked(baton.data) ? $('<i class="fa fa-lock">') : '';
-            this.append(
-                $('<span class="locked">').append(node)
-            );
+            this.toggleClass('locked', baton.data.locked_until > _.now());
         },
 
         fileTypeIcon: function () {

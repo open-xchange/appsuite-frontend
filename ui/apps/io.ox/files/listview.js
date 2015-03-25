@@ -116,8 +116,13 @@ define('io.ox/files/listview', [
             draw: extensions.thumbnail
         },
         {
-            id: 'filename',
+            id: 'lock',
             index: 200,
+            draw: extensions.locked
+        },
+        {
+            id: 'filename',
+            index: 300,
             draw: extensions.filename
         }
     );

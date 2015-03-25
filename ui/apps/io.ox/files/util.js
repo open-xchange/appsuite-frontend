@@ -128,9 +128,15 @@ define('io.ox/files/util', [
             var self = this,
                 list = _.getArray(e.context),
                 mapping = {
-                    'locked': api.tracker.isLocked,
-                    'lockedByOthers': api.tracker.isLockedByOthers,
-                    'lockedByMe': api.tracker.isLockedByMe
+                    'locked': function (obj) {
+                        return obj.locked_until && obj.locked_until <= _.now();
+                    },
+                    'lockedByOthers': function (obj) {
+                        return obj.locked_until > _.now() && obj.modified_by !== ox.user_id;
+                    },
+                    'lockedByMe': function (obj) {
+                        return obj.locked_until > _.now() && obj.modified_by === ox.user_id;
+                    }
                 },
                 inverse, result, fn;
             // '!' type prefix as magical negation
