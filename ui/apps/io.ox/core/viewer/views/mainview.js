@@ -55,14 +55,12 @@ define('io.ox/core/viewer/views/mainview', [
             // clean stuff on dispose event from core/commons.js
             this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
-            this.displayedFileIndex = this.collection.getStartIndex();
-            var displayedData = {
-                index: this.displayedFileIndex,
-                model: this.collection.at(this.displayedFileIndex)
+            var startIndex = this.collection.getStartIndex(),
+                displayedData = {
+                index: startIndex,
+                model: this.collection.at(startIndex)
             };
             this.render(displayedData);
-            // trigger item changed event initally for the first file
-            EventDispatcher.trigger('viewer:displayeditem:change', displayedData);
         },
 
         /**

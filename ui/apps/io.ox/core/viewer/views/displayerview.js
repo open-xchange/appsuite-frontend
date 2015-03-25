@@ -33,9 +33,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
         initialize: function () {
             //console.warn('DisplayerView.initialize()');
-            // The slide index which this view should display at start.
-            // This index originates from the selected file in OX Drive folder.
-            this.displayedFileIndex = this.collection.getStartIndex();
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
@@ -396,7 +393,6 @@ define('io.ox/core/viewer/views/displayerview', [
             this.swiper.removeAllSlides();
             this.swiper.destroy();
             this.swiper = null;
-            this.displayedFileIndex = null;
             this.captionTimeoutId = null;
             this.loadedSlides = null;
             this.slideViews = null;
