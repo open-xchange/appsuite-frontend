@@ -14,13 +14,6 @@
 /* restrict all definitions to OX Documents applications */
 .io-ox-core-pdf {
 
-.pdf-canvas {
-	position: absolute;
-	vertical-align: top;
-	top: 0;
-	left: 0;
-}
-
 /* Allow absolute positioning of the canvas and textLayer in the page. They
    will be the same size and will be placed on top of each other. */
 .pdf-page {
@@ -37,57 +30,7 @@
     }
 }
 
-.textLayer {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  opacity: 0.2;
-}
-
-.textLayer > div {
-  color: transparent;
-  position: absolute;
-  white-space: pre;
-  cursor: text;
-  -webkit-transform-origin: 0% 0%;
-  -moz-transform-origin: 0% 0%;
-  -o-transform-origin: 0% 0%;
-  -ms-transform-origin: 0% 0%;
-  transform-origin: 0% 0%;
-}
-
-.textLayer .highlight {
-  margin: -1px;
-  padding: 1px;
-
-  background-color: rgb(180, 0, 170);
-  border-radius: 4px;
-}
-
-.textLayer .highlight.begin {
-  border-radius: 4px 0px 0px 4px;
-}
-
-.textLayer .highlight.end {
-  border-radius: 0px 4px 4px 0px;
-}
-
-.textLayer .highlight.middle {
-  border-radius: 0px;
-}
-
-.textLayer .highlight.selected {
-  background-color: rgb(0, 100, 0);
-}
-
-.textLayer ::selection { background: rgb(0,0,255); }
-.textLayer ::-moz-selection { background: rgb(0,0,255); }
-
-/*
-.textLayer {
+.pdf-textlayer {
   	position: absolute;
   	left: 0;
   	top: 0;
@@ -140,5 +83,5 @@
         background: rgb(0,0,255);
     }
 }
-*/
+
 } /* end of .io-ox-core-pdf */
