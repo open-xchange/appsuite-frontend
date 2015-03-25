@@ -113,6 +113,7 @@ define('io.ox/core/folder/api', [
             if (model === undefined) {
                 // add new model
                 this.models[id] = model = new FolderModel(data);
+                $(this).trigger('folder-model-added', id);
             } else {
                 // update existing model
                 model.set(data);
