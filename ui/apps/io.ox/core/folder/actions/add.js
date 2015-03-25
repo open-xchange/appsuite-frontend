@@ -96,7 +96,10 @@ define('io.ox/core/folder/actions/add', [
                     ),
                     // help
                     $('<div class="help-block">').text(
-                        'This little help text should take the chance and explain what a public folder is ...'
+                        gt( 'A public folder is used for content that is of common interest for all users. ' +
+                            'To allow other users to read or edit the contents, you have to set ' +
+                            'the respective permissions for the public folder.'
+                        )
                     )
                 );
             }
@@ -126,7 +129,8 @@ define('io.ox/core/folder/actions/add', [
         folder = String(folder);
         opt = opt || {};
 
-        if (capabilities.has('edit_public_folders')) {
+        if (/^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders')) {
+            // only address book, calendar, and tasks do have a "public folder" section
             api.get('2').done(function (public_folder) {
                 opt.supportsPublicFolders = api.can('create', public_folder);
                 open(folder, opt);

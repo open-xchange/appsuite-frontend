@@ -299,6 +299,7 @@ define('io.ox/core/folder/extensions', [
     // helper
 
     function addFolder(e) {
+        e.preventDefault();
         ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
             add(e.data.folder, { module: e.data.module });
         });
