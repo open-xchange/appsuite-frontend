@@ -209,6 +209,12 @@ define('io.ox/files/api', [
 
     var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
+    function resetFolder(id) {
+        var list = _(pool.getByFolder(id));
+        list.each(function (collection) { collection.expired = true; });
+        return list;
+    }
+
     /**
      * map error codes and text phrases for user feedback
      * @param  {event} e
@@ -386,7 +392,11 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.unlock = function (list) {
-        return lockToggle(list, 'unlock');
+        return lockToggle(list, 'unlock').done(function () {
+            list.forEach(function (m) {
+                m.set('locked_until', 0);
+            });
+        });
     };
 
     /**
@@ -395,7 +405,11 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.lock = function (list) {
-        return lockToggle(list, 'lock');
+        return lockToggle(list, 'lock').done(function () {
+            var folder = list[0].get('folder_id');
+            resetFolder(folder);
+            folderAPI.reload(folder);
+        });
     };
 
     /**
