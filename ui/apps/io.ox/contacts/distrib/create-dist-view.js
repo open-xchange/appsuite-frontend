@@ -126,7 +126,9 @@ define('io.ox/contacts/distrib/create-dist-view', [
                     newMember = self.copyContact(self.$el, data.id ? data : nameValue, mailValue);
 
                 if (newMember && self.isUnique(newMember)) {
-                    self.model.addMember(newMember);
+                    var tmpList = _.clone(self.model.get('distribution_list') || []);
+                    tmpList.push(newMember);
+                    self.model.set('distribution_list', tmpList, { validate: true });
                 }
 
             });
@@ -230,15 +232,14 @@ define('io.ox/contacts/distrib/create-dist-view', [
             return newMember;
         },
 
-        onDistributionListChange: function () {
+        onDistributionListChange: function (model, list) {
             var self = this;
             this.$el.find('.item-list').empty();
-            _(this.model.get('distribution_list')).each(function (member) {
+            _(list).each(function (member) {
                 self.$el.find('.item-list').append(
                     self.drawListedItem(member)
                 );
             });
-
         },
 
         drawListedItem: function (o) {
@@ -274,7 +275,9 @@ define('io.ox/contacts/distrib/create-dist-view', [
                     )
                     .on('click', { mail: o.mail, name: o.display_name }, function (e) {
                         e.preventDefault();
-                        self.model.removeMember(e.data.mail, e.data.name);
+                        self.model.set('distribution_list', _(self.model.get('distribution_list')).filter(function (val) {
+                            return val.mail !== e.data.mail || val.display_name !== e.data.name;
+                        }));
                     })
                 );
         },
@@ -293,14 +296,13 @@ define('io.ox/contacts/distrib/create-dist-view', [
         id: 'notice',
         index: 400,
         render: function () {
-            this.$el.append($('<div class="alert alert-info">').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
+            this.$el.addClass('help-block').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'));
         }
     });
 
     ext.point('io.ox/contacts/model/validation/distribution_list').extend({
         id: 'check_for_duplicates',
-        validate: function () {
-        }
+        validate: $.noop
     });
 
     return ContactCreateDistView;

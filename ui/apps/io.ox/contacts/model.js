@@ -28,41 +28,6 @@ define('io.ox/contacts/model', [
                 api: api,
                 ref: ref,
 
-                model: {
-
-                    addMember: function (member) {
-
-                        var currentDistListArray = this.get('distribution_list');
-
-                        if (currentDistListArray === undefined) {
-                            this.set('distribution_list', [member], { validate: true });
-                        } else {
-                            currentDistListArray.push(member);
-                            this.set('distribution_list', currentDistListArray, { validate: true });
-                        }
-
-                        this.trigger('change');
-                        this.trigger('change:distribution_list');
-                    },
-
-                    removeMember: function (mail, name) {
-
-                        var currentDistlist = this.get('distribution_list');
-
-                        _(currentDistlist).each(function (val, key) {
-                            if (val.mail === mail && val.display_name === name) {
-                                currentDistlist.splice(key, 1);
-                            }
-                        });
-
-                        this.set('distribution_list', currentDistlist);
-
-                        this.trigger('change');
-                        this.trigger('change:distribution_list');
-
-                    }
-                },
-
                 update: function (model) {
                     // Some special handling for profile pictures
                     var data = model.changedSinceLoading(),
