@@ -239,7 +239,6 @@ define('io.ox/files/toolbar', [
                 // extract single object if length === 1
                 var data = list.length === 1 ? list[0] : list;
                 // draw toolbar
-                console.debug('toolbar: keys %o models %o data %o', cids, models, list);
                 var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, app: this, allIds: [] }),
                     ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
                 $.when.apply($, ret.value()).then(function () {
