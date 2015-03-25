@@ -28,13 +28,12 @@ define('plugins/notifications/mail/register', [
         id: 'mail',
         index: 100,
         register: function (baton) {
-            var defaultId = api.getDefaultFolder(),
-                models = {},
+            var models = {},
                 badge = baton.addBadge('io.ox/mail');
 
             _(folderApi.pool.models).each(function (model, key) {
                 //foldername starts with inbox
-                if (key.indexOf(defaultId) === 0) {
+                if (key.match(/^default\d+\/INBOX/)) {
                     models[key] = model;
                 }
             });
@@ -55,7 +54,7 @@ define('plugins/notifications/mail/register', [
             });
 
             $(folderApi.pool).on('folder-model-added', function (e, key) {
-                if (key.indexOf(defaultId) === 0) {
+                if (key.match(/^default\d+\/INBOX/)) {
                     var model = folderApi.pool.models[key];
                     models[key] = model;
                     model.on('change:unread', update);
