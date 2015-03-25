@@ -129,7 +129,7 @@ define('io.ox/files/util', [
                 list = _.getArray(e.context),
                 mapping = {
                     'locked': function (obj) {
-                        return obj.locked_until && obj.locked_until <= _.now();
+                        return obj.locked_until > _.now();
                     },
                     'lockedByOthers': function (obj) {
                         return obj.locked_until > _.now() && obj.modified_by !== ox.user_id;
