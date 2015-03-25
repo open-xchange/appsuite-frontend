@@ -148,7 +148,11 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.loadSlide(startIndex, 'both');
                 // focus first active slide initially
                 self.focusActiveSlide();
-
+                // trigger item changed event initally for the first file
+                EventDispatcher.trigger('viewer:addtotoolbar', {
+                    model: self.collection.at(startIndex),
+                    viewLinks: self.slideViews[startIndex].linksMeta
+                });
             })
             .fail(function () {
                 console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
@@ -339,6 +343,11 @@ define('io.ox/core/viewer/views/displayerview', [
             EventDispatcher.trigger('viewer:displayeditem:change', {
                 index: activeSlideIndex,
                 model: this.collection.at(activeSlideIndex)
+            });
+            // tigger event for adding links to toolbar
+            EventDispatcher.trigger('viewer:addtotoolbar', {
+                model: this.collection.at(activeSlideIndex),
+                viewLinks: this.slideViews[activeSlideIndex].linksMeta
             });
             this.unloadDistantSlides(activeSlideIndex);
         },

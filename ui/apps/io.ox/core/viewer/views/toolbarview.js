@@ -31,6 +31,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     var TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
+        TOOLBAR_LINKS_EXTERNAL_ID = TOOLBAR_LINKS_ID + '/external',
         TOOLBAR_LINKS_DROPDOWN_ID = TOOLBAR_LINKS_ID + '/dropdown',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
         TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown',
@@ -50,6 +51,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         toolbarLinksMeta = {
             // high priority links
             'filename': {
+                index: 100,
                 prio: 'hi',
                 mobile: 'lo',
                 title: gt('File name'),
@@ -63,12 +65,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
                     if (fileSource === 'file') {
-                        this.attr({ title: gt('Double click to rename'), 'aria-label': gt('Filename, double click to rename') })
+                        this.attr({
+                            title: gt('Double click to rename'),
+                            'aria-label': gt('Filename, double click to rename')
+                        })
                             .addClass('viewer-toolbar-rename');
                     }
                 }
             },
             'functiondropdown': {
+                index: 200,
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-bars',
@@ -96,6 +102,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             'togglesidebar': {
+                index: 300,
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-info-circle',
@@ -105,6 +112,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             'close': {
+                index: 400,
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-times',
@@ -114,24 +122,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             }
         };
-
-    // create extension points from the toolbar links meta object with the links ext pattern
-    var index = 0;
-    _(toolbarLinksMeta).each(function (extension, extensionIndex) {
-        extension.id = extensionIndex;
-        extension.index = (index += 100);
-        toolbarLinksPoint.extend(new LinksPattern.Link(extension));
-    });
-
-    // extend toolbar extension point with the toolbar links
-    toolbarPoint.extend(new LinksPattern.InlineLinks({
-        attributes: {},
-        classes: '',
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/core/viewer/toolbar/links'
-    }));
 
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
@@ -284,18 +274,28 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         initialize: function () {
             //console.info('ToolbarView.initialize()', options);
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
-                //console.warn('SidebarbarView viewer:displayeditem:change', data);
-                this.render(data);
-            });
-            this.render();
+            this.resetLinks();
+            // listen to view links injection
+            this.listenTo(EventDispatcher, 'viewer:addtotoolbar', this.onAddToToolbar.bind(this));
+            // rerender on slide change
+            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render.bind(this));
+            // run own disposer function at global dispose
+            this.on('dispose', this.disposeView.bind(this));
         },
 
+        /**
+         * Close the viewer.
+         */
         onClose: function () {
             //console.info('ToolbarView.onClose()');
             this.trigger('close');
         },
 
+        /**
+         * Toggles the visibility of the sidebar.
+         *
+         * @param {Event} event
+         */
         onToggleSidebar: function (event) {
             //console.warn('ToolbarView.onClose()', event);
             $(event.currentTarget).toggleClass('active');
@@ -317,6 +317,15 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
         },
 
+        /**
+         * Renders the toolbar.
+         *
+         * @param {Object} data
+         *  an object containing the active viewer model
+         *
+         * @returns {ToolbarView} toolbarView
+         *  this view object itself.
+         */
         render: function (data) {
             //console.warn('ToolbarView.render()', data, this);
             if (!data || !data.model) { return this; }
@@ -327,8 +336,65 @@ define('io.ox/core/viewer/views/toolbarview', [
             // set device type
             Util.setDeviceClass(this.$el);
             toolbar.empty();
-            Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
+            toolbarPoint.invoke('draw', toolbar, baton);
             return this;
+        },
+
+        /**
+         * Creates links from the given metadata and append it to the toolbar,
+         * by extending the toolbar links.
+         *
+         * @param {Object} data
+         *  an object containing the active model and the links metadata.
+         */
+        onAddToToolbar: function (data) {
+            // clear old toolbar extensions
+            this.resetLinks();
+            // place view links after filename
+            var index = 100;
+            if (!data.viewLinks) {
+                this.render(data);
+                return;
+            }
+            // add custom view links
+            _(data.viewLinks).each(function (extensionMeta, extensionId) {
+                extensionMeta.id = extensionId;
+                extensionMeta.index = index + 1;
+                toolbarLinksPoint.extend(new LinksPattern.Link(extensionMeta));
+            });
+            toolbarPoint.extend(new LinksPattern.InlineLinks({
+                id: 'toolbar-external-links',
+                ref: TOOLBAR_LINKS_EXTERNAL_ID
+            }));
+            this.render(data);
+        },
+
+        /**
+         * Clears links in the toolbar extension point and rebind toolbar default links.
+         */
+        resetLinks: function () {
+            // clear old extensions
+            toolbarPoint.clear();
+            toolbarLinksPoint.clear();
+            // create extension points from the toolbar links meta object with the links ext pattern
+            _(toolbarLinksMeta).each(function (extensionMeta, extensionId) {
+                extensionMeta.id = extensionId;
+                toolbarLinksPoint.extend(new LinksPattern.Link(extensionMeta));
+            });
+            // extend toolbar extension point with the toolbar links
+            toolbarPoint.extend(new LinksPattern.InlineLinks({
+                id: 'toolbar-links',
+                ref: TOOLBAR_LINKS_ID
+            }));
+        },
+
+        /**
+         * Destructor of this view
+         */
+        disposeView: function () {
+            //console.warn('ToolbarView.disposeView()');
+            toolbarPoint.clear();
+            toolbarLinksPoint.clear();
         }
 
     });

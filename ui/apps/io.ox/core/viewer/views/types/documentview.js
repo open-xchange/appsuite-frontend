@@ -10,13 +10,19 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/documentview', [
+    'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/views/types/baseview',
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
-    'io.ox/core/viewer/util'
-], function (BaseView, PDFDocument, PDFView, Util) {
+    'io.ox/core/viewer/util',
+    'gettext!io.ox/core'
+], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, gt) {
 
     'use strict';
+
+    // define actions for zoom buttons in the toolbar
+    var TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
+        Action = ActionsPattern.Action;
 
     /**
      * The image file type. Implements the ViewerType interface.
@@ -42,6 +48,44 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.pdfDocument = null;
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
+            // define meta objects for zoom links creation in the toolbar
+            this.linksMeta = {
+                'zoomin': {
+                    prio: 'hi',
+                    mobile: 'hi',
+                    icon: 'fa fa-search-plus',
+                    ref: TOOLBAR_ACTION_ID + '/zoomin',
+                    customize: function () {
+                        this.addClass('viewer-toolbar-zoomin').attr({
+                            tabindex: '1',
+                            title: gt('Zoom in'),
+                            'aria-label': gt('Zoom in')
+                        });
+                    }
+                },
+                'zoomout': {
+                    prio: 'hi',
+                    mobile: 'hi',
+                    icon: 'fa fa-search-minus',
+                    ref: TOOLBAR_ACTION_ID + '/zoomout',
+                    customize: function () {
+                        this.addClass('viewer-toolbar-zoomout').attr({
+                            tabindex: '1',
+                            title: gt('Zoom out'),
+                            'aria-label': gt('Zoom out')
+                        });
+                    }
+                }
+            };
+            // define actions for the zoom function
+            this.zoomInAction = new Action(TOOLBAR_ACTION_ID + '/zoomin', {
+                id: 'zoomin',
+                action: this.zoomIn
+            });
+            this.zoomOutAction = new Action(TOOLBAR_ACTION_ID + '/zoomout', {
+                id: 'zoomout',
+                action: this.zoomOut
+            });
         },
 
         /**
@@ -212,6 +256,20 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
+         * Zooms in of a document.
+         */
+        zoomIn: function () {
+            //console.warn('DocumentView.zoomIn()');
+        },
+
+        /**
+         * Zooms in of the document.
+         */
+        zoomOut: function () {
+            //console.warn('DocumentView.zoomIn()');
+        },
+
+        /**
          * Unloads the document slide by destroying the pdf view and model instances
          *
          * @param {Boolean} dispose
@@ -243,6 +301,8 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             //console.warn('DocumentView.disposeView()');
             this.unload(true);
+            this.zoomInAction = null;
+            this.zoomOutAction = null;
         }
 
     });
