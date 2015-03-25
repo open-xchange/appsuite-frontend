@@ -17,7 +17,7 @@ define('io.ox/files/fluid/view-detail', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/actions',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/preview/main',
     'io.ox/core/api/user',
     'io.ox/core/folder/breadcrumb',
@@ -25,7 +25,7 @@ define('io.ox/files/fluid/view-detail', [
     'gettext!io.ox/files',
     'io.ox/files/util',
     'less!io.ox/files/style'
-], function (ext, links, actionPerformer, actions, filesAPI, preview, userAPI, getBreadcrumb, attachments, gt, util) {
+], function (ext, links, actionPerformer, actions, filesAPI, preview, userAPI, BreadcrumbView, attachments, gt, util) {
 
     'use strict';
 
@@ -182,19 +182,8 @@ define('io.ox/files/fluid/view-detail', [
         id: 'breadcrumb',
         index: 500,
         draw: function (baton, app) {
-            var folderSet;
-            if (app) {
-                folderSet = app.folder.set;
-            }
             this.append(
-                getBreadcrumb(baton.data.folder_id, {
-                    exclude: ['9'],
-                    handler: folderSet,
-                    last: false,
-                    prefix: gt('Saved in'),
-                    subfolder: false
-                })
-                .addClass('chromeless')
+                new BreadcrumbView({ app: app, folder: baton.data.folder_id, label: gt('Saved in:') }).render().$el
             );
         }
     });

@@ -99,9 +99,13 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         });
     }
 
-    function Pool(module) {
+    function Pool(module, options) {
 
         var hash = collections[module] || (collections[module] = {});
+
+        options = options || {};
+        this.Collection = options.Collection || backbone.Collection;
+        this.Model = options.Model || backbone.Model;
 
         this.getCollections = function () {
             return hash;
@@ -117,7 +121,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             }
 
             // register new collection
-            hash[cid] = { access: _.now(), collection: new backbone.Collection() };
+            hash[cid] = { access: _.now(), collection: new this.Collection() };
 
             // add "expired" attribute
             hash[cid].collection.expired = false;
@@ -142,8 +146,8 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
     // create new pool / singleton per module
     // avoids having different instances per module
-    Pool.create = function (module) {
-        return pools[module] || (pools[module] = new Pool(module));
+    Pool.create = function (module, options) {
+        return pools[module] || (pools[module] = new Pool(module, options));
     };
 
     // inspect
@@ -167,12 +171,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
     _.extend(Pool.prototype, {
 
         getDefault: function () {
-            return new backbone.Collection();
+            return new this.Collection();
         },
 
         propagate: function (type, data) {
             if (type === 'change') {
-                propagateChange.call(this, this.getModule(), new backbone.Model(data));
+                propagateChange.call(this, this.getModule(), new this.Model(data));
             }
         },
 
@@ -197,7 +201,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
             if ((model = collection.get(cid))) return model;
 
-            model = new backbone.Model(data);
+            model = new this.Model(data);
 
             // add to pool unless it looks like a nested object
             if (data.folder_id !== undefined && data.parent === undefined) collection.add(model);

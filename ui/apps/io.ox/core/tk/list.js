@@ -98,9 +98,8 @@ define('io.ox/core/tk/list', [
             this.paginate();
         },
 
-        // support for custom cid attributes
-        // needed to identify threads
-        getCID: function (model) {
+        // support for custom keys, e.g. needed to identify threads or folders
+        getCompositeKey: function (model) {
             return model.cid;
         },
 
@@ -154,7 +153,7 @@ define('io.ox/core/tk/list', [
         onRemove: function (model) {
 
             var children = this.getItems(),
-                cid = this.getCID(model),
+                cid = this.getCompositeKey(model),
                 li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
                 isSelected = li.hasClass('selected');
 
@@ -226,7 +225,7 @@ define('io.ox/core/tk/list', [
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
-            var li = this.$el.find('li[data-cid="' + $.escape(this.getCID(model)) + '"]'),
+            var li = this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(model)) + '"]'),
                 baton = this.getBaton(model),
                 index = model.changed.index;
             // change position?
@@ -245,7 +244,13 @@ define('io.ox/core/tk/list', [
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
             // preserve: don't remove selected items (e.g. for unseen messages)
-            this.options = _.extend({ pagination: true, draggable: false, preserve: false, selection: true, scrollable: true }, options);
+            this.options = _.extend({
+                pagination: true,
+                draggable: false,
+                preserve: false,
+                selection: true,
+                scrollable: true
+            }, options);
 
             var events = {};
 
@@ -376,7 +381,17 @@ define('io.ox/core/tk/list', [
         // the filter is important, as we might have a header
         // although we could use children(), we use find() as it's still faster (see http://jsperf.com/jquery-children-vs-find/8)
         getItems: function () {
-            return this.$el.find('.list-item');
+            var items = this.$el.find('.list-item');
+            if (this.filter) items = items.filter(this.filter);
+            return items;
+        },
+
+        // optional: filter items
+        setFilter: function (selector) {
+            this.filter = selector;
+            var items = this.$el.find('.list-item');
+            items.removeClass('hidden');
+            if (this.filter) items.not(this.filter).addClass('hidden');
         },
 
         connect: function (loader) {
@@ -448,7 +463,7 @@ define('io.ox/core/tk/list', [
             var li = this.createListItem(),
                 baton = this.getBaton(model);
             // add cid and full data
-            li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
+            li.attr({ 'data-cid': this.getCompositeKey(model), 'data-index': model.get('index') });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;

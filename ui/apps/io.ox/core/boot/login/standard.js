@@ -64,12 +64,12 @@ define('io.ox/core/boot/login/standard', [
         );
     };
 
-    function login(username, password) {
+    function login(name, password) {
 
         if (util.isAnonymous()) {
             return session.login({
                 action: 'anonymous',
-                username: username,
+                name: name,
                 password: password,
                 store: $('#io-ox-login-store-box').prop('checked'),
                 // temporary language for error messages
@@ -82,7 +82,7 @@ define('io.ox/core/boot/login/standard', [
             });
         } else {
             return session.login({
-                username: username,
+                name: name,
                 password: password,
                 store: $('#io-ox-login-store-box').prop('checked'),
                 // temporary language for error messages

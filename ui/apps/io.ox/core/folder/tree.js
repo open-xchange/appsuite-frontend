@@ -226,6 +226,12 @@ define('io.ox/core/folder/tree', [
                     );
                 }
                 ext.point(point).invoke('draw', ul, baton);
+                // remove unwanted dividers
+                ul.find('.divider').each(function () {
+                    var node = $(this), next = node.next();
+                    // remove leading, subsequent, and tailing dividers
+                    if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
+                });
                 // check if menu exceeds viewport
                 if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
                     ul.css({ top: 'auto', bottom: '20px' });

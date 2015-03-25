@@ -145,19 +145,22 @@ define('io.ox/core/session', [
                     delete options.forceLanguage;
                 }
 
-                var params = {
-                    action: options.action || 'login',
-                    name: options.username,
-                    password: options.password,
-                    // current browser language; required for proper error messages
-                    language: options.language || 'en_US',
-                    client: that.client(),
-                    version: that.version(),
-                    timeout: TIMEOUTS.LOGIN,
-                    multiple: JSON.stringify(multiple),
-                    rampup: true,
-                    rampupFor: 'open-xchange-appsuite'
-                };
+                var params = _.extend(
+                    {
+                        action: 'login',
+                        name: '',
+                        password: '',
+                        // current browser language; required for proper error messages
+                        language: 'en_US',
+                        client: that.client(),
+                        version: that.version(),
+                        timeout: TIMEOUTS.LOGIN,
+                        multiple: JSON.stringify(multiple),
+                        rampup: true,
+                        rampupFor: 'open-xchange-appsuite'
+                    },
+                    _(options).pick('name', 'password', 'language', 'rampup')
+                );
 
                 // copy optional share-specific parameters to avoid undefineds
                 if (options.share) params.share = options.share;

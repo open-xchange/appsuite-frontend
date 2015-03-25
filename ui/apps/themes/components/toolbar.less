@@ -183,7 +183,7 @@
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     margin: 0;
-    padding: 0 7px 0 5px;
+    padding: 0;
     .user-select(none);
 
     html.high-contrast & {
@@ -200,8 +200,8 @@
         & > a {
 
             display: inline-block;
-            line-height: @toolbar-line-height;
-            padding: @toolbar-vertical-padding 13px;
+            line-height: @toolbar-line-height - 2;
+            padding: @toolbar-vertical-padding @default-padding;
             text-decoration: none;
             float: left;
             outline: 0;
@@ -213,7 +213,7 @@
 
     & > li.pull-right {
         float: right;
-        & > .dropdown-menu { right: 10px; }
+        & > .dropdown-menu { right: 4px; }
     }
 }
 
@@ -282,7 +282,7 @@
 //
 .generic-toolbar {
 
-    @height-default: 45px;
+    @height-default: @toolbar-height;
     @height-small: 30px;
 
     position: absolute;
@@ -308,16 +308,12 @@
     }
 
     .toolbar-item {
-
         color: #333;
         display: inline-block;
         float: left;
-        line-height: @height-default - 1;
-        padding: 0 14px;
+        line-height: @height-default - 2;
+        padding: 0 @default-padding;
         text-decoration: none;
-
-        &:first-child { padding-left: 18px; }
-        &:last-child { padding-right: 18px; }
     }
 
     &.visual-focus .toolbar-item {
@@ -337,6 +333,8 @@
         &:focus > i { color: #fff; }
     }
 
+    .toolbar-item.pull-right > .dropdown-menu { right: 4px; }
+
     &.toolbar-small {
         height: @height-small;
         line-height: @height-small - 1;
@@ -344,6 +342,10 @@
             line-height: @height-small - 1;
         }
     }
+}
+
+.secondary-toolbar {
+    font-size: 13px;
 }
 
 // landscape fullscreen on iPhone

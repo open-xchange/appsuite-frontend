@@ -19,6 +19,7 @@ define('io.ox/mail/detail/links', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
 ], function (api, coreUtil, emoji, ext, settings, gt) {
+    'use strict';
 
     // fix hosts (still need a configurable list on the backend)
     // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');

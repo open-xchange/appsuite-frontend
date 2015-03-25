@@ -76,6 +76,11 @@ define('io.ox/core/folder/view', [
             nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
+        var populateResize = _.throttle(function () {
+            // trigger generic resize event so that other components can respond to it
+            $(document).trigger('resize');
+        }, 50);
+
         //
         // Add API
         //
@@ -94,6 +99,7 @@ define('io.ox/core/folder/view', [
                 applyInitialWidth();
                 sidepanel.addClass('visible');
                 app.trigger('folderview:open');
+                populateResize();
             },
 
             hide: function () {
@@ -102,6 +108,7 @@ define('io.ox/core/folder/view', [
                 resetLeftPosition();
                 sidepanel.removeClass('visible').css('width', '');
                 app.trigger('folderview:close');
+                populateResize();
             },
 
             toggle: function (state) {
@@ -121,10 +128,12 @@ define('io.ox/core/folder/view', [
                     if (x > maxSidePanelWidth || x < minSidePanelWidth) return;
                     app.trigger('folderview:resize');
                     applyWidth(width = x);
+                    populateResize();
                 }
 
                 function mouseup(e) {
                     $(this).off('mousemove.resize mouseup.resize');
+                    populateResize();
                     // auto-close?
                     if (e.pageX - base < minSidePanelWidth * 0.75) {
                         app.folderView.hide();
@@ -309,14 +318,14 @@ define('io.ox/core/folder/view', [
         }());
 
         // respond to folder removal
-        api.on('remove:prepare', function (e, data) {
+        api.on('remove:prepare', function (data) {
             // select parent or default folder
             var id = data.folder_id === '1' ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
             tree.selection.set(id);
         });
 
         // respond to folder move
-        api.on('move', function (e, id, newId) {
+        api.on('move', function (id, newId) {
             tree.selection.set(newId);
         });
 

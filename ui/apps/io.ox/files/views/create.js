@@ -14,7 +14,7 @@
 define('io.ox/files/views/create', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/extensions',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/upload',
     'gettext!io.ox/files',
     'io.ox/core/tk/attachments',

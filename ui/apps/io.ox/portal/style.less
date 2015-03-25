@@ -15,18 +15,19 @@
 
 .io-ox-portal {
 
-    @spacing: 13px;
-    @vert-spacing: 13px;
+    @spacing: 16px;
+    @vert-spacing: 16px;
     @line-height: 18px;
     @lines: 18;
-    @widget-padding: 13px;
+    @widget-padding: 16px;
 
-    padding: 13px (13px - @spacing) 13px 13px;
+    padding: 16px (16px - @spacing) 16px 16px;
     overflow: auto;
 
     .header {
 
-        margin: 0 13px @vert-spacing 0;
+        margin: 0 16px @vert-spacing 0;
+        min-height: 32px;
 
         .ios & {
             /* no touch scrolling in header, breaks dropdowns */
@@ -39,13 +40,13 @@
         font-family: @light-font-family;
         font-weight: 300;
         font-size: 24px;
-        line-height: 27px;
+        line-height: 28px;
         color: #333;
         margin: 0;
     }
 
     .greeting-phrase {
-        margin: 0 1em 0 0;
+        margin: 0 16px 0 0;
     }
 
     .signin {
@@ -68,7 +69,7 @@
         position: relative;
         display: inline-block;
         width: 300px;
-        height: @line-height * @lines + 13px + @vert-spacing;
+        height: @line-height * @lines + 16px + @vert-spacing;
         border-width: 0 @spacing @vert-spacing 0;
         border-style: solid;
         border-color: transparent;
@@ -294,8 +295,8 @@
         display: block;
         color: white;
         text-align: center;
-        padding: 13px;
-        margin-bottom: 13px;
+        padding: 16px;
+        margin-bottom: 16px;
         cursor: pointer;
 
         &:hover {
@@ -331,7 +332,7 @@
             width: 52px;
             padding: 14px 0;
             text-align: center;
-            margin: -13px -13px 0 0;
+            margin: -16px -16px 0 0;
             text-decoration: none;
             cursor: pointer;
 
@@ -391,7 +392,7 @@
             bottom: 0; right: 0; left: 0;
             margin: 0;
             height: 57px;
-            padding: 13px;
+            padding: 16px;
             color: #fff;
             background-color: rgba(0, 0, 0, 0.40);
             border-top: 1px solid rgba(0, 0, 0, 0.50);
@@ -485,7 +486,7 @@
     h2 {
         font-size: 18px;
         line-height: 22px;
-        margin: 26px 0 13px 0;
+        margin: 26px 0 16px 0;
         clear: both;
     }
 
@@ -495,17 +496,17 @@
         background-size: contain;
         background-repeat: no-repeat;
         background-position: top left;
-        margin-bottom: 13px;
+        margin-bottom: 16px;
     }
 
     .post-url {
-        margin: 0 0 13px 0;
+        margin: 0 0 16px 0;
         clear: both;
     }
 
     .rss-url {
         text-align: right;
-        margin: 0 0 13px 0;
+        margin: 0 0 16px 0;
         clear: both;
     }
 
@@ -733,7 +734,7 @@
         .portal-feed {
 
             h1 {
-                margin: 0 0 13px 0;
+                margin: 0 0 16px 0;
             }
 
             .photo {
@@ -785,9 +786,9 @@
     .user-select(none);
 
     .controls {
-        padding: 13px;
+        padding: 16px;
         height: 30px;
-        margin-bottom: 13px;
+        margin-bottom: 16px;
     }
 
     @media (max-width: 480px), (max-device-width: 480px) {
@@ -824,8 +825,8 @@
     .widget-settings-view {
 
         background-color: #f5f5f5;
-        padding: 13px;
-        margin: 0 0 7px 0;
+        padding: 16px;
+        margin: 0 0 8px 0;
         text-align: right;
         position: relative;
 
@@ -1024,8 +1025,8 @@
 
         .drag-handle {
             position: relative;
-            top: -13px;
-            bottom: 13px;
+            top: -16px;
+            bottom: 16px;
             width: 50px;
             cursor: move;
             float: left;

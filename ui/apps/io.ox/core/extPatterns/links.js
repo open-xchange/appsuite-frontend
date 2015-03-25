@@ -360,9 +360,11 @@ define('io.ox/core/extPatterns/links', [
                             'data-action': 'more',
                             'aria-haspopup': true,
                             'aria-label': isSmartphone ? gt('Actions') : gt('More')
-                        }).append(
-                            isSmartphone ? $.txt(gt('Actions')) : $('<span class="sr-only">' + gt('Actions') + '</span><i aria-hidden="true" class="fa fa-bars">'),
-                            $('<i aria-hidden="true" class="fa fa-caret-down">')
+                        })
+                        .append(
+                            isSmartphone ?
+                                $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
+                                $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
                         )
                         .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
