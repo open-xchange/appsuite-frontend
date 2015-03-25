@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-18 14:14+0100\n"
+"PO-Revision-Date: 2015-03-25 14:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1151,7 +1151,7 @@ msgid ""
 "Automatically delete incoming notifications after it has been accepted or "
 "declined"
 msgstr ""
-"Eingehende Benachrichtigungen nach Bestätigen/Ablehnen automatisch löschen?"
+"Eingehende Benachrichtigungen nach Bestätigen/Ablehnen automatisch löschen"
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
@@ -3498,10 +3498,8 @@ msgid "Hide all appointment reminders."
 msgstr "Alle Termin-Erinnerungen ausblenden."
 
 #: apps/io.ox/core/notifications.js:101 module:io.ox/core
-#, fuzzy
-#| msgid "Hide this notification"
 msgid "Hide all notifications"
-msgstr "Diese Benachrichtigung ausblenden"
+msgstr "Alle Benachrichtigungen ausblenden"
 
 #: apps/plugins/notifications/tasks/register.js:127
 #: module:plugins/notifications
@@ -4473,8 +4471,6 @@ msgid "New folder"
 msgstr "Neuer Ordner"
 
 #: apps/io.ox/core/notifications/subview.js:157 module:io.ox/core
-#, fuzzy
-#| msgid "New Notifications"
 msgid "New notifications"
 msgstr "Neue Benachrichtigungen"
 
@@ -4755,10 +4751,8 @@ msgid "Nothing in your newsfeed."
 msgstr "Sie haben keine Neuigkeiten."
 
 #: apps/io.ox/core/notifications.js:97 module:io.ox/core
-#, fuzzy
-#| msgid "No notifications"
 msgid "Notifications"
-msgstr "Keine Benachrichtigungen"
+msgstr "Benachrichtigungen"
 
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
 msgid "Notifier"
@@ -6769,11 +6763,6 @@ msgid "Thank you for your feedback"
 msgstr "Danke für Ihr Feedback"
 
 #: apps/plugins/portal/oxdriveclients/register.js:93 module:plugins/portal
-#, fuzzy
-#| msgid ""
-#| "The %s client lets you store and share your photos, files, documents and "
-#| "videos, anytime,anywhere. Access any file you save to OX Drive from all "
-#| "your computers, iPhone, iPad or from within OX App Suite itself."
 msgid ""
 "The %s client lets you store and share your photos, files, documents and "
 "videos, anytime, anywhere. Access any file you save to %s from all your "
@@ -6781,8 +6770,8 @@ msgid ""
 msgstr ""
 "Mit dem %s-Client können Sie jederzeit und überall Ihre Fotos, Dateien, "
 "Dokumente und Videos speichern und teilen. Sie können von Ihrem Rechner, "
-"iPhone, iPad oder der OX App Suite auf  jede beliebige in OX Drive "
-"gespeicherte Datei zugreifen."
+"iPhone, iPad oder von %s auf  jede beliebige in %s gespeicherte Datei "
+"zugreifen."
 
 #: apps/io.ox/files/guidance/main.js:92 module:io.ox/files
 msgctxt "help"
@@ -8078,6 +8067,8 @@ msgid ""
 "You can import existing signatures from the previous product generation. "
 "Your signatures will be copied - not moved."
 msgstr ""
+"Sie können bestehende Signaturen aus der vorherigen Produktgeneration "
+"importieren. Ihre Signaturen werden kopiert - nicht verschoben."
 
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
@@ -8232,7 +8223,6 @@ msgid "You've got appointment reminders"
 msgstr "Sie haben Termin-Erinnerungen"
 
 #: apps/io.ox/core/notifications/subview.js:158 module:io.ox/core
-#, fuzzy
 msgid "You've got new notifications"
 msgstr "Sie haben neue Benachrichtigungen"
 
@@ -8680,9 +8670,8 @@ msgstr "endet nie"
 #. %1$s is a weekdays, like 'next Monday'
 #: apps/io.ox/tasks/util.js:207 module:io.ox/tasks
 #, fuzzy
-#| msgid "Due %1$s"
 msgid "next %1$s"
-msgstr "Fällig am %1$s"
+msgstr "nächster %1$s"
 
 #: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 msgid "no color"
