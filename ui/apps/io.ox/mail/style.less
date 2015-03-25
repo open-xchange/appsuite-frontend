@@ -156,18 +156,23 @@
     }
 
     @media (max-width: 480px), (max-device-width: 480px)  {
+
+        border-right: 1px solid rgba(0, 0, 0, 0.15);
+        margin-right: -1px;
+
         &.unread.selected {
             .subject { color: #000; }
         }
+
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
             border-bottom: 0;
         }
-        font-size: @phone-font-size;
-        line-height: @phone-line-height;
-        border-right: 1px solid rgba(0, 0, 0, 0.15);
-        margin-right: -1px;
 
+        .list-item-content {
+            font-size: @phone-font-size;
+            line-height: @phone-line-height;
+        }
     }
 }
 
@@ -1597,6 +1602,13 @@ h4.mail-attachment-preview {
                     position: absolute;
                     right: 20px;
                 }
+            }
+        }
+
+        .content {
+            font-size: 16px;
+            * {
+                line-height: 1.42857142em; // ~20px at 14px
             }
         }
     }

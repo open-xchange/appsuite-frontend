@@ -27,11 +27,6 @@
     @indentation: 40px;
     @height: 24px;
 
-    // custom mobile values
-    @mobile-line-height: 40px;
-    @mobile-arrow-size: 20px;
-    @mobile-label-size: 15px;
-
     // width fix
     .tree-container {
         min-width: 100%;
@@ -306,11 +301,20 @@
 
     @media(max-width: 480px), (max-device-width: 480px) {
 
+        // custom mobile values
+        @mobile-height: 48px;
+        @mobile-line-height: @mobile-height;
+        @mobile-arrow-size: 20px;
+        @mobile-label-size: 15px;
+
         .folder {
             line-height: @mobile-line-height;
         }
 
         .folder-node {
+
+            height: @mobile-height;
+
             .folder-arrow {
                 font-size: @mobile-arrow-size;
             }
