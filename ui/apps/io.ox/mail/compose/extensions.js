@@ -236,7 +236,7 @@ define('io.ox/mail/compose/extensions', [
                             ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
                         },
                         drawToken: function (model) {
-                            ext.point(POINT + '/token').invoke('draw', this, model);
+                            ext.point(POINT + '/token').invoke('draw', this, model, baton);
                         }
                     });
 
