@@ -246,6 +246,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 function needToValidate(list, differences) {
+                    if (!capabilities.has('multiple_mail_accounts')) return false;
                     var result = false;
                     _.each(differences, function (value) {
                         if (_.indexOf(list, value) === -1) {
