@@ -16,8 +16,9 @@
 define('plugins/notifications/mail/register', [
     'io.ox/mail/api',
     'io.ox/core/extensions',
-    'gettext!plugins/notifications'
-], function (api, ext, gt) {
+    'gettext!plugins/notifications',
+    'io.ox/mail/util'
+], function (api, ext, gt, util) {
 
     'use strict';
 
@@ -27,25 +28,7 @@ define('plugins/notifications/mail/register', [
         index: 100,
         register: function (baton) {
             var badge = baton.addBadge('io.ox/mail'),
-                ids = new Backbone.Collection();/*,
-                genericDesktopNotification= {
-                    title: gt('New mails'),
-                    body: gt("You've got new mails"),
-                    icon: ''
-                },
-                specificDesktopNotification= function (model) {
-                    var data = model.attributes,
-                        from = data.from || [['', '']],
-                                //#. %1$s mail sender
-                                //#. %2$s mail subject
-                                //#, c-format
-                        message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
-                    return {
-                        title: gt('New mail'),
-                        body: message,
-                        icon: ''
-                    };
-                };*/
+                ids = new Backbone.Collection();
 
             baton.setBadgeText('io.ox/mail', 12);
                                      //#. %1$d number of notifications
@@ -62,9 +45,44 @@ define('plugins/notifications/mail/register', [
                     ids.remove(mails);
                 }
             }
+            function checkNew (items) {
+                var newIds = _(items).map(function (item) {
+                        return item.folder_id + '.'  + item.id;
+                    }),
+                    oldIds = _(ids.models).map(function (model) {
+                        return model.get('folder_id') + '.'  + model.get('id');
+                    }),
+                    newItems = _.difference(newIds, oldIds);
+                if (newItems.length) {
+                    //if theres multiple items or no specific notification given, use the generic
+                    require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
+                        if (newItems.length > 1) {
+                            desktopNotifications.show({
+                                title: gt('New mails'),
+                                body: gt("You've got new mails"),
+                                icon: ''
+                            });
+                        } else {
+                            api.get(_.extend({}, _.cid(newItems[0]), { unseen: true })).then(function (data) {
+                                var from = data.from || [['', '']],
+                                              //#. %1$s mail sender
+                                              //#. %2$s mail subject
+                                              //#, c-format
+                                    message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
+                                desktopNotifications.show({
+                                    title: gt('New mail'),
+                                    body: message,
+                                    icon: ''
+                                    });
+                            });
+                        }
+                    });
+                }
+            }
 
             //special add function to consider mails that might have been read elsewhere (didn't throw update:set-seen in appsuite)
             api.on('new-mail', function (e, recent, unseen) {
+                checkNew(unseen);
                 ids.reset(unseen);
                 baton.setBadgeText('io.ox/mail', ids.size());
                                          //#. %1$d number of notifications
@@ -72,6 +90,7 @@ define('plugins/notifications/mail/register', [
             });
 
             api.on('refresh.unseen', function (e, list) {
+                checkNew(list);
                 ids.add(list);
                 baton.setBadgeText('io.ox/mail', ids.size());
                                          //#. %1$d number of notifications

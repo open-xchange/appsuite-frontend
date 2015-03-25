@@ -45,13 +45,12 @@ define('io.ox/core/notifications/subview', [
             var drawItem = function (model, requestedModel) {
                 //model is the result of a get request, requestedModel is the data passed to the api (they are usually the same)
                 //reminders need both to work correctly (reminderObject and task/appointment)
-                //
-                // TODO: Not sure if I fixed this correctly (Daniel, please have a look)
+
                 //make sure we have a model
                 if ( !model ) {
                     model = requestedModel;
                 } else if (!model.get) {
-                    model = new Backbone.Model(requestedModel);
+                    model = new Backbone.Model(model);
                 }
 
                 if (String(requestedModel.get('id')) === String(desktopNotificationFor)) {
