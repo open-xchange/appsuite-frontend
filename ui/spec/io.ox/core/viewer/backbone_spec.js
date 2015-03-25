@@ -33,7 +33,8 @@ define([
                 file_mimetype: 'image/jpeg',
                 file_size: 106120,
                 version: '1',
-                locked_until: 0
+                locked_until: 0,
+                number_of_versions: 1
             },
 
             mailAttachment = {
@@ -105,7 +106,8 @@ define([
                     expect(model.get('module')).to.equal(null);
                     expect(model.get('versions')).to.equal(null);
                     expect(model.get('description')).to.equal(null);
-
+                    expect(model.get('numberOfVersions')).to.equal(0);
+                    
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['false'];
@@ -134,6 +136,7 @@ define([
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(1402646241319);
                     expect(model.get('module')).to.equal(null);
+                    expect(model.get('numberOfVersions')).to.equal(1);
 
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['false'];
@@ -163,6 +166,7 @@ define([
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(null);
                     expect(model.get('module')).to.equal(null);
+                    expect(model.get('numberOfVersions')).to.equal(0);
 
                     expect(model.isMailAttachment()).to.be['true'];
                     expect(model.isPIMAttachment()).to.be['false'];
@@ -192,6 +196,7 @@ define([
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(null);
                     expect(model.get('module')).to.equal(4);
+                    expect(model.get('numberOfVersions')).to.equal(0);
                     
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['true'];

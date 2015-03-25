@@ -69,9 +69,13 @@ define([
 
         var mainView =  new MainView({ collection: fileCollection }),
             coreDummy = $('<div id="io-ox-core">'),
+//            displayedData = {
+//                index: mainView.displayedFileIndex,
+//                model: mainView.collection.at(mainView.displayedFileIndex)
+//            };
             displayedData = {
-                index: mainView.displayedFileIndex,
-                model: mainView.collection.at(mainView.displayedFileIndex)
+                index: 0,
+                model: mainView.collection.at(0)
             };
 
         coreDummy.append(mainView.render(displayedData).el);
@@ -85,27 +89,12 @@ define([
                 expect(mainView.sidebarView).to.be.an.instanceof(Backbone.View);
             });
 
-            it('should bind viewer:display:previous event', function () {
-                var oldIndex = mainView.displayedFileIndex;
-                EventDispatcher.trigger('viewer:display:next');
-                expect(mainView.displayedFileIndex).to.be.above(oldIndex);
-            });
-
-            it('should bind viewer:display:next event', function () {
-                var oldIndex = mainView.displayedFileIndex;
-                EventDispatcher.trigger('viewer:display:previous');
-                expect(mainView.displayedFileIndex).to.be.below(oldIndex);
-            });
-
-            it('should bind viewer:toggle:sidebar event', function () {
-                var oldSidebarOpened = mainView.sidebarView.opened;
-                EventDispatcher.trigger('viewer:toggle:sidebar');
-                expect(mainView.sidebarView.opened).to.be.not.equal(oldSidebarOpened);
-            });
-
-            it('should set an initial displayed file index', function () {
-                expect(mainView.displayedFileIndex).to.exist;
-            });
+            // TODO: adopt to asynchronous slide creation
+//            it('should bind viewer:toggle:sidebar event', function () {
+//                var oldSidebarOpened = mainView.sidebarView.opened;
+//                EventDispatcher.trigger('viewer:toggle:sidebar');
+//                expect(mainView.sidebarView.opened).to.be.not.equal(oldSidebarOpened);
+//            });
 
             it('should fire an initial render', function () {
                 expect(mainView.$el.find('.viewer-toolbar').length).to.equal(1);
@@ -149,28 +138,6 @@ define([
 
         });
 
-        describe('onPreviousSlide()', function () {
-
-            it('should decrease the the displayed file index', function () {
-                var mainView =  new MainView({ collection: fileCollection });
-                mainView.displayedFileIndex = 1;
-                var oldIndex = mainView.displayedFileIndex;
-                mainView.onPreviousSlide();
-                expect(mainView.displayedFileIndex).to.be.below(oldIndex);
-            });
-
-        });
-
-        describe('onNextSlide()', function () {
-
-            it('should increase the the displayed file index', function () {
-                var mainView =  new MainView({ collection: fileCollection }),
-                    oldIndex = mainView.displayedFileIndex;
-                mainView.onNextSlide();
-                expect(mainView.displayedFileIndex).to.be.above(oldIndex);
-            });
-
-        });
 
     });
 
