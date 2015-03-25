@@ -14,7 +14,7 @@
 define('io.ox/files/folderview-extensions', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
 ], function (ext, folderAPI, filesAPI, notifications, gt) {

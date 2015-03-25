@@ -51,7 +51,10 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                     right.css('left', width);
                 },
                 'mouseup.resize': function () {
-                    $(this).off('mousemove.resize mouseup.resize');
+                    $(this)
+                        .off('mousemove.resize mouseup.resize')
+                        // trigger generic resize event so that other components can respond to it
+                        .trigger('resize');
                     storeSize(app, width, 'width');
                 }
             });

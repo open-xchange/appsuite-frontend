@@ -33,6 +33,7 @@ define('io.ox/core/api/backbone', [], function () {
         model: Model,
         parse: function (array) {
             if (!_.isArray(array)) array = [array];
+            var Model = this.model;
             return _(array).map(function (item) {
                 return item instanceof Model ? item : new Model(item);
             });

@@ -403,9 +403,10 @@ define('io.ox/calendar/month/perspective', [
          * print current month
          */
         print: function () {
-            var win, data = null;
-            if (this.folder.id || this.folder.folder) {
-                data = { folder_id: this.folder.id || this.folder.folder };
+            var win, data = null,
+                folderID = this.folder.id || this.folder.folder;
+            if (folderID && folderID !== 'virtual/all-my-appointments') {
+                data = { folder_id: folderID };
             }
             win = print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',

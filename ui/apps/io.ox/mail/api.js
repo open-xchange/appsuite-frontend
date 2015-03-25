@@ -1097,7 +1097,7 @@ define('io.ox/mail/api', [
             });
         });
         return http.resume().done(function () {
-            require(['io.ox/files/api'], function (fileAPI) {
+            require(['io.ox/files/legacy_api'], function (fileAPI) {
                 fileAPI.caches.all.grepRemove(target + DELIM);
                 fileAPI.trigger('refresh.all');
             });
@@ -1347,7 +1347,7 @@ define('io.ox/mail/api', [
     });
 
     //If the folder api creates a new folder in mail, the mail api needs to be refreshed
-    folderAPI.on('create', function (e, data) {
+    folderAPI.on('create', function (data) {
         if (data.module === 'mail') api.refresh();
     });
 

@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/sendlink', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'gettext!io.ox/files'
 ], function (api, gt) {
 

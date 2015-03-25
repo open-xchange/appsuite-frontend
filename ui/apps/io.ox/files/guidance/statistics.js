@@ -6,7 +6,7 @@ define('io.ox/files/guidance/statistics', [
     'io.ox/core/strings',
     'io.ox/core/folder/api',
     'io.ox/core/folder/breadcrumb',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
     'static/3rd.party/Chart.js/Chart.js'

@@ -195,6 +195,7 @@ define('io.ox/core/folder/util', [
             // can delete objects
             return perm(rights, 21) > compareValue;
         case 'rename':
+        case 'rename:folder':
             // can rename?
             // missing admin privileges or system folder
             if (!isAdmin || isSystem) return false;

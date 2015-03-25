@@ -30,7 +30,10 @@
 @window-head-font-size:                 13px;
 @vgrid-font-size:                       13px;
 @inline-link-font-size:                 14px;
-@list-view-padding:                     18px;
+
+@base-padding:                          4px;
+@default-padding:                       @base-padding * 4;
+@list-view-padding:                     @default-padding;
 
 // Accent colors
 //----------------------
@@ -133,8 +136,8 @@
 @topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
 @topbar-launcher-color-hover:           #fff;
 @topbar-launcher-color-active:          #fff;
-@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.20);
-@topbar-launcher-background-active:     rgba(0, 0, 0, 0.40);
+@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
+@topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
 @topbar-icon-color:                     #fff;
 @topbar-background:                     #3C73AA;
 
@@ -147,8 +150,8 @@
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 @toolbar-line-height:                   24px;
-@toolbar-vertical-padding:              10px;
-@toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
+@toolbar-vertical-padding:              8px;
+@toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
 @link-accent-color:                     #ffad00;
 
 // mail app
@@ -189,7 +192,7 @@
 
 @calendar-today-background:             #f5f5f5;    /* gray */
 @calendar-today:                        #CF3239;    /* red */
-@calendar-toolbar-height:               47px;
+@calendar-toolbar-height:               35px;
 @calendar-toolbar-top-padding:          13px;
 
 // calender custom colors (ordered by spectrum)

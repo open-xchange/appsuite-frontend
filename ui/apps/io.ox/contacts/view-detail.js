@@ -23,7 +23,7 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/util',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, getBreadcrumb, links, coreUtil, gt) {
+], function (ext, util, api, actions, model, BreadcrumbView, links, coreUtil, gt) {
 
     'use strict';
 
@@ -698,19 +698,13 @@ define('io.ox/contacts/view-detail', [
         id: 'breadcrumb',
         draw: function (baton) {
 
-            var options = { subfolder: false, prefix: gt('Saved in'), module: 'contacts' };
-
             // this is also used by halo, so we might miss a folder id
-            if (baton.data.folder_id) {
-                // do we know the app?
-                if (baton.app) {
-                    options.handler = baton.app.folder.set;
-                }
-                this.append(
-                    $('<div class="clearfix">'),
-                    getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
-                );
-            }
+            if (!baton.data.folder_id) return;
+
+            this.append(
+                $('<div class="clearfix">'),
+                new BreadcrumbView({ folder: baton.data.folder_id, app: baton.app, label: gt('Saved in:') }).render().$el
+            );
         }
     });
 

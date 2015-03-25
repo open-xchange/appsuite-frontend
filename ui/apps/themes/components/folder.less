@@ -14,19 +14,18 @@
  */
 
 .folder-tree {
-    padding: 7px 0;
+
+    padding: 8px 0;
     overflow: auto;
     background-color: @foldertree-sidepanel-background;
     .user-select(none);
 
     // font weights
-    @normal : 300;
-    @bold   : 700;
-
-    // custom mobile values
-    @mobile-line-height: 40px;
-    @mobile-arrow-size: 20px;
-    @mobile-label-size: 15px;
+    @fontSize: 13px;
+    @normal: 400;
+    @bold: 700;
+    @indentation: 40px;
+    @height: 24px;
 
     // width fix
     .tree-container {
@@ -38,7 +37,7 @@
     }
 
     .folder {
-        line-height: 30px;
+        line-height: @height - 1;
         overflow: visible;
         white-space: nowrap;
         width: 100%;
@@ -58,6 +57,10 @@
             opacity: 0.5;
             font-style: italic;
         }
+    }
+
+    .folder-node {
+        height: @height;
     }
 
     &.visible-selection {
@@ -93,21 +96,22 @@
         .folder-arrow {
             color: #777;
             display: inline-block;
-            padding-left: 14px;
-            width: 40px;
+            padding-left: @default-padding;
+            width: @indentation;
         }
 
         .folder-label, .folder-counter, .folder-options {
             font-weight: @normal;
             display: inline-block;
             -webkit-font-smoothing: antialiased;
-            margin: 0 14px 0 0;
+            margin: 0 @default-padding 0 0;
             &:empty { margin: 0; }
         }
 
         .folder-label {
+            font-size: @fontSize;
             &:first-child { // needed when arrows are hidden
-                margin-left: 14px;
+                margin-left: @default-padding;
             }
         }
 
@@ -115,6 +119,7 @@
             color: #08c;
             font-weight: @bold;
             display: none;
+            vertical-align: top;
         }
 
         &.show-counter .folder-counter {
@@ -124,7 +129,7 @@
         .folder-options {
 
             padding: 0 12px;
-            line-height: 30px;
+            line-height: @height - 1;
             background-color: rgba(0, 0, 0, 0.05);
             outline: 0;
             display: none;
@@ -138,6 +143,7 @@
         }
 
         .folder-icon {
+
             display: none;
 
             &.visible {
@@ -161,7 +167,7 @@
 
         .folder-checkbox {
             display: inline-block;
-            margin: 0 14px 0 0;
+            margin: 0 @default-padding 0 0;
         }
 
         .folder-shared {
@@ -183,17 +189,19 @@
 
     .shared {
 
+        .folder-node {
+            height: 48px;
+        }
+
         .folder-options {
-            line-height: 24px;
-            margin-top: 3px;
+            line-height: @height;
         }
 
         .owner {
             font-size: 12px;
-            padding-left: 40px;
-            margin-top: -10px;
-            margin-bottom: 3px;
-            a { color: #555; }
+            padding-left: @indentation;
+            margin-top: -6px;
+            color: #777;
         }
     }
 
@@ -209,7 +217,7 @@
     }
 
     .favorites, .unified-folders, .standard-folders, .other-folders {
-        margin-bottom: 14px;
+        margin-bottom: @default-padding;
     }
 
     .favorites > .folder-node > .folder-label {
@@ -220,7 +228,7 @@
     .folder.section {
 
         &.open {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         &:first-child {
@@ -234,9 +242,9 @@
 
     // shorten folder title when selected so that folder options are visible
     .selected > .folder-node > .folder-label {
+        font-weight: @bold;
         max-width: 120px;
         vertical-align: top;
-
         div {
             .ellipsis();
         }
@@ -259,24 +267,21 @@
     .links {
 
         margin: 0;
-        padding: 0 14px 14px 40px;
-        line-height: 30px;
+        padding: 0 @default-padding @default-padding @indentation;
+        font-size: @fontSize;
+        line-height: 24px;
         font-weight: @normal;
 
         &:empty {
             margin: 0;
             padding: 0;
         }
-
-        & > div {
-            margin-bottom: 7px;
-        }
     }
 
     .folder.section + .links {
-        margin: 20px 0 20px 40px;
+        margin: 16px 0 16px @indentation;
         padding: 0;
-        line-height: 20px;
+        line-height: @height;
         &:empty {
             margin: 0;
         }
@@ -291,16 +296,25 @@
         }
     }
 
-    .window-sidepanel.top-toolbar & { top: 45px; }
-    .window-sidepanel.bottom-toolbar & { bottom: 45px; }
+    .window-sidepanel.top-toolbar & { top: @toolbar-height; }
+    .window-sidepanel.bottom-toolbar & { bottom: @toolbar-height; }
 
     @media(max-width: 480px), (max-device-width: 480px) {
+
+        // custom mobile values
+        @mobile-height: 48px;
+        @mobile-line-height: @mobile-height;
+        @mobile-arrow-size: 20px;
+        @mobile-label-size: 15px;
 
         .folder {
             line-height: @mobile-line-height;
         }
 
         .folder-node {
+
+            height: @mobile-height;
+
             .folder-arrow {
                 font-size: @mobile-arrow-size;
             }

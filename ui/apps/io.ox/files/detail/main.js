@@ -13,7 +13,7 @@
  */
 
 define('io.ox/files/detail/main', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/files/fluid/view-detail',
     'gettext!io.ox/files'
 ], function (api, viewDetail, gt) {

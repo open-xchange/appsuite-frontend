@@ -1653,26 +1653,27 @@ define('io.ox/calendar/week/view', [
         print: function () {
             var self = this;
             ox.load(['io.ox/core/print']).done(function (print) {
-                var start = moment(self.startDate).utc(true).valueOf(),
-                    end = moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
-                    folder = self.folder(self.folder()),
+                var folder = self.folder(),
+                    folderID = folder.id || folder.folder,
                     templates = {
-                        'day': { name: 'cp_dayview_table_appsuite.tmpl' },
-                        'workweek': { name: 'cp_weekview_table_appsuite.tmpl' },
-                        'week': { name: 'cp_weekview_table_appsuite.tmpl' }
-                    };
-                var tmpl = templates[self.mode],
+                        'day': 'cp_dayview_table_appsuite.tmpl',
+                        'workweek': 'cp_weekview_table_appsuite.tmpl',
+                        'week': 'cp_weekview_table_appsuite.tmpl'
+                    },
                     data = null;
-                if (folder.id || folder.folder) {
-                    data = { folder_id: folder.id || folder.folder };
+
+                if (folderID && folderID !== 'virtual/all-my-appointments') {
+                    data = { folder_id: folderID };
                 }
+
                 var win = print.open('printCalendar', data, {
-                    template: tmpl.name,
-                    start: start,
-                    end: end,
+                    template: templates[self.mode],
+                    start: moment(self.startDate).utc(true).valueOf(),
+                    end: moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
                     work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
                     work_day_end_time: self.workEnd * 36e5
                 });
+
                 if (_.browser.firefox) {
                     // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
                     var limit = 50,

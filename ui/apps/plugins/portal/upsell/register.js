@@ -13,7 +13,7 @@
 
 define('plugins/portal/upsell/register', [
     'io.ox/core/extensions',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'gettext!plugins/portal'
 ], function (ext, api, gt) {
 

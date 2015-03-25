@@ -22,6 +22,315 @@
     width: 100%;
 }
 
+// file list view
+
+.file-list-view {
+
+    //
+    // Column layout
+    //
+
+    &.column-layout .list-item {
+        line-height: 16px;
+        padding: 4px 16px 4px 16px;
+        border-bottom: 0;
+        &:nth-child(odd) {
+            background-color: #f5f5f5;
+        }
+    }
+
+    &.column-layout .list-item-content {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+    .list-item-column {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0;
+        white-space: nowrap;
+        &.column-1 { width: 30px; padding-right: 10px; }
+        &.column-2 { width: 70%; padding-right: 10px; }
+        &.column-3 { width: 120px; padding-right: 10px; text-align: right; }
+        &.column-4 { width: 120px; text-align: right; }
+    }
+
+    &.visible-selection.has-focus .list-item.selected i {
+        color: rgba(255, 255, 255, 0.50);
+    }
+
+    .list-item .list-item-checkmark .fa-checkmark {
+        top: 10px;
+    }
+
+    &.column-layout {
+        .filename {
+            .ellipsis();
+        }
+    }
+}
+
+.file-type-icon {
+
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+
+    &:before { content: '\f016'; color: #aaa; } // default: fa-file-o
+
+    .file-type-image  &:before { content: '\f03e'; } // fa-image
+    .file-type-audio  &:before { content: '\f028'; } // fa-volume-up
+    .file-type-video  &:before { content: '\f008'; } // fa-film
+    .file-type-doc    &:before { content: '\f15c'; color: #376CB8; } // fa-file-text
+    .file-type-xls    &:before { content: '\f0ce'; color: #26935D; } // fa-table
+    .file-type-ppt    &:before { content: '\f15b'; color: #F4502A; } // fa-file
+    .file-type-pdf    &:before { content: '\f15b'; color: #C01E07; } // fa-file
+    .file-type-zip    &:before { content: '\f187'; color: #FF940A; } // fa-archive
+    .file-type-txt    &:before { content: '\f0f6'; } // fa-file-text-o
+    .file-type-guard  &:before { content: '\f023'; } // fa-lock
+    .file-type-folder &:before { content: '\f07b'; color: #777; } // fa-folder
+}
+
+.file-list-view {
+
+    &.visible-selection.has-focus .list-item.selected .file-type-icon:before { color: white; }
+
+    //
+    // Grid layout
+    //
+
+    &.grid-layout {
+
+        padding: @default-padding 0 0 @default-padding;
+
+        & > li.list-item {
+            padding: 0;
+            display: inline-block;
+            border: solid white;
+            border-width: 0 @default-padding @default-padding 0;
+            overflow: hidden;
+            float: left;
+        }
+
+        &.grid-1  > li { width: 100% /  1; }
+        &.grid-2  > li { width: 100% /  2; }
+        &.grid-3  > li { width: 100% /  3; }
+        &.grid-4  > li { width: 100% /  4; }
+        &.grid-5  > li { width: 100% /  5; }
+        &.grid-6  > li { width: 100% /  6; }
+        &.grid-7  > li { width: 100% /  7; }
+        &.grid-8  > li { width: 100% /  8; }
+        &.grid-9  > li { width: 100% /  9; }
+        &.grid-10 > li { width: 100% / 10; }
+        &.grid-11 > li { width: 100% / 11; }
+        &.grid-12 > li { width: 100% / 12; }
+    }
+
+    .thumbnail(@height) {
+        height: @height;
+        background-color: #eee;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-origin: border-box;
+    }
+
+    .busy-indicator(@height) {
+        .busy-indicator {
+            padding-top: 40px;
+            height: @height;
+            border-bottom: 0;
+        }
+    }
+
+    &.icon-layout {
+
+        // width is > 120px, so assuming a 4/3 format, we're around 90px
+        // since it's not equal but more than 120px we add a bit (just looks better on average)
+        @thumbnail_width: 120px;
+        @thumbnail_height: 96px;
+        @filename_rows: 2;
+        @filename_line_height: 16px;
+        @filename_height: @filename_rows * @filename_line_height;
+        @filename_margin: 12px;
+        @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
+
+        .list-item-checkmark {
+            top: 60px;
+        }
+
+        .list-item-content {
+            width: 100%;
+            height: @height;
+        }
+
+        .icon-thumbnail {
+            .thumbnail(@thumbnail_height);
+        }
+
+        .icon-thumbnail.default-icon  {
+
+            display: table;
+            width: 101%; // yep, 101, fixes layout glitch in chrome
+
+            .folder-name { display: none; }
+
+            .file-icon, .folder-icon {
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+                i.fa {
+                    font-size: 42px;
+                    width: auto;
+                }
+            }
+
+            .folder-icon i.fa:before { color: #ccc; }
+        }
+
+        .filename {
+            line-height: @filename_line_height;
+            height: @filename_height;
+            overflow: hidden;
+            margin: @filename_margin 0;
+            text-align: left;
+            padding: 0 4px 0 32px;
+            word-break: break-word;
+        }
+
+        .busy-indicator(@thumbnail_height);
+
+        //
+        // Checkbox handling
+        //
+
+        .list-item-checkmark {
+            top: auto;
+            bottom: 7px;
+            left: -8px;
+            height: 48px;
+            width: 40px;
+        }
+
+        &.hide-checkboxes .filename {
+            text-align: center;
+            padding: 0 8px;
+        }
+    }
+
+    &.tile-layout {
+
+        & > li.list-item {
+            border-width: 0 @default-padding @default-padding 0;
+        }
+
+        // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)
+        @thumbnail_height: 128px;
+
+        .list-item-content {
+            width: 100%;
+            height: @thumbnail_height;
+        }
+
+        .icon-thumbnail {
+            .thumbnail(@thumbnail_height);
+        }
+
+        .icon-thumbnail {
+
+            display: table;
+            width: 100%;
+
+            .folder-name, .file-icon {
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .folder-name {
+                color: #333;
+            }
+
+            .file-icon i.fa {
+                font-size: 42px;
+                width: auto;
+            }
+        }
+
+        .file-type-folder .folder-icon {
+            display: none;
+        }
+
+        .busy-indicator(@thumbnail_height);
+
+        //
+        // Checkbox handling
+        //
+
+        .list-item-checkmark {
+            top: 90px;
+            height: 40px;
+            right: 0;
+            left: auto;
+            .fa-checkmark {
+                color: #eee;
+                text-shadow: 0 0 3px #000;
+            }
+        }
+
+        .file-type-folder .list-item-checkmark .fa-checkmark {
+            color: #555;
+            text-shadow: none;
+        }
+
+        li.selected .list-item-checkmark .fa-checkmark {
+            color: #fff;
+        }
+    }
+
+    //
+    // Selection handling
+    //
+
+    &.icon-layout {
+
+        .selected .icon-thumbnail {
+            opacity: 0.70;
+        }
+
+        &.has-focus {
+            .selected .icon-thumbnail {
+                background-color: darken(@selected-background, 15%);
+                .folder-icon i.fa:before {
+                    color: rgba(0, 0, 0, 0.50);
+                }
+            }
+        }
+    }
+
+    &.tile-layout {
+
+        .selected:not(.file-type-folder) .icon-thumbnail {
+            border: 4px solid #ddd;
+            box-shadow: 0 0 1px 2px white inset;
+        }
+
+        .selected.file-type-folder .icon-thumbnail {
+            background-color: #ddd;
+        }
+
+        &.has-focus {
+            .selected .icon-thumbnail {
+                border-color: @selected-background;
+            }
+            .selected.file-type-folder .icon-thumbnail {
+                background-color: @selected-background;
+                .folder-name { color: white; }
+            }
+        }
+    }
+}
+
 .files-wrapper {
 
     @innerHeight: 110px;
@@ -917,5 +1226,12 @@ ul.breadcrumb li.prefix {
 
     .size {
         color: rgb(119, 119, 119);
+    }
+}
+
+.file-list-view {
+
+    .locked {
+        color: rgb(204, 0, 0);
     }
 }

@@ -111,7 +111,7 @@ define('io.ox/core/tk/tokenfield', [
             this.redrawLock = false;
 
             this.listenTo(this.collection, 'reset', function () {
-                self.redrawToken();
+                self.redrawTokens();
             });
         },
 
@@ -155,12 +155,15 @@ define('io.ox/core/tk/tokenfield', [
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
+                    if (self.redrawLock) return;
                     // preventDefault to supress creating incomplete token
                     if (self.options.autoselect && !e.attrs.model) {
                         e.preventDefault();
-                        return;
+                        return false;
                     }
-                    var inputData = self.getInput().data(), model;
+
+                    // edit
+                    var inputData = self.getInput().data();
                     if (inputData.edit === true) {
                         // edit mode
                         var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
@@ -170,43 +173,59 @@ define('io.ox/core/tk/tokenfield', [
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
                         // save new token data to model
-                        model = inputData.editModel.set('token', {
+                        e.attrs.model = inputData.editModel.set('token', {
                             label: newAttrs[1],
                             value: newAttrs[3]
                         });
                         // save cid to token value
-                        e.attrs.value = model.cid;
-                        e.attrs.model = model;
-                    } else if (!self.redrawLock) {
-                        // create mode
-                        var model;
-                        if (e.attrs.model) {
-                            model = e.attrs.model;
-                        } else {
-                            var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
-                            if (_.isArray(newAttrs)) {
-                                e.attrs.label = newAttrs[1];
-                                e.attrs.value = newAttrs[3];
-                            } else {
-                                newAttrs = ['', e.attrs.value, '', e.attrs.value];
-                            }
-                            // add extrenal participant
-                            model = new pModel.Participant({
-                                type: 5,
-                                display_name: newAttrs[1],
-                                email1: newAttrs[3]
-                            });
-                        }
-                        model.set('token', {
-                            label: e.attrs.label,
-                            value: e.attrs.value
-                        }, { silent: true });
-                        // add model to the collection and save cid to the token
-                        self.collection.addUniquely(model);
-                        // save cid to token value
-                        e.attrs.value = model.cid;
-                        e.attrs.model = model;
+                        e.attrs.value = e.attrs.model.cid;
+                        return;
                     }
+
+                    // create model for unknown participants
+                    if (!e.attrs.model) {
+                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        if (_.isArray(newAttrs)) {
+                            e.attrs.label = newAttrs[1];
+                            e.attrs.value = newAttrs[3];
+                        } else {
+                            newAttrs = ['', e.attrs.value, '', e.attrs.value];
+                        }
+                        // add extrenal participant
+                        e.attrs.model = new pModel.Participant({
+                            type: 5,
+                            display_name: newAttrs[1],
+                            email1: newAttrs[3]
+                        });
+                    }
+
+                    // distribution lists
+                    if (e.attrs.model.has('distribution_list')) {
+                        var models = _(e.attrs.model.get('distribution_list')).map(function (m) {
+                            m.type = 5;
+                            var model = new pModel.Participant({
+                                type: 5,
+                                display_name: m.display_name,
+                                email1: m.mail
+                            });
+                            return model.set('token', {
+                                label: m.display_name,
+                                value: m.mail
+                            }, { silent: true });
+                        });
+                        self.collection.addUniquely(models);
+                        self.redrawTokens();
+                        return false;
+                    }
+
+                    // create token data
+                    e.attrs.model.set('token', {
+                        label: e.attrs.label,
+                        value: e.attrs.value
+                    }, { silent: true });
+                    e.attrs.value = e.attrs.model.cid;
+                    // add model to the collection and save cid to the token
+                    self.collection.addUniquely(e.attrs.model);
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
@@ -222,6 +241,7 @@ define('io.ox/core/tk/tokenfield', [
                             return title;
                         });
 
+                        // call optional function to customize token
                         self.options.drawToken.call(e.relatedTarget, model);
 
                         // init and render view for each token (if available)
@@ -325,7 +345,7 @@ define('io.ox/core/tk/tokenfield', [
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);
                     });
-                    self.redrawToken();
+                    self.redrawTokens();
                 }
             });
 
@@ -336,7 +356,7 @@ define('io.ox/core/tk/tokenfield', [
             return this.collection.get({ cid: cid });
         },
 
-        redrawToken: function () {
+        redrawTokens: function () {
             var tokens = [];
             this.redrawLock = true;
             this.collection.each(function (model) {
@@ -356,7 +376,7 @@ define('io.ox/core/tk/tokenfield', [
                 col.get({ cid: token.value }).index = index;
             });
             col.sort();
-            this.redrawToken();
+            this.redrawTokens();
         },
 
         getInput: function () {

@@ -12,8 +12,8 @@
  */
 
 // definitions
-@icon-size: 18px;
-@unread-toggle-width: 40px;
+@icon-size: 16px;
+@unread-toggle-width: 48px;
 
 // phone
 @phone-font-size: 14px;
@@ -31,26 +31,6 @@
 }
 
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
-
-.list-view-control .toolbar {
-    .user-select(none);
-    .select-all {
-        color: #555;
-        cursor: pointer;
-        white-space: nowrap;
-        i {
-            color: #ccc;
-            margin-right: 14px;
-            width: 16px;
-            font-size: 18px;
-            position: relative;
-            top: 2px;
-        }
-    }
-    .dropdown-menu {
-        font-size: 14px;
-    }
-}
 
 .preview-right {
     .leftside {
@@ -117,17 +97,25 @@
     table-layout: fixed;
 }
 
-.list-item-column {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0;
-    @icon-width: 24px;
-    &.column-1 { width: @icon-width; text-align: center; }
-    &.column-2 { width: @icon-width; text-align: center; }
-    &.column-3 { width: @icon-width; text-align: center; }
-    &.column-4 { width: 35%; padding-right: 10px; }
-    &.column-5 { width: 55%; padding-right: 10px; }
-    &.column-6 { width: 140px; text-align: right; }
+.mail-item {
+
+    .list-item {
+        padding-top: 8px;
+        padding-bottom: 6px;
+    }
+
+    .list-item-column {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0;
+        @icon-width: 24px;
+        &.column-1 { width: @icon-width; text-align: center; }
+        &.column-2 { width: @icon-width; text-align: center; }
+        &.column-3 { width: @icon-width; text-align: center; }
+        &.column-4 { width: 35%; padding-right: 10px; }
+        &.column-5 { width: 55%; padding-right: 10px; }
+        &.column-6 { width: 140px; text-align: right; }
+    }
 }
 
 .list-view .list-item {
@@ -168,18 +156,23 @@
     }
 
     @media (max-width: 480px), (max-device-width: 480px)  {
+
+        border-right: 1px solid rgba(0, 0, 0, 0.15);
+        margin-right: -1px;
+
         &.unread.selected {
             .subject { color: #000; }
         }
+
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
             border-bottom: 0;
         }
-        font-size: @phone-font-size;
-        line-height: @phone-line-height;
-        border-right: 1px solid rgba(0, 0, 0, 0.15);
-        margin-right: -1px;
 
+        .list-item-content {
+            font-size: @phone-font-size;
+            line-height: @phone-line-height;
+        }
     }
 }
 
@@ -229,7 +222,7 @@
 .mail-detail {
     section.body {
         margin: 0;
-        padding: 20px;
+        padding: @default-padding;
         background-color: #fff;
         display: none;
         width: 100%;
@@ -267,7 +260,7 @@
 
     .contact-picture {
         float: left;
-        margin: 0px 14px 0 0;
+        margin: 0px @default-padding 0 0;
         .picture(40px, 40px);
         html.high-contrast & {
             display: none;
@@ -326,7 +319,7 @@
         }
     }
 
-    @item-line-height: 21px;
+    @item-line-height: 20px;
 
     .list-item-content {
 
@@ -339,7 +332,7 @@
             display: inline-block;
             float: left;
             line-height: 20px;
-            margin-right: 7px;
+            margin-right: 8px;
         }
 
         i.icon-unread { color: @link-color; }
@@ -353,13 +346,13 @@
         }
 
         .drag-title {
-            opacity: 0.75;
+            opacity: 0.70;
         }
 
         i.flag {
             font-size: 18px;
             padding: 0;
-            margin: 0 0 0 7px;
+            margin: 0 0 0 8px;
             float: right;
         }
     }
@@ -373,9 +366,7 @@
 
     .fa-paperclip.has-attachments {
         font-size: @icon-size;
-        width: 18px;
-        height: 18px;
-        margin: 0 0 0 7px;
+        margin: 0 0 0 8px;
         float: right;
 
     }
@@ -404,17 +395,18 @@
     }
 
     .box() {
-        color: #888;
-        line-height: @item-line-height - 2;
-        padding: 0 7px;
-        margin: 0 0 0 7px;
+        font-size: 12px;
+        color: #777;
+        line-height: 14px;
+        padding: 0 4px;
+        margin: 2px 0 0 8px;
         display: inline-block;
         float: right;
         overflow: visible;
         text-align: center;
-        border: 1px solid rgba(0, 0, 0, 0.10);
+        border: 1px solid rgba(0, 0, 0, 0.15);
         .fontWeight(normal);
-        .border-radius(3px);
+        .border-radius(2px);
     }
 
     .account-name {
@@ -423,7 +415,7 @@
 
     .thread-size {
         .box();
-        min-width: 2em;
+        min-width: 24px;
         html.high-contrast & {
             color: @hc-gray;
         }
@@ -457,18 +449,17 @@
     }
 
     .attachments {
-        padding: 14px 20px;
-        border-top: 1px solid #eee;
+        padding: 10px @default-padding 9px @default-padding;
         border-bottom: 1px solid #eee;
         .io-ox-inline-links {
             display: inline;
             font-family: @normal-font-family;
             font-size: 13px;
-            margin-left: 1em;
+            margin-left: @default-padding;
             a:hover {
                 text-decoration: underline;
             }
-            li { margin-right: 14px; }
+            li { margin-right: @default-padding; }
         }
         .preview .item .io-ox-core-tk-attachment {
 
@@ -546,7 +537,7 @@
         margin-left: 7px;
         position: relative;
         .dropdown-toggle {
-            font-size: @icon-size;
+            font-size: 14px;
             &:hover { text-decoration: none; }
         }
         .flag-dropdown-icon.flag_0 {
@@ -615,14 +606,14 @@
 .subject() {
     font-size: 20px;
     line-height: 24px;
-    padding: 20px;
+    padding: 12px @default-padding 4px @default-padding;
     margin: 0;
     .fontWeight(300);
 }
 
 .thread-view-list {
 
-    padding: 20px;
+    padding: @default-padding;
     background-color: #eee;
     &.scrollable { overflow: auto; }
 
@@ -641,9 +632,10 @@
 
         .summary {
 
-            color: #888;
+            color: #777;
             font-size: 13px;
-            line-height: 16px;
+            line-height: 20px;
+            margin-top: 4px;
 
             html.high-contrast & {
                 color: @hc-gray;
@@ -701,8 +693,8 @@ textarea.inplace-editor {
         .button {
             display: table-cell;
             width: 40%;
-            padding-left: 20px;
-            i { margin-right: 14px; }
+            padding-left: @default-padding;
+            i { margin-right: @default-padding; }
         }
 
         .position {
@@ -716,8 +708,8 @@ textarea.inplace-editor {
             display: table-cell;
             text-align: right;
             width: 40%;
-            padding-right: 20px;
-            i { margin-left: 14px; }
+            padding-right: @default-padding;
+            i { margin-left: @default-padding; }
         }
 
          .fa {
@@ -757,7 +749,7 @@ textarea.inplace-editor {
         background-color: white;
         clear: both;
         padding: 0;
-        margin-bottom: 7px;
+        margin-bottom: 8px;
         border-bottom: 1px solid transparent;
     }
 
@@ -853,7 +845,7 @@ textarea.inplace-editor {
     .mail-detail-decorator {
 
         position: relative;
-        padding: 20px;
+        padding: @default-padding;
         display: table;
         width: 100%;
         // to make sure the quick-reply field can scroll out of viewport
@@ -877,8 +869,7 @@ textarea.inplace-editor {
     width: 100%;
 
     @picture-width: 40px;
-    @header-padding: 19px;
-    @picture-padding: @picture-width + @header-padding;
+    @picture-padding: @picture-width + @default-padding;
 
     &.list-item:focus {
         outline: 0;
@@ -985,7 +976,7 @@ textarea.inplace-editor {
     .external-images, .disposition-notification {
         display: table;
         width: 100%;
-        .btn { float: left; margin-right: 20px; }
+        .btn { float: left; margin-right: @default-padding; }
         .comment { display: table; }
         .close { position: relative; right: -10px; }
     }
@@ -993,7 +984,7 @@ textarea.inplace-editor {
     .flag-dropdown {
 
         font-size: 22px;
-        margin: 7px 0 0 14px;
+        margin: 8px 0 0 @default-padding;
         cursor: pointer;
         float: right;
 
@@ -1044,7 +1035,8 @@ textarea.inplace-editor {
 
     .contact-picture {
         position: absolute;
-        left: 20px;
+        top: @default-padding;
+        left: @default-padding;
         .picture(@picture-width, @picture-width);
     }
 
@@ -1088,28 +1080,39 @@ textarea.inplace-editor {
     }
 
     blockquote {
+        color: #555;
         font-size: 13px;
-        border-left: 1px solid #08c;
-        padding: 7px 0 7px 20px;
-        margin: 10px 0;
+        border-left: 2px solid #ddd;
+        padding: 0 0 0 16px;
+        margin: 8px 0 8px 38px;
     }
 
-    @colorQuotedWidth: 1px;
+    blockquote blockquote {
+        border-color: #3C73AA;
+        margin: 8px 0;
+    }
 
-    .colorQuoted blockquote {
-        border-left: @colorQuotedWidth solid #08c;
+    .blockquote(@color) {
+        color: @color !important;
+        border-left: 2px solid @color;
+        a[href] { color: @color; }
+        a[href]:hover { color: darken(@color, 10%); }
     }
 
     .colorQuoted blockquote blockquote {
-        border-left: @colorQuotedWidth solid #EE0889;
+        .blockquote(#3C73AA);
     }
 
     .colorQuoted blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #08C4FF;
+        .blockquote(#DD0880);
     }
 
     .colorQuoted blockquote blockquote blockquote blockquote {
-        border-left: @colorQuotedWidth solid #aaa;
+        .blockquote(#8F09C7);
+    }
+
+    .colorQuoted blockquote blockquote blockquote blockquote blockquote {
+        .blockquote(#777);
     }
 
     blockquote p {
@@ -1123,9 +1126,9 @@ textarea.inplace-editor {
     .blockquote-toggle {
         color: #888;
         font-size: 13px;
-        padding-left: 44px;
-        margin: 14px 0;
-        min-height: 18px;
+        padding-left: 56px;
+        margin: 16px 0;
+        min-height: 16px;
         i {
             color: #888;
             background-color: #eee;
@@ -1152,12 +1155,17 @@ textarea.inplace-editor {
 
     .detail-view-header {
         .fontWeight(300);
-        padding: 14px (@header-padding + 1);
-        padding-left: @picture-padding + @unread-toggle-width;
+        line-height: 16px;
+        padding: (@default-padding + 3) @default-padding @default-padding (@picture-padding + @default-padding);
+        min-height: 71px;
+    }
+
+    &.expanded .detail-view-header {
+        border-bottom: 1px solid #eee;
     }
 
     &.no-padding .detail-view-header {
-        padding-left: @picture-padding + @unread-toggle-width - 20;
+        padding-left: @picture-padding;
         padding-right: 0;
     }
 
@@ -1166,7 +1174,7 @@ textarea.inplace-editor {
     }
 
     .notification-item {
-        padding: 14px 20px;
+        padding: @default-padding;
         background-color: #f0f0f0;
         border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
@@ -1179,7 +1187,7 @@ textarea.inplace-editor {
     .alert, .well {
         margin: 0;
         border: 0;
-        padding: 14px 40px 14px 20px;
+        padding: @default-padding 40px @default-padding @default-padding;
         .border-radius(0px);
         .box-shadow(none);
     }
@@ -1209,10 +1217,7 @@ textarea.inplace-editor {
 
     .content {
 
-        font-family: @normal-font-family;
-        .fontWeight(400);
-        font-size: 14px;
-        line-height: 20px;
+        font: normal e('13px/normal') @normal-font-family;
         // Max-width does not work here, see Bug #24505
         // max-width: 1000px;
         width: 100%;
@@ -1225,7 +1230,7 @@ textarea.inplace-editor {
 
         * {
             // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
-            line-height: 1.4em;
+            line-height: normal;
             box-sizing: content-box;
         }
 
@@ -1289,7 +1294,7 @@ textarea.inplace-editor {
 
         p {
             font-family: @normal-font-family;
-            margin: 0 0 14px 0;
+            margin: 0 0 1em 0;
         }
 
         small {
@@ -1307,7 +1312,7 @@ textarea.inplace-editor {
 
         ul {
             padding: 0;
-            margin: 10px 0 10px 25px;
+            margin: 1em 0 1em 24px;
         }
 
         ul { list-style-type: disc; }
@@ -1315,7 +1320,7 @@ textarea.inplace-editor {
         ul ul ul { list-style-type: square; }
 
         li {
-            line-height: 1.33333em;
+            line-height: normal;
             margin-bottom: 0.5em;
         }
 
@@ -1339,7 +1344,7 @@ textarea.inplace-editor {
             text-align: left;
         }
 
-        ul, ol { padding-left: 25px; }
+        ul, ol { padding-left: 16px; }
 
         // see Bug 24995 - Strange boxes shown for invitation mails
         .calendar-detail .label {
@@ -1359,8 +1364,8 @@ textarea.inplace-editor {
 
     .max-size-warning {
         color: #777;
-        margin: 10px -20px 0 -20px;
-        padding: 20px 20px 0 20px;
+        margin: 10px -16px 0 -16px;
+        padding: 16px 16px 0 16px;
         border-top: 1px solid #ddd;
     }
 }
@@ -1539,11 +1544,11 @@ h4.mail-attachment-preview {
 
         .subject {
             font-size: @phone-font-size;
-            padding: 10px 20px;
+            padding: @default-padding;
         }
 
         .detail-view-header {
-            padding-left: 20px;
+            padding-left: @default-padding;
             .sp {
                 margin-right: 4px;
             }
@@ -1597,6 +1602,13 @@ h4.mail-attachment-preview {
                     position: absolute;
                     right: 20px;
                 }
+            }
+        }
+
+        .content {
+            font-size: 16px;
+            * {
+                line-height: 1.42857142em; // ~20px at 14px
             }
         }
     }

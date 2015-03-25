@@ -12,7 +12,7 @@
  */
 
 define('io.ox/editor/main', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
     'gettext!io.ox/editor',

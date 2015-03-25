@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
+define('io.ox/core/download', ['io.ox/files/legacy_api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
 
     'use strict';
 

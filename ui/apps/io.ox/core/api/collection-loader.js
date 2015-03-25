@@ -36,12 +36,13 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.collection = null;
         this.loading = false;
 
-        function apply(collection, type, data) {
+        function apply(collection, type, limit, data) {
             Pool.preserve(function () {
                 var method = methods[type];
                 collection[method](data, { parse: true });
             });
-            if (type === 'paginate' && data.length === 0) collection.trigger('complete');
+            var isComplete = (type === 'load' && data.length < limit) || (type === 'paginate' && data.length <= 1);
+            if (isComplete) collection.trigger('complete');
             collection.trigger(type);
         }
 
@@ -55,7 +56,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // trigger proper event
             this.collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = _.lfo(apply, this.collection, type),
+            var cb_apply = _.lfo(apply, this.collection, type, this.LIMIT),
                 cb_fail = _.lfo(fail, this.collection, type),
                 self = this;
             // fetch data
@@ -87,14 +88,16 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         this.load = function (params) {
 
+            var collection, limit = this.LIMIT;
+
             params = this.getQueryParams(params || {});
-            params.limit = '0,' + this.LIMIT;
-            var collection = this.collection = this.getCollection(params);
+            params.limit = '0,' + limit;
+            collection = this.collection = this.getCollection(params);
             this.loading = false;
 
             if (collection.length > 0 && !collection.expired) {
                 _.defer(function () {
-                    collection.trigger('reset load');
+                    collection.trigger(collection.length < limit ? 'reset load complete' : 'reset load');
                 });
                 return collection;
             }
@@ -192,7 +195,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var module = this.module,
                 key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
-                virtual = this.virtual(params);
+                virtual = this.virtual(params),
+                self = this;
 
             if (rampup) {
                 delete ox.rampup[key];
@@ -204,8 +208,15 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             }
 
             return http.wait().then(function () {
-                return http.GET({ module: module, params: params });
+                return self.httpGet(module, params).then(function (data) {
+                    // useSlice helps if server request doesn't support "limit"
+                    return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                });
             });
+        },
+
+        httpGet: function (module, params) {
+            return http.GET({ module: module, params: params });
         },
 
         getQueryParams: function () {

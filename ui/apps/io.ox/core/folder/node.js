@@ -107,12 +107,15 @@ define('io.ox/core/folder/node', [
 
         // respond to changed id
         onChangeId: function (model) {
-            var id = model.get('id'),
-                previous = model.previous('id'),
+            var id = String(model.get('id')),
+                previous = String(model.previous('id')),
                 selection = this.options.tree.selection,
                 selected = selection.get();
+            // update other ID attributes
+            if (this.folder === previous) this.folder = id;
+            if (this.options.model_id === previous) this.options.model_id = id;
+            if (this.options.contextmenu_id === previous) this.options.contextmenu_id = id;
             // update DOM
-            this.folder = this.model_id = String(id);
             this.renderAttributes();
             // trigger selection change event
             if (previous === selected) this.options.tree.trigger('change', id);
@@ -321,16 +324,16 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
-                    id:              this.describedbyID,
-                    'aria-label':    '',
-                    'aria-level':    o.level + 1,
+                    id: this.describedbyID,
+                    'aria-label': '',
+                    'aria-level': o.level + 1,
                     'aria-selected': false,
-                    'data-id':       this.folder,
-                    'data-index':    this.getIndex(),
-                    'data-model':    o.model_id,
+                    'data-id': this.folder,
+                    'data-index': this.getIndex(),
+                    'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
-                    'role':         'treeitem',
-                    'tabindex':     '-1'
+                    'role': 'treeitem',
+                    'tabindex': '-1'
                 })
                 .append(
                     // folder

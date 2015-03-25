@@ -213,6 +213,8 @@ define('io.ox/mail/toolbar', [
 
     // local mediator
     function updateContactPicture() {
+        // disposed?
+        if (!this.model) return;
         // only show this option if preview pane is right (vertical/compact)
         var li = this.$el.find('[data-name="contactPictures"]').parent(),
             layout = this.model.get('layout');
@@ -235,7 +237,7 @@ define('io.ox/mail/toolbar', [
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
             .option('layout', 'vertical', gt('Vertical'))
             .option('layout', 'compact', gt('Compact'))

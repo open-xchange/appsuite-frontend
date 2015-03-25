@@ -6,73 +6,141 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/files/listview', [
-    'io.ox/files/common-extensions',
+    'io.ox/core/tk/list',
     'io.ox/core/extensions',
+    'io.ox/files/common-extensions',
+    'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (extensions, ext) {
+], function (ListView, ext, extensions) {
 
     'use strict';
 
-    ext.point('io.ox/files/listview/item').extend({
-        id: 'default',
-        draw: function (baton) {
-            var isSmall = false;
-            ext.point('io.ox/files/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
+    var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
+
+    //
+    // Extend ListView
+    //
+
+    var FileListView = ListView.extend({
+
+        ref: LISTVIEW,
+
+        initialize: function () {
+            ListView.prototype.initialize.apply(this, arguments);
+            this.$el.addClass('file-list-view');
+        },
+
+        getCompositeKey: function (model) {
+            return model.isFolder() ? 'folder.' + model.get('id') : model.cid;
         }
     });
 
-    /* default */
+    //
+    // Extensions
+    //
 
-    ext.point('io.ox/files/listview/item/default').extend({
-        id: 'row1',
-        index: 100,
-        draw: function (baton) {
-            var row = $('<div class="list-item-row">');
-            ext.point('io.ox/files/listview/item/default/row1').invoke('draw', row, baton);
-            this.append(row);
+    ext.point(ITEM).extend(
+        {
+            id: 'default',
+            index: 100,
+            draw: function (baton) {
+                var layout = (baton.app && baton.app.props.get('layout')) || 'list';
+                ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
+            }
         }
-    });
+    );
 
-    ext.point('io.ox/files/listview/item/default/row1').extend({
-        id: 'locked',
-        index: 100,
-        draw: extensions.locked
-    });
+    // list layout
 
-    ext.point('io.ox/files/listview/item/default/row1').extend({
-        id: 'filename',
-        index: 200,
-        draw: extensions.filename
-    });
-
-    //ROW2
-
-    ext.point('io.ox/files/listview/item/default').extend({
-        id: 'row2',
-        index: 200,
-        draw: function (baton) {
-            var row = $('<div class="list-item-row">');
-            ext.point('io.ox/files/listview/item/default/row2').invoke('draw', row, baton);
-            this.append(row);
+    ext.point(ITEM + '/list').extend(
+        {
+            id: 'file-type',
+            index: 10,
+            draw: extensions.fileTypeClass
+        },
+        {
+            id: 'col1',
+            index: 100,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-1">');
+                extensions.fileTypeIcon.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
+            id: 'col2',
+            index: 200,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-2">');
+                extensions.filename.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
+            id: 'col3',
+            index: 300,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-3 gray">');
+                extensions.smartdate.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
+            id: 'col4',
+            index: 500,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-4 gray">');
+                extensions.size.call(column, baton);
+                this.append(column);
+            }
         }
-    });
+    );
 
-    ext.point('io.ox/files/listview/item/default/row2').extend({
-        id: 'date',
-        index: 100,
-        draw: extensions.compactdate
-    });
+    // icon layout
 
-    ext.point('io.ox/files/listview/item/default/row2').extend({
-        id: 'size',
-        index: 200,
-        draw: extensions.size
-    });
+    ext.point(ITEM + '/icon').extend(
+        {
+            id: 'file-type',
+            index: 10,
+            draw: extensions.fileTypeClass
+        },
+        {
+            id: 'thumbnail',
+            index: 100,
+            draw: extensions.thumbnail
+        },
+        {
+            id: 'lock',
+            index: 200,
+            draw: extensions.locked
+        },
+        {
+            id: 'filename',
+            index: 300,
+            draw: extensions.filename
+        }
+    );
 
+    // tile layout
+
+    ext.point(ITEM + '/tile').extend(
+        {
+            id: 'file-type',
+            index: 10,
+            draw: extensions.fileTypeClass
+        },
+        {
+            id: 'thumbnail',
+            index: 100,
+            draw: extensions.thumbnail
+        }
+    );
+
+    return FileListView;
 });

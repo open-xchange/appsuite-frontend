@@ -48,7 +48,6 @@
     .launchers-secondary {
         float: right;
         position: relative;
-        margin-right: 7px;
     }
 
     html.high-contrast & {
@@ -69,7 +68,7 @@
         & > a {
 
             color: @topbar-launcher-color;
-            padding: 12px;
+            padding: 12px @default-padding;
             line-height: 40px;
 
             html.high-contrast & {
@@ -288,8 +287,9 @@
         &.dropdown {
             overflow: visible;
             .dropdown-menu {
-                right: 0;
+                right: 4px;
                 left: auto;
+                -webkit-font-smoothing: initial;
             }
         }
     }
@@ -348,11 +348,11 @@
 
     i.fa.launcher-icon {
         color: @topbar-icon-color;
-        font-size: 20px;
+        font-size: 18px;
         text-decoration: none;
         line-height: 1em;
         position: relative;
-        top: 4px;
+        top: 2px;
         html.high-contrast & {
             color: @black; // HC
             &:hover {

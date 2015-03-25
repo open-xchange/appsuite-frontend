@@ -27,6 +27,25 @@ body {
     font-feature-settings: "liga", "kern";
 }
 
+// ensure proper alignment (during development)
+// or use the bookmarklet from http://keyes.ie/things/baseliner/
+html.baseline {
+    #background-loader {
+        display: block !important;
+        background-color: transparent;
+        background-image: url(apps/themes/default/baseline_8_cyan.png);
+        opacity: 0.50;
+    }
+    &.red #background-loader {
+        background-image: url(apps/themes/default/baseline_8_red.png);
+        opacity: 0.30;
+    }
+    &.gray #background-loader {
+        background-image: url(apps/themes/default/baseline_8_gray.png);
+        opacity: 0.80;
+    }
+}
+
 /* OpenSans Font Face */
 @font-face {
     font-family: 'OpenSans';
@@ -144,27 +163,7 @@ a.button {
     font-size: 15.5px;
 }
 
-
-.breadcrumb {
-
-    &>li+li:before {
-        content: '/';
-    }
-
-    &>.prefix+li:before {
-        content: '';
-    }
-
-}
-
 .cursor-pointer, .label.pointer { cursor: pointer; }
-
-.breadcrumb > li.prefix { white-space: nowrap; }
-
-.breadcrumb.chromeless {
-    padding-left: 0;
-    background-color: transparent;
-}
 
 .badge {
 
