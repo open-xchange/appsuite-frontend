@@ -66,8 +66,6 @@ define('io.ox/core/pdf/pdfview', [
 
             intervalId = 0;
 
-        console.log('DEVICE_PDFPAGE_SCALING: ' + DEVICE_PDFPAGE_SCALING);
-
         // ---------------------------------------------------------------------
 
         function getPageViewport(pdfjsPage, pageZoom) {
@@ -580,7 +578,7 @@ define('io.ox/core/pdf/pdfview', [
 
     PDFView.getNormalizedSize = function (size) {
         return (size && _.isNumber(size.width) && _.isNumber(size.height)) ?
-                { width: Math.floor(size.width), height: Math.floor(size.height) } :
+                { width: Math.ceil(size.width), height: Math.ceil(size.height) } :
                     null;
     };
 
