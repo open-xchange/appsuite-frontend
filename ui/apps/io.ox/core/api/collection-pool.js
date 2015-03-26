@@ -187,11 +187,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             return collection;
         },
 
+        // resolve a list of composite keys (cids) to models
+        // skips items that are a model already
         resolve: function (list) {
-            var collection = this.get('detail');
+            var collection = this.get('detail'), Model = this.Model;
             return _([].concat(list)).map(function (item) {
-                var cid = _.cid(item);
-                return collection.get(cid) || {};
+                return item instanceof Model ? item : collection.get(_.cid(item)) || {};
             });
         },
 

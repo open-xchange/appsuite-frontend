@@ -12,6 +12,7 @@
  */
 
 define('io.ox/files/actions', [
+    'io.ox/files/api',
     'io.ox/files/legacy_api',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
@@ -19,7 +20,7 @@ define('io.ox/files/actions', [
     'io.ox/files/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/files'
-], function (api, ext, links, capabilities, util, folderAPI, gt) {
+], function (api, legacy_api, ext, links, capabilities, util, folderAPI, gt) {
 
     'use strict';
 
@@ -123,7 +124,7 @@ define('io.ox/files/actions', [
         },
         multiple: function (list) {
             _(list).each(function (file) {
-                window.open(api.getUrl(file, 'open'));
+                window.open(legacy_api.getUrl(file, 'open'));
             });
         }
     });
@@ -162,7 +163,7 @@ define('io.ox/files/actions', [
             );
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
+            legacy_api.getList(list).done(function (list) {
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
                 if (filtered_list.length > 0) {
                     ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
@@ -195,6 +196,10 @@ define('io.ox/files/actions', [
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/delete']).done(function (action) {
+                if (!baton.models) {
+                    api.pool.add(list);
+                    baton.models = api.pool.resolve(list);
+                }
                 action(baton.models);
             });
         }
@@ -212,6 +217,10 @@ define('io.ox/files/actions', [
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
+                if (!baton.models) {
+                    api.pool.add(list);
+                    baton.models = api.pool.resolve(list);
+                }
                 action.lock(baton.models);
             });
         }
@@ -229,6 +238,10 @@ define('io.ox/files/actions', [
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
+                if (!baton.models) {
+                    api.pool.add(list);
+                    baton.models = api.pool.resolve(list);
+                }
                 action.unlock(baton.models);
             });
         }
@@ -367,7 +380,7 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             var data = baton.data;
-            api.update({
+            legacy_api.update({
                 id: data.id,
                 last_modified: data.last_modified,
                 version: data.version

@@ -13,7 +13,7 @@
  */
 
 define('io.ox/files/detail/main', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/files/fluid/view-detail',
     'gettext!io.ox/files'
 ], function (api, viewDetail, gt) {
@@ -44,6 +44,7 @@ define('io.ox/files/detail/main', [
                     ));
 
                     app.setTitle(title);
+
                     api.one('delete:' + _.ecid(data), function () {
                         app.quit();
                     });

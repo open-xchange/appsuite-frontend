@@ -337,9 +337,9 @@ define('io.ox/files/api', [
     }());
 
     api.get = function (options) {
-        var model = pool.get('detail').get(_.cid(options));
 
-        if (model) return $.when(model);
+        var model = pool.get('detail').get(_.cid(options));
+        if (model) return $.when(model.toJSON());
 
         return http.GET({
             module: 'files',
@@ -349,8 +349,10 @@ define('io.ox/files/api', [
                 folder: options.folder_id || options.folder,
                 timezone: 'UTC'
             }
-        }).then(function (data) {
-            return pool.add('detail', data).get(_.cid(data));
+        })
+        .then(function (data) {
+            pool.add('detail', data);
+            return data;
         });
     };
 
@@ -510,14 +512,7 @@ define('io.ox/files/api', [
         });
     }
 
-    api.remove = function (list) {
-
-        //only remove file objects
-        var ids = list.filter(function (o) {
-            return o.isFile && o.isFile();
-        }).map(function (model) {
-            return model.toJSON();
-        });
+    api.remove = function (ids) {
 
         prepareRemove(ids);
 
@@ -529,10 +524,11 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .done(function () {
-                // update folder
                 folderAPI.reload(ids);
-                // trigger delete to update notification area
                 api.trigger('delete');
+                _(ids).each(function (item) {
+                    api.trigger('delete:' + _.ecid(item));
+                });
             })
         );
     };
