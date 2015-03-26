@@ -15,14 +15,29 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
+    'io.ox/core/viewer/eventdispatcher',
     'gettext!io.ox/core'
-], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, gt) {
+], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher, gt) {
 
     'use strict';
 
     // define actions for zoom buttons in the toolbar
     var TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
         Action = ActionsPattern.Action;
+
+    // define actions for the zoom function
+    new Action(TOOLBAR_ACTION_ID + '/zoomin', {
+        id: 'zoomin',
+        action: function (baton) {
+            EventDispatcher.trigger('viewer:document:zoomin', baton);
+        }
+    });
+    new Action(TOOLBAR_ACTION_ID + '/zoomout', {
+        id: 'zoomout',
+        action: function (baton) {
+            EventDispatcher.trigger('viewer:document:zoomout', baton);
+        }
+    });
 
     /**
      * The image file type. Implements the ViewerType interface.
@@ -77,15 +92,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                     }
                 }
             };
-            // define actions for the zoom function
-            this.zoomInAction = new Action(TOOLBAR_ACTION_ID + '/zoomin', {
-                id: 'zoomin',
-                action: this.zoomIn
-            });
-            this.zoomOutAction = new Action(TOOLBAR_ACTION_ID + '/zoomout', {
-                id: 'zoomout',
-                action: this.zoomOut
-            });
+            // bind zoom handlers
+            EventDispatcher.on('viewer:document:zoomin', this.onZoomIn.bind(this));
+            EventDispatcher.on('viewer:document:zoomout', this.onZoomOut.bind(this));
         },
 
         /**
@@ -132,7 +141,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
             var self = this,
                 // the file descriptor object
-                file = this.model.get('origData'),
+                file = this.model.get('origData').attributes,
                 // generate document converter URL of the document
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, file, {
                     action: 'getdocument',
@@ -234,7 +243,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 };
 
                 this.pdfView.setRenderCallbacks(renderCallbacks);
-                pageContainer.idle();
             }
 
             /**
@@ -242,6 +250,8 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadFinished() {
                 pageContainer.idle();
+                this.onZoomIn();
+                //this.pdfView.setPageZoom(2);
             }
 
             /**
@@ -260,7 +270,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             // wait for PDF document to finish loading
             $.when(this.pdfDocument.getLoadPromise())
                 .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError)
-                .always(pdfDocumentLoadFinished);
+                .always(pdfDocumentLoadFinished.bind(this));
 
             return this;
         },
@@ -285,15 +295,19 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * Zooms in of a document.
          */
-        zoomIn: function () {
-            //console.warn('DocumentView.zoomIn()');
+        onZoomIn: function (baton) {
+            if (this.$el.hasClass('swiper-slide-active')) {
+                console.warn('DocumentView.zoomIn()', baton);
+            }
         },
 
         /**
-         * Zooms in of the document.
+         * Zooms out of the document.
          */
-        zoomOut: function () {
-            //console.warn('DocumentView.zoomIn()');
+        onZoomOut: function (baton) {
+            if (this.$el.hasClass('swiper-slide-active')) {
+                console.warn('DocumentView.zoomOut()', baton);
+            }
         },
 
         /**
@@ -328,8 +342,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             //console.warn('DocumentView.disposeView()');
             this.unload(true);
-            this.zoomInAction = null;
-            this.zoomOutAction = null;
+            EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
         }
 
     });
