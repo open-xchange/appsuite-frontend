@@ -233,7 +233,6 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        placeholder: _.device('smartphone') ? '' : tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
