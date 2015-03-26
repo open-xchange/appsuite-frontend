@@ -485,9 +485,8 @@ define('io.ox/core/desktop', [
                         ox.trigger('app:start', self);
                     },
                     function fail() {
-                        ox.launch(
-                            require('settings!io.ox/core').get('autoStart')
-                        );
+                        var autoStart = require('settings!io.ox/core').get('autoStart');
+                        if (autoStart !== 'none') ox.launch(autoStart);
                     }
                 );
             } else if (this.has('window')) {
