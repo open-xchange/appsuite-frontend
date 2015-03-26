@@ -70,7 +70,7 @@ define('io.ox/files/api', [
 
         isEncrypted: function () {
             // check if file has "guard" file extension
-            return /\.grd$/.test(this.get('filename'));
+            return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
         },
 
         getDisplayName: function () {
@@ -114,7 +114,7 @@ define('io.ox/files/api', [
             pdf:   /^pdf$/,
             zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
             txt:   /^(txt|md)$/,
-            guard: /^grd$/
+            guard: /^(grd|grd2|pgp)$/
         },
 
         supportsPreview: function () {
