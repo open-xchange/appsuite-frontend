@@ -45,6 +45,7 @@ define('io.ox/mail/main', [
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/mail',
+        id: 'io.ox/mail',
         title: 'Mail'
     });
 

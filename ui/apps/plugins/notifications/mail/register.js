@@ -27,9 +27,8 @@ define('plugins/notifications/mail/register', [
     ext.point('io.ox/core/notifications/badge').extend({
         id: 'mail',
         index: 100,
-        register: function (baton) {
-            var models = {},
-                badge = baton.addBadge('io.ox/mail');
+        register: function () {
+            var models = {};
 
             _(folderApi.pool.models).each(function (model, key) {
                 //foldername starts with inbox
@@ -37,17 +36,22 @@ define('plugins/notifications/mail/register', [
                     models[key] = model;
                 }
             });
-            function update() {
+            var update = _.debounce(function () {
+                var app = ox.ui.apps._byId['io.ox/mail'] || ox.ui.apps._byId['io.ox/mail/placeholder'];
+                if (!app ) {
+                    return;
+                }
+
                 var count = 0;
                 _(models).each(function (model) {
                     if (model && model.get('unread')) {
                         count = count + model.get('unread');
                     }
                 });
-                baton.setBadgeText('io.ox/mail', count);
+
                 //#. %1$d number of notifications
-                badge.attr('aria-label', gt.format('%1$d unread mails', count));
-            }
+                app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });
+            }, 300);
 
             _(models).each(function (folderModel) {
                 folderModel.on('change:unread', update);
@@ -58,6 +62,7 @@ define('plugins/notifications/mail/register', [
                     var model = folderApi.pool.models[key];
                     models[key] = model;
                     model.on('change:unread', update);
+                    //when a foldertree is loaded, many new folders are added, no need to call update that often
                     update();
                 }
             });

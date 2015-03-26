@@ -57,6 +57,28 @@ define('io.ox/core/desktop', [
             };
         },
 
+        setCounter: function (text, options) {
+            if (!this.get('topbarNode')) {
+                return;
+            }
+            if (!this.badge && this.get('topbarNode')) {
+                this.badge = this.get('topbarNode').find('.topbar-launcherbadge');
+                if (this.badge.length === 0) {
+                    this.badge = $('<span class="badge topbar-launcherbadge">');
+                }
+                this.get('topbarNode').find('a.apptitle').append(this.badge);
+            }
+            this.badge.text(text);
+            if (options.arialabel) {
+                this.badge.attr('aria-label', options.arialabel);
+            }
+            if (!text) {
+                this.badge.hide();
+            } else {
+                this.badge.show();
+            }
+        },
+
         getName: function () {
             return this.get('name');
         },
@@ -147,7 +169,6 @@ define('io.ox/core/desktop', [
         },
 
         initialize: function () {
-
             var self = this;
 
             // call super constructor

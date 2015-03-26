@@ -39,6 +39,7 @@ define('io.ox/tasks/main', [
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/tasks',
+        id: 'io.ox/tasks',
         title: 'Tasks'
     });
 

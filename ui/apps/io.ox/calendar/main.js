@@ -37,6 +37,7 @@ define('io.ox/calendar/main', [
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/calendar',
+        id: 'io.ox/calendar',
         title: 'Calendar'
     }), win;
 

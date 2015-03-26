@@ -337,40 +337,6 @@ define('io.ox/core/main', [
         return node.appendTo(side === 'left' ? launchers : topbar);
     };
 
-    var badges = {},
-        addBadge = function (id, text) {
-            if (!badges[id]) {
-                //check if this app has a topbar node
-                var node = $('li.launcher[data-app-name="' + id + '"] .apptitle');
-                if (!node) return;
-                var badge = $('<span class="badge topbar-launcherbadge">').text(text);
-                if (!text) {
-                    badge.hide();
-                }
-                badges[id] = badge;
-                node.append(badge);
-                return badge;
-            } else {
-                return badges[id];
-            }
-        },
-
-        getBadge = function (id) {
-            return (badges[id]);
-        },
-
-        setBadgeText = function (id, text) {
-            if (badges[id]) {
-                var badge = badges[id];
-                badge.text(text);
-                if (!text) {
-                    badge.hide();
-                } else {
-                    badge.show();
-                }
-            }
-        };
-
     function initRefreshAnimation() {
 
         var count = 0,
@@ -697,6 +663,7 @@ define('io.ox/core/main', [
                 closable = model.get('closable') && !_.device('smartphone'),
                 name;
 
+            model.set('topbarNode', node);
             add(node, launchers, model);
 
             // call extensions to customize
@@ -1066,7 +1033,8 @@ define('io.ox/core/main', [
                 _(favorites).each(function (obj) {
                     if (upsell.visible(obj.requires) && _.device(obj.device)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
-                            id: obj.id,
+                            id: obj.id + '/placeholder',
+                            name: obj.id,
                             title: obj.title,
                             requires: obj.requires
                         }));
@@ -1075,11 +1043,7 @@ define('io.ox/core/main', [
 
                 //load and draw badges
                 ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
-                    ext.point('io.ox/core/notifications/badge').invoke('register', self, {
-                        addBadge: addBadge,
-                        getBadge: getBadge,
-                        setBadgeText: setBadgeText
-                    });
+                    ext.point('io.ox/core/notifications/badge').invoke('register', self, {});
                 });
             }
         });

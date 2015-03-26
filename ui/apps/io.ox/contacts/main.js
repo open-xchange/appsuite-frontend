@@ -42,6 +42,7 @@ define('io.ox/contacts/main', [
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/contacts',
+        id: 'io.ox/contacts',
         title: 'Address Book'
     });
 
