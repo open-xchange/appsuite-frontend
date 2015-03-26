@@ -40,6 +40,7 @@ define('plugins/notifications/calendar/register', [
         draw: function (baton) {
             var model = baton.model,
                 node = this,
+                view = baton.view,
                 descriptionId = _.uniqueId('notification-description-'),
                 onClickChangeStatus = function (e) {
                     // stopPropagation could be prevented by another markup structure
@@ -66,7 +67,10 @@ define('plugins/notifications/calendar/register', [
                             }
                             calAPI.checkConflicts(appointmentData).done(function (conflicts) {
                                 if (conflicts.length === 0) {
-                                    calAPI.confirm(o);
+                                    view.responsiveRemove(model);
+                                    calAPI.confirm(o).fail(function () {
+                                        view.unHide(model);
+                                    });
                                 } else {
                                     ox.load(['io.ox/calendar/conflicts/conflictList', 'io.ox/core/tk/dialogs']).done(function (conflictView, dialogs) {
                                         var dialog = new dialogs.ModalDialog()
@@ -82,7 +86,10 @@ define('plugins/notifications/calendar/register', [
                                                     return;
                                                 }
                                                 if (action === 'ignore') {
-                                                    calAPI.confirm(o);
+                                                    view.responsiveRemove(model);
+                                                    calAPI.confirm(o).fail(function () {
+                                                        view.unHide(model);
+                                                    });
                                                 }
                                             });
                                     });
@@ -208,31 +215,6 @@ define('plugins/notifications/calendar/register', [
             });
 
             reminderAPI.getReminders();
-            //needed?
-            /*function removeReminders(e, reminders) {
-                //make sure we have an array
-                reminders = reminders ? [].concat(reminders) : [];
-                _(reminders).each(function (reminder) {
-                    for (var i = 0; ReminderNotifications.collection.length > i; i++) {
-                        var model = ReminderNotifications.collection.models[i];
-                        if (model.attributes.caldata.id === reminder.id && model.attributes.caldata.folder_id === (reminder.folder || reminder.folder_id)) {
-                            ReminderNotifications.collection.remove(model);
-                        }
-                    }
-                });
-            }
-
-            calAPI
-                .on('delete:appointment', removeReminders)
-                .on('delete:appointment', function () {
-                    reminderAPI.getReminders();
-                })
-                .on('mark:invite:confirmed', function (e, obj) {
-                    //remove reminders for declined appointments
-                    if (obj.data.confirmation === 2) {
-                        removeReminders(e, obj);
-                    }
-                });*/
         }
     });
 

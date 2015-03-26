@@ -235,6 +235,8 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
             var node = this.addClass('taskNotification'),
+                model = baton.model,
+                view = baton.view,
                 onChangeState = function (e) {
                     e.stopPropagation();
                     //only open if click or enter is pressed
@@ -258,9 +260,12 @@ define('plugins/notifications/tasks/register', [
                             folder_id: baton.model.get('folder_id'),
                             data: { confirmmessage: '', confirmation: 1 }
                         };
+                    view.responsiveRemove(model);
                     api.confirm(o).done(function () {
                         //update detailview
                         api.trigger('update:' + _.ecid(o));
+                    }).fail(function () {
+                        view.unHide(model);
                     });
                 };
 

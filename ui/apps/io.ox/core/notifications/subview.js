@@ -269,13 +269,33 @@ define('io.ox/core/notifications/subview', [
                 }
             }
         },
+        //removes a notification from view and puts it in the hidden collection
+        //does not redraw the whole view or fire requests
+        //if there is 0 items left to display, hides the view
+        responsiveRemove: function (model) {
+            //should work with models and objects with attributes
+            var data = model.attributes || model,
+                id = data.id,
+                obj = this.collection.get(id);
+
+            if (obj) {
+                this.hiddenCollection.add(obj);
+                this.removeNotifications(obj, true);
+
+                this.$el.find('[data-cid="' + _.cid(data) + '"]').remove();
+
+                if (this.collection.size() === 0) {
+                    this.render(this.$el.parent());
+                }
+            }
+        },
         unHide: function (model) {
             var id = model.id || model.get('id'),
                 obj = this.hiddenCollection.get(id);
             this.hiddenCollection.remove(obj);
             //don't add twice
             if (!this.collection.get(obj.get('id'))) {
-                this.collection.add(obj);
+                this.addNotifications(obj);
             }
         },
         //removes items that are in the hidden list so they don't get added
@@ -323,6 +343,10 @@ define('io.ox/core/notifications/subview', [
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
+            //stop here if nothing changes, to prevent event triggering and redrawing
+            if (items.length === 0) {
+                return;
+            }
             items = this.checkHidden(items);
             this.checkNew(items);
             this.collection.add(items, { silent: silent });
@@ -331,11 +355,19 @@ define('io.ox/core/notifications/subview', [
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
+            //stop here if nothing changes, to prevent event triggering and redrawing
+            if (items.length === 0 ||  (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
+                return;
+            }
             this.collection.remove(items, { silent: silent });
         },
         resetNotifications: function (items, silent) {
             if (!_.isArray(items)) {
                 items = [].concat(items);
+            }
+            //stop here if nothing changes, to prevent event triggering and redrawing
+            if (this.collection.size() === 0 && items.length === 0) {
+                return;
             }
             items = this.checkHidden(items);
             this.checkNew(items);
