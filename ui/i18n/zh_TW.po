@@ -583,7 +583,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "使用 WebDAV 存取檔案"
 
-#: apps/io.ox/core/folder/api.js:320 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:321 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "未被允許存取全域通訊錄"
 
@@ -862,15 +862,15 @@ msgctxt "app"
 msgid "Address Book"
 msgstr "通訊錄"
 
-#: apps/io.ox/contacts/model.js:320 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:285 module:io.ox/contacts
 msgid "Address Business"
 msgstr "地址（業務）"
 
-#: apps/io.ox/contacts/model.js:319 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:284 module:io.ox/contacts
 msgid "Address Home"
 msgstr "地址（住家）"
 
-#: apps/io.ox/contacts/model.js:321 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:286 module:io.ox/contacts
 msgid "Address Other"
 msgstr "位址（其他）"
 
@@ -951,7 +951,7 @@ msgstr "所有資料夾"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "超過 %1$d 天的訊息將被移動至封存信件匣"
 
-#: apps/io.ox/core/folder/api.js:207 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:208 module:io.ox/core
 #, fuzzy
 #| msgid "All appointments"
 msgid "All my appointments"
@@ -984,7 +984,7 @@ msgstr "發生錯誤。請稍後重試。"
 msgid "An internal error occurred"
 msgstr "發生內部錯誤"
 
-#: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:206 module:io.ox/contacts
 msgid "Anniversary"
 msgstr "周年紀念日"
 
@@ -1132,7 +1132,7 @@ msgstr "與收件帳密相同"
 msgid "Ascending"
 msgstr "昇冪"
 
-#: apps/io.ox/contacts/model.js:260 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
 msgid "Assistant"
 msgstr "助理"
 
@@ -1289,7 +1289,7 @@ msgstr "黑色"
 msgid "Blue"
 msgstr "藍色"
 
-#: apps/io.ox/contacts/model.js:256 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:221 module:io.ox/contacts
 msgid "Branches"
 msgstr "分支"
 
@@ -1306,7 +1306,7 @@ msgstr "業務地址"
 msgid "Business address"
 msgstr "業務地址"
 
-#: apps/io.ox/contacts/model.js:257 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:222 module:io.ox/contacts
 msgid "Business category"
 msgstr "業務分類"
 
@@ -1467,12 +1467,12 @@ msgstr "容量"
 msgid "Cart is empty."
 msgstr "購物車是空的。"
 
-#: apps/io.ox/contacts/model.js:274 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:239 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "行動電話"
 
-#: apps/io.ox/contacts/model.js:275 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "替代行動電話"
 
@@ -1548,7 +1548,7 @@ msgstr "選取盒"
 msgid "Checking credentials ..."
 msgstr "正在檢查帳號密碼... 可能需要幾秒鐘。"
 
-#: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:202 module:io.ox/contacts
 msgid "Children"
 msgstr "子女"
 
@@ -1706,7 +1706,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js:94 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:263 module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:242 apps/io.ox/contacts/view-detail.js:439
+#: apps/io.ox/contacts/model.js:207 apps/io.ox/contacts/view-detail.js:439
 #: apps/plugins/portal/xing/actions.js:68 module:plugins/portal
 msgid "Comment"
 msgstr "注釋"
@@ -1723,7 +1723,7 @@ msgstr "注釋"
 msgid "Comments and suggestions"
 msgstr "意見與建議"
 
-#: apps/io.ox/contacts/model.js:255 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:220 module:io.ox/contacts
 msgid "Commercial Register"
 msgstr "商業註冊"
 
@@ -1757,7 +1757,7 @@ msgstr "精簡型面板"
 msgid "Companies"
 msgstr "公司"
 
-#: apps/io.ox/contacts/model.js:292 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:257 module:io.ox/contacts
 msgid "Company"
 msgstr "公司"
 
@@ -1828,7 +1828,7 @@ msgstr "聯絡人照片"
 msgid "Contact request sent"
 msgstr "已送出聯絡人請求"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:135 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:137 module:io.ox/contacts
 msgid "Contacts"
 msgstr "成員"
 
@@ -1924,7 +1924,7 @@ msgstr "無法儲存設定"
 msgid "Could not save settings."
 msgstr "無法儲存設定。"
 
-#: apps/io.ox/core/folder/api.js:622 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:623 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1960,8 +1960,8 @@ msgstr "無法載入您的郵件篩選規則。"
 msgid "Couldn't load your vacation notice."
 msgstr "無法載入您的假期通知。"
 
-#: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:251 apps/io.ox/contacts/model.js:264
+#: apps/io.ox/contacts/model.js:199 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:216 apps/io.ox/contacts/model.js:229
 msgid "Country"
 msgstr "國家/地區"
 
@@ -2089,7 +2089,7 @@ msgstr "日期"
 msgid "Date completed"
 msgstr "完成日期"
 
-#: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:200 module:io.ox/contacts
 #: apps/plugins/halo/xing/register.js:142 module:plugins/portal
 msgid "Date of birth"
 msgstr "出生日期"
@@ -2128,7 +2128,7 @@ msgstr "拒絕"
 msgid "Default Theme"
 msgstr "預設佈景"
 
-#: apps/io.ox/contacts/model.js:318 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:283 module:io.ox/contacts
 msgid "Default address"
 msgstr "預設地址"
 
@@ -2252,7 +2252,7 @@ msgstr "已刪除訊息"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "郵件從本地存儲刪除時也將從伺服器上刪除"
 
-#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:208 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "部門"
@@ -2350,7 +2350,7 @@ msgstr "顯示名稱"
 msgid "Display emoticons as graphics in text emails"
 msgstr "在純文字電子郵件中以圖形顯示表情符號"
 
-#: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:189 module:io.ox/contacts
 msgid "Display name"
 msgstr "顯示名"
 
@@ -2376,7 +2376,7 @@ msgid "Distribution List Details"
 msgstr "通訊組列表"
 
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:315
+#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:280
 #: apps/io.ox/contacts/view-detail.js:48 apps/io.ox/participants/model.js:43
 #: module:io.ox/participants/model apps/io.ox/participants/views.js:185
 #: module:io.ox/calendar/edit/main
@@ -2791,19 +2791,19 @@ msgstr "編輯器"
 msgid "Email"
 msgstr "電子郵件"
 
-#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
 msgid "Email 1"
 msgstr "電子郵件 1"
 
-#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
 msgid "Email 1 / Phone number"
 msgstr "郵件 1 / 電話號碼"
 
-#: apps/io.ox/contacts/model.js:279 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:244 module:io.ox/contacts
 msgid "Email 2"
 msgstr "電子郵件 2"
 
-#: apps/io.ox/contacts/model.js:280 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Email 3"
 msgstr "電子郵件 3"
 
@@ -2857,11 +2857,11 @@ msgstr "當您的空間已滿時，電子郵件無法被到垃圾桶。"
 msgid "Employee"
 msgstr "員工"
 
-#: apps/io.ox/contacts/model.js:252 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:217 module:io.ox/contacts
 msgid "Employee ID"
 msgstr "員工 ID"
 
-#: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:210 module:io.ox/contacts
 msgid "Employee type"
 msgstr "員工類型"
 
@@ -3183,15 +3183,15 @@ msgstr "已加入最愛"
 msgid "Favorites"
 msgstr "最愛"
 
-#: apps/io.ox/contacts/model.js:267 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:232 module:io.ox/contacts
 msgid "Fax"
 msgstr "傳真"
 
-#: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
 msgid "Fax (Home)"
 msgstr "傳真（住宅）"
 
-#: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
 msgid "Fax (alt)"
 msgstr "傳真（替代）"
 
@@ -3266,7 +3266,7 @@ msgstr ""
 msgid "Find a free time"
 msgstr "尋找空閒時間"
 
-#: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:190 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:84 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:80 module:io.ox/wizards/firstStart
 msgid "First name"
@@ -3683,7 +3683,7 @@ msgstr "這個功能如何使用？"
 msgid "IMAP folder subscription"
 msgstr "IMAP 資料夾訂閱"
 
-#: apps/io.ox/contacts/model.js:290 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:255 module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP 電話"
 
@@ -3730,7 +3730,7 @@ msgid ""
 "example."
 msgstr "忽略現有事件，匯入國定假日行事曆時很有用。"
 
-#: apps/io.ox/contacts/model.js:293 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:258 module:io.ox/contacts
 msgid "Image 1"
 msgstr "圖片 1"
 
@@ -3786,7 +3786,7 @@ msgstr "收件伺服器"
 msgid "Inconsistent dates"
 msgstr "不連貫的日期"
 
-#: apps/io.ox/contacts/model.js:258 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:223 module:io.ox/contacts
 #: apps/io.ox/core/yell.js:22 module:io.ox/core
 msgid "Info"
 msgstr "信息"
@@ -3824,11 +3824,11 @@ msgid ""
 "Screen'%4$s"
 msgstr "在您的 %1$s 安裝此網頁應用程式: 點選 %2$s -> %3$s「新增至主畫面」%4$s"
 
-#: apps/io.ox/contacts/model.js:288 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
 msgstr "即時訊息 1"
 
-#: apps/io.ox/contacts/model.js:289 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
 msgid "Instant Messenger 2"
 msgstr "即時訊息 2"
 
@@ -3979,7 +3979,7 @@ msgstr "不同語言的細部設定"
 msgid "Languages"
 msgstr "語言"
 
-#: apps/io.ox/contacts/model.js:226 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
 msgid "Last name"
@@ -4059,7 +4059,7 @@ msgstr "LinkedIn 網路更新"
 msgid "LinkedIn reported an error:"
 msgstr "LinkedIn 回報錯誤:"
 
-#: apps/io.ox/contacts/model.js:314 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:279 module:io.ox/contacts
 msgid "Links"
 msgstr "鏈結"
 
@@ -4160,7 +4160,8 @@ msgstr "郵件數量額度"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:71 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:105
+#: module:plugins/notifications
 #, fuzzy, c-format
 #| msgid "Mail from %1$s %2$s"
 msgid "Mail from %1$s, %2$s"
@@ -4249,7 +4250,7 @@ msgstr "將此版本作為目前版本"
 msgid "Manage applications"
 msgstr "管理應用程式"
 
-#: apps/io.ox/contacts/model.js:259 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
 msgstr "經理"
 
@@ -4269,7 +4270,7 @@ msgstr "手動"
 msgid "March"
 msgstr "三月"
 
-#: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:201 module:io.ox/contacts
 msgid "Marital status"
 msgstr "婚姻狀況"
 
@@ -4287,7 +4288,7 @@ msgstr "將所有郵件標示為已讀"
 msgid "Mark as"
 msgstr "標記為"
 
-#: apps/io.ox/contacts/model.js:317 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:282 module:io.ox/contacts
 msgid "Mark as distributionlist"
 msgstr "標示為通訊組列表"
 
@@ -4377,7 +4378,7 @@ msgstr "消息"
 msgid "Messenger"
 msgstr "Messenger"
 
-#: apps/io.ox/contacts/model.js:227 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:192 module:io.ox/contacts
 msgid "Middle name"
 msgstr "中間名"
 
@@ -4545,7 +4546,7 @@ msgstr "大自然"
 msgid "New"
 msgstr "新增"
 
-#: apps/io.ox/core/folder/api.js:668 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:669 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新資料夾"
@@ -4597,13 +4598,14 @@ msgstr "新增檔案"
 msgid "New folder"
 msgstr "新文件夾"
 
-#: apps/plugins/notifications/mail/register.js:73 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:107
+#: module:plugins/notifications
 #, fuzzy
 #| msgid "New Mail"
 msgid "New mail"
 msgstr "新增郵件"
 
-#: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:95 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mails"
 msgid "New mails"
@@ -4687,7 +4689,7 @@ msgstr "下一天"
 msgid "Next Week"
 msgstr "下週"
 
-#: apps/io.ox/contacts/model.js:239 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
 msgstr "別名"
 
@@ -4798,7 +4800,8 @@ msgstr "無慢速請求"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:71 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:105
+#: module:plugins/notifications
 #, c-format
 msgid "No subject"
 msgstr "無主題"
@@ -4998,83 +5001,83 @@ msgstr "在 LinkedIn 開啟"
 msgid "Open/close all messages"
 msgstr "開啟/關閉所有訊息"
 
-#: apps/io.ox/contacts/model.js:294 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:259 module:io.ox/contacts
 msgid "Optional 01"
 msgstr "可選 01"
 
-#: apps/io.ox/contacts/model.js:295 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:260 module:io.ox/contacts
 msgid "Optional 02"
 msgstr "可選 02"
 
-#: apps/io.ox/contacts/model.js:296 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:261 module:io.ox/contacts
 msgid "Optional 03"
 msgstr "可選 03"
 
-#: apps/io.ox/contacts/model.js:297 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:262 module:io.ox/contacts
 msgid "Optional 04"
 msgstr "可選 04"
 
-#: apps/io.ox/contacts/model.js:298 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:263 module:io.ox/contacts
 msgid "Optional 05"
 msgstr "可選 05"
 
-#: apps/io.ox/contacts/model.js:299 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
 msgid "Optional 06"
 msgstr "可選 06"
 
-#: apps/io.ox/contacts/model.js:300 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
 msgid "Optional 07"
 msgstr "可選 07"
 
-#: apps/io.ox/contacts/model.js:301 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Optional 08"
 msgstr "可選 08"
 
-#: apps/io.ox/contacts/model.js:302 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:267 module:io.ox/contacts
 msgid "Optional 09"
 msgstr "可選 09"
 
-#: apps/io.ox/contacts/model.js:303 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:268 module:io.ox/contacts
 msgid "Optional 10"
 msgstr "選項 10"
 
-#: apps/io.ox/contacts/model.js:304 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:269 module:io.ox/contacts
 msgid "Optional 11"
 msgstr "選項 11"
 
-#: apps/io.ox/contacts/model.js:305 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:270 module:io.ox/contacts
 msgid "Optional 12"
 msgstr "選項 12"
 
-#: apps/io.ox/contacts/model.js:306 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:271 module:io.ox/contacts
 msgid "Optional 13"
 msgstr "選項 13"
 
-#: apps/io.ox/contacts/model.js:307 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:272 module:io.ox/contacts
 msgid "Optional 14"
 msgstr "選項 14"
 
-#: apps/io.ox/contacts/model.js:308 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
 msgid "Optional 15"
 msgstr "選項 15"
 
-#: apps/io.ox/contacts/model.js:309 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:274 module:io.ox/contacts
 msgid "Optional 16"
 msgstr "選項 16"
 
-#: apps/io.ox/contacts/model.js:310 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:275 module:io.ox/contacts
 msgid "Optional 17"
 msgstr "選項 17"
 
-#: apps/io.ox/contacts/model.js:311 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:276 module:io.ox/contacts
 msgid "Optional 18"
 msgstr "選項 18"
 
-#: apps/io.ox/contacts/model.js:312 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Optional 19"
 msgstr "選項 19"
 
-#: apps/io.ox/contacts/model.js:313 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
 msgid "Optional 20"
 msgstr "選項 20"
 
@@ -5138,7 +5141,7 @@ msgstr "PB"
 msgid "PDFs"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:283 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:248 module:io.ox/contacts
 msgid "Pager"
 msgstr "尋呼機"
 
@@ -5235,35 +5238,35 @@ msgstr "電話"
 msgid "Phone & fax numbers"
 msgstr "電話與傳真號碼"
 
-#: apps/io.ox/contacts/model.js:291 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:256 module:io.ox/contacts
 msgid "Phone (assistant)"
 msgstr "電話（助理）"
 
-#: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:231 module:io.ox/contacts
 msgid "Phone (business alt)"
 msgstr "電話（業務替代）"
 
-#: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 msgid "Phone (business)"
 msgstr "電話（業務）"
 
-#: apps/io.ox/contacts/model.js:269 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
 msgid "Phone (car)"
 msgstr "電話（汽車）"
 
-#: apps/io.ox/contacts/model.js:270 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
 msgid "Phone (company)"
 msgstr "電話（公司）"
 
-#: apps/io.ox/contacts/model.js:272 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
 msgid "Phone (home alt)"
 msgstr "電話（家用替代）"
 
-#: apps/io.ox/contacts/model.js:271 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
 msgid "Phone (home)"
 msgstr "電話（家用）"
 
-#: apps/io.ox/contacts/model.js:276 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Phone (other)"
 msgstr "電話（其他）"
 
@@ -5449,7 +5452,7 @@ msgstr "請選擇我們可以使用以下那些資料來建立您的 %s 帳號:"
 msgid "Please sign in again to continue"
 msgstr "請再次登入以繼續"
 
-#: apps/io.ox/files/api.js:273 module:io.ox/files
+#: apps/io.ox/files/api.js:279 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "請指定這些缺少的變數: "
@@ -5478,7 +5481,7 @@ msgstr "入口"
 msgid "Portal settings"
 msgstr "入口設定"
 
-#: apps/io.ox/contacts/model.js:244 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:209 module:io.ox/contacts
 msgid "Position"
 msgstr "職位"
 
@@ -5486,8 +5489,8 @@ msgstr "職位"
 msgid "Post a status update"
 msgstr "張貼狀態更新"
 
-#: apps/io.ox/contacts/model.js:231 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:248 apps/io.ox/contacts/model.js:263
+#: apps/io.ox/contacts/model.js:196 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:213 apps/io.ox/contacts/model.js:228
 msgid "Postcode"
 msgstr "郵遞區號"
 
@@ -5605,7 +5608,7 @@ msgstr "私人地址"
 msgid "Process subsequent rules"
 msgstr "處理後續規則"
 
-#: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:203 module:io.ox/contacts
 msgid "Profession"
 msgstr "專業"
 
@@ -5900,7 +5903,7 @@ msgstr "刪除"
 msgid "Remove attachment"
 msgstr "移除附件"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:270 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:271 module:io.ox/contacts
 #: apps/io.ox/participants/views.js:52 module:io.ox/calendar/edit/main
 msgid "Remove contact"
 msgstr "移除聯絡人"
@@ -6038,7 +6041,7 @@ msgstr "由 %s 轉推"
 msgid "Review your purchases"
 msgstr "確認您的購買"
 
-#: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:211 module:io.ox/contacts
 msgid "Room number"
 msgstr "房間號"
 
@@ -6051,7 +6054,7 @@ msgstr "規則名稱"
 msgid "Running applications"
 msgstr "執行中的應用程式"
 
-#: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:218 module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "銷售量"
 
@@ -6666,7 +6669,7 @@ msgctxt "folder"
 msgid "Spam"
 msgstr "垃圾"
 
-#: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:205 module:io.ox/contacts
 msgid "Spouse's name"
 msgstr "配偶姓名"
 
@@ -6707,8 +6710,8 @@ msgstr ""
 msgid "Starts on"
 msgstr "開始於"
 
-#: apps/io.ox/contacts/model.js:233 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:250 apps/io.ox/contacts/model.js:316
+#: apps/io.ox/contacts/model.js:198 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:215 apps/io.ox/contacts/model.js:281
 msgid "State"
 msgstr "州"
 
@@ -6727,8 +6730,8 @@ msgstr "狀態"
 msgid "Stay signed in"
 msgstr "保持登入"
 
-#: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:261
+#: apps/io.ox/contacts/model.js:195 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:212 apps/io.ox/contacts/model.js:226
 msgid "Street"
 msgstr "街道"
 
@@ -6787,7 +6790,7 @@ msgstr "已成功重新授權您的 %s 帳號"
 msgid "Such data will never be uploaded"
 msgstr "這類資料將不會被上傳"
 
-#: apps/io.ox/contacts/model.js:228 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:193 module:io.ox/contacts
 msgid "Suffix"
 msgstr "尾碼"
 
@@ -6808,7 +6811,7 @@ msgstr ""
 "與 Microsoft Outlook® 客戶端同步郵件、行事曆、聯絡人與任務，以及公開、分享與"
 "系統資料夾。"
 
-#: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:219 module:io.ox/contacts
 msgid "TAX ID"
 msgstr "TAX ID"
 
@@ -6817,7 +6820,7 @@ msgstr "TAX ID"
 msgid "TB"
 msgstr "TB"
 
-#: apps/io.ox/contacts/model.js:287 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:252 module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
@@ -6891,23 +6894,23 @@ msgstr "任務"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "無法移動任務進或出共享資料夾"
 
-#: apps/io.ox/contacts/model.js:282 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:247 module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "電話 (ISDN)"
 
-#: apps/io.ox/contacts/model.js:268 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:233 module:io.ox/contacts
 msgid "Telephone callback"
 msgstr "電話回撥"
 
-#: apps/io.ox/contacts/model.js:284 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:249 module:io.ox/contacts
 msgid "Telephone primary"
 msgstr "主要電話"
 
-#: apps/io.ox/contacts/model.js:285 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:250 module:io.ox/contacts
 msgid "Telephone radio"
 msgstr "電話廣播"
 
-#: apps/io.ox/contacts/model.js:286 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Telex"
 msgstr "電報"
 
@@ -6961,7 +6964,7 @@ msgstr "必須為帳號取名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功刪除動態"
 
-#: apps/io.ox/files/api.js:233 module:io.ox/files
+#: apps/io.ox/files/api.js:239 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已達可用的配額額度。"
@@ -7089,7 +7092,7 @@ msgstr "到期日無法在起始日之前，調整起始日？"
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate mail address
-#: apps/io.ox/contacts/distrib/create-dist-view.js:180 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:182 module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
 msgstr "電子郵件地址 %1$s 已在清單中"
 
@@ -7165,11 +7168,11 @@ msgstr "通知區域已開啟"
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate display name of the person
-#: apps/io.ox/contacts/distrib/create-dist-view.js:184 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186 module:io.ox/contacts
 msgid "The person %1$s is already in the list"
 msgstr "人員 %1$s 已在清單中"
 
-#: apps/io.ox/files/api.js:228 module:io.ox/files
+#: apps/io.ox/files/api.js:234 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
@@ -7364,7 +7367,7 @@ msgstr "未閱讀此郵件，點擊此處標示為已讀。"
 msgid "This browser is not supported on your current platform."
 msgstr "您目前的平台中不支援此瀏覽器。"
 
-#: apps/io.ox/contacts/model.js:322 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:287 module:io.ox/contacts
 msgid "This contact is private and cannot be shared"
 msgstr "此聯絡人是私人聯絡人，無法分享"
 
@@ -7397,7 +7400,7 @@ msgstr "此功能無法使用。要使用的話，您必須立刻升級您的帳
 msgid "This field has to be filled"
 msgstr "必須填入此欄位"
 
-#: apps/io.ox/files/api.js:238 module:io.ox/files
+#: apps/io.ox/files/api.js:244 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "無法上傳此檔案。"
@@ -7505,7 +7508,7 @@ msgstr "這是無效的電子郵件位址"
 msgid "This is not a valid user or group."
 msgstr "這是無效的使用者或群組。"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:202 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:204 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:255
 msgid "This list has no contacts yet"
 msgstr "該組無成員"
@@ -7568,7 +7571,7 @@ msgstr "時區"
 msgid "Timezone"
 msgstr "時區"
 
-#: apps/io.ox/contacts/model.js:229 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:194 module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
 msgstr "頭銜"
@@ -7581,7 +7584,7 @@ msgstr "頭銜"
 msgid "To"
 msgstr "收件人"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:296 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:299 module:io.ox/contacts
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
@@ -7648,8 +7651,8 @@ msgstr "全部: %1$s"
 msgid "Total: %1$s requests"
 msgstr "總計: %1$s 請求"
 
-#: apps/io.ox/contacts/model.js:232 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:249 apps/io.ox/contacts/model.js:262
+#: apps/io.ox/contacts/model.js:197 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:214 apps/io.ox/contacts/model.js:227
 msgid "Town"
 msgstr "城市"
 
@@ -7682,7 +7685,7 @@ msgstr "類型"
 msgid "UI version"
 msgstr "UI 版本"
 
-#: apps/io.ox/contacts/model.js:281 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
 #: apps/plugins/portal/rss/register.js:146 module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -8353,7 +8356,7 @@ msgstr "隱藏所有約會邀請。"
 msgid "You've got appointment reminders"
 msgstr "隱藏所有約會提醒。"
 
-#: apps/plugins/notifications/mail/register.js:62 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:96 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got new mails"

@@ -567,7 +567,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "WebDAV によるファイルへのアクセス"
 
-#: apps/io.ox/core/folder/api.js:320 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:321 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "グローバル アドレス帳へのアクセスは許可されていません。"
 
@@ -848,15 +848,15 @@ msgctxt "app"
 msgid "Address Book"
 msgstr "アドレス帳"
 
-#: apps/io.ox/contacts/model.js:320 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:285 module:io.ox/contacts
 msgid "Address Business"
 msgstr "住所 (勤務先)"
 
-#: apps/io.ox/contacts/model.js:319 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:284 module:io.ox/contacts
 msgid "Address Home"
 msgstr "住所 (自宅)"
 
-#: apps/io.ox/contacts/model.js:321 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:286 module:io.ox/contacts
 msgid "Address Other"
 msgstr "住所 (その他)"
 
@@ -937,7 +937,7 @@ msgstr "すべてのフォルダ"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "%1$d 日以上経過したメッセージは、アーカイブ フォルダに移動されます。"
 
-#: apps/io.ox/core/folder/api.js:207 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:208 module:io.ox/core
 #, fuzzy
 #| msgid "All appointments"
 msgid "All my appointments"
@@ -970,7 +970,7 @@ msgstr "エラーが発生しました。もう一度やり直してください
 msgid "An internal error occurred"
 msgstr "内部エラーが発生しました。"
 
-#: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:206 module:io.ox/contacts
 msgid "Anniversary"
 msgstr "記念日"
 
@@ -1120,7 +1120,7 @@ msgstr "受信メール サーバ"
 msgid "Ascending"
 msgstr "昇順"
 
-#: apps/io.ox/contacts/model.js:260 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
 msgid "Assistant"
 msgstr "秘書"
 
@@ -1276,7 +1276,7 @@ msgstr "黒"
 msgid "Blue"
 msgstr "青"
 
-#: apps/io.ox/contacts/model.js:256 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:221 module:io.ox/contacts
 msgid "Branches"
 msgstr "支店"
 
@@ -1293,7 +1293,7 @@ msgstr "勤務先住所"
 msgid "Business address"
 msgstr "勤務先住所"
 
-#: apps/io.ox/contacts/model.js:257 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:222 module:io.ox/contacts
 msgid "Business category"
 msgstr "業種"
 
@@ -1455,12 +1455,12 @@ msgstr "容量"
 msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
 
-#: apps/io.ox/contacts/model.js:274 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:239 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "携帯電話"
 
-#: apps/io.ox/contacts/model.js:275 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "携帯電話 (予備)"
 
@@ -1536,7 +1536,7 @@ msgstr "チェックボックス"
 msgid "Checking credentials ..."
 msgstr "認証情報をチェックしています... 数秒かかる場合があります。"
 
-#: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:202 module:io.ox/contacts
 msgid "Children"
 msgstr "子供"
 
@@ -1697,7 +1697,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js:94 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:263 module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:242 apps/io.ox/contacts/view-detail.js:439
+#: apps/io.ox/contacts/model.js:207 apps/io.ox/contacts/view-detail.js:439
 #: apps/plugins/portal/xing/actions.js:68 module:plugins/portal
 msgid "Comment"
 msgstr "コメント"
@@ -1714,7 +1714,7 @@ msgstr "コメント"
 msgid "Comments and suggestions"
 msgstr "コメントおよびヒント"
 
-#: apps/io.ox/contacts/model.js:255 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:220 module:io.ox/contacts
 msgid "Commercial Register"
 msgstr "商業登記"
 
@@ -1748,7 +1748,7 @@ msgstr "コンパクト ビュー"
 msgid "Companies"
 msgstr "会社"
 
-#: apps/io.ox/contacts/model.js:292 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:257 module:io.ox/contacts
 msgid "Company"
 msgstr "会社"
 
@@ -1819,7 +1819,7 @@ msgstr "連絡先の写真"
 msgid "Contact request sent"
 msgstr "コンタクトリクエストが送信されました。"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:135 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:137 module:io.ox/contacts
 msgid "Contacts"
 msgstr "メンバ"
 
@@ -1915,7 +1915,7 @@ msgstr "設定を保存できませんでした。"
 msgid "Could not save settings."
 msgstr "設定を保存できませんでした。"
 
-#: apps/io.ox/core/folder/api.js:622 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:623 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1952,8 +1952,8 @@ msgstr "メール フィルタ ルールを読み込めませんでした。"
 msgid "Couldn't load your vacation notice."
 msgstr "休暇通知を読み込めませんでした。"
 
-#: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:251 apps/io.ox/contacts/model.js:264
+#: apps/io.ox/contacts/model.js:199 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:216 apps/io.ox/contacts/model.js:229
 msgid "Country"
 msgstr "国"
 
@@ -2082,7 +2082,7 @@ msgstr "日付"
 msgid "Date completed"
 msgstr "完成日"
 
-#: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:200 module:io.ox/contacts
 #: apps/plugins/halo/xing/register.js:142 module:plugins/portal
 msgid "Date of birth"
 msgstr "生年月日"
@@ -2121,7 +2121,7 @@ msgstr "辞退"
 msgid "Default Theme"
 msgstr "既定のテーマ"
 
-#: apps/io.ox/contacts/model.js:318 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:283 module:io.ox/contacts
 msgid "Default address"
 msgstr "既定の住所"
 
@@ -2245,7 +2245,7 @@ msgstr "削除済みメッセージ"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "ローカル ストレージとサーバ上のメッセージを削除"
 
-#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:208 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "部署"
@@ -2343,7 +2343,7 @@ msgstr "表示名"
 msgid "Display emoticons as graphics in text emails"
 msgstr "メール本文に顔文字をグラフィックとして表示"
 
-#: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:189 module:io.ox/contacts
 msgid "Display name"
 msgstr "表示名"
 
@@ -2369,7 +2369,7 @@ msgid "Distribution List Details"
 msgstr "配布リスト"
 
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:315
+#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:280
 #: apps/io.ox/contacts/view-detail.js:48 apps/io.ox/participants/model.js:43
 #: module:io.ox/participants/model apps/io.ox/participants/views.js:185
 #: module:io.ox/calendar/edit/main
@@ -2796,19 +2796,19 @@ msgstr "エディタ"
 msgid "Email"
 msgstr "メール"
 
-#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
 msgid "Email 1"
 msgstr "メール 1"
 
-#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
 msgid "Email 1 / Phone number"
 msgstr "メール 1 / 電話番号"
 
-#: apps/io.ox/contacts/model.js:279 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:244 module:io.ox/contacts
 msgid "Email 2"
 msgstr "メール 2"
 
-#: apps/io.ox/contacts/model.js:280 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Email 3"
 msgstr "メール 3"
 
@@ -2862,11 +2862,11 @@ msgstr "メールの割当量を超えたため、メールをごみ箱フォル
 msgid "Employee"
 msgstr "従業員"
 
-#: apps/io.ox/contacts/model.js:252 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:217 module:io.ox/contacts
 msgid "Employee ID"
 msgstr "従業員 ID"
 
-#: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:210 module:io.ox/contacts
 msgid "Employee type"
 msgstr "従業員タイプ"
 
@@ -3195,15 +3195,15 @@ msgstr "お気に入り"
 msgid "Favorites"
 msgstr "お気に入り"
 
-#: apps/io.ox/contacts/model.js:267 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:232 module:io.ox/contacts
 msgid "Fax"
 msgstr "FAX"
 
-#: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
 msgid "Fax (Home)"
 msgstr "FAX (自宅)"
 
-#: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
 msgid "Fax (alt)"
 msgstr "FAX (予備)"
 
@@ -3278,7 +3278,7 @@ msgstr "フィルタ"
 msgid "Find a free time"
 msgstr "空き時間を検索"
 
-#: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:190 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:84 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:80 module:io.ox/wizards/firstStart
 msgid "First name"
@@ -3695,7 +3695,7 @@ msgstr "アポイントの作成方法について"
 msgid "IMAP folder subscription"
 msgstr "IMAP フォルダの登録"
 
-#: apps/io.ox/contacts/model.js:290 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:255 module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP 電話"
 
@@ -3747,7 +3747,7 @@ msgstr ""
 "既存のイベントを無視します。例えば、祝日付きのカレンダーをインポートする際に"
 "役に立ちます。"
 
-#: apps/io.ox/contacts/model.js:293 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:258 module:io.ox/contacts
 msgid "Image 1"
 msgstr "画像 1"
 
@@ -3803,7 +3803,7 @@ msgstr "受信サーバ"
 msgid "Inconsistent dates"
 msgstr "日付が矛盾しています。"
 
-#: apps/io.ox/contacts/model.js:258 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:223 module:io.ox/contacts
 #: apps/io.ox/core/yell.js:22 module:io.ox/core
 msgid "Info"
 msgstr "情報"
@@ -3844,11 +3844,11 @@ msgstr ""
 "ご利用の %1$s にこの Web アプリケーションをインストールします。%2$s をタップ"
 "し、%3$s'ホーム スクリーンに追加'%4$s をタップします。"
 
-#: apps/io.ox/contacts/model.js:288 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
 msgstr "IM 1"
 
-#: apps/io.ox/contacts/model.js:289 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
 msgid "Instant Messenger 2"
 msgstr "IM 2"
 
@@ -3999,7 +3999,7 @@ msgstr "言語に固有の既定値"
 msgid "Languages"
 msgstr "言語"
 
-#: apps/io.ox/contacts/model.js:226 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
 msgid "Last name"
@@ -4080,7 +4080,7 @@ msgstr "LinkedIn ネットワーク アップデート"
 msgid "LinkedIn reported an error:"
 msgstr "LinkedIn が次のエラーを報告しました:"
 
-#: apps/io.ox/contacts/model.js:314 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:279 module:io.ox/contacts
 msgid "Links"
 msgstr "リンク"
 
@@ -4182,7 +4182,8 @@ msgstr "メール数割当量"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:71 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:105
+#: module:plugins/notifications
 #, fuzzy, c-format
 #| msgid "Mail from %1$s %2$s"
 msgid "Mail from %1$s, %2$s"
@@ -4272,7 +4273,7 @@ msgstr "これを最新のバージョンにする"
 msgid "Manage applications"
 msgstr "アプリケーションを管理"
 
-#: apps/io.ox/contacts/model.js:259 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
 msgstr "上司"
 
@@ -4292,7 +4293,7 @@ msgstr "手動設定"
 msgid "March"
 msgstr "3 月"
 
-#: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:201 module:io.ox/contacts
 msgid "Marital status"
 msgstr "既婚/未婚"
 
@@ -4310,7 +4311,7 @@ msgstr "すべてのメールを既読にする"
 msgid "Mark as"
 msgstr "マークを付ける"
 
-#: apps/io.ox/contacts/model.js:317 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:282 module:io.ox/contacts
 msgid "Mark as distributionlist"
 msgstr "配布リストにする"
 
@@ -4400,7 +4401,7 @@ msgstr "メッセージング"
 msgid "Messenger"
 msgstr "メッセンジャー"
 
-#: apps/io.ox/contacts/model.js:227 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:192 module:io.ox/contacts
 msgid "Middle name"
 msgstr "ミドル ネーム"
 
@@ -4569,7 +4570,7 @@ msgstr "自然"
 msgid "New"
 msgstr "新規"
 
-#: apps/io.ox/core/folder/api.js:668 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:669 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新規フォルダ"
@@ -4621,13 +4622,14 @@ msgstr "新規ファイル"
 msgid "New folder"
 msgstr "フォルダを表示"
 
-#: apps/plugins/notifications/mail/register.js:73 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:107
+#: module:plugins/notifications
 #, fuzzy
 #| msgid "New Mail"
 msgid "New mail"
 msgstr "新規メール"
 
-#: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:95 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mails"
 msgid "New mails"
@@ -4711,7 +4713,7 @@ msgstr "翌日"
 msgid "Next Week"
 msgstr "翌週"
 
-#: apps/io.ox/contacts/model.js:239 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
 msgstr "ニックネーム"
 
@@ -4825,7 +4827,8 @@ msgstr "低速なリクエストはありません。"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:71 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:105
+#: module:plugins/notifications
 #, c-format
 msgid "No subject"
 msgstr "件名なし"
@@ -5023,83 +5026,83 @@ msgstr "LinkedIn で開く"
 msgid "Open/close all messages"
 msgstr "すべてのメッセージを開く/閉じる"
 
-#: apps/io.ox/contacts/model.js:294 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:259 module:io.ox/contacts
 msgid "Optional 01"
 msgstr "オプション 1"
 
-#: apps/io.ox/contacts/model.js:295 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:260 module:io.ox/contacts
 msgid "Optional 02"
 msgstr "オプション 2"
 
-#: apps/io.ox/contacts/model.js:296 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:261 module:io.ox/contacts
 msgid "Optional 03"
 msgstr "オプション 3"
 
-#: apps/io.ox/contacts/model.js:297 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:262 module:io.ox/contacts
 msgid "Optional 04"
 msgstr "オプション 4"
 
-#: apps/io.ox/contacts/model.js:298 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:263 module:io.ox/contacts
 msgid "Optional 05"
 msgstr "オプション 5"
 
-#: apps/io.ox/contacts/model.js:299 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
 msgid "Optional 06"
 msgstr "オプション 6"
 
-#: apps/io.ox/contacts/model.js:300 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
 msgid "Optional 07"
 msgstr "オプション 7"
 
-#: apps/io.ox/contacts/model.js:301 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Optional 08"
 msgstr "オプション 8"
 
-#: apps/io.ox/contacts/model.js:302 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:267 module:io.ox/contacts
 msgid "Optional 09"
 msgstr "オプション 9"
 
-#: apps/io.ox/contacts/model.js:303 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:268 module:io.ox/contacts
 msgid "Optional 10"
 msgstr "オプション 10"
 
-#: apps/io.ox/contacts/model.js:304 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:269 module:io.ox/contacts
 msgid "Optional 11"
 msgstr "オプション 11"
 
-#: apps/io.ox/contacts/model.js:305 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:270 module:io.ox/contacts
 msgid "Optional 12"
 msgstr "オプション 12"
 
-#: apps/io.ox/contacts/model.js:306 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:271 module:io.ox/contacts
 msgid "Optional 13"
 msgstr "オプション 13"
 
-#: apps/io.ox/contacts/model.js:307 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:272 module:io.ox/contacts
 msgid "Optional 14"
 msgstr "オプション 14"
 
-#: apps/io.ox/contacts/model.js:308 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
 msgid "Optional 15"
 msgstr "オプション 15"
 
-#: apps/io.ox/contacts/model.js:309 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:274 module:io.ox/contacts
 msgid "Optional 16"
 msgstr "オプション 16"
 
-#: apps/io.ox/contacts/model.js:310 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:275 module:io.ox/contacts
 msgid "Optional 17"
 msgstr "オプション 17"
 
-#: apps/io.ox/contacts/model.js:311 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:276 module:io.ox/contacts
 msgid "Optional 18"
 msgstr "オプション 18"
 
-#: apps/io.ox/contacts/model.js:312 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Optional 19"
 msgstr "オプション 19"
 
-#: apps/io.ox/contacts/model.js:313 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
 msgid "Optional 20"
 msgstr "オプション 20"
 
@@ -5163,7 +5166,7 @@ msgstr "PB"
 msgid "PDFs"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:283 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:248 module:io.ox/contacts
 msgid "Pager"
 msgstr "ポケットベル"
 
@@ -5260,35 +5263,35 @@ msgstr "電話"
 msgid "Phone & fax numbers"
 msgstr "電話番号と FAX 番号"
 
-#: apps/io.ox/contacts/model.js:291 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:256 module:io.ox/contacts
 msgid "Phone (assistant)"
 msgstr "秘書の電話"
 
-#: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:231 module:io.ox/contacts
 msgid "Phone (business alt)"
 msgstr "電話 (勤務先 予備)"
 
-#: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 msgid "Phone (business)"
 msgstr "電話 (勤務先)"
 
-#: apps/io.ox/contacts/model.js:269 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
 msgid "Phone (car)"
 msgstr "自動車電話"
 
-#: apps/io.ox/contacts/model.js:270 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
 msgid "Phone (company)"
 msgstr "勤務先電話"
 
-#: apps/io.ox/contacts/model.js:272 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
 msgid "Phone (home alt)"
 msgstr "電話 (自宅 予備)"
 
-#: apps/io.ox/contacts/model.js:271 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
 msgid "Phone (home)"
 msgstr "電話 (自宅)"
 
-#: apps/io.ox/contacts/model.js:276 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Phone (other)"
 msgstr "その他の電話"
 
@@ -5477,7 +5480,7 @@ msgstr "%s アカウントの作成に使用するデータを次の中から選
 msgid "Please sign in again to continue"
 msgstr "続行するには、再度サイン インしてください。"
 
-#: apps/io.ox/files/api.js:273 module:io.ox/files
+#: apps/io.ox/files/api.js:279 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "次の変数を指定してください: "
@@ -5506,7 +5509,7 @@ msgstr "ポータル"
 msgid "Portal settings"
 msgstr "ポータルの設定"
 
-#: apps/io.ox/contacts/model.js:244 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:209 module:io.ox/contacts
 msgid "Position"
 msgstr "役職"
 
@@ -5514,8 +5517,8 @@ msgstr "役職"
 msgid "Post a status update"
 msgstr "ステータスのアップデートを投稿"
 
-#: apps/io.ox/contacts/model.js:231 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:248 apps/io.ox/contacts/model.js:263
+#: apps/io.ox/contacts/model.js:196 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:213 apps/io.ox/contacts/model.js:228
 msgid "Postcode"
 msgstr "郵便番号"
 
@@ -5633,7 +5636,7 @@ msgstr "プライベート アドレス"
 msgid "Process subsequent rules"
 msgstr "次のルールも処理"
 
-#: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:203 module:io.ox/contacts
 msgid "Profession"
 msgstr "職業"
 
@@ -5929,7 +5932,7 @@ msgstr "削除"
 msgid "Remove attachment"
 msgstr "添付ファイルを削除する"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:270 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:271 module:io.ox/contacts
 #: apps/io.ox/participants/views.js:52 module:io.ox/calendar/edit/main
 msgid "Remove contact"
 msgstr "連絡先を削除"
@@ -6065,7 +6068,7 @@ msgstr "%s さんがリツイート"
 msgid "Review your purchases"
 msgstr "購入品を確認"
 
-#: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:211 module:io.ox/contacts
 msgid "Room number"
 msgstr "部屋番号"
 
@@ -6078,7 +6081,7 @@ msgstr "ルール名"
 msgid "Running applications"
 msgstr "実行中のアプリケーション"
 
-#: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:218 module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "売上規模"
 
@@ -6695,7 +6698,7 @@ msgctxt "folder"
 msgid "Spam"
 msgstr "スパム"
 
-#: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:205 module:io.ox/contacts
 msgid "Spouse's name"
 msgstr "配偶者名"
 
@@ -6736,8 +6739,8 @@ msgstr ""
 msgid "Starts on"
 msgstr "開始日時"
 
-#: apps/io.ox/contacts/model.js:233 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:250 apps/io.ox/contacts/model.js:316
+#: apps/io.ox/contacts/model.js:198 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:215 apps/io.ox/contacts/model.js:281
 msgid "State"
 msgstr "都道府県"
 
@@ -6756,8 +6759,8 @@ msgstr "進捗状況"
 msgid "Stay signed in"
 msgstr "サイン イン状態を保存"
 
-#: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:261
+#: apps/io.ox/contacts/model.js:195 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:212 apps/io.ox/contacts/model.js:226
 msgid "Street"
 msgstr "番地"
 
@@ -6816,7 +6819,7 @@ msgstr "%s アカウントが正しく再認証されました。"
 msgid "Such data will never be uploaded"
 msgstr "この種類のデータは、アップロードされません。"
 
-#: apps/io.ox/contacts/model.js:228 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:193 module:io.ox/contacts
 msgid "Suffix"
 msgstr "敬称（後）"
 
@@ -6837,7 +6840,7 @@ msgstr ""
 "メール、予定表、連絡先、仕事に加え、パブリック フォルダ、共有フォルダ、システ"
 "ム フォルダを Microsoft Outlook® クライアントに同期します。"
 
-#: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:219 module:io.ox/contacts
 msgid "TAX ID"
 msgstr "税金 ID"
 
@@ -6846,7 +6849,7 @@ msgstr "税金 ID"
 msgid "TB"
 msgstr "TB"
 
-#: apps/io.ox/contacts/model.js:287 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:252 module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
@@ -6917,23 +6920,23 @@ msgstr "仕事"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "共有フォルダへの、または共有フォルダからの仕事の移動はできません。"
 
-#: apps/io.ox/contacts/model.js:282 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:247 module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "ISDN"
 
-#: apps/io.ox/contacts/model.js:268 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:233 module:io.ox/contacts
 msgid "Telephone callback"
 msgstr "電話のコールバック"
 
-#: apps/io.ox/contacts/model.js:284 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:249 module:io.ox/contacts
 msgid "Telephone primary"
 msgstr "通常の電話"
 
-#: apps/io.ox/contacts/model.js:285 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:250 module:io.ox/contacts
 msgid "Telephone radio"
 msgstr "無線電話"
 
-#: apps/io.ox/contacts/model.js:286 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Telex"
 msgstr "テレックス"
 
@@ -6988,7 +6991,7 @@ msgstr "アカウントの名前を指定する必要があります。"
 msgid "The activity has been deleted successfully"
 msgstr "アクティビティが正しく削除されました。"
 
-#: apps/io.ox/files/api.js:233 module:io.ox/files
+#: apps/io.ox/files/api.js:239 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "許可された割当量に達しました。"
@@ -7120,7 +7123,7 @@ msgstr "期限を開始日の前に設定できません。開始日を変更し
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate mail address
-#: apps/io.ox/contacts/distrib/create-dist-view.js:180 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:182 module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
 msgstr "メールアドレス %1$s は既に一覧に存在します。"
 
@@ -7206,11 +7209,11 @@ msgstr "通知エリアが開いています。"
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate display name of the person
-#: apps/io.ox/contacts/distrib/create-dist-view.js:184 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186 module:io.ox/contacts
 msgid "The person %1$s is already in the list"
 msgstr "人 %1$s は既に一覧に存在します。"
 
-#: apps/io.ox/files/api.js:228 module:io.ox/files
+#: apps/io.ox/files/api.js:234 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "入力したファイル名が最大文字数を超えています。"
@@ -7411,7 +7414,7 @@ msgstr "このメールは未読になっています。既読にするには、
 msgid "This browser is not supported on your current platform."
 msgstr "このブラウザはご利用のプラットフォームでサポートされていません。"
 
-#: apps/io.ox/contacts/model.js:322 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:287 module:io.ox/contacts
 msgid "This contact is private and cannot be shared"
 msgstr ""
 "この連絡先はプライベートの連絡先として設定されているため、共有できません。"
@@ -7447,7 +7450,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "このフィールドには、値を入力する必要があります。"
 
-#: apps/io.ox/files/api.js:238 module:io.ox/files
+#: apps/io.ox/files/api.js:244 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "このファイルをアップロードできませんでした。"
@@ -7550,7 +7553,7 @@ msgstr "このメール アドレスは無効です。"
 msgid "This is not a valid user or group."
 msgstr "これは、有効なユーザ/グループではありません。"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:202 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:204 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:255
 msgid "This list has no contacts yet"
 msgstr "このリストにはメンバが今のところ追加されていません。"
@@ -7617,7 +7620,7 @@ msgstr "タイム ゾーン"
 msgid "Timezone"
 msgstr "タイムゾーン"
 
-#: apps/io.ox/contacts/model.js:229 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:194 module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
 msgstr "敬称（前）"
@@ -7630,7 +7633,7 @@ msgstr "敬称（前）"
 msgid "To"
 msgstr "宛先"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:296 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:299 module:io.ox/contacts
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
@@ -7697,8 +7700,8 @@ msgstr "合計: %1$d"
 msgid "Total: %1$s requests"
 msgstr "総数: %1$s 件のリクエスト"
 
-#: apps/io.ox/contacts/model.js:232 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:249 apps/io.ox/contacts/model.js:262
+#: apps/io.ox/contacts/model.js:197 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:214 apps/io.ox/contacts/model.js:227
 msgid "Town"
 msgstr "市区町村"
 
@@ -7731,7 +7734,7 @@ msgstr "タイプ"
 msgid "UI version"
 msgstr "UI バージョン"
 
-#: apps/io.ox/contacts/model.js:281 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
 #: apps/plugins/portal/rss/register.js:146 module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -8420,7 +8423,7 @@ msgstr "アポイントへの出席依頼をすべて隠す。"
 msgid "You've got appointment reminders"
 msgstr "アポイントのアラームをすべて隠す。"
 
-#: apps/plugins/notifications/mail/register.js:62 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:96 module:plugins/notifications
 #, fuzzy
 #| msgid "Create a new E-Mail"
 msgid "You've got new mails"

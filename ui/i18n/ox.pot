@@ -363,7 +363,7 @@ msgstr ""
 #: module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js:128
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:242
+#: apps/io.ox/contacts/model.js:207
 #: apps/io.ox/contacts/view-detail.js:439
 #: apps/plugins/portal/xing/actions.js:68
 #: module:plugins/portal
@@ -2517,7 +2517,7 @@ msgstr ""
 #: apps/io.ox/contacts/common-extensions.js:42
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:205
-#: apps/io.ox/contacts/model.js:315
+#: apps/io.ox/contacts/model.js:280
 #: apps/io.ox/contacts/view-detail.js:48
 #: apps/io.ox/participants/model.js:43
 #: module:io.ox/participants/model
@@ -2567,39 +2567,39 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:135
+#: apps/io.ox/contacts/distrib/create-dist-view.js:137
 #: module:io.ox/contacts
 msgid "Contacts"
 msgstr ""
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate mail address
-#: apps/io.ox/contacts/distrib/create-dist-view.js:180
+#: apps/io.ox/contacts/distrib/create-dist-view.js:182
 #: module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
 msgstr ""
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate display name of the person
-#: apps/io.ox/contacts/distrib/create-dist-view.js:184
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: module:io.ox/contacts
 msgid "The person %1$s is already in the list"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:202
+#: apps/io.ox/contacts/distrib/create-dist-view.js:204
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:255
 msgid "This list has no contacts yet"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:270
+#: apps/io.ox/contacts/distrib/create-dist-view.js:271
 #: module:io.ox/contacts
 #: apps/io.ox/participants/views.js:52
 #: module:io.ox/calendar/edit/main
 msgid "Remove contact"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:296
+#: apps/io.ox/contacts/distrib/create-dist-view.js:299
 #: module:io.ox/contacts
 msgid "To add contacts manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
@@ -2750,12 +2750,12 @@ msgstr ""
 msgid "Item List"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:224
+#: apps/io.ox/contacts/model.js:189
 #: module:io.ox/contacts
 msgid "Display name"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:225
+#: apps/io.ox/contacts/model.js:190
 #: module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:84
 #: module:plugins/portal
@@ -2764,7 +2764,7 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:226
+#: apps/io.ox/contacts/model.js:191
 #: module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88
 #: module:plugins/portal
@@ -2773,446 +2773,446 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:227
+#: apps/io.ox/contacts/model.js:192
 #: module:io.ox/contacts
 msgid "Middle name"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:228
+#: apps/io.ox/contacts/model.js:193
 #: module:io.ox/contacts
 msgid "Suffix"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:229
+#: apps/io.ox/contacts/model.js:194
 #: module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:230
+#: apps/io.ox/contacts/model.js:195
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:247
-#: apps/io.ox/contacts/model.js:261
+#: apps/io.ox/contacts/model.js:212
+#: apps/io.ox/contacts/model.js:226
 msgid "Street"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:231
+#: apps/io.ox/contacts/model.js:196
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:248
-#: apps/io.ox/contacts/model.js:263
+#: apps/io.ox/contacts/model.js:213
+#: apps/io.ox/contacts/model.js:228
 msgid "Postcode"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:232
+#: apps/io.ox/contacts/model.js:197
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:249
-#: apps/io.ox/contacts/model.js:262
+#: apps/io.ox/contacts/model.js:214
+#: apps/io.ox/contacts/model.js:227
 msgid "Town"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:233
+#: apps/io.ox/contacts/model.js:198
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:250
-#: apps/io.ox/contacts/model.js:316
+#: apps/io.ox/contacts/model.js:215
+#: apps/io.ox/contacts/model.js:281
 msgid "State"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:234
+#: apps/io.ox/contacts/model.js:199
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:251
-#: apps/io.ox/contacts/model.js:264
+#: apps/io.ox/contacts/model.js:216
+#: apps/io.ox/contacts/model.js:229
 msgid "Country"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:235
+#: apps/io.ox/contacts/model.js:200
 #: module:io.ox/contacts
 #: apps/plugins/halo/xing/register.js:142
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:236
+#: apps/io.ox/contacts/model.js:201
 #: module:io.ox/contacts
 msgid "Marital status"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:237
+#: apps/io.ox/contacts/model.js:202
 #: module:io.ox/contacts
 msgid "Children"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:238
+#: apps/io.ox/contacts/model.js:203
 #: module:io.ox/contacts
 msgid "Profession"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:239
+#: apps/io.ox/contacts/model.js:204
 #: module:io.ox/contacts
 msgid "Nickname"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:240
+#: apps/io.ox/contacts/model.js:205
 #: module:io.ox/contacts
 msgid "Spouse's name"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:241
+#: apps/io.ox/contacts/model.js:206
 #: module:io.ox/contacts
 msgid "Anniversary"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:243
+#: apps/io.ox/contacts/model.js:208
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:244
+#: apps/io.ox/contacts/model.js:209
 #: module:io.ox/contacts
 msgid "Position"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:245
+#: apps/io.ox/contacts/model.js:210
 #: module:io.ox/contacts
 msgid "Employee type"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:246
+#: apps/io.ox/contacts/model.js:211
 #: module:io.ox/contacts
 msgid "Room number"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:252
+#: apps/io.ox/contacts/model.js:217
 #: module:io.ox/contacts
 msgid "Employee ID"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:253
+#: apps/io.ox/contacts/model.js:218
 #: module:io.ox/contacts
 msgid "Sales Volume"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:254
+#: apps/io.ox/contacts/model.js:219
 #: module:io.ox/contacts
 msgid "TAX ID"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:255
+#: apps/io.ox/contacts/model.js:220
 #: module:io.ox/contacts
 msgid "Commercial Register"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:256
+#: apps/io.ox/contacts/model.js:221
 #: module:io.ox/contacts
 msgid "Branches"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:257
+#: apps/io.ox/contacts/model.js:222
 #: module:io.ox/contacts
 msgid "Business category"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:258
+#: apps/io.ox/contacts/model.js:223
 #: module:io.ox/contacts
 #: apps/io.ox/core/yell.js:22
 #: module:io.ox/core
 msgid "Info"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:259
+#: apps/io.ox/contacts/model.js:224
 #: module:io.ox/contacts
 msgid "Manager"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:260
+#: apps/io.ox/contacts/model.js:225
 #: module:io.ox/contacts
 msgid "Assistant"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:265
+#: apps/io.ox/contacts/model.js:230
 #: module:io.ox/contacts
 msgid "Phone (business)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:266
+#: apps/io.ox/contacts/model.js:231
 #: module:io.ox/contacts
 msgid "Phone (business alt)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:267
+#: apps/io.ox/contacts/model.js:232
 #: module:io.ox/contacts
 msgid "Fax"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:268
+#: apps/io.ox/contacts/model.js:233
 #: module:io.ox/contacts
 msgid "Telephone callback"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:269
+#: apps/io.ox/contacts/model.js:234
 #: module:io.ox/contacts
 msgid "Phone (car)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:270
+#: apps/io.ox/contacts/model.js:235
 #: module:io.ox/contacts
 msgid "Phone (company)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:271
+#: apps/io.ox/contacts/model.js:236
 #: module:io.ox/contacts
 msgid "Phone (home)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:272
+#: apps/io.ox/contacts/model.js:237
 #: module:io.ox/contacts
 msgid "Phone (home alt)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:273
+#: apps/io.ox/contacts/model.js:238
 #: module:io.ox/contacts
 msgid "Fax (Home)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:274
+#: apps/io.ox/contacts/model.js:239
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:275
+#: apps/io.ox/contacts/model.js:240
 #: module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:276
+#: apps/io.ox/contacts/model.js:241
 #: module:io.ox/contacts
 msgid "Phone (other)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:277
+#: apps/io.ox/contacts/model.js:242
 #: module:io.ox/contacts
 msgid "Fax (alt)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:278
+#: apps/io.ox/contacts/model.js:243
 #: module:io.ox/contacts
 msgid "Email 1 / Phone number"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:278
+#: apps/io.ox/contacts/model.js:243
 #: module:io.ox/contacts
 msgid "Email 1"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:279
+#: apps/io.ox/contacts/model.js:244
 #: module:io.ox/contacts
 msgid "Email 2"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:280
+#: apps/io.ox/contacts/model.js:245
 #: module:io.ox/contacts
 msgid "Email 3"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:281
+#: apps/io.ox/contacts/model.js:246
 #: module:io.ox/contacts
 #: apps/plugins/portal/rss/register.js:146
 #: module:io.ox/portal
 msgid "URL"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:282
+#: apps/io.ox/contacts/model.js:247
 #: module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:283
+#: apps/io.ox/contacts/model.js:248
 #: module:io.ox/contacts
 msgid "Pager"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:284
+#: apps/io.ox/contacts/model.js:249
 #: module:io.ox/contacts
 msgid "Telephone primary"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:285
+#: apps/io.ox/contacts/model.js:250
 #: module:io.ox/contacts
 msgid "Telephone radio"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:286
+#: apps/io.ox/contacts/model.js:251
 #: module:io.ox/contacts
 msgid "Telex"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:287
+#: apps/io.ox/contacts/model.js:252
 #: module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:288
+#: apps/io.ox/contacts/model.js:253
 #: module:io.ox/contacts
 msgid "Instant Messenger 1"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:289
+#: apps/io.ox/contacts/model.js:254
 #: module:io.ox/contacts
 msgid "Instant Messenger 2"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:290
+#: apps/io.ox/contacts/model.js:255
 #: module:io.ox/contacts
 msgid "IP phone"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:291
+#: apps/io.ox/contacts/model.js:256
 #: module:io.ox/contacts
 msgid "Phone (assistant)"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:292
+#: apps/io.ox/contacts/model.js:257
 #: module:io.ox/contacts
 msgid "Company"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:293
+#: apps/io.ox/contacts/model.js:258
 #: module:io.ox/contacts
 msgid "Image 1"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:294
+#: apps/io.ox/contacts/model.js:259
 #: module:io.ox/contacts
 msgid "Optional 01"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:295
+#: apps/io.ox/contacts/model.js:260
 #: module:io.ox/contacts
 msgid "Optional 02"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:296
+#: apps/io.ox/contacts/model.js:261
 #: module:io.ox/contacts
 msgid "Optional 03"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:297
+#: apps/io.ox/contacts/model.js:262
 #: module:io.ox/contacts
 msgid "Optional 04"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:298
+#: apps/io.ox/contacts/model.js:263
 #: module:io.ox/contacts
 msgid "Optional 05"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:299
+#: apps/io.ox/contacts/model.js:264
 #: module:io.ox/contacts
 msgid "Optional 06"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:300
+#: apps/io.ox/contacts/model.js:265
 #: module:io.ox/contacts
 msgid "Optional 07"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:301
+#: apps/io.ox/contacts/model.js:266
 #: module:io.ox/contacts
 msgid "Optional 08"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:302
+#: apps/io.ox/contacts/model.js:267
 #: module:io.ox/contacts
 msgid "Optional 09"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:303
+#: apps/io.ox/contacts/model.js:268
 #: module:io.ox/contacts
 msgid "Optional 10"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:304
+#: apps/io.ox/contacts/model.js:269
 #: module:io.ox/contacts
 msgid "Optional 11"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:305
+#: apps/io.ox/contacts/model.js:270
 #: module:io.ox/contacts
 msgid "Optional 12"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:306
+#: apps/io.ox/contacts/model.js:271
 #: module:io.ox/contacts
 msgid "Optional 13"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:307
+#: apps/io.ox/contacts/model.js:272
 #: module:io.ox/contacts
 msgid "Optional 14"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:308
+#: apps/io.ox/contacts/model.js:273
 #: module:io.ox/contacts
 msgid "Optional 15"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:309
+#: apps/io.ox/contacts/model.js:274
 #: module:io.ox/contacts
 msgid "Optional 16"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:310
+#: apps/io.ox/contacts/model.js:275
 #: module:io.ox/contacts
 msgid "Optional 17"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:311
+#: apps/io.ox/contacts/model.js:276
 #: module:io.ox/contacts
 msgid "Optional 18"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:312
+#: apps/io.ox/contacts/model.js:277
 #: module:io.ox/contacts
 msgid "Optional 19"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:313
+#: apps/io.ox/contacts/model.js:278
 #: module:io.ox/contacts
 msgid "Optional 20"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/model.js:279
 #: module:io.ox/contacts
 msgid "Links"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:317
+#: apps/io.ox/contacts/model.js:282
 #: module:io.ox/contacts
 msgid "Mark as distributionlist"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:318
+#: apps/io.ox/contacts/model.js:283
 #: module:io.ox/contacts
 msgid "Default address"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:319
+#: apps/io.ox/contacts/model.js:284
 #: module:io.ox/contacts
 msgid "Address Home"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:320
+#: apps/io.ox/contacts/model.js:285
 #: module:io.ox/contacts
 msgid "Address Business"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:321
+#: apps/io.ox/contacts/model.js:286
 #: module:io.ox/contacts
 msgid "Address Other"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:322
+#: apps/io.ox/contacts/model.js:287
 #: module:io.ox/contacts
 msgid "This contact is private and cannot be shared"
 msgstr ""
@@ -4155,22 +4155,22 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:207
+#: apps/io.ox/core/folder/api.js:208
 #: module:io.ox/core
 msgid "All my appointments"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:320
+#: apps/io.ox/core/folder/api.js:321
 #: module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:622
+#: apps/io.ox/core/folder/api.js:623
 #: module:io.ox/core
 msgid "Could not save settings. There have to be at least one user with administration rights."
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:668
+#: apps/io.ox/core/folder/api.js:669
 #: module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171
 #: module:io.ox/core/sub
@@ -6104,25 +6104,25 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr ""
 
-#: apps/io.ox/files/api.js:228
+#: apps/io.ox/files/api.js:234
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr ""
 
-#: apps/io.ox/files/api.js:233
+#: apps/io.ox/files/api.js:239
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr ""
 
-#: apps/io.ox/files/api.js:238
+#: apps/io.ox/files/api.js:244
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr ""
 
-#: apps/io.ox/files/api.js:273
+#: apps/io.ox/files/api.js:279
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
@@ -7400,7 +7400,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/util.js:377
 #: module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:71
+#: apps/plugins/notifications/mail/register.js:105
 #: module:plugins/notifications
 #, c-format
 msgid "No subject"
@@ -9532,25 +9532,25 @@ msgstr ""
 msgid "Hide all appointment invitations."
 msgstr ""
 
-#: apps/plugins/notifications/mail/register.js:61
+#: apps/plugins/notifications/mail/register.js:95
 #: module:plugins/notifications
 msgid "New mails"
 msgstr ""
 
-#: apps/plugins/notifications/mail/register.js:62
+#: apps/plugins/notifications/mail/register.js:96
 #: module:plugins/notifications
 msgid "You've got new mails"
 msgstr ""
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:71
+#: apps/plugins/notifications/mail/register.js:105
 #: module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr ""
 
-#: apps/plugins/notifications/mail/register.js:73
+#: apps/plugins/notifications/mail/register.js:107
 #: module:plugins/notifications
 msgid "New mail"
 msgstr ""

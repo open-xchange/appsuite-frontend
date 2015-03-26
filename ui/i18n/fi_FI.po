@@ -584,7 +584,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Tiedostoihin pääsy WebDAV kautta"
 
-#: apps/io.ox/core/folder/api.js:320 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:321 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "Pääsy yhteiseen osoitekirjaan evätty"
 
@@ -864,15 +864,15 @@ msgctxt "app"
 msgid "Address Book"
 msgstr "Osoitekirja"
 
-#: apps/io.ox/contacts/model.js:320 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:285 module:io.ox/contacts
 msgid "Address Business"
 msgstr "Työosoite"
 
-#: apps/io.ox/contacts/model.js:319 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:284 module:io.ox/contacts
 msgid "Address Home"
 msgstr "Kotiosoite"
 
-#: apps/io.ox/contacts/model.js:321 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:286 module:io.ox/contacts
 msgid "Address Other"
 msgstr "Muu osoite"
 
@@ -953,7 +953,7 @@ msgstr "Kaikki kansiot"
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr "Kaikki  %1$d päivää vanhemmat viestit siirretään arkistokansioon"
 
-#: apps/io.ox/core/folder/api.js:207 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:208 module:io.ox/core
 #, fuzzy
 #| msgid "Appointments"
 msgid "All my appointments"
@@ -986,7 +986,7 @@ msgstr "Tapahtui virhe. Yritä uudelleen."
 msgid "An internal error occurred"
 msgstr "Tapahtui virhe"
 
-#: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:206 module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Vuosipäivä"
 
@@ -1135,7 +1135,7 @@ msgstr "Saapuvan postin palvelimena"
 msgid "Ascending"
 msgstr "Nouseva"
 
-#: apps/io.ox/contacts/model.js:260 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
 msgid "Assistant"
 msgstr "Assistentti"
 
@@ -1297,7 +1297,7 @@ msgstr "Musta"
 msgid "Blue"
 msgstr "Sininen"
 
-#: apps/io.ox/contacts/model.js:256 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:221 module:io.ox/contacts
 msgid "Branches"
 msgstr "Sivutoimipisteet"
 
@@ -1314,7 +1314,7 @@ msgstr "Työosoite"
 msgid "Business address"
 msgstr "Työosoite"
 
-#: apps/io.ox/contacts/model.js:257 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:222 module:io.ox/contacts
 msgid "Business category"
 msgstr "Liiketoiminnan ala"
 
@@ -1477,12 +1477,12 @@ msgstr "Tila"
 msgid "Cart is empty."
 msgstr "Kori on tyhjä."
 
-#: apps/io.ox/contacts/model.js:274 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:239 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Matkapuhelin"
 
-#: apps/io.ox/contacts/model.js:275 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Matkapuhelin vaihtoehtoinen"
 
@@ -1558,7 +1558,7 @@ msgstr "Valintaruutuja"
 msgid "Checking credentials ..."
 msgstr "Tarkistetaan valtuuksia Tämä voi kestää muutaman sekunnin."
 
-#: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:202 module:io.ox/contacts
 msgid "Children"
 msgstr "Lapsia"
 
@@ -1717,7 +1717,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js:94 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:263 module:io.ox/calendar/main
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:242 apps/io.ox/contacts/view-detail.js:439
+#: apps/io.ox/contacts/model.js:207 apps/io.ox/contacts/view-detail.js:439
 #: apps/plugins/portal/xing/actions.js:68 module:plugins/portal
 msgid "Comment"
 msgstr "Viesti"
@@ -1734,7 +1734,7 @@ msgstr "Kommentit"
 msgid "Comments and suggestions"
 msgstr "Huomautukset ja ehdotukset"
 
-#: apps/io.ox/contacts/model.js:255 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:220 module:io.ox/contacts
 msgid "Commercial Register"
 msgstr "Kaupparekisteri"
 
@@ -1768,7 +1768,7 @@ msgstr "Tiivis näkymä"
 msgid "Companies"
 msgstr "Yritykset"
 
-#: apps/io.ox/contacts/model.js:292 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:257 module:io.ox/contacts
 msgid "Company"
 msgstr "Yhtiö"
 
@@ -1839,7 +1839,7 @@ msgstr "Yhteystiedon kuvat"
 msgid "Contact request sent"
 msgstr "Yhteystietopyyntö lähetetty"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:135 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:137 module:io.ox/contacts
 msgid "Contacts"
 msgstr "Yhteystiedot"
 
@@ -1935,7 +1935,7 @@ msgstr "Asetuksia ei voitu tallentaa"
 msgid "Could not save settings."
 msgstr "Asetuksia ei voitu tallentaa."
 
-#: apps/io.ox/core/folder/api.js:622 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:623 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1973,8 +1973,8 @@ msgstr "Postisuodatinsääntöjäsi ei voitu ladata."
 msgid "Couldn't load your vacation notice."
 msgstr "Lomailmoitustasi ei voitu ladata."
 
-#: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:251 apps/io.ox/contacts/model.js:264
+#: apps/io.ox/contacts/model.js:199 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:216 apps/io.ox/contacts/model.js:229
 msgid "Country"
 msgstr "Maa"
 
@@ -2102,7 +2102,7 @@ msgstr "Päivämäärä"
 msgid "Date completed"
 msgstr "Valmistumispäivämäärä"
 
-#: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:200 module:io.ox/contacts
 #: apps/plugins/halo/xing/register.js:142 module:plugins/portal
 msgid "Date of birth"
 msgstr "Syntymäaika"
@@ -2141,7 +2141,7 @@ msgstr "Evätty"
 msgid "Default Theme"
 msgstr "Oletusteema"
 
-#: apps/io.ox/contacts/model.js:318 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:283 module:io.ox/contacts
 msgid "Default address"
 msgstr "oletusosoite"
 
@@ -2266,7 +2266,7 @@ msgstr "Hylätyt viestit"
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Paikallisten viestien poistaminen poistaa ne myös palvelimelta"
 
-#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:208 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Osasto"
@@ -2364,7 +2364,7 @@ msgstr "Näytä nimi"
 msgid "Display emoticons as graphics in text emails"
 msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
 
-#: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:189 module:io.ox/contacts
 msgid "Display name"
 msgstr "Näytä nimi"
 
@@ -2390,7 +2390,7 @@ msgid "Distribution List Details"
 msgstr "Jakelulista"
 
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:315
+#: apps/io.ox/contacts/main.js:205 apps/io.ox/contacts/model.js:280
 #: apps/io.ox/contacts/view-detail.js:48 apps/io.ox/participants/model.js:43
 #: module:io.ox/participants/model apps/io.ox/participants/views.js:185
 #: module:io.ox/calendar/edit/main
@@ -2805,19 +2805,19 @@ msgstr "Editori"
 msgid "Email"
 msgstr "Sähköposti"
 
-#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
 msgid "Email 1"
 msgstr "Sähköposti 1"
 
-#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:243 module:io.ox/contacts
 msgid "Email 1 / Phone number"
 msgstr "Sähköposti 1 / puhelinnumero"
 
-#: apps/io.ox/contacts/model.js:279 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:244 module:io.ox/contacts
 msgid "Email 2"
 msgstr "Sähköposti 2"
 
-#: apps/io.ox/contacts/model.js:280 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Email 3"
 msgstr "Sähköposti 3"
 
@@ -2872,11 +2872,11 @@ msgstr ""
 msgid "Employee"
 msgstr "Työntekijä"
 
-#: apps/io.ox/contacts/model.js:252 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:217 module:io.ox/contacts
 msgid "Employee ID"
 msgstr "Työntekijätunnus"
 
-#: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:210 module:io.ox/contacts
 msgid "Employee type"
 msgstr "Työntekijän tyyppi"
 
@@ -3204,15 +3204,15 @@ msgstr "Suosikit"
 msgid "Favorites"
 msgstr "Suosikit"
 
-#: apps/io.ox/contacts/model.js:267 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:232 module:io.ox/contacts
 msgid "Fax"
 msgstr "Faksi"
 
-#: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
 msgid "Fax (Home)"
 msgstr "Faksi (koti)"
 
-#: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
 msgid "Fax (alt)"
 msgstr "Faksi (vaihtoehtoinen)"
 
@@ -3287,7 +3287,7 @@ msgstr ""
 msgid "Find a free time"
 msgstr "Löydä vapaa aika"
 
-#: apps/io.ox/contacts/model.js:225 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:190 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:84 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:80 module:io.ox/wizards/firstStart
 msgid "First name"
@@ -3708,7 +3708,7 @@ msgstr "Kuinka tämä toimii?"
 msgid "IMAP folder subscription"
 msgstr "IMAP-kansioiden tilaus"
 
-#: apps/io.ox/contacts/model.js:290 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:255 module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP puhelin"
 
@@ -3759,7 +3759,7 @@ msgstr ""
 "Älä huomioi olemassaolevia tapahtumia. Hyödyllinen esimerkiksi yleisiä "
 "vapaapäiviä sisältäviä kalentereita tuotaessa."
 
-#: apps/io.ox/contacts/model.js:293 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:258 module:io.ox/contacts
 msgid "Image 1"
 msgstr "Kuva 1"
 
@@ -3815,7 +3815,7 @@ msgstr "Saapuvan postin palvelin"
 msgid "Inconsistent dates"
 msgstr "Ristiriitaiset päivämäärät"
 
-#: apps/io.ox/contacts/model.js:258 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:223 module:io.ox/contacts
 #: apps/io.ox/core/yell.js:22 module:io.ox/core
 msgid "Info"
 msgstr "Info"
@@ -3856,11 +3856,11 @@ msgstr ""
 "Asenna tämä web sovellus %1$s laiteeseesi: Napauta %2$s ja sitten %3$s'Add "
 "to Home Screen'%4$s"
 
-#: apps/io.ox/contacts/model.js:288 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
 msgstr "Pikaviestin 1"
 
-#: apps/io.ox/contacts/model.js:289 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
 msgid "Instant Messenger 2"
 msgstr "Pikaviestin 2"
 
@@ -4011,7 +4011,7 @@ msgstr "Kielikohtainen oletusarvo"
 msgid "Languages"
 msgstr "Kielet"
 
-#: apps/io.ox/contacts/model.js:226 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
 msgid "Last name"
@@ -4091,7 +4091,7 @@ msgstr "LinkedIn Network Updates"
 msgid "LinkedIn reported an error:"
 msgstr "LinkedIn virhe:"
 
-#: apps/io.ox/contacts/model.js:314 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:279 module:io.ox/contacts
 msgid "Links"
 msgstr "Linkit"
 
@@ -4192,7 +4192,8 @@ msgstr "Viestien kappalemäärän kiintiö"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:71 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:105
+#: module:plugins/notifications
 #, fuzzy, c-format
 #| msgid "Mail from %1$s %2$s"
 msgid "Mail from %1$s, %2$s"
@@ -4281,7 +4282,7 @@ msgstr "Tee tästä vallitseva versio"
 msgid "Manage applications"
 msgstr "Hallinnoi sovelluksia"
 
-#: apps/io.ox/contacts/model.js:259 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
 msgstr "Johtaja"
 
@@ -4301,7 +4302,7 @@ msgstr "Manuaalinen"
 msgid "March"
 msgstr "maaliskuu"
 
-#: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:201 module:io.ox/contacts
 msgid "Marital status"
 msgstr "Aviosääty"
 
@@ -4319,7 +4320,7 @@ msgstr "Merkitse kaikki viestit luetuiksi"
 msgid "Mark as"
 msgstr "Merkitse"
 
-#: apps/io.ox/contacts/model.js:317 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:282 module:io.ox/contacts
 msgid "Mark as distributionlist"
 msgstr "Merkitse jakelulistaksi"
 
@@ -4409,7 +4410,7 @@ msgstr "Viestimet"
 msgid "Messenger"
 msgstr "Viestin"
 
-#: apps/io.ox/contacts/model.js:227 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:192 module:io.ox/contacts
 msgid "Middle name"
 msgstr "Muut nimet"
 
@@ -4577,7 +4578,7 @@ msgstr "Luonto"
 msgid "New"
 msgstr "Uusi"
 
-#: apps/io.ox/core/folder/api.js:668 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:669 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Uusi kansio"
@@ -4629,13 +4630,14 @@ msgstr "Uusi tiedosto"
 msgid "New folder"
 msgstr "Uusi kansio"
 
-#: apps/plugins/notifications/mail/register.js:73 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:107
+#: module:plugins/notifications
 #, fuzzy
 #| msgid "New Mail"
 msgid "New mail"
 msgstr "Uusi viesti"
 
-#: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:95 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mails"
 msgid "New mails"
@@ -4719,7 +4721,7 @@ msgstr "Seuraava päivä"
 msgid "Next Week"
 msgstr "Seuraava viikko"
 
-#: apps/io.ox/contacts/model.js:239 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
 msgstr "Kutsumanimi"
 
@@ -4831,7 +4833,8 @@ msgstr "Ei hitaita pyyntöjä"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:71 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:105
+#: module:plugins/notifications
 #, c-format
 msgid "No subject"
 msgstr "Ei aihetta"
@@ -5031,83 +5034,83 @@ msgstr "Avaa Linkedin:ssä"
 msgid "Open/close all messages"
 msgstr "Avaa/sulje kaikki viestit"
 
-#: apps/io.ox/contacts/model.js:294 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:259 module:io.ox/contacts
 msgid "Optional 01"
 msgstr "Vapaavalintainen 01"
 
-#: apps/io.ox/contacts/model.js:295 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:260 module:io.ox/contacts
 msgid "Optional 02"
 msgstr "Vapaavalintainen 02"
 
-#: apps/io.ox/contacts/model.js:296 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:261 module:io.ox/contacts
 msgid "Optional 03"
 msgstr "Vapaavalintainen 03"
 
-#: apps/io.ox/contacts/model.js:297 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:262 module:io.ox/contacts
 msgid "Optional 04"
 msgstr "Vapaavalintainen 04"
 
-#: apps/io.ox/contacts/model.js:298 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:263 module:io.ox/contacts
 msgid "Optional 05"
 msgstr "Vapaavalintainen 05"
 
-#: apps/io.ox/contacts/model.js:299 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
 msgid "Optional 06"
 msgstr "Vapaavalintainen 06"
 
-#: apps/io.ox/contacts/model.js:300 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
 msgid "Optional 07"
 msgstr "Vapaavalintainen 07"
 
-#: apps/io.ox/contacts/model.js:301 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Optional 08"
 msgstr "Vapaavalintainen 08"
 
-#: apps/io.ox/contacts/model.js:302 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:267 module:io.ox/contacts
 msgid "Optional 09"
 msgstr "Vapaavalintainen 09"
 
-#: apps/io.ox/contacts/model.js:303 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:268 module:io.ox/contacts
 msgid "Optional 10"
 msgstr "Vapaavalintainen 10"
 
-#: apps/io.ox/contacts/model.js:304 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:269 module:io.ox/contacts
 msgid "Optional 11"
 msgstr "Vapaavalintainen 11"
 
-#: apps/io.ox/contacts/model.js:305 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:270 module:io.ox/contacts
 msgid "Optional 12"
 msgstr "Vapaavalintainen 12"
 
-#: apps/io.ox/contacts/model.js:306 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:271 module:io.ox/contacts
 msgid "Optional 13"
 msgstr "Vapaavalintainen 13"
 
-#: apps/io.ox/contacts/model.js:307 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:272 module:io.ox/contacts
 msgid "Optional 14"
 msgstr "Vapaavalintainen 14"
 
-#: apps/io.ox/contacts/model.js:308 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
 msgid "Optional 15"
 msgstr "Vapaavalintainen 15"
 
-#: apps/io.ox/contacts/model.js:309 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:274 module:io.ox/contacts
 msgid "Optional 16"
 msgstr "Vapaavalintainen 16"
 
-#: apps/io.ox/contacts/model.js:310 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:275 module:io.ox/contacts
 msgid "Optional 17"
 msgstr "Vapaavalintainen 17"
 
-#: apps/io.ox/contacts/model.js:311 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:276 module:io.ox/contacts
 msgid "Optional 18"
 msgstr "Vapaavalintainen 18"
 
-#: apps/io.ox/contacts/model.js:312 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Optional 19"
 msgstr "Vapaavalintainen 19"
 
-#: apps/io.ox/contacts/model.js:313 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:278 module:io.ox/contacts
 msgid "Optional 20"
 msgstr "Vapaavalintainen 20"
 
@@ -5171,7 +5174,7 @@ msgstr "PT"
 msgid "PDFs"
 msgstr ""
 
-#: apps/io.ox/contacts/model.js:283 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:248 module:io.ox/contacts
 msgid "Pager"
 msgstr "Hakulaite"
 
@@ -5268,35 +5271,35 @@ msgstr "Puhelin"
 msgid "Phone & fax numbers"
 msgstr "Puhelin ja faksinumerot"
 
-#: apps/io.ox/contacts/model.js:291 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:256 module:io.ox/contacts
 msgid "Phone (assistant)"
 msgstr "Puhelin (assistentti)"
 
-#: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:231 module:io.ox/contacts
 msgid "Phone (business alt)"
 msgstr "Puhelin (työ vaihtoehtoinen)"
 
-#: apps/io.ox/contacts/model.js:265 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 msgid "Phone (business)"
 msgstr "Puhelin (työ)"
 
-#: apps/io.ox/contacts/model.js:269 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
 msgid "Phone (car)"
 msgstr "Puhelin (auto)"
 
-#: apps/io.ox/contacts/model.js:270 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:235 module:io.ox/contacts
 msgid "Phone (company)"
 msgstr "Puhelin (yhtiö)"
 
-#: apps/io.ox/contacts/model.js:272 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
 msgid "Phone (home alt)"
 msgstr "Puhelin (koti vaihtoehtoinen)"
 
-#: apps/io.ox/contacts/model.js:271 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
 msgid "Phone (home)"
 msgstr "Puhelin (koti)"
 
-#: apps/io.ox/contacts/model.js:276 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:241 module:io.ox/contacts
 msgid "Phone (other)"
 msgstr "Puhelin (muu)"
 
@@ -5488,7 +5491,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Uudelleenkirjaudu jatkaaksesi"
 
-#: apps/io.ox/files/api.js:273 module:io.ox/files
+#: apps/io.ox/files/api.js:279 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "Määrittele nämä puuttuvat muuttujat:"
@@ -5517,7 +5520,7 @@ msgstr "Portaali"
 msgid "Portal settings"
 msgstr "Portaalin asetukset"
 
-#: apps/io.ox/contacts/model.js:244 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:209 module:io.ox/contacts
 msgid "Position"
 msgstr "Asema"
 
@@ -5525,8 +5528,8 @@ msgstr "Asema"
 msgid "Post a status update"
 msgstr "Postaa tilapäivitys"
 
-#: apps/io.ox/contacts/model.js:231 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:248 apps/io.ox/contacts/model.js:263
+#: apps/io.ox/contacts/model.js:196 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:213 apps/io.ox/contacts/model.js:228
 msgid "Postcode"
 msgstr "Postinumero"
 
@@ -5646,7 +5649,7 @@ msgstr "Yksityisosoite"
 msgid "Process subsequent rules"
 msgstr "Suorita myös muut säännöt"
 
-#: apps/io.ox/contacts/model.js:238 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:203 module:io.ox/contacts
 msgid "Profession"
 msgstr "Ammatti"
 
@@ -5945,7 +5948,7 @@ msgstr "Poista"
 msgid "Remove attachment"
 msgstr "Poista liite"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:270 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:271 module:io.ox/contacts
 #: apps/io.ox/participants/views.js:52 module:io.ox/calendar/edit/main
 msgid "Remove contact"
 msgstr "Poista yhteystieto"
@@ -6083,7 +6086,7 @@ msgstr "%s retweettaama"
 msgid "Review your purchases"
 msgstr "Tarkastele ostoksiasi"
 
-#: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:211 module:io.ox/contacts
 msgid "Room number"
 msgstr "Huonenumero"
 
@@ -6096,7 +6099,7 @@ msgstr "Säännön nimi"
 msgid "Running applications"
 msgstr "Käynnissä olevat sovellukset"
 
-#: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:218 module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Liikevaihto"
 
@@ -6715,7 +6718,7 @@ msgctxt "folder"
 msgid "Spam"
 msgstr "Roskaposti"
 
-#: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:205 module:io.ox/contacts
 msgid "Spouse's name"
 msgstr "Puolison nimi"
 
@@ -6756,8 +6759,8 @@ msgstr ""
 msgid "Starts on"
 msgstr "Alkaa"
 
-#: apps/io.ox/contacts/model.js:233 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:250 apps/io.ox/contacts/model.js:316
+#: apps/io.ox/contacts/model.js:198 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:215 apps/io.ox/contacts/model.js:281
 msgid "State"
 msgstr "Maakunta"
 
@@ -6776,8 +6779,8 @@ msgstr "Tila"
 msgid "Stay signed in"
 msgstr "Pysy kirjautuneena"
 
-#: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:261
+#: apps/io.ox/contacts/model.js:195 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:212 apps/io.ox/contacts/model.js:226
 msgid "Street"
 msgstr "Katu"
 
@@ -6836,7 +6839,7 @@ msgstr "%-tilisi uudelleenvaltuutettiin onnistuneesti"
 msgid "Such data will never be uploaded"
 msgstr "Tietoja ei koskaan ladata (upload)"
 
-#: apps/io.ox/contacts/model.js:228 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:193 module:io.ox/contacts
 msgid "Suffix"
 msgstr "Jälkiliite"
 
@@ -6857,7 +6860,7 @@ msgstr ""
 "Viestien, kalenterin, yhteystietojen ja tehtävien sekä julkisten, jaettujen "
 "ja järjestelmäkansioiden synkronointi Microsoft Outlook® asiakasohjelmille."
 
-#: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:219 module:io.ox/contacts
 msgid "TAX ID"
 msgstr "Verotunnus"
 
@@ -6866,7 +6869,7 @@ msgstr "Verotunnus"
 msgid "TB"
 msgstr "TT"
 
-#: apps/io.ox/contacts/model.js:287 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:252 module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "kaukokirjoitin/tekstipuhelin"
 
@@ -6940,23 +6943,23 @@ msgstr "Tehtävät"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Tehtäviä ei voi siirtää yhteisiin kansiohin eikä niistä pois"
 
-#: apps/io.ox/contacts/model.js:282 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:247 module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Puhelin (ISDN)"
 
-#: apps/io.ox/contacts/model.js:268 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:233 module:io.ox/contacts
 msgid "Telephone callback"
 msgstr "Puhelin (vastapuhelu)"
 
-#: apps/io.ox/contacts/model.js:284 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:249 module:io.ox/contacts
 msgid "Telephone primary"
 msgstr "Puhelin ensisijainen"
 
-#: apps/io.ox/contacts/model.js:285 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:250 module:io.ox/contacts
 msgid "Telephone radio"
 msgstr "Radiopuhelin"
 
-#: apps/io.ox/contacts/model.js:286 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Telex"
 msgstr "Teleksi"
 
@@ -7012,7 +7015,7 @@ msgstr "Tili täytyy nimetä"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteetti on poistettu onnistuneesti"
 
-#: apps/io.ox/files/api.js:233 module:io.ox/files
+#: apps/io.ox/files/api.js:239 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Sallittu kiintiö on täynnä."
@@ -7143,7 +7146,7 @@ msgstr ""
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate mail address
-#: apps/io.ox/contacts/distrib/create-dist-view.js:180 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:182 module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
 msgstr "Sähköpostiosoite %1$s on jo listassa"
 
@@ -7226,11 +7229,11 @@ msgstr "Ilmoitusalue on avoinna"
 
 #. uniqueness of distribution listmembers
 #. %1$s is the duplicate display name of the person
-#: apps/io.ox/contacts/distrib/create-dist-view.js:184 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186 module:io.ox/contacts
 msgid "The person %1$s is already in the list"
 msgstr "Henkilö %1$s on jo listassa"
 
-#: apps/io.ox/files/api.js:228 module:io.ox/files
+#: apps/io.ox/files/api.js:234 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
@@ -7436,7 +7439,7 @@ msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
 msgid "This browser is not supported on your current platform."
 msgstr "Tämä selainen ei ole tuettu tämänhetkisellä alustallasi."
 
-#: apps/io.ox/contacts/model.js:322 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:287 module:io.ox/contacts
 msgid "This contact is private and cannot be shared"
 msgstr "Tämä yhteystieto on yksityinen eikä sitä voida jakaa."
 
@@ -7471,7 +7474,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Tämä kenttä pitää täyttää"
 
-#: apps/io.ox/files/api.js:238 module:io.ox/files
+#: apps/io.ox/files/api.js:244 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Tiedostoa ei voitu ladata."
@@ -7583,7 +7586,7 @@ msgstr "Tämä ei ole käypä postiosoite"
 msgid "This is not a valid user or group."
 msgstr "Tämä ei ole käypä käyttäjä tai ryhmä."
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:202 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:204 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:255
 msgid "This list has no contacts yet"
 msgstr "Tällä listalla ei vielä ole yhteystietoja"
@@ -7648,7 +7651,7 @@ msgstr "Aikavyöhyke"
 msgid "Timezone"
 msgstr "Aikavyöhyke"
 
-#: apps/io.ox/contacts/model.js:229 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:194 module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
 msgstr "Titteli"
@@ -7661,7 +7664,7 @@ msgstr "Titteli"
 msgid "To"
 msgstr "Vastaanottaja"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:296 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:299 module:io.ox/contacts
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
@@ -7728,8 +7731,8 @@ msgstr "Yhteensä %1$d"
 msgid "Total: %1$s requests"
 msgstr "Yhteensä %1$s pyyntöä"
 
-#: apps/io.ox/contacts/model.js:232 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:249 apps/io.ox/contacts/model.js:262
+#: apps/io.ox/contacts/model.js:197 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:214 apps/io.ox/contacts/model.js:227
 msgid "Town"
 msgstr "Kaupunki"
 
@@ -7762,7 +7765,7 @@ msgstr "Tyyppi"
 msgid "UI version"
 msgstr "KL versio"
 
-#: apps/io.ox/contacts/model.js:281 module:io.ox/contacts
+#: apps/io.ox/contacts/model.js:246 module:io.ox/contacts
 #: apps/plugins/portal/rss/register.js:146 module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -8450,7 +8453,7 @@ msgstr "Paina piilottaaksesi kaikki tapaamiskutsut."
 msgid "You've got appointment reminders"
 msgstr "Paina piilottaaksesi kaikki tapaamismuistutukset."
 
-#: apps/plugins/notifications/mail/register.js:62 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:96 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got new mails"
