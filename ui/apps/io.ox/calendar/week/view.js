@@ -219,7 +219,7 @@ define('io.ox/calendar/week/view', [
                 break;
             case 'workweek':
                 // settings independent, set startDate to Monday of the current week
-                this.startDate.startOf('week').isoWeekday(1);
+                this.startDate.startOf('week').day(this.workWeekStart);
                 break;
             default:
             case 'week':
