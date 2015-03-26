@@ -16,7 +16,7 @@ define([
 ], function (api, coreSettings) {
     'use strict';
 
-    describe.only('files API', function () {
+    describe('files API', function () {
         it('should exist', function () {
             expect(api).to.exist;
         });
