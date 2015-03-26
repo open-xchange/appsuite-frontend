@@ -333,30 +333,12 @@
                            'url($1' + path);
     }
 
-    // IE9 fix. Cannot handle more than 30 <style> tags at once.
-    // see e.g. http://dean.edwards.name/weblog/2010/02/bug85/
-
-    var concatCSS = {}, nodes = {};
-
-    function insertCommon(name, css, selector, node) {
+    function insert(name, css, selector, node) {
         if (node) return node.text(css);
         return $('<style type="text/css">').text(css)
             .attr('data-require-src', name)
             .insertBefore(selector);
     }
-
-    function insertIE9(name, css, selector, node) {
-        if (node) return node.text(css);
-        // need new node?
-        if (!nodes[selector]) nodes[selector] = $('<style type="text/css">').insertBefore(selector);
-        if (!concatCSS[selector]) concatCSS[selector] = '';
-        // append css
-        concatCSS[selector] += '/* ' + name + ' */\n\n' + css + '\n\n';
-        // update
-        return nodes[selector].text(concatCSS[selector]);
-    }
-
-    var insert = _.device('IE === 9') ? insertIE9 : insertCommon;
 
     // Replace the load function of RequireJS with our own, which fetches
     // dynamically concatenated files.
