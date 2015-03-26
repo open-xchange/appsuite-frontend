@@ -17,8 +17,9 @@ define('io.ox/core/folder/actions/add', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
+    'io.ox/core/capabilities',
     'gettext!io.ox/core'
-], function (api, dialogs, ext, notifications, gt) {
+], function (api, dialogs, ext, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -53,17 +54,67 @@ define('io.ox/core/folder/actions/add', [
     }
 
     function getTitle(folder, module) {
-        if (module === 'mail' || module === 'infostore') {
-            return gt('New subfolder');
-        } else if (folder === '2') {
-            return module === 'calendar' ? gt('New public calendar') : gt('New public folder');
-        } else {
-            return module === 'calendar' ? gt('New private calendar') : gt('New private folder');
-        }
+        return module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
     }
 
     function getName(module) {
         return module === 'calendar' ? gt('New calendar') : gt('New folder');
+    }
+
+    function open(folder, opt) {
+
+        new dialogs.ModalDialog({
+            async: true,
+            width: 400,
+            enter: 'add'
+        })
+        .header(
+            $('<h4>').text(getTitle(folder, opt.module))
+        )
+        .build(function () {
+
+            var guid = _.uniqueId('label_'),
+                label = opt.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
+
+            this.getContentNode().append(
+                // name
+                $('<div class="form-group">').append(
+                    $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
+                    $('<input type="text" name="name" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
+                )
+            );
+
+            if (opt.supportsPublicFolders) {
+                this.getContentNode().append(
+                    // public
+                    $('<div class="form-group checkbox">').append(
+                        // checkbox
+                        $('<label>').append(
+                            $('<input type="checkbox" name="public">'),
+                            $.txt(label)
+                        )
+                    ),
+                    // help
+                    $('<div class="help-block">').text(
+                        gt( 'A public folder is used for content that is of common interest for all users. ' +
+                            'To allow other users to read or edit the contents, you have to set ' +
+                            'the respective permissions for the public folder.'
+                        )
+                    )
+                );
+            }
+        })
+        .addPrimaryButton('add', gt('Add'))
+        .addButton('cancel', gt('Cancel'))
+        .on('add', function () {
+            var node = this.getContentNode(),
+                name = node.find('input[name="name"]').val(),
+                isPublic = node.find('input[name="public"]').prop('checked');
+            add(isPublic ? '2' : folder, name, opt).then(this.close, this.idle);
+        })
+        .show(function () {
+            this.find('input[name="name"]').val(getName(opt.module)).focus().select();
+        });
     }
 
     /**
@@ -78,31 +129,14 @@ define('io.ox/core/folder/actions/add', [
         folder = String(folder);
         opt = opt || {};
 
-        new dialogs.ModalDialog({
-            async: true,
-            width: 400,
-            enter: 'add'
-        })
-        .header(
-            $('<h4>').text(getTitle(folder, opt.module))
-        )
-        .build(function () {
-            var guid = _.uniqueId('label_');
-            this.getContentNode().append(
-                $('<div class="form-group">').append(
-                    $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
-                    $('<input type="text" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
-                )
-            );
-        })
-        .addPrimaryButton('add', gt('Add'))
-        .addButton('cancel', gt('Cancel'))
-        .on('add', function () {
-            add(folder, this.getContentNode().find('input').val(), opt)
-                .then(this.close, this.idle);
-        })
-        .show(function () {
-            this.find('input').val(getName(opt.module)).focus().select();
-        });
+        if (/^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders')) {
+            // only address book, calendar, and tasks do have a "public folder" section
+            api.get('2').done(function (public_folder) {
+                opt.supportsPublicFolders = api.can('create', public_folder);
+                open(folder, opt);
+            });
+        } else {
+            open(folder, opt);
+        }
     };
 });

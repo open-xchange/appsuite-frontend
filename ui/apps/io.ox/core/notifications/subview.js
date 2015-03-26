@@ -47,7 +47,9 @@ define('io.ox/core/notifications/subview', [
                 //reminders need both to work correctly (reminderObject and task/appointment)
 
                 //make sure we have a model
-                if ( !model.get ) {
+                if ( !model ) {
+                    model = requestedModel;
+                } else if (!model.get) {
                     model = new Backbone.Model(model);
                 }
 

@@ -21,20 +21,22 @@ define('io.ox/core/viewer/main', [
     'use strict';
 
     /**
-     * Extracts the file list from the baton of the Viewer launch action.
-     *
-     * @param {Object} baton
-     *  The baton object delivered by the Viewer launch action.
-     *
-     * @returns {Array|null}
-     *  The file list or null.
-     */
+    * Extracts the file list from the baton of the Viewer launch action.
+    *
+    * @param {Object} baton
+    *  The baton object delivered by the Viewer launch action.
+    *
+    * @returns {Array|null}
+    *  The file list or null.
+    */
     function getFileList (baton) {
         if (!baton) { return null; }
-        // Drive has the list in the allIds property, Mail in the root
-        if (_.isArray(baton.allIds)) { return baton.allIds; }
+        // temporary till we get list of models from baton directly
+        if (baton.app && baton.app.listView) {
+            return baton.app.listView.collection.models;
+        }
+        // exception for Mail and PIM
         if (_.isArray(baton)) { return baton; }
-
         return null;
     }
 

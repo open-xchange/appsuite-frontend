@@ -391,7 +391,7 @@ define('io.ox/core/commons', [
             });
 
             // unread counter for mail
-            folderAPI.on('update:total', function (e, id) {
+            folderAPI.on('update:total', function (id) {
                 // check for current folder (otherwise we get cross-app results! see bug #28558)
                 if (id === app.folder.get()) drawFolderInfo(id);
             });

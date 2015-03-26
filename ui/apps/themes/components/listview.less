@@ -16,7 +16,7 @@
 /* List View */
 .list-view-control {
 
-    @height-default: 45px;
+    @height-default: @toolbar-height;
     @height-small: 35px;
     background-color: #fff;
 
@@ -36,11 +36,31 @@
 
     .toolbar {
 
+        .user-select(none);
+
         &.top { .top-toolbar(); }
         &.bottom { .bottom-toolbar(); }
 
         .grid-options > a {
-            color: #555;
+            color: #777;
+        }
+
+        .select-all {
+            color: #777;
+            cursor: pointer;
+            white-space: nowrap;
+            i {
+                color: #ccc;
+                margin-right: 8px;
+                width: 16px;
+                font-size: 18px;
+                position: relative;
+                top: 2px;
+            }
+        }
+
+        .dropdown-menu {
+            font-size: 14px;
         }
     }
 
@@ -125,14 +145,14 @@
     .list-item, .list-header {
         position: relative;
         font-size: 13px;
-        line-height: 19px;
-        padding: 9px @list-view-padding 9px (@list-view-padding + 30px);
+        line-height: 20px;
+        padding: 6px @list-view-padding 5px (@list-view-padding + 32px);
         cursor: pointer;
         outline: 0;
     }
 
     .list-item {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.10);
     }
 
     .list-item .list-item-checkmark {
@@ -145,7 +165,7 @@
         .fa-checkmark {
             color: #ccc;
             position: absolute;
-            left: 18px;
+            left: @default-padding;
             top: 12px;
             font-size: 18px;
             &:before { content: "\f096"; } // fa-square-o
@@ -173,8 +193,8 @@
             }
 
             &:before {
-                content: "\f046";
-            } // fa-check-square-o
+                content: "\f14a"; // fa-check-square-o
+            }
         }
     }
 
@@ -197,6 +217,11 @@
 
     .list-item-row {
         clear: right;
+    }
+
+    .list-item-row + .list-item-row {
+        position: relative;
+        top: -4px;
     }
 
     & > .list-item:last-child {
@@ -225,15 +250,11 @@
 
     // use this for empty list
     .busy-indicator:first-child {
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         background-color: transparent;
+        i { display: none; }
     }
-
-    // ul {
-    //     list-style-type: none;
-    //     padding: 0;
-    //     margin: 0;
-    // }
 
     // swipe animation
 
@@ -241,7 +262,7 @@
 
     .list-item {
         left: 0px;
-        .transition(e('left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1), padding 0.40s cubic-bezier(0.1, 0.7, 0.1, 1)'));
+        .transition(e('left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1)'));
         &.swipe-left {
             left: -@swipe-position;
         }
@@ -277,6 +298,6 @@
 
     .list-item {
         .bold { font-weight: bold; }
-        .gray { opacity: 0.70; } // 0.70 has enough color contrast
+        .gray { opacity: 0.50; } // 0.50 has enough color contrast
     }
 }

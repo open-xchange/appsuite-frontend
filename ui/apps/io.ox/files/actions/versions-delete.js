@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/versions-delete', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files'
 ], function (api, dialogs, gt) {

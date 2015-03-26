@@ -13,7 +13,6 @@
  */
 
 define('io.ox/files/main', [
-    'io.ox/core/viewer/main',
     'io.ox/core/commons',
     'gettext!io.ox/files',
     'settings!io.ox/files',
@@ -21,6 +20,8 @@ define('io.ox/files/main', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/files/listview',
+    'io.ox/core/tk/list-control',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
@@ -32,7 +33,7 @@ define('io.ox/files/main', [
     'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
     'io.ox/files/toolbar'
-], function (Viewer, commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
 
@@ -225,6 +226,259 @@ define('io.ox/files/main', [
             // do once on startup
             update();
         },
+
+        /*
+         * Default application properties
+         */
+        'props': function (app) {
+            // layout
+            var layout = app.settings.get('layout');
+            if (!/^(list|icon|tile)/.test(layout)) layout = 'list';
+            // introduce shared properties
+            app.props = new Backbone.Model({
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
+                'filter': 'none',
+                'layout': layout,
+                'folderEditMode': false
+            });
+        },
+
+        /*
+         * Setup list view
+         */
+        'list-view': function (app) {
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true });
+            app.listView.model.set({ folder: app.folder.get() });
+            // for debugging
+            window.list = app.listView;
+        },
+
+        /*
+         * Setup list view control
+         */
+        'list-view-control': function (app) {
+            app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
+            app.getWindow().nodes.main.append(
+                app.listControl.render().$el
+                    //#. items list (e.g. mails)
+                    .attr('aria-label', gt('Item list'))
+                    .find('.toolbar')
+                    //#. toolbar with 'select all' and 'sort by'
+                    .attr('aria-label', gt('Item list options'))
+                    .end()
+            );
+            // make resizable
+            app.listControl.resizable();
+        },
+
+        /*
+         * Connect collection loader with list view
+         */
+        'connect-loader': function (app) {
+            app.listView.connect(api.collectionLoader);
+        },
+
+        /*
+         * Respond to folder change
+         */
+        'folder:change': function (app) {
+            app.on('folder:change', function (id) {
+                // we clear the list now to avoid flickering due to subsequent layout changes
+                app.listView.empty();
+                var options = app.getViewOptions(id);
+                app.props.set(options);
+                app.listView.model.set('folder', id);
+            });
+        },
+
+        /*
+         * Get folder-based view options
+         */
+        'get-view-options': function (app) {
+            app.getViewOptions = function (folder) {
+                var options = app.settings.get(['viewOptions', folder]);
+                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
+            };
+        },
+
+        /*
+         * Store view options
+         */
+        'store-view-options': function (app) {
+            app.props.on('change', _.debounce(function () {
+                var folder = app.folder.get(), data = app.props.toJSON();
+                app.settings
+                    .set(['viewOptions', folder], { sort: data.sort, order: data.order, layout: data.layout });
+                if (_.device('!smartphone')) {
+                    app.settings.set('showCheckboxes', data.checkboxes);
+                }
+                app.settings.save();
+            }, 500));
+        },
+
+        /*
+         * Restore view opt
+         */
+        'restore-view-options': function (app) {
+            var data = app.getViewOptions(app.folder.get());
+            app.props.set(data);
+        },
+
+        /*
+         * Respond to changed sort option
+         */
+        'change:sort': function (app) {
+            app.props.on('change:sort', function (model, value) {
+                // set proper order first
+                var model = app.listView.model;
+                model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                app.props.set('order', model.get('order'));
+                // now change sort columns
+                model.set('sort', value);
+            });
+        },
+
+        /*
+         * Respond to changed order
+         */
+        'change:order': function (app) {
+            app.props.on('change:order', function (model, value) {
+                app.listView.model.set('order', value);
+            });
+        },
+
+        /*
+         * Respond to changed filter
+         */
+        'change:filter': function (app) {
+            app.props.on('change:filter', function (model, value) {
+                app.listView.selection.selectNone();
+                if (value === 'none') app.listView.setFilter();
+                else app.listView.setFilter('.file-type-' + value);
+            });
+        },
+
+        // respond to resize events
+        'resize': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            $(window).on('resize', function () {
+
+                var list = app.listView, width, layout, gridWidth, column;
+
+                // skip recalcucation if invisible
+                if (!list.$el.is(':visible')) return;
+
+                width = list.$el.width();
+                layout = app.props.get('layout');
+                gridWidth = layout === 'icon' ? 140 : 180;
+                // icon: 140px as minimum width (120 content + 20 margin/border)
+                // tile: 180px (160 + 20)
+                // minimum is 1, maximum is 12
+                column = Math.max(1, Math.min(12, width / gridWidth >> 0));
+
+                // update class name
+                list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
+                list.$el.addClass('grid-' + column).attr('grid-count', column);
+            });
+
+            $(window).trigger('resize');
+        },
+
+        /*
+         * Respond to changing layout
+         */
+        'change:layout': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            function applyLayout() {
+
+                var layout = app.props.get('layout');
+
+                if (layout === 'list') {
+                    app.listView.$el.addClass('column-layout').removeClass('grid-layout icon-layout tile-layout');
+                } else if (layout === 'icon') {
+                    app.listView.$el.addClass('grid-layout icon-layout').removeClass('column-layout tile-layout');
+                } else {
+                    app.listView.$el.addClass('grid-layout tile-layout').removeClass('column-layout icon-layout');
+                }
+            }
+
+            app.props.on('change:layout', function () {
+                _.defer(function () {
+                    applyLayout();
+                    app.listView.redraw();
+                    $(document).trigger('resize');
+                });
+            });
+
+            applyLayout();
+        },
+
+        /*
+         * Add support for doubleclick
+         */
+        'selection-doubleclick': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            app.listView.$el.on('dblclick', '.file-type-folder', function (e) {
+                var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                app.folder.set(obj.id);
+            });
+
+            app.listView.$el.on('dblclick', '.list-item:not(.file-type-folder)', function (e) {
+                var cid = $(e.currentTarget).attr('data-cid');
+                ox.launch('io.ox/files/detail/main', { cid: cid });
+            });
+        },
+
+        /*
+         * Respond to change:checkboxes
+         */
+        'change:checkboxes': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            app.props.on('change:checkboxes', function (model, value) {
+                app.listView.toggleCheckboxes(value);
+            });
+
+            app.listView.toggleCheckboxes(app.props.get('checkboxes'));
+        },
+
+        /*
+         * Respond to global refresh
+         */
+        'refresh': function (app) {
+            ox.on('refresh^', function () {
+                _.defer(function () {
+                    app.listView.reload();
+                });
+            });
+        },
+
+        /*
+         *
+         */
+        'folder:add/remove': function (app) {
+
+            folderAPI.on('create', function (data) {
+                if (data.folder_id === app.folder.get()) app.listView.reload();
+            });
+
+            folderAPI.on('remove', function (id, data) {
+                // on folder remove, the folder model is directly removed from the collection.
+                // the folder tree automatically selects the parent folder. therefore,
+                // the parent folder's collection just needs to be marked as expired
+                _(api.pool.getByFolder(data.folder_id)).each(function (collection) {
+                    collection.expired = true;
+                });
+            });
+        },
+
         /*
          * Delete file
          * leave detailview if file is deleted
@@ -238,57 +492,11 @@ define('io.ox/files/main', [
             });
         },
 
-        'change:perspective': function () {
-             //use last manually choosen perspective (mode) as default
-            win.on('change:perspective', function (e, name, id) {
-                app.props.set('layout', id);
-            });
-        },
-
-        'change:perspective-mobile': function (app) {
-            if (_.device('!smartphone')) return;
-
-            win.on('change:perspective', function (e, name, id) {
-                if (id === 'fluid:list') {
-                    app.pages.getNavbar('fluid').show('.right');
-                } else {
-                    app.pages.getNavbar('fluid').hide('.right');
-                }
-            });
-        },
-        /*
-         * Default application properties
-         */
-        'props': function (app) {
-            // introduce shared properties
-            app.props = new Backbone.Model({
-                'layout': settings.get('view', 'fluid:list'),
-                // mobile only
-                'folderEditMode': false,
-                // mobile only
-                'showCheckboxes': false
-            });
-
-            win.trigger('change:perspective', 'fluid', app.props.get('layout'));
-        },
-
         /*
          * Set folderview property
          */
         'prop-folderview': function (app) {
             app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
-        },
-
-        /*
-         * Store view options
-         */
-        'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function () {
-                var data = app.props.toJSON();
-                app.settings
-                    .set('view', data.layout)
-                    .save();
-            }, 500));
         },
 
         /*
@@ -308,22 +516,13 @@ define('io.ox/files/main', [
         },
 
         /*
-         * Respond to layout change
-         */
-        'change:layout': function (app) {
-            app.props.on('change:layout', function (model, value) {
-                ox.ui.Perspective.show(app, value);
-            });
-
-            window.drive = app;
-        },
-
-        /*
          * mobile only
          * toggle edit mode in listview on mobiles
          */
-        'change:checkboxes': function (app) {
+        'change:checkboxes-mobile': function (app) {
+
             if (_.device('!smartphone')) return;
+
             // bind action on button
             app.pages.getNavbar('fluid').on('rightAction', function () {
                 app.props.set('showCheckboxes', !app.props.get('showCheckboxes'));
@@ -343,11 +542,11 @@ define('io.ox/files/main', [
             });
         },
 
-        'toggle-secondary-toolbar': function (app) {
-            app.props.on('change:showCheckboxes', function (model, state) {
-                app.pages.toggleSecondaryToolbar('fluid', state);
-            });
-        },
+        // 'toggle-secondary-toolbar': function (app) {
+        //     app.props.on('change:showCheckboxes', function (model, state) {
+        //         app.pages.toggleSecondaryToolbar('fluid', state);
+        //     });
+        // },
 
         /*
          * Folerview toolbar
@@ -409,18 +608,6 @@ define('io.ox/files/main', [
         }
     });
 
-    //map old settings/links
-    function map(pers) {
-        var mapping;
-        if (/^(icons)$/.test(pers)) {
-            //support old setting value
-            mapping = 'fluid:icon';
-        } else if (!/^(fluid:list|fluid:icon|fluid:tile)$/.test(pers)) {
-            mapping = 'fluid:list';
-        }
-        return mapping || pers;
-    }
-
     // launcher
     app.setLauncher(function (options) {
         // get window
@@ -447,12 +634,10 @@ define('io.ox/files/main', [
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
                 app.mediate();
-
-                win.show();
-            })
-            .done(function () {
-                var pers = map(options.perspective || _.url.hash('perspective') || app.props.get('layout'));
-                ox.ui.Perspective.show(app, pers);
+                win.show(function () {
+                    // trigger grid resize
+                    $(window).trigger('resize');
+                });
             });
     });
 

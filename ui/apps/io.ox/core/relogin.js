@@ -22,7 +22,7 @@ define('io.ox/core/relogin', [
 
     var queue = [], pending = false;
 
-    function relogin(e, request, deferred, error) {
+    function relogin(request, deferred, error) {
 
         if (!ox.online) return;
 
@@ -64,7 +64,12 @@ define('io.ox/core/relogin', [
                     .on('relogin', function () {
                         var self = this.busy();
                         // relogin
-                        session.login(ox.user, this.getContentNode().find('input').val(), ox.secretCookie).then(
+                        session.login({
+                            name: ox.user,
+                            password: this.getContentNode().find('input').val(),
+                            rampup: false,
+                            store: ox.secretCookie
+                        }).then(
                             function success() {
                                 notifications.yell('close');
                                 self.getContentNode().find('input').val('');

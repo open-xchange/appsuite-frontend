@@ -110,7 +110,7 @@ define('io.ox/core/boot/support', [
         //
         {
             id: 'update-required',
-            index: 'last',
+            index: 1000000000000,
             draw: function () {
 
                 util.feedback('info', function () {
@@ -163,7 +163,7 @@ define('io.ox/core/boot/support', [
         //
         {
             id: 'cookies',
-            index: 'last',
+            index: 1000000000000,
             draw: function () {
 
                 // cookie check (else clause because we don't want to show multiple warnings; plus this is an edge case)

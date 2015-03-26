@@ -375,13 +375,13 @@ define('io.ox/calendar/util', [
                         gt('work days')
                     );
                 } else {
-                    if ((i & that.days.SUNDAY) !== 0) tmp.push(gt('Sunday'));
-                    if ((i & that.days.MONDAY) !== 0) tmp.push(gt('Monday'));
-                    if ((i & that.days.TUESDAY) !== 0) tmp.push(gt('Tuesday'));
-                    if ((i & that.days.WEDNESDAY) !== 0) tmp.push(gt('Wednesday'));
-                    if ((i & that.days.THURSDAY) !== 0) tmp.push(gt('Thursday'));
-                    if ((i & that.days.FRIDAY) !== 0) tmp.push(gt('Friday'));
-                    if ((i & that.days.SATURDAY) !== 0) tmp.push(gt('Saturday'));
+                    if ((i & that.days.SUNDAY) !== 0) tmp.push(moment.weekdays(0));
+                    if ((i & that.days.MONDAY) !== 0) tmp.push(moment.weekdays(1));
+                    if ((i & that.days.TUESDAY) !== 0) tmp.push(moment.weekdays(2));
+                    if ((i & that.days.WEDNESDAY) !== 0) tmp.push(moment.weekdays(3));
+                    if ((i & that.days.THURSDAY) !== 0) tmp.push(moment.weekdays(4));
+                    if ((i & that.days.FRIDAY) !== 0) tmp.push(moment.weekdays(5));
+                    if ((i & that.days.SATURDAY) !== 0) tmp.push(moment.weekdays(6));
                 }
 
                 var and =

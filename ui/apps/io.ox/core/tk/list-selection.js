@@ -98,8 +98,9 @@ define('io.ox/core/tk/list-selection', [
             });
         },
 
-        getItems: function () {
-            return this.view.$el.find(SELECTABLE);
+        getItems: function (filter) {
+            var items = this.view.$el.find(SELECTABLE);
+            return filter ? items.filter(filter) : items;
         },
 
         getNode: function (cid) {
@@ -298,7 +299,7 @@ define('io.ox/core/tk/list-selection', [
         },
 
         selectAll: function (items) {
-            items = items || this.getItems();
+            items = _.isString(items) ? this.getItems(items) : (items || this.getItems());
             var slice = items.slice(0, items.length);
             slice.removeClass('no-checkbox');
             this.check(slice);
@@ -355,12 +356,33 @@ define('io.ox/core/tk/list-selection', [
             });
         },
 
-        onCursorUpDown: function (e) {
+        onCursor: function (e) {
 
+            // cursor left/right have no effect in a list
+            var grid = this.view.$el.hasClass('grid-layout'),
+                cursorLeftRight = e.which === 37 || e.which === 39;
+            if (!grid && cursorLeftRight) return;
+
+            // get current index
             var items = this.getItems(),
                 current = $(document.activeElement),
-                index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
+                index = (items.index(current) || 0);
 
+            // don't cross the edge on cursor left/right
+            var width = parseInt(this.view.$el.attr('grid-count') || 1, 10),
+                column = index % width;
+            if ((column === 0 && e.which === 37) || (column === width - 1 && e.which === 39)) return;
+
+            // compute new index
+            var cursorUpDown = e.which === 38 || e.which === 40,
+                cursorBack = e.which === 37 || e.which === 38,
+                step = grid && cursorUpDown ? width : 1;
+            index +=  cursorBack ? -step : +step;
+
+            // move to very last element on cursor down?
+            if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
+
+            // out of bounds?
             if (index < 0) return;
             // scroll to very bottom if at end of list (to keep a11y support)
             if (index >= items.length) return this.view.$el.scrollTop(0xFFFFFF);
@@ -417,10 +439,12 @@ define('io.ox/core/tk/list-selection', [
                 this.view.trigger('selection:delete', this.get());
                 break;
 
-            // cursor up/down
+            // cursor left/right up/down
+            case 37:
             case 38:
+            case 39:
             case 40:
-                this.onCursorUpDown(e);
+                this.onCursor(e);
                 break;
 
             // page up/down

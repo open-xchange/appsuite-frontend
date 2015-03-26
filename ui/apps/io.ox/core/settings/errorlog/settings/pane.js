@@ -25,7 +25,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
         id: 'errorlog',
         title: gt('Error log'),
         ref: 'io.ox/core/settings/errorlog',
-        index: 'last',
+        index: 1000000000000,
         advancedMode: true,
         settingsgroup: 'tools'
     });

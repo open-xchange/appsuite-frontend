@@ -16,7 +16,7 @@ define('io.ox/files/carousel', [
     'io.ox/core/commons',
     'io.ox/core/capabilities',
     'gettext!io.ox/files',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/preview/main',
     'io.ox/core/folder/breadcrumb',
     'less!io.ox/files/carousel'

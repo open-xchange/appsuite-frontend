@@ -13,7 +13,7 @@
 
 define('plugins/portal/recentfiles/register', [
     'io.ox/core/extensions',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/api/user',
     'gettext!plugins/portal',
     'settings!io.ox/core',

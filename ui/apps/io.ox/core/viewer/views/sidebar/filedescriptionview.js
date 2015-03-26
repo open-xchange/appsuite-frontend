@@ -15,7 +15,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
 ], function (DisposableView, Ext, ActionsPattern, EventDispatcher, FilesAPI, Util, gt) {
@@ -29,7 +29,6 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         index: 200,
         id: 'description',
         draw: function (baton) {
-            //console.info('FileDescriptionView.draw()');
             var panel, panelHeading,
                 model = baton && baton.model,
                 description = model && model.get('description');

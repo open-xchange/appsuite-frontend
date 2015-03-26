@@ -38,7 +38,7 @@ define('io.ox/core/tk/typeahead', [
 
         options: {
             apiOptions: {},
-            draw: $.noop,
+            drawAutocompleteItem: $.noop,
             cbshow: $.noop,
             click: $.noop,
             blur: $.noop,
@@ -128,7 +128,7 @@ define('io.ox/core/tk/typeahead', [
                 templates: {
                     suggestion: o.suggestion || function (searchresult) {
                         var node = $('<div class="autocomplete-item">');
-                        o.draw.call(node, searchresult);
+                        o.drawAutocompleteItem.call(node, searchresult);
                         return node;
                     },
                     header: function (data) {

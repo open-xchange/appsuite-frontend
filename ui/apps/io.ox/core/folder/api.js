@@ -13,7 +13,6 @@
 
 define('io.ox/core/folder/api', [
     'io.ox/core/http',
-    'io.ox/core/event',
     'io.ox/core/folder/util',
     'io.ox/core/folder/sort',
     'io.ox/core/folder/blacklist',
@@ -24,14 +23,14 @@ define('io.ox/core/folder/api', [
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core'
-], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
 
     'use strict';
 
     var api = {}, pool;
 
     // add event hub
-    Events.extend(api);
+    _.extend(api, Backbone.Events);
 
     //
     // Utility functions
@@ -114,6 +113,7 @@ define('io.ox/core/folder/api', [
             if (model === undefined) {
                 // add new model
                 this.models[id] = model = new FolderModel(data);
+                $(this).trigger('folder-model-added', id);
             } else {
                 // update existing model
                 model.set(data);
@@ -238,6 +238,7 @@ define('io.ox/core/folder/api', [
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
+                virtual.refresh();
                 api.trigger('refresh');
             });
         }
@@ -292,6 +293,12 @@ define('io.ox/core/folder/api', [
 
         refresh: function () {
             _(this.hash).invoke('list');
+        },
+
+        getCollections: function () {
+            return _(this.hash).keys().map(function (id) {
+                return api.pool.getCollection(id);
+            });
         }
     };
 
@@ -603,7 +610,9 @@ define('io.ox/core/folder/api', [
                 if (id !== newId) model.set('id', newId);
                 if (options.cascadePermissions) refresh();
                 // trigger event
-                if (!options.silent) api.trigger('update', id, newId, model.toJSON());
+                if (!options.silent) {
+                    api.trigger('update update:' + id, id, newId, model.toJSON());
+                }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
                     return newId;

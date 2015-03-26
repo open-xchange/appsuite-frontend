@@ -23,7 +23,7 @@ define('io.ox/search/autocomplete/extensions',[
 
     ext.point(POINT + '/handler/click').extend({
         id: 'default',
-        index: 'last',
+        index: 1000000000000,
         flow: function (baton) {
             baton.data.deferred.done(function (value) {
                 // exclusive: define used option (type2 default is index 0 of options)

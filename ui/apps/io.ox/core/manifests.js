@@ -43,6 +43,12 @@ define.async('io.ox/core/manifests', [
             return (deps || []).concat(this.pluginsFor(name));
         },
 
+        hasPluginsFor: function (name) {
+            validate();
+            var plugins = this.pluginPoints[name];
+            return plugins && plugins.length > 0;
+        },
+
         pluginsFor: function (name) {
             validate();
             var plugins = this.pluginPoints[name];

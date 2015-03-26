@@ -75,6 +75,29 @@
 
             margin-bottom: 7px;
 
+            &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
+                .col-xs-11 {
+                    width: 90%;
+                    margin-right: -5px;
+                }
+            }
+            &[data-extension-id=subject] {
+                .col-xs-12 {
+                    padding-left: 7px;
+                }
+            }
+            &[data-extension-id=composetoolbar] {
+                padding-top:5px;
+            }
+
+            .maillabel {
+                padding-top: 3px;
+                &.col-xs-1 {
+                    width: 10%;
+                }
+
+            }
+
             &.subject input {
                 padding-left: 8px;
             }
@@ -82,7 +105,10 @@
             &.composetoolbar {
                 margin-top: 5px;
             }
-
+            &:not(.attachments) {
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 5px;
+            }
             .token-input, &.subject input {
                 &::-webkit-input-placeholder {
                     color: #aaa;
@@ -109,13 +135,14 @@
 
             .form-control {
                 border: none;
-                border-bottom: 1px solid #aaa;
+                //border-bottom: 1px solid #aaa;
                 border-radius: 0;
                 box-shadow: none;
                 &.focus, &:focus {
-                    border-color: #66afe9;
+                    //border-color: #66afe9;
                 }
             }
+
 
         }
 
@@ -333,7 +360,21 @@
 
 
 @media (max-width: 480px), (max-device-width: 480px) {
+    .io-ox-mail-compose .tokenfield.form-control.to {
+        padding-right: 20px;
+    }
+    .io-ox-mail-compose .recipient-actions a {
+        outline: 0;
+    }
     .window-container.header-top .window-header .btn[data-action="save"] {
         display: none;
+    }
+    .window-container.header-top .window-header [data-extension-id=header] button.btn[data-action=discard] {
+        border-top: 1px solid #eee;
+    }
+    .io-ox-mail-compose textarea.editable, .io-ox-mail-compose .mce-content-body.editable {
+        border-top:0;
+        padding: 0;
+        margin-top: 0;
     }
 }

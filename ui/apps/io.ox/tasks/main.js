@@ -671,7 +671,7 @@ define('io.ox/tasks/main', [
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
-        index: 'last',
+        index: 1000000000000,
         draw: function () {
             var dropdown = new Dropdown({
                     model: app.grid.props,

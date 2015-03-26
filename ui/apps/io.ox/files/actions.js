@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
@@ -90,6 +90,7 @@ define('io.ox/files/actions', [
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
+            debugger;
             ox.load(['io.ox/files/actions/download']).done(function (action) {
                 action(list);
             });
@@ -117,6 +118,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
+            if (e.collection.has('folders')) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -133,7 +135,7 @@ define('io.ox/files/actions', [
             return util.conditionChain(
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
-                e.collection.has('some'),
+                e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
                 util.isFolderType('!trash', e.baton)
             );
@@ -152,7 +154,7 @@ define('io.ox/files/actions', [
             return util.conditionChain(
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
-                e.collection.has('some'),
+                e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
                 _(list).reduce(function (memo, obj) {
                     return memo || obj.file_size > 0;
@@ -176,7 +178,7 @@ define('io.ox/files/actions', [
             return util.conditionChain(
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
-                e.collection.has('some'),
+                e.collection.has('some', 'items'),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -190,16 +192,19 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('some') && e.collection.has('delete') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return (e.collection.has('some', 'delete') || e.collection.has('some', 'delete:folder', 'folders')) && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/delete']).done(function (action) {
-                action(list);
+                action(baton.models);
             });
         }
     });
 
     new Action('io.ox/files/actions/viewer', {
+        requires: function (e) {
+            return e.collection.has('some', 'items');
+        },
         action: function (baton) {
             ox.load(['io.ox/files/actions/viewer']).done(function (action) {
                 action(baton);
@@ -212,14 +217,14 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
-                e.collection.has('some') &&
+                e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
-                action.lock(list);
+                action.lock(baton.models);
             });
         }
     });
@@ -229,14 +234,14 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
-                e.collection.has('some') &&
+                e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('lockedByMe', e);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
-                action.unlock(list);
+                action.unlock(baton.models);
             });
         }
     });
@@ -245,7 +250,7 @@ define('io.ox/files/actions', [
         capabilities: 'portal',
         requires: function (e) {
             return util.conditionChain(
-                e.collection.has('one'),
+                e.collection.has('one', 'items'),
                 !_.isEmpty(e.baton.data),
                 util.isFolderType('!trash', e.baton)
             );
@@ -260,7 +265,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/rename']).done(function (action) {
@@ -272,7 +277,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
@@ -285,7 +290,7 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/' + type, {
             id: type,
             requires:  function (e) {
-                return e.collection.has('some') &&
+                return e.collection.has('some', 'items') &&
                         (e.baton.openedBy !== 'io.ox/mail/compose') &&
                         (type === 'move' ? e.collection.has('delete') &&
                         util.hasStatus('!lockedByOthers', e) : e.collection.has('read'));
@@ -319,10 +324,12 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/icons/slideshow', {
-        requires: function (e) {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
+        requires: function () {
+            // must be solved differently
+            return false;
+            // return _(e.baton.allIds).reduce(function (memo, obj) {
+            //     return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            // }, false);
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/slideshow']).done(function (action) {
@@ -368,7 +375,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'items') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             var data = baton.data;
@@ -383,11 +390,28 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && e.baton.openedBy !== 'io.ox/mail/compose';
+            return e.collection.has('one', 'items') && e.baton.openedBy !== 'io.ox/mail/compose';
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {
                 action(baton.data);
+            });
+        }
+    });
+
+    //
+    // Add new folder
+    //
+
+    new Action('io.ox/files/actions/add-folder', {
+        requires: function (e) {
+            var model = folderAPI.pool.getModel(e.baton.app.folder.get());
+            return folderAPI.can('create:folder', model.toJSON());
+        },
+        action: function (baton) {
+            var id = baton.app.folder.get(), model = folderAPI.pool.getModel(id);
+            ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
+                add(id, { module: model.get('module') });
             });
         }
     });
@@ -425,6 +449,13 @@ define('io.ox/files/actions', [
             //#. more like "to notice" than "to notify".
             gt('Add note'),
         ref: 'io.ox/files/actions/editor-new'
+    });
+
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
+        index: 300,
+        id: 'add-folder',
+        label: gt('Add new folder'),
+        ref: 'io.ox/files/actions/add-folder'
     });
 
     new links.ActionLink('io.ox/files/links/toolbar/default', {
@@ -587,8 +618,6 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
-        prio: 'hi',
-        mobile: 'hi',
         label: gt('Download'),
         ref: 'io.ox/files/actions/downloadversion'
     }));
@@ -596,8 +625,6 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'makeCurrent',
         index: 250,
-        prio: 'hi',
-        mobile: 'hi',
         label: gt('Make this the current version'),
         ref: 'io.ox/files/versions/actions/makeCurrent'
     }));
@@ -605,8 +632,6 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'delete',
         index: 300,
-        prio: 'hi',
-        mobile: 'hi',
         label: gt('Delete version'),
         ref: 'io.ox/files/versions/actions/delete',
         special: 'danger'

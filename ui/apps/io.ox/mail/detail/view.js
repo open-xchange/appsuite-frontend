@@ -81,11 +81,12 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'unread-toggle',
-        index: INDEX_header += 100,
-        draw: extensions.unreadToggle
-    });
+    // TODO: relocate
+    // ext.point('io.ox/mail/detail/header').extend({
+    //     id: 'unread-toggle',
+    //     index: INDEX_header += 100,
+    //     draw: extensions.unreadToggle
+    // });
 
     /* move the actions menu to the top in sidepanel on smartphones */
     var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header';
@@ -286,8 +287,8 @@ define('io.ox/mail/detail/view', [
             // ignore click on dropdowns
             if ($(e.target).hasClass('dropdown-menu')) return;
 
-            // don't toggle single messages
-            if (this.$el.siblings().length === 0) return;
+            // don't toggle single messages unless it's collapsed
+            if (this.$el.siblings().length === 0 && this.$el.hasClass('expanded')) return;
 
             // fix collapsed blockquotes
             this.$el.find('.collapsed-blockquote').hide();

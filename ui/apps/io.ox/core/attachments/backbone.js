@@ -70,7 +70,7 @@ define('io.ox/core/attachments/backbone', [
             var def = $.Deferred();
             // consider retina displays
             var size = _.device('retina') ? 240 : 120;
-            require(['io.ox/files/api'], function (filesAPI) {
+            require(['io.ox/files/legacy_api'], function (filesAPI) {
                 var meta = _.clone(model.get('meta'));
                 // get URL of preview image
                 meta.previewUrl = filesAPI.getUrl(model.toJSON(), 'view')  + '&scaleType=cover&width=' + size + '&height=' + size;

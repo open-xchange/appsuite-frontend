@@ -35,53 +35,28 @@ define('jquery', function () { return $; });
 define.async = (function () {
 
     var getLoader = function (name, deps, callback) {
-            return function (n, req, onLoad, config) {
-                // resolve module dependencies
-                req(deps, function () {
-                    // get module (must return deferred object)
-                    var def = callback.apply(null, arguments);
-                    if (def && def.done) {
-                        def.done(onLoad);
-                    } else {
-                        console.error('Module "' + name + '" does not return a deferred object!');
-                    }
-                    name = deps = callback = null;
-                });
-            };
+        return function (n, req, onLoad, config) {
+            // resolve module dependencies
+            req(deps, function () {
+                // get module (must return deferred object)
+                var def = callback.apply(null, arguments);
+                if (def && def.done) {
+                    def.done(onLoad);
+                } else {
+                    console.error('Module "' + name + '" does not return a deferred object!');
+                }
+                name = deps = callback = null;
+            });
         };
+    };
 
     return function (name, deps, callback) {
         // use loader plugin to defer module definition
-        var wrapper = null;
-        if (ox.manifests) {
-            wrapper = ox.manifests.wrapperFor(name, deps, callback);
-        } else {
-            wrapper = {
-                dependencies: deps,
-                definitionFunction: callback
-            };
-        }
-        if (wrapper.after && wrapper.after.length) {
-            (function () {
-                var definitionFunction = wrapper.definitionFunction;
-                wrapper.definitionFunction = function () {
-                    var def = definitionFunction.apply(window, arguments);
-                    var allLoaded = $.Deferred();
-
-                    def.done(function (module) {
-                        require(wrapper.after).done(function () {
-                            allLoaded.resolve(module);
-                        });
-                    }).fail(allLoaded.reject);
-
-                    return allLoaded;
-                };
-            }());
-        }
-        define(name + ':init', { load: getLoader(name, wrapper.dependencies, wrapper.definitionFunction) });
+        define(name + ':async', { load: getLoader(name, deps, callback) });
         // define real module - will wait for promise
-        define(name, [name + ':init!'], _.identity);
+        define(name, [name + ':async!'], _.identity);
     };
+
 }());
 
 //
@@ -106,14 +81,37 @@ define.async = (function () {
             deps = [];
         }
 
-        if (ox.manifests) {
-            // if we have the manifests manager at hand, we use it immediately to
-            // inject plugins as further dependencies.
-            deps = ox.manifests.withPluginsFor(name, deps);
+        if (!ox.manifests || ox.manifests.hasPluginsFor(name)) {
+            // we always resolve injected dependencies via a placeholder
+            // in order to avoid UI freezes just because a plugin is missing
+            deps.push(name + ':placeholder!');
+            define(name + ':placeholder', { load: getPluginLoader(name) });
         }
 
         return define.call(this, name, deps, callback);
     };
+
+    function getPluginLoader(name) {
+
+        return function resolveInjectedDependecies(n, req, done) {
+            // still no manifests? (only applies for very basic modules)
+            if (!ox.manifests) return done();
+            // try again: require further dependencies
+            var deps = ox.manifests.pluginsFor(name);
+            if (deps.length) {
+                // resolve dependencies and respond to failures
+                req(deps, done, function fail(e) {
+                    // print error message but continue!
+                    // not restricted to ox.debug; a missing dependency should be recognizable
+                    console.error('Unable to resolve injected dependencies for module "' + name + '". Dependencies:', deps, e.message);
+                    done();
+                });
+            } else {
+                // we're done if nothing to inject
+                done();
+            }
+        };
+    }
 
     // copy other properties
     _.extend(window.define, define);

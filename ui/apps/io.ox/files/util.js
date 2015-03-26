@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/util', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
@@ -128,9 +128,15 @@ define('io.ox/files/util', [
             var self = this,
                 list = _.getArray(e.context),
                 mapping = {
-                    'locked': api.tracker.isLocked,
-                    'lockedByOthers': api.tracker.isLockedByOthers,
-                    'lockedByMe': api.tracker.isLockedByMe
+                    'locked': function (obj) {
+                        return obj.locked_until > _.now();
+                    },
+                    'lockedByOthers': function (obj) {
+                        return obj.locked_until > _.now() && obj.modified_by !== ox.user_id;
+                    },
+                    'lockedByMe': function (obj) {
+                        return obj.locked_until > _.now() && obj.modified_by === ox.user_id;
+                    }
                 },
                 inverse, result, fn;
             // '!' type prefix as magical negation

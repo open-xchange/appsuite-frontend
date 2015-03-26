@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/edit-description', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/keys',
     'gettext!io.ox/files'

@@ -55,7 +55,7 @@ define('io.ox/core/folder/favorites', [
 
         var extension = {
             id: 'favorites',
-            index: 'first',
+            index: 1,
             draw: function (tree) {
 
                 this.append(
@@ -124,7 +124,8 @@ define('io.ox/core/folder/favorites', [
 
     ext.point('io.ox/core/foldertree/contextmenu/default').extend({
         id: 'toggle-favorite',
-        index: 1000,
+        // place after "Add new folder"
+        index: 1010,
         draw: function (baton) {
 
             var id = baton.data.id,

@@ -40,13 +40,13 @@ define('io.ox/calendar/edit/recurrence-view', [
         FRIDAY: 32,
         SATURDAY: 64,
         i18n: {
-            SUNDAY: gt('Sunday'),
-            MONDAY: gt('Monday'),
-            TUESDAY: gt('Tuesday'),
-            WEDNESDAY: gt('Wednesday'),
-            THURSDAY: gt('Thursday'),
-            FRIDAY: gt('Friday'),
-            SATURDAY: gt('Saturday')
+            SUNDAY: moment.weekdays(0),
+            MONDAY: moment.weekdays(1),
+            TUESDAY: moment.weekdays(2),
+            WEDNESDAY: moment.weekdays(3),
+            THURSDAY: moment.weekdays(4),
+            FRIDAY: moment.weekdays(5),
+            SATURDAY: moment.weekdays(6)
         },
         values: [
             'SUNDAY',

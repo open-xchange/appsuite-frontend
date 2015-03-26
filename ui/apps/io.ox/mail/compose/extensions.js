@@ -181,6 +181,45 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
+        tokenPicture: function (model) {
+            // add contact picture
+            $(this).prepend(
+                contactAPI.pictureHalo(
+                    $('<div class="contact-image">'),
+                    model.toJSON(),
+                    { width: 16, height: 16, scaleType: 'contain' }
+                )
+            );
+        },
+
+        recipientActionLink: function (type) {
+            return function () {
+                var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">');
+                if (type === 'cc') {
+                    node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
+                } else {
+                    node.attr({ 'data-type': 'bcc', 'aria-label': gt('Show blind carbon copy input field') }).text(gt('BCC'));
+                }
+                this.append(node);
+            };
+        },
+
+        recipientActionLinkMobile: function () {
+            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-down">'));
+            this.append(node);
+        },
+
+        recipientActions: function () {
+            var node = $('<div class="recipient-actions">');
+            if (_.device('!smartphone')) {
+                ext.point(POINT + '/recipientActionLink').invoke('draw', node);
+            } else {
+                ext.point(POINT + '/recipientActionLinkMobile').invoke('draw', node);
+            }
+
+            this.append(node);
+        },
+
         tokenfield: function (label) {
 
             var attr = String(label).toLowerCase();
@@ -190,10 +229,11 @@ define('io.ox/mail/compose/extensions', [
                     value = baton.model.get(attr) || [],
                     // display tokeninputfields if necessary
                     cls = 'row' + (attr === 'to' || value.length ? '' : ' hidden'),
+                    redrawLock = false,
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        placeholder: tokenfieldTranslations[attr],
+                        placeholder: _.device('smartphone') ? '' : tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
@@ -201,42 +241,27 @@ define('io.ox/mail/compose/extensions', [
                             emailAutoComplete: true
                         },
                         maxResults: 20,
-                        draw: function (token) {
-                            baton.participantModel = token.model;
+                        drawAutocompleteItem: function (result) {
+                            baton.participantModel = result.model;
                             ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
+                        },
+                        drawToken: function (model) {
+                            ext.point(POINT + '/token').invoke('draw', this, model);
                         }
                     });
 
+                var node = $('<div class="col-xs-11">').append(
+                    tokenfieldView.$el
+                );
+                if (attr === 'to') {
+                    ext.point(POINT + '/recipientActions').invoke('draw', node);
+                }
+
                 this.append(
-                    $('<div data-extension-id="' + attr + '">')
-                        .addClass(cls)
+                    $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
-                            $('<label class="maillabel hidden-xs col-sm-1">').text(tokenfieldTranslations[attr]).attr({
-                                'for': guid
-                            }),
-                            $('<div class="col-xs-12 col-sm-11">').append(
-                                tokenfieldView.$el,
-                                attr === 'to' ? $('<div class="recipient-actions">').append(
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'cc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show carbon copy input field')
-                                    }).text(gt('CC')),
-                                    $('<a>').attr({
-                                        href: '#',
-                                        tabindex: 1,
-                                        'data-action': 'add',
-                                        'data-type': 'bcc',
-                                        role: 'checkbox',
-                                        'aria-checked': false,
-                                        'aria-label': gt('Show blind carbon copy input field')
-                                    }).text(gt('BCC'))
-                                ) : $()
-                            )
+                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
+                            node
                         )
                     );
 
@@ -245,8 +270,9 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
-                // bind model to collection
+                // bind mial-model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
+                    if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {
                         return {
                             type: 5,
@@ -261,14 +287,17 @@ define('io.ox/mail/compose/extensions', [
                     this.collection.reset(recArray);
                 });
 
+                // trigger change to fill tokenfield
                 baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
 
-                tokenfieldView.collection.on('change add remove sort', function () {
+                tokenfieldView.collection.on('change reset add remove sort', function () {
                     var recipients = this.map(function (model) {
                         var token = model.get('token');
                         return [token.label, token.value];
                     });
-                    baton.model.set(attr, recipients, { silent: true });
+                    redrawLock = true;
+                    baton.model.set(attr, recipients);
+                    redrawLock = false;
                 });
             };
         },

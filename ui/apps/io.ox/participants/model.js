@@ -204,7 +204,7 @@ define('io.ox/participants/model', [
         },
 
         getTarget: function () {
-            return this.get(this.get('field')) || '';
+            return this.get(this.get('field')) || this.getDisplayName();
         },
 
         getFieldName: function () {

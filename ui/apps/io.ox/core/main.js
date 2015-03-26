@@ -28,7 +28,8 @@ define('io.ox/core/main', [
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
-    'io.ox/core/links'
+    'io.ox/core/links',
+    'io.ox/backbone/disposable'
 ], function (desktop, session, http, appAPI, ext, Stage, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
@@ -106,7 +107,7 @@ define('io.ox/core/main', [
     // trigger all apps to save restorepoints
     ext.point('io.ox/core/logout').extend({
         id: 'saveRestorePoint',
-        index: 'first',
+        index: 1,
         logout: function (baton) {
             http.pause();
             var def = $.Deferred();
@@ -161,7 +162,7 @@ define('io.ox/core/main', [
     // wait for all pending settings
     ext.point('io.ox/core/logout').extend({
         id: 'savePendingSettings',
-        index: 'last',
+        index: 1000000000000,
         logout: function () {
             // force save requests for all pending settings
             http.pause();
@@ -971,7 +972,7 @@ define('io.ox/core/main', [
                     $('<li class="launcher dropdown" role="presentation">').append(
                         a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
                         .append(
-                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
+                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
@@ -1112,7 +1113,7 @@ define('io.ox/core/main', [
                 if (sc.banner === false || _.device('!desktop')) return;
 
                 var banner = $('#io-ox-banner').toggleClass('visible'),
-                    height = sc.bannerHeight || 60;
+                    height = sc.bannerHeight || 64;
 
                 // move affected viewports
                 // #io-ox-notifications is not handled here because it's not yet attached
@@ -1578,7 +1579,7 @@ define('io.ox/core/main', [
 
         new Stage('io.ox/core/stages', {
             id: 'ready',
-            index: 'last',
+            index: 1000000000000,
             run: function () {
                 debug('DONE!');
                 ox.trigger('core:ready');
@@ -1637,9 +1638,11 @@ define('io.ox/core/main', [
 
     ox.on('http:error', function (error) {
         switch (error.code) {
+            // IMAP-specific: 'Relogin required'
             case 'MSG-1000':
             case 'MSG-1001':
-                // IMAP-specific: 'Relogin required'
+            // INUSE (see bug 37218)
+            case 'MSG-1031':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':

@@ -14,7 +14,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/api/user',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'

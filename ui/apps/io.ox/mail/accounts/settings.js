@@ -126,7 +126,7 @@ define('io.ox/mail/accounts/settings', [
 
     ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'feedback',
-        index: 'last',
+        index: 1000000000000,
         draw: function () {
             this.append(
                 $('<div class="alert-placeholder">')

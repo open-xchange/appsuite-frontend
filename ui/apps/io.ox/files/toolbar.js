@@ -214,13 +214,14 @@ define('io.ox/files/toolbar', [
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li', caret: true })
                 .header(gt('Layout'))
-                .option('layout', 'fluid:list', gt('List'))
-                .option('layout', 'fluid:icon', gt('Icons'))
-                .option('layout', 'fluid:tile', gt('Tiles'))
+                .option('layout', 'list', gt('List'))
+                .option('layout', 'icon', gt('Icons'))
+                .option('layout', 'tile', gt('Tiles'))
                 .divider()
                 .header(gt('Options'))
+                .option('checkboxes', true, gt('Checkboxes'))
                 .option('folderview', true, gt('Folder view'));
 
             this.append(
@@ -237,21 +238,18 @@ define('io.ox/files/toolbar', [
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbar.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                if (!list) return $.when();
-                var self = this,
-                    ids = this.getIds ? this.getIds() : [];
-
-                //get full data, needed for require checks for example
-                return api.getList(list).then(function (data) {
-                    // extract single object if length === 1
-                    data = data.length === 1 ? data[0] : data;
-                    // draw toolbar
-                    var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self, allIds: ids }),
-                        ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    return $.when.apply($, ret.value()).then(function () {
-                        toolbar.initButtons();
-                    });
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
+                // turn cids into proper objects
+                var cids = list, models = api.resolve(cids, false);
+                list = _(models).invoke('toJSON');
+                // extract single object if length === 1
+                var data = list.length === 1 ? list[0] : list;
+                // draw toolbar
+                var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, app: this, allIds: [] }),
+                    ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
+                $.when.apply($, ret.value()).then(function () {
+                    toolbar.initButtons();
                 });
             }, 10);
         }
@@ -262,17 +260,9 @@ define('io.ox/files/toolbar', [
         index: 10200,
         setup: function (app) {
             app.updateToolbar([]);
-            // update toolbar on selection change
-            app.on('selection:change', function () {
-                app.updateToolbar(app.selection.get());
-            });
-            // folder change
-            app.on('folder:change', function () {
-                app.updateToolbar(app.selection.get());
-            });
-            // file change
-            api.on('update', function () {
-                app.updateToolbar(app.selection.get());
+            // update toolbar on selection change as well as any model change
+            app.listView.on('selection:change change', function () {
+                app.updateToolbar(app.listView.selection.get());
             });
         }
     });

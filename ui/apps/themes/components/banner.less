@@ -14,6 +14,7 @@
  */
 
 #io-ox-banner {
+
     position: absolute;
     left: 0;
     right: 0;
@@ -21,24 +22,24 @@
 
     &.visible {
         color: #fff;
-        line-height: 40px;
-        padding: 10px 20px 10px 10px;
+        line-height: 32px;
+        padding: @default-padding;
         display: block;
-        height: 60px;
-        .vertical-gradient(darken(@topbar-background, 10%), darken(@topbar-background, 18%));
+        height: 64px;
+        .vertical-gradient(darken(@topbar-background, 12%), darken(@topbar-background, 18%));
     }
 
     .banner-title {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 300;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.70);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.50);
         float: left;
     }
 
     .banner-content {
+        font-weight: 300;
         font-size: 13px;
         float: right;
-
         label {
             font-weight: inherit;
             color: rgba(255, 255, 255, 0.70);
@@ -47,8 +48,8 @@
 
     .banner-action {
         color: #fff;
-        font-size: 20px;
-        margin-left: 14px;
+        font-size: 18px;
+        margin-left: @default-padding * 2;
         position: relative;
         text-decoration: none;
         top: 2px;

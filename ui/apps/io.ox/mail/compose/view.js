@@ -108,6 +108,30 @@ define('io.ox/mail/compose/view', [
         draw: extensions.subject
     });
 
+    ext.point(POINT + '/recipientActionLink').extend({
+        id: 'cc',
+        index: 100,
+        draw: extensions.recipientActionLink('cc')
+    });
+
+    ext.point(POINT + '/recipientActionLink').extend({
+        id: 'bcc',
+        index: 200,
+        draw: extensions.recipientActionLink('bcc')
+    });
+
+    ext.point(POINT + '/recipientActionLinkMobile').extend({
+        id: 'mobile',
+        index: 100,
+        draw: extensions.recipientActionLinkMobile
+    });
+
+    ext.point(POINT + '/recipientActions').extend({
+        id: 'recipientActions',
+        index: 100,
+        draw: extensions.recipientActions
+    });
+
     ext.point(POINT + '/menu').extend({
         id: 'signatures',
         index: 100,
@@ -130,6 +154,7 @@ define('io.ox/mail/compose/view', [
         id: 'editor',
         index: 100,
         draw: function () {
+            if (_.device('smartphone')) return;
             this.data('view')
                 .header(gt('Editor'))
                 .option('editorMode', 'text', gt('Plain Text'))
@@ -259,6 +284,15 @@ define('io.ox/mail/compose/view', [
             // contact picture / display name / email address
             ext.point(POINT + '/autoComplete').invoke('draw', this, baton);
         }
+    });
+
+    /*
+     * extension point for a token
+     */
+    ext.point(POINT + '/token').extend({
+        id: 'token',
+        index: 100,
+        draw: extensions.tokenPicture
     });
 
     var MailComposeView = Backbone.View.extend({
@@ -794,6 +828,20 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleTokenfield: function (e) {
+            if (_.device('smartphone')) {
+                e.preventDefault();
+                var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
+                if (input.hasClass('hidden')) {
+                    input.removeClass('hidden');
+                } else {
+                    if (this.model.get('cc').length === 0 && this.model.get('bcc').length === 0) {
+                        this.model.set('cc', []);
+                        this.model.set('bcc', []);
+                        input.addClass('hidden');
+                    }
+                }
+                return input;
+            }
             var isString = typeof e === 'string',
                 type = isString ? e : $(e.target).attr('data-type'),
                 button = this.$el.find('[data-type="' + type + '"]'),
@@ -1056,6 +1104,7 @@ define('io.ox/mail/compose/view', [
                     // shortcuts (to/cc/bcc)
                     keyup: function (e) {
                         if (e.which === 13) return;
+                        if (_.device('smartphone')) return;
                         // look for special prefixes
                         var val = $(this).val();
                         if ((/^to:?\s/i).test(val)) {

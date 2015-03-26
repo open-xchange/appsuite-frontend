@@ -24,7 +24,7 @@
  */
 
 define('io.ox/core/viewer/backbone', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/api/attachment',
     'io.ox/mail/api'
 ], function (FilesAPI, AttachmentAPI, MailAPI) {
@@ -155,7 +155,7 @@ define('io.ox/core/viewer/backbone', [
         },
 
         initialize: function () {
-            //console.warn('FileModel.initialize(): ', data, options);
+            //console.warn('FileModel.initialize(): ', data);
         },
 
         parse: function (data) {
@@ -230,7 +230,6 @@ define('io.ox/core/viewer/backbone', [
                 return (fileName.lastIndexOf('.') >= 0) ? fileName.substring(index + 1).toLowerCase() : null;
             }
 
-            result.origData = _.copy(data, true);   // create a deep copy, since we want to do updates later
             result.source = getFileSourceType (data);
 
             if (result.source === ITEM_TYPE_MAIL_ATTACHMENT) {
@@ -299,7 +298,7 @@ define('io.ox/core/viewer/backbone', [
                 if (this.isDocumentFile()) {
                     viewMode = VIEW_MODES.PREVIEW;
                 }
-                return FilesAPI.getUrl(this.get('origData'), viewMode, null);
+                return FilesAPI.getUrl(this.get('origData').attributes, viewMode, null);
 
             } else if (this.isPIMAttachment()) {
                 return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
@@ -317,9 +316,23 @@ define('io.ox/core/viewer/backbone', [
         model: Model,
 
         // TODO: filter file models without a real file
-        parse: function (model/*, options*/) {
-            //console.info('FileCollection.parse()', model, options);
-            return model;
+        /**
+         *  Transform Drive Backbone Models to Viewer Backbone Models.
+         *
+         * @param {Array} models
+         *  Backbone models from Drive.
+         *
+         * @returns {Array} viewerModels
+         *  Viewer Backbone models.
+         */
+        parse: function (models) {
+            var viewerModels = [];
+            _.each(models, function (model) {
+                var newModel = new Model(model.attributes, { parse: true });
+                newModel.set('origData', model);
+                viewerModels.push(newModel);
+            });
+            return viewerModels;
         },
 
         /**
