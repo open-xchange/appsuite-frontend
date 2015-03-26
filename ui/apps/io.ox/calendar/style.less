@@ -670,21 +670,11 @@
 
     .participant-list {
 
-        @width: 200px;
-        @gap: 20px;
-
-        // no -webkit for safari any more; browser bug since version 7.1 (see bug 34604)
-        -moz-column-width: @width;
-        -moz-column-gap: @gap;
-        column-width: @width;
-        column-gap: @gap;
-
         .participant {
 
             line-height: 2em;
             width: 250px;
             margin: 0 20px 0em 0;
-            cursor: pointer;
 
             &:focus, &:hover {
                 .person {
@@ -696,9 +686,7 @@
 
             .person {
 
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+               .ellipsis()
                 // icons and padding need 28px
                 max-width: 222px;
                 display: inline-block;
