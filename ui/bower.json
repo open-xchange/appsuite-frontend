@@ -29,7 +29,7 @@
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
     "bootstrap-tokenfield": "https://github.com/sliptree/bootstrap-tokenfield.git#9c06df4ee5",
     "typeahead.js": "0.10.5",
-    "mobiscroll": "2.14.4",
+    "mobiscroll": "2.15.0",
     "marked": "0.3.3",
     "tinymce-dist": "4.1.9",
     "velocity": "1.2.2",

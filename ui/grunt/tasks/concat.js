@@ -219,19 +219,19 @@ module.exports = function (grunt) {
                         src: [
                             'bower_components/mobiscroll/js/mobiscroll.core.js',
                             'bower_components/mobiscroll/js/mobiscroll.util.datetime.js',
-                            'bower_components/mobiscroll/js/mobiscroll.widget.js',
+                            'bower_components/mobiscroll/js/mobiscroll.frame.js',
                             'bower_components/mobiscroll/js/mobiscroll.scroller.js',
                             'bower_components/mobiscroll/js/mobiscroll.datetimebase.js',
                             'bower_components/mobiscroll/js/mobiscroll.datetime.js',
-                            'bower_components/mobiscroll/js/mobiscroll.widget.ios.js'
+                            'bower_components/mobiscroll/js/mobiscroll.frame.ios.js'
                         ],
                         dest: 'build/static/3rd.party/mobiscroll/mobiscroll.js',
                         nonull: true
                     },
                     {
                         src: [
-                            'bower_components/mobiscroll/css/mobiscroll.widget.css',
-                            'bower_components/mobiscroll/css/mobiscroll.widget.ios.css',
+                            'bower_components/mobiscroll/css/mobiscroll.frame.css',
+                            'bower_components/mobiscroll/css/mobiscroll.frame.ios.css',
                             'bower_components/mobiscroll/css/mobiscroll.scroller.css',
                             'bower_components/mobiscroll/css/mobiscroll.scroller.ios.css'
                         ],
