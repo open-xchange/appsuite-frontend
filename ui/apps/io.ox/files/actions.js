@@ -638,7 +638,9 @@ define('io.ox/files/actions', [
         index: 10,
         label: gt('Drop here to upload a <b class="dndignore">new file</b>'),
         multiple: function (files, app) {
-            app.queues.create.offer(files, { folder: app.folder.get() });
+            require(['io.ox/files/upload/main'], function (fileUpload) {
+                fileUpload.create.offer(files, { folder: app.folder.get() });
+            });
         }
     });
 
@@ -660,7 +662,9 @@ define('io.ox/files/actions', [
             }
         },
         action: function (file, app) {
-            app.queues.update.offer(file, { folder: app.folder.get() });
+            require(['io.ox/files/upload/main'], function (fileUpload) {
+                fileUpload.update.offer(file, { folder: app.folder.get() });
+            });
         }
     });
 });
