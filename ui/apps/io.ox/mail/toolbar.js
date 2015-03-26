@@ -112,7 +112,8 @@ define('io.ox/mail/toolbar', [
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-archive',
-            label: gt('Archive'),
+            //#. Verb: (to) archive messages
+            label: gt.pgettext('verb', 'Archive'),
             ref: 'io.ox/mail/actions/archive'
         },
         //

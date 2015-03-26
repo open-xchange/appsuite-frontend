@@ -43,12 +43,6 @@ define('io.ox/core/folder/contextmenu', [
         return link;
     }
 
-    function header(title) {
-        this.append(
-            $('<li class="dropdown-header" role="sectionhead">').text(title)
-        );
-    }
-
     function divider() {
         this.append(
             $('<li class="divider" role="presentation" aria-hidden="true">')
@@ -638,14 +632,6 @@ define('io.ox/core/folder/contextmenu', [
             draw: divider
         },
         // -----------------------------------------------
-        {
-            id: 'header-1',
-            index: 4000,
-            draw: function (baton) {
-                if (baton.module !== 'mail') return;
-                header.call(this, gt('Housekeeping'));
-            }
-        },
         {
             id: 'mark-folder-read',
             index: 4100,

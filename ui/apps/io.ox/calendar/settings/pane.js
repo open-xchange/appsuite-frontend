@@ -213,7 +213,7 @@ define('io.ox/calendar/settings/pane', [
                             )
                         ),
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Automatically delete incoming notifications after it has been accepted or declined')).prepend(
+                            $('<label>').addClass('control-label').text(gt('Automatically delete incoming notifications after the appointment has been accepted or declined')).prepend(
                                 new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model }).render().$el
                             )
                         )

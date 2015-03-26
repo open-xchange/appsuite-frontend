@@ -634,7 +634,8 @@ define('io.ox/mail/actions', [
         prio: 'hi',
         mobile: 'hi',
         id: 'archive',
-        label: gt('Archive'),
+        //#. Verb: (to) archive messages
+        label: gt.pgettext('verb', 'Archive'),
         ref: 'io.ox/mail/actions/archive',
         section: 'file-op'
     }));
