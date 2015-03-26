@@ -1360,12 +1360,15 @@ define('io.ox/mail/api', [
 
         var interval = null, alt = false;
 
-        function tick() {
-            if (visibilityApi.isHidden) {
-                document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
-            } else {
-                document.title = document.customTitle;
+        $(visibilityApi).on('visibility-changed', function (e, data) {
+            //remove new mail title if page becomes visible again
+            if (data.currentHiddenState === false) {
+                original();
             }
+        });
+
+        function tick() {
+            document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
         }
 
         function blink() {
@@ -1380,7 +1383,7 @@ define('io.ox/mail/api', [
         }
 
         return function (state) {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || !visibilityApi.isHidden) return;
             if (state === true) blink(); else original();
         };
 
