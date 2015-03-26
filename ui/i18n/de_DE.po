@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-25 14:18+0100\n"
+"PO-Revision-Date: 2015-03-26 10:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -498,6 +498,10 @@ msgid ""
 "users. To allow other users to read or edit the contents, you have to set "
 "the respective permissions for the public folder."
 msgstr ""
+"Ein öffentlicher Ordner ist für Inhalte vorgesehen, die für alle Benutzer "
+"von Interesse sind. Damit andere Benutzer die Inhalte lesen oder bearbeiten "
+"können, müssen Sie entprechende Berechtigungen an dem öffentlichen Ordner "
+"erteilen."
 
 #. read receipt; German "Lesebestätigung"
 #: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
@@ -653,16 +657,12 @@ msgid "Add action"
 msgstr "Aktion hinzufügen"
 
 #: apps/io.ox/core/folder/actions/add.js:77 module:io.ox/core
-#, fuzzy
-#| msgid "New public calendar"
 msgid "Add as public calendar"
-msgstr "Neuer öffentlicher Kalender"
+msgstr "Als öffentlichen Kalender hinzufügen"
 
 #: apps/io.ox/core/folder/actions/add.js:77 module:io.ox/core
-#, fuzzy
-#| msgid "Add subfolder"
 msgid "Add as public folder"
-msgstr "Unterordner hinzufügen"
+msgstr "Als öffentlichen Ordner hinzufügen"
 
 #: apps/io.ox/mail/compose/extensions.js:432 module:io.ox/mail
 msgid "Add attachments"
@@ -713,19 +713,15 @@ msgstr "Neuen Account hinzufügen"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js:408
-#, fuzzy
-#| msgid "Add to calendar"
 msgid "Add new calendar"
-msgstr "Zum Kalender hinzufügen"
+msgstr "Neuen Kalender hinzufügen"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:235
 #: apps/io.ox/core/folder/extensions.js:408 apps/io.ox/files/actions.js:445
 #: module:io.ox/files
-#, fuzzy
-#| msgid "Add new subfolder"
 msgid "Add new folder"
-msgstr "Neuen Unterordner hinzufügen"
+msgstr "Neuen Ordner hinzufügen"
 
 #: apps/io.ox/core/sub/subscriptions.js:347 module:io.ox/core/sub
 msgid "Add new folder for this subscription"
@@ -915,10 +911,8 @@ msgid "All day"
 msgstr "Ganztägig"
 
 #: apps/io.ox/files/view-options.js:112 module:io.ox/files
-#, fuzzy
-#| msgid "All folders"
 msgid "All files"
-msgstr "Alle Ordner"
+msgstr "Alle Dateien"
 
 #: apps/io.ox/search/facets/extensions.js:600 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:603
@@ -2366,15 +2360,14 @@ msgstr ""
 "Wollen Sie die Dateiendung wirklich von \".%1$s\" nach \".%2$s\" ändern?"
 
 #: apps/io.ox/calendar/actions/create.js:46 module:io.ox/calendar
-#, fuzzy
 msgid ""
 "Do you really want to create an appointment <b>on behalf of the folder "
 "owner</b> or do you want to create an appointment <b>with the folder owner</"
 "b> in your own calendar?"
 msgstr ""
 "Wollen Sie wirklich einen Termin <b>im Auftrag des Ordner-Eigentümers</b> "
-"anlegen oder wollen Sie einen Termin <b>mit dem Eigentümer des Ordners</b> "
-"in Ihrem eigenen Kalender anlegen?"
+"anlegen oder wollen Sie einen Termin <b>mit dem Ordner-Eigentümer</b> in "
+"Ihrem eigenen Kalender anlegen?"
 
 #: apps/io.ox/core/folder/actions/remove.js:32 module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
@@ -2497,9 +2490,6 @@ msgstr[0] "Wollen Sie diese E-Mail unwiderruflich löschen?"
 msgstr[1] "Wollen Sie diese E-Mails unwiderruflich löschen?"
 
 #: apps/io.ox/files/view-options.js:117 module:io.ox/files
-#, fuzzy
-#| msgctxt "app"
-#| msgid "Documents"
 msgid "Documents"
 msgstr "Dokumente"
 
@@ -3712,10 +3702,8 @@ msgid "Image 1"
 msgstr "Bild 1"
 
 #: apps/io.ox/files/view-options.js:120 module:io.ox/files
-#, fuzzy
-#| msgid "Image"
 msgid "Images"
-msgstr "Bild"
+msgstr "Bilder"
 
 #: apps/io.ox/core/folder/contextmenu.js:394 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
@@ -4439,10 +4427,8 @@ msgid "Move"
 msgstr "Verschieben"
 
 #: apps/io.ox/core/folder/contextmenu.js:146 module:io.ox/core
-#, fuzzy
-#| msgid "Open/close all messages"
 msgid "Move all messages"
-msgstr "Alle Nachrichten öffnen/schließen"
+msgstr "Alle Nachrichten verschieben"
 
 #: apps/io.ox/core/folder/actions/move.js:137 module:io.ox/core
 msgid "Move folder"
@@ -4459,7 +4445,7 @@ msgstr "Mehrfachauswahl"
 
 #: apps/io.ox/files/view-options.js:121 module:io.ox/files
 msgid "Music"
-msgstr ""
+msgstr "Musik"
 
 #: apps/io.ox/core/folder/extensions.js:319 module:io.ox/core
 msgid "My address books"
@@ -5090,7 +5076,7 @@ msgstr "PB"
 
 #: apps/io.ox/files/view-options.js:116 module:io.ox/files
 msgid "PDFs"
-msgstr ""
+msgstr "PDFs"
 
 #: apps/io.ox/contacts/model.js:248 module:io.ox/contacts
 msgid "Pager"
@@ -5453,10 +5439,8 @@ msgid "Postcode"
 msgstr "PLZ"
 
 #: apps/io.ox/files/view-options.js:119 module:io.ox/files
-#, fuzzy
-#| msgid "Task invitations"
 msgid "Presentations"
-msgstr "Aufgaben-Einladungen"
+msgstr "Präsentationen"
 
 #: apps/plugins/portal/birthdays/register.js:61 module:plugins/portal
 msgid "Press [enter] to jump to complete list of Birthdays."
@@ -6077,9 +6061,8 @@ msgstr "Kontakt-Anlage wurde gespeichert"
 #: apps/io.ox/contacts/view-detail.js:706 module:io.ox/contacts
 #: apps/io.ox/files/fluid/view-detail.js:186 module:io.ox/files
 #, fuzzy
-#| msgid "Saved in"
 msgid "Saved in:"
-msgstr "Gespeichert unter"
+msgstr "Gespeichert unter:"
 
 #: apps/io.ox/mail/api.js:1095 module:io.ox/mail
 msgid "Saved mail attachment"
@@ -6152,8 +6135,6 @@ msgstr "Wählen"
 
 #. Sort options drop-down
 #: apps/io.ox/files/view-options.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "Select"
 msgctxt "dropdown"
 msgid "Select"
 msgstr "Wählen"
@@ -6614,7 +6595,7 @@ msgstr "Ehepartner"
 
 #: apps/io.ox/files/view-options.js:118 module:io.ox/files
 msgid "Spreadsheets"
-msgstr ""
+msgstr "Tabellendokumente"
 
 #: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings
 msgid "Standard folders"
@@ -7134,7 +7115,7 @@ msgid ""
 "will generally be created on behalf of the owner."
 msgstr ""
 "Der gewählte Kalender wurde von %1$s geteilt. Termine in geteilten Kalendern "
-"werden allgemein im Auftrag des Eigentümers angelegt."
+"werden generell im Auftrag des Eigentümers angelegt."
 
 #: apps/io.ox/search/model.js:36 module:io.ox/search
 msgid ""
@@ -7727,10 +7708,8 @@ msgid "Unlock"
 msgstr "Sperre aufheben"
 
 #: apps/io.ox/core/sub/settings/pane.js:133 module:io.ox/core/sub
-#, fuzzy
-#| msgid "New subscription"
 msgid "Unnamed subscription"
-msgstr "Neues Abonnement"
+msgstr "Unbenanntes Abonnement"
 
 #: apps/io.ox/mail/common-extensions.js:43 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:33
@@ -7933,7 +7912,7 @@ msgstr "Vertikal"
 
 #: apps/io.ox/files/view-options.js:122 module:io.ox/files
 msgid "Videos"
-msgstr ""
+msgstr "Videos"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
