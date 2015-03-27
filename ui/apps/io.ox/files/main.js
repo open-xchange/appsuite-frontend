@@ -430,8 +430,13 @@ define('io.ox/files/main', [
             });
 
             app.listView.$el.on('dblclick', '.list-item:not(.file-type-folder)', function (e) {
-                var cid = $(e.currentTarget).attr('data-cid');
-                ox.launch('io.ox/files/detail/main', { cid: cid });
+                var cid = $(e.currentTarget).attr('data-cid'),
+                    selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
+                    baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
+                ox.load(['io.ox/files/actions/viewer']).done(function (action) {
+                    action(baton);
+                });
+                //ox.launch('io.ox/files/detail/main', { cid: cid });
             });
         },
 
