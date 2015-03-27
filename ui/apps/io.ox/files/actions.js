@@ -205,6 +205,17 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/viewer', {
+        requires: function (e) {
+            return e.collection.has('some', 'items');
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/viewer']).done(function (action) {
+                action(baton);
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
