@@ -22,7 +22,7 @@ define('io.ox/calendar/edit/view', [
 
         tagName: 'form',
 
-        className: 'io-ox-calendar-edit container default-content-padding',
+        className: 'io-ox-calendar-edit container',
 
         init: function () {
 

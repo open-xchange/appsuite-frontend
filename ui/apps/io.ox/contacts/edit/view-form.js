@@ -168,7 +168,7 @@ define('io.ox/contacts/edit/view-form', [
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact',
+                className: 'edit-contact compact container',
                 render: function () {
                     this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
                     return this;
@@ -484,8 +484,8 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawCheckbox(options, model) {
             this.append(
-                $('<div class="col-lg-12">').append(
-                    $('<label class="checkbox">').append(
+                $('<div class="col-lg-12 checkbox">').append(
+                    $('<label>').append(
                         new mini.CheckboxView({ name: options.field, model: model }).render().$el,
                         $.txt(' '),
                         $.txt(options.label)
@@ -537,7 +537,7 @@ define('io.ox/contacts/edit/view-form', [
                         module: 7,
                         changeCallback: propagateAttachmentChange
                     }).render().$el,
-                    new attachmentViews.UploadView({ model: model }).render().$el
+                    new attachmentViews.UploadView({ model: model }).render().$el.addClass('col-md-12')
                 )
             );
         }
