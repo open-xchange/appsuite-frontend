@@ -27,7 +27,7 @@
     "requirejs": "2.1.16",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#90a9ca94ab7712915d0416102837f8a638fc2819",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
-    "bootstrap-tokenfield": "https://github.com/sliptree/bootstrap-tokenfield.git#9c06df4ee5",
+    "bootstrap-tokenfield": "https://github.com/sliptree/bootstrap-tokenfield.git#9c06df4ee5f5dca7890f60d95c76880b39531aa9",
     "typeahead.js": "0.10.5",
     "mobiscroll": "2.15.0",
     "marked": "0.3.3",
