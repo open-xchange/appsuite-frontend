@@ -65,19 +65,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.on('dispose', this.disposeView.bind(this));
             // define meta objects for zoom links creation in the toolbar
             this.linksMeta = {
-                'zoomin': {
-                    prio: 'hi',
-                    mobile: 'hi',
-                    icon: 'fa fa-search-plus',
-                    ref: TOOLBAR_ACTION_ID + '/zoomin',
-                    customize: function () {
-                        this.addClass('viewer-toolbar-zoomin').attr({
-                            tabindex: '1',
-                            title: gt('Zoom in'),
-                            'aria-label': gt('Zoom in')
-                        });
-                    }
-                },
                 'zoomout': {
                     prio: 'hi',
                     mobile: 'hi',
@@ -88,6 +75,19 @@ define('io.ox/core/viewer/views/types/documentview', [
                             tabindex: '1',
                             title: gt('Zoom out'),
                             'aria-label': gt('Zoom out')
+                        });
+                    }
+                },
+                'zoomin': {
+                    prio: 'hi',
+                    mobile: 'hi',
+                    icon: 'fa fa-search-plus',
+                    ref: TOOLBAR_ACTION_ID + '/zoomin',
+                    customize: function () {
+                        this.addClass('viewer-toolbar-zoomin').attr({
+                            tabindex: '1',
+                            title: gt('Zoom in'),
+                            'aria-label': gt('Zoom in')
                         });
                     }
                 }
@@ -294,8 +294,19 @@ define('io.ox/core/viewer/views/types/documentview', [
          * Zooms in of a document.
          */
         onZoomIn: function (baton) {
+            var self = this;
             if (this.$el.hasClass('swiper-slide-active')) {
                 console.warn('DocumentView.zoomIn()', baton);
+                this.pdfDocument.getLoadPromise().done(function () {
+                    var pages = self.$el.find('.document-container .document-page');
+                    // test code, increase zoom 1.5 times for every zoom in
+                    _.each(pages, function (page, pageIndex) {
+                        var currentPageZoom = self.pdfView.getPageZoom(pageIndex + 1);
+                        self.pdfView.setPageZoom(currentPageZoom * 1.5);
+                        var realPageSize = self.pdfView.getRealPageSize(pageIndex + 1);
+                        $(page).attr(realPageSize).css(realPageSize);
+                    });
+                });
             }
         },
 
