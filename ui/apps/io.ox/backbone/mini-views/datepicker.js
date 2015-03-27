@@ -46,7 +46,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 def = $.Deferred();
 
             this.$el.append(
-                $('<legend>').addClass('control-label').text(this.options.label),
+                $('<legend>').addClass('simple control-label').text(this.options.label),
                 $('<div class="form-inline">').append(
                     function () {
                         // render date input
