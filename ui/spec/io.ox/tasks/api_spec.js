@@ -131,7 +131,7 @@ define(['shared/examples/for/api',
                 expect(testCopy).not.to.contain.key('tempAttachmentIndicator');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
-              //make copy of testData
+                //make copy of testData
                 var testCopy = _.copy(apiTestData.tempTestDataUpdate, true),
                     result;
 

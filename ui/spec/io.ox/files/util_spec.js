@@ -71,7 +71,7 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
                 it('when boolean breaks', function () {
                     var cb = sinon.spy(),
                         def = $.Deferred().then(cb);
-                        //cause def is second in line that breaks it should not be called
+                    //cause def is second in line that breaks it should not be called
                     return util.conditionChain(false, def).done(function () {
                         expect(cb.called).to.be.false;
                     });
@@ -79,7 +79,7 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
                 it('when deferred breaks', function () {
                     var cb = sinon.spy(),
                         def = $.Deferred().then(cb);
-                        //cause def is second in line that breaks it should not be called
+                    //cause def is second in line that breaks it should not be called
                     return util.conditionChain($.Deferred().reject(), def).done(function () {
                         expect(cb.called).to.be.false;
                     });
@@ -87,7 +87,7 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
                 it('when deferred returns false', function () {
                     var cb = sinon.spy(),
                         def = $.Deferred().then(cb);
-                        //cause def is second in line that breaks it should not be called
+                    //cause def is second in line that breaks it should not be called
                     return util.conditionChain($.Deferred().resolveWith(undefined, [false]), def).done(function () {
                         expect(cb.called).to.be.false;
                     });

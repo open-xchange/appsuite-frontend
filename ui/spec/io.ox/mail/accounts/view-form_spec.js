@@ -64,11 +64,10 @@ define([
             expect($popup.find('input[name="transport_password"]'), 'transport password field').to.have.length(1);
 
             //folder stuff has been removed/changed
-//             expect($popup.find('input[name="sent_fullname"]'), 'sent folder field').to.have.length(1);
-//             expect($popup.find('input[name="trash_fullname"]'), 'trash folder field').to.have.length(1);
-//             expect($popup.find('input[name="drafts_fullname"]'), 'drafts folder field').to.have.length(1);
-//             expect($popup.find('input[name="spam_fullname"]'), 'spam folder field').to.have.length(1);
-
+            // expect($popup.find('input[name="sent_fullname"]'), 'sent folder field').to.have.length(1);
+            // expect($popup.find('input[name="trash_fullname"]'), 'trash folder field').to.have.length(1);
+            // expect($popup.find('input[name="drafts_fullname"]'), 'drafts folder field').to.have.length(1);
+            // expect($popup.find('input[name="spam_fullname"]'), 'spam folder field').to.have.length(1);
         });
 
     });
