@@ -415,26 +415,14 @@ define('io.ox/calendar/edit/extensions', [
             var pNode,
                 guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="col-md-6">').append(
-                    pNode = $('<div class="input-group">').append(
-                        $('<input class="add-participant form-control">').attr({
-                            type: 'text',
-                            tabindex: 1,
-                            id: guid,
-                            placeholder: gt('Add participant/resource')
-                        }),
-                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                        $('<span class="input-group-btn">').append(
-                            $('<button class="btn btn-default">')
-                                .attr({
-                                    type: 'button',
-                                    tabindex: 1,
-                                    'data-action': 'add',
-                                    'aria-label': gt('Add participant/resource')
-                                })
-                                .append($('<i class="fa fa-plus">'))
-                        )
-                    )
+                pNode = $('<div class="col-md-6">').append(
+                    $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
+                    $('<input class="add-participant form-control">').attr({
+                        type: 'text',
+                        tabindex: 1,
+                        id: guid,
+                        placeholder: gt('Add participant/resource')
+                    })
                 )
             );
 

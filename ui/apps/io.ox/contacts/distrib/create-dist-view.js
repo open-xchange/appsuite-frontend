@@ -92,14 +92,15 @@ define('io.ox/contacts/distrib/create-dist-view', [
         render: function () {
             var self = this;
 
-            var pNode = $('<div class="col-xs-12 col-md-6">').append(
-                    $('<div class="autocomplete-controls input-group">').append(
-                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr({ 'placeholder': gt('Add contact') + ' ...', 'aria-label': gt('Add contact') }),
-                        $('<span class="input-group-btn">').append(
-                            $('<button type="button" class="btn btn-default" aria-label="' + gt('Add contact') + '" data-action="add" tabindex="1">')
-                                .append($('<i class="fa fa-plus">'))
-                        )
-                    )
+            var guid = _.uniqueId('form-control-label-'),
+                pNode = $('<div class="col-xs-12 col-md-6">').append(
+                    $('<label class="sr-only">').text(gt('Add contact')).attr('for', guid),
+                    $('<input class="add-participant form-control">').attr({
+                        type: 'text',
+                        tabindex: 1,
+                        'placeholder': gt('Add contact') + ' ...',
+                        id: guid
+                    })
                 ),
 
             autocomplete = new AddParticipantsView({ el: pNode });
