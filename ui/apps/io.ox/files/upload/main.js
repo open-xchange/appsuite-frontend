@@ -24,42 +24,37 @@ define('io.ox/files/upload/main', [
     var limits = [
             {
                 limit: 1000,
-                singular: function (t) {
-                    return gt('%1$s second', t);
-                }, plural: function (t) {
-                    return gt('%1$s seconds', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d second', '%1$d seconds', t), t);
                 }
             },
             {
                 limit: 60,
-                singular: function (t) {
-                    return gt('%1$s minute', t);
-                }, plural: function (t) {
-                    return gt('%1$s minutes', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d minute', '%1$d minutes', t), t);
                 }
             },
             {
                 limit: 60,
-                singular: function (t) {
-                    return gt('%1$s hour', t);
-                }, plural: function (t) {
-                    return gt('%1$s hours', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d hour', '%1$d hours', t), t);
                 }
             },
             {
                 limit: 24,
-                singular: function (t) {
-                    return gt('%1$s day', t);
-                }, plural: function (t) {
-                    return gt('%1$s days', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d day', '%1$d days', t), t);
                 }
             },
             {
                 limit: 7,
-                singular: function (t) {
-                    return gt('%1$s week', t);
-                }, plural: function (t) {
-                    return gt('%1$s weeks', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d week', '%1$d weeks', t), t);
                 }
             }
         ],
@@ -191,7 +186,7 @@ define('io.ox/files/upload/main', [
                 counter++;
             } while (counter < limits.length && limits[counter].limit < estimation);
 
-            return (estimation == 1 ? limits[counter - 1].singular(estimation) : limits[counter - 1].plural(estimation)) || 0;
+            return (limits[counter - 1].message(estimation)) || 0;
         }
         this.getEstimatedTime = getEstimatedTime;
 
