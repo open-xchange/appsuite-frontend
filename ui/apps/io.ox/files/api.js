@@ -533,6 +533,36 @@ define('io.ox/files/api', [
         );
     };
 
+    //
+    // Update file
+    // @param {object} file { id, folder_id }
+    // @param {object} changes The changes to apply; not sent to server if empty
+    //
+
+    api.update = function (file, changes) {
+
+        if (!_.isObject(changes) || _.isEmpty(changes)) return;
+
+        // update model
+        var cid = _.cid(file), model = pool.get('detail').get(cid);
+        model.set(changes);
+
+        return http.PUT({
+            module: 'files',
+            params: {
+                action: 'update',
+                id: file.id,
+                timestamp: _.then()
+            },
+            data: changes,
+            appendColumns: false
+        })
+        .done(function () {
+            api.trigger('update update:' + cid);
+            if ('title' in changes || 'filename' in changes) api.trigger('rename', cid);
+        });
+    };
+
     return api;
 
 });

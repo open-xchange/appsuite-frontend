@@ -436,6 +436,15 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Respond to rename
+         */
+        'change:filename': function (app) {
+            api.on('rename',_.debounce(function () {
+                app.listView.reload();
+            }, 100));
+        },
+
+        /*
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
