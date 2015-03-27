@@ -465,7 +465,7 @@ define('io.ox/contacts/view-detail', [
                                 var birthday = moment.utc(baton.data.birthday);
                                 if (birthday.year() === 1) {
                                     //Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format('MMMM D');
+                                    return birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
                                 } else {
                                     return birthday.format('l');
                                 }

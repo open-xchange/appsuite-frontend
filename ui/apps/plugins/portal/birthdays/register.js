@@ -93,7 +93,7 @@ define('plugins/portal/birthdays/register', [
                         birthdayText = gt('Yesterday');
                     } else if (birthday.year() === 1) {
                         //Year 0 is special for birthdays without year (backend changes this to 1...)
-                        birthdayText = birthday.format('MMM D');
+                        birthdayText = birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
                     } else {
                         birthdayText = birthday.format('l');
                     }
@@ -166,7 +166,7 @@ define('plugins/portal/birthdays/register', [
                                 ),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.year() === 1 ? 'MMM D' : 'l'))), $.txt(' '),
+                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.year() === 1 ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l'))), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )
