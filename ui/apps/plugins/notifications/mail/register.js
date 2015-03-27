@@ -117,7 +117,7 @@ define('plugins/notifications/mail/register', [
                             title: gt('New mail'),
                             body: message,
                             icon: ''
-                            });
+                        });
                     });
                 }
             });

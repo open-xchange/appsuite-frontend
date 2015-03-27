@@ -90,8 +90,8 @@ define('io.ox/core/main', [
                         var location = settings.get('customLocations/logout'),
                             fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
                             logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
-                            // Substitute some variables
-                            // [hostname], [login]
+                        // Substitute some variables
+                        // [hostname], [login]
                         logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
                         _.url.redirect(logoutLocation);
                     });

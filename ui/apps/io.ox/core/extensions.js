@@ -39,12 +39,12 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             return a.index - b.index;
         };
 
-        // for debugging purposes
-        /*
-        randomSorter = function () {
-            return Math.random() > 0.5 ? -1 : +1;
-        };
-        */
+    // for debugging purposes
+    /*
+    randomSorter = function () {
+        return Math.random() > 0.5 ? -1 : +1;
+    };
+    */
 
     // never leak
     $(window).on('unload', function () {

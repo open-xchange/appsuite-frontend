@@ -478,7 +478,7 @@ define('io.ox/core/tk/list-selection', [
 
             // range select / single select
             this.pick(index, items, e);
-            //always trigger in multiple mode (sometimes only checkbox is changed)
+            // always trigger in multiple mode (sometimes only checkbox is changed)
             if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
 
@@ -491,7 +491,7 @@ define('io.ox/core/tk/list-selection', [
                 self = this,
                 resetStyle = function () {
                     this.removeAttr('style');
-                     // reset velocitie's transfrom cache manually
+                    // reset velocitie's transfrom cache manually
                     _(this).each(function (listItem) {
                         $(listItem).data('velocity').transformCache = {};
                     });
@@ -692,7 +692,7 @@ define('io.ox/core/tk/list-selection', [
                 var self = this,
                     resetStyle = function () {
                         this.removeAttr('style');
-                         // reset velocitie's transfrom cache manually
+                        // reset velocitie's transfrom cache manually
                         _(this).each(function (listItem) {
                             $(listItem).data('velocity').transformCache = {};
                         });

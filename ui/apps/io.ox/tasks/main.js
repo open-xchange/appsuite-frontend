@@ -190,7 +190,7 @@ define('io.ox/tasks/main', [
                     app.grid.showToolbar(false);
                     app.pages.getNavbar('listView').setRight(gt('Edit')).show('.left');
                 } else {
-                     // also show sorting options
+                    // also show sorting options
                     app.grid.showTopbar(true);
                     app.grid.showToolbar(true);
                     app.pages.getNavbar('listView').setRight(gt('Cancel')).hide('.left');
@@ -543,7 +543,7 @@ define('io.ox/tasks/main', [
             });
         },
 
-         /*
+        /*
          * Handle delete event based on keyboard shortcut
          */
         'delete-mobile': function (app) {
@@ -642,7 +642,7 @@ define('io.ox/tasks/main', [
             }
         };
         app.gridContainer = $('<div class="border-right">');
-          // grid
+
         var grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeLeftHandler: swipeRightHandler,

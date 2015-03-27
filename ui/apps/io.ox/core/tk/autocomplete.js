@@ -542,11 +542,11 @@ define('io.ox/core/tk/autocomplete', [
                 }
             }, o.delay);
 
-       /**
-        * get the selected item
-        *
-        * @return { object|boolean} data object or false
-        */
+        /**
+         * get the selected item
+         *
+         * @return { object|boolean} data object or false
+         */
         this.getSelectedItem = function () {
             var data = scrollpane.children().eq(Math.max(0, index)).data();
             return index < 0 ? false : data;

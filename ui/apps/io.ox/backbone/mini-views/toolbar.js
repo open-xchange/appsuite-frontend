@@ -71,20 +71,26 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
             if (index < 0) return;
 
             switch (e.which) {
+
+                // SPACE
                 case 32:
-                    // SPACE
                     $(e.currentTarget).click();
                     break;
+
+                // LEFT and UP
                 case 37:
                 case 38:
                     index -= 1;
                     break;
-                    // LEFT and UP
+
+                // RIGHT
                 case 39:
-                // case 40: don't use down button because of dropdowns
                     index += 1;
-                    // RIGHT and DOWN
                     break;
+
+                // DOWN
+                // case 40: don't use down button because of dropdowns
+
                 default:
                     break;
             }

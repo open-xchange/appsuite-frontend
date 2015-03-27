@@ -1130,7 +1130,7 @@ define('io.ox/mail/api', [
             first = _(data).first();
             // multiple?
             if (data.length > 1) {
-               // zipped
+                // zipped
                 return url + '?' + $.param({
                     action: 'zip_messages',
                     folder: first.folder_id,

@@ -117,7 +117,7 @@ define('io.ox/mail/sender', [
             return $.trim(settings.get('defaultSendAddress', ''));
         },
 
-         /**
+        /**
          * default send adresse from settings
          * @return {string}
          */

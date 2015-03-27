@@ -52,9 +52,9 @@ define('plugins/notifications/tasks/register', [
             if (_.noI18n(data.end_date)) {
                 endText = gt('end date ') + _.noI18n(data.end_date);
             }
-                    //#. %1$s task title
-                    //#. %2$s task end date
-                    //#, c-format
+            //#. %1$s task title
+            //#. %2$s task end date
+            //#, c-format
             var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText);
 
             node.attr({

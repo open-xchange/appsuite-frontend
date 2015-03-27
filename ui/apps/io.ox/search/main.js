@@ -114,7 +114,7 @@ define('io.ox/search/main', [
     }
 
     // TODO: use custom node for autocomplete (autocomplete items appended here)
-        // init window
+    // init window
     var win = ox.ui.createWindow({
             name: 'io.ox/search',
             title: 'Search',

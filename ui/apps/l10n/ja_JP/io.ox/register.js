@@ -149,12 +149,12 @@ define('l10n/ja_JP/io.ox/register', [
             }
         });
 
-        var lv = field.value; // last updated value
-                              // lv is not updated when inserting non-kana
-                              // characters, e. g. when typing the first
-                              // letter of a kana character using romaji.
-        var lp = 0, ls = 0; // length of last prefix and last suffix
-                            // (boundaries of the current word in lv)
+        var lv = field.value; /* last updated value
+                               * lv is not updated when inserting non-kana
+                               * characters, e. g. when typing the first
+                               * letter of a kana character using romaji. */
+        var lp = 0, ls = 0; /* length of last prefix and last suffix
+                               (boundaries of the current word in lv) */
         var v0 = lv; // previous value (always updated, used to wait for changes)
         var yl = 0; // length of the current word in yomiField
 
@@ -216,8 +216,7 @@ define('l10n/ja_JP/io.ox/register', [
                 // copy only katakana (and hiragana "yori")
                 if (c >= 0x309f && c <= 0x30ff || // katakana
                     c >= 0x31f0 && c <= 0x31ff || // katakana phonetic extensions
-                    c >= 0xff61 && c <= 0xff9f)   // halfwidth katakana
-                {
+                    c >= 0xff61 && c <= 0xff9f) { // halfwidth katakana
                     kana.push(c);
                 }
             }

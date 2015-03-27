@@ -155,12 +155,12 @@ define('io.ox/contacts/distrib/create-dist-view', [
             });
         },
 
-       /**
-        * check for uniqueness (emailadress, name-only entries) and displays error message
-        *
-        * @param {object} newMember contains with properties email and display_name
-        * @return { boolean }
-        */
+        /**
+         * check for uniqueness (emailadress, name-only entries) and displays error message
+         *
+         * @param {object} newMember contains with properties email and display_name
+         * @return { boolean }
+         */
         isUnique: function (newMember) {
 
             var self = this,

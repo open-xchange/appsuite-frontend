@@ -124,7 +124,7 @@ define('io.ox/mail/compose/extensions', [
                             var value = !!settings.get('sendDisplayName', true);
                             settings.set('sendDisplayName', !value).save();
                             redraw();
-                             // stop propagation to keep drop-down open
+                            // stop propagation to keep drop-down open
                             return false;
                         }
 

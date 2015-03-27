@@ -1578,7 +1578,7 @@ define('io.ox/core/desktop', [
                     id: 'container',
                     index: 100,
                     draw: function () {
-                         // init container
+                        // init container
                         ext.point(this.name + '/facetedsearch')
                             .invoke('draw', this.facetedsearch, win);
 

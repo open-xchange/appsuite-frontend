@@ -149,7 +149,7 @@ define('io.ox/core/api/factory', [
                                         lastModified[cid] = obj.last_modified;
                                         return ready;
                                     } else if (obj.last_modified > lastModified[cid]) {
-                                    // do we see a newer item now?
+                                        // do we see a newer item now?
                                         lastModified[cid] = obj.last_modified;
                                         return $.when(
                                             api.caches.list.remove(cid),

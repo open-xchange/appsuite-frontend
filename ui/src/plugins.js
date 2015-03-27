@@ -480,7 +480,7 @@
         }
     });
 
-        // Name of the current theme, or falsy before a theme is set.
+    // Name of the current theme, or falsy before a theme is set.
     var theme = '',
         // LessCSS files of the current theme.
         themeCommon = { name: 'common', selector: '#theme' },

@@ -16,20 +16,19 @@ define('io.ox/core/api/templating', ['io.ox/core/http'], function (http) {
     'use strict';
 
     var api = {
-
-            /**
-             * get names
-             * @return { deferred} returns array of template names
-             */
-            getNames: function () {
-                return http.GET({
-                    module: 'templating',
-                    params: {
-                        action: 'names'
-                    }
-                });
-            }
-        };
+        /**
+         * get names
+         * @return { deferred} returns array of template names
+         */
+        getNames: function () {
+            return http.GET({
+                module: 'templating',
+                params: {
+                    action: 'names'
+                }
+            });
+        }
+    };
 
     return api;
 });

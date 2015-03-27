@@ -233,7 +233,7 @@ define('io.ox/calendar/main', [
                 app.pages.goBack();
             });
 
-           // checkbox toggle
+            // checkbox toggle
             app.pages.getNavbar('list').on('rightAction', function () {
                 if (app.props.get('checkboxes') === true) {
                     // leave multiselect? -> clear selection
@@ -242,7 +242,7 @@ define('io.ox/calendar/main', [
                     app.grid.showToolbar(false);
                     app.pages.getNavbar('list').setRight(gt('Edit')).show('.left');
                 } else {
-                     // also show sorting options
+                    // also show sorting options
                     app.grid.showTopbar(true);
                     app.grid.showToolbar(true);
                     app.pages.getNavbar('list').setRight(gt('Cancel')).hide('.left');
@@ -383,7 +383,7 @@ define('io.ox/calendar/main', [
             app.props.set('folderview', app.settings.get('folderview/visible/' + _.display(), true));
         },
 
-         /*
+        /*
          * Set folderview property
          */
         'prop-folderview-mobile': function (app) {

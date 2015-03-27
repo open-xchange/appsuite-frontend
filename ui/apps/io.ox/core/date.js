@@ -462,8 +462,7 @@ define.async('io.ox/core/date', [
             handlers[i](match[i + 1], d);
         if (!d.h) d.h = Number(d.h2) + (d.pm ? 12 : 0);
         if (d.h < 0 || d.h >= 24 || d.min < 0 || d.min >= 60 ||
-            d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000)
-        {
+            d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000) {
             return null;
         }
         function adjustYear(year, strLen) {
@@ -488,8 +487,7 @@ define.async('io.ox/core/date', [
                 (start + 7 * d.w - 7 + (d.wd - api.locale.weekStart + 7) % 7)));
             if (getWeekYear(date) !== Number(d.wy) ||
                 getWeek(date)     !== Number(d.w)  ||
-                date.getDay()     !== Number(d.wd))
-            {
+                date.getDay()     !== Number(d.wd)) {
                 return null;
             }
         } else if ('yd' in d) {
@@ -500,8 +498,7 @@ define.async('io.ox/core/date', [
             date.setYear(d.y, d.m, d.d);
             if (date.getYear()  !== Number(d.y) ||
                 date.getMonth() !== Number(d.m) ||
-                date.getDate()  !== Number(d.d))
-            {
+                date.getDate()  !== Number(d.d)) {
                 return null;
             }
         }
@@ -521,7 +518,7 @@ define.async('io.ox/core/date', [
             when = ',(?:J(\\d+)|(\\d+)|M(\\d+)\\.(\\d+)\\.(\\d+))(?:\\/' +
                    time + ')?';
         return new RegExp('^' + abbr + offset +
-                          opt(abbr + opt(offset) + when + when) + '$');
+            opt(abbr + opt(offset) + when + when) + '$');
     }());
 
     function julian(day, time) {
@@ -928,11 +925,8 @@ define.async('io.ox/core/date', [
             var L = api.locale;
             if (format & api.TIME) {
                 if (this.getDays() === end.getDays()) {
-                    var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
-                                           (format & api.TIMEZONE ? 'v' : '')];
-                    if (L.h12 &&
-                        (this.getHours() < 12) !== (end.getHours() < 12))
-                    {
+                    var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') + (format & api.TIMEZONE ? 'v' : '')];
+                    if (L.h12 && (this.getHours() < 12) !== (end.getHours() < 12)) {
                         return diff.a;
                     } else if (this.getHours() !== end.getHours()) {
                         return diff.h;
