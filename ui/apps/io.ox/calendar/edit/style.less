@@ -11,26 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.io-ox-calendar-edit-window {
-
-    .io-ox-calendar-edit {
-
-        padding-top: 10px;
-
-        div.header {
-            margin-bottom: 10px;
-
-           .btn.save {
-                margin-left: 13px;
-            }
-
-            h1.title {
-                line-height:0;
-                font-size: 20px;
-                float: left;
-            }
-        }
-    }
+.io-ox-calendar-edit {
 
     .io-ox-busy {
         position: absolute;
@@ -144,37 +125,8 @@
 
 /* Mobile */
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
-    .io-ox-calendar-edit-window {
-        .custom-color {
-            .color-label {
-                &.no-color {
-                    margin-right: 52px;
-                }
-
-                width: 40px;
-                height: 40px;
-                margin: 4px;
-                font-size: 34px;
-                padding-top: 4px;
-            }
-        }
-    }
 
     .io-ox-calendar-edit {
-        margin-top: 0;
-        padding: 0 13px;
-
-        div.header {
-            margin-bottom: 9px;
-
-            h1.title {
-                float: none;
-            }
-
-            .btn {
-                display: none;
-            }
-        }
 
         .dateinput .form-inline input {
             padding: 4px 6px;
@@ -189,7 +141,18 @@
 
         }
 
-        .row.spacer { padding-bottom: 50px; }
+        .custom-color {
+            .color-label {
+                &.no-color {
+                    margin-right: 52px;
+                }
+
+                width: 40px;
+                height: 40px;
+                margin: 4px;
+                font-size: 30px;
+            }
+        }
 
         .collapsed {
             display: none;

@@ -39,7 +39,7 @@ define('io.ox/calendar/edit/extensions', [
                 buttonCol = $('<div class="col-xs-12 col-sm-6 text-right">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', buttonCol, baton);
-            this.append($('<div class="row header">').append(headerCol, buttonCol));
+            baton.app.getWindow().setHeader($('<div class="row header">').append(headerCol, buttonCol));
         }
     });
 
@@ -55,18 +55,6 @@ define('io.ox/calendar/edit/extensions', [
     // buttons
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
-        id: 'discard',
-        draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
-                .on('click', function () {
-                    baton.app.quit();
-                })
-            );
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 200,
         id: 'save',
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
@@ -81,6 +69,18 @@ define('io.ox/calendar/edit/extensions', [
                 })
             );
 
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 200,
+        id: 'discard',
+        draw: function (baton) {
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
+                .on('click', function () {
+                    baton.app.quit();
+                })
+            );
         }
     });
 
@@ -219,7 +219,7 @@ define('io.ox/calendar/edit/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
-                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid })
+                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid }).addClass('note')
             );
         }
     });
@@ -318,7 +318,7 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(gt('Type')),
+                    $('<legend>').addClass('simple').text(gt('Type')),
                     $('<label class="checkbox-inline control-label">').append(
                         new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
                         $.txt(gt('Private'))
@@ -372,6 +372,8 @@ define('io.ox/calendar/edit/extensions', [
                 )
             );
         }
+    }, {
+        rowClass: 'collapsed'
     });
 
     // participants label
@@ -622,15 +624,6 @@ define('io.ox/calendar/edit/extensions', [
         }
     }, {
         rowClass: 'collapsed'
-    });
-
-    // spacer for mobile
-    point.basicExtend({
-        id: 'dummy_spacer',
-        index: 10000,
-        draw: function () {
-            this.addClass('spacer');
-        }
     });
 
     function openFreeBusyView(e) {
