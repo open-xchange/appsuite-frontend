@@ -14,17 +14,15 @@
 define('io.ox/files/views/create', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/extensions',
-    'io.ox/files/legacy_api',
     'io.ox/core/tk/upload',
     'gettext!io.ox/files',
     'io.ox/core/tk/attachments',
     'io.ox/core/notifications'
-], function (dialogs, ext, api, upload, gt, attachments, notifications) {
+], function (dialogs, ext, upload, gt, attachments, notifications) {
 
     'use strict';
 
     var POINT = 'io.ox/files/create',
-        oldMode = _.browser.IE < 10,
         dndInfo = $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')),
 
         show = function (app) {
@@ -77,45 +75,6 @@ define('io.ox/files/views/create', [
                 }
             }
 
-            //TODO: add support for multiple files via filelist widget
-            function uploadFilesIE9() {
-                var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]').prop('disabled', false)[0].files : []) || [],
-                    folder = app.folder.get();
-                if ($form.find('input[type="file"]').val()) {
-                    // disable autologout -> bug 29389
-                    ox.autoLogout.stop();
-
-                    api.uploadFile({
-                        form: $form,
-                        file: _(files).first(),
-                        json: {
-                            folder: app.folder.get(),
-                            description: $form.find('textarea').val()
-                        },
-                        folder: folder
-                    })
-                    .done(function (data) {
-                        api.propagate('new', data);
-                        notifications.yell('success', gt('This file has been added'));
-                        dialog.close();
-                    })
-                    .fail(function (e) {
-                        if (e && e.data && e.data.custom) {
-                            notifications.yell(e.data.custom.type, e.data.custom.text);
-                        }
-                        dialog.close();
-                    })
-                    .always(function () {
-                        // reenable autologout -> bug 29389
-                        ox.autoLogout.start();
-                    });
-                } else {
-                    notifications.yell('error', gt('No file selected for upload.'));
-                    dialog.idle();
-                    $form.find('input[type="file"]').focus();
-                }
-            }
-
             //dialog
             dialog.header($('<h4>').text(gt('Upload new files')));
             dialog.getBody().append($('<div>').addClass('row').append($form));
@@ -127,7 +86,7 @@ define('io.ox/files/views/create', [
                 .addPrimaryButton('save', gt('Save'), 'save',  { 'tabIndex': '1' })
                 .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                 .on('save', function () {
-                    if (oldMode) uploadFilesIE9(); else uploadFiles();
+                    uploadFiles();
                 })
                 .show(function () { $form.find('.btn-file').focus(); });
         };
@@ -149,16 +108,14 @@ define('io.ox/files/views/create', [
                     $input = $inputWrap.find('input[type="file"]'),
                     changeHandler = function (e) {
                         e.preventDefault();
-                        if (!oldMode) {
-                            var list = [];
-                            //fileList to array of files
-                            _($input[0].files).each(function (file) {
-                                list.push(_.extend(file, { group: 'file' }));
-                            });
-                            baton.fileList.add(list);
-                            $input.trigger('reset.fileupload');
-                            dndInfo.remove();
-                        }
+                        var list = [];
+                        //fileList to array of files
+                        _($input[0].files).each(function (file) {
+                            list.push(_.extend(file, { group: 'file' }));
+                        });
+                        baton.fileList.add(list);
+                        $input.trigger('reset.fileupload');
+                        dndInfo.remove();
                     };
                 this.append($inputWrap);
                 $input.on('change', changeHandler);
