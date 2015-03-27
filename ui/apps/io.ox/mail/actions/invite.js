@@ -40,7 +40,7 @@ define('io.ox/mail/actions/invite', [
                         });
                         var initData = { participants: participants, title: notetext, folder_id: currentFolder };
                         this.create(initData);
-//                             to set Dirty
+                        // to set Dirty
                         this.model.toSync = initData;
                     });
                 });

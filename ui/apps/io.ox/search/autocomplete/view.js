@@ -54,7 +54,7 @@ define('io.ox/search/autocomplete/view', [
      * dropdown item: special
      * @id  io.ox/search/autocomplete/item/[facet.id]
      */
-     // called via ext.point(POINT + '/item')
+    // called via ext.point(POINT + '/item')
 
     /**
      * dropdown item: name

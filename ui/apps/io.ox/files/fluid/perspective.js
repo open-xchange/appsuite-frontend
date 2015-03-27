@@ -413,46 +413,6 @@ define('io.ox/files/fluid/perspective', [
         $(this).remove();
     }
 
-    /*
-     * This extension point adds a toolbar, which displays the upload progess of all files.
-     * If several files are loaded this toolbar provides links to open an overview of all currently uploaded files.
-     */
-    ext.point('io.ox/files/upload/toolbar').extend({
-        draw: function () {
-            this.append($('<div class="upload-wrapper">').append(
-                $('<div class="upload-title">').append(
-                    $('<span class="file-name">'),
-                    $('<span class="estimated-time">')
-                ),
-                $('<div class="upload-details">').append(
-                    $('<a href=#>').text(gt('Details')).click(function (e) {
-                        e.preventDefault();
-
-                        require(['io.ox/files/upload/view'], function (uploadView) {
-                            uploadView.show();
-                        });
-                    })
-                ),
-                $('<div class="progress">').append(
-                    $('<div class="progress-bar progress-bar-striped active">')
-                        .attr({
-                            'role': 'progressbar',
-                            'aria-valuenow': '0',
-                            'aria-valuemin': '0',
-                            'aria-valuemax': '100'
-                        })
-                        .css({ 'width': '0%' })
-                        .append(
-                            $('<span class="sr-only">').text(
-                                //#. %1$s progress of currently uploaded files in percent
-                                gt('%1$s completed', '0%')
-                            )
-                        )
-                )
-            ));
-        }
-    });
-
     function getAriaLabel (file, title, filesize, changed) {
         var arialabel = [
             title,
@@ -887,74 +847,6 @@ define('io.ox/files/fluid/perspective', [
             app.getIds = function () {
                 return allIds;
             };
-
-            app.queues = {};
-            app.queues.create = upload.createQueue(fileUpload)
-                .on('start', function () {
-                    $('.files-wrapper').addClass('margin-bottom');
-                    ext.point('io.ox/files/upload/toolbar').invoke('draw', self.main, baton);
-                })
-                .on('progress', function (e, def, file) {
-                    $('.upload-wrapper').find('.file-name').text(
-                        //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-                        gt('Uploading %1$s', file.file.name)
-                    );
-                })
-                .on('stop', function () {
-                    $('.files-wrapper').removeClass('margin-bottom');
-                    $('.upload-wrapper').remove();
-                });
-
-            fileUpload.collection
-                .on('progress', function (baton) {
-                    var progressWrapper = $('.upload-wrapper'),
-                        progressBar = progressWrapper.find('.progress-bar'),
-                        progressText = progressWrapper.find('.sr-only'),
-                        val = Math.round(baton.progress * 100);
-
-                    progressBar
-                        .attr({ 'aria-valuenow': val })
-                        .css({ 'width': val + '%' });
-                    progressText.text(
-                        //#. %1$s progress of currently uploaded files in percent
-                        gt('%1$s completed', val + '%')
-                    );
-
-                    progressWrapper.find('.estimated-time').text(
-                        //#. %1$s remaining upload time
-                        gt('Remaining time: %1$s', baton.estimatedTime)
-                    );
-                })
-                .on('remove', function (model, collection, options) {
-                    app.queues.create.remove(options.index);
-                });
-
-            app.queues.update = upload.createQueue({
-                start: function () {
-                    win.busy(0);
-                },
-                progress: function (item, position, files) {
-                    var pct = position / files.length;
-                    win.busy(pct, 0);
-                    return api.uploadNewVersion({
-                        file: item.file,
-                        id: app.currentFile.id,
-                        folder: app.currentFile.folder_id,
-                        timestamp: _.now()
-                    })
-                    .progress(function (e) {
-                        var sub = e.loaded / e.total;
-                        win.busy(pct + sub / files.length, sub);
-                    }).fail(function (e) {
-                        if (e && e.data && e.data.custom) {
-                            notifications.yell(e.data.custom.type, e.data.custom.text);
-                        }
-                    });
-                },
-                stop: function () {
-                    win.idle();
-                }
-            });
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 

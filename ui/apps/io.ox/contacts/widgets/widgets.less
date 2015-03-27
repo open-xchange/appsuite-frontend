@@ -1,9 +1,15 @@
-.picture-uploader {
+.picture-upload-view {
+    position: relative;
+    display: inline-block;
+    padding-left: 15px;
+    margin: 0 30px 10px 0;
+    float: left;
 
-    & {
+    .picture-uploader {
+
         cursor: pointer;
         position: relative;
-        z-index: 1;
+        z-index: 0;
         width: 100px;
         height: 100px;
         display: inline-block;
@@ -16,26 +22,42 @@
         &.focussed {
             border-color: @link-color;
         }
+
+        .add-img-text {
+            font-size: 12px;
+            line-height: 12px;
+            margin-top: 28px;
+            height: 100%;
+            text-align: center;
+            color: #888;
+            z-index: 2;
+        }
+
+        .close {
+            z-index: 3;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            opacity: 0.6;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            background-color: #fff;
+        }
     }
 
-    .add-img-text {
-        font-size: 14px;
-        margin-top: 28px;
-        height: 100%;
-        text-align: center;
-        color: #888;
-        z-index: 2;
-    }
-
-    .close {
-        z-index: 3;
+    form {
         position: absolute;
-        top: 4px;
-        right: 4px;
-        opacity: 0.6;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-        background-color: #fff;
+        z-index: 1;
+    }
+
+    input[type=file] {
+        position: absolute;
+        top: 24px;
+        width: 90px;
+        height: 90px;
+        opacity: 0;
+        cursor: pointer;
     }
 }
+

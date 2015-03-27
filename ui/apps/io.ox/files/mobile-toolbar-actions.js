@@ -136,13 +136,13 @@ define('io.ox/files/mobile-toolbar-actions', [
         var self = this,
             ids = this.getIds ? this.getIds() : [];
 
-        //get full data, needed for require checks for example
+        // get full data, needed for require checks for example
         api.getList(list).done(function (data) {
             // extract single object if length === 1
             data = data.length === 1 ? data[0] : data;
             // draw toolbar
             var baton = ext.Baton({ data: data, app: self, allIds: ids });
-             // handle updated baton to pageController
+            // handle updated baton to pageController
             self.pages.getToolbar('detailView').setBaton(baton);
             self.pages.getSecondaryToolbar('fluid').setBaton(baton);
         });

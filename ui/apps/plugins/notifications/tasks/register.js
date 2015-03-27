@@ -52,9 +52,9 @@ define('plugins/notifications/tasks/register', [
             if (_.noI18n(data.end_date)) {
                 endText = gt('end date ') + _.noI18n(data.end_date);
             }
-                    //#. %1$s task title
-                    //#. %2$s task end date
-                    //#, c-format
+            //#. %1$s task title
+            //#. %2$s task end date
+            //#, c-format
             var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText);
 
             node.attr({
@@ -235,6 +235,8 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
             var node = this.addClass('taskNotification'),
+                model = baton.model,
+                view = baton.view,
                 onChangeState = function (e) {
                     e.stopPropagation();
                     //only open if click or enter is pressed
@@ -258,9 +260,12 @@ define('plugins/notifications/tasks/register', [
                             folder_id: baton.model.get('folder_id'),
                             data: { confirmmessage: '', confirmation: 1 }
                         };
+                    view.responsiveRemove(model);
                     api.confirm(o).done(function () {
                         //update detailview
                         api.trigger('update:' + _.ecid(o));
+                    }).fail(function () {
+                        view.unHide(model);
                     });
                 };
 

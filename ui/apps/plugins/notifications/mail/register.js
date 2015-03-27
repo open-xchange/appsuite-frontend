@@ -27,38 +27,47 @@ define('plugins/notifications/mail/register', [
     ext.point('io.ox/core/notifications/badge').extend({
         id: 'mail',
         index: 100,
-        register: function (baton) {
-            var defaultId = api.getDefaultFolder(),
-                models = {},
-                badge = baton.addBadge('io.ox/mail');
+        register: function () {
+            var models = {};
 
             _(folderApi.pool.models).each(function (model, key) {
                 //foldername starts with inbox
-                if (key.indexOf(defaultId) === 0) {
+                if (key.match(/^default\d+\/INBOX/)) {
                     models[key] = model;
                 }
             });
-            function update() {
+            var update = _.debounce(function () {
+                var app = ox.ui.apps._byId['io.ox/mail'] || ox.ui.apps._byId['io.ox/mail/placeholder'];
+                if (!app ) {
+                    return;
+                }
+
                 var count = 0;
                 _(models).each(function (model) {
                     if (model && model.get('unread')) {
                         count = count + model.get('unread');
                     }
                 });
-                baton.setBadgeText('io.ox/mail', count);
+
+                //don't let the badge grow infinite
+                if (count > 99) {
+                    count = '99+';
+                }
+
                 //#. %1$d number of notifications
-                badge.attr('aria-label', gt.format('%1$d unread mails', count));
-            }
+                app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });
+            }, 300);
 
             _(models).each(function (folderModel) {
                 folderModel.on('change:unread', update);
             });
 
             $(folderApi.pool).on('folder-model-added', function (e, key) {
-                if (key.indexOf(defaultId) === 0) {
+                if (key.match(/^default\d+\/INBOX/)) {
                     var model = folderApi.pool.models[key];
                     models[key] = model;
                     model.on('change:unread', update);
+                    //when a foldertree is loaded, many new folders are added, no need to call update that often
                     update();
                 }
             });
@@ -108,7 +117,7 @@ define('plugins/notifications/mail/register', [
                             title: gt('New mail'),
                             body: message,
                             icon: ''
-                            });
+                        });
                     });
                 }
             });

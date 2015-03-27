@@ -613,6 +613,7 @@ define('io.ox/files/main', [
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
+            id: 'io.ox/files',
             title: 'Drive',
             chromeless: true,
             facetedsearch: capabilities.has('search')

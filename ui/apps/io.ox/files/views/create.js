@@ -63,10 +63,13 @@ define('io.ox/files/views/create', [
                     //fileList = ($input.length > 0 ? $input[0].files : []) || [],
                     files = baton.fileList.get();
                 if (files.length) {
-                    description = $form.find('textarea').val();
-                    app.queues.create.offer(files, { description: description, folder: app.folder.get() });
-                    baton.fileList.clear();
-                    dialog.close();
+                    require(['io.ox/files/upload/main'], function (fileUpload) {
+                        description = $form.find('textarea').val();
+                        fileUpload.create.offer(files, { description: description, folder: app.folder.get() });
+                        fileUpload.setWindowNode(app.getWindowNode());
+                        baton.fileList.clear();
+                        dialog.close();
+                    });
                 } else {
                     notifications.yell('error', gt('No file selected for upload.'));
                     dialog.idle();

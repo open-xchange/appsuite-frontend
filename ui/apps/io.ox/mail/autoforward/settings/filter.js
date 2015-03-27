@@ -87,7 +87,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                     autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
 
                     if (data[0].active === true) {
-                       // set active state
+                        // set active state
                     }
                     $node.append(autoForward.render().$el);
                     $node.one('dispose', function () {

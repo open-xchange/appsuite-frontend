@@ -45,6 +45,7 @@ define('io.ox/mail/main', [
     // application object
     var app = ox.ui.createApp({
         name: 'io.ox/mail',
+        id: 'io.ox/mail',
         title: 'Mail'
     });
 
@@ -574,7 +575,7 @@ define('io.ox/mail/main', [
             };
         },
 
-           /*
+        /*
          * Define basic function to show an email
          */
         'show-mail-mobile': function (app) {
@@ -622,7 +623,7 @@ define('io.ox/mail/main', [
             };
         },
 
-         /*
+        /*
          * Define function to reflect multiple selection
          */
         'show-multiple-mobile': function (app) {
@@ -776,7 +777,7 @@ define('io.ox/mail/main', [
                     app.left.css('height', height);
                 }
 
-                 // remove inline styles from using the resize bar
+                // remove inline styles from using the resize bar
                 app.left.css({ width: '', height: '' });
                 app.right.css({ left: '', top: '' });
 

@@ -66,7 +66,7 @@ define('io.ox/contacts/edit/main', [
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact, app: app });
                         container.append(
-                            editView.render().$el.addClass('default-content-padding container')
+                            editView.render().$el
                         );
                         // no autofocus on smartphone and for iOS in special (see bug #36921)
                         if (_.device('!smartphone && !iOS')) {

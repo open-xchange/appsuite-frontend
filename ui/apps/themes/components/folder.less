@@ -218,6 +218,9 @@
 
     .favorites, .unified-folders, .standard-folders, .other-folders {
         margin-bottom: @default-padding;
+        @media (max-width: 480px), (max-device-width: 480px) {
+            margin-bottom: 0;
+        }
     }
 
     .favorites > .folder-node > .folder-label {
@@ -312,11 +315,18 @@
         }
 
         .folder-node {
-
+            margin-left: 22px;
             height: @mobile-height;
 
             .folder-arrow {
                 font-size: @mobile-arrow-size;
+                position: absolute;
+                right: 0;
+                text-align: center;
+                padding-left: 0;
+                .fa-caret-right:before {
+                    content: "\f0d8";
+                }
             }
 
             .folder-label, .folder-counter, .folder-options {

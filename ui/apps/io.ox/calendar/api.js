@@ -533,7 +533,7 @@ define('io.ox/calendar/api', [
             return ret;
         },
 
-         /**
+        /**
          * get invites
          * @fires  api#new-invites (invites)
          * @return { deferred} returns sorted array of appointments

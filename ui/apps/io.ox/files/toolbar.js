@@ -110,13 +110,6 @@ define('io.ox/files/toolbar', [
                 label: gt('Delete'),
                 ref: 'io.ox/files/actions/delete'
             },
-            'viewer': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-eye',
-                label: gt('View'),
-                ref: 'io.ox/files/actions/viewer'
-            },
             //
             // --- LO ----
             //
@@ -246,7 +239,7 @@ define('io.ox/files/toolbar', [
                 // extract single object if length === 1
                 var data = list.length === 1 ? list[0] : list;
                 // draw toolbar
-                var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, app: this, allIds: [] }),
+                var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, collection: app.listView.collection, app: this, allIds: [] }),
                     ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
                 $.when.apply($, ret.value()).then(function () {
                     toolbar.initButtons();

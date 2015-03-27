@@ -39,29 +39,27 @@
 html, body {
     height: 100%;
     font-family: @normal-font-family;
-    font-size: 14px;
     line-height: 20px;
-    color: #333;
 }
 
-#io-ox-login-container .alert {
-    padding: 15px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-
-    &.alert-info {
-        color: #fff;
-        background: rgba(0, 0, 0, 0.2);
-        border:1px solid rgba(0, 0, 0, 0.2);
-    }
+.css-table {
+    display: table;
+    width: 100%;
+    height: 100%;
 }
 
-.css-table { display: table; width: 100%; height: 100%; }
-.css-table-row { display: table-row; }
-.css-table-cell { display: table-cell; vertical-align: middle; }
+.css-table-row {
+    display: table-row;
+}
 
-.unselectable { .user-select(none); }
+.css-table-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.unselectable {
+    .user-select(none);
+}
 
 .selectable-text {
     .user-select(text);
@@ -164,10 +162,20 @@ html, body {
     margin: 0 auto 0 auto;
     padding: 0 30px 0 30px;
     box-sizing: border-box;
+
+    .alert {
+        padding: 15px;
+        .border-radius(4px);
+
+        &.alert-info {
+            color: #fff;
+            background: rgba(0, 0, 0, 0.2);
+            border:1px solid rgba(0, 0, 0, 0.2);
+        }
+    }
 }
 
 #io-ox-login-header {
-
     height: 45%;
     text-align: right;
     vertical-align: middle;
@@ -324,6 +332,7 @@ html, body {
   0%    { transform: rotate(0deg);          }
   100%  { transform: rotate(359deg);        }
 }
+
 #io-ox-login-screen {
     .io-ox-busy {
         position: relative;

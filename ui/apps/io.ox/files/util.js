@@ -226,7 +226,7 @@ define('io.ox/files/util', [
          */
         confirmDialog: function (formFilename, serverFilename, options) {
             var opt = options || {};
-                    //be robust
+            // be robust
             serverFilename = String(serverFilename || '');
             formFilename = String(formFilename || '');
             var def = $.Deferred(),
@@ -239,15 +239,15 @@ define('io.ox/files/util', [
                         ),
                 message;
 
-            //set message
+            // set message
             if (formFilename !== '' && formFilename.split('.').length === 1 && extServer !== '') {
-            //file extension ext removed
+                // file extension ext removed
                 message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
             } else if (extServer !== extForm && extServer !== '') {
-                //ext changed
+                // ext changed
                 message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
             }
-            //confirmation needed
+            // confirmation needed
             if (message) {
                 new dialogs.ModalDialog(opt)
                             .header($('<h4>').text(gt('Confirmation')))
@@ -263,7 +263,7 @@ define('io.ox/files/util', [
                                 }
                             });
             } else if (formFilename === '') {
-                //usually prevented from ui
+                // usually prevented from ui
                 def.reject();
             } else {
                 def.resolve();

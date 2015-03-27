@@ -30,7 +30,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
-        grid,
         notificationId = _.uniqueId('notification_');
 
     function containsStop(actioncmds) {
@@ -166,7 +165,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         draw: function (model) {
             //redirect
             ext.point('io.ox/settings/mailfilter/filter/settings/actions/common')
-                            .invoke('draw', this, model);
+                .invoke('draw', this, model);
         }
     });
 
@@ -176,13 +175,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
         draw: function (model) {
             //redirect
             ext.point('io.ox/settings/mailfilter/filter/settings/actions/common')
-                            .invoke('draw', this, model);
+                .invoke('draw', this, model);
         }
     });
 
     return {
         editMailfilter: function ($node, baton) {
-            grid = (baton || {}).grid;
 
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
@@ -318,7 +316,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         var self = this,
                             id = self.model.get('id');
                         if (id !== false) {
-                             //yell on reject
+                            //yell on reject
                             settingsUtil.yellOnReject(
                                 api.deleteRule(id).done(function () {
                                     var arrayOfFilters,
@@ -330,7 +328,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                     data = _.map(arrayOfFilters, function (single) {
                                         return parseInt($(single).attr('data-id'), 10);
                                     });
-                                     //yell on reject
+                                    //yell on reject
                                     settingsUtil.yellOnReject(
                                         api.reorder(data)
                                     );
@@ -354,24 +352,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditVacation: function (e) {
                         e.preventDefault();
-                        var elem = _.find(grid.getIds(), function (item) {
-                                return item.id === 'io.ox/vacation';
-                            });
-
-                        if (elem) {
-                            grid.selection.set(elem);
-                        }
+                        baton.tree.trigger('virtual', 'virtual/' + 'io.ox/vacation', {});
                     },
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
-                        var elem = _.find(grid.getIds(), function (item) {
-                                return item.id === 'io.ox/autoforward';
-                            });
-
-                        if (elem) {
-                            grid.selection.set(elem);
-                        }
+                        baton.tree.trigger('virtual', 'virtual/' + 'io.ox/autoforward', {});
                     },
 
                     dragViaKeyboard: function (e) {

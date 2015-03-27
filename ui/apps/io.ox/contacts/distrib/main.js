@@ -175,7 +175,7 @@ define('io.ox/contacts/distrib/main', [
                 }, 150));
             });
 
-            container = $('<div>').addClass('create-distributionlist container default-content-padding');
+            container = $('<div>').addClass('create-distributionlist container');
 
             win.nodes.main.addClass('scrollable').append(container);
 

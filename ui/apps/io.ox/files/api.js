@@ -70,7 +70,7 @@ define('io.ox/files/api', [
 
         isEncrypted: function () {
             // check if file has "guard" file extension
-            return /\.grd$/.test(this.get('filename'));
+            return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
         },
 
         getDisplayName: function () {
@@ -114,7 +114,7 @@ define('io.ox/files/api', [
             pdf:   /^pdf$/,
             zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
             txt:   /^(txt|md)$/,
-            guard: /^grd$/
+            guard: /^(grd|grd2|pgp)$/
         },
 
         supportsPreview: function () {
@@ -207,7 +207,13 @@ define('io.ox/files/api', [
 
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
-    var allColumns = '20,23,1,5,700,702,703,704,705,707,3,711';
+    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
+
+    function resetFolder(id) {
+        var list = _(pool.getByFolder(id));
+        list.each(function (collection) { collection.expired = true; });
+        return list;
+    }
 
     /**
      * map error codes and text phrases for user feedback
@@ -331,9 +337,9 @@ define('io.ox/files/api', [
     }());
 
     api.get = function (options) {
-        var model = pool.get('detail').get(_.cid(options));
 
-        if (model) return $.when(model);
+        var model = pool.get('detail').get(_.cid(options));
+        if (model) return $.when(model.toJSON());
 
         return http.GET({
             module: 'files',
@@ -343,8 +349,10 @@ define('io.ox/files/api', [
                 folder: options.folder_id || options.folder,
                 timezone: 'UTC'
             }
-        }).then(function (data) {
-            return pool.add('detail', data).get(_.cid(data));
+        })
+        .then(function (data) {
+            pool.add('detail', data);
+            return data;
         });
     };
 
@@ -386,7 +394,11 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.unlock = function (list) {
-        return lockToggle(list, 'unlock');
+        return lockToggle(list, 'unlock').done(function () {
+            list.forEach(function (m) {
+                m.set('locked_until', 0);
+            });
+        });
     };
 
     /**
@@ -395,7 +407,11 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.lock = function (list) {
-        return lockToggle(list, 'lock');
+        return lockToggle(list, 'lock').done(function () {
+            var folder = list[0].get('folder_id');
+            resetFolder(folder);
+            folderAPI.reload(folder);
+        });
     };
 
     /**
@@ -496,14 +512,7 @@ define('io.ox/files/api', [
         });
     }
 
-    api.remove = function (list) {
-
-        //only remove file objects
-        var ids = list.filter(function (o) {
-            return o.isFile && o.isFile();
-        }).map(function (model) {
-            return model.toJSON();
-        });
+    api.remove = function (ids) {
 
         prepareRemove(ids);
 
@@ -515,10 +524,11 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .done(function () {
-                // update folder
                 folderAPI.reload(ids);
-                // trigger delete to update notification area
                 api.trigger('delete');
+                _(ids).each(function (item) {
+                    api.trigger('delete:' + _.ecid(item));
+                });
             })
         );
     };

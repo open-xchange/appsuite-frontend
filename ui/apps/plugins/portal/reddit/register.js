@@ -81,9 +81,9 @@ define('plugins/portal/reddit/register', [
         mp.init({
             appendLimitOffset: function (myurl, count, offset) {
                 // &count-param is ignored by reddit
-    //            if (count) {
-    //                myurl += "&count=" + count;
-    //            }
+                // if (count) {
+                //     myurl += "&count=" + count;
+                // }
 
                 if (offset) {
                     myurl += '&after=' + lastShowedPreview;

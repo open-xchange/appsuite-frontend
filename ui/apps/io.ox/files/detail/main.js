@@ -44,6 +44,7 @@ define('io.ox/files/detail/main', [
                     ));
 
                     app.setTitle(title);
+
                     api.one('delete:' + _.ecid(data), function () {
                         app.quit();
                     });

@@ -250,6 +250,8 @@ define('io.ox/settings/main', [
 
         tree.on('virtual', function (id, item, baton) {
             var focus = true;
+
+            tree.selection.resetSelected(tree.selection.getItems());
             tree.selection.preselect(id);
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');

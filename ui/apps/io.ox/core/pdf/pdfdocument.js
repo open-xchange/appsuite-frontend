@@ -178,25 +178,27 @@ define('io.ox/core/pdf/pdfdocument', [
 
         // convert document to PDF
         PDFJS.getDocument(pdfConverterURL).promise.then( function (document) {
+            var error = true;
+
             if (document) {
                 pdfjsDocument = document;
                 pageCount = pdfjsDocument.numPages;
 
                 if (pageCount > 0) {
+                    error = false;
+
                     initializePageSize(1).then( function (pageSize) {
                         pageSizes[0] = defaultPageSize = pageSize;
                         return loadDef.resolve(pageCount);
-                    }, function () {
-                        return loadDef.reject();
                     });
-                } else {
-                    loadDef.reject();
                 }
-            } else {
-                loadDef.reject();
+            }
+
+            if (error) {
+                loadDef.resolve({ cause: 'importError' });
             }
         }, function () {
-            loadDef.reject();
+            loadDef.resolve({ cause: 'importError' });
         });
 
     } // class PDFDocument

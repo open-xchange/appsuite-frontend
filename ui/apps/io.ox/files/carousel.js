@@ -76,23 +76,23 @@ define('io.ox/files/carousel', [
         //#. helper text for slideshow widget navigation
         info:           $('<div class="sr-only">').attr('id', guid).text(gt('Use left/right arrow keys to navigate and escape key to exit view.')),
 
-       /**
-        * The config parameter used to initialize a carousel.
-        *
-        * The fields are mostly self-explaining. Important field is baton.
-        * It must contain an object that looks like this:
-        * { allIds: [
-        *     { filename: 'the filename.ext',
-        *       url: 'an_url_ponting/to/the_file'
-        *     }, …
-        *   ]
-        * }
-        *
-        * The url attribute for the items in allIds list is optional and can be used to provide
-        * an user-defined url for the image. If this attribute is not defined, the files API getUrl
-        * method is used to get the URL for the file.
-        *
-        */
+        /**
+         * The config parameter used to initialize a carousel.
+         *
+         * The fields are mostly self-explaining. Important field is baton.
+         * It must contain an object that looks like this:
+         * { allIds: [
+         *     { filename: 'the filename.ext',
+         *       url: 'an_url_ponting/to/the_file'
+         *     }, …
+         *   ]
+         * }
+         *
+         * The url attribute for the items in allIds list is optional and can be used to provide
+         * an user-defined url for the image. If this attribute is not defined, the files API getUrl
+         * method is used to get the URL for the file.
+         *
+         */
         config: {},
         defaultconfig: {
             fullScreen: false,

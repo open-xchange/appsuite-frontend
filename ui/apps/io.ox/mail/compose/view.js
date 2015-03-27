@@ -297,7 +297,7 @@ define('io.ox/mail/compose/view', [
 
     var MailComposeView = Backbone.View.extend({
 
-        className: 'io-ox-mail-compose container default-content-padding',
+        className: 'io-ox-mail-compose container',
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
@@ -1143,13 +1143,13 @@ define('io.ox/mail/compose/view', [
                 if (top < scrollPane.scrollTop()) {
                     // toolbar leaves viewport
                     if (!fixed) {
-                        toolbar.addClass('fixed').css('width', editor.outerWidth());
+                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
                         editor.css('margin-top', toolbar.height());
                         $(window).trigger('resize.tinymce');
                         fixed = true;
                     }
                 } else if (fixed) {
-                    toolbar.removeClass('fixed');
+                    toolbar.removeClass('fixed').css('top', 0);
                     editor.css('margin-top', 0);
                     fixed = false;
                 }

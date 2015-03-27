@@ -112,7 +112,8 @@ define('io.ox/files/view-options', [
                 .link('files', gt('All files'))
                 .link('none', gt('None'))
                 .divider()
-                .header(gt('Filter'))
+                //#. Verb: (to) filter documents by file type
+                .header(gt.pgettext('verb', 'Filter'))
                 .option('filter', 'pdf', gt('PDFs'))
                 .option('filter', 'doc', gt('Documents'))
                 .option('filter', 'xls', gt('Spreadsheets'))

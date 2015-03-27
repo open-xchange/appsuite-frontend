@@ -132,10 +132,6 @@
         vertical-align: top;
         -webkit-font-smoothing: antialiased;
 
-        .topbar-launcherbadge {
-            margin-left: 3px;
-        }
-
         & > a {
 
             // IE10 needs this :link class otherwise :active is not removed
@@ -292,6 +288,12 @@
                 -webkit-font-smoothing: initial;
             }
         }
+
+        .topbar-launcherbadge {
+            margin-left: 8px;
+            border-radius: 2px;
+            background-color: rgba(0, 0, 0, 0.30);
+        }
     }
 
     .launcher-dropdown {
@@ -301,7 +303,7 @@
         @media (max-width: 480px), (max-device-width: 480px) {
             .dropdown-toggle {
                 font-size: @mobile-launcher-icon-size;
-                padding: @mobile-launcher-icon-size - 10px 12px;
+                padding: @mobile-launcher-icon-size - 10px 18px;
             }
         }
 
@@ -484,6 +486,13 @@ html.ios8-standalone-ipad-fix {
     #io-ox-topbar {
         .launcher a.notifications-icon {
             padding: 12px 5px;
+
+            &.no-notifications {
+                .badge {
+                    display: initial;
+                }
+            }
+
             .badge {
                 top: initial;
                 left: initial;

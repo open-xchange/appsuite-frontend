@@ -436,7 +436,7 @@ define('io.ox/tasks/api', [
         http.pause();
 
         _(list).map(function (obj) {
-          //repair broken folder attribute
+            //repair broken folder attribute
             if (obj.folder) {
                 obj.folder_id = obj.folder;
                 delete obj.folder;

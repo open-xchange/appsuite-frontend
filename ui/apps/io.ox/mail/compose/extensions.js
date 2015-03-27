@@ -63,7 +63,7 @@ define('io.ox/mail/compose/extensions', [
             if (!baton.view.app.getWindow()) return;
             var header = $('<div data-extension-id="header">');
             ext.point(POINT + '/header').invoke('draw', header, baton);
-            baton.view.app.getWindow().setHeader(header).addClass('container default-header-padding');
+            baton.view.app.getWindow().setHeader(header);
         },
 
         title: function () {
@@ -124,7 +124,7 @@ define('io.ox/mail/compose/extensions', [
                             var value = !!settings.get('sendDisplayName', true);
                             settings.set('sendDisplayName', !value).save();
                             redraw();
-                             // stop propagation to keep drop-down open
+                            // stop propagation to keep drop-down open
                             return false;
                         }
 
@@ -160,8 +160,8 @@ define('io.ox/mail/compose/extensions', [
                         drawOptions();
 
                         node.append(
-                            $('<label class="maillabel col-xs-2 col-sm-1">').text(gt('From')),
-                            $('<div class="col-xs-10 col-sm-11">').append(
+                            $('<label class="maillabel col-xs-1">').text(gt('From')),
+                            $('<div class="col-xs-11">').append(
                                 dropdown.render().$el.attr({ 'data-dropdown': 'from' })
                             )
                         );
@@ -233,7 +233,6 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        placeholder: _.device('smartphone') ? '' : tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
@@ -246,7 +245,7 @@ define('io.ox/mail/compose/extensions', [
                             ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
                         },
                         drawToken: function (model) {
-                            ext.point(POINT + '/token').invoke('draw', this, model);
+                            ext.point(POINT + '/token').invoke('draw', this, model, baton);
                         }
                     });
 

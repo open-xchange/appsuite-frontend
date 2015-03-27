@@ -151,7 +151,7 @@ define('io.ox/calendar/edit/view-addparticipants', [
 
                             this.append(pview.render().el);
 
-                             // apply a11y
+                            // apply a11y
                             this.attr({
                                 'aria-label': pview.nodes.$text.text() + ' ' + pview.nodes.$mail.text(),
                                 'tabIndex': 1

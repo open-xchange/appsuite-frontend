@@ -95,7 +95,6 @@ span.hint {
     vertical-align: middle;
 }
 
-
 /** Flat inputs **/
 input.flat-input {
     border-width: 0;
@@ -120,8 +119,22 @@ a.button {
     text-decoration: none;
 }
 
-
 /* Bootstrap overrides BEGIN */
+legend, label {
+    color: @label-default-bg;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+legend {
+    padding-top: 8px;
+
+    &.simple {
+        margin:0;
+        border-bottom: 0 none;
+    }
+}
+
 .checkbox.control-label, label {
     font-weight:normal;
 }
@@ -359,8 +372,6 @@ div.hopscotch-bubble {
 
 .default-content-padding { padding: 20px 30px; }
 
-.default-header-padding  { padding: 10px 30px; }
-
 a.n-more {
     white-space: nowrap;
     display: inline-block;
@@ -404,7 +415,6 @@ a.nolink {
         border-left: 1px solid @hc-border-color;
     }
 }
-
 
 .touch {
 

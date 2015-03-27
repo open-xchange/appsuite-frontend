@@ -96,13 +96,13 @@ define('plugins/portal/userSettings/register', [
             new dialogs.ModalDialog({ async: true, width: 500 })
             .header($('<h4>').text(gt('Change password')))
             .build(function () {
-                               //#. %1$s are some example characters
-                               //#, c-format
+                //#. %1$s are some example characters
+                //#, c-format
                 var hintText = gt('Your password is more secure if it also contains capital letters, numbers, and special characters like %1$s', regexText);
                 if (maxLength) {
-                               //#. %1$s is the minimum password length
-                               //#. %2$s is the maximum password length
-                               //#, c-format
+                    //#. %1$s is the minimum password length
+                    //#. %2$s is the maximum password length
+                    //#, c-format
                     hintText = gt('Password length must be between %1$d and %2$d characters.', minLength, maxLength) + '<br>' + hintText;
                 } else {
                     //#. %1$s is the minimum password length

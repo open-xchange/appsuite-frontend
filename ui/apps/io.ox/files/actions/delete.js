@@ -27,45 +27,41 @@ define('io.ox/files/actions/delete', [
     }
 
     function process(list) {
-        var folderIds = list.filter(function (o) {
-            return !isFile(o);
-        });
-        $.when([
-            api.remove(list)
-        ].concat(folderIds.map(function (folder) {
-            return folderAPI.remove(folder.id);
-        }))).then(
-            function success() {
-                notifications.yell('success', gt.ngettext(
-                    'This file has been deleted',
-                    'These files have been deleted',
+
+        var items = _(list).filter(isFile),
+            folders = _(list).reject(isFile);
+
+        // delete files
+        api.remove(_(items).invoke('toJSON')).fail(function (e) {
+            if (e && e.code && e.code === 'IFO-0415') {
+                notifications.yell('error', gt.ngettext(
+                    'This file has not been deleted, as it is locked by its owner.',
+                    'These files have not been deleted, as they are locked by their owner.',
                     list.length
                 ));
-            },
-            function fail(e) {
-                if (e && e.code && e.code === 'IFO-0415') {
-                    notifications.yell('error', gt.ngettext(
-                        'This file has not been deleted, as it is locked by its owner.',
-                        'These files have not been deleted, as they are locked by their owner.',
-                        list.length
-                    ));
-                } else {
-                    notifications.yell('error', gt.ngettext(
-                        'This file has not been deleted',
-                        'These files have not been deleted',
-                        list.length
-                    ) + '\n' + e.error);
-                }
+            } else {
+                notifications.yell('error', gt.ngettext(
+                    'This file has not been deleted',
+                    'These files have not been deleted',
+                    list.length
+                ) + '\n' + e.error);
             }
-        );
+        });
+
+        // delete folders
+        _(folders).each(function (folder) {
+            folderAPI.remove(folder.id);
+        });
     }
 
     return function (list) {
-        list = _.isArray(list) || [list];
+
+        list = _.isArray(list) ? list : [list];
+
         new dialogs.ModalDialog()
             .text(gt.ngettext(
-                'Do you really want to delete this file?',
-                'Do you really want to delete these files?',
+                'Do you really want to delete this item?',
+                'Do you really want to delete these items?',
                 list.length
             ))
             .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
