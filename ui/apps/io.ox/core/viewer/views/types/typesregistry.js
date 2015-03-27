@@ -16,13 +16,13 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
 
     // a map of supported file types to their implementations
     var typesMap = {
-            IMAGE: 'imageview',
-            OFFICE: 'documentview',
-            OFFICE_TEXT: 'documentview',
-            OFFICE_SPREADSHEET: 'documentview',
-            PDF: 'documentview',
-            AUDIO: 'audioview',
-            VIDEO: 'videoview'
+        IMAGE: 'imageview',
+        OFFICE: 'documentview',
+        OFFICE_TEXT: 'documentview',
+        OFFICE_SPREADSHEET: 'documentview',
+        PDF: 'documentview',
+        AUDIO: 'audioview',
+        VIDEO: 'videoview'
     },
     // a list of types only available in debug mode
     debugOnlyList = ['audioview', 'videoview'];
