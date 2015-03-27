@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-03-26 10:09+0100\n"
+"PO-Revision-Date: 2015-03-27 09:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -128,11 +128,8 @@ msgstr "%1$d markiert"
 
 #. %1$d number of notifications
 #: apps/plugins/notifications/mail/register.js:53 module:plugins/notifications
-#, fuzzy
-#| msgid "%1$d mail"
-#| msgid_plural "%1$d mails"
 msgid "%1$d unread mails"
-msgstr "%1$d E-Mail"
+msgstr "%1$d ungelesene E-Mails"
 
 #. Format of addresses
 #. %1$s is the street
@@ -1185,12 +1182,12 @@ msgstr ""
 "speichern"
 
 #: apps/io.ox/calendar/settings/pane.js:216 module:io.ox/calendar
-#, fuzzy
 msgid ""
 "Automatically delete incoming notifications after the appointment has been "
 "accepted or declined"
 msgstr ""
-"Eingehende Benachrichtigungen nach Bestätigen/Ablehnen automatisch löschen"
+"Eingehende Benachrichtigungen nach Bestätigen/Ablehnen des Termins "
+"automatisch löschen"
 
 #. It's a label for an input field with a number
 #. This only applies for plain text messages, so please keep this information in translations
@@ -1536,7 +1533,6 @@ msgid "Clean up"
 msgstr "Aufräumen"
 
 #: apps/io.ox/core/folder/actions/common.js:35 module:io.ox/core
-#, fuzzy
 msgid "Cleaning up ..."
 msgstr "Aufräumen ..."
 
@@ -2416,11 +2412,9 @@ msgid "Do you really want to delete this file?"
 msgstr "Wollen Sie diese Datei wirklich löschen?"
 
 #: apps/io.ox/files/actions/delete.js:62 module:io.ox/files
-#, fuzzy
-#| msgid "Do you really want to delete these items?"
 msgid "Do you really want to delete this item?"
 msgid_plural "Do you really want to delete these items?"
-msgstr[0] "Wollen Sie diese Objekte wirklich löschen?"
+msgstr[0] "Wollen Sie dieses Objekt wirklich löschen?"
 msgstr[1] "Wollen Sie diese Objekte wirklich löschen?"
 
 #: apps/io.ox/tasks/actions/delete.js:32 module:io.ox/tasks
@@ -2721,7 +2715,6 @@ msgid "Edit names"
 msgstr "Namen bearbeiten"
 
 #: apps/io.ox/mail/compose/names.js:156 module:io.ox/mail
-#, fuzzy
 msgid "Edit real names"
 msgstr "Realnamen bearbeiten"
 
@@ -3236,7 +3229,7 @@ msgstr "Dateien wurden verschoben"
 #: apps/io.ox/files/view-options.js:116 module:io.ox/files
 msgctxt "verb"
 msgid "Filter"
-msgstr ""
+msgstr "Filtern"
 
 #: apps/io.ox/calendar/edit/extensions.js:670 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
@@ -3428,7 +3421,6 @@ msgid "Get %s"
 msgstr "%s abrufen"
 
 #: apps/io.ox/files/share/view.js:45 module:io.ox/files
-#, fuzzy
 msgid "Get a link"
 msgstr "Einen Link abrufen"
 
@@ -4246,10 +4238,8 @@ msgid "Mark all day appointments as free"
 msgstr "Alle Tagestermine als 'Frei' markieren"
 
 #: apps/io.ox/core/folder/contextmenu.js:122 module:io.ox/core
-#, fuzzy
-#| msgid "Mark all mails as read"
 msgid "Mark all messages as read"
-msgstr "Alle E-Mails als 'Gelesen' markieren"
+msgstr "Alle E-Mails als gelesen markieren"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js:161 module:io.ox/mail
 msgid "Mark as"
@@ -5523,7 +5513,6 @@ msgid "Print"
 msgstr "Drucken"
 
 #: apps/io.ox/tasks/actions/printDisabled.js:27 module:io.ox/tasks
-#, fuzzy
 msgid "Print tasks"
 msgstr "Aufgaben drucken"
 
@@ -6062,7 +6051,6 @@ msgstr "Kontakt-Anlage wurde gespeichert"
 
 #: apps/io.ox/contacts/view-detail.js:706 module:io.ox/contacts
 #: apps/io.ox/files/fluid/view-detail.js:186 module:io.ox/files
-#, fuzzy
 msgid "Saved in:"
 msgstr "Gespeichert unter:"
 
@@ -7111,7 +7099,6 @@ msgid "The provided filename exceeds the allowed length."
 msgstr "Der angegebene Dateiname ist zu lang."
 
 #: apps/io.ox/calendar/actions/create.js:45 module:io.ox/calendar
-#, fuzzy
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
@@ -8774,9 +8761,8 @@ msgstr "endet nie"
 #. reminder date selection
 #. %1$s is a weekdays, like 'next Monday'
 #: apps/io.ox/tasks/util.js:207 module:io.ox/tasks
-#, fuzzy
 msgid "next %1$s"
-msgstr "nächster %1$s"
+msgstr "nächsten %1$s"
 
 #: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
 msgid "no color"
