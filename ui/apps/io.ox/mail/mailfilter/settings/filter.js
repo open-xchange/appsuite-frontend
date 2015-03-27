@@ -30,7 +30,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
-        grid,
         notificationId = _.uniqueId('notification_');
 
     function containsStop(actioncmds) {
@@ -182,7 +181,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
     return {
         editMailfilter: function ($node, baton) {
-            grid = (baton || {}).grid;
 
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
@@ -354,24 +352,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditVacation: function (e) {
                         e.preventDefault();
-                        var elem = _.find(grid.getIds(), function (item) {
-                                return item.id === 'io.ox/vacation';
-                            });
-
-                        if (elem) {
-                            grid.selection.set(elem);
-                        }
+                        baton.tree.trigger('virtual', 'virtual/' + 'io.ox/vacation', {});
                     },
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
-                        var elem = _.find(grid.getIds(), function (item) {
-                                return item.id === 'io.ox/autoforward';
-                            });
-
-                        if (elem) {
-                            grid.selection.set(elem);
-                        }
+                        baton.tree.trigger('virtual', 'virtual/' + 'io.ox/autoforward', {});
                     },
 
                     dragViaKeyboard: function (e) {
