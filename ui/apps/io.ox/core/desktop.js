@@ -1060,7 +1060,7 @@ define('io.ox/core/desktop', [
                 this.shown = shown.promise();
 
                 this.setHeader = function (node) {
-                    this.nodes.header.append(node).addClass('container default-header-padding');
+                    this.nodes.header.append(node).addClass('container');
                     this.nodes.outer.addClass('header-top');
                     return this.nodes.header;
                 };

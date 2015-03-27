@@ -20,7 +20,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
     'io.ox/contacts/util',
     'io.ox/core/extensions',
     'io.ox/calendar/edit/view-addparticipants',
-    'io.ox/core/notifications'
+    'io.ox/core/notifications',
+    'less!io.ox/participants/participants'
 ], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
@@ -31,26 +32,25 @@ define('io.ox/contacts/distrib/create-dist-view', [
             className: 'create-distributionlist-view'
         });
 
-    point.extend({
+    point.basicExtend({
         id: 'title-controls',
         index: 100,
         className: 'row title-controls',
-        render: function () {
-            var self = this,
-                buttonText = gt('Create list'),
+        draw: function (baton) {
+            var buttonText = gt('Create list'),
                 header = gt('Create distribution list');
 
             // on edit
-            if (self.model.get('id')) {
+            if (baton.model.get('id')) {
                 buttonText = gt('Save');
                 header = gt('Edit distribution list');
             }
-            this.baton.app.getWindow().setHeader(
+            baton.app.getWindow().setHeader(
                 $('<div class="header">').append(
                     $('<h1 class="clear-title title">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
-                        self.options.model.save();
+                        baton.model.save();
                     }),
                     // cancel button
                     $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
@@ -121,9 +121,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 // overwrite display_name
                 data.display_name = util.getMailFullName(data);
 
-                var mailValue = data.email1 || data.email2 || data.email3 || data.mail,
-                    nameValue = data.display_name,
-                    newMember = self.copyContact(self.$el, data.id ? data : nameValue, mailValue);
+                var mailValue = data.field ? data[data.field] : data.mail,
+                    newMember = self.copyContact(self.$el, data.id ? data : data.display_name, mailValue);
 
                 if (newMember && self.isUnique(newMember)) {
                     var tmpList = _.clone(self.model.get('distribution_list') || []);
@@ -135,13 +134,12 @@ define('io.ox/contacts/distrib/create-dist-view', [
 
             this.$el.append(
                 $('<legend>').addClass('sectiontitle col-md-12').text(gt('Contacts')),
-                this.itemList = $('<div>').addClass('item-list col-md-12'),
+                this.itemList = $('<div>').addClass('item-list participantsrow col-md-12'),
                 pNode
             );
 
             if (_.isEmpty(this.model.get('distribution_list'))) {
                 self.drawEmptyItem(self.$el.find('.item-list'));
-
             } else {
                 _(this.model.get('distribution_list')).each(function (member) {
                     self.$el.find('.item-list').append(
@@ -199,7 +197,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
 
         drawEmptyItem: function (node) {
             node.append(
-                $('<div>').addClass('listed-item')
+                $('<div>').addClass('participant-wrapper')
                 .attr({ 'data-mail': 'empty' })
                 .text(gt('This list has no contacts yet'))
             );
@@ -250,19 +248,19 @@ define('io.ox/contacts/distrib/create-dist-view', [
             var halo = $.extend({}, o);
             if (/^0\./.test(halo.id)) delete halo.id;
 
-            return $('<div class="listed-item col-xs-12 col-md-6">')
+            return $('<div class="participant-wrapper removable col-xs-12 col-md-6">')
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture
                     api.pictureHalo(
-                        $('<div class="contact-image">'),
+                        $('<div class="participant-image">'),
                         halo,
                         { width: 48, height: 48 }
                     ),
                     // name
-                    $('<div class="person-name">').text(o.display_name),
+                    $('<div class="participant-name">').text(o.display_name),
                     // mail address
-                    $('<div class="person-mail">').append(
+                    $('<div class="participant-mail">').append(
                         $('<a href="#" class="halo-link" tabindex="1">')
                             .data({ email1: o.mail })
                             .text(o.mail)
