@@ -323,14 +323,8 @@ define('io.ox/mail/api', [
         });
     }
 
-    function resetFolder(ids) {
-        var list = _(pool.getByFolder(ids));
-        list.each(function (collection) { collection.expired = true; });
-        return list;
-    }
-
     function resetFolderByType(type) {
-        return resetFolder(accountAPI.getFoldersByType(type));
+        return pool.resetFolder(accountAPI.getFoldersByType(type));
     }
 
     /**
@@ -353,7 +347,7 @@ define('io.ox/mail/api', [
             .done(function () {
                 // reset trash folder
                 var trashId = accountAPI.getFoldersByType('trash');
-                resetFolder(trashId);
+                pool.resetFolder(trashId);
                 // update unread counter and folder item counter
                 folderAPI.reload(ids, trashId);
                 // trigger delete to update notification area
@@ -703,7 +697,7 @@ define('io.ox/mail/api', [
     function transfer(type, list, targetFolderId) {
 
         // mark target folder as expired
-        resetFolder(targetFolderId);
+        pool.resetFolder(targetFolderId);
 
         return http.wait(
             update(list, { folder_id: targetFolderId }, type).then(function (response) {
@@ -744,7 +738,6 @@ define('io.ox/mail/api', [
      * @return { deferred }
      */
     api.copy = function (list, targetFolderId) {
-
         return transfer('copy', list, targetFolderId);
     };
 
@@ -1308,7 +1301,7 @@ define('io.ox/mail/api', [
             fixPost: true
         })
         .done(function () {
-            resetFolder(options.folder);
+            pool.resetFolder(options.folder);
             folderAPI.reload(options.folder);
             api.trigger('refresh.all');
         });

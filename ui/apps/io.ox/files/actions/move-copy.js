@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/move-copy', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/folder/actions/move',
     'settings!io.ox/files'
 ], function (api, move, settings) {

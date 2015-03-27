@@ -227,6 +227,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         // used by garbage collector to resolve threads
         getDependentModels: function (/* cid */) {
             return [];
+        },
+
+        resetFolder: function (ids) {
+            var list = _(this.getByFolder(ids));
+            list.each(function (collection) { collection.expired = true; });
+            return list;
         }
     });
 

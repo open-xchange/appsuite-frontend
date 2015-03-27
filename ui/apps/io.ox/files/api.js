@@ -534,6 +534,77 @@ define('io.ox/files/api', [
     };
 
     //
+    // Move / Copy
+    //
+
+    function move(list, targetFolderId) {
+        http.pause();
+        _(list).map(function (item) {
+            return api.update(item, { folder_id: targetFolderId });
+        });
+        return http.resume();
+    }
+
+    function copy(list, targetFolderId) {
+        http.pause();
+        _(list).map(function (item) {
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: 'copy',
+                    id: item.id,
+                    folder: item.folder_id,
+                    timestamp: item.timestamp || _.then()
+                },
+                data: { folder_id: targetFolderId },
+                appendColumns: false
+            });
+        });
+        return http.resume();
+    }
+
+    function transfer(type, list, targetFolderId) {
+
+        // mark target folder as expired
+        pool.resetFolder(targetFolderId);
+
+        var fn = type === 'move' ? move : copy;
+
+        return http.wait(fn(list, targetFolderId)).then(function (response) {
+            var errorText, i = 0, $i = response.length;
+            // look if anything went wrong
+            for (; i < $i; i++) {
+                if (response[i].error) {
+                    errorText = response[i].error.error;
+                    break;
+                }
+            }
+            api.trigger(type, list, targetFolderId);
+            folderAPI.reload(targetFolderId, list);
+            if (errorText) return errorText;
+        });
+    }
+
+    /**
+     * Move files to another folder
+     * @param  {array} list of objects { id, folder_id }
+     * @param  {string} targetFolderId
+     */
+    api.move = function (list, targetFolderId) {
+        prepareRemove(list);
+        return transfer('move', list, targetFolderId);
+    };
+
+    /**
+     * Copy files to another folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     */
+    api.copy = function (list, targetFolderId) {
+        return transfer('copy', list, targetFolderId);
+    };
+
+    //
     // Update file
     // @param {object} file { id, folder_id }
     // @param {object} changes The changes to apply; not sent to server if empty
@@ -545,7 +616,7 @@ define('io.ox/files/api', [
 
         // update model
         var cid = _.cid(file), model = pool.get('detail').get(cid);
-        model.set(changes);
+        if (model) model.set(changes);
 
         return http.PUT({
             module: 'files',
