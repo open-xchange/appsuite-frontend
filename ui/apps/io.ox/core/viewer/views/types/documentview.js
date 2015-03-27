@@ -250,8 +250,6 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadFinished() {
                 pageContainer.idle();
-                this.onZoomIn();
-                //this.pdfView.setPageZoom(2);
             }
 
             /**
