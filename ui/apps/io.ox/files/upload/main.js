@@ -81,7 +81,9 @@ define('io.ox/files/upload/main', [
         totalSize = 0, //accumulated size of all files
         currentSize = 0, //number of bytes, which are currently uploaded
         startTime, // time stamp, when the first file started uploading
-        uploadCollection = new UploadCollection();
+        uploadCollection = new UploadCollection(),
+        $el, bottomToolbar, mainView, //some dom nodes needed for the view
+        self = this;
 
         this.update = upload.createQueue({
             start: function () {
@@ -231,7 +233,7 @@ define('io.ox/files/upload/main', [
                 );
             })
             .on('remove', function (model, collection, options) {
-                FileUpload.create.remove(options.index);
+                self.create.remove(options.index);
             });
 
         function remove(index, model) {
@@ -240,10 +242,17 @@ define('io.ox/files/upload/main', [
             uploadCollection.remove(model);
         }
 
+        this.setWindowNode = function (node) {
+            bottomToolbar = node.find('.toolbar.bottom');
+            mainView = node.find('.list-view-control');
+        };
+
         this.create = upload.createQueue(this)
             .on('start', function () {
-                $(document.getElementById('io.ox/files')).addClass('toolbar-bottom-visible');
-                ext.point('io.ox/files/upload/toolbar').invoke('draw', $('<div>'));
+                mainView.addClass('toolbar-bottom-visible');
+                $el = $('<div class="upload-wrapper">');
+                ext.point('io.ox/files/upload/toolbar').invoke('draw', $el);
+                bottomToolbar.append($el);
             })
             .on('progress', function (e, def, file) {
                 $('.upload-wrapper').find('.file-name').text(
@@ -252,8 +261,8 @@ define('io.ox/files/upload/main', [
                 );
             })
             .on('stop', function () {
-                $(document.getElementById('io.ox/files')).removeClass('toolbar-bottom-visible');
-                $('.upload-wrapper').remove();
+                mainView.removeClass('toolbar-bottom-visible');
+                $el.remove();
             });
     }
 
@@ -263,7 +272,7 @@ define('io.ox/files/upload/main', [
      */
     ext.point('io.ox/files/upload/toolbar').extend({
         draw: function () {
-            this.append($('<div class="upload-wrapper">').append(
+            this.append(
                 $('<div class="upload-title">').append(
                     $('<span class="file-name">'),
                     $('<span class="estimated-time">')
@@ -293,7 +302,7 @@ define('io.ox/files/upload/main', [
                         )
                     )
                 )
-            ));
+            );
         }
     });
 

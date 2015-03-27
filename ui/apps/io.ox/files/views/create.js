@@ -66,6 +66,7 @@ define('io.ox/files/views/create', [
                     require(['io.ox/files/upload/main'], function (fileUpload) {
                         description = $form.find('textarea').val();
                         fileUpload.create.offer(files, { description: description, folder: app.folder.get() });
+                        fileUpload.setWindowNode(app.getWindowNode());
                         baton.fileList.clear();
                         dialog.close();
                     });
