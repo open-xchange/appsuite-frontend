@@ -364,10 +364,10 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'private_flag',
         index: 1300,
-        className: 'col-sm-3 collapsed',
+        className: 'checkbox col-sm-3 collapsed',
         render: function () {
             this.$el.append(
-                $('<label class="checkbox control-label private-flag">').append(
+                $('<label class="control-label private-flag">').append(
                     new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
                     $.txt(gt('Private'))
                 )

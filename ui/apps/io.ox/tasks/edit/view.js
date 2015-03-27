@@ -26,7 +26,7 @@ define('io.ox/tasks/edit/view', [
 
         tagName: 'div',
 
-        className: 'io-ox-tasks-edit container default-content-padding',
+        className: 'io-ox-tasks-edit container',
 
         init: function () {
             this.collapsed = true;
