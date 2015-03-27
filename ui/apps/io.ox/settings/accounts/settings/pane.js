@@ -267,15 +267,13 @@ define('io.ox/settings/accounts/settings/pane', [
 
             redraw();
 
-            function onChange(e, list) {
-                if (!list || list.length === 0 || list.first().attr('data-id') !== 'virtual/io.ox/settings/accounts') {
+            function onChange(id, list) {
+                if (!list || list.length === 0 || id !== 'virtual/io.ox/settings/accounts') {
                     api.off('refresh.all refresh.list', redraw);
-                    data.tree.off('change', onChange);
+                    data.tree.off('virtual', onChange);
                 }
             }
-
             api.on('refresh.all refresh.list', redraw);
-
             data.tree.on('virtual', onChange);
         },
         save: function () {
