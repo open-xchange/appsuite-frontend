@@ -139,7 +139,7 @@ define('io.ox/core/extPatterns/actions', [
                 } catch (e) {
                     params.exception = e;
                     console.error(
-                        'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, params
+                        'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, e.stack, params
                     );
                 }
             }
