@@ -14,9 +14,8 @@
 define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
     'io.ox/files/api',
-    'io.ox/files/legacy_api',
     'io.ox/core/strings'
-], function (util, api, legacy_api, strings) {
+], function (util, api, strings) {
 
     'use strict';
 
@@ -134,7 +133,7 @@ define('io.ox/files/common-extensions', [
                     var retina = false,
                         width = retina ? 400 : 200,
                         height = retina ? 300 : 150,
-                        url = legacy_api.getUrl(baton.data, preview, { thumbnailWidth: width, thumbnailHeight: height, scaletype: 'cover' }),
+                        url = baton.model.getUrl(preview, { width: width, height: height, scaletype: 'cover' }),
                         img = $('<img class="dummy-image invisible">').attr('data-original', url);
 
                     // use defer to ensure the node has already been added to the DOM
