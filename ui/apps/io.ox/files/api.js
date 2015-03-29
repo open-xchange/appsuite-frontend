@@ -209,12 +209,6 @@ define('io.ox/files/api', [
 
     var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
-    function resetFolder(id) {
-        var list = _(pool.getByFolder(id));
-        list.each(function (collection) { collection.expired = true; });
-        return list;
-    }
-
     /**
      * map error codes and text phrases for user feedback
      * @param  {event} e
@@ -409,7 +403,7 @@ define('io.ox/files/api', [
     api.lock = function (list) {
         return lockToggle(list, 'lock').done(function () {
             var folder = list[0].get('folder_id');
-            resetFolder(folder);
+            pool.resetFolder(folder);
             folderAPI.reload(folder);
         });
     };
