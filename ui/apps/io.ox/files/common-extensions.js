@@ -139,6 +139,9 @@ define('io.ox/files/common-extensions', [
                         url = baton.model.getUrl(preview, { width: width, height: height, scaletype: 'cover' }),
                         img = $('<img class="dummy-image invisible">').attr('data-original', url);
 
+                    // fix URL - would be cool if we had just one call for thumbnails ...
+                    url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+
                     // use defer to ensure the node has already been added to the DOM
                     _.defer(function () {
                         img.lazyload({

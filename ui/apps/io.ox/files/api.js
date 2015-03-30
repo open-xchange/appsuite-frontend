@@ -64,6 +64,10 @@ define('io.ox/files/api', [
             return /^application\/(msword|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
         },
 
+        isPDF: function (type) {
+            return /^application\/pdf$/.test(type || this.getMimeType());
+        },
+
         isText: function (type) {
             return /^(text\/plain|application\/rtf)$/.test(type || this.getMimeType());
         },
@@ -126,7 +130,7 @@ define('io.ox/files/api', [
             var type = this.getMimeType();
             if (this.isImage(type)) return 'thumbnail';
             if (this.isAudio(type)) return 'cover';
-            if (capabilities.has('document_preview') && (this.isOffice(type) || this.isText(type))) return 'preview';
+            if (capabilities.has('document_preview') && (this.isPDF(type) || this.isOffice(type) || this.isText(type))) return 'preview';
             return false;
         },
 
