@@ -350,17 +350,21 @@ define('io.ox/files/api', [
     // GET a single file
     //
 
-    api.get = function (options) {
+    api.get = function (file, options) {
 
-        var model = pool.get('detail').get(_.cid(options));
-        if (model) return $.when(model.toJSON());
+        options = _.extend({ cache: true }, options);
+
+        if (options.cache) {
+            var model = pool.get('detail').get(_.cid(file));
+            if (model) return $.when(model.toJSON());
+        }
 
         return http.GET({
             module: 'files',
             params: {
                 action: 'get',
-                id: options.id,
-                folder: options.folder_id || options.folder,
+                id: file.id,
+                folder: file.folder_id || file.folder,
                 timezone: 'UTC'
             }
         })
@@ -660,8 +664,10 @@ define('io.ox/files/api', [
                 },
                 appendColumns: true
             })
-            .done(function (data) {
+            .then(function (data) {
                 if (model) model.set('versions', data);
+                // make sure we always get the same result (just data; not timestamp)
+                return data;
             });
         },
 
@@ -687,8 +693,23 @@ define('io.ox/files/api', [
             });
         },
 
-        setCurrent: function () {
-            console.log('TBD');
+        setCurrent: function (file) {
+            // update model
+            var model = pool.get('detail').get(_.cid(file));
+            if (model && _.isArray(model.get('versions'))) {
+                model.set('versions', model.get('versions').map(function (item) {
+                    item.current_version = (item.version === file.version);
+                    return item;
+                }));
+            }
+            // update server-side
+            // if there is only version, the request works.
+            // if the other fields are present, we get a backend error
+            var changes = { version: file.version };
+            return api.update(file, changes).then(function () {
+                // reload model to get current filename, size, and last modified
+                return api.get(file, { cache: false });
+            });
         }
     };
 
