@@ -5442,7 +5442,7 @@ msgstr "请选择以下哪些数据我们可以用作创建您的 %s 户口："
 msgid "Please sign in again to continue"
 msgstr "请再登录继续"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "请指定这些缺少的变量："
@@ -6954,7 +6954,7 @@ msgstr "户口必须命名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功删除活动"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已到达允许额度。"
@@ -7162,7 +7162,7 @@ msgstr "通知区域开放"
 msgid "The person %1$s is already in the list"
 msgstr "%1$s 此人已经在列表里"
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
@@ -7390,7 +7390,7 @@ msgstr "此特性不可用。您必须先升级您的户口才能使用。"
 msgid "This field has to be filled"
 msgstr "此栏必填"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "无法上载此文件。"

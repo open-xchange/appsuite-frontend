@@ -5528,7 +5528,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Prosím, znova sa prihláste, aby ste mohli pokračovať"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "Prosím, uveďte tieto chýbajúce premenné: "
@@ -7050,7 +7050,7 @@ msgstr "Účet musí byť pomenovaný"
 msgid "The activity has been deleted successfully"
 msgstr "Aktivita bola úspešne zmazaná"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Bola dosiahnutá povolená kvóta."
@@ -7266,7 +7266,7 @@ msgstr "Oznamovacia oblasť je otvorená"
 msgid "The person %1$s is already in the list"
 msgstr "Osoba %1$s sa už v zozname nachádza"
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
@@ -7508,7 +7508,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Toto pole musí byť vyplnené"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Tento súbor nebolo možné nahrať."

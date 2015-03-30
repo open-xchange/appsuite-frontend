@@ -5394,7 +5394,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Zum Fortfahren bitte erneut anmelden"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "Bitte geben Sie diese fehlenden Variablen an:"
@@ -6874,7 +6874,7 @@ msgstr "Der Account muss benannt werden"
 msgid "The activity has been deleted successfully"
 msgstr "Die Aktivität wurde erfolgreich gelöscht"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Die zulässige Quota ist erreicht."
@@ -7098,7 +7098,7 @@ msgstr "Der Infobereich ist geöffnet"
 msgid "The person %1$s is already in the list"
 msgstr "Die Person %1$s befindet sich bereits in der Liste."
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Der angegebene Dateiname ist zu lang."
@@ -7342,7 +7342,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Dieses Feld muss ausgefüllt werden"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Die Datei konnte nicht hochgeladen werden."

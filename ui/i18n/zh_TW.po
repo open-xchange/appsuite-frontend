@@ -5440,7 +5440,7 @@ msgstr "請選擇我們可以使用以下那些資料來建立您的 %s 帳號:"
 msgid "Please sign in again to continue"
 msgstr "請再次登入以繼續"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "請指定這些缺少的變數: "
@@ -6951,7 +6951,7 @@ msgstr "必須為帳號取名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功刪除動態"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已達可用的配額額度。"
@@ -7159,7 +7159,7 @@ msgstr "通知區域已開啟"
 msgid "The person %1$s is already in the list"
 msgstr "人員 %1$s 已在清單中"
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
@@ -7387,7 +7387,7 @@ msgstr "此功能無法使用。要使用的話，您必須立刻升級您的帳
 msgid "This field has to be filled"
 msgstr "必須填入此欄位"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "無法上傳此檔案。"

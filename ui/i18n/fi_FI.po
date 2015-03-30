@@ -5479,7 +5479,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Uudelleenkirjaudu jatkaaksesi"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "Määrittele nämä puuttuvat muuttujat:"
@@ -7002,7 +7002,7 @@ msgstr "Tili täytyy nimetä"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteetti on poistettu onnistuneesti"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Sallittu kiintiö on täynnä."
@@ -7220,7 +7220,7 @@ msgstr "Ilmoitusalue on avoinna"
 msgid "The person %1$s is already in the list"
 msgstr "Henkilö %1$s on jo listassa"
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
@@ -7461,7 +7461,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Tämä kenttä pitää täyttää"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Tiedostoa ei voitu ladata."

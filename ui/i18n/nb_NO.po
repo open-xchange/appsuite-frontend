@@ -5420,7 +5420,7 @@ msgstr "Velg hvilken av følgende data vi kan bruke til å lage din %s konto:"
 msgid "Please sign in again to continue"
 msgstr "Logg deg på igjen for å fortsette"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "Vennligst fyll ut de manglende variablene: "
@@ -6916,7 +6916,7 @@ msgstr "Kontoen må være navngitt"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteten har blitt slettet"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Kvoten er oppbrukt."
@@ -7141,7 +7141,7 @@ msgstr "Ingen varsler"
 msgid "The person %1$s is already in the list"
 msgstr "Personen %1$s er allerede i listen"
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Det medfølgende filnavnet overstiger den tillatte lengden."
@@ -7379,7 +7379,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Dette feltet må fylles ut"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Denne filen kan ikke lastes opp."

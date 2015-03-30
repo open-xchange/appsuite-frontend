@@ -5532,7 +5532,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Meld opnieuw aan om door te gaan"
 
-#: apps/io.ox/files/api.js:279 module:io.ox/files
+#: apps/io.ox/files/api.js:318 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:392
 msgid "Please specify these missing variables: "
 msgstr "Geef alstublieft deze missende gegevens op: "
@@ -7062,7 +7062,7 @@ msgstr "Het accounts moet een naam hebben"
 msgid "The activity has been deleted successfully"
 msgstr "De activiteit is succesvol verwijderd"
 
-#: apps/io.ox/files/api.js:239 module:io.ox/files
+#: apps/io.ox/files/api.js:278 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Het toegestane quota is bereikt."
@@ -7285,7 +7285,7 @@ msgstr "Er is geen kennisgevingsgebied open"
 msgid "The person %1$s is already in the list"
 msgstr "De persoon %1$s bestaat reeds in de lijst"
 
-#: apps/io.ox/files/api.js:234 module:io.ox/files
+#: apps/io.ox/files/api.js:273 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "De gegeven bestandsnaam is langer dan de toegestane lengte."
@@ -7528,7 +7528,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Dit veld moet gevuld zijn"
 
-#: apps/io.ox/files/api.js:244 module:io.ox/files
+#: apps/io.ox/files/api.js:283 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Dit bestand kan niet worden geüpload."
