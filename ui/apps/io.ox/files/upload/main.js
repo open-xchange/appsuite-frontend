@@ -77,17 +77,17 @@ define('io.ox/files/upload/main', [
         currentSize = 0, //number of bytes, which are currently uploaded
         startTime, // time stamp, when the first file started uploading
         uploadCollection = new UploadCollection(),
-        $el, bottomToolbar, mainView, //some dom nodes needed for the view
+        $el, bottomToolbar, mainView, win, //some dom nodes needed for the view
         self = this;
 
         this.update = upload.createQueue({
             start: function () {
-                //             win.busy(0);
+                win.busy(0);
             },
             progress: function (item, position, files) {
                 var pct = position / files.length;
                 console.log(pct);
-                //             win.busy(pct, 0);
+                win.busy(pct, 0);
                 return api.uploadNewVersion({
                     file: item.file,
                     //                 id: app.currentFile.id,
@@ -96,7 +96,7 @@ define('io.ox/files/upload/main', [
                 })
                 .progress(function (e) {
                     var sub = e.loaded / e.total;
-                    //                 win.busy(pct + sub / files.length, sub);
+                    win.busy(pct + sub / files.length, sub);
                     console.log(pct + sub / files.length, sub);
                 }).fail(function (e) {
                     if (e && e.data && e.data.custom) {
@@ -105,7 +105,7 @@ define('io.ox/files/upload/main', [
                 });
             },
             stop: function () {
-                //             win.idle();
+                win.idle();
             }
         });
         this.changed = function (item, position, files) {
@@ -238,6 +238,7 @@ define('io.ox/files/upload/main', [
         }
 
         this.setWindowNode = function (node) {
+            win = node;
             bottomToolbar = node.find('.toolbar.bottom');
             mainView = node.find('.list-view-control');
         };
