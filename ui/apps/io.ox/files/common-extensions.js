@@ -14,8 +14,9 @@
 define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
     'io.ox/files/api',
-    'io.ox/core/strings'
-], function (util, api, strings) {
+    'io.ox/core/strings',
+    'gettext!io.ox/files'
+], function (util, api, strings, gt) {
 
     'use strict';
 
@@ -44,8 +45,10 @@ define('io.ox/files/common-extensions', [
         },
 
         filename: function (baton) {
+            var name = baton.data.filename || baton.data.title;
+            if (baton.model.isLocked()) name += ' (' + gt('Locked') + ')';
             this.append(
-                $('<div class="filename">').text(baton.data.filename || baton.data.title)
+                $('<div class="filename">').text(name)
             );
         },
 
@@ -59,7 +62,7 @@ define('io.ox/files/common-extensions', [
         },
 
         locked: function (baton) {
-            this.toggleClass('locked', baton.data.locked_until > _.now());
+            this.toggleClass('locked', baton.model.isLocked());
         },
 
         fileTypeIcon: function () {

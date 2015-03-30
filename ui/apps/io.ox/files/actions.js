@@ -215,13 +215,9 @@ define('io.ox/files/actions', [
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
-                if (!baton.models) {
-                    api.pool.add(list);
-                    baton.models = api.pool.resolve(list);
-                }
-                action.lock(baton.models);
+                action.lock(list);
             });
         }
     });
@@ -236,13 +232,9 @@ define('io.ox/files/actions', [
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('lockedByMe', e);
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
-                if (!baton.models) {
-                    api.pool.add(list);
-                    baton.models = api.pool.resolve(list);
-                }
-                action.unlock(baton.models);
+                action.unlock(list);
             });
         }
     });

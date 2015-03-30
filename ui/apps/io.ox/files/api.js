@@ -73,6 +73,10 @@ define('io.ox/files/api', [
             return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
         },
 
+        isLocked: function () {
+            return this.get('locked_until') > _.now();
+        },
+
         getDisplayName: function () {
             return this.get('filename') || this.get('title') || '';
         },
@@ -375,6 +379,10 @@ define('io.ox/files/api', [
 
     }());
 
+    //
+    // GET a single file
+    //
+
     api.get = function (options) {
 
         var model = pool.get('detail').get(_.cid(options));
@@ -395,6 +403,49 @@ define('io.ox/files/api', [
         });
     };
 
+    //
+    // GET multiple files
+    //
+
+    api.list = (function () {
+
+        function getter(item) {
+            return this.get(_.cid(item));
+        }
+
+        function add(item) {
+            pool.add('detail', item);
+        }
+
+        return function (ids, options) {
+
+            var uncached = ids, collection = pool.get('detail');
+            options = _.extend({ cache: true }, options);
+
+            // empty?
+            if (ids.length === 0) return $.when([]);
+
+            // get uncached items
+            if (options.cache) uncached = _(ids).reject(getter, collection);
+
+            // all cached?
+            if (uncached.length === 0) return _(ids).map(getter, collection);
+
+            return http.fixList(uncached, http.PUT({
+                module: 'files',
+                params: { action: 'list', columns: allColumns, timezone: 'UTC' },
+                data: http.simplify(uncached)
+            }))
+            .then(function (array) {
+                // add new items to the pool
+                _(array).each(add);
+                // reconstruct results
+                return _(ids).map(getter, collection);
+            });
+        };
+
+    }());
+
     // We should *NOT* LOAD versions by default!
     // pool.get('detail').on('add', function (model) {
     //     api.versions(model.attributes);
@@ -406,15 +457,13 @@ define('io.ox/files/api', [
         // pause http layer
         http.pause();
         // process all updates
-        list.map(function (m) {
-            return m.toJSON();
-        }).forEach(function (o) {
+        _(list).each(function (item) {
             http.PUT({
                 module: 'files',
                 params: {
                     action: action,
-                    id: o.id,
-                    folder: o.folder_id || o.folder,
+                    id: item.id,
+                    folder: item.folder_id || item.folder,
                     timezone: 'UTC'
                     // Use 10s diff for debugging purposes
                     // diff: 10000
@@ -422,7 +471,6 @@ define('io.ox/files/api', [
                 appendColumns: false
             });
         });
-
         // resume & trigger refresh
         return http.resume();
     };
@@ -434,8 +482,10 @@ define('io.ox/files/api', [
      */
     api.unlock = function (list) {
         return lockToggle(list, 'unlock').done(function () {
-            list.forEach(function (m) {
-                m.set('locked_until', 0);
+            var collection = pool.get('detail');
+            _(list).each(function (item) {
+                var model = collection.get(_.cid(item));
+                if (model) model.set('locked_until', 0);
             });
         });
     };
@@ -446,10 +496,8 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.lock = function (list) {
-        return lockToggle(list, 'lock').done(function () {
-            var folder = list[0].get('folder_id');
-            pool.resetFolder(folder);
-            folderAPI.reload(folder);
+        return lockToggle(list, 'lock').then(function () {
+            return api.list(list, { cache: false });
         });
     };
 
