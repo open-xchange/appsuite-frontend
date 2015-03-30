@@ -409,8 +409,12 @@ define('io.ox/files/api', [
 
     api.list = (function () {
 
-        function getter(item) {
+        function has(item) {
             return this.get(_.cid(item));
+        }
+
+        function getter(item) {
+            return this.get(_.cid(item)).toJSON();
         }
 
         function add(item) {
@@ -426,10 +430,10 @@ define('io.ox/files/api', [
             if (ids.length === 0) return $.when([]);
 
             // get uncached items
-            if (options.cache) uncached = _(ids).reject(getter, collection);
+            if (options.cache) uncached = _(ids).reject(has, collection);
 
             // all cached?
-            if (uncached.length === 0) return _(ids).map(getter, collection);
+            if (uncached.length === 0) return $.when(_(ids).map(getter, collection));
 
             return http.fixList(uncached, http.PUT({
                 module: 'files',

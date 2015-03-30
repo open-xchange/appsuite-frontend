@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/showlink', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/util',
     'gettext!io.ox/files'
@@ -20,7 +20,8 @@ define('io.ox/files/actions/showlink', [
 
     'use strict';
 
-    function process (list) {
+    function process(list) {
+
         new dialogs.ModalDialog({ width: 500 })
             .build(function () {
                 // header
@@ -53,6 +54,6 @@ define('io.ox/files/actions/showlink', [
     }
 
     return function (list) {
-        api.getList(list).done(process);
+        api.list(list).done(process);
     };
 });
