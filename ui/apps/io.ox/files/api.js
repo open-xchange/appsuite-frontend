@@ -207,7 +207,7 @@ define('io.ox/files/api', [
 
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
-    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
+    var allColumns = '20,23,1,5,700,702,703,704,705,707,3,711';
 
     function resetFolder(id) {
         var list = _(pool.getByFolder(id));
