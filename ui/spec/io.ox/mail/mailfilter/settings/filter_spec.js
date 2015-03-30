@@ -101,7 +101,7 @@ define([
             actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'addflags', 'set']
         }};
 
-    describe('Mailfilter filter with rules', function () {
+    describe('Mailfilter listview with rules', function () {
 
         beforeEach(function () {
             var that = this;
@@ -125,7 +125,7 @@ define([
             $('#filtertestNode', document).remove();
         });
 
-        it('should draw the list of tests', function () {
+        it('should draw the list of rules', function () {
 
             expect(this.node.find('h1')).to.have.length(1);
             expect(this.node.find('.btn-primary[data-action="add"]')).to.have.length(1);
@@ -146,7 +146,7 @@ define([
 
     });
 
-    describe('Mailfilter filter without rules', function () {
+    describe('Mailfilter listview without rules', function () {
 
         beforeEach(function () {
             var that = this;
