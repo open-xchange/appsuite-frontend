@@ -439,7 +439,7 @@ define('io.ox/files/main', [
          * Respond to rename
          */
         'change:filename': function (app) {
-            api.on('rename',_.debounce(function () {
+            api.on('rename', _.debounce(function () {
                 app.listView.reload();
             }, 100));
         },
@@ -499,6 +499,15 @@ define('io.ox/files/main', [
                     app.pages.goBack();
                 }
             });
+        },
+
+        /*
+         * update view when adding a new file
+         */
+        'create:file': function (app) {
+            api.on('create:file', _.debounce(function () {
+                app.listView.reload();
+            }, 100));
         },
 
         /*

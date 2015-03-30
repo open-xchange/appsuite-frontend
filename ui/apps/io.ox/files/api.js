@@ -643,12 +643,74 @@ define('io.ox/files/api', [
         });
     };
 
+    function performUpload(options) {
+        options = $.extend({
+            folder: coreConfig.get('folder/infostore'),
+            action: 'new',
+            module: 'files'
+        }, options || {});
+
+        var formData = new FormData(),
+        uploadRequest;
+
+        if ('filename' in options) {
+            formData.append('file', options.file, options.filename);
+        } else if ('file' in options) {
+            formData.append('file', options.file);
+        }
+
+        // set meta data
+        if (!_.isObject(options.json) || _.isEmpty(options.json)) {
+            options.json = {};
+        }
+        if (!options.json.folder_id) {
+            options.json.folder_id = options.folder;
+        }
+        if (options.description) {
+            options.json.description = options.description;
+        }
+
+        formData.append('json', JSON.stringify(options.json));
+
+        uploadRequest = http.UPLOAD({
+            // allow API consumers to override the module (like OX Guard will certainly do)
+            module: options.module,
+            params: { action: options.action, filename: options.filename },
+            data: formData,
+            fixPost: true
+        });
+
+        //append abort function to returning object
+        return uploadRequest.fail(failedUpload);
+    }
+
+    /**
+     * Upload a new file
+     * @param {object} file options
+     *     - options.file - a File object (as in Blob)
+     *     - options.filename - an optional filename (overrides the name value of options.file)
+     *     - options.folder - the id of the folder to upload the file into
+     *     - options.module - override the module used to upload to (default: 'files')
+     * @returns {object}
+     *     - a promise resolving to the created file
+     *     - promise can be aborted using promise.abort function
+     */
+    api.uploadFile = function (options) {
+        options.action = 'new';
+        return performUpload(options).done(function () {
+            api.trigger('create:file');
+        });
+    };
+
     // File versions
 
     api.versions = {
 
-        upload: function () {
-            console.log('TBD', failedUpload);
+        upload: function (options) {
+            options.action = 'update';
+            return performUpload(options).done(function () {
+                api.trigger('create:version');
+            });
         },
 
         load: function (file, options) {

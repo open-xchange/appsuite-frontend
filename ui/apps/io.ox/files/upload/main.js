@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/upload/main', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'io.ox/core/tk/upload',
@@ -88,7 +88,7 @@ define('io.ox/files/upload/main', [
                 var pct = position / files.length;
                 console.log(pct);
                 win.busy(pct, 0);
-                return api.uploadNewVersion({
+                return api.versions.upload({
                     file: item.file,
                     //                 id: app.currentFile.id,
                     //                 folder: app.currentFile.folder_id,
