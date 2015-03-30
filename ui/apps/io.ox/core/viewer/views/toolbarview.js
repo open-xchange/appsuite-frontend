@@ -330,12 +330,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             //console.warn('ToolbarView.render()', data, this);
             if (!data || !data.model) { return this; }
             // draw toolbar
-            var toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+            var origData = data.model.get('origData'),
+                toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
                 baton = Ext.Baton({
                     $el: toolbar,
                     model: data.model,
-                    models: [data.model.get('origData')],
-                    data: data.model.get('origData').toJSON()
+                    models: origData instanceof Backbone.Model ? [origData] : null,
+                    data: origData instanceof Backbone.Model ? origData.toJSON() : origData
                 });
 
             this.model = data.model;
