@@ -331,7 +331,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!data || !data.model) { return this; }
             // draw toolbar
             var toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
-                baton = Ext.Baton({ $el: toolbar, model: data.model, data: data.model.get('origData') });
+                baton = Ext.Baton({
+                    $el: toolbar,
+                    model: data.model,
+                    models: [data.model.get('origData')],
+                    data: data.model.get('origData').toJSON()
+                });
+
             this.model = data.model;
             // set device type
             Util.setDeviceClass(this.$el);
