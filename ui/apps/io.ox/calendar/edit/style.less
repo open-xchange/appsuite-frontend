@@ -13,33 +13,46 @@
 
 .io-ox-calendar-edit {
 
-    .io-ox-busy {
-        position: absolute;
-    }
-
     .btn.btn-link {
-        padding-right:0;
-        font-size: 13px;
-        font-weight: 700;
+        padding-left:0;
     }
 
-    div.section {
-        display: block;
-        clear: both;
-        padding: 20px;
+    .actionToggle {
+        display: none;
+        margin: 10px 0;
     }
 
     .dateinput {
-
-        .form-inline input {
-            width: 90px;
-            &.datepicker-day-field {
-                width: 107px;
+        input {
+            text-align: center;
+        }
+        .time-field {
+            width: 100px;
+            border-left: none;
+        }
+        .typeahead.calendaredit {
+            height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-width: 85px;
+            a {
+                text-align: right;
+                padding: 3px 15px 3px 3px;
             }
+        }
+        &.dateonly .datepicker-day-field {
+            border-radius: 4px;
+        }
+        .datepicker-day-field {
+            width: 120px;
+        }
+        .timezone {
+            width: auto;
+            font-size: 12px;
         }
     }
 
-    .recurrenceview .checkbox.control-label {
+    .recurrenceview div.checkbox {
         margin-top: 0;
     }
 
@@ -50,32 +63,7 @@
     }
 
     .find-free-time {
-        margin-top: 13px;
-    }
-
-    .find-free-time-top {
-        margin-top: 26px;
-    }
-
-    .hard-conflict {
-        margin: 1em 0 0 0;
-    }
-
-    .filename {
-        word-wrap: break-word;
-        word-break: break-all;
-    }
-
-    .typeahead.calendaredit {
-        height: 200px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-width: 85px;
-
-        a {
-            text-align: right;
-            padding: 3px 15px 3px 3px;
-        }
+        margin-top: 12px;
     }
 
     .custom-color {
@@ -121,24 +109,35 @@
             }
         }
     }
-}
 
-/* Mobile */
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
+    .hard-conflict {
+        margin: 1em 0 0 0;
+    }
 
-    .io-ox-calendar-edit {
+    /* Mobile */
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
-        .dateinput .form-inline input {
-            padding: 4px 6px;
-            &.datepicker-day-field {
+        .dateinput {
+            .input-group {
+                display: block;
+            }
+            .datepicker-day-field {
+                padding: 4px 6px;
                 width: 100%;
+                border-radius: 4px;
             }
         }
 
         .actionToggle {
             display: block;
-            margin: 10px 0;
+        }
 
+        .collapsed {
+            display: none;
+        }
+
+        textarea.note {
+            min-height: 50px;
         }
 
         .custom-color {
@@ -152,14 +151,6 @@
                 margin: 4px;
                 font-size: 30px;
             }
-        }
-
-        .collapsed {
-            display: none;
-        }
-
-        textarea.note {
-            min-height: 0;
         }
     }
 }

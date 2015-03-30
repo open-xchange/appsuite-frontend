@@ -22,7 +22,7 @@ define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflic
         },
 
         drawList: function (conflicts, dialog) {
-            var conflictList = $('<ul>');
+            var conflictList = $('<ul class="list-unstyled">');
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-grid-template', 'io.ox/calendar/api']).done(
                 function (dialogs, viewGrid, calAPI) {
                     _.map(conflicts, function (c) { c.conflict = true; });
