@@ -67,8 +67,8 @@ define('io.ox/core/tk/reminder-util',
         //find out remindertype
         if (model.get('reminder') && model.get('reminder').module === 4) {//task
             info = [$('<div class="title">').text(_.noI18n(model.get('title'))),
-                    $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
-                    $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge'))];
+                    $('<div class="info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
+                    $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))];
             var endText = '',
                 statusText = '';
             if (_.noI18n(model.get('end_date'))) {
