@@ -49,7 +49,7 @@ define('io.ox/tasks/edit/view-template', [
 
             row = $('<div class="header">').append(
                 //title
-                headline = $('<h1 class="title clear-title">').text(headlineText),
+                headline = $('<h1 class="sr-only">').text(headlineText),
                 //save button
                 saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
                     .text(saveBtnText)

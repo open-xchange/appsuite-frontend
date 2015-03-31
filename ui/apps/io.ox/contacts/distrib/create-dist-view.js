@@ -47,7 +47,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
             }
             baton.app.getWindow().setHeader(
                 $('<div class="header">').append(
-                    $('<h1 class="clear-title title">').text(header),
+                    $('<h1 class="sr-only">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
                         baton.model.save();

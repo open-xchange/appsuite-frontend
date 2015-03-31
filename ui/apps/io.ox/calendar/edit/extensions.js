@@ -35,11 +35,10 @@ define('io.ox/calendar/edit/extensions', [
         id: 'header',
         index: 10,
         draw: function (baton) {
-            var headerCol = $('<div class="col-sm-6 hidden-xs">'),
-                buttonCol = $('<div class="col-xs-12 col-sm-6 text-right">');
+            var headerCol = $('<div class="col-sm-12">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
-            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', buttonCol, baton);
-            baton.app.getWindow().setHeader($('<div class="row header">').append(headerCol, buttonCol));
+            ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', headerCol, baton);
+            baton.app.getWindow().setHeader($('<div class="row header">').append(headerCol));
         }
     });
 
@@ -48,7 +47,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 100,
         id: 'title',
         draw: function (baton) {
-            this.append($('<h1>').addClass('clear-title title').text(baton.mode === 'edit' ? gt('Edit appointment') : gt('Create appointment')));
+            this.append($('<h1>').addClass('sr-only').text(baton.mode === 'edit' ? gt('Edit appointment') : gt('Create appointment')));
         }
     });
 
