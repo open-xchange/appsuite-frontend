@@ -34,7 +34,8 @@
     "tinymce-dist": "4.1.9",
     "velocity": "1.2.2",
     "moment": "2.9.0",
-    "moment-timezone": "0.3.1"
+    "moment-timezone": "0.3.1",
+    "swiper": "3.0.3"
   },
   "resolutions": {
     "bootstrap": "3.3.4"
