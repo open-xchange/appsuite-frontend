@@ -849,7 +849,7 @@ define('io.ox/files/api', [
     //
     api.search = function (query, options) {
 
-        options = _.extend({ columns: api.search.columns, sort: '702', order: 'asc' }, options);
+        options = _.extend({ columns: api.search.columns, sort: '702', order: 'asc', limit: 100 }, options);
 
         return http.PUT({
             module: 'files',
@@ -857,7 +857,8 @@ define('io.ox/files/api', [
                 action: 'search',
                 columns: options.columns,
                 sort: options.sort,
-                order: options.order
+                order: options.order,
+                limit: options.limit
             },
             data: api.search.getData(query, options)
         });
