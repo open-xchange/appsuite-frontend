@@ -23,7 +23,7 @@ define('io.ox/files/api', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreConfig, gt) {
+], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, gt) {
 
     'use strict';
 
@@ -49,15 +49,15 @@ define('io.ox/files/api', [
         },
 
         isImage: function (type) {
-            return /^image\//.test(type || this.getMimeType());
+            return /^image\//.test(type || this.getMimeType());
         },
 
         isAudio: function (type) {
-            return /^audio\//.test(type || this.getMimeType());
+            return /^audio\//.test(type || this.getMimeType());
         },
 
         isVideo: function (type) {
-            return /^video\//.test(type || this.getMimeType());
+            return /^video\//.test(type || this.getMimeType());
         },
 
         isOffice: function (type) {
@@ -309,7 +309,7 @@ define('io.ox/files/api', [
         getQueryParams: function (params) {
             return {
                 action: 'all',
-                folder: params.folder || coreConfig.get('folder/infostore'),
+                folder: params.folder || settings.get('folder/infostore'),
                 columns: allColumns,
                 sort: params.sort || '702',
                 order: params.order || 'asc'
@@ -647,14 +647,15 @@ define('io.ox/files/api', [
     };
 
     function performUpload(options) {
-        options = $.extend({
-            folder: coreConfig.get('folder/infostore'),
+        options = _.extend({
+            folder: settings.get('folder/infostore'),
+            // used by api.version.upload to be different from api.upload
             action: 'new',
+            // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
-        }, options || {});
+        }, options);
 
-        var formData = new FormData(),
-        uploadRequest;
+        var formData = new FormData(), data;
 
         if ('filename' in options) {
             formData.append('file', options.file, options.filename);
@@ -663,28 +664,17 @@ define('io.ox/files/api', [
         }
 
         // set meta data
-        if (!_.isObject(options.json) || _.isEmpty(options.json)) {
-            options.json = {};
-        }
-        if (!options.json.folder_id) {
-            options.json.folder_id = options.folder;
-        }
-        if (options.description) {
-            options.json.description = options.description;
-        }
+        data.folder_id = options.folder;
+        data.description = options.description || '';
+        formData.append('json', JSON.stringify(data));
 
-        formData.append('json', JSON.stringify(options.json));
-
-        uploadRequest = http.UPLOAD({
+        return http.UPLOAD({
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: options.module,
             params: { action: options.action, filename: options.filename },
             data: formData,
             fixPost: true
-        });
-
-        //append abort function to returning object
-        return uploadRequest.fail(failedUpload);
+        }).fail(failedUpload);
     }
 
     /**
