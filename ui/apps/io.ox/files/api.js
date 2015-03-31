@@ -134,49 +134,8 @@ define('io.ox/files/api', [
             return false;
         },
 
-        // get URL to open, download, or preview a file
-        // options:
-        // - scaletype: contain or cover or auto
-        // - height: image height in pixels
-        // - widht: image widht in pixels
-        // - version: true/false. if false no version will be appended
         getUrl: function (type, options) {
-
-            options = _.extend({ scaletype: 'contain' }, options);
-
-            var file = this.toJSON(),
-                url = ox.apiRoot + '/files',
-                folder = encodeURIComponent(file.folder_id),
-                id = encodeURIComponent(file.id),
-                version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
-                // basic URL
-                query = '?action=document&folder=' + folder + '&id=' + id + version,
-                // file name
-                name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
-                // scaling options
-                scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
-                // avoid having identical URLs across contexts (rather edge case)
-                // also inject last_modified if available; needed for "revisionless save"
-                // the content might change without creating a new version (which would be part of the URL)
-                buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
-
-            if (buster) query += '&' + buster;
-
-            switch (type) {
-                case 'download':
-                    return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
-                case 'thumbnail':
-                    return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
-                case 'preview':
-                    return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
-                case 'cover':
-                    return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
-                case 'play':
-                    return url + query + '&delivery=view';
-                // open/view
-                default:
-                    return url + name + query + '&delivery=view';
-            }
+            return api.getUrl(this.toJSON(), type, options);
         }
     });
 
@@ -252,6 +211,50 @@ define('io.ox/files/api', [
         'xlt':  'application/vnd.ms-excel',
         'ppt':  'application/vnd.ms-powerpoint',
         'pps':  'application/vnd.ms-powerpoint'
+    };
+
+    // get URL to open, download, or preview a file
+    // options:
+    // - scaletype: contain or cover or auto
+    // - height: image height in pixels
+    // - widht: image widht in pixels
+    // - version: true/false. if false no version will be appended
+    api.getUrl = function (file, type, options) {
+
+        options = _.extend({ scaletype: 'contain' }, options);
+
+        var url = ox.apiRoot + '/files',
+            folder = encodeURIComponent(file.folder_id),
+            id = encodeURIComponent(file.id),
+            version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
+            // basic URL
+            query = '?action=document&folder=' + folder + '&id=' + id + version,
+            // file name
+            name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
+            // scaling options
+            scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+            // avoid having identical URLs across contexts (rather edge case)
+            // also inject last_modified if available; needed for "revisionless save"
+            // the content might change without creating a new version (which would be part of the URL)
+            buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
+
+        if (buster) query += '&' + buster;
+
+        switch (type) {
+            case 'download':
+                return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+            case 'thumbnail':
+                return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+            case 'preview':
+                return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+            case 'cover':
+                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
+            case 'play':
+                return url + query + '&delivery=view';
+            // open/view
+            default:
+                return url + name + query + '&delivery=view';
+        }
     };
 
     //

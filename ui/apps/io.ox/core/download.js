@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/download', ['io.ox/files/legacy_api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
+define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
 
     'use strict';
 
@@ -58,7 +58,7 @@ define('io.ox/core/download', ['io.ox/files/legacy_api', 'io.ox/mail/api', 'io.o
 
         // download single file
         file: function (options) {
-            api.get(api.reduce(options)).done(function (file) {
+            api.get(options).done(function (file) {
                 if (options.version) {
                     file = _.extend({}, file, { version: options.version });
                 }
@@ -87,7 +87,7 @@ define('io.ox/core/download', ['io.ox/files/legacy_api', 'io.ox/mail/api', 'io.o
             form({
                 url: ox.apiRoot + '/mail?action=zip_messages&session=' + ox.session,
                 // this one wants folder - not folder_id
-                body: JSON.stringify(_.map(list, api.reduce))
+                body: JSON.stringify(_.map(list, mailAPI.reduce))
             });
         }
     };
