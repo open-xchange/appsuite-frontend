@@ -54,7 +54,7 @@ define('plugins/xing/main',
                 arr = _.compact([contact.email1, contact.email2, contact.email3]),
                 def = $.Deferred();
 
-            if (! hasXingAccount()) {
+            if (!hasXingAccount() || !e.collection.has('one') || contact.mark_as_distributionlist) {
                 def.resolve(false);
                 return def;
             }
