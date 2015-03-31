@@ -12,13 +12,14 @@
  */
 
 define('io.ox/files/util', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
+    'io.ox/files/mediasupport',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'settings!io.ox/files'
-], function (api, dialogs, gt, capabilities, folderAPI, settings) {
+], function (api, mediasupport, dialogs, gt, capabilities, folderAPI, settings) {
 
     'use strict';
 
@@ -198,7 +199,7 @@ define('io.ox/files/util', [
             folder = Object.keys(incompleteHash);
             if (folder.length === 1) {
                 // get only this folder
-                def = api.getAll({ folder: folder[0] });
+                def = api.getAll(folder[0]);
             } else if (folder.length > 1) {
                 // multiple folder -> use getList
                 def = api.getList(incompleteItems).then(function (data) {
@@ -213,7 +214,7 @@ define('io.ox/files/util', [
                 // update baton
                 e.baton.allIds = data;
                 return _(data).reduce(function (memo, obj) {
-                    return memo || !!(obj && api.checkMediaFile(type, obj.filename));
+                    return memo || !!(obj && mediasupport.checkFile(type, obj.filename));
                 }, false);
             });
         },

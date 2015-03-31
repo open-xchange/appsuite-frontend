@@ -27,13 +27,14 @@
 define('io.ox/files/mediaplayer', [
     'io.ox/core/commons',
     'gettext!io.ox/files',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
+    'io.ox/files/mediasupport',
     'static/3rd.party/mediaelement/mediaelement-and-player.js',
     'io.ox/files/actions',
     'less!io.ox/files/mediaplayer',
     'css!3rd.party/mediaelement/mediaelementplayer.css',
     'static/3rd.party/jquery-ui.min.js'
-], function (commons, gt, api) {
+], function (commons, gt, api, mediasupport) {
 
     'use strict';
 
@@ -131,7 +132,7 @@ define('io.ox/files/mediaplayer', [
 
         filterMediaList: function (list, videoSupport) {
             return $.grep(list, function (o) {
-                return api.checkMediaFile((videoSupport ? 'video' : 'audio'), o.filename);
+                return mediasupport.checkFile(videoSupport ? 'video' : 'audio', o.filename);
             });
         },
 

@@ -16,7 +16,7 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/core/extensions',
     'io.ox/core/commons',
     'io.ox/core/tk/dialogs',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/upload',
     'io.ox/core/extPatterns/dnd',
@@ -419,7 +419,8 @@ define('io.ox/files/fluid/perspective', [
             filesize.replace('\xA0', ' '),
             gt.noI18n(changed)
         ];
-        if (api.tracker.isLocked(file)) {
+        // deprecated code anyway
+        if (api.tracker && api.tracker.isLocked(file)) {
             if (api.tracker.isLockedByMe(file)) {
                 arialabel.push(gt('This file is locked by you'));
             } else {
@@ -499,7 +500,7 @@ define('io.ox/files/fluid/perspective', [
                         .attr('title', title)
                         .append(
                             // lock icon
-                            api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : $(),
+                            api.tracker && api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : $(),
                             // long title
                             $('<span class="not-selectable title-long">').text(gt.noI18n(cut(title, 90))),
                             // short title

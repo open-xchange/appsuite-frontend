@@ -1090,9 +1090,9 @@ define('io.ox/mail/api', [
             });
         });
         return http.resume().done(function () {
-            require(['io.ox/files/legacy_api'], function (fileAPI) {
-                fileAPI.caches.all.grepRemove(target + DELIM);
-                fileAPI.trigger('refresh.all');
+            require(['io.ox/files/api'], function (fileAPI) {
+                fileAPI.pool.resetFolder(target);
+                fileAPI.trigger('add:file');
             });
         });
     };

@@ -391,13 +391,15 @@ define('io.ox/files/api', [
     //
     // GET all files of a folder (for compatibility)
     //
-    api.getAll = function (folder) {
+    api.getAll = function (folder, options) {
+
+        options = _.extend({ columns: allColumns }, options);
 
         return http.GET({
             module: 'files',
             params: {
                 action: 'all',
-                columns: allColumns,
+                columns: options.columns,
                 folder: folder,
                 timezone: 'UTC'
             }
@@ -840,6 +842,31 @@ define('io.ox/files/api', [
                 api.trigger('change:version');
             });
         }
+    };
+
+    //
+    // Search
+    //
+    api.search = function (query, options) {
+
+        options = _.extend({ columns: api.search.columns, sort: '702', order: 'asc' }, options);
+
+        return http.PUT({
+            module: 'files',
+            params: {
+                action: 'search',
+                columns: options.columns,
+                sort: options.sort,
+                order: options.order
+            },
+            data: api.search.getData(query, options)
+        });
+    };
+
+    // make extensible
+    api.search.columns = allColumns;
+    api.search.getData = function (query) {
+        return { pattern: query };
     };
 
     return api;
