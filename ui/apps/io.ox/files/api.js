@@ -817,7 +817,9 @@ define('io.ox/files/api', [
             .then(function () {
                 // let's reload the version list
                 // since we might have just removed the current version
-                return api.versions.load(file, { cache: false }).done(function () {
+                return api.versions.load(file, { cache: false }).done(function (list) {
+                    // update model
+                    if (model) model.set('number_of_versions', list.length);
                     // the mediator will reload the current collection
                     api.trigger('remove:version');
                 });
