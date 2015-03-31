@@ -55,6 +55,6 @@ define('io.ox/files/actions/sendlink', [
     }
 
     return function (list) {
-        api.list(list).done(process);
+        api.getList(list).done(process);
     };
 });

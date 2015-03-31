@@ -12,7 +12,7 @@
  */
 
 define('io.ox/editor/main', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
     'gettext!io.ox/editor',
@@ -282,7 +282,6 @@ define('io.ox/editor/main', [
                                                 model.set(data);
                                                 previous = model.toJSON();
                                                 view.idle();
-                                                api.trigger('refresh.all');
                                             })
                                             .always(function () { view.idle(); })
                                             .fail(notifications.yell);

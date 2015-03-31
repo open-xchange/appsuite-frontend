@@ -115,7 +115,7 @@ define('io.ox/files/fluid/perspective', [
             search = app.getWindow().nodes.sidepanel.find('.search-container').is(':visible');
         if (!search) {
             //empty search query shows folder again
-            api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
+            api.getAll(app.folder.get(), { cache: false }).done(def.resolve).fail(def.reject);
         } else {
             //remove selection to prevent errors (file might not be in our search results)
             _.url.hash('id', null);

@@ -362,14 +362,15 @@ define('io.ox/files/api', [
     //
     // GET a single file
     //
-
     api.get = function (file, options) {
 
         options = _.extend({ cache: true }, options);
 
         if (options.cache) {
             var model = pool.get('detail').get(_.cid(file));
-            if (model) return $.when(model.toJSON());
+            // look for an attribute that is not part of the "all" request
+            // to determine if we can use a cached model
+            if (model && model.has('description')) return $.when(model.toJSON());
         }
 
         return http.GET({
@@ -388,10 +389,29 @@ define('io.ox/files/api', [
     };
 
     //
+    // GET all files of a folder (for compatibility)
+    //
+    api.getAll = function (folder) {
+
+        return http.GET({
+            module: 'files',
+            params: {
+                action: 'all',
+                columns: allColumns,
+                folder: folder,
+                timezone: 'UTC'
+            }
+        })
+        .then(function (data) {
+            pool.add('detail', data);
+            return data;
+        });
+    };
+
+    //
     // GET multiple files
     //
-
-    api.list = (function () {
+    api.getList = (function () {
 
         function has(item) {
             return this.get(_.cid(item));
@@ -484,7 +504,7 @@ define('io.ox/files/api', [
      */
     api.lock = function (list) {
         return lockToggle(list, 'lock').then(function () {
-            return api.list(list, { cache: false });
+            return api.getList(list, { cache: false });
         });
     };
 
@@ -623,11 +643,21 @@ define('io.ox/files/api', [
     };
 
     //
+    // Download zipped content of a folder
+    //
+    api.zip = function (id) {
+        return require(['io.ox/core/download']).then(function (download) {
+            download.url(
+                ox.apiRoot + '/files?' + $.param({ action: 'zipfolder', folder: id, recursive: true, session: ox.session })
+            );
+        });
+    };
+
+    //
     // Update file
     // @param {object} file { id, folder_id }
     // @param {object} changes The changes to apply; not sent to server if empty
     //
-
     api.update = function (file, changes) {
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
@@ -653,15 +683,16 @@ define('io.ox/files/api', [
     };
 
     function performUpload(options) {
+
         options = _.extend({
-            folder: settings.get('folder/infostore'),
             // used by api.version.upload to be different from api.upload
             action: 'new',
+            folder: settings.get('folder/infostore'),
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
 
-        var formData = new FormData(), data;
+        var formData = new FormData();
 
         if ('filename' in options) {
             formData.append('file', options.file, options.filename);
@@ -669,18 +700,19 @@ define('io.ox/files/api', [
             formData.append('file', options.file);
         }
 
-        // set meta data
-        data.folder_id = options.folder;
-        data.description = options.description || '';
-        formData.append('json', JSON.stringify(data));
+        // add data
+        formData.append('json', JSON.stringify({
+            folder_id: options.folder,
+            description: options.description || ''
+        }));
 
         return http.UPLOAD({
-            // allow API consumers to override the module (like OX Guard will certainly do)
             module: options.module,
             params: { action: options.action, filename: options.filename },
             data: formData,
             fixPost: true
-        }).fail(failedUpload);
+        })
+        .fail(failedUpload);
     }
 
     /**

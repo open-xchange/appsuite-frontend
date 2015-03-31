@@ -289,7 +289,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                 });
             // infostore
             } else if (data.module === 'infostore') {
-                require(['io.ox/files/legacy_api'], function (filesAPI) {
+                require(['io.ox/files/api'], function (filesAPI) {
                     var prev = new pre.Preview({
                         name: file.filename,
                         filename: file.filename,
