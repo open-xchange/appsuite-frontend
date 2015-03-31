@@ -260,6 +260,7 @@ define('io.ox/find/view-tokenfield', [
         reset: function () {
             this.ui.container.find('.token-input').val('');
             this.api('setTokens', []);
+            this.setPlaceholder();
             // tokenfield manually sets width -  has to be removed here
             this.ui.container.find('.token-input').css('width', 'auto');
         },
