@@ -503,15 +503,6 @@ define('io.ox/files/main', [
         },
 
         /*
-         * update view when adding a new file
-         */
-        'add:file': function (app) {
-            api.on('add:file', _.debounce(function () {
-                app.listView.reload();
-            }, 100));
-        },
-
-        /*
          * Set folderview property
          */
         'prop-folderview': function (app) {
