@@ -454,39 +454,6 @@ define('io.ox/core/commons', [
             if (win.state.visible) { on(); }
         },
 
-        /**
-         * Wire Grid and window's search
-         */
-        wireGridAndSearch: function (grid, win, api) {
-            // search: all request
-            grid.setAllRequest('search', function () {
-                // result: contains a amount of data somewhere between the usual all and list responses
-                var params = { sort: grid.prop('sort'), order: grid.prop('order') };
-                return api.query(true, params)
-                    .then(function (response) {
-                        var data = response && response.results ? response.results : [];
-                        return data;
-                    });
-            });
-
-            // search: list request
-            // forward ids (no explicit all/list request in find/search api)
-            grid.setListRequest('search', function (ids) {
-                var args = [ ids ];
-                return $.Deferred().resolveWith(this, args);
-            });
-
-            // events
-            win.on({
-                'search:query': function () {
-                    grid.setMode('search');
-                },
-                'search:clear search:cancel': function () {
-                    if (grid.getMode() !== 'all') grid.setMode('all');
-                }
-            });
-        },
-
         wirePerspectiveEvents: function (app) {
             var win = app.getWindow();
             var oldPerspective = null;

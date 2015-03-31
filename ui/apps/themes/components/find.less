@@ -1,0 +1,176 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+@action-color: #777;
+@action-hover-color: #aaa;
+@placeholder-color: #aaa;
+
+/**
+ *  window-container.io-ox-find-active (show/hide)
+ *  ----------------------------------------------
+ *  io-ox-find (generic-toolbar)
+ *     search-box
+ *         form-group has-feedback
+ *             tokenfield (search-field)
+ *                 token
+ *                 actions (form-control-feedback)
+ *
+ *     search-box-filter
+ *         ul (classic-toolbar)
+ *             lif (dropdown)
+ */
+
+.window-container {
+
+    /**
+     *  GENERAL
+     */
+    .io-ox-find {
+
+        padding: 4px 8px;
+        line-height: 20px;
+        z-index: 10;
+
+        .search-box {
+
+            .tokenfield {
+                // use same placeholder color
+                .placeholder(@placeholder-color);
+                // adjust tokenfield (7 = outer padding, 1 = border, 3 = placeholder padding)
+                padding-left: @default-padding - 8 - 1 - 3;
+                padding-right: 9px;
+
+                .token {
+
+                    .token-type, .token-detail, .fa-caret-down {
+                        color: rgba(0, 0, 0, 0.7);
+                    }
+
+                    .close {
+                        opacity: 0.5;
+                        &:hover {
+                            opacity: 0.7;
+                        }
+                    }
+
+                    .token-name {
+                        color: rgb(85, 85, 85);
+                        font-weight: 500;
+                    }
+
+                    .dropdown {
+                        [data-toggle="dropdown"] {
+                            outline: none;
+                        }
+
+                        .fa-caret-down {
+                            margin-left: 4px;
+                            margin-right: 8px;
+                        }
+                        // left is set by js
+                        .dropdown-menu {
+                            position: fixed;
+                            top: 134px;
+                        }
+                    }
+                }
+            }
+
+            .action {
+                pointer-events: auto;
+                color: @action-color;
+                // overwrite fa line-height
+                line-height: 30px;
+
+                &:hover {
+                    color: @action-hover-color;
+                }
+            }
+        }
+
+        .search-box-filter {
+            float: left;
+            padding-left: 8px;
+
+            & > .classic-toolbar {
+
+                // disable
+                .dropdown .conflicting, .dropdown.conflicting {
+                    a {
+                        color: #a4a4a4;
+                        pointer-events: none;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *  MODE: NOT ACTIVE
+     */
+    .io-ox-find {
+
+        .search-box {
+            .action {
+                &.action-find {
+                    display: inline-block;
+                }
+                &.action-cancel {
+                    display: none;
+                }
+            }
+        }
+        .search-box-filter {
+            display: none;
+        }
+    }
+
+    /**
+     *  MODE: ACTIVE
+     */
+    &.io-ox-find-active {
+
+        .window-body {
+            //top: managed by backbone view
+            transition: top .2s;
+        }
+
+        .io-ox-find {
+            //top: managed by backbone view
+            position: fixed;
+            width: 100%;
+            height: 40px;
+
+            .search-box {
+                float: left;
+                width: 100%;
+                max-width: 550px;
+
+                // switch visibility
+                .action {
+                    &.action-show {
+                        display: none;
+                    }
+                    &.action-cancel {
+                        display: inline-block;
+                    }
+                }
+            }
+
+            .search-box-filter {
+                display: block;
+            }
+
+        }
+    }
+}

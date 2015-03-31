@@ -20,12 +20,22 @@ define('io.ox/files/actions/share', [
 
     'use strict';
 
-    return function (files) {
-        var count = files.length,
-            insert = count === 1 ? _.ellipsis(files[0].filename, { max: 40, charpos: 'middle' }) : count,
+    return function (baton) {
+        if (!baton || !baton.models) return;
+
+        var header = '',
+            count = baton.models.length,
+            first = baton.models[0],
+            filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
+            view = new ShareView({ files: baton.models });
+
+        // build header
+        if (first.isFile()) {
             //#. if only one item -> insert filename / on more than one item -> item count
-            header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), insert),
-            view = new ShareView({ files: files });
+            header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), filler);
+        } else if (first.isFolder()) {
+            header = gt.format(gt.ngettext('Share the folder "%1$d"', 'Share %1$d items', count), filler);
+        }
 
         new dialogs.ModalDialog({ width: 600, async: true })
             .header($('<h4>').text(header))

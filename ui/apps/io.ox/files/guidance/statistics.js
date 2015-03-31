@@ -6,7 +6,7 @@ define('io.ox/files/guidance/statistics', [
     'io.ox/core/strings',
     'io.ox/core/folder/api',
     'io.ox/core/folder/breadcrumb',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
     'static/3rd.party/Chart.js/Chart.js'
@@ -171,7 +171,7 @@ define('io.ox/files/guidance/statistics', [
 
             //do not load files, when cid is already in hash
             if (!hash[cid] || hash[cid].state() === 'rejected') {
-                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS }, false);
+                hash[cid] = api.getAll(options.folder, { cache: false, columns: COLUMNS });
             }
 
             //return deferred promise

@@ -21,9 +21,10 @@ define('io.ox/core/desktop', [
     'io.ox/core/upsell',
     'io.ox/core/adaptiveLoader',
     'io.ox/core/folder/api',
+    'io.ox/find/main',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, coreConfig, gt) {
+], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, find, coreConfig, gt) {
 
     'use strict';
 
@@ -350,6 +351,18 @@ define('io.ox/core/desktop', [
 
         getWindow: function () {
             return this.get('window');
+        },
+
+        setSearch: function () {
+            var app = find.getApp({ parent: this });
+            //TODO: bottleneck
+            app.prepare();
+            this.set('search', app);
+            return app;
+        },
+
+        getSearch: function () {
+            return this.get('search');
         },
 
         getWindowNode: function () {
@@ -986,7 +999,7 @@ define('io.ox/core/desktop', [
                 this.options = options || {};
                 this.id = options.id;
                 this.name = options.name || 'generic';
-                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $(), facetedsearch: {}};
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = false;
@@ -1292,153 +1305,6 @@ define('io.ox/core/desktop', [
                     return this;
                 };
 
-                this.facetedsearch = {
-                    active: false,
-                    lastFocus: '',
-                    ready: $.Deferred(),
-                    selectors: {
-                        facets: '.search-facets:first',
-                        facetsadv: '.search-facets-advanced'
-                    },
-                    init: function () {
-                        // via ext.point: this.name + '/facetedsearch'
-                    },
-
-                    toggle: function () {
-                        // show: search container
-                        // hide: tree, tree bottom toolbar
-                        var selector = '.folder-tree, .generic-toolbar.bottom, .search-container',
-                            nodes = self.nodes.sidepanel.find(selector);
-                        nodes.toggle();
-                        this.active = !this.active;
-                    },
-
-                    open: function () {
-                        var container = self.nodes.facetedsearch.container,
-                            facets = container.find(this.selectors.facets),
-                            advfacets = container.find(this.selectors.facetsadv),
-                            baton = self.facetedsearch.view.baton;
-
-                        if (!this.active) this.toggle();
-
-                        require(['io.ox/search/facets/extensions'], function (extensions) {
-                            extensions.facets.call(facets.empty(), baton);
-                            extensions.advfacets.call(advfacets.empty(), baton);
-                        });
-                        return this;
-                    },
-
-                    close: function () {
-                        if (this.active) {
-                            this.toggle();
-                        }
-                        return this;
-                    },
-
-                    focus: function () {
-                        self.nodes.facetedsearch.container
-                            .find('.facet > a')
-                            .focus();
-                    },
-
-                    clear: function () {
-                        // empty input
-                        self.nodes.facetedsearch.toolbar
-                            .find('.search-field')
-                            .val('');
-                    },
-
-                    cancel: function () {
-                        // empty input
-                        self.facetedsearch.clear();
-                        // reset model
-                        self.facetedsearch.view.model.reset();
-                        self.facetedsearch.close();
-                        // apps switch from 'search mode' to 'all mode'
-                        self.trigger('search:cancel');
-                    }
-                };
-
-                ext.point(this.name + '/facetedsearch').extend({
-                    id: 'searchfield',
-                    index: 100,
-                    draw: function (win) {
-                        var side = win.nodes.sidepanel,
-                            nodes = win.nodes.facetedsearch;
-
-                        // search field
-                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">');
-
-                        // add nodes
-                        side.append(nodes.toolbar);
-                    }
-                });
-
-                ext.point(this.name + '/facetedsearch').extend({
-                    id: 'container',
-                    index: 100,
-                    draw: function (win) {
-                        var side = win.nodes.sidepanel,
-                            nodes = win.nodes.facetedsearch;
-
-                        // facets container
-                        nodes.container = $('<div class="abs search-container">').hide().append(
-                            // active facets
-                            $('<div class="default">').append(
-                                $('<h3 class="sr-only">').text(gt('Common Facets')),
-                                $('<ul class="search-facets">')
-                                .attr({
-                                    //#. search: headline for list of common facets/filters
-                                    'aria-label': gt('Common Facets'),
-                                    'tabIndex': 1,
-                                    'role': 'group'
-                                })
-                            ),
-                            // advanced facets
-                            $('<div class="advanced">')
-                            .append(
-                                $('<h3 class="sr-only">').text(gt('Advanced Facets')),
-                                $('<ul class="search-facets search-facets-advanced">')
-                                .attr({
-                                    //#. search: clickable headline to show/hide list of advanced facets/filters
-                                    'aria-label': gt('Advanced Facets'),
-                                    'tabIndex': 1,
-                                    'role': 'group'
-                                })
-                            ),
-                            // cancel button
-                            $('<div>')
-                                .attr({
-                                    //#. search: actions when in search mode e.g. close search
-                                    'aria-label': gt('Actions'),
-                                    'tabIndex': 1,
-                                    'role': 'group'
-                                })
-                            .append(
-                                $('<a data-action="close">')
-                                    .text(gt('Close search'))
-                                    .attr({
-                                        tabindex: 1,
-                                        role: 'button',
-                                        href: '#'
-                                    })
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        win.facetedsearch.view.trigger('button:cancel');
-                                    })
-                            )
-                        )
-                        .addClass('f6-target')
-                        .attr({
-                            role: 'navigation',
-                            //#. search: leftside sidepanel container that shows active and available facets
-                            'aria-label': gt('Search Options')
-                        });
-                        // add nodes
-                        side.append(nodes.container);
-                    }
-                });
-
                 this.addClass = function () {
                     var o = this.nodes.outer;
                     return o.addClass.apply(o, arguments);
@@ -1492,7 +1358,6 @@ define('io.ox/core/desktop', [
                 classic: false,
                 id: 'window-' + guid,
                 name: '',
-                facetedsearch: false,
                 title: '',
                 toolbar: false,
                 width: 0
@@ -1519,7 +1384,6 @@ define('io.ox/core/desktop', [
                 win.nodes.sidepanel = $();
                 win.nodes.head = $();
                 win.nodes.body = $();
-                win.nodes.facetedsearch = {};
 
             } else {
 
@@ -1551,8 +1415,6 @@ define('io.ox/core/desktop', [
                     })
                 );
 
-                win.nodes.facetedsearch = {};
-
                 // classic window header?
                 if (opt.classic) win.nodes.outer.addClass('classic');
 
@@ -1570,232 +1432,124 @@ define('io.ox/core/desktop', [
             Events.extend(win);
 
             if (opt.search)
-                console.warn('search is deprecated: please use facetedsearch instead');
+                console.warn('search is deprecated with 7.6.0. Please use io.ox/find instead');
 
             if (opt.facetedsearch) {
+                console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
+            }
 
-                ext.point(win.name + '/facetedsearch/view').extend({
-                    id: 'container',
+            if (opt.find) {
+
+                ext.point('io.ox/find/view').extend({
+                    id: 'view',
                     index: 100,
-                    draw: function () {
-                        // init container
-                        ext.point(this.name + '/facetedsearch')
-                            .invoke('draw', this.facetedsearch, win);
+                    draw: function (baton) {
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find">');
 
+                        // add nodes
+                        this.nodes.sidepanel
+                            .append(baton.$.viewnode)
+                            .addClass('top-toolbar');
                     }
                 });
 
-                ext.point(win.name + '/facetedsearch/view').extend({
-                    id: 'input',
+                ext.point('io.ox/find/view').extend({
+                    id: 'subviews',
                     index: 200,
-                    draw: function () {
-                        var node = this.nodes.facetedsearch.toolbar,
-                            //#. search feature help text for screenreaders
-                            label = gt('Search'),
-                            id = win.name + '-search-field',
-                            guid = _.uniqueId('form-control-description-'),
-                            group;
-
-                        // input group and dropdown
-                        node.append(
-                            group = $('<div class="input-group">')
-                                .append(
-                                        $('<input type="text">')
-                                        .attr({
-                                            class: 'form-control search-field f6-target',
-                                            tabindex: 1,
-                                            role: 'navigation',
-                                            'aria-label': gt('Search within application'),
-                                            id: id,
-                                            placeholder: label + ' ...',
-                                            'aria-describedby': guid
-                                        }),
-                                        $('<label class="sr-only">')
-                                            .attr('for', id)
-                                            .text(label),
-                                        $('<p class="sr-only sr-description">')
-                                            .attr({
-                                                id: guid
-                                            })
-                                            .text(
-                                                //#. search feature help text for screenreaders
-                                                gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
-                                            )
-                                )
+                    draw: function (baton) {
+                        baton.$.viewnode.append(
+                            baton.$.box = $('<form class="search-box">'),
+                            baton.$.boxfilter = $('<div class="search-box-filter">')
                         );
                     }
                 });
-                // hint: listener is implemented in search/autocomplete/extensions
-                // ext.point(win.name + '/facetedsearch/view').extend({
-                //     id: 'clear',
-                //     index: 250,
-                //     draw: function () {
 
-                //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                //         group.append(
-                //             $('<a href="#">')
-                //                 .attr({
-                //                     'tabindex': '1',
-                //                     'class': 'btn-clear',
-                //                 }).append(
-                //                     $('<i class="fa fa-times"></i>')
-                //                 )
-                //                 .on('click', function (e) {
-                //                     e.preventDefault();
-                //                 })
-                //         );
-                //     }
-                // });
-
-                ext.point(win.name + '/facetedsearch/view').extend({
-                    id: 'action',
+                ext.point('io.ox/find/view').extend({
+                    id: 'form',
                     index: 300,
-                    draw: function () {
-                        var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                        group.append(
-                            $('<span class="input-group-btn">').append(
-                                // submit
-                                $('<button type="button">')
+                    draw: function (baton) {
+                        // share data
+                        _.extend(baton.data, {
+                            label: gt('Search'),
+                            id:  win.name + '-search-field',
+                            guid:  _.uniqueId('form-control-description-')
+                        });
+                        // search box form
+                        baton.$.group = $('<div class="form-group has-feedback">')
+                            .append(
+                                $('<input type="text">')
                                 .attr({
-                                    'tabindex': '1',
-                                    'class': 'btn btn-default btn-search',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'bottom',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
-                                    'data-original-title': gt('Start search'),
-                                    'aria-label': gt('Start search')
+                                    class: 'form-control has-feedback search-field f6-target',
+                                    tabindex: 1,
+                                    role: 'search',
+                                    id: baton.data.id,
+                                    placeholder: baton.data.label + '...',
+                                    'aria-describedby': baton.data.guid
                                 })
-                                .append(
-                                    $('<i class="fa fa-search"></i>')
-                                )
-                            )
-                        );
-                    }
-                });
-                // hint: listener is implemented in search/autocomplete/extensions
-                // ext.point(win.name + '/facetedsearch/view').extend({
-                //     id: 'clear',
-                //     index: 250,
-                //     draw: function () {
-
-                //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                //         group.append(
-                //             $('<a href="#">')
-                //                 .attr({
-                //                     'tabindex': '1',
-                //                     'class': 'btn-clear',
-                //                 }).append(
-                //                     $('<i class="fa fa-times"></i>')
-                //                 )
-                //                 .on('click', function (e) {
-                //                     e.preventDefault();
-                //                 })
-                //         );
-                //     }
-                // });
-
-                ext.point(win.name + '/facetedsearch/view').extend({
-                    id: 'action',
-                    index: 300,
-                    draw: function () {
-                        var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                        group.append(
-                            $('<span class="input-group-btn">').append(
-                                // submit
-                                $('<button type="button">')
-                                .attr({
-                                    'tabindex': '1',
-                                    'class': 'btn btn-default btn-search',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'bottom',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
-                                    'data-original-title': gt('Start search'),
-                                    'aria-label': gt('Start search')
-                                })
-                                .append(
-                                    $('<i class="fa fa-search"></i>')
-                                )
-                                .tooltip()
-                            )
+                            );
+                        // add to searchbox area
+                        baton.$.box.append(
+                            baton.$.group
                         );
                     }
                 });
 
-                ext.point(win.name + '/facetedsearch/view').extend({
-                    id: 'lazy-load',
+                ext.point('io.ox/find/view').extend({
+                    id: 'buttons',
                     index: 400,
-                    draw: function () {
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // search
+                            $('<i>')
+                                .attr({
+                                    'tabindex': '-1',
+                                    'class': 'fa fa-search form-control-feedback action action-show',
+                                    'data-toggle': 'tooltip',
+                                    'data-placement': 'bottom',
+                                    'data-animation': 'false',
+                                    'data-container': 'body',
+                                    'data-original-title': gt('Start search'),
+                                    'aria-label': gt('Start search')
+                                })
+                                .tooltip(),
+                            // cancel/reset
+                            $('<i>')
+                                .attr({
+                                    'tabindex': '-1',
+                                    'class': 'fa fa-times-circle form-control-feedback action action-cancel',
+                                    'data-toggle': 'tooltip',
+                                    'data-placement': 'bottom',
+                                    'data-animation': 'false',
+                                    'data-container': 'body',
+                                    'data-original-title': gt('Cancel search'),
+                                    'aria-label': gt('Cancel search')
+                                })
+                                .tooltip()
+                        );
+                    }
+                });
 
-                        var field = this.nodes.facetedsearch.toolbar.find('.search-field'),
-                            run = function () {
-                                require(['io.ox/search/quickstart'], function (quickstart) {
-                                    //if (true) return;
-                                    quickstart.run(win).done(function () {
-                                        //field.off('focus', run);
-                                        // get view
-                                        var view = win.facetedsearch.view;
-
-                                        //events: app resume cancels search mode
-                                        win.app.on('resume', function () {
-                                            if (win.facetedsearch.active) {
-                                                view.trigger('button:cancel');
-                                            }
-                                        });
-
-                                        // events: internal
-                                        view.on({
-                                            'query':
-                                                _.debounce(function (e, appname) {
-                                                    // one search app, one model but multiple views
-                                                    if (win.app.get('name') === appname) {
-                                                        win.facetedsearch.open();
-                                                        if (e.type === 'query') win.trigger('search:query');
-                                                    }
-                                                }, 10
-                                            ),
-                                            'button:clear': function () {
-                                                win.facetedsearch.clear();
-                                            },
-                                            'button:cancel': function () {
-                                                win.facetedsearch.cancel();
-                                            }
-                                        });
-
-                                        // events: redirect
-                                        view.model.on({
-                                            'query': function (appname) {
-                                                view.trigger('query', appname);
-                                            },
-                                            'query:result': function (response) {
-                                                // screenreader
-                                                var n = response.results.length,
-                                                    //#. 'no results' message for screenreaders with additional hint to adjust active filters
-                                                    empty = gt('No items were found. Please adjust currently used facets.'),
-                                                    //#. result count for screenreaders
-                                                    //#. %1$s number of items found by search feature
-                                                    some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
-                                                notifications.yell('screenreader', n ? some : empty);
-                                            },
-                                            'cancel': function (appname) {
-                                                view.trigger('button:cancel', appname);
-                                            }
-                                        });
-                                        win.trigger('search:loaded');
-                                        ox.trigger('search:load', win);
-                                    });
-                                });
-                            };
-
-                        // lazy load search app when search field gets the focus for the first time
-                        // also listen to "load" to trigger this manually
-                        field.one('focus load', run);
+                ext.point('io.ox/find/view').extend({
+                    id: 'screenreader',
+                    index: 500,
+                    draw: function (baton) {
+                        baton.$.group.append(
+                            // sr label
+                            $('<label class="sr-only">')
+                                .attr('for', baton.data.id)
+                                .text(baton.data.label),
+                            // sr description
+                            $('<p class="sr-only sr-description">').attr({ id: baton.data.guid })
+                                .text(
+                                    //#. search feature help text for screenreaders
+                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                )
+                        );
                     }
                 });
 
                 // draw searchfield and attach lazy load listener
-                ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
+                ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
             }
 
             // fix height/position/appearance

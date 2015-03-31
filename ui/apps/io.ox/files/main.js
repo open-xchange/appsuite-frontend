@@ -32,7 +32,8 @@ define('io.ox/files/main', [
     'io.ox/files/actions',
     'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
-    'io.ox/files/toolbar'
+    'io.ox/files/toolbar',
+    'io.ox/files/upload/dropzone'
 ], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
@@ -610,15 +611,79 @@ define('io.ox/files/main', [
             app.toggleFolders = toggle;
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
-            win.facetedsearch.ready.done(function (search) {
-                //add reference: used in perspective
-                app.searchapi = search.apiproxy;
+            var searchApp = app.setSearch();
+            searchApp.ready.done(function () {
+                require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
+                    var manager = searchApp.view.model.manager,
+                        searchcid = _.bind(manager.getResponseCid, manager),
+                        mode = 'default';
+                    // define collection loader for search results
+                    var collectionLoader = new CollectionLoader({
+                            module: 'files',
+                            mode: 'search',
+                            fetch: function (params) {
+                                var self = this,
+                                    limit = params.limit.split(','),
+                                    start = parseInt(limit[0]),
+                                    size = parseInt(limit[1]) - start;
+
+                                searchApp.model.set({
+                                    'start': start,
+                                    'size': size,
+                                    'extra': 1
+                                }, { silent: true });
+
+                                var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                return searchApp.apiproxy.query(true, params).then(function (response) {
+                                    response = response || {};
+                                    var list = response.results || [],
+                                        request = response.request || {};
+                                    // add 'more results' info to collection (compare request limits and result)
+                                    self.collection.search = {
+                                        next: list.length !== 0 && list.length === request.data.size
+                                    };
+                                    return list;
+                                });
+                            },
+                            cid: searchcid
+                        });
+                    var register = function () {
+                            var view = searchApp.view.model,
+                                // remember original setCollection
+                                setCollection = app.listView.setCollection;
+                            app.listView.connect(collectionLoader);
+                            mode = 'search';
+                            // wrap setCollection
+                            app.listView.setCollection = function (collection) {
+                                view.stopListening();
+                                view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'query:result', collection));
+                                return setCollection.apply(this, arguments);
+                            };
+                        };
+
+                    // events
+                    searchApp.on({
+                        'search:idle': function () {
+                            if (mode === 'search') {
+                                //console.log('%c' + 'reset collection loader', 'color: white; background-color: green');
+                                app.listView.connect(api.collectionLoader);
+                                app.listView.load();
+                            }
+                            mode = 'default';
+                        },
+                        'search:query': _.debounce(function () {
+                            // register/connect once
+                            if (app.listView.loader.mode !== 'search') register();
+                            // load
+                            app.listView.load();
+                        }, 10)
+                    });
+
+                });
             });
         }
     });
@@ -631,7 +696,7 @@ define('io.ox/files/main', [
             id: 'io.ox/files',
             title: 'Drive',
             chromeless: true,
-            facetedsearch: capabilities.has('search')
+            find: capabilities.has('search')
         }));
 
         win.addClass('io-ox-files-main');

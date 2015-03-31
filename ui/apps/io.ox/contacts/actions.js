@@ -18,7 +18,8 @@ define('io.ox/contacts/actions', [
     'io.ox/contacts/api',
     'io.ox/portal/util',
     'settings!io.ox/contacts',
-    'gettext!io.ox/contacts'
+    'gettext!io.ox/contacts',
+    'io.ox/core/pim/actions'
 ], function (ext, links, actions, api, portalUtil, settings, gt) {
 
     'use strict';
@@ -250,7 +251,7 @@ define('io.ox/contacts/actions', [
         }
     });
 
-    // Viewer 2.0
+    /*
     new Action('io.ox/contacts/actions/viewer', {
         id: 'viewer',
         requires: 'some',
@@ -260,79 +261,7 @@ define('io.ox/contacts/actions', [
             });
         }
     });
-
-    // attachment actions
-    new Action('io.ox/contacts/actions/slideshow-attachment', {
-        id: 'slideshow',
-        requires: function (e) {
-            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        multiple: function (list) {
-            require(['io.ox/contacts/actions/attachment'], function (attachmentAction) {
-                attachmentAction.slideshow(list);
-            });
-        }
-    });
-
-    new Action('io.ox/contacts/actions/preview-attachment', {
-        id: 'preview',
-        requires: function (e) {
-            return require(['io.ox/preview/main'])
-                .then(function (p) {
-                    var list = _.getArray(e.context);
-                    // is at least one attachment supported?
-                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({
-                            filename: obj.filename,
-                            mimetype: obj.content_type,
-                            pim: true
-                        })
-                        .supportsPreview();
-                    }, false);
-                });
-        },
-        multiple: function (list, baton) {
-            require(['io.ox/contacts/actions/attachment'], function (attachmentAction) {
-                attachmentAction.preview(list, baton);
-            });
-        }
-    });
-
-    new Action('io.ox/contacts/actions/open-attachment', {
-        id: 'open',
-        requires: 'one',
-        multiple: function (list) {
-            require(['io.ox/contacts/actions/attachment'], function (attachmentAction) {
-                attachmentAction.open(list);
-            });
-        }
-    });
-
-    new Action('io.ox/contacts/actions/download-attachment', {
-        id: 'download',
-        requires: function (e) {
-            //browser support for downloading more than one file at once is pretty bad (see Bug #36212)
-            return e.collection.has('one') && _.device('!ios');
-        },
-        multiple: function (list) {
-            require(['io.ox/contacts/actions/attachment'], function (attachmentAction) {
-                attachmentAction.download(list);
-            });
-        }
-    });
-
-    new Action('io.ox/contacts/actions/save-attachment', {
-        id: 'save',
-        capabilities: 'infostore',
-        requires: 'some',
-        multiple: function (list) {
-            require(['io.ox/contacts/actions/attachment'], function (attachmentAction) {
-                attachmentAction.save(list);
-            });
-        }
-    });
+    */
 
     // Mobile multi select extension points
     // action send mail to contact
@@ -532,53 +461,13 @@ define('io.ox/contacts/actions', [
         label: gt('Add to address book'),
         ref: 'io.ox/contacts/actions/add-to-contactlist'
     }));
-
-    // Attachments
-    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
-        id: 'viewer',
-        index: 100,
-        label: gt('Viewer'),
-        mobile: 'hi',
-        ref: 'io.ox/contacts/actions/viewer'
-    }));
-
-    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
-        id: 'slideshow',
-        index: 100,
-        label: gt('Slideshow'),
-        mobile: 'hi',
-        ref: 'io.ox/contacts/actions/slideshow-attachment'
-    }));
-
-    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
-        id: 'preview',
-        index: 100,
-        label: gt('Preview'),
-        mobile: 'none',
-        ref: 'io.ox/contacts/actions/preview-attachment'
-    }));
-
-    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
-        id: 'open',
-        index: 200,
-        label: gt('Open in browser'),
-        mobile: 'hi',
-        ref: 'io.ox/contacts/actions/open-attachment'
-    }));
-
-    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
-        id: 'download',
-        index: 300,
-        label: gt('Download'),
-        mobile: 'hi',
-        ref: 'io.ox/contacts/actions/download-attachment'
-    }));
-
-    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
-        id: 'save',
-        index: 400,
-        label: gt('Save to Drive'),
-        mobile: 'hi',
-        ref: 'io.ox/contacts/actions/save-attachment'
-    }));
+    /*
+     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+     id: 'viewer',
+     index: 100,
+     label: gt('Viewer'),
+     mobile: 'hi',
+     ref: 'io.ox/contacts/actions/viewer'
+     }));
+    */
 });

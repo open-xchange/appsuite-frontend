@@ -23,6 +23,8 @@ define('io.ox/core/tk/tokenfield', [
 
     'use strict';
 
+    // http://sliptree.github.io/bootstrap-tokenfield/
+
     $.fn.tokenfield.Constructor.prototype.getTokensList = function (delimiter, beautify, active) {
         delimiter = delimiter || this._firstDelimiter;
         beautify = ( typeof beautify !== 'undefined' && beautify !== null ) ? beautify : this.options.beautify;
@@ -85,10 +87,13 @@ define('io.ox/core/tk/tokenfield', [
                         model: model
                     };
                 },
+                // customize token
+                drawToken: $.noop,
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,
                 // tokenfield default
                 allowEditing: true,
+                createTokensOnBlur: true,
                 // dnd sort
                 dnd: true,
                 // token view
@@ -279,7 +284,7 @@ define('io.ox/core/tk/tokenfield', [
                 })
                 .addClass('tokenfield');
             this.$el.tokenfield({
-                createTokensOnBlur: true,
+                createTokensOnBlur: o.createTokensOnBlur,
                 minLength: o.minLength,
                 allowEditing: o.allowEditing,
                 typeahead: self.typeaheadOptions

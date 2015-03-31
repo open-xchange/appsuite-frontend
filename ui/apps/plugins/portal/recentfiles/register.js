@@ -13,7 +13,7 @@
 
 define('plugins/portal/recentfiles/register', [
     'io.ox/core/extensions',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/api/user',
     'gettext!plugins/portal',
     'settings!io.ox/core',
@@ -119,8 +119,7 @@ define('plugins/portal/recentfiles/register', [
             draw: function (baton) {
                 var popup = this.busy();
                 require(['io.ox/files/fluid/view-detail'], function (view) {
-                    var obj = filesAPI.reduce(baton.item);
-                    filesAPI.get(obj).done(function (data) {
+                    filesAPI.get(baton.item).done(function (data) {
                         popup.idle().append(view.draw(data));
                     });
                 });

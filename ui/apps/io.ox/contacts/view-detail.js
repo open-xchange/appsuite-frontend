@@ -83,7 +83,7 @@ define('io.ox/contacts/view-detail', [
         return new links.Dropdown({
             label: label,
             classes: 'attachment-item',
-            ref: 'io.ox/contacts/attachment/links'
+            ref: 'io.ox/core/tk/attachment/links'
         }).draw.call(container, data);
     }
 

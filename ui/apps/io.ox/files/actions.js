@@ -319,8 +319,7 @@ define('io.ox/files/actions', [
         requires: 'some',
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                var list = [].concat(baton.data);
-                action(list);
+                action(baton);
             });
         }
     });

@@ -68,7 +68,7 @@ define('io.ox/mail/compose/extensions', [
 
         title: function () {
             this.append(
-                $('<h1 class="hidden-xs clear-title title">').text(gt('Compose new mail'))
+                $('<h1 class="sr-only">').text(gt('Compose new mail'))
             );
         },
 

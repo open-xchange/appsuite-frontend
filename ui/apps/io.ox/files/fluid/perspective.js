@@ -16,7 +16,7 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/core/extensions',
     'io.ox/core/commons',
     'io.ox/core/tk/dialogs',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/upload',
     'io.ox/core/extPatterns/dnd',
@@ -111,9 +111,8 @@ define('io.ox/files/fluid/perspective', [
     }
 
     function loadFiles(app) {
-        var def = $.Deferred(),
-            search = app.getWindow().nodes.sidepanel.find('.search-container').is(':visible');
-        if (!search) {
+        var def = $.Deferred();
+        if (!app.get('search').isActive()) {
             //empty search query shows folder again
             api.getAll(app.folder.get(), { cache: false }).done(def.resolve).fail(def.reject);
         } else {
@@ -419,7 +418,8 @@ define('io.ox/files/fluid/perspective', [
             filesize.replace('\xA0', ' '),
             gt.noI18n(changed)
         ];
-        if (api.tracker.isLocked(file)) {
+        // deprecated code anyway
+        if (api.tracker && api.tracker.isLocked(file)) {
             if (api.tracker.isLockedByMe(file)) {
                 arialabel.push(gt('This file is locked by you'));
             } else {
@@ -499,7 +499,7 @@ define('io.ox/files/fluid/perspective', [
                         .attr('title', title)
                         .append(
                             // lock icon
-                            api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : $(),
+                            api.tracker && api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : $(),
                             // long title
                             $('<span class="not-selectable title-long">').text(gt.noI18n(cut(title, 90))),
                             // short title
@@ -622,7 +622,6 @@ define('io.ox/files/fluid/perspective', [
                 .on('folder:change', function () {
                     app.currentFile = null;
                     dropZoneInit(app);
-                    self.main.closest('.search-open').removeClass('search-open');
                     dialog.close();
                     breadcrumb = undefined;
                     allIds = [];
@@ -850,10 +849,12 @@ define('io.ox/files/fluid/perspective', [
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search:query search:cancel', function () {
-                breadcrumb = undefined;
-                allIds = [];
-                drawFirst();
+            app.get('search').on({
+                'search:query search:idle': function () {
+                    breadcrumb = undefined;
+                    allIds = [];
+                    drawFirst();
+                }
             });
 
             api.on('update', function (e, obj) {
@@ -871,7 +872,7 @@ define('io.ox/files/fluid/perspective', [
             });
 
             api.on('refresh.all', function () {
-                if (!app.getWindow().facetedsearch.active) {
+                if (!app.get('search').isActive()) {
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},

@@ -13,7 +13,7 @@
 
 define('plugins/portal/files/register', [
     'io.ox/core/extensions',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/preview/main',
     'io.ox/portal/widgets',
     'gettext!plugins/portal'
@@ -31,7 +31,7 @@ define('plugins/portal/files/register', [
             return api.get({ folder: props.folder_id, id: props.id }).then(
                 function success(data) {
                     baton.data = data;
-                    api.on('delete', function (event, elements) {
+                    api.on('remove', function (event, elements) {
                         var filename = baton.data.filename;
                         if (_(elements).any(function (element) { return element.filename === filename; })) {
                             var widgetCol = portalWidgets.getCollection();
@@ -63,7 +63,7 @@ define('plugins/portal/files/register', [
                 content.css('backgroundImage', 'url(' + url + ')');
             } else if ((/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
-                options = { thumbnailWidth: 300, thumbnailHeight: 300 };
+                options = { width: 300, height: 300 };
                 url = api.getUrl(data, 'cover', options);
                 this.addClass('photo-stream');
                 content.addClass('decoration');
@@ -89,8 +89,7 @@ define('plugins/portal/files/register', [
         draw: function (baton) {
             var popup = this.busy();
             require(['io.ox/files/fluid/view-detail'], function (view) {
-                var obj = api.reduce(baton.data);
-                api.get(obj).done(function (data) {
+                api.get(baton.data).done(function (data) {
                     popup.idle().append(view.draw(data));
                 });
             });

@@ -253,7 +253,7 @@ define('io.ox/tasks/view-detail', [
         var bla = new links.Dropdown({
                 label: label,
                 classes: 'attachment-item',
-                ref: 'io.ox/tasks/attachment/links'
+                ref: 'io.ox/core/tk/attachment/links'
             }).draw.call(container, data);
 
         //no inline style for mobile

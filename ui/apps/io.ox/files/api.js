@@ -61,7 +61,7 @@ define('io.ox/files/api', [
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
+            return /^application\/(msword|vnd.ms-word|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
         },
 
         isPDF: function (type) {
@@ -391,13 +391,15 @@ define('io.ox/files/api', [
     //
     // GET all files of a folder (for compatibility)
     //
-    api.getAll = function (folder) {
+    api.getAll = function (folder, options) {
+
+        options = _.extend({ columns: allColumns }, options);
 
         return http.GET({
             module: 'files',
             params: {
                 action: 'all',
-                columns: allColumns,
+                columns: options.columns,
                 folder: folder,
                 timezone: 'UTC'
             }
@@ -682,7 +684,7 @@ define('io.ox/files/api', [
         });
     };
 
-    function performUpload(options) {
+    function performUpload(options, data) {
 
         options = _.extend({
             // used by api.version.upload to be different from api.upload
@@ -701,10 +703,7 @@ define('io.ox/files/api', [
         }
 
         // add data
-        formData.append('json', JSON.stringify({
-            folder_id: options.folder,
-            description: options.description || ''
-        }));
+        formData.append('json', JSON.stringify(data));
 
         return http.UPLOAD({
             module: options.module,
@@ -720,15 +719,21 @@ define('io.ox/files/api', [
      * @param {object} file options
      *     - options.file - a File object (as in Blob)
      *     - options.filename - an optional filename (overrides the name value of options.file)
-     *     - options.folder - the id of the folder to upload the file into
      *     - options.module - override the module used to upload to (default: 'files')
+     *     - options.folder - the id of the folder to upload the file into
+     *
+     *     - options.description - optional meta data for the file object
      * @returns {object}
      *     - a promise resolving to the created file
      *     - promise can be aborted using promise.abort function
      */
     api.upload = function (options) {
         options.action = 'new';
-        return performUpload(options).done(function () {
+        return performUpload(options, {
+            folder_id: options.folder,
+            description: options.description || ''
+        })
+        .done(function () {
             api.trigger('add:file');
         });
     };
@@ -736,10 +741,26 @@ define('io.ox/files/api', [
     // File versions
 
     api.versions = {
-
+        /**
+         * Upload a new version for a file
+         * @param {object} file options
+         *     - options.file - a File object (as in Blob)
+         *     - options.filename - an optional filename (overrides the name value of options.file)
+         *     - options.module - override the module used to upload to (default: 'files')
+         *     - options.folder - the id of the folder to upload the file into
+         *
+         *     - options.version_comment - optional meta data for the file object
+         * @returns {object}
+         *     - a promise resolving to the created file
+         *     - promise can be aborted using promise.abort function
+         */
         upload: function (options) {
             options.action = 'update';
-            return performUpload(options).done(function () {
+            return performUpload(options, {
+                folder_id: options.folder,
+                version_comment: options.version_comment || ''
+            })
+            .done(function () {
                 api.trigger('add:version');
             });
         },
@@ -821,6 +842,32 @@ define('io.ox/files/api', [
                 api.trigger('change:version');
             });
         }
+    };
+
+    //
+    // Search
+    //
+    api.search = function (query, options) {
+
+        options = _.extend({ columns: api.search.columns, sort: '702', order: 'asc', limit: 100 }, options);
+
+        return http.PUT({
+            module: 'files',
+            params: {
+                action: 'search',
+                columns: options.columns,
+                sort: options.sort,
+                order: options.order,
+                limit: options.limit
+            },
+            data: api.search.getData(query, options)
+        });
+    };
+
+    // make extensible
+    api.search.columns = allColumns;
+    api.search.getData = function (query) {
+        return { pattern: query };
     };
 
     return api;

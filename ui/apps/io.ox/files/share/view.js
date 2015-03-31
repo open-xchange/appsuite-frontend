@@ -161,7 +161,7 @@ define('io.ox/files/share/view', [
                     groups: true
                 },
                 maxResults: 20,
-                draw: function (token) {
+                drawAutocompleteItem: function (token) {
                     baton.participantModel = token.model;
                     ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
                 },

@@ -272,7 +272,6 @@ define('io.ox/core/tk/autocomplete', [
                     });
                 } else {
                     var regular, childs;
-
                     //apply style
                     o.container
                         .addClass('autocomplete-search');
