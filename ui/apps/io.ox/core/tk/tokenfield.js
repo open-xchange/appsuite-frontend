@@ -87,6 +87,7 @@ define('io.ox/core/tk/tokenfield', [
                         model: model
                     };
                 },
+                // customize token
                 drawToken: $.noop,
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,

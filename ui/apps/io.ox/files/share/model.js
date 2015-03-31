@@ -75,13 +75,16 @@ define('io.ox/files/share/model', [
                 };
 
             // collect target data
-            _(this.get('files')).each(function (file) {
+            _(this.get('files')).each(function (item) {
                 var target = {
-                    module: 'infostore',
-                    folder: file.folder_id || file.folder
+                    module: 'infostore'
                 };
-                if (file.id) {
-                    target.item = file.id;
+                if (item.isFolder()) {
+                    target.folder = item.get('id');
+                }
+                if (item.isFile()) {
+                    target.folder = item.get('folder_id');
+                    target.item = item.get('id');
                 }
                 if (self.get('temporary')) {
                     target.expiry_date = self.getExpiryDate();
