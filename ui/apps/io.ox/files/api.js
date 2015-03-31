@@ -760,8 +760,12 @@ define('io.ox/files/api', [
                 folder_id: options.folder,
                 version_comment: options.version_comment || ''
             })
-            .done(function () {
-                api.trigger('add:version');
+            .then(function () {
+                // reload versions list
+                return api.versions.load(options, { cache: false }).done(function () {
+                    // the mediator will reload the current collection
+                    api.trigger('add:version');
+                });
             });
         },
 
