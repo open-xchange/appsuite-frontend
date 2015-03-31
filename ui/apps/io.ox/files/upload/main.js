@@ -128,7 +128,7 @@ define('io.ox/files/upload/main', [
         };
         this.progress = function (item, position, files) {
             var model = uploadCollection.at(position),
-                request = api.uploadFile(
+                request = api.upload(
                     _.extend({ file: item.file }, item.options)
                 )
                 .progress(function (e) {

@@ -688,7 +688,7 @@ define('io.ox/files/api', [
      *     - a promise resolving to the created file
      *     - promise can be aborted using promise.abort function
      */
-    api.uploadFile = function (options) {
+    api.upload = function (options) {
         options.action = 'new';
         return performUpload(options).done(function () {
             api.trigger('create:file');
