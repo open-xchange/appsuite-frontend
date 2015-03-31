@@ -12,7 +12,6 @@
  */
 
 define('io.ox/core/tk/attachments', [
-    'io.ox/core/extensions',
     'io.ox/core/api/attachment',
     'io.ox/core/folder/title',
     'io.ox/core/strings',
@@ -24,8 +23,9 @@ define('io.ox/core/tk/attachments', [
     'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
     'io.ox/core/notifications',
-    'less!io.ox/core/tk/attachments'
-], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
+    'less!io.ox/core/tk/attachments',
+    'io.ox/core/pim/actions'
+], function (attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
@@ -412,7 +412,7 @@ define('io.ox/core/tk/attachments', [
                     return new links.Dropdown({
                         label: label || data.filename,
                         classes: 'attachment-link',
-                        ref: 'io.ox/core/tk/attachments/links'
+                        ref: 'io.ox/core/tk/attachment/links'
                     }).draw.call($node, { data: data, options: options });
                 }
 
@@ -448,156 +448,6 @@ define('io.ox/core/tk/attachments', [
 
         }, options);
     }
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'slideshow',
-        index: 100,
-        label: gt('Slideshow'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'preview',
-        index: 100,
-        label: gt('Preview'),
-        ref: 'io.ox/core/tk/attachment/actions/preview-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'open',
-        index: 150,
-        label: gt('Open in browser'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/open-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'download',
-        index: 200,
-        label: gt('Download'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/download-attachment'
-    }));
-
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'save',
-        index: 400,
-        label: gt('Save to Drive'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/save-attachment'
-    }));
-
-    //attachment actions
-    new links.Action('io.ox/core/tk/attachment/actions/preview-attachment', {
-        id: 'preview',
-        requires: function (e) {
-            return require(['io.ox/preview/main'])
-                .pipe(function (p) {
-                    var list = _.getArray(e.context);
-                    // is at least one attachment supported?
-                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({
-                            filename: obj.filename,
-                            mimetype: obj.content_type
-                        })
-                        .supportsPreview();
-                    }, false);
-                });
-        },
-        multiple: function (list, baton) {
-            ox.load([
-                'io.ox/core/tk/dialogs',
-                'io.ox/preview/main',
-                'io.ox/core/api/attachment'
-            ]).done(function (dialogs, p, attachmentAPI) {
-                //build Sidepopup
-                new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data) {
-                        data.dataURL = attachmentAPI.getUrl(data, 'view');
-                        var pre = new p.Preview(data, {
-                            width: popup.parent().width(),
-                            height: 'auto'
-                        });
-                        if (pre.supportsPreview()) {
-                            popup.append(
-                                $('<h4>').text(data.filename)
-                            );
-                            pre.appendTo(popup);
-                            popup.append($('<div>').text('\u00A0'));
-                        }
-                    });
-                    if (popup.find('h4').length === 0) {
-                        popup.append($('<h4>').text(gt('No preview available')));
-                    }
-                });
-            });
-        }
-    });
-
-    new links.Action('io.ox/core/tk/attachment/actions/slideshow-attachment', {
-        id: 'slideshow',
-        requires: function (e) {
-            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        multiple: function (list, baton) {
-            require(['io.ox/files/carousel'], function (slideshow) {
-                var files = _(list).map(function (file) {
-                    return {
-                        url: attachmentAPI.getUrl(file, 'open'),
-                        filename: file.filename
-                    };
-                });
-                slideshow.init({
-                    baton: { allIds: files },
-                    attachmentMode: true,
-                    selector: baton.options.selector
-                });
-            });
-        }
-    });
-
-    new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
-        id: 'open',
-        requires: 'one',
-        multiple: function (list) {
-            _(list).each(function (data) {
-                var url = attachmentAPI.getUrl(data, 'open');
-                window.open(url);
-            });
-        }
-    });
-
-    //attachments api currently doesn't support zip download
-    new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
-        id: 'download',
-        requires: function (e) {
-            return e.collection.has('one') && _.device('!ios');
-        },
-        action: function (baton) {
-            require(['io.ox/core/download'], function (download) {
-                var url = attachmentAPI.getUrl(baton.data, 'download');
-                download.url(url);
-            });
-        }
-    });
-
-    new links.Action('io.ox/core/tk/attachment/actions/save-attachment', {
-        id: 'save',
-        capabilities: 'infostore',
-        requires: 'some',
-        multiple: function (list) {
-            //cannot be converted to multiple request because of backend bug (module overides params.module)
-            _(list).each(function (data) {
-                attachmentAPI.save(data);
-            });
-            require(['io.ox/core/notifications'], function (notifications) {
-                setTimeout(function () { notifications.yell('success', gt('Attachments have been saved!')); }, 300);
-            });
-        }
-    });
 
     var fileUploadWidget = function (options) {
 

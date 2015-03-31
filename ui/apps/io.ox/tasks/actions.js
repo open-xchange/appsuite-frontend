@@ -19,7 +19,8 @@ define('io.ox/tasks/actions', [
     'io.ox/core/print',
     'io.ox/core/extPatterns/actions',
     'io.ox/tasks/common-extensions',
-    'io.ox/core/folder/api'
+    'io.ox/core/folder/api',
+    'io.ox/core/pim/actions'
 ], function (ext, links, gt, notifications, print, actions, extensions, folderAPI) {
 
     'use strict';
@@ -155,121 +156,6 @@ define('io.ox/tasks/actions', [
         multiple: function (list) {
             ox.load(['io.ox/tasks/actions/printDisabled']).done(function (action) {
                 action.multiple(list);
-            });
-        }
-    });
-
-    //attachment actions
-    new links.Action('io.ox/tasks/actions/slideshow-attachment', {
-        id: 'slideshow',
-        requires: function (e) {
-            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        multiple: function (list) {
-            require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
-                var files = _(list).map(function (file) {
-                    return {
-                        url: attachmentAPI.getUrl(file, 'open'),
-                        filename: file.filename
-                    };
-                });
-                slideshow.init({
-                    baton: { allIds: files },
-                    attachmentMode: true,
-                    selector: '.window-container.io-ox-tasks-window'
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/tasks/actions/preview-attachment', {
-        id: 'preview',
-        requires: function (e) {
-            return require(['io.ox/preview/main'])
-                .pipe(function (p) {
-                    var list = _.getArray(e.context);
-                    // is at least one attachment supported?
-                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({
-                            filename: obj.filename,
-                            mimetype: obj.content_type
-                        })
-                        .supportsPreview();
-                    }, false);
-                });
-        },
-        multiple: function (list, baton) {
-            ox.load([
-                'io.ox/core/tk/dialogs',
-                'io.ox/preview/main',
-                'io.ox/core/api/attachment'
-            ]).done(function (dialogs, p, attachmentAPI) {
-                //build Sidepopup
-                new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
-                    _(list).each(function (data) {
-                        data.dataURL = attachmentAPI.getUrl(data, 'view');
-                        var pre = new p.Preview(data, {
-                            width: popup.parent().width(),
-                            height: 'auto'
-                        });
-                        if (pre.supportsPreview()) {
-                            popup.append(
-                                $('<h4>').text(data.filename)
-                            );
-                            pre.appendTo(popup);
-                            popup.append($('<div>').text('\u00A0'));
-                        }
-                    });
-                    if (popup.find('h4').length === 0) {
-                        popup.append($('<h4>').text(gt('No preview available')));
-                    }
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/tasks/actions/open-attachment', {
-        id: 'open',
-        requires: 'one',
-        multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
-                _(list).each(function (data) {
-                    var url = attachmentAPI.getUrl(data, 'view');
-                    window.open(url);
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/tasks/actions/download-attachment', {
-        id: 'download',
-        requires: function (e) {
-            //browser support for downloading more than one file at once is pretty bad (see Bug #36212)
-            return e.collection.has('one') && _.device('!ios');
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
-                _(list).each(function (data) {
-                    var url = attachmentAPI.getUrl(data, 'download');
-                    download.url(url);
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/tasks/actions/save-attachment', {
-        id: 'save',
-        capabilities: 'infostore',
-        requires: 'some',
-        multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
-                //cannot be converted to multiple request because of backend bug (module overides params.module)
-                _(list).each(function (data) {
-                    attachmentAPI.save(data);
-                });
-                setTimeout(function () { notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
         }
     });
@@ -450,45 +336,5 @@ define('io.ox/tasks/actions', [
         mobile: 'lo',
         label: gt('Print'),
         ref: 'io.ox/tasks/actions/print'
-    }));
-
-    // Attachments
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'slideshow',
-        index: 100,
-        label: gt('Slideshow'),
-        mobile: 'hi',
-        ref: 'io.ox/tasks/actions/slideshow-attachment'
-    }));
-
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'preview',
-        index: 100,
-        label: gt('Preview'),
-        ref: 'io.ox/tasks/actions/preview-attachment'
-    }));
-
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'open',
-        index: 200,
-        label: gt('Open in browser'),
-        mobile: 'hi',
-        ref: 'io.ox/tasks/actions/open-attachment'
-    }));
-
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'download',
-        index: 300,
-        label: gt('Download'),
-        mobile: 'hi',
-        ref: 'io.ox/tasks/actions/download-attachment'
-    }));
-
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'save',
-        index: 400,
-        label: gt('Save to Drive'),
-        mobile: 'hi',
-        ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });
