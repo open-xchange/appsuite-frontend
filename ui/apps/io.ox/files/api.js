@@ -691,7 +691,7 @@ define('io.ox/files/api', [
     api.upload = function (options) {
         options.action = 'new';
         return performUpload(options).done(function () {
-            api.trigger('create:file');
+            api.trigger('add:file');
         });
     };
 
@@ -702,7 +702,7 @@ define('io.ox/files/api', [
         upload: function (options) {
             options.action = 'update';
             return performUpload(options).done(function () {
-                api.trigger('create:version');
+                api.trigger('add:version');
             });
         },
 

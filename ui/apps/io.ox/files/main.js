@@ -504,8 +504,8 @@ define('io.ox/files/main', [
         /*
          * update view when adding a new file
          */
-        'create:file': function (app) {
-            api.on('create:file', _.debounce(function () {
+        'add:file': function (app) {
+            api.on('add:file', _.debounce(function () {
                 app.listView.reload();
             }, 100));
         },
