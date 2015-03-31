@@ -109,11 +109,16 @@ define.async('io.ox/oauth/keychain', [
                     };
 
                 window['callback_' + callbackName] = function (response) {
+                    delete window['callback_' + callbackName];
+                    popupWindow.close();
+
+                    if (!response.data) {
+                        return;
+                    }
+
                     // TODO handle a possible error object in response
                     cache[service.id].accounts[response.data.id] = response.data;
                     def.resolve(response.data);
-                    delete window['callback_' + callbackName];
-                    popupWindow.close();
                     self.trigger('create', response.data);
                     self.trigger('refresh.all refresh.list');
                     ox.trigger('refresh-portal');
