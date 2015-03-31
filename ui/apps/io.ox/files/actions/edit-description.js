@@ -12,67 +12,32 @@
  */
 
 define('io.ox/files/actions/edit-description', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/tk/keys',
+    'io.ox/core/notifications',
     'gettext!io.ox/files'
-], function (api, dialogs, KeyListener, gt) {
+], function (api, dialogs, notifications, gt) {
 
     'use strict';
 
     return function (data) {
 
-        var keys = new KeyListener($input),
-            dialog = new dialogs.ModalDialog(),
-            $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
-                    .val(data.description),
-            $form = $('<form>')
-                    .css('margin', '0 0 0 0')
-                    .append(
-                        $input
-                    );
-
         function save() {
-            var description = $input.val(),
-                update = {
-                    id: data.id,
-                    folder_id: data.folder_id,
-                    description: description
-                };
-            return api.update(update).fail(notify);
+            var changes = { description: this.getContentNode().find('textarea').val() };
+            console.log('update', data, changes);
+            return api.update(data, changes).fail(notifications.yell);
         }
 
-        // notifications lazy load
-        function notify () {
-            var self = this,
-                args = arguments;
-            require(['io.ox/core/notifications'], function (notifications) {
-                notifications.yell.apply(self, args);
-            });
-        }
-
-        keys.on('shift+enter', function () {
-            dialog.busy();
-            save().done(function () {
-                dialog.close();
-            });
-        });
-
-        dialog
+        new dialogs.ModalDialog()
             .header($('<h4>').text(gt('Description')))
             .append(
-                $form
+                $('<textarea rows="10" class="form-control" tabindex="1">')
             )
             .addPrimaryButton('save', gt('Save'), 'save',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+            .on('save', save)
             .show(function () {
-                $input.select();
-                keys.include();
-            })
-            .done(function (action) {
-                if (action === 'save') {
-                    save();
-                }
+                this.find('textarea').val(data.description).focus();
             });
     };
 });

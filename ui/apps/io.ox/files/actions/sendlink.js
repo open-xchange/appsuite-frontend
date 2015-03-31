@@ -12,26 +12,26 @@
  */
 
 define('io.ox/files/actions/sendlink', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'gettext!io.ox/files'
 ], function (api, gt) {
 
     'use strict';
 
-    function getUrl (file) {
+    function getUrl(file) {
         return ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
     }
 
-    function getHTML (label, url) {
+    function getHTML(label, url) {
         var link = '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>';
         return _.escape(label) + '<br>' + gt('Direct link: %1$s', link);
     }
 
-    function getText (label, url) {
+    function getText(label, url) {
         return label + '\n' + gt('Direct link: %1$s', url);
     }
 
-    function process (list) {
+    function process(list) {
         // generate text and html content
         var html = [], text = [], options;
         _(list).each(function (file) {
@@ -55,6 +55,6 @@ define('io.ox/files/actions/sendlink', [
     }
 
     return function (list) {
-        api.getList(list).done(process);
+        api.list(list).done(process);
     };
 });

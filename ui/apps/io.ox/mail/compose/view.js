@@ -640,12 +640,9 @@ define('io.ox/mail/compose/view', [
                                 self.clean();
                                 def.resolve();
                             } else if (action === 'savedraft') {
-                                self.saveDraft().done(function () {
-                                    //clean();
-                                    def.resolve();
-                                }).fail(function (e) {
-                                    def.reject(e);
-                                });
+                                self.saveDraft().always(function () {
+                                    self.clean();
+                                }).done(def.resolve).fail(def.reject);
                             } else {
                                 def.reject();
                             }

@@ -12,70 +12,10 @@
  */
 
 .io-ox-tasks-edit-main {
-
-    label, legend , .sectiontitle{
-        margin-bottom: 5px;
-        font-size: 13px;
-        color: #888;
-    }
-
-    .io-ox-tasks-edit {
-        padding-top: 10px;
-    }
-
-    legend {
-        padding-top: 8px;
-        border: 0;
-    }
-
-    .task-edit-cancel { float: right; }
-
-    .task-edit-save{
-        margin-left: 13px;
-        float: right;
-     }
-
-    .form-inline input{
-        width: 90px;
-        &.datepicker-day-field {
-            width: 107px;
-        }
-    }
-
-    .typeahead.calendaredit {
-
-        height: 200px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-width: 85px;
-
-        a {
-            text-align: right;
-            padding: 3px 15px 3px 3px;
-        }
-
-    }
-
     //hide collapsed and details on startup
-    .collapsed, .task-edit-details {
-        display: none;
-    }
+    .collapsed, .task-edit-details { display: none; }
 
     .progress-field { text-align: center; }
-
-    .private-flag {
-        position: relative;
-        top: 16px;
-        @media (max-width: 767px) {
-            top: 0px;
-        }
-    }
-
-    .expand-link, .expand-details-link {
-        margin-bottom: 9px;
-        padding-left: 0px;
-        display: block;
-    }
 
     .note-field {
         resize: vertical;
@@ -83,20 +23,8 @@
         min-height: 120px;
     }
 
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
-
-        //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
-        .form-inline input {
-            padding: 4px 6px;
-            &.datepicker-day-field {
-                width: 100%;
-            }
-        }
-
-        .form-control[readonly] { background-color: #fff; }
-
-        .task-edit-cancel { float: none; }
-
-        .task-edit-headline { margin-bottom: 9px; }
+    .btn.btn-link {
+        padding-left: 0;
+        margin-bottom: 9px;
     }
 }

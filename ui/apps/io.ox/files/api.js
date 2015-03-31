@@ -64,6 +64,10 @@ define('io.ox/files/api', [
             return /^application\/(msword|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
         },
 
+        isPDF: function (type) {
+            return /^application\/pdf$/.test(type || this.getMimeType());
+        },
+
         isText: function (type) {
             return /^(text\/plain|application\/rtf)$/.test(type || this.getMimeType());
         },
@@ -71,6 +75,10 @@ define('io.ox/files/api', [
         isEncrypted: function () {
             // check if file has "guard" file extension
             return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
+        },
+
+        isLocked: function () {
+            return this.get('locked_until') > _.now();
         },
 
         getDisplayName: function () {
@@ -122,8 +130,53 @@ define('io.ox/files/api', [
             var type = this.getMimeType();
             if (this.isImage(type)) return 'thumbnail';
             if (this.isAudio(type)) return 'cover';
-            if (capabilities.has('document_preview') && (this.isOffice(type) || this.isText(type))) return 'preview';
+            if (capabilities.has('document_preview') && (this.isPDF(type) || this.isOffice(type) || this.isText(type))) return 'preview';
             return false;
+        },
+
+        // get URL to open, download, or preview a file
+        // options:
+        // - scaletype: contain or cover or auto
+        // - height: image height in pixels
+        // - widht: image widht in pixels
+        // - version: true/false. if false no version will be appended
+        getUrl: function (type, options) {
+
+            options = _.extend({ scaletype: 'contain' }, options);
+
+            var file = this.toJSON(),
+                url = ox.apiRoot + '/files',
+                folder = encodeURIComponent(file.folder_id),
+                id = encodeURIComponent(file.id),
+                version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
+                // basic URL
+                query = '?action=document&folder=' + folder + '&id=' + id + version,
+                // file name
+                name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
+                // scaling options
+                scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+                // avoid having identical URLs across contexts (rather edge case)
+                // also inject last_modified if available; needed for "revisionless save"
+                // the content might change without creating a new version (which would be part of the URL)
+                buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
+
+            if (buster) query += '&' + buster;
+
+            switch (type) {
+                case 'download':
+                    return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                case 'thumbnail':
+                    return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                case 'preview':
+                    return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                case 'cover':
+                    return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
+                case 'play':
+                    return url + query + '&delivery=view';
+                // open/view
+                default:
+                    return url + name + query + '&delivery=view';
+            }
         }
     });
 
@@ -209,12 +262,6 @@ define('io.ox/files/api', [
 
     var allColumns = '20,23,1,5,700,702,703,704,705,707,3,711';
 
-    function resetFolder(id) {
-        var list = _(pool.getByFolder(id));
-        list.each(function (collection) { collection.expired = true; });
-        return list;
-    }
-
     /**
      * map error codes and text phrases for user feedback
      * @param  {event} e
@@ -247,39 +294,6 @@ define('io.ox/files/api', [
             };
         }
         return e;
-    };
-
-    /**
-    * returns an error object in case arguments/properties are missing
-    * @param  {object}           obj
-    * @param  {string|array}     property keys
-    * @param  {object}           options
-    * @return { undefined|object }
-    */
-    var missing = function (obj, keys, options) {
-        var opt, empty = [], undef = [], response, missing;
-        //preparation
-        obj = obj || {};
-        keys = [].concat(keys.split(','));
-        opt = $.extend({ type: 'undefined' }, options);
-        //idenfity undefined/empty
-        _.each(keys, function (key) {
-            if (!(key in obj)) {
-                undef.push(key);
-            } else if (_.isEmpty(obj[key])) {
-                empty.push(key);
-            }
-        });
-        //consider option
-        missing = opt.type === 'undefined' ? undef : undef.concat(empty);
-        //set response
-        if (missing.length) {
-            response = failedUpload({
-                categories: 'ERROR',
-                error: opt.message || gt('Please specify these missing variables: ') + missing
-            });
-        }
-        return response;
     };
 
     // add event hub
@@ -336,17 +350,25 @@ define('io.ox/files/api', [
 
     }());
 
-    api.get = function (options) {
+    //
+    // GET a single file
+    //
 
-        var model = pool.get('detail').get(_.cid(options));
-        if (model) return $.when(model.toJSON());
+    api.get = function (file, options) {
+
+        options = _.extend({ cache: true }, options);
+
+        if (options.cache) {
+            var model = pool.get('detail').get(_.cid(file));
+            if (model) return $.when(model.toJSON());
+        }
 
         return http.GET({
             module: 'files',
             params: {
                 action: 'get',
-                id: options.id,
-                folder: options.folder_id || options.folder,
+                id: file.id,
+                folder: file.folder_id || file.folder,
                 timezone: 'UTC'
             }
         })
@@ -356,10 +378,56 @@ define('io.ox/files/api', [
         });
     };
 
-    // We should *NOT* LOAD versions by default!
-    // pool.get('detail').on('add', function (model) {
-    //     api.versions(model.attributes);
-    // });
+    //
+    // GET multiple files
+    //
+
+    api.list = (function () {
+
+        function has(item) {
+            return this.get(_.cid(item));
+        }
+
+        function getter(item) {
+            return this.get(_.cid(item)).toJSON();
+        }
+
+        function add(item) {
+            pool.add('detail', item);
+        }
+
+        return function (ids, options) {
+
+            var uncached = ids, collection = pool.get('detail');
+            options = _.extend({ cache: true }, options);
+
+            // empty?
+            if (ids.length === 0) return $.when([]);
+
+            // get uncached items
+            if (options.cache) uncached = _(ids).reject(has, collection);
+
+            // all cached?
+            if (uncached.length === 0) return $.when(_(ids).map(getter, collection));
+
+            return http.fixList(uncached, http.PUT({
+                module: 'files',
+                params: { action: 'list', columns: allColumns, timezone: 'UTC' },
+                data: http.simplify(uncached)
+            }))
+            .then(function (array) {
+                // add new items to the pool
+                _(array).each(add);
+                // reconstruct results
+                return _(ids).map(getter, collection);
+            });
+        };
+
+    }());
+
+    //
+    // Lock/unlock files
+    //
 
     var lockToggle = function (list, action) {
         // allow single object and arrays
@@ -367,15 +435,13 @@ define('io.ox/files/api', [
         // pause http layer
         http.pause();
         // process all updates
-        list.map(function (m) {
-            return m.toJSON();
-        }).forEach(function (o) {
+        _(list).each(function (item) {
             http.PUT({
                 module: 'files',
                 params: {
                     action: action,
-                    id: o.id,
-                    folder: o.folder_id || o.folder,
+                    id: item.id,
+                    folder: item.folder_id || item.folder,
                     timezone: 'UTC'
                     // Use 10s diff for debugging purposes
                     // diff: 10000
@@ -383,7 +449,6 @@ define('io.ox/files/api', [
                 appendColumns: false
             });
         });
-
         // resume & trigger refresh
         return http.resume();
     };
@@ -395,8 +460,10 @@ define('io.ox/files/api', [
      */
     api.unlock = function (list) {
         return lockToggle(list, 'unlock').done(function () {
-            list.forEach(function (m) {
-                m.set('locked_until', 0);
+            var collection = pool.get('detail');
+            _(list).each(function (item) {
+                var model = collection.get(_.cid(item));
+                if (model) model.set('locked_until', 0);
             });
         });
     };
@@ -407,38 +474,8 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.lock = function (list) {
-        return lockToggle(list, 'lock').done(function () {
-            var folder = list[0].get('folder_id');
-            resetFolder(folder);
-            folderAPI.reload(folder);
-        });
-    };
-
-    /**
-     * returns versions
-     * @param  {object} options
-     * @param  {string} options.id
-     * @return { deferred }
-     */
-    api.versions = function (options) {
-        var cid = _.cid(options),
-            model = pool.get('detail').get(cid);
-
-        if (model && model.get('versions')) return $.when(model.get('versions'));
-
-        return http.GET({
-            module: 'files',
-            params: _.extend({ action: 'versions', timezone: 'utc' }, options),
-            appendColumns: true
-        })
-        .done(function (data) {
-            if (model) {
-                model.set('versions', data);
-            } else {
-                pool.add('detail', _.extend({
-                    versions: data
-                }, options));
-            }
+        return lockToggle(list, 'lock').then(function () {
+            return api.list(list, { cache: false });
         });
     };
 
@@ -465,34 +502,6 @@ define('io.ox/files/api', [
             data: [folder_id]
         }).done(function () {
             folderAPI.reload(folder_id);
-        });
-    };
-
-    /**
-     * removes version
-     * @param  {object} version (file version object)
-     * @return { deferred }
-     */
-    api.detach = function (version) {
-        //missing arguments / argument properties
-        var error = missing(version, 'id,folder_id,version');
-        if (error) return $.Deferred().reject(error).promise();
-
-        return $.when(this.get(version), http.PUT({
-            module: 'files',
-            params: {
-                action: 'detach',
-                id: version.id,
-                folder: version.folder_id,
-                timestamp: _.now()
-            },
-            data: [version.version],
-            appendColumns: false
-        }))
-        .done(function (m) {
-            m.set('versions', m.get('versions').filter(function (v) {
-                return v.version !== version.version;
-            }));
         });
     };
 
@@ -531,6 +540,255 @@ define('io.ox/files/api', [
                 });
             })
         );
+    };
+
+    //
+    // Move / Copy
+    //
+
+    function move(list, targetFolderId) {
+        http.pause();
+        _(list).map(function (item) {
+            return api.update(item, { folder_id: targetFolderId });
+        });
+        return http.resume();
+    }
+
+    function copy(list, targetFolderId) {
+        http.pause();
+        _(list).map(function (item) {
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: 'copy',
+                    id: item.id,
+                    folder: item.folder_id,
+                    timestamp: item.timestamp || _.then()
+                },
+                data: { folder_id: targetFolderId },
+                appendColumns: false
+            });
+        });
+        return http.resume();
+    }
+
+    function transfer(type, list, targetFolderId) {
+
+        // mark target folder as expired
+        pool.resetFolder(targetFolderId);
+
+        var fn = type === 'move' ? move : copy;
+
+        return http.wait(fn(list, targetFolderId)).then(function (response) {
+            var errorText, i = 0, $i = response.length;
+            // look if anything went wrong
+            for (; i < $i; i++) {
+                if (response[i].error) {
+                    errorText = response[i].error.error;
+                    break;
+                }
+            }
+            api.trigger(type, list, targetFolderId);
+            folderAPI.reload(targetFolderId, list);
+            if (errorText) return errorText;
+        });
+    }
+
+    /**
+     * Move files to another folder
+     * @param  {array} list of objects { id, folder_id }
+     * @param  {string} targetFolderId
+     */
+    api.move = function (list, targetFolderId) {
+        prepareRemove(list);
+        return transfer('move', list, targetFolderId);
+    };
+
+    /**
+     * Copy files to another folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     */
+    api.copy = function (list, targetFolderId) {
+        return transfer('copy', list, targetFolderId);
+    };
+
+    //
+    // Update file
+    // @param {object} file { id, folder_id }
+    // @param {object} changes The changes to apply; not sent to server if empty
+    //
+
+    api.update = function (file, changes) {
+
+        if (!_.isObject(changes) || _.isEmpty(changes)) return;
+
+        // update model
+        var cid = _.cid(file), model = pool.get('detail').get(cid);
+        if (model) model.set(changes);
+
+        return http.PUT({
+            module: 'files',
+            params: {
+                action: 'update',
+                id: file.id,
+                timestamp: _.then()
+            },
+            data: changes,
+            appendColumns: false
+        })
+        .done(function () {
+            api.trigger('update update:' + cid);
+            if ('title' in changes || 'filename' in changes) api.trigger('rename', cid);
+        });
+    };
+
+    function performUpload(options) {
+        options = $.extend({
+            folder: coreConfig.get('folder/infostore'),
+            action: 'new',
+            module: 'files'
+        }, options || {});
+
+        var formData = new FormData(),
+        uploadRequest;
+
+        if ('filename' in options) {
+            formData.append('file', options.file, options.filename);
+        } else if ('file' in options) {
+            formData.append('file', options.file);
+        }
+
+        // set meta data
+        if (!_.isObject(options.json) || _.isEmpty(options.json)) {
+            options.json = {};
+        }
+        if (!options.json.folder_id) {
+            options.json.folder_id = options.folder;
+        }
+        if (options.description) {
+            options.json.description = options.description;
+        }
+
+        formData.append('json', JSON.stringify(options.json));
+
+        uploadRequest = http.UPLOAD({
+            // allow API consumers to override the module (like OX Guard will certainly do)
+            module: options.module,
+            params: { action: options.action, filename: options.filename },
+            data: formData,
+            fixPost: true
+        });
+
+        //append abort function to returning object
+        return uploadRequest.fail(failedUpload);
+    }
+
+    /**
+     * Upload a new file
+     * @param {object} file options
+     *     - options.file - a File object (as in Blob)
+     *     - options.filename - an optional filename (overrides the name value of options.file)
+     *     - options.folder - the id of the folder to upload the file into
+     *     - options.module - override the module used to upload to (default: 'files')
+     * @returns {object}
+     *     - a promise resolving to the created file
+     *     - promise can be aborted using promise.abort function
+     */
+    api.uploadFile = function (options) {
+        options.action = 'new';
+        return performUpload(options).done(function () {
+            api.trigger('create:file');
+        });
+    };
+
+    // File versions
+
+    api.versions = {
+
+        upload: function (options) {
+            options.action = 'update';
+            return performUpload(options).done(function () {
+                api.trigger('create:version');
+            });
+        },
+
+        load: function (file, options) {
+
+            options = _.extend({ cache: true }, options);
+
+            // skip if we don't have a model to add data
+            var cid = _.cid(file), model = pool.get('detail').get(cid);
+            if (!model) return $.when([]);
+
+            // cache hit?
+            if (options.cache && model.has('versions')) return $.when(model.get('versions'));
+
+            return http.GET({
+                module: 'files',
+                params: {
+                    action: 'versions',
+                    folder: file.folder_id,
+                    id: file.id,
+                    timezone: 'utc'
+                },
+                appendColumns: true
+            })
+            .then(function (data) {
+                model.set('versions', data);
+                // make sure we always get the same result (just data; not timestamp)
+                return data;
+            });
+        },
+
+        remove: function (file) {
+
+            // update model instantly
+            var cid = _.cid(file), model = pool.get('detail').get(cid);
+            if (model && _.isArray(model.get('versions'))) {
+                model.set('versions', model.get('versions').filter(function (item) {
+                    return item.version !== file.version;
+                }));
+            }
+
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: 'detach',
+                    id: file.id,
+                    folder: file.folder_id,
+                    timestamp: _.now()
+                },
+                data: [file.version],
+                appendColumns: false
+            })
+            .then(function () {
+                // let's reload the file and the version list since we might
+                // have removed the current version
+                return api.get(file, { cache: false }).then(function () {
+                    return api.versions.load(file, { cache: false });
+                });
+            });
+        },
+
+        setCurrent: function (file) {
+            // update model
+            var model = pool.get('detail').get(_.cid(file));
+            if (model && _.isArray(model.get('versions'))) {
+                model.set('versions', model.get('versions').map(function (item) {
+                    item.current_version = (item.version === file.version);
+                    return item;
+                }));
+            }
+            // update server-side
+            // if there is only version, the request works.
+            // if the other fields are present, we get a backend error
+            var changes = { version: file.version };
+            return api.update(file, changes).then(function () {
+                // reload model to get current filename, size, and last modified
+                return api.get(file, { cache: false });
+            });
+        }
     };
 
     return api;

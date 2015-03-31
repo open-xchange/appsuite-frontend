@@ -620,7 +620,7 @@ define('io.ox/core/tk/attachments', [
     var fileUploadWidget = function (options) {
 
         options = _.extend({
-            buttontext: gt('Upload file'),
+            buttontext: gt('Add attachments'),
             tabindex: 1,
             drive: false,
             multi: true

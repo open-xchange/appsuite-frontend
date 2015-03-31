@@ -108,10 +108,10 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.setCaretPosition = function () {
+            if (!textarea) return;
             var el = textarea.get(0);
-            // Prevent NS_ERROR_FAILURE in Firefox
-            _.defer(function () {
-                if (document.activeElement !== el) return;
+
+            function fnSetCaretPosition() {
                 if (el.setSelectionRange) {
                     el.setSelectionRange(0, 0);
                 } else if (el.createTextRange) {
@@ -119,8 +119,11 @@ define('io.ox/core/tk/text-editor', function () {
                     range.moveStart('character', 0);
                     range.select();
                 }
-                textarea.scrollTop(0);
-            });
+            }
+            fnSetCaretPosition();
+            // Defer is needed on Chrome, but causes Error in Firefox
+            if (_.browser.Chrome) _.defer(fnSetCaretPosition);
+            textarea.scrollTop(0);
         };
 
         this.appendContent = function (str) {

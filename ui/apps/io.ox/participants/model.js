@@ -196,7 +196,7 @@ define('io.ox/participants/model', [
         },
 
         getDisplayName: function () {
-            return util.getMailFullName(this.toJSON());
+            return util.getMailFullName(this.toJSON()) || this.getEmail();
         },
 
         getEmail: function () {

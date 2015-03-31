@@ -191,7 +191,7 @@ define('io.ox/core/tk/tokenfield', [
                         } else {
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
-                        // add extrenal participant
+                        // add external participant
                         e.attrs.model = new pModel.Participant({
                             type: 5,
                             display_name: newAttrs[1],

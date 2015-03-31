@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/rename', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/files/util',
@@ -23,28 +23,17 @@ define('io.ox/files/actions/rename', [
 
     return function (data) {
 
-        var filename = data.filename || data.title,
-            $input;
+        var filename = data.filename || data.title;
 
         function rename(name) {
-            var update = {
-                    id: data.id,
-                    folder_id: data.folder_id
-                };
-            // 'title only' entries
-            if (!data.filename && data.title) {
-                update.title = name;
-            } else {
-                update.filename = name;
-            }
-
-            return api.update(update).fail(notify);
+            // 'title only' entries vs files
+            var changes = !data.filename && data.title ? { title: name } : { filename: name };
+            return api.update(data, changes).fail(notify);
         }
 
         // notifications lazy load
         function notify () {
-            var self = this,
-                args = arguments;
+            var self = this, args = arguments;
             require(['io.ox/core/notifications'], function (notifications) {
                 notifications.yell.apply(self, args);
             });
@@ -54,16 +43,9 @@ define('io.ox/files/actions/rename', [
          * user have to confirm if name doesn't contains a file extension
          * @return { promise }
          */
-        function process() {
+        function process(name) {
 
-            var name = $input.val().trim(),
-                invalid;
-
-            function adjust() {
-                _.delay(function () {
-                    $input.focus();
-                }, 0);
-            }
+            var invalid;
 
             // check for valid filename
             ext.point('io.ox/core/filename')
@@ -78,11 +60,7 @@ define('io.ox/files/actions/rename', [
             if (invalid) return $.Deferred().reject();
 
             // show confirm dialog if necessary
-            return util.confirmDialog(name, filename)
-                .then(
-                    rename.bind(this, name),
-                    adjust
-                );
+            return util.confirmDialog(name, filename).then(rename.bind(this, name));
         }
 
         new dialogs.ModalDialog({ enter: 'rename', async: true })
@@ -90,17 +68,21 @@ define('io.ox/files/actions/rename', [
                 $('<h4>').text(gt('Rename'))
             )
             .append(
-                $input = $('<input type="text" name="name" class="form-control" tabindex="1">')
+                $('<input type="text" name="name" class="form-control" tabindex="1">')
             )
             .addPrimaryButton('rename', gt('Rename'), 'rename',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'),  'cancel',  { 'tabIndex': '1' })
             .on('rename', function () {
-                process().then(this.close, this.idle);
+                var node = this.getContentNode(),
+                    name = node.find('input[name="name"]').val();
+                process(name).then(this.close, this.idle).fail(function () {
+                    _.defer(function () { node.focus(); });
+                });
             })
             .show(function () {
-                var dominput = _.first($input);
-                $input.focus().val(filename);
-                dominput.setSelectionRange(0, filename.lastIndexOf('.'));
+                this.find('input[name="name"]')
+                    .focus().val(filename)
+                    .get(0).setSelectionRange(0, filename.lastIndexOf('.'));
             });
 
     };

@@ -65,6 +65,11 @@ define('io.ox/files/listview', [
             draw: extensions.fileTypeClass
         },
         {
+            id: 'locked',
+            index: 20,
+            draw: extensions.locked
+        },
+        {
             id: 'col1',
             index: 100,
             draw: function (baton) {
@@ -116,7 +121,7 @@ define('io.ox/files/listview', [
             draw: extensions.thumbnail
         },
         {
-            id: 'lock',
+            id: 'locked',
             index: 200,
             draw: extensions.locked
         },
@@ -139,6 +144,11 @@ define('io.ox/files/listview', [
             id: 'thumbnail',
             index: 100,
             draw: extensions.thumbnail
+        },
+        {
+            id: 'locked',
+            index: 200,
+            draw: extensions.locked
         }
     );
 

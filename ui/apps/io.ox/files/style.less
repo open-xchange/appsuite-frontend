@@ -34,7 +34,7 @@
         line-height: 16px;
         padding: 4px 16px 4px 16px;
         border-bottom: 0;
-        &:nth-child(odd) {
+        &:not(.selected):nth-child(odd) {
             background-color: #f5f5f5;
         }
     }
@@ -84,7 +84,7 @@
     .file-type-doc    &:before { content: '\f15c'; color: #376CB8; } // fa-file-text
     .file-type-xls    &:before { content: '\f0ce'; color: #26935D; } // fa-table
     .file-type-ppt    &:before { content: '\f15b'; color: #F4502A; } // fa-file
-    .file-type-pdf    &:before { content: '\f15b'; color: #C01E07; } // fa-file
+    .file-type-pdf    &:before { content: '\f15c'; color: #C01E07; } // fa-file
     .file-type-zip    &:before { content: '\f187'; color: #FF940A; } // fa-archive
     .file-type-txt    &:before { content: '\f0f6'; } // fa-file-text-o
     .file-type-guard  &:before { content: '\f023'; } // fa-lock
@@ -329,6 +329,10 @@
             }
         }
     }
+
+    // file lock
+    .locked { color: rgb(204, 0, 0); }
+    &.has-focus .selected .locked { color: #fff; }
 }
 
 .files-wrapper {
@@ -1226,12 +1230,5 @@ ul.breadcrumb li.prefix {
 
     .size {
         color: rgb(119, 119, 119);
-    }
-}
-
-.file-list-view {
-
-    .locked {
-        color: rgb(204, 0, 0);
     }
 }

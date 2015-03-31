@@ -38,6 +38,23 @@ define([
             ],
             actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'addflags', 'set']
         }},
+        resultConfigLimited = { timestamp: 1378223251586, data: {
+            tests: [
+                { test: 'address', comparison: ['user', 'detail'] },
+                { test: 'envelope', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'exists', comparison: [] },
+                { test: 'false', comparison: [] },
+                { test: 'true', comparison: [] },
+                { test: 'not', comparison: [] },
+                { test: 'size', comparison: ['over', 'under'] },
+                { test: 'header', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'allof', comparison: [] },
+                { test: 'anyof', comparison: [] },
+                { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'currentdate', comparison: ['ge', 'le', 'is', 'contains','matches'] }
+            ],
+            actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'set']
+        }},
         model;
 
     describe('Mailfilter detailview', function () {
@@ -87,6 +104,8 @@ define([
             expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add condition') + ')'), 'Add condition element').to.have.length(1);
             expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add action') + ')'), 'Add action element').to.have.length(1);
             expect($popup.find('[data-action="check-for-stop"]'), 'check for stop action element').to.have.length(1);
+
+            expect($popup.find('.alert.alert-info'), 'initial alert for empty conditions').to.have.length(1);
 
         });
 
@@ -813,6 +832,56 @@ define([
 
             expect($popup.find('a[data-value="allof"]')).to.have.length(1);
             expect($popup.find('a[data-value="anyof"]')).to.have.length(1);
+        });
+
+    });
+
+    describe('Mailfilter detailview', function () {
+
+        var $container = $('<div id="testNode">'),
+            addButton,
+            $popup,
+            collection;
+
+        beforeEach(function (done) {
+            this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithoutFilter));
+            });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultAfterSave));
+            });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=config/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultConfigLimited));
+            });
+
+            filters.editMailfilter($container.empty()).done(function (filtercollection) {
+                collection = filtercollection;
+                addButton = $container.find('.btn-primary[data-action="add"]');
+                addButton.click();
+                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+                done();
+            });
+            $('body', document).append($container);
+        });
+
+        afterEach(function () {
+            $('#testNode').remove();
+            $popup.remove();
+        });
+
+        it('should fill the dropdowns with the limited actions', function () {
+            // actions
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')')).to.have.length(0);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')')).to.have.length(0);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')')).to.have.length(0);
+
         });
 
     });

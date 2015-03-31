@@ -194,13 +194,13 @@ define([], function () {
             });
         });
 
-        //describe('_.tick', function () {
+        describe.skip('_.tick', function () {
             //TODO
-        //});
+        });
 
-        //describe('_.wait', function () {
+        describe.skip('_.wait', function () {
             //TODO
-        //});
+        });
 
         it('_.mythrottle', function (done) {
             //TODO: implement using fake timer

@@ -14,9 +14,9 @@
 define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
     'io.ox/files/api',
-    'io.ox/files/legacy_api',
-    'io.ox/core/strings'
-], function (util, api, legacy_api, strings) {
+    'io.ox/core/strings',
+    'gettext!io.ox/files'
+], function (util, api, strings, gt) {
 
     'use strict';
 
@@ -45,8 +45,10 @@ define('io.ox/files/common-extensions', [
         },
 
         filename: function (baton) {
+            var name = baton.data.filename || baton.data.title;
+            if (baton.model.isLocked()) name += ' (' + gt('Locked') + ')';
             this.append(
-                $('<div class="filename">').text(baton.data.filename || baton.data.title)
+                $('<div class="filename">').text(name)
             );
         },
 
@@ -60,7 +62,7 @@ define('io.ox/files/common-extensions', [
         },
 
         locked: function (baton) {
-            this.toggleClass('locked', baton.data.locked_until > _.now());
+            this.toggleClass('locked', baton.model.isLocked());
         },
 
         fileTypeIcon: function () {
@@ -134,8 +136,11 @@ define('io.ox/files/common-extensions', [
                     var retina = false,
                         width = retina ? 400 : 200,
                         height = retina ? 300 : 150,
-                        url = legacy_api.getUrl(baton.data, preview, { thumbnailWidth: width, thumbnailHeight: height, scaletype: 'cover' }),
+                        url = baton.model.getUrl(preview, { width: width, height: height, scaletype: 'cover' }),
                         img = $('<img class="dummy-image invisible">').attr('data-original', url);
+
+                    // fix URL - would be cool if we had just one call for thumbnails ...
+                    url = url.replace(/format=preview_image/, 'format=thumbnail_image');
 
                     // use defer to ensure the node has already been added to the DOM
                     _.defer(function () {

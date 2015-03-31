@@ -13,7 +13,8 @@
 
 define('io.ox/backbone/mini-views/datepicker', [
     'settings!io.ox/calendar',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'less!io.ox/backbone/mini-views/datepicker'
 ], function (settings, gt) {
 
     'use strict';
@@ -45,9 +46,9 @@ define('io.ox/backbone/mini-views/datepicker', [
             var self = this,
                 def = $.Deferred();
 
-            this.$el.append(
-                $('<legend>').addClass('control-label').text(this.options.label),
-                $('<div class="form-inline">').append(
+            this.$el.addClass('dateinput').append(
+                $('<legend>').addClass('simple control-label').text(this.options.label),
+                $('<div class="input-group form-inline">').append(
                     function () {
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
@@ -69,12 +70,15 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                         // render time input
                         guid = _.uniqueId('form-control-label-');
-                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">').attr('id', guid).attr({
+                        self.nodes.timeField = $('<input class="form-control time-field">').attr({
+                            type: 'text',
+                            tabindex: 1,
+                            id: guid,
                             'aria-describedby': guid + '-aria'
                         });
 
                         // render timezone badge
-                        self.nodes.timezoneField = $('<span class="label label-default">');
+                        self.nodes.timezoneField = $('<div class="timezone input-group-addon">');
 
                         // add a11y
                         self.nodes.a11yDate = $('<p>')
@@ -87,14 +91,12 @@ define('io.ox/backbone/mini-views/datepicker', [
                             .text(gt('Use up and down keys to change the time. Close selection by pressing ESC key.'));
 
                         return [
-                            dayFieldLabel,
                             self.nodes.dayField,
+                            dayFieldLabel,
                             self.nodes.a11yDate,
-                            '&nbsp;',
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
                             self.nodes.timeField,
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Time') + ' (' + moment.localeData().longDateFormat('LT') + ')'),
                             self.nodes.a11yTime,
-                            '&nbsp;',
                             self.nodes.timezoneField
                         ];
                     }
@@ -116,6 +118,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                     // initialize mobiscroll plugin
                     self.nodes.dayField.mobiscroll(mobileSettings);
                     self.nodes.dayField.on('change', _.bind(self.updateModel, self));
+
+                    def.resolve();
                 });
             } else {
                 require(['io.ox/core/tk/datepicker'], function () {
@@ -146,7 +150,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
                     };
 
-                    self.nodes.timeField.combobox(comboboxHours);
+                    self.nodes.timeField.combobox(comboboxHours).addClass('');
                     self.nodes.timeField.on('change', _.bind(self.updateModel, self));
                     self.toggleTimeInput(self.options.display === 'DATETIME');
 
@@ -251,6 +255,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             if (this.mobileMode) {
                 this.nodes.dayField.mobiscroll('option', { preset: show ? 'datetime' : 'date' });
             } else {
+                this.$el.toggleClass('dateonly', !show);
                 this.nodes.timeField.add(this.nodes.timezoneField).css('display', show ? '' : 'none');
             }
         }

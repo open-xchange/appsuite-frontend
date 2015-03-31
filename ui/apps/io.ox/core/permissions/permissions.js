@@ -418,7 +418,7 @@ define('io.ox/core/permissions/permissions', [
                                     buildCheckbox()
                                 )
                             ),
-                            node =  $('<div class="autocomplete-controls input-group">').append(
+                            node =  $('<div class="autocomplete-controls">').append(
                                 $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
                                 })

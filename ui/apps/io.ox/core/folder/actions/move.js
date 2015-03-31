@@ -48,7 +48,7 @@ define('io.ox/core/folder/actions/move', [
 
             function success() {
                 notifications.yell('success', options.list.length > 1 ? options.success.multiple : options.success.single);
-                options.api.refresh();
+                if (options.api.refresh) options.api.refresh();
             }
 
             function commit(target) {

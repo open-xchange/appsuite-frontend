@@ -11,54 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.io-ox-calendar-edit-window {
-
-    .io-ox-calendar-edit {
-
-        padding-top: 10px;
-
-        div.header {
-            margin-bottom: 10px;
-
-           .btn.save {
-                margin-left: 13px;
-            }
-
-            h1.title {
-                line-height:0;
-                font-size: 20px;
-                float: left;
-            }
-        }
-    }
-
-    .io-ox-busy {
-        position: absolute;
-    }
+.io-ox-calendar-edit {
 
     .btn.btn-link {
-        padding-right:0;
-        font-size: 13px;
-        font-weight: 700;
+        padding-left: 0;
     }
 
-    div.section {
-        display: block;
-        clear: both;
-        padding: 20px;
+    .actionToggle {
+        display: none;
+        margin: 10px 0;
     }
 
-    .dateinput {
-
-        .form-inline input {
-            width: 90px;
-            &.datepicker-day-field {
-                width: 107px;
-            }
-        }
-    }
-
-    .recurrenceview .checkbox.control-label {
+    .recurrenceview div.checkbox {
         margin-top: 0;
     }
 
@@ -69,32 +33,7 @@
     }
 
     .find-free-time {
-        margin-top: 13px;
-    }
-
-    .find-free-time-top {
-        margin-top: 26px;
-    }
-
-    .hard-conflict {
-        margin: 1em 0 0 0;
-    }
-
-    .filename {
-        word-wrap: break-word;
-        word-break: break-all;
-    }
-
-    .typeahead.calendaredit {
-        height: 200px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-width: 85px;
-
-        a {
-            text-align: right;
-            padding: 3px 15px 3px 3px;
-        }
+        margin-top: 12px;
     }
 
     .custom-color {
@@ -140,11 +79,26 @@
             }
         }
     }
-}
 
-/* Mobile */
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
-    .io-ox-calendar-edit-window {
+    .hard-conflict {
+        margin: 1em 0 0 0;
+    }
+
+    /* Mobile */
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+
+        .actionToggle {
+            display: block;
+        }
+
+        .collapsed {
+            display: none;
+        }
+
+        textarea.note {
+            min-height: 50px;
+        }
+
         .custom-color {
             .color-label {
                 &.no-color {
@@ -154,49 +108,8 @@
                 width: 40px;
                 height: 40px;
                 margin: 4px;
-                font-size: 34px;
-                padding-top: 4px;
+                font-size: 30px;
             }
-        }
-    }
-
-    .io-ox-calendar-edit {
-        margin-top: 0;
-        padding: 0 13px;
-
-        div.header {
-            margin-bottom: 9px;
-
-            h1.title {
-                float: none;
-            }
-
-            .btn {
-                display: none;
-            }
-        }
-
-        .dateinput .form-inline input {
-            padding: 4px 6px;
-            &.datepicker-day-field {
-                width: 100%;
-            }
-        }
-
-        .actionToggle {
-            display: block;
-            margin: 10px 0;
-
-        }
-
-        .row.spacer { padding-bottom: 50px; }
-
-        .collapsed {
-            display: none;
-        }
-
-        textarea.note {
-            min-height: 0;
         }
     }
 }

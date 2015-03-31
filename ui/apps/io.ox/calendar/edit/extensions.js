@@ -39,7 +39,7 @@ define('io.ox/calendar/edit/extensions', [
                 buttonCol = $('<div class="col-xs-12 col-sm-6 text-right">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', buttonCol, baton);
-            this.append($('<div class="row header">').append(headerCol, buttonCol));
+            baton.app.getWindow().setHeader($('<div class="row header">').append(headerCol, buttonCol));
         }
     });
 
@@ -55,18 +55,6 @@ define('io.ox/calendar/edit/extensions', [
     // buttons
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
-        id: 'discard',
-        draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
-                .on('click', function () {
-                    baton.app.quit();
-                })
-            );
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 200,
         id: 'save',
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
@@ -81,6 +69,18 @@ define('io.ox/calendar/edit/extensions', [
                 })
             );
 
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 200,
+        id: 'discard',
+        draw: function (baton) {
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
+                .on('click', function () {
+                    baton.app.quit();
+                })
+            );
         }
     });
 
@@ -139,7 +139,7 @@ define('io.ox/calendar/edit/extensions', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'dateinput col-xs-6 col-md-4',
+                    className: 'col-xs-6',
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'start_date',
                     label: gt('Starts on')
@@ -159,7 +159,7 @@ define('io.ox/calendar/edit/extensions', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'dateinput col-xs-6 col-md-4',
+                    className: 'col-xs-6',
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'end_date',
                     label: gt('Ends on')
@@ -170,23 +170,11 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    // find free time link
-    point.basicExtend({
-        id: 'find-free-time-1',
-        index: 550,
-        nextTo: 'end-date',
-        draw: function () {
-            this.append(
-                $('<div class="hidden-xs col-sm-12 col-md-4 find-free-time"></div>')
-            );
-        }
-    });
-
     // full time
     point.extend({
         id: 'full_time',
         index: 600,
-        className: 'col-xs-12',
+        className: 'col-md-6',
         render: function () {
             this.$el.append(
                 $('<div>').addClass('checkbox').append(
@@ -195,6 +183,18 @@ define('io.ox/calendar/edit/extensions', [
                         $.txt(gt('All day'))
                     )
                 )
+            );
+        }
+    });
+
+    // find free time link
+    point.basicExtend({
+        id: 'find-free-time-1',
+        index: 650,
+        nextTo: 'full_time',
+        draw: function () {
+            this.append(
+                $('<div class="hidden-xs col-md-6 find-free-time"></div>')
             );
         }
     });
@@ -219,7 +219,7 @@ define('io.ox/calendar/edit/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
-                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid })
+                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid }).addClass('note')
             );
         }
     });
@@ -229,35 +229,33 @@ define('io.ox/calendar/edit/extensions', [
         id: 'noteSeparator',
         index: 750,
         draw: function (baton) {
-            if (_.device('smartphone')) {
-                this.append(
-                    $('<a href="#">')
-                        .text(gt('Expand form'))
-                        .addClass('btn btn-link actionToggle')
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $('.row.collapsed', baton.parentView.$el).toggle();
-                            if (baton.parentView.collapsed) {
-                                $(this).text(gt('Expand form'));
-                            } else {
-                                $(this).text(gt('Collapse form'));
-                            }
-                            baton.parentView.collapsed = !baton.parentView.collapsed;
-                        })
-                );
-            } else {
-                this.append($('<span>&nbsp;</span>'));
-            }
+            this.append(
+                $('<a href="#">')
+                    .text(gt('Expand form'))
+                    .addClass('btn btn-link actionToggle')
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        if (baton.parentView.collapsed) {
+                            $('.row.collapsed', baton.parentView.$el).css('display', '');
+                            $(this).text(gt('Expand form'));
+                        } else {
+                            $('.row.collapsed', baton.parentView.$el).show();
+                            $(this).text(gt('Collapse form'));
+                        }
+                        baton.parentView.collapsed = !baton.parentView.collapsed;
+                    })
+            );
         }
     });
 
     // alarms
     point.extend({
         id: 'alarm',
+        className: 'col-md-6',
         index: 800,
         render: function () {
             var guid = _.uniqueId('form-control-label-');
-            this.$el.addClass('col-md-4').append(
+            this.$el.append(
                 $('<label>').attr({
                     class: 'control-label',
                     for: guid
@@ -280,6 +278,7 @@ define('io.ox/calendar/edit/extensions', [
     // shown as
     point.extend({
         id: 'shown_as',
+        className: 'col-md-6',
         index: 900,
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
@@ -289,7 +288,7 @@ define('io.ox/calendar/edit/extensions', [
                     { label: gt('Absent'), value: 3 },
                     { label: gt('Free'), value: 4 }
                 ];
-            this.$el.addClass('col-md-4').append(
+            this.$el.append(
                 $('<label>').attr({
                     class: 'control-label',
                     for: guid
@@ -310,27 +309,6 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed'
     });
 
-    // private checkbox
-    point.extend({
-        id: 'private_flag',
-        index: 1000,
-        className: 'col-md-4',
-        render: function () {
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').append(
-                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
-                        $.txt(gt('Private'))
-                    )
-                )
-            );
-        }
-    }, {
-        nextTo: 'shown_as',
-        rowClass: 'collapsed'
-    });
-
     function colorClickHandler(e) {
         // toggle active class
         $(this).siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
@@ -341,7 +319,8 @@ define('io.ox/calendar/edit/extensions', [
     //color selection
     point.extend({
         id: 'color',
-        index: 1200,
+        index: 1000,
+        className: 'col-md-6',
         render: function () {
 
             if (settings.get('colorScheme') !== 'custom') return;
@@ -353,7 +332,7 @@ define('io.ox/calendar/edit/extensions', [
             });
 
             this.$el.append(
-                $('<label class="control-label col-xs-12">').append(
+                $('<label class="control-label">').append(
                     $.txt(gt('Color')),
                     $('<div class="custom-color">').append(
                         _.map(_.range(0, 11), function (color_label) {
@@ -372,6 +351,29 @@ define('io.ox/calendar/edit/extensions', [
                 )
             );
         }
+    }, {
+        rowClass: 'collapsed'
+    });
+
+    // private checkbox
+    point.extend({
+        id: 'private_flag',
+        index: 1200,
+        className: 'col-md-6',
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('simple').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').append(
+                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                        $.txt(gt('Private'))
+                    )
+                )
+            );
+        }
+    }, {
+        nextTo: 'color',
+        rowClass: 'collapsed'
     });
 
     // participants label
@@ -382,7 +384,7 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(gt('Participants')).addClass('find-free-time')
+                    $('<legend>').text(gt('Participants'))
                 )
             );
         }
@@ -413,26 +415,14 @@ define('io.ox/calendar/edit/extensions', [
             var pNode,
                 guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="col-md-6">').append(
-                    pNode = $('<div class="input-group">').append(
-                        $('<input class="add-participant form-control">').attr({
-                            type: 'text',
-                            tabindex: 1,
-                            id: guid,
-                            placeholder: gt('Add participant/resource')
-                        }),
-                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                        $('<span class="input-group-btn">').append(
-                            $('<button class="btn btn-default">')
-                                .attr({
-                                    type: 'button',
-                                    tabindex: 1,
-                                    'data-action': 'add',
-                                    'aria-label': gt('Add participant/resource')
-                                })
-                                .append($('<i class="fa fa-plus">'))
-                        )
-                    )
+                pNode = $('<div class="col-md-6">').append(
+                    $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
+                    $('<input class="add-participant form-control">').attr({
+                        type: 'text',
+                        tabindex: 1,
+                        id: guid,
+                        placeholder: gt('Add participant/resource')
+                    })
                 )
             );
 
@@ -624,15 +614,6 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed'
     });
 
-    // spacer for mobile
-    point.basicExtend({
-        id: 'dummy_spacer',
-        index: 10000,
-        draw: function () {
-            this.addClass('spacer');
-        }
-    });
-
     function openFreeBusyView(e) {
         var app = e.data.app,
             model = e.data.model,
@@ -667,7 +648,7 @@ define('io.ox/calendar/edit/extensions', [
             // because that works
             if (capabilities.has('freebusy !alone')) {
                 this.parent().find('.find-free-time').append(
-                    $('<button type="button" class="btn btn-link pull-right hidden-xs" tabindex="1">').text(gt('Find a free time'))
+                    $('<button type="button" class="btn btn-link" tabindex="1">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }

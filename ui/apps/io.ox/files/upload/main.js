@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/upload/main', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'io.ox/core/tk/upload',
@@ -24,42 +24,37 @@ define('io.ox/files/upload/main', [
     var limits = [
             {
                 limit: 1000,
-                singular: function (t) {
-                    return gt('%1$s second', t);
-                }, plural: function (t) {
-                    return gt('%1$s seconds', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d second', '%1$d seconds', t), t);
                 }
             },
             {
                 limit: 60,
-                singular: function (t) {
-                    return gt('%1$s minute', t);
-                }, plural: function (t) {
-                    return gt('%1$s minutes', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d minute', '%1$d minutes', t), t);
                 }
             },
             {
                 limit: 60,
-                singular: function (t) {
-                    return gt('%1$s hour', t);
-                }, plural: function (t) {
-                    return gt('%1$s hours', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d hour', '%1$d hours', t), t);
                 }
             },
             {
                 limit: 24,
-                singular: function (t) {
-                    return gt('%1$s day', t);
-                }, plural: function (t) {
-                    return gt('%1$s days', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d day', '%1$d days', t), t);
                 }
             },
             {
                 limit: 7,
-                singular: function (t) {
-                    return gt('%1$s week', t);
-                }, plural: function (t) {
-                    return gt('%1$s weeks', t);
+                message: function (t) {
+                    //#. estimated upload duration
+                    return gt.format(gt.ngettext('%1$d week', '%1$d weeks', t), t);
                 }
             }
         ],
@@ -82,18 +77,18 @@ define('io.ox/files/upload/main', [
         currentSize = 0, //number of bytes, which are currently uploaded
         startTime, // time stamp, when the first file started uploading
         uploadCollection = new UploadCollection(),
-        $el, bottomToolbar, mainView, //some dom nodes needed for the view
+        $el, bottomToolbar, mainView, win, //some dom nodes needed for the view
         self = this;
 
         this.update = upload.createQueue({
             start: function () {
-                //             win.busy(0);
+                win.busy(0);
             },
             progress: function (item, position, files) {
                 var pct = position / files.length;
                 console.log(pct);
-                //             win.busy(pct, 0);
-                return api.uploadNewVersion({
+                win.busy(pct, 0);
+                return api.versions.upload({
                     file: item.file,
                     //                 id: app.currentFile.id,
                     //                 folder: app.currentFile.folder_id,
@@ -101,7 +96,7 @@ define('io.ox/files/upload/main', [
                 })
                 .progress(function (e) {
                     var sub = e.loaded / e.total;
-                    //                 win.busy(pct + sub / files.length, sub);
+                    win.busy(pct + sub / files.length, sub);
                     console.log(pct + sub / files.length, sub);
                 }).fail(function (e) {
                     if (e && e.data && e.data.custom) {
@@ -110,7 +105,7 @@ define('io.ox/files/upload/main', [
                 });
             },
             stop: function () {
-                //             win.idle();
+                win.idle();
             }
         });
         this.changed = function (item, position, files) {
@@ -191,7 +186,7 @@ define('io.ox/files/upload/main', [
                 counter++;
             } while (counter < limits.length && limits[counter].limit < estimation);
 
-            return (estimation == 1 ? limits[counter - 1].singular(estimation) : limits[counter - 1].plural(estimation)) || 0;
+            return (limits[counter - 1].message(estimation)) || 0;
         }
         this.getEstimatedTime = getEstimatedTime;
 
@@ -243,6 +238,7 @@ define('io.ox/files/upload/main', [
         }
 
         this.setWindowNode = function (node) {
+            win = node;
             bottomToolbar = node.find('.toolbar.bottom');
             mainView = node.find('.list-view-control');
         };

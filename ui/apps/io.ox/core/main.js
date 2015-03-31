@@ -223,7 +223,9 @@ define('io.ox/core/main', [
             'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
             'role': 'button',
             'aria-haspopup': 'true'
-        });
+        })
+        .end()
+        .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
 
     // whatever ...
     gt.pgettext('app', 'Portal');

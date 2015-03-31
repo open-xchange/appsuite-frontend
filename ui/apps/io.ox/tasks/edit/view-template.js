@@ -364,12 +364,15 @@ define('io.ox/tasks/edit/view-template', [
     point.extend({
         id: 'private_flag',
         index: 1300,
-        className: 'col-sm-3 collapsed',
+        className: 'checkbox col-sm-3 collapsed',
         render: function () {
             this.$el.append(
-                $('<label class="checkbox control-label private-flag">').append(
-                    new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
-                    $.txt(gt('Private'))
+                $('<fieldset>').append(
+                    $('<legend>').addClass('simple').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').append(
+                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                        $.txt(gt('Private'))
+                    )
                 )
             );
         }
@@ -416,20 +419,13 @@ define('io.ox/tasks/edit/view-template', [
                 var collection = options.model.getParticipants();
 
                 node.append(
-                    $('<div class="input-group">').append(
-                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                        $('<input type="text" class="add-participant task-participant-input-field form-control">').attr({
-                            placeholder: gt('Add participant/resource'),
-                            id: guid,
-                            tabindex: 1
-                        }),
-                        $('<span class="input-group-btn">').append(
-                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">').append(
-                                $('<i class="fa fa-plus" aria-hidden="true">'),
-                                $('<span class="sr-only">').text(gt('Plus'))
-                            )
-                        )
-                    )
+                    $('<input class="add-participant task-participant-input-field form-control">').attr({
+                        type: 'text',
+                        placeholder: gt('Add participant/resource'),
+                        id: guid,
+                        tabindex: 1
+                    }),
+                    $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid)
                 );
 
                 var autocomplete = new AddParticipantsView({ el: node });
