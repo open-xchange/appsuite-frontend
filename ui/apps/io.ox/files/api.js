@@ -61,7 +61,7 @@ define('io.ox/files/api', [
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
+            return /^application\/(msword|vnd.ms-word|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
         },
 
         isPDF: function (type) {
