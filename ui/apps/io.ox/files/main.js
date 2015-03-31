@@ -32,7 +32,8 @@ define('io.ox/files/main', [
     'io.ox/files/actions',
     'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
-    'io.ox/files/toolbar'
+    'io.ox/files/toolbar',
+    'io.ox/files/upload/dropzone'
 ], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
