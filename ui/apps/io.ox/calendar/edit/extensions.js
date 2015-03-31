@@ -139,7 +139,7 @@ define('io.ox/calendar/edit/extensions', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'dateinput col-xs-6',
+                    className: 'col-xs-6',
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'start_date',
                     label: gt('Starts on')
@@ -159,7 +159,7 @@ define('io.ox/calendar/edit/extensions', [
             this.append(
                 new DatePicker({
                     model: baton.model,
-                    className: 'dateinput col-xs-6',
+                    className: 'col-xs-6',
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'end_date',
                     label: gt('Ends on')

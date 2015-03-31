@@ -12,18 +12,8 @@
  */
 
 .io-ox-tasks-edit-main {
-
-    .form-inline input{
-        width: 90px;
-        &.datepicker-day-field {
-            width: 107px;
-        }
-    }
-
     //hide collapsed and details on startup
-    .collapsed, .task-edit-details {
-        display: none;
-    }
+    .collapsed, .task-edit-details { display: none; }
 
     .progress-field { text-align: center; }
 
@@ -33,19 +23,8 @@
         min-height: 120px;
     }
 
-    .expand-link, .expand-details-link {
+    .btn.btn-link {
+        padding-left: 0;
         margin-bottom: 9px;
-        padding-left: 0px;
-    }
-
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
-
-        //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
-        .form-inline input {
-            padding: 4px 6px;
-            &.datepicker-day-field {
-                width: 100%;
-            }
-        }
     }
 }

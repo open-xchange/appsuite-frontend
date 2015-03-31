@@ -13,7 +13,8 @@
 
 define('io.ox/backbone/mini-views/datepicker', [
     'settings!io.ox/calendar',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'less!io.ox/backbone/mini-views/datepicker'
 ], function (settings, gt) {
 
     'use strict';
@@ -45,7 +46,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             var self = this,
                 def = $.Deferred();
 
-            this.$el.append(
+            this.$el.addClass('dateinput').append(
                 $('<legend>').addClass('simple control-label').text(this.options.label),
                 $('<div class="input-group form-inline">').append(
                     function () {
