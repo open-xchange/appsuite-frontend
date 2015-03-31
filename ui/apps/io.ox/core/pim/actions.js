@@ -72,26 +72,21 @@ define('io.ox/core/pim/actions', [
     };
 
     // and let's define all points right now
-    // calendar uses special variant, therefore "core/tk"
-    _(['contacts', 'core/tk', 'tasks']).each(function (module) {
+    var index = 0;
+    _(extensions).each(function (extension, id) {
 
-        var index = 0;
+        // define action
+        var ref = 'io.ox/core/tk/actions/' + id + '-attachment';
+        new actions.Action(ref, extension);
 
-        _(extensions).each(function (extension, id) {
-
-            // define action
-            var ref = 'io.ox/' + module + '/actions/' + id + '-attachment';
-            new actions.Action(ref, extension);
-
-            // define default link
-            ext.point('io.ox/' + module + '/attachment/links').extend(new links.Link({
-                id: id,
-                index: index += 100,
-                label: labels[id],
-                mobile: 'hi',
-                ref: ref
-            }));
-        });
+        // define default link
+        ext.point('io.ox/core/tk/attachment/links').extend(new links.Link({
+            id: id,
+            index: index += 100,
+            label: labels[id],
+            mobile: 'hi',
+            ref: ref
+        }));
     });
 
     return extensions;
