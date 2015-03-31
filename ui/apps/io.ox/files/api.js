@@ -651,12 +651,16 @@ define('io.ox/files/api', [
             console.log('TBD', failedUpload);
         },
 
-        load: function (file) {
+        load: function (file, options) {
 
+            options = _.extend({ cache: true }, options);
+
+            // skip if we don't have a model to add data
             var cid = _.cid(file), model = pool.get('detail').get(cid);
-
             if (!model) return $.when([]);
-            if (model && model.get('versions')) return $.when(model.get('versions'));
+
+            // cache hit?
+            if (options.cache && model.has('versions')) return $.when(model.get('versions'));
 
             return http.GET({
                 module: 'files',
@@ -669,13 +673,21 @@ define('io.ox/files/api', [
                 appendColumns: true
             })
             .then(function (data) {
-                if (model) model.set('versions', data);
+                model.set('versions', data);
                 // make sure we always get the same result (just data; not timestamp)
                 return data;
             });
         },
 
         remove: function (file) {
+
+            // update model instantly
+            var cid = _.cid(file), model = pool.get('detail').get(cid);
+            if (model && _.isArray(model.get('versions'))) {
+                model.set('versions', model.get('versions').filter(function (item) {
+                    return item.version !== file.version;
+                }));
+            }
 
             return http.PUT({
                 module: 'files',
@@ -688,12 +700,12 @@ define('io.ox/files/api', [
                 data: [file.version],
                 appendColumns: false
             })
-            .done(function (model) {
-                var cid = _.cid(file), model = pool.get('detail').get(cid);
-                if (!model) return;
-                model.set('versions', model.get('versions').filter(function (item) {
-                    return item.version !== file.version;
-                }));
+            .then(function () {
+                // let's reload the file and the version list since we might
+                // have removed the current version
+                return api.get(file, { cache: false }).then(function () {
+                    return api.versions.load(file, { cache: false });
+                });
             });
         },
 
