@@ -756,10 +756,11 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .then(function () {
-                // let's reload the file and the version list since we might
-                // have removed the current version
-                return api.get(file, { cache: false }).then(function () {
-                    return api.versions.load(file, { cache: false });
+                // let's reload the version list
+                // since we might have just removed the current version
+                return api.versions.load(file, { cache: false }).done(function () {
+                    // the mediator will reload the current collection
+                    api.trigger('remove:version');
                 });
             });
         },
@@ -778,8 +779,8 @@ define('io.ox/files/api', [
             // if the other fields are present, we get a backend error
             var changes = { version: file.version };
             return api.update(file, changes).then(function () {
-                // reload model to get current filename, size, and last modified
-                return api.get(file, { cache: false });
+                // the mediator will reload the current collection
+                api.trigger('change:version');
             });
         }
     };

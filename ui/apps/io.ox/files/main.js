@@ -436,10 +436,11 @@ define('io.ox/files/main', [
         },
 
         /*
-         * Respond to rename
+         * Respond to API events that need a reload
          */
-        'change:filename': function (app) {
-            api.on('rename', _.debounce(function () {
+        'requires-reload': function (app) {
+            // listen to events that affect the filename, add files, or remove files
+            api.on('rename add:file add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
         },

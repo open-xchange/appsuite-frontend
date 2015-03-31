@@ -263,7 +263,7 @@ define('io.ox/editor/main', [
                                     // create or update?
                                     if (model.has('id')) {
                                         // update
-                                        return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                                        return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function () {
                                                 previous = model.toJSON();
                                             })
@@ -275,7 +275,7 @@ define('io.ox/editor/main', [
                                             });
                                     } else {
                                         // create
-                                        return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
+                                        return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function (data) {
                                                 delete data.content;
                                                 app.setState({ folder: data.folder_id, id: data.id });
