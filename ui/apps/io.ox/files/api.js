@@ -341,9 +341,15 @@ define('io.ox/files/api', [
 
         function map(cid) {
             // return either folder or file models
-            return /^folder\./.test(cid) ?
-                folderAPI.pool.getModel(cid.substr(7)) :
-                pool.get('detail').get(cid);
+            if (/^folder\./.test(cid)) {
+                // convert folder model to file model
+                var data = folderAPI.pool.getModel(cid.substr(7)).toJSON();
+                data.folder_id = 'folder';
+                return new api.Model(data);
+            } else {
+                // return existing file model
+                return pool.get('detail').get(cid);
+            }
         }
 
         return function (list, json) {
