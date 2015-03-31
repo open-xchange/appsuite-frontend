@@ -729,7 +729,7 @@ define('io.ox/files/api', [
         options.action = 'new';
         return performUpload(options, {
             folder_id: options.folder,
-            description: options.description || '';
+            description: options.description || ''
         })
         .done(function () {
             api.trigger('add:file');
