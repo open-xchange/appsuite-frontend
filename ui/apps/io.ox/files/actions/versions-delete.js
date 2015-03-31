@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/versions-delete', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files'
 ], function (api, dialogs, gt) {
@@ -24,11 +24,9 @@ define('io.ox/files/actions/versions-delete', [
             .text(gt.pgettext('One file only', 'Do you really want to delete this file?'))
             .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-            .show()
-            .done(function (action) {
-                if (action === 'delete') {
-                    api.detach(data);
-                }
-            });
+            .on('delete', function () {
+                api.versions.remove(data);
+            })
+            .show();
     };
 });

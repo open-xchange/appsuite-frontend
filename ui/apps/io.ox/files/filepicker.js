@@ -16,7 +16,7 @@ define('io.ox/files/filepicker', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/folder/picker',
     'io.ox/core/cache',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/tk/selection',
     'settings!io.ox/core',
     'gettext!io.ox/files',
@@ -74,7 +74,7 @@ define('io.ox/files/filepicker', [
             }
 
             filesPane.empty();
-            filesAPI.getAll({ folder: id }, false).then(function (files) {
+            filesAPI.getAll(id, { cache: false }).done(function (files) {
                 filesPane.append(
                     _.chain(files)
                     .filter(options.filter)
@@ -115,18 +115,22 @@ define('io.ox/files/filepicker', [
                 progress: function (item) {
                     var o = item.options;
 
-                    return filesAPI.uploadFile({
+                    return filesAPI.upload({
                         file: item.file,
                         filename: o.filename,
                         folder: o.folder,
                         timestamp: _.now()
-                    }).then(function success(data) {
-                        item.data = data;
-                    }, function fail(e) {
-                        if (e && e.data && e.data.custom) {
-                            notifications.yell(e.data.custom.type, e.data.custom.text);
+                    })
+                    .then(
+                        function success(data) {
+                            item.data = data;
+                        },
+                        function fail(e) {
+                            if (e && e.data && e.data.custom) {
+                                notifications.yell(e.data.custom.type, e.data.custom.text);
+                            }
                         }
-                    });
+                    );
                 },
                 stop: function (current, position, list) {
                     var defList = _(list).map(function (file) {

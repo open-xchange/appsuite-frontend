@@ -225,10 +225,11 @@ define('io.ox/core/api/attachment', [
                 },
                 data: { folder_id: target, description: descriptionText[data.module] || gt('Saved attachment') },
                 appendColumns: false
-            }).done(function () {
-                require(['io.ox/files/legacy_api'], function (fileAPI) {
-                    fileAPI.caches.all.grepRemove(target + (api.DELIM || '//'));
-                    fileAPI.trigger('refresh.all');
+            })
+            .done(function () {
+                require(['io.ox/files/api'], function (api) {
+                    api.pool.resetFolder(target);
+                    api.trigger('add:file');
                 });
             });
         }

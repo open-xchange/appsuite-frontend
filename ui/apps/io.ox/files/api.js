@@ -23,7 +23,7 @@ define('io.ox/files/api', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreConfig, gt) {
+], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, gt) {
 
     'use strict';
 
@@ -49,15 +49,15 @@ define('io.ox/files/api', [
         },
 
         isImage: function (type) {
-            return /^image\//.test(type || this.getMimeType());
+            return /^image\//.test(type || this.getMimeType());
         },
 
         isAudio: function (type) {
-            return /^audio\//.test(type || this.getMimeType());
+            return /^audio\//.test(type || this.getMimeType());
         },
 
         isVideo: function (type) {
-            return /^video\//.test(type || this.getMimeType());
+            return /^video\//.test(type || this.getMimeType());
         },
 
         isOffice: function (type) {
@@ -134,49 +134,8 @@ define('io.ox/files/api', [
             return false;
         },
 
-        // get URL to open, download, or preview a file
-        // options:
-        // - scaletype: contain or cover or auto
-        // - height: image height in pixels
-        // - widht: image widht in pixels
-        // - version: true/false. if false no version will be appended
         getUrl: function (type, options) {
-
-            options = _.extend({ scaletype: 'contain' }, options);
-
-            var file = this.toJSON(),
-                url = ox.apiRoot + '/files',
-                folder = encodeURIComponent(file.folder_id),
-                id = encodeURIComponent(file.id),
-                version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
-                // basic URL
-                query = '?action=document&folder=' + folder + '&id=' + id + version,
-                // file name
-                name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
-                // scaling options
-                scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
-                // avoid having identical URLs across contexts (rather edge case)
-                // also inject last_modified if available; needed for "revisionless save"
-                // the content might change without creating a new version (which would be part of the URL)
-                buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
-
-            if (buster) query += '&' + buster;
-
-            switch (type) {
-                case 'download':
-                    return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
-                case 'thumbnail':
-                    return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
-                case 'preview':
-                    return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
-                case 'cover':
-                    return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
-                case 'play':
-                    return url + query + '&delivery=view';
-                // open/view
-                default:
-                    return url + name + query + '&delivery=view';
-            }
+            return api.getUrl(this.toJSON(), type, options);
         }
     });
 
@@ -254,6 +213,50 @@ define('io.ox/files/api', [
         'pps':  'application/vnd.ms-powerpoint'
     };
 
+    // get URL to open, download, or preview a file
+    // options:
+    // - scaletype: contain or cover or auto
+    // - height: image height in pixels
+    // - widht: image widht in pixels
+    // - version: true/false. if false no version will be appended
+    api.getUrl = function (file, type, options) {
+
+        options = _.extend({ scaletype: 'contain' }, options);
+
+        var url = ox.apiRoot + '/files',
+            folder = encodeURIComponent(file.folder_id),
+            id = encodeURIComponent(file.id),
+            version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
+            // basic URL
+            query = '?action=document&folder=' + folder + '&id=' + id + version,
+            // file name
+            name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
+            // scaling options
+            scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+            // avoid having identical URLs across contexts (rather edge case)
+            // also inject last_modified if available; needed for "revisionless save"
+            // the content might change without creating a new version (which would be part of the URL)
+            buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
+
+        if (buster) query += '&' + buster;
+
+        switch (type) {
+            case 'download':
+                return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+            case 'thumbnail':
+                return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+            case 'preview':
+                return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+            case 'cover':
+                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
+            case 'play':
+                return url + query + '&delivery=view';
+            // open/view
+            default:
+                return url + name + query + '&delivery=view';
+        }
+    };
+
     //
     // Pool
     //
@@ -306,7 +309,7 @@ define('io.ox/files/api', [
         getQueryParams: function (params) {
             return {
                 action: 'all',
-                folder: params.folder || coreConfig.get('folder/infostore'),
+                folder: params.folder || settings.get('folder/infostore'),
                 columns: allColumns,
                 sort: params.sort || '702',
                 order: params.order || 'asc'
@@ -338,9 +341,15 @@ define('io.ox/files/api', [
 
         function map(cid) {
             // return either folder or file models
-            return /^folder\./.test(cid) ?
-                folderAPI.pool.getModel(cid.substr(7)) :
-                pool.get('detail').get(cid);
+            if (/^folder\./.test(cid)) {
+                // convert folder model to file model
+                var data = folderAPI.pool.getModel(cid.substr(7)).toJSON();
+                data.folder_id = 'folder';
+                return new api.Model(data);
+            } else {
+                // return existing file model
+                return pool.get('detail').get(cid);
+            }
         }
 
         return function (list, json) {
@@ -353,14 +362,15 @@ define('io.ox/files/api', [
     //
     // GET a single file
     //
-
     api.get = function (file, options) {
 
         options = _.extend({ cache: true }, options);
 
         if (options.cache) {
             var model = pool.get('detail').get(_.cid(file));
-            if (model) return $.when(model.toJSON());
+            // look for an attribute that is not part of the "all" request
+            // to determine if we can use a cached model
+            if (model && model.has('description')) return $.when(model.toJSON());
         }
 
         return http.GET({
@@ -379,10 +389,29 @@ define('io.ox/files/api', [
     };
 
     //
+    // GET all files of a folder (for compatibility)
+    //
+    api.getAll = function (folder) {
+
+        return http.GET({
+            module: 'files',
+            params: {
+                action: 'all',
+                columns: allColumns,
+                folder: folder,
+                timezone: 'UTC'
+            }
+        })
+        .then(function (data) {
+            pool.add('detail', data);
+            return data;
+        });
+    };
+
+    //
     // GET multiple files
     //
-
-    api.list = (function () {
+    api.getList = (function () {
 
         function has(item) {
             return this.get(_.cid(item));
@@ -475,7 +504,7 @@ define('io.ox/files/api', [
      */
     api.lock = function (list) {
         return lockToggle(list, 'lock').then(function () {
-            return api.list(list, { cache: false });
+            return api.getList(list, { cache: false });
         });
     };
 
@@ -614,11 +643,21 @@ define('io.ox/files/api', [
     };
 
     //
+    // Download zipped content of a folder
+    //
+    api.zip = function (id) {
+        return require(['io.ox/core/download']).then(function (download) {
+            download.url(
+                ox.apiRoot + '/files?' + $.param({ action: 'zipfolder', folder: id, recursive: true, session: ox.session })
+            );
+        });
+    };
+
+    //
     // Update file
     // @param {object} file { id, folder_id }
     // @param {object} changes The changes to apply; not sent to server if empty
     //
-
     api.update = function (file, changes) {
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
@@ -644,14 +683,16 @@ define('io.ox/files/api', [
     };
 
     function performUpload(options) {
-        options = $.extend({
-            folder: coreConfig.get('folder/infostore'),
-            action: 'new',
-            module: 'files'
-        }, options || {});
 
-        var formData = new FormData(),
-        uploadRequest;
+        options = _.extend({
+            // used by api.version.upload to be different from api.upload
+            action: 'new',
+            folder: settings.get('folder/infostore'),
+            // allow API consumers to override the module (like OX Guard will certainly do)
+            module: 'files'
+        }, options);
+
+        var formData = new FormData();
 
         if ('filename' in options) {
             formData.append('file', options.file, options.filename);
@@ -659,29 +700,19 @@ define('io.ox/files/api', [
             formData.append('file', options.file);
         }
 
-        // set meta data
-        if (!_.isObject(options.json) || _.isEmpty(options.json)) {
-            options.json = {};
-        }
-        if (!options.json.folder_id) {
-            options.json.folder_id = options.folder;
-        }
-        if (options.description) {
-            options.json.description = options.description;
-        }
+        // add data
+        formData.append('json', JSON.stringify({
+            folder_id: options.folder,
+            description: options.description || ''
+        }));
 
-        formData.append('json', JSON.stringify(options.json));
-
-        uploadRequest = http.UPLOAD({
-            // allow API consumers to override the module (like OX Guard will certainly do)
+        return http.UPLOAD({
             module: options.module,
             params: { action: options.action, filename: options.filename },
             data: formData,
             fixPost: true
-        });
-
-        //append abort function to returning object
-        return uploadRequest.fail(failedUpload);
+        })
+        .fail(failedUpload);
     }
 
     /**
@@ -695,10 +726,10 @@ define('io.ox/files/api', [
      *     - a promise resolving to the created file
      *     - promise can be aborted using promise.abort function
      */
-    api.uploadFile = function (options) {
+    api.upload = function (options) {
         options.action = 'new';
         return performUpload(options).done(function () {
-            api.trigger('create:file');
+            api.trigger('add:file');
         });
     };
 
@@ -709,7 +740,7 @@ define('io.ox/files/api', [
         upload: function (options) {
             options.action = 'update';
             return performUpload(options).done(function () {
-                api.trigger('create:version');
+                api.trigger('add:version');
             });
         },
 
@@ -763,10 +794,11 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .then(function () {
-                // let's reload the file and the version list since we might
-                // have removed the current version
-                return api.get(file, { cache: false }).then(function () {
-                    return api.versions.load(file, { cache: false });
+                // let's reload the version list
+                // since we might have just removed the current version
+                return api.versions.load(file, { cache: false }).done(function () {
+                    // the mediator will reload the current collection
+                    api.trigger('remove:version');
                 });
             });
         },
@@ -785,8 +817,8 @@ define('io.ox/files/api', [
             // if the other fields are present, we get a backend error
             var changes = { version: file.version };
             return api.update(file, changes).then(function () {
-                // reload model to get current filename, size, and last modified
-                return api.get(file, { cache: false });
+                // the mediator will reload the current collection
+                api.trigger('change:version');
             });
         }
     };

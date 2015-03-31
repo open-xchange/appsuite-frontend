@@ -441,10 +441,11 @@ define('io.ox/files/main', [
         },
 
         /*
-         * Respond to rename
+         * Respond to API events that need a reload
          */
-        'change:filename': function (app) {
-            api.on('rename', _.debounce(function () {
+        'requires-reload': function (app) {
+            // listen to events that affect the filename, add files, or remove files
+            api.on('rename add:file add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
         },
@@ -504,15 +505,6 @@ define('io.ox/files/main', [
                     app.pages.goBack();
                 }
             });
-        },
-
-        /*
-         * update view when adding a new file
-         */
-        'create:file': function (app) {
-            api.on('create:file', _.debounce(function () {
-                app.listView.reload();
-            }, 100));
         },
 
         /*

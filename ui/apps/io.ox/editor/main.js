@@ -12,7 +12,7 @@
  */
 
 define('io.ox/editor/main', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
     'gettext!io.ox/editor',
@@ -263,7 +263,7 @@ define('io.ox/editor/main', [
                                     // create or update?
                                     if (model.has('id')) {
                                         // update
-                                        return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                                        return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function () {
                                                 previous = model.toJSON();
                                             })
@@ -275,14 +275,13 @@ define('io.ox/editor/main', [
                                             });
                                     } else {
                                         // create
-                                        return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
+                                        return api.upload({ folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function (data) {
                                                 delete data.content;
                                                 app.setState({ folder: data.folder_id, id: data.id });
                                                 model.set(data);
                                                 previous = model.toJSON();
                                                 view.idle();
-                                                api.trigger('refresh.all');
                                             })
                                             .always(function () { view.idle(); })
                                             .fail(notifications.yell);

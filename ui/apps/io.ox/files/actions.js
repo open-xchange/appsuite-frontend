@@ -13,14 +13,13 @@
 
 define('io.ox/files/actions', [
     'io.ox/files/api',
-    'io.ox/files/legacy_api',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
     'io.ox/files/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/files'
-], function (api, legacy_api, ext, links, capabilities, util, folderAPI, gt) {
+], function (api, ext, links, capabilities, util, folderAPI, gt) {
 
     'use strict';
 
@@ -124,7 +123,7 @@ define('io.ox/files/actions', [
         },
         multiple: function (list) {
             _(list).each(function (file) {
-                window.open(legacy_api.getUrl(file, 'open'));
+                window.open(api.getUrl(file, 'open'));
             });
         }
     });
@@ -162,12 +161,11 @@ define('io.ox/files/actions', [
                 util.isFolderType('!trash', e.baton)
             );
         },
-        multiple: function (list) {
-            legacy_api.getList(list).done(function (list) {
+        multiple: function (array) {
+            api.getList(array).done(function (list) {
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
-                if (filtered_list.length > 0) {
-                    ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
-                }
+                if (filtered_list.length === 0) return;
+                ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
             });
         }
     });
@@ -382,12 +380,7 @@ define('io.ox/files/actions', [
             return e.collection.has('one', 'items') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
-            var data = baton.data;
-            legacy_api.update({
-                id: data.id,
-                last_modified: data.last_modified,
-                version: data.version
-            }, true);
+            api.versions.setCurrent(baton.data);
         }
     });
 
