@@ -126,6 +126,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         disposeView: function () {
             //console.info('SidebarView.disposeView()');
+            this.model.off().stopListening();
             this.$el.disableTouch();
             this.fileInfoView.remove();
             this.fileDescriptionView.remove();
@@ -133,6 +134,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.fileInfoView = null;
             this.fileDescriptionView = null;
             this.fileVersionsView = null;
+            this.model = null;
             return this;
         }
     });

@@ -231,6 +231,7 @@ define('io.ox/core/viewer/backbone', [
             result.meta = data.meta;
             result.lastModified = data.last_modified;
             result.numberOfVersions = data.number_of_versions;
+            result.description = data.description;
         }
 
         return result;
