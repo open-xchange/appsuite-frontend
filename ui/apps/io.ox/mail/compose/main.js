@@ -71,6 +71,10 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
+                // Set window and toolbars invisible initially
+                win.nodes.header.addClass('sr-only');
+                win.nodes.body.addClass('sr-only');
+
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/view'], function (MailComposeView) {
                         app.view = new MailComposeView({ data: obj, app: app });
@@ -79,6 +83,9 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                             app.view.setMail()
                             .done(function () {
                                 win.idle();
+                                // Set window and toolbars visible again
+                                win.nodes.header.removeClass('sr-only');
+                                win.nodes.body.removeClass('sr-only');
                                 win.setTitle(gt('Compose'));
                                 def.resolve({ app: app });
                                 ox.trigger('mail:' + type + ':ready', obj, app);
