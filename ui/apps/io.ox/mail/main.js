@@ -895,6 +895,16 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Prefetch mail-compose code
+         */
+        'prefetch-compose': function () {
+            if (_.device('smartphone')) return;
+            setTimeout(function () {
+                require(['io.ox/mail/compose/bundle']);
+            }, 3000);
+        },
+
+        /*
          * Connect collection loader with list view
          */
         'connect-loader': function (app) {
