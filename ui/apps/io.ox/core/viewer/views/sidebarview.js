@@ -50,6 +50,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.fileDescriptionView = new FileDescriptionView();
             this.fileVersionsView = new FileVersionsView();
 
+            this.model = null;
+
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
                 this.render(data);
@@ -63,7 +65,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         },
 
         render: function (data) {
-            //console.info('SidebarView.render() ', data);
+            //console.warn('SidebarView.render() ', data);
             if (!data || !data.model) { return this; }
 
             var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
@@ -85,7 +87,20 @@ define('io.ox/core/viewer/views/sidebarview', [
             // attach the touch handlers
             this.$el.enableTouch({ selector: null, horSwipeHandler: this.onHorizontalSwipe });
 
+            // remove listener from previous model
+            if (this.model) {
+                this.stopListening(this.model, 'change');
+            }
+            // save current data as view model
+            this.model = data.model;
+            this.listenTo(this.model, 'change', this.onModelChange.bind(this));
+
             return this;
+        },
+
+        onModelChange: function (changedModel) {
+            //console.warn('SidebarView.onModelChange()', changedModel);
+            this.fileInfoView.render({ model: changedModel });
         },
 
         /**

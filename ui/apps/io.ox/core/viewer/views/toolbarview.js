@@ -332,6 +332,11 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
         },
 
+        onModelChange: function (changedModel) {
+            //console.warn('ToolbarView.onModelChange()', changedModel);
+            this.render({ model: changedModel });
+        },
+
         /**
          * Renders the toolbar.
          *
@@ -354,8 +359,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     data: origData instanceof Backbone.Model ? origData.toJSON() : origData
                 }),
                 appName = data.model.get('source');
+            // remove listener from previous model
+            if (this.model) {
+                this.stopListening(this.model, 'change');
+            }
             // save current data as view model
             this.model = data.model;
+            this.listenTo(this.model, 'change', this.onModelChange.bind(this));
             // set device type
             Util.setDeviceClass(this.$el);
             toolbar.empty();
@@ -382,6 +392,8 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         disposeView: function () {
             //console.warn('ToolbarView.disposeView()');
+            this.model.off().stopListening();
+            this.model = null;
         }
 
     });

@@ -130,6 +130,112 @@ define('io.ox/core/viewer/backbone', [
             }
         };
 
+    function convert(data) {
+        var result = {};
+
+        /**
+         * Guesses (duck check) the source type of a file by its properties.
+         *
+         * @param {Object} data
+         *  a file descriptor object passed from e.g Drive, Calendar or Mail app.
+         *
+         * @returns {String|null}
+         *  returns the file source type or null:
+         *      ITEM_TYPE_FILE for Drive files
+         *      ITEM_TYPE_MAIL_ATTACHMENT for mail attachments
+         *      ITEM_TYPE_PIM_ATTACHMENT for attachments of contacts, appointments or tasks
+         */
+        function getFileSourceType (data) {
+            if (!data || !data.id) { return null; }
+
+            if ((data.mail && data.mail.id && data.mail.folder_id) || (data.group === 'mail') || (data.disp === 'attachment')) {
+                return ITEM_TYPE_MAIL_ATTACHMENT;
+
+            } else if (_.isNumber(data.attached) && _.isNumber(data.folder) && _.isNumber(data.module)) {
+                return ITEM_TYPE_PIM_ATTACHMENT;
+
+            } else if (_.isString(data.version)) {
+                return ITEM_TYPE_FILE;
+            }
+
+            return null;
+        }
+
+        /**
+         *  Retrieves the file category from its MIME type and extension.
+         *
+         *  @param {String} mimeType
+         *  the MIME type string
+         *
+         *  @param {String} fileExtension
+         *  the file extension
+         *
+         *  @returns {String}
+         *   Returns one of these supported categories: 'IMAGE', 'VIDEO', AUDIO', 'OFFICE', 'PDF',
+         *   and returns null if no matching category is found.
+         */
+        function getFileCategory (mimeType, fileExtension) {
+            var fileCategory = null;
+            _.each(MIME_TYPES, function (types, category) {
+                var mimeTypes = _.values(types),
+                    extensions = _.keys(types);
+                if (_.contains(mimeTypes, mimeType) || _.contains(extensions, fileExtension)) {
+                    fileCategory = category;
+                }
+            });
+            return fileCategory;
+        }
+
+        /**
+         *  Retrieves the extension from a given file name.
+         *
+         * @param {String} filename
+         *  Filename string
+         *
+         * @returns {String | null}
+         *  Returns the file extension string if found, null otherwise.
+         */
+        function getExtension (fileName) {
+            if (!fileName || !_.isString(fileName) || fileName.length === 0) { return null; }
+            var index = fileName.lastIndexOf('.');
+            return (fileName.lastIndexOf('.') >= 0) ? fileName.substring(index + 1).toLowerCase() : null;
+        }
+
+        result.source = getFileSourceType (data);
+
+        if (result.source === ITEM_TYPE_MAIL_ATTACHMENT) {
+            result.filename = data.filename;
+            result.size = data.size;
+            result.contentType = data.content_type;
+            result.fileCategory = getFileCategory(data.content_type, getExtension(data.filename));
+            result.id = data.id;    // could be a attachment id, or drive file id
+            result.folderId = data.mail && data.mail.folder_id || null;
+
+        } else if (result.source === ITEM_TYPE_PIM_ATTACHMENT) {
+            result.filename = data.filename;
+            result.size = data.file_size;
+            result.contentType = data.file_mimetype;
+            result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
+            result.id = data.id;
+            result.folderId = data.folder;
+            result.module = data.module;
+
+        } else if (result.source === ITEM_TYPE_FILE) {
+            result.filename = data.filename;
+            result.size = data.file_size;
+            result.version = data.version;  // drive only
+            result.contentType = data.file_mimetype;
+            result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
+            result.id = data.id;    // could be a attachment id, or drive file id
+            result.folderId = data.folder_id;
+            result.meta = data.meta;
+            result.lastModified = data.last_modified;
+            result.numberOfVersions = data.number_of_versions;
+        }
+
+        return result;
+    }
+
     /**
      *  The Model represents a general file model for the OX Viewer.
      */
@@ -158,112 +264,7 @@ define('io.ox/core/viewer/backbone', [
             //console.warn('FileModel.initialize(): ', data);
         },
 
-        parse: function (data) {
-
-            var result = {};
-
-            /**
-             * Guesses (duck check) the source type of a file by its properties.
-             *
-             * @param {Object} data
-             *  a file descriptor object passed from e.g Drive, Calendar or Mail app.
-             *
-             * @returns {String|null}
-             *  returns the file source type or null:
-             *      ITEM_TYPE_FILE for Drive files
-             *      ITEM_TYPE_MAIL_ATTACHMENT for mail attachments
-             *      ITEM_TYPE_PIM_ATTACHMENT for attachments of contacts, appointments or tasks
-             */
-            function getFileSourceType (data) {
-                if (!data || !data.id) { return null; }
-
-                if ((data.mail && data.mail.id && data.mail.folder_id) || (data.group === 'mail') || (data.disp === 'attachment')) {
-                    return ITEM_TYPE_MAIL_ATTACHMENT;
-
-                } else if (_.isNumber(data.attached) && _.isNumber(data.folder) && _.isNumber(data.module)) {
-                    return ITEM_TYPE_PIM_ATTACHMENT;
-
-                } else if (_.isString(data.version)) {
-                    return ITEM_TYPE_FILE;
-                }
-
-                return null;
-            }
-
-            /**
-             *  Retrieves the file category from its MIME type and extension.
-             *
-             *  @param {String} mimeType
-             *  the MIME type string
-             *
-             *  @param {String} fileExtension
-             *  the file extension
-             *
-             *  @returns {String}
-             *   Returns one of these supported categories: 'IMAGE', 'VIDEO', AUDIO', 'OFFICE', 'PDF',
-             *   and returns null if no matching category is found.
-             */
-            function getFileCategory (mimeType, fileExtension) {
-                var fileCategory = null;
-                _.each(MIME_TYPES, function (types, category) {
-                    var mimeTypes = _.values(types),
-                        extensions = _.keys(types);
-                    if (_.contains(mimeTypes, mimeType) || _.contains(extensions, fileExtension)) {
-                        fileCategory = category;
-                    }
-                });
-                return fileCategory;
-            }
-
-            /**
-             *  Retrieves the extension from a given file name.
-             *
-             * @param {String} filename
-             *  Filename string
-             *
-             * @returns {String | null}
-             *  Returns the file extension string if found, null otherwise.
-             */
-            function getExtension (fileName) {
-                if (!fileName || !_.isString(fileName) || fileName.length === 0) { return null; }
-                var index = fileName.lastIndexOf('.');
-                return (fileName.lastIndexOf('.') >= 0) ? fileName.substring(index + 1).toLowerCase() : null;
-            }
-
-            result.source = getFileSourceType (data);
-
-            if (result.source === ITEM_TYPE_MAIL_ATTACHMENT) {
-                result.filename = data.filename;
-                result.size = data.size;
-                result.contentType = data.content_type;
-                result.fileCategory = getFileCategory(data.content_type, getExtension(data.filename));
-                result.id = data.id;    // could be a attachment id, or drive file id
-                result.folderId = data.mail && data.mail.folder_id || null;
-
-            } else if (result.source === ITEM_TYPE_PIM_ATTACHMENT) {
-                result.filename = data.filename;
-                result.size = data.file_size;
-                result.contentType = data.file_mimetype;
-                result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
-                result.id = data.id;
-                result.folderId = data.folder;
-                result.module = data.module;
-
-            } else if (result.source === ITEM_TYPE_FILE) {
-                result.filename = data.filename;
-                result.size = data.file_size;
-                result.version = data.version;  // drive only
-                result.contentType = data.file_mimetype;
-                result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
-                result.id = data.id;    // could be a attachment id, or drive file id
-                result.folderId = data.folder_id;
-                result.meta = data.meta;
-                result.lastModified = data.last_modified;
-                result.numberOfVersions = data.number_of_versions;
-            }
-
-            return result;
-        },
+        parse: convert,
 
         isMailAttachment: function () {
             return this.get('source') === ITEM_TYPE_MAIL_ATTACHMENT;
@@ -327,12 +328,19 @@ define('io.ox/core/viewer/backbone', [
          */
         parse: function (models) {
             var viewerModels = [];
+            //var self = this;
             _.each(models, function (model) {
                 // check if model is a Backbone Model (Drive), or POJs (Mail, PIM apps)
                 var attributes = model instanceof Backbone.Model ? model.attributes : model,
                     newModel = new Model(attributes, { parse: true });
                 newModel.set('origData', model);
                 viewerModels.push(newModel);
+                newModel.listenTo(model, 'change', function (changeModel) {
+                    //console.warn('ViewerCollection model changed', changeModel, changeModel.changed);
+                    var converted = convert(changeModel.attributes);
+                    newModel.set(converted);
+                    //console.warn('ViewerCollection model converted', newModel, converted);
+                });
             });
             return viewerModels;
         },
