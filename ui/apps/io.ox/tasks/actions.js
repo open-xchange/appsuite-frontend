@@ -160,18 +160,6 @@ define('io.ox/tasks/actions', [
         }
     });
 
-    /*
-    new Action('io.ox/tasks/actions/viewer', {
-        id: 'viewer',
-        requires: 'some',
-        multiple: function (attachmentList) {
-            ox.load(['io.ox/tasks/actions/viewer']).done(function (action) {
-                action(attachmentList);
-            });
-        }
-    });
-    */
-
     //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'edit',
