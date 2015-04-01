@@ -32,8 +32,8 @@ define('io.ox/core/viewer/main', [
     function getFileList (baton) {
         if (!baton) { return null; }
         // temporary till we get list of models from baton directly
-        if (baton.app && baton.app.listView) {
-            return baton.app.listView.collection.models;
+        if (baton.collection) {
+            return baton.collection.models;
         }
         // exception for Mail and PIM
         if (_.isArray(baton)) { return baton; }

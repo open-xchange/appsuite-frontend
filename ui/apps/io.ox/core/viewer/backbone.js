@@ -31,9 +31,9 @@ define('io.ox/core/viewer/backbone', [
 
     'use strict';
 
-    var ITEM_TYPE_FILE = 'file',
-        ITEM_TYPE_MAIL_ATTACHMENT = 'mail-attachment',
-        ITEM_TYPE_PIM_ATTACHMENT = 'pim-attachment',
+    var ITEM_TYPE_FILE = 'drive',
+        ITEM_TYPE_MAIL_ATTACHMENT = 'mail',
+        ITEM_TYPE_PIM_ATTACHMENT = 'pim',
         VIEW_MODES = { VIEW: 'view', PREVIEW: 'preview', THUMBNAIL: 'thumbnail', DOWNLOAD: 'download' },
         MIME_TYPES = {
             IMAGE: {
@@ -328,7 +328,9 @@ define('io.ox/core/viewer/backbone', [
         parse: function (models) {
             var viewerModels = [];
             _.each(models, function (model) {
-                var newModel = new Model(model.attributes, { parse: true });
+                // check if model is a Backbone Model (Drive), or POJs (Mail, PIM apps)
+                var attributes = model instanceof Backbone.Model ? model.attributes : model,
+                    newModel = new Model(attributes, { parse: true });
                 newModel.set('origData', model);
                 viewerModels.push(newModel);
             });
