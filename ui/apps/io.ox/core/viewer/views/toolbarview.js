@@ -191,7 +191,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             completeMeta = _.extend(defaultMeta, appMeta);
         _.each(completeMeta, function (linkMeta, linkId) {
             linkMeta.id = linkId;
-            linkMeta.index = index + 100;
+            linkMeta.index = (index += 100);
             extPoint.extend(new LinksPattern.Link(linkMeta));
         });
     });
