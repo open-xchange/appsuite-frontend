@@ -29,20 +29,12 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     'use strict';
 
+    // define constants
     var TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
         TOOLBAR_LINKS_EXTERNAL_ID = TOOLBAR_LINKS_ID + '/external',
-        TOOLBAR_LINKS_DROPDOWN_ID = TOOLBAR_LINKS_ID + '/dropdown',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
-        TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown',
-        ITEM_TYPE_FILE = 'file',
-        ITEM_TYPE_MAIL_ATTACHMENT = 'mail-attachment',
-        ITEM_TYPE_PIM_ATTACHMENT = 'pim-attachment',
-        ACTION_REF_PREFIX = {
-            '1': 'io.ox/core/tk/attachment',
-            '4': 'io.ox/tasks',
-            '7': 'io.ox/contacts'
-        };
+        TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown';
 
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point(TOOLBAR_ID),
@@ -51,7 +43,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         toolbarLinksMeta = {
             // high priority links
             'filename': {
-                index: 100,
                 prio: 'hi',
                 mobile: 'lo',
                 title: gt('File name'),
@@ -73,55 +64,137 @@ define('io.ox/core/viewer/views/toolbarview', [
                     }
                 }
             },
-            'functiondropdown': {
-                index: 200,
-                prio: 'hi',
-                mobile: 'hi',
-                icon: 'fa fa-bars',
-                ref: TOOLBAR_ACTION_DROPDOWN_ID,
-                customize: function (baton) {
-                    var self = this,
-                        fileSource = baton.model.get('source'),
-                        pimModule = baton.model.get('module') || '',
-                        dropdownLinks = LinksPattern.DropdownLinks({
-                            ref: TOOLBAR_LINKS_DROPDOWN_ID + '/' + fileSource + pimModule,
-                            wrap: false,
-                            //function to call when dropdown is empty
-                            emptyCallback: function () {
-                                self.addClass('disabled')
-                                    .attr({ 'aria-disabled': true })
-                                    .removeAttr('href');
-                            }
-                        }, baton);
-                    this.append('<i class="fa fa-caret-down">')
-                        .after(dropdownLinks.addClass('dropdown-menu-right'))
-                        .addClass('dropdown-toggle viewer-toolbar-dropdown')
-                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1', 'title': gt('More functions'), 'aria-label': gt('More functions') })
-                        .dropdown();
-                    this.parent().addClass('dropdown');
-                }
-            },
             'togglesidebar': {
-                index: 300,
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-info-circle',
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
-                    this.addClass('viewer-toolbar-togglesidebar').attr({ tabindex: '1', title: gt('View details'), 'aria-label': gt('View details') });
+                    this.addClass('viewer-toolbar-togglesidebar')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('View details'),
+                            'aria-label': gt('View details')
+                        });
                 }
             },
             'close': {
-                index: 400,
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-times',
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
-                    this.addClass('viewer-toolbar-close').attr({ tabindex: '1', title: gt('Close'), 'aria-label': gt('Close') });
+                    this.addClass('viewer-toolbar-close')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Close'),
+                            'aria-label': gt('Close')
+                        })
+                        .parent().addClass('pull-right');
+                }
+            }
+        },
+        // a map containing App <-> Links mapping
+        linksMap = {
+            drive: {
+                'rename': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Rename'),
+                    section: 'edit',
+                    ref: 'io.ox/files/actions/rename'
+                },
+                'editdescription': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Edit description'),
+                    section: 'edit',
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
+                },
+                'download': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Download'),
+                    section: 'export',
+                    ref: 'io.ox/files/actions/download'
+                },
+                //'print': {
+                //    prio: 'lo',
+                //    mobile: 'lo',
+                //    label: gt('Print'),
+                //    section: 'export',
+                //    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
+                //},
+                'share': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Share'),
+                    section: 'export',
+                    ref: 'io.ox/files/icons/share'
+                },
+                'delete': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Delete'),
+                    section: 'delete',
+                    ref: 'io.ox/files/actions/delete'
+                }
+            },
+            mail: {
+                'openmailattachment': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Open in browser tab'),
+                    ref: 'io.ox/mail/actions/open-attachment'
+                },
+                'downloadmailattachment': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Download'),
+                    ref: 'io.ox/mail/actions/download-attachment'
+                },
+                'savemailattachmenttodrive': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Save to Drive'),
+                    ref: 'io.ox/mail/actions/save-attachment'
+                }
+            },
+            pim: {
+                'openmailattachment': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Open in browser tab'),
+                    ref: 'io.ox/core/tk/actions/open-attachment'
+                },
+                'downloadmailattachment': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Download'),
+                    ref: 'io.ox/core/tk/actions/download-attachment'
+                },
+                'savemailattachmenttodrive': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Save to Drive'),
+                    ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             }
         };
+
+    // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
+    _.each(linksMap, function (appMeta, appName) {
+        var index = 0,
+            extId = TOOLBAR_LINKS_ID + '/' + appName,
+            extPoint = Ext.point(extId),
+            defaultMeta = _.copy(toolbarLinksMeta),
+            completeMeta = _.extend(defaultMeta, appMeta);
+        _.each(completeMeta, function (linkMeta, linkId) {
+            linkMeta.id = linkId;
+            linkMeta.index = index + 100;
+            extPoint.extend(new LinksPattern.Link(linkMeta));
+        });
+    });
 
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
@@ -131,9 +204,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription', {
         id: 'edit-description',
-        requires: function () {
-            return true;
-        },
         action: function (baton) {
             var actionBaton = Ext.Baton({ data: {
                 id: baton.model.get('id'),
@@ -145,116 +215,21 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         id: 'print',
-        requires: function () {
-            return true;
-        },
         action: function () {
             //console.warn('ToolbarView.actions.print', baton);
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         id: 'togglesidebar',
-        requires: function () {
-            return true;
-        },
         action: function () {
             //console.warn('ToolbarView.actions.togglesidebar', baton);
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
-        requires: function () {
-            return true;
-        },
         action: function () {
             //console.warn('ToolbarView.actions.close', baton);
         }
-    });
-
-    // action links for the function dropdown for Drive files
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
-        index: 80,
-        id: 'rename',
-        label: gt('Rename'),
-        section: 'edit',
-        ref: 'io.ox/files/actions/rename'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
-        index: 90,
-        id: 'editdescription',
-        label: gt('Edit description'),
-        section: 'edit',
-        ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
-        index: 100,
-        id: 'share',
-        label: gt('Share'),
-        section: 'export',
-        ref: 'io.ox/files/icons/share'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
-        index: 200,
-        id: 'download',
-        label: gt('Download'),
-        section: 'export',
-        ref: 'io.ox/files/actions/download'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
-        index: 300,
-        id: 'print',
-        label: gt('Print'),
-        section: 'export',
-        ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
-        index: 400,
-        id: 'delete',
-        label: gt('Delete'),
-        section: 'delete',
-        ref: 'io.ox/files/actions/delete'
-    });
-
-    // action links of the function dropdown for mail attachments
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
-        index: 100,
-        id: 'open',
-        label: gt('Open in browser tab'),
-        ref: 'io.ox/mail/actions/open-attachment'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
-        index: 200,
-        id: 'download',
-        label: gt('Download'),
-        ref: 'io.ox/mail/actions/download-attachment'
-    });
-    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
-        index: 300,
-        id: 'save',
-        label: gt('Save to Drive'),
-        ref: 'io.ox/mail/actions/save-attachment'
-    });
-
-    // action links of the function dropdown for pim attachments
-    _.each(ACTION_REF_PREFIX, function (prefix, moduleId) {
-        new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
-            index: 100,
-            id: 'open',
-            label: gt('Open in browser tab'),
-            ref: prefix + '/actions/open-attachment'
-        });
-        new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
-            index: 200,
-            id: 'download',
-            label: gt('Download'),
-            ref: prefix + '/actions/download-attachment'
-        });
-        new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
-            index: 300,
-            id: 'save',
-            label: gt('Save to Drive'),
-            ref: prefix + '/actions/save-attachment'
-        });
     });
 
     // define the Backbone view
@@ -274,9 +249,9 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         initialize: function () {
             //console.info('ToolbarView.initialize()', options);
-            this.resetLinks();
+            //this.resetLinks();
             // listen to view links injection
-            this.listenTo(EventDispatcher, 'viewer:addtotoolbar', this.onAddToToolbar.bind(this));
+            //this.listenTo(EventDispatcher, 'viewer:addtotoolbar', this.onAddToToolbar.bind(this));
             // rerender on slide change
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render.bind(this));
             // run own disposer function at global dispose
@@ -337,12 +312,27 @@ define('io.ox/core/viewer/views/toolbarview', [
                     model: data.model,
                     models: origData instanceof Backbone.Model ? [origData] : null,
                     data: origData instanceof Backbone.Model ? origData.toJSON() : origData
-                });
-
+                }),
+                appName = data.model.get('source');
+            // save current data as view model
             this.model = data.model;
             // set device type
             Util.setDeviceClass(this.$el);
             toolbar.empty();
+            // enable only the link set for the current app
+            _.each(toolbarPoint.keys(), function (id) {
+                if (id === appName) {
+                    toolbarPoint.enable(id);
+                } else {
+                    toolbarPoint.disable(id);
+                }
+            });
+            //extend toolbar extension point with the toolbar links
+            toolbarPoint.extend(new LinksPattern.InlineLinks({
+                id: appName,
+                dropdown: true,
+                ref: TOOLBAR_LINKS_ID + '/' + appName
+            }));
             toolbarPoint.invoke('draw', toolbar, baton);
             return this;
         },
@@ -356,7 +346,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onAddToToolbar: function (data) {
             // clear old toolbar extensions
-            this.resetLinks();
+            //this.resetLinks();
             // place view links after filename
             var index = 100;
             if (!data.viewLinks) {
@@ -380,12 +370,14 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Clears links in the toolbar extension point and rebind toolbar default links.
          */
         resetLinks: function () {
+            var index = 0;
             // clear old extensions
             toolbarPoint.clear();
             toolbarLinksPoint.clear();
             // create extension points from the toolbar links meta object with the links ext pattern
             _(toolbarLinksMeta).each(function (extensionMeta, extensionId) {
                 extensionMeta.id = extensionId;
+                extensionMeta.index = (index += 100);
                 toolbarLinksPoint.extend(new LinksPattern.Link(extensionMeta));
             });
             // extend toolbar extension point with the toolbar links
@@ -400,8 +392,8 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         disposeView: function () {
             //console.warn('ToolbarView.disposeView()');
-            toolbarPoint.clear();
-            toolbarLinksPoint.clear();
+            //toolbarPoint.clear();
+            //toolbarLinksPoint.clear();
         }
 
     });
