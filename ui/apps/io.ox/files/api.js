@@ -263,7 +263,7 @@ define('io.ox/files/api', [
 
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
-    var allColumns = '20,23,1,5,700,702,703,704,705,707,3,711';
+    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
     /**
      * map error codes and text phrases for user feedback

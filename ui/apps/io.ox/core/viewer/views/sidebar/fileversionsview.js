@@ -14,7 +14,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/api/user',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
@@ -30,34 +30,62 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'versions',
         draw: function (baton) {
             //console.info('FileVersionsView.draw()');
-            var panel, panelBody,
+            var self = this,
                 model = baton && baton.model,
-                versions = model && model.get('versions'),
-                numberOfVersions = model && model.get('numberOfVersions');
+                numberOfVersions = model && model.get('numberOfVersions'),
+                panelCollapsed = baton.panelCollapsed;
+
+            function drawPanel (numberOfVersions) {
+                var panel, panelBody,
+                    versions = model.get('versions');
+
+                // display versions panel only if we have at least 2 versions
+                if (numberOfVersions > 1) {
+                    // a11y
+                    self.attr({ role: 'tablist', 'aria-hidden': 'false' }).removeClass('hidden');
+
+                    // render panel
+                    panel = Util.createPanelNode({
+                        title: gt('Versions (%1$d)', _.noI18n(numberOfVersions)),
+                        collapsed: panelCollapsed
+                    });
+                    panelBody = panel.find('.panel-body');
+
+                    if (_.isArray(versions)) {
+                        Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ model: model, data: model.get('origData') }));
+                    }
+
+                    self.append(panel);
+                }
+            }
+
+            //debugger;
 
             this.empty();
             // mail and PIM attachments don't support versions
-            // display versions panel only if number of versions > 2
-            if (!model || !model.isDriveFile() || numberOfVersions < 2) {
+            if (!model || !model.isDriveFile()) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }
 
-            // a11y
-            this.attr({ role: 'tablist', 'aria-hidden': 'false' }).removeClass('hidden');
+            if (numberOfVersions > 0) {
+                // we already have the number of versions
+                drawPanel (numberOfVersions);
 
-            // render panel
-            panel = Util.createPanelNode({
-                title: gt('Versions (%1$d)', _.noI18n(numberOfVersions)),
-                collapsed: true
-            });
-            panelBody = panel.find('.panel-body');
+            } else {
+                // get number of versions
+                FilesAPI.get({ id: model.get('id'), folder_id: model.get('folderId') }, { cache: false })
+                .done(function (file) {
+                    //console.info('FilesAPI.get() ok ', file);
+                    var numberOfVersions = (file && file.number_of_versions) ? file.number_of_versions : 0;
 
-            if (_.isArray(versions)) {
-                Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ model: model, data: model.get('origData') }));
+                    model.set('numberOfVersions', numberOfVersions);
+                    drawPanel (numberOfVersions);
+                })
+                .fail(function (err) {
+                    console.warn('FilesAPI.get() error ', err);
+                });
             }
-
-            this.append(panel);
         }
     });
 
@@ -97,7 +125,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             }
 
             this.empty();
-            if (!model) { return; }
+            if (!model || !versions) { return; }
 
             table = $('<table>').addClass('versiontable table').append(
                         $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
@@ -210,27 +238,39 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         },
 
         onTogglePanel: function (event) {
-            var model = this.model,
+            var self = this,
+                model = this.model,
                 panelHeading = this.$el.find('.panel>.panel-heading'),
                 panelBody = this.$el.find('.panel>.panel-body');
 
             event.preventDefault();
             if (!model) { return; }
 
-            if (panelBody.hasClass('panel-collapsed')) {
+            this.panelCollapsed = panelBody.hasClass('panel-collapsed');
+            if (this.panelCollapsed) {
                 // get file version history
                 if (model.get('versions') === null) {
                     panelHeading.busy();
+
+                    if (!this.changeEventsHooked && this.origModel instanceof Backbone.Model) {
+                        this.listenTo(this.origModel, 'change:current_version change:number_of_versions change:version', this.onOrigModelChange.bind(this));
+                    }
+
                     // get file versions
-                    FilesAPI.versions({
-                        id: model.get('id')
+                    FilesAPI.versions.load({
+                        id: model.get('id'),
+                        folder_id: model.get('folderId')
                     })
                     .done(function (versions) {
-                        //console.info('FilesAPI.versions() ok ', versions);
-                        model.set('versions', (_.isArray(versions) ? versions : []));
+                        //console.info('FilesAPI.versions.load()', versions);
+                        model.set('versions', (_.isArray(versions) ? versions : null));
+
+                        // expand the panel
+                        panelBody.slideDown().removeClass('panel-collapsed');
+                        self.panelCollapsed = false;
                     })
                     .fail(function (err) {
-                        console.warn('FilesAPI.versions() error ', err);
+                        console.warn('FilesAPI.versions.load() error ', err);
                     })
                     .always(function () {
                         panelHeading.idle();
@@ -239,44 +279,82 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 } else {
                     // expand the panel
                     panelBody.slideDown().removeClass('panel-collapsed');
+                    this.panelCollapsed = false;
                 }
 
             } else {
                 // collapse the panel
                 panelBody.slideUp().addClass('panel-collapsed');
+                this.panelCollapsed = true;
             }
         },
 
+        /**
+         * Handles change events of 'versions' of the Viewer model
+         */
         onModelChangeVersions: function (model) {
             //console.info('FileVersionsView.onModelChangeVersions() ', model);
             var panelBody = this.$el.find('.panel>.panel-body'),
                 baton = Ext.Baton({ model: model, data: model.get('origData') });
 
             Ext.point(POINT + '/list').invoke('draw', panelBody, baton);
+        },
 
-            // expand the panel
-            panelBody.slideDown().removeClass('panel-collapsed');
+        /**
+         * Handles change events of 'current_version', 'number_of_versions' and 'version' of the original model
+         */
+        onOrigModelChange: function (model) {
+            //console.info('FileVersionsView.onOrigModelChange() ', model);
+            var self = this,
+                viewModel = this.model;
+
+            FilesAPI.versions.load(model.toJSON())
+            .done(function (versions) {
+                //console.info('FilesAPI.versions.load()', versions);
+                var baton,
+                    numberOfVersions = model.get('number_of_versions') || 0;
+
+                viewModel.set('numberOfVersions', numberOfVersions);
+                viewModel.set('versions', (_.isArray(versions) ? versions : null));
+
+                baton = Ext.Baton({ model: viewModel, data: viewModel.get('origData'), panelCollapsed: self.panelCollapsed });
+                Ext.point(POINT).invoke('draw', self.$el, baton);
+            })
+            .fail(function (err) {
+                console.warn('FilesAPI.versions.load() error ', err);
+            });
         },
 
         initialize: function () {
             //console.info('FileVersionsView.initialize()');
             this.on('dispose', this.disposeView.bind(this));
             this.model = null;
+            this.origModel = null;
+            this.panelCollapsed = true;
+            this.changeEventsHooked = false;
         },
 
         render: function (data) {
             //console.info('FileVersionsView.render() ', data);
+            var baton;
+
             if (!data || !data.model) { return this; }
 
-            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
+            this.panelCollapsed = true;
+            baton = Ext.Baton({ model: data.model, data: data.model.get('origData'), panelCollapsed: this.panelCollapsed });
 
             // remove listener from previous model
             if (this.model) {
                 this.stopListening(this.model, 'change:versions');
             }
+            if (this.origModel instanceof Backbone.Model) {
+                this.stopListening(this.origModel, 'change:versions');
+                this.changeEventsHooked = false;
+            }
 
             // add listener to new model
             this.model = data.model;
+            this.origModel = this.model.get('origData');
             this.listenTo(this.model, 'change:versions', this.onModelChangeVersions);
 
             Ext.point(POINT).invoke('draw', this.$el, baton);
@@ -286,7 +364,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         disposeView: function () {
             //console.info('FileVersionsView.disposeView()');
             this.model.off().stopListening();
+            this.origModel.off().stopListening();
             this.model = null;
+            this.origModel = null;
             return this;
         }
     });

@@ -15,7 +15,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
 ], function (DisposableView, Ext, ActionsPattern, EventDispatcher, FilesAPI, Util, gt) {
@@ -31,6 +31,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         draw: function (baton) {
             var panel, panelHeading,
                 model = baton && baton.model,
+                origModel = model && model.get('origData'),
                 description = model && model.get('description');
 
             this.empty();
@@ -59,7 +60,12 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 })
                 .done(function (file) {
                     //console.info('FilesAPI.get() ok ', file);
-                    model.set('description', (file && _.isString(file.description) ? file.description : ''));
+                    var description = (file && _.isString(file.description)) ? file.description : '';
+
+                    model.set('description', description);
+                    if (origModel instanceof Backbone.Model) {
+                        origModel.set('description', description);
+                    }
                 })
                 .fail(function (err) {
                     console.warn('FilesAPI.get() error ', err);
@@ -188,10 +194,17 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             Ext.point(POINT + '/text').invoke('draw', panel, Ext.Baton({ data: description }));
         },
 
+        onOrigModelChangeDescription: function (model) {
+            //console.info('onOrigModelChangeDescription() ', model);
+            var description = model.get('description') || '';
+            this.model.set('description', description);
+        },
+
         initialize: function () {
             //console.info('FileDescriptionView.initialize()');
             this.on('dispose', this.disposeView.bind(this));
             this.model = null;
+            this.origModel = null;
         },
 
         /**
@@ -275,9 +288,16 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             if (this.model) {
                 this.stopListening(this.model, 'change:description');
             }
+            if (this.origModel instanceof Backbone.Model) {
+                this.stopListening(this.origModel, 'change:description');
+            }
 
             // add listener to new model
             this.model = data.model;
+            this.origModel = this.model.get('origData');
+            if (this.origModel instanceof Backbone.Model) {
+                this.listenTo(this.origModel, 'change:description', this.onOrigModelChangeDescription.bind(this));
+            }
             this.listenTo(this.model, 'change:description', this.onModelChangeDescription);
 
             this.$el.attr({ role: 'tablist' });
@@ -289,7 +309,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         disposeView: function () {
             //console.info('FileDescriptionView.disposeView()');
             this.model.off().stopListening();
+            this.origModel.off().stopListening();
             this.model = null;
+            this.origModel = null;
             return this;
         }
     });
