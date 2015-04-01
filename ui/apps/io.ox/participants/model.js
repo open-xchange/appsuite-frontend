@@ -186,7 +186,7 @@ define('io.ox/participants/model', [
                 });
                 break;
             default:
-                self.set({ display_name: 'unknown' });
+                //self.set({ display_name: 'unknown' });
                 self.trigger('change', self);
                 df.resolve();
                 break;
