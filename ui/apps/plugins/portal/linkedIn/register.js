@@ -245,8 +245,7 @@ define('plugins/portal/linkedIn/register', [
                         return (baton.data = data);
                     }
                     return (baton.data = data.values);
-                })
-                .fail(require('io.ox/core/notifications').yell);
+                });
 
             } else {
 
