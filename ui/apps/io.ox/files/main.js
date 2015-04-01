@@ -447,6 +447,23 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Add listener to files upload to select newly uploaded files after listview reload
+         */
+        'select-uploaded-files': function (app) {
+            api.on('stop:upload', function (e, requests) {
+                api.collectionLoader.collection.once('reload', function () {
+                    $.when.apply(this, requests).done(function () {
+                        var files = _(arguments).map(function (file) {
+                            return { id: file.data, folder: app.folder.get() };
+                        });
+
+                        app.listView.selection.set(files);
+                    });
+                });
+            });
+        },
+
+        /*
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
