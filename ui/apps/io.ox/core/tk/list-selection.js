@@ -104,7 +104,7 @@ define('io.ox/core/tk/list-selection', [
         },
 
         getNode: function (cid) {
-            this.getItems().filter('[data-cid="' + cid + '"]');
+            return this.getItems().filter('[data-cid="' + cid + '"]');
         },
 
         getPosition: function (items) {
