@@ -126,10 +126,10 @@ define('io.ox/find/main', [
 
                 // events
                 app.on({
-                    'search:query': function () {
+                    'find:query': function () {
                         grid.setMode('search');
                     },
-                    'search:idle': function () {
+                    'find:idle': function () {
                         if (grid.getMode() !== 'all') grid.setMode('all');
                     }
                 });
@@ -197,26 +197,29 @@ define('io.ox/find/main', [
                 manager = model.manager;
 
             /**
-             * search:query     list of active facets changed
-             * search:idle      no active facets anymore
+             * find:query   list of active facets changed
+             * find:idle    no active facets anymore
              */
             app.listenTo(manager, {
                 'active': _.debounce(function (count) {
-                        app.trigger(count ? 'search:query' : 'search:idle');
+                        app.trigger(count ? 'find:query' : 'find:idle');
                     }, 10)
             });
 
             /**
-             * search:cancel    reset, collapse search field and move focus
+             * find:cancel  reset, collapse search field and move focus
              */
             app.listenTo(app.view, {
                 'cancel': function () {
-                    app.trigger('search:cancel');
+                    app.trigger('find:cancel');
                 }
             });
 
-            // screenreader
-            app.on('query:result', function (response) {
+            /**
+             * find:query:result  inform user about number of returned hits
+             */
+            app.on('find:query:result', function (response) {
+                // screenreader
                 var n = response.results.length,
                     //#. 'no results' message for screenreaders with additional hint to adjust active filters
                     empty = gt('No items were found. Please adjust currently used facets.'),

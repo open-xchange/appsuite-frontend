@@ -850,7 +850,7 @@ define('io.ox/files/fluid/perspective', [
             $(window).resize(_.debounce(recalculateLayout, 300));
 
             app.get('search').on({
-                'search:query search:idle': function () {
+                'find:query find:idle': function () {
                     breadcrumb = undefined;
                     allIds = [];
                     drawFirst();

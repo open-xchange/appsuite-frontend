@@ -495,7 +495,7 @@ define('io.ox/calendar/main', [
 
                 // additional handler: switch to list perspective (and back)
                 searchApp.on({
-                    'search:query': function () {
+                    'find:query': function () {
                         // switch to supported perspective
                         lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
@@ -505,7 +505,7 @@ define('io.ox/calendar/main', [
                             app.props.on('change', app.getSearch().view.cancel);
                         }
                     },
-                    'search:cancel': function () {
+                    'find:cancel': function () {
                         // switch back to perspective used before
                         var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
                         if (lastPerspective && lastPerspective !== currentPerspective)

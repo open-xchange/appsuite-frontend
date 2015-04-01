@@ -655,14 +655,14 @@ define('io.ox/files/main', [
                             // wrap setCollection
                             app.listView.setCollection = function (collection) {
                                 view.stopListening();
-                                view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'query:result', collection));
+                                view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'find:query:result', collection));
                                 return setCollection.apply(this, arguments);
                             };
                         };
 
                     // events
                     searchApp.on({
-                        'search:idle': function () {
+                        'find:idle': function () {
                             if (mode === 'search') {
                                 //console.log('%c' + 'reset collection loader', 'color: white; background-color: green');
                                 app.listView.connect(api.collectionLoader);
@@ -670,7 +670,7 @@ define('io.ox/files/main', [
                             }
                             mode = 'default';
                         },
-                        'search:query': _.debounce(function () {
+                        'find:query': _.debounce(function () {
                             // register/connect once
                             if (app.listView.loader.mode !== 'search') register();
                             // load

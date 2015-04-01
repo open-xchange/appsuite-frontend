@@ -133,16 +133,16 @@ define('io.ox/find/apiproxy',[
 
                     function drawResults(result) {
                         if (result) {
-                            app.trigger('query:result', result);
+                            app.trigger('find:query:result', result);
                         }
-                        app.trigger('query:stop');
+                        app.trigger('find:query:stop');
                         return result;
                     }
 
                     function fail(result) {
                         notifications.yell(result);
-                        app.trigger('query:stop');
-                        app.trigger('query:fail');
+                        app.trigger('find:query:stop');
+                        app.trigger('find:query:fail');
                     }
 
                     return function (sync, params) {
@@ -156,9 +156,8 @@ define('io.ox/find/apiproxy',[
                                     facets: manager.getRequest()
                                 }
                             };
-
-                        app.trigger('query:start');
-                        app.trigger('query:running');
+                        app.trigger('find:query:start');
+                        app.trigger('find:query:running');
 
                         return getResults(request)
                             .then(enrich.bind(this, request))
