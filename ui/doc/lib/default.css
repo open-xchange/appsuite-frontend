@@ -56,9 +56,7 @@ pre.text {
     border: 1px solid #ccc;
     padding: 20px;
     white-space: pre-wrap;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 4px;
 }
 
 dl, pre.prettyprint {
