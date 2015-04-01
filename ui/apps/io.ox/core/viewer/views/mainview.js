@@ -48,6 +48,10 @@ define('io.ox/core/viewer/views/mainview', [
             this.listenTo(this.toolbarView, 'close', function () {
                 this.remove();
             });
+            // close viewer when another app is started or resumed
+            this.listenTo(ox, 'app:start app:resume', function () {
+                this.remove();
+            });
             // listen to the Viewer event 'bus' for useful events
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
             // handle DOM events
