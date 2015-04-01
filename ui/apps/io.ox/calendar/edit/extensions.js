@@ -193,7 +193,7 @@ define('io.ox/calendar/edit/extensions', [
         nextTo: 'full_time',
         draw: function () {
             this.append(
-                $('<div class="hidden-xs col-md-6 find-free-time"></div>')
+                $('<div class="hidden-xs col-sm-6 find-free-time"></div>')
             );
         }
     });
