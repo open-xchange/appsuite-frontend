@@ -491,11 +491,7 @@ define('io.ox/files/api', [
      */
     api.unlock = function (list) {
         return lockToggle(list, 'unlock').done(function () {
-            var collection = pool.get('detail');
-            _(list).each(function (item) {
-                var model = collection.get(_.cid(item));
-                if (model) model.set('locked_until', 0);
-            });
+            api.propagate('unlock', list);
         });
     };
 
@@ -506,7 +502,7 @@ define('io.ox/files/api', [
      */
     api.lock = function (list) {
         return lockToggle(list, 'lock').then(function () {
-            return api.getList(list, { cache: false });
+            return api.propagate('lock', list);
         });
     };
 
@@ -564,11 +560,7 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .done(function () {
-                folderAPI.reload(ids);
-                api.trigger('delete');
-                _(ids).each(function (item) {
-                    api.trigger('delete:' + _.ecid(item));
-                });
+                api.propagate('delete', ids);
             })
         );
     };
@@ -664,10 +656,6 @@ define('io.ox/files/api', [
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
-        // update model
-        var cid = _.cid(file), model = pool.get('detail').get(cid);
-        if (model) model.set(changes);
-
         return http.PUT({
             module: 'files',
             params: {
@@ -679,8 +667,8 @@ define('io.ox/files/api', [
             appendColumns: false
         })
         .done(function () {
-            api.trigger('update update:' + cid);
-            if ('title' in changes || 'filename' in changes) api.trigger('rename', cid);
+            api.propagate('update', file);
+            if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
         });
     };
 
@@ -735,8 +723,8 @@ define('io.ox/files/api', [
             folder_id: fid,
             description: options.description || ''
         })
-        .done(function () {
-            api.trigger('add:file');
+        .done(function (res) {
+            api.propagate('add:file', { id: res.data, folder: fid });
         });
     };
 
@@ -766,9 +754,9 @@ define('io.ox/files/api', [
             })
             .then(function () {
                 // reload versions list
-                return api.versions.load(options, { cache: false }).done(function () {
+                return api.versions.load(options, { cache: false }).done(function (data) {
                     // the mediator will reload the current collection
-                    api.trigger('add:version');
+                    api.propagate('add:version', { id: data.id, folder: fid });
                 });
             });
         },
@@ -829,7 +817,7 @@ define('io.ox/files/api', [
                     // update model
                     if (model) model.set('number_of_versions', list.length);
                     // the mediator will reload the current collection
-                    api.trigger('remove:version');
+                    api.propagate('remove:version', file);
                 });
             });
         },
@@ -849,7 +837,7 @@ define('io.ox/files/api', [
             var changes = { version: file.version };
             return api.update(file, changes).then(function () {
                 // the mediator will reload the current collection
-                api.trigger('change:version');
+                api.propagate('change:version', file);
             });
         }
     };
@@ -878,6 +866,81 @@ define('io.ox/files/api', [
     api.search.columns = allColumns;
     api.search.getData = function (query) {
         return { pattern: query };
+    };
+
+    /**
+     * update collections and models and fire events (if not suppressed)
+     * @param  {string} type
+     * @param  {file} obj
+     * @param  {boolean} silent (no events will be fired) [optional]
+     * @return { promise }
+     */
+    api.propagate = function (type, list, silent) {
+        list = _.isArray(list) ? list : [list];
+
+        var oldSchool = {
+            'new': 'add:file',
+            'change': 'update'
+        };
+
+        if (!type || _.isEmpty(list)) {
+            return $.when();
+        }
+
+        type = oldSchool[type] || type;
+
+        switch (type) {
+            case 'unlock':
+                list = list.map(function (obj) {
+                    var fid = String(obj.folder_id || obj.folder),
+                        id = String(obj.id),
+                        collection = pool.get('detail'),
+                        model = collection.get(_.cid(obj));
+
+                    if (model) model.set('locked_until', 0);
+                    return { folder_id: fid, id: id };
+                });
+                break;
+            case 'lock':
+                list = [api.getList(list, { cache: false })];
+                break;
+            case 'update':
+                // update models
+                list = list.map(function (obj) {
+                    var fid = String(obj.folder_id || obj.folder),
+                        id = String(obj.id),
+                        collection = pool.get('detail'),
+                        model = collection.get(_.cid(obj));
+
+                    if (model) model.set(obj);
+                    return { folder_id: fid, id: id };
+                });
+                break;
+            default:
+                list = list.map(function (obj) {
+                    var fid = String(obj.folder_id || obj.folder),
+                        id = String(obj.id);
+
+                    return { folder_id: fid, id: id };
+                });
+                break;
+        }
+
+        return $.when.apply($, list).then(function () {
+            if (silent) return list;
+
+            //need to flatten one layer, because list might be a list containing a deferred object resolving to a list
+            var events = [type].concat(_.flatten(list, true).map(function (obj) {
+                return type + ':' + _.ecid(obj);
+            }));
+            api.trigger(events.join(' '));
+
+            return list;
+        })
+        .then(function (list) {
+            folderAPI.reload(list);
+            return list;
+        });
     };
 
     return api;
