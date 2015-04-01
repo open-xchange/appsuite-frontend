@@ -728,9 +728,11 @@ define('io.ox/files/api', [
      *     - promise can be aborted using promise.abort function
      */
     api.upload = function (options) {
+        var fid = options.folder_id || options.folder;
+
         options.action = 'new';
         return performUpload(options, {
-            folder_id: options.folder,
+            folder_id: fid,
             description: options.description || ''
         })
         .done(function () {
@@ -755,9 +757,11 @@ define('io.ox/files/api', [
          *     - promise can be aborted using promise.abort function
          */
         upload: function (options) {
+            var fid = options.folder_id || options.folder;
+
             options.action = 'update';
             return performUpload(options, {
-                folder_id: options.folder,
+                folder_id: fid,
                 version_comment: options.version_comment || ''
             })
             .then(function () {
