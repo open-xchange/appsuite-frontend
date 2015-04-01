@@ -17,27 +17,9 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/eventdispatcher',
     'gettext!io.ox/core'
-], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher, gt) {
+], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher) {
 
     'use strict';
-
-    // define actions for zoom buttons in the toolbar
-    var TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
-        Action = ActionsPattern.Action;
-
-    // define actions for the zoom function
-    new Action(TOOLBAR_ACTION_ID + '/zoomin', {
-        id: 'zoomin',
-        action: function (baton) {
-            EventDispatcher.trigger('viewer:document:zoomin', baton);
-        }
-    });
-    new Action(TOOLBAR_ACTION_ID + '/zoomout', {
-        id: 'zoomout',
-        action: function (baton) {
-            EventDispatcher.trigger('viewer:document:zoomout', baton);
-        }
-    });
 
     /**
      * The image file type. Implements the ViewerType interface.
@@ -63,35 +45,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.pdfDocument = null;
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
-            // define meta objects for zoom links creation in the toolbar
-            this.linksMeta = {
-                'zoomout': {
-                    prio: 'hi',
-                    mobile: 'hi',
-                    icon: 'fa fa-search-minus',
-                    ref: TOOLBAR_ACTION_ID + '/zoomout',
-                    customize: function () {
-                        this.addClass('viewer-toolbar-zoomout').attr({
-                            tabindex: '1',
-                            title: gt('Zoom out'),
-                            'aria-label': gt('Zoom out')
-                        });
-                    }
-                },
-                'zoomin': {
-                    prio: 'hi',
-                    mobile: 'hi',
-                    icon: 'fa fa-search-plus',
-                    ref: TOOLBAR_ACTION_ID + '/zoomin',
-                    customize: function () {
-                        this.addClass('viewer-toolbar-zoomin').attr({
-                            tabindex: '1',
-                            title: gt('Zoom in'),
-                            'aria-label': gt('Zoom in')
-                        });
-                    }
-                }
-            };
             // bind zoom handlers
             EventDispatcher.on('viewer:document:zoomin', this.onZoomIn.bind(this));
             EventDispatcher.on('viewer:document:zoomout', this.onZoomOut.bind(this));

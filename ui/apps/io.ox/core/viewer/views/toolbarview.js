@@ -32,13 +32,11 @@ define('io.ox/core/viewer/views/toolbarview', [
     // define constants
     var TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
-        TOOLBAR_LINKS_EXTERNAL_ID = TOOLBAR_LINKS_ID + '/external',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
         TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown';
 
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point(TOOLBAR_ID),
-        toolbarLinksPoint = Ext.point(TOOLBAR_LINKS_ID),
         // toolbar link meta object used to generate extension points later
         toolbarLinksMeta = {
             // high priority links
@@ -62,6 +60,32 @@ define('io.ox/core/viewer/views/toolbarview', [
                         })
                             .addClass('viewer-toolbar-rename');
                     }
+                }
+            },
+            'zoomout': {
+                prio: 'hi',
+                mobile: 'hi',
+                icon: 'fa fa-search-minus',
+                ref: TOOLBAR_ACTION_ID + '/zoomout',
+                customize: function () {
+                    this.addClass('viewer-toolbar-zoomout').attr({
+                        tabindex: '1',
+                        title: gt('Zoom out'),
+                        'aria-label': gt('Zoom out')
+                    });
+                }
+            },
+            'zoomin': {
+                prio: 'hi',
+                mobile: 'hi',
+                icon: 'fa fa-search-plus',
+                ref: TOOLBAR_ACTION_ID + '/zoomin',
+                customize: function () {
+                    this.addClass('viewer-toolbar-zoomin').attr({
+                        tabindex: '1',
+                        title: gt('Zoom in'),
+                        'aria-label': gt('Zoom in')
+                    });
                 }
             },
             'togglesidebar': {
@@ -231,6 +255,25 @@ define('io.ox/core/viewer/views/toolbarview', [
             //console.warn('ToolbarView.actions.close', baton);
         }
     });
+    // define actions for the zoom function
+    new Action(TOOLBAR_ACTION_ID + '/zoomin', {
+        id: 'zoomin',
+        requires: function (e) {
+            return e.baton.model.isDocumentFile() && ox.debug;
+        },
+        action: function (baton) {
+            EventDispatcher.trigger('viewer:document:zoomin', baton);
+        }
+    });
+    new Action(TOOLBAR_ACTION_ID + '/zoomout', {
+        id: 'zoomout',
+        requires: function (e) {
+            return e.baton.model.isDocumentFile() && ox.debug;
+        },
+        action: function (baton) {
+            EventDispatcher.trigger('viewer:document:zoomout', baton);
+        }
+    });
 
     // define the Backbone view
     var ToolbarView = DisposableView.extend({
@@ -249,9 +292,6 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         initialize: function () {
             //console.info('ToolbarView.initialize()', options);
-            //this.resetLinks();
-            // listen to view links injection
-            //this.listenTo(EventDispatcher, 'viewer:addtotoolbar', this.onAddToToolbar.bind(this));
             // rerender on slide change
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render.bind(this));
             // run own disposer function at global dispose
@@ -338,62 +378,10 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         /**
-         * Creates links from the given metadata and append it to the toolbar,
-         * by extending the toolbar links.
-         *
-         * @param {Object} data
-         *  an object containing the active model and the links metadata.
-         */
-        onAddToToolbar: function (data) {
-            // clear old toolbar extensions
-            //this.resetLinks();
-            // place view links after filename
-            var index = 100;
-            if (!data.viewLinks) {
-                this.render(data);
-                return;
-            }
-            // add custom view links
-            _(data.viewLinks).each(function (extensionMeta, extensionId) {
-                extensionMeta.id = extensionId;
-                extensionMeta.index = index + 1;
-                toolbarLinksPoint.extend(new LinksPattern.Link(extensionMeta));
-            });
-            toolbarPoint.extend(new LinksPattern.InlineLinks({
-                id: 'toolbar-external-links',
-                ref: TOOLBAR_LINKS_EXTERNAL_ID
-            }));
-            this.render(data);
-        },
-
-        /**
-         * Clears links in the toolbar extension point and rebind toolbar default links.
-         */
-        resetLinks: function () {
-            var index = 0;
-            // clear old extensions
-            toolbarPoint.clear();
-            toolbarLinksPoint.clear();
-            // create extension points from the toolbar links meta object with the links ext pattern
-            _(toolbarLinksMeta).each(function (extensionMeta, extensionId) {
-                extensionMeta.id = extensionId;
-                extensionMeta.index = (index += 100);
-                toolbarLinksPoint.extend(new LinksPattern.Link(extensionMeta));
-            });
-            // extend toolbar extension point with the toolbar links
-            toolbarPoint.extend(new LinksPattern.InlineLinks({
-                id: 'toolbar-links',
-                ref: TOOLBAR_LINKS_ID
-            }));
-        },
-
-        /**
          * Destructor of this view
          */
         disposeView: function () {
             //console.warn('ToolbarView.disposeView()');
-            //toolbarPoint.clear();
-            //toolbarLinksPoint.clear();
         }
 
     });
