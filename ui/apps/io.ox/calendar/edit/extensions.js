@@ -35,10 +35,10 @@ define('io.ox/calendar/edit/extensions', [
         id: 'header',
         index: 10,
         draw: function (baton) {
-            var headerCol = $('<div class="col-sm-12">');
+            var headerCol = $('<div class="header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', headerCol, baton);
-            baton.app.getWindow().setHeader($('<div class="row header">').append(headerCol));
+            baton.app.getWindow().setHeader(headerCol);
         }
     });
 

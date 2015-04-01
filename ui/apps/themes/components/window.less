@@ -78,13 +78,15 @@
     &.header-top {
 
         .window-body{
-            top: 50px;
+            top: 48px;
             bottom: 0;
         }
 
         .window-header {
-            height: 50px;
-            padding-top: 15px;
+            height: 48px;
+            background-color: @window-header-color;
+            border-bottom: 1px solid @defaultBorderColor;
+            padding: 8px 0;
 
             h1.title {
                 margin: 0.2em 0;
@@ -171,19 +173,6 @@
     &.simple-window {
         position: relative;
         z-index: 11; // higher than io-ox-screens
-    }
-
-    &.toolbar-right {
-
-        .window-head {
-            left: auto;
-            right: 0;
-        }
-
-        .window-body {
-            left: 0;
-            right: @window-head-width;
-        }
     }
 }
 
@@ -427,11 +416,6 @@
 
     .chromeless-window .window-body {
         bottom: 0;
-    }
-
-    .window-container.toolbar-right {
-        .window-head { left: 0;  }
-        .window-body { right: 0; }
     }
 
     .vsplit {
