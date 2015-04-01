@@ -285,9 +285,9 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a.viewer-toolbar-close': 'onClose',
             'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
-            'click a.viewer-toolbar-rename': 'onRename',
-            'dblclick a.viewer-toolbar-rename': 'onRename',
-            'keydown a.viewer-toolbar-rename': 'onRename'
+            'click a.viewer-toolbar-filename': 'onRename',
+            'dblclick a.viewer-toolbar-filename': 'onRename',
+            'keydown a.viewer-toolbar-filename': 'onRename'
         },
 
         initialize: function () {
@@ -325,10 +325,10 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
-            var fileSource = this.model.get('source');
-            if (fileSource === 'file' && (event.which === 32 || event.which === 13 || event.type === 'dblclick' || (_.device('smartphone || tablet') && event.type === 'click'))) {
+            if (this.model.isDriveFile() && (event.which === 32 || event.which === 13 || event.type === 'dblclick' ||
+                (_.device('smartphone || tablet') && event.type === 'click'))) {
                 event.preventDefault();
-                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData') });
+                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData').toJSON() });
             }
         },
 
