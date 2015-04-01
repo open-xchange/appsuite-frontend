@@ -490,7 +490,9 @@ define('io.ox/core/folder/extensions', [
                 index: 300,
                 draw: function (baton) {
 
-                    this.find('.folder-sub:first').remove();
+                    if (!api.isVirtual(baton.view.folder)) {
+                        this.find('.folder-sub:first').remove();
+                    }
 
                     // ignore shared folders
                     if (api.is('shared', baton.data)) return;
