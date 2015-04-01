@@ -558,7 +558,23 @@ define('io.ox/tasks/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
-            app.setSearch();
+            var searchApp = app.setSearch();
+
+            // when search is ready
+            searchApp.ready.done(function () {
+                // additional handler: switch to list perspective (and back)
+                searchApp.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.grid.getToolbar().find('.grid-options:first').hide();
+                    },
+                    'find:cancel': function () {
+                        // show sort options again
+                        app.grid.getToolbar().find('.grid-options:first').show();
+                    }
+                });
+            });
+
         }
     });
 

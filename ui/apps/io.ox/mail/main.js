@@ -1158,6 +1158,8 @@ define('io.ox/mail/main', [
                                 var view = searchApp.view.model,
                                     // remember original setCollection
                                     setCollection = app.listView.setCollection;
+                                // hide sort options
+                                app.listControl.$el.find('.grid-options:first').hide();
                                 app.listView.connect(collectionLoader);
                                 mode = 'search';
                                 // wrap setCollection
@@ -1172,7 +1174,9 @@ define('io.ox/mail/main', [
                         searchApp.on({
                             'find:idle': function () {
                                 if (mode === 'search') {
-                                    //console.log('%c' + 'reset collection loader', 'color: white; background-color: green');
+                                    // show sort options
+                                    app.listControl.$el.find('.grid-options:first').show();
+                                    // reset collection loader
                                     app.listView.connect(api.collectionLoader);
                                     app.listView.load();
                                 }
