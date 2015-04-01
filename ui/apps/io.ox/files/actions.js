@@ -428,7 +428,7 @@ define('io.ox/files/actions', [
     new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,
         id: 'upload',
-        label: gt('Upload local file'),
+        label: gt('Add local file'),
         ref: 'io.ox/files/actions/upload'
     });
 
