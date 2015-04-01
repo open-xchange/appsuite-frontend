@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/contenteditable-editor', [
+define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
@@ -507,5 +507,10 @@ define('io.ox/core/tk/contenteditable-editor', [
         };
     }
 
-    return Editor;
+    if (!window.tinyMCE) {
+        return require(['3rd.party/tinymce/jquery.tinymce.min'])
+            .then(function () { return Editor; });
+    } else {
+        return $.Deferred().resolve(Editor);
+    }
 });
