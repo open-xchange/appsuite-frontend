@@ -259,7 +259,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/mail/compose/model.js',
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
-                            'apps/io.ox/core/tk/textproc.js'
+                            'apps/io.ox/core/tk/textproc.js',
+                            'bower_components/tinymce-dist/jquery.tinymce.min.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true
