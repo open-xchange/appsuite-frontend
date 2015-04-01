@@ -14,6 +14,8 @@
 @action-color: #777;
 @action-hover-color: #aaa;
 @placeholder-color: #aaa;
+// adjust tokenfield (8 = outer padding, 1 = border)
+@search-field-padding-left: @default-padding - 8 - 1;
 
 /**
  *  window-container.io-ox-find-active (show/hide)
@@ -43,11 +45,15 @@
 
         .search-box {
 
+            .tokenfield-placeholder {
+                padding-left: @search-field-padding-left;
+            }
+
             .tokenfield {
                 // use same placeholder color
                 .placeholder(@placeholder-color);
-                // adjust tokenfield (7 = outer padding, 1 = border, 3 = placeholder padding)
-                padding-left: @default-padding - 8 - 1 - 3;
+                // adjust tokenfield (3 = placeholder padding)
+                padding-left: @search-field-padding-left - 3;
                 padding-right: 9px;
 
                 .token {
