@@ -83,9 +83,10 @@
         }
 
         .window-header {
+
             height: 48px;
             background-color: @window-header-color;
-            border-bottom: 1px solid @defaultBorderColor;
+            border-bottom: 1px solid darken(@window-header-color, 5%);
             padding: 8px 0;
 
             h1.title {
@@ -95,7 +96,9 @@
             }
 
             .btn {
-                margin-right: 1em;
+                min-width: 80px;
+                margin-right: 8px;
+                height: 32px;
             }
         }
 
