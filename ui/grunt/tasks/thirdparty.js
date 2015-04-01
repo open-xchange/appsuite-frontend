@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['**/*'],
+                        src: ['**/*', '!tinymce.min.js'],
                         cwd: 'bower_components/tinymce-dist',
                         dest: 'build/apps/3rd.party/tinymce/'
                     },
