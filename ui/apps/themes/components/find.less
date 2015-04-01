@@ -11,33 +11,31 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-@action-color: #777;
-@action-hover-color: #aaa;
-@placeholder-color: #aaa;
-// adjust tokenfield (8 = outer padding, 1 = border)
-@search-field-padding-left: @default-padding - 8 - 1;
-
-/**
- *  window-container.io-ox-find-active (show/hide)
- *  ----------------------------------------------
- *  io-ox-find (generic-toolbar)
- *     search-box
- *         form-group has-feedback
- *             tokenfield (search-field)
- *                 token
- *                 actions (form-control-feedback)
- *
- *     search-box-filter
- *         ul (classic-toolbar)
- *             lif (dropdown)
- */
-
 .window-container {
+
+    /**
+     *  io-ox-find (generic-toolbar)
+     *     search-box
+     *         form-group has-feedback
+     *             tokenfield-placeholder OR tokenfield (search-field)
+     *                 token
+     *                 actions (form-control-feedback)
+     *
+     *     search-box-filter
+     *         ul (classic-toolbar)
+     *             lif (dropdown)
+     */
 
     /**
      *  GENERAL
      */
     .io-ox-find {
+
+        // adjust tokenfield (8 = outer padding, 1 = border)
+        @placeholder-padding: @default-padding - 8 - 1;
+        @placeholder-color: #aaa;
+        @action-color: #777;
+        @action-hover-color: #aaa;
 
         padding: 4px 8px;
         line-height: 20px;
@@ -46,14 +44,14 @@
         .search-box {
 
             .tokenfield-placeholder {
-                padding-left: @search-field-padding-left;
+                padding-left: @placeholder-padding;
             }
 
             .tokenfield {
                 // use same placeholder color
                 .placeholder(@placeholder-color);
                 // adjust tokenfield (3 = placeholder padding)
-                padding-left: @search-field-padding-left - 3;
+                padding-left: @placeholder-padding - 3;
                 padding-right: 9px;
 
                 .token {
