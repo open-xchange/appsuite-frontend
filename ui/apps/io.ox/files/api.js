@@ -728,9 +728,11 @@ define('io.ox/files/api', [
      *     - promise can be aborted using promise.abort function
      */
     api.upload = function (options) {
+        var fid = options.folder_id || options.folder;
+
         options.action = 'new';
         return performUpload(options, {
-            folder_id: options.folder,
+            folder_id: fid,
             description: options.description || ''
         })
         .done(function () {
@@ -755,13 +757,19 @@ define('io.ox/files/api', [
          *     - promise can be aborted using promise.abort function
          */
         upload: function (options) {
+            var fid = options.folder_id || options.folder;
+
             options.action = 'update';
             return performUpload(options, {
-                folder_id: options.folder,
+                folder_id: fid,
                 version_comment: options.version_comment || ''
             })
-            .done(function () {
-                api.trigger('add:version');
+            .then(function () {
+                // reload versions list
+                return api.versions.load(options, { cache: false }).done(function () {
+                    // the mediator will reload the current collection
+                    api.trigger('add:version');
+                });
             });
         },
 
@@ -817,7 +825,9 @@ define('io.ox/files/api', [
             .then(function () {
                 // let's reload the version list
                 // since we might have just removed the current version
-                return api.versions.load(file, { cache: false }).done(function () {
+                return api.versions.load(file, { cache: false }).done(function (list) {
+                    // update model
+                    if (model) model.set('number_of_versions', list.length);
                     // the mediator will reload the current collection
                     api.trigger('remove:version');
                 });

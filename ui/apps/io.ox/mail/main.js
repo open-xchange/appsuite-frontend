@@ -1158,27 +1158,31 @@ define('io.ox/mail/main', [
                                 var view = searchApp.view.model,
                                     // remember original setCollection
                                     setCollection = app.listView.setCollection;
+                                // hide sort options
+                                app.listControl.$el.find('.grid-options:first').hide();
                                 app.listView.connect(collectionLoader);
                                 mode = 'search';
                                 // wrap setCollection
                                 app.listView.setCollection = function (collection) {
                                     view.stopListening();
-                                    view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'query:result', collection));
+                                    view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'find:query:result', collection));
                                     return setCollection.apply(this, arguments);
                                 };
                             };
 
                         // events
                         searchApp.on({
-                            'search:idle': function () {
+                            'find:idle': function () {
                                 if (mode === 'search') {
-                                    //console.log('%c' + 'reset collection loader', 'color: white; background-color: green');
+                                    // show sort options
+                                    app.listControl.$el.find('.grid-options:first').show();
+                                    // reset collection loader
                                     app.listView.connect(api.collectionLoader);
                                     app.listView.load();
                                 }
                                 mode = 'default';
                             },
-                            'search:query': _.debounce(function () {
+                            'find:query': _.debounce(function () {
                                 // register/connect once
                                 if (app.listView.loader.mode !== 'search') register();
                                 // load

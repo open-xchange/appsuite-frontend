@@ -271,7 +271,7 @@ define('plugins/portal/facebook/register', [
             .pipe(JSON.parse)
             .done(function (data) {
                 baton.data = data;
-            }).fail(require('io.ox/core/notifications').yell);
+            });
         },
 
         draw: function (baton) {

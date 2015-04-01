@@ -1479,7 +1479,7 @@ define('io.ox/core/desktop', [
                             .append(
                                 $('<input type="text">')
                                 .attr({
-                                    class: 'form-control has-feedback search-field f6-target',
+                                    class: 'form-control has-feedback search-field tokenfield-placeholder f6-target',
                                     tabindex: 1,
                                     role: 'search',
                                     id: baton.data.id,

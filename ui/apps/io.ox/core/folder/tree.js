@@ -213,9 +213,10 @@ define('io.ox/core/folder/tree', [
                 point = this.getContextMenuId(contextmenu),
                 view = this;
             // get folder data and redraw
-            api.get(id).done(function (data) {
+            // don't use cache or total attribute is not up to date see Bug 37504
+            api.get(id, { cache: false }).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
-                if (_.device('smartphone')) {
+                if (_.device('smartphone')) {
                     ul.append(
                         $('<li role="presentation">').append(
                             $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" aria-haspopup="true">').append(

@@ -452,6 +452,23 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Add listener to files upload to select newly uploaded files after listview reload
+         */
+        'select-uploaded-files': function (app) {
+            api.on('stop:upload', function (e, requests) {
+                api.collectionLoader.collection.once('reload', function () {
+                    $.when.apply(this, requests).done(function () {
+                        var files = _(arguments).map(function (file) {
+                            return { id: file.data, folder: app.folder.get() };
+                        });
+
+                        app.listView.selection.set(files);
+                    });
+                });
+            });
+        },
+
+        /*
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
@@ -655,27 +672,31 @@ define('io.ox/files/main', [
                             var view = searchApp.view.model,
                                 // remember original setCollection
                                 setCollection = app.listView.setCollection;
+                            // hide sort options
+                            app.listControl.$el.find('.grid-options:first').hide();
                             app.listView.connect(collectionLoader);
                             mode = 'search';
                             // wrap setCollection
                             app.listView.setCollection = function (collection) {
                                 view.stopListening();
-                                view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'query:result', collection));
+                                view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'find:query:result', collection));
                                 return setCollection.apply(this, arguments);
                             };
                         };
 
                     // events
                     searchApp.on({
-                        'search:idle': function () {
+                        'find:idle': function () {
                             if (mode === 'search') {
-                                //console.log('%c' + 'reset collection loader', 'color: white; background-color: green');
+                                // show sort options
+                                app.listControl.$el.find('.grid-options:first').show();
+                                // reset collection loader
                                 app.listView.connect(api.collectionLoader);
                                 app.listView.load();
                             }
                             mode = 'default';
                         },
-                        'search:query': _.debounce(function () {
+                        'find:query': _.debounce(function () {
                             // register/connect once
                             if (app.listView.loader.mode !== 'search') register();
                             // load

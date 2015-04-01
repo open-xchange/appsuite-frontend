@@ -165,6 +165,10 @@ define('io.ox/files/upload/main', [
         };
 
         this.stop = function () {
+            var requests = uploadCollection.map(function (file) {
+                return file.get('request');
+            });
+            api.trigger('stop:upload', requests);
             api.trigger('refresh.all');
             totalProgress = 0;
             currentSize = 0;

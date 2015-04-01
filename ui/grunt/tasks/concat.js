@@ -164,6 +164,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/toolbars-mobile.js',
                             'apps/io.ox/core/page-controller.js',
                             'apps/io.ox/mail/actions.js',
+                            'apps/io.ox/mail/actions/attachmentEmpty.js',
                             'apps/io.ox/mail/toolbar.js',
                             'apps/io.ox/mail/import.js',
                             'apps/io.ox/mail/folderview-extensions.js',
@@ -236,6 +237,32 @@ module.exports = function (grunt) {
                             'bower_components/mobiscroll/css/mobiscroll.scroller.ios.css'
                         ],
                         dest: 'build/apps/3rd.party/mobiscroll/mobiscroll.css',
+                        nonull: true
+                    }
+                ]
+            },
+            compose: {
+                files: [
+                    {
+                        src: [
+                            'bower_components/tinymce-dist/tinymce.min.js',
+                            'lib/tinymce/themes/unobtanium/theme.min.js',
+                            'bower_components/tinymce-dist/plugins/{autolink,link,paste,textcolor}/plugin.min.js',
+                            'lib/tinymce/plugins/oximage/plugin.min.js'
+                        ],
+                        dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',
+                        nonull: true
+                    },
+                    {
+                        src: [
+                            'apps/io.ox/mail/compose/view.js',
+                            'apps/io.ox/mail/compose/model.js',
+                            'apps/io.ox/core/api/snippets.js',
+                            'apps/io.ox/core/tk/contenteditable-editor.js',
+                            'apps/io.ox/core/tk/textproc.js',
+                            'bower_components/tinymce-dist/jquery.tinymce.min.js'
+                        ],
+                        dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true
                     }
                 ]
