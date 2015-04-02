@@ -36,15 +36,21 @@ define('io.ox/files/actions', [
             });
         },
         action: function (baton) {
-            require(['io.ox/files/views/create'], function (create) {
-                create.show(baton.app, {
-                    uploadedFile: function (data) {
-                        if ('invalidateFolder' in baton.app) {
-                            baton.app.invalidateFolder(data);
-                        }
-                    }
+            $('<input type="file" name="file" capture="camera" multiple>')
+            .on('change', function (e) {
+                var app = baton.app;
+                require(['io.ox/files/upload/main'], function (fileUpload) {
+                    e.preventDefault();
+
+                    var list = [];
+                    _(e.target.files).each(function (file) {
+                        list.push(_.extend(file, { group: 'file' }));
+                    });
+                    fileUpload.setWindowNode(app.getWindowNode());
+                    fileUpload.create.offer(list, { folder: app.folder.get() });
                 });
-            });
+            })
+            .trigger('click');
         }
     });
 
@@ -433,7 +439,7 @@ define('io.ox/files/actions', [
     new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,
         id: 'upload',
-        label: gt('Upload new file'),
+        label: gt('Add local file'),
         ref: 'io.ox/files/actions/upload'
     });
 

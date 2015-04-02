@@ -41,12 +41,12 @@ define('io.ox/tasks/view-grid-template', [
                 return { title: title, private_flag: private_flag, end_date: end_date, status: status, user: user, progress: progress };
             },
 
-            set: function (data, fields, index) {
-
+            set: function (task, fields, index, prev, grid) {
+                var data = task;
                 if (!data.badge && data.badge !== '') {
                     // check for empty string also to avoid double processing (see bug 36610)
                     // data needs to be processed first
-                    data = util.interpretTask(data);
+                    data = util.interpretTask(task, { noOverdue: grid.prop('sort') !== 'urgency' });
                 }
 
                 var a11yLabel = '';

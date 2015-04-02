@@ -458,11 +458,17 @@ define('io.ox/files/main', [
             api.on('stop:upload', function (e, requests) {
                 api.collectionLoader.collection.once('reload', function () {
                     $.when.apply(this, requests).done(function () {
-                        var files = _(arguments).map(function (file) {
+                        var files,
+                            selection = app.listView.selection,
+                            node;
+
+                        files = _(arguments).map(function (file) {
                             return { id: file.data, folder: app.folder.get() };
                         });
 
-                        app.listView.selection.set(files);
+                        node = selection.getNode(_.cid(files[0]));
+                        selection.set(files);
+                        selection.focus(0, node);
                     });
                 });
             });

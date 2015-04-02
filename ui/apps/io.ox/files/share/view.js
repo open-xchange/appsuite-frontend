@@ -53,7 +53,9 @@ define('io.ox/files/share/view', [
                 });
 
             this.append(
-                dropdown.render().$el
+                $('<div class="form-group">').append(
+                    dropdown.render().$el
+                )
             );
         }
     });
@@ -66,7 +68,7 @@ define('io.ox/files/share/view', [
         index: INDEX += 100,
         draw: function (baton) {
             this.append(
-                baton.nodes.default.description = $('<p>').addClass('form-group description').text(trans[baton.model.get('type', 'invite')])
+                baton.nodes.default.description = $('<span>').addClass('help-block').text(trans[baton.model.get('type', 'invite')])
             );
         }
     });
@@ -80,8 +82,8 @@ define('io.ox/files/share/view', [
         draw: function (baton) {
             var link = baton.model.get('link', '');
             this.append(
-                baton.nodes.link.link = $('<p>').addClass('link').append(
-                    $('<a>').attr({ href: link, tabindex: 1, target: '_blank' }).text(link)
+                baton.nodes.link.link = $('<div>').addClass('form-group').append(
+                    $('<a class="sharelink">').attr({ href: link, tabindex: 1, target: '_blank' }).text(link)
                 ).hide()
             );
             baton.model.on('change:link', function (model, val) {
@@ -223,67 +225,18 @@ define('io.ox/files/share/view', [
                 icon = $('<i>').addClass('fa fa-caret-right fa-fw');
             ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
             this.append(
-                $('<a href="#" tabindex=1>').append(
-                    icon,
-                    $('<span>').text(gt('Advanced options'))
-                ).click(function () {
-                    optionGroup.toggle();
-                    icon.toggleClass('fa-caret-right fa-caret-down');
-                }),
+                $('<div class="form-group">').append(
+                    $('<a href="#" tabindex=1>').append(
+                        icon,
+                        $('<span>').text(gt('Advanced options'))
+                    ).click(function (e) {
+                        e.preventDefault();
+                        optionGroup.toggle();
+                        icon.toggleClass('fa-caret-right fa-caret-down');
+                    })
+                ),
                 optionGroup
             );
-        }
-    });
-
-    /*
-     * extension point for write permissions checkbox
-     */
-    ext.point(POINT + '/options').extend({
-        id: 'write-permissions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            this.append(
-                $('<div>').addClass('form-group').append(
-                    $('<div>').addClass('checkbox').append(
-                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).prepend(
-                            new miniViews.CheckboxView({ name: 'edit', model: baton.model }).render().$el
-                        )
-                    )
-                )
-            );
-        }
-    });
-
-    /*
-     * extension point for password protection
-     */
-    ext.point(POINT + '/options').extend({
-        id: 'secured',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-'), passInput;
-            this.append(
-                $('<div>').addClass('form-inline passwordgroup').append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('checkbox-inline').append(
-                            $('<label>').addClass('control-label').text(gt('Password required')).prepend(
-                                new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
-                            )
-                        )
-                    ),
-                    $.txt(' '),
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
-                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
-                            .render().$el
-                            .attr({ id: guid, placeholder: gt('Enter Password') })
-                            .prop('disabled', !baton.model.get('secured'))
-                    )
-                )
-            );
-            baton.model.on('change:secured', function (model, val) {
-                passInput.prop('disabled', !val);
-            });
         }
     });
 
@@ -305,7 +258,7 @@ define('io.ox/files/share/view', [
                 5: gt('one year')
             };
 
-            var dropdown = new Dropdown({ model: baton.model, label: typeTranslations[baton.model.get('expires')], caret: true })
+            var dropdown = new Dropdown({ tagName: 'span', model: baton.model, label: typeTranslations[baton.model.get('expires')], caret: true })
                 .listenTo(baton.model, 'change:expires', function (model, expires) {
                     this.$el.find('.dropdown-label').text(typeTranslations[expires]);
                 });
@@ -315,14 +268,12 @@ define('io.ox/files/share/view', [
             });
 
             this.append(
-                $('<div>').addClass('form-inline').append(
-                    $('<div>').addClass('checkbox-inline').append(
-                        $('<label>').text(gt('Expires in')).prepend(
-                            new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
-                        ),
-                        $.txt(' '),
-                        dropdown.render().$el.addClass('inline dropup')
-                    )
+                $('<div>').addClass('form-group expiresgroup').append(
+                    $('<label>').addClass('checkbox-inline').text(gt('Expires in')).prepend(
+                        new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
+                    ),
+                    $.txt(' '),
+                    dropdown.render().$el.addClass('dropup')
                 )
             );
 
@@ -330,6 +281,56 @@ define('io.ox/files/share/view', [
                 model.set('temporary', true);
             });
 
+        }
+    });
+
+    /*
+     * extension point for write permissions checkbox
+     */
+    ext.point(POINT + '/options').extend({
+        id: 'write-permissions',
+        index: INDEX += 100,
+        draw: function (baton) {
+            this.append(
+                $('<div>').addClass('form-group editgroup').append(
+                    $('<div>').addClass('checkbox').append(
+                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).prepend(
+                            new miniViews.CheckboxView({ name: 'edit', model: baton.model }).render().$el
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+    /*
+     * extension point for password protection
+     */
+    ext.point(POINT + '/options').extend({
+        id: 'secured',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var guid = _.uniqueId('form-control-label-'), passInput;
+            this.append(
+                $('<div>').addClass('form-inline passwordgroup').append(
+                    $('<div>').addClass('form-group').append(
+                        $('<label>').addClass('checkbox-inline').text(gt('Password required')).prepend(
+                            new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
+                        )
+                    ),
+                    $.txt(' '),
+                    $('<div>').addClass('form-group').append(
+                        $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
+                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
+                            .render().$el
+                            .attr({ id: guid, placeholder: gt('Password') })
+                            .prop('disabled', !baton.model.get('secured'))
+                    )
+                )
+            );
+            baton.model.on('change:secured', function (model, val) {
+                passInput.prop('disabled', !val);
+            });
         }
     });
 
@@ -356,6 +357,8 @@ define('io.ox/files/share/view', [
             });
 
             this.listenTo(this.model, 'change:type', function (model, val) {
+                // css
+                this.$el.toggleClass('invite link', val);
                 // toggle autocomplete and message input
                 _(self.baton.nodes.invite).each(function (el) {
                     el.toggle(val === 'invite');
@@ -382,7 +385,7 @@ define('io.ox/files/share/view', [
 
             this.$el.attr({
                 role: 'form'
-            });
+            }).addClass('invite');
 
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);

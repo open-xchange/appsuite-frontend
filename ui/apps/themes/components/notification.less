@@ -23,7 +23,7 @@
     background-color: @notification-pane-background;
     background-clip: padding-box;
     display: none;
-    
+
     min-height: 200px;
     max-height: 80%;
     -webkit-box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
@@ -40,7 +40,7 @@
         width: 100%;
         max-height: 100%;
         z-index: 30;
-        bottom: 0px;
+        bottom: 0;
         top: 40px;
         position: fixed;
         &.active {
@@ -91,7 +91,7 @@
         .clear-area-button {
              float: right;
              line-height: 24px;
-             margin: 0px 14px 0 0;
+             margin: 0 14px 0 0;
              padding: 0;
              color: #767676;
              font-size: 18px;
@@ -225,7 +225,7 @@
 
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
         #io-ox-notifications-display {
-            padding: 0px 14px 14px 14px;
+            padding: 0 14px 14px 14px;
         }
     }
 }

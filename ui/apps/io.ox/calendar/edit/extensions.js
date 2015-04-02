@@ -35,10 +35,10 @@ define('io.ox/calendar/edit/extensions', [
         id: 'header',
         index: 10,
         draw: function (baton) {
-            var headerCol = $('<div class="col-sm-12">');
+            var headerCol = $('<div class="header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', headerCol, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', headerCol, baton);
-            baton.app.getWindow().setHeader($('<div class="row header">').append(headerCol));
+            baton.app.getWindow().setHeader(headerCol);
         }
     });
 
@@ -193,7 +193,7 @@ define('io.ox/calendar/edit/extensions', [
         nextTo: 'full_time',
         draw: function () {
             this.append(
-                $('<div class="hidden-xs col-md-6 find-free-time"></div>')
+                $('<div class="hidden-xs col-sm-6 find-free-time"></div>')
             );
         }
     });
@@ -271,7 +271,7 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     // shown as
@@ -305,7 +305,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     }, {
         nextTo: 'alarm',
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     function colorClickHandler(e) {
@@ -388,7 +388,7 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     // participants
@@ -537,7 +537,7 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     point.extend(new attachments.EditableAttachmentList({

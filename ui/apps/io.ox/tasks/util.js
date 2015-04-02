@@ -23,99 +23,49 @@ define('io.ox/tasks/util', [
             gt('tonight'),
             gt('late in the evening')
         ],
-
+        hours = [
+            //this morning
+            6,
+            // by noon
+            12,
+            // this afternoon
+            15,
+            // tonight
+            18,
+            // late in the evening
+            22
+        ],
         util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
                 var alarmDate = moment(),
                     endDate;
 
-                switch (value) {
-                // in 5 minutes
-                case '5':
-                    alarmDate.add(5, 'minutes');
-                    break;
-                // in 15 minutes
-                case '15':
-                    alarmDate.add(15, 'minutes');
-                    break;
-                // in 30 minutes
-                case '30':
-                    alarmDate.add(30, 'minutes');
-                    break;
-                // in 60 minutes
-                case '60':
-                    alarmDate.add(1, 'hour');
-                    break;
-                default:
+                if (!isNaN(parseInt(value, 10))) {
+                    //in x minutes
+                    alarmDate.add(parseInt(value, 10), 'minutes');
+                } else {
                     alarmDate.startOf('hour');
-                    switch (value) {
-                    // this morning
-                    case 'd0':
+                    if (value.indexOf('d') === 0) {
+                        //this morning, by noon etc
+                        alarmDate.hours(hours[parseInt(value.charAt(1), 10)]);
+                    } else {
                         alarmDate.hours(6);
-                        break;
-                    // by noon
-                    case 'd1':
-                        alarmDate.hours(12);
-                        break;
-                    // this afternoon
-                    case 'd2':
-                        alarmDate.hours(15);
-                        break;
-                    // tonight
-                    case 'd3':
-                        alarmDate.hours(18);
-                        break;
-                    // late in the evening
-                    case 'd4':
-                        alarmDate.hours(22);
-                        break;
-                    default:
-                        alarmDate.hours(6);
-                        switch (value) {
-                        // tomorrow
-                        case 't':
+                        if (value === 't') {
+                            //tomorow
                             alarmDate.add(1, 'day');
-                            break;
-                        // next week
-                        case 'ww':
+                        } else if ( value === 'ww') {
+                            // next week
                             alarmDate.add(1, 'week');
-                            break;
-                        // next Sunday
-                        case 'w0':
-                            alarmDate.day(7);
-                            break;
-                        // next Monday
-                        case 'w1':
-                            alarmDate.day(8);
-                            break;
-                        // next Tuesday
-                        case 'w2':
-                            alarmDate.day(9);
-                            break;
-                        // next Wednesday
-                        case 'w3':
-                            alarmDate.day(10);
-                            break;
-                        // next Thursday
-                        case 'w4':
-                            alarmDate.day(11);
-                            break;
-                        // next Friday
-                        case 'w5':
-                            alarmDate.day(12);
-                            break;
-                        // next Saturday
-                        case 'w6':
-                            alarmDate.day(13);
-                            break;
-                        default:
-                            //cannot identify selector...set time now
-                            break;
+                        } else if (value.indexOf('w') === 0) {
+                            //next sunday - saturday
+                            alarmDate.day(parseInt(value.charAt(1), 10));
+                            //day selects the weekday of the current week, this might be in the past, for example selecting sunday on a wednesday
+                            if (alarmDate.valueOf() < _.now()) {
+                                alarmDate.add(1, 'week');
+                            }
                         }
-                        break;
                     }
-                    break;
                 }
 
                 // set endDate
@@ -203,7 +153,7 @@ define('io.ox/tasks/util', [
 
                 for (i = (now.day() + 2) % 7;i !== now.day(); i = ++i % 7) {
                     //#. reminder date selection
-                    //#. %1$s is a weekdays, like 'next Monday'
+                    //#. %1$s is a weekday, like 'next Monday'
                     result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
                 }
 
@@ -212,13 +162,18 @@ define('io.ox/tasks/util', [
                 return result;
             },
 
+            isOverdue: function (task) {
+                return ( task.end_date !== undefined && task.end_date !== null && task.end_date < _.now() && task.status !== 3 );
+            },
+
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, options) {
                 options = options || {};
                 task = _.copy(task, true);
+
                 //no state for task over time, so manual check is needed
-                if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {
+                if (!options.noOverdue && this.isOverdue(task)) {
                     task.status = gt('Overdue');
                     task.badge = 'badge badge-important';
                 } else if (task.status) {
@@ -253,31 +208,19 @@ define('io.ox/tasks/util', [
                     task.title = '\u2014';
                 }
 
-                if (task.end_date !== undefined && task.end_date !== null) {
-                    // convert UTC timestamp to local time
-                    task.end_date = moment.utc(task.end_date).local(true).format('l');
-
-                } else {
-                    task.end_date = '';
+                function formatTime(value, format) {
+                    if (value === undefined || value === null) {
+                        return '';
+                    } else {
+                        return moment.utc(value).local(true).format(format);
+                    }
                 }
 
-                if (options.detail) {
-                    if (task.start_date !== undefined && task.start_date !== null) {
-                        task.start_date = moment.utc(task.start_date).local(true).format('l');
-
-                    } else {
-                        task.start_date = '';
-                    }
-                    if (task.date_completed) {
-                        task.date_completed = moment(task.date_completed).format('l LT');
-                    }
-
-                    if (task.alarm !== undefined && task.alarm !== null) {
-                        task.alarm = moment(task.alarm).format('l LT');
-                    } else {
-                        task.alarm = '';
-                    }
-                }
+                // convert UTC timestamps to local time
+                task.end_date = formatTime(task.end_date, 'l');
+                task.start_date = formatTime(task.start_date, 'l');
+                task.alarm = formatTime(task.alarm, 'l LT');
+                task.date_completed = formatTime(task.date_completed, 'l LT');
 
                 return task;
             },

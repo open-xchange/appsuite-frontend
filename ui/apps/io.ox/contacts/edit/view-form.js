@@ -238,6 +238,24 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
+        ext.point(ref + '/edit/buttons').extend({
+            index: 300,
+            id: 'showall',
+            draw: function () {
+                this.append(
+                    $('<label class="checkbox-inline">').append(
+                        $('<input>')
+                            .addClass('toggle-check')
+                            .attr({
+                                type: 'checkbox'
+                            })
+                            .on('change', toggle),
+                        $.txt(gt('Show all fields'))
+                    )
+                );
+            }
+        });
+
         point.basicExtend({
             id: 'autoExpand',
             index: 1000000000000,
@@ -263,7 +281,7 @@ define('io.ox/contacts/edit/view-form', [
 
             //make sure this works for links in head and body
             var windowNode = $(this).closest('.io-ox-contacts-edit-window'),
-                header = windowNode.find('.window-header'),
+                // header = windowNode.find('.window-header'),
                 node = windowNode.find('.edit-contact');
 
             // update "has-content" class
@@ -276,9 +294,7 @@ define('io.ox/contacts/edit/view-form', [
 
             node.toggleClass('compact');
 
-            var isCompact = node.hasClass('compact'),
-                label = isCompact ? gt('Extended view') : gt('Compact view'),
-                icon = isCompact ? 'fa fa-plus-square-o' : 'fa fa-minus-square-o';
+            var isCompact = node.hasClass('compact');
 
             // update hidden
             node.find('.block').each(function () {
@@ -294,13 +310,7 @@ define('io.ox/contacts/edit/view-form', [
                 block.addClass(index % 2 ? 'even' : 'odd');
             });
 
-            node.find('.toggle-compact')
-                .find('i').attr('class', icon).end()
-                .find('a').attr({ 'aria-expanded': !isCompact }).text(label);
-
-            header.find('.toggle-compact')
-                .find('i').attr('class', icon).end()
-                .find('a').attr({ 'aria-expanded': !isCompact }).text(label);
+            windowNode.find('.window-header .toggle-check').prop('checked', !isCompact);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -340,16 +350,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.append(
                     new FullnameView({ model: baton.model }).render().$el,
                     new JobView({ model: baton.model }).render().$el,
-                    $('<nav class="toggle-compact">').append(
-                        $('<a>').attr({
-                            href: '#',
-                            role: 'button',
-                            tabindex: 1,
-                            'aria-expanded': false
-                        }).click(toggle).text(gt('Extended view')),
-                        $.txt(' '),
-                        $('<i class="fa fa-plus-square-o" aria-hidden="true">')
-                    )
+                    $('<div class="clearfix">')
                 );
             }
         });
@@ -358,15 +359,6 @@ define('io.ox/contacts/edit/view-form', [
             id: 'final',
             index: 1000000000000,
             draw: function () {
-                var link;
-                this.append(
-                    $('<nav class="toggle-compact clear">').append(
-                        link = $('<a href="#" tabindex="1" role="button">').click(toggle).text(gt('Extended view')),
-                        $.txt(' '),
-                        $('<i class="fa fa-plus-square-o">')
-                    )
-                );
-
                 //check if all non rare non attachment fields are filled
                 var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');
 
@@ -374,8 +366,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">'));
                 //if all fields are filled the link must be compact view, not extend view
                 if (inputs.length === 0) {
-                    //only one button must trigger this
-                    link.trigger('click');
+                    toggle();
                 }
             }
         });
@@ -443,7 +434,7 @@ define('io.ox/contacts/edit/view-form', [
         function drawDefault(options, model) {
             var input;
             this.append(
-                $('<label class="control-label col-lg-12 col-md-12 col-sm-12 col-xs-12">').append(
+                $('<label class="control-label col-md-12">').append(
                     $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
                     new mini.ErrorView({ selector: '.row' }).render().$el
@@ -465,7 +456,7 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawTextarea(options, model) {
             this.append(
-                $('<label>').addClass('control-label col-lg-12 col-md-12 col-sm-12 col-xs-12').append(
+                $('<label>').addClass('control-label col-md-12').append(
                     $.txt('\u00A0'), $('<br>'),
                     new mini.TextView({ name: options.field, model: model }).render().$el
                 )
@@ -576,7 +567,7 @@ define('io.ox/contacts/edit/view-form', [
                     } else if (id === 'userfields') {
                         block.addClass('col-lg-12');
                     } else {
-                        block.addClass('col-sm-6 col-md-6 col-lg-6');
+                        block.addClass('col-sm-6');
                     }
 
                     // draw fields inside block
@@ -635,7 +626,7 @@ define('io.ox/contacts/edit/view-form', [
                             node.find('input').prop('disabled', true);
                         }
                         if (id === 'userfields') {
-                            this.append($('<div class="col-sm-6 col-md-6 col-lg-6">').append(node));
+                            this.append($('<div class="col-sm-6">').append(node));
                         } else {
                             this.append(node);
                         }

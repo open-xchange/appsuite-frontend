@@ -35,6 +35,10 @@
 @default-padding:                       @base-padding * 4;
 @list-view-padding:                     @default-padding;
 
+@border-radius-large:                   3px;
+@border-radius-base:                    3px;
+@border-radius-small:                   3px;
+
 // Accent colors
 //----------------------
 @white:                                 #fff;
@@ -105,6 +109,7 @@
 //----------------------
 
 // window head (side toolbar)
+@window-header-color:                   #f5f5f5;
 @window-head-color:                     #fff;
 @window-head-border-color:              #eee;
 @window-head-width:                     50px;
@@ -232,5 +237,7 @@
 //----------------------
 @ui-disabled-color:                     #ccc;
 
-@container-large-desktop:               (970px + @grid-gutter-width);
+@container-desktop:                     (870px + @grid-gutter-width);
+@container-large-desktop:               @container-desktop;
+
 

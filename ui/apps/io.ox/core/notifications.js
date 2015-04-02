@@ -59,8 +59,10 @@ define('io.ox/core/notifications', [
             //prevent overwriting of existing subviews
             if (!subviews[subview.model.get('id')]) {
                 subviews[subview.model.get('id')] = subview;
+
                 //always draw at least one time (to keep the order )
                 self.model.get('markedForRedraw')[subview.model.get('id')] = true;
+
                 subview.collection.on('add reset remove', function (collection) {
                     if (!collection.subviewId) {
                         //sometimes the first parameter is a model and not a collection (add event)
@@ -303,6 +305,9 @@ define('io.ox/core/notifications', [
                     self.hide();
                 }
             });
+
+            //add initial no notifications message
+            self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
 
             // load and invoke plugins with delay
             setTimeout(function () {

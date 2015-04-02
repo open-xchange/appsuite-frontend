@@ -11,7 +11,10 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-.io-ox-contacts-edit-window {
+.edit-contact {
+
+    // baseline adjustment
+    padding-top: 16px;
 
     h1.name {
         font-weight: 300;
@@ -30,13 +33,6 @@
         .ellipsis();
     }
 
-    nav.toggle-compact {
-        padding-right:15px;
-        text-align: right;
-        margin: 10px 0;
-        clear: both;
-    }
-
     & div.field.rare,
     &.compact div.field {
         display: none;
@@ -50,8 +46,6 @@
     .block {
         margin-bottom:28px;
         .attachment-list { margin-left: 15px; }
-
-        legend {}
     }
 
     textarea {

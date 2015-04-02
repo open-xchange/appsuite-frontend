@@ -461,8 +461,6 @@ define('io.ox/files/api', [
     //
 
     var lockToggle = function (list, action) {
-        // allow single object and arrays
-        list = _.isArray(list) ? list : [list];
         // pause http layer
         http.pause();
         // process all updates
@@ -490,12 +488,17 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.unlock = function (list) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        list.forEach(function (obj) {
+            var collection = pool.get('detail'),
+                model = collection.get(_.cid(obj));
+
+            if (model) model.set('locked_until', 0);
+        });
+
         return lockToggle(list, 'unlock').done(function () {
-            var collection = pool.get('detail');
-            _(list).each(function (item) {
-                var model = collection.get(_.cid(item));
-                if (model) model.set('locked_until', 0);
-            });
+            api.propagate('unlock', list);
         });
     };
 
@@ -505,8 +508,17 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.lock = function (list) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        list.forEach(function (obj) {
+            var collection = pool.get('detail'),
+                model = collection.get(_.cid(obj));
+
+            // lock for 60s, until server responds with the actual value
+            if (model) model.set('locked_until', _.now() + 60000);
+        });
         return lockToggle(list, 'lock').then(function () {
-            return api.getList(list, { cache: false });
+            return api.propagate('lock', list);
         });
     };
 
@@ -564,11 +576,7 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .done(function () {
-                folderAPI.reload(ids);
-                api.trigger('delete');
-                _(ids).each(function (item) {
-                    api.trigger('delete:' + _.ecid(item));
-                });
+                api.propagate('delete', ids);
             })
         );
     };
@@ -664,10 +672,6 @@ define('io.ox/files/api', [
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
-        // update model
-        var cid = _.cid(file), model = pool.get('detail').get(cid);
-        if (model) model.set(changes);
-
         return http.PUT({
             module: 'files',
             params: {
@@ -679,8 +683,8 @@ define('io.ox/files/api', [
             appendColumns: false
         })
         .done(function () {
-            api.trigger('update update:' + cid);
-            if ('title' in changes || 'filename' in changes) api.trigger('rename', cid);
+            api.propagate('update', file);
+            if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
         });
     };
 
@@ -735,8 +739,8 @@ define('io.ox/files/api', [
             folder_id: fid,
             description: options.description || ''
         })
-        .done(function () {
-            api.trigger('add:file');
+        .done(function (res) {
+            api.propagate('add:file', { id: res.data, folder: fid });
         });
     };
 
@@ -766,9 +770,9 @@ define('io.ox/files/api', [
             })
             .then(function () {
                 // reload versions list
-                return api.versions.load(options, { cache: false }).done(function () {
+                return api.versions.load(options, { cache: false }).done(function (data) {
                     // the mediator will reload the current collection
-                    api.trigger('add:version');
+                    api.propagate('add:version', { id: data.id, folder: fid });
                 });
             });
         },
@@ -829,7 +833,7 @@ define('io.ox/files/api', [
                     // update model
                     if (model) model.set('number_of_versions', list.length);
                     // the mediator will reload the current collection
-                    api.trigger('remove:version');
+                    api.propagate('remove:version', file);
                 });
             });
         },
@@ -849,7 +853,7 @@ define('io.ox/files/api', [
             var changes = { version: file.version };
             return api.update(file, changes).then(function () {
                 // the mediator will reload the current collection
-                api.trigger('change:version');
+                api.propagate('change:version', file);
             });
         }
     };
@@ -878,6 +882,81 @@ define('io.ox/files/api', [
     api.search.columns = allColumns;
     api.search.getData = function (query) {
         return { pattern: query };
+    };
+
+    /**
+     * update collections and models and fire events (if not suppressed)
+     * @param  {string} type
+     * @param  {file} obj
+     * @param  {boolean} silent (no events will be fired) [optional]
+     * @return { promise }
+     */
+    api.propagate = function (type, list, silent) {
+        list = _.isArray(list) ? list : [list];
+
+        var oldSchool = {
+            'new': 'add:file',
+            'change': 'update'
+        };
+
+        if (!type || _.isEmpty(list)) {
+            return $.when(list);
+        }
+
+        type = oldSchool[type] || type;
+
+        switch (type) {
+            case 'add:file':
+                //same as add:version just different type
+            case 'add:version':
+                var obj = list[0];
+                if (!silent) api.trigger(type, obj);
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'change:version':
+                if (!silent) list.forEach(function (obj) {
+                    api.trigger('change:version', obj);
+                });
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'delete':
+                if (!silent) {
+                    api.trigger('delete');
+                    list.forEach(function (obj) {
+                        api.trigger('delete' + ':' + _.ecid(obj));
+                    });
+                }
+                folderAPI.refresh(list);
+
+                return $.when(list);
+            case 'lock':
+                return api.getList(list, { cache: false });
+            case 'remove:version':
+                if (!silent) list.forEach(function (obj) {
+                    api.trigger('remove:version', obj);
+                });
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'rename':
+                if (!silent) list.forEach(function (obj) {
+                    api.trigger('rename', _.cid(obj));
+                });
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'unlock':
+                return $.when(list);
+            case 'update':
+                if (!silent) {
+                    api.trigger('update');
+                    list.forEach(function (obj) {
+                        api.trigger('update' + ':' + _.ecid(obj));
+                    });
+                }
+                return $.when(list);
+            default:
+                if (ox.debug) console.warn('unknown propagation type', type, list);
+                return $.when(list);
+        }
     };
 
     return api;

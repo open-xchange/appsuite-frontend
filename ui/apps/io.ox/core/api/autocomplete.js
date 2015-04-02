@@ -18,8 +18,9 @@ define('io.ox/core/api/autocomplete', [
     'io.ox/contacts/api',
     'io.ox/core/api/resource',
     'io.ox/core/api/group',
+    'io.ox/core/extensions',
     'settings!io.ox/contacts'
-], function (http, capabilities, util, contactsAPI, resourceAPI, groupAPI, settings) {
+], function (http, capabilities, util, contactsAPI, resourceAPI, groupAPI, ext, settings) {
 
     'use strict';
 
@@ -46,6 +47,8 @@ define('io.ox/core/api/autocomplete', [
         if (options.groups) {
             this.apis.push({ type: 'group', api: groupAPI });
         }
+
+        ext.point('io.ox/core/api/autocomplete/customize').invoke('customize', this);
 
         // If contacts auto-collector might have added new contacts
         contactsAPI.on('maybyNewContact', function () {
@@ -99,6 +102,7 @@ define('io.ox/core/api/autocomplete', [
                                     return { data: data, type: type };
                                 });
                             switch (module.type) {
+                            case 'custom':
                             case 'user':
                             case 'contact':
                                 retData = self.processContactResults(retData.concat(items), query, options);

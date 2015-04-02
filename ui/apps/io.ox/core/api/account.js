@@ -44,8 +44,9 @@ define('io.ox/core/api/account', [
                     }
                     account[field] = folder;
                 } else if (!account[field]) {
+                    // US 91604548 / Bug 37439: remove legacy code
                     // educated guess
-                    account[field] = prefix + (account[id] || title);
+                    // account[field] = prefix + (account[id] || title);
                 } else if (!rPath.test(account[field])) {
                     // missing prefix
                     account[field] = prefix + account[field];

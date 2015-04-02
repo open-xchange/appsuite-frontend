@@ -285,11 +285,7 @@ define('io.ox/tasks/main', [
             listRequest = function (ids) {
                 return api.getList(ids).pipe(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
-                    var listcopy = _.copy(_.compact(list), true),
-                        i = 0;
-                    for (; i < listcopy.length; i++) {
-                        listcopy[i] = util.interpretTask(listcopy[i], { noOverdue: grid.prop('sort') !== 'urgency' });
-                    }
+                    var listcopy = _.copy(_.compact(list), true);
 
                     return listcopy;
                 });

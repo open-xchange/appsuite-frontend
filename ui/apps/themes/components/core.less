@@ -95,30 +95,6 @@ span.hint {
     vertical-align: middle;
 }
 
-/** Flat inputs **/
-input.flat-input {
-    border-width: 0;
-    .box-shadow(none);
-    border-bottom-width: 1px;
-    .border-radius(0);
-}
-
-a.button {
-    line-height: 18px;
-    color: #fff;
-    text-align: center;
-    display: inline-block;
-    margin: 0 10px 0 0;
-    cursor: pointer;
-    background-color: #555;
-    border: 1px solid #333;
-    padding: 5px 1.5em 4px 1.5em;
-    white-space: nowrap;
-    vertical-align: middle;
-    outline: none;
-    text-decoration: none;
-}
-
 /* Bootstrap overrides BEGIN */
 legend, label {
     color: @label-default-bg;
@@ -129,20 +105,11 @@ legend, label {
 
 legend {
     padding-top: 8px;
+    font-weight: bold;
 
     &.simple {
         margin:0;
         border-bottom: 0 none;
-    }
-}
-
-.checkbox.control-label, label {
-    font-weight:normal;
-}
-
-.checkbox.control-label {
-    input[type=checkbox] {
-        margin-top: 2px;
     }
 }
 
@@ -192,12 +159,6 @@ legend {
 
 /* fixes WBR handling in long character sequences, esp. for IE */
 wbr:after { content: "\00200B" }
-
-@media (min-width: 768px) {
-    .form-inline .form-group {
-        margin-bottom: 9px;
-    }
-}
 
 .alert {
     padding: 8px 35px 8px 14px;
@@ -439,6 +400,11 @@ a.nolink {
     .default-content-padding {
         padding: 26px 13px 26px 13px;
     }
+}
+
+@media (min-width: 900px) {
+    // used for form rows to inject consistent white-space
+    .form-spacer { margin-top: 32px; }
 }
 
 // small screens (mobile)

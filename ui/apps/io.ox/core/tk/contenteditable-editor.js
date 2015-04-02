@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/contenteditable-editor', [
+define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
@@ -182,7 +182,10 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
             advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
-            toolbar3: ''
+            toolbar3: '',
+            plugins: 'autolink oximage link paste textcolor emoji',
+            theme: 'unobtanium',
+            skin: 'ox'
         }, opt);
 
         opt.toolbar1 += ' | ' + opt.advanced;
@@ -197,6 +200,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             opt.toolbar1 = opt.toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
             opt.toolbar2 = opt.toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
             opt.toolbar3 = opt.toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
         }
 
         var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
@@ -206,7 +210,6 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             extended_valid_elements: 'blockquote[type]',
 
-            // content_css: ox.base + '/apps/themes/' + require('settings!io.ox/core').get('theme') + '/io.ox/core/tk/contenteditable-editor.css',
             inline: true,
 
             fixed_toolbar_container: fixed_toolbar,
@@ -214,7 +217,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             menubar: false,
             statusbar: false,
 
-            skin: 'ox',
+            skin: opt.skin,
 
             toolbar1: opt.toolbar1,
             toolbar2: opt.toolbar2,
@@ -227,7 +230,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             browser_spellcheck: true,
 
-            plugins: 'autolink oximage link paste textcolor emoji',
+            plugins: opt.plugins,
 
             //link plugin settings
             link_title: false,
@@ -238,7 +241,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             // disable the auto generation of hidden input fields (we don't need them)
             hidden_input: false,
 
-            theme: 'unobtanium',
+            theme: opt.theme,
 
             init_instance_callback: function (editor) {
                 ed = editor;
@@ -504,5 +507,10 @@ define('io.ox/core/tk/contenteditable-editor', [
         };
     }
 
-    return Editor;
+    if (!window.tinyMCE) {
+        return require(['3rd.party/tinymce/jquery.tinymce.min'])
+            .then(function () { return Editor; });
+    } else {
+        return $.Deferred().resolve(Editor);
+    }
 });
