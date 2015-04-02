@@ -461,8 +461,6 @@ define('io.ox/files/api', [
     //
 
     var lockToggle = function (list, action) {
-        // allow single object and arrays
-        list = _.isArray(list) ? list : [list];
         // pause http layer
         http.pause();
         // process all updates
@@ -490,6 +488,15 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.unlock = function (list) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        list.forEach(function (obj) {
+            var collection = pool.get('detail'),
+                model = collection.get(_.cid(obj));
+
+            if (model) model.set('locked_until', 0);
+        });
+
         return lockToggle(list, 'unlock').done(function () {
             api.propagate('unlock', list);
         });
@@ -501,6 +508,15 @@ define('io.ox/files/api', [
      * @return { deferred }
      */
     api.lock = function (list) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        list.forEach(function (obj) {
+            var collection = pool.get('detail'),
+                model = collection.get(_.cid(obj));
+
+            // lock for 60s, until server responds with the actual value
+            if (model) model.set('locked_until', _.now() + 60000);
+        });
         return lockToggle(list, 'lock').then(function () {
             return api.propagate('lock', list);
         });
@@ -928,12 +944,6 @@ define('io.ox/files/api', [
                 folderAPI.refresh(list);
                 return $.when(list);
             case 'unlock':
-                list.forEach(function (obj) {
-                    var collection = pool.get('detail'),
-                        model = collection.get(_.cid(obj));
-
-                    if (model) model.set('locked_until', 0);
-                });
                 return $.when(list);
             case 'update':
                 if (!silent) {
