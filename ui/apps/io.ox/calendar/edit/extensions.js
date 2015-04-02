@@ -271,7 +271,7 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     // shown as
@@ -305,7 +305,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     }, {
         nextTo: 'alarm',
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     function colorClickHandler(e) {
@@ -388,7 +388,7 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     // participants
@@ -537,7 +537,7 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        rowClass: 'collapsed'
+        rowClass: 'collapsed form-spacer'
     });
 
     point.extend(new attachments.EditableAttachmentList({
