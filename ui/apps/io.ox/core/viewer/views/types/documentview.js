@@ -94,13 +94,15 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
             var self = this,
                 // the file descriptor object
-                file = this.model.get('origData').attributes,
+                originalFile = this.model.get('origData'),
+                file = originalFile instanceof Backbone.Model ? originalFile.attributes : originalFile,
+                fileContentType = this.model.get('contentType'),
                 // generate document converter URL of the document
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, file, {
                     action: 'getdocument',
                     documentformat: 'pdf',
                     priority: 'instant',
-                    mimetype: file.file_mimetype ? encodeURIComponent(file.file_mimetype) : '',
+                    mimetype: fileContentType ? encodeURIComponent(fileContentType) : '',
                     nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
                 }),
                 // fire up PDF.JS with the document URL and get its loading promise
@@ -176,6 +178,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadSuccess(pageCount) {
 
+                // forward 'resolved' errors to error handler
                 if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
                     pdfDocumentLoadError();
                     return;

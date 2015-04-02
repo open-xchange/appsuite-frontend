@@ -364,7 +364,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         disposeView: function () {
             //console.info('FileVersionsView.disposeView()');
             this.model.off().stopListening();
-            this.origModel.off().stopListening();
+            //this.origModel.off().stopListening();
             this.model = null;
             this.origModel = null;
             return this;
