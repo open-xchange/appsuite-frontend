@@ -36,7 +36,7 @@ define('io.ox/files/actions', [
             });
         },
         action: function (baton) {
-            $('<input type="file" name="file" capture="camera">')
+            $('<input type="file" name="file" capture="camera" multiple>')
             .on('change', function (e) {
                 var app = baton.app;
                 require(['io.ox/files/upload/main'], function (fileUpload) {
