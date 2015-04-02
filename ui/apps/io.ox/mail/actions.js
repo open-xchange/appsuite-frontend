@@ -323,15 +323,12 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/slideshow-attachment', {
-        id: 'slideshow',
-        requires: function (e) {
-            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        multiple: function (list, baton) {
-            require(['io.ox/mail/actions/slideshowAttachment'], function (action) {
-                action.multiple(list, baton);
+        id: 'viewer',
+        // TODO capabilites check, files filter?
+        requires: 'some',
+        multiple: function (attachmentList) {
+            ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
+                action(attachmentList);
             });
         }
     });
@@ -710,10 +707,10 @@ define('io.ox/mail/actions', [
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'slideshow',
+        id: 'view_new',
         index: 100,
         mobile: 'high',
-        label: gt('Slideshow'),
+        label: gt('View (New)'),
         ref: 'io.ox/mail/actions/slideshow-attachment'
     }));
 
@@ -747,6 +744,15 @@ define('io.ox/mail/actions', [
         mobile: 'high',
         label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
+    }));
+
+    // the mighty Viewer 2.0
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'viewer',
+        index: 600,
+        mobile: 'high',
+        label: gt('View attachment'),
+        ref: 'io.ox/mail/actions/viewer'
     }));
 
     // DND actions

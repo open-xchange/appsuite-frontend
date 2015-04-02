@@ -251,6 +251,18 @@ define('io.ox/contacts/actions', [
         }
     });
 
+    /*
+    new Action('io.ox/contacts/actions/viewer', {
+        id: 'viewer',
+        requires: 'some',
+        multiple: function (attachmentList) {
+            ox.load(['io.ox/contacts/actions/viewer']).done(function (action) {
+                action(attachmentList);
+            });
+        }
+    });
+    */
+
     // Mobile multi select extension points
     // action send mail to contact
     ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
@@ -449,4 +461,13 @@ define('io.ox/contacts/actions', [
         label: gt('Add to address book'),
         ref: 'io.ox/contacts/actions/add-to-contactlist'
     }));
+    /*
+     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+     id: 'viewer',
+     index: 100,
+     label: gt('Viewer'),
+     mobile: 'hi',
+     ref: 'io.ox/contacts/actions/viewer'
+     }));
+    */
 });

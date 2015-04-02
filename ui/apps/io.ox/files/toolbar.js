@@ -110,6 +110,13 @@ define('io.ox/files/toolbar', [
                 label: gt('Delete'),
                 ref: 'io.ox/files/actions/delete'
             },
+            'viewer': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-eye',
+                label: gt('View'),
+                ref: 'io.ox/files/actions/viewer'
+            },
             //
             // --- LO ----
             //

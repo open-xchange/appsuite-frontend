@@ -1,0 +1,444 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
+ */
+
+@viewer-text-color: #ffffff;
+@viewer-background-color: rgba(0, 0, 0, 0.85);
+
+@viewer-toolbar-height: 45px;
+@viewer-toolbar-bgcolor: #000000;
+@viewer-toolbar-filename-width: 400px;
+@viewer-toolbar-filename-width-smartphone-portrait: 170px;
+@viewer-toolbar-filename-width-smartphone-landscape: 320px;
+@viewer-toolbar-hover-bgcolor: #333333;
+@viewer-toolbar-focus-bgcolor: #222222;
+@viewer-toolbar-active-bgcolor: #222222;
+@viewer-toolbar-link-width: 60px;
+@viewer-toolbar-link-width-smartphone: 50px;
+
+@viewer-sidebar-bgcolor: #202020;
+@viewer-sidebar-width: 400px;
+@viewer-sidebar-width-smartphone: 100%;
+@viewer-sidebar-active-bgcolor: #333333;
+@viewer-sidebar-label-text-color: #999999;
+
+/* enable iOS momentum scrolling */
+html.ios .io-ox-viewer {
+    .viewer-sidebar { -webkit-overflow-scrolling: touch; }
+}
+
+.io-ox-viewer {
+
+    /* set the text context of responsive labels according to the device and it's orientation */
+    & *.viewer-responsive-label[data-label-normal]:before {
+        content: attr(data-label-normal);
+    }
+    &.smartphone *.viewer-responsive-label[data-label-normal]:before {
+        @media(orientation: portrait) {
+            content: attr(data-label-short);
+        }
+    }
+
+    background-color: @viewer-background-color;
+    z-index: 11; // just to one more than #io-ox-screens
+    color: @viewer-text-color;
+    outline: none;
+
+    ::-webkit-scrollbar {
+        width: 14px;
+    }
+    ::-webkit-scrollbar-track {
+        background: @viewer-sidebar-bgcolor;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #666666;
+        width: 12px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555555;
+    }
+
+    scrollbar-base-color: #666666;
+    scrollbar-track-color: @viewer-sidebar-bgcolor;
+    scrollbar-arrow-color: @viewer-sidebar-label-text-color;
+
+    .viewer-toolbar {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: @viewer-toolbar-height;
+        line-height: @viewer-toolbar-height;
+        background: @viewer-toolbar-bgcolor;
+        list-style: none;
+        padding-left: 0;
+        text-align: right;
+        z-index: 2;
+        > li {
+            display: inline-block;
+            height: @viewer-toolbar-height;
+            text-align: center;
+            > a {
+                display: inline-block;
+                height: @viewer-toolbar-height;
+                min-width: @viewer-toolbar-link-width;
+                outline: none;
+                text-decoration: none;
+                color: #999999;
+                border-right: 1px solid #000000;
+                &:hover {
+                    color: #ffffff;
+                    background-color: @viewer-toolbar-hover-bgcolor;
+                }
+                &:focus,
+                &:active {
+                    color: #ffffff;
+                    background-color: @viewer-toolbar-focus-bgcolor;
+                }
+            }
+            > a.viewer-toolbar-filename {
+                max-width: @viewer-toolbar-filename-width;
+                padding: 0 20px;
+                text-align: left;
+                cursor: pointer;
+                .ellipsis();
+                i {
+                    margin-right: 10px;
+                    font-size: 16px;
+                };
+                i.fa-file-excel-o { color: #44B957; }
+                i.fa-file-word-o { color: #1A9DD4; }
+                i.fa-file-powerpoint-o { color: #EE5F37; }
+                i.fa-file-pdf-o { color: #CF1E28; }
+                i.fa-file-image-o { color: #EE5F37; }
+                &:hover, &:active, &:focus {
+                    background: @viewer-toolbar-hover-bgcolor;
+                    color: #999999;
+                }
+            }
+            > a.viewer-toolbar-rename {
+                &:hover {
+                    background: @viewer-toolbar-hover-bgcolor;
+                    cursor: pointer;
+                }
+                &:focus {
+                    background-color: @viewer-toolbar-active-bgcolor ;
+                }
+            }
+            > a.active { background-color: @viewer-toolbar-active-bgcolor ; }
+            &.dropdown.open { background-color: @viewer-toolbar-active-bgcolor; }
+            .dropdown-menu { margin: 0; }
+        }
+        &.smartphone > li > a {
+            min-width: @viewer-toolbar-link-width-smartphone;
+
+            @media(orientation: portrait) {
+                &.viewer-toolbar-filename {
+                    max-width: @viewer-toolbar-filename-width-smartphone-portrait;
+                }
+            }
+            @media(orientation: landscape) {
+                &.viewer-toolbar-filename {
+                    max-width: @viewer-toolbar-filename-width-smartphone-landscape;
+                }
+            }
+        }
+    }
+
+    .viewer-displayer {
+        position: absolute;
+        top: @viewer-toolbar-height;
+        width: 100%;
+        bottom: 0;
+        outline: none;
+
+        #viewer-carousel,
+        .carousel-inner,
+        .item {
+            height: 100%;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+            .swiper-slide {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                -webkit-justify-content: center;
+                justify-content: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                -webkit-align-items: center;
+                align-items: center;
+                overflow: auto;
+                outline: none;
+            }
+            .io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
+        }
+
+        .viewer-displayer-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            max-height: 100%;
+            max-width: 100%;
+        }
+
+        .viewer-displayer-image{
+            display: none;
+        }
+
+        .viewer-displayer-audio,
+        .viewer-displayer-video {
+            min-height: 34px;
+            &.player-hidden {
+                // audio, video is not loading with 'display: none;', 'visibility: hidden;' or 'width: / height: 1px'
+                top: -10000px;
+                left: -10000px;
+            }
+        }
+
+        .document-container {
+            width: 100%;
+            height: 100%;
+            .document-page {
+	            margin: 40px auto;
+                width: 450px;
+                background: #ffffff;
+                color: #000000;
+//                font-size: 3rem;
+//                padding: 20px;
+            }
+        }
+
+        .viewer-displayer-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            bottom: 40px;
+            height: 2rem;
+            line-height: 2rem;
+            width: 100px;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            .border-radius(4px);
+            display: none;
+            &.smartphone {
+                bottom: 6px;
+            }
+        }
+
+        .swiper-button-control {
+            color: #777777;
+            background: none;
+            outline: none;
+            width: 50px;
+            height: 50px;
+            i {
+                position: absolute;
+                top: 50%;
+                font-size: 3rem;
+                transform: translateY(-50%);
+            }
+            &.left i { left: 20px; }
+            &.right i { right: 20px; }
+            &:hover, &:focus { color: #FFFFFF; }
+        }
+
+        .viewer-displayer-notification {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            height: 100px;
+            text-align: center;
+            color: #999999;
+            i {
+                font-size: 4rem;
+            }
+            .apology {
+                margin-top: 40px;
+            }
+        }
+    }
+
+    .viewer-sidebar {
+        position: absolute;
+        top: 45px;
+        right: 0;
+        bottom: 0;
+        width: @viewer-sidebar-width;
+        padding: 1rem;
+        background: @viewer-sidebar-bgcolor;
+        display: none;
+        box-shadow: inset 0px 2px 2px 0px #000000;
+        overflow-y: auto;
+        overflow-x: hidden;
+        outline: none;
+        &.opened {
+            display: block;
+        }
+        &.smartphone {
+            width: @viewer-sidebar-width-smartphone;
+        }
+    }
+
+    .viewer-fileinfo,
+    .viewer-filedescription,
+    .viewer-fileversions {
+
+        .panel {
+            background-color: transparent;
+            border-color: transparent;
+
+            a.btn, div.dropdown > a { outline: none; }
+
+            .panel-heading {
+                color: @viewer-sidebar-label-text-color;
+                border-color: @viewer-sidebar-label-text-color;
+                background-color: transparent;
+                position: relative;
+
+                .panel-heading-button {
+                    color: @viewer-text-color;
+                    position: absolute;
+                    top: 4px;
+                    right: 10px;
+                    width: 40px;
+                    &:active, &:focus, &:hover {
+                        background-color: @viewer-sidebar-active-bgcolor
+                    }
+                }
+
+                h3 {
+                    font-weight: bold;
+                    cursor: default;
+                }
+
+                &.io-ox-busy:before {
+                    top: 185%;
+                }
+            }
+
+            .panel-body {
+
+                dt {
+                    width: 33%;
+                    float: left;
+                    color: @viewer-sidebar-label-text-color;
+                    cursor: default;
+                }
+
+                dd {
+                    width: 66%;
+                    float: left;
+                    .user-select(text);
+
+                    &.io-ox-busy:before {
+                        font-size: inherit;
+                        left: 0px;
+                        margin-left: 0px;
+                    }
+                }
+
+                .versiontable {
+                    white-space:nowrap;
+
+                    td {
+                        padding: 4px;
+                        border-top: none;
+                    }
+
+                    .version-label {
+                        max-width: 30px;
+                        overflow: hidden;
+                        color: lightgrey;
+
+                        &.current {
+                            font-weight: bold;
+                            color: @viewer-text-color;
+                        }
+                    }
+
+                    .version-content {
+                        padding-left: 6px;
+
+                        .last_modified {
+                            float: left;
+                        }
+                        .size {
+                            text-align: right;
+                        }
+                        .version-comment {
+                            color: lightgrey;
+                        }
+                    }
+
+                    .dropdown > a {
+                        color: #00BBFF;
+                        &:hover {
+                            color: #008aca;
+                        }
+                        &:active, &:focus{
+                            background-color: #444444;
+                        }
+                    }
+                }
+
+                .description {
+                    &.description-text {
+                        color: @viewer-text-color;
+                        background-color: transparent;
+                        display: none;
+                        width: 100%;
+
+                        &.editmode {
+                            display: block;
+                        }
+                    }
+                    &.description-label {
+                        display: block;
+                        white-space: pre-wrap;
+                        padding: 3px;
+                        border: 2px solid transparent;
+                        .border-radius(4px);
+                        outline: none;
+                        .user-select(text);
+
+                        &.description-empty {
+                            .user-select(none);
+                            cursor: default;
+                        }
+
+                        &:active, &:focus{
+                            border-color: #444444;
+                        }
+
+                        &.editmode {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

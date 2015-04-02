@@ -13,7 +13,8 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'spec/main-test.js',
+        //'spec/main-test.js',
+        'spec/viewer-test.js', // test only viewer component temporarily
         {pattern: 'spec/**/*_spec.js', included: false },
         {pattern: 'spec/fixtures/**/*.*', included: false, served: true },
         {pattern: 'spec/shared/**/*.js' }

@@ -25,6 +25,17 @@ define('io.ox/core/pim/actions', [
 
     var extensions = {
 
+        // view attachment
+        view: {
+            id: 'view_new',
+            requires: 'some',
+            multiple: function (baton) {
+                ox.load(['io.ox/tasks/actions/viewer']).done(function (action) {
+                    action(baton);
+                });
+            }
+        },
+
         // open attachment
         open: {
             id: 'open',
@@ -66,6 +77,7 @@ define('io.ox/core/pim/actions', [
     };
 
     var labels = {
+        view: gt('View (New)'),
         open: gt('Open in browser'),
         download: gt('Download'),
         save: gt('Save to Drive')
