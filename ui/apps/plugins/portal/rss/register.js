@@ -97,9 +97,6 @@ define('plugins/portal/rss/register',
                 var publishedDate = new date.Local(item.date).format(date.DATE),
                     $body = $('<div class="text-body noI18n">').html(item.body);
 
-                // replace img tags with empty src
-                $body.find('img[src=""]').replaceWith(gt('show image'));
-
                 // add target to a tags
                 $body.find('a').attr('target', '_blank');
 
