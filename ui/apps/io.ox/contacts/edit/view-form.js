@@ -295,8 +295,6 @@ define('io.ox/contacts/edit/view-form', [
             node.toggleClass('compact');
 
             var isCompact = node.hasClass('compact');
-            // label = isCompact ? gt('Extended view') : gt('Compact view'),
-            // icon = isCompact ? 'fa fa-plus-square-o' : 'fa fa-minus-square-o';
 
             // update hidden
             node.find('.block').each(function () {
@@ -313,14 +311,6 @@ define('io.ox/contacts/edit/view-form', [
             });
 
             windowNode.find('.window-header .toggle-check').prop('checked', !isCompact);
-
-            // node.find('.toggle-compact')
-            //     .find('i').attr('class', icon).end()
-            //     .find('a').attr({ 'aria-expanded': !isCompact }).text(label);
-
-            // header.find('.toggle-compact')
-            //     .find('i').attr('class', icon).end()
-            //     .find('a').attr({ 'aria-expanded': !isCompact }).text(label);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -359,17 +349,8 @@ define('io.ox/contacts/edit/view-form', [
 
                 this.append(
                     new FullnameView({ model: baton.model }).render().$el,
-                    new JobView({ model: baton.model }).render().$el
-                    // $('<nav class="toggle-compact">').append(
-                    //     $('<a>').attr({
-                    //         href: '#',
-                    //         role: 'button',
-                    //         tabindex: 1,
-                    //         'aria-expanded': false
-                    //     }).click(toggle).text(gt('Extended view')),
-                    //     $.txt(' '),
-                    //     $('<i class="fa fa-plus-square-o" aria-hidden="true">')
-                    // )
+                    new JobView({ model: baton.model }).render().$el,
+                    $('<div class="clearfix">')
                 );
             }
         });
@@ -378,15 +359,6 @@ define('io.ox/contacts/edit/view-form', [
             id: 'final',
             index: 1000000000000,
             draw: function () {
-                // var link;
-                // this.append(
-                //     $('<nav class="toggle-compact clear">').append(
-                //         link = $('<a href="#" tabindex="1" role="button">').click(toggle).text(gt('Extended view')),
-                //         $.txt(' '),
-                //         $('<i class="fa fa-plus-square-o">')
-                //     )
-                // );
-
                 //check if all non rare non attachment fields are filled
                 var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');
 
@@ -394,10 +366,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">'));
                 //if all fields are filled the link must be compact view, not extend view
                 if (inputs.length === 0) {
-                    debugger;
                     toggle();
-                    //only one button must trigger this
-                    // link.trigger('click');
                 }
             }
         });
