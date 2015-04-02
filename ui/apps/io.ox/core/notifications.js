@@ -73,8 +73,6 @@ define('io.ox/core/notifications', [
                 });
                 subview.on('autoopen', _.bind(self.show, self));
                 this.badgeview.registerView(subview);
-                //add some delay so every subview has time to register
-                self.delayedUpdate(500);
             }
             return subview;
         },
@@ -308,6 +306,9 @@ define('io.ox/core/notifications', [
                 }
             });
 
+            //add initial no notifications message
+            self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
+
             // load and invoke plugins with delay
             setTimeout(function () {
                 ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
@@ -321,14 +322,14 @@ define('io.ox/core/notifications', [
                 $.proxy(this.toggle, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
-        delayedUpdate: function (delay) {
-            //delays updating by given delay or 100ms (prevents updating the view multiple times in a row)
+        delayedUpdate: function () {
+            //delays updating by 100ms (prevents updating the view multiple times in a row)
             var self = this;
             if (!this.updateTimer) {
                 this.updateTimer = setTimeout(function () {
                     self.update();
                     self.updateTimer = undefined;
-                }, delay || 100);
+                }, 100);
             }
         },
         updateNotification: function () {
