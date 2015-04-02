@@ -59,8 +59,10 @@ define('io.ox/core/notifications', [
             //prevent overwriting of existing subviews
             if (!subviews[subview.model.get('id')]) {
                 subviews[subview.model.get('id')] = subview;
+
                 //always draw at least one time (to keep the order )
                 self.model.get('markedForRedraw')[subview.model.get('id')] = true;
+
                 subview.collection.on('add reset remove', function (collection) {
                     if (!collection.subviewId) {
                         //sometimes the first parameter is a model and not a collection (add event)
@@ -71,6 +73,8 @@ define('io.ox/core/notifications', [
                 });
                 subview.on('autoopen', _.bind(self.show, self));
                 this.badgeview.registerView(subview);
+                //add some delay so every subview has time to register
+                self.delayedUpdate(500);
             }
             return subview;
         },
@@ -317,14 +321,14 @@ define('io.ox/core/notifications', [
                 $.proxy(this.toggle, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
-        delayedUpdate: function () {
-            //delays updating by 100ms (prevents updating the view multiple times in a row)
+        delayedUpdate: function (delay) {
+            //delays updating by given delay or 100ms (prevents updating the view multiple times in a row)
             var self = this;
             if (!this.updateTimer) {
                 this.updateTimer = setTimeout(function () {
                     self.update();
                     self.updateTimer = undefined;
-                }, 100);
+                }, delay || 100);
             }
         },
         updateNotification: function () {
