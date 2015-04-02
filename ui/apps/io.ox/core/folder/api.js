@@ -240,7 +240,7 @@ define('io.ox/core/folder/api',
 
     VirtualFolder.prototype.list = function () {
         var id = this.id;
-        return this.getter().done(function (array) {
+        return this.getter().done(function (array) {
             _(array).each(injectIndex.bind(null, id));
             pool.addCollection(getCollectionId(id), array);
             pool.getModel(id).set('subfolders', array.length > 0);
@@ -581,6 +581,8 @@ define('io.ox/core/folder/api',
                 });
             },
             function fail(error) {
+                //get fresh data for the model (the current ones are wrong since we applied the changes early to be responsive)
+                api.get(id, { cache: false });
                 if (error && error.code && error.code === 'FLD-0018') {
                     error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
                 }

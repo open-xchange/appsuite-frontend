@@ -457,6 +457,9 @@ define('io.ox/core/folder/extensions',
                 draw: function (baton) {
 
                     this.find('.folder-node:first .folder-shared:first').remove();
+                    baton.view.options.a11yDescription = baton.view.options.a11yDescription.filter(function (description) {
+                        return description !== gt('You share this folder with other users');
+                    });
 
                     if (_.device('smartphone')) return;
                     // drive has virtual folder 'Shared by me'

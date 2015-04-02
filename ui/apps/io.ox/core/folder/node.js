@@ -416,9 +416,8 @@ define('io.ox/core/folder/node', [
         },
 
         renderA11yNode: function () {
-            if (this.options.a11yDescription.length) {
-                this.$.a11y.text(this.options.a11yDescription.join('. '));
-            }
+            //draw even if there is no description or old descriptions cannot be cleared
+            this.$.a11y.text(this.options.a11yDescription.join('. '));
         },
 
         renderTooltip: function () {
