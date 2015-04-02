@@ -323,7 +323,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/slideshow-attachment', {
-        id: 'slideshow',
+        id: 'viewer',
         // TODO capabilites check, files filter?
         requires: 'some',
         multiple: function (attachmentList) {
@@ -707,10 +707,10 @@ define('io.ox/mail/actions', [
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'slideshow',
+        id: 'view_new',
         index: 100,
         mobile: 'high',
-        label: gt('Slideshow'),
+        label: gt('View (New)'),
         ref: 'io.ox/mail/actions/slideshow-attachment'
     }));
 

@@ -27,7 +27,7 @@ define('io.ox/core/pim/actions', [
 
         // view attachment
         view: {
-            id: 'view',
+            id: 'view_new',
             requires: 'some',
             multiple: function (baton) {
                 ox.load(['io.ox/tasks/actions/viewer']).done(function (action) {
@@ -77,7 +77,7 @@ define('io.ox/core/pim/actions', [
     };
 
     var labels = {
-        view: gt('View'),
+        view: gt('View (New)'),
         open: gt('Open in browser'),
         download: gt('Download'),
         save: gt('Save to Drive')
