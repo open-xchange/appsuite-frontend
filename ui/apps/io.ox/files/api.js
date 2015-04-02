@@ -884,63 +884,69 @@ define('io.ox/files/api', [
         };
 
         if (!type || _.isEmpty(list)) {
-            return $.when();
+            return $.when(list);
         }
 
         type = oldSchool[type] || type;
 
         switch (type) {
+            case 'add:file':
+                //same as add:version just different type
+            case 'add:version':
+                var obj = list[0];
+                if (!silent) api.trigger(type, obj);
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'change:version':
+                if (!silent) list.forEach(function (obj) {
+                    api.trigger('change:version', obj);
+                });
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'delete':
+                if (!silent) {
+                    api.trigger('delete');
+                    list.forEach(function (obj) {
+                        api.trigger('delete' + ':' + _.ecid(obj));
+                    });
+                }
+                folderAPI.refresh(list);
+
+                return $.when(list);
+            case 'lock':
+                return api.getList(list, { cache: false });
+            case 'remove:version':
+                if (!silent) list.forEach(function (obj) {
+                    api.trigger('remove:version', obj);
+                });
+                folderAPI.refresh(list);
+                return $.when(list);
+            case 'rename':
+                if (!silent) list.forEach(function (obj) {
+                    api.trigger('rename', _.cid(obj));
+                });
+                folderAPI.refresh(list);
+                return $.when(list);
             case 'unlock':
-                list = list.map(function (obj) {
-                    var fid = String(obj.folder_id || obj.folder),
-                        id = String(obj.id),
-                        collection = pool.get('detail'),
+                list.forEach(function (obj) {
+                    var collection = pool.get('detail'),
                         model = collection.get(_.cid(obj));
 
                     if (model) model.set('locked_until', 0);
-                    return { folder_id: fid, id: id };
                 });
-                break;
-            case 'lock':
-                list = [api.getList(list, { cache: false })];
-                break;
+                return $.when(list);
             case 'update':
-                // update models
-                list = list.map(function (obj) {
-                    var fid = String(obj.folder_id || obj.folder),
-                        id = String(obj.id),
-                        collection = pool.get('detail'),
-                        model = collection.get(_.cid(obj));
-
-                    if (model) model.set(obj);
-                    return { folder_id: fid, id: id };
-                });
-                break;
+                if (!silent) {
+                    api.trigger('update');
+                    list.forEach(function (obj) {
+                        api.trigger('update' + ':' + _.ecid(obj));
+                    });
+                }
+                return $.when(list);
             default:
-                list = list.map(function (obj) {
-                    var fid = String(obj.folder_id || obj.folder),
-                        id = String(obj.id);
-
-                    return { folder_id: fid, id: id };
-                });
-                break;
+                if (ox.debug) console.warn('unknown propagation type', type, list);
+                return $.when(list);
         }
-
-        return $.when.apply($, list).then(function () {
-            if (silent) return list;
-
-            //need to flatten one layer, because list might be a list containing a deferred object resolving to a list
-            var events = [type].concat(_.flatten(list, true).map(function (obj) {
-                return type + ':' + _.ecid(obj);
-            }));
-            api.trigger(events.join(' '));
-
-            return list;
-        })
-        .then(function (list) {
-            folderAPI.reload(list);
-            return list;
-        });
     };
 
     return api;
