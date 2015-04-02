@@ -928,7 +928,6 @@ define('io.ox/calendar/edit/recurrence-view', [
                     .append(
                         $('<span>&nbsp;</span>'),
                         sum = $('<a href="#" tabindex="' + this.tabindex + '">')
-                            .css('fontSize', 'small')
                     );
                 if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
                     this.nodes.wrapper.css({ 'display': 'inline-block' });
