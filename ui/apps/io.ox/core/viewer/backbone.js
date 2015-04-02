@@ -24,7 +24,7 @@
  */
 
 define('io.ox/core/viewer/backbone', [
-    'io.ox/files/legacy_api',
+    'io.ox/files/api',
     'io.ox/core/api/attachment',
     'io.ox/mail/api'
 ], function (FilesAPI, AttachmentAPI, MailAPI) {
