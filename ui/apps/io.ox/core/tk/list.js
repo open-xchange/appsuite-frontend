@@ -391,7 +391,13 @@ define('io.ox/core/tk/list', [
             this.filter = selector;
             var items = this.$el.find('.list-item');
             items.removeClass('hidden');
-            if (this.filter) items.not(this.filter).addClass('hidden');
+            if (this.filter) {
+                items.not(this.filter).addClass('hidden');
+                // we need to have manual control over odd/even because nth-child doesn't work with hidden elements
+                items.filter(this.filter).each(function (index) { $(this).addClass(index % 2 ? 'even' : 'odd'); });
+            } else {
+                items.removeClass('even odd');
+            }
         },
 
         connect: function (loader) {
