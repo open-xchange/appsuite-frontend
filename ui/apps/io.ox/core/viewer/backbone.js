@@ -130,8 +130,23 @@ define('io.ox/core/viewer/backbone', [
             }
         };
 
-    function convert(data) {
-        var result = {};
+    /**
+     * Normalize file descriptors coming from Mail, Drive, and PIM Apps.
+     *
+     * @param {Object} data
+     *  file descriptor object from Mail, Drive, and PIM Apps.
+     *
+     * @returns {Object} result
+     *  normalized object which will be used to create OX Viewer models.
+     *
+     */
+    function normalize(data) {
+        var result = {},
+            source = getFileSourceType(data);
+        if (!source) {
+            console.warn('Core.Viewer.backbone: Can not determine file source.');
+            return result;
+        }
 
         /**
          * Guesses (duck check) the source type of a file by its properties.
@@ -201,38 +216,44 @@ define('io.ox/core/viewer/backbone', [
             return (fileName.lastIndexOf('.') >= 0) ? fileName.substring(index + 1).toLowerCase() : null;
         }
 
-        result.source = getFileSourceType (data);
+        // normalize properties
+        if (source === ITEM_TYPE_MAIL_ATTACHMENT) {
+            result = {
+                filename: data.filename,
+                size: data.size,
+                contentType: data.content_type,
+                fileCategory: getFileCategory(data.content_type, getExtension(data.filename)),
+                id: data.id,
+                folderId: data.mail && data.mail.folder_id || null
+            };
 
-        if (result.source === ITEM_TYPE_MAIL_ATTACHMENT) {
-            result.filename = data.filename;
-            result.size = data.size;
-            result.contentType = data.content_type;
-            result.fileCategory = getFileCategory(data.content_type, getExtension(data.filename));
-            result.id = data.id;    // could be a attachment id, or drive file id
-            result.folderId = data.mail && data.mail.folder_id || null;
+        } else if (source === ITEM_TYPE_PIM_ATTACHMENT) {
+            result = {
+                filename: data.filename,
+                size: data.file_size,
+                contentType: data.file_mimetype,
+                fileCategory: getFileCategory(data.file_mimetype, getExtension(data.filename)),
+                id: data.id,
+                folderId: data.folder,
+                module: data.module
+            };
 
-        } else if (result.source === ITEM_TYPE_PIM_ATTACHMENT) {
-            result.filename = data.filename;
-            result.size = data.file_size;
-            result.contentType = data.file_mimetype;
-            result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
-            result.id = data.id;
-            result.folderId = data.folder;
-            result.module = data.module;
-
-        } else if (result.source === ITEM_TYPE_FILE) {
-            result.filename = data.filename;
-            result.size = data.file_size;
-            result.version = data.version;  // drive only
-            result.contentType = data.file_mimetype;
-            result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
-            result.id = data.id;    // could be a attachment id, or drive file id
-            result.folderId = data.folder_id;
-            result.meta = data.meta;
-            result.lastModified = data.last_modified;
-            result.numberOfVersions = data.number_of_versions;
-            result.description = data.description;
+        } else if (source === ITEM_TYPE_FILE) {
+            result = {
+                filename: data.filename,
+                size: data.file_size,
+                version: data.version,
+                contentType: data.file_mimetype,
+                fileCategory: getFileCategory(data.file_mimetype, getExtension(data.filename)),
+                id: data.id,
+                folderId: data.folder_id,
+                meta: data.meta,
+                lastModified: data.last_modified,
+                numberOfVersions: data.number_of_versions,
+                description: data.description
+            };
         }
+        result.source = source;
 
         return result;
     }
@@ -261,11 +282,7 @@ define('io.ox/core/viewer/backbone', [
             };
         },
 
-        initialize: function () {
-            //console.warn('FileModel.initialize(): ', data);
-        },
-
-        parse: convert,
+        parse: normalize,
 
         isMailAttachment: function () {
             return this.get('source') === ITEM_TYPE_MAIL_ATTACHMENT;
@@ -329,19 +346,24 @@ define('io.ox/core/viewer/backbone', [
          */
         parse: function (models) {
             var viewerModels = [];
-            //var self = this;
             _.each(models, function (model) {
+                var isBackboneModel = model instanceof Backbone.Model;
+                // filter out folders in Drive
+                if (isBackboneModel && model.has('standard_folder')) {
+                    return;
+                }
                 // check if model is a Backbone Model (Drive), or POJs (Mail, PIM apps)
-                var attributes = model instanceof Backbone.Model ? model.attributes : model,
-                    newModel = new Model(attributes, { parse: true });
-                newModel.set('origData', model);
-                viewerModels.push(newModel);
-                newModel.listenTo(model, 'change', function (changeModel) {
-                    //console.warn('ViewerCollection model changed', changeModel, changeModel.changed);
-                    var converted = convert(changeModel.attributes);
-                    newModel.set(converted);
-                    //console.warn('ViewerCollection model converted', newModel, converted);
-                });
+                var attributes = isBackboneModel ? model.attributes : model,
+                    viewerModel = new Model(attributes, { parse: true });
+                viewerModel.set('origData', model);
+                viewerModels.push(viewerModel);
+                if (isBackboneModel) {
+                    // forward Drive model events to Viewer models
+                    viewerModel.listenTo(model, 'change', function (changeModel) {
+                        var convertedAtrributes = normalize(changeModel.attributes);
+                        viewerModel.set(convertedAtrributes);
+                    });
+                }
             });
             return viewerModels;
         },
