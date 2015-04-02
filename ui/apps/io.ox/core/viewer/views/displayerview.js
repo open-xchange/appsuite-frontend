@@ -364,8 +364,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     leftRange = _.range(activeSlideIndex, activeSlideIndex - cacheOffset - 1, -1),
                     rangeUnion = _.union(leftRange, rightRange);
                 _.each(rangeUnion, function (index) {
-                    if (index < 0) { index = slidesCount + index; }
-                    if (index > (slidesCount - 1)) { index = index - slidesCount;}
+                    if (index < 0) { index = Math.abs(slidesCount + index); }
+                    if (index > (slidesCount - 1)) { index = index % slidesCount; }
                     cachedRange.push(index);
                 });
                 return cachedRange;
