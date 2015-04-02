@@ -93,10 +93,9 @@ define('io.ox/portal/main', [
     }
 
     function openSettings() {
-        require(['io.ox/settings/main'], function (m) {
-            m.getApp().launch().done(function () {
-                this.getGrid().selection.set({ id: 'io.ox/portal' });
-            });
+        var options = { id: app.get('name') };
+        ox.launch('io.ox/settings/main', options).done(function () {
+            this.setSettingsPane(options);
         });
     }
 
