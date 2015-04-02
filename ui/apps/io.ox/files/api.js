@@ -312,7 +312,8 @@ define('io.ox/files/api', [
                 folder: params.folder || settings.get('folder/infostore'),
                 columns: allColumns,
                 sort: params.sort || '702',
-                order: params.order || 'asc'
+                order: params.order || 'asc',
+                timezone: 'utc'
             };
         },
         httpGet: function (module, params) {
@@ -896,7 +897,8 @@ define('io.ox/files/api', [
 
         var oldSchool = {
             'new': 'add:file',
-            'change': 'update'
+            'change': 'update',
+            'delete': 'remove:file'
         };
 
         if (!type || _.isEmpty(list)) {
@@ -907,41 +909,50 @@ define('io.ox/files/api', [
 
         switch (type) {
             case 'add:file':
-                //same as add:version just different type
+                var obj = list[0];
+                if (!silent) api.trigger(type, obj);
+
+                // file count changed, need to reload folder
+                folderAPI.reload(obj.folder_id || obj.folder);
+
+                return $.when(list);
             case 'add:version':
                 var obj = list[0];
                 if (!silent) api.trigger(type, obj);
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'change:version':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('change:version', obj);
                 });
-                folderAPI.refresh(list);
-                return $.when(list);
-            case 'delete':
-                if (!silent) {
-                    api.trigger('delete');
-                    list.forEach(function (obj) {
-                        api.trigger('delete' + ':' + _.ecid(obj));
-                    });
-                }
-                folderAPI.refresh(list);
 
                 return $.when(list);
             case 'lock':
                 return api.getList(list, { cache: false });
+            case 'remove:file':
+                if (!silent) {
+                    api.trigger('remove:file');
+                    list.forEach(function (obj) {
+                        api.trigger('remove:file' + ':' + _.ecid(obj));
+                    });
+                }
+                // file count changed, need to reload folder
+                folderAPI.reload(list.map(function (obj) {
+                    return obj.folder_id || obj.folder;
+                }));
+
+                return $.when(list);
             case 'remove:version':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('remove:version', obj);
                 });
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'rename':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('rename', _.cid(obj));
                 });
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'unlock':
                 return $.when(list);
