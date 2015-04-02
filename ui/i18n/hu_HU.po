@@ -280,8 +280,8 @@ msgid "%1$s changed their status:"
 msgstr "%1$s megváltoztatta az állapotát:"
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/upload/main.js:222 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:297 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:226 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:301 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 #, fuzzy
 #| msgid "Date completed"
@@ -710,6 +710,7 @@ msgstr "Fájlok hozzáadása"
 msgid "Add from Drive"
 msgstr "Hozzáadás a Drive-ról"
 
+#: apps/io.ox/files/actions.js:431 module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js:455 module:io.ox/mail
 msgid "Add local file"
 msgstr "Helyi fájl hozzáadása"
@@ -738,7 +739,7 @@ msgstr "Hozzáadás a naptárhoz"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:229
-#: apps/io.ox/core/folder/extensions.js:408 apps/io.ox/files/actions.js:442
+#: apps/io.ox/core/folder/extensions.js:408 apps/io.ox/files/actions.js:448
 #: module:io.ox/files
 #, fuzzy
 #| msgid "Add new subfolder"
@@ -763,7 +764,7 @@ msgstr "Új aláírás hozzáadása"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
-#: apps/io.ox/files/actions.js:435 module:io.ox/files
+#: apps/io.ox/files/actions.js:441 module:io.ox/files
 msgid "Add note"
 msgstr "Jegyzet hozzáadása"
 
@@ -820,7 +821,7 @@ msgid "Add to favorites"
 msgstr "Hozzáadás a kedvencekhez"
 
 #: apps/io.ox/contacts/actions.js:426 module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:125 apps/io.ox/files/actions.js:522
+#: apps/io.ox/contacts/toolbar.js:125 apps/io.ox/files/actions.js:528
 #: module:io.ox/files apps/io.ox/files/toolbar.js:140
 #: apps/io.ox/mail/actions.js:689 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:182
@@ -837,7 +838,7 @@ msgid "Add your %1$s account"
 msgstr "%1$s fiók hozzáadása"
 
 #: apps/plugins/portal/facebook/register.js:378 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:383
+#: apps/plugins/portal/linkedIn/register.js:382
 #: apps/plugins/portal/twitter/register.js:394
 msgid "Add your account"
 msgstr "Fiók hozzáadása"
@@ -1003,7 +1004,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:1219 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1233 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
@@ -1125,7 +1126,7 @@ msgstr "Mint a beérkező levelek kiszolgálójánál"
 #: apps/io.ox/calendar/list/perspective.js:242 module:io.ox/calendar
 #: apps/io.ox/files/view-options.js:56 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:686 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:698 module:io.ox/tasks
 msgid "Ascending"
 msgstr "Növekvő"
 
@@ -1399,8 +1400,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/files/actions/versions-delete.js:26
 #: apps/io.ox/files/fluid/view-detail.js:220
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
-#: apps/io.ox/files/main.js:548 apps/io.ox/files/main.js:599
-#: apps/io.ox/files/views/create.js:87
+#: apps/io.ox/files/main.js:571 apps/io.ox/files/main.js:622
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1411,7 +1411,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/compose/extensions.js:430
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:635
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1068
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/mail/settings/signatures/register.js:273
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1678,7 +1678,7 @@ msgid "Close"
 msgstr "Bezárás"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:581 module:io.ox/files
+#: apps/io.ox/files/main.js:604 module:io.ox/files
 #: apps/io.ox/files/view-options.js:203 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -1763,7 +1763,7 @@ msgid "Company"
 msgstr "Cég"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:82 apps/io.ox/mail/compose/view.js:443
+#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:443
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -1863,8 +1863,8 @@ msgstr "Társalgások"
 #: apps/io.ox/contacts/actions.js:134 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:442
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:82 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:303
-#: module:io.ox/files apps/io.ox/files/actions.js:562
+#: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:309
+#: module:io.ox/files apps/io.ox/files/actions.js:568
 #: apps/io.ox/files/toolbar.js:154 apps/io.ox/mail/actions.js:206
 #: apps/io.ox/mail/actions.js:627
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
@@ -1942,7 +1942,7 @@ msgstr "A találkozó adatai nem tölthetők be."
 msgid "Couldn't load contact data."
 msgstr "A partner adatai nem tölthetők be."
 
-#: apps/io.ox/tasks/main.js:364 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:360 module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr "Az a feladat nem tölthető be."
 
@@ -2163,7 +2163,7 @@ msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js:264 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:243
+#: apps/io.ox/tasks/util.js:198
 msgid "Deferred"
 msgstr "Elhalasztott"
 
@@ -2179,7 +2179,7 @@ msgstr "Elhalasztott"
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:196 module:io.ox/core/sub
-#: apps/io.ox/core/sub/settings/pane.js:198 apps/io.ox/files/actions.js:481
+#: apps/io.ox/core/sub/settings/pane.js:198 apps/io.ox/files/actions.js:487
 #: module:io.ox/files apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:522
@@ -2231,7 +2231,7 @@ msgstr "Csoport törlése"
 msgid "Delete task"
 msgstr "Feladat törlése"
 
-#: apps/io.ox/files/actions.js:613 module:io.ox/files
+#: apps/io.ox/files/actions.js:619 module:io.ox/files
 msgid "Delete version"
 msgstr "Verzió törlése"
 
@@ -2263,13 +2263,12 @@ msgstr "Osztály"
 #: apps/io.ox/calendar/list/perspective.js:243 module:io.ox/calendar
 #: apps/io.ox/files/view-options.js:57 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:687 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:699 module:io.ox/tasks
 msgid "Descending"
 msgstr "Csökkenő"
 
 #: apps/io.ox/calendar/edit/extensions.js:220 module:io.ox/calendar/edit/main
 #: apps/io.ox/files/actions/edit-description.js:32 module:io.ox/files
-#: apps/io.ox/files/views/create.js:131
 #: apps/io.ox/tasks/edit/view-template.js:126 module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50 module:io.ox/core
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
@@ -2284,7 +2283,7 @@ msgid "Description has been copied"
 msgstr "A leírás átmásolva"
 
 #: apps/io.ox/calendar/view-detail.js:169 module:io.ox/calendar
-#: apps/io.ox/files/upload/main.js:277 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:281 module:io.ox/files
 msgid "Details"
 msgstr "Részletek"
 
@@ -2550,7 +2549,7 @@ msgstr "Dokumentumok"
 #: apps/io.ox/tasks/edit/view-template.js:262 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
-#: apps/io.ox/tasks/util.js:235
+#: apps/io.ox/tasks/util.js:190
 #: apps/plugins/notifications/tasks/register.js:74
 #: module:plugins/notifications
 msgid "Done"
@@ -2561,8 +2560,8 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "Egész napos találkozóért kattintson duplán erre a sorra"
 
 #: apps/io.ox/core/pim/actions.js:70 module:io.ox/core
-#: apps/io.ox/files/actions.js:472 module:io.ox/files
-#: apps/io.ox/files/actions.js:599 apps/io.ox/files/toolbar.js:103
+#: apps/io.ox/files/actions.js:478 module:io.ox/files
+#: apps/io.ox/files/actions.js:605 apps/io.ox/files/toolbar.js:103
 #: apps/io.ox/mail/actions.js:740 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2644,15 +2643,15 @@ msgstr "Ejtse ide a levél importálásához"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Húzza ide a feltöltendő <b class=\"dndignore\">új mellékletet</b>"
 
-#: apps/io.ox/files/actions.js:623 module:io.ox/files
+#: apps/io.ox/files/actions.js:629 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Húzza ide a feltöltendő <b class='dndignore'>új fájlt</b>"
 
-#: apps/io.ox/files/actions.js:645 module:io.ox/files
+#: apps/io.ox/files/actions.js:651 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr "Húzza ide a feltöltendő <b class='dndignore'>új verziót</b>"
 
-#: apps/io.ox/files/actions.js:639 module:io.ox/files
+#: apps/io.ox/files/actions.js:645 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
@@ -2671,7 +2670,7 @@ msgid "Due %1$s"
 msgstr "Határidő: %1$s"
 
 #: apps/io.ox/tasks/edit/view-template.js:194 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:681 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
 msgid "Due date"
 msgstr "Lejárat"
 
@@ -2694,13 +2693,13 @@ msgstr "EB"
 #: module:io.ox/contacts apps/io.ox/contacts/main.js:365
 #: apps/io.ox/contacts/main.js:371 apps/io.ox/contacts/main.js:730
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:463
+#: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:469
 #: module:io.ox/files apps/io.ox/files/main.js:148
-#: apps/io.ox/files/main.js:154 apps/io.ox/files/main.js:551
-#: apps/io.ox/files/main.js:599 apps/io.ox/mail/actions.js:512
+#: apps/io.ox/files/main.js:154 apps/io.ox/files/main.js:574
+#: apps/io.ox/files/main.js:622 apps/io.ox/mail/actions.js:512
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1072
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
 #: apps/io.ox/mail/settings/signatures/register.js:343
 #: apps/io.ox/mail/settings/signatures/register.js:345
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -2739,7 +2738,7 @@ msgstr "Találkozó szerkesztése"
 msgid "Edit contact"
 msgstr "Névjegy szerkesztése"
 
-#: apps/io.ox/files/actions.js:542 module:io.ox/files
+#: apps/io.ox/files/actions.js:548 module:io.ox/files
 msgid "Edit description"
 msgstr "Leírás szerkesztése"
 
@@ -3253,11 +3252,11 @@ msgstr "Fájl"
 msgid "File Details"
 msgstr "Fájlrészletek"
 
-#: apps/io.ox/files/actions.js:303 module:io.ox/files
+#: apps/io.ox/files/actions.js:309 module:io.ox/files
 msgid "File has been copied"
 msgstr "A fájl átmásolása megtörtént"
 
-#: apps/io.ox/files/actions.js:302 module:io.ox/files
+#: apps/io.ox/files/actions.js:308 module:io.ox/files
 msgid "File has been moved"
 msgstr "A fájl áthelyezésre megtörtént"
 
@@ -3273,11 +3272,11 @@ msgstr "Fájl: %1$s"
 msgid "Files View"
 msgstr "Fájlok nézet"
 
-#: apps/io.ox/files/actions.js:303 module:io.ox/files
+#: apps/io.ox/files/actions.js:309 module:io.ox/files
 msgid "Files have been copied"
 msgstr "A fájlok átmásolásra kerültek"
 
-#: apps/io.ox/files/actions.js:302 module:io.ox/files
+#: apps/io.ox/files/actions.js:308 module:io.ox/files
 msgid "Files have been moved"
 msgstr "A fájlok áthelyezésre kerültek"
 
@@ -3671,7 +3670,7 @@ msgstr "Magas"
 msgid "High contrast theme"
 msgstr "Magas kontrasztú témák"
 
-#: apps/io.ox/mail/util.js:391 module:io.ox/core apps/io.ox/tasks/util.js:367
+#: apps/io.ox/mail/util.js:391 module:io.ox/core apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Magas prioritás"
@@ -3794,7 +3793,7 @@ msgstr "%1$d nap múlva"
 
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:231
+#: apps/io.ox/tasks/util.js:186
 msgid "In progress"
 msgstr "Folyamatban"
 
@@ -4083,11 +4082,11 @@ msgid "Liked comment"
 msgstr "Kedvelt megjegyzés"
 
 #: apps/plugins/portal/linkedIn/register.js:215 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:390
+#: apps/plugins/portal/linkedIn/register.js:389
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: apps/plugins/portal/linkedIn/register.js:325 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:324 module:plugins/portal
 msgid "LinkedIn Network Updates"
 msgstr "LinkedIn hálózat frissítései"
 
@@ -4113,7 +4112,7 @@ msgstr "Listanézet"
 msgid "Location"
 msgstr "Hely"
 
-#: apps/io.ox/files/actions.js:572 module:io.ox/files
+#: apps/io.ox/files/actions.js:578 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:161
 msgid "Lock"
 msgstr "Zárolás"
@@ -4138,7 +4137,7 @@ msgstr "Veszteség: %1$s %"
 msgid "Low"
 msgstr "Alacsony"
 
-#: apps/io.ox/mail/util.js:392 module:io.ox/core apps/io.ox/tasks/util.js:361
+#: apps/io.ox/mail/util.js:392 module:io.ox/core apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Alacsony prioritás"
@@ -4284,7 +4283,7 @@ msgstr "Levelek naponként (%)"
 msgid "Main window"
 msgstr "Főablak"
 
-#: apps/io.ox/files/actions.js:606 module:io.ox/files
+#: apps/io.ox/files/actions.js:612 module:io.ox/files
 msgid "Make this the current version"
 msgstr "Legyen ez az aktuális verzió"
 
@@ -4394,7 +4393,7 @@ msgstr "Május"
 msgid "Medium"
 msgstr "Közepes"
 
-#: apps/io.ox/tasks/util.js:364 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:307 module:io.ox/tasks
 msgid "Medium priority"
 msgstr "Közepes prioritás"
 
@@ -4494,8 +4493,8 @@ msgstr "A megjelenített %1$s elemnél több is található"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:76 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:306 module:io.ox/core
-#: apps/io.ox/files/actions.js:302 module:io.ox/files
-#: apps/io.ox/files/actions.js:552 apps/io.ox/files/toolbar.js:145
+#: apps/io.ox/files/actions.js:308 module:io.ox/files
+#: apps/io.ox/files/actions.js:558 apps/io.ox/files/toolbar.js:145
 #: apps/io.ox/mail/actions.js:205 apps/io.ox/mail/actions.js:617
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:139
 #: apps/io.ox/tasks/actions.js:319 module:io.ox/tasks
@@ -4775,10 +4774,6 @@ msgstr "Nincs elem kijelölve"
 msgid "No errors"
 msgstr "Nincs hiba"
 
-#: apps/io.ox/files/views/create.js:72 module:io.ox/files
-msgid "No file selected for upload."
-msgstr "Nincs fájl kiválasztva feltöltésre."
-
 #: apps/plugins/portal/recentfiles/register.js:70 module:plugins/portal
 #: apps/plugins/portal/recentfiles/register.js:91
 msgid "No files have been changed recently"
@@ -4789,7 +4784,7 @@ msgid "No items found"
 msgstr "Nem találhatók elemek"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:222 module:io.ox/find
+#: apps/io.ox/find/main.js:225 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Egyetlen elem sem található. Módosítsa a jelenleg használt lapot."
 
@@ -4809,7 +4804,7 @@ msgstr "Nincs kiválasztott üzenet"
 msgid "No notifications"
 msgstr "Nincsenek értesítések"
 
-#: apps/io.ox/tasks/util.js:358 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:301 module:io.ox/tasks
 msgid "No priority"
 msgstr "Nincs prioritás"
 
@@ -4872,7 +4867,7 @@ msgstr "Nem levélszemét"
 
 #: apps/io.ox/tasks/edit/view-template.js:260 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:227
+#: apps/io.ox/tasks/util.js:182
 msgid "Not started"
 msgstr "Nem indult el"
 
@@ -5001,7 +4996,7 @@ msgstr "Munkanapokon"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:225 module:io.ox/find
+#: apps/io.ox/find/main.js:228 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Egy elem található."
@@ -5011,8 +5006,8 @@ msgstr[1] "%1$s elem található."
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 
-#: apps/io.ox/files/actions.js:454 module:io.ox/files
-#: apps/io.ox/files/actions.js:592
+#: apps/io.ox/files/actions.js:460 module:io.ox/files
+#: apps/io.ox/files/actions.js:598
 msgid "Open"
 msgstr "Megnyitás"
 
@@ -5137,7 +5132,7 @@ msgstr "Beállítások"
 msgid "Orange"
 msgstr "Narancs"
 
-#: apps/io.ox/tasks/main.js:685 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:697 module:io.ox/tasks
 msgid "Order"
 msgstr "Sorrend"
 
@@ -5158,7 +5153,7 @@ msgstr "Egyéb cím"
 msgid "Outgoing server (SMTP)"
 msgstr "Kimenő kiszolgáló (SMTP)"
 
-#: apps/io.ox/tasks/util.js:222 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:177 module:io.ox/tasks
 msgid "Overdue"
 msgstr "Lejárt"
 
@@ -5556,7 +5551,7 @@ msgstr "Nyomja meg az [enter]-t a Facebook folyamra ugráshoz."
 msgid "Press [enter] to jump to the flicker stream."
 msgstr "Nyomja meg az [enter]-t a Flickr folyamra ugráshoz."
 
-#: apps/plugins/portal/linkedIn/register.js:268 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:267 module:plugins/portal
 msgid "Press [enter] to jump to the linkedin stream."
 msgstr "Nyomja meg az [enter]-t a LinkedIn folyamra ugráshoz."
 
@@ -5630,7 +5625,7 @@ msgstr "Nyomtatás"
 
 #: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:683 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:695 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
 msgid "Priority"
 msgstr "Prioritás"
@@ -5887,7 +5882,7 @@ msgid "Reload statistics"
 msgstr "Statisztika újratöltése"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/upload/main.js:227 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:231 module:io.ox/files
 #, fuzzy
 #| msgid "Reminder date %1$s"
 msgid "Remaining time: %1$s"
@@ -5975,7 +5970,7 @@ msgid "Remove member"
 msgstr "November"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:254 apps/io.ox/files/actions.js:532
+#: apps/io.ox/core/folder/contextmenu.js:254 apps/io.ox/files/actions.js:538
 #: module:io.ox/files apps/io.ox/files/actions/rename.js:68
 #: apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6115,8 +6110,8 @@ msgstr "Értékesítési mennyiség"
 #: apps/io.ox/core/settings/user.js:81 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
 #: apps/io.ox/files/actions/edit-description.js:36 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:35 apps/io.ox/files/views/create.js:86
-#: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
+#: apps/io.ox/files/filepicker.js:35 apps/io.ox/mail/accounts/settings.js:44
+#: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:93
 #: apps/io.ox/mail/compose/names.js:162
@@ -6284,7 +6279,7 @@ msgstr "Küldés"
 msgid "Send a read receipt"
 msgstr "Tértivevény küldése"
 
-#: apps/io.ox/files/actions.js:502 module:io.ox/files
+#: apps/io.ox/files/actions.js:508 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:126
 msgid "Send as internal link"
 msgstr "Küldés belső hivatkozásként"
@@ -6295,7 +6290,7 @@ msgstr "Küldés belső hivatkozásként"
 msgid "Send as vCard"
 msgstr "Küldés vCard-ként"
 
-#: apps/io.ox/files/actions.js:492 module:io.ox/files
+#: apps/io.ox/files/actions.js:498 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:119
 msgid "Send by mail"
 msgstr "Küldés e-mailben"
@@ -6513,7 +6508,7 @@ msgstr "Nincsenek értesítések"
 msgid "Show details"
 msgstr "Részletek megjelenítése"
 
-#: apps/io.ox/tasks/main.js:689 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:701 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "Kész feladatok megjelenítése"
 
@@ -6529,7 +6524,7 @@ msgstr "Ikonok megjelenítése"
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
-#: apps/io.ox/files/actions.js:512 module:io.ox/files
+#: apps/io.ox/files/actions.js:518 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:133
 msgid "Show internal link"
 msgstr "Belső hivatkozás megjelenítése"
@@ -6708,7 +6703,7 @@ msgid "Sort by"
 msgstr "Rendezés módja:"
 
 #: apps/io.ox/calendar/list/perspective.js:234 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:678 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:690 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Rendezési beállítások"
 
@@ -6773,7 +6768,7 @@ msgstr "Statisztika"
 
 #: apps/io.ox/calendar/toolbar.js:71 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:270 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:680 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
 msgid "Status"
 msgstr "Állapot"
 
@@ -6800,7 +6795,7 @@ msgstr "Diák"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:112 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:682 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:694 module:io.ox/tasks
 msgid "Subject"
 msgstr "Tárgy"
 
@@ -7415,7 +7410,7 @@ msgstr "Nem volt importálható találkozó"
 msgid "There was no suitable server found for this mail/password combination"
 msgstr "Nem található megfelelő kiszolgáló ehhez a cím/jelszó kombinációhoz"
 
-#: apps/plugins/portal/linkedIn/register.js:311 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:310 module:plugins/portal
 msgid "There were not activities in your network"
 msgstr "Nem volt tevékenység a hálózatában"
 
@@ -7542,11 +7537,11 @@ msgstr "Ez a fájl az alapértelmezett mappába kerül kiírásra a szerkesztés
 msgid "This folder has no subscriptions"
 msgstr "A mappa nem tartalmaz feliratkozásokat"
 
-#: apps/io.ox/core/folder/extensions.js:503 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:505 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "A mappa tartalmaz publikációkat és/vagy feliratkozásokat"
 
-#: apps/io.ox/core/folder/extensions.js:500 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:502 module:io.ox/core
 #, fuzzy
 #| msgid "This folder has no subscriptions"
 msgid "This folder has subscriptions"
@@ -7819,7 +7814,7 @@ msgstr "Ismeretlen hiba a tumblr blog ellenőrzésekor."
 msgid "Unknown sender"
 msgstr "ismeretlen feladó"
 
-#: apps/io.ox/files/actions.js:582 module:io.ox/files
+#: apps/io.ox/files/actions.js:588 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:168
 msgid "Unlock"
 msgstr "Feloldás"
@@ -7892,14 +7887,6 @@ msgstr "Fájl feltöltése"
 msgid "Upload local file"
 msgstr "Fájl feltöltése"
 
-#: apps/io.ox/files/actions.js:425 module:io.ox/files
-msgid "Upload new file"
-msgstr "Új fájl feltöltése"
-
-#: apps/io.ox/files/views/create.js:79 module:io.ox/files
-msgid "Upload new files"
-msgstr "Új fájlok feltöltése"
-
 #: apps/io.ox/files/fluid/view-detail.js:232 module:io.ox/files
 msgid "Upload new version"
 msgstr "Új verzió feltöltése"
@@ -7911,7 +7898,7 @@ msgid "Upload progress"
 msgstr "Folyamatban"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/upload/main.js:256 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:260 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
 msgid "Uploading %1$s"
@@ -7929,7 +7916,7 @@ msgstr "Feltöltés…"
 msgid "Uptime: %1$s minutes"
 msgstr "Futási idő: %1$s perc"
 
-#: apps/io.ox/tasks/main.js:679 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:691 module:io.ox/tasks
 msgid "Urgency"
 msgstr "Sürgősség"
 
@@ -8058,7 +8045,7 @@ msgstr "Forrás megtekintése"
 
 #: apps/io.ox/tasks/edit/view-template.js:263 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
-#: apps/io.ox/tasks/util.js:239
+#: apps/io.ox/tasks/util.js:194
 msgid "Waiting"
 msgstr "Várakozás"
 
@@ -8281,14 +8268,6 @@ msgstr ""
 "Egy üres fájlt csatolt. Ez előfordulhat, ha ez a fájl törlésre került a "
 "merevlemezről. Mindenképpen elküldi?"
 
-#: apps/io.ox/files/views/create.js:26 module:io.ox/files
-msgid ""
-"You can drag and drop files from your computer to upload either a new file "
-"or another version of a file."
-msgstr ""
-"A számítógépén lévő fájlokat ide ejtve feltölthet egy új fájlt vagy egy fájl "
-"másik verzióját."
-
 #: apps/io.ox/mail/settings/signatures/register.js:251 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation. "
@@ -8368,7 +8347,7 @@ msgstr "Automatikusan ki lett jelentkeztetve"
 msgid "You have declined the appointment"
 msgstr "Elutasította a találkozót"
 
-#: apps/plugins/portal/linkedIn/register.js:287 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:286 module:plugins/portal
 msgid "You have no new messages"
 msgstr "Nincsenek új üzenetei"
 
@@ -8543,7 +8522,7 @@ msgstr "A visszajelzés elküldésekor az e-mail címe is csatolva lesz"
 msgid "Your mail address"
 msgstr "Az Ön e-mail címe"
 
-#: apps/plugins/portal/linkedIn/register.js:330 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:329 module:plugins/portal
 msgid "Your messages"
 msgstr "Üzenetei"
 
@@ -8860,23 +8839,23 @@ msgid_plural "in %d minutes"
 msgstr[0] "%d perc múlva"
 msgstr[1] "%d perc múlva"
 
-#: apps/io.ox/tasks/util.js:178 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:128 module:io.ox/tasks
 msgid "in 15 minutes"
 msgstr "15 percen belül"
 
-#: apps/io.ox/tasks/util.js:179 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:129 module:io.ox/tasks
 msgid "in 30 minutes"
 msgstr "30 percen belül"
 
-#: apps/io.ox/tasks/util.js:177 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:127 module:io.ox/tasks
 msgid "in 5 minutes"
 msgstr "5 percen belül"
 
-#: apps/io.ox/tasks/util.js:180 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:130 module:io.ox/tasks
 msgid "in one hour"
 msgstr "egy órán belül"
 
-#: apps/io.ox/tasks/util.js:210 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:160 module:io.ox/tasks
 msgid "in one week"
 msgstr "egy héten belül"
 
@@ -8917,8 +8896,8 @@ msgid "never ends"
 msgstr "soha nem fejeződik be"
 
 #. reminder date selection
-#. %1$s is a weekdays, like 'next Monday'
-#: apps/io.ox/tasks/util.js:207 module:io.ox/tasks
+#. %1$s is a weekday, like 'next Monday'
+#: apps/io.ox/tasks/util.js:157 module:io.ox/tasks
 #, fuzzy
 #| msgid "Due %1$s"
 msgid "next %1$s"
@@ -9081,7 +9060,7 @@ msgstr "ma reggel"
 msgid "three months"
 msgstr "minden hónap"
 
-#: apps/io.ox/tasks/util.js:202 module:io.ox/tasks
+#: apps/io.ox/tasks/util.js:152 module:io.ox/tasks
 msgid "tomorrow"
 msgstr "holnap"
 
@@ -10469,6 +10448,9 @@ msgstr "yyyy"
 #~ msgid "No downloads available"
 #~ msgstr "Nem érhetők el letöltések"
 
+#~ msgid "No file selected for upload."
+#~ msgstr "Nincs fájl kiválasztva feltöltésre."
+
 #~ msgid "No mails"
 #~ msgstr "Nincsenek levelek"
 
@@ -11453,6 +11435,12 @@ msgstr "yyyy"
 #~ msgid "Upload"
 #~ msgstr "Feltöltés"
 
+#~ msgid "Upload new file"
+#~ msgstr "Új fájl feltöltése"
+
+#~ msgid "Upload new files"
+#~ msgstr "Új fájlok feltöltése"
+
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "
 #~ "want to view in the sidebar."
@@ -11520,6 +11508,13 @@ msgstr "yyyy"
 #~ "You can drag and drop files from your computer here to add as attachment."
 #~ msgstr ""
 #~ "A számítógépén lévő fájlokat ide ejtve hozzáadhatja azokat mellékletként."
+
+#~ msgid ""
+#~ "You can drag and drop files from your computer to upload either a new "
+#~ "file or another version of a file."
+#~ msgstr ""
+#~ "A számítógépén lévő fájlokat ide ejtve feltölthet egy új fájlt vagy egy "
+#~ "fájl másik verzióját."
 
 #~ msgid "You don't have any publications yet"
 #~ msgstr "Még nincsenek publikációi"
