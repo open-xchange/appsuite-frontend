@@ -175,6 +175,12 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  page count of the pdf document delivered by the PDF.js library.
              */
             function pdfDocumentLoadSuccess(pageCount) {
+
+                if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
+                    pdfDocumentLoadError();
+                    return;
+                }
+
                 var pdfDocument = this.pdfDocument;
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
