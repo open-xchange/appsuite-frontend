@@ -12,43 +12,17 @@
  */
 
 define('io.ox/files/actions/lock-unlock', [
-    'io.ox/files/api',
-    'io.ox/core/notifications',
-    'gettext!io.ox/files'
-], function (api, notifications, gt) {
+    'io.ox/files/api'
+], function (api) {
 
     'use strict';
 
     return {
         lock: function (list) {
-            api.lock(list).done(function () {
-                notifications.yell('success', gt.ngettext(
-                    'This file has been locked',
-                    'These files have been locked',
-                    list.length
-                ));
-            }).fail(function () {
-                notifications.yell('error', gt.ngettext(
-                    'This file has not been locked',
-                    'These files have not been locked',
-                    list.length
-                ));
-            });
+            api.lock(list);
         },
         unlock: function (list) {
-            api.unlock(list).done(function () {
-                notifications.yell('success', gt.ngettext(
-                    'This file has been unlocked',
-                    'These files have been unlocked',
-                    list.length
-                ));
-            }).fail(function () {
-                notifications.yell('error', gt.ngettext(
-                    'This file has not been unlocked',
-                    'These files have not been unlocked',
-                    list.length
-                ));
-            });
+            api.unlock(list);
         }
     };
 });
