@@ -896,7 +896,8 @@ define('io.ox/files/api', [
 
         var oldSchool = {
             'new': 'add:file',
-            'change': 'update'
+            'change': 'update',
+            'delete': 'remove:file'
         };
 
         if (!type || _.isEmpty(list)) {
@@ -919,18 +920,18 @@ define('io.ox/files/api', [
                 });
                 folderAPI.refresh(list);
                 return $.when(list);
-            case 'delete':
+            case 'lock':
+                return api.getList(list, { cache: false });
+            case 'remove:file':
                 if (!silent) {
-                    api.trigger('delete');
+                    api.trigger('remove:file');
                     list.forEach(function (obj) {
-                        api.trigger('delete' + ':' + _.ecid(obj));
+                        api.trigger('remove:file' + ':' + _.ecid(obj));
                     });
                 }
                 folderAPI.refresh(list);
 
                 return $.when(list);
-            case 'lock':
-                return api.getList(list, { cache: false });
             case 'remove:version':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('remove:version', obj);
