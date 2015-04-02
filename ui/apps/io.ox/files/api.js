@@ -909,17 +909,23 @@ define('io.ox/files/api', [
 
         switch (type) {
             case 'add:file':
-                //same as add:version just different type
+                var obj = list[0];
+                if (!silent) api.trigger(type, obj);
+
+                // file count changed, need to reload folder
+                folderAPI.reload(obj.folder_id || obj.folder);
+
+                return $.when(list);
             case 'add:version':
                 var obj = list[0];
                 if (!silent) api.trigger(type, obj);
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'change:version':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('change:version', obj);
                 });
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'lock':
                 return api.getList(list, { cache: false });
@@ -930,20 +936,23 @@ define('io.ox/files/api', [
                         api.trigger('remove:file' + ':' + _.ecid(obj));
                     });
                 }
-                folderAPI.refresh(list);
+                // file count changed, need to reload folder
+                folderAPI.reload(list.map(function (obj) {
+                    return obj.folder_id || obj.folder;
+                }));
 
                 return $.when(list);
             case 'remove:version':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('remove:version', obj);
                 });
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'rename':
                 if (!silent) list.forEach(function (obj) {
                     api.trigger('rename', _.cid(obj));
                 });
-                folderAPI.refresh(list);
+
                 return $.when(list);
             case 'unlock':
                 return $.when(list);
