@@ -122,7 +122,7 @@ define('io.ox/participants/model', [
             switch (self.get('type')) {
             case self.TYPE_USER:
                 // fetch user contact
-                if (self.has('display_name') && self.has('image1_url')) {
+                if (self.isComplete()) {
                     setUser(self.toJSON());
                 } else {
                     userAPI.get({ id: self.get('id') }).then(
@@ -160,7 +160,7 @@ define('io.ox/participants/model', [
                 break;
             case self.TYPE_EXTERNAL_USER:
                 // has
-                if (self.has('display_name') && self.has('image1_url')) {
+                if (self.isComplete()) {
                     setExternalContact(self.toJSON());
                 } else {
                     contactAPI.getByEmailaddress(self.get('mail') || self.get('email1')).done(function (data) {
@@ -193,6 +193,10 @@ define('io.ox/participants/model', [
             }
 
             return df;
+        },
+
+        isComplete: function () {
+            return 'display_name' in this.attributes && 'image1_url' in this.attributes;
         },
 
         getDisplayName: function () {

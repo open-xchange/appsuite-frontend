@@ -41,22 +41,22 @@
         color: #ccc;
         cursor: pointer;
         display: none;
-    }
 
-    .remove:hover, .remove:focus {
-        background-color: #a00;
-        color: #fff;
-        text-decoration: none;
-        outline: 0;
-    }
+        &:hover, &:focus {
+            background-color: #a00;
+            color: #fff;
+            text-decoration: none;
+            outline: 0;
+        }
 
-    .remove .icon {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        margin-top: -0.5em;
-        text-align: center;
+        .icon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            margin-top: -0.5em;
+            text-align: center;
+        }
     }
 
     &.removable {
@@ -96,20 +96,18 @@
         float: left;
         margin-right: 1em;
         .picture(54px, 54px); /* 54px allows 3 lines with 18px line-height */
-    }
 
-    .participant-image.contact-image,
-    .participant-image.external-user-image {
-        background-image: url('apps/themes/default/dummypicture.png');
-    }
+        &.contact-image, &.external-user-image {
+            background-image: url('apps/themes/default/dummypicture.png');
+        }
 
-    .participant-image.group-image {
-        background-image: url('apps/themes/default/dummypicture_group.png');
-        background-position: 0 -4px;
-    }
+        &.group-image {
+            background-image: url('apps/themes/default/dummypicture_group.png');
+            background-position: 0 -4px;
+        }
 
-    .participant-image.resource-image {
-        background-image: url('apps/themes/default/dummypicture_resource.png');
+        &.resource-image {
+            background-image: url('apps/themes/default/dummypicture_resource.png');
+        }
     }
-
 }
