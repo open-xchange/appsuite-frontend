@@ -312,7 +312,8 @@ define('io.ox/files/api', [
                 folder: params.folder || settings.get('folder/infostore'),
                 columns: allColumns,
                 sort: params.sort || '702',
-                order: params.order || 'asc'
+                order: params.order || 'asc',
+                timezone: 'utc'
             };
         },
         httpGet: function (module, params) {
