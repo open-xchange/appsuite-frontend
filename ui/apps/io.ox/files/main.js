@@ -466,8 +466,8 @@ define('io.ox/files/main', [
                             return { id: file.data, folder: app.folder.get() };
                         });
 
-                        node = selection.getNode(_.cid(files[0]));
                         selection.set(files);
+                        node = selection.getNode(_(selection.get()).first());
                         selection.focus(0, node);
                     });
                 });
