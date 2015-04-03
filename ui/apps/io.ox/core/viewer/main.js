@@ -13,10 +13,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
-define('io.ox/core/viewer/main', [
-    'io.ox/core/viewer/backbone',
-    'io.ox/core/viewer/views/mainview'
-], function (backbone, MainView) {
+define('io.ox/core/viewer/main', [], function () {
 
     'use strict';
 
@@ -50,22 +47,29 @@ define('io.ox/core/viewer/main', [
          * Main bootstrap file for the OX Viewer.
          */
         this.launch = function (baton) {
-            //console.warn('Main.launch() ');
-            var fileList = getFileList(baton);
-            if (!fileList) {
-                console.error('Core.Viewer.launch(): no files to preview.');
-                return;
-            }
-            // create file collection and populate it with file models
-            this.fileCollection = new backbone.Collection();
-            this.fileCollection.set(fileList, { parse: true });
-            // set the index of the selected file (Drive only)
-            if (baton.data) {
-                this.fileCollection.setStartIndex(baton.data);
-            }
-            // create main view and append main view to core
-            this.mainView =  new MainView({ collection: this.fileCollection });
-            $('#io-ox-core').append(this.mainView.el);
+
+            var el = $('<div class="io-ox-viewer abs">');
+            $('#io-ox-core').append(el);
+
+            // resolve dependencies now for an instant response
+            require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
+
+                var fileList = getFileList(baton);
+                if (!fileList) {
+                    console.error('Core.Viewer.launch(): no files to preview.');
+                    return;
+                }
+                // create file collection and populate it with file models
+                this.fileCollection = new backbone.Collection();
+                this.fileCollection.set(fileList, { parse: true });
+                // set the index of the selected file (Drive only)
+                if (baton.data) {
+                    this.fileCollection.setStartIndex(baton.data);
+                }
+                // create main view and append main view to core
+                this.mainView = new MainView({ collection: this.fileCollection, el: el });
+
+            }.bind(this));
         };
     };
 

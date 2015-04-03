@@ -74,14 +74,6 @@ define('io.ox/files/toolbar', [
                 title: gt('Share selected files'),
                 ref: 'io.ox/files/icons/share'
             },
-            'slideshow': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-picture-o',
-                label: gt('Slideshow'),
-                title: gt('View Slideshow'),
-                ref: 'io.ox/files/icons/slideshow'
-            },
             'mediaplayer-audio': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -96,6 +88,13 @@ define('io.ox/files/toolbar', [
                 label: gt('Play video files'),
                 ref: 'io.ox/files/icons/videoplayer'
             },
+            'viewer': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-eye',
+                label: gt('View'),
+                ref: 'io.ox/files/actions/viewer'
+            },
             'download': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -109,13 +108,6 @@ define('io.ox/files/toolbar', [
                 icon: 'fa fa-trash-o',
                 label: gt('Delete'),
                 ref: 'io.ox/files/actions/delete'
-            },
-            'viewer': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-eye',
-                label: gt('View'),
-                ref: 'io.ox/files/actions/viewer'
             },
             //
             // --- LO ----
