@@ -173,7 +173,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js:319
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:569
-#: apps/io.ox/files/toolbar.js:152
+#: apps/io.ox/files/toolbar.js:144
 #: apps/io.ox/mail/actions.js:205
 #: apps/io.ox/mail/actions.js:614
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81
@@ -267,7 +267,7 @@ msgstr ""
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:110
+#: apps/io.ox/files/toolbar.js:109
 #: apps/io.ox/mail/actions.js:519
 #: apps/io.ox/mail/actions/delete.js:62
 #: apps/io.ox/mail/actions/delete.js:81
@@ -444,7 +444,7 @@ msgstr ""
 #: module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js:68
 #: module:io.ox/files
-#: apps/io.ox/files/actions/edit-description.js:37
+#: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74
 #: apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/versions-delete.js:26
@@ -642,7 +642,7 @@ msgstr ""
 #: apps/io.ox/editor/main.js:134
 #: module:io.ox/editor
 #: apps/io.ox/editor/main.js:156
-#: apps/io.ox/files/actions/edit-description.js:36
+#: apps/io.ox/files/actions/edit-description.js:35
 #: module:io.ox/files
 #: apps/io.ox/files/filepicker.js:35
 #: apps/io.ox/mail/accounts/settings.js:44
@@ -746,7 +746,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
 #: module:io.ox/core/viewer
-#: apps/io.ox/files/actions/edit-description.js:32
+#: apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files
 #: apps/io.ox/tasks/edit/view-template.js:126
 #: module:io.ox/tasks/edit
@@ -1847,9 +1847,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:167
 #: module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:117
+#: apps/io.ox/files/toolbar.js:95
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:217
+#: apps/io.ox/files/toolbar.js:209
 #: apps/io.ox/mail/toolbar.js:241
 #: module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:142
@@ -1858,7 +1858,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:160
 #: module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:218
+#: apps/io.ox/files/toolbar.js:210
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:242
 #: module:io.ox/mail
@@ -1867,7 +1867,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:165
 #: module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:219
+#: apps/io.ox/files/toolbar.js:211
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:246
 #: module:io.ox/mail
@@ -1880,7 +1880,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121
 #: module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:223
+#: apps/io.ox/files/toolbar.js:215
 #: module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83
 #: module:io.ox/core
@@ -1896,7 +1896,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:169
 #: module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:225
+#: apps/io.ox/files/toolbar.js:217
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:249
 #: module:io.ox/mail
@@ -1908,7 +1908,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170
 #: module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:224
+#: apps/io.ox/files/toolbar.js:216
 #: module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:250
 #: module:io.ox/mail
@@ -2341,7 +2341,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js:320
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:579
-#: apps/io.ox/files/toolbar.js:161
+#: apps/io.ox/files/toolbar.js:153
 #: apps/io.ox/mail/actions.js:206
 #: apps/io.ox/mail/actions.js:624
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
@@ -2402,7 +2402,7 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:125
 #: apps/io.ox/files/actions.js:539
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:147
+#: apps/io.ox/files/toolbar.js:139
 #: apps/io.ox/mail/actions.js:686
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:182
@@ -4731,7 +4731,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js:489
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:616
-#: apps/io.ox/files/toolbar.js:103
+#: apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:737
 #: module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38
@@ -6071,31 +6071,31 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js:509
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:126
+#: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
 msgstr ""
 
 #: apps/io.ox/files/actions.js:519
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:133
+#: apps/io.ox/files/toolbar.js:125
 msgid "Send as internal link"
 msgstr ""
 
 #: apps/io.ox/files/actions.js:529
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:140
+#: apps/io.ox/files/toolbar.js:132
 msgid "Show internal link"
 msgstr ""
 
 #: apps/io.ox/files/actions.js:589
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:168
+#: apps/io.ox/files/toolbar.js:160
 msgid "Lock"
 msgstr ""
 
 #: apps/io.ox/files/actions.js:599
 #: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:175
+#: apps/io.ox/files/toolbar.js:167
 msgid "Unlock"
 msgstr ""
 
@@ -6504,30 +6504,20 @@ msgstr ""
 
 #: apps/io.ox/files/toolbar.js:81
 #: module:io.ox/files
-msgid "Slideshow"
-msgstr ""
-
-#: apps/io.ox/files/toolbar.js:82
-#: module:io.ox/files
-msgid "View Slideshow"
-msgstr ""
-
-#: apps/io.ox/files/toolbar.js:89
-#: module:io.ox/files
 msgid "Play audio files"
 msgstr ""
 
-#: apps/io.ox/files/toolbar.js:96
+#: apps/io.ox/files/toolbar.js:88
 #: module:io.ox/files
 msgid "Play video files"
 msgstr ""
 
-#: apps/io.ox/files/toolbar.js:220
+#: apps/io.ox/files/toolbar.js:212
 #: module:io.ox/files
 msgid "Icons"
 msgstr ""
 
-#: apps/io.ox/files/toolbar.js:221
+#: apps/io.ox/files/toolbar.js:213
 #: module:io.ox/files
 msgid "Tiles"
 msgstr ""

@@ -817,7 +817,7 @@ msgstr "お気に入りに追加"
 
 #: apps/io.ox/contacts/actions.js:438 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125 apps/io.ox/files/actions.js:539
-#: module:io.ox/files apps/io.ox/files/toolbar.js:147
+#: module:io.ox/files apps/io.ox/files/toolbar.js:139
 #: apps/io.ox/mail/actions.js:686 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:182
 msgid "Add to portal"
@@ -1382,7 +1382,7 @@ msgstr "予定表ビュー"
 #: module:io.ox/core/sub apps/io.ox/core/tk/mobiscroll.js:27
 #: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:348
 #: module:io.ox/editor apps/io.ox/files/actions/delete.js:68
-#: module:io.ox/files apps/io.ox/files/actions/edit-description.js:37
+#: module:io.ox/files apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/versions-delete.js:26
 #: apps/io.ox/files/fluid/view-detail.js:220
@@ -1530,7 +1530,7 @@ msgstr "キャラクター"
 
 #: apps/io.ox/calendar/toolbar.js:169 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:224 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:216 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:250 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:145
 msgid "Checkboxes"
@@ -1849,7 +1849,7 @@ msgstr "スレッド"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:82 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:320
 #: module:io.ox/files apps/io.ox/files/actions.js:579
-#: apps/io.ox/files/toolbar.js:161 apps/io.ox/mail/actions.js:206
+#: apps/io.ox/files/toolbar.js:153 apps/io.ox/mail/actions.js:206
 #: apps/io.ox/mail/actions.js:624
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:146
@@ -2168,7 +2168,7 @@ msgstr "延期"
 #: apps/io.ox/files/actions.js:498 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:519
+#: apps/io.ox/files/toolbar.js:109 apps/io.ox/mail/actions.js:519
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:349
@@ -2255,7 +2255,7 @@ msgstr "降順"
 
 #: apps/io.ox/calendar/edit/extensions.js:220 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
-#: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:32
+#: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:126
 #: module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50 module:io.ox/core
@@ -2559,7 +2559,7 @@ msgstr "終日のアポイントを作成するには、この行をダブル �
 #: apps/io.ox/core/viewer/views/toolbarview.js:177
 #: apps/io.ox/core/viewer/views/toolbarview.js:197
 #: apps/io.ox/files/actions.js:489 module:io.ox/files
-#: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:103
+#: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -3359,7 +3359,7 @@ msgstr "フォルダ タイプ"
 
 #: apps/io.ox/calendar/toolbar.js:168 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:169 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:225 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:217 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:249 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:144
 msgid "Folder view"
@@ -3741,7 +3741,7 @@ msgstr "IMAP フォルダの登録"
 msgid "IP phone"
 msgstr "IP 電話"
 
-#: apps/io.ox/files/toolbar.js:220 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:212 module:io.ox/files
 msgid "Icons"
 msgstr "アイコン"
 
@@ -4056,7 +4056,7 @@ msgstr ""
 "ランチャー ドロップダウンです。Enter キーでドロップダウンに移動します。"
 
 #: apps/io.ox/calendar/toolbar.js:160 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:218 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:210 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:242 module:io.ox/mail
 msgid "Layout"
 msgstr "レイアウト"
@@ -4126,7 +4126,7 @@ msgid "Links"
 msgstr "リンク"
 
 #: apps/io.ox/calendar/toolbar.js:165 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:219 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:211 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:246 module:io.ox/mail
 msgid "List"
 msgstr "リスト"
@@ -4140,7 +4140,7 @@ msgid "Location"
 msgstr "場所"
 
 #: apps/io.ox/files/actions.js:589 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:168
+#: apps/io.ox/files/toolbar.js:160
 msgid "Lock"
 msgstr "ロック"
 
@@ -4528,7 +4528,7 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:306 module:io.ox/core
 #: apps/io.ox/files/actions.js:319 module:io.ox/files
-#: apps/io.ox/files/actions.js:569 apps/io.ox/files/toolbar.js:152
+#: apps/io.ox/files/actions.js:569 apps/io.ox/files/toolbar.js:144
 #: apps/io.ox/mail/actions.js:205 apps/io.ox/mail/actions.js:614
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:139
 #: apps/io.ox/tasks/actions.js:319 module:io.ox/tasks
@@ -5156,7 +5156,7 @@ msgstr "オプション 20"
 #: apps/io.ox/calendar/toolbar.js:167 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:168 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:223 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:215 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:354 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
@@ -5376,11 +5376,11 @@ msgstr "テキスト"
 msgid "Plain text"
 msgstr "テキスト"
 
-#: apps/io.ox/files/toolbar.js:89 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:81 module:io.ox/files
 msgid "Play audio files"
 msgstr "オーディオ ファイルの再生"
 
-#: apps/io.ox/files/toolbar.js:96 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:88 module:io.ox/files
 msgid "Play video files"
 msgstr "ビデオ ファイルを再生"
 
@@ -6140,7 +6140,7 @@ msgstr "売上規模"
 #: apps/io.ox/core/permissions/permissions.js:404
 #: apps/io.ox/core/settings/user.js:81 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
-#: apps/io.ox/files/actions/edit-description.js:36 module:io.ox/files
+#: apps/io.ox/files/actions/edit-description.js:35 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:35 apps/io.ox/mail/accounts/settings.js:44
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
@@ -6319,7 +6319,7 @@ msgid "Send a read receipt"
 msgstr "開封通知を送信"
 
 #: apps/io.ox/files/actions.js:519 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:133
+#: apps/io.ox/files/toolbar.js:125
 msgid "Send as internal link"
 msgstr "内部リンクとして送信"
 
@@ -6330,7 +6330,7 @@ msgid "Send as vCard"
 msgstr "vCard を送信"
 
 #: apps/io.ox/files/actions.js:509 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:126
+#: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
 msgstr "メールで送信"
 
@@ -6569,7 +6569,7 @@ msgid "Show images"
 msgstr "画像を表示"
 
 #: apps/io.ox/files/actions.js:529 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:140
+#: apps/io.ox/files/toolbar.js:132
 msgid "Show internal link"
 msgstr "内部リンクを表示"
 
@@ -6680,10 +6680,6 @@ msgstr "サイズ"
 #: module:io.ox/settings/settings
 msgid "Size (bytes)"
 msgstr "サイズ (バイト)"
-
-#: apps/io.ox/files/toolbar.js:81 module:io.ox/files
-msgid "Slideshow"
-msgstr "スライドショー"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:224 module:io.ox/core
 msgid "Slow requests"
@@ -7656,7 +7652,7 @@ msgstr ""
 msgid "Thread"
 msgstr "スレッド"
 
-#: apps/io.ox/files/toolbar.js:221 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:213 module:io.ox/files
 msgid "Tiles"
 msgstr "タイル"
 
@@ -7858,7 +7854,7 @@ msgid "Unknown sender"
 msgstr "差出人が不明です。"
 
 #: apps/io.ox/files/actions.js:599 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:175
+#: apps/io.ox/files/toolbar.js:167
 msgid "Unlock"
 msgstr "ロックを解除"
 
@@ -8091,8 +8087,8 @@ msgstr ""
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:167 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:117 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:217 apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/files/toolbar.js:95 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:209 apps/io.ox/mail/toolbar.js:241
 #: module:io.ox/mail apps/io.ox/tasks/toolbar.js:142
 msgid "View"
 msgstr "表示"
@@ -8101,10 +8097,6 @@ msgstr "表示"
 #: apps/io.ox/mail/actions.js:713 module:io.ox/mail
 msgid "View (New)"
 msgstr ""
-
-#: apps/io.ox/files/toolbar.js:82 module:io.ox/files
-msgid "View Slideshow"
-msgstr "スライドショーを表示"
 
 #: apps/io.ox/mail/actions.js:754 module:io.ox/mail
 #, fuzzy
@@ -14707,6 +14699,9 @@ msgstr "年"
 #~ msgid "Skip this step"
 #~ msgstr "この手順をスキップ"
 
+#~ msgid "Slideshow"
+#~ msgstr "スライドショー"
+
 #~ msgid "Slovakia"
 #~ msgstr "スロヴァキア"
 
@@ -16004,6 +15999,9 @@ msgstr "年"
 
 #~ msgid "Viet Nam"
 #~ msgstr "ベトナム"
+
+#~ msgid "View Slideshow"
+#~ msgstr "スライドショーを表示"
 
 #~ msgid "View all appointments from all available calendars"
 #~ msgstr "利用可能なすべての予定表のすべてのアポイントを表示"

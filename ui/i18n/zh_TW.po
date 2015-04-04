@@ -836,7 +836,7 @@ msgstr "新增至最愛"
 
 #: apps/io.ox/contacts/actions.js:438 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125 apps/io.ox/files/actions.js:539
-#: module:io.ox/files apps/io.ox/files/toolbar.js:147
+#: module:io.ox/files apps/io.ox/files/toolbar.js:139
 #: apps/io.ox/mail/actions.js:686 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:182
 msgid "Add to portal"
@@ -1398,7 +1398,7 @@ msgstr "日曆視圖"
 #: module:io.ox/core/sub apps/io.ox/core/tk/mobiscroll.js:27
 #: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:348
 #: module:io.ox/editor apps/io.ox/files/actions/delete.js:68
-#: module:io.ox/files apps/io.ox/files/actions/edit-description.js:37
+#: module:io.ox/files apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/versions-delete.js:26
 #: apps/io.ox/files/fluid/view-detail.js:220
@@ -1547,7 +1547,7 @@ msgstr "字元"
 
 #: apps/io.ox/calendar/toolbar.js:169 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:224 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:216 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:250 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:145
 msgid "Checkboxes"
@@ -1863,7 +1863,7 @@ msgstr "談話"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:82 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:320
 #: module:io.ox/files apps/io.ox/files/actions.js:579
-#: apps/io.ox/files/toolbar.js:161 apps/io.ox/mail/actions.js:206
+#: apps/io.ox/files/toolbar.js:153 apps/io.ox/mail/actions.js:206
 #: apps/io.ox/mail/actions.js:624
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:146
@@ -2180,7 +2180,7 @@ msgstr "延遲"
 #: apps/io.ox/files/actions.js:498 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:110 apps/io.ox/mail/actions.js:519
+#: apps/io.ox/files/toolbar.js:109 apps/io.ox/mail/actions.js:519
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:349
@@ -2267,7 +2267,7 @@ msgstr "降冪"
 
 #: apps/io.ox/calendar/edit/extensions.js:220 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
-#: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:32
+#: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:126
 #: module:io.ox/tasks/edit
 #: apps/plugins/administration/resources/settings/edit.js:50 module:io.ox/core
@@ -2568,7 +2568,7 @@ msgstr "雙擊此欄位以新增全天約會"
 #: apps/io.ox/core/viewer/views/toolbarview.js:177
 #: apps/io.ox/core/viewer/views/toolbarview.js:197
 #: apps/io.ox/files/actions.js:489 module:io.ox/files
-#: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:103
+#: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -3349,7 +3349,7 @@ msgstr "文件夾類型"
 
 #: apps/io.ox/calendar/toolbar.js:168 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:169 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:225 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:217 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:249 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:144
 msgid "Folder view"
@@ -3729,7 +3729,7 @@ msgstr "IMAP 資料夾訂閱"
 msgid "IP phone"
 msgstr "IP 電話"
 
-#: apps/io.ox/files/toolbar.js:220 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:212 module:io.ox/files
 msgid "Icons"
 msgstr "圖示"
 
@@ -4035,7 +4035,7 @@ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "啟動器下拉選單，請按 Enter 以跳轉至下拉選單。"
 
 #: apps/io.ox/calendar/toolbar.js:160 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:218 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:210 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:242 module:io.ox/mail
 msgid "Layout"
 msgstr "版面"
@@ -4105,7 +4105,7 @@ msgid "Links"
 msgstr "鏈結"
 
 #: apps/io.ox/calendar/toolbar.js:165 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:219 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:211 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:246 module:io.ox/mail
 msgid "List"
 msgstr "列表"
@@ -4119,7 +4119,7 @@ msgid "Location"
 msgstr "地點"
 
 #: apps/io.ox/files/actions.js:589 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:168
+#: apps/io.ox/files/toolbar.js:160
 msgid "Lock"
 msgstr "鎖定"
 
@@ -4504,7 +4504,7 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 #: apps/io.ox/contacts/toolbar.js:109
 #: apps/io.ox/core/folder/contextmenu.js:306 module:io.ox/core
 #: apps/io.ox/files/actions.js:319 module:io.ox/files
-#: apps/io.ox/files/actions.js:569 apps/io.ox/files/toolbar.js:152
+#: apps/io.ox/files/actions.js:569 apps/io.ox/files/toolbar.js:144
 #: apps/io.ox/mail/actions.js:205 apps/io.ox/mail/actions.js:614
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:139
 #: apps/io.ox/tasks/actions.js:319 module:io.ox/tasks
@@ -5131,7 +5131,7 @@ msgstr "選項 20"
 #: apps/io.ox/calendar/toolbar.js:167 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:168 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:223 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:215 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:354 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
@@ -5351,11 +5351,11 @@ msgstr "純文字"
 msgid "Plain text"
 msgstr "純文本"
 
-#: apps/io.ox/files/toolbar.js:89 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:81 module:io.ox/files
 msgid "Play audio files"
 msgstr "撥放聲音檔案"
 
-#: apps/io.ox/files/toolbar.js:96 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:88 module:io.ox/files
 msgid "Play video files"
 msgstr "撥放影片檔案"
 
@@ -6113,7 +6113,7 @@ msgstr "銷售量"
 #: apps/io.ox/core/permissions/permissions.js:404
 #: apps/io.ox/core/settings/user.js:81 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
-#: apps/io.ox/files/actions/edit-description.js:36 module:io.ox/files
+#: apps/io.ox/files/actions/edit-description.js:35 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:35 apps/io.ox/mail/accounts/settings.js:44
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
@@ -6292,7 +6292,7 @@ msgid "Send a read receipt"
 msgstr "傳送送達回執"
 
 #: apps/io.ox/files/actions.js:519 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:133
+#: apps/io.ox/files/toolbar.js:125
 msgid "Send as internal link"
 msgstr "作為內部連結發送"
 
@@ -6303,7 +6303,7 @@ msgid "Send as vCard"
 msgstr "以 vCard 傳送"
 
 #: apps/io.ox/files/actions.js:509 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:126
+#: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
 msgstr "透過電子郵件寄送"
 
@@ -6544,7 +6544,7 @@ msgid "Show images"
 msgstr "顯示圖片"
 
 #: apps/io.ox/files/actions.js:529 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:140
+#: apps/io.ox/files/toolbar.js:132
 msgid "Show internal link"
 msgstr "顯示內部連結"
 
@@ -6655,10 +6655,6 @@ msgstr "大小"
 #: module:io.ox/settings/settings
 msgid "Size (bytes)"
 msgstr "大小 (位元組)"
-
-#: apps/io.ox/files/toolbar.js:81 module:io.ox/files
-msgid "Slideshow"
-msgstr "幻燈片"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:224 module:io.ox/core
 msgid "Slow requests"
@@ -7603,7 +7599,7 @@ msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
 msgid "Thread"
 msgstr "討論串"
 
-#: apps/io.ox/files/toolbar.js:221 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:213 module:io.ox/files
 msgid "Tiles"
 msgstr "磚塊"
 
@@ -7805,7 +7801,7 @@ msgid "Unknown sender"
 msgstr "未知的寄件者"
 
 #: apps/io.ox/files/actions.js:599 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:175
+#: apps/io.ox/files/toolbar.js:167
 msgid "Unlock"
 msgstr "解鎖"
 
@@ -8028,8 +8024,8 @@ msgstr ""
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:167 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:117 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:217 apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/files/toolbar.js:95 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:209 apps/io.ox/mail/toolbar.js:241
 #: module:io.ox/mail apps/io.ox/tasks/toolbar.js:142
 msgid "View"
 msgstr "視圖"
@@ -8038,10 +8034,6 @@ msgstr "視圖"
 #: apps/io.ox/mail/actions.js:713 module:io.ox/mail
 msgid "View (New)"
 msgstr ""
-
-#: apps/io.ox/files/toolbar.js:82 module:io.ox/files
-msgid "View Slideshow"
-msgstr "檢視幻燈片"
 
 #: apps/io.ox/mail/actions.js:754 module:io.ox/mail
 #, fuzzy
@@ -11857,6 +11849,9 @@ msgstr "年"
 #~ msgid "Skip this step"
 #~ msgstr "略過此步驟"
 
+#~ msgid "Slideshow"
+#~ msgstr "幻燈片"
+
 #~ msgid "Someone shared a file with you"
 #~ msgstr "某人與您分享了檔案"
 
@@ -12406,6 +12401,9 @@ msgstr "年"
 
 #~ msgid "Video enabled"
 #~ msgstr "已啟用視訊"
+
+#~ msgid "View Slideshow"
+#~ msgstr "檢視幻燈片"
 
 #~ msgid "Wednesday"
 #~ msgstr "星期三"
