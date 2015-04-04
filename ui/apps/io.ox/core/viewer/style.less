@@ -15,7 +15,7 @@
 @viewer-text-color: #ffffff;
 @viewer-background-color: rgba(0, 0, 0, 0.85);
 
-@viewer-toolbar-height: 45px;
+@viewer-toolbar-height: 40px;
 @viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-filename-width-smartphone-portrait: 170px;
@@ -26,8 +26,8 @@
 @viewer-toolbar-link-width: 60px;
 @viewer-toolbar-link-width-smartphone: 50px;
 
-@viewer-sidebar-bgcolor: #202020;
-@viewer-sidebar-width: 400px;
+@viewer-sidebar-bgcolor: #1a1a1a;
+@viewer-sidebar-width: 360px;
 @viewer-sidebar-width-smartphone: 100%;
 @viewer-sidebar-active-bgcolor: #333333;
 @viewer-sidebar-label-text-color: #999999;
@@ -49,22 +49,23 @@ html.ios .io-ox-viewer {
         }
     }
 
+    font-size: 13px;
     background-color: @viewer-background-color;
     color: @viewer-text-color;
     outline: none;
 
     ::-webkit-scrollbar {
-        width: 14px;
+        width: 8px;
     }
     ::-webkit-scrollbar-track {
-        background: @viewer-sidebar-bgcolor;
+        background: #000;//@viewer-sidebar-bgcolor;
     }
     ::-webkit-scrollbar-thumb {
-        background: #666666;
-        width: 12px;
+        background: #333;
+        width: 8px;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #555555;
+        background: #444;
     }
 
     scrollbar-base-color: #666666;
@@ -82,6 +83,9 @@ html.ios .io-ox-viewer {
         padding-left: 0;
         text-align: right;
         z-index: 2;
+        i.fa {
+            font-size: 14px;
+        }
         > li {
             display: inline-block;
             height: @viewer-toolbar-height;
@@ -282,14 +286,14 @@ html.ios .io-ox-viewer {
 
     .viewer-sidebar {
         position: absolute;
-        top: 45px;
+        top: @viewer-toolbar-height;
         right: 0;
         bottom: 0;
         width: @viewer-sidebar-width;
-        padding: 1rem;
-        background: @viewer-sidebar-bgcolor;
+        padding: 16px;
+        background-color: @viewer-sidebar-bgcolor;
+        border-left: 2px solid #000;
         display: none;
-        box-shadow: inset 0px 2px 2px 0px #000000;
         overflow-y: auto;
         overflow-x: hidden;
         outline: none;
@@ -306,22 +310,25 @@ html.ios .io-ox-viewer {
     .viewer-fileversions {
 
         .panel {
+
             background-color: transparent;
-            border-color: transparent;
+            border: 0;
+            margin-bottom: 0;
 
             a.btn, div.dropdown > a { outline: none; }
 
             .panel-heading {
                 color: @viewer-sidebar-label-text-color;
-                border-color: @viewer-sidebar-label-text-color;
+                border-color: #555;
                 background-color: transparent;
                 position: relative;
+                padding: 12px 0 5px 0;
 
                 .panel-heading-button {
                     color: @viewer-text-color;
                     position: absolute;
-                    top: 4px;
-                    right: 10px;
+                    top: 0;
+                    right: 0;
                     width: 40px;
                     &:active, &:focus, &:hover {
                         background-color: @viewer-sidebar-active-bgcolor
@@ -329,6 +336,7 @@ html.ios .io-ox-viewer {
                 }
 
                 h3 {
+                    font-size: 13px;
                     font-weight: bold;
                     cursor: default;
                 }
@@ -340,10 +348,17 @@ html.ios .io-ox-viewer {
 
             .panel-body {
 
+                padding: 20px 0;
+
+                dd, dt {
+                    line-height: 16px;
+                }
+
                 dt {
                     width: 33%;
                     float: left;
                     color: @viewer-sidebar-label-text-color;
+                    font-weight: normal;
                     cursor: default;
                 }
 
@@ -360,11 +375,14 @@ html.ios .io-ox-viewer {
                 }
 
                 .versiontable {
-                    white-space:nowrap;
+
+                    white-space: nowrap;
 
                     td {
-                        padding: 4px;
+                        padding: 0;
                         border-top: none;
+                        line-height: 16px;
+                        color: #ccc;
                     }
 
                     .version-label {
@@ -379,13 +397,14 @@ html.ios .io-ox-viewer {
                     }
 
                     .version-content {
-                        padding-left: 6px;
+
+                        padding: 0 0 8px 8px;
 
                         .last_modified {
-                            float: left;
+                            float: right;
                         }
                         .size {
-                            text-align: right;
+                            text-align: left;
                         }
                         .version-comment {
                             color: lightgrey;
@@ -393,9 +412,9 @@ html.ios .io-ox-viewer {
                     }
 
                     .dropdown > a {
-                        color: #00BBFF;
+                        color: #fff;
                         &:hover {
-                            color: #008aca;
+                            color: #fff;
                         }
                         &:active, &:focus{
                             background-color: #444444;
@@ -417,9 +436,10 @@ html.ios .io-ox-viewer {
                     &.description-label {
                         display: block;
                         white-space: pre-wrap;
-                        padding: 3px;
-                        border: 2px solid transparent;
-                        .border-radius(4px);
+                        line-height: 16px;
+                        // padding: 3px;
+                        // border: 2px solid transparent;
+                        // .border-radius(4px);
                         outline: none;
                         .user-select(text);
 
