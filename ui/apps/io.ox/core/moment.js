@@ -12,7 +12,7 @@
  */
 
 // define for moment timezone
-define('moment', ['static/3rd.party/moment/min/moment-with-locales.js'], function (m) {
+define('moment', ['static/3rd.party/moment/moment-with-locales.js'], function (m) {
 
     'use strict';
 
@@ -21,7 +21,7 @@ define('moment', ['static/3rd.party/moment/min/moment-with-locales.js'], functio
 
 define('io.ox/core/moment', [
     'settings!io.ox/core',
-    'static/3rd.party/moment-timezone/builds/moment-timezone-with-data.js'
+    'static/3rd.party/moment/moment-timezone-with-data.js'
 ], function (settings, moment) {
 
     'use strict';

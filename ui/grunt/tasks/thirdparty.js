@@ -55,8 +55,6 @@ module.exports = function (grunt) {
                         // static bower_components
                         expand: true,
                         src: [
-                            'moment/min/moment-with-locales.js',
-                            'moment-timezone/builds/moment-timezone-with-data.js',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',
@@ -67,6 +65,17 @@ module.exports = function (grunt) {
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
+                    },
+                    {
+                        // static bower_components
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'moment/min/moment-with-locales.js',
+                            'moment-timezone/builds/moment-timezone-with-data.js'
+                        ],
+                        cwd: 'bower_components',
+                        dest: 'build/static/3rd.party/moment'
                     },
                     {
                         expand: true,
