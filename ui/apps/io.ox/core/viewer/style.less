@@ -20,11 +20,14 @@
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-filename-width-smartphone-portrait: 170px;
 @viewer-toolbar-filename-width-smartphone-landscape: 320px;
+@viewer-toolbar-color: #999;
 @viewer-toolbar-hover-bgcolor: #333333;
 @viewer-toolbar-focus-bgcolor: #222222;
 @viewer-toolbar-active-bgcolor: #222222;
-@viewer-toolbar-link-width: 60px;
+@viewer-toolbar-link-width: 48px;
 @viewer-toolbar-link-width-smartphone: 50px;
+
+@viewer-control-color: @viewer-toolbar-color;
 
 @viewer-sidebar-bgcolor: #1a1a1a;
 @viewer-sidebar-width: 360px;
@@ -94,10 +97,11 @@ html.ios .io-ox-viewer {
                 display: inline-block;
                 height: @viewer-toolbar-height;
                 min-width: @viewer-toolbar-link-width;
+                padding: 0 16px;
                 outline: none;
+                text-align: center;
                 text-decoration: none;
-                color: #999999;
-                border-right: 1px solid #000000;
+                color: @viewer-toolbar-color;
                 &:hover {
                     color: #ffffff;
                     background-color: @viewer-toolbar-hover-bgcolor;
@@ -110,13 +114,13 @@ html.ios .io-ox-viewer {
             }
             > a.viewer-toolbar-filename {
                 max-width: @viewer-toolbar-filename-width;
-                padding: 0 20px;
+                padding: 0 16px;
                 text-align: left;
                 cursor: pointer;
                 .ellipsis();
                 i {
-                    margin-right: 10px;
-                    font-size: 16px;
+                    margin-right: 16px;
+                    font-size: 14px;
                 };
                 i.fa-file-excel-o { color: #44B957; }
                 i.fa-file-word-o { color: #1A9DD4; }
@@ -124,8 +128,8 @@ html.ios .io-ox-viewer {
                 i.fa-file-pdf-o { color: #CF1E28; }
                 i.fa-file-image-o { color: #EE5F37; }
                 &:hover, &:active, &:focus {
+                    color: @viewer-toolbar-color;
                     background: @viewer-toolbar-hover-bgcolor;
-                    color: #999999;
                 }
             }
             > a.viewer-toolbar-rename {
@@ -274,7 +278,7 @@ html.ios .io-ox-viewer {
             margin: auto;
             height: 100px;
             text-align: center;
-            color: #999999;
+            color: @viewer-toolbar-color;
             i {
                 font-size: 4rem;
             }
@@ -292,7 +296,7 @@ html.ios .io-ox-viewer {
         width: @viewer-sidebar-width;
         padding: 16px;
         background-color: @viewer-sidebar-bgcolor;
-        border-left: 2px solid #000;
+        border-left: 1px solid #000;
         display: none;
         overflow-y: auto;
         overflow-x: hidden;
@@ -325,7 +329,7 @@ html.ios .io-ox-viewer {
                 padding: 12px 0 5px 0;
 
                 .panel-heading-button {
-                    color: @viewer-text-color;
+                    color: @viewer-control-color;
                     position: absolute;
                     top: 0;
                     right: 0;
