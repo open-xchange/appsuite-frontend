@@ -33,10 +33,10 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 this.app = options.app;
                 this.handler = function (id) { this.app.folder.set(id); };
                 this.folder = this.app.folder.get();
-                this.search = this.app.get('search');
+                this.find = this.app.get('find');
                 this.listenTo(this.app, 'folder:change', this.onChangeFolder);
 
-                if (this.search && this.search.isActive()) {
+                if (this.find && this.find.isActive()) {
                     // use item's folder id
                     this.folder = options.folder;
                     // last item is a normal item (not a unclickable tail node)

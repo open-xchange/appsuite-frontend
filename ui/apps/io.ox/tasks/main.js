@@ -554,12 +554,12 @@ define('io.ox/tasks/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
-            var searchApp = app.setSearch();
+            var find = app.searchable().get('find');
 
             // when search is ready
-            searchApp.ready.done(function () {
+            find.ready.done(function () {
                 // additional handler: switch to list perspective (and back)
-                searchApp.on({
+                find.on({
                     'find:query': function () {
                         // hide sort options
                         app.grid.getToolbar().find('.grid-options:first').hide();

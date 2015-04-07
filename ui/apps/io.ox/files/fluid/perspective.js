@@ -112,7 +112,7 @@ define('io.ox/files/fluid/perspective', [
 
     function loadFiles(app) {
         var def = $.Deferred();
-        if (!app.get('search').isActive()) {
+        if (!app.get('find!') || !app.get('find').isActive()) {
             //empty search query shows folder again
             api.getAll(app.folder.get(), { cache: false }).done(def.resolve).fail(def.reject);
         } else {
@@ -849,13 +849,15 @@ define('io.ox/files/fluid/perspective', [
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            app.get('search').on({
-                'find:query find:idle': function () {
-                    breadcrumb = undefined;
-                    allIds = [];
-                    drawFirst();
-                }
-            });
+            if (app.get('find')) {
+                app.get('find').on({
+                    'find:query find:idle': function () {
+                        breadcrumb = undefined;
+                        allIds = [];
+                        drawFirst();
+                    }
+                });
+            }
 
             api.on('update', function (e, obj) {
                 // update icon
@@ -872,7 +874,7 @@ define('io.ox/files/fluid/perspective', [
             });
 
             api.on('refresh.all', function () {
-                if (!app.get('search').isActive()) {
+                if (!app.get('find!') || !app.get('find').isActive()) {
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},

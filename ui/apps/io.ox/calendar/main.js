@@ -486,15 +486,15 @@ define('io.ox/calendar/main', [
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var searchApp = app.setSearch();
+            var find = app.searchable().get('find');
 
             // when search is ready
-            searchApp.ready.done(function () {
+            find.ready.done(function () {
                 var lastPerspective,
                     SEARCH_PERSPECTIVE = 'list';
 
                 // additional handler: switch to list perspective (and back)
-                searchApp.on({
+                find.on({
                     'find:query': function () {
                         // hide sort options
                         app.grid.getToolbar().find('.grid-options:first').hide();
@@ -504,7 +504,7 @@ define('io.ox/calendar/main', [
                             // fluent option: do not write to user settings
                             app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
                             // cancel search when user changes view
-                            app.props.on('change', app.getSearch().view.cancel);
+                            app.props.on('change', find.cancel);
                         }
                     },
                     'find:cancel': function () {
@@ -515,7 +515,7 @@ define('io.ox/calendar/main', [
                         // show sort options again
                         app.grid.getToolbar().find('.grid-options:first').show();
                         // disable
-                        app.props.off('change', app.getSearch().view.cancel);
+                        app.props.off('change', find.cancel);
                         // reset
                         lastPerspective = undefined;
                     }

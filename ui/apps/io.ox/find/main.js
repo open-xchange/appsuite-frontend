@@ -233,7 +233,7 @@ define('io.ox/find/main', [
         }
 
         /**
-         * ready: app created and accessible via parentapp.getSearch()
+         * ready: app created and accessible via parentapp.get('find')
          * waiting: skeleton nodes drawn
          * running: lazy load finished, search app is usable in full
          */

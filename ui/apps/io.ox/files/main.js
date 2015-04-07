@@ -638,10 +638,10 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var searchApp = app.setSearch();
-            searchApp.ready.done(function () {
+            var find = app.searchable().get('find');
+            find.ready.done(function () {
                 require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
-                    var manager = searchApp.view.model.manager,
+                    var manager = find.view.model.manager,
                         searchcid = _.bind(manager.getResponseCid, manager),
                         mode = 'default';
                     // define collection loader for search results
@@ -654,14 +654,14 @@ define('io.ox/files/main', [
                                     start = parseInt(limit[0]),
                                     size = parseInt(limit[1]) - start;
 
-                                searchApp.model.set({
+                                find.model.set({
                                     'start': start,
                                     'size': size,
                                     'extra': 1
                                 }, { silent: true });
 
                                 var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                                return searchApp.apiproxy.query(true, params).then(function (response) {
+                                return find.apiproxy.query(true, params).then(function (response) {
                                     response = response || {};
                                     var list = response.results || [],
                                         request = response.request || {};
@@ -675,7 +675,7 @@ define('io.ox/files/main', [
                             cid: searchcid
                         });
                     var register = function () {
-                            var view = searchApp.view.model,
+                            var view = find.view.model,
                                 // remember original setCollection
                                 setCollection = app.listView.setCollection;
                             // hide sort options
@@ -685,13 +685,13 @@ define('io.ox/files/main', [
                             // wrap setCollection
                             app.listView.setCollection = function (collection) {
                                 view.stopListening();
-                                view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'find:query:result', collection));
+                                view.listenTo(collection, 'add reset remove', find.trigger.bind(view, 'find:query:result', collection));
                                 return setCollection.apply(this, arguments);
                             };
                         };
 
                     // events
-                    searchApp.on({
+                    find.on({
                         'find:idle': function () {
                             if (mode === 'search') {
                                 // show sort options

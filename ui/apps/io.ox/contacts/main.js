@@ -782,7 +782,7 @@ define('io.ox/contacts/main', [
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            app.setSearch();
+            app.searchable();
         }
 
     });
