@@ -119,7 +119,10 @@ define('io.ox/search/facets/extensions',
                     nodes = [];
 
 
-                if (!baton.model.get('showadv')) {
+                if (baton.model.get('showadv')) {
+                    self.show();
+                    headline.show();
+                } else {
                     self.hide();
                     headline.hide();
                 }
