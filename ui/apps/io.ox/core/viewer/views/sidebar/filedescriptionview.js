@@ -31,6 +31,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         draw: function (baton) {
             var panel, panelHeading,
                 model = baton && baton.model,
+                origModel = model && model.get('origData'),
                 description = model && model.get('description');
 
             this.empty();
@@ -52,10 +53,25 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             } else {
                 panelHeading = panel.find('.panel-heading');
                 panelHeading.busy();
-                // get description
+                // get file description
+                // when we successfully loaded the file description, we set at least an empty string.
+                // so we can distinguish between the cases that the description has been loaded but is empty
+                // and the description has not been loaded yet and we don't know if the file has a description set.
                 FilesAPI.get({
                     id: model.get('id'),
                     folder_id: model.get('folderId')
+                })
+                .done(function (file) {
+                    //console.info('FilesAPI.get() ok ', file);
+                    var description = (file && _.isString(file.description)) ? file.description : '';
+
+                    //model.set('description', description);
+                    if (origModel instanceof Backbone.Model) {
+                        origModel.set('description', description);
+                    }
+                })
+                .fail(function (err) {
+                    console.warn('FilesAPI.get() error ', err);
                 })
                 .always(function () {
                     panelHeading.idle();
