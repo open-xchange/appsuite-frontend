@@ -151,6 +151,15 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
             });
 
             return def;
+        },
+
+        save: function () {
+            return http.PUT({
+                module: 'config',
+                appendColumns: false,
+                processResponse: false,
+                data: config
+            });
         }
     };
     api.load().done(function () {

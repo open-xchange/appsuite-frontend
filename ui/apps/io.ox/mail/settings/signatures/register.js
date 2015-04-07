@@ -19,8 +19,9 @@ define('io.ox/mail/settings/signatures/register', [
     'io.ox/core/api/snippets',
     'io.ox/backbone/mini-views',
     'io.ox/core/http',
+    'io.ox/core/config',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, dialogs, snippets, mini, http) {
+], function (ext, gt, settings, dialogs, snippets, mini, http, config) {
 
     'use strict';
 
@@ -245,7 +246,13 @@ define('io.ox/mail/settings/signatures/register', [
     function fnImportSignatures(evt, signatures) {
 
         // create modal dialog with a list of old signatures (ox 6)
-        var dialog = new dialogs.ModalDialog({ async: true });
+        var dialog = new dialogs.ModalDialog({ async: true }),
+            Model = Backbone.Model.extend({
+                defaults: {
+                    check: false
+                }
+            }),
+            model = new Model();
         dialog.header($('<h4>').text(gt('Import signatures')))
         .append(
             $('<p class="help-block">').text(gt('You can import existing signatures from the previous product generation. Your signatures will be copied - not moved.')),
@@ -267,6 +274,11 @@ define('io.ox/mail/settings/signatures/register', [
                         $('<div class="signature-preview">').append(preview)
                     );
                 })
+            ),
+            $('<div>').addClass('checkbox').append(
+                $('<label>').text(gt('Delete old signatures after import')).prepend(
+                    new mini.CheckboxView({ name: 'check', model: model }).render().$el
+                )
             )
         )
         .addPrimaryButton('import', gt('Import'))
@@ -294,8 +306,14 @@ define('io.ox/mail/settings/signatures/register', [
                 }).fail(require('io.ox/core/notifications').yell);
             });
 
+            if (model.get('check')) config.remove('gui.mail.signatures');
+
             $.when.apply(this, deferreds).then(function success() {
                 dialog.close();
+                if (model.get('check')) {
+                    config.save();
+                    evt.target.remove();
+                }
             }, function fail() {
                 dialog.idle();
             });
@@ -494,18 +512,15 @@ define('io.ox/mail/settings/signatures/register', [
                 fnDrawAll();
                 snippets.on('refresh.all', fnDrawAll);
 
-                require(['io.ox/core/config'], function (config) {
-                    if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
-                        section.append(
-
-                            $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
-                                fnImportSignatures(e, config.get('gui.mail.signatures'));
-                                return false;
-                            })
-                        );
-                    }
-                    section = null;
-                });
+                if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
+                    section.append(
+                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
+                            fnImportSignatures(e, config.get('gui.mail.signatures'));
+                            return false;
+                        })
+                    );
+                }
+                section = null;
             }
         }
     });
