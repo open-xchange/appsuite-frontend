@@ -22,7 +22,8 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
         OFFICE_SPREADSHEET: 'documentview',
         PDF: 'documentview',
         AUDIO: 'audioview',
-        VIDEO: 'videoview'
+        VIDEO: 'videoview',
+        TEXT: 'textview'
     },
     // a list of types only available in debug mode
     debugOnlyList = ['audioview', 'videoview'];

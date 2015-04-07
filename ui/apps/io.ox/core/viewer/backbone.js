@@ -127,6 +127,11 @@ define('io.ox/core/viewer/backbone', [
 
             PDF: {
                 'pdf': 'application/pdf'
+            },
+
+            TEXT: {
+                'txt': 'text/plain',
+                'md': 'text/markdown'
             }
         };
 
