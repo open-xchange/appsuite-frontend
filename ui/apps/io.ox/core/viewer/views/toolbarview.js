@@ -156,6 +156,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: 'io.ox/files/icons/share'
                 },
+                'sendbymail': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Send by mail'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/send'
+                },
                 'delete': {
                     prio: 'lo',
                     mobile: 'lo',
