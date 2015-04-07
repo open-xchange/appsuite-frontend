@@ -22,8 +22,9 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, gt) {
+], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, filesSettings, gt) {
 
     'use strict';
 
@@ -546,6 +547,27 @@ define('io.ox/files/api', [
             api.propagate('clear', { folder_id: folder_id });
         });
     };
+
+    //
+    // Respond to folder API
+    //
+    folderAPI.on({
+        'before:clear': function (id) {
+            // clear target folder
+            _(pool.getByFolder(id)).each(function (collection) {
+                collection.reset([]);
+            });
+        },
+        'remove:infostore': function () {
+            var id = filesSettings.get('folder/trash');
+            if (id) {
+                folderAPI.list(id, { cache: false });
+                _(pool.getByFolder(id)).each(function (collection) {
+                    collection.expired = true;
+                });
+            }
+        }
+    });
 
     //
     // Delete files
