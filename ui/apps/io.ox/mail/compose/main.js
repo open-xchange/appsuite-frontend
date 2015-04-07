@@ -21,7 +21,7 @@
  * require('settings!io.ox/core').set('registry/mail-compose', undefined).save();
  */
 
-define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (mailAPI, gt) {
+define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail', 'io.ox/mail/compose/bundle'], function (mailAPI, gt) {
 
     'use strict';
 
@@ -63,7 +63,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         function compose(type) {
 
             return function (obj) {
-
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
@@ -76,28 +75,26 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 win.nodes.body.addClass('sr-only');
 
                 win.busy().show(function () {
-                    require(['io.ox/mail/compose/bundle'], function () {
-                        require(['io.ox/mail/compose/view'], function (MailComposeView) {
-                            app.view = new MailComposeView({ data: obj, app: app });
-                            win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                            app.view.fetchMail(obj).done(function () {
-                                app.view.setMail()
-                                .done(function () {
-                                    // Set window and toolbars visible again
-                                    win.nodes.header.removeClass('sr-only');
-                                    win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
-                                    win.idle();
-                                    win.setTitle(gt('Compose'));
-                                    def.resolve({ app: app });
-                                    ox.trigger('mail:' + type + ':ready', obj, app);
-                                });
-                            })
-                            .fail(function (e) {
-                                require(['io.ox/core/notifications'], function (notifications) {
-                                    notifications.yell(e);
-                                    app.quit();
-                                    def.reject();
-                                });
+                    require(['io.ox/mail/compose/view'], function (MailComposeView) {
+                        app.view = new MailComposeView({ data: obj, app: app });
+                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                        app.view.fetchMail(obj).done(function () {
+                            app.view.setMail()
+                            .done(function () {
+                                // Set window and toolbars visible again
+                                win.nodes.header.removeClass('sr-only');
+                                win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
+                                win.idle();
+                                win.setTitle(gt('Compose'));
+                                def.resolve({ app: app });
+                                ox.trigger('mail:' + type + ':ready', obj, app);
+                            });
+                        })
+                        .fail(function (e) {
+                            require(['io.ox/core/notifications'], function (notifications) {
+                                notifications.yell(e);
+                                app.quit();
+                                def.reject();
                             });
                         });
                     });

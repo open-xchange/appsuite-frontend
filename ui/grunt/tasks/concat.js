@@ -242,7 +242,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            compose: {
+            tinymce: {
                 files: [
                     {
                         src: [
@@ -253,7 +253,16 @@ module.exports = function (grunt) {
                         ],
                         dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',
                         nonull: true
-                    },
+                    }
+                ]
+            },
+            compose: {
+                options: {
+                    banner: 'define("io.ox/mail/compose/bundle", [], function () {\n\n' +
+                                '"use strict";\n\n',
+                    footer: '});\n'
+                },
+                files: [
                     {
                         src: [
                             'apps/io.ox/mail/compose/view.js',
