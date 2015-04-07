@@ -428,6 +428,7 @@ define('io.ox/core/pdf/pdfview', [
                         }
 
                         curPageData.pageZoom = pageZoom;
+                        renderedPageNumbers = _.without(renderedPageNumbers, pageNumber);
                     }
                 }
 
