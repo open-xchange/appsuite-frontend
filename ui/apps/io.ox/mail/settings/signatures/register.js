@@ -256,7 +256,12 @@ define('io.ox/mail/settings/signatures/register', [
             model = new Model();
         dialog.header($('<h4>').text(gt('Import signatures')))
         .append(
-            $('<p class="help-block">').text(gt('You can import existing signatures from the previous product generation. Your signatures will be copied - not moved.')),
+            $('<p class="help-block">').text(gt('You can import existing signatures from the previous product generation.')),
+            $('<div>').addClass('checkbox').append(
+                $('<label>').text(gt('Delete old signatures after import')).prepend(
+                    new mini.CheckboxView({ name: 'check', model: model }).render().$el
+                )
+            ),
             $('<ul class="io-ox-signature-import">').append(
                 _(signatures).map(function (sig) {
                     //replace div and p elements to br's and remove all other tags.
@@ -275,11 +280,6 @@ define('io.ox/mail/settings/signatures/register', [
                         $('<div class="signature-preview">').append(preview)
                     );
                 })
-            ),
-            $('<div>').addClass('checkbox').append(
-                $('<label>').text(gt('Delete old signatures after import')).prepend(
-                    new mini.CheckboxView({ name: 'check', model: model }).render().$el
-                )
             )
         )
         .addPrimaryButton('import', gt('Import'))
