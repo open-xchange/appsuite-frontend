@@ -186,7 +186,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'last_modified',
         index: 30,
         draw: function (baton) {
-            var d = Util.getDateFormated(baton.data.last_modified, { fulldate: true, filtertoday: false });
+            var d = (baton.data.last_modified) ? moment(baton.data.last_modified).format('l LT') : '-';
             this.find('td:last').append($('<div class="last_modified">').text(gt.noI18n(d)));
         }
     });
