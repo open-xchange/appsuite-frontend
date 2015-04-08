@@ -12,7 +12,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/participants', [
+define('io.ox/participants/detail', [
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'io.ox/core/api/user',
@@ -20,7 +20,8 @@ define('io.ox/calendar/participants', [
     'io.ox/core/api/resource',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
-    'io.ox/core/util'
+    'io.ox/core/util',
+    'less!io.ox/participants/style'
 ], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil, coreUtil) {
 
     'use strict';

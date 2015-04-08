@@ -624,76 +624,50 @@ define('io.ox/calendar/util', [
                 });
         },
 
-        resolveParticipants: function (participants, mode) {
-
-            var groupIDs = [],
+        resolveParticipants: function (data) {
+            var participants = data.participants.slice(),
+                groupIDs = [],
                 userIDs = [],
                 result = [];
 
-            mode = mode || 'dist';
+            if (!data.organizerId && _.isString(data.organizer)) {
+                participants.unshift({
+                    display_name: data.organizer,
+                    mail: data.organizer,
+                    type: 5
+                });
+            }
 
             _.each(participants, function (participant) {
-                if (participant.type === 5) {
+                switch (participant.type) {
+                    // internal user
+                    case 1:
+                        userIDs.push(participant.id);
+                        break;
+                    // user group
+                    case 2:
+                        groupIDs.push(participant.id);
+                        break;
+                    // resource or rescource group
+                    case 3:
+                    case 4:
+                        // ignore resources
+                        break;
                     // external user
-                    if (mode === 'dist') {
+                    case 5:
+                        // external user
                         result.push({
                             display_name: participant.display_name,
                             mail: participant.mail,
                             mail_field: 0
                         });
-                    } else {
-                        result.push([participant.display_name, participant.mail]);
-                    }
-                } else if (participant.type === 2) {
-                    // group
-                    groupIDs.push(participant.id);
-                } else if (participant.type === 1) {
-                    // internal user
-                    userIDs.push(participant.id);
+                        break;
                 }
             });
 
-            return that.resolveGroupMembers(groupIDs, userIDs).then(function (users) {
-                if (mode === 'dist') {
-                    return _([].concat(result, users)).uniq();
-                } else {
-                    _.each(users, function (user) {
-                        // don't add myself
-                        if (user.id === ox.user_id) return;
-                        // don't add if mail address is missing (yep, edge-case)
-                        if (!user.mail) return;
-                        // add to result
-                        result.push([user.display_name, user.mail]);
-                    });
-                    return result;
-                }
+            return this.resolveGroupMembers(groupIDs, userIDs).then(function (users) {
+                return _([].concat(result, users)).uniq();
             });
-        },
-
-        createRecipientsArray: function (data) {
-            // include external organizer
-            var list = data.participants.slice();
-            if (!data.organizerId && _.isString(data.organizer)) {
-                list.unshift({
-                    display_name: data.organizer,
-                    mail: data.organizer,
-                    type: 5
-                });
-            }
-            return this.resolveParticipants(list, 'rec');
-        },
-
-        createDistlistArray: function (data) {
-            // include external organizer
-            var list = data.participants.slice();
-            if (!data.organizerId && _.isString(data.organizer)) {
-                list.unshift({
-                    display_name: data.organizer,
-                    mail: data.organizer,
-                    type: 5
-                });
-            }
-            return this.resolveParticipants(list, 'dist');
         },
 
         getUserIdByInternalId: function (internal) {

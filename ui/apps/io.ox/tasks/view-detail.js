@@ -18,11 +18,9 @@ define('io.ox/tasks/view-detail', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
-    'io.ox/calendar/participants',
+    'io.ox/participants/detail',
     'io.ox/tasks/actions',
-    'less!io.ox/tasks/style',
-    //participantsview needs this
-    'less!io.ox/calendar/style'
+    'less!io.ox/tasks/style'
 ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
