@@ -291,7 +291,7 @@ define('io.ox/core/settings', [
          * @return { deferred }
          */
         this.saveAndYell = function (custom, options) {
-            var def = this.save(custom),
+            var def = this.save(custom, options),
                 //options
                 opt = $.extend({
                     debug: false

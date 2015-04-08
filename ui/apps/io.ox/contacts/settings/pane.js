@@ -26,12 +26,15 @@ define('io.ox/contacts/settings/pane', [
         contactsModel =  settings.createModel(contactsSettingsModel),
         reloadMe = [];
 
-    contactsModel.on('change', function (e, path) {
-        contactsModel.saveAndYell().then(
+    contactsModel.on('change', function (model) {
+        var showNotice = _(reloadMe).any(function (attr) {
+            return model.changed[attr];
+        });
+
+        contactsModel.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
+
             function success() {
-                var showNotice = _(reloadMe).any(function (attr) {
-                    return attr === path;
-                });
+
                 if (showNotice) {
                     notifications.yell(
                         'success',

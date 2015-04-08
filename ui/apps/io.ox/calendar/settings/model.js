@@ -22,8 +22,8 @@ define('io.ox/calendar/settings/model', ['settings!io.ox/calendar'], function (s
             return settings.save(this.attributes);
         },
 
-        saveAndYell: function () {
-            return settings.saveAndYell(this.attributes);
+        saveAndYell: function (custom, options) {
+            return settings.saveAndYell(custom, options);
         },
 
         destroy: function () {
