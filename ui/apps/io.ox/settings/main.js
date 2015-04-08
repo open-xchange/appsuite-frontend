@@ -259,7 +259,10 @@ define('io.ox/settings/main', [
                 baton = pool.getModel(id).get('meta');
                 focus = false;
             }
-            showSettings(baton, focus);
+
+            if (previousSelection === null || previousSelection.id !== currentSelection.id) {
+                showSettings(baton, focus);
+            }
 
             left.trigger('select');
             if (!ignoreChangeEvent) {
