@@ -17,56 +17,11 @@ define('io.ox/find/extensions-api',[
 
     'use strict';
 
-    // function whenResolved (list, def) {
-    //     // remove failed deferreds until when resolves
-    //     def = def || $.Deferred();
-    //     $.when.apply($, list).then(
-    //         function () {
-    //             def.resolve.apply(this, arguments);
-    //         },
-    //         function () {
-    //             // kick rejected
-    //             var valid = _.filter(list, function (item) {
-    //                 return item.state() !== 'rejected';
-    //             });
-    //             // when again
-    //             whenResolved(valid, def);
-    //         }
-    //     );
-    //     return def;
-    // }
-
     function isVirtualFolder (data) {
         return /^virtual/.test(data.id);
     }
 
     var extensions = {
-
-        DISABLEDdaterange: function (baton) {
-            if (_.device('smartphone')) return;
-            if (baton.request.params.module !== 'mail') return;
-
-            // for mail only
-            _.each(baton.data, function (facet) {
-                // hack to add custom timespan value
-                if (facet.id === 'date') {
-
-                    // new id
-                    facet.id = facet.id + '.custom';
-                    var tmp = _.copy(facet.values[0]);
-
-                    delete tmp.filter;
-                    tmp.facet = facet.id;
-                    tmp.name = gt('date range');
-                    tmp.id = 'daterange';
-                    tmp.point = 'daterange';
-                    tmp.options = [];
-
-                    delete facet.options;
-                    facet.values = [tmp];
-                }
-            });
-        },
 
         // add basic flags to facets (tokenfield/toolbar)
         flag: function (baton) {

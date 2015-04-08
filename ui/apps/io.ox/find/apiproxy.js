@@ -25,13 +25,6 @@ define('io.ox/find/apiproxy',[
      */
     var POINT = ext.point('io.ox/find/api/autocomplete');
 
-    //TODO: repair datepicker
-    POINT.extend({
-        id: 'custom-facet-daterange',
-        index: 200,
-        customize: extensions.daterange
-    });
-
     POINT.extend({
         id: 'flag',
         index: 300,

@@ -73,8 +73,7 @@ define('io.ox/find/extensions-tokenfield',[
                 if (isContact) {
                     this.removeClass('indent');
                     this.append(
-                        //TODO: remove value.id
-                        $('<div class="detail">').text(/*baton.data.value.id + ' | ' + */(detail || '\u00A0'))
+                        $('<div class="detail">').text((detail || '\u00A0'))
                     );
                 } else if (detail) {
                     var node = this.find('.name');
