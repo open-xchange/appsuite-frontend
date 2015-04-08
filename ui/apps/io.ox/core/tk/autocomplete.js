@@ -175,12 +175,20 @@ define('io.ox/core/tk/autocomplete',
             listModeOff = function () {
                     $('.autocomplete-popup').off('blur', '.autocomplete-item', fnBlur);
                     $('.autocomplete-popup').off('keydown', '.autocomplete-item', fnKeyDown);
+                    // Bug 37471 - [L3] Search in IE11: dropdown list disappears
+                    if (_.device('ie')) {
+                        _.defer(function () {
+                            self.on('blur', fnBlur);
+                        });
+                    }
                 },
 
             listModeOn = function () {
                     _.defer(function () {
                         $('.autocomplete-popup').on('blur', '.autocomplete-item', fnBlur);
                         $('.autocomplete-popup').on('keydown', '.autocomplete-item', fnKeyDown);
+                        // Bug 37471 - [L3] Search in IE11: dropdown list disappears
+                        if (_.device('ie')) self.off('blur', fnBlur);
                     });
                 },
 
