@@ -36,21 +36,32 @@ define('io.ox/files/actions', [
             });
         },
         action: function (baton) {
-            $('<input type="file" name="file" capture="camera" multiple>')
-            .on('change', function (e) {
-                var app = baton.app;
-                require(['io.ox/files/upload/main'], function (fileUpload) {
-                    e.preventDefault();
+            var elem = $(baton.e.target),
+                input;
 
-                    var list = [];
-                    _(e.target.files).each(function (file) {
-                        list.push(_.extend(file, { group: 'file' }));
+            // remove old input-tags resulting from 'add local file' -> 'cancel'
+            elem.siblings('input').remove();
+
+            elem.after(
+                input = $('<input type="file" name="file" capture="camera" multiple>')
+                .css('display', 'none')
+                .on('change', function (e) {
+                    var app = baton.app;
+                    require(['io.ox/files/upload/main'], function (fileUpload) {
+                        e.preventDefault();
+
+                        var list = [];
+                        _(e.target.files).each(function (file) {
+                            list.push(_.extend(file, { group: 'file' }));
+                        });
+                        fileUpload.setWindowNode(app.getWindowNode());
+                        fileUpload.create.offer(list, { folder: app.folder.get() });
                     });
-                    fileUpload.setWindowNode(app.getWindowNode());
-                    fileUpload.create.offer(list, { folder: app.folder.get() });
-                });
-            })
-            .trigger('click');
+                    input.remove();
+                })
+            );
+
+            input.trigger('click');
         }
     });
 
