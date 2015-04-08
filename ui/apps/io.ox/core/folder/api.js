@@ -215,6 +215,7 @@ define('io.ox/core/folder/api',
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
+                virtual.refresh();
                 api.trigger('refresh');
             });
         }
