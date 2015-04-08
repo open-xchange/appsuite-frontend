@@ -215,8 +215,8 @@ msgstr ""
 #: apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260
 #: apps/io.ox/mail/main.js:1082
-#: apps/io.ox/mail/settings/signatures/register.js:343
-#: apps/io.ox/mail/settings/signatures/register.js:345
+#: apps/io.ox/mail/settings/signatures/register.js:361
+#: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:289
@@ -262,7 +262,7 @@ msgstr ""
 #: apps/io.ox/core/sub/settings/pane.js:196
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:198
-#: apps/io.ox/core/viewer/views/toolbarview.js:162
+#: apps/io.ox/core/viewer/views/toolbarview.js:169
 #: apps/io.ox/files/actions.js:498
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
@@ -272,8 +272,8 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js:62
 #: apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:349
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:367
+#: apps/io.ox/mail/settings/signatures/register.js:368
 #: apps/io.ox/mail/toolbar.js:76
 #: apps/io.ox/portal/main.js:619
 #: module:io.ox/portal
@@ -420,7 +420,7 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:255
 #: apps/io.ox/contacts/main.js:730
-#: apps/io.ox/core/desktop.js:1616
+#: apps/io.ox/core/desktop.js:1614
 #: module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
@@ -470,8 +470,8 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260
 #: apps/io.ox/mail/main.js:1078
-#: apps/io.ox/mail/settings/signatures/register.js:179
-#: apps/io.ox/mail/settings/signatures/register.js:273
+#: apps/io.ox/mail/settings/signatures/register.js:180
+#: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82
 #: module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:621
@@ -496,7 +496,7 @@ msgstr ""
 #: module:plugins/portal
 #: apps/plugins/portal/mail/register.js:205
 #: apps/plugins/portal/rss/register.js:154
-#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/tumblr/register.js:260
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:141
@@ -652,7 +652,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js:93
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/settings/signatures/register.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:80
 #: module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46
@@ -665,7 +665,7 @@ msgstr ""
 #: apps/plugins/portal/mail/register.js:204
 #: apps/plugins/portal/rss/register.js:153
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:258
+#: apps/plugins/portal/tumblr/register.js:259
 #: apps/plugins/portal/userSettings/register.js:44
 msgid "Save"
 msgstr ""
@@ -744,7 +744,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:220
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:48
 #: module:io.ox/core/viewer
 #: apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files
@@ -757,7 +757,7 @@ msgstr ""
 #: apps/plugins/portal/mail/register.js:198
 #: apps/plugins/portal/rss/register.js:147
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:251
+#: apps/plugins/portal/tumblr/register.js:252
 msgid "Description"
 msgstr ""
 
@@ -3746,12 +3746,12 @@ msgstr ""
 msgid "Could not get a default folder for this application."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:736
+#: apps/io.ox/core/desktop.js:734
 #: module:io.ox/core
 msgid "There are unsaved changes."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1048
+#: apps/io.ox/core/desktop.js:1046
 #: module:io.ox/core
 msgid "Application Toolbar"
 msgstr ""
@@ -3759,19 +3759,19 @@ msgstr ""
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1124
+#: apps/io.ox/core/desktop.js:1122
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1293
+#: apps/io.ox/core/desktop.js:1291
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1410
+#: apps/io.ox/core/desktop.js:1408
 #: module:io.ox/core
 msgid "Main window"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1473
+#: apps/io.ox/core/desktop.js:1471
 #: module:io.ox/core
 #: apps/io.ox/core/main.js:766
 #: apps/io.ox/find/extensions-facets.js:30
@@ -3788,25 +3788,25 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1511
+#: apps/io.ox/core/desktop.js:1509
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1512
+#: apps/io.ox/core/desktop.js:1510
 msgid "Start search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1524
+#: apps/io.ox/core/desktop.js:1522
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1525
+#: apps/io.ox/core/desktop.js:1523
 msgid "Cancel search"
 msgstr ""
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1545
+#: apps/io.ox/core/desktop.js:1543
 #: module:io.ox/core
 msgid "Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1716
+#: apps/io.ox/core/desktop.js:1714
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
@@ -4087,7 +4087,7 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js:388
 #: module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
-#: apps/io.ox/mail/settings/signatures/register.js:272
+#: apps/io.ox/mail/settings/signatures/register.js:284
 #: module:io.ox/mail
 msgid "Import"
 msgstr ""
@@ -4726,8 +4726,8 @@ msgstr ""
 #: apps/io.ox/core/pim/actions.js:82
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:141
-#: apps/io.ox/core/viewer/views/toolbarview.js:177
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
+#: apps/io.ox/core/viewer/views/toolbarview.js:184
+#: apps/io.ox/core/viewer/views/toolbarview.js:204
 #: apps/io.ox/files/actions.js:489
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:616
@@ -4741,8 +4741,8 @@ msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:83
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:183
-#: apps/io.ox/core/viewer/views/toolbarview.js:203
+#: apps/io.ox/core/viewer/views/toolbarview.js:190
+#: apps/io.ox/core/viewer/views/toolbarview.js:210
 #: apps/io.ox/mail/actions.js:745
 #: module:io.ox/mail
 msgid "Save to Drive"
@@ -5653,13 +5653,13 @@ msgstr ""
 msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:79
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:230
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:246
 msgid "Add a description"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:83
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:99
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr ""
@@ -5774,13 +5774,21 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:171
+#: apps/io.ox/core/viewer/views/toolbarview.js:162
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:191
+#: apps/io.ox/files/actions.js:509
+#: module:io.ox/files
+#: apps/io.ox/files/toolbar.js:118
+msgid "Send by mail"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:178
+#: module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
 msgid "Open in browser tab"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:354
+#: apps/io.ox/core/viewer/views/toolbarview.js:359
 #: module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
@@ -6069,12 +6077,6 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: apps/io.ox/files/actions.js:509
-#: module:io.ox/files
-#: apps/io.ox/files/toolbar.js:118
-msgid "Send by mail"
-msgstr ""
-
 #: apps/io.ox/files/actions.js:519
 #: module:io.ox/files
 #: apps/io.ox/files/toolbar.js:125
@@ -6187,19 +6189,19 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr ""
 
-#: apps/io.ox/files/api.js:284
+#: apps/io.ox/files/api.js:285
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr ""
 
-#: apps/io.ox/files/api.js:289
+#: apps/io.ox/files/api.js:290
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr ""
 
-#: apps/io.ox/files/api.js:294
+#: apps/io.ox/files/api.js:295
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
@@ -7422,15 +7424,15 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js:340
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:403
+#: apps/io.ox/mail/settings/signatures/register.js:421
 msgid "Signatures"
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js:341
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:321
-#: apps/io.ox/mail/settings/signatures/register.js:323
-#: apps/io.ox/mail/settings/signatures/register.js:385
+#: apps/io.ox/mail/settings/signatures/register.js:339
+#: apps/io.ox/mail/settings/signatures/register.js:341
+#: apps/io.ox/mail/settings/signatures/register.js:403
 msgid "No signature"
 msgstr ""
 
@@ -7441,7 +7443,7 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js:36
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90
+#: apps/io.ox/mail/compose/main.js:89
 #: apps/io.ox/mail/compose/view.js:443
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210
@@ -8082,70 +8084,75 @@ msgstr ""
 msgid "Change subscription"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:35
+#: apps/io.ox/mail/settings/signatures/register.js:36
 #: module:io.ox/mail
 msgid "Signature name"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:112
+#: apps/io.ox/mail/settings/signatures/register.js:113
 #: module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:113
+#: apps/io.ox/mail/settings/signatures/register.js:114
 #: module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:160
+#: apps/io.ox/mail/settings/signatures/register.js:161
 #: module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:170
+#: apps/io.ox/mail/settings/signatures/register.js:171
 #: module:io.ox/mail
 msgid "Add signature"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:170
+#: apps/io.ox/mail/settings/signatures/register.js:171
 #: module:io.ox/mail
 msgid "Edit signature"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:249
+#: apps/io.ox/mail/settings/signatures/register.js:256
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:501
+#: apps/io.ox/mail/settings/signatures/register.js:517
 msgid "Import signatures"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:251
+#: apps/io.ox/mail/settings/signatures/register.js:258
 #: module:io.ox/mail
-msgid "You can import existing signatures from the previous product generation. Your signatures will be copied - not moved."
+msgid "You can import existing signatures from the previous product generation."
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:345
+#: apps/io.ox/mail/settings/signatures/register.js:260
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:350
+msgid "Delete old signatures after import"
+msgstr ""
+
+#: apps/io.ox/mail/settings/signatures/register.js:363
+#: module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:368
 msgid "%1$s, %2$s"
 msgstr ""
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:376
+#: apps/io.ox/mail/settings/signatures/register.js:394
 #: module:io.ox/mail
 msgid "Signature"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:453
+#: apps/io.ox/mail/settings/signatures/register.js:471
 #: module:io.ox/mail
 msgid "Add new signature"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:478
+#: apps/io.ox/mail/settings/signatures/register.js:496
 #: module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:485
+#: apps/io.ox/mail/settings/signatures/register.js:503
 #: module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
@@ -10119,43 +10126,43 @@ msgstr ""
 msgid "Press [enter] to jump to the tumblr feed."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:187
+#: apps/plugins/portal/tumblr/register.js:188
 #: module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:190
+#: apps/plugins/portal/tumblr/register.js:191
 #: module:io.ox/portal
 msgid "Open external link"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:240
+#: apps/plugins/portal/tumblr/register.js:241
 #: module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:245
+#: apps/plugins/portal/tumblr/register.js:246
 #: module:io.ox/portal
 msgid "Feed URL"
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:286
+#: apps/plugins/portal/tumblr/register.js:287
 #: module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:289
+#: apps/plugins/portal/tumblr/register.js:290
 #: module:io.ox/portal
 msgid "Please enter a description."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:302
+#: apps/plugins/portal/tumblr/register.js:303
 #: module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:307
+#: apps/plugins/portal/tumblr/register.js:308
 msgid "Unknown error while checking tumblr-blog."
 msgstr ""
 
-#: apps/plugins/portal/tumblr/register.js:332
+#: apps/plugins/portal/tumblr/register.js:333
 #: module:io.ox/portal
 msgid "Tumblr"
 msgstr ""

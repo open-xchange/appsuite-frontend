@@ -230,8 +230,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1124 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1293
+#: apps/io.ox/core/desktop.js:1122 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1291
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -354,8 +354,8 @@ msgstr "dal %1$s al %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s hanno cambiato il loro profilo:"
 
-#: apps/io.ox/mail/settings/signatures/register.js:345 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:363 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:368
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -673,9 +673,9 @@ msgstr "Durata attuale in minuti"
 msgid "Add"
 msgstr "Aggiungi"
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:79
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:230
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:246
 #, fuzzy
 #| msgid "Edit description"
 msgid "Add a description"
@@ -778,7 +778,7 @@ msgstr "Aggiungi un nuovo partecipante"
 msgid "Add new rule"
 msgstr "Aggiungi una nuova regola"
 
-#: apps/io.ox/mail/settings/signatures/register.js:453 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:471 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Aggiungi una nuova firma"
 
@@ -811,15 +811,15 @@ msgstr "Aggiungi partecipante/risorsa"
 msgid "Add recipients ..."
 msgstr "Nessun destinatario"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Add signature"
 msgstr "Aggiungi una firma"
 
-#: apps/io.ox/mail/settings/signatures/register.js:112 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "Aggiungi la firma sopra il testo citato"
 
-#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:114 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Aggiungi la firma sotto il testo citato"
 
@@ -1021,7 +1021,7 @@ msgstr "Qualsiasi destinatario"
 msgid "Append vCard"
 msgstr "Aggiungi vCard"
 
-#: apps/io.ox/core/desktop.js:1048 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1046 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Barra degli strumenti delle applicazioni"
 
@@ -1401,7 +1401,7 @@ msgstr "Vista di calendario"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:730
-#: apps/io.ox/core/desktop.js:1616 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1614 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1433,8 +1433,8 @@ msgstr "Vista di calendario"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:635
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
-#: apps/io.ox/mail/settings/signatures/register.js:179
-#: apps/io.ox/mail/settings/signatures/register.js:273
+#: apps/io.ox/mail/settings/signatures/register.js:180
+#: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:621 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:121
@@ -1452,7 +1452,7 @@ msgstr "Vista di calendario"
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
 #: module:plugins/portal apps/plugins/portal/mail/register.js:205
 #: apps/plugins/portal/rss/register.js:154
-#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/tumblr/register.js:260
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:141
@@ -1460,8 +1460,8 @@ msgstr "Vista di calendario"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: apps/io.ox/core/desktop.js:1524 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1525
+#: apps/io.ox/core/desktop.js:1522 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1523
 msgid "Cancel search"
 msgstr "Annulla la ricerca"
 
@@ -1780,7 +1780,7 @@ msgid "Company"
 msgstr "Azienda"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:443
+#: apps/io.ox/mail/compose/main.js:89 apps/io.ox/mail/compose/view.js:443
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -2168,13 +2168,13 @@ msgstr "Promemoria predefinito"
 msgid "Default sender address"
 msgstr "Indirizzo mittente predefinito"
 
-#: apps/io.ox/mail/settings/signatures/register.js:478 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:496 module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
 msgid "Default signature for new messages"
 msgstr "Non hai nuovi messaggi"
 
-#: apps/io.ox/mail/settings/signatures/register.js:485 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:503 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
 
@@ -2197,15 +2197,15 @@ msgstr "Rinviata"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:196 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:198
-#: apps/io.ox/core/viewer/views/toolbarview.js:162
+#: apps/io.ox/core/viewer/views/toolbarview.js:169
 #: apps/io.ox/files/actions.js:498 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:109 apps/io.ox/mail/actions.js:519
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:349
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:367
+#: apps/io.ox/mail/settings/signatures/register.js:368
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:619
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:116
@@ -2238,6 +2238,10 @@ msgstr "Elimina contatto"
 #: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
 msgid "Delete group"
 msgstr "Elimina gruppo"
+
+#: apps/io.ox/mail/settings/signatures/register.js:260 module:io.ox/mail
+msgid "Delete old signatures after import"
+msgstr ""
 
 #: apps/plugins/administration/resources/settings/toolbar.js:62
 #: module:io.ox/core
@@ -2288,7 +2292,7 @@ msgid "Descending"
 msgstr "Decrescente"
 
 #: apps/io.ox/calendar/edit/extensions.js:220 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:48
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:126
 #: module:io.ox/tasks/edit
@@ -2296,7 +2300,7 @@ msgstr "Decrescente"
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:198
 #: apps/plugins/portal/rss/register.js:147 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:251
+#: apps/plugins/portal/tumblr/register.js:252
 msgid "Description"
 msgstr "Descrizione"
 
@@ -2304,7 +2308,7 @@ msgstr "Descrizione"
 msgid "Description has been copied"
 msgstr "La descrizione è stata copiata"
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:83
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:99
 #: module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Description"
@@ -2587,8 +2591,8 @@ msgstr "Doppio clic su questa riga per un appuntamento di una giornata intera"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:141
-#: apps/io.ox/core/viewer/views/toolbarview.js:177
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
+#: apps/io.ox/core/viewer/views/toolbarview.js:184
+#: apps/io.ox/core/viewer/views/toolbarview.js:204
 #: apps/io.ox/files/actions.js:489 module:io.ox/files
 #: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2731,8 +2735,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
-#: apps/io.ox/mail/settings/signatures/register.js:343
-#: apps/io.ox/mail/settings/signatures/register.js:345
+#: apps/io.ox/mail/settings/signatures/register.js:361
+#: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:289
 #: apps/io.ox/settings/accounts/settings/pane.js:117
@@ -2754,7 +2758,7 @@ msgstr "Modifica contatto"
 msgid "Edit Flickr photo stream"
 msgstr "Modifica un flusso di foto di Flickr"
 
-#: apps/plugins/portal/tumblr/register.js:240 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:241 module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Modifica fonte Tumblr"
 
@@ -2812,7 +2816,7 @@ msgstr "Modifica regola"
 msgid "Edit rule"
 msgstr "Modifica regola"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Edit signature"
 msgstr "Modifica firma"
 
@@ -3198,7 +3202,7 @@ msgstr "Salvataggio della lista di distribuzione non riuscito."
 msgid "Failed to sign in"
 msgstr "Accesso non riuscito"
 
-#: apps/io.ox/core/desktop.js:1716 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1714 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3254,7 +3258,7 @@ msgstr "Fax (alt)"
 msgid "February"
 msgstr "Febbraio"
 
-#: apps/plugins/portal/tumblr/register.js:245 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:246 module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL della fonte"
 
@@ -3831,7 +3835,7 @@ msgstr "Immagine"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
-#: apps/io.ox/mail/settings/signatures/register.js:272 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "Importa"
 
@@ -3839,8 +3843,8 @@ msgstr "Importa"
 msgid "Import from file"
 msgstr "Importa da file"
 
-#: apps/io.ox/mail/settings/signatures/register.js:249 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:501
+#: apps/io.ox/mail/settings/signatures/register.js:256 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:517
 msgid "Import signatures"
 msgstr "Importa firme"
 
@@ -4336,7 +4340,7 @@ msgstr "Messaggi per ora (%)"
 msgid "Mails per week-day (%)"
 msgstr "Messaggi per giorno della settimana (%)"
 
-#: apps/io.ox/core/desktop.js:1410 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1408 module:io.ox/core
 msgid "Main window"
 msgstr "Finestra principale"
 
@@ -4880,9 +4884,9 @@ msgid "No reminder"
 msgstr "Nessun promemoria"
 
 #: apps/io.ox/mail/compose/extensions.js:341 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:321
-#: apps/io.ox/mail/settings/signatures/register.js:323
-#: apps/io.ox/mail/settings/signatures/register.js:385
+#: apps/io.ox/mail/settings/signatures/register.js:339
+#: apps/io.ox/mail/settings/signatures/register.js:341
+#: apps/io.ox/mail/settings/signatures/register.js:403
 msgid "No signature"
 msgstr "Nessuna firma"
 
@@ -5075,7 +5079,7 @@ msgstr "Mostra solo gli elementi relativi alla cartella \"%1$s\""
 msgid "Open"
 msgstr "Apri"
 
-#: apps/plugins/portal/tumblr/register.js:190 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:191 module:io.ox/portal
 msgid "Open external link"
 msgstr "Apri collegamento esterno"
 
@@ -5090,8 +5094,8 @@ msgstr "Apri la vista della cartella"
 msgid "Open in browser"
 msgstr "Apri nel browser"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:171 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:191
+#: apps/io.ox/core/viewer/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
 #, fuzzy
 #| msgid "Open in browser"
 msgid "Open in browser tab"
@@ -5447,7 +5451,7 @@ msgstr "Digita una data nel passato"
 msgid "Please enter a description"
 msgstr "Digita una descrizione"
 
-#: apps/plugins/portal/tumblr/register.js:289 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:290 module:io.ox/portal
 msgid "Please enter a description."
 msgstr "Digita una descrizione."
 
@@ -5473,7 +5477,7 @@ msgstr "Digita un indirizzo di posta valido"
 msgid "Please enter a valid email address or phone number"
 msgstr "Digita un indirizzo di posta valido o un numero di telefono"
 
-#: apps/io.ox/mail/settings/signatures/register.js:160 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:161 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Digita un nome valido"
 
@@ -5494,7 +5498,7 @@ msgstr "Digita un numero di telefono valido. I caratteri consentiti sono: %1$s"
 msgid "Please enter a value"
 msgstr "Digita un valore"
 
-#: apps/plugins/portal/tumblr/register.js:286 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:287 module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr "Digita l'URL di un blog."
 
@@ -5822,7 +5826,7 @@ msgstr ""
 "Valutazione di %1$d di %2$d. Premi Invio per confermare o utilizza le frecce "
 "direzionali destra e sinistra per modificare la tua valutazione."
 
-#: apps/plugins/portal/tumblr/register.js:187 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:188 module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr "Leggi l'articolo su tumblr.com"
 
@@ -6189,7 +6193,7 @@ msgstr "Volume vendite"
 #: apps/io.ox/mail/compose/extensions.js:93
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/settings/signatures/register.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:95
@@ -6198,7 +6202,7 @@ msgstr "Volume vendite"
 #: apps/plugins/portal/flickr/register.js:234 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:204
 #: apps/plugins/portal/rss/register.js:153 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:258
+#: apps/plugins/portal/tumblr/register.js:259
 #: apps/plugins/portal/userSettings/register.js:44
 msgid "Save"
 msgstr "Salva"
@@ -6222,8 +6226,8 @@ msgid "Save attachment"
 msgstr "Salva allegato"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:183
-#: apps/io.ox/core/viewer/views/toolbarview.js:203
+#: apps/io.ox/core/viewer/views/toolbarview.js:190
+#: apps/io.ox/core/viewer/views/toolbarview.js:210
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Salva su Drive"
@@ -6281,7 +6285,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Pianificazione"
 
-#: apps/io.ox/core/desktop.js:1473 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1471 module:io.ox/core
 #: apps/io.ox/core/main.js:766 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:40 module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:106
@@ -6305,7 +6309,7 @@ msgid "Search here"
 msgstr "Cerca qui"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1545 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1543 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -6373,6 +6377,7 @@ msgstr "Invia come collegamento interno"
 msgid "Send as vCard"
 msgstr "Invia come vCard"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js:162 module:io.ox/core
 #: apps/io.ox/files/actions.js:509 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
@@ -6692,16 +6697,16 @@ msgid "Sign out now"
 msgstr "Esci subito"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:394 module:io.ox/mail
 msgid "Signature"
 msgstr "Firma"
 
-#: apps/io.ox/mail/settings/signatures/register.js:35 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:36 module:io.ox/mail
 msgid "Signature name"
 msgstr "Nome della firma"
 
 #: apps/io.ox/mail/compose/extensions.js:340 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:403
+#: apps/io.ox/mail/settings/signatures/register.js:421
 msgid "Signatures"
 msgstr "Firme"
 
@@ -6855,8 +6860,8 @@ msgstr "Data iniziale"
 msgid "Start of working time"
 msgstr "Ora d'inizio della giornata lavorativa"
 
-#: apps/io.ox/core/desktop.js:1511 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1512
+#: apps/io.ox/core/desktop.js:1509 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1510
 msgid "Start search"
 msgstr "Inizia la ricerca"
 
@@ -7128,7 +7133,7 @@ msgstr "L'account deve avere un nome"
 msgid "The activity has been deleted successfully"
 msgstr "L'attività è stata eliminata correttamente"
 
-#: apps/io.ox/files/api.js:289 module:io.ox/files
+#: apps/io.ox/files/api.js:290 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "La quota consentita è stata raggiunta."
@@ -7353,7 +7358,7 @@ msgstr "L'area di notifica è aperta"
 msgid "The person %1$s is already in the list"
 msgstr "La persona %1$s è già nell&apos;elenco"
 
-#: apps/io.ox/files/api.js:284 module:io.ox/files
+#: apps/io.ox/files/api.js:285 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Il nome file fornito supera la lunghezza consentita."
@@ -7485,7 +7490,7 @@ msgstr "L'utente ha diritti amministrativi"
 msgid "Theme"
 msgstr "Tema"
 
-#: apps/io.ox/core/desktop.js:736 module:io.ox/core
+#: apps/io.ox/core/desktop.js:734 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Ci sono modifiche non salvate."
 
@@ -7600,7 +7605,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Questo campo deve essere compilato"
 
-#: apps/io.ox/files/api.js:294 module:io.ox/files
+#: apps/io.ox/files/api.js:295 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Questo file non può essere caricato."
@@ -7844,7 +7849,7 @@ msgstr "Città"
 msgid "Trying to auto-configure your mail account"
 msgstr "Tentativo di configurazione automatica dell'account di posta"
 
-#: apps/plugins/portal/tumblr/register.js:332 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:333 module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
 
@@ -7920,8 +7925,8 @@ msgstr "Smetti di seguire"
 msgid "Unified"
 msgstr "Unificata"
 
-#: apps/plugins/portal/tumblr/register.js:302 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:307
+#: apps/plugins/portal/tumblr/register.js:303 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:308
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Errore sconosciuto durante il controllo del blog di Tumblr."
 
@@ -8193,7 +8198,7 @@ msgstr "Nascondi i dettagli"
 msgid "View source"
 msgstr "Visualizza il sorgente"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:354 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:359 module:io.ox/core
 #, fuzzy
 #| msgid "Editor toolbar"
 msgid "Viewer Toolbar"
@@ -8427,10 +8432,9 @@ msgstr ""
 "Hai allegato un file vuoto. Potrebbe essere che questo file sia stato "
 "eliminato dal tuo disco. Vuoi inviarlo comunque?"
 
-#: apps/io.ox/mail/settings/signatures/register.js:251 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:258 module:io.ox/mail
 msgid ""
-"You can import existing signatures from the previous product generation. "
-"Your signatures will be copied - not moved."
+"You can import existing signatures from the previous product generation."
 msgstr ""
 
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor

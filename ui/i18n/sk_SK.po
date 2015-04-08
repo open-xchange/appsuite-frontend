@@ -246,8 +246,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1124 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1293
+#: apps/io.ox/core/desktop.js:1122 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1291
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%2$s %1$s"
@@ -370,8 +370,8 @@ msgstr "%1$s až %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s aktualizoval(a) svoj profil:"
 
-#: apps/io.ox/mail/settings/signatures/register.js:345 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:363 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:368
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -696,9 +696,9 @@ msgstr "Skutočné trvanie v minútach"
 msgid "Add"
 msgstr "Pridať"
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:79
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:230
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:246
 #, fuzzy
 #| msgid "Edit description"
 msgid "Add a description"
@@ -803,7 +803,7 @@ msgstr "Pridať nového účastníka"
 msgid "Add new rule"
 msgstr "Pridať nové pravidlo"
 
-#: apps/io.ox/mail/settings/signatures/register.js:453 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:471 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Pridať nový podpis"
 
@@ -836,15 +836,15 @@ msgstr "Pridať účastníkov/zdroje"
 msgid "Add recipients ..."
 msgstr "Žiadni príjemcovia"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Add signature"
 msgstr "Pridať podpis"
 
-#: apps/io.ox/mail/settings/signatures/register.js:112 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "Pridať podpis nad citovaný text"
 
-#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:114 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Pridať podpis pod citovaný text"
 
@@ -1044,7 +1044,7 @@ msgstr "Ľubovoľný príjemca"
 msgid "Append vCard"
 msgstr "Pripojiť vCard"
 
-#: apps/io.ox/core/desktop.js:1048 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1046 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Panel nástrojov aplikácie"
 
@@ -1423,7 +1423,7 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:730
-#: apps/io.ox/core/desktop.js:1616 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1614 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1455,8 +1455,8 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:635
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
-#: apps/io.ox/mail/settings/signatures/register.js:179
-#: apps/io.ox/mail/settings/signatures/register.js:273
+#: apps/io.ox/mail/settings/signatures/register.js:180
+#: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:621 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:121
@@ -1474,7 +1474,7 @@ msgstr "Zobrazenie kalendára"
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
 #: module:plugins/portal apps/plugins/portal/mail/register.js:205
 #: apps/plugins/portal/rss/register.js:154
-#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/tumblr/register.js:260
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:141
@@ -1482,8 +1482,8 @@ msgstr "Zobrazenie kalendára"
 msgid "Cancel"
 msgstr "Zrušiť"
 
-#: apps/io.ox/core/desktop.js:1524 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1525
+#: apps/io.ox/core/desktop.js:1522 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1523
 msgid "Cancel search"
 msgstr "Zrušiť hľadanie"
 
@@ -1803,7 +1803,7 @@ msgid "Company"
 msgstr "Spoločnosť"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:443
+#: apps/io.ox/mail/compose/main.js:89 apps/io.ox/mail/compose/view.js:443
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -2191,13 +2191,13 @@ msgstr "Predvolený čas pripomenutia"
 msgid "Default sender address"
 msgstr "Predvolená adresa odosielateľa"
 
-#: apps/io.ox/mail/settings/signatures/register.js:478 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:496 module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
 msgid "Default signature for new messages"
 msgstr "Nemáte nové správy"
 
-#: apps/io.ox/mail/settings/signatures/register.js:485 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:503 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
 
@@ -2220,15 +2220,15 @@ msgstr "Odložené"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:196 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:198
-#: apps/io.ox/core/viewer/views/toolbarview.js:162
+#: apps/io.ox/core/viewer/views/toolbarview.js:169
 #: apps/io.ox/files/actions.js:498 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:109 apps/io.ox/mail/actions.js:519
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:349
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:367
+#: apps/io.ox/mail/settings/signatures/register.js:368
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:619
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:116
@@ -2261,6 +2261,12 @@ msgstr "Zmazať kontakt"
 #: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
 msgid "Delete group"
 msgstr "Zmazať skupinu"
+
+#: apps/io.ox/mail/settings/signatures/register.js:260 module:io.ox/mail
+#, fuzzy
+#| msgid "Select a folder for import"
+msgid "Delete old signatures after import"
+msgstr "Vyberte priečinok, ktorý chcete importovať"
 
 #: apps/plugins/administration/resources/settings/toolbar.js:62
 #: module:io.ox/core
@@ -2310,7 +2316,7 @@ msgid "Descending"
 msgstr "zostupne"
 
 #: apps/io.ox/calendar/edit/extensions.js:220 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:48
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:126
 #: module:io.ox/tasks/edit
@@ -2318,7 +2324,7 @@ msgstr "zostupne"
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:198
 #: apps/plugins/portal/rss/register.js:147 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:251
+#: apps/plugins/portal/tumblr/register.js:252
 msgid "Description"
 msgstr "Popis"
 
@@ -2326,7 +2332,7 @@ msgstr "Popis"
 msgid "Description has been copied"
 msgstr "Popis bol skopírovaný"
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:83
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:99
 #: module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Description"
@@ -2614,8 +2620,8 @@ msgstr "Dvojitým kliknutím v tomto riadku zobrazíte celodennú schôdzku"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:141
-#: apps/io.ox/core/viewer/views/toolbarview.js:177
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
+#: apps/io.ox/core/viewer/views/toolbarview.js:184
+#: apps/io.ox/core/viewer/views/toolbarview.js:204
 #: apps/io.ox/files/actions.js:489 module:io.ox/files
 #: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2757,8 +2763,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
-#: apps/io.ox/mail/settings/signatures/register.js:343
-#: apps/io.ox/mail/settings/signatures/register.js:345
+#: apps/io.ox/mail/settings/signatures/register.js:361
+#: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:289
 #: apps/io.ox/settings/accounts/settings/pane.js:117
@@ -2780,7 +2786,7 @@ msgstr "Upraviť Kontakt"
 msgid "Edit Flickr photo stream"
 msgstr "Upraviť tok fotiek Flickr"
 
-#: apps/plugins/portal/tumblr/register.js:240 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:241 module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Upraviť kanál Tumblr"
 
@@ -2838,7 +2844,7 @@ msgstr "Upraviť pravidlo"
 msgid "Edit rule"
 msgstr "Upraviť pravidlo"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Edit signature"
 msgstr "Upraviť podpis"
 
@@ -3223,7 +3229,7 @@ msgstr "Nepodarilo sa uložiť distribučný zoznam."
 msgid "Failed to sign in"
 msgstr "Nepodarilo sa prihlásiť sa"
 
-#: apps/io.ox/core/desktop.js:1716 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1714 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3279,7 +3285,7 @@ msgstr "Fax (alt.)"
 msgid "February"
 msgstr "Február"
 
-#: apps/plugins/portal/tumblr/register.js:245 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:246 module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL kanála"
 
@@ -3854,7 +3860,7 @@ msgstr "Obrázok"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
-#: apps/io.ox/mail/settings/signatures/register.js:272 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "Importovať"
 
@@ -3862,8 +3868,8 @@ msgstr "Importovať"
 msgid "Import from file"
 msgstr "Importovať zo súboru"
 
-#: apps/io.ox/mail/settings/signatures/register.js:249 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:501
+#: apps/io.ox/mail/settings/signatures/register.js:256 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:517
 msgid "Import signatures"
 msgstr "Importovať podpisy"
 
@@ -4361,7 +4367,7 @@ msgstr "Správ za hodinu (%)"
 msgid "Mails per week-day (%)"
 msgstr "Správ za deň-týždeň (%)"
 
-#: apps/io.ox/core/desktop.js:1410 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1408 module:io.ox/core
 msgid "Main window"
 msgstr "Hlavné okno"
 
@@ -4906,9 +4912,9 @@ msgid "No reminder"
 msgstr "Bez pripomenutia"
 
 #: apps/io.ox/mail/compose/extensions.js:341 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:321
-#: apps/io.ox/mail/settings/signatures/register.js:323
-#: apps/io.ox/mail/settings/signatures/register.js:385
+#: apps/io.ox/mail/settings/signatures/register.js:339
+#: apps/io.ox/mail/settings/signatures/register.js:341
+#: apps/io.ox/mail/settings/signatures/register.js:403
 msgid "No signature"
 msgstr "Bez podpisu"
 
@@ -5102,7 +5108,7 @@ msgstr "Zobrazujú sa len položky súvisiace s priečinkom „%1$s“"
 msgid "Open"
 msgstr "Otvoriť"
 
-#: apps/plugins/portal/tumblr/register.js:190 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:191 module:io.ox/portal
 msgid "Open external link"
 msgstr "Otvoriť externý odkaz"
 
@@ -5117,8 +5123,8 @@ msgstr "Otvoriť zobrazenie priečinka"
 msgid "Open in browser"
 msgstr "Otvoriť v prehliadači"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:171 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:191
+#: apps/io.ox/core/viewer/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
 #, fuzzy
 #| msgid "Open in browser"
 msgid "Open in browser tab"
@@ -5472,7 +5478,7 @@ msgstr "Prosím, zadajte dátum v minulosti"
 msgid "Please enter a description"
 msgstr "Prosím, zadajte popis"
 
-#: apps/plugins/portal/tumblr/register.js:289 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:290 module:io.ox/portal
 msgid "Please enter a description."
 msgstr "Prosím, zadajte popis"
 
@@ -5498,7 +5504,7 @@ msgstr "Prosím, zadajte platnú e-mailovú adresu"
 msgid "Please enter a valid email address or phone number"
 msgstr "Prosím, zadajte platnú emailovú adresu alebo telefónne číslo"
 
-#: apps/io.ox/mail/settings/signatures/register.js:160 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:161 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Prosím, zadajte platné meno"
 
@@ -5519,7 +5525,7 @@ msgstr "Prosím, zadajte platné telefónne číslo. Povolené znaky sú: %1$s"
 msgid "Please enter a value"
 msgstr "Prosím, zadajte hodnotu"
 
-#: apps/plugins/portal/tumblr/register.js:286 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:287 module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr "Prosím, zadajte URL blogu."
 
@@ -5845,7 +5851,7 @@ msgstr ""
 "Hodnotenie %1$d z %2$d. Použite Enter na potvrdenie alebo šípky vľavo a "
 "vpravo na upravenie vášho hodnotenia."
 
-#: apps/plugins/portal/tumblr/register.js:187 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:188 module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr "Prečítať si článok na tumblr.com"
 
@@ -6210,7 +6216,7 @@ msgstr "Objem predaja"
 #: apps/io.ox/mail/compose/extensions.js:93
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/settings/signatures/register.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:95
@@ -6219,7 +6225,7 @@ msgstr "Objem predaja"
 #: apps/plugins/portal/flickr/register.js:234 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:204
 #: apps/plugins/portal/rss/register.js:153 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:258
+#: apps/plugins/portal/tumblr/register.js:259
 #: apps/plugins/portal/userSettings/register.js:44
 msgid "Save"
 msgstr "Uložiť"
@@ -6243,8 +6249,8 @@ msgid "Save attachment"
 msgstr "Uložiť prílohu"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:183
-#: apps/io.ox/core/viewer/views/toolbarview.js:203
+#: apps/io.ox/core/viewer/views/toolbarview.js:190
+#: apps/io.ox/core/viewer/views/toolbarview.js:210
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Uložiť na Drive"
@@ -6303,7 +6309,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Plánovanie"
 
-#: apps/io.ox/core/desktop.js:1473 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1471 module:io.ox/core
 #: apps/io.ox/core/main.js:766 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:40 module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:106
@@ -6327,7 +6333,7 @@ msgid "Search here"
 msgstr "Hľadať tu"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1545 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1543 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -6394,6 +6400,7 @@ msgstr "Poslať ako interný odkaz"
 msgid "Send as vCard"
 msgstr "Poslať ako vCard"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js:162 module:io.ox/core
 #: apps/io.ox/files/actions.js:509 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
@@ -6715,16 +6722,16 @@ msgid "Sign out now"
 msgstr "Odhlásiť sa teraz"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:394 module:io.ox/mail
 msgid "Signature"
 msgstr "Podpis"
 
-#: apps/io.ox/mail/settings/signatures/register.js:35 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:36 module:io.ox/mail
 msgid "Signature name"
 msgstr "Názov podpisu"
 
 #: apps/io.ox/mail/compose/extensions.js:340 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:403
+#: apps/io.ox/mail/settings/signatures/register.js:421
 msgid "Signatures"
 msgstr "Podpisy"
 
@@ -6876,8 +6883,8 @@ msgstr "Dátum začiatku"
 msgid "Start of working time"
 msgstr "Začiatok pracovného času"
 
-#: apps/io.ox/core/desktop.js:1511 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1512
+#: apps/io.ox/core/desktop.js:1509 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1510
 msgid "Start search"
 msgstr "Spustiť vyhľadávanie"
 
@@ -7149,7 +7156,7 @@ msgstr "Účet musí byť pomenovaný"
 msgid "The activity has been deleted successfully"
 msgstr "Aktivita bola úspešne zmazaná"
 
-#: apps/io.ox/files/api.js:289 module:io.ox/files
+#: apps/io.ox/files/api.js:290 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Bola dosiahnutá povolená kvóta."
@@ -7365,7 +7372,7 @@ msgstr "Oznamovacia oblasť je otvorená"
 msgid "The person %1$s is already in the list"
 msgstr "Osoba %1$s sa už v zozname nachádza"
 
-#: apps/io.ox/files/api.js:284 module:io.ox/files
+#: apps/io.ox/files/api.js:285 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
@@ -7497,7 +7504,7 @@ msgstr "Používateľ má práva správcu"
 msgid "Theme"
 msgstr "Téma vzhľadu"
 
-#: apps/io.ox/core/desktop.js:736 module:io.ox/core
+#: apps/io.ox/core/desktop.js:734 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Existujú neuložené zmeny."
 
@@ -7607,7 +7614,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Toto pole musí byť vyplnené"
 
-#: apps/io.ox/files/api.js:294 module:io.ox/files
+#: apps/io.ox/files/api.js:295 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Tento súbor nebolo možné nahrať."
@@ -7848,7 +7855,7 @@ msgstr "Mesto"
 msgid "Trying to auto-configure your mail account"
 msgstr "Prebieha pokus o auto-nastavenie poštového účtu"
 
-#: apps/plugins/portal/tumblr/register.js:332 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:333 module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
 
@@ -7923,8 +7930,8 @@ msgstr "Prestať sledovať"
 msgid "Unified"
 msgstr "Zjednotená"
 
-#: apps/plugins/portal/tumblr/register.js:302 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:307
+#: apps/plugins/portal/tumblr/register.js:303 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:308
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Neznáma chyba počas kontrolovania blogu Tumblr."
 
@@ -8196,7 +8203,7 @@ msgstr "Skryť podrobnosti"
 msgid "View source"
 msgstr "Zobraziť zdroj"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:354 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:359 module:io.ox/core
 #, fuzzy
 #| msgid "Editor toolbar"
 msgid "Viewer Toolbar"
@@ -8426,10 +8433,9 @@ msgstr ""
 "Pripojili ste prázdny súbor. Je možné, že tento súbor bol odstránený z vášho "
 "disku. Napriek tomu ho odoslať?"
 
-#: apps/io.ox/mail/settings/signatures/register.js:251 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:258 module:io.ox/mail
 msgid ""
-"You can import existing signatures from the previous product generation. "
-"Your signatures will be copied - not moved."
+"You can import existing signatures from the previous product generation."
 msgstr ""
 
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor
@@ -13297,9 +13303,6 @@ msgstr "RRRR"
 
 #~ msgid "Select a contact category"
 #~ msgstr "Vyberte kategóriu kontaktu"
-
-#~ msgid "Select a folder for import"
-#~ msgstr "Vyberte priečinok, ktorý chcete importovať"
 
 #~ msgid "Select a task category"
 #~ msgstr "Vyberte kategóriu úloh"

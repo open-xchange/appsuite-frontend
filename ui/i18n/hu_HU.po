@@ -227,8 +227,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1124 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1293
+#: apps/io.ox/core/desktop.js:1122 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1291
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -351,8 +351,8 @@ msgstr "%1$s itt: %2$s"
 msgid "%1$s updated their profile:"
 msgstr "%1$s frissítette profilját:"
 
-#: apps/io.ox/mail/settings/signatures/register.js:345 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:363 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:368
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
@@ -669,9 +669,9 @@ msgstr "Tényleges időtartam percben"
 msgid "Add"
 msgstr "Hozzáadás"
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:79
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:95
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:230
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:246
 #, fuzzy
 #| msgid "Edit description"
 msgid "Add a description"
@@ -776,7 +776,7 @@ msgstr "Új résztvevő hozzáadása"
 msgid "Add new rule"
 msgstr "Új szabály hozzáadása"
 
-#: apps/io.ox/mail/settings/signatures/register.js:453 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:471 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Új aláírás hozzáadása"
 
@@ -809,15 +809,15 @@ msgstr "Résztvevő/erőforrás hozzáadása"
 msgid "Add recipients ..."
 msgstr "Nincsenek címzettek"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Add signature"
 msgstr "Aláírás hozzáadása"
 
-#: apps/io.ox/mail/settings/signatures/register.js:112 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "Aláírás hozzáadása az idézett szöveg fölé"
 
-#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:114 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Aláírás hozzáadása az idézett szöveg alá"
 
@@ -1018,7 +1018,7 @@ msgstr "Bármely címzett"
 msgid "Append vCard"
 msgstr "vCard hozzáadása"
 
-#: apps/io.ox/core/desktop.js:1048 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1046 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
@@ -1398,7 +1398,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:730
-#: apps/io.ox/core/desktop.js:1616 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1614 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1430,8 +1430,8 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:635
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
-#: apps/io.ox/mail/settings/signatures/register.js:179
-#: apps/io.ox/mail/settings/signatures/register.js:273
+#: apps/io.ox/mail/settings/signatures/register.js:180
+#: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:621 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:121
@@ -1449,7 +1449,7 @@ msgstr "Naptár nézet"
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js:235
 #: module:plugins/portal apps/plugins/portal/mail/register.js:205
 #: apps/plugins/portal/rss/register.js:154
-#: apps/plugins/portal/tumblr/register.js:259
+#: apps/plugins/portal/tumblr/register.js:260
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
 #: apps/plugins/portal/userSettings/register.js:141
@@ -1457,8 +1457,8 @@ msgstr "Naptár nézet"
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: apps/io.ox/core/desktop.js:1524 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1525
+#: apps/io.ox/core/desktop.js:1522 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1523
 msgid "Cancel search"
 msgstr "Keresés megszakítása"
 
@@ -1779,7 +1779,7 @@ msgid "Company"
 msgstr "Cég"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:443
+#: apps/io.ox/mail/compose/main.js:89 apps/io.ox/mail/compose/view.js:443
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -2167,13 +2167,13 @@ msgstr "Alapértelmezett figyelmeztetés"
 msgid "Default sender address"
 msgstr "Alapértelmezett küldő e-mail címe"
 
-#: apps/io.ox/mail/settings/signatures/register.js:478 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:496 module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
 msgid "Default signature for new messages"
 msgstr "Nincsenek új üzenetei"
 
-#: apps/io.ox/mail/settings/signatures/register.js:485 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:503 module:io.ox/mail
 msgid "Default signature for replies or forwardings"
 msgstr ""
 
@@ -2196,15 +2196,15 @@ msgstr "Elhalasztott"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:196 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:198
-#: apps/io.ox/core/viewer/views/toolbarview.js:162
+#: apps/io.ox/core/viewer/views/toolbarview.js:169
 #: apps/io.ox/files/actions.js:498 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:109 apps/io.ox/mail/actions.js:519
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:349
-#: apps/io.ox/mail/settings/signatures/register.js:350
+#: apps/io.ox/mail/settings/signatures/register.js:367
+#: apps/io.ox/mail/settings/signatures/register.js:368
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:619
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:116
@@ -2237,6 +2237,10 @@ msgstr "Névjegy törlése"
 #: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
 msgid "Delete group"
 msgstr "Csoport törlése"
+
+#: apps/io.ox/mail/settings/signatures/register.js:260 module:io.ox/mail
+msgid "Delete old signatures after import"
+msgstr ""
 
 #: apps/plugins/administration/resources/settings/toolbar.js:62
 #: module:io.ox/core
@@ -2286,7 +2290,7 @@ msgid "Descending"
 msgstr "Csökkenő"
 
 #: apps/io.ox/calendar/edit/extensions.js:220 module:io.ox/calendar/edit/main
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:47
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:48
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js:31
 #: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:126
 #: module:io.ox/tasks/edit
@@ -2294,7 +2298,7 @@ msgstr "Csökkenő"
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:198
 #: apps/plugins/portal/rss/register.js:147 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:251
+#: apps/plugins/portal/tumblr/register.js:252
 msgid "Description"
 msgstr "Leírás"
 
@@ -2302,7 +2306,7 @@ msgstr "Leírás"
 msgid "Description has been copied"
 msgstr "A leírás átmásolva"
 
-#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:83
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js:99
 #: module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Description"
@@ -2592,8 +2596,8 @@ msgstr "Egész napos találkozóért kattintson duplán erre a sorra"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:141
-#: apps/io.ox/core/viewer/views/toolbarview.js:177
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
+#: apps/io.ox/core/viewer/views/toolbarview.js:184
+#: apps/io.ox/core/viewer/views/toolbarview.js:204
 #: apps/io.ox/files/actions.js:489 module:io.ox/files
 #: apps/io.ox/files/actions.js:616 apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2734,8 +2738,8 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
-#: apps/io.ox/mail/settings/signatures/register.js:343
-#: apps/io.ox/mail/settings/signatures/register.js:345
+#: apps/io.ox/mail/settings/signatures/register.js:361
+#: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:289
 #: apps/io.ox/settings/accounts/settings/pane.js:117
@@ -2757,7 +2761,7 @@ msgstr "Névjegy szerkesztése"
 msgid "Edit Flickr photo stream"
 msgstr "Flickr fotófolyam szerkesztése"
 
-#: apps/plugins/portal/tumblr/register.js:240 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:241 module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Tumblr hírforrás szerkesztése"
 
@@ -2815,7 +2819,7 @@ msgstr "Szabály szerkesztése"
 msgid "Edit rule"
 msgstr "Szabály szerkesztése"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Edit signature"
 msgstr "Aláírás szerkesztése"
 
@@ -3199,7 +3203,7 @@ msgstr "A disztribúciós lista mentése sikertelen."
 msgid "Failed to sign in"
 msgstr "A bejelentkezés meghiúsult"
 
-#: apps/io.ox/core/desktop.js:1716 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1714 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3253,7 +3257,7 @@ msgstr "Fax (másik)"
 msgid "February"
 msgstr "Február"
 
-#: apps/plugins/portal/tumblr/register.js:245 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:246 module:io.ox/portal
 msgid "Feed URL"
 msgstr "Forrás URL"
 
@@ -3829,7 +3833,7 @@ msgstr "Kép"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
-#: apps/io.ox/mail/settings/signatures/register.js:272 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "Importálás"
 
@@ -3837,8 +3841,8 @@ msgstr "Importálás"
 msgid "Import from file"
 msgstr "Importálás fájlból"
 
-#: apps/io.ox/mail/settings/signatures/register.js:249 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:501
+#: apps/io.ox/mail/settings/signatures/register.js:256 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:517
 msgid "Import signatures"
 msgstr "Aláírások importálása"
 
@@ -4334,7 +4338,7 @@ msgstr "Levelek óránként (%)"
 msgid "Mails per week-day (%)"
 msgstr "Levelek naponként (%)"
 
-#: apps/io.ox/core/desktop.js:1410 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1408 module:io.ox/core
 msgid "Main window"
 msgstr "Főablak"
 
@@ -4877,9 +4881,9 @@ msgid "No reminder"
 msgstr "Nincs emlékeztető"
 
 #: apps/io.ox/mail/compose/extensions.js:341 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:321
-#: apps/io.ox/mail/settings/signatures/register.js:323
-#: apps/io.ox/mail/settings/signatures/register.js:385
+#: apps/io.ox/mail/settings/signatures/register.js:339
+#: apps/io.ox/mail/settings/signatures/register.js:341
+#: apps/io.ox/mail/settings/signatures/register.js:403
 msgid "No signature"
 msgstr "Nincs aláírás"
 
@@ -5070,7 +5074,7 @@ msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 msgid "Open"
 msgstr "Megnyitás"
 
-#: apps/plugins/portal/tumblr/register.js:190 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:191 module:io.ox/portal
 msgid "Open external link"
 msgstr "Külső hivatkozás megnyitása"
 
@@ -5085,8 +5089,8 @@ msgstr "Mappanézet megnyitása"
 msgid "Open in browser"
 msgstr "Megnyitás böngészőben"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:171 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:191
+#: apps/io.ox/core/viewer/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
 #, fuzzy
 #| msgid "Open in browser"
 msgid "Open in browser tab"
@@ -5440,7 +5444,7 @@ msgstr "Adjon meg egy múltbeli dátumot"
 msgid "Please enter a description"
 msgstr "Adjon meg egy leírást"
 
-#: apps/plugins/portal/tumblr/register.js:289 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:290 module:io.ox/portal
 msgid "Please enter a description."
 msgstr "Adjon meg egy leírást."
 
@@ -5466,7 +5470,7 @@ msgstr "Érvényes e-mail címet adjon meg"
 msgid "Please enter a valid email address or phone number"
 msgstr "Érvényes e-mail címet vagy telefonszámot adjon meg"
 
-#: apps/io.ox/mail/settings/signatures/register.js:160 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:161 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Érvényes nevet adjon meg"
 
@@ -5487,7 +5491,7 @@ msgstr "Érvényes telefonszámot adjon meg. Az engedélyezett karakterek: %1$s"
 msgid "Please enter a value"
 msgstr "Adjon meg egy értéket"
 
-#: apps/plugins/portal/tumblr/register.js:286 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:287 module:io.ox/portal
 msgid "Please enter an blog url."
 msgstr "Adjon meg egy blog URL-t."
 
@@ -5818,7 +5822,7 @@ msgstr ""
 "%1$d / %2$d értékelés megerősítése. Az értékeléshez nyomja meg ez Entert "
 "vagy módosítsa a jobb/bal nyíllal."
 
-#: apps/plugins/portal/tumblr/register.js:187 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:188 module:io.ox/portal
 msgid "Read article on tumblr.com"
 msgstr "Cikk olvasása a tumblr.com-on"
 
@@ -6185,7 +6189,7 @@ msgstr "Értékesítési mennyiség"
 #: apps/io.ox/mail/compose/extensions.js:93
 #: apps/io.ox/mail/compose/names.js:162
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/settings/signatures/register.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:179
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
 #: apps/io.ox/tasks/edit/view-template.js:46 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:95
@@ -6194,7 +6198,7 @@ msgstr "Értékesítési mennyiség"
 #: apps/plugins/portal/flickr/register.js:234 module:plugins/portal
 #: apps/plugins/portal/mail/register.js:204
 #: apps/plugins/portal/rss/register.js:153 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:258
+#: apps/plugins/portal/tumblr/register.js:259
 #: apps/plugins/portal/userSettings/register.js:44
 msgid "Save"
 msgstr "Mentés"
@@ -6218,8 +6222,8 @@ msgid "Save attachment"
 msgstr "Melléklet mentése"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:183
-#: apps/io.ox/core/viewer/views/toolbarview.js:203
+#: apps/io.ox/core/viewer/views/toolbarview.js:190
+#: apps/io.ox/core/viewer/views/toolbarview.js:210
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Mentés a Drive-ra"
@@ -6277,7 +6281,7 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Ütemezés"
 
-#: apps/io.ox/core/desktop.js:1473 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1471 module:io.ox/core
 #: apps/io.ox/core/main.js:766 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:40 module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:106
@@ -6301,7 +6305,7 @@ msgid "Search here"
 msgstr "Keresés itt"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1545 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1543 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -6368,6 +6372,7 @@ msgstr "Küldés belső hivatkozásként"
 msgid "Send as vCard"
 msgstr "Küldés vCard-ként"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js:162 module:io.ox/core
 #: apps/io.ox/files/actions.js:509 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
@@ -6687,16 +6692,16 @@ msgid "Sign out now"
 msgstr "Kijelentkezés most"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:394 module:io.ox/mail
 msgid "Signature"
 msgstr "Aláírás"
 
-#: apps/io.ox/mail/settings/signatures/register.js:35 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:36 module:io.ox/mail
 msgid "Signature name"
 msgstr "Aláírásnév"
 
 #: apps/io.ox/mail/compose/extensions.js:340 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:403
+#: apps/io.ox/mail/settings/signatures/register.js:421
 msgid "Signatures"
 msgstr "Aláírások"
 
@@ -6848,8 +6853,8 @@ msgstr "Kezdés dátuma"
 msgid "Start of working time"
 msgstr "Munkaidő kezdete"
 
-#: apps/io.ox/core/desktop.js:1511 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1512
+#: apps/io.ox/core/desktop.js:1509 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1510
 msgid "Start search"
 msgstr "Keresés indítása"
 
@@ -7118,7 +7123,7 @@ msgstr "A felhasználó fiókot el kell nevezni"
 msgid "The activity has been deleted successfully"
 msgstr "A tevékenység sikeresen törölve"
 
-#: apps/io.ox/files/api.js:289 module:io.ox/files
+#: apps/io.ox/files/api.js:290 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Az engedélyezett kvóta elérve."
@@ -7340,7 +7345,7 @@ msgstr "Az értesítési terület nyitva"
 msgid "The person %1$s is already in the list"
 msgstr "A(z) %1$s személy már szerepel a listában"
 
-#: apps/io.ox/files/api.js:284 module:io.ox/files
+#: apps/io.ox/files/api.js:285 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "A megadott fájlnév hossza meghaladja az engedélyezett méretet."
@@ -7470,7 +7475,7 @@ msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
 msgid "Theme"
 msgstr "Téma"
 
-#: apps/io.ox/core/desktop.js:736 module:io.ox/core
+#: apps/io.ox/core/desktop.js:734 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Mentetlen beállítások vannak."
 
@@ -7578,7 +7583,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Ezt a mezőt ki kell tölteni"
 
-#: apps/io.ox/files/api.js:294 module:io.ox/files
+#: apps/io.ox/files/api.js:295 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "A fájlt nem sikerült feltölteni."
@@ -7817,7 +7822,7 @@ msgstr "Város"
 msgid "Trying to auto-configure your mail account"
 msgstr "Kísérlet a postafiók automatikus beállítására"
 
-#: apps/plugins/portal/tumblr/register.js:332 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:333 module:io.ox/portal
 msgid "Tumblr"
 msgstr "Tumblr"
 
@@ -7892,8 +7897,8 @@ msgstr "Követés befejezése"
 msgid "Unified"
 msgstr "Egységes"
 
-#: apps/plugins/portal/tumblr/register.js:302 module:io.ox/portal
-#: apps/plugins/portal/tumblr/register.js:307
+#: apps/plugins/portal/tumblr/register.js:303 module:io.ox/portal
+#: apps/plugins/portal/tumblr/register.js:308
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Ismeretlen hiba a tumblr blog ellenőrzésekor."
 
@@ -8165,7 +8170,7 @@ msgstr "Részletek elrejtése"
 msgid "View source"
 msgstr "Forrás megtekintése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:354 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:359 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -8394,10 +8399,9 @@ msgstr ""
 "Egy üres fájlt csatolt. Ez előfordulhat, ha ez a fájl törlésre került a "
 "merevlemezről. Mindenképpen elküldi?"
 
-#: apps/io.ox/mail/settings/signatures/register.js:251 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:258 module:io.ox/mail
 msgid ""
-"You can import existing signatures from the previous product generation. "
-"Your signatures will be copied - not moved."
+"You can import existing signatures from the previous product generation."
 msgstr ""
 
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor
