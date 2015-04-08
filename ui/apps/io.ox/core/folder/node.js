@@ -99,18 +99,20 @@ define('io.ox/core/folder/node', [
         onRemove: function (model) {
             var children = this.$.subfolders.children();
             children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
-            if (children.length === 0) this.model.set('subfolders', false);
             this.renderEmpty();
         },
 
         // respond to changed id
         onChangeId: function (model) {
-            var id = model.get('id'),
-                previous = model.previous('id'),
+            var id = String(model.get('id')),
+                previous = String(model.previous('id')),
                 selection = this.options.tree.selection,
                 selected = selection.get();
+            // update other ID attributes
+            if (this.folder === previous) this.folder = id;
+            if (this.options.model_id === previous) this.options.model_id = id;
+            if (this.options.contextmenu_id === previous) this.options.contextmenu_id = id;
             // update DOM
-            this.folder = this.model_id = String(id);
             this.renderAttributes();
             // trigger selection change event
             if (previous === selected) this.options.tree.trigger('change', id);
@@ -126,7 +128,7 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed.index !== undefined) {
+            if (model.changed[this.getIndexAttribute()] !== undefined) {
                 this.renderAttributes();
                 if (this.options.parent.onSort) this.options.parent.onSort();
             }
@@ -253,6 +255,7 @@ define('io.ox/core/folder/node', [
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
+                contextmenu_id: this.folder,    // use this id for the context menu
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
@@ -293,14 +296,15 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
-                    'aria-label'    : '',
-                    'aria-level'    : o.level + 1,
-                    'aria-selected' : false,
-                    'data-id'       : this.folder,
-                    'data-index'    : this.model.get('index'),
-                    'data-model'    : o.model_id,
-                    'role'          : 'treeitem',
-                    'tabindex'      : '-1'
+                    'aria-label':    '',
+                    'aria-level':    o.level + 1,
+                    'aria-selected': false,
+                    'data-id':       this.folder,
+                    'data-index':    this.getIndex(),
+                    'data-model':    o.model_id,
+                    'data-contextmenu-id': o.contextmenu_id,
+                    'role':         'treeitem',
+                    'tabindex':     '-1'
                 })
                 .append(
                     // folder
@@ -335,7 +339,8 @@ define('io.ox/core/folder/node', [
             if (!this.isVirtual) api.get(o.model_id);
 
             // fetch subfolders if not open but "empty" is false
-            if (o.empty === false && o.open === false) this.reset();
+            // or if it's a virtual folder and we're not sure if it has subfolders
+            if ((o.empty === false && o.open === false) || this.isVirtual) this.reset();
 
             // run through some custom callbacks
             var data = this.model.toJSON(), baton = ext.Baton({ view: this, data: data });
@@ -399,9 +404,22 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.model.get('index'),
-                'data-model': this.model_id
+                'data-index': this.getIndex(),
+                'data-model': this.options.model_id,
+                'data-contextmenu-id': this.options.contextmenu_id
             });
+        },
+
+        getIndexAttribute: function () {
+            var parent = this.options.parent;
+            if (!parent || !parent.collection) return undefined;
+            return 'index/' + parent.collection.id;
+        },
+
+        getIndex: function () {
+            var attribute = this.getIndexAttribute();
+            if (attribute === undefined) return 0;
+            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {

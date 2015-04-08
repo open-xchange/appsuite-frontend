@@ -828,26 +828,19 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     // init queue
                     requests[hash] = [];
                     // create new request
-                    r.def.then(
-                        function success() {
-                            if (!requests[hash] || !requests[hash].length) return;
-                            var args = _(arguments).map(clone);
-                            _(requests[hash]).each(function (r) {
-                                r.def.resolve.apply(r.def, args);
-                                that.trigger('stop done', r.xhr);
-                            });
-                        },
-                        function fail() {
-                            if (!requests[hash] || !requests[hash].length) return;
-                            var args = _(arguments).map(clone);
-                            _(requests[hash]).each(function (r) {
-                                r.def.reject.apply(r.def, args);
-                                that.trigger('stop fail', r.xhr);
-                            });
-                        }
-                    )
-                    .always(function () {
+                    r.def.always(function () {
+                        // success or failure?
+                        var success = this.state() === 'resolved';
+                        // at first, remove request from hash (see bug 37113)
+                        var reqs = requests[hash];
                         delete requests[hash];
+                        if (!reqs || !reqs.length) return;
+                        // now resolve all callbacks
+                        var args = _(arguments).map(clone);
+                        _(reqs).each(function (r) {
+                            r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
+                            that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
+                        });
                         hash = null;
                     });
                     lowLevelSend(r);

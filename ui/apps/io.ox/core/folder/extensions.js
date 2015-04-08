@@ -29,13 +29,34 @@ define('io.ox/core/folder/extensions',
 
     // define virtual/standard
     api.virtual.add('virtual/standard', function () {
-        return api.virtual.concat(
+        return this.concat(
             // inbox
             api.get(INBOX),
             // sent, drafts, spam, trash, archive
             // default0 is alternative for IMAP server that list standard folders below INBOX
             api.list('default0'), api.list(INBOX)
         );
+    });
+
+    // myfolders
+    api.virtual.add('virtual/myfolders', function () {
+        var id = api.altnamespace ? 'default0' : INBOX;
+        return api.list(id).then(function (list) {
+            return _(list).filter(function (data) {
+                if (account.isStandardFolder(data.id)) return false;
+                if (api.is('public|shared', data)) return false;
+                return true;
+            });
+        });
+    });
+
+    // remote folders
+    api.virtual.add('virtual/remote', function () {
+        return api.list('1').then(function (list) {
+            return _(list).filter(function (data) {
+                return account.isExternal(data.id);
+            });
+        });
     });
 
     var extensions = {
@@ -82,14 +103,10 @@ define('io.ox/core/folder/extensions',
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
-                filter: function (id, model) {
-                    if (account.isStandardFolder(model.id)) return false;
-                    if (api.is('public|shared', model.toJSON())) return false;
-                    return true;
-                },
-                folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
+                // convention! virtual folders are identified by their id starting with "virtual"
+                folder: 'virtual/myfolders',
                 icons: tree.options.icons,
-                model_id: defaultId,
+                contextmenu_id: defaultId,
                 parent: tree,
                 title: gt('My folders'),
                 tree: tree
@@ -107,10 +124,7 @@ define('io.ox/core/folder/extensions',
             this.append(
                 new TreeNodeView({
                     //empty: false,
-                    filter: function (id, model) {
-                        return account.isExternal(model.get('id'));
-                    },
-                    folder: '1',
+                    folder: 'virtual/remote',
                     headless: true,
                     open: true,
                     tree: tree,
@@ -244,6 +258,21 @@ define('io.ox/core/folder/extensions',
         {
             id: 'root-folders',
             draw: extensions.rootFolders
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/mail/filter').extend(
+        {
+            id: 'standard-folders',
+            draw: extensions.standardFolders
+        },
+        {
+            id: 'local-folders',
+            draw: extensions.localFolders
+        },
+        {
+            id: 'other',
+            draw: extensions.otherFolders
         }
     );
 
@@ -409,6 +438,8 @@ define('io.ox/core/folder/extensions',
                     this.find('.folder-shared').remove();
 
                     if (_.device('smartphone')) return;
+                    // drive has virtual folder 'Shared by me'
+                    if (baton.data.module === 'infostore') return;
                     if (!api.is('unlocked', baton.data)) return;
 
                     this.find('.folder-node').append(
