@@ -24,7 +24,7 @@ define('io.ox/core/desktop', [
     'io.ox/find/main',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, find, coreConfig, gt) {
+], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreConfig, gt) {
 
     'use strict';
 
@@ -353,16 +353,14 @@ define('io.ox/core/desktop', [
             return this.get('window');
         },
 
-        setSearch: function () {
-            var app = find.getApp({ parent: this });
-            //TODO: bottleneck
-            app.prepare();
-            this.set('search', app);
-            return app;
-        },
+        searchable: function () {
+            if (this.get('find')) return;
 
-        getSearch: function () {
-            return this.get('search');
+            var find = findFactory.getApp({ parent: this });
+            //TODO: bottleneck
+            find.prepare();
+            this.set('find', find);
+            return this;
         },
 
         getWindowNode: function () {

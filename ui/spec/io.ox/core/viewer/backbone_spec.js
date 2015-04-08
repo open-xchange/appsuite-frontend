@@ -57,12 +57,12 @@ define([
                 uploaded: 1,
                 meta: {}
             },
-            
+
             pimAttachment = {
                 attached: 1,
-                file_mimetype: "image/png",
+                file_mimetype: 'image/png',
                 file_size: 24670,
-                filename: "Happy-Minion-Icon.png",
+                filename: 'Happy-Minion-Icon.png',
                 folder: 187,
                 id: 3,
                 module: 4
@@ -107,7 +107,7 @@ define([
                     expect(model.get('versions')).to.equal(null);
                     expect(model.get('description')).to.equal(null);
                     expect(model.get('numberOfVersions')).to.equal(0);
-                    
+
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['false'];
@@ -173,7 +173,7 @@ define([
                     //expect(model.getPreviewUrl()).to.be.a('string');
                 });
             });
-            
+
             describe('result of creating a Model from a PIM attachment', function () {
                 it('should return a non empty object', function () {
                     var model = new Model(pimAttachment, { parse: true });
@@ -194,7 +194,7 @@ define([
                     expect(model.get('lastModified')).to.equal(null);
                     expect(model.get('module')).to.equal(4);
                     expect(model.get('numberOfVersions')).to.equal(0);
-                    
+
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['true'];
                     expect(model.isDriveFile()).to.be['false'];
@@ -202,7 +202,7 @@ define([
                     //expect(model.getPreviewUrl()).to.be.a('string');
                 });
             });
-            
+
         });
 
         // ----------------------------------------------------------------

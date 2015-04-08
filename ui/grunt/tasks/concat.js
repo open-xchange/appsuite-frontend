@@ -72,6 +72,7 @@ module.exports = function (grunt) {
                             'apps/plugins/halo/register.js',
                             'apps/io.ox/core/settings/defaults.js',
                             'apps/io.ox/core/moment.js',
+                            'apps/io.ox/core/viewer/main.js',
                             // missing for signin
                             'apps/io.ox/core/boot/config.js',
                             'apps/io.ox/core/boot/fixes.js',
@@ -241,7 +242,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            compose: {
+            tinymce: {
                 files: [
                     {
                         src: [
@@ -252,7 +253,16 @@ module.exports = function (grunt) {
                         ],
                         dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',
                         nonull: true
-                    },
+                    }
+                ]
+            },
+            compose: {
+                options: {
+                    banner: 'define("io.ox/mail/compose/bundle", [], function () {\n\n' +
+                                '"use strict";\n\n',
+                    footer: '});\n'
+                },
+                files: [
                     {
                         src: [
                             'apps/io.ox/mail/compose/view.js',

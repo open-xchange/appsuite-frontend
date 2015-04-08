@@ -69,10 +69,10 @@ define([
 
         var mainView =  new MainView({ collection: fileCollection }),
             coreDummy = $('<div id="io-ox-core">'),
-//            displayedData = {
-//                index: mainView.displayedFileIndex,
-//                model: mainView.collection.at(mainView.displayedFileIndex)
-//            };
+            // displayedData = {
+            //     index: mainView.displayedFileIndex,
+            //     model: mainView.collection.at(mainView.displayedFileIndex)
+            // };
             displayedData = {
                 index: 0,
                 model: mainView.collection.at(0)
@@ -90,11 +90,11 @@ define([
             });
 
             // TODO: adopt to asynchronous slide creation
-//            it('should bind viewer:toggle:sidebar event', function () {
-//                var oldSidebarOpened = mainView.sidebarView.opened;
-//                EventDispatcher.trigger('viewer:toggle:sidebar');
-//                expect(mainView.sidebarView.opened).to.be.not.equal(oldSidebarOpened);
-//            });
+            // it('should bind viewer:toggle:sidebar event', function () {
+            //     var oldSidebarOpened = mainView.sidebarView.opened;
+            //     EventDispatcher.trigger('viewer:toggle:sidebar');
+            //     expect(mainView.sidebarView.opened).to.be.not.equal(oldSidebarOpened);
+            // });
 
             it('should fire an initial render', function () {
                 expect(mainView.$el.find('.viewer-toolbar').length).to.equal(1);
@@ -131,14 +131,10 @@ define([
             });
 
             it('should close the viewer on ESC key', function () {
-                var escEvent = $.Event('keydown', { keyCode: 27});
+                var escEvent = $.Event('keydown', { keyCode: 27 });
                 mainView.$el.trigger(escEvent);
                 expect(coreDummy.find('.io-ox-viewer').length).to.be.equal(0);
             });
-
         });
-
-
     });
-
 });

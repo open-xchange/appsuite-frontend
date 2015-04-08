@@ -21,7 +21,7 @@ define('io.ox/calendar/view-detail', [
     'io.ox/core/folder/api',
     'io.ox/core/tk/attachments',
     'io.ox/core/extPatterns/links',
-    'io.ox/calendar/participants',
+    'io.ox/participants/detail',
     'io.ox/core/util',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',

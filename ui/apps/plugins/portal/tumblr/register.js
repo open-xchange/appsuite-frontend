@@ -83,7 +83,7 @@ define('plugins/portal/tumblr/register', [
                 // find proper size
                 _(sizes).each(function (photo) {
                     if (width === 0 || (photo.width > 250 && photo.width < 1000)) {
-                        url = photo.url;
+                        url = photo.url.replace(/https?:\/\//, '//');
                         width = photo.width;
                     }
                 });
@@ -140,7 +140,7 @@ define('plugins/portal/tumblr/register', [
                 },
                 postTags = function () {
                     var tags = [],
-                        tagBaseUri = 'http://' + post.blog_name + '.tumblr.com/tagged/';
+                        tagBaseUri = '//' + post.blog_name + '.tumblr.com/tagged/';
                     if (post.tags && post.tags.length > 0) {
                         _(post.tags).each(function (tag) {
                             tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
@@ -158,6 +158,7 @@ define('plugins/portal/tumblr/register', [
                                 width = photo.width;
                             }
                         });
+                        url = url.replace(/https?:\/\//, '//');
                         img = $('<img>').attr({ 'src': url }).css({
                             'width': '100%',
                             'max-width': width,

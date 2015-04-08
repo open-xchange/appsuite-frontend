@@ -19,8 +19,8 @@ define('io.ox/contacts/settings/model', ['settings!io.ox/contacts'], function (s
         initialize: function () {
         },
 
-        saveAndYell: function () {
-            return settings.saveAndYell(this.attributes);
+        saveAndYell: function (custom, options) {
+            return settings.saveAndYell(custom, options);
         },
 
         save: function () {

@@ -52,7 +52,7 @@ define('io.ox/core/pdf/pdfview', [
     /**
      * @param {PDFDocumentLoadingTask} pdfDocument
      */
-    function PDFView(pdfDocument) {
+    function PDFView(pdfDocument, globalOptions) {
 
         var self = this,
 
@@ -214,7 +214,7 @@ define('io.ox/core/pdf/pdfview', [
 
                             if (jqPageNode) {
                                 if (jqPageNode.children().length === 0) {
-                                    self.createPDFPageNode(jqPageNode, { pageZoom: self.getPageZoom(pageNumber) });
+                                    self.createPDFPageNode(jqPageNode, _.extend({ pageZoom: self.getPageZoom(pageNumber) }, globalOptions));
                                 }
 
                                 // do async. rendering and save all render Deferreds to be
@@ -428,6 +428,7 @@ define('io.ox/core/pdf/pdfview', [
                         }
 
                         curPageData.pageZoom = pageZoom;
+                        renderedPageNumbers = _.without(renderedPageNumbers, pageNumber);
                     }
                 }
 

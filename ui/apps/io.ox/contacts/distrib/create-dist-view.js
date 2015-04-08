@@ -20,8 +20,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
     'io.ox/contacts/util',
     'io.ox/core/extensions',
     'io.ox/calendar/edit/view-addparticipants',
-    'io.ox/core/notifications',
-    'less!io.ox/participants/participants'
+    'io.ox/core/notifications'
 ], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';

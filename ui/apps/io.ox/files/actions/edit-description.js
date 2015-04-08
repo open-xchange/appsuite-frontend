@@ -24,7 +24,6 @@ define('io.ox/files/actions/edit-description', [
 
         function save() {
             var changes = { description: this.getContentNode().find('textarea').val() };
-            console.log('update', data, changes);
             return api.update(data, changes).fail(notifications.yell);
         }
 

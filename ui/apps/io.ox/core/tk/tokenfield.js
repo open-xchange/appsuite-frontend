@@ -268,7 +268,9 @@ define('io.ox/core/tk/tokenfield', [
                     }
                 },
                 'tokenfield:removetoken': function (e) {
-                    self.collection.remove(self.getModelByCID(e.attrs.value));
+                    _([].concat(e.attrs)).each(function (el) {
+                        self.collection.remove(self.getModelByCID(el.value));
+                    });
                 }
             });
         },

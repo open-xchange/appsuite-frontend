@@ -245,11 +245,13 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         getDefaultScale: function () {
             var maxWidth = window.innerWidth - (this.PAGE_SIDE_MARGIN * 2),
-                pageDefaultSizeWidth = this.pdfDocument.getDefaultPageSize().width;
-            if (maxWidth >= pageDefaultSizeWidth) {
+                pageDefaultSize = this.pdfDocument.getDefaultPageSize(),
+                pageDefaultWidth = pageDefaultSize && pageDefaultSize.width;
+
+            if ((!pageDefaultWidth) || (maxWidth >= pageDefaultWidth)) {
                 return 1;
             }
-            return PDFView.round(maxWidth / pageDefaultSizeWidth, 1 / 100);
+            return PDFView.round(maxWidth / pageDefaultWidth, 1 / 100);
         },
 
         /**

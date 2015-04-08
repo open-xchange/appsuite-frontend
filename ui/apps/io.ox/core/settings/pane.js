@@ -41,12 +41,13 @@ define('io.ox/core/settings/pane', [
                 $('html').toggleClass('high-contrast', value);
             });
             model.on('change', function (model) {
-                settings.saveAndYell().then(
-                    function success() {
 
-                        var showNotice = _(reloadMe).any(function (attr) {
-                            return model.changed[attr];
-                        });
+                var showNotice = _(reloadMe).any(function (attr) {
+                    return model.changed[attr];
+                });
+
+                settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
+                    function success() {
 
                         if (showNotice) {
                             notifications.yell(

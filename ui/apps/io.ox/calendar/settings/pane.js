@@ -62,12 +62,13 @@ define('io.ox/calendar/settings/pane', [
             return list;
         };
 
-    model.on('change', function (e, path) {
-        model.saveAndYell().then(
+    model.on('change', function (model) {
+        var showNotice = _(reloadMe).any(function (attr) {
+            return model.changed[attr];
+        });
+        model.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
             function success() {
-                var showNotice = _(reloadMe).any(function (attr) {
-                    return attr === path;
-                });
+
                 if (showNotice) {
                     notifications.yell(
                         'success',

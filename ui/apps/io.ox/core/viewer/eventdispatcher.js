@@ -11,8 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 
-define('io.ox/core/viewer/eventdispatcher', [
-], function () {
+define('io.ox/core/viewer/eventdispatcher', [], function () {
 
     'use strict';
 

@@ -289,11 +289,13 @@ define('io.ox/mail/listview', [
             this.on('collection:load', this.lookForUnseenMessage);
 
             // mirror threaded state
-            this.listenTo(options.app.props, {
-                'change:thread': function (model) {
-                    self.threaded = model.get('thread');
-                }
-            });
+            if (options.app) {
+                this.listenTo(options.app.props, {
+                    'change:thread': function (model) {
+                        self.threaded = model.get('thread');
+                    }
+                });
+            }
         },
 
         lookForUnseenMessage: function () {

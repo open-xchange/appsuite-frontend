@@ -10,9 +10,7 @@
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
-define([
-    'io.ox/core/viewer/eventdispatcher',
-], function (EventDispatcher) {
+define(['io.ox/core/viewer/eventdispatcher'], function (EventDispatcher) {
 
     describe('OX Viewer Eventdispatcher', function () {
 

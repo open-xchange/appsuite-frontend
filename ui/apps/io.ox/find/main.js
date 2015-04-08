@@ -96,7 +96,7 @@ define('io.ox/find/main', [
             'reset': function (app) {
                 if (!app.get('inplace')) return;
                 // reset on folder click
-                app.listenTo(app.get('parent').folderView.tree, 'selection:action', app.reset);
+                app.listenTo(app.get('parent'), 'folder:change', app.cancel);
             },
 
             'vgrid': function (app) {
@@ -166,9 +166,9 @@ define('io.ox/find/main', [
             if (app.view) return app.view.discard();
         });
 
-        // reset current state of serach app
-        app.reset = function () {
-            if (this.view) this.view.reset();
+        // reset and collapse/hide
+        app.cancel = function () {
+            if (this.view) this.view.cancel();
         };
 
         // parent app id
@@ -233,7 +233,7 @@ define('io.ox/find/main', [
         }
 
         /**
-         * ready: app created and accessible via parentapp.getSearch()
+         * ready: app created and accessible via parentapp.get('find')
          * waiting: skeleton nodes drawn
          * running: lazy load finished, search app is usable in full
          */

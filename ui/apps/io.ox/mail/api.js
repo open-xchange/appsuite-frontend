@@ -531,7 +531,7 @@ define('io.ox/mail/api', [
     //
 
     folderAPI.on({
-        'before:clear': function (e, id) {
+        'before:clear': function (id) {
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
                 collection.reset([]);

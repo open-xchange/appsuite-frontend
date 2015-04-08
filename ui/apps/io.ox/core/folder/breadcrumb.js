@@ -33,7 +33,20 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 this.app = options.app;
                 this.handler = function (id) { this.app.folder.set(id); };
                 this.folder = this.app.folder.get();
+                this.find = this.app.get('find');
                 this.listenTo(this.app, 'folder:change', this.onChangeFolder);
+
+                if (this.find && this.find.isActive()) {
+                    // use item's folder id
+                    this.folder = options.folder;
+                    // last item is a normal item (not a unclickable tail node)
+                    this.notail = true;
+                    this.handler = function (id) {
+                        var folder = this.app.folder;
+                        folder.unset();
+                        folder.set(id);
+                    };
+                }
             }
         },
 
@@ -84,7 +97,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             }
 
             // add plain text tail or clickable link
-            if (isLast) node = $('<span class="breadcrumb-tail">');
+            if (isLast && !this.notail) node = $('<span class="breadcrumb-tail">');
             else if (!this.handler) node = $('<span class="breadcrumb-item">');
             else node = $('<a href="#" role="button" class="breadcrumb-link" tabindex="1">');
 

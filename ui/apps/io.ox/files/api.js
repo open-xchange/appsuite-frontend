@@ -22,8 +22,9 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, gt) {
+], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, filesSettings, gt) {
 
     'use strict';
 
@@ -483,6 +484,14 @@ define('io.ox/files/api', [
         return http.resume();
     };
 
+    function updateLockedUntil(list, value) {
+        var collection = pool.get('detail');
+        list.forEach(function (obj) {
+            var model = collection.get(_.cid(obj));
+            if (model) model.set('locked_until', value);
+        });
+    }
+
     /**
      * unlocks files
      * @param  {array} list
@@ -491,13 +500,7 @@ define('io.ox/files/api', [
     api.unlock = function (list) {
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
-        list.forEach(function (obj) {
-            var collection = pool.get('detail'),
-                model = collection.get(_.cid(obj));
-
-            if (model) model.set('locked_until', 0);
-        });
-
+        updateLockedUntil(list, 0);
         return lockToggle(list, 'unlock').done(function () {
             api.propagate('unlock', list);
         });
@@ -511,13 +514,8 @@ define('io.ox/files/api', [
     api.lock = function (list) {
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
-        list.forEach(function (obj) {
-            var collection = pool.get('detail'),
-                model = collection.get(_.cid(obj));
-
-            // lock for 60s, until server responds with the actual value
-            if (model) model.set('locked_until', _.now() + 60000);
-        });
+        // lock for 60s until server responds with the actual value
+        updateLockedUntil(list, _.now() + 60000);
         return lockToggle(list, 'lock').then(function () {
             return api.propagate('lock', list);
         });
@@ -544,10 +542,32 @@ define('io.ox/files/api', [
                 tree: '1'
             },
             data: [folder_id]
-        }).done(function () {
-            folderAPI.reload(folder_id);
+        })
+        .done(function () {
+            api.propagate('clear', { folder_id: folder_id });
         });
     };
+
+    //
+    // Respond to folder API
+    //
+    folderAPI.on({
+        'before:clear': function (id) {
+            // clear target folder
+            _(pool.getByFolder(id)).each(function (collection) {
+                collection.reset([]);
+            });
+        },
+        'remove:infostore': function () {
+            var id = filesSettings.get('folder/trash');
+            if (id) {
+                folderAPI.list(id, { cache: false });
+                _(pool.getByFolder(id)).each(function (collection) {
+                    collection.expired = true;
+                });
+            }
+        }
+    });
 
     //
     // Delete files
@@ -577,7 +597,7 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .done(function () {
-                api.propagate('delete', ids);
+                api.propagate('remove:file', ids);
             })
         );
     };
@@ -614,9 +634,6 @@ define('io.ox/files/api', [
 
     function transfer(type, list, targetFolderId) {
 
-        // mark target folder as expired
-        pool.resetFolder(targetFolderId);
-
         var fn = type === 'move' ? move : copy;
 
         return http.wait(fn(list, targetFolderId)).then(function (response) {
@@ -628,8 +645,7 @@ define('io.ox/files/api', [
                     break;
                 }
             }
-            api.trigger(type, list, targetFolderId);
-            folderAPI.reload(targetFolderId, list);
+            api.propagate(type, list, targetFolderId);
             if (errorText) return errorText;
         });
     }
@@ -684,8 +700,7 @@ define('io.ox/files/api', [
             appendColumns: false
         })
         .done(function () {
-            api.propagate('update', file);
-            if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
+            api.propagate('change:file', file, changes);
         });
     };
 
@@ -734,14 +749,14 @@ define('io.ox/files/api', [
      */
     api.upload = function (options) {
         var fid = options.folder_id || options.folder;
-
         options.action = 'new';
         return performUpload(options, {
             folder_id: fid,
             description: options.description || ''
         })
-        .done(function (res) {
-            api.propagate('add:file', { id: res.data, folder: fid });
+        .done(function (result) {
+            // result.data just provides the new file id
+            api.propagate('add:file', { id: result.data, folder_id: fid });
         });
     };
 
@@ -762,19 +777,13 @@ define('io.ox/files/api', [
          *     - promise can be aborted using promise.abort function
          */
         upload: function (options) {
-            var fid = options.folder_id || options.folder;
-
             options.action = 'update';
             return performUpload(options, {
-                folder_id: fid,
+                folder_id: options.folder_id || options.folder,
                 version_comment: options.version_comment || ''
             })
             .then(function () {
-                // reload versions list
-                return api.versions.load(options, { cache: false }).done(function (data) {
-                    // the mediator will reload the current collection
-                    api.propagate('add:version', { id: data.id, folder: fid });
-                });
+                return api.propagate('add:version', options);
             });
         },
 
@@ -828,14 +837,7 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .then(function () {
-                // let's reload the version list
-                // since we might have just removed the current version
-                return api.versions.load(file, { cache: false }).done(function (list) {
-                    // update model
-                    if (model) model.set('number_of_versions', list.length);
-                    // the mediator will reload the current collection
-                    api.propagate('remove:version', file);
-                });
+                return api.propagate('remove:version', file);
             });
         },
 
@@ -852,7 +854,7 @@ define('io.ox/files/api', [
             // if there is only version, the request works.
             // if the other fields are present, we get a backend error
             var changes = { version: file.version };
-            return api.update(file, changes).then(function () {
+            return api.update(file, changes).done(function () {
                 // the mediator will reload the current collection
                 api.propagate('change:version', file);
             });
@@ -886,89 +888,122 @@ define('io.ox/files/api', [
     };
 
     /**
-     * update collections and models and fire events (if not suppressed)
+     * Propagate changes beyond pure model updates
+     *
      * @param  {string} type
      * @param  {file} obj
-     * @param  {boolean} silent (no events will be fired) [optional]
-     * @return { promise }
+     * @param  {file} changes [optional]
+     * @return { promise } [if necessary]
+     *
+     * Usage:
+     *   api.propagate('add:file', file);
+     *   api.propagate('lock', array);
+     *   api.propagate('remove:file', array);
+     *   api.propagate('change:file', file, [changes]);
+     *   api.propagate('move', array, [targetFolderId]);
      */
-    api.propagate = function (type, list, silent) {
-        list = _.isArray(list) ? list : [list];
+    api.propagate = (function () {
 
-        var oldSchool = {
-            'new': 'add:file',
-            'change': 'update',
-            'delete': 'remove:file'
+        // keep support for old names
+        var oldschool = { 'new': 'add:file', 'change': 'change:file', 'update': 'change:file', 'delete': 'remove:file' };
+
+        function reloadVersions(file) {
+            return api.versions.load(file, { cache: false });
+        }
+
+        return function (type, file) {
+
+            // get another copy for array support
+            // move, copy, lock, unlock, remove:file handle multiple files at once
+            var list = _.isArray(file) ? file : [file];
+
+            // reduce attributes
+            file = _(file).pick('folder', 'folder_id', 'id', 'version');
+
+            // translate oldschool names
+            type = oldschool[type] || type;
+
+            // might help for a while
+            if (ox.debug) console.log('files/api.propagate()', type, file, list, arguments[2] || {});
+
+            switch (type) {
+
+                case 'add:file':
+                    api.trigger('add:file', file);
+                    // file count changed, need to reload folder
+                    folderAPI.reload(list);
+                    break;
+
+                case 'add:version':
+                    // reload versions list
+                    return reloadVersions().then(function () {
+                        // the mediator will reload the current collection
+                        api.trigger('add:version', file);
+                    });
+
+                case 'change:file':
+                    // we trigger both change and update for backwards-compatibility
+                    api.trigger('change:file update change:file:' + _.ecid(file) + ' update:' + _.ecid(file));
+                    // rename?
+                    var changes = arguments[2] || {};
+                    if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
+                    break;
+
+                case 'change:version':
+                    api.trigger('change:version', file);
+                    break;
+
+                case 'clear':
+                    api.trigger('clear', file.folder_id);
+                    folderAPI.reload(file.folder_id);
+                    break;
+
+                case 'copy':
+                case 'move':
+                    var targetFolderId = arguments[2];
+                    // propagate proper event
+                    api.trigger(type, list, targetFolderId);
+                    // reload all affected folders (yep, copy would just need the target folder)
+                    folderAPI.reload(list, targetFolderId);
+                    // mark target folder as expired
+                    pool.resetFolder(targetFolderId);
+                    break;
+
+                case 'lock':
+                    // reload locked files to get proper timestamps
+                    return api.getList(list, { cache: false });
+
+                case 'remove:file':
+                    api.trigger('remove:file', list);
+                    _(list).each(function (obj) {
+                        api.trigger('remove:file:' + _.ecid(obj));
+                    });
+                    // file count changed, need to reload folder
+                    folderAPI.reload(list);
+                    break;
+
+                case 'remove:version':
+                    // let's reload the version list
+                    // since we might have just removed the current version
+                    return reloadVersions().done(function (list) {
+                        // update model
+                        var cid = _.cid(file), model = pool.get('detail').get(cid);
+                        if (model) model.set('number_of_versions', list.length);
+                        // the mediator will reload the current collection
+                        api.trigger('remove:version', file);
+                    });
+
+                case 'rename':
+                    api.trigger('rename', _.cid(file));
+                    break;
+
+                case 'unlock':
+                    // nothing to do for unlock
+                    break;
+            }
         };
 
-        if (!type || _.isEmpty(list)) {
-            return $.when(list);
-        }
-
-        type = oldSchool[type] || type;
-
-        switch (type) {
-            case 'add:file':
-                var obj = list[0];
-                if (!silent) api.trigger(type, obj);
-
-                // file count changed, need to reload folder
-                folderAPI.reload(obj.folder_id || obj.folder);
-
-                return $.when(list);
-            case 'add:version':
-                var obj = list[0];
-                if (!silent) api.trigger(type, obj);
-
-                return $.when(list);
-            case 'change:version':
-                if (!silent) list.forEach(function (obj) {
-                    api.trigger('change:version', obj);
-                });
-
-                return $.when(list);
-            case 'lock':
-                return api.getList(list, { cache: false });
-            case 'remove:file':
-                if (!silent) {
-                    api.trigger('remove:file');
-                    list.forEach(function (obj) {
-                        api.trigger('remove:file' + ':' + _.ecid(obj));
-                    });
-                }
-                // file count changed, need to reload folder
-                folderAPI.reload(list.map(function (obj) {
-                    return obj.folder_id || obj.folder;
-                }));
-
-                return $.when(list);
-            case 'remove:version':
-                if (!silent) list.forEach(function (obj) {
-                    api.trigger('remove:version', obj);
-                });
-
-                return $.when(list);
-            case 'rename':
-                if (!silent) list.forEach(function (obj) {
-                    api.trigger('rename', _.cid(obj));
-                });
-
-                return $.when(list);
-            case 'unlock':
-                return $.when(list);
-            case 'update':
-                if (!silent) {
-                    api.trigger('update');
-                    list.forEach(function (obj) {
-                        api.trigger('update' + ':' + _.ecid(obj));
-                    });
-                }
-                return $.when(list);
-            default:
-                if (ox.debug) console.warn('unknown propagation type', type, list);
-                return $.when(list);
-        }
-    };
+    }());
 
     return api;
 

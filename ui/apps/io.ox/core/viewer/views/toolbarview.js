@@ -156,6 +156,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: 'io.ox/files/icons/share'
                 },
+                'sendbymail': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Send by mail'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/send'
+                },
                 'delete': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -286,7 +293,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             'click a.viewer-toolbar-close': 'onClose',
             'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
             'click a.viewer-toolbar-filename': 'onRename',
-            'dblclick a.viewer-toolbar-filename': 'onRename',
             'keydown a.viewer-toolbar-filename': 'onRename'
         },
 
@@ -325,8 +331,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
-            if (this.model.isDriveFile() && (event.which === 32 || event.which === 13 || event.type === 'dblclick' ||
-                (_.device('smartphone || tablet') && event.type === 'click'))) {
+            if (this.model.isDriveFile() && (event.which === 32 || event.which === 13 || event.type === 'click')) {
                 event.preventDefault();
                 ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData').toJSON() });
             }

@@ -71,8 +71,20 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 this.setImageURL(this.model.get('image1_url'));
             },
 
-            setImageURL: function (url) {
-                this.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
+            setImageURL: function (url, callback) {
+                if (callback) {
+                    var self = this;
+                    //preload Image
+                    $('<img>').attr('src', url).load(function () {
+                        //no memory leaks
+                        $(this).remove();
+                        //image is cached now so no loading time for this
+                        self.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
+                        callback();
+                    });
+                } else {
+                    this.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
+                }
             },
 
             previewPictureFile: function () {
@@ -84,6 +96,9 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
                 var self = this, file = this.model.get('pictureFile');
 
+                self.imgCon.css('background-image', 'initial').busy();
+                self.addImgText.hide();
+
                 require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
                     canvasResize(file, {
                         width: 300,
@@ -91,9 +106,10 @@ define('io.ox/contacts/widgets/pictureUpload', [
                         crop: false,
                         quality: 80,
                         callback: function (data) {
-                            self.setImageURL(data);
-                            self.addImgText.hide();
-                            self.closeBtn.show();
+                            self.setImageURL(data, function () {
+                                self.imgCon.idle();
+                                self.closeBtn.show();
+                            });
                         }
                     });
                 });

@@ -270,6 +270,12 @@ div.hopscotch-bubble {
     .border-radius(5px 5px 0 0);
 }
 
+// defined in core CSS to guarantee an instant response
+.io-ox-viewer {
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 11; // just to one more than #io-ox-screens
+}
+
 /* scrollable for touch devices, esp. iOS */
 .scrollable {
     overflow: auto !important;
@@ -338,7 +344,6 @@ div.hopscotch-bubble {
     html.high-contrast & {
         color: @black;
     }
-
 }
 
 .default-content-padding { padding: 20px 30px; }
