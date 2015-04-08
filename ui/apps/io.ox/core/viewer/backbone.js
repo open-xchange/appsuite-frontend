@@ -255,7 +255,9 @@ define('io.ox/core/viewer/backbone', [
                 meta: data.meta,
                 lastModified: data.last_modified,
                 numberOfVersions: data.number_of_versions,
-                description: data.description
+                description: data.description,
+                currentVersion: data.current_version,
+                versions: data.versions
             };
         }
         result.source = source;
