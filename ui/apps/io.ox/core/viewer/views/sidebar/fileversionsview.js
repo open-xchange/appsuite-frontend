@@ -74,9 +74,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
                 self.append(panel);
 
-                // expand the panel
+                // if the panel was about to slide down before repainting, we need to trigger this manually
                 if (panelState === PANEL_STATE_OPENING) {
-                    panelBody.slideDown().removeClass('panel-collapsed');
+                    panel.find('.toggle-panel').trigger('click');
                 }
             }
         }
