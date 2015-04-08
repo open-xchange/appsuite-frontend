@@ -41,9 +41,9 @@ define('io.ox/core/viewer/views/mainview', [
         initialize: function (/*options*/) {
             //console.info('MainView.initialize()');
             // create children views
-            this.toolbarView = new ToolbarView();
+            this.toolbarView = new ToolbarView({ collection: this.collection });
             this.displayerView = new DisplayerView({ collection: this.collection });
-            this.sidebarView = new SidebarView();
+            //this.sidebarView = new SidebarView({ collection: this.collection });
             // clean Viewer element and all event handlers on viewer close
             this.listenTo(this.toolbarView, 'close', function () {
                 this.remove();
@@ -84,7 +84,6 @@ define('io.ox/core/viewer/views/mainview', [
                 console.error('Core.Viewer.MainView.render(): no file to render');
                 return;
             }
-            var self = this;
             // make this main view focusable and prevent focus from leaving the viewer.
             this.$el.attr('tabindex', -1);
             // set device type
@@ -92,15 +91,9 @@ define('io.ox/core/viewer/views/mainview', [
             // append toolbar view
             this.$el.append(
                 this.toolbarView.render(data).el,
-                this.displayerView.render(data).el,
-                this.sidebarView.render(data).el
+                this.displayerView.render(data).el
+                //this.sidebarView.render(data).el
             );
-            // Hotfix to prevent Halo View from stealing the focus
-            // TODO: remove when Viewer replaces the Halo View
-            _.delay(function () {
-                self.displayerView.focusActiveSlide();
-            }, 100);
-
             return this;
         },
 
@@ -183,7 +176,7 @@ define('io.ox/core/viewer/views/mainview', [
             //console.info('MainView.disposeView()');
             this.toolbarView.remove();
             this.displayerView.remove();
-            this.sidebarView.remove();
+            //this.sidebarView.remove();
             this.collection.off().stopListening().each(function (model) {
                 model.off().stopListening();
             });

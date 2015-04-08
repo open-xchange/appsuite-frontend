@@ -236,11 +236,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription', {
         id: 'edit-description',
         action: function (baton) {
-            var actionBaton = Ext.Baton({ data: {
-                id: baton.model.get('id'),
-                folder_id: baton.model.get('folderId'),
-                description: baton.model.get('description')
-            }});
+            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
             ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
         }
     });
@@ -266,7 +262,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         id: 'zoomin',
         requires: function (e) {
-            return e.baton.model.isDocumentFile() && ox.debug;
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF()) && ox.debug;
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomin', baton);
@@ -275,7 +272,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         id: 'zoomout',
         requires: function (e) {
-            return e.baton.model.isDocumentFile() && ox.debug;
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF()) && ox.debug;
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomout', baton);
@@ -331,9 +329,9 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
-            if (this.model.isDriveFile() && (event.which === 32 || event.which === 13 || event.type === 'click')) {
+            if ((this.model.get('source') === 'drive') && (event.which === 32 || event.which === 13 || event.type === 'click')) {
                 event.preventDefault();
-                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData').toJSON() });
+                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
             }
         },
 
@@ -360,8 +358,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 baton = Ext.Baton({
                     $el: toolbar,
                     model: data.model,
-                    models: origData instanceof Backbone.Model ? [origData] : null,
-                    data: origData instanceof Backbone.Model ? origData.toJSON() : origData
+                    models: origData ? null : [data.model],
+                    data: origData ? origData : data.model.toJSON()
                 }),
                 appName = data.model.get('source');
             // remove listener from previous model

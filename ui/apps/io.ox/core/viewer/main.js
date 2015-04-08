@@ -28,7 +28,6 @@ define('io.ox/core/viewer/main', [], function () {
     */
     function getFileList (baton) {
         if (!baton) { return null; }
-        // temporary till we get list of models from baton directly
         if (baton.collection) {
             return baton.collection.models;
         }
@@ -56,7 +55,7 @@ define('io.ox/core/viewer/main', [], function () {
 
                 var fileList = getFileList(baton);
                 if (!fileList) {
-                    console.error('Core.Viewer.launch(): no files to preview.');
+                    console.error('Core.Viewer.main.launch(): no files to preview.');
                     return;
                 }
                 // create file collection and populate it with file models

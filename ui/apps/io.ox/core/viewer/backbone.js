@@ -24,119 +24,49 @@
  */
 
 define('io.ox/core/viewer/backbone', [
-    'io.ox/files/api',
-    'io.ox/core/api/attachment',
-    'io.ox/mail/api'
-], function (FilesAPI, AttachmentAPI, MailAPI) {
+    'io.ox/files/api'
+], function (FilesAPI) {
 
     'use strict';
 
     var ITEM_TYPE_FILE = 'drive',
         ITEM_TYPE_MAIL_ATTACHMENT = 'mail',
-        ITEM_TYPE_PIM_ATTACHMENT = 'pim',
-        VIEW_MODES = { VIEW: 'view', PREVIEW: 'preview', THUMBNAIL: 'thumbnail', DOWNLOAD: 'download' },
-        MIME_TYPES = {
-            IMAGE: {
-                'jpg':  'image/jpeg',
-                'jpeg': 'image/jpeg',
-                'png':  'image/png',
-                'gif':  'image/gif',
-                'tif':  'image/tiff',
-                'tiff': 'image/tiff',
-                'bmp':  'image/bmp'
-            },
-            AUDIO: {
-                'mp3':  'audio/mpeg',
-                'ogg':  'audio/ogg',
-                'opus': 'audio/ogg',
-                'aac':  'audio/aac',
-                'm4a':  'audio/mp4',
-                'm4b':  'audio/mp4',
-                'wav':  'audio/wav'
-            },
-            VIDEO: {
-                'mp4':  'video/mp4',
-                'm4v':  'video/mp4',
-                'ogv':  'video/ogg',
-                'ogm':  'video/ogg',
-                'webm': 'video/webm'
-            },
-            OFFICE: {
-                // open office
-                'odc': 'application/vnd.oasis.opendocument.chart',
-                'odb': 'application/vnd.oasis.opendocument.database',
-                'odf': 'application/vnd.oasis.opendocument.formula',
-                'odg': 'application/vnd.oasis.opendocument.graphics',
-                'otg': 'application/vnd.oasis.opendocument.graphics-template',
-                'odi': 'application/vnd.oasis.opendocument.image',
-                'odp': 'application/vnd.oasis.opendocument.presentation',
-                'otp': 'application/vnd.oasis.opendocument.presentation-template',
-                'ods': 'application/vnd.oasis.opendocument.spreadsheet',
-                'ots': 'application/vnd.oasis.opendocument.spreadsheet-template',
-                'odt': 'application/vnd.oasis.opendocument.text',
-                'odm': 'application/vnd.oasis.opendocument.text-master',
-                'ott': 'application/vnd.oasis.opendocument.text-template',
-                'oth': 'application/vnd.oasis.opendocument.text-web',
-                // microsoft office
-                'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-                'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-                'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
-                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-                'doc': 'application/msword',
-                'dot': 'application/msword',
-                'xls': 'application/vnd.ms-excel',
-                'xlb': 'application/vnd.ms-excel',
-                'xlt': 'application/vnd.ms-excel',
-                'ppt': 'application/vnd.ms-powerpoint',
-                'pps': 'application/vnd.ms-powerpoint'
-            },
-
-            OFFICE_SPREADSHEET: {
-                'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-                'xls': 'application/vnd.ms-excel',
-                'xlb': 'application/vnd.ms-excel',
-                'xlt': 'application/vnd.ms-excel',
-                'ods': 'application/vnd.oasis.opendocument.spreadsheet',
-                'ots': 'application/vnd.oasis.opendocument.spreadsheet-template'
-            },
-
-            OFFICE_TEXT: {
-                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-                'doc': 'application/msword',
-                'dot': 'application/msword',
-                'odt': 'application/vnd.oasis.opendocument.text',
-                'odm': 'application/vnd.oasis.opendocument.text-master',
-                'ott': 'application/vnd.oasis.opendocument.text-template',
-                'oth': 'application/vnd.oasis.opendocument.text-web'
-            },
-
-            OFFICE_PRESENTATION: {
-                'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-                'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
-                'ppt': 'application/vnd.ms-powerpoint',
-                'pps': 'application/vnd.ms-powerpoint',
-                'odp': 'application/vnd.oasis.opendocument.presentation',
-                'otp': 'application/vnd.oasis.opendocument.presentation-template'
-            },
-
-            PDF: {
-                'pdf': 'application/pdf'
-            },
-
-            TEXT: {
-                'txt': 'text/plain',
-                'md': 'text/markdown'
-            }
-        };
+        ITEM_TYPE_PIM_ATTACHMENT = 'pim';
 
     /**
-     * Normalize file descriptors coming from Mail, Drive, and PIM Apps.
+     * Guesses (duck check) the source type of a file by its properties.
+     *
+     * @param {Object} data
+     *  a file descriptor object passed from e.g Drive, Calendar or Mail app.
+     *
+     * @returns {String|null}
+     *  returns the file source type or null:
+     *      ITEM_TYPE_FILE for Drive files
+     *      ITEM_TYPE_MAIL_ATTACHMENT for mail attachments
+     *      ITEM_TYPE_PIM_ATTACHMENT for attachments of contacts, appointments or tasks
+     */
+    function getFileSourceType (data) {
+        if (!data) {
+            return null;
+        }
+        if (data instanceof FilesAPI.Model) {
+            data = data.toJSON();
+        }
+        if ((data.mail && data.mail.id && data.mail.folder_id) || (data.group === 'mail') || (data.disp === 'attachment')) {
+            return ITEM_TYPE_MAIL_ATTACHMENT;
+
+        } else if (_.isNumber(data.attached) && _.isNumber(data.folder) && _.isNumber(data.module)) {
+            return ITEM_TYPE_PIM_ATTACHMENT;
+
+        } else if (_.isString(data.version)) {
+            return ITEM_TYPE_FILE;
+        }
+
+        return null;
+    }
+
+    /**
+     * Normalize file descriptors coming from Mail and PIM Apps.
      *
      * @param {Object} data
      *  file descriptor object from Mail, Drive, and PIM Apps.
@@ -148,227 +78,70 @@ define('io.ox/core/viewer/backbone', [
     function normalize(data) {
         var result = {},
             source = getFileSourceType(data);
-        if (!source) {
+        if (!source ) {
             console.warn('Core.Viewer.backbone: Can not determine file source.');
             return result;
         }
 
-        /**
-         * Guesses (duck check) the source type of a file by its properties.
-         *
-         * @param {Object} data
-         *  a file descriptor object passed from e.g Drive, Calendar or Mail app.
-         *
-         * @returns {String|null}
-         *  returns the file source type or null:
-         *      ITEM_TYPE_FILE for Drive files
-         *      ITEM_TYPE_MAIL_ATTACHMENT for mail attachments
-         *      ITEM_TYPE_PIM_ATTACHMENT for attachments of contacts, appointments or tasks
-         */
-        function getFileSourceType (data) {
-            if (!data || !data.id) { return null; }
-
-            if ((data.mail && data.mail.id && data.mail.folder_id) || (data.group === 'mail') || (data.disp === 'attachment')) {
-                return ITEM_TYPE_MAIL_ATTACHMENT;
-
-            } else if (_.isNumber(data.attached) && _.isNumber(data.folder) && _.isNumber(data.module)) {
-                return ITEM_TYPE_PIM_ATTACHMENT;
-
-            } else if (_.isString(data.version)) {
-                return ITEM_TYPE_FILE;
-            }
-
-            return null;
-        }
-
-        /**
-         *  Retrieves the file category from its MIME type and extension.
-         *
-         *  @param {String} mimeType
-         *  the MIME type string
-         *
-         *  @param {String} fileExtension
-         *  the file extension
-         *
-         *  @returns {String}
-         *   Returns one of these supported categories: 'IMAGE', 'VIDEO', AUDIO', 'OFFICE', 'PDF',
-         *   and returns null if no matching category is found.
-         */
-        function getFileCategory (mimeType, fileExtension) {
-            var fileCategory = null;
-            _.each(MIME_TYPES, function (types, category) {
-                var mimeTypes = _.values(types),
-                    extensions = _.keys(types);
-                if (_.contains(mimeTypes, mimeType) || _.contains(extensions, fileExtension)) {
-                    fileCategory = category;
-                }
-            });
-            return fileCategory;
-        }
-
-        /**
-         *  Retrieves the extension from a given file name.
-         *
-         * @param {String} filename
-         *  Filename string
-         *
-         * @returns {String | null}
-         *  Returns the file extension string if found, null otherwise.
-         */
-        function getExtension (fileName) {
-            if (!fileName || !_.isString(fileName) || fileName.length === 0) { return null; }
-            var index = fileName.lastIndexOf('.');
-            return (fileName.lastIndexOf('.') >= 0) ? fileName.substring(index + 1).toLowerCase() : null;
-        }
-
         // normalize properties
-        if (source === ITEM_TYPE_MAIL_ATTACHMENT) {
-            result = {
-                filename: data.filename,
-                size: data.size,
-                contentType: data.content_type,
-                fileCategory: getFileCategory(data.content_type, getExtension(data.filename)),
-                id: data.id,
-                folderId: data.mail && data.mail.folder_id || null
-            };
-
-        } else if (source === ITEM_TYPE_PIM_ATTACHMENT) {
-            result = {
-                filename: data.filename,
-                size: data.file_size,
-                contentType: data.file_mimetype,
-                fileCategory: getFileCategory(data.file_mimetype, getExtension(data.filename)),
-                id: data.id,
-                folderId: data.folder,
-                module: data.module
-            };
-
-        } else if (source === ITEM_TYPE_FILE) {
-            result = {
-                filename: data.filename,
-                size: data.file_size,
-                version: data.version,
-                contentType: data.file_mimetype,
-                fileCategory: getFileCategory(data.file_mimetype, getExtension(data.filename)),
-                id: data.id,
-                folderId: data.folder_id,
-                meta: data.meta,
-                lastModified: data.last_modified,
-                numberOfVersions: data.number_of_versions,
-                description: data.description
-            };
+        switch (source) {
+            case ITEM_TYPE_MAIL_ATTACHMENT:
+                result = {
+                    filename: data.filename,
+                    file_size: data.size,
+                    file_mimetype: data.content_type,
+                    id: data.id,
+                    folder_id: data.mail && data.mail.folder_id || null
+                }; break;
+            case ITEM_TYPE_PIM_ATTACHMENT:
+                result = {
+                    filename: data.filename,
+                    file_size: data.file_size,
+                    file_mimetype: data.file_mimetype,
+                    id: data.id,
+                    folder_id: data.folder,
+                    module: data.module
+                }; break;
+            default:
+                break;
         }
-        result.source = source;
 
         return result;
     }
-
-    /**
-     *  The Model represents a general file model for the OX Viewer.
-     */
-    var Model = Backbone.Model.extend({
-
-        defaults: function () {
-            return {
-                origData: null,
-                source: null,
-                filename: '',
-                size: 0,
-                version: null, // nur drive
-                contentType: null,
-                id: null, // could be a attachment id, or drive file id
-                folderId: null,
-                meta: {},
-                lastModified: null,
-                module: null,
-                description: null,
-                versions: null,
-                numberOfVersions: 0
-            };
-        },
-
-        parse: normalize,
-
-        isMailAttachment: function () {
-            return this.get('source') === ITEM_TYPE_MAIL_ATTACHMENT;
-        },
-
-        isPIMAttachment: function () {
-            return this.get('source') === ITEM_TYPE_PIM_ATTACHMENT;
-        },
-
-        isDriveFile: function () {
-            return this.get('source') === ITEM_TYPE_FILE;
-        },
-
-        /**
-         * Whether this file is a 'Document' file. Office or PDF are declared
-         * as documents at the moment.
-         *
-         * @returns {boolean}
-         */
-        isDocumentFile: function () {
-            var category = this.get('fileCategory');
-            return (_.isString(category) && category.indexOf('OFFICE') >= 0) || (category === 'PDF');
-        },
-
-        getPreviewUrl: function () {
-            if (this.isMailAttachment()) {
-                return MailAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
-
-            } else if (this.isDriveFile()) {
-                var viewMode = VIEW_MODES.THUMBNAIL;
-                // temporary workaround to show previews of office documents
-                if (this.isDocumentFile()) {
-                    viewMode = VIEW_MODES.PREVIEW;
-                }
-                return FilesAPI.getUrl(this.get('origData').attributes, viewMode, null);
-
-            } else if (this.isPIMAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
-            }
-            return null;
-        }
-
-    });
 
     /**
      *  The Collection consists of an array of viewer models.
      */
     var Collection = Backbone.Collection.extend({
 
-        model: Model,
+        model: FilesAPI.Model,
 
-        // TODO: filter file models without a real file
         /**
-         *  Transform Drive Backbone Models to Viewer Backbone Models.
+         *  Normalizes given models array and create Files API models out of the
+         *  model objects if not yet already.
          *
          * @param {Array} models
-         *  Backbone models from Drive.
+         *  an array of models objects from Drive, Mail or PIM Apps.
          *
          * @returns {Array} viewerModels
-         *  Viewer Backbone models.
+         *  an array of file models to be used by OX Viewer.
          */
         parse: function (models) {
             var viewerModels = [];
             _.each(models, function (model) {
-                var isBackboneModel = model instanceof Backbone.Model;
-                // filter out folders in Drive
-                if (isBackboneModel && model.has('standard_folder')) {
+                var isFileModel = model instanceof FilesAPI.Model;
+                // filter out folders
+                if (isFileModel && model.isFolder()) {
                     return;
                 }
-                // check if model is a Backbone Model (Drive), or POJs (Mail, PIM apps)
-                var attributes = isBackboneModel ? model.attributes : model,
-                    viewerModel = new Model(attributes, { parse: true });
-                viewerModel.set('origData', model);
-                viewerModels.push(viewerModel);
-                if (isBackboneModel) {
-                    // forward Drive model events to Viewer models
-                    viewerModel.listenTo(model, 'change', function (changeModel) {
-                        var convertedAtrributes = normalize(changeModel.attributes);
-                        viewerModel.set(convertedAtrributes);
-                    });
+                // normalize non-file model objects and create file models out of it
+                if (!isFileModel) {
+                    var normalizedModel = normalize(model);
+                    model = new FilesAPI.Model(normalizedModel);
+                    model.set('origData', model);
                 }
+                model.set('source', getFileSourceType(model));
+                viewerModels.push(model);
             });
             return viewerModels;
         },
@@ -400,7 +173,6 @@ define('io.ox/core/viewer/backbone', [
     });
 
     return {
-        Model: Model,
         Collection: Collection
     };
 });
