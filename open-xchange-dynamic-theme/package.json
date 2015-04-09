@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD:open-xchange-dynamic-theme/package.json
   "name": "open-xchange-dynamic-theme",
   "version": "7.8.0-0",
+=======
+  "name": "open-xchange-appsuite-help-drive",
+  "version": "7.6.1-20",
+>>>>>>> hotfix-2475:help-drive/package.json
   "dependencies": {
     "less": "1.7.3",
     "assemble": "^0.4.41"
