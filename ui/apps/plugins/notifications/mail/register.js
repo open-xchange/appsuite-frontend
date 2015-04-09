@@ -18,8 +18,9 @@ define('plugins/notifications/mail/register', [
     'io.ox/core/extensions',
     'gettext!plugins/notifications',
     'io.ox/mail/util',
-    'io.ox/core/folder/api'
-], function (api, ext, gt, util, folderApi) {
+    'io.ox/core/folder/api',
+    'io.ox/core/api/account'
+], function (api, ext, gt, util, folderApi, account) {
 
     'use strict';
 
@@ -32,7 +33,7 @@ define('plugins/notifications/mail/register', [
 
             _(folderApi.pool.models).each(function (model, key) {
                 //foldername starts with inbox
-                if (key.match(/^default\d+\/INBOX/)) {
+                if (key.match(/^default0\/INBOX/) && !account.is('spam', key)) {
                     models[key] = model;
                 }
             });
@@ -63,7 +64,7 @@ define('plugins/notifications/mail/register', [
             });
 
             $(folderApi.pool).on('folder-model-added', function (e, key) {
-                if (key.match(/^default\d+\/INBOX/)) {
+                if (key.match(/^default0\/INBOX/) && !account.is('spam', key)) {
                     var model = folderApi.pool.models[key];
                     models[key] = model;
                     model.on('change:unread', update);

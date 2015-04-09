@@ -69,34 +69,38 @@ define('io.ox/core/folder/api', [
         return (all ? 'all/' : '') + String(id);
     }
 
-    function calculateSubtotal(model, value, attribute) {
-        if (isVirtual(model.get('id')) || account.is('spam', model.get('id'))) {
+    //no deep recursion needed here, children are sufficient
+    function calculateSubtotal(model) {
+        var subfolders = pool.collections[model.get('id')].models,
+        subtotal = 0;
+        for (var i = 0; i < subfolders.length; i++) {
+            subtotal += (subfolders[i].get('subtotal') || 0) + (subfolders[i].get('unread') || 0);
+        }
+        return subtotal;
+    }
+
+    function bubbleSubtotal(model, value, attribute) {
+        if (isVirtual(model.get('id'))) {
             return;
         }
-
+        //attribute may be subtotal or unread
         var previous = model._previousAttributes[attribute] !== undefined && model._previousAttributes[attribute] !== null ? model._previousAttributes[attribute] : 0,
             difference = value - previous,
             parent = pool.models[model.get('folder_id')];
 
         //system folders doesn't matter
-        if (difference !== 0 && parent && parent.get('module') !== 'system'  && !account.is('spam', parent.get('id')) && pool.collections[parent.get('id')]) {
-            var parentSubfolders = pool.collections[parent.get('id')].models,
-            subtotal = 0;
-            for (var i = 0; i < parentSubfolders.length; i++) {
-                if (!account.is('spam', parentSubfolders[i].get('id'))) {
-                    subtotal += (parentSubfolders[i].get('subtotal') || 0) + (parentSubfolders[i].get('unread') || 0);
-                }
-            }
-            parent.set('subtotal', subtotal);
+        //bubble through the tree in parent direction
+        if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
+            parent.set('subtotal', calculateSubtotal(parent));
         }
     }
 
     function onChangeSubtotal (model, value) {
-        calculateSubtotal(model, value, 'subtotal');
+        bubbleSubtotal(model, value, 'subtotal');
     }
 
     function onChangeUnread (model, value) {
-        calculateSubtotal(model, value, 'unread');
+        bubbleSubtotal(model, value, 'unread');
     }
 
     //
@@ -164,12 +168,10 @@ define('io.ox/core/folder/api', [
             collection[type](models);
             collection.fetched = true;
 
-            if (!isVirtual(id) && !account.is('spam', id) && this.models[id] && this.models[id].get('module') !== 'system') {
+            if (!isVirtual(id) && this.models[id] && this.models[id].get('module') !== 'system') {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
-                    if (!account.is('spam', models[i].get('id'))) {
-                        subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
-                    }
+                    subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
                 }
                 this.models[id].set('subtotal', subtotal);
             }
@@ -995,6 +997,7 @@ define('io.ox/core/folder/api', [
         FolderCollection: FolderCollection,
         Pool: Pool,
         pool: pool,
+        calculateSubtotal: calculateSubtotal,
         get: get,
         list: list,
         multiple: multiple,

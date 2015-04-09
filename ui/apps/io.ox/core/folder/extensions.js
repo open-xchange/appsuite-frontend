@@ -104,7 +104,6 @@ define('io.ox/core/folder/extensions', [
 
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
-                count: 0,
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders
                 empty: !!api.altnamespace,
