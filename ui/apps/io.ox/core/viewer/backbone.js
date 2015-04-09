@@ -129,11 +129,13 @@ define('io.ox/core/viewer/backbone', [
                 'pdf': 'application/pdf'
             },
 
-            TEXT: {
-                'txt': 'text/plain',
-                'md': 'text/markdown'
-            }
+            TEXT: {}
         };
+
+    // add some typical plain text extensions
+    'asc asm c conf cpp css diff htm html js json log md patch php pl properties py rb sh txt xml yaml'.split(' ').forEach(function (suffix) {
+        MIME_TYPES.TEXT[suffix] = 'text/plain';
+    });
 
     /**
      * Normalize file descriptors coming from Mail, Drive, and PIM Apps.
