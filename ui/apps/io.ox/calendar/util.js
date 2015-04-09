@@ -297,6 +297,10 @@ define('io.ox/calendar/util', [
                 $.txt(gt.noI18n(this.getTimeInterval(data))),
                 $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())).popover({
                     container: '#io-ox-core',
+                    viewport: {
+                        selector: '#io-ox-core',
+                        padding: 10
+                    },
                     content: getContent(),
                     html: true,
                     placement: function (tip) {
@@ -307,7 +311,7 @@ define('io.ox/calendar/util', [
                     },
                     title: this.getTimeInterval(data) + ' ' + current.zoneAbbr(),
                     trigger: 'hover focus'
-                }).on('blur', function () {
+                }).on('blur dispose', function () {
                     $(this).popover('hide');
                 })
             );
