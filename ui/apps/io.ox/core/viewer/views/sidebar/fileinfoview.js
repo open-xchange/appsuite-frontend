@@ -34,7 +34,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 model = baton && baton.model,
                 fileName = model && model.get('filename') || '-',
                 size = model && (_.isNumber(model.get('size'))) ? _.filesize(model.get('size')) : '-',
-                modified = model && Util.getDateFormated(model.get('lastModified'));
+                modified = model && model.get('lastModified'),
+                isToday = moment().isSame(moment(modified), 'day'),
+                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
 
             if (!model) { return; }
 
@@ -49,7 +51,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dd class="size">').text(size),
                     // modified
                     $('<dt>').text(gt('Modified')),
-                    $('<dd class="modified">').text(modified),
+                    $('<dd class="modified">').text(dateString),
                     // path
                     $('<dt>').text(gt('Saved in')),
                     $('<dd class="saved-in">').text('\xa0').busy()
