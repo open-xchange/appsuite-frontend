@@ -27,14 +27,10 @@ define('io.ox/core/viewer/views/types/textview', [
 
         prefetch: function () {
             //console.warn('TextView.prefetch()', this.model.get('filename'));
-            // this only works for files
-            // TODO preview plain text files in Mail and PIM apps
-            if (this.model.get('source') !== 'drive') {
-                return this;
-            }
             // simply load the document content via $.ajax
-            var $el = this.$el.busy();
-            $.ajax({ url: this.model.getUrl('view'), dataType: 'text' }).done(function (text) {
+            var $el = this.$el.busy(),
+                previewUrl = this.getPreviewUrl();
+            $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
                 $el.idle().append($('<div class="plain-text-page">').text(text));
                 $el = null;
             });
