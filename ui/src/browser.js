@@ -113,6 +113,7 @@
             isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
+            spartan = ua.indexOf('Edge/12.0') > -1;  // TODO: This needs to be updated, if better user agent is available
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Windows = ua.indexOf('Windows') > -1;
@@ -132,6 +133,9 @@
                     Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
                         !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
                     ),
+                /** is Spartan? */
+                Spartan: spartan ?
+                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined,
                 /** is Opera? */
                 Opera: isOpera ?
                     ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,

@@ -93,7 +93,7 @@ define('io.ox/core/viewer/views/mainview', [
             this.$el.append(
                 this.toolbarView.render(data).el,
                 this.displayerView.render(data).el,
-                this.sidebarView.render(data).el
+                this.sidebarView.render(data.model).el
             );
             // Hotfix to prevent Halo View from stealing the focus
             // TODO: remove when Viewer replaces the Halo View

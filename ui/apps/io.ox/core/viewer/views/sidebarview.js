@@ -15,10 +15,11 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
+    'io.ox/files/api',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview'
-], function (Ext, DisposableView, EventDispatcher, Util, FileInfoView, FileDescriptionView, FileVersionsView) {
+], function (Ext, DisposableView, EventDispatcher, Util, FilesAPI, FileInfoView, FileDescriptionView, FileVersionsView) {
 
     'use strict';
 
@@ -31,9 +32,9 @@ define('io.ox/core/viewer/views/sidebarview', [
     });
 
     /**
-     * The SidebarView is responsible for displaying the detail sidebar.
-     * This view should show file meta information, versions, sharing/permissions
-     * etc. This view should have children views (TBD)
+     * The SidebarView is responsible for displaying the detail side bar.
+     * This includes sections for file meta information, file description
+     * and version history.
      */
     var SidebarView = DisposableView.extend({
 
@@ -44,63 +45,83 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         initialize: function () {
             //console.info('SidebarView.initialize()');
-            this.on('dispose', this.disposeView.bind(this));
-
-            this.fileInfoView = new FileInfoView();
-            this.fileDescriptionView = new FileDescriptionView();
-            this.fileVersionsView = new FileVersionsView();
-
             this.model = null;
+
+            this.on('dispose', this.disposeView.bind(this));
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
-                this.render(data);
+                if (!data || !data.model) { return; }
+
+                this.model = data.model;
+                this.renderSections();
             });
 
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', function () {
                 //console.warn('SidebarbarView viewer:toggle:sidebar');
                 this.$el.toggleClass('opened');
                 this.opened = !this.opened;
+                this.renderSections();
             });
         },
 
-        render: function (data) {
-            //console.warn('SidebarView.render() ', data);
-            if (!data || !data.model) { return this; }
+        /**
+         * Renders the sections for file meta information, file description
+         * and version history.
+         */
+        renderSections: function () {
+            //console.info('SidebarView.renderSections()', 'sidebar open', this.opened);
+            // remove previous sections
+            this.$el.empty();
+            // render sections only if side bar is open
+            if (!this.model || !this.opened) { return; }
+            // load file details
+            this.loadFileDetails();
 
-            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
-
-            Ext.point('io.ox/core/viewer/sidebar').invoke('draw', this.$el, baton);
-
-            // append sub views
             this.$el.append(
-                this.fileInfoView.render(data).el,
-                this.fileDescriptionView.render(data).el,
-                this.fileVersionsView.render(data).el
+                new FileInfoView({ model: this.model }).render().el,
+                new FileDescriptionView({ model: this.model }).render().el,
+                new FileVersionsView({ model: this.model }).render().el
             );
+        },
 
+        render: function (model) {
+            //console.info('SidebarView.render()', data);
+            // a11y
             this.$el.attr({ tabindex: -1, role: 'complementary' });
-
             // set device type
             Util.setDeviceClass(this.$el);
-
             // attach the touch handlers
             this.$el.enableTouch({ selector: null, horSwipeHandler: this.onHorizontalSwipe });
-
-            // remove listener from previous model
-            if (this.model) {
-                this.stopListening(this.model, 'change');
-            }
-            // save current data as view model
-            this.model = data.model;
-            this.listenTo(this.model, 'change', this.onModelChange.bind(this));
-
+            // initially set model
+            this.model = model;
             return this;
         },
 
-        onModelChange: function (changedModel) {
-            //console.warn('SidebarView.onModelChange()', changedModel);
-            this.fileInfoView.render({ model: changedModel });
+        /**
+         * Loads the file details, especially needed for the file description
+         * and the number of versions.
+         */
+        loadFileDetails: function () {
+            //console.info('SidebarView.loadFileDetails()');
+            if (!this.model) { return; }
+            var origModel = this.model.get('origData');
+
+            FilesAPI.get({
+                id: this.model.get('id'),
+                folder_id: this.model.get('folderId')
+            })
+            .done(function (file) {
+                //console.info('SidebarView.loadFileDetails()', 'done', file);
+                // after loading the file details we set at least an empty string as description.
+                // in order to distinguish between 'the file details have been loaded but the file has no description'
+                // and 'the file details have not been loaded yet so we don't know if it has a description'.
+                var description = (file && _.isString(file.description)) ? file.description : '';
+
+                if (origModel instanceof Backbone.Model) {
+                    origModel.set('description', description);
+                }
+            });
         },
 
         /**
@@ -117,25 +138,20 @@ define('io.ox/core/viewer/views/sidebarview', [
          *
          */
         onHorizontalSwipe: function (phase, event, distance) {
-            console.warn('SidebarView.onHorizontalSwipe()', 'event phase:', phase, 'distance:', distance);
+            //console.info('SidebarView.onHorizontalSwipe()', 'event phase:', phase, 'distance:', distance);
 
             if (distance > 0) {
                 EventDispatcher.trigger('viewer:toggle:sidebar');
             }
         },
 
+        /**
+         * Destructor function of this view.
+         */
         disposeView: function () {
             //console.info('SidebarView.disposeView()');
-            this.model.off().stopListening();
             this.$el.disableTouch();
-            this.fileInfoView.remove();
-            this.fileDescriptionView.remove();
-            this.fileVersionsView.remove();
-            this.fileInfoView = null;
-            this.fileDescriptionView = null;
-            this.fileVersionsView = null;
             this.model = null;
-            return this;
         }
     });
 
