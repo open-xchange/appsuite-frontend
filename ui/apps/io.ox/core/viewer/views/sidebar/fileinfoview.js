@@ -15,10 +15,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
-    'io.ox/core/date',
     'io.ox/core/folder/api',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Ext, EventDispatcher, Util, OXDate, FolderAPI, gt) {
+], function (DisposableView, Ext, EventDispatcher, Util, FolderAPI, gt) {
 
     'use strict';
 
