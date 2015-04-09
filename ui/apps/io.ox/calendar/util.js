@@ -318,21 +318,24 @@ define('io.ox/calendar/util', [
 
             function getContent() {
                 // hard coded for demo purposes
-                var div = $('<ul class="list-unstyled">');
+                var div = $('<ul class="list-unstyled">'),
+                    list = settings.get('favoriteTimezones');
 
-                _([ 'America/Los_Angeles',
-                    'America/New_York',
-                    'Europe/London',
-                    'Europe/Berlin',
-                    'Australia/Sydney'
-                ]).each(function (zone) {
+                if (!list || list.length === 0) {
+                    list = [
+                        'America/Los_Angeles',
+                        'America/New_York',
+                        'Europe/London',
+                        'Europe/Berlin',
+                        'Australia/Sydney'
+                    ];
+                }
+
+                _(list).chain().uniq().first(10).each(function (zone) {
                     // must use outer DIV with "clear: both" here for proper layout in firefox
                     div.append($('<li>').append(
                         $('<span>')
                             .text(gt.noI18n(zone.replace(/^.*?\//, '').replace(/_/g, ' '))),
-                        $('<span>')
-                            .addClass('label label-info')
-                            .text(gt.noI18n(moment.tz(zone).zoneAbbr())),
                         $('<span>')
                             .addClass('time')
                             .text(gt.noI18n(that.getTimeInterval(data, zone)))

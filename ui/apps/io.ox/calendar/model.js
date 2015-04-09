@@ -18,8 +18,9 @@ define('io.ox/calendar/model', [
     'io.ox/backbone/validation',
     'io.ox/participants/model',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar'
-], function (api, ModelFactory, ext, gt, Validators, pModel, folderAPI, settings) {
+    'settings!io.ox/calendar',
+    'settings!io.ox/core'
+], function (api, ModelFactory, ext, gt, Validators, pModel, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -45,7 +46,9 @@ define('io.ox/calendar/model', [
             defaults: {
                 recurrence_type: 0,
                 notification: true,
-                shown_as: 1
+                shown_as: 1,
+                timezone: coreSettings.get('timezone'),
+                endTimezone: coreSettings.get('timezone')
             },
 
             init: function () {
