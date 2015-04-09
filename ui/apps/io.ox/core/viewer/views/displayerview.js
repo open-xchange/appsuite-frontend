@@ -86,7 +86,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 };
 
             // enable touch and swiping for 'smartphone' devices
-            if (Util.COMPACT_DEVICE) {
+            if (_.device('smartphone') || _.device('tablet')) {
                 swiperParameter = _.extend(swiperParameter, {
                     followFinger: true,
                     simulateTouch: true,
