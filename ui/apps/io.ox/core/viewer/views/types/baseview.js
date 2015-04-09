@@ -89,10 +89,10 @@ define('io.ox/core/viewer/views/types/baseview', [
                     previewUrl = FilesAPI.getUrl(this.model.attributes, 'thumbnail', null);
                     break;
                 case 'mail':
-                    previewUrl = MailAPI.getUrl(this.get('origData'), 'view');
+                    previewUrl = MailAPI.getUrl(this.model.get('origData'), 'view');
                     break;
                 case 'pim':
-                    previewUrl = AttachmentAPI.getUrl(this.get('origData'), 'view');
+                    previewUrl = AttachmentAPI.getUrl(this.model.get('origData'), 'view');
                     break;
                 default:
                     break;
