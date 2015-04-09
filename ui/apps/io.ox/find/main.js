@@ -32,12 +32,17 @@ define('io.ox/find/main', [
     var createInstance = function (opt) {
         var app;
 
-        opt = _.extend({}, { inplace: true }, opt);
+        opt = _.extend({}, {
+            // use 'parent' window
+            inplace: true
+        }, opt);
+
         // application object
         app = ox.ui.createApp(
             _.extend({
                 name: 'io.ox/find',
-                title: gt('Search')
+                title: gt('Search'),
+                state: 'created'
             }, opt)
         );
 
@@ -160,12 +165,6 @@ define('io.ox/find/main', [
         // initiated via lazyload
         app.apiproxy = {};
 
-        // launcher
-        app.setQuit(function () {
-            // TODO: on parent app quit
-            if (app.view) return app.view.discard();
-        });
-
         // reset and collapse/hide
         app.cancel = function () {
             if (this.view) this.view.cancel();
@@ -232,41 +231,51 @@ define('io.ox/find/main', [
             });
         }
 
+        // DEBUG: states
+        // app.on('change:state', function (e, state) {
+        //     console.log('%c' + state, 'color: white; background-color: blue');
+        // });
+
         /**
-         * ready: app created and accessible via parentapp.get('find')
-         * waiting: skeleton nodes drawn
-         * running: lazy load finished, search app is usable in full
+         * created: app created and accessible via parentapp.get('find')
+         * prepared: app is mediated and placeholder view intantiated
+         * launched: init views and models, search app is usable in full
          */
         app.prepare = function () {
+            app.set('state', 'preparing');
             // setup
             app.mediate();
-            // keep ready status
-            app.set('state', 'waiting');
+            require(['io.ox/find/view-placeholder'], function (PlaceholderView) {
+                app.placeholder = new PlaceholderView({ app: app });
+                // delay launch app (on focus)
+                app.listenToOnce(app.placeholder, 'launch', app.launch);
+                app.set('state', 'prepared');
+            });
+        };
 
-            // initialize view
-            // TODO: add data now (or later)
-            require(['io.ox/find/model', 'io.ox/find/view'], function (FindModel, FindView) {
-                app.model = new FindModel({ app: app });
-                app.view = new FindView({ app: app, model: app.model });
+        // overwrite defaults app.launch
+        app.launch = function () {
+            if (app.get('state') !== 'prepared') return;
+            // get rid of placeholder view
+            if (app.placeholder) {
+                app.placeholder.destroy();
+                delete app.placeholder;
+            }
+            // initialize views (tokenfield, typeahed, etc)
+            app.set('state', 'launching');
+            require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
+                app.model = new MainModel({ app: app });
+                app.view = new MainView({ app: app, model: app.model });
                 // inplace: use parents view window
-                // view manages (appended via win.nodes reference)
                 app.view.render();
                 register();
+                app.ready.resolve();
+                app.set('state', 'launched');
             });
         };
 
         // resolves after prepare is ready
         app.ready = $.Deferred();
-
-        // overwrite app.launch
-        app.super = {
-            launch: app.launch
-        };
-        app.launch = function () {
-            // lazy load
-            // create view
-            app.set('state', 'running');
-        };
 
         return app;
     };

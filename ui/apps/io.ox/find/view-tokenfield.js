@@ -85,7 +85,6 @@ define('io.ox/find/view-tokenfield', [
                 field: undefined,
                 view: undefined
             };
-
             return this;
         },
 
@@ -94,7 +93,8 @@ define('io.ox/find/view-tokenfield', [
             var baton = this.baton,
                 fieldstub = baton.app.view.$el.find('.search-field'),
                 guid = _.uniqueId('form-control-label-'),
-                apiproxy = baton.app.apiproxy = ApiProxy.init(baton.app),
+                // TODO: decouple apiproxy
+                apiproxy = this.app.apiproxy = ApiProxy.init(this.app),
                 model = baton.model,
                 hasFocus = fieldstub.is(':focus'),
                 query = fieldstub.val();

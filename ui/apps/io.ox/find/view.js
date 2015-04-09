@@ -176,7 +176,6 @@ define('io.ox/find/view', [
             });
         },
 
-        // hint: debounced
         setFocus: function (target) {
             // focus search field
             if (target !== 'move') return this.ui.searchbox.setFocus();
@@ -204,22 +203,6 @@ define('io.ox/find/view', [
         hasFocus: function () {
             var node = $(document.activeElement);
             return !!node.closest('.io-ox-find').length;
-        },
-
-        lazyload: function () {
-            // TODO: rework on that later
-
-            //TODO: sould be executed only once; name properly
-            if (!!this.logic) return;
-
-            // add autocomplete and addional handler
-            ext.point('io.ox/find/tokenfield/logic').invoke('draw', this.ui.searchbox.$el, this.baton);
-
-            // app is ready now
-            this.app.ready.resolve();
-
-            // TODO: set app status
-            this.logic = true;
         }
     });
 
