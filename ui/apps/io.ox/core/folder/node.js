@@ -392,7 +392,7 @@ define('io.ox/core/folder/node', [
         },
 
         getCounter: function () {
-            return this.options.count !== undefined ? this.options.count : this.model.get('unread') || 0;
+            return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + (this.model.get('subtotal') || 0);
         },
 
         renderCounter: function () {

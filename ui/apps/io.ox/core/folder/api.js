@@ -69,6 +69,36 @@ define('io.ox/core/folder/api', [
         return (all ? 'all/' : '') + String(id);
     }
 
+    function calculateSubtotal(model, value, attribute) {
+        if (isVirtual(model.get('id')) || account.is('spam', model.get('id'))) {
+            return;
+        }
+
+        var previous = model._previousAttributes[attribute] !== undefined && model._previousAttributes[attribute] !== null ? model._previousAttributes[attribute] : 0,
+            difference = value - previous,
+            parent = pool.models[model.get('folder_id')];
+
+        //system folders doesn't matter
+        if (difference !== 0 && parent && parent.get('module') !== 'system'  && !account.is('spam', parent.get('id')) && pool.collections[parent.get('id')]) {
+            var parentSubfolders = pool.collections[parent.get('id')].models,
+            subtotal = 0;
+            for (var i = 0; i < parentSubfolders.length; i++) {
+                if (!account.is('spam', parentSubfolders[i].get('id'))) {
+                    subtotal += (parentSubfolders[i].get('subtotal') || 0) + (parentSubfolders[i].get('unread') || 0);
+                }
+            }
+            parent.set('subtotal', subtotal);
+        }
+    }
+
+    function onChangeSubtotal (model, value) {
+        calculateSubtotal(model, value, 'subtotal');
+    }
+
+    function onChangeUnread (model, value) {
+        calculateSubtotal(model, value, 'unread');
+    }
+
     //
     // Model & Collections
     //
@@ -77,6 +107,8 @@ define('io.ox/core/folder/api', [
         constructor: function () {
             Backbone.Model.apply(this, arguments);
             this.on('change:id', onChangeModelId);
+            this.on('change:subtotal', onChangeSubtotal);
+            this.on('change:unread', onChangeUnread);
         }
     });
 
@@ -131,6 +163,16 @@ define('io.ox/core/folder/api', [
                 type = collection.fetched ? 'set' : 'reset';
             collection[type](models);
             collection.fetched = true;
+
+            if (!isVirtual(id) && !account.is('spam', id) && this.models[id].get('module') !== 'system') {
+                var subtotal = 0;
+                for (var i = 0; i < models.length; i++) {
+                    if (!account.is('spam', models[i].get('id'))) {
+                        subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
+                    }
+                }
+                this.models[id].set('subtotal', subtotal);
+            }
 
             if (options.reset) collection.trigger('reset');
         },
@@ -644,6 +686,9 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id);
         removeFromAllCollections(model);
 
+        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+        model.set('unread', 0);
+
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
@@ -725,6 +770,9 @@ define('io.ox/core/folder/api', [
 
         // trigger event
         api.trigger('remove:prepare', data);
+
+        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+        model.set('unread', 0);
 
         // update collection (now)
         removeFromAllCollections(model);
