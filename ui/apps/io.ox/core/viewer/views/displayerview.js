@@ -45,6 +45,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.preloadOffset = 3;
             // number of slides to be kept loaded at one time in the browser.
             this.slidesToCache = 7;
+            // instance of the swiper plugin
+            this.swiper = null;
         },
 
         /**
