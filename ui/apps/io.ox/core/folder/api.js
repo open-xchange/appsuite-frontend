@@ -164,7 +164,7 @@ define('io.ox/core/folder/api', [
             collection[type](models);
             collection.fetched = true;
 
-            if (!isVirtual(id) && !account.is('spam', id) && this.models[id].get('module') !== 'system') {
+            if (!isVirtual(id) && !account.is('spam', id) && this.models[id] && this.models[id].get('module') !== 'system') {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
                     if (!account.is('spam', models[i].get('id'))) {
