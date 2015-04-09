@@ -21,11 +21,12 @@ define('io.ox/core/viewer/views/types/textview', [
 
         render: function () {
             // quick hack to get rid of flex box
-            this.$el.css('display', 'block');
+            this.$el.css('display', 'block').append(this.createCaption());
             return this;
         },
 
         prefetch: function () {
+            //console.warn('TextView.prefetch()', this.model.get('filename'));
             // this only works for files
             // TODO preview plain text files in Mail and PIM apps
             if (this.model.get('source') !== 'drive') {
@@ -52,7 +53,7 @@ define('io.ox/core/viewer/views/types/textview', [
          */
         unload: function () {
             //console.warn('TextView.unload()', this.model.get('filename'));
-            this.$el.empty();
+            this.$el.find('.plain-text-page').remove();
         }
 
     });
