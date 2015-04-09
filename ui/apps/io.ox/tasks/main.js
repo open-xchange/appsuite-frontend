@@ -556,19 +556,15 @@ define('io.ox/tasks/main', [
             if (_.device('smartphone') || !capabilities.has('search')) return;
             var find = app.searchable().get('find');
 
-            // when search is ready
-            find.ready.done(function () {
-                // additional handler: switch to list perspective (and back)
-                find.on({
-                    'find:query': function () {
-                        // hide sort options
-                        app.grid.getToolbar().find('.grid-options:first').hide();
-                    },
-                    'find:cancel': function () {
-                        // show sort options again
-                        app.grid.getToolbar().find('.grid-options:first').show();
-                    }
-                });
+            find.on({
+                'find:query': function () {
+                    // hide sort options
+                    app.grid.getToolbar().find('.grid-options:first').hide();
+                },
+                'find:cancel': function () {
+                    // show sort options again
+                    app.grid.getToolbar().find('.grid-options:first').show();
+                }
             });
 
         }

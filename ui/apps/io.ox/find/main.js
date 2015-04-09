@@ -269,13 +269,9 @@ define('io.ox/find/main', [
                 // inplace: use parents view window
                 app.view.render();
                 register();
-                app.ready.resolve();
                 app.set('state', 'launched');
             });
         };
-
-        // resolves after prepare is ready
-        app.ready = $.Deferred();
 
         return app;
     };

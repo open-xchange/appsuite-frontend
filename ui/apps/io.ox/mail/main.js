@@ -1122,86 +1122,89 @@ define('io.ox/mail/main', [
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            //create search app instance (sub instance of current app)
-            var find = app.searchable().get('find');
+            app.searchable();
 
-            find.ready
-                .done(function () {
-                    require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
-                        var manager = find.view.model.manager,
-                            searchcid = _.bind(manager.getResponseCid, manager),
-                            mode = 'default';
-                        // define collection loader for search results
-                        var collectionLoader = new CollectionLoader({
-                                module: 'mail',
-                                mode: 'search',
-                                fetch: function (params) {
-                                    var self = this,
-                                        limit = params.limit.split(','),
-                                        start = parseInt(limit[0]),
-                                        size = parseInt(limit[1]) - start;
+            var find = app.get('find');
 
-                                    find.model.set({
-                                        'start': start,
-                                        'size': size,
-                                        'extra': 1
-                                    }, { silent: true });
+            find.on('change:state', function (e, state) {
 
-                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                                    return find.apiproxy.query(true, params).then(function (response) {
-                                        response = response || {};
-                                        var list = response.results || [],
-                                            request = response.request || {};
-                                        // add 'more results' info to collection (compare request limits and result)
-                                        self.collection.search = {
-                                            next: list.length !== 0 && list.length === request.data.size
-                                        };
-                                        return list;
-                                    });
-                                },
-                                cid: searchcid,
-                                each: function (obj) {
-                                    api.processThreadMessage(obj);
-                                }
-                            });
-                        var register = function () {
-                                var view = find.view.model,
-                                    // remember original setCollection
-                                    setCollection = app.listView.setCollection;
-                                // hide sort options
-                                app.listControl.$el.find('.grid-options:first').hide();
-                                app.listView.connect(collectionLoader);
-                                mode = 'search';
-                                // wrap setCollection
-                                app.listView.setCollection = function (collection) {
-                                    view.stopListening();
-                                    view.listenTo(collection, 'add reset remove', find.trigger.bind(view, 'find:query:result', collection));
-                                    return setCollection.apply(this, arguments);
-                                };
-                            };
+                if (state !== 'launched') return;
 
-                        // events
-                        find.on({
-                            'find:idle': function () {
-                                if (mode === 'search') {
-                                    // show sort options
-                                    app.listControl.$el.find('.grid-options:first').show();
-                                    // reset collection loader
-                                    app.listView.connect(api.collectionLoader);
-                                    app.listView.load();
-                                }
-                                mode = 'default';
+                require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
+                    var manager = find.view.model.manager,
+                        searchcid = _.bind(manager.getResponseCid, manager),
+                        mode = 'default';
+                    // define collection loader for search results
+                    var collectionLoader = new CollectionLoader({
+                            module: 'mail',
+                            mode: 'search',
+                            fetch: function (params) {
+                                var self = this,
+                                    limit = params.limit.split(','),
+                                    start = parseInt(limit[0]),
+                                    size = parseInt(limit[1]) - start;
+
+                                find.model.set({
+                                    'start': start,
+                                    'size': size,
+                                    'extra': 1
+                                }, { silent: true });
+
+                                var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                return find.apiproxy.query(true, params).then(function (response) {
+                                    response = response || {};
+                                    var list = response.results || [],
+                                        request = response.request || {};
+                                    // add 'more results' info to collection (compare request limits and result)
+                                    self.collection.search = {
+                                        next: list.length !== 0 && list.length === request.data.size
+                                    };
+                                    return list;
+                                });
                             },
-                            'find:query': _.debounce(function () {
-                                // register/connect once
-                                if (app.listView.loader.mode !== 'search') register();
-                                // load
-                                app.listView.load();
-                            }, 10)
+                            cid: searchcid,
+                            each: function (obj) {
+                                api.processThreadMessage(obj);
+                            }
                         });
+                    var register = function () {
+                            var view = find.view.model,
+                                // remember original setCollection
+                                setCollection = app.listView.setCollection;
+                            // hide sort options
+                            app.listControl.$el.find('.grid-options:first').hide();
+                            app.listView.connect(collectionLoader);
+                            mode = 'search';
+                            // wrap setCollection
+                            app.listView.setCollection = function (collection) {
+                                view.stopListening();
+                                view.listenTo(collection, 'add reset remove', find.trigger.bind(view, 'find:query:result', collection));
+                                return setCollection.apply(this, arguments);
+                            };
+                        };
 
+                    // events
+                    find.on({
+                        'find:idle': function () {
+                            if (mode === 'search') {
+                                // show sort options
+                                app.listControl.$el.find('.grid-options:first').show();
+                                // reset collection loader
+                                app.listView.connect(api.collectionLoader);
+                                app.listView.load();
+                            }
+                            mode = 'default';
+                        },
+                        'find:query': _.debounce(function () {
+                            // register/connect once
+                            if (app.listView.loader.mode !== 'search') register();
+                            // load
+                            app.listView.load();
+                        }, 10)
                     });
+
                 });
+            });
         }
 
     });

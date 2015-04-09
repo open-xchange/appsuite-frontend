@@ -638,8 +638,14 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var find = app.searchable().get('find');
-            find.ready.done(function () {
+            app.searchable();
+
+            var find = app.get('find');
+
+            find.on('change:state', function (e, state) {
+
+                if (state !== 'launched') return;
+
                 require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                     var manager = find.view.model.manager,
                         searchcid = _.bind(manager.getResponseCid, manager),
@@ -675,7 +681,7 @@ define('io.ox/files/main', [
                             cid: searchcid
                         });
                     var register = function () {
-                            var view = find.view.model,
+                            var view = find.model,
                                 // remember original setCollection
                                 setCollection = app.listView.setCollection;
                             // hide sort options
@@ -709,7 +715,6 @@ define('io.ox/files/main', [
                             app.listView.load();
                         }, 10)
                     });
-
                 });
             });
         }
