@@ -59,28 +59,16 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             );
 
             FolderAPI.path(model.get('folderId'))
-            .done(function success(list) {
-                //console.info('path: ', list);
-                var folderPath = '';
+            .done(function (list) {
+                var path = _.chain(list)
+                    .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
+                    .map(function (folder) { return gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30)); })
+                    .value().join(' / ');
 
-                _.each(list, function (folder, index, list) {
-                    var isLast = (index === list.length - 1);
-
-                    if (folder.id !== DRIVE_ROOT_FOLDER) {
-                        folderPath += gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30));
-                        if (!isLast) {
-                            folderPath += gt.noI18n(' / ');
-                        }
-                    }
-                });
-
-                panelBody.find('dl>dd.saved-in').text(folderPath);
+                panelBody.find('dl>dd.saved-in').text(path).idle();
             })
-            .fail(function fail() {
-                panelBody.find('dl>dd.saved-in').text('-');
-            })
-            .always(function () {
-                panelBody.find('dl>dd.saved-in').idle();
+            .fail(function () {
+                panelBody.find('dl>dd.saved-in').text('-').idle();
             });
 
             this.empty().attr({ role: 'tablist' }).append(panel);
