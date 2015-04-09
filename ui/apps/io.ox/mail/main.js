@@ -515,7 +515,7 @@ define('io.ox/mail/main', [
                     .toggleNext(list.hasNext());
             }
 
-            app.listView.on('selection:change', update);
+            app.listView.on('selection:action', update);
 
             update();
         },
