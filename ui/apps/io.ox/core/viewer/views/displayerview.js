@@ -48,19 +48,16 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
-         * Renders this DisplayerView with the supplied data model.
+         * Renders this DisplayerView with the supplied model.
          *
-         * @param {Object} data
-         *  @param {Number} data.index
-         *   The index of the model to render.
-         *  @param {Object} data.model
-         *   The model object itself.
+         *  @param {Object} model
+         *   The file model object.
          *
          * @returns {DisplayerView}
          */
-        render: function (data) {
+        render: function (model) {
             //console.warn('DisplayerView.render() data', data);
-            if (!data) {
+            if (!model) {
                 console.error('Core.Viewer.DisplayerView.render(): no file to render');
                 return;
             }
@@ -69,7 +66,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner = $('<div class="swiper-wrapper">'),
                 prevSlide = $('<a href="#" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
                 nextSlide = $('<a href="#" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
-                startIndex = data.index,
+                startIndex = this.collection.getStartIndex(),
                 self = this,
                 swiperParameter = {
                     nextButton: '.swiper-button-next',
@@ -332,10 +329,7 @@ define('io.ox/core/viewer/views/displayerview', [
             if (mediaSlide.length > 0) {
                 mediaSlide[0].pause();
             }
-            EventDispatcher.trigger('viewer:displayeditem:change', {
-                index: activeSlideIndex,
-                model: this.collection.at(activeSlideIndex)
-            });
+            EventDispatcher.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
         },
 

@@ -60,27 +60,21 @@ define('io.ox/core/viewer/views/mainview', [
             this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
             var startIndex = this.collection.getStartIndex(),
-                displayedData = {
-                index: startIndex,
-                model: this.collection.at(startIndex)
-            };
-            this.render(displayedData);
+                startModel = this.collection.at(startIndex);
+            this.render(startModel);
         },
 
         /**
-         * Renders this MainView with the supplied data model.
+         * Renders this MainView with the supplied model.
          *
-         * @param {Object} data
-         *  @param {Number} data.index
-         *   The index of the model to render.
-         *  @param {Object} data.model
-         *   The model object itself.
+         *  @param {Object} model
+         *   The file model object.
          *
          * @returns {MainView}
          */
-        render: function (data) {
+        render: function (model) {
             //console.warn('MainView.render()', data);
-            if (!data) {
+            if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
                 return;
             }
@@ -90,8 +84,8 @@ define('io.ox/core/viewer/views/mainview', [
             Util.setDeviceClass(this.$el);
             // append toolbar view
             this.$el.append(
-                this.toolbarView.render(data).el,
-                this.displayerView.render(data).el
+                this.toolbarView.render(model).el,
+                this.displayerView.render(model).el
                 //this.sidebarView.render(data).el
             );
             return this;

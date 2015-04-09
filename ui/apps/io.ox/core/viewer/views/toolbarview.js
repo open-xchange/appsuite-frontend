@@ -341,34 +341,37 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         /**
-         * Renders the toolbar.
+         * Renders this DisplayerView with the supplied model.
          *
-         * @param {Object} data
-         *  an object containing the active viewer model
+         * @param {Object} model
+         *  The file model object.
          *
          * @returns {ToolbarView} toolbarView
          *  this view object itself.
          */
-        render: function (data) {
+        render: function (model) {
             //console.warn('ToolbarView.render()', data, this);
-            if (!data || !data.model) { return this; }
+            if (!model) {
+                console.error('Core.Viewer.ToolbarView.render(): no file to render');
+                return this;
+            }
             // draw toolbar
-            var origData = data.model.get('origData'),
+            var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
-                isDriveFile = data.model.get('source') === 'drive',
+                isDriveFile = model.get('source') === 'drive',
                 baton = Ext.Baton({
                     $el: toolbar,
-                    model: data.model,
-                    models: isDriveFile ? [data.model] : null,
-                    data: isDriveFile ? data.model.toJSON() : origData
+                    model: model,
+                    models: isDriveFile ? [model] : null,
+                    data: isDriveFile ? model.toJSON() : origData
                 }),
-                appName = data.model.get('source');
+                appName = model.get('source');
             // remove listener from previous model
             if (this.model) {
                 this.stopListening(this.model, 'change');
             }
             // save current data as view model
-            this.model = data.model;
+            this.model = model;
             this.listenTo(this.model, 'change', this.onModelChange.bind(this));
             // set device type
             Util.setDeviceClass(this.$el);
