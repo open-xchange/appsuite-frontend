@@ -12,11 +12,8 @@
  */
 define('io.ox/core/viewer/views/types/imageview', [
     'io.ox/core/viewer/views/types/baseview',
-    'io.ox/files/api',
-    'io.ox/mail/api',
-    'io.ox/core/api/attachment',
     'gettext!io.ox/core'
-], function (BaseView, FilesAPI, MailAPI, AttachmentAPI, gt) {
+], function (BaseView, gt) {
 
     'use strict';
 
@@ -117,24 +114,6 @@ define('io.ox/core/viewer/views/types/imageview', [
                 }
             }
             return this;
-        },
-
-        getPreviewUrl: function () {
-            var previewUrl = null;
-            switch (this.model.get('source')) {
-                case 'drive':
-                    previewUrl = FilesAPI.getUrl(this.model.attributes, 'thumbnail', null);
-                    break;
-                case 'mail':
-                    previewUrl = MailAPI.getUrl(this.get('origData'), 'view');
-                    break;
-                case 'pim':
-                    previewUrl = AttachmentAPI.getUrl(this.get('origData'), 'view');
-                    break;
-                default:
-                    break;
-            }
-            return previewUrl;
         }
 
     });

@@ -40,8 +40,8 @@ define('io.ox/core/viewer/views/types/videoview',  [
             var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
                 source = $('<source>'),
                 fallback = $('<div>').text(gt('Your browser does not support HTML5 video.')),
-                previewUrl = this.model.getPreviewUrl() || '',
-                contentType = this.model.get('contentType') || '',
+                previewUrl = this.getPreviewUrl() || '',
+                contentType = this.model.get('file_mimetype') || '',
                 caption = this.createCaption(),
                 self = this;
 

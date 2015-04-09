@@ -27,20 +27,34 @@ define('io.ox/core/viewer/views/types/textview', [
 
         prefetch: function () {
             // this only works for files
-            var model = this.model.get('origData');
-            if (!model) return;
+            // TODO preview plain text files in Mail and PIM apps
+            if (this.model.get('source') !== 'drive') {
+                return this;
+            }
             // simply load the document content via $.ajax
             var $el = this.$el.busy();
-            $.ajax({ url: model.getUrl('view'), dataType: 'text' }).done(function (text) {
+            $.ajax({ url: this.model.getUrl('view'), dataType: 'text' }).done(function (text) {
                 $el.idle().append($('<div class="plain-text-page">').text(text));
-                $el = model = null;
+                $el = null;
             });
             return this;
         },
 
         show: function () {
             return this;
+        },
+
+        /**
+         * Unloads the text file
+         *
+         * @returns {ImageView}
+         *  the ImageView instance.
+         */
+        unload: function () {
+            //console.warn('TextView.unload()', this.model.get('filename'));
+            this.$el.empty();
         }
+
     });
 
     return TextView;

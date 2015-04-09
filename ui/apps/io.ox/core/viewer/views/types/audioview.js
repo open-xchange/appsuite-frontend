@@ -40,8 +40,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
             var audio = $('<audio controls="true" class="viewer-displayer-item viewer-displayer-audio player-hidden">'),
                 source = $('<source>'),
                 fallback = $('<div>').text(gt('Your browser does not support HTML5 audio.')),
-                previewUrl = this.model.getPreviewUrl() || '',
-                contentType = this.model.get('contentType') || '',
+                previewUrl = this.getPreviewUrl() || '',
+                contentType = this.model.get('file_mimetype') || '',
                 caption = this.createCaption(),
                 self = this;
 

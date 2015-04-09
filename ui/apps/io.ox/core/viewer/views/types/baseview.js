@@ -11,10 +11,13 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/baseview', [
+    'io.ox/files/api',
+    'io.ox/mail/api',
+    'io.ox/core/api/attachment',
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core'
-], function (DisposableView, Util,  gt) {
+], function (FilesAPI, MailAPI, AttachmentAPI, DisposableView, Util,  gt) {
 
     'use strict';
 
@@ -72,6 +75,29 @@ define('io.ox/core/viewer/views/types/baseview', [
                 $('<p class="apology">').text(notification || '')
             );
             return node;
+        },
+
+        /**
+         * Gets preview URLs of file types from their respective APIs.
+         *
+         * @returns {String} previewURL
+         */
+        getPreviewUrl: function () {
+            var previewUrl = null;
+            switch (this.model.get('source')) {
+                case 'drive':
+                    previewUrl = FilesAPI.getUrl(this.model.attributes, 'thumbnail', null);
+                    break;
+                case 'mail':
+                    previewUrl = MailAPI.getUrl(this.get('origData'), 'view');
+                    break;
+                case 'pim':
+                    previewUrl = AttachmentAPI.getUrl(this.get('origData'), 'view');
+                    break;
+                default:
+                    break;
+            }
+            return previewUrl;
         }
 
     });

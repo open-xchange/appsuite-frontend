@@ -188,14 +188,15 @@ define('io.ox/core/viewer/util', [
      * Maps the file categories of the OX Viewer model to Font Awesome icon classes.
      */
     Util.CATEGORY_ICON_MAP = {
-        'OFFICE': 'fa-file-text-o',
-        'OFFICE_TEXT': 'fa-file-word-o',
-        'OFFICE_PRESENTATION': 'fa-file-powerpoint-o',
-        'OFFICE_SPREADSHEET': 'fa-file-excel-o',
-        'IMAGE': 'fa-file-image-o',
-        'VIDEO': 'fa-file-video-o',
-        'AUDIO': 'fa-file-audio-o',
-        'PDF': 'fa-file-pdf-o'
+        'file': 'fa-file-o',
+        'txt': 'fa-file-text-o',
+        'doc': 'fa-file-word-o',
+        'ppt': 'fa-file-powerpoint-o',
+        'xls': 'fa-file-excel-o',
+        'image': 'fa-file-image-o',
+        'video': 'fa-file-video-o',
+        'audio': 'fa-file-audio-o',
+        'pdf': 'fa-file-pdf-o'
     };
 
     /**
@@ -405,8 +406,11 @@ define('io.ox/core/viewer/util', [
      *  The Font Awesome icon class String.
      */
     Util.getIconClass = function (model) {
-        var fileCategory = model && model.get('fileCategory'),
-            iconClass = Util.CATEGORY_ICON_MAP[fileCategory] || 'fa-file-o';
+        if (!model) {
+            return Util.CATEGORY_ICON_MAP.file;
+        }
+        var fileType = model.getFileType(),
+            iconClass = Util.CATEGORY_ICON_MAP[fileType] || Util.CATEGORY_ICON_MAP.file;
 
         return iconClass;
     };
