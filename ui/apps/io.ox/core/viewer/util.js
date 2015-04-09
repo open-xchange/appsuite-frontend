@@ -347,10 +347,12 @@ define('io.ox/core/viewer/util', [
                 buttonIcon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
                 toggleButton.attr('aria-expanded', 'true');
                 panelHeader.attr('aria-expanded', 'true');
+                panelBody.slideDown().removeClass('panel-collapsed');
             } else {
                 buttonIcon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
                 toggleButton.attr('aria-expanded', 'false');
                 panelHeader.attr('aria-expanded', 'false');
+                panelBody.slideUp().addClass('panel-collapsed');
             }
         }
 
