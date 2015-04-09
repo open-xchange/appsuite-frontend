@@ -689,6 +689,9 @@ define('io.ox/files/api', [
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
+        var model = api.pool.get('detail').get(_.cid(file));
+        if (model) model.set(changes);
+
         return http.PUT({
             module: 'files',
             params: {
