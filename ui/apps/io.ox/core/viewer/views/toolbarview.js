@@ -355,11 +355,12 @@ define('io.ox/core/viewer/views/toolbarview', [
             // draw toolbar
             var origData = data.model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                isDriveFile = data.model.get('source') === 'drive',
                 baton = Ext.Baton({
                     $el: toolbar,
                     model: data.model,
-                    models: origData ? null : [data.model],
-                    data: origData ? origData : data.model.toJSON()
+                    models: isDriveFile ? [data.model] : null,
+                    data: isDriveFile ? data.model.toJSON() : origData
                 }),
                 appName = data.model.get('source');
             // remove listener from previous model

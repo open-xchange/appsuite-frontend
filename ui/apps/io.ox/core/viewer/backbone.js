@@ -119,6 +119,8 @@ define('io.ox/core/viewer/backbone', [
         /**
          *  Normalizes given models array and create Files API models out of the
          *  model objects if not yet already.
+         *  For compatibility reasons,the original model will be saved as
+         *  'origData' property for Mail and PIM attachment files.
          *
          * @param {Array} models
          *  an array of models objects from Drive, Mail or PIM Apps.
@@ -127,23 +129,25 @@ define('io.ox/core/viewer/backbone', [
          *  an array of file models to be used by OX Viewer.
          */
         parse: function (models) {
-            var viewerModels = [];
+            var viewerFileModels = [];
             _.each(models, function (model) {
-                var isFileModel = model instanceof FilesAPI.Model;
-                // filter out folders
-                if (isFileModel && model.isFolder()) {
-                    return;
+                var isFileModel = model instanceof FilesAPI.Model,
+                    normalizedFileModel = null;
+                if (isFileModel) {
+                    // filter out folders
+                    if (model.isFolder()) {
+                        return;
+                    }
+                    normalizedFileModel = model;
+                } else {
+                    var normalizedModelAttributes = normalize(model);
+                    normalizedFileModel = new FilesAPI.Model(normalizedModelAttributes);
+                    normalizedFileModel.set('origData', model);
                 }
-                // normalize non-file model objects and create file models out of it
-                if (!isFileModel) {
-                    var normalizedModel = normalize(model);
-                    model = new FilesAPI.Model(normalizedModel);
-                    model.set('origData', model);
-                }
-                model.set('source', getFileSourceType(model));
-                viewerModels.push(model);
+                normalizedFileModel.set('source', getFileSourceType(model));
+                viewerFileModels.push(normalizedFileModel);
             });
-            return viewerModels;
+            return viewerFileModels;
         },
 
         /**
