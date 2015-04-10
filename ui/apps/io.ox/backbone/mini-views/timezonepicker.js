@@ -60,26 +60,33 @@ define('io.ox/backbone/mini-views/timezonepicker', [
             }));
         },
 
+        deferredRender: function () {
+
+        },
+
         render: function () {
+            var self = this;
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
             if (this.id) this.$el.attr({ id: this.id });
-            if (this.options.favorites) {
-                var standard = $('<optgroup>').attr('label', gt('Standard timezone')),
-                    favorites = $('<optgroup>').attr('label', gt('Favorites')),
-                    all = $('<optgroup>').attr('label', gt('All timezones'));
+            _.defer(function () {
+                if (self.options.favorites) {
+                    var standard = $('<optgroup>').attr('label', gt('Standard timezone')),
+                        favorites = $('<optgroup>').attr('label', gt('Favorites')),
+                        all = $('<optgroup>').attr('label', gt('All timezones'));
 
-                this.renderOptions([{
-                    label: getDisplayName(coreSettings.get('timezone')),
-                    value: coreSettings.get('timezone')
-                }], standard);
-                this.renderOptions(this.options.favorites, favorites);
-                this.renderOptions(this.options.list, all);
+                    self.renderOptions([{
+                        label: getDisplayName(coreSettings.get('timezone')),
+                        value: coreSettings.get('timezone')
+                    }], standard);
+                    self.renderOptions(self.options.favorites, favorites);
+                    self.renderOptions(self.options.list, all);
 
-                this.$el.append(standard, favorites, all);
-            } else {
-                this.renderOptions(this.options.list, this.$el);
-            }
-            this.update();
+                    self.$el.append(standard, favorites, all);
+                } else {
+                    self.renderOptions(self.options.list, self.$el);
+                }
+                self.update();
+            });
             return this;
         }
     });
