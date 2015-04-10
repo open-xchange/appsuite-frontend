@@ -229,6 +229,16 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Get folder-based view options
+         */
+        'get-view-options': function (app) {
+            app.getViewOptions = function (folder) {
+                var options = app.settings.get(['viewOptions', folder]);
+                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
+            };
+        },
+
+        /*
          * Default application properties
          */
         'props': function (app) {
@@ -242,6 +252,9 @@ define('io.ox/files/main', [
                 'layout': layout,
                 'folderEditMode': false
             });
+            // initial setup
+            var folder = app.folder.get();
+            if (folder) app.props.set(app.getViewOptions(folder));
         },
 
         /*
@@ -249,7 +262,7 @@ define('io.ox/files/main', [
          */
         'list-view': function (app) {
             app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true });
-            app.listView.model.set({ folder: app.folder.get() });
+            app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
         },
@@ -283,6 +296,7 @@ define('io.ox/files/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
                 app.listView.empty();
@@ -290,16 +304,6 @@ define('io.ox/files/main', [
                 app.props.set(options);
                 app.listView.model.set('folder', id);
             });
-        },
-
-        /*
-         * Get folder-based view options
-         */
-        'get-view-options': function (app) {
-            app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
-                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
-            };
         },
 
         /*
