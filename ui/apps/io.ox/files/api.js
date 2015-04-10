@@ -939,7 +939,7 @@ define('io.ox/files/api', [
 
                 case 'add:version':
                     // reload versions list
-                    return reloadVersions().then(function () {
+                    return reloadVersions(file).done(function () {
                         // the mediator will reload the current collection
                         api.trigger('add:version', file);
                     });
@@ -988,7 +988,7 @@ define('io.ox/files/api', [
                 case 'remove:version':
                     // let's reload the version list
                     // since we might have just removed the current version
-                    return reloadVersions().done(function (list) {
+                    return reloadVersions(file).done(function (list) {
                         // update model
                         var cid = _.cid(file), model = pool.get('detail').get(cid);
                         if (model) model.set('number_of_versions', list.length);
