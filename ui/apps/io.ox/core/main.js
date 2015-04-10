@@ -1076,7 +1076,7 @@ define('io.ox/core/main', [
             draw: function () {
 
                 var sc = ox.serverConfig;
-                if (sc.banner === false || _.device('!desktop')) return;
+                if (sc.banner === false || settings.get('banner/visible') === false || _.device('!desktop')) return;
 
                 var banner = $('#io-ox-banner').toggleClass('visible'),
                     height = sc.bannerHeight || 64;
