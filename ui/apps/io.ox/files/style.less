@@ -141,11 +141,12 @@
         background-origin: border-box;
     }
 
-    .busy-indicator(@height) {
+    .busy-indicator(@height, @float: none) {
         .busy-indicator {
             padding-top: 40px;
             height: @height;
             border-bottom: 0;
+            float: @float;
         }
     }
 
@@ -174,7 +175,7 @@
             .thumbnail(@thumbnail_height);
         }
 
-        .icon-thumbnail.default-icon  {
+        .icon-thumbnail.default-icon {
 
             display: table;
             width: 101%; // yep, 101, fixes layout glitch in chrome
@@ -204,7 +205,7 @@
             word-break: break-word;
         }
 
-        .busy-indicator(@thumbnail_height);
+        .busy-indicator(@thumbnail_height, left);
 
         //
         // Checkbox handling
@@ -267,7 +268,7 @@
             display: none;
         }
 
-        .busy-indicator(@thumbnail_height);
+        .busy-indicator(@thumbnail_height, left);
 
         //
         // Checkbox handling

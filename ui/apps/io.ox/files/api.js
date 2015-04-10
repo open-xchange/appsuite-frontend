@@ -321,7 +321,7 @@ define('io.ox/files/api', [
             return $.when(
                 folderAPI.list(params.folder),
                 // this one might fail due to lack of permissions; error are transformed to empty array
-                http.GET({ module: module, params: params }).then(null, $.when)
+                http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
             )
             .then(function (folders, files) {
                 return [].concat(folders, files[0] || []);

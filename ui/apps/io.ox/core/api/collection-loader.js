@@ -216,6 +216,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         },
 
         httpGet: function (module, params) {
+            if (this.useSlice) params = _(params).omit('limit');
             return http.GET({ module: module, params: params });
         },
 

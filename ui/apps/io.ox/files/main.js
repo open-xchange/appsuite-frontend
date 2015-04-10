@@ -450,9 +450,13 @@ define('io.ox/files/main', [
          */
         'requires-reload': function (app) {
             // listen to events that affect the filename, add files, or remove files
-            api.on('rename add:file add:version remove:version change:version', _.debounce(function () {
+            api.on('rename add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
+            // use throttled updates for add:file - in case many small files are uploaded
+            api.on('add:file', _.throttle(function () {
+                app.listView.reload();
+            }, 10000));
         },
 
         /*
