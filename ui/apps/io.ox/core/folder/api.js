@@ -709,6 +709,8 @@ define('io.ox/core/folder/api', [
 
     function create(id, options) {
 
+        id = String(id);
+
         // get parent folder first - actually just to inherit 'module';
         return get(id).then(function (parent) {
             // default options
@@ -749,7 +751,7 @@ define('io.ox/core/folder/api', [
                 pool.getModel(id).set('subfolders', true);
                 virtual.refresh();
                 api.trigger('create', data);
-                api.trigger('create:' + id, data);
+                api.trigger('create:' + id.replace(/\s/g, '_'), data);
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
