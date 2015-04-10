@@ -140,6 +140,96 @@ define('io.ox/find/main', [
                 });
             },
 
+            'listview': function (app) {
+
+                if (!app.get('inplace')) return;
+
+                // check for listview
+                var parent = app.get('parent'),
+                    listView = parent.listView,
+                    defaultLoader = parent.listView.loader;
+
+                if (!listView) return;
+
+                app.on('change:state', function (e, state) {
+
+                    if (state !== 'launched') return;
+
+                    require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
+                        var manager = app.view.model.manager,
+                            searchcid = _.bind(manager.getResponseCid, manager),
+                            mode = 'default';
+                        // define collection loader for search results
+                        var collectionLoader = new CollectionLoader({
+                                module: app.getModuleParam(),
+                                mode: 'search',
+                                fetch: function (params) {
+                                    var self = this,
+                                        limit = params.limit.split(','),
+                                        start = parseInt(limit[0]),
+                                        size = parseInt(limit[1]) - start;
+
+                                    app.model.set({
+                                        'start': start,
+                                        'size': size,
+                                        'extra': 1
+                                    }, { silent: true });
+
+                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                    return app.getSearchResult(params, true).then(function (response) {
+                                        response = response || {};
+                                        var list = response.results || [],
+                                            request = response.request || {};
+                                        // add 'more results' info to collection (compare request limits and result)
+                                        self.collection.search = {
+                                            next: list.length !== 0 && list.length === request.data.size
+                                        };
+                                        return list;
+                                    });
+                                },
+                                cid: searchcid
+                            });
+                        app.trigger('collectionLoader:created', collectionLoader);
+                        var register = function () {
+                                var view = app.view.model,
+                                    // remember original setCollection
+                                    setCollection = parent.listView.setCollection;
+                                // hide sort options
+                                parent.listControl.$el.find('.grid-options:first').hide();
+                                parent.listView.connect(collectionLoader);
+                                mode = 'search';
+                                // wrap setCollection
+                                parent.listView.setCollection = function (collection) {
+                                    view.stopListening();
+                                    view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
+                                    return setCollection.apply(this, arguments);
+                                };
+                            };
+
+                        // events
+                        app.on({
+                            'find:idle': function () {
+                                if (mode === 'search') {
+                                    // show sort options
+                                    parent.listControl.$el.find('.grid-options:first').show();
+                                    // reset collection loader
+                                    parent.listView.connect(defaultLoader);
+                                    parent.listView.load();
+                                }
+                                mode = 'default';
+                            },
+                            'find:query': _.debounce(function () {
+                                // register/connect once
+                                if (parent.listView.loader.mode !== 'search') register();
+                                // load
+                                parent.listView.load();
+                            }, 10)
+                        });
+
+                    });
+                });
+            },
+
             'quit': function (app) {
                 if (!app.get('inplace')) return;
                 // also quit when parent app quits
