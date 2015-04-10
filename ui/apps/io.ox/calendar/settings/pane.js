@@ -231,7 +231,7 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
+                    $('<legend>').addClass('sectiontitle expertmode').append(
                         $('<h2>').text(gt('Favorite timezones'))
                     ),
                     new FavoriteView({ model: model }).render().$el
