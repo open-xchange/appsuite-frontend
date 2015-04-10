@@ -12,14 +12,22 @@
  */
 
 define('io.ox/core/viewer/views/types/textview', [
-    'io.ox/core/viewer/views/types/baseview'
-], function (BaseView) {
+    'io.ox/core/viewer/views/types/baseview',
+    'io.ox/core/viewer/eventdispatcher'
+], function (BaseView, EventDispatcher) {
 
     'use strict';
 
     var TextView = BaseView.extend({
 
         render: function () {
+            // handle zoom events
+            this.size = 13;
+            this.on('dispose', function () {
+                EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
+            });
+            EventDispatcher.on('viewer:document:zoomin', this.zoomIn.bind(this));
+            EventDispatcher.on('viewer:document:zoomout', this.zoomOut.bind(this));
             // quick hack to get rid of flex box
             this.$el.css('display', 'block');
             return this;
@@ -40,6 +48,19 @@ define('io.ox/core/viewer/views/types/textview', [
 
         show: function () {
             return this;
+        },
+
+        setFontSize: function (value) {
+            this.size = Math.min(Math.max(value, 9), 21);
+            this.$('.plain-text-page').css('fontSize', this.size);
+        },
+
+        zoomIn: function () {
+            this.setFontSize(this.size + 2);
+        },
+
+        zoomOut: function () {
+            this.setFontSize(this.size - 2);
         }
     });
 

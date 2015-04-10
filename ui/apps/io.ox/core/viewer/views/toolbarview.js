@@ -266,7 +266,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         id: 'zoomin',
         requires: function (e) {
-            return e.baton.model.isDocumentFile() && ox.debug;
+            return (e.baton.model.isDocumentFile() || e.baton.model.isTextFile()) && ox.debug;
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomin', baton);
@@ -275,7 +275,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         id: 'zoomout',
         requires: function (e) {
-            return e.baton.model.isDocumentFile() && ox.debug;
+            return (e.baton.model.isDocumentFile() || e.baton.model.isTextFile()) && ox.debug;
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomout', baton);

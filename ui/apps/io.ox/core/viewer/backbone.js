@@ -316,6 +316,10 @@ define('io.ox/core/viewer/backbone', [
             return (_.isString(category) && category.indexOf('OFFICE') >= 0) || (category === 'PDF');
         },
 
+        isTextFile: function () {
+            return this.get('fileCategory') === 'TEXT';
+        },
+
         getPreviewUrl: function () {
             if (this.isMailAttachment()) {
                 return MailAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
