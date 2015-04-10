@@ -146,8 +146,7 @@ define('io.ox/find/main', [
 
                 // check for listview
                 var parent = app.get('parent'),
-                    listView = parent.listView,
-                    defaultLoader = parent.listView.loader;
+                    listView = parent.listViev;
 
                 if (!listView) return;
 
@@ -158,6 +157,7 @@ define('io.ox/find/main', [
                     require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                         var manager = app.view.model.manager,
                             searchcid = _.bind(manager.getResponseCid, manager),
+                            defaultLoader = parent.listView.loader,
                             mode = 'default';
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
