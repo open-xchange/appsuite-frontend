@@ -69,27 +69,24 @@ define('io.ox/core/folder/api', [
         return (all ? 'all/' : '') + String(id);
     }
 
-    //no deep recursion needed here, children are sufficient
+    // no deep recursion needed here, children are sufficient
     function calculateSubtotal(model) {
-        var subfolders = pool.collections[model.get('id')].models,
-        subtotal = 0;
-        for (var i = 0; i < subfolders.length; i++) {
-            subtotal += (subfolders[i].get('subtotal') || 0) + (subfolders[i].get('unread') || 0);
-        }
-        return subtotal;
+        return pool.getCollection(model.id).reduce(function (total, model) {
+            return total + (model.get('subtotal') || 0) + (model.get('unread') || 0);
+        }, 0);
     }
 
     function bubbleSubtotal(model, value, attribute) {
-        if (isVirtual(model.get('id'))) {
-            return;
-        }
-        //attribute may be subtotal or unread
+
+        if (isVirtual(model.id)) return;
+
+        // attribute may be subtotal or unread
         var previous = model._previousAttributes[attribute] !== undefined && model._previousAttributes[attribute] !== null ? model._previousAttributes[attribute] : 0,
             difference = value - previous,
             parent = pool.models[model.get('folder_id')];
 
-        //system folders doesn't matter
-        //bubble through the tree in parent direction
+        // system folders don't matter
+        // bubble through the tree in parent direction
         if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
             parent.set('subtotal', calculateSubtotal(parent));
         }
@@ -101,6 +98,8 @@ define('io.ox/core/folder/api', [
 
     function onChangeUnread (model, value) {
         bubbleSubtotal(model, value, 'unread');
+        // forward event
+        api.trigger('change:unread', model, value);
     }
 
     //
@@ -110,9 +109,11 @@ define('io.ox/core/folder/api', [
     var FolderModel = Backbone.Model.extend({
         constructor: function () {
             Backbone.Model.apply(this, arguments);
-            this.on('change:id', onChangeModelId);
-            this.on('change:subtotal', onChangeSubtotal);
-            this.on('change:unread', onChangeUnread);
+            this.on({
+                'change:id': onChangeModelId,
+                'change:subtotal': onChangeSubtotal,
+                'change:unread': onChangeUnread
+            });
         }
     });
 
@@ -149,7 +150,7 @@ define('io.ox/core/folder/api', [
             if (model === undefined) {
                 // add new model
                 this.models[id] = model = new FolderModel(data);
-                $(this).trigger('folder-model-added', id);
+                api.trigger('pool:add', model);
             } else {
                 // update existing model
                 model.set(data);
