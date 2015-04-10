@@ -3,7 +3,6 @@
 <provider id="org.eclipse.egit.core.GitProvider">
 <project reference="1.0,https://git.open-xchange.com/git/wd/web,develop,open-xchange-appsuite"/>
 <project reference="1.0,https://git.open-xchange.com/git/wd/web,develop,open-xchange-appsuite-help"/>
-<project reference="1.0,https://git.open-xchange.com/git/wd/web,develop,open-xchange-appsuite-help-drive"/>
 <project reference="1.0,https://git.open-xchange.com/git/wd/web,develop,open-xchange-appsuite-spamexperts"/>
 <project reference="1.0,https://git.open-xchange.com/git/wd/web,develop,open-xchange-dynamic-theme"/>
 <project reference="1.0,https://git.open-xchange.com/git/wd/web,develop,open-xchange-guidedtours"/>
