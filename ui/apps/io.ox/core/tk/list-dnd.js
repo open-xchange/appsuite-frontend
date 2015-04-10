@@ -32,6 +32,9 @@ define('io.ox/core/tk/list-dnd', [
         return title || gt.format(gt.ngettext('1 item', '%1$d items', items.length), items.length);
     }
 
+    //toggleTime must be defined here to give over and drop event handlers the same scope, see Bug 37605
+    var toggleTimer;
+
     function enable(options) {
 
         options = _.extend({
@@ -54,7 +57,6 @@ define('io.ox/core/tk/list-dnd', [
             selected,
             helper = null,
             fast,
-            toggleTimer,
             deltaLeft = 15,
             deltaTop = 15,
             // move helper
