@@ -63,7 +63,7 @@ define([
             },
         subview = new Subview(options);
 
-    describe.only('The Notification Subview', function () {
+    describe('The Notification Subview', function () {
         afterEach(function () {
             subview.resetNotifications([]);
             subview.hiddenCollection.reset();
