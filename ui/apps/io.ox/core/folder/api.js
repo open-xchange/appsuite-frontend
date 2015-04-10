@@ -57,6 +57,10 @@ define('io.ox/core/folder/api',
         pool.unfetch(model.id);
     }
 
+    function isVirtual(id) {
+        return /^virtual/.test(id);
+    }
+
     function isFlat(id) {
         return /^(contacts|calendar|tasks)$/.test(id);
     }
@@ -81,9 +85,14 @@ define('io.ox/core/folder/api',
             Backbone.Collection.apply(this, arguments);
             this.id = id;
             this.fetched = false;
+            this.on('remove', this.onRemove, this);
         },
         comparator: function (model) {
-            return model.get('index/' + this.id) || 0;
+            return model.get('index/' + this.id) || 0;
+        },
+        onRemove: function (model) {
+            if (isFlat(model.get('module'))) return;
+            pool.getModel(this.id).set('subfolders', this.length > 0);
         },
         model: FolderModel
     });
@@ -211,6 +220,7 @@ define('io.ox/core/folder/api',
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
+                virtual.refresh();
                 api.trigger('refresh');
             });
         }
@@ -234,6 +244,15 @@ define('io.ox/core/folder/api',
         });
     };
 
+    VirtualFolder.prototype.list = function () {
+        var id = this.id;
+        return this.getter().done(function (array) {
+            _(array).each(injectIndex.bind(null, id));
+            pool.addCollection(getCollectionId(id), array);
+            pool.getModel(id).set('subfolders', array.length > 0);
+        });
+    };
+
     var virtual = {
 
         hash: {},
@@ -241,6 +260,10 @@ define('io.ox/core/folder/api',
         get: function (id) {
             var folder = this.hash[id];
             return folder !== undefined ? folder.getter() : $.Deferred().reject();
+        },
+        list: function (id) {
+            var folder = this.hash[id];
+            return folder !== undefined ? folder.list() : $.Deferred().reject();
         },
 
         add: function (id, getter) {
@@ -252,6 +275,16 @@ define('io.ox/core/folder/api',
             if (ox.debug) console.warn('Deprecated! Please use this.concat()');
             return $.when.apply($, arguments).then(function () {
                 return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
+            });
+        },
+
+        refresh: function () {
+            _(this.hash).invoke('list');
+        },
+
+        getCollections: function () {
+            return _(this.hash).keys().map(function (id) {
+                return api.pool.getCollection(id);
             });
         }
     };
@@ -350,9 +383,7 @@ define('io.ox/core/folder/api',
         }
 
         // special handling for virtual folders
-        if (/^virtual/.test(id)) return virtual.get(id).done(function (array) {
-            pool.addCollection(collectionId, array);
-        });
+        if (isVirtual(id)) return virtual.list(id);
 
         return http.GET({
             module: 'folders',
@@ -598,6 +629,10 @@ define('io.ox/core/folder/api',
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
+            // update all virtual folders
+            virtual.refresh();
+            // add folder to collection
+            pool.getCollection(target).add(model);
             // trigger event
             api.trigger('move', id, newId);
         });
@@ -647,6 +682,7 @@ define('io.ox/core/folder/api',
             })
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
+                virtual.refresh();
                 api.trigger('create', data);
                 api.trigger('create:' + id, data);
             })
@@ -662,19 +698,20 @@ define('io.ox/core/folder/api',
 
     function removeFromCollection(model) {
         // flat folders are different
-        var module = model.get('module'), section, parent, collection;
+        var module = model.get('module'), section, collections;
         if (isFlat(module)) {
             // contacts, calendar, tasks
             section = getSection(model.get('type'));
-            collection = getFlatCollection(module, section);
-            collection.remove(model);
+            getFlatCollection(module, section).remove(model);
         } else {
-            // mail and drive
-            parent = model.get('folder_id');
-            collection = pool.getCollection(parent);
-            collection.remove(model);
-            // update parent folder; subfolders might have changed
-            pool.getModel(parent).set('subfolders', collection.length > 0);
+            // mail and drive; consider virtual folders
+            collections = api.virtual.getCollections();
+            collections.push(pool.getCollection(model.get('folder_id')));
+            // remove and update parent folder; subfolders might have changed
+            _(collections).each(function (collection) {
+                collection.remove(model);
+                pool.getModel(collection.id).set('subfolders', collection.length > 0);
+            });
         }
     }
 
@@ -925,6 +962,7 @@ define('io.ox/core/folder/api',
         can: util.can,
         virtual: virtual,
         isFlat: isFlat,
+        isVirtual: isVirtual,
         getFlatCollection: getFlatCollection,
         getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,

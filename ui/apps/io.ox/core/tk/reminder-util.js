@@ -89,10 +89,10 @@ define('io.ox/core/tk/reminder-util',
             if (_.noI18n(model.get('status'))) {
                 statusText = gt('status ') + _.noI18n(model.get('status'));
             }
-                    //#. %1$s task title
-                    //#. %2$s task end date
-                    //#. %3$s task status
-                    //#, c-format
+            //#. %1$s task title
+            //#. %2$s task end date
+            //#. %3$s task status
+            //#, c-format
             label = gt('%1$s %2$s %3$s.', _.noI18n(model.get('title')), endText, statusText);
         } else {
             //appointment
