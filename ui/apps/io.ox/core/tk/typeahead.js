@@ -62,10 +62,10 @@ define('io.ox/core/tk/typeahead', [
             // harmonize returned data from 'source'
             harmonize: _.identity,
             // lazyload selector
-            lazyload: null
+            lazyload: null,
+            // call typeahead function in render method
+            init: true
         },
-
-        typeaheadInput: $(),
 
         initialize: function (o) {
             var self = this;
@@ -139,7 +139,7 @@ define('io.ox/core/tk/typeahead', [
                 }
             }];
 
-            this.$el.attr({ tabindex: this.options.tabindex }).typeahead(this.typeaheadOptions);
+            this.$el.attr({ tabindex: this.options.tabindex, placeholder: this.options.placeholder });
         },
 
         render: function () {
@@ -161,6 +161,9 @@ define('io.ox/core/tk/typeahead', [
                 },
                 'blur': o.blur
             });
+            if (this.options.init) {
+                this.$el.typeahead.apply(this.$el, this.typeaheadOptions);
+            }
             return this;
         }
 
