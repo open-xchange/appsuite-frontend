@@ -96,7 +96,6 @@ $(window).load(function () {
         };
 
         _.extend(window.require, require);
-
     }(window.require));
 
     require(['io.ox/core/boot/fixes', 'io.ox/core/boot/main']).then(

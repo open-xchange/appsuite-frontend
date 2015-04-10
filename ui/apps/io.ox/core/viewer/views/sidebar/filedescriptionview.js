@@ -15,10 +15,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/files/api',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Ext, ActionsPattern, EventDispatcher, FilesAPI, Util, gt) {
+], function (DisposableView, Ext, ActionsPattern, EventDispatcher, Util, gt) {
 
     'use strict';
 
@@ -29,54 +28,22 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         index: 200,
         id: 'description',
         draw: function (baton) {
-            var panel, panelHeading,
+            var panel,
                 model = baton && baton.model,
-                origModel = model && model.get('origData'),
-                description = model && model.get('description');
+                isDrive = model && (model.get('source') === 'drive'); // TODO: make nicer;
 
             this.empty();
             // mail and PIM attachments don't support file description
-            if (!model || !model.isDriveFile()) {
+            if (!model || !isDrive) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }
-
             // a11y
             this.attr({ role: 'tablist', 'aria-hidden': 'false' }).removeClass('hidden');
 
             // render panel
             this.append(panel = Util.createPanelNode({ title: gt('Description') }));
-
-            if (_.isString(description)) {
-                Ext.point(POINT + '/text').invoke('draw', panel, Ext.Baton({ data: description }));
-
-            } else {
-                panelHeading = panel.find('.panel-heading');
-                panelHeading.busy();
-                // get file description
-                // when we successfully loaded the file description, we set at least an empty string.
-                // so we can distinguish between the cases that the description has been loaded but is empty
-                // and the description has not been loaded yet and we don't know if the file has a description set.
-                FilesAPI.get({
-                    id: model.get('id'),
-                    folder_id: model.get('folderId')
-                })
-                .done(function (file) {
-                    //console.info('FilesAPI.get() ok ', file);
-                    var description = (file && _.isString(file.description)) ? file.description : '';
-
-                    //model.set('description', description);
-                    if (origModel instanceof Backbone.Model) {
-                        origModel.set('description', description);
-                    }
-                })
-                .fail(function (err) {
-                    console.warn('FilesAPI.get() error ', err);
-                })
-                .always(function () {
-                    panelHeading.idle();
-                });
-            }
+            Ext.point(POINT + '/text').invoke('draw', panel, Ext.Baton({ data: model.get('description') }));
         }
     });
 
@@ -90,42 +57,14 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 labelString;
 
             panelBody.empty();
-            if (!_.isString(description)) { return; }
-
+            if (!_.isString(description)) {
+                return;
+            }
             labelString = (description.length > 0) ? description : gt('Add a description');
 
             panelBody.append(
-                $('<div>').append(
-                    $('<div>', { tabindex: 1, title: gt('Description text'), 'aria-label': gt('Description text') }).addClass('description description-label' + ((description.length === 0) ? ' description-empty' : '')).text(labelString),
-                    $('<textarea>').addClass('description description-text').val(description)
-                )
+                $('<div>', { tabindex: 1, title: gt('Description text'), 'aria-label': gt('Description text') }).addClass('description' + ((description.length === 0) ? ' description-empty' : '')).text(labelString)
             );
-        }
-    });
-
-    // Extensions for the file description edit button
-    Ext.point(POINT + '/edit').extend({
-        index: 20,
-        id: 'description-edit',
-        ref: 'io.ox/files/actions/edit-description',
-        draw: function (baton) {
-            //console.info('description-edit.draw() ', baton);
-            var actionBaton, buttonNode;
-
-            actionBaton = Ext.Baton({ data: {
-                id: baton.model.get('id'),
-                folder_id: baton.model.get('folderId'),
-                description: baton.model.get('description')
-            }});
-
-            buttonNode = $('<a>', { id: 'edit-button', href: '#', role: 'button', tabindex: 1 }).addClass('panel-heading-button btn')
-                    .append($('<i>').addClass('fa fa-pencil'));
-
-            buttonNode.on('click', function () {
-                ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
-            });
-
-            this.append(buttonNode);
         }
     });
 
@@ -138,59 +77,32 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         className: 'viewer-filedescription',
 
         events: {
-            'click .toggle-panel': 'onTogglePanel',
-            'click .description-label': 'onStartEdit',
-            'dblclick .description-label': 'onStartEdit',
-            'keyup .description-label': 'onKeyUp'
-            //'blur .description-text': 'onStopEdit'
+            'click .description': 'onEdit',
+            'dblclick .description': 'onEdit',
+            'keyup .description': 'onKeyUp'
         },
 
-        onTogglePanel: function (event) {
-            var panelBody = this.$el.find('.panel>.panel-body');
-            event.preventDefault();
-
-            if (panelBody.hasClass('panel-collapsed')) {
-                // expand the panel
-                panelBody.slideDown().removeClass('panel-collapsed');
-            } else {
-                // collapse the panel
-                panelBody.slideUp().addClass('panel-collapsed');
-            }
-        },
-
-        onStartEdit: function (event) {
-            //console.info('FileDescriptionView.onStartEdit()');
+        onEdit: function (event) {
+            //console.info('FileDescriptionView.onEdit()');
             if (_.device('smartphone || tablet') || event.type === 'dblclick') {
                 event.preventDefault();
-                this.startEdit();
+                this.editDescription();
             }
-        },
-
-        onStopEdit: function () {
-            //console.info('FileDescriptionView.onStopEdit()');
-            this.stopEdit();
-            this.saveDescription(this.$el.find('.description-text').first().val());
         },
 
         onKeyUp: function (event) {
             //console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
-
             switch (event.which || event.keyCode) {
             case 13:
             case 32:
-                this.startEdit();
+                this.editDescription();
                 event.preventDefault();
                 break;
             }
-            /*case 27:
-                this.stopEdit();
-                this.resetDescriptionString();
-                break;
-            }*/
         },
 
         onModelChangeDescription: function (model) {
-            //console.info('onModelChangeDescription() ', model);
+            //console.info('FileDescriptionView.onModelChangeDescription() ', model);
             var panel = this.$el.find('.panel'),
                 description = model.get('description');
 
@@ -198,108 +110,45 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         },
 
         initialize: function () {
-            //console.info('FileDescriptionView.initialize()');
+            //console.info('FileDescriptionView.initialize()', this.model);
             this.on('dispose', this.disposeView.bind(this));
-            this.model = null;
         },
 
-        /**
-         * Switch description to texarea
-         */
-        startEdit: function () {
-            if (!this.model) { return; }
-
-            var baton = Ext.Baton({ data: {
-                id: this.model.get('id'),
-                folder_id: this.model.get('folderId'),
-                description: this.model.get('description')
-            }});
-
-            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, baton);
-
-            // Inplace edit
-            /*var descriptionTextArea = this.$el.find('.description-text').first();
-
-            this.$el.find('.description').addClass('editmode');
-
-            // set initial textarea height
-            if (descriptionTextArea.height() < descriptionTextArea.prop('scrollHeight')) {
-                descriptionTextArea.height('auto');
-                descriptionTextArea.height(descriptionTextArea.prop('scrollHeight'));
+        render: function () {
+            //console.info('FileDescriptionView.render()');
+            if (!this.model) {
+                return this;
             }
-
-            descriptionTextArea.focus();*/
-        },
-
-        /**
-         * Switch description to label
-         */
-        stopEdit: function () {
-            this.$el.find('.description').removeClass('editmode');
-        },
-
-        /**
-         * Resets the label and text area to the previous description
-         */
-        resetDescriptionString: function () {
-            var description = this.model && this.model.get('description') || '',
-                labelString = (description.length > 0) ? description : gt('Add a description');
-
-            this.$el.find('.description-label').first().text(labelString);
-            this.$el.find('.description-text').first().val(description);
-        },
-
-        /**
-         * Updates the file with the new description
-         */
-        saveDescription: function (description) {
-
-            description = (_.isString(description)) ? description : '';
-            if (description === this.model.get('description')) { return; }
-
-            //this.descriptionLabel.text(gt('Saving...'));
-
-            FilesAPI.update({
-                id: this.model.get('id'),
-                folder_id: this.model.get('folderId'),
-                description: description
-            })
-            .done(function (file) {
-                //console.info('FilesAPI.update() ok ', file);
-                this.model.set('description', (file && _.isString(file.description) ? file.description : ''));
-
-            }.bind(this))
-            .fail(function (/*err*/) {
-                //console.info('FilesAPI.update() error ', err);
-            }.bind(this));
-        },
-
-        render: function (data) {
-            //console.info('FileDescriptionView.render() ', data);
-            if (!data || !data.model) { return this; }
-
-            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
-
-            // remove listener from previous model
-            if (this.model) {
-                this.stopListening(this.model, 'change:description');
-            }
-
-            // add listener to new model
-            this.model = data.model;
-            this.listenTo(this.model, 'change:description', this.onModelChangeDescription);
-
+            // a11y
             this.$el.attr({ role: 'tablist' });
-
+            // add model change listener
+            this.listenTo(this.model, 'change:description', this.onModelChangeDescription);
+            // draw
+            var baton = Ext.Baton({ model: this.model, data: this.model.toJSON() });
             Ext.point('io.ox/core/viewer/sidebar/description').invoke('draw', this.$el, baton);
+
             return this;
         },
 
+        /**
+         * Invoke action to edit description
+         */
+        editDescription: function () {
+            if (!this.model) {
+                return;
+            }
+            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, Ext.Baton({ data: this.model.toJSON() }));
+        },
+
+        /**
+         * Destructor function of this view.
+         */
         disposeView: function () {
             //console.info('FileDescriptionView.disposeView()');
-            this.model.off().stopListening();
-            this.model = null;
-            return this;
+            if (this.model) {
+                this.model.off().stopListening();
+                this.model = null;
+            }
         }
     });
 

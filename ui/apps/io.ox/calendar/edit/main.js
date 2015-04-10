@@ -100,6 +100,8 @@ define('io.ox/calendar/edit/main', [
 
                         self.considerSaved = true;
 
+                        self.model.set('endTimezone', self.model.get('timezone'));
+
                         self.model
                             .on('change', function () {
                                 self.considerSaved = false;

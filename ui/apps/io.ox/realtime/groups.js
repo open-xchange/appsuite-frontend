@@ -183,6 +183,10 @@ define('io.ox/realtime/groups', [
             return (rt.send !== $.noop);
         };
 
+        this.getUuid = function () {
+            return rt.resource;
+        };
+
         Event.extend(this);
     }
 

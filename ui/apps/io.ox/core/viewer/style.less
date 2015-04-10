@@ -441,39 +441,24 @@ html.ios .io-ox-viewer {
                 }
 
                 .description {
-                    &.description-text {
-                        color: @viewer-text-color;
-                        background-color: transparent;
-                        display: none;
-                        width: 100%;
+                    display: block;
+                    white-space: pre-wrap;
+                    line-height: 16px;
+                    // padding: 3px;
+                    // border: 2px solid transparent;
+                    // .border-radius(4px);
+                    outline: none;
+                    .user-select(text);
 
-                        &.editmode {
-                            display: block;
-                        }
+                    &.description-empty {
+                        .user-select(none);
+                        cursor: default;
                     }
-                    &.description-label {
-                        display: block;
-                        white-space: pre-wrap;
-                        line-height: 16px;
-                        // padding: 3px;
-                        // border: 2px solid transparent;
-                        // .border-radius(4px);
-                        outline: none;
-                        .user-select(text);
 
-                        &.description-empty {
-                            .user-select(none);
-                            cursor: default;
-                        }
-
-                        &:active, &:focus{
-                            border-color: #444444;
-                        }
-
-                        &.editmode {
-                            display: none;
-                        }
+                    &:active, &:focus{
+                        border-color: #444444;
                     }
+
                 }
             }
         }

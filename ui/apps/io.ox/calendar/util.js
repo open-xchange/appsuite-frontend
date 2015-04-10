@@ -297,6 +297,10 @@ define('io.ox/calendar/util', [
                 $.txt(gt.noI18n(this.getTimeInterval(data))),
                 $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())).popover({
                     container: '#io-ox-core',
+                    viewport: {
+                        selector: '#io-ox-core',
+                        padding: 10
+                    },
                     content: getContent(),
                     html: true,
                     placement: function (tip) {
@@ -307,28 +311,31 @@ define('io.ox/calendar/util', [
                     },
                     title: this.getTimeInterval(data) + ' ' + current.zoneAbbr(),
                     trigger: 'hover focus'
-                }).on('blur', function () {
+                }).on('blur dispose', function () {
                     $(this).popover('hide');
                 })
             );
 
             function getContent() {
                 // hard coded for demo purposes
-                var div = $('<ul class="list-unstyled">');
+                var div = $('<ul class="list-unstyled">'),
+                    list = settings.get('favoriteTimezones');
 
-                _([ 'America/Los_Angeles',
-                    'America/New_York',
-                    'Europe/London',
-                    'Europe/Berlin',
-                    'Australia/Sydney'
-                ]).each(function (zone) {
+                if (!list || list.length === 0) {
+                    list = [
+                        'America/Los_Angeles',
+                        'America/New_York',
+                        'Europe/London',
+                        'Europe/Berlin',
+                        'Australia/Sydney'
+                    ];
+                }
+
+                _(list).chain().uniq().first(10).each(function (zone) {
                     // must use outer DIV with "clear: both" here for proper layout in firefox
                     div.append($('<li>').append(
                         $('<span>')
                             .text(gt.noI18n(zone.replace(/^.*?\//, '').replace(/_/g, ' '))),
-                        $('<span>')
-                            .addClass('label label-info')
-                            .text(gt.noI18n(moment.tz(zone).zoneAbbr())),
                         $('<span>')
                             .addClass('time')
                             .text(gt.noI18n(that.getTimeInterval(data, zone)))
@@ -606,29 +613,14 @@ define('io.ox/calendar/util', [
             return ret;
         },
 
-        resolveGroupMembers: function (groupIDs, userIDs) {
-            groupIDs = groupIDs || [];
-            userIDs = userIDs || [];
-
-            return groupAPI.getList(groupIDs)
-                .then(function (groups) {
-                    _.each(groups, function (single) {
-                        userIDs = _.union(single.members, userIDs);
-                    });
-                    return userAPI.getList(userIDs);
-                })
-                .then(function (users) {
-                    return _(users).map(function (user) {
-                        return $.extend(user, { mail: user.email1, mail_field: 1 });
-                    });
-                });
-        },
-
         resolveParticipants: function (data) {
+            // clone array
             var participants = data.participants.slice(),
-                groupIDs = [],
-                userIDs = [],
-                result = [];
+                IDs = {
+                    user: [],
+                    group: [],
+                    ext: []
+                };
 
             if (!data.organizerId && _.isString(data.organizer)) {
                 participants.unshift({
@@ -642,11 +634,11 @@ define('io.ox/calendar/util', [
                 switch (participant.type) {
                     // internal user
                     case 1:
-                        userIDs.push(participant.id);
+                        IDs.user.push(participant.id);
                         break;
                     // user group
                     case 2:
-                        groupIDs.push(participant.id);
+                        IDs.group.push(participant.id);
                         break;
                     // resource or rescource group
                     case 3:
@@ -656,7 +648,7 @@ define('io.ox/calendar/util', [
                     // external user
                     case 5:
                         // external user
-                        result.push({
+                        IDs.ext.push({
                             display_name: participant.display_name,
                             mail: participant.mail,
                             mail_field: 0
@@ -665,9 +657,36 @@ define('io.ox/calendar/util', [
                 }
             });
 
-            return this.resolveGroupMembers(groupIDs, userIDs).then(function (users) {
-                return _([].concat(result, users)).uniq();
-            });
+            return groupAPI.getList(IDs.group)
+                // resolve groups
+                .then(function (groups) {
+                    _.each(groups, function (single) {
+                        IDs.user = _.union(single.members, IDs.user);
+                    });
+                    return userAPI.getList(IDs.user);
+                })
+                // add mail to user objects
+                .then(function (users) {
+                    // search for external users in contacts
+                    var defs = _(IDs.ext).map(function (ext) {
+                        return contactAPI.search(ext.mail);
+                    });
+                    return $.when.apply($, defs).then(function () {
+                        _(arguments).each(function (result, i) {
+                            if (_.isArray(result)) {
+                                IDs.ext[i] = result[0];
+                            }
+                        });
+                        // combine results with groups and map
+                        return _([].concat(IDs.ext, users))
+                            .chain()
+                            .uniq()
+                            .map(function (user) {
+                                return $.extend(user, { mail: user.email1, mail_field: 1 });
+                            })
+                            .value();
+                    });
+                });
         },
 
         getUserIdByInternalId: function (internal) {

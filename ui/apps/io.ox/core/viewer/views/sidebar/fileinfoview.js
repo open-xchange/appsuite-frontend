@@ -15,10 +15,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
-    'io.ox/core/date',
     'io.ox/core/folder/api',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Ext, EventDispatcher, Util, OXDate, FolderAPI, gt) {
+], function (DisposableView, Ext, EventDispatcher, Util, FolderAPI, gt) {
 
     'use strict';
 
@@ -30,59 +29,47 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         id: 'fileinfo',
         draw: function (baton) {
             //console.info('FileInfoView.draw()');
-            var panel, panelBody,
-                fileName, size, modified, folderId,
-                model = baton && baton.model;
-
-            /**
-             * adds a row to the panel body
-             */
-            function addRow(label, content, cls) {
-                panelBody.find('dl').append(
-                    $('<dt>').text(label),
-                    $('<dd>').addClass(cls).text(content)
-                );
+            if (!baton.model) {
+                return;
             }
-
-            if (!model) { return; }
-
-            fileName = model.get('filename') || '-';
-            size = (_.isNumber(model.get('size'))) ? _.filesize(model.get('size')) : '-';
-            modified = Util.getDateFormated(model.get('lastModified'));
-            folderId = model.get('folderId');
+            var panel, panelBody,
+                model = baton.model,
+                fileName = model.get('filename') || '-',
+                size = model.get('file_size'),
+                sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
+                modified = model.get('last_modified'),
+                isToday = moment().isSame(moment(modified), 'day'),
+                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
 
             panel = Util.createPanelNode({ title: gt('General Info') });
-            panelBody = panel.find('.panel-body').append($('<dl>'));
+            panelBody = panel.find('.panel-body').append(
+                $('<dl>').append(
+                    // filename
+                    $('<dt>').text(gt('Filename')),
+                    $('<dd class="file-name">').text(fileName),
+                    // size
+                    $('<dt>').text(gt('Size')),
+                    $('<dd class="size">').text(sizeString),
+                    // modified
+                    $('<dt>').text(gt('Modified')),
+                    $('<dd class="modified">').text(dateString),
+                    // path
+                    $('<dt>').text(gt('Saved in')),
+                    $('<dd class="saved-in">').text('\xa0').busy()
+                )
+            );
 
-            addRow(gt('Filename'), fileName, 'file-name');
-            addRow(gt('Size'), size, 'size');
-            addRow(gt('Modified'), modified, 'modified');
-            addRow(gt('Saved in'), '\xa0', 'saved-in');
-            panelBody.find('dl>dd.saved-in').busy();
+            FolderAPI.path(model.get('folder_id'))
+            .done(function (list) {
+                var path = _.chain(list)
+                    .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
+                    .map(function (folder) { return gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30)); })
+                    .value().join(' / ');
 
-            FolderAPI.path(folderId)
-            .done(function success(list) {
-                //console.info('path: ', list);
-                var folderPath = '';
-
-                _.each(list, function (folder, index, list) {
-                    var isLast = (index === list.length - 1);
-
-                    if (folder.id !== DRIVE_ROOT_FOLDER) {
-                        folderPath += gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30));
-                        if (!isLast) {
-                            folderPath += gt.noI18n(' / ');
-                        }
-                    }
-                });
-
-                panelBody.find('dl>dd.saved-in').text(folderPath);
+                panelBody.find('dl>dd.saved-in').text(path).idle();
             })
-            .fail(function fail() {
-                panelBody.find('dl>dd.saved-in').text('-');
-            })
-            .always(function () {
-                panelBody.find('dl>dd.saved-in').idle();
+            .fail(function () {
+                panelBody.find('dl>dd.saved-in').text('-').idle();
             });
 
             this.empty().attr({ role: 'tablist' }).append(panel);
@@ -97,35 +84,45 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         className: 'viewer-fileinfo',
 
-        events: {
-            'click .toggle-panel': 'onTogglePanel'
-        },
-
-        onTogglePanel: function (event) {
-            var panelBody = this.$el.find('.panel>.panel-body');
-            event.preventDefault();
-
-            if (panelBody.hasClass('panel-collapsed')) {
-                // expand the panel
-                panelBody.slideDown().removeClass('panel-collapsed');
-            } else {
-                // collapse the panel
-                panelBody.slideUp().addClass('panel-collapsed');
-            }
-        },
-
         initialize: function () {
-            //console.info('FileInfoView.initialize()');
+            //console.info('FileInfoView.initialize()', this.model);
+            this.on('dispose', this.disposeView.bind(this));
         },
 
-        render: function (data) {
-            //console.info('FileInfoView.render() ', data);
-            if (!data || !data.model) { return this; }
-
-            var baton = Ext.Baton({ model: data.model, data: data.model.get('origData') });
-
+        /**
+         * Listens on model change events.
+         */
+        onModelChange: function (model) {
+            //console.info('FileInfoView.onModelChangeDescription()', model);
+            var isDrive = (model.get('source') === 'drive'), // TODO: make nicer
+                baton = Ext.Baton({ model: model, data: isDrive ? model.toJSON() : model.get('origData') });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
+        },
+
+        render: function () {
+            //console.info('FileInfoView.render()');
+            if (!this.model) {
+                return this;
+            }
+            // add model change listener
+            this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.onModelChange.bind(this));
+
+            var isDrive = (this.model.get('source') === 'drive'), // TODO: make nicer
+                baton = Ext.Baton({ model: this.model, data: isDrive ? this.model.toJSON() : this.model.get('origData') });
+            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
+
             return this;
+        },
+
+        /**
+         * Destructor function of this view.
+         */
+        disposeView: function () {
+            //console.info('FileDescriptionView.disposeView()');
+            if (this.model) {
+                this.model.off().stopListening();
+                this.model = null;
+            }
         }
 
     });

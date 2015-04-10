@@ -64,6 +64,7 @@ define('io.ox/calendar/edit/extensions', [
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                         baton.model.attributes.tempAttachmentIndicator = true;
                     }
+                    baton.model.unset('endTimezone');
                     baton.model.save().then(_.bind(baton.app.onSave, baton.app));
                 })
             );
@@ -130,6 +131,14 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
+    function openTimezoneDialog() {
+        var model = this.model;
+
+        require(['io.ox/calendar/edit/timezone-dialog'], function (dialog) {
+            dialog.open({ model: model });
+        });
+    }
+
     // start date
     point.basicExtend({
         id: 'start-date',
@@ -141,10 +150,12 @@ define('io.ox/calendar/edit/extensions', [
                     className: 'col-xs-6',
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'start_date',
-                    label: gt('Starts on')
+                    label: gt('Starts on'),
+                    timezoneButton: true,
+                    timezoneAttribute: 'timezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
-                }).render().$el
+                }).on('click:timezone', openTimezoneDialog, baton).render().$el
             );
         }
     });
@@ -161,10 +172,12 @@ define('io.ox/calendar/edit/extensions', [
                     className: 'col-xs-6',
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'end_date',
-                    label: gt('Ends on')
+                    label: gt('Ends on'),
+                    timezoneButton: true,
+                    timezoneAttribute: 'endTimezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
-                }).render().$el
+                }).on('click:timezone', openTimezoneDialog, baton).render().$el
             );
         }
     });

@@ -93,7 +93,6 @@ define('io.ox/participants/model', [
 
             this.fetch().done(function () {
                 self.trigger('fetch');
-                self.trigger('change');
             });
         },
 
@@ -103,7 +102,6 @@ define('io.ox/participants/model', [
 
             function setUser(data) {
                 self.set(data);
-                self.trigger('change', self);
                 df.resolve();
             }
 
@@ -116,7 +114,6 @@ define('io.ox/participants/model', [
                     id: data.internal_userid ? data.internal_userid : self.get('id')
                 });
                 self.id = self.get('id');
-                self.trigger('change');
             }
 
             switch (self.get('type')) {
@@ -142,20 +139,17 @@ define('io.ox/participants/model', [
                 //fetch user group
                 groupAPI.get({ id: self.get('id') }).done(function (group) {
                     self.set(group);
-                    self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
                 resourceAPI.get({ id: self.get('id') }).done(function (resource) {
                     self.set(resource);
-                    self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE_GROUP:
-                self._data = { display_name: 'resource group' };
-                self.trigger('change', self);
+                self.set('display_name', 'resource group');
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
@@ -172,7 +166,6 @@ define('io.ox/participants/model', [
                                 email1: self.get('mail') || self.get('email1')
                             });
                         }
-                        self.trigger('change', self);
                         df.resolve();
                     });
                 }
@@ -181,13 +174,10 @@ define('io.ox/participants/model', [
                 //fetch user group
                 contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
                     self.set(group);
-                    self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             default:
-                //self.set({ display_name: 'unknown' });
-                self.trigger('change', self);
                 df.resolve();
                 break;
             }

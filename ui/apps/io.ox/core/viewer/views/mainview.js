@@ -43,7 +43,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create children views
             this.toolbarView = new ToolbarView({ collection: this.collection });
             this.displayerView = new DisplayerView({ collection: this.collection });
-            //this.sidebarView = new SidebarView({ collection: this.collection });
+            this.sidebarView = new SidebarView({ collection: this.collection });
             // clean Viewer element and all event handlers on viewer close
             this.listenTo(this.toolbarView, 'close', function () {
                 this.remove();
@@ -85,8 +85,8 @@ define('io.ox/core/viewer/views/mainview', [
             // append toolbar view
             this.$el.append(
                 this.toolbarView.render(model).el,
-                this.displayerView.render(model).el
-                //this.sidebarView.render(data).el
+                this.displayerView.render(model).el,
+                this.sidebarView.render(model).el
             );
             return this;
         },

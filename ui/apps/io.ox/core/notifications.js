@@ -117,17 +117,15 @@ define('io.ox/core/notifications', [
                 cont = function () {
                     // open dialog first to be visually responsive
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        self.nodes.sidepopup.attr('data-cid', cid).appendTo(document.body);
+                        self.nodes.sidepopup.attr('data-cid', cid).appendTo('#io-ox-windowmanager-pane');
                         // open SidePopup without arrow
                         var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
                             .setTarget(self.nodes.sidepopup.empty())
                             .show({ target: self.nodes.sidepopup.empty() }, function (popup) {
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
-                                    var top = self.bannerHeight + 50;
                                     node.css({
-                                        right: '400px',
-                                        top: top + 'px'
+                                        right: '400px'
                                     });
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');

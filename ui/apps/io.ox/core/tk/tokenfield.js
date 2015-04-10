@@ -97,8 +97,9 @@ define('io.ox/core/tk/tokenfield', [
                 // dnd sort
                 dnd: true,
                 // token view
-                tokenview: undefined
-
+                tokenview: undefined,
+                // dont't call init function in typeahead view
+                init: false
             }, options);
 
             // call super constructor
@@ -280,10 +281,6 @@ define('io.ox/core/tk/tokenfield', [
                 self = this;
 
             this.$el
-                .attr({
-                    tabindex: this.options.tabindex,
-                    placeholder: this.options.placeholder || null
-                })
                 .addClass('tokenfield');
             this.$el.tokenfield({
                 createTokensOnBlur: o.createTokensOnBlur,

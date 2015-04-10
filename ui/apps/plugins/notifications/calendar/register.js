@@ -111,16 +111,16 @@ define('plugins/notifications/calendar/register', [
                 //#. %5$s Appointment Organizer
                 //#, c-format
                 'aria-label': gt('%1$s %2$s %3$s %4$s %5$s.',
-                        _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.get('data'))),
+                        _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.attributes)),
                         _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '',
                         _.noI18n(model.get('organizer')))
             }).append(
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                $('<span class="span-to-div time">').text(model.get('time')),
-                $('<span class="span-to-div date">').text(model.get('date')),
-                $('<span class="span-to-div title">').text(model.get('title')),
-                $('<span class="span-to-div location">').text(model.get('location')),
-                $('<span class="span-to-div organizer">').text(model.get('organizer')),
+                $('<span class="span-to-div time">').text(_.noI18n(util.getTimeInterval(model.attributes))),
+                $('<span class="span-to-div date">').text(_.noI18n(util.getDateInterval(model.attributes))),
+                $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
+                $('<span class="span-to-div location">').text(_.noI18n(model.get('location'))),
+                $('<span class="span-to-div organizer">').text(_.noI18n(model.get('organizer'))),
                 $('<div class="actions">').append(
                     $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
                         .attr('focus-id', 'calendar-invite-' + cid + '-accept-decline')

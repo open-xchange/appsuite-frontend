@@ -32,12 +32,17 @@ define('io.ox/find/main', [
     var createInstance = function (opt) {
         var app;
 
-        opt = _.extend({}, { inplace: true }, opt);
+        opt = _.extend({}, {
+            // use 'parent' window
+            inplace: true
+        }, opt);
+
         // application object
         app = ox.ui.createApp(
             _.extend({
                 name: 'io.ox/find',
-                title: gt('Search')
+                title: gt('Search'),
+                state: 'created'
             }, opt)
         );
 
@@ -110,7 +115,7 @@ define('io.ox/find/main', [
                 grid.setAllRequest('search', function () {
                     // result: contains a amount of data somewhere between the usual all and list responses
                     var params = { sort: grid.prop('sort'), order: grid.prop('order') };
-                    return app.apiproxy.query(true, params)
+                    return app.getSearchResult(params, true)
                         .then(function (response) {
                             var data = response && response.results ? response.results : [];
                             return data;
@@ -135,6 +140,96 @@ define('io.ox/find/main', [
                 });
             },
 
+            'listview': function (app) {
+
+                if (!app.get('inplace')) return;
+
+                // check for listview
+                var parent = app.get('parent'),
+                    listView = parent.listView,
+                    defaultLoader = parent.listView.loader;
+
+                if (!listView) return;
+
+                app.on('change:state', function (e, state) {
+
+                    if (state !== 'launched') return;
+
+                    require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
+                        var manager = app.view.model.manager,
+                            searchcid = _.bind(manager.getResponseCid, manager),
+                            mode = 'default';
+                        // define collection loader for search results
+                        var collectionLoader = new CollectionLoader({
+                                module: app.getModuleParam(),
+                                mode: 'search',
+                                fetch: function (params) {
+                                    var self = this,
+                                        limit = params.limit.split(','),
+                                        start = parseInt(limit[0]),
+                                        size = parseInt(limit[1]) - start;
+
+                                    app.model.set({
+                                        'start': start,
+                                        'size': size,
+                                        'extra': 1
+                                    }, { silent: true });
+
+                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                    return app.getSearchResult(params, true).then(function (response) {
+                                        response = response || {};
+                                        var list = response.results || [],
+                                            request = response.request || {};
+                                        // add 'more results' info to collection (compare request limits and result)
+                                        self.collection.search = {
+                                            next: list.length !== 0 && list.length === request.data.size
+                                        };
+                                        return list;
+                                    });
+                                },
+                                cid: searchcid
+                            });
+                        app.trigger('collectionLoader:created', collectionLoader);
+                        var register = function () {
+                                var view = app.view.model,
+                                    // remember original setCollection
+                                    setCollection = parent.listView.setCollection;
+                                // hide sort options
+                                parent.listControl.$el.find('.grid-options:first').hide();
+                                parent.listView.connect(collectionLoader);
+                                mode = 'search';
+                                // wrap setCollection
+                                parent.listView.setCollection = function (collection) {
+                                    view.stopListening();
+                                    view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
+                                    return setCollection.apply(this, arguments);
+                                };
+                            };
+
+                        // events
+                        app.on({
+                            'find:idle': function () {
+                                if (mode === 'search') {
+                                    // show sort options
+                                    parent.listControl.$el.find('.grid-options:first').show();
+                                    // reset collection loader
+                                    parent.listView.connect(defaultLoader);
+                                    parent.listView.load();
+                                }
+                                mode = 'default';
+                            },
+                            'find:query': _.debounce(function () {
+                                // register/connect once
+                                if (parent.listView.loader.mode !== 'search') register();
+                                // load
+                                parent.listView.load();
+                            }, 10)
+                        });
+
+                    });
+                });
+            },
+
             'quit': function (app) {
                 if (!app.get('inplace')) return;
                 // also quit when parent app quits
@@ -155,15 +250,6 @@ define('io.ox/find/main', [
                 win.show();
             }
 
-        });
-
-        // initiated via lazyload
-        app.apiproxy = {};
-
-        // launcher
-        app.setQuit(function () {
-            // TODO: on parent app quit
-            if (app.view) return app.view.discard();
         });
 
         // reset and collapse/hide
@@ -232,40 +318,73 @@ define('io.ox/find/main', [
             });
         }
 
+        // DEBUG: states
+        // app.on('change:state', function (e, state) {
+        //     console.log('%c' + state, 'color: white; background-color: blue');
+        // });
+
         /**
-         * ready: app created and accessible via parentapp.get('find')
-         * waiting: skeleton nodes drawn
-         * running: lazy load finished, search app is usable in full
+         * created: app created and accessible via parentapp.get('find')
+         * prepared: app is mediated and placeholder view intantiated
+         * launched: init views and models, search app is usable in full
          */
         app.prepare = function () {
+            app.set('state', 'preparing');
             // setup
             app.mediate();
-            // keep ready status
-            app.set('state', 'waiting');
-
-            // initialize view
-            // TODO: add data now (or later)
-            require(['io.ox/find/model', 'io.ox/find/view'], function (FindModel, FindView) {
-                app.model = new FindModel({ app: app });
-                app.view = new FindView({ app: app, model: app.model });
-                // inplace: use parents view window
-                // view manages (appended via win.nodes reference)
-                app.view.render();
-                register();
+            require(['io.ox/find/view-placeholder'], function (PlaceholderView) {
+                app.placeholder = new PlaceholderView({ app: app });
+                // delay launch app (on focus)
+                app.listenToOnce(app.placeholder, 'launch', app.launch);
+                app.set('state', 'prepared');
             });
         };
 
-        // resolves after prepare is ready
-        app.ready = $.Deferred();
+        app.getProxy = (function () {
+            var apiproxy, invalid = $.Deferred().reject('please launch app first');
+            return function () {
+                var def = $.Deferred();
+                if (app.get('state') !== 'launched') return invalid;
 
-        // overwrite app.launch
-        app.super = {
-            launch: app.launch
+                if (apiproxy) return apiproxy;
+                // connect apiproxy first
+                require(['io.ox/find/apiproxy'], function (ApiProxy) {
+                    apiproxy = def.resolve(ApiProxy.init(app));
+                });
+                return def;
+            };
+        })();
+
+        app.getSuggestions = function (query) {
+            return app.getProxy().then(function (apiproxy) {
+                return apiproxy.search(query);
+            });
         };
+
+        app.getSearchResult = function (params, sync) {
+            return app.getProxy().then(function (apiproxy) {
+                return apiproxy.query(params, sync);
+            });
+        };
+
+        // overwrite defaults app.launch
         app.launch = function () {
-            // lazy load
-            // create view
-            app.set('state', 'running');
+            if (app.get('state') !== 'prepared') return;
+            // get rid of placeholder view
+            if (app.placeholder) {
+                app.placeholder.destroy();
+                delete app.placeholder;
+            }
+            // initialize views (tokenfield, typeahed, etc)
+            app.set('state', 'launching');
+            require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
+                app.model = new MainModel({ app: app });
+                app.view = new MainView({ app: app, model: app.model });
+                // inplace: use parents view window
+                app.view.render();
+                register();
+                app.set('state', 'launched');
+            });
         };
 
         return app;

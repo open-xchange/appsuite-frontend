@@ -110,9 +110,11 @@
         try {
             // browser detection - adopted from prototype.js
             ua = nav.userAgent;
+
             isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
+            spartan = ua.indexOf('Edge/12.0') > -1;  // TODO: This needs to be updated, if better user agent is available
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Windows = ua.indexOf('Windows') > -1;
@@ -125,13 +127,26 @@
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
+            // TODO: This needs to be updated, if better user agent is available
+            // Spartan is no Chrome and no Webkit.
+            if (spartan) {
+                chrome = false;
+                webkit = false;
+            }
+
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
-                IE: nav.appName === 'Microsoft Internet Explorer' ?
-                    Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
-                        !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
-                    ),
+                IE: spartan ?
+                    // TODO: Handle Spartan as IE 12. Is this really wanted?
+                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : (
+                        nav.appName === 'Microsoft Internet Explorer' ?
+                            Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
+                                !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)),
+                /** is Spartan? */
+                Spartan: spartan ?
+                    // TODO: If Spartan is handled as IE 12, a specific 'Spartan' property is not required.
+                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined,
                 /** is Opera? */
                 Opera: isOpera ?
                     ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,

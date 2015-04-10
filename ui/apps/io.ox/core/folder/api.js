@@ -69,6 +69,40 @@ define('io.ox/core/folder/api', [
         return (all ? 'all/' : '') + String(id);
     }
 
+    //no deep recursion needed here, children are sufficient
+    function calculateSubtotal(model) {
+        var subfolders = pool.collections[model.get('id')].models,
+        subtotal = 0;
+        for (var i = 0; i < subfolders.length; i++) {
+            subtotal += (subfolders[i].get('subtotal') || 0) + (subfolders[i].get('unread') || 0);
+        }
+        return subtotal;
+    }
+
+    function bubbleSubtotal(model, value, attribute) {
+        if (isVirtual(model.get('id'))) {
+            return;
+        }
+        //attribute may be subtotal or unread
+        var previous = model._previousAttributes[attribute] !== undefined && model._previousAttributes[attribute] !== null ? model._previousAttributes[attribute] : 0,
+            difference = value - previous,
+            parent = pool.models[model.get('folder_id')];
+
+        //system folders doesn't matter
+        //bubble through the tree in parent direction
+        if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
+            parent.set('subtotal', calculateSubtotal(parent));
+        }
+    }
+
+    function onChangeSubtotal (model, value) {
+        bubbleSubtotal(model, value, 'subtotal');
+    }
+
+    function onChangeUnread (model, value) {
+        bubbleSubtotal(model, value, 'unread');
+    }
+
     //
     // Model & Collections
     //
@@ -77,6 +111,8 @@ define('io.ox/core/folder/api', [
         constructor: function () {
             Backbone.Model.apply(this, arguments);
             this.on('change:id', onChangeModelId);
+            this.on('change:subtotal', onChangeSubtotal);
+            this.on('change:unread', onChangeUnread);
         }
     });
 
@@ -131,6 +167,14 @@ define('io.ox/core/folder/api', [
                 type = collection.fetched ? 'set' : 'reset';
             collection[type](models);
             collection.fetched = true;
+
+            if (!isVirtual(id) && this.models[id] && this.models[id].get('module') !== 'system') {
+                var subtotal = 0;
+                for (var i = 0; i < models.length; i++) {
+                    subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
+                }
+                this.models[id].set('subtotal', subtotal);
+            }
 
             if (options.reset) collection.trigger('reset');
         },
@@ -644,6 +688,9 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id);
         removeFromAllCollections(model);
 
+        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+        model.set('unread', 0);
+
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
@@ -725,6 +772,9 @@ define('io.ox/core/folder/api', [
 
         // trigger event
         api.trigger('remove:prepare', data);
+
+        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+        model.set('unread', 0);
 
         // update collection (now)
         removeFromAllCollections(model);
@@ -947,6 +997,7 @@ define('io.ox/core/folder/api', [
         FolderCollection: FolderCollection,
         Pool: Pool,
         pool: pool,
+        calculateSubtotal: calculateSubtotal,
         get: get,
         list: list,
         multiple: multiple,

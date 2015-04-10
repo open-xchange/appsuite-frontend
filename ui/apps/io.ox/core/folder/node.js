@@ -148,6 +148,7 @@ define('io.ox/core/folder/node', [
             this.options.open = state;
             this.onChangeSubFolders();
             this.options.tree.trigger(state ? 'open' : 'close', this.folder);
+            this.renderCounter();
         },
 
         // open/close folder
@@ -392,7 +393,16 @@ define('io.ox/core/folder/node', [
         },
 
         getCounter: function () {
-            return this.options.count !== undefined ? this.options.count : this.model.get('unread') || 0;
+            var subtotal = 0;
+            //show number of unread subfolder items only when folder is closed
+            if (!this.options.open && this.options.subfolders) {
+                if (this.isVirtual) {
+                    subtotal =  api.calculateSubtotal(this.model);
+                } else if (this.model.get('subtotal')) {
+                    subtotal = this.model.get('subtotal');
+                }
+            }
+            return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
         renderCounter: function () {

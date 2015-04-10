@@ -38,8 +38,6 @@ define('io.ox/find/view-searchbox', [
         render: function () {
             // render subview
             this.ui.tokenfield.render();
-            // initate the rest
-            this.parent.lazyload();
             // register additional handlers
             this.register();
             return this;

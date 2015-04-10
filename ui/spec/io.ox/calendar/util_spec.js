@@ -313,7 +313,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
 
             it('for test group', function (done) {
-                util.resolveGroupMembers([{ id: 1337 }], [4]).then(function (result) {
+                util.resolveParticipants({ participants: [{ id: 1337, type: 2 }] }).then(function (result) {
                     var expectedResult = [{
                         'id': 1,
                         'folder_id': 6,

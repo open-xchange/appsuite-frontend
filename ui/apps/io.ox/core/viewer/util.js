@@ -10,9 +10,8 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/util', [
-    'io.ox/core/date',
     'gettext!io.ox/core/viewer'
-], function (OXDate, gt) {
+], function (gt) {
 
     'use strict';
 
@@ -32,41 +31,6 @@ define('io.ox/core/viewer/util', [
         'video': 'fa-file-video-o',
         'audio': 'fa-file-audio-o',
         'pdf': 'fa-file-pdf-o'
-    };
-
-    /**
-     * Returns a date formatted as string
-     *
-     * @param {Number} timestamp
-     *  The core date.
-     *
-     * @param {Object} options
-     *      @param {Boolean} [options.fulldate = false]
-     *          If set to true the time part is added to the date String.
-     *      @param {Boolean} [options.filtertoday = true]
-     *          If set to true only displays the time part for today.
-     *
-     * @returns {String}
-     *  The formatted date string.
-     */
-    Util.getDateFormated = function (timestamp, options) {
-        if (!_.isNumber(timestamp)) { return '-'; }
-
-        var opt = $.extend({ fulldate: false, filtertoday: true }, options || {}),
-        now = new OXDate.Local(),
-        d = new OXDate.Local(timestamp),
-        timestr = function () {
-            return d.format(OXDate.TIME);
-        },
-        datestr = function () {
-            return d.format(OXDate.DATE) + (opt.fulldate ? ' ' + timestr() : '');
-        },
-        isSameDay = function () {
-            return d.getDate() === now.getDate() &&
-            d.getMonth() === now.getMonth() &&
-            d.getYear() === now.getYear();
-        };
-        return isSameDay() && opt.filtertoday ? timestr() : datestr();
     };
 
     /**
@@ -183,10 +147,12 @@ define('io.ox/core/viewer/util', [
                 buttonIcon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
                 toggleButton.attr('aria-expanded', 'true');
                 panelHeader.attr('aria-expanded', 'true');
+                panelBody.slideDown().removeClass('panel-collapsed');
             } else {
                 buttonIcon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
                 toggleButton.attr('aria-expanded', 'false');
                 panelHeader.attr('aria-expanded', 'false');
+                panelBody.slideUp().addClass('panel-collapsed');
             }
         }
 

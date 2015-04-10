@@ -233,8 +233,8 @@ define('io.ox/core/folder/view', [
             // does not work reliable on iOS, use click instead
             // Safari removes the 300ms click delay, so it's fine to use
             // click on iOS
-            tree.$el.on(_.device('ios') ? 'click' : 'tap', '.folder', _.debounce(function (e) {
-                // use default behavior for arrow
+            tree.$el.on(_.device('ios') ? 'click' : 'tap', '.folder:not(.virtual)', _.debounce(function (e) {
+                // use default behavior for arrow and virtual folders
                 if ($(e.target).is('.folder-arrow, .fa')) return;
                 // edit mode?
                 if (app.props.get('mobileFolderSelectMode') === true) {

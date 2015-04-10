@@ -23,8 +23,9 @@ define('io.ox/core/settings/pane', [
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
-    'gettext!io.ox/core'
-], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt) {
+    'gettext!io.ox/core',
+    'io.ox/backbone/mini-views/timezonepicker'
+], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
 
     'use strict';
 
@@ -143,23 +144,6 @@ define('io.ox/core/settings/pane', [
 
     // Timezones
     (function () {
-        var available = settingOptions.get('availableTimeZones'),
-            now = moment();
-
-        var timezones = _(moment.tz._zones)
-            .chain()
-            .filter(function (tz) {
-                tz.displayName = moment.tz(tz.name).format('([GMT]Z) ') + tz.name;
-                return !!available[tz.name];
-            })
-            .sortBy(function (tz) {
-                return tz.offset(now) * -1;
-            })
-            .map(function (tz) {
-                return { label: tz.displayName, value: tz.name };
-            })
-            .value();
-
         point.extend({
             id: 'timezones',
             index: 200,
@@ -172,12 +156,12 @@ define('io.ox/core/settings/pane', [
                         for: guid
                     }).text(gt('Time zone')),
                     $('<div>').addClass('col-sm-4').append(
-                        new miniViews.SelectView({
-                            list: timezones,
+                        new TimezonePicker({
                             name: 'timezone',
                             model: this.baton.model,
                             id: guid,
-                            className: 'form-control'
+                            className: 'form-control',
+                            showFavorites: true
                         }).render().$el
                     )
                 );

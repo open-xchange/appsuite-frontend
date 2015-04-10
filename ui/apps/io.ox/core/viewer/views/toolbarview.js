@@ -337,7 +337,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         onModelChange: function (changedModel) {
             //console.warn('ToolbarView.onModelChange()', changedModel);
-            this.render({ model: changedModel });
+            this.render(changedModel);
         },
 
         /**

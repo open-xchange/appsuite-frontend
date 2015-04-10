@@ -401,6 +401,11 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.remove();
             }
 
+            // show but keep invisible
+            // this speeds up calculation of dimenstions
+            nodes.underlay.show().addClass('in');
+            nodes.popup.addClass('invisible').show();
+
             var fnSetDimensions = function () {
                 var dim = {
                     width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
@@ -493,8 +498,7 @@ define('io.ox/core/tk/dialogs', [
 
             this.trigger('beforeshow');
 
-            nodes.underlay.show().addClass('in');
-            nodes.popup.show();
+            nodes.popup.removeClass('invisible');
 
             // focus button (if available)
             var button = nodes.popup.find('.btn-primary').first().focus();

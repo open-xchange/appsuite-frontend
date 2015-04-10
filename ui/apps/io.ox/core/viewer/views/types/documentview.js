@@ -15,8 +15,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
-    'io.ox/core/viewer/eventdispatcher',
-    'gettext!io.ox/core'
+    'io.ox/core/viewer/eventdispatcher'
 ], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher) {
 
     'use strict';

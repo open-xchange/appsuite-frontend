@@ -53,9 +53,9 @@ define('io.ox/find/manager/facet-collection', [
 
         /**
          * advanced 'add'
-         * keep active facets
-         * add new
-         * remove missing
+         * - keeps active facets
+         * - adds new
+         * - removes missing
          */
         update: function (list) {
             var self = this,

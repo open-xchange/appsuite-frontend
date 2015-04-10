@@ -17,8 +17,9 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'gettext!io.ox/calendar',
-    'io.ox/backbone/mini-views'
-], function (settings, calendarSettingsModel, ext, notifications, gt, mini) {
+    'io.ox/backbone/mini-views',
+    'io.ox/calendar/settings/favorite-view'
+], function (settings, calendarSettingsModel, ext, notifications, gt, mini, FavoriteView) {
 
     'use strict';
 
@@ -219,6 +220,21 @@ define('io.ox/calendar/settings/pane', [
                             )
                         )
                     )
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 600,
+        id: 'favorite-timezone',
+        draw: function () {
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Favorite timezones'))
+                    ),
+                    new FavoriteView({ model: model }).render().$el
                 )
             );
         }
