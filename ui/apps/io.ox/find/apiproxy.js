@@ -85,18 +85,14 @@ define('io.ox/find/apiproxy',[
             return api.autocomplete(request).then(extend.bind(this, request));
         }
 
-        var model = app.view.model,
+        var model = app.model,
             // managing wrapper to keep model up2date and match tokenfields naming conventions
             proxy = {
                 // alias for autocomplete tk
                 search: function (query) {
                     var standard = {
-                            params: {
-                                module: app.getModuleParam()
-                            },
-                            data: {
-                                prefix: query
-                            }
+                            params: { module: app.getModuleParam() },
+                            data: { prefix: query }
                         };
 
                     function updateModel (data) {
