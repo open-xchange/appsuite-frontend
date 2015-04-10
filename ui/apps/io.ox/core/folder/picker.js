@@ -165,6 +165,9 @@ define('io.ox/core/folder/picker',
                         dialog.getBody().idle().append(tree.render().$el);
                         tree.$el.focus();
                         o.show(dialog, tree);
+                        //force a list request
+                        //quick workaround for Bug 37373
+                        api.list(o.root, { all: true });
                     });
             })
             .done(function () {
