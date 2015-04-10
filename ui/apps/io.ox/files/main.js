@@ -667,7 +667,7 @@ define('io.ox/files/main', [
                                 }, { silent: true });
 
                                 var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                                return find.apiproxy.query(true, params).then(function (response) {
+                                return find.getSearchResult(params, true).then(function (response) {
                                     response = response || {};
                                     var list = response.results || [],
                                         request = response.request || {};

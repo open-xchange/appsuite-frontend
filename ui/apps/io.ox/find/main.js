@@ -115,7 +115,7 @@ define('io.ox/find/main', [
                 grid.setAllRequest('search', function () {
                     // result: contains a amount of data somewhere between the usual all and list responses
                     var params = { sort: grid.prop('sort'), order: grid.prop('order') };
-                    return app.apiproxy.query(true, params)
+                    return app.getSearchResult(params, true)
                         .then(function (response) {
                             var data = response && response.results ? response.results : [];
                             return data;
@@ -161,9 +161,6 @@ define('io.ox/find/main', [
             }
 
         });
-
-        // initiated via lazyload
-        app.apiproxy = {};
 
         // reset and collapse/hide
         app.cancel = function () {
@@ -250,6 +247,33 @@ define('io.ox/find/main', [
                 // delay launch app (on focus)
                 app.listenToOnce(app.placeholder, 'launch', app.launch);
                 app.set('state', 'prepared');
+            });
+        };
+
+        app.getProxy = (function () {
+            var apiproxy, invalid = $.Deferred().reject('please launch app first');
+            return function () {
+                var def = $.Deferred();
+                if (app.get('state') !== 'launched') return invalid;
+
+                if (apiproxy) return apiproxy;
+                // connect apiproxy first
+                require(['io.ox/find/apiproxy'], function (ApiProxy) {
+                    apiproxy = def.resolve(ApiProxy.init(app));
+                });
+                return def;
+            };
+        })();
+
+        app.getSuggestions = function (query) {
+            return app.getProxy().then(function (apiproxy) {
+                return apiproxy.search(query);
+            });
+        };
+
+        app.getSearchResult = function (params, sync) {
+            return app.getProxy().then(function (apiproxy) {
+                return apiproxy.query(params, sync);
             });
         };
 

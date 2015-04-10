@@ -15,11 +15,10 @@ define('io.ox/find/view-tokenfield', [
     'io.ox/find/extensions-tokenfield',
     'io.ox/core/extensions',
     'settings!io.ox/contacts',
-    'io.ox/find/apiproxy',
     'io.ox/core/tk/tokenfield',
     'io.ox/find/view-token',
     'gettext!io.ox/core'
-], function (extensions, ext, settings, ApiProxy, Tokenfield, TokenView, gt) {
+], function (extensions, ext, settings, Tokenfield, TokenView, gt) {
 
     'use strict';
 
@@ -90,11 +89,10 @@ define('io.ox/find/view-tokenfield', [
 
         render: function () {
             // replace stub input field with tokenfield
-            var baton = this.baton,
+            var app = this.app,
+                baton = this.baton,
                 fieldstub = baton.app.view.$el.find('.search-field'),
                 guid = _.uniqueId('form-control-label-'),
-                // TODO: decouple apiproxy
-                apiproxy = this.app.apiproxy = ApiProxy.init(this.app),
                 model = baton.model,
                 hasFocus = fieldstub.is(':focus'),
                 query = fieldstub.val();
@@ -117,10 +115,7 @@ define('io.ox/find/view-tokenfield', [
                 minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
                 autoselect: true,
                 // TODO: would be nice to move to control
-                source: function (val) {
-                    // show dropdown immediately (busy by autocomplete tk)
-                    return apiproxy.search(val);
-                },
+                source: app.getSuggestions,
                 reduce: function (data) {
                     var manager = model.manager,
                         list = [];
