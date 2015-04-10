@@ -659,6 +659,11 @@ define('io.ox/files/main', [
         commons.wirePerspectiveEvents(app);
 
         win.nodes.outer.on('selection:drop', function (e, baton) {
+            // convert composite keys to objects
+            baton.data = _(baton.data).map(function (item) {
+                return _.isString(item) ? _.cid(item) : item;
+            });
+            // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });
 
