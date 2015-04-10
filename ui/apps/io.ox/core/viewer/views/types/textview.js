@@ -26,8 +26,10 @@ define('io.ox/core/viewer/views/types/textview', [
             this.on('dispose', function () {
                 EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
             });
-            EventDispatcher.on('viewer:document:zoomin', this.zoomIn.bind(this));
-            EventDispatcher.on('viewer:document:zoomout', this.zoomOut.bind(this));
+            EventDispatcher.on({
+                'viewer:document:zoomin': this.zoomIn.bind(this),
+                'viewer:document:zoomout': this.zoomOut.bind(this)
+            });
             // quick hack to get rid of flex box
             this.$el.css('display', 'block');
             return this;
