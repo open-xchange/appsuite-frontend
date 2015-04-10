@@ -60,10 +60,6 @@ define('io.ox/backbone/mini-views/timezonepicker', [
             }));
         },
 
-        deferredRender: function () {
-
-        },
-
         render: function () {
             var self = this;
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
