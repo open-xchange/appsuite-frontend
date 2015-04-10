@@ -103,13 +103,10 @@ define('io.ox/calendar/settings/pane', [
 
     ext.point(POINT + '/pane').extend({
         index: 200,
-        id: 'time',
+        id: 'common',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
-                        $('<h2>').text(gt('Time'))
-                    ),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('row').append(
                             $('<label>').attr('for', 'interval').addClass('control-label col-sm-4').text(gt('Time scale in minutes')),
@@ -133,20 +130,6 @@ define('io.ox/calendar/settings/pane', [
                                 new mini.SelectView({ list: optionsTime(), name: 'endTime', model: model, id: 'endTime', className: 'form-control' }).render().$el
                             )
                         )
-                    )
-                )
-            );
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 300,
-        id: 'calendar_view',
-        draw: function () {
-            this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').append(
-                        $('<h2>').text(gt('Default calendar view'))
                     ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
@@ -161,7 +144,7 @@ define('io.ox/calendar/settings/pane', [
     });
 
     ext.point(POINT + '/pane').extend({
-        index: 400,
+        index: 300,
         id: 'appointment',
         draw: function () {
             this.append(
@@ -190,7 +173,7 @@ define('io.ox/calendar/settings/pane', [
     });
 
     ext.point(POINT + '/pane').extend({
-        index: 500,
+        index: 400,
         id: 'notifications',
         draw: function () {
             this.append(
@@ -226,7 +209,7 @@ define('io.ox/calendar/settings/pane', [
     });
 
     ext.point(POINT + '/pane').extend({
-        index: 600,
+        index: 500,
         id: 'favorite-timezone',
         draw: function () {
             this.append(
