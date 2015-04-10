@@ -21,38 +21,37 @@ define('io.ox/backbone/mini-views/timezonepicker', [
 
     'use strict';
 
-    var TimezonePicker = miniViews.SelectView.extend({
-        initialize: function (options) {
-            var self = this,
-                available = settingOptions.get('availableTimeZones'),
-                now = moment(),
-                timezones = _(moment.tz._zones)
-                    .chain()
-                    .filter(function (tz) {
-                        tz.displayName = self.getDisplayName(tz.name);
-                        return !!available[tz.name];
-                    })
-                    .sortBy(function (tz) {
-                        return tz.offset(now) * -1;
-                    })
-                    .map(function (tz) {
-                        return { label: tz.displayName, value: tz.name };
-                    })
-                    .filter(options.filter)
-                    .value();
+    function getDisplayName(timezone) {
+        return moment.tz(timezone).format('([GMT]Z) ') + timezone;
+    }
 
+    var available = settingOptions.get('availableTimeZones'),
+        now = moment(),
+        timezones = _(moment.tz._zones)
+            .chain()
+            .filter(function (tz) {
+                tz.displayName = getDisplayName(tz.name);
+                return !!available[tz.name];
+            })
+            .sortBy(function (tz) {
+                return tz.offset(now) * -1;
+            })
+            .map(function (tz) {
+                return { label: tz.displayName, value: tz.name };
+            })
+            .value();
+
+    var TimezonePicker = miniViews.SelectView.extend({
+
+        initialize: function (options) {
             options = options || {};
             if (options.showFavorites && calendarSettings.get('favoriteTimezones')) {
                 options.favorites = _(calendarSettings.get('favoriteTimezones')).map(function (favorite) {
-                    return { label: self.getDisplayName(favorite), value: favorite };
+                    return { label: getDisplayName(favorite), value: favorite };
                 });
             }
             options.list = timezones;
             miniViews.SelectView.prototype.initialize.call(this, options);
-        },
-
-        getDisplayName: function (timezone) {
-            return moment.tz(timezone).format('([GMT]Z) ') + timezone;
         },
 
         renderOptions: function (list, parent) {
@@ -70,7 +69,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
                     all = $('<optgroup>').attr('label', gt('All timezones'));
 
                 this.renderOptions([{
-                    label: this.getDisplayName(coreSettings.get('timezone')),
+                    label: getDisplayName(coreSettings.get('timezone')),
                     value: coreSettings.get('timezone')
                 }], standard);
                 this.renderOptions(this.options.favorites, favorites);
