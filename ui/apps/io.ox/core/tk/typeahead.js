@@ -166,9 +166,6 @@ define('io.ox/core/tk/typeahead', [
                 },
                 'blur': o.blur
             });
-            if (this.options.init) {
-                this.$el.typeahead.apply(this.$el, this.typeaheadOptions);
-            }
             return this;
         }
 
