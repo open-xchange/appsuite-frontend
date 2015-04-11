@@ -190,7 +190,7 @@ msgid "%1$d selected"
 msgstr "%1$d vybráno"
 
 #. %1$d number of notifications
-#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:49 module:plugins/notifications
 #, fuzzy
 #| msgid "%1$d mail"
 #| msgid_plural "%1$d mails"
@@ -618,7 +618,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Přístup k souborům přes WebDAV"
 
-#: apps/io.ox/core/folder/api.js:365 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:366 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "Přístup do globální knihy adres není povolen"
 
@@ -668,7 +668,7 @@ msgstr "Účet aktualizován"
 #: apps/io.ox/files/mobile-toolbar-actions.js:113
 #: apps/io.ox/files/mobile-toolbar-actions.js:126
 #: apps/io.ox/mail/detail/view.js:98 apps/io.ox/mail/detail/view.js:99
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:717
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:731
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
@@ -707,7 +707,7 @@ msgstr "Upravit popis"
 msgid "Add account"
 msgstr "Přidat účet"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:731
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:745
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Přidat činnost"
@@ -729,7 +729,7 @@ msgstr "Přidat podsložku"
 msgid "Add attachments"
 msgstr "Přidat přílohy"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:726
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:740
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Přidat stav"
@@ -848,7 +848,7 @@ msgstr "Přidat podpis pod citovaným textem"
 msgid "Add subject"
 msgstr "Přidat předmět"
 
-#: apps/io.ox/calendar/settings/favorite-view.js:72 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/favorite-view.js:74 module:io.ox/calendar
 #, fuzzy
 #| msgid "Add action"
 msgid "Add timezone"
@@ -955,7 +955,7 @@ msgid "Advanced options"
 msgstr "Pokročilá nastavení"
 
 #: apps/io.ox/files/view-options.js:111 module:io.ox/files
-#: apps/io.ox/find/extensions-api.js:347 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:302 module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
 #: apps/io.ox/search/facets/extensions.js:280
 #: apps/io.ox/search/facets/extensions.js:368
@@ -968,7 +968,7 @@ msgstr "Vše"
 msgid "All Emoji"
 msgstr "Všechny Emoji"
 
-#: apps/io.ox/find/extensions-api.js:283 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:238 module:io.ox/core
 #, fuzzy
 #| msgid "All folders"
 msgid "All Folders"
@@ -1001,13 +1001,13 @@ msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
 "Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
 
-#: apps/io.ox/core/folder/api.js:252 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:253 module:io.ox/core
 #, fuzzy
 #| msgid "All appointments"
 msgid "All my appointments"
 msgstr "Všechny schůzky"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:70 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:71 module:io.ox/core
 #, fuzzy
 #| msgid "Your timezone"
 msgid "All timezones"
@@ -1057,7 +1057,7 @@ msgstr "Připojit vCard"
 msgid "Application Toolbar"
 msgstr "Nástrojová lišta aplikace"
 
-#: apps/io.ox/mail/main.js:1233 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1163 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikace nemusí pracovat podle očekávání, dokud nebude tento problém vyřešen."
@@ -1070,13 +1070,13 @@ msgstr "Aplikace"
 msgid "Apply role"
 msgstr "Aplikovat roli"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:762
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:776
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:766
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:780
 msgid "Apply rule if all conditions are met"
 msgstr "Uplatnit pravidlo, pokud jsou všechny podmínky splněny"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:762
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:776
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Uplatnit pravidlo, pokud je kterákoliv z podmínek splněna"
@@ -1178,7 +1178,7 @@ msgstr "Server příchozí pošty"
 #: apps/io.ox/calendar/list/perspective.js:242 module:io.ox/calendar
 #: apps/io.ox/files/view-options.js:56 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:698 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:694 module:io.ox/tasks
 msgid "Ascending"
 msgstr "Vzestupně"
 
@@ -1260,7 +1260,7 @@ msgid ""
 "sending"
 msgstr "Při odesílání automaticky ukládat kontakty ve složce „Sebrané adresy“"
 
-#: apps/io.ox/calendar/settings/pane.js:218 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:201 module:io.ox/calendar
 #, fuzzy
 #| msgid ""
 #| "Automatically delete a notification mail after it has been accepted or "
@@ -1447,7 +1447,7 @@ msgstr "Kalendář"
 #: apps/io.ox/files/actions/versions-delete.js:26
 #: apps/io.ox/files/fluid/view-detail.js:220
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
-#: apps/io.ox/files/main.js:576 apps/io.ox/files/main.js:627
+#: apps/io.ox/files/main.js:584 apps/io.ox/files/main.js:635
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1531,6 +1531,11 @@ msgstr "Mobilní telefon"
 #: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Mobilní telefon (alt.)"
+
+#: apps/io.ox/calendar/edit/timezone-dialog.js:140
+#: module:io.ox/calendar/edit/main
+msgid "Change"
+msgstr "Změnit"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:84 module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js:328 module:io.ox/tasks
@@ -1733,7 +1738,7 @@ msgid "Close"
 msgstr "Zavřít"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:609 module:io.ox/files
+#: apps/io.ox/files/main.js:617 module:io.ox/files
 #: apps/io.ox/files/view-options.js:203 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -1828,7 +1833,7 @@ msgstr "Psát novou zprávu"
 msgid "Compose new mail"
 msgstr "Psát novou zprávu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:716
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:730
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Podmínky"
@@ -1976,7 +1981,7 @@ msgstr "Nepodařilo se uložit nastavení"
 msgid "Could not save settings."
 msgstr "Nepodařilo se uložit nastavení."
 
-#: apps/io.ox/core/folder/api.js:669 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:670 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2190,11 +2195,7 @@ msgstr "Výchozí adresa"
 msgid "Default app after sign in"
 msgstr "Výchozí aplikace po přihlášení"
 
-#: apps/io.ox/calendar/settings/pane.js:149 module:io.ox/calendar
-msgid "Default calendar view"
-msgstr "Výchozí zobrazení kalendáře"
-
-#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:157 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Výchozí upomínka"
 
@@ -2322,7 +2323,7 @@ msgstr "Oddělení"
 #: apps/io.ox/calendar/list/perspective.js:243 module:io.ox/calendar
 #: apps/io.ox/files/view-options.js:57 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:699 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:695 module:io.ox/tasks
 msgid "Descending"
 msgstr "Sestupně"
 
@@ -2740,7 +2741,7 @@ msgid "Due %1$s"
 msgstr "Dokončit do %1$s"
 
 #: apps/io.ox/tasks/edit/view-template.js:194 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:689 module:io.ox/tasks
 msgid "Due date"
 msgstr "Datum dokončení"
 
@@ -2765,8 +2766,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:491
 #: module:io.ox/files apps/io.ox/files/main.js:148
-#: apps/io.ox/files/main.js:154 apps/io.ox/files/main.js:579
-#: apps/io.ox/files/main.js:627 apps/io.ox/mail/actions.js:509
+#: apps/io.ox/files/main.js:154 apps/io.ox/files/main.js:587
+#: apps/io.ox/files/main.js:635 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
@@ -2929,7 +2930,7 @@ msgstr "E-mailové oznámení pro autora úkolu?"
 msgid "Email notification for task participant?"
 msgstr "E-mailové oznámení pro účastníka úkolu?"
 
-#: apps/io.ox/calendar/settings/pane.js:199 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:182 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for task"
 msgid "Email notifications"
@@ -3011,7 +3012,7 @@ msgstr "Konec"
 msgid "End date timezone"
 msgstr "koncové datum "
 
-#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:128 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Konec pracovní doby"
 
@@ -3265,7 +3266,7 @@ msgstr "Nepodařilo se aktualizovat potvrzení; úkol byl nejspíš smazán."
 msgid "Favorite"
 msgstr "Oblíbené"
 
-#: apps/io.ox/calendar/settings/pane.js:235 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:218 module:io.ox/calendar
 #, fuzzy
 #| msgid "Your timezone"
 msgid "Favorite timezones"
@@ -3276,7 +3277,7 @@ msgstr "Vaše časové pásmo"
 msgid "Favorited"
 msgstr "Označené jaké oblíbené"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:69 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:70 module:io.ox/core
 #: apps/io.ox/core/folder/favorites.js:69
 msgid "Favorites"
 msgstr "Oblíbené"
@@ -3410,8 +3411,8 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:237 module:io.ox/calendar
-#: apps/io.ox/find/extensions-api.js:263 module:io.ox/core
-#: apps/io.ox/find/extensions-api.js:275 apps/io.ox/mail/detail/links.js:65
+#: apps/io.ox/find/extensions-api.js:218 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:230 apps/io.ox/mail/detail/links.js:65
 #: module:io.ox/mail apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Složka"
@@ -3448,8 +3449,8 @@ msgstr ""
 "Složka s názvem „%1$s“ bude skryta. Pro pozdější přístup k této složce "
 "povolte možnost „Zobrazit skryté soubory a složky“."
 
-#: apps/io.ox/core/folder/node.js:449 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:456
+#: apps/io.ox/core/folder/node.js:455 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:462
 msgid "Folder-specific actions"
 msgstr "Činnosti týkající se složky"
 
@@ -3956,8 +3957,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak "
-"%3$s‚Přidat na domácí stránku‘%4$s"
+"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak %3$s"
+"‚Přidat na domácí stránku‘%4$s"
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4033,14 +4034,14 @@ msgstr "Seznam položek"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:657 module:io.ox/core
-#: apps/io.ox/files/main.js:265 module:io.ox/files apps/io.ox/mail/main.js:444
+#: apps/io.ox/files/main.js:278 module:io.ox/files apps/io.ox/mail/main.js:444
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Seznam položek"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
-#: apps/io.ox/files/main.js:268 module:io.ox/files apps/io.ox/mail/main.js:447
+#: apps/io.ox/files/main.js:281 module:io.ox/files apps/io.ox/mail/main.js:447
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Možnosti seznamu položek"
@@ -4306,7 +4307,7 @@ msgstr "Limit počtu zpráv"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:116
+#: apps/plugins/notifications/mail/register.js:100
 #: module:plugins/notifications
 #, fuzzy, c-format
 #| msgid "Mail from %1$s %2$s"
@@ -4420,7 +4421,7 @@ msgstr "Březen"
 msgid "Marital status"
 msgstr "Rodinný stav"
 
-#: apps/io.ox/calendar/settings/pane.js:182 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Označit všechny denní schůzky jako volné"
 
@@ -4583,7 +4584,7 @@ msgstr "Měsíce"
 
 #: apps/io.ox/core/extPatterns/links.js:362 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:375
-#: apps/io.ox/find/extensions-api.js:201
+#: apps/io.ox/find/extensions-api.js:156
 #: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr "Více"
@@ -4674,7 +4675,7 @@ msgstr "Mé úkoly"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:75 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:458
 #: apps/io.ox/files/view-options.js:44 module:io.ox/files
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:542
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:556
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Název"
@@ -4693,7 +4694,7 @@ msgstr "Příroda"
 msgid "New"
 msgstr "Nový"
 
-#: apps/io.ox/core/folder/api.js:718 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:721 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Nová složka"
@@ -4702,7 +4703,7 @@ msgstr "Nová složka"
 msgid "New Mail"
 msgstr "Nová zpráva"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:153 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Nová schůzka"
@@ -4745,15 +4746,14 @@ msgstr "Nový soubor"
 msgid "New folder"
 msgstr "Nová složka"
 
-#: apps/plugins/notifications/mail/register.js:118
+#: apps/plugins/notifications/mail/register.js:102
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "New Mail"
 msgid "New mail"
 msgstr "Nová zpráva"
 
-#: apps/plugins/notifications/mail/register.js:106
-#: module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:90 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mails"
 msgid "New mails"
@@ -4892,7 +4892,7 @@ msgid "No items found"
 msgstr "Nepodařilo se nalézt žádné položky"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:225 module:io.ox/find
+#: apps/io.ox/find/main.js:311 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Nenalezeny žádné položky. Upravte, prosím, používaná kritéria."
 
@@ -4941,7 +4941,7 @@ msgstr "Žádné pomalé požadavky"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:116
+#: apps/plugins/notifications/mail/register.js:100
 #: module:plugins/notifications
 #, c-format
 msgid "No subject"
@@ -5056,9 +5056,8 @@ msgstr "Počet dní mezi oznámeními o nepřítomnosti pro stejného odesílate
 msgid "Number of items"
 msgstr "Počet položek"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js:140
-#: module:io.ox/calendar/edit/main apps/io.ox/core/tk/reminder-util.js:34
-#: module:io.ox/core apps/io.ox/core/tk/reminder-util.js:58
+#: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:58
 msgid "OK"
 msgstr "OK"
 
@@ -5108,7 +5107,7 @@ msgstr "V pracovních dnech"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:228 module:io.ox/find
+#: apps/io.ox/find/main.js:314 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Nalezena jedna položka."
@@ -5252,7 +5251,7 @@ msgstr "Volby"
 msgid "Orange"
 msgstr "Oranžová"
 
-#: apps/io.ox/tasks/main.js:697 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
 msgid "Order"
 msgstr "Pořadí"
 
@@ -5744,7 +5743,7 @@ msgstr "Výtisk"
 
 #: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:695 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:691 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
 msgid "Priority"
 msgstr "Priorita"
@@ -5875,7 +5874,7 @@ msgstr "Přečíst článek na tumblr.com"
 msgid "Reauthorize"
 msgstr "Znovu autorizovat"
 
-#: apps/io.ox/calendar/settings/pane.js:208 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:191 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid ""
@@ -5883,13 +5882,13 @@ msgid ""
 "decline"
 msgstr "E-mailové oznámení schůzky"
 
-#: apps/io.ox/calendar/settings/pane.js:213 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:196 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:203 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:186 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid "Receive notification for appointment changes"
@@ -6204,7 +6203,7 @@ msgstr "Zkontrolovat nákup"
 msgid "Room number"
 msgstr "Číslo místnosti"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:745
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:759
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Název pravidla"
@@ -6327,8 +6326,8 @@ msgstr "Plánování"
 
 #: apps/io.ox/core/desktop.js:1471 module:io.ox/core
 #: apps/io.ox/core/main.js:766 apps/io.ox/find/extensions-facets.js:30
-#: apps/io.ox/find/main.js:40 module:io.ox/find
-#: apps/io.ox/find/view-tokenfield.js:106
+#: apps/io.ox/find/main.js:44 module:io.ox/find
+#: apps/io.ox/find/view-tokenfield.js:104
 #: apps/io.ox/search/autocomplete/extensions.js:169
 #: apps/io.ox/search/autocomplete/extensions.js:212
 #: apps/io.ox/search/main.js:199 module:io.ox/search
@@ -6629,7 +6628,7 @@ msgstr "Zobrazit komentáře"
 msgid "Show conflicts"
 msgstr "Zobrazit konflikty"
 
-#: apps/io.ox/calendar/settings/pane.js:153 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Zobrazit odmítnuté schůzky"
 
@@ -6644,7 +6643,7 @@ msgstr "Žádná oznámení"
 msgid "Show details"
 msgstr "Zobrazit detaily"
 
-#: apps/io.ox/tasks/main.js:701 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:697 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "Zobrazit dokončené úkoly"
 
@@ -6858,7 +6857,7 @@ msgid "Sort by"
 msgstr "Řadit podle"
 
 #: apps/io.ox/calendar/list/perspective.js:234 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:690 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:686 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Možnosti řazení"
 
@@ -6884,7 +6883,7 @@ msgstr ""
 msgid "Standard folders"
 msgstr "Standardní složky"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:68 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:69 module:io.ox/core
 #, fuzzy
 #| msgid "Standard folders"
 msgid "Standard timezone"
@@ -6907,7 +6906,7 @@ msgstr "Datum začátku"
 msgid "Start date timezone"
 msgstr "Datum začátku"
 
-#: apps/io.ox/calendar/settings/pane.js:123 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:120 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Začátek pracovní doby"
 
@@ -6936,7 +6935,7 @@ msgstr "Statistiky"
 
 #: apps/io.ox/calendar/toolbar.js:71 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:270 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:688 module:io.ox/tasks
 msgid "Status"
 msgstr "Stav"
 
@@ -6963,7 +6962,7 @@ msgstr "Student"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:112 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:694 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:690 module:io.ox/tasks
 msgid "Subject"
 msgstr "Předmět"
 
@@ -7294,7 +7293,7 @@ msgstr ""
 msgid "The changes have been rejected"
 msgstr "Změny byly odmítnuty"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:424
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:438
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "Znak „ “ není povolený."
@@ -7420,7 +7419,7 @@ msgstr ""
 "Vybraná složka je virtuální a nelze ji prohledávat. Vyberte, prosím, jinou "
 "složku."
 
-#: apps/io.ox/calendar/settings/favorite-view.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/favorite-view.js:93 module:io.ox/calendar
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
@@ -7780,11 +7779,10 @@ msgid "Tiles"
 msgstr "Dlaždice"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:112 module:io.ox/core
-#: apps/io.ox/calendar/settings/pane.js:111 module:io.ox/calendar
 msgid "Time"
 msgstr "Čas"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:112 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Časový rozsah v minutách"
 
@@ -7874,7 +7872,7 @@ msgstr "10 nejčastějších adresátů"
 msgid "Total cost"
 msgstr "Celková cena"
 
-#: apps/io.ox/core/folder/node.js:433 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:439 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Celkem: %1$d"
 
@@ -7992,7 +7990,7 @@ msgstr "Nové přihlášení k odběru"
 msgid "Unread"
 msgstr "Nepřečtené"
 
-#: apps/io.ox/core/folder/node.js:434 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:440 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Nepřečtených: %1$d"
 
@@ -8078,7 +8076,7 @@ msgstr "Nahrávám..."
 msgid "Uptime: %1$s minutes"
 msgstr "Spuštěné: %1$s minut"
 
-#: apps/io.ox/tasks/main.js:691 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:687 module:io.ox/tasks
 msgid "Urgency"
 msgstr "Naléhavost"
 
@@ -8642,8 +8640,7 @@ msgstr "Skrýt všechny pozvánky na schůzky."
 msgid "You've got appointment reminders"
 msgstr "Skrýt všechny upomínky schůzek."
 
-#: apps/plugins/notifications/mail/register.js:107
-#: module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:91 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got new mails"
@@ -8888,8 +8885,7 @@ msgstr "Tmavě modrá"
 msgid "dark green"
 msgstr "Tmavě červená"
 
-#: apps/io.ox/find/extensions-api.js:60 module:io.ox/core
-#: apps/io.ox/search/apiproxy.js:67
+#: apps/io.ox/search/apiproxy.js:67 module:io.ox/core
 msgid "date range"
 msgstr "rozmezí dat"
 
@@ -11849,9 +11845,6 @@ msgstr "rrrr"
 #~ msgid "Chad"
 #~ msgstr "Čad"
 
-#~ msgid "Change"
-#~ msgstr "Změnit"
-
 #~ msgid "Change View"
 #~ msgstr "Změnit pohled"
 
@@ -12290,6 +12283,9 @@ msgstr "rrrr"
 
 #~ msgid "Default E-Mail font?"
 #~ msgstr "Výchozí písmo zpráv?"
+
+#~ msgid "Default calendar view"
+#~ msgstr "Výchozí zobrazení kalendáře"
 
 #~ msgid "Default sender address:"
 #~ msgstr "Výchozí adresa odesílatele:"

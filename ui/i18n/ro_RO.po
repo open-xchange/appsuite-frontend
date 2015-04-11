@@ -191,7 +191,7 @@ msgid "%1$d selected"
 msgstr "%1$d selectate"
 
 #. %1$d number of notifications
-#: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:49 module:plugins/notifications
 #, fuzzy
 #| msgid "%1$d mail"
 #| msgid_plural "%1$d mails"
@@ -619,7 +619,7 @@ msgctxt "help"
 msgid "Accessing Files with WebDAV"
 msgstr "Accesul la fișiere cu WebDAV"
 
-#: apps/io.ox/core/folder/api.js:365 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:366 module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr "Accesarea agendei globale de contacte nu este permisă"
 
@@ -668,7 +668,7 @@ msgstr "Cont actualizat"
 #: apps/io.ox/files/mobile-toolbar-actions.js:113
 #: apps/io.ox/files/mobile-toolbar-actions.js:126
 #: apps/io.ox/mail/detail/view.js:98 apps/io.ox/mail/detail/view.js:99
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:717
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:731
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
@@ -707,7 +707,7 @@ msgstr "Editează descrierea"
 msgid "Add account"
 msgstr "Adaugă un cont"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:731
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:745
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Adaugă o acțiune"
@@ -729,7 +729,7 @@ msgstr "Adaugă dosar subordonat"
 msgid "Add attachments"
 msgstr "Adaugă fișiere atașate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:726
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:740
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Adaugă condiție"
@@ -848,7 +848,7 @@ msgstr "Adaugă semnătura sub textul între ghilimele"
 msgid "Add subject"
 msgstr "Adaugă subiect"
 
-#: apps/io.ox/calendar/settings/favorite-view.js:72 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/favorite-view.js:74 module:io.ox/calendar
 #, fuzzy
 #| msgid "Add action"
 msgid "Add timezone"
@@ -955,7 +955,7 @@ msgid "Advanced options"
 msgstr "Setări avansate"
 
 #: apps/io.ox/files/view-options.js:111 module:io.ox/files
-#: apps/io.ox/find/extensions-api.js:347 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:302 module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
 #: apps/io.ox/search/facets/extensions.js:280
 #: apps/io.ox/search/facets/extensions.js:368
@@ -968,7 +968,7 @@ msgstr "Tot"
 msgid "All Emoji"
 msgstr "Toate caracterele emoji"
 
-#: apps/io.ox/find/extensions-api.js:283 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:238 module:io.ox/core
 #, fuzzy
 #| msgid "All folders"
 msgid "All Folders"
@@ -1001,13 +1001,13 @@ msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
 "Toate mesajele mai vechi de %1$d zile vor fi mutate în dosarul de arhive"
 
-#: apps/io.ox/core/folder/api.js:252 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:253 module:io.ox/core
 #, fuzzy
 #| msgid "All appointments"
 msgid "All my appointments"
 msgstr "Toate întâlnirile"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:70 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:71 module:io.ox/core
 #, fuzzy
 #| msgid "Your timezone"
 msgid "All timezones"
@@ -1057,7 +1057,7 @@ msgstr "Adaugă un vCard"
 msgid "Application Toolbar"
 msgstr "Bară de unelte pentru aplicații"
 
-#: apps/io.ox/mail/main.js:1233 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1163 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "S-ar putea ca aplicația să nu funcționeze conform așteptărilor până când "
@@ -1071,13 +1071,13 @@ msgstr "Aplicații"
 msgid "Apply role"
 msgstr "Aplică rolul"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:762
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:776
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:766
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:780
 msgid "Apply rule if all conditions are met"
 msgstr "Aplică regula dacă toate condițiile sunt respectate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:762
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:776
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Aplică regula dacă oricare din condiții este respectată."
@@ -1179,7 +1179,7 @@ msgstr "Ca pentru serverul de primire de e-mail"
 #: apps/io.ox/calendar/list/perspective.js:242 module:io.ox/calendar
 #: apps/io.ox/files/view-options.js:56 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:698 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:694 module:io.ox/tasks
 msgid "Ascending"
 msgstr "În ordine crescătoare"
 
@@ -1263,7 +1263,7 @@ msgid ""
 msgstr ""
 "Colectează automat contactele în dosarul  \"Adrese colectate\" la trimitere"
 
-#: apps/io.ox/calendar/settings/pane.js:218 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:201 module:io.ox/calendar
 #, fuzzy
 #| msgid ""
 #| "Automatically delete a notification mail after it has been accepted or "
@@ -1453,7 +1453,7 @@ msgstr "Vedere calendar"
 #: apps/io.ox/files/actions/versions-delete.js:26
 #: apps/io.ox/files/fluid/view-detail.js:220
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
-#: apps/io.ox/files/main.js:576 apps/io.ox/files/main.js:627
+#: apps/io.ox/files/main.js:584 apps/io.ox/files/main.js:635
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1537,6 +1537,11 @@ msgstr "Telefon mobil"
 #: apps/io.ox/contacts/model.js:240 module:io.ox/contacts
 msgid "Cell phone (alt)"
 msgstr "Telefon mobil (alternativ)"
+
+#: apps/io.ox/calendar/edit/timezone-dialog.js:140
+#: module:io.ox/calendar/edit/main
+msgid "Change"
+msgstr "Modifică"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:84 module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js:328 module:io.ox/tasks
@@ -1743,7 +1748,7 @@ msgid "Close"
 msgstr "Închide"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:609 module:io.ox/files
+#: apps/io.ox/files/main.js:617 module:io.ox/files
 #: apps/io.ox/files/view-options.js:203 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -1838,7 +1843,7 @@ msgstr "Compune un mesaj nou"
 msgid "Compose new mail"
 msgstr "Compune un mail nou"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:716
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:730
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Condiții"
@@ -1986,7 +1991,7 @@ msgstr "Nu s-au putut salva setările"
 msgid "Could not save settings."
 msgstr "Nu s-au putut salva setările."
 
-#: apps/io.ox/core/folder/api.js:669 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:670 module:io.ox/core
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2200,11 +2205,7 @@ msgstr "Adresă implicită "
 msgid "Default app after sign in"
 msgstr "Aplicație implicită după autentificare"
 
-#: apps/io.ox/calendar/settings/pane.js:149 module:io.ox/calendar
-msgid "Default calendar view"
-msgstr "Vedere implicită calendar"
-
-#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:157 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Memento implicit"
 
@@ -2333,7 +2334,7 @@ msgstr "Departament"
 #: apps/io.ox/calendar/list/perspective.js:243 module:io.ox/calendar
 #: apps/io.ox/files/view-options.js:57 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:699 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:695 module:io.ox/tasks
 msgid "Descending"
 msgstr "În ordine descrescătoare"
 
@@ -2755,7 +2756,7 @@ msgid "Due %1$s"
 msgstr "Scadent în data de %1$s"
 
 #: apps/io.ox/tasks/edit/view-template.js:194 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:689 module:io.ox/tasks
 msgid "Due date"
 msgstr "Dată de scadență"
 
@@ -2780,8 +2781,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:491
 #: module:io.ox/files apps/io.ox/files/main.js:148
-#: apps/io.ox/files/main.js:154 apps/io.ox/files/main.js:579
-#: apps/io.ox/files/main.js:627 apps/io.ox/mail/actions.js:509
+#: apps/io.ox/files/main.js:154 apps/io.ox/files/main.js:587
+#: apps/io.ox/files/main.js:635 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
@@ -2944,7 +2945,7 @@ msgstr "Notificare pe e-mail pentru creatorul sarcinii?"
 msgid "Email notification for task participant?"
 msgstr "Notificare pe e-mail pentru participantul la sarcină?"
 
-#: apps/io.ox/calendar/settings/pane.js:199 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:182 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for task"
 msgid "Email notifications"
@@ -3027,7 +3028,7 @@ msgstr "Sfârșit"
 msgid "End date timezone"
 msgstr "dată de sfârșit"
 
-#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:128 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Sfârșitul zilei de lucru"
 
@@ -3287,7 +3288,7 @@ msgstr ""
 msgid "Favorite"
 msgstr "Favorit"
 
-#: apps/io.ox/calendar/settings/pane.js:235 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:218 module:io.ox/calendar
 #, fuzzy
 #| msgid "Your timezone"
 msgid "Favorite timezones"
@@ -3298,7 +3299,7 @@ msgstr "Fusul dumneavoastră orar"
 msgid "Favorited"
 msgstr "Adăugat la preferințe"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:69 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:70 module:io.ox/core
 #: apps/io.ox/core/folder/favorites.js:69
 msgid "Favorites"
 msgstr "Favorite"
@@ -3432,8 +3433,8 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:237 module:io.ox/calendar
-#: apps/io.ox/find/extensions-api.js:263 module:io.ox/core
-#: apps/io.ox/find/extensions-api.js:275 apps/io.ox/mail/detail/links.js:65
+#: apps/io.ox/find/extensions-api.js:218 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:230 apps/io.ox/mail/detail/links.js:65
 #: module:io.ox/mail apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Dosar"
@@ -3470,8 +3471,8 @@ msgstr ""
 "Dosarul denumit \"%1$s\" va fi ascuns. Activați setarea \"Afișează fișierele "
 "și dosarele ascunse\" pentru a avea din nou acces la acest dosar."
 
-#: apps/io.ox/core/folder/node.js:449 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:456
+#: apps/io.ox/core/folder/node.js:455 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:462
 msgid "Folder-specific actions"
 msgstr "Acțiuni specifice dosarului"
 
@@ -4055,14 +4056,14 @@ msgstr "Listă elemente"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:657 module:io.ox/core
-#: apps/io.ox/files/main.js:265 module:io.ox/files apps/io.ox/mail/main.js:444
+#: apps/io.ox/files/main.js:278 module:io.ox/files apps/io.ox/mail/main.js:444
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Listă elemente"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
-#: apps/io.ox/files/main.js:268 module:io.ox/files apps/io.ox/mail/main.js:447
+#: apps/io.ox/files/main.js:281 module:io.ox/files apps/io.ox/mail/main.js:447
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Opțiuni listă elemente"
@@ -4330,7 +4331,7 @@ msgstr "Cotă de număr de mailuri"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js:116
+#: apps/plugins/notifications/mail/register.js:100
 #: module:plugins/notifications
 #, fuzzy, c-format
 #| msgid "Mail from %1$s %2$s"
@@ -4444,7 +4445,7 @@ msgstr "Martie"
 msgid "Marital status"
 msgstr "Stare civilă"
 
-#: apps/io.ox/calendar/settings/pane.js:182 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Marchează toate întâlnirile de azi ca ore libere"
 
@@ -4607,7 +4608,7 @@ msgstr "Luni"
 
 #: apps/io.ox/core/extPatterns/links.js:362 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:375
-#: apps/io.ox/find/extensions-api.js:201
+#: apps/io.ox/find/extensions-api.js:156
 #: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr "Mai multe"
@@ -4698,7 +4699,7 @@ msgstr "Sarcinile mele"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:75 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:458
 #: apps/io.ox/files/view-options.js:44 module:io.ox/files
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:542
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:556
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Nume"
@@ -4717,7 +4718,7 @@ msgstr "Natură"
 msgid "New"
 msgstr "Nou"
 
-#: apps/io.ox/core/folder/api.js:718 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:721 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Dosar nou"
@@ -4726,7 +4727,7 @@ msgstr "Dosar nou"
 msgid "New Mail"
 msgstr "Mesaj nou"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:153 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Întâlnire nouă"
@@ -4769,15 +4770,14 @@ msgstr "Fișier nou"
 msgid "New folder"
 msgstr "Dosar nou"
 
-#: apps/plugins/notifications/mail/register.js:118
+#: apps/plugins/notifications/mail/register.js:102
 #: module:plugins/notifications
 #, fuzzy
 #| msgid "New Mail"
 msgid "New mail"
 msgstr "Mesaj nou"
 
-#: apps/plugins/notifications/mail/register.js:106
-#: module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:90 module:plugins/notifications
 #, fuzzy
 #| msgid "New Mails"
 msgid "New mails"
@@ -4916,7 +4916,7 @@ msgid "No items found"
 msgstr "Nu s-au găsit elemente"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:225 module:io.ox/find
+#: apps/io.ox/find/main.js:311 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Nu s-a găsit niciun element. Modificați filtrele utilizate momentan."
 
@@ -4965,7 +4965,7 @@ msgstr "Nicio cerere lentă"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
-#: apps/plugins/notifications/mail/register.js:116
+#: apps/plugins/notifications/mail/register.js:100
 #: module:plugins/notifications
 #, c-format
 msgid "No subject"
@@ -5080,9 +5080,8 @@ msgstr "Număr de zile între mesajele de absență către același expeditor"
 msgid "Number of items"
 msgstr "Număr de elemente"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js:140
-#: module:io.ox/calendar/edit/main apps/io.ox/core/tk/reminder-util.js:34
-#: module:io.ox/core apps/io.ox/core/tk/reminder-util.js:58
+#: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
+#: apps/io.ox/core/tk/reminder-util.js:58
 msgid "OK"
 msgstr "OK"
 
@@ -5132,7 +5131,7 @@ msgstr "În zilele lucrătoare"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:228 module:io.ox/find
+#: apps/io.ox/find/main.js:314 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "S-a găsit un element."
@@ -5276,7 +5275,7 @@ msgstr "Opțiuni"
 msgid "Orange"
 msgstr "Portocaliu"
 
-#: apps/io.ox/tasks/main.js:697 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:693 module:io.ox/tasks
 msgid "Order"
 msgstr "Ordine"
 
@@ -5769,7 +5768,7 @@ msgstr "Imprimă"
 
 #: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:695 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:691 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
 msgid "Priority"
 msgstr "Prioritate"
@@ -5900,7 +5899,7 @@ msgstr "Citiți articolul pe tumblr.com"
 msgid "Reauthorize"
 msgstr "Autorizează din nou"
 
-#: apps/io.ox/calendar/settings/pane.js:208 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:191 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid ""
@@ -5908,13 +5907,13 @@ msgid ""
 "decline"
 msgstr "Notificare pe e-mail pentru întâlnire"
 
-#: apps/io.ox/calendar/settings/pane.js:213 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:196 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:203 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:186 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid "Receive notification for appointment changes"
@@ -6231,7 +6230,7 @@ msgstr "Revedeți cumpărăturile"
 msgid "Room number"
 msgstr "Număr cameră"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:745
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:759
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Nume regulă"
@@ -6354,8 +6353,8 @@ msgstr "Programare"
 
 #: apps/io.ox/core/desktop.js:1471 module:io.ox/core
 #: apps/io.ox/core/main.js:766 apps/io.ox/find/extensions-facets.js:30
-#: apps/io.ox/find/main.js:40 module:io.ox/find
-#: apps/io.ox/find/view-tokenfield.js:106
+#: apps/io.ox/find/main.js:44 module:io.ox/find
+#: apps/io.ox/find/view-tokenfield.js:104
 #: apps/io.ox/search/autocomplete/extensions.js:169
 #: apps/io.ox/search/autocomplete/extensions.js:212
 #: apps/io.ox/search/main.js:199 module:io.ox/search
@@ -6656,7 +6655,7 @@ msgstr "Afișează comentariile"
 msgid "Show conflicts"
 msgstr "Afișează conflictele"
 
-#: apps/io.ox/calendar/settings/pane.js:153 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Afișează întâlnirile respinse"
 
@@ -6671,7 +6670,7 @@ msgstr "Nicio notificare "
 msgid "Show details"
 msgstr "Afișează detaliile"
 
-#: apps/io.ox/tasks/main.js:701 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:697 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "Afișează sarcinile efectuate"
 
@@ -6886,7 +6885,7 @@ msgid "Sort by"
 msgstr "Sortează după"
 
 #: apps/io.ox/calendar/list/perspective.js:234 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:690 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:686 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Opțiuni de sortare"
 
@@ -6912,7 +6911,7 @@ msgstr ""
 msgid "Standard folders"
 msgstr "Dosare standard"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:68 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:69 module:io.ox/core
 #, fuzzy
 #| msgid "Standard folders"
 msgid "Standard timezone"
@@ -6935,7 +6934,7 @@ msgstr "Dată de început"
 msgid "Start date timezone"
 msgstr "Dată de început"
 
-#: apps/io.ox/calendar/settings/pane.js:123 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:120 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Ora la care s-a început lucrul"
 
@@ -6964,7 +6963,7 @@ msgstr "Statistici"
 
 #: apps/io.ox/calendar/toolbar.js:71 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:270 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:688 module:io.ox/tasks
 msgid "Status"
 msgstr "Stare"
 
@@ -6991,7 +6990,7 @@ msgstr "Student"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:112 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:694 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:690 module:io.ox/tasks
 msgid "Subject"
 msgstr "Subiect"
 
@@ -7325,7 +7324,7 @@ msgstr ""
 msgid "The changes have been rejected"
 msgstr "Modificările au fost respinse"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:424
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:438
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "Caracterul \" \" nu este permis."
@@ -7452,7 +7451,7 @@ msgid ""
 msgstr ""
 "Dosarul selectat este virtual și nu poate fi căutat. Selectați un alt dosar."
 
-#: apps/io.ox/calendar/settings/favorite-view.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/favorite-view.js:93 module:io.ox/calendar
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
@@ -7816,11 +7815,10 @@ msgid "Tiles"
 msgstr "Dale"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:112 module:io.ox/core
-#: apps/io.ox/calendar/settings/pane.js:111 module:io.ox/calendar
 msgid "Time"
 msgstr "Oră"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:112 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Interval de timp în minute"
 
@@ -7910,7 +7908,7 @@ msgstr "Primii 10 destinatari cărora le-ați trimis mesaje"
 msgid "Total cost"
 msgstr "Cost total"
 
-#: apps/io.ox/core/folder/node.js:433 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:439 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Total: %1$d"
 
@@ -8028,7 +8026,7 @@ msgstr "Abonament nou"
 msgid "Unread"
 msgstr "Necitite"
 
-#: apps/io.ox/core/folder/node.js:434 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:440 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Necitite: %1$d"
 
@@ -8115,7 +8113,7 @@ msgstr "Se încarcă..."
 msgid "Uptime: %1$s minutes"
 msgstr "Timp de activitate: %1$s minutes"
 
-#: apps/io.ox/tasks/main.js:691 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:687 module:io.ox/tasks
 msgid "Urgency"
 msgstr "Urgență"
 
@@ -8682,8 +8680,7 @@ msgstr "Ascunde toate invitațiile la întâlniri."
 msgid "You've got appointment reminders"
 msgstr "Ascunde toate mementourile pentru întâlniri."
 
-#: apps/plugins/notifications/mail/register.js:107
-#: module:plugins/notifications
+#: apps/plugins/notifications/mail/register.js:91 module:plugins/notifications
 #, fuzzy
 #| msgid "Composing a new E-Mail"
 msgid "You've got new mails"
@@ -8932,8 +8929,7 @@ msgstr "Albastru închis"
 msgid "dark green"
 msgstr "Roșu închis"
 
-#: apps/io.ox/find/extensions-api.js:60 module:io.ox/core
-#: apps/io.ox/search/apiproxy.js:67
+#: apps/io.ox/search/apiproxy.js:67 module:io.ox/core
 msgid "date range"
 msgstr "interval calendaristic"
 
@@ -10352,9 +10348,6 @@ msgstr "aaaa"
 #~ msgid "Chad"
 #~ msgstr "Ciad"
 
-#~ msgid "Change"
-#~ msgstr "Modifică"
-
 #~ msgid "Change View"
 #~ msgstr "Modifică vederea"
 
@@ -10739,6 +10732,9 @@ msgstr "aaaa"
 
 #~ msgid "Default E-Mail font?"
 #~ msgstr "Fontul implicit pentru mesaje?"
+
+#~ msgid "Default calendar view"
+#~ msgstr "Vedere implicită calendar"
 
 #~ msgid "Default sender address:"
 #~ msgstr "Adresa implicită a expeditorului:"
