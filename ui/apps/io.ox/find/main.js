@@ -144,15 +144,12 @@ define('io.ox/find/main', [
 
                 if (!app.get('inplace')) return;
 
-                // check for listview
-                var parent = app.get('parent'),
-                    listView = parent.listViev;
-
-                if (!listView) return;
-
                 app.on('change:state', function (e, state) {
 
                     if (state !== 'launched') return;
+                    // check for listview
+                    var parent = app.get('parent');
+                    if (!app.get('parent').listView) return;
 
                     require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                         var manager = app.view.model.manager,
