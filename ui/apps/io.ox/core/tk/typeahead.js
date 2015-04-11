@@ -140,8 +140,13 @@ define('io.ox/core/tk/typeahead', [
             }];
 
             this.$el.attr({ tabindex: this.options.tabindex, placeholder: this.options.placeholder });
+
+            if (this.options.init) {
+                this.$el.typeahead(this.typeaheadOptions);
+            }
         },
 
+        // hint: called with custom context via prototype
         render: function () {
             var o = this.options,
                 self = this;

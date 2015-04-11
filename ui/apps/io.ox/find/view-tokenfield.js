@@ -106,6 +106,7 @@ define('io.ox/find/view-tokenfield', [
                 delayedautoselect: true,
                 dnd: false,
                 tokenview: TokenView,
+                init: true,
                 // tokenfield options
                 hint: false,
                 allowEditing: false,
