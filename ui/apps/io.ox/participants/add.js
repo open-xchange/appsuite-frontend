@@ -30,6 +30,7 @@ define('io.ox/participants/add', [
         typeahead: null,
 
         options: {
+            label: '',
             apiOptions: {
                 contacts: true,
                 users: true,
@@ -50,7 +51,6 @@ define('io.ox/participants/add', [
             var data = this.typeahead.$el.typeahead('val');
             // enter
             if (e.which === 13) {
-                // data = new pModel.Participant();
                 this.addParticipant(e, { model: { email1: data, id: Math.random() } });
             }
         },
@@ -70,9 +70,11 @@ define('io.ox/participants/add', [
         },
 
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.typeahead = new Typeahead(this.options);
             this.$el.append(
-                this.typeahead.$el
+                $('<label class="sr-only">').attr({ for: guid }).text(this.options.label),
+                this.typeahead.$el.attr({ id: guid })
             );
             this.typeahead.render();
             return this;
