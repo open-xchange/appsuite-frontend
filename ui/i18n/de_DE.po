@@ -4779,7 +4779,7 @@ msgid "No items found"
 msgstr "Keine Objekte gefunden"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:311 module:io.ox/find
+#: apps/io.ox/find/main.js:308 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr ""
 "Keine Suchergebnisse. Bitte passen Sie die derzeit verwendeten Suchfilter an."
@@ -4991,7 +4991,7 @@ msgstr "An Arbeitstagen"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:314 module:io.ox/find
+#: apps/io.ox/find/main.js:311 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Es wurde ein Objekt gefunden."

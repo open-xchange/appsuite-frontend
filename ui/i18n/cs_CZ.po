@@ -4892,7 +4892,7 @@ msgid "No items found"
 msgstr "Nepodařilo se nalézt žádné položky"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:311 module:io.ox/find
+#: apps/io.ox/find/main.js:308 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Nenalezeny žádné položky. Upravte, prosím, používaná kritéria."
 
@@ -5107,7 +5107,7 @@ msgstr "V pracovních dnech"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:314 module:io.ox/find
+#: apps/io.ox/find/main.js:311 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Nalezena jedna položka."
