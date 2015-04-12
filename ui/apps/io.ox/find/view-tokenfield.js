@@ -239,8 +239,9 @@ define('io.ox/find/view-tokenfield', [
         },
 
         removedToken: function (e) {
-            var token = e.attrs;
-            token.model.deactivate();
+            _([].concat(e.attrs)).each(function (el) {
+                el.model.deactivate();
+            });
             this.setFocus();
         },
 
