@@ -246,55 +246,6 @@ define('io.ox/mail/compose/view', [
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
-    /*
-     * extension point for contact picture
-     */
-    ext.point(POINT + '/autoComplete').extend({
-        id: 'contactPicture',
-        index: 100,
-        draw: extensions.contactPicture
-    });
-
-    /*
-     * extension point for display name
-     */
-    ext.point(POINT + '/autoComplete').extend({
-        id: 'displayName',
-        index: 200,
-        draw: extensions.displayName
-    });
-
-    // /*
-    //  * extension point for halo link
-    //  */
-    ext.point(POINT + '/autoComplete').extend({
-        id: 'emailAddress',
-        index: 300,
-        draw: extensions.emailAddress
-    });
-
-    /*
-     * extension point for autocomplete item
-     */
-    ext.point(POINT + '/autoCompleteItem').extend({
-        id: 'autoCompleteItem',
-        index: 100,
-        draw: function (baton) {
-            this.addClass('io-ox-mail-compose-contact');
-            // contact picture / display name / email address
-            ext.point(POINT + '/autoComplete').invoke('draw', this, baton);
-        }
-    });
-
-    /*
-     * extension point for a token
-     */
-    ext.point(POINT + '/token').extend({
-        id: 'token',
-        index: 100,
-        draw: extensions.tokenPicture
-    });
-
     var MailComposeView = Backbone.View.extend({
 
         className: 'io-ox-mail-compose container',

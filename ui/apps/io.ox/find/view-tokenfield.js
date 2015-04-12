@@ -69,6 +69,20 @@ define('io.ox/find/view-tokenfield', [
         flow: extensions.click
     });
 
+    /*
+     * extension point for a token
+     */
+    ext.point(POINT + '/token').extend({
+        id: 'token',
+        index: 100,
+        draw: function (model, e) {
+            if (!e.attrs.view) {
+                e.attrs.view = new TokenView({ model: model, el: e.relatedTarget });
+            }
+            e.attrs.view.render();
+        }
+    });
+
     var TokenfieldExtView = Backbone.View.extend({
 
         // tokenfield api
@@ -100,13 +114,12 @@ define('io.ox/find/view-tokenfield', [
             // extend basic tokenfieldview
             this.ui.view = new Tokenfield({
                 // hybrid views options
+                extPoint: POINT,
                 id: guid,
                 placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
                 dnd: false,
-                tokenview: TokenView,
-                init: true,
                 // tokenfield options
                 hint: false,
                 allowEditing: false,

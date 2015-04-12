@@ -181,6 +181,7 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
+        // TODO: only used by search
         tokenPicture: function (model) {
             // add contact picture
             $(this).prepend(
@@ -233,20 +234,14 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
+                        extPoint: POINT,
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20,
-                        drawAutocompleteItem: function (result) {
-                            baton.participantModel = result.model;
-                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
-                        },
-                        drawToken: function (model) {
-                            ext.point(POINT + '/token').invoke('draw', this, model, baton);
-                        }
+                        maxResults: 20
                     });
 
                 var node = $('<div class="col-xs-11">').append(
@@ -499,37 +494,6 @@ define('io.ox/mail/compose/extensions', [
                     );
                 }
             }
-        },
-
-        contactPicture: function (baton) {
-            var node;
-            this.append(
-                node = $('<div class="contact-image lazyload">')
-                    .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-            );
-            // apply picture halo lazy load
-            contactAPI.pictureHalo(
-                node,
-                baton.participantModel.toJSON(),
-                { width: 42, height: 42 }
-            );
-        },
-
-        displayName: function (baton) {
-            this.append(
-                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
-            );
-        },
-
-        emailAddress: function (baton) {
-            var model = baton.participantModel;
-            this.append(
-                $('<div class="ellipsis email">').append(
-                    $.txt(model.getTarget() + ' '),
-                    model.getFieldName() !== '' ?
-                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
-                )
-            );
         }
     };
 

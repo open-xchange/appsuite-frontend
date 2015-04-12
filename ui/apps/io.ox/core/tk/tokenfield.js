@@ -13,13 +13,15 @@
  */
 
 define('io.ox/core/tk/tokenfield', [
+    'io.ox/core/extensions',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
+    'io.ox/contacts/api',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (Typeahead, pModel) {
+], function (ext, Typeahead, pModel, contactAPI) {
 
     'use strict';
 
@@ -87,8 +89,6 @@ define('io.ox/core/tk/tokenfield', [
                         model: model
                     };
                 },
-                // customize token
-                drawToken: $.noop,
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,
                 // tokenfield default
@@ -99,8 +99,27 @@ define('io.ox/core/tk/tokenfield', [
                 // token view
                 tokenview: undefined,
                 // dont't call init function in typeahead view
-                init: false
+                init: false,
+                extPoint: 'io.ox/core/tk/tokenfield'
             }, options);
+
+            /*
+             * extension point for a token
+             */
+            ext.point(options.extPoint + '/token').extend({
+                id: 'token',
+                index: 100,
+                draw: function (model) {
+                    // add contact picture
+                    $(this).prepend(
+                        contactAPI.pictureHalo(
+                            $('<div class="contact-image">'),
+                            model.toJSON(),
+                            { width: 16, height: 16, scaleType: 'contain' }
+                        )
+                    );
+                }
+            });
 
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
@@ -247,13 +266,8 @@ define('io.ox/core/tk/tokenfield', [
                             return title;
                         });
 
-                        // call optional function to customize token
-                        self.options.drawToken.call(e.relatedTarget, model);
-
-                        // init and render view for each token (if available)
-                        if (!self.options.tokenview) return;
-                        var view = e.attrs.view = e.attrs.view || new self.options.tokenview({ model: model, el: e.relatedTarget });
-                        view.render();
+                        // customize token
+                        ext.point(self.options.extPoint + '/token').invoke('draw', this, model, e);
                     }
                 },
                 'tokenfield:edittoken': function (e) {
@@ -394,5 +408,4 @@ define('io.ox/core/tk/tokenfield', [
     });
 
     return Tokenfield;
-
 });
