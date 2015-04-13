@@ -351,15 +351,17 @@ define('io.ox/mail/compose/view', [
                 obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
             }
 
-            if (this.messageFormat === 'alternative') {
-                this.messageFormat = obj.content_type === 'text/plain' ? 'text' : 'html';
+            var content_type = this.messageFormat;
+
+            if (content_type === 'alternative') {
+                content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
             }
 
             // use CSS sanitizing and size limit (large than detail view)
             obj.embedded = true;
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
-            return mailAPI[mode](obj, obj.content_type).then(function (data) {
+            return mailAPI[mode](obj, content_type).then(function (data) {
                 data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
