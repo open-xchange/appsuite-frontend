@@ -13,10 +13,16 @@
 
 // define for moment timezone
 define('moment', ['static/3rd.party/moment/moment.js'], function (m) {
-
-    'use strict';
-
     return window.moment = m;
+});
+
+// this is defined globaly in boot.js
+define('static/3rd.party/moment/moment.js', function () {
+    return window.moment;
+});
+
+define('static/3rd.party/moment/moment-timezone-with-data.js', ['moment'], function (m) {
+    return m;
 });
 
 define('io.ox/core/moment', [
