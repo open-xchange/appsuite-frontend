@@ -28,7 +28,6 @@ define('plugins/portal/recentfiles/register', [
 
         if (type === 'myfiles') {
             searchOptions.folder = settings.get('folder/infostore');
-            searchOptions.omitFolder = false;
         }
 
         var title = type === 'recentfiles' ? gt('Recently changed files') : gt('My latest files');

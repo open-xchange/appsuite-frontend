@@ -869,17 +869,11 @@ define('io.ox/files/api', [
     //
     api.search = function (query, options) {
 
-        options = _.extend({ columns: api.search.columns, sort: '702', order: 'asc', limit: 100 }, options);
+        options = _.extend({ action: 'search', columns: api.search.columns, sort: '702', order: 'asc', limit: 100 }, options);
 
         return http.PUT({
             module: 'files',
-            params: {
-                action: 'search',
-                columns: options.columns,
-                sort: options.sort,
-                order: options.order,
-                limit: options.limit
-            },
+            params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
             data: api.search.getData(query, options)
         });
     };
