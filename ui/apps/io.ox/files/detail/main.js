@@ -13,10 +13,9 @@
  */
 
 define('io.ox/files/detail/main', [
-    'io.ox/files/legacy_api',
-    'io.ox/files/fluid/view-detail',
+    'io.ox/files/api',
     'gettext!io.ox/files'
-], function (api, viewDetail, gt) {
+], function (api, gt) {
 
     'use strict';
 
@@ -31,17 +30,21 @@ define('io.ox/files/detail/main', [
                     var label = gt('File Details'),
                         title = data.filename || data.title;
 
-                    app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
-                        'tabindex': 1,
-                        'role': 'complementary',
-                        'aria-label': label
-                    }).append(
-                        viewDetail.draw(data)
-                        .attr({
+                    app.getWindowNode().addClass('detail-view-app').append(
+                        $('<div class="f6-target detail-view-container">').attr({
+                            'tabindex': 1,
                             'role': 'complementary',
-                            'aria-label': gt('File Details')
+                            'aria-label': label
                         })
-                    ));
+                        .append(
+                            // TODO: replace by new viewer
+                            $('<div>Will be replaced by the new Viewer soon!</div>')
+                            .attr({
+                                'role': 'complementary',
+                                'aria-label': gt('File Details')
+                            })
+                        )
+                    );
 
                     app.setTitle(title);
 

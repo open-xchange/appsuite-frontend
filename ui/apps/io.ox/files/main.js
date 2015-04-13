@@ -30,7 +30,6 @@ define('io.ox/files/main', [
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',
-    'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
     'io.ox/files/toolbar',
     'io.ox/files/upload/dropzone'

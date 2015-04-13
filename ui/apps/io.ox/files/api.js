@@ -875,6 +875,10 @@ define('io.ox/files/api', [
             module: 'files',
             params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
             data: api.search.getData(query, options)
+        })
+        .done(function (data) {
+            pool.add('detail', data);
+            return data;
         });
     };
 

@@ -341,23 +341,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/icons/slideshow', {
-        requires: function () {
-            // must be solved differently
-            return false;
-            // return _(e.baton.allIds).reduce(function (memo, obj) {
-            //     return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            // }, false);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/actions/slideshow']).done(function (action) {
-                action({
-                    baton: baton
-                });
-            });
-        }
-    });
-
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
             if (_.device('android')) return false;

@@ -57,6 +57,8 @@ define('io.ox/core/viewer/main', [], function () {
                 var fileList = getFileList(baton);
                 if (!fileList) {
                     console.error('Core.Viewer.launch(): no files to preview.');
+                    el.remove();
+                    el = null;
                     return;
                 }
                 // create file collection and populate it with file models
