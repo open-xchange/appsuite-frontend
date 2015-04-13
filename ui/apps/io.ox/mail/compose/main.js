@@ -57,6 +57,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         };
 
         app.failRestore = function (point) {
+            point.initial = false;
             return compose(point.mode)(point);
         };
 

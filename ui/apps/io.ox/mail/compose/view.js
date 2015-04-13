@@ -883,7 +883,10 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature(this.model.get('signature'));
+
+            if (this.model.get('initial')) {
+                this.setSelectedSignature(this.model.get('signature'));
+            }
         },
 
         getMobileSignature: function () {
@@ -946,7 +949,6 @@ define('io.ox/mail/compose/view', [
         },
 
         setSignature: function (signature) {
-
             var text,
                 isHTML = !!this.editor.find;
 
