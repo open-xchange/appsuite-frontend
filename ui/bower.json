@@ -33,7 +33,7 @@
     "marked": "0.3.3",
     "tinymce-dist": "4.1.9",
     "velocity": "1.2.2",
-    "moment": "2.9.0",
+    "moment": "2.10.2",
     "moment-timezone": "0.3.1",
     "swiper": "3.0.3"
   },
