@@ -332,10 +332,16 @@ define('io.ox/mail/compose/view', [
         fetchMail: function (obj) {
 
             var self = this,
-            mode = obj.mode;
+                mode = obj.mode;
+
             delete obj.mode;
 
-            if (/(compose|edit)/.test(mode)) {
+            if (obj.initial === false) {
+                obj.attachments = new Backbone.Collection(_.clone(obj.attachments));
+                this.model.set(obj);
+                obj = null;
+                return $.when();
+            } else if (/(compose|edit)/.test(mode)) {
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
                 obj = _(obj).map(function (o) {
@@ -345,17 +351,15 @@ define('io.ox/mail/compose/view', [
                 obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
             }
 
-            var content_type = this.messageFormat;
-
-            if (content_type === 'alternative') {
-                content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
+            if (this.messageFormat === 'alternative') {
+                this.messageFormat = obj.content_type === 'text/plain' ? 'text' : 'html';
             }
 
             // use CSS sanitizing and size limit (large than detail view)
             obj.embedded = true;
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
-            return mailAPI[mode](obj, content_type).then(function (data) {
+            return mailAPI[mode](obj, obj.content_type).then(function (data) {
                 data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
@@ -382,6 +386,7 @@ define('io.ox/mail/compose/view', [
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
                 self.model.set('attachments', attachmentCollection);
+                obj = data = attachmentCollection = null;
             });
         },
 
@@ -874,7 +879,6 @@ define('io.ox/mail/compose/view', [
         },
 
         setBody: function (content) {
-
             if (this.model.get('initial')) {
                 // remove white-space at beginning except in first-line
                 content = String(content || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
@@ -984,29 +988,25 @@ define('io.ox/mail/compose/view', [
         },
 
         setMail: function () {
-
-            var self = this,
-                data = this.model.toJSON();
+            var self = this;
 
             this.model.setInitialMailContentType();
 
             return this.changeEditorMode().then(function () {
                 return self.signaturesLoading;
             }).done(function () {
-                if (data.replaceBody !== 'no') {
-                    var mode = self.model.get('mode');
-                    // set focus in compose and forward mode to recipient tokenfield
-                    if (/(compose|forward)/.test(mode)) {
-                        self.$el.find('.tokenfield:first .token-input').focus();
-                    } else {
-                        self.editor.focus();
-                    }
-                    if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
-                        self.toggleTokenfield('cc');
-                    }
-                    self.setBody(self.model.getContent());
-                    self.model.dirty(false);
+                var mode = self.model.get('mode');
+                // set focus in compose and forward mode to recipient tokenfield
+                if (/(compose|forward)/.test(mode)) {
+                    self.$el.find('.tokenfield:first .token-input').focus();
+                } else {
+                    self.editor.focus();
                 }
+                if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
+                    self.toggleTokenfield('cc');
+                }
+                self.setBody(self.model.getContent());
+                self.model.dirty(false);
             });
         },
 
