@@ -263,8 +263,9 @@ define('io.ox/find/view-tokenfield', [
         },
 
         isEmpty: function () {
+            var none = !this.model.manager.getActive().length;
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
+            return none && this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
         },
 
         reset: function () {

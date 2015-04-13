@@ -109,7 +109,7 @@ define('io.ox/find/view', [
         render: function () {
             // replaces stub
             this.ui.searchbox.render();
-            this.ui.facets.render().hide();
+            this.ui.facets.render();
             return this;
         },
 

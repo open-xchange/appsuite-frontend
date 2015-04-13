@@ -52,6 +52,16 @@ define('io.ox/find/manager/facet-collection', [
         },
 
         /**
+         * helper function to  determine if only folder facet is active
+         */
+        isFolderOnly: function () {
+            var list = this.getActive(),
+                single = list.length === 1;
+            if (!single) return;
+            return _.where(list, { id: 'folder' }).length;
+        },
+
+        /**
          * advanced 'add'
          * - keeps active facets
          * - adds new

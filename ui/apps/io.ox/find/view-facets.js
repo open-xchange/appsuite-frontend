@@ -77,7 +77,7 @@ define('io.ox/find/view-facets', [
         },
 
         render: function () {
-            this.reset();
+            this.$el.empty();
             // container node
             ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
             return this;
@@ -92,7 +92,7 @@ define('io.ox/find/view-facets', [
         },
 
         reset: function () {
-            this.$el.empty();
+            this.render();
         },
 
         focus: function () {
