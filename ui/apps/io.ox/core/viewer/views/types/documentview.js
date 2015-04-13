@@ -15,7 +15,8 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
-    'io.ox/core/viewer/eventdispatcher'
+    'io.ox/core/viewer/eventdispatcher',
+    'less!io.ox/core/pdf/pdfstyle'
 ], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher) {
 
     'use strict';
@@ -57,7 +58,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         render: function () {
             //console.warn('DocumentView.render()', this.model.get('filename'));
-            var pageContainer = $('<div class="document-container">');
+            var pageContainer = $('<div class="document-container io-ox-core-pdf">');
 
             // remove content of the slide duplicates
             if (this.$el.hasClass('swiper-slide-duplicate')) {
@@ -186,7 +187,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var pdfDocument = this.pdfDocument;
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
-                this.pdfView = new PDFView(pdfDocument);
+                this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
                 // set default scale/zoom, according to device's viewport width
                 this.pdfView.setPageZoom(this.getDefaultScale());
                 // draw page nodes and apply css sizes
@@ -264,9 +265,12 @@ define('io.ox/core/viewer/views/types/documentview', [
                     var pages = self.$el.find('.document-container .document-page');
                     // test code, increase zoom 1.5 times for every zoom in
                     _.each(pages, function (page, pageIndex) {
-                        var currentPageZoom = self.pdfView.getPageZoom(pageIndex + 1);
-                        self.pdfView.setPageZoom(currentPageZoom * 1.5);
-                        var realPageSize = self.pdfView.getRealPageSize(pageIndex + 1);
+                        var pageNumber = pageIndex + 1,
+                            currentPageZoom = self.pdfView.getPageZoom(pageNumber);
+
+                        self.pdfView.setPageZoom(currentPageZoom * 1.5, pageNumber);
+
+                        var realPageSize = self.pdfView.getRealPageSize(pageNumber);
                         $(page).attr(realPageSize).css(realPageSize);
                     });
                 });
