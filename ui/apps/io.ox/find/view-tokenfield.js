@@ -226,23 +226,30 @@ define('io.ox/find/view-tokenfield', [
             return this;
         },
 
+        retrigger: function (e) {
+            this.trigger(e.type, e);
+        },
+
         // register additional handlers
         register: function () {
-            this.ui.field.on({
-                'tokenfield:initialize': function () {
-                    //console.log('%c' + 'tokenfield:initialize', 'color: white; background-color: blue');
-                },
-                'tokenfield:clickedtoken': function () {
-                    //console.log('%c' + 'tokenfield:clickedtoken', 'color: white; background-color: blue');
-                },
-                'tokenfield:createtoken': function (e) {
-                    // stop creation when cancel button is clicked while dropdown is open
-                    if ($(document.activeElement).is('body')) e.preventDefault();
-                    //console.log('%c' + 'tokenfield:createtoken', 'color: white; background-color: blue');
-                },
-                'tokenfield:createdtoken': function () {
-                    //console.log('%c' + 'tokenfield:createdtoken', 'color: white; background-color: blue');
-                },
+            function preventOnCancel (e) {
+                if ($(document.activeElement).is('body')) e.preventDefault();
+            }
+
+            //retrigger events on view
+            this.ui.field.on([
+                'tokenfield:initialize',
+                'tokenfield:clickedtoken',
+                'tokenfield:createtoken',
+                'tokenfield:createdtoken',
+                'tokenfield:removetoken',
+                'tokenfield:removedtoken'
+                ].join(' '), _.bind(this.retrigger, this));
+
+            //
+            this.on({
+                // stop creation when cancel button is clicked while dropdown is open
+                'tokenfield:createtoken': preventOnCancel,
                 // show placeholder only when search box is empty
                 'tokenfield:createdtoken tokenfield:removedtoken': _.bind(this.setPlaceholder, this),
                 // try to contract each time a token is removed

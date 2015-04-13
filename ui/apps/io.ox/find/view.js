@@ -110,6 +110,7 @@ define('io.ox/find/view', [
             // replaces stub
             this.ui.searchbox.render();
             this.ui.facets.render();
+            this.register();
             return this;
         },
 
@@ -174,6 +175,22 @@ define('io.ox/find/view', [
                 if (!self.hasFocus() && self.isEmpty())
                     self.cancel();
             });
+        },
+
+        _onResize: function (delta) {
+            var box = this.$el,
+                facets = this.ui.facets.$el.find('ul'),
+                tree = this.$el.closest('.window-sidepanel').find('.folder-tree'),
+                winbody = this.$el.closest('.window-container').find('.window-body');
+
+            box.outerHeight(box.outerHeight() + delta);
+            facets.outerHeight(facets.outerHeight() + delta);
+            tree.offset({ top: tree.offset().top + delta });
+            winbody.offset({ top: winbody.offset().top + delta });
+        },
+
+        register: function () {
+            this.ui.searchbox.on('resize', _.bind(this._onResize, this));
         },
 
         setFocus: function (target) {

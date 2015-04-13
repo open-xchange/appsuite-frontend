@@ -171,6 +171,7 @@ define('io.ox/core/tk/typeahead', [
                     if (!self.registered) {
                         var dateset = this;
                         // only way to get dateset reference and listen for 'rendered' event
+                        // hint: used for 'delayedautoselect' option in core/tk/tokenfield
                         dateset.onSync('rendered', function () {
                             var dropdown = dateset.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
                                 emptyAction = dropdown.find('.tt-dataset-0').is(':empty'),
