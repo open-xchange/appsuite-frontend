@@ -60,7 +60,7 @@ define('io.ox/core/viewer/main', [], function () {
                 }
                 // create file collection and populate it with file models
                 this.fileCollection = new backbone.Collection();
-                this.fileCollection.set(fileList, { parse: true });
+                this.fileCollection.reset(fileList, { parse: true });
                 // set the index of the selected file (Drive only)
                 if (baton.data) {
                     this.fileCollection.setStartIndex(baton.data);

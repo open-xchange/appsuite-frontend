@@ -83,21 +83,16 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function () {
-            var previewUrl = null;
-            switch (this.model.get('source')) {
-                case 'drive':
-                    previewUrl = FilesAPI.getUrl(this.model.attributes, 'thumbnail', null);
-                    break;
-                case 'mail':
-                    previewUrl = MailAPI.getUrl(this.model.get('origData'), 'view');
-                    break;
-                case 'pim':
-                    previewUrl = AttachmentAPI.getUrl(this.model.get('origData'), 'view');
-                    break;
-                default:
-                    break;
+            if (this.model.isSourceDrive()) {
+                return FilesAPI.getUrl(this.model.toJSON(), 'thumbnail', null);
+
+            } else if (this.model.isSourceMail()) {
+                return MailAPI.getUrl(this.model.get('origData'), 'view');
+
+            } else if (this.model.isSourcePIM()) {
+                return AttachmentAPI.getUrl(this.model.get('origData'), 'view');
             }
-            return previewUrl;
+            return null;
         }
 
     });

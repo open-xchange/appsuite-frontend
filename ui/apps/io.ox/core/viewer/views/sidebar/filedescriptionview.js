@@ -29,12 +29,11 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         id: 'description',
         draw: function (baton) {
             var panel,
-                model = baton && baton.model,
-                isDrive = model && (model.get('source') === 'drive'); // TODO: make nicer;
+                model = baton && baton.model;
 
             this.empty();
             // mail and PIM attachments don't support file description
-            if (!model || !isDrive) {
+            if (!model || !model.isSourceDrive()) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }

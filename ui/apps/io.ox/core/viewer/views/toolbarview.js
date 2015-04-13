@@ -46,14 +46,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 title: gt('File name'),
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
-                    var fileSource = baton.model.get('source'),
-                        fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
+                    var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
                         .attr('title', gt('File name'))
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
-                    if (fileSource === 'file') {
+                    if (baton.model.isSourceDrive()) {
                         this.attr({
                             title: gt('Double click to rename'),
                             'aria-label': gt('Filename, double click to rename')
@@ -329,7 +328,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
-            if ((this.model.get('source') === 'drive') && (event.which === 32 || event.which === 13 || event.type === 'click')) {
+            if ((this.model.isSourceDrive()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
                 event.preventDefault();
                 ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
             }
@@ -358,7 +357,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             // draw toolbar
             var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
-                isDriveFile = model.get('source') === 'drive',
+                isDriveFile = model.isSourceDrive(),
                 baton = Ext.Baton({
                     $el: toolbar,
                     model: model,

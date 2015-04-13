@@ -92,7 +92,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var self = this,
-                file = (this.model.get('source') === 'drive') ? this.model.toJSON() : this.model.get('origData'),
+                file = (this.model.isSourceDrive()) ? this.model.toJSON() : this.model.get('origData'),
                 fileContentType = this.model.get('file_mimetype'),
                 // generate document converter URL of the document
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, file, {

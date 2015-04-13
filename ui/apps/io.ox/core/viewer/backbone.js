@@ -29,86 +29,6 @@ define('io.ox/core/viewer/backbone', [
 
     'use strict';
 
-    var ITEM_TYPE_FILE = 'drive',
-        ITEM_TYPE_MAIL_ATTACHMENT = 'mail',
-        ITEM_TYPE_PIM_ATTACHMENT = 'pim';
-
-    /**
-     * Guesses (duck check) the source type of a file by its properties.
-     *
-     * @param {Object} data
-     *  a file descriptor object passed from e.g Drive, Calendar or Mail app.
-     *
-     * @returns {String|null}
-     *  returns the file source type or null:
-     *      ITEM_TYPE_FILE for Drive files
-     *      ITEM_TYPE_MAIL_ATTACHMENT for mail attachments
-     *      ITEM_TYPE_PIM_ATTACHMENT for attachments of contacts, appointments or tasks
-     */
-    function getFileSourceType (data) {
-        if (!data) {
-            return null;
-        }
-        if (data instanceof FilesAPI.Model) {
-            data = data.toJSON();
-        }
-        if ((data.mail && data.mail.id && data.mail.folder_id) || (data.group === 'mail') || (data.disp === 'attachment')) {
-            return ITEM_TYPE_MAIL_ATTACHMENT;
-
-        } else if (_.isNumber(data.attached) && _.isNumber(data.folder) && _.isNumber(data.module)) {
-            return ITEM_TYPE_PIM_ATTACHMENT;
-
-        } else if (_.isString(data.version)) {
-            return ITEM_TYPE_FILE;
-        }
-
-        return null;
-    }
-
-    /**
-     * Normalize file descriptors coming from Mail and PIM Apps.
-     *
-     * @param {Object} data
-     *  file descriptor object from Mail, Drive, and PIM Apps.
-     *
-     * @returns {Object} result
-     *  normalized object which will be used to create OX Viewer models.
-     *
-     */
-    function normalize(data) {
-        var result = {},
-            source = getFileSourceType(data);
-        if (!source ) {
-            console.warn('Core.Viewer.backbone: Can not determine file source.');
-            return result;
-        }
-
-        // normalize properties
-        switch (source) {
-            case ITEM_TYPE_MAIL_ATTACHMENT:
-                result = {
-                    filename: data.filename,
-                    file_size: data.size,
-                    file_mimetype: data.content_type,
-                    id: data.id,
-                    folder_id: data.mail && data.mail.folder_id || null
-                }; break;
-            case ITEM_TYPE_PIM_ATTACHMENT:
-                result = {
-                    filename: data.filename,
-                    file_size: data.file_size,
-                    file_mimetype: data.file_mimetype,
-                    id: data.id,
-                    folder_id: data.folder,
-                    module: data.module
-                }; break;
-            default:
-                break;
-        }
-
-        return result;
-    }
-
     /**
      *  The Collection consists of an array of viewer models.
      */
@@ -131,21 +51,16 @@ define('io.ox/core/viewer/backbone', [
         parse: function (models) {
             var viewerFileModels = [];
             _.each(models, function (model) {
-                var isFileModel = model instanceof FilesAPI.Model,
-                    normalizedFileModel = null;
-                if (isFileModel) {
+                if (model instanceof FilesAPI.Model) {
                     // filter out folders
-                    if (model.isFolder()) {
-                        return;
+                    if (!model.isFolder()) {
+                        // drive files
+                        viewerFileModels.push(model);
                     }
-                    normalizedFileModel = model;
                 } else {
-                    var normalizedModelAttributes = normalize(model);
-                    normalizedFileModel = new FilesAPI.Model(normalizedModelAttributes);
-                    normalizedFileModel.set('origData', model);
+                    // mail, PIM attachments
+                    viewerFileModels.push(new FilesAPI.Model(model));
                 }
-                normalizedFileModel.set('source', getFileSourceType(model));
-                viewerFileModels.push(normalizedFileModel);
             });
             return viewerFileModels;
         },

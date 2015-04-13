@@ -37,14 +37,13 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 panel, panelBody,
                 model = baton && baton.model,
                 numberOfVersions = model && model.get('number_of_versions'),
-                panelState = baton && baton.panelState,
-                isDrive = model && (model.get('source') === 'drive'); // TODO: make nicer;
+                panelState = baton && baton.panelState;
 
             this.empty();
 
             // mail and PIM attachments don't support versions
             // show the versions panel only if we have at least 2 versions
-            if (!model || !isDrive || (numberOfVersions < 2)) {
+            if (!model || !model.isSourceDrive() || !_.isNumber(numberOfVersions) || (numberOfVersions < 2)) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }
