@@ -28,9 +28,12 @@ module.exports = function (grunt) {
                             'lib/jquery.mobile.touch.min.js',
                             'bower_components/underscore/underscore.js', // load this before require.js to keep global object
                             'build/ox.js',
-                            //add backbone and dot.js may be a AMD-variant would be better
+                            // add backbone and dot.js may be a AMD-variant would be better
                             'bower_components/backbone/backbone.js',
                             'bower_components/backbone-validation/dist/backbone-validation.js',
+                            // load moment before require, because of anonymous define
+                            'build/static/3rd.party/moment/moment.js',
+                            'build/static/3rd.party/moment/moment-timezone-with-data.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',
