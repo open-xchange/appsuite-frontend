@@ -96,8 +96,6 @@ define('io.ox/core/tk/tokenfield', [
                 createTokensOnBlur: true,
                 // dnd sort
                 dnd: true,
-                // token view
-                tokenview: undefined,
                 // dont't call init function in typeahead view
                 init: false,
                 extPoint: 'io.ox/core/tk/tokenfield'
