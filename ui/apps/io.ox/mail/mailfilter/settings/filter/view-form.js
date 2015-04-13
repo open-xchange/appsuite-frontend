@@ -103,6 +103,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             '$cl_9': '9',
             '$cl_10': '10'
         },
+        currentState = null,
 
         checkForMultipleTests = function (el) {
             return $(el).find('[data-test-id]');
@@ -220,6 +221,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         'envelope': ['headers', 'values'],
                         'size': ['size']
                     };
+
+                if (currentState !== null) self.model.trigger('ChangeProcessSub', currentState);
+                currentState = null;
 
                 function loopAndRemove(testsArray) {
                     var idArray = [];
@@ -788,10 +792,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         id: 'stopaction',
         draw: function (baton) {
             var checkStopAction = function (e) {
-                var currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked'),
-                    arrayOfActions = baton.model.get('actioncmds');
-
-                baton.model.trigger('ChangeProcessSub', currentState);
+                currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
+                var arrayOfActions = baton.model.get('actioncmds');
 
                 function getCurrentPosition(array) {
                     var currentPosition;
