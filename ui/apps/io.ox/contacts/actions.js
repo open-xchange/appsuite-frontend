@@ -136,12 +136,13 @@ define('io.ox/contacts/actions', [
     new Action('io.ox/contacts/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
-            var ctx = e.context;
-            if (ctx.id === 0 || ctx.folder_id === 0) {
-                // e.g. non-existing contacts in halo view
-                return false;
+            var contact = e.context;
+            // e.g. non-existing contacts in halo view
+            if (contact.id === 0 || contact.folder_id === 0) {
+                // check if contains mail
+                return !!(contact.email1 || contact.email2 || contact.email3);
             } else {
-                var list = [].concat(ctx);
+                var list = [].concat(contact);
                 // is request needed?
                 return api.getList(list, true, {
                     check: function (obj) {
@@ -180,7 +181,8 @@ define('io.ox/contacts/actions', [
             var contact = e.context;
             // e.g. non-existing contacts in halo view
             if (contact.id === 0 || contact.folder_id === 0) {
-                return false;
+                // check if contains mail
+                return !!(contact.email1 || contact.email2 || contact.email3);
             } else {
                 var list = [].concat(contact);
                 return api.getList(list, true, {
