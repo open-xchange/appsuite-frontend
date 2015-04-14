@@ -10,6 +10,7 @@
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
+/*
 define([
     'io.ox/core/viewer/backbone',
     'io.ox/core/viewer/views/mainview',
@@ -81,7 +82,7 @@ define([
                 }
             };
 
-            Main.launch(dummyBaton);
+            //Main.launch(dummyBaton);
 
             it('should create the file collection', function () {
                 //expect(Main.fileCollection).to.be.an.instanceof(backbone.Collection);
@@ -97,3 +98,4 @@ define([
     });
 
 });
+*/
