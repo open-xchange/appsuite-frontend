@@ -120,6 +120,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.carouselRoot = carouselRoot;
 
             // create slides from file collection and append them to the carousel
+            // TODO move this.collection
             this.createSlides(this.collection, carouselInner)
             .done(function () {
                 // initiate swiper
@@ -127,22 +128,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 // overwrite the original removeSlide function because its buggy
                 self.swiper.removeSlide = self.removeSlide;
                 // always load duplicate slides of the swiper plugin.
-                self.$el.find('.swiper-slide-duplicate').each(function (index, element) {
-                    var slideNode = $(element),
-                        slideIndex = slideNode.data('swiper-slide-index'),
-                        slideModel = self.collection.at(slideIndex);
-
-                    TypesRegistry.getModelType(slideModel)
-                    .then(function (ModelType) {
-                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
-                        view.render().prefetch().show();
-                    },
-                    function () {
-                        console.warn('Cannot require a view type for', slideModel.get('filename'));
-                    });
-
-                });
-
+                self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
                 self.blendSlideCaption(startIndex);
                 self.loadSlide(startIndex, 'both');
@@ -154,6 +140,27 @@ define('io.ox/core/viewer/views/displayerview', [
             });
 
             return this;
+        },
+
+        /**
+         * Creates the corresponding type view for duplicate slides of the swiper plugin and render them.
+         */
+        handleDuplicatesSlides: function () {
+            var self = this;
+            this.$el.find('.swiper-slide-duplicate').each(function (index, element) {
+                var slideNode = $(element),
+                    slideIndex = slideNode.data('swiper-slide-index'),
+                    slideModel = self.collection.at(slideIndex);
+
+                TypesRegistry.getModelType(slideModel)
+                    .then(function (ModelType) {
+                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
+                        view.render().prefetch().show();
+                    },
+                    function () {
+                        console.warn('Cannot require a view type for', slideModel.get('filename'));
+                    });
+            });
         },
 
         /**
@@ -400,6 +407,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.collection.remove(removedFileModel);
             // remove slide from the swiper plugin
             this.swiper.removeSlide(removedFileModelIndex + 1);
+            // render the duplicate slides
+            this.handleDuplicatesSlides();
             // reset the invalidated local loaded slides array
             this.loadedSlides = [];
             // remove corresponding view type of the file
