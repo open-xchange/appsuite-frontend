@@ -33,7 +33,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             this.empty();
             // mail and PIM attachments don't support file description
-            if (!model || !model.isDriveFile()) {
+            if (!model || !model.isFile()) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }
@@ -56,8 +56,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 labelString;
 
             panelBody.empty();
-            if (!_.isString(description)) { return; }
-
+            if (!_.isString(description)) {
+                return;
+            }
             labelString = (description.length > 0) ? description : gt('Add a description');
 
             panelBody.append(
@@ -114,13 +115,15 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         render: function () {
             //console.info('FileDescriptionView.render()');
-            if (!this.model) { return this; }
+            if (!this.model) {
+                return this;
+            }
             // a11y
             this.$el.attr({ role: 'tablist' });
             // add model change listener
             this.listenTo(this.model, 'change:description', this.onModelChangeDescription);
             // draw
-            var baton = Ext.Baton({ model: this.model, data: this.model.get('origData') });
+            var baton = Ext.Baton({ model: this.model, data: this.model.toJSON() });
             Ext.point('io.ox/core/viewer/sidebar/description').invoke('draw', this.$el, baton);
 
             return this;
@@ -130,15 +133,10 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
          * Invoke action to edit description
          */
         editDescription: function () {
-            if (!this.model) { return; }
-
-            var baton = Ext.Baton({ data: {
-                id: this.model.get('id'),
-                folder_id: this.model.get('folderId'),
-                description: this.model.get('description')
-            }});
-
-            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, baton);
+            if (!this.model) {
+                return;
+            }
+            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, Ext.Baton({ data: this.model.toJSON() }));
         },
 
         /**

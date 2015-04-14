@@ -49,11 +49,12 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             this.on('dispose', this.disposeView.bind(this));
 
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
+            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (model) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
-                if (!data || !data.model) { return; }
-
-                this.model = data.model;
+                if (!model) {
+                    return;
+                }
+                this.model = model;
                 this.renderSections();
             });
 
@@ -74,7 +75,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             // remove previous sections
             this.$el.empty();
             // render sections only if side bar is open
-            if (!this.model || !this.opened) { return; }
+            if (!this.model || !this.opened) {
+                return;
+            }
             // load file details
             this.loadFileDetails();
 
@@ -104,24 +107,21 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         loadFileDetails: function () {
             //console.info('SidebarView.loadFileDetails()');
-            if (!this.model) { return; }
-            var origModel = this.model.get('origData');
+            if (!this.model) {
+                return;
+            }
 
-            FilesAPI.get({
-                id: this.model.get('id'),
-                folder_id: this.model.get('folderId')
-            })
+            FilesAPI.get(this.model.toJSON())
             .done(function (file) {
                 //console.info('SidebarView.loadFileDetails()', 'done', file);
                 // after loading the file details we set at least an empty string as description.
                 // in order to distinguish between 'the file details have been loaded but the file has no description'
                 // and 'the file details have not been loaded yet so we don't know if it has a description'.
-                var description = (file && _.isString(file.description)) ? file.description : '';
-
-                if (origModel instanceof Backbone.Model) {
-                    origModel.set('description', description);
+                if (this.model.isFile()) {
+                    var description = (file && _.isString(file.description)) ? file.description : '';
+                    this.model.set('description', description);
                 }
-            });
+            }.bind(this));
         },
 
         /**

@@ -29,15 +29,17 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         id: 'fileinfo',
         draw: function (baton) {
             //console.info('FileInfoView.draw()');
+            if (!baton.model) {
+                return;
+            }
             var panel, panelBody,
-                model = baton && baton.model,
-                fileName = model && model.get('filename') || '-',
-                size = model && (_.isNumber(model.get('size'))) ? _.filesize(model.get('size')) : '-',
-                modified = model && model.get('lastModified'),
+                model = baton.model,
+                fileName = model.get('filename') || '-',
+                size = model.get('file_size'),
+                sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
+                modified = model.get('last_modified'),
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
-
-            if (!model) { return; }
 
             panel = Util.createPanelNode({ title: gt('General Info') });
             panelBody = panel.find('.panel-body').append(
@@ -47,7 +49,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dd class="file-name">').text(fileName),
                     // size
                     $('<dt>').text(gt('Size')),
-                    $('<dd class="size">').text(size),
+                    $('<dd class="size">').text(sizeString),
                     // modified
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').text(dateString),
@@ -57,7 +59,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 )
             );
 
-            FolderAPI.path(model.get('folderId'))
+            FolderAPI.path(model.get('folder_id'))
             .done(function (list) {
                 var path = _.chain(list)
                     .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
@@ -92,18 +94,19 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
          */
         onModelChange: function (model) {
             //console.info('FileInfoView.onModelChangeDescription()', model);
-            var baton = Ext.Baton({ model: model, data: model.get('origData') });
+            var baton = Ext.Baton({ model: model, data: model.isFile() ? model.toJSON() : model.get('origData') });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
         },
 
         render: function () {
             //console.info('FileInfoView.render()');
-            if (!this.model) { return this; }
-
+            if (!this.model) {
+                return this;
+            }
             // add model change listener
-            this.listenTo(this.model, 'change:filename change:size change:lastModified change:folderId', this.onModelChange.bind(this));
+            this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.onModelChange.bind(this));
 
-            var baton = Ext.Baton({ model: this.model, data: this.model.get('origData') });
+            var baton = Ext.Baton({ model: this.model, data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData') });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
 
             return this;

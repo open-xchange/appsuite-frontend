@@ -46,14 +46,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 title: gt('File name'),
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
-                    var fileSource = baton.model.get('source'),
-                        fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
+                    var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
                         .attr('title', gt('File name'))
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
-                    if (fileSource === 'file') {
+                    if (baton.model.isFile()) {
                         this.attr({
                             title: gt('Double click to rename'),
                             'aria-label': gt('Filename, double click to rename')
@@ -236,11 +235,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription', {
         id: 'edit-description',
         action: function (baton) {
-            var actionBaton = Ext.Baton({ data: {
-                id: baton.model.get('id'),
-                folder_id: baton.model.get('folderId'),
-                description: baton.model.get('description')
-            }});
+            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
             ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
         }
     });
@@ -266,7 +261,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         id: 'zoomin',
         requires: function (e) {
-            return (e.baton.model.isDocumentFile() || e.baton.model.isTextFile()) && ox.debug;
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF()) && ox.debug;
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomin', baton);
@@ -275,7 +271,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         id: 'zoomout',
         requires: function (e) {
-            return (e.baton.model.isDocumentFile() || e.baton.model.isTextFile()) && ox.debug;
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF()) && ox.debug;
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomout', baton);
@@ -331,45 +328,49 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
-            if (this.model.isDriveFile() && (event.which === 32 || event.which === 13 || event.type === 'click')) {
+            if ((this.model.isFile()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
                 event.preventDefault();
-                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData').toJSON() });
+                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
             }
         },
 
         onModelChange: function (changedModel) {
             //console.warn('ToolbarView.onModelChange()', changedModel);
-            this.render({ model: changedModel });
+            this.render(changedModel);
         },
 
         /**
-         * Renders the toolbar.
+         * Renders this DisplayerView with the supplied model.
          *
-         * @param {Object} data
-         *  an object containing the active viewer model
+         * @param {Object} model
+         *  The file model object.
          *
          * @returns {ToolbarView} toolbarView
          *  this view object itself.
          */
-        render: function (data) {
+        render: function (model) {
             //console.warn('ToolbarView.render()', data, this);
-            if (!data || !data.model) { return this; }
+            if (!model) {
+                console.error('Core.Viewer.ToolbarView.render(): no file to render');
+                return this;
+            }
             // draw toolbar
-            var origData = data.model.get('origData'),
+            var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                isDriveFile = model.isFile(),
                 baton = Ext.Baton({
                     $el: toolbar,
-                    model: data.model,
-                    models: origData instanceof Backbone.Model ? [origData] : null,
-                    data: origData instanceof Backbone.Model ? origData.toJSON() : origData
+                    model: model,
+                    models: isDriveFile ? [model] : null,
+                    data: isDriveFile ? model.toJSON() : origData
                 }),
-                appName = data.model.get('source');
+                appName = model.get('source');
             // remove listener from previous model
             if (this.model) {
                 this.stopListening(this.model, 'change');
             }
             // save current data as view model
-            this.model = data.model;
+            this.model = model;
             this.listenTo(this.model, 'change', this.onModelChange.bind(this));
             // set device type
             Util.setDeviceClass(this.$el);

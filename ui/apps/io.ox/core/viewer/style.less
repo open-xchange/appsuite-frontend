@@ -127,6 +127,7 @@ html.ios .io-ox-viewer {
                 i.fa-file-powerpoint-o { color: #EE5F37; }
                 i.fa-file-pdf-o { color: #CF1E28; }
                 i.fa-file-image-o { color: #EE5F37; }
+                i.fa-file-text-o { color: #4285f4; }
                 &:hover, &:active, &:focus {
                     color: @viewer-toolbar-color;
                     background: @viewer-toolbar-hover-bgcolor;
@@ -248,7 +249,7 @@ html.ios .io-ox-viewer {
         }
 
         .viewer-displayer-caption {
-            position: absolute;
+            position: fixed;
             left: 0;
             right: 0;
             margin: auto;
@@ -260,6 +261,7 @@ html.ios .io-ox-viewer {
             background: rgba(0,0,0,0.5);
             .border-radius(4px);
             display: none;
+            z-index: 1;
             &.smartphone {
                 bottom: 6px;
             }

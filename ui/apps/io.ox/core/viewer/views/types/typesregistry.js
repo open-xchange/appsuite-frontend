@@ -14,24 +14,25 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
 
     'use strict';
 
-    // a map of supported file types to their implementations
-    var typesMap = {
-        IMAGE: 'imageview',
-        OFFICE: 'documentview',
-        OFFICE_TEXT: 'documentview',
-        OFFICE_SPREADSHEET: 'documentview',
-        PDF: 'documentview',
-        AUDIO: 'audioview',
-        VIDEO: 'videoview',
-        TEXT: 'textview'
-    },
-    // a list of types only available in debug mode
-    debugOnlyList = ['audioview', 'videoview'];
-
     /**
      * A central registry of file types which are supported by OX Viewer.
      * This registry Also offers file type related methods.
      */
+
+    // a map of supported file types to their implementations
+    var typesMap = {
+        image: 'imageview',
+        doc: 'documentview',
+        xls: 'documentview',
+        ppt: 'documentview',
+        pdf: 'documentview',
+        audio: 'audioview',
+        video: 'videoview',
+        txt: 'textview'
+    },
+    // a list of types only available in debug mode
+    debugOnlyList = ['audioview', 'videoview'];
+
     var typesRegistry = {
 
         /**
@@ -48,7 +49,8 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
             // console.warn('getModelType()', model.get('fileCategory'));
             if (!model) { return $.Deferred().reject(); }
 
-            var modelType = this.checkModelTypeForDebug(typesMap[model.get('fileCategory')]);
+            var modelTypeName = typesMap[model.getFileType()],
+                modelType = this.checkModelTypeForDebug(modelTypeName);
 
             return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {

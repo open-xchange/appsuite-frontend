@@ -41,18 +41,14 @@ define('io.ox/core/viewer/views/mainview', [
         initialize: function (/*options*/) {
             //console.info('MainView.initialize()');
             // create children views
-            this.toolbarView = new ToolbarView();
+            this.toolbarView = new ToolbarView({ collection: this.collection });
             this.displayerView = new DisplayerView({ collection: this.collection });
-            this.sidebarView = new SidebarView();
-            // clean Viewer element and all event handlers on viewer close
-            this.listenTo(this.toolbarView, 'close', function () {
-                this.remove();
-            });
-            // close viewer when another app is started or resumed
-            this.listenTo(ox, 'app:start app:resume', function () {
-                this.remove();
-            });
-            // listen to the Viewer event 'bus' for useful events
+            this.sidebarView = new SidebarView({ collection: this.collection });
+            // close viewer on events
+            this.listenTo(this.toolbarView, 'close', this.remove);
+            this.listenTo(ox, 'app:start app:resume', this.remove);
+            this.listenTo(EventDispatcher, 'viewer:close', this.remove);
+            // bind toggle side bar handler
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
@@ -60,47 +56,34 @@ define('io.ox/core/viewer/views/mainview', [
             this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
             var startIndex = this.collection.getStartIndex(),
-                displayedData = {
-                index: startIndex,
-                model: this.collection.at(startIndex)
-            };
-            this.render(displayedData);
+                startModel = this.collection.at(startIndex);
+            this.render(startModel);
         },
 
         /**
-         * Renders this MainView with the supplied data model.
+         * Renders this MainView with the supplied model.
          *
-         * @param {Object} data
-         *  @param {Number} data.index
-         *   The index of the model to render.
-         *  @param {Object} data.model
-         *   The model object itself.
+         *  @param {Object} model
+         *   The file model object.
          *
          * @returns {MainView}
          */
-        render: function (data) {
+        render: function (model) {
             //console.warn('MainView.render()', data);
-            if (!data) {
+            if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
                 return;
             }
-            var self = this;
             // make this main view focusable and prevent focus from leaving the viewer.
             this.$el.attr('tabindex', -1);
             // set device type
             Util.setDeviceClass(this.$el);
             // append toolbar view
             this.$el.append(
-                this.toolbarView.render(data).el,
-                this.displayerView.render(data).el,
-                this.sidebarView.render(data.model).el
+                this.toolbarView.render(model).el,
+                this.displayerView.render(model).el,
+                this.sidebarView.render(model).el
             );
-            // Hotfix to prevent Halo View from stealing the focus
-            // TODO: remove when Viewer replaces the Halo View
-            _.delay(function () {
-                self.displayerView.focusActiveSlide();
-            }, 100);
-
             return this;
         },
 
@@ -169,11 +152,14 @@ define('io.ox/core/viewer/views/mainview', [
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
                 activeSlide = displayerEl.find('.swiper-slide-active'),
-                activeSlideIndex = activeSlide.index();
+                activeSlideIndex = activeSlide.index(),
+                swiper = this.displayerView.swiper;
 
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
-            this.displayerView.swiper.onResize();
+            if (swiper) {
+                swiper.onResize();
+            }
             // workaround for a possible bug from swiper plugin that happens sporadically:
             // After an on resize call, the plugin 'resets' the active slide to the beginning.
             this.displayerView.swiper.slideTo(activeSlideIndex);
@@ -183,7 +169,7 @@ define('io.ox/core/viewer/views/mainview', [
             //console.info('MainView.disposeView()');
             this.toolbarView.remove();
             this.displayerView.remove();
-            this.sidebarView.remove();
+            //this.sidebarView.remove();
             this.collection.off().stopListening().each(function (model) {
                 model.off().stopListening();
             });

@@ -39,14 +39,11 @@ define('io.ox/core/viewer/views/types/imageview', [
             //console.warn('ImageView.render()', this.model.get('filename'));
 
             var image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
-                previewUrl = this.model.getPreviewUrl(),
+                previewUrl = this.getPreviewUrl(),
                 filename = this.model.get('filename') || '',
                 self = this;
 
-            // remove content of the slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.empty();
-            }
+            this.$el.empty();
 
             if (previewUrl) {
                 previewUrl = _.unescapeHTML(previewUrl);
@@ -60,7 +57,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                     var notification = self.createNotificationNode(gt('Sorry, there is no preview available for this image.'));
                     self.$el.idle().append(notification);
                 });
-                this.$el.append(image, this.createCaption());
+                this.$el.append(image);
             }
 
             return this;
@@ -105,7 +102,6 @@ define('io.ox/core/viewer/views/types/imageview', [
          */
         unload: function () {
             //console.warn('ImageView.unload()', this.model.get('filename'));
-
             var imageToUnLoad;
             // never unload slide duplicates
             if (!this.$el.hasClass('swiper-slide-duplicate')) {
@@ -114,7 +110,6 @@ define('io.ox/core/viewer/views/types/imageview', [
                     imageToUnLoad.attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=');
                 }
             }
-
             return this;
         }
 

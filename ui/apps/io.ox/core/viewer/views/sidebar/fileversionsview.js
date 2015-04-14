@@ -36,14 +36,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var self = this,
                 panel, panelBody,
                 model = baton && baton.model,
-                numberOfVersions = model && model.get('numberOfVersions'),
+                numberOfVersions = model && model.get('number_of_versions'),
                 panelState = baton && baton.panelState;
 
             this.empty();
 
             // mail and PIM attachments don't support versions
             // show the versions panel only if we have at least 2 versions
-            if (!model || !model.isDriveFile() || (numberOfVersions < 2)) {
+            if (!model || !model.isFile() || !_.isNumber(numberOfVersions) || (numberOfVersions < 2)) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }
@@ -57,7 +57,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 collapsed: (panelState !== PANEL_STATE_OPEN)
             });
             panelBody = panel.find('.panel-body');
-            Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ model: model, data: model.get('origData') }));
+            Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ model: model, data: model.toJSON() }));
 
             self.append(panel);
 
@@ -238,10 +238,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 this.panelState = PANEL_STATE_OPENING;
 
                 // get file versions
-                FilesAPI.versions.load({
-                    id: this.model.get('id'),
-                    folder_id: this.model.get('folderId')
-                })
+                FilesAPI.versions.load(this.model.toJSON())
                 .done(function (/*versions*/) {
                     //console.info('FilesAPI.versions.load()', versions);
                     self.panelState = PANEL_STATE_OPEN;
@@ -262,7 +259,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         onModelChangeVersions: function (model) {
             //console.info('FileVersionsView.onModelChangeVersions()', 'changed:', model.changed);
 
-            var baton = Ext.Baton({ model: model, data: model.get('origData'), panelState: this.panelState });
+            var baton = Ext.Baton({ model: model, data: model.toJSON(), panelState: this.panelState });
             Ext.point(POINT).invoke('draw', this.$el, baton);
         },
 
@@ -279,9 +276,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (!this.model) { return this; }
 
             // add listener to new model
-            this.listenTo(this.model, 'change:versions change:currentVersion change:numberOfVersions change:version', this.onModelChangeVersions);
+            this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version', this.onModelChangeVersions);
 
-            var baton = Ext.Baton({ model: this.model, data: this.model.get('origData'), panelState: this.panelState });
+            var baton = Ext.Baton({ model: this.model, data: this.model.toJSON(), panelState: this.panelState });
             Ext.point(POINT).invoke('draw', this.$el, baton);
 
             return this;

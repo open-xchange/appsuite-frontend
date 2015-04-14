@@ -39,6 +39,48 @@ define('io.ox/files/api', [
     // basic model with custom cid
     api.Model = backbone.Model.extend({
 
+        /**
+         * Constructor, to initialize the model with mail and PIM attachments,
+         * besides Drive model attributes.
+         */
+        constructor: function ( attributes, options ) {
+            attributes = attributes || {};
+            var normalizedAttrs;
+            // check if model is initialized with mail, pim or drive model attributes
+            if (_.isObject(attributes.mail)) {
+                // mail attachment
+                normalizedAttrs = {
+                    filename: attributes.filename,
+                    file_size: attributes.size,
+                    file_mimetype: attributes.content_type,
+                    id: attributes.id,
+                    folder_id: attributes.mail.folder_id || null,
+                    origData: attributes,
+                    source: 'mail'
+                };
+
+            } else if (_.isNumber(attributes.attached) && _.isNumber(attributes.module)) {
+                // pim attachment
+                normalizedAttrs = {
+                    filename: attributes.filename,
+                    file_size: attributes.file_size,
+                    file_mimetype: attributes.file_mimetype,
+                    id: attributes.id,
+                    folder_id: attributes.folder,
+                    module: attributes.module,
+                    origData: attributes,
+                    source: 'pim'
+                };
+
+            } else {
+                // drive
+                normalizedAttrs = attributes;
+                normalizedAttrs.source = 'drive';
+            }
+            // call parent constructor
+            backbone.Model.call( this, normalizedAttrs, options );
+        },
+
         isFolder: function () {
             return this.has('standard_folder');
         },
@@ -46,7 +88,7 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder();
+            return !this.isFolder() && this.get('source') === 'drive';
         },
 
         isImage: function (type) {
@@ -82,6 +124,14 @@ define('io.ox/files/api', [
             return this.get('locked_until') > _.now();
         },
 
+        isMailAttachment: function () {
+            return this.get('source') === 'mail';
+        },
+
+        isPIMAttachment: function () {
+            return this.get('source') === 'pim';
+        },
+
         getDisplayName: function () {
             return this.get('filename') || this.get('title') || '';
         },
@@ -106,7 +156,9 @@ define('io.ox/files/api', [
         },
 
         getFileType: function () {
-            if (!this.isFile()) return 'folder';
+            if (this.isFolder()) {
+                return 'folder';
+            }
             var extension = this.getExtension();
             for (var type in this.types) {
                 if (this.types[type].test(extension)) return type;

@@ -27,9 +27,10 @@ define('io.ox/core/viewer/main', [], function () {
     *  The file list or null.
     */
     function getFileList (baton) {
-        if (!baton) return null;
-        // temporary till we get list of models from baton directly
-        if (baton.collection) return baton.collection.models;
+        if (!baton) { return null; }
+        if (baton.collection) {
+            return baton.collection.models;
+        }
         // exception for Mail and PIM
         if (_.isArray(baton)) return baton;
         return null;
@@ -54,7 +55,7 @@ define('io.ox/core/viewer/main', [], function () {
 
                 var fileList = getFileList(baton);
                 if (!fileList) {
-                    console.error('Core.Viewer.launch(): no files to preview.');
+                    console.error('Core.Viewer.main.launch(): no files to preview.');
                     el.remove();
                     el = null;
                     return;

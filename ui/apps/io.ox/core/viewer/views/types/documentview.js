@@ -59,12 +59,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         render: function () {
             //console.warn('DocumentView.render()', this.model.get('filename'));
             var pageContainer = $('<div class="document-container io-ox-core-pdf">');
-
-            // remove content of the slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.empty();
-            }
-            this.$el.append(pageContainer, this.createCaption());
+            this.$el.empty().append(pageContainer);
             return this;
         },
 
@@ -93,10 +88,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var self = this,
-                // the file descriptor object
-                originalFile = this.model.get('origData'),
-                file = originalFile instanceof Backbone.Model ? originalFile.attributes : originalFile,
-                fileContentType = this.model.get('contentType'),
+                file = (this.model.isFile()) ? this.model.toJSON() : this.model.get('origData'),
+                fileContentType = this.model.get('file_mimetype'),
                 // generate document converter URL of the document
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, file, {
                     action: 'getdocument',

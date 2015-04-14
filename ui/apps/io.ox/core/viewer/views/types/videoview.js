@@ -40,18 +40,12 @@ define('io.ox/core/viewer/views/types/videoview',  [
             var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
                 source = $('<source>'),
                 fallback = $('<div>').text(gt('Your browser does not support HTML5 video.')),
-                previewUrl = this.model.getPreviewUrl() || '',
-                contentType = this.model.get('contentType') || '',
-                caption = this.createCaption(),
+                previewUrl = this.getPreviewUrl() || '',
+                contentType = this.model.get('file_mimetype') || '',
                 self = this;
 
             // run own disposer function on dispose event from DisposableView
             this.on('dispose', this.disposeView.bind(this));
-
-            // remove content of the slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.empty();
-            }
 
             // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
             video.on('loadeddata', function () {
@@ -72,7 +66,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
             source.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
             video.append(source, fallback);
 
-            this.$el.append(video, caption);
+            this.$el.empty().append(video);
             return this;
         },
 

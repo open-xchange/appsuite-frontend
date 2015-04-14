@@ -31,24 +31,35 @@ define('io.ox/core/viewer/views/types/textview', [
                 'viewer:document:zoomout': this.zoomOut.bind(this)
             });
             // quick hack to get rid of flex box
-            this.$el.css('display', 'block');
+            this.$el.empty().css('display', 'block');
             return this;
         },
 
         prefetch: function () {
-            // this only works for files
-            var model = this.model.get('origData');
-            if (!model) return;
+            //console.warn('TextView.prefetch()', this.model.get('filename'));
             // simply load the document content via $.ajax
-            var $el = this.$el.busy();
-            $.ajax({ url: model.getUrl('view'), dataType: 'text' }).done(function (text) {
+            var $el = this.$el.busy(),
+                previewUrl = this.getPreviewUrl();
+            $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
                 $el.idle().append($('<div class="plain-text-page">').text(text));
-                $el = model = null;
+                $el = null;
             });
             return this;
         },
 
         show: function () {
+            return this;
+        },
+
+        /**
+         * Unloads the text file
+         *
+         * @returns {TextView}
+         *  the TextView instance.
+         */
+        unload: function () {
+            //console.warn('TextView.unload()', this.model.get('filename'));
+            this.$el.find('.plain-text-page').remove();
             return this;
         },
 
@@ -64,6 +75,7 @@ define('io.ox/core/viewer/views/types/textview', [
         zoomOut: function () {
             this.setFontSize(this.size - 2);
         }
+
     });
 
     return TextView;
