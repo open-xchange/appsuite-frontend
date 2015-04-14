@@ -44,15 +44,11 @@ define('io.ox/core/viewer/views/mainview', [
             this.toolbarView = new ToolbarView({ collection: this.collection });
             this.displayerView = new DisplayerView({ collection: this.collection });
             this.sidebarView = new SidebarView({ collection: this.collection });
-            // clean Viewer element and all event handlers on viewer close
-            this.listenTo(this.toolbarView, 'close', function () {
-                this.remove();
-            });
-            // close viewer when another app is started or resumed
-            this.listenTo(ox, 'app:start app:resume', function () {
-                this.remove();
-            });
-            // listen to the Viewer event 'bus' for useful events
+            // close viewer on events
+            this.listenTo(this.toolbarView, 'close', this.remove);
+            this.listenTo(ox, 'app:start app:resume', this.remove);
+            this.listenTo(EventDispatcher, 'viewer:close', this.remove);
+            // bind toggle side bar handler
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));

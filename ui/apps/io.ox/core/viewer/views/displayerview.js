@@ -11,6 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/displayerview', [
+    'io.ox/files/api',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
@@ -18,7 +19,7 @@ define('io.ox/core/viewer/views/displayerview', [
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (EventDispatcher, TypesRegistry, DisposableView, Util, gt) {
+], function (FilesAPI, EventDispatcher, TypesRegistry, DisposableView, Util, gt) {
 
     'use strict';
 
@@ -47,6 +48,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slidesToCache = 7;
             // instance of the swiper plugin
             this.swiper = null;
+            // listen to delete event propagation from FilesAPI
+            this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
         },
 
         /**
@@ -121,7 +124,8 @@ define('io.ox/core/viewer/views/displayerview', [
             .done(function () {
                 // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
-
+                // overwrite the original removeSlide function because its buggy
+                self.swiper.removeSlide = self.removeSlide;
                 // always load duplicate slides of the swiper plugin.
                 self.$el.find('.swiper-slide-duplicate').each(function (index, element) {
                     var slideNode = $(element),
@@ -372,6 +376,77 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.slideViews[index].unload();
             });
             this.loadedSlides = cachedRange;
+        },
+
+        /**
+         * File remove handler.
+         *
+         * @param {jQueryEvent} event
+         *  a jQuery Event object
+         *
+         * @param {Array} removedFiles
+         *  an array consisting of objects representing file models.
+         */
+        onFileRemoved: function (event, removedFiles) {
+            //console.warn('DisplayerView.onFileRemoved()', removedFiles);
+            if (!_.isArray(removedFiles) || removedFiles.length < 1) {
+                return;
+            }
+            // identify removed models
+            var removedFileCid = removedFiles[0].cid,
+                removedFileModel = this.collection.get(removedFileCid),
+                removedFileModelIndex = this.collection.indexOf(removedFileModel);
+            // remove the deleted file(s) from Viewer collection
+            this.collection.remove(removedFileModel);
+            // remove slide from the swiper plugin
+            this.swiper.removeSlide(removedFileModelIndex + 1);
+            // reset the invalidated local loaded slides array
+            this.loadedSlides = [];
+            // remove corresponding view type of the file
+            this.slideViews.splice(removedFileModelIndex, 1);
+            // close viewer we don't have any files to show
+            if (this.collection.length === 0) {
+                EventDispatcher.trigger('viewer:close');
+                return;
+            }
+            // do a swiper change end manually, because the plugin is not doing it (maybe a bug)
+            this.onSlideChangeEnd(this.swiper);
+        },
+
+        /**
+         * This remove slide function overwrites the original function from the swiper plugin,
+         * because it is buggy. (v.3.0.6, slide duplicates are not restored after removing slides)
+         *
+         * @param {Number | Array } slidesIndexes
+         *  the index of the slide to be removed, as a Number or Array.
+         */
+        removeSlide: function (slidesIndexes) {
+            //console.warn('Custom removeSlide()', slidesIndexes);
+            if (this.params.loop) {
+                this.destroyLoop();
+            }
+            var newActiveIndex = this.activeIndex,
+                indexToRemove;
+            if (typeof slidesIndexes === 'object' && slidesIndexes.length) {
+                for (var i = 0; i < slidesIndexes.length; i++) {
+                    indexToRemove = slidesIndexes[i];
+                    if (this.slides[indexToRemove]) this.slides.eq(indexToRemove).remove();
+                    if (indexToRemove < newActiveIndex) newActiveIndex--;
+                }
+                newActiveIndex = Math.max(newActiveIndex, 0);
+            } else {
+                indexToRemove = slidesIndexes;
+                if (this.slides[indexToRemove]) this.slides.eq(indexToRemove).remove();
+                if (indexToRemove < newActiveIndex) newActiveIndex--;
+                newActiveIndex = Math.max(newActiveIndex, 0);
+            }
+            if (this.params.loop) {
+                this.createLoop();
+            }
+            if (!(this.params.observer && this.support.observer)) {
+                this.update(true);
+            }
+            this.slideTo(newActiveIndex, 0, true);
         },
 
         disposeView: function () {
