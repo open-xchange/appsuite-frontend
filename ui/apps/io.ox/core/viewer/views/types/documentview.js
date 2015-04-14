@@ -58,12 +58,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         render: function () {
             //console.warn('DocumentView.render()', this.model.get('filename'));
             var pageContainer = $('<div class="document-container">');
-
-            // remove content of the slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.empty();
-            }
-            this.$el.append(pageContainer, this.createCaption());
+            this.$el.empty().append(pageContainer, this.createCaption());
             return this;
         },
 

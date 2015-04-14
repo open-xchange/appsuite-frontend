@@ -43,10 +43,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                 filename = this.model.get('filename') || '',
                 self = this;
 
-            // remove content of the slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.empty();
-            }
+            this.$el.empty();
 
             if (previewUrl) {
                 previewUrl = _.unescapeHTML(previewUrl);

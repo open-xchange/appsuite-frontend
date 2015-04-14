@@ -234,6 +234,8 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 slideToLoad = slideToLoad || 0,
                 slidesCount = this.collection.length,
+                activeModel = this.collection.at(slideToLoad),
+                previousModel = this.collection.at(this.swiper.previousIndex - 1) || null,
                 rightRange,
                 leftRange,
                 loadRange;
@@ -275,6 +277,12 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // show active slide
             this.slideViews[slideToLoad].show();
+
+            // remove listener from previous and attach to current model
+            if (previousModel) {
+                this.stopListening(previousModel, 'change:version', this.onModelChangeVersion);
+            }
+            this.listenTo(activeModel, 'change:version', this.onModelChangeVersion.bind(this));
         },
 
         /**
@@ -286,6 +294,32 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         isSlideLoaded: function (slideIndex) {
             return _.contains(this.loadedSlides, slideIndex);
+        },
+
+        /**
+         * Handles file version change events.
+         * Loads the type model and renders the new slide content.
+         *
+         * @param {Object} model
+         *   The changed model.
+         */
+        onModelChangeVersion: function (model) {
+            //console.log('DisplayerView.onModelChangeVersion()', 'changed:', model.changed);
+            var index = this.collection.indexOf(model),
+                slideNode = this.slideViews[index].$el;
+
+            // unload current slide content
+            this.slideViews[index].unload();
+            // load model and create new slide slide content
+            TypesRegistry.getModelType(model)
+            .then(function (ModelType) {
+                var view = new ModelType({ model: model, collection: this.collection, el: slideNode });
+                view.render().prefetch().show();
+                this.slideViews[index] = view;
+            }.bind(this),
+            function () {
+                console.warn('Cannot require a view type for', model.get('filename'));
+            });
         },
 
         /**

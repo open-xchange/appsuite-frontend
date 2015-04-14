@@ -42,12 +42,7 @@ define('io.ox/core/viewer/views/types/defaultview',  [
         render: function () {
             //console.warn('DefaultView.render()', this.model.get('filename'));
 
-            // remove content of the slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.empty();
-            }
-
-            this.$el.append(
+            this.$el.empty().append(
                 this.createNotificationNode(gt('Sorry, there is no preview available for this file.')),
                 this.createCaption()
             );

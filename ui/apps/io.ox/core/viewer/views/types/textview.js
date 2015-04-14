@@ -21,7 +21,7 @@ define('io.ox/core/viewer/views/types/textview', [
 
         render: function () {
             // quick hack to get rid of flex box
-            this.$el.css('display', 'block').append(this.createCaption());
+            this.$el.empty().css('display', 'block').append(this.createCaption());
             return this;
         },
 
