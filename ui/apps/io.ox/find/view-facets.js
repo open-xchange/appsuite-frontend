@@ -81,7 +81,7 @@ define('io.ox/find/view-facets', [
             // container node
             ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
             // adjust height by parents height (maybe tokenfield has morge than on line visible)
-            this.$el.find('ul').outerHeight(this.$el.parent().outerHeight());
+            this.$el.find('ul.classic-toolbar').outerHeight(this.$el.parent().outerHeight());
             return this;
         },
 
