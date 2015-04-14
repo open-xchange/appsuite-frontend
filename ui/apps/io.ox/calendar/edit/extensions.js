@@ -64,7 +64,8 @@ define('io.ox/calendar/edit/extensions', [
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                         baton.model.attributes.tempAttachmentIndicator = true;
                     }
-                    baton.model.unset('endTimezone');
+                    // cleanup temp timezone data without change events
+                    baton.model.unset('endTimezone', { silent: true });
                     baton.model.save().then(_.bind(baton.app.onSave, baton.app));
                 })
             );
