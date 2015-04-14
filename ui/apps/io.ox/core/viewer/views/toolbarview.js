@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .attr('title', gt('File name'))
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
-                    if (baton.model.isSourceDrive()) {
+                    if (baton.model.isFile()) {
                         this.attr({
                             title: gt('Double click to rename'),
                             'aria-label': gt('Filename, double click to rename')
@@ -328,7 +328,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
-            if ((this.model.isSourceDrive()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
+            if ((this.model.isFile()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
                 event.preventDefault();
                 ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
             }
@@ -357,7 +357,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             // draw toolbar
             var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
-                isDriveFile = model.isSourceDrive(),
+                isDriveFile = model.isFile(),
                 baton = Ext.Baton({
                     $el: toolbar,
                     model: model,

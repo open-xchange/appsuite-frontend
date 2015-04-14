@@ -33,7 +33,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             this.empty();
             // mail and PIM attachments don't support file description
-            if (!model || !model.isSourceDrive()) {
+            if (!model || !model.isFile()) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }

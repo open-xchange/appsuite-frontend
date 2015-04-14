@@ -43,7 +43,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             // mail and PIM attachments don't support versions
             // show the versions panel only if we have at least 2 versions
-            if (!model || !model.isSourceDrive() || !_.isNumber(numberOfVersions) || (numberOfVersions < 2)) {
+            if (!model || !model.isFile() || !_.isNumber(numberOfVersions) || (numberOfVersions < 2)) {
                 this.attr({ 'aria-hidden': 'true' }).addClass('hidden');
                 return;
             }

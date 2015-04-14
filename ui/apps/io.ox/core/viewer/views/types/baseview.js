@@ -83,13 +83,13 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function () {
-            if (this.model.isSourceDrive()) {
+            if (this.model.isFile()) {
                 return FilesAPI.getUrl(this.model.toJSON(), 'thumbnail', null);
 
-            } else if (this.model.isSourceMail()) {
+            } else if (this.model.isMailAttachment()) {
                 return MailAPI.getUrl(this.model.get('origData'), 'view');
 
-            } else if (this.model.isSourcePIM()) {
+            } else if (this.model.isPIMAttachment()) {
                 return AttachmentAPI.getUrl(this.model.get('origData'), 'view');
             }
             return null;

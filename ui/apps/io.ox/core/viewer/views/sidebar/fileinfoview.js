@@ -94,7 +94,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
          */
         onModelChange: function (model) {
             //console.info('FileInfoView.onModelChangeDescription()', model);
-            var baton = Ext.Baton({ model: model, data: model.isSourceDrive() ? model.toJSON() : model.get('origData') });
+            var baton = Ext.Baton({ model: model, data: model.isFile() ? model.toJSON() : model.get('origData') });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
         },
 
@@ -106,7 +106,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             // add model change listener
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.onModelChange.bind(this));
 
-            var baton = Ext.Baton({ model: this.model, data: this.model.isSourceDrive() ? this.model.toJSON() : this.model.get('origData') });
+            var baton = Ext.Baton({ model: this.model, data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData') });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
 
             return this;

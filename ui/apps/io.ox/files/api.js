@@ -44,21 +44,22 @@ define('io.ox/files/api', [
          * besides Drive model attributes.
          */
         constructor: function ( attributes, options ) {
+            attributes = attributes || {};
             var normalizedAttrs;
             // check if model is initialized with mail, pim or drive model attributes
-            if ((attributes && attributes.mail && attributes.mail.id && attributes.mail.folder_id) || (attributes.group === 'mail') || (attributes.disp === 'attachment')) {
+            if (_.isObject(attributes.mail)) {
                 // mail attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
                     file_size: attributes.size,
                     file_mimetype: attributes.content_type,
                     id: attributes.id,
-                    folder_id: attributes.mail && attributes.mail.folder_id || null,
+                    folder_id: attributes.mail.folder_id || null,
                     origData: attributes,
                     source: 'mail'
                 };
 
-            } else if (attributes && _.isNumber(attributes.attached) && _.isNumber(attributes.folder) && _.isNumber(attributes.module)) {
+            } else if (_.isNumber(attributes.attached) && _.isNumber(attributes.module)) {
                 // pim attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
@@ -73,7 +74,7 @@ define('io.ox/files/api', [
 
             } else {
                 // drive
-                normalizedAttrs = attributes || {};
+                normalizedAttrs = attributes;
                 normalizedAttrs.source = 'drive';
             }
             // call parent constructor
@@ -87,7 +88,7 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder();
+            return !this.isFolder() && this.get('source') === 'drive';
         },
 
         isImage: function (type) {
@@ -123,16 +124,12 @@ define('io.ox/files/api', [
             return this.get('locked_until') > _.now();
         },
 
-        isSourceMail: function () {
+        isMailAttachment: function () {
             return this.get('source') === 'mail';
         },
 
-        isSourcePIM: function () {
+        isPIMAttachment: function () {
             return this.get('source') === 'pim';
-        },
-
-        isSourceDrive: function () {
-            return this.get('source') === 'drive';
         },
 
         getDisplayName: function () {
@@ -159,7 +156,9 @@ define('io.ox/files/api', [
         },
 
         getFileType: function () {
-            if (!this.isFile()) return 'folder';
+            if (this.isFolder()) {
+                return 'folder';
+            }
             var extension = this.getExtension();
             for (var type in this.types) {
                 if (this.types[type].test(extension)) return type;
