@@ -148,8 +148,9 @@ define('io.ox/core/viewer/backbone', [
      *
      */
     function normalize(data) {
-        var result = {},
-            source = getFileSourceType(data);
+
+        var result = {}, source = getFileSourceType(data);
+
         if (!source) {
             console.warn('Core.Viewer.backbone: Can not determine file source.');
             return result;

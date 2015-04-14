@@ -264,7 +264,8 @@ define('io.ox/files/api', [
 
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
-    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
+    // guess 23 is "meta"
+    var allColumns = '1,3,5,20,23,700,702,703,704,705,707';
 
     /**
      * map error codes and text phrases for user feedback

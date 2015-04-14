@@ -24,7 +24,7 @@ define('plugins/portal/recentfiles/register', [
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 
-        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5 : 10, columns: '1,3,4,5,20,700,701,702,703,704' };
+        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5 : 10 };
 
         if (type === 'myfiles') {
             searchOptions.folder = settings.get('folder/infostore');
@@ -125,7 +125,8 @@ define('plugins/portal/recentfiles/register', [
                         item = $(e.currentTarget).data('item');
                     require(['io.ox/core/viewer/main'], function (viewer) {
                         filesAPI.get(item).done(function (data) {
-                            var collection = new Backbone.Collection(filesAPI.resolve(items));
+                            var models = filesAPI.resolve(items, false),
+                                collection = new Backbone.Collection(models);
                             baton = new ext.Baton({ data: data, collection: collection });
                             viewer.launch(baton);
                         });

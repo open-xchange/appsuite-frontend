@@ -225,8 +225,8 @@ define('io.ox/files/actions', [
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
-            ox.load(['io.ox/files/actions/viewer']).done(function (action) {
-                action(baton);
+            ox.load(['io.ox/core/viewer/main']).done(function (viewer) {
+                viewer.launch(baton);
             });
         }
     });

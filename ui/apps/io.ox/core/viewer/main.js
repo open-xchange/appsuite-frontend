@@ -27,13 +27,11 @@ define('io.ox/core/viewer/main', [], function () {
     *  The file list or null.
     */
     function getFileList (baton) {
-        if (!baton) { return null; }
+        if (!baton) return null;
         // temporary till we get list of models from baton directly
-        if (baton.collection) {
-            return baton.collection.models;
-        }
+        if (baton.collection) return baton.collection.models;
         // exception for Mail and PIM
-        if (_.isArray(baton)) { return baton; }
+        if (_.isArray(baton)) return baton;
         return null;
     }
 
@@ -63,7 +61,7 @@ define('io.ox/core/viewer/main', [], function () {
                 }
                 // create file collection and populate it with file models
                 this.fileCollection = new backbone.Collection();
-                this.fileCollection.set(fileList, { parse: true });
+                this.fileCollection.reset(fileList, { parse: true });
                 // set the index of the selected file (Drive only)
                 if (baton.data) {
                     this.fileCollection.setStartIndex(baton.data);

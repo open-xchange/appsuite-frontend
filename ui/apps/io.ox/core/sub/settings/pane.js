@@ -34,15 +34,8 @@ define('io.ox/core/sub/settings/pane', [
         e.preventDefault();
         var cid = target.attr('data-cid'), obj = _.cid(cid);
         popup.busy();
-        require(['io.ox/files/api', 'io.ox/files/fluid/view-detail'], function (api, view) {
-            api.get(obj).done(function (data) {
-                popup.idle().append(view.draw(data));
-            });
-            api.on('remove:version', function () {
-                // Close dialog after delete
-                dialog.close();
-            });
-        });
+        // TODO: replace by new viewer
+        if (ox.debug) console.error('No clue how to get here.', cid, obj);
     }
 
     function drawFilterInfo(folder, view) {
