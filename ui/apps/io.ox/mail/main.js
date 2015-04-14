@@ -456,7 +456,7 @@ define('io.ox/mail/main', [
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop();
+            app.threadView = new ThreadView.Desktop({ app: app });
             app.right.append(app.threadView.render().$el);
         },
 

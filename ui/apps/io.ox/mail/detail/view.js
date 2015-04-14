@@ -377,6 +377,7 @@ define('io.ox/mail/detail/view', [
 
             this.options = options || {};
             this.model = pool.getDetailModel(options.data);
+            this.app = options.app;
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
@@ -403,7 +404,7 @@ define('io.ox/mail/detail/view', [
         render: function () {
 
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, model: this.model, view: this }),
+                baton = ext.Baton({ app: this.app, data: data, model: this.model, view: this }),
                 subject = util.getSubject(data),
                 title = util.hasFrom(data) ?
                     //#. %1$s: Mail sender
