@@ -428,9 +428,10 @@ define('io.ox/mail/detail/view', [
                 }
             });
             // show breadcrumb for search results only
-            if (this.app.listView.loader.mode !== 'search') {
-                baton.disable('io.ox/mail/detail', 'breadcrumb');
-            }
+            // TODO: enable when backend/imap returns not just a virtual folder
+            // if (this.app.listView.loader.mode !== 'search') {
+            //     baton.disable('io.ox/mail/detail', 'breadcrumb');
+            // }
 
             this.$el.attr({
                 'data-cid': this.model.cid,
