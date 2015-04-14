@@ -72,9 +72,9 @@ define('io.ox/core/tk/list', [
 
             if (this.isBusy || this.complete) return;
 
-            var height = this.$el.height(),
-                scrollTop = this.$el.scrollTop(),
-                scrollHeight = this.$el.prop('scrollHeight'),
+            var height = this.$el.outerHeight(),
+                scrollTop = this.el.scrollTop,
+                scrollHeight = this.el.scrollHeight,
                 tail = scrollHeight - (scrollTop + height);
 
             // do anything?

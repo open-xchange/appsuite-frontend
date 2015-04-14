@@ -78,9 +78,9 @@ define('io.ox/core/pdf/pdfview', [
          * prepares all absolute-positioned textelements for textselection
          * by setting zIndex, margin and padding
          */
-        function prepareTextLayerForTextSelection(textOverlayNode) {
-            if (textOverlayNode) {
-                var pageChildren = textOverlayNode.children(),
+        function prepareTextLayerForTextSelection(textWrapperNode) {
+            if (textWrapperNode) {
+                var pageChildren = textWrapperNode.children(),
                     last = null,
                     childrenCount = pageChildren.length,
                     offset = '2em';
@@ -132,7 +132,7 @@ define('io.ox/core/pdf/pdfview', [
                     this.style.zIndex = childrenCount - index;
                 });
 
-                textOverlayNode.append('<div style="bottom: 0; right: 0; padding: 200% 0 0 100%; cursor: default;">&#8203;</div>');
+                textWrapperNode.append('<div style="bottom: 0; right: 0; padding: 200% 0 0 100%; cursor: default;">&#8203;</div>');
             }
         }
 
@@ -284,7 +284,7 @@ define('io.ox/core/pdf/pdfview', [
          *  is going to be rendered. The callback function is called
          *  with an array, containing the 1-based <code>Integer Numbers</code>
          *  of the rendering pages.
-         *  @param {Function} [callbacks.endRendering]
+         *  @param {Function} [callbacks.endRendering].pdf-textlayer.user-select-text
          *  The callback function that is called after a range of pages
          *  has been rendered. The callback function is called
          *  with an array, containing the 1-based <code>Integer Numbers</code>
@@ -378,14 +378,14 @@ define('io.ox/core/pdf/pdfview', [
             // set retrieved PDF page size as page node data and append correctly initialized canvas to given page node
             if (_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height)) {
                 var extentAttr = 'width="' + pageSize.width + '" height="' + pageSize.height + '" style="width:' + pageSize.width + 'px; height:' + pageSize.height + 'px"',
-                    pageNode = $('<div class="io-ox-core-pdf pdf-page" ' + extentAttr + '>'),
-                    canvasNode = $('<canvas ' + extentAttr + '>');
+                    pageNode = $('<div class="pdf-page" ' + extentAttr + '>'),
+                    canvasWrapper = $('<div class="canvas-wrapper" ' + extentAttr + '>');
 
-                pageNode.append(canvasNode);
+                pageNode.append(canvasWrapper.append($('<canvas ' + extentAttr + '>')));
 
                 if (options.textOverlay) {
-                    var textOverlayNode = $('<div class="pdf-textlayer user-select-text" ' + extentAttr + '>');
-                    pageNode.append(textOverlayNode);
+                    var textWrapper = $('<div class="text-wrapper user-select-text" ' + extentAttr + '>');
+                    pageNode.append(textWrapper);
                 }
 
                 jqParentNode.append(pageNode);
@@ -400,11 +400,11 @@ define('io.ox/core/pdf/pdfview', [
          * Sets the zoom factor for one or all pages
          *
          * @param {Number} pageZoom
-         *  The zoom to set at one or all pages
+         *  The zoom factor to set for one or all pages
          *
          * @param {Number} [pageNumber]
-         *  The optional 1-based page number of the page to set the zoom for.
-         *  If not given, the zoom of all pages is set to the given zoom factor
+         *  The optional 1-based page number of the page to set the zoom factor for.
+         *  If not given, the zoom factor of all pages is set to the given zoom factor
          *
          *  returns {Number}
          *   The current pageZoom or 1.0, if no zoom has been set before
@@ -518,20 +518,22 @@ define('io.ox/core/pdf/pdfview', [
                     if (pageNode.children().length) {
                         var viewport = getPageViewport(pdfjsPage, pageZoom),
                             pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
-                            canvasNode = pageNode.children('canvas'),
-                            textOverlayNode = pageNode.children('.pdf-textlayer'),
+                            canvasWrapperNode = pageNode.children('.canvas-wrapper'),
+                            canvasNode = canvasWrapperNode.children('canvas'),
+                            textWrapperNode = pageNode.children('.text-wrapper'),
                             pdfTextBuilder = null;
 
                         canvasNode.empty();
 
                         pageNode.attr(pageSize).css(pageSize);
+                        canvasWrapperNode.attr(pageSize).css(pageSize);
                         canvasNode.attr(pageSize).css(pageSize);
 
-                        if (textOverlayNode.length) {
-                            textOverlayNode.empty().attr(pageSize).css(pageSize);
+                        if (textWrapperNode.length) {
+                            textWrapperNode.empty().attr(pageSize).css(pageSize);
 
                             pdfTextBuilder = new PDFTextLayerBuilder({
-                                textLayerDiv: textOverlayNode[0],
+                                textLayerDiv: textWrapperNode[0],
                                 viewport: viewport,
                                 pageIndex: pageNumber });
                         }
@@ -546,7 +548,7 @@ define('io.ox/core/pdf/pdfview', [
                                     pdfjsPage.getTextContent().then( function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
                                         pdfTextBuilder.render(TEXT_LAYER_RENDER_DELAY);
-                                        prepareTextLayerForTextSelection(textOverlayNode);
+                                        prepareTextLayerForTextSelection(textWrapperNode);
                                         return def.resolve();
                                     }) : def.resolve());
                         });

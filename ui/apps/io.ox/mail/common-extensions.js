@@ -287,6 +287,18 @@ define('io.ox/mail/common-extensions', [
             };
         }()),
 
+        breadcrumb: function (baton) {
+            var section;
+            this.append(
+                section = $('<section class="breadcrumb">')
+            );
+            require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
+                section.append(
+                    new BreadcrumbView({ folder: baton.data.folder_id, app: baton.app, label: gt('Saved in:') }).render().$el
+                );
+            });
+        },
+
         attachmentList: (function attachmentList() {
 
             function drawInlineLinks(node, data) {

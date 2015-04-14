@@ -61,7 +61,9 @@ module.exports = function (grunt) {
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',
-                            'velocity/velocity.min.js'
+                            'velocity/velocity.min.js',
+                            'moment/moment.js',
+                            'moment/locale/*'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
@@ -71,7 +73,6 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
-                            'moment/min/moment-with-locales.js',
                             'moment-timezone/builds/moment-timezone-with-data.js'
                         ],
                         cwd: 'bower_components',

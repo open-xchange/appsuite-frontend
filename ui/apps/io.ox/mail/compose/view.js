@@ -246,55 +246,6 @@ define('io.ox/mail/compose/view', [
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
-    /*
-     * extension point for contact picture
-     */
-    ext.point(POINT + '/autoComplete').extend({
-        id: 'contactPicture',
-        index: 100,
-        draw: extensions.contactPicture
-    });
-
-    /*
-     * extension point for display name
-     */
-    ext.point(POINT + '/autoComplete').extend({
-        id: 'displayName',
-        index: 200,
-        draw: extensions.displayName
-    });
-
-    // /*
-    //  * extension point for halo link
-    //  */
-    ext.point(POINT + '/autoComplete').extend({
-        id: 'emailAddress',
-        index: 300,
-        draw: extensions.emailAddress
-    });
-
-    /*
-     * extension point for autocomplete item
-     */
-    ext.point(POINT + '/autoCompleteItem').extend({
-        id: 'autoCompleteItem',
-        index: 100,
-        draw: function (baton) {
-            this.addClass('io-ox-mail-compose-contact');
-            // contact picture / display name / email address
-            ext.point(POINT + '/autoComplete').invoke('draw', this, baton);
-        }
-    });
-
-    /*
-     * extension point for a token
-     */
-    ext.point(POINT + '/token').extend({
-        id: 'token',
-        index: 100,
-        draw: extensions.tokenPicture
-    });
-
     var MailComposeView = Backbone.View.extend({
 
         className: 'io-ox-mail-compose container',
@@ -381,10 +332,16 @@ define('io.ox/mail/compose/view', [
         fetchMail: function (obj) {
 
             var self = this,
-            mode = obj.mode;
+                mode = obj.mode;
+
             delete obj.mode;
 
-            if (/(compose|edit)/.test(mode)) {
+            if (obj.initial === false) {
+                obj.attachments = new Backbone.Collection(_.clone(obj.attachments));
+                this.model.set(obj);
+                obj = null;
+                return $.when();
+            } else if (/(compose|edit)/.test(mode)) {
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
                 obj = _(obj).map(function (o) {
@@ -431,6 +388,7 @@ define('io.ox/mail/compose/view', [
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
                 self.model.set('attachments', attachmentCollection);
+                obj = data = attachmentCollection = null;
             });
         },
 
@@ -923,7 +881,6 @@ define('io.ox/mail/compose/view', [
         },
 
         setBody: function (content) {
-
             if (this.model.get('initial')) {
                 // remove white-space at beginning except in first-line
                 content = String(content || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
@@ -932,7 +889,10 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature(this.model.get('signature'));
+
+            if (this.model.get('initial')) {
+                this.setSelectedSignature(this.model.get('signature'));
+            }
         },
 
         getMobileSignature: function () {
@@ -995,7 +955,6 @@ define('io.ox/mail/compose/view', [
         },
 
         setSignature: function (signature) {
-
             var text,
                 isHTML = !!this.editor.find;
 
@@ -1031,29 +990,25 @@ define('io.ox/mail/compose/view', [
         },
 
         setMail: function () {
-
-            var self = this,
-                data = this.model.toJSON();
+            var self = this;
 
             this.model.setInitialMailContentType();
 
             return this.changeEditorMode().then(function () {
                 return self.signaturesLoading;
             }).done(function () {
-                if (data.replaceBody !== 'no') {
-                    var mode = self.model.get('mode');
-                    // set focus in compose and forward mode to recipient tokenfield
-                    if (/(compose|forward)/.test(mode)) {
-                        self.$el.find('.tokenfield:first .token-input').focus();
-                    } else {
-                        self.editor.focus();
-                    }
-                    if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
-                        self.toggleTokenfield('cc');
-                    }
-                    self.setBody(self.model.getContent());
-                    self.model.dirty(false);
+                var mode = self.model.get('mode');
+                // set focus in compose and forward mode to recipient tokenfield
+                if (/(compose|forward)/.test(mode)) {
+                    self.$el.find('.tokenfield:first .token-input').focus();
+                } else {
+                    self.editor.focus();
                 }
+                if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
+                    self.toggleTokenfield('cc');
+                }
+                self.setBody(self.model.getContent());
+                self.model.dirty(false);
             });
         },
 

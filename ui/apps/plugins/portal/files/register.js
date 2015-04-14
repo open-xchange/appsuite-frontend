@@ -83,16 +83,21 @@ define('plugins/portal/files/register', [
                 }
             }
 
+            content.on('click keypress', { file: baton.data }, function (e) {
+                // ignore any keys except 'enter'
+                if (e.type === 'keypress' && e.which !== 13) return;
+                // stop propagation to avoid side-popup
+                e.stopPropagation();
+                // open viewer
+                require(['io.ox/core/viewer/main'], function (viewer) {
+                    viewer.launch([e.data.file]);
+                });
+            });
+
             this.append(content);
         },
 
-        draw: function (baton) {
-            var popup = this.busy();
-            require(['io.ox/files/fluid/view-detail'], function (view) {
-                api.get(baton.data).done(function (data) {
-                    popup.idle().append(view.draw(data));
-                });
-            });
+        draw: function () {
         }
     });
 });

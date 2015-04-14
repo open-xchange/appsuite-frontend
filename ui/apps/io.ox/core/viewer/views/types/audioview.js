@@ -123,6 +123,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
                 audio.addClass('player-hidden');
                 audio.find('source').attr('src', '');
             }
+
+            return this;
         },
 
         /**

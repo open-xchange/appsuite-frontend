@@ -32,7 +32,7 @@ define('io.ox/core/viewer/main', [], function () {
             return baton.collection.models;
         }
         // exception for Mail and PIM
-        if (_.isArray(baton)) { return baton; }
+        if (_.isArray(baton)) return baton;
         return null;
     }
 
@@ -56,6 +56,8 @@ define('io.ox/core/viewer/main', [], function () {
                 var fileList = getFileList(baton);
                 if (!fileList) {
                     console.error('Core.Viewer.main.launch(): no files to preview.');
+                    el.remove();
+                    el = null;
                     return;
                 }
                 // create file collection and populate it with file models

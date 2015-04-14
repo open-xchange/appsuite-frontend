@@ -141,11 +141,12 @@
         background-origin: border-box;
     }
 
-    .busy-indicator(@height) {
+    .busy-indicator(@height, @float: none) {
         .busy-indicator {
             padding-top: 40px;
             height: @height;
             border-bottom: 0;
+            float: @float;
         }
     }
 
@@ -174,7 +175,7 @@
             .thumbnail(@thumbnail_height);
         }
 
-        .icon-thumbnail.default-icon  {
+        .icon-thumbnail.default-icon {
 
             display: table;
             width: 101%; // yep, 101, fixes layout glitch in chrome
@@ -204,7 +205,7 @@
             word-break: break-word;
         }
 
-        .busy-indicator(@thumbnail_height);
+        .busy-indicator(@thumbnail_height, left);
 
         //
         // Checkbox handling
@@ -267,7 +268,7 @@
             display: none;
         }
 
-        .busy-indicator(@thumbnail_height);
+        .busy-indicator(@thumbnail_height, left);
 
         //
         // Checkbox handling
@@ -341,457 +342,6 @@
     &.has-focus .selected .locked { color: #fff; }
 }
 
-.files-wrapper {
-
-    @innerHeight: 110px;
-    @outerWidth:  138px;
-
-    min-height: 100px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    .overflow(auto);
-    -webkit-overflow-scrolling: touch;
-    -webkit-tap-highlight-color: transparent;
-
-    .ico-thumbnail {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border: 1px solid rgba(0,0,0,.2);
-        .box-shadow(0 1px 3px rgba(0,0,0,.1));
-        //IE9
-        margin: 6px;
-    }
-
-    .files-scrollable-pane {
-        outline: 0;
-        padding: 15px 20px;
-        width: 100%;
-        // for busy animation
-        min-height: 200px;
-    }
-
-    // simple hover (not selected)
-    //@color-hover: #F6F6F6; // light grey
-    @color-hover: #F0F0F0; // light grey
-
-    // selected (not focussed)
-    @color-selected: #ddd; // grey
-    @color-selected-hover: darken(@color-selected, 10%); // dark grey
-
-    // selected (focussed)
-    @color-focus-selected: #08c; // blue
-    @color-focus-selected-hover: darken(@color-focus-selected, 10%); // dark blue
-
-
-    .files-container {
-
-        .img-thumbnail {
-            //overwrite bootstrap style
-            border-radius: 0;
-        }
-
-        text-decoration: none;
-        // appled when container has focus (blue based colors)
-        &:focus {
-            outline: 0;
-            &.view-list {
-                .file-cell {
-                    &.selected  {
-                        background-color: @color-focus-selected;
-                        &:hover, &.marked {
-                            background-color: @color-focus-selected-hover;
-                        }
-                        i.icon-lock {
-                            color: white
-                        }
-                        color: #fff;
-                    }
-                    &.selected span {
-                        color: #fff;
-                    }
-                }
-            }
-            &.view-icon {
-                .file-cell {
-                    &.selected {
-                        background-color: @color-focus-selected;
-                        color: white;
-                        &:hover, &.marked {
-                            background-color: @color-focus-selected-hover;
-                        }
-                    }
-                }
-            }
-            &.view-tile {
-                .file-cell {
-                    &.selected {
-                        .preview-cover {
-                            border-color: @color-focus-selected;
-                        }
-                        color: @color-focus-selected
-                    }
-                    &.selected:hover, &.selected.marked {
-                        .preview-cover {
-                            border-color: @color-focus-selected-hover;
-                        }
-                        color: @color-focus-selected-hover;
-                    }
-                }
-            }
-        }
-
-        &.fixed {
-            position: fixed;
-        };
-        &.checkboxes-hidden {
-            &.view-list {
-                .file-cell{
-                    .checkbox {
-                        display:none;
-                    }
-                    .preview-cover {
-                        margin-left: 10px;
-                    }
-
-                    .details {
-                        padding-left: 60px;
-                    }
-                }
-            }
-        }
-
-        // applied when container not focussed (grey based colors)
-        &.view-list {
-
-            .file-cell {
-                width: 100%;
-                cursor: pointer;
-                text-decoration: none;
-                color: black;
-                padding: 2px 0;
-
-                .user-select(none);
-
-                //hidden ones
-                .preview {
-                    display: none;
-                }
-
-                //parts
-                .checkbox {
-                    width: 8px;
-                    height: 34px;
-                    padding: 9px 0 0 16px;
-                    margin-top: 4px;
-                    position: absolute;
-                }
-
-                .preview-cover {
-                    .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.102) inset);
-                    margin-left: 40px;
-                    margin-top: 2px;
-                    float: left;
-                    width: 40px;
-                    height: 40px;
-                    text-align: center;
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-color: white;
-
-                    //generic icons
-                    i {
-                        color: #ccc;
-                        font-size: 32px;
-                        line-height: 1.3em;
-                    }
-                    .fa-film {
-                        font-size: 28px;
-                    }
-                    .fa-music {
-                        padding-right: 4px;
-                    }
-                    i.file-type-doc { color: #0092D0; }
-                    i.file-type-xls { color: #2FB145; }
-                    i.file-type-ppt { color: #ED4D21; }
-                }
-
-                .details {
-                    padding-left: 100px;
-                }
-
-                //text nodes
-                span {
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    word-wrap: break-word;
-                    line-height: 3.2em;
-                    &.not-selectable {
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
-                }
-
-                .title {
-                    float: left;
-                    width: 60%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    i.fa-lock {
-                        margin-right: 5px;
-                        font-size: 14px;
-                        color: #c00;
-                    }
-                }
-
-                .title-short { display: none; }
-
-                .modified, .size {
-                    color: #5E5E5E;
-                    font-weight: 300;
-                    float: right;
-                    text-align: right;
-                }
-
-                .size {
-                    width: 60px;
-                }
-                .modified {
-                    width: 150px;
-                    margin-right: 13px;
-                }
-
-                //highlighting
-                &.selected {
-                    outline: 0;
-                    background-color: @color-selected;
-                    &:hover {
-                        color: black;
-                        background-color: @color-selected-hover;
-                        .image-effect(0.9);
-                    }
-                }
-                &:hover, &.marked {
-                    background-color: @color-hover;
-                    .image-effect(0.9);
-                }
-            }
-        }
-
-        &.view-icon {
-            margin-right: -13px;
-
-            .file-cell {
-                text-decoration:none;
-
-                width: @outerWidth;
-                height: @innerHeight + 59;
-                // 18px allows 4 columns on IPhone
-                margin: 0 18px 13px 0;
-                cursor: pointer;
-                text-decoration: none;
-
-                .preview-cover {
-                    display: none;
-                }
-
-                .preview {
-
-                    width: @outerWidth;
-                    height: @innerHeight + 20;
-                    display: table-cell;
-                    text-align: center;
-                    vertical-align: middle;
-                    position: relative;
-
-                    img {
-                        // till backend fix
-                        max-height: 90px;
-                        max-width: 120px;
-                    }
-
-                    img.lazy {
-                        visibility: hidden;
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                    }
-
-                    background-size: auto;
-                    background-repeat: no-repeat;
-                    background-position: center;
-
-                    .fa {
-                        .ico-thumbnail;
-                        line-height: 100px;
-                        font-size: 48px;
-                        width: 75px;
-                        height: 100px;
-                        color: #bbb;
-                    }
-
-                    i.file-type-doc { color: #0092D0; }
-                    i.file-type-xls { color: #2FB145; }
-                    i.file-type-ppt { color: #ED4D21; }
-                }
-
-                .details {
-                    text-align: center;
-                }
-
-                .size, .modified, .checkbox {
-                    display: none;
-                }
-
-                .title {
-                    text-align: center;
-                    word-wrap: break-word;
-                    overflow: hidden;
-                    height: 2.5em;
-                    font-size: 13px;
-                    line-height: 1.25em;
-                    // no shadows please!
-                    //color: black;
-                    margin: 0.5em 10px 0.5em 10px;
-
-                    i.fa-lock {
-                        margin-right: 5px;
-                        font-size: 14px;
-                        color: #c00;
-                    }
-                }
-
-                .title-long { display: none; }
-
-                //image
-                &.selected {
-                    background-color: @color-selected;
-                    &:hover {
-                        background-color: @color-selected-hover;
-                    }
-                    }
-                &:hover, &.marked {
-                    background-color: @color-hover;
-                }
-             }
-        }
-
-        &.view-tile {
-            @tile: 192px;
-            @tile-border: 8px;
-            @tile-icon-size: 32px;
-
-            .view-icon;
-            .file-cell {
-                width: @tile;
-                height: @tile;
-                margin-right: 8px;
-                margin-bottom: 8px;
-
-                .img-thumbnail {
-                    border: 1px solid black;
-                    padding: 0 0 0 0;
-                }
-
-                .preview {
-                    display: none;
-                }
-
-                .preview-cover {
-                    height: 100%;
-                    width: 100%;
-                    float:left;
-                    display: inline;
-                    text-align: center;
-                    .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.102) inset);
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    background-position: center;
-
-                    .fa {
-                        font-size: 100px;
-                        line-height: @tile;
-                        color: #bbb;
-                    }
-
-                    .fa-music {
-                        padding-right: 10px;
-                    }
-                }
-                .size, .modified, .checkbox, .title, .details {
-                    display: none;
-                }
-
-                .bordered {
-                    background-color: transparent;
-                    .preview-cover .fa {
-                        line-height: @tile - (2 * @tile-border);
-                    }
-                    .preview-cover {
-                        border: @tile-border solid #ddd;
-                        background-origin: border-box;
-                        position: relative;
-                        &:before {
-                            position: absolute;
-                            top: 2px;
-                            right: 10px;
-                            font-size: @tile-icon-size;
-                            font-family: 'FontAwesome';
-                            font-weight: 100;
-                            // fa-check-circle
-                            content: '\f05d';
-                        }
-                    }
-                    .image-effect(0.9);
-                }
-
-                &.selected {
-                    .bordered;
-                    .preview-cover {
-                        border-color: @color-selected
-                    };
-                    color: @color-selected;
-                }
-                //show short title on hover
-                &:hover, &.marked {
-                    .bordered;
-                    .preview-cover {
-                        border-color: @color-hover;
-                        // disable checked icon on hover (unselected)
-                        &:before {
-                            content: '';
-                        }
-                    }
-                }
-
-                &.selected:hover, &.selected.marked {
-                    .bordered;
-                    .preview-cover {
-                       border-color: @color-selected-hover;
-                    }
-                    color: @color-selected-hover;
-
-                }
-
-            }
-        }
-    }
-
-    .files-container .alert {
-        margin-right: 13px;
-    }
-
-    .breadcrumb a {
-        cursor:pointer;
-    }
-}
-
 .margin-bottom {
     bottom: 68px;
 }
@@ -839,150 +389,6 @@
     margin: 10px 10px 55px 10px;
 }
 
-.file-details {
-
-    max-width: 900px;
-
-    .history,
-    .versiontable,
-    .uploadbutton {
-        display: none;
-    }
-
-    .version-button {
-        font-weight: normal;
-        font-size: @inline-link-font-size;
-    }
-
-    .versiontable {
-
-        margin-top: 6px;
-
-        .createdby,
-        .creationdate,
-        .last_modified,
-        .size {
-            white-space:nowrap;
-        }
-        .createdby {
-            padding-right: 8px;
-        }
-        .dropdown {
-            display: inline-block;
-            margin-right: 7px;
-            float: left;
-        }
-    }
-
-    .title {
-        margin-bottom: 0.5em;
-        word-wrap: break-word;
-        outline: 0;
-    }
-
-    .description {
-        font-family: monospace, 'Courier new';
-        white-space: pre-wrap;
-        margin: 26px 0;
-        min-height: 30px;
-    }
-
-    .preview {
-
-        width: 100%;
-        margin: 26px 0;
-
-        .preview-plaintext {
-            font-family: monospace;
-            font-size: 13px;
-            width: 100%;
-            padding: 13px;
-            border: 1px dotted silver;
-            white-space: pre-wrap;
-            cursor: auto;
-            word-break: break-all;
-            .user-select(text);
-        }
-    }
-
-    .comment {
-        clear:both;
-        padding-top: 8px;
-    }
-
-    form {
-        margin: 0;
-
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .uploadbutton {
-            margin-left: 5px;
-        }
-    }
-
-    .buttons {
-        margin-bottom: 10px;
-
-        a {
-            margin-right: 10px;
-        }
-    }
-
-    .version.info .versionLabel {
-        font-weight: bold;
-    }
-
-    .version {
-        padding: 5px 5px 10px 5px;
-
-        .span6 div a {
-            word-break: break-all;
-            word-wrap: break-word;
-        }
-
-        .dropdown a {
-            word-break: break-all;
-        }
-
-    }
-
-    .version-comment {
-        white-space: pre-wrap;
-        color: #888;
-    }
-
-    .dragout {
-        color: @text-color;
-        cursor: pointer;
-    }
-
-    .dragout:focus,
-    .dragout:hover {
-        text-decoration: none;
-    }
-
-    .io-ox-inline-links:first-child {
-        margin: 0 0 20px 0;
-    }
-
-    .modal-header {
-        h1 { font-size: 20px;}
-    }
-
-}
-
-.create-file {
-    .fileForm {
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-    }
-}
-
 .dndinfo {
     margin-top: 10px;
 }
@@ -1011,121 +417,15 @@ ul.breadcrumb li.prefix {
     white-space: nowrap;
 }
 
-.files-create { margin: 0; }
-
 // small screens
 
-.width-less-than-768 {
-    .files-wrapper  {
-        .files-container {
-            //use two rows
-            &.view-list {
-                .file-cell {
-                    span {
-                        line-height: 1.6em;
-                        &.not-selectable {
-                            &:hover {
-                                text-decoration: none;
-                            }
-                        }
-                    }
-                    .title {
-                        width: 100%;
-                    }
-                    .size {
-                        float: left;
-                        text-align: left;
-                    }
-                }
-            }
-        }
-    }
-}
-
 .width-less-than-480 {
+
     #window-content-top {
         #inline-actions-ms {
             margin: 0 30px 0 30px;
             .summary {
                 font-size: 12pt;
-            }
-        }
-    }
-
-    .files-wrapper  {
-        .files-container {
-            &.view-icon {
-                margin-right: 0;
-            }
-        }
-        .files-scrollable-pane {
-            //reduce padding, margin, right (27px)
-            padding: 0;
-            .inline-actions {
-                margin: 12px 0 12px 12px;
-                a {
-                    margin-bottom: 10px;
-                }
-            }
-        }
-
-        .files-container {
-
-            &.view-list {
-                .file-cell {
-                    &.selected {
-                        background-color: #ddd;
-                        .image-effect();
-                    }
-                    &:hover {
-                        background-color: #F6F6F6;
-                        .image-effect();
-                    }
-                    &.selected:hover {
-                        background-color: #ccc;
-                        .image-effect();
-                    }
-                    &.selected span {
-                        color: #000;
-                    }
-                    .modified {
-                        width: 100px;
-                    }
-                }
-            }
-            &.view-icon {
-                .file-cell {
-                    width: 27%;
-                    height: 150px;
-                    margin: 10px;
-                    .preview img {
-                        max-width: 100%;
-                        max-height: 100%;
-                    }
-                    &:hover {
-                        border: 0;
-                        .preview-border {
-                            border: 0;
-                        }
-                    }
-                    &.selected {
-                        .image-effect();
-                    }
-                }
-            }
-            &.view-tile {
-                margin: 0;
-                .file-cell {
-                    width: 50%;
-                    margin: 0;
-                    &:hover {
-                        border: inherit;
-                    }
-                    &.selected {
-                        border: 0;
-                        .image-effect();
-                    }
-                }
             }
         }
     }
@@ -1189,10 +489,6 @@ ul.breadcrumb li.prefix {
     }
 }
 
-@media all and (max-width: 768px), all and (max-device-width: 768px)  {
-    .width-less-than-768;
-}
-
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
     .width-less-than-480;
 }
@@ -1208,7 +504,7 @@ ul.breadcrumb li.prefix {
     }
 }
 
- .io-ox-files-main .io-ox-dialog-popup .modal-body { overflow-x: hidden; }
+.io-ox-files-main .io-ox-dialog-popup .modal-body { overflow-x: hidden; }
 
 //io.ox/files/listview, io.ox/files/common-extensions
 .file-item {

@@ -27,7 +27,7 @@ define('io.ox/find/view-token', [
                 dropdown: $()
             };
 
-            this.api = this.$el.parent().find('.tokenfield.tt-input').data('bs.tokenfield');
+            this.api = this.$el.closest('.tokenfield').find('input.tokenfield').data('bs.tokenfield');
 
             // redraw on option change
             this.listenTo(this.model, 'change:option', _.bind(this.render, this));

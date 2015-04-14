@@ -13,11 +13,13 @@
  */
 
 define('io.ox/core/tk/typeahead', [
+    'io.ox/core/extensions',
     'io.ox/core/api/autocomplete',
+    'io.ox/contacts/api',
     'settings!io.ox/contacts',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
-], function (AutocompleteAPI, settings) {
+], function (ext, AutocompleteAPI, contactAPI, settings) {
 
     'use strict';
 
@@ -64,7 +66,8 @@ define('io.ox/core/tk/typeahead', [
             // lazyload selector
             lazyload: null,
             // call typeahead function in render method
-            init: true
+            init: true,
+            extPoint: 'io.ox/core/tk/typeahead'
         },
 
         initialize: function (o) {
@@ -82,6 +85,61 @@ define('io.ox/core/tk/typeahead', [
 
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
+
+            this.options.drawAutocompleteItem = function (result) {
+                ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', this, result.model);
+            };
+
+            /*
+             * extension point for contact picture
+             */
+            ext.point(o.extPoint + '/autoCompleteItem').extend({
+                id: 'contactPicture',
+                index: 100,
+                draw: function (participant) {
+                    var node;
+                    this.append(
+                        node = $('<div class="contact-image lazyload">')
+                            .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
+                    );
+                    // apply picture halo lazy load
+                    contactAPI.pictureHalo(
+                        node,
+                        participant.toJSON(),
+                        { width: 42, height: 42 }
+                    );
+                }
+            });
+
+            /*
+             * extension point for display name
+             */
+            ext.point(o.extPoint + '/autoCompleteItem').extend({
+                id: 'displayName',
+                index: 200,
+                draw: function (participant) {
+                    this.append(
+                        $('<div class="recipient-name">').text(participant.getDisplayName())
+                    );
+                }
+            });
+
+            // /*
+            //  * extension point for halo link
+            //  */
+            ext.point(o.extPoint + '/autoCompleteItem').extend({
+                id: 'emailAddress',
+                index: 300,
+                draw: function (participant) {
+                    this.append(
+                        $('<div class="ellipsis email">').append(
+                            $.txt(participant.getTarget() + ' '),
+                            participant.getFieldName() !== '' ?
+                                $('<span style="color: #888;">').text('(' + participant.getFieldName() + ')') : participant.getTypeString()
+                        )
+                    );
+                }
+            });
 
             this.api = new AutocompleteAPI(o.apiOptions);
 
@@ -113,6 +171,7 @@ define('io.ox/core/tk/typeahead', [
                     if (!self.registered) {
                         var dateset = this;
                         // only way to get dateset reference and listen for 'rendered' event
+                        // hint: used for 'delayedautoselect' option in core/tk/tokenfield
                         dateset.onSync('rendered', function () {
                             var dropdown = dateset.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
                                 emptyAction = dropdown.find('.tt-dataset-0').is(':empty'),
@@ -138,14 +197,17 @@ define('io.ox/core/tk/typeahead', [
                     }
                 }
             }];
-
-            this.$el.attr({ tabindex: this.options.tabindex, placeholder: this.options.placeholder });
         },
 
+        // hint: called with custom context via prototype
         render: function () {
             var o = this.options,
                 self = this;
-            this.$el.on({
+
+            this.$el.attr({
+                tabindex: this.options.tabindex,
+                placeholder: this.options.placeholder
+            }).on({
                 'typeahead:opened': function () {
                     if (_.isFunction(o.cbshow)) o.cbshow();
                 },
@@ -161,9 +223,11 @@ define('io.ox/core/tk/typeahead', [
                 },
                 'blur': o.blur
             });
+
             if (this.options.init) {
                 this.$el.typeahead.apply(this.$el, this.typeaheadOptions);
             }
+
             return this;
         }
 

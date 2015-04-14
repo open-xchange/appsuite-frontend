@@ -19,6 +19,8 @@ define('io.ox/find/view-searchbox', [
 
     var AutocompleteView = Backbone.View.extend({
 
+        _height: {},
+
         initialize: function (props) {
             // app, win, model references
             _.extend(this, props);
@@ -30,31 +32,17 @@ define('io.ox/find/view-searchbox', [
                 tokenfield: new Tokenfield(_.extend(props, { parent: this }))
             };
 
-            // set context for global event handler
-            this.retrigger = _.bind(this.retrigger, this);
+            // register
+            this.register();
             return this;
         },
 
         render: function () {
             // render subview
             this.ui.tokenfield.render();
-            // register additional handlers
-            this.register();
+            // default height
+            this._height.initial = this._height.current = this.$el.outerHeight();
             return this;
-        },
-
-        retrigger: function (e) {
-            this.trigger(e.type, e);
-        },
-
-        // register additional handlers
-        register: function () {
-            // hide when last token was removed
-            this.ui.tokenfield
-                .getField()
-                .on('tokenfield:removedtoken',
-                    this.retrigger
-                );
         },
 
         show: function () {
@@ -65,6 +53,21 @@ define('io.ox/find/view-searchbox', [
 
         reset: function () {
             this.ui.tokenfield.reset();
+        },
+
+        // show input placeholder only on empty tokenfield
+        _onResize: function () {
+            var self = this;
+            _.defer(function () {
+                var delta = self.$el.height() - self._height.current;
+                if (!delta) return;
+                self._height.current = self.$el.height();
+                self.trigger('resize', delta);
+            });
+        },
+
+        register: function () {
+            this.ui.tokenfield.on('tokenfield:createdtoken tokenfield:removedtoken', _.bind(this._onResize, this));
         },
 
         isEmpty: function () {

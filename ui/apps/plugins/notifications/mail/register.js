@@ -24,54 +24,38 @@ define('plugins/notifications/mail/register', [
 
     'use strict';
 
-    //add a badge to mailapp in the topbar
+    function filter(model) {
+        return /^default0\D/.test(model.id) && !account.is('spam|trash', model.id);
+    }
+
+    var update = _.debounce(function () {
+
+        var app = ox.ui.apps.get('io.ox/mail') || ox.ui.apps.get('io.ox/mail/placeholder');
+        if (!app) return;
+
+        // get relevant folder models and sum up unread messages
+        var count = _(folderApi.pool.models)
+            .chain()
+            .filter(filter)
+            .reduce(function (sum, model) {
+                return sum + (model && model.get('unread')) || 0;
+            }, 0)
+            .value();
+
+        // don't let the badge grow infinite
+        if (count > 99) count = '99+';
+
+        //#. %1$d number of notifications
+        app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });
+
+    }, 100);
+
+    // add a badge to mailapp in the topbar
     ext.point('io.ox/core/notifications/badge').extend({
         id: 'mail',
         index: 100,
         register: function () {
-            var models = {};
-
-            _(folderApi.pool.models).each(function (model, key) {
-                //foldername starts with inbox
-                if (key.match(/^default0\/INBOX/) && !account.is('spam', key)) {
-                    models[key] = model;
-                }
-            });
-            var update = _.debounce(function () {
-                var app = ox.ui.apps._byId['io.ox/mail'] || ox.ui.apps._byId['io.ox/mail/placeholder'];
-                if (!app ) {
-                    return;
-                }
-
-                var count = 0;
-                _(models).each(function (model) {
-                    if (model && model.get('unread')) {
-                        count = count + model.get('unread');
-                    }
-                });
-
-                //don't let the badge grow infinite
-                if (count > 99) {
-                    count = '99+';
-                }
-
-                //#. %1$d number of notifications
-                app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });
-            }, 300);
-
-            _(models).each(function (folderModel) {
-                folderModel.on('change:unread', update);
-            });
-
-            $(folderApi.pool).on('folder-model-added', function (e, key) {
-                if (key.match(/^default0\/INBOX/) && !account.is('spam', key)) {
-                    var model = folderApi.pool.models[key];
-                    models[key] = model;
-                    model.on('change:unread', update);
-                    //when a foldertree is loaded, many new folders are added, no need to call update that often
-                    update();
-                }
-            });
+            folderApi.on('change:unread', update);
             update();
         }
     });

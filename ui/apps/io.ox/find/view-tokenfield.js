@@ -69,6 +69,20 @@ define('io.ox/find/view-tokenfield', [
         flow: extensions.click
     });
 
+    /*
+     * extension point for a token
+     */
+    ext.point(POINT + '/token').extend({
+        id: 'token',
+        index: 100,
+        draw: function (model, e) {
+            if (!e.attrs.view) {
+                e.attrs.view = new TokenView({ model: model, el: e.relatedTarget });
+            }
+            e.attrs.view.render();
+        }
+    });
+
     var TokenfieldExtView = Backbone.View.extend({
 
         // tokenfield api
@@ -100,12 +114,12 @@ define('io.ox/find/view-tokenfield', [
             // extend basic tokenfieldview
             this.ui.view = new Tokenfield({
                 // hybrid views options
+                extPoint: POINT,
                 id: guid,
                 placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
                 dnd: false,
-                tokenview: TokenView,
                 // tokenfield options
                 hint: false,
                 allowEditing: false,
@@ -212,23 +226,30 @@ define('io.ox/find/view-tokenfield', [
             return this;
         },
 
+        retrigger: function (e) {
+            this.trigger(e.type, e);
+        },
+
         // register additional handlers
         register: function () {
-            this.ui.field.on({
-                'tokenfield:initialize': function () {
-                    //console.log('%c' + 'tokenfield:initialize', 'color: white; background-color: blue');
-                },
-                'tokenfield:clickedtoken': function () {
-                    //console.log('%c' + 'tokenfield:clickedtoken', 'color: white; background-color: blue');
-                },
-                'tokenfield:createtoken': function (e) {
-                    // stop creation when cancel button is clicked while dropdown is open
-                    if ($(document.activeElement).is('body')) e.preventDefault();
-                    //console.log('%c' + 'tokenfield:createtoken', 'color: white; background-color: blue');
-                },
-                'tokenfield:createdtoken': function () {
-                    //console.log('%c' + 'tokenfield:createdtoken', 'color: white; background-color: blue');
-                },
+            function preventOnCancel (e) {
+                if ($(document.activeElement).is('body')) e.preventDefault();
+            }
+
+            //retrigger events on view
+            this.ui.field.on([
+                'tokenfield:initialize',
+                'tokenfield:clickedtoken',
+                'tokenfield:createtoken',
+                'tokenfield:createdtoken',
+                'tokenfield:removetoken',
+                'tokenfield:removedtoken'
+                ].join(' '), _.bind(this.retrigger, this));
+
+            //
+            this.on({
+                // stop creation when cancel button is clicked while dropdown is open
+                'tokenfield:createtoken': preventOnCancel,
                 // show placeholder only when search box is empty
                 'tokenfield:createdtoken tokenfield:removedtoken': _.bind(this.setPlaceholder, this),
                 // try to contract each time a token is removed
@@ -238,8 +259,9 @@ define('io.ox/find/view-tokenfield', [
         },
 
         removedToken: function (e) {
-            var token = e.attrs;
-            token.model.deactivate();
+            _([].concat(e.attrs)).each(function (el) {
+                el.model.deactivate();
+            });
             this.setFocus();
         },
 
@@ -248,8 +270,9 @@ define('io.ox/find/view-tokenfield', [
         },
 
         isEmpty: function () {
+            var none = !this.model.manager.getActive().length;
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
+            return none && this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
         },
 
         reset: function () {

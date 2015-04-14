@@ -44,7 +44,7 @@ define('io.ox/core/notifications', [
             //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
             $(document.body).on('click', function (e) {
                 var isInside = $( e.target )
-                    .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
+                    .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
 
                 if (!isInside ) {
                     if (self.getStatus() !== 'closed') {

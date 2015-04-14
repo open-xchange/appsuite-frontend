@@ -225,8 +225,8 @@ define('io.ox/files/actions', [
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
-            ox.load(['io.ox/files/actions/viewer']).done(function (action) {
-                action(baton);
+            ox.load(['io.ox/core/viewer/main']).done(function (viewer) {
+                viewer.launch(baton);
             });
         }
     });
@@ -337,23 +337,6 @@ define('io.ox/files/actions', [
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
                 action(baton);
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/slideshow', {
-        requires: function () {
-            // must be solved differently
-            return false;
-            // return _(e.baton.allIds).reduce(function (memo, obj) {
-            //     return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            // }, false);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/actions/slideshow']).done(function (action) {
-                action({
-                    baton: baton
-                });
             });
         }
     });

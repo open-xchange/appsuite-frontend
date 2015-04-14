@@ -13,6 +13,26 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+.autocomplete-item {
+
+    .contact-image {
+        margin-right: 14px;
+        display: inline-block;
+        float: left;
+        .picture(42px, 42px);
+    }
+
+    .recipient-name {
+        font-weight: bold;
+        .ellipsis();
+    }
+
+    .email {
+        .ellipsis();
+    }
+
+}
+
 .autocomplete-popup {
 
     @width: 3px;

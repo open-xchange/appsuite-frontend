@@ -29,6 +29,7 @@ define('io.ox/calendar/model', [
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
         api: api,
+        toUniqueId: _.ecid,
         destroy: function (model) {
             var options = {
                 id: model.id,

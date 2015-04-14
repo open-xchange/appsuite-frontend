@@ -266,7 +266,8 @@ define('io.ox/mail/compose/model', [
                 'vcard',
                 'nested_msgs',
                 'sendtype',
-                'csid'
+                'csid',
+                'initial'
             );
 
             // remove display name from sender if necessary

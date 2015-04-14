@@ -93,58 +93,6 @@ define('io.ox/files/share/view', [
     });
 
     /*
-     * extension point for contact picture in autocomplete dropdown
-     */
-    ext.point(POINT +  '/autoCompleteItem').extend({
-        id: 'contactPicture',
-        index: 100,
-        draw: function (baton) {
-            var node;
-            this.append(
-                node = $('<div class="contact-image">')
-                    .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-            );
-            // apply picture halo lazy load
-            contactsAPI.pictureHalo(
-                node,
-                baton.participantModel.toJSON(),
-                { width: 42, height: 42 }
-            );
-        }
-    });
-
-    /*
-     * extension point for display name in autocomplete dropdown
-     */
-    ext.point(POINT +  '/autoCompleteItem').extend({
-        id: 'displayName',
-        index: 100,
-        draw: function (baton) {
-            this.append(
-                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
-            );
-        }
-    });
-
-    /*
-     * extension point for email in autocomplete dropdown
-     */
-    ext.point(POINT +  '/autoCompleteItem').extend({
-        id: 'emailAddress',
-        index: 100,
-        draw: function (baton) {
-            var model = baton.participantModel;
-            this.append(
-                $('<div class="ellipsis email">').append(
-                    $.txt(model.getTarget() + ' '),
-                    model.getFieldName() !== '' ?
-                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
-                )
-            );
-        }
-    });
-
-    /*
      * extension point for recipients autocomplete input field
      */
     ext.point(POINT + '/fields').extend({
@@ -156,6 +104,7 @@ define('io.ox/files/share/view', [
             // add autocomplete
             var tokenfieldView = new Tokenfield({
                 id: guid,
+                extPoint: POINT,
                 placeholder: gt('Add recipients ...'),
                 apiOptions: {
                     contacts: true,
@@ -163,10 +112,6 @@ define('io.ox/files/share/view', [
                     groups: true
                 },
                 maxResults: 20,
-                drawAutocompleteItem: function (token) {
-                    baton.participantModel = token.model;
-                    ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
-                },
                 lazyload: 'div.contact-image'
             });
 

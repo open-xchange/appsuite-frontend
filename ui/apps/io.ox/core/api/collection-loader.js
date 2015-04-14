@@ -36,18 +36,34 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.collection = null;
         this.loading = false;
 
-        function apply(collection, type, limit, data) {
+        function apply(loader, type, params, data) {
+            var collection = loader.collection;
+            if (type === 'paginate' && collection.length > 0) {
+                // check if first fetched item matches last existing item
+                // use case: reload on new messages; race-conditions with external clients
+                var first = _(data).first(), last = collection.last().toJSON();
+                // use "head" item to compare threads
+                if (last.head) last = last.head;
+                // compare
+                if (_.cid(first) !== _.cid(last)) {
+                    // check d0901724d8050552b5b82c0fdd5be1ccfef50d99 for details
+                    params.thread = params.action === 'threadedAll';
+                    loader.reload(params, loader.limit);
+                    return;
+                }
+            }
+
             Pool.preserve(function () {
                 var method = methods[type];
                 collection[method](data, { parse: true });
             });
-            var isComplete = (type === 'load' && data.length < limit) || (type === 'paginate' && data.length <= 1);
+            var isComplete = (type === 'load' && data.length < loader.limit) || (type === 'paginate' && data.length <= 1);
             if (isComplete) collection.trigger('complete');
             collection.trigger(type);
         }
 
-        function fail(collection, type, e) {
-            collection.trigger(type + ':fail', e);
+        function fail(loader, type, e) {
+            loader.collection.trigger(type + ':fail', e);
         }
 
         function process(params, type) {
@@ -56,26 +72,12 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // trigger proper event
             this.collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = _.lfo(apply, this.collection, type, this.LIMIT),
-                cb_fail = _.lfo(fail, this.collection, type),
+            var cb_apply = _.lfo(apply, this, type, params),
+                cb_fail = _.lfo(fail, this, type),
                 self = this;
             // fetch data
             return this.fetch(params)
                 .done(function (data) {
-                    if (type === 'paginate' && self.collection.length > 0) {
-                        // check if first fetched item matches last existing item
-                        // use case: reload on new messages; race-conditions with external clients
-                        var first = _(data).first(), last = self.collection.last().toJSON();
-                        // use "head" item to compare threads
-                        if (last.head) last = last.head;
-                        // compare
-                        if (_.cid(first) !== _.cid(last)) {
-                            self.done();
-                            params.thread = params.action === 'threadedAll';
-                            self.reload(params, self.LIMIT);
-                            return;
-                        }
-                    }
                     self.addIndex(offset, params, data);
                     self.done();
                     cb_apply(data);
@@ -216,6 +218,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         },
 
         httpGet: function (module, params) {
+            if (this.useSlice) params = _(params).omit('limit');
             return http.GET({ module: module, params: params });
         },
 

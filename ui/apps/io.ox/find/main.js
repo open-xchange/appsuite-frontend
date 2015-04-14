@@ -18,15 +18,16 @@ define('io.ox/find/main', [
 
     'use strict';
 
-    var cid = function (app) {
-        var parts = [
-            app.getName(),
-            app.get('inplace') ? 'inplace' : 'standalone',
-            app.getModule()
-        ];
-        //toString
-        return _.compact(parts).join(':');
-    };
+    var INVALID = $.Deferred().reject('please launch app first'),
+        cid = function (app) {
+            var parts = [
+                app.getName(),
+                app.get('inplace') ? 'inplace' : 'standalone',
+                app.getModule()
+            ];
+            //toString
+            return _.compact(parts).join(':');
+        };
 
     // multi instance pattern
     var createInstance = function (opt) {
@@ -144,20 +145,17 @@ define('io.ox/find/main', [
 
                 if (!app.get('inplace')) return;
 
-                // check for listview
-                var parent = app.get('parent'),
-                    listView = parent.listView,
-                    defaultLoader = parent.listView.loader;
-
-                if (!listView) return;
-
                 app.on('change:state', function (e, state) {
 
                     if (state !== 'launched') return;
+                    // check for listview
+                    var parent = app.get('parent');
+                    if (!app.get('parent').listView) return;
 
                     require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                         var manager = app.view.model.manager,
                             searchcid = _.bind(manager.getResponseCid, manager),
+                            defaultLoader = parent.listView.loader,
                             mode = 'default';
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
@@ -288,6 +286,8 @@ define('io.ox/find/main', [
              */
             app.listenTo(manager, {
                 'active': _.debounce(function (count) {
+                        // ignore folder facet not combined with another facet
+                        if (app.model.manager.isFolderOnly()) count = 0;
                         app.trigger(count ? 'find:query' : 'find:idle');
                     }, 10)
             });
@@ -341,10 +341,9 @@ define('io.ox/find/main', [
         };
 
         app.getProxy = (function () {
-            var apiproxy, invalid = $.Deferred().reject('please launch app first');
+            var apiproxy;
             return function () {
                 var def = $.Deferred();
-                if (app.get('state') !== 'launched') return invalid;
 
                 if (apiproxy) return apiproxy;
                 // connect apiproxy first
@@ -355,13 +354,21 @@ define('io.ox/find/main', [
             };
         })();
 
+        app.getConfig = function (query) {
+            return app.getProxy().then(function (apiproxy) {
+                return apiproxy.config(query);
+            });
+        };
+
         app.getSuggestions = function (query) {
+            if (app.get('state') !== 'launched') return INVALID;
             return app.getProxy().then(function (apiproxy) {
                 return apiproxy.search(query);
             });
         };
 
         app.getSearchResult = function (params, sync) {
+            if (app.get('state') !== 'launched') return INVALID;
             return app.getProxy().then(function (apiproxy) {
                 return apiproxy.query(params, sync);
             });
@@ -383,6 +390,11 @@ define('io.ox/find/main', [
                 // inplace: use parents view window
                 app.view.render();
                 register();
+                app.getConfig().then(function (data) {
+                    app.model.manager.update(data);
+                    // TODO: or delay 'app.view.render()' until this point
+                    app.view.ui.facets.render();
+                });
                 app.set('state', 'launched');
             });
         };

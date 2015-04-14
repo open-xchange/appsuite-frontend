@@ -75,7 +75,10 @@ define('io.ox/core/folder/node', [
                 }, this)
             );
 
-            this.model.set('subfolders', models.length > 0);
+            // see bug 37373
+            // This was caused by the filter method of the unified-folders extensionpoint which sets "subfolder = false" for the folder 1 model.
+            // Since this folder always has subfolders this is skipped.
+            if (this.folder !== '1') this.model.set('subfolders', models.length > 0);
             this.renderEmpty();
 
             // trigger events
@@ -137,7 +140,8 @@ define('io.ox/core/folder/node', [
             }
 
             if (model.changed.subfolders) {
-                this.options.open = !!model.changed.subfolders;
+                // close if no more subfolders
+                if (!model.changed.subfolders) this.open = false;
                 this.onChangeSubFolders();
             }
 
@@ -312,6 +316,11 @@ define('io.ox/core/folder/node', [
                     'remove':  this.onRemove,
                     'reset':   this.onReset,
                     'sort':    this.onSort
+                });
+                // respond to newly created folders
+                this.listenTo(api, 'create:' + String(o.model_id).replace(/\s/g, '_'), function () {
+                    this.open = true;
+                    this.onChangeSubFolders();
                 });
             }
 

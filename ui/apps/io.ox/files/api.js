@@ -316,7 +316,8 @@ define('io.ox/files/api', [
 
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
-    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
+    // guess 23 is "meta"
+    var allColumns = '1,3,5,20,23,700,702,703,704,705,707';
 
     /**
      * map error codes and text phrases for user feedback
@@ -373,7 +374,7 @@ define('io.ox/files/api', [
             return $.when(
                 folderAPI.list(params.folder),
                 // this one might fail due to lack of permissions; error are transformed to empty array
-                http.GET({ module: module, params: params }).then(null, $.when)
+                http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
             )
             .then(function (folders, files) {
                 return [].concat(folders, files[0] || []);
@@ -921,18 +922,16 @@ define('io.ox/files/api', [
     //
     api.search = function (query, options) {
 
-        options = _.extend({ columns: api.search.columns, sort: '702', order: 'asc', limit: 100 }, options);
+        options = _.extend({ action: 'search', columns: api.search.columns, sort: '702', order: 'asc', limit: 100 }, options);
 
         return http.PUT({
             module: 'files',
-            params: {
-                action: 'search',
-                columns: options.columns,
-                sort: options.sort,
-                order: options.order,
-                limit: options.limit
-            },
+            params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
             data: api.search.getData(query, options)
+        })
+        .done(function (data) {
+            pool.add('detail', data);
+            return data;
         });
     };
 
@@ -991,7 +990,7 @@ define('io.ox/files/api', [
 
                 case 'add:version':
                     // reload versions list
-                    return reloadVersions().then(function () {
+                    return reloadVersions(file).done(function () {
                         // the mediator will reload the current collection
                         api.trigger('add:version', file);
                     });
@@ -1040,7 +1039,7 @@ define('io.ox/files/api', [
                 case 'remove:version':
                     // let's reload the version list
                     // since we might have just removed the current version
-                    return reloadVersions().done(function (list) {
+                    return reloadVersions(file).done(function (list) {
                         // update model
                         var cid = _.cid(file), model = pool.get('detail').get(cid);
                         if (model) model.set('number_of_versions', list.length);

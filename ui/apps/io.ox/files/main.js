@@ -30,7 +30,6 @@ define('io.ox/files/main', [
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',
-    'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
     'io.ox/files/toolbar',
     'io.ox/files/upload/dropzone'
@@ -229,6 +228,16 @@ define('io.ox/files/main', [
         },
 
         /*
+         * Get folder-based view options
+         */
+        'get-view-options': function (app) {
+            app.getViewOptions = function (folder) {
+                var options = app.settings.get(['viewOptions', folder]);
+                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
+            };
+        },
+
+        /*
          * Default application properties
          */
         'props': function (app) {
@@ -242,6 +251,9 @@ define('io.ox/files/main', [
                 'layout': layout,
                 'folderEditMode': false
             });
+            // initial setup
+            var folder = app.folder.get();
+            if (folder) app.props.set(app.getViewOptions(folder));
         },
 
         /*
@@ -249,7 +261,7 @@ define('io.ox/files/main', [
          */
         'list-view': function (app) {
             app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true });
-            app.listView.model.set({ folder: app.folder.get() });
+            app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
         },
@@ -283,6 +295,7 @@ define('io.ox/files/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
                 app.listView.empty();
@@ -290,16 +303,6 @@ define('io.ox/files/main', [
                 app.props.set(options);
                 app.listView.model.set('folder', id);
             });
-        },
-
-        /*
-         * Get folder-based view options
-         */
-        'get-view-options': function (app) {
-            app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
-                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
-            };
         },
 
         /*
@@ -434,10 +437,9 @@ define('io.ox/files/main', [
                 var cid = $(e.currentTarget).attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
-                ox.load(['io.ox/files/actions/viewer']).done(function (action) {
-                    action(baton);
+                ox.load(['io.ox/core/viewer/main']).done(function (viewer) {
+                    viewer.launch(baton);
                 });
-                //ox.launch('io.ox/files/detail/main', { cid: cid });
             });
         },
 
@@ -446,9 +448,13 @@ define('io.ox/files/main', [
          */
         'requires-reload': function (app) {
             // listen to events that affect the filename, add files, or remove files
-            api.on('rename add:file add:version remove:version change:version', _.debounce(function () {
+            api.on('rename add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
+            // use throttled updates for add:file - in case many small files are uploaded
+            api.on('add:file', _.throttle(function () {
+                app.listView.reload();
+            }, 10000));
         },
 
         /*
@@ -659,6 +665,11 @@ define('io.ox/files/main', [
         commons.wirePerspectiveEvents(app);
 
         win.nodes.outer.on('selection:drop', function (e, baton) {
+            // convert composite keys to objects
+            baton.data = _(baton.data).map(function (item) {
+                return _.isString(item) ? _.cid(item) : item;
+            });
+            // call move action (instead of API) to have visual error handlers
             actions.invoke('io.ox/files/actions/move', null, baton);
         });
 

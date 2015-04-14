@@ -137,30 +137,30 @@ define('io.ox/calendar/edit/timezone-dialog', [
 
         new dialogs.ModalDialog()
             .header($('<h4>').text(gt('Change timezone')))
-            .addPrimaryButton('ok', gt('OK'), 'ok', { tabIndex: 1 })
+            .addPrimaryButton('change', gt('Change'), 'change', { tabIndex: 1 })
             .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
             .build(function () {
                 ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.getContentNode(), { model: model });
             })
-            .show()
-            .done(function (action) {
-                if (action === 'cancel') {
-                    return;
-                } else {
-                    if (model.get('keepTime')) {
-                        var utcStart = getUtc('start_date', model.get('startTimezone')),
-                            utcEnd = getUtc('end_date', model.get('endTimezone'));
+            .on('change', function () {
+                if (model.get('keepTime')) {
+                    var utcStart = getUtc('start_date', model.get('startTimezone')),
+                        utcEnd = getUtc('end_date', model.get('endTimezone'));
 
-                        opt.model.set('timezone', model.get('startTimezone'));
-                        opt.model.set('endTimezone', model.get('endTimezone'));
-                        opt.model.set('start_date', utcStart);
-                        opt.model.set('end_date', utcEnd);
-                    } else {
-                        opt.model.set('timezone', model.get('startTimezone'));
-                        opt.model.set('endTimezone', model.get('endTimezone'));
-                    }
+                    opt.model.set({
+                        'timezone': model.get('startTimezone'),
+                        'endTimezone': model.get('endTimezone'),
+                        'start_date': utcStart,
+                        'end_date': utcEnd
+                    });
+                } else {
+                    opt.model.set({
+                        'timezone': model.get('startTimezone'),
+                        'endTimezone': model.get('endTimezone')
+                    });
                 }
-            });
+            })
+            .show();
     }
 
     return { open: open };

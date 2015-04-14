@@ -233,14 +233,13 @@ define('io.ox/calendar/edit/main', [
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
-                    appointmentFactory.realm('edit').retain().get({
-                        id: data.id,
-                        folder: data.folder_id
-                    })
-                    .done(function (model) {
-                        self.model = model;
-                        cont();
-                    });
+                    appointmentFactory.realm('edit')
+                        .retain()
+                        .get(_.pick(data, 'id', 'folder_id', 'recurrence_position'))
+                        .done(function (model) {
+                            self.model = model;
+                            cont();
+                        });
                 } else {
 
                     // default values from settings

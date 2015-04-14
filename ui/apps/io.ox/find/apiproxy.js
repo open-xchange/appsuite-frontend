@@ -88,7 +88,15 @@ define('io.ox/find/apiproxy',[
         var model = app.model,
             // managing wrapper to keep model up2date and match tokenfields naming conventions
             proxy = {
-                // alias for autocomplete tk
+                // static facets
+                config: function () {
+                    var request = {
+                            params: { module: app.getModuleParam() },
+                            data: { prefix: '' }
+                        };
+                    return api.autocomplete(request).then(extend.bind(this, request));
+                },
+                // suggestions
                 search: function (query) {
                     var standard = {
                             params: { module: app.getModuleParam() },
@@ -105,6 +113,7 @@ define('io.ox/find/apiproxy',[
                     return autocomplete(standard)
                             .then(updateModel, notifications.yell);
                 },
+                // result
                 query: (function () {
 
                     function getResults(request) {

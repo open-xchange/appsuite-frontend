@@ -568,7 +568,7 @@ define('io.ox/core/tk/dialogs', [
         var popups = $('.io-ox-sidepopup');
         if (popups.length === 0) return;
         //check if we are inside a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
-        if ($(e.target).closest('.io-ox-dialog-popup,.modal-footer').length > 0) {
+        if ($(e.target).closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer').length > 0) {
             return;
         }
 

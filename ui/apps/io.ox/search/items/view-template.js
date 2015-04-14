@@ -200,7 +200,8 @@ define('io.ox/search/items/view-template', [
 
             ext.point('io.ox/search/items/files').extend({
                 draw: function (baton) {
-                    draw.call(this, baton, 'io.ox/files/fluid/view-detail', 'io.ox/files/api');
+                    // TODO: replace by new viewer
+                    if (ox.debug) console.error('Need to open new viewer', baton);
                 }
             });
 

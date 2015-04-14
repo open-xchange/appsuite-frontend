@@ -30,6 +30,8 @@ define('io.ox/calendar/settings/favorite-view', [
 
         tagName: 'div',
 
+        className: 'expertmode',
+
         events: {
             'click button': 'addFavorite',
             'click a[data-action="delete"]': 'removeFavorite'

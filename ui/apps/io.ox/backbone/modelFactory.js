@@ -281,7 +281,7 @@ define('io.ox/backbone/modelFactory', [
         this.internal.load = delegate.load || function () {
             var args = $.makeArray(arguments);
 
-            return self.api.get.apply(self.api, args).pipe(processLoaded);
+            return self.api.get.apply(self.api, args).then(processLoaded);
         };
 
         this.internal.loadAll = delegate.loadAll || function () {
@@ -289,7 +289,7 @@ define('io.ox/backbone/modelFactory', [
         };
 
         this.internal.loadBulk = delegate.loadBulk || function (idsToLoad) {
-            return self.api.getList(idsToLoad).pipe(function (result) {
+            return self.api.getList(idsToLoad).then(function (result) {
                 _(result).each(processLoaded);
                 return result;
             });

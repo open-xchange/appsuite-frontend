@@ -18,23 +18,36 @@ define('io.ox/contacts/actions/send', [
     'use strict';
 
     return function (list) {
-
-        api.getList(list, true, {
-            check: function (obj) {
-                return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
-            }
-        }).done(function (list) {
-            // set recipient
-            var recipients = _.chain(list).map(function (obj) {
-                if (obj.distribution_list && obj.distribution_list.length) {
-                    return _(obj.distribution_list).map(function (obj) {
-                        return [obj.display_name, obj.mail];
-                    });
-                } else {
-                    return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
+        var def = null;
+        if (list.length === 1 && (list[0].id === 0 || list[0].folder_id === 0)) {
+            var adress = list[0].email1 || list[0].email2 || list[0].email3;
+            def = $.Deferred().resolve([[adress, adress]]);
+        } else {
+            def = api.getList(list, true, {
+                check: function (obj) {
+                    return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
                 }
-            }).flatten(true).filter(function (obj) { return !!obj[1]; }).value();
+            }).then(function (list) {
+                // set recipient
+                return _.chain(list)
+                    .map(function (obj) {
+                        if (obj.distribution_list && obj.distribution_list.length) {
+                            return _(obj.distribution_list).map(function (obj) {
+                                return [obj.display_name, obj.mail];
+                            });
+                        } else {
+                            return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
+                        }
+                    })
+                    .flatten(true)
+                    .filter(function (obj) {
+                        return !!obj[1];
+                    })
+                    .value();
+            });
+        }
 
+        def.done(function (recipients) {
             // open compose
             ox.registry.call('mail-compose', 'compose', {
                 to: recipients
