@@ -71,6 +71,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner = $('<div class="swiper-wrapper">'),
                 prevSlide = $('<a href="#" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
                 nextSlide = $('<a href="#" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                caption = $('<div class="viewer-displayer-caption">'),
                 startIndex = this.collection.getStartIndex(),
                 self = this,
                 swiperParameter = {
@@ -116,7 +117,7 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             // append carousel to view
-            this.$el.append(carouselRoot).attr({ tabindex: -1, role: 'main' });
+            this.$el.append(carouselRoot, caption).attr({ tabindex: -1, role: 'main' });
             this.carouselRoot = carouselRoot;
 
             // create slides from file collection and append them to the carousel
@@ -321,7 +322,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 console.warn('Cannot require a view type for', model.get('filename'));
             });
         },
-
         /**
          * Blends in the caption of the passed slide index for a specific duration in milliseconds.
          *
@@ -335,7 +335,14 @@ define('io.ox/core/viewer/views/displayerview', [
         blendSlideCaption: function (slideIndex, duration) {
             //console.warn('BlendslideCaption', slideIndex);
             var duration = duration || 3000,
-                slideCaption = this.$el.find('.swiper-slide[data-swiper-slide-index=' + slideIndex + '] .viewer-displayer-caption');
+                slideCaption = this.$el.find('.viewer-displayer-caption');
+            slideCaption.text(
+                //#. text of a viewer slide caption
+                //#. Example result: "1 of 10"
+                //#. %1$d is the slide index of the current
+                //#. %2$d is the total slide count
+                gt('%1$d of %2$d', (slideIndex + 1), this.collection.length)
+            );
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();
             this.captionTimeoutId = window.setTimeout(function () {

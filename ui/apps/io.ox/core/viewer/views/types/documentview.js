@@ -59,7 +59,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         render: function () {
             //console.warn('DocumentView.render()', this.model.get('filename'));
             var pageContainer = $('<div class="document-container io-ox-core-pdf">');
-            this.$el.empty().append(pageContainer, this.createCaption());
+            this.$el.empty().append(pageContainer);
             return this;
         },
 

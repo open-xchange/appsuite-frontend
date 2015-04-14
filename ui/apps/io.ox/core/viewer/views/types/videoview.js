@@ -42,7 +42,6 @@ define('io.ox/core/viewer/views/types/videoview',  [
                 fallback = $('<div>').text(gt('Your browser does not support HTML5 video.')),
                 previewUrl = this.getPreviewUrl() || '',
                 contentType = this.model.get('file_mimetype') || '',
-                caption = this.createCaption(),
                 self = this;
 
             // run own disposer function on dispose event from DisposableView
@@ -67,7 +66,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
             source.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
             video.append(source, fallback);
 
-            this.$el.empty().append(video, caption);
+            this.$el.empty().append(video);
             return this;
         },
 

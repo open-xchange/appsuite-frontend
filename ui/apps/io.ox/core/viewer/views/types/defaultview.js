@@ -43,8 +43,7 @@ define('io.ox/core/viewer/views/types/defaultview',  [
             //console.warn('DefaultView.render()', this.model.get('filename'));
 
             this.$el.empty().append(
-                this.createNotificationNode(gt('Sorry, there is no preview available for this file.')),
-                this.createCaption()
+                this.createNotificationNode(gt('Sorry, there is no preview available for this file.'))
             );
 
             return this;

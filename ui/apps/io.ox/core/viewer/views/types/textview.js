@@ -31,7 +31,7 @@ define('io.ox/core/viewer/views/types/textview', [
                 'viewer:document:zoomout': this.zoomOut.bind(this)
             });
             // quick hack to get rid of flex box
-            this.$el.empty().css('display', 'block').append(this.createCaption());
+            this.$el.empty().css('display', 'block');
             return this;
         },
 
