@@ -64,6 +64,13 @@ define('io.ox/core/viewer/views/types/baseview', [
                 return AttachmentAPI.getUrl(this.model.get('origData'), 'view');
             }
             return null;
+        },
+
+        /**
+         * Wether this slide is currently visible to the user or not.
+         */
+        isVisible: function () {
+            return this.$el.hasClass('swiper-slide-active');
         }
 
     });

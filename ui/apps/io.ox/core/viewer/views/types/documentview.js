@@ -39,6 +39,10 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = 30;
+            // predefined zoom factors
+            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800];
+            // current zoom factor, defaults at 100%
+            this.currentZoomFactor = 100;
             // the PDFView instance
             this.pdfView = null;
             // the PDFDocument instance
@@ -177,12 +181,14 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
                 }
 
-                var pdfDocument = this.pdfDocument;
+                var pdfDocument = this.pdfDocument,
+                    defaultScale = this.getDefaultScale();
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
                 // set default scale/zoom, according to device's viewport width
-                this.pdfView.setPageZoom(this.getDefaultScale());
+                this.currentZoomFactor = defaultScale * 100;
+                this.pdfView.setPageZoom(defaultScale);
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var jqPage = $('<div class="document-page">'),
@@ -250,33 +256,70 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * Zooms in of a document.
          */
-        onZoomIn: function (baton) {
-            var self = this;
-            if (this.$el.hasClass('swiper-slide-active')) {
-                console.warn('DocumentView.zoomIn()', baton);
-                this.pdfDocument.getLoadPromise().done(function () {
-                    var pages = self.$el.find('.document-container .document-page');
-                    // test code, increase zoom 1.5 times for every zoom in
-                    _.each(pages, function (page, pageIndex) {
-                        var pageNumber = pageIndex + 1,
-                            currentPageZoom = self.pdfView.getPageZoom(pageNumber);
-
-                        self.pdfView.setPageZoom(currentPageZoom * 1.5, pageNumber);
-
-                        var realPageSize = self.pdfView.getRealPageSize(pageNumber);
-                        $(page).attr(realPageSize).css(realPageSize);
-                    });
-                });
+        onZoomIn: function () {
+            if (this.isVisible()) {
+                this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'increase'));
             }
         },
 
         /**
          * Zooms out of the document.
          */
-        onZoomOut: function (baton) {
-            if (this.$el.hasClass('swiper-slide-active')) {
-                console.warn('DocumentView.zoomOut()', baton);
+        onZoomOut: function () {
+            if (this.isVisible()) {
+                this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'decrease'));
             }
+        },
+
+        /**
+         *  Changes the zoom level of a document.
+         *
+         * @param {String} action
+         *  Supported values: 'increase' or 'decrease'.
+         */
+        changeZoomLevel: function (action) {
+            var currentZoomFactor = this.currentZoomFactor,
+                pages = this.$el.find('.document-page'),
+                pdfView = this.pdfView,
+                nextZoomFactor;
+            // search for next bigger/smaller zoom factor in the avaliable zoom factors
+            switch (action) {
+                case 'increase':
+                    nextZoomFactor = _.find(this.ZOOM_FACTORS, function (factor) {
+                        return factor > currentZoomFactor;
+                    }) || this.getMaxZoomFactor();
+                    break;
+                case 'decrease':
+                    var lastIndex = _.findLastIndex(this.ZOOM_FACTORS, function (factor) {
+                        return factor < currentZoomFactor;
+                    });
+                    nextZoomFactor = this.ZOOM_FACTORS[lastIndex] || this.getMinZoomFactor();
+                    break;
+                default:
+                    return;
+            }
+            // forward zoom to PDF.js and adapt node sizes
+            _.each(pages, function (page, pageIndex) {
+                pdfView.setPageZoom(nextZoomFactor / 100, pageIndex + 1);
+                var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
+                $(page).css(realPageSize);
+            });
+            // save the new zoom factor to the document view
+            this.currentZoomFactor = nextZoomFactor;
+        },
+
+        /**
+         *  Gets the maximum zoom factor of a document.
+         */
+        getMaxZoomFactor: function () {
+            return _.last(this.ZOOM_FACTORS);
+        },
+
+        /**
+         *  Gets the minimum zoom factor of a document.
+         */
+        getMinZoomFactor: function () {
+            return _.first(this.ZOOM_FACTORS);
         },
 
         /**
