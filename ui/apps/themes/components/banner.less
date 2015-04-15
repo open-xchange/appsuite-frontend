@@ -20,14 +20,13 @@
     right: 0;
     display: none;
     text-align: right;
+    color: #fff;
+    line-height: 32px;
+    padding: @default-padding;
     .ellipsis();
 
-    &.visible {
-        color: #fff;
-        line-height: 32px;
-        padding: @default-padding;
+    #io-ox-core.show-banner & {
         display: block;
-        height: 64px;
         .vertical-gradient(darken(@topbar-background, 12%), darken(@topbar-background, 18%));
     }
 
@@ -56,5 +55,24 @@
         position: relative;
         text-decoration: none;
         top: 2px;
+    }
+}
+
+// adjust positions of top-bar and screens
+#io-ox-core.show-banner {
+    @height: 64px;
+    #io-ox-banner { height: @height; padding: @default-padding; }
+    #io-ox-topbar { top: @height; }
+    #io-ox-screens { top: @height + 40; }
+}
+
+// less height on smaller screens; desktop-only
+// typical maximized browser window on 1280x800 should run into this, therefore 640px
+@media all and (max-height: 640px) {
+    #io-ox-core.show-banner {
+        @height: 48px;
+        #io-ox-banner { height: @height; padding: 8px @default-padding; .banner-title { font-size: 16px; } }
+        #io-ox-topbar { top: @height; }
+        #io-ox-screens { top: @height + 40; }
     }
 }
