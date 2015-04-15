@@ -20,9 +20,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
-    'io.ox/calendar/util',
+    'io.ox/core/folder/folder-color',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt, calendarUtil) {
+], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt, color) {
 
     'use strict';
 
@@ -515,7 +515,7 @@ define('io.ox/core/folder/extensions', [
                     if (!api.is('private', baton.data)) return;
                     if (/^virtual/.test(baton.data.id)) return;
 
-                    var folderColor = calendarUtil.getFolderColor(baton.data),
+                    var folderColor = color.getFolderColor(baton.data),
                         folderLabel = this.find('.folder-label');
 
                     // remove any color-label.* classes from folder.

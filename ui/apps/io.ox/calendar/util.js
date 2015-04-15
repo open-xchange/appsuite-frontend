@@ -17,9 +17,10 @@ define('io.ox/calendar/util', [
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
     'io.ox/core/util',
+    'io.ox/core/folder/folder-color',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, settings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, settings, gt) {
 
     'use strict';
 
@@ -734,9 +735,7 @@ define('io.ox/calendar/util', [
             return appointmentColor === 0 && !privateFlag;
         },
 
-        getFolderColor: function (folder) {
-            return folder.meta ? folder.meta.color_label || settings.get('defaultFolderColor', 1) : settings.get('defaultFolderColor', 1);
-        },
+        getFolderColor: color.getFolderColor,
 
         getColorLabel: function (colorIndex) {
             if (colorIndex >= 0 && colorIndex < colorLabels.length) {
