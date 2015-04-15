@@ -82,11 +82,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 _.chain(allVersions)
                 .sort(versionSorter)
                 .each(function (version) {
-                    var entryRow = $('<tr>').addClass('version').append(
-                                $('<td>').addClass('version-label' + (version.current_version ? ' current' : '')).append(
-                                    $('<div>').text(gt.noI18n(version.version)).attr('title', gt.noI18n(version.version))
-                                )
-                            );
+                    var entryRow = $('<tr class="version">');
 
                     Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version }));
                     table.append(entryRow);
@@ -100,7 +96,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 } else if (version2.current_version) {
                     return versions.length;
                 }
-                return version2.version - version1.version;
+                return version2.creation_date - version1.creation_date;
             }
 
             this.empty();
@@ -110,7 +106,6 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                         $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
                         $('<thead>').addClass('sr-only').append(
                             $('<tr>').append(
-                                $('<th>').text(gt('Version number')),
                                 $('<th>').text(gt('File'))
                             )
                         )
@@ -144,7 +139,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             Ext.point(POINT + '/version/dropdown').invoke('draw', row, baton);
             $node = row.find('div.dropdown > a');
-
+            if (baton.data.current_version) {
+                $node.addClass('current');
+            }
             Util.setClippedLabel($node, baton.data.filename);
         }
     });

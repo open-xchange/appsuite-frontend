@@ -404,17 +404,6 @@ html.ios .io-ox-viewer {
                         color: #ccc;
                     }
 
-                    .version-label {
-                        max-width: 30px;
-                        overflow: hidden;
-                        color: lightgrey;
-
-                        &.current {
-                            font-weight: bold;
-                            color: @viewer-text-color;
-                        }
-                    }
-
                     .version-content {
 
                         padding: 0 0 8px 8px;
@@ -437,6 +426,9 @@ html.ios .io-ox-viewer {
                         }
                         &:active, &:focus{
                             background-color: #444444;
+                        }
+                        &.current {
+                            font-weight: bold;
                         }
                     }
                 }
