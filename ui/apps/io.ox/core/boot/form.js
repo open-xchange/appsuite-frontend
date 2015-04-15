@@ -47,7 +47,7 @@ define('io.ox/core/boot/form', [
         var revision = 'revision' in sc ? sc.revision : ('Rev' + ox.revision);
         footer += revision !== '' ? revision + ' ' : '';
         footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
-        $('#io-ox-copyright').text(footer);
+        $('#io-ox-copyright').text(footer.replace(/\(c\)/i, '\u00A9'));
 
         // hide checkbox?
         if (!capabilities.has('autologin')) {
