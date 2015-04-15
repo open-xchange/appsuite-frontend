@@ -42,7 +42,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
 
             panel = Util.createPanelNode({ title: gt('General Info') });
-            panelBody = panel.find('.panel-body').append(
+            panelBody = panel.find('.sidebar-panel-body').append(
                 $('<dl>').append(
                     // filename
                     $('<dt>').text(gt('Filename')),

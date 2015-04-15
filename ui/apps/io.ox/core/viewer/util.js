@@ -157,7 +157,7 @@ define('io.ox/core/viewer/util', [
         }
 
         toggleButton = $('<a>', {
-            'class': 'toggle-panel panel-heading-button btn',
+            'class': 'panel-toggle-btn btn',
             href: '#',
             tabindex: 1,
             title: gt('Toggle panel'),
@@ -171,15 +171,15 @@ define('io.ox/core/viewer/util', [
 
         buttonIcon = $('<i>', { 'aria-hidden': 'true' }).addClass('fa fa-chevron-' + (options.collapsed ? 'right' : 'down'));
 
-        panelHeader = $('<div>', { 'class': 'panel-heading', role: 'tab', 'aria-expanded': options.collapsed ? 'false' : 'true' }).append(
-            $('<h3>').addClass('panel-title').text(options.title),
+        panelHeader = $('<div>', { 'class': 'sidebar-panel-heading', role: 'tab', 'aria-expanded': options.collapsed ? 'false' : 'true' }).append(
+            $('<h3>').text(options.title),
             toggleButton.append(
                 buttonIcon
             )
         );
 
         panelBody = $('<div>', {
-            'class': 'panel-body',
+            'class': 'sidebar-panel-body',
             id: panelId,
             role: 'tabpanel',
             'aria-label': options.title,
@@ -188,7 +188,7 @@ define('io.ox/core/viewer/util', [
         .addClass(options.collapsed ? 'panel-collapsed' : '')
         .css('display', (options.collapsed ? 'none' : 'block'));
 
-        panel = $('<div>').addClass('panel panel-default').append(
+        panel = $('<div>', { 'class': 'sidebar-panel' }).append(
             panelHeader,
             panelBody
         );

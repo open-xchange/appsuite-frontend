@@ -56,14 +56,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 title: gt('Versions (%1$d)', _.noI18n(numberOfVersions)),
                 collapsed: (panelState !== PANEL_STATE_OPEN)
             });
-            panelBody = panel.find('.panel-body');
+            panelBody = panel.find('.sidebar-panel-body');
             Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ model: model, data: model.toJSON() }));
 
             self.append(panel);
 
             // if the panel was about to slide down before repainting, we need to trigger this manually
             if (panelState === PANEL_STATE_OPENING) {
-                panel.find('.toggle-panel').trigger('click');
+                panel.find('.panel-toggle-btn').trigger('click');
             }
         }
     });
@@ -210,7 +210,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         className: 'viewer-fileversions',
 
         events: {
-            'click .toggle-panel': 'onTogglePanel'
+            'click .panel-toggle-btn': 'onTogglePanel'
         },
 
         /**
@@ -219,8 +219,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          */
         onTogglePanel: function (event) {
             var self = this,
-                panelHeading = this.$el.find('.panel>.panel-heading'),
-                panelBody = this.$el.find('.panel>.panel-body'),
+                panelHeading = this.$el.find('.sidebar-panel > .sidebar-panel-heading'),
+                panelBody = this.$el.find('.sidebar-panel > .sidebar-panel-body'),
                 versions = this.model && this.model.get('versions');
 
             event.preventDefault();

@@ -51,7 +51,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         index: 10,
         id: 'description-text',
         draw: function (baton) {
-            var panelBody = this.find('.panel-body'),
+            var panelBody = this.find('.sidebar-panel-body'),
                 description = baton.data,
                 labelString;
 
@@ -102,7 +102,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         onModelChangeDescription: function (model) {
             //console.info('FileDescriptionView.onModelChangeDescription() ', model);
-            var panel = this.$el.find('.panel'),
+            var panel = this.$el.find('.sidebar-panel'),
                 description = model.get('description');
 
             Ext.point(POINT + '/text').invoke('draw', panel, Ext.Baton({ data: description }));

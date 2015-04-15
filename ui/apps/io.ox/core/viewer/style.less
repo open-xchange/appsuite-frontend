@@ -328,7 +328,7 @@ html.ios .io-ox-viewer {
     .viewer-filedescription,
     .viewer-fileversions {
 
-        .panel {
+        .sidebar-panel {
 
             background-color: transparent;
             border: 0;
@@ -336,14 +336,14 @@ html.ios .io-ox-viewer {
 
             a.btn, div.dropdown > a { outline: none; }
 
-            .panel-heading {
+            .sidebar-panel-heading {
                 color: @viewer-sidebar-label-text-color;
-                border-color: #555;
                 background-color: transparent;
+                border-bottom: 1px solid #555;
                 position: relative;
                 padding: 12px 0 5px 0;
 
-                .panel-heading-button {
+                .panel-toggle-btn {
                     color: @viewer-control-color;
                     position: absolute;
                     top: 0;
@@ -357,6 +357,8 @@ html.ios .io-ox-viewer {
                 h3 {
                     font-size: 13px;
                     font-weight: bold;
+                    margin-top: 0;
+                    margin-bottom: 0;
                     cursor: default;
                 }
 
@@ -365,9 +367,15 @@ html.ios .io-ox-viewer {
                 }
             }
 
-            .panel-body {
+            .sidebar-panel-body {
 
                 padding: 20px 0;
+                
+                &:after {
+                    content: " ";
+                    display: table;
+                    clear: both;                
+                }
 
                 dd, dt {
                     line-height: 16px;
