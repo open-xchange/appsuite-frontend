@@ -1132,6 +1132,15 @@ define('io.ox/mail/main', [
             find.on('collectionLoader:created', function (loader) {
                 loader.each = each;
             });
+        },
+        // respond to pull-to-refresh in mail list on mobiles
+        'on:pull-to-refresh': function (app) {
+            if (_.device('!smartphone')) return;
+            ox.on('pull-to-refresh', function () {
+                api.refresh().always(function () {
+                    app.listView.removePullToRefreshIndicator();
+                });
+            });
         }
 
     });

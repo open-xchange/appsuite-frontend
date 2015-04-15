@@ -1240,7 +1240,7 @@ define('io.ox/mail/api', [
      */
     api.refresh = function () {
         if (!ox.online) return;
-        api.checkInbox().always(function () {
+        return api.checkInbox().always(function () {
             api.trigger('refresh.all');
         });
     };
