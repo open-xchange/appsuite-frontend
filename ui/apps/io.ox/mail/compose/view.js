@@ -25,9 +25,10 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
+    'io.ox/core/tk/textproc',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, textproc) {
 
     'use strict';
 
@@ -330,6 +331,8 @@ define('io.ox/mail/compose/view', [
         },
 
         fetchMail: function (obj) {
+            // Empty compose (early exit)
+            if (obj.mode === 'compose') return $.when();
 
             var self = this,
                 mode = obj.mode;
@@ -340,8 +343,6 @@ define('io.ox/mail/compose/view', [
                 obj.attachments = new Backbone.Collection(_.clone(obj.attachments));
                 this.model.set(obj);
                 obj = null;
-                return $.when();
-            } else if (/(compose|edit)/.test(mode)) {
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
                 obj = _(obj).map(function (o) {
@@ -362,7 +363,11 @@ define('io.ox/mail/compose/view', [
             obj.max_size = settings.get('maxSize/compose', 1024 * 512);
 
             return mailAPI[mode](obj, content_type).then(function (data) {
-                data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                if (mode !== 'edit') {
+                    data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                } else {
+                    data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                }
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
@@ -387,6 +392,18 @@ define('io.ox/mail/compose/view', [
                 self.model.set(data);
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
+
+                // Force text edit mode when alternative editorMode and text/plain mail
+                if (mode === 'edit' && self.editorMode === 'alternative' && content_type === 'text') {
+                    self.model.set('editorMode', 'text', { silent: true });
+                    self.editorMode = 'text';
+                }
+
+                // Can sometimes contain html so reparse
+                if (mode === 'edit' && self.editorMode === 'text') {
+                    attachmentCollection.at(0).set('content', textproc.htmltotext(attachmentCollection.at(0).get('content')));
+                }
+
                 self.model.set('attachments', attachmentCollection);
                 obj = data = attachmentCollection = null;
             });

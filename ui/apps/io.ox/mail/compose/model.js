@@ -27,6 +27,7 @@ define('io.ox/mail/compose/model', [
 
         defaults: function () {
             return {
+                preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
                 account_name: '',
                 attachment: '',
@@ -113,7 +114,7 @@ define('io.ox/mail/compose/model', [
                 }), { silent: true });
             }
 
-            if (settings.get('messageFormat', 'html') === 'alternative') {
+            if (this.preferredEditorMode === 'alternative') {
                 this.set('editorMode', 'html', { silent: true });
                 if (this.get('content_type') === 'text/plain') {
                     this.set('editorMode', 'text', { silent: true });

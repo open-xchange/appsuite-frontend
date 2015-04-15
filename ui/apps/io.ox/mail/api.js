@@ -759,6 +759,12 @@ define('io.ox/mail/api', [
     };
 
     var react = function (action, obj, view) {
+        var isDraft = false;
+
+        if (action === 'edit') {
+            isDraft = true;
+            action = 'get';
+        }
 
         // get proper view first
         view = $.trim(view || 'text').toLowerCase();
@@ -794,7 +800,7 @@ define('io.ox/mail/api', [
             if (data.attachments && data.attachments.length) {
                 if (data.attachments[0].content === '') {
                     // nothing to do - nothing to break
-                } else {
+                } else if (!isDraft) {
                     //content-type specific
                     if (data.attachments[0].content_type === 'text/plain') {
                         $('<div>')
@@ -942,6 +948,16 @@ define('io.ox/mail/api', [
      */
     api.forward = function (obj, view) {
         return react('forward', obj, view);
+    };
+
+    /**
+     * prepares object content for 'edit' action
+     * @param  {object} obj (mail object)
+     * @param  {string} view (html or text)
+     * @return { deferred} done returns prepared object
+     */
+    api.edit = function (obj, view) {
+        return react('edit', obj, view);
     };
 
     /**
