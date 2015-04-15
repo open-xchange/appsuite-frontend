@@ -452,9 +452,11 @@ define('io.ox/mail/compose/view', [
                 }
             }).then(function (result, data) {
                 // Replace inline images in contenteditable with links from draft response
-                $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                    $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
-                });
+                if (self.editorMode === 'html') {
+                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                    });
+                }
                 self.model.set('msgref', result.data, { silent: true });
                 self.model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
