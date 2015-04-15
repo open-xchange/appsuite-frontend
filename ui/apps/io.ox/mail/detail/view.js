@@ -154,12 +154,6 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
-        id: 'breadcrumb',
-        index: INDEX += 100,
-        draw: extensions.breadcrumb
-    });
-
     var INDEX_notifications = 0;
 
     ext.point('io.ox/mail/detail/notifications').extend({
@@ -427,10 +421,6 @@ define('io.ox/mail/detail/view', [
                     baton.disable(point, extension);
                 }
             });
-            // show breadcrumb for search results only
-            if (this.app.listView.loader.mode !== 'search') {
-                baton.disable('io.ox/mail/detail', 'breadcrumb');
-            }
 
             this.$el.attr({
                 'data-cid': this.model.cid,

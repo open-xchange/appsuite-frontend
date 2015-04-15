@@ -232,9 +232,6 @@
             min-height: 80px;
         }
     }
-    section.breadcrumb {
-        display: none;
-    }
     section.attachments {
         display: none;
     }
@@ -243,7 +240,7 @@
     }
 
     &.expanded {
-        section.breadcrumb, section.attachments, section.notifications { display: block; }
+        section.attachments, section.notifications { display: block; }
         // for proper overflow behavior */
         section.body { display: table; }
         section.attachments:empty { display: none; }
@@ -451,16 +448,7 @@
         .fontWeight(300);
     }
 
-    .breadcrumb {
-        background-color: transparent;
-        min-height: 40px;
-        .breadcrumb-view {
-            margin: 0;
-            text-align: right;
-        }
-    }
-
-    .attachments, .breadcrumb {
+    .attachments {
         padding: 10px @default-padding 9px @default-padding;
         border-bottom: 1px solid #eee;
         .io-ox-inline-links {
