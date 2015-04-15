@@ -12,10 +12,11 @@
  */
 
 define('io.ox/core/tk/list', [
+    'io.ox/backbone/disposable',
     'io.ox/core/tk/list-selection',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extensions'
-], function (Selection, dnd, ext) {
+], function (DisposableView, Selection, dnd, ext) {
 
     'use strict';
 
@@ -35,7 +36,7 @@ define('io.ox/core/tk/list', [
     // helper
     function NOOP() { return $.when(); }
 
-    var ListView = Backbone.View.extend({
+    var ListView = DisposableView.extend({
 
         tagName: 'ul',
         className: 'list-view',
@@ -96,6 +97,13 @@ define('io.ox/core/tk/list', [
             this.processPaginate();
 
         }, 50),
+
+        onLoad: function () {
+            // trigger scroll event after initial load
+            // takes care of the edge-case that the initial list cannot fill the viewport (see bug 37728)
+            this.onScroll();
+            this.idle();
+        },
 
         onComplete: function () {
             this.toggleComplete(true);
@@ -407,8 +415,8 @@ define('io.ox/core/tk/list', [
             // set special class if not on smartphones (different behavior)
             if (_.device('!smartphone')) {
                 this.$el.addClass('visible-selection');
-
             }
+
             // helper to detect scrolling in action, only used by mobiles
             if (_.device('smartphone')) {
                 var self = this,
@@ -422,6 +430,13 @@ define('io.ox/core/tk/list', [
                     }, 250);
                 });
             }
+
+            // respond to window resize (see bug 37728)
+            $(window).on('resize.list-view', this.onScroll.bind(this));
+
+            this.on('dispone', function () {
+                $(window).off('resize.list-view');
+            });
         },
 
         forwardCollectionEvents: function (name) {
@@ -446,7 +461,7 @@ define('io.ox/core/tk/list', [
                 'sort': this.onSort,
                 // load
                 'before:load': this.busy,
-                'load': this.idle,
+                'load': this.onLoad,
                 'load:fail': this.idle,
                 // paginate
                 'before:paginate': this.busy,
