@@ -99,10 +99,10 @@ define('io.ox/core/tk/list', [
         }, 50),
 
         onLoad: function () {
+            this.idle();
             // trigger scroll event after initial load
             // takes care of the edge-case that the initial list cannot fill the viewport (see bug 37728)
-            this.onScroll();
-            this.idle();
+            if (!this.complete && false) this.onScroll();
         },
 
         onComplete: function () {

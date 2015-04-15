@@ -48,7 +48,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 if (_.cid(first) !== _.cid(last)) {
                     // check d0901724d8050552b5b82c0fdd5be1ccfef50d99 for details
                     params.thread = params.action === 'threadedAll';
-                    loader.reload(params, loader.limit);
+                    loader.reload(params, loader.LIMIT);
                     return;
                 }
             }
@@ -56,7 +56,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 var method = methods[type];
                 collection[method](data, { parse: true });
             });
-            var isComplete = (type === 'load' && data.length < loader.limit) || (type === 'paginate' && data.length <= 1);
+            var isComplete = (type === 'load' && data.length < loader.LIMIT) || (type === 'paginate' && data.length <= 1);
             if (isComplete) collection.trigger('complete');
             collection.trigger(type);
         }
