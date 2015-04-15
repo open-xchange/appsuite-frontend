@@ -352,11 +352,9 @@ define('io.ox/mail/threadview', [
             items.eq(index).get(0).scrollIntoView(true);
         },
 
-        initialize: function (options) {
-            options = options || {};
+        initialize: function () {
 
             this.model = null;
-            this.app = options.app;
             this.threaded = true;
             this.collection = new backbone.Collection();
 
@@ -396,7 +394,7 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var view = new detail.View({ app: this.app, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             return view.render().$el.attr({ tabindex: '1' });
         },
 
