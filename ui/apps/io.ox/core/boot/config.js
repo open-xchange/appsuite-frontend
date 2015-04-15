@@ -25,8 +25,9 @@ define('io.ox/core/boot/config', [
         ox.serverConfig = data || {};
 
         // transform language array (hash keeps insertion order if keys are not array indexes)
-        ox.serverConfig.languages = _(ox.serverConfig.languages).object();
-
+        if (_.isArray(ox.serverConfig.languages)) {
+            ox.serverConfig.languages = _(ox.serverConfig.languages).object();
+        }
         capabilities.reset();
         manifests.reset();
 
