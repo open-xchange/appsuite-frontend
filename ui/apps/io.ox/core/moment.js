@@ -32,12 +32,20 @@ define('io.ox/core/moment', [
 
     'use strict';
 
+    var defaultLang = 'en';
+
+    function isMomentLanguage(lang) {
+        return ox.momentLanguages.indexOf(lang) > -1;
+    }
+
     function normalizeLocale(key) {
-        key = key.toLowerCase().replace('_', '-').split('-');
-        if (key[0] !== key[1]) {
-            return key[0] + '-' + key[1];
+        if (_.isEmpty(key)) return defaultLang;
+        var l = key.toLowerCase().replace('_', '-').split('-'),
+            iso = l[0] !== l[1] ? l[0] + '-' + l[1] : l[0];
+        if (isMomentLanguage(iso)) {
+            return iso;
         } else {
-            return key[0];
+            return isMomentLanguage(l[0]) ? l[0] : defaultLang;
         }
     }
 
@@ -45,7 +53,10 @@ define('io.ox/core/moment', [
     window.moment = moment;
 
     // set locale
-    require(['static/3rd.party/moment/locale/' + normalizeLocale(settings.get('language')) + '.js']);
+    var langISO = normalizeLocale(settings.get('language'));
+    if (langISO !== defaultLang) {
+        require(['static/3rd.party/moment/locale/' + langISO + '.js']);
+    }
     // set timezone
     moment.tz.setDefault(settings.get('timezone'));
     // define threshold for humanize function

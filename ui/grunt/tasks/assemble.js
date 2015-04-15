@@ -15,6 +15,11 @@
 
 module.exports = function (grunt) {
 
+    var momentLanguages = [];
+    grunt.file.expand({ cwd: 'bower_components/moment/locale/' }, '*.js').forEach(function (file) {
+        momentLanguages.push(file.split('.').shift());
+    });
+
     grunt.config.merge({
         assemble: {
             options: {
@@ -22,7 +27,8 @@ module.exports = function (grunt) {
                 revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
                 enable_debug: '<%= String(local.debug) %>',
                 base: 'v=<%= assemble.options.version %>',
-                cap: '<%= String(local.cap || "") %>'
+                cap: '<%= String(local.cap || "") %>',
+                momentLanguages:  "['" + momentLanguages.join("','") + "']"
             },
             base: {
                 options: {
