@@ -27,7 +27,10 @@ define('io.ox/core/tk/list', [
         38: 'cursor:up',
         39: 'cursor:right',
         40: 'cursor:down'
-    };
+    },
+    // PULL TO REFRESH constants
+    PTR_START = 5,              // Threshold when pull-to-refresh starts
+    PTR_TRIGGER = 150;          // threshold when refresh is done
 
     // helper
     function NOOP() { return $.when(); }
@@ -45,6 +48,12 @@ define('io.ox/core/tk/list', [
         ),
 
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
+
+        pullToRefreshIndicator: $(
+            '<div class="pull-to-refresh" style="top: -70px">' +
+            '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
+            '<i class="fa fa-refresh"/></div></div>'
+        ),
 
         onItemFocus: function () {
             this.$el.removeAttr('tabindex');
@@ -223,6 +232,91 @@ define('io.ox/core/tk/list', [
             };
         }()),
 
+        onTouchStart: function (e) {
+            if (this.options.noPullToRefresh) return;
+            var atTop = this.$el.scrollTop() === 0,
+                touches = e.originalEvent.touches[0],
+                currentY = touches.pageY;
+            if (atTop) {
+                this.pullToRefreshStartY = currentY;
+            }
+        },
+
+        onTouchMove: function (e) {
+            var touches = e.originalEvent.touches[0],
+                currentY = touches.pageY;
+            if (this.pullToRefreshStartY && !this.isPulling) {
+                if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // mark the list as scrolling, this will prevent selection from
+                    // performing cell swipes
+                    this.selection.isScrolling = true;
+                    this.isPulling = true;
+                    this.$el.prepend(
+                        this.pullToRefreshIndicator
+                    );
+                }
+            }
+            if (this.isPulling && !this.pullToRefreshTriggerd) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var distance = currentY - this.pullToRefreshStartY,
+                    opacity = (1 / PTR_TRIGGER) * distance,
+                    rotationAngle = (360 / PTR_TRIGGER) * distance,
+                    top = -70 + ((70 / PTR_TRIGGER) * distance);
+
+                this.pullToRefreshIndicator
+                    .css({
+                        'opacity': opacity,
+                        'top': top +  'px'
+                    })
+                    .find('i')
+                    .css('transform', 'rotateZ(' + rotationAngle + 'deg)');
+
+                this.selection.isScrolling = true;
+
+                if ((currentY - this.pullToRefreshStartY) >= PTR_TRIGGER) {
+                    this.pullToRefreshTriggerd = true;
+                }
+            }
+        },
+
+        onTouchEnd: function (e) {
+            // reset stuff
+            if (this.pullToRefreshTriggerd) {
+                this.pullToRefreshIndicator.find('i').addClass('fa-spin');
+                // trigger event to do the refresh elsewhere
+                ox.trigger('pull-to-refresh', this);
+                e.preventDefault();
+                e.stopPropagation();
+                this.selection.isScrolling = false;
+
+            } else {
+                if (this.isPulling) {
+                    this.pullToRefreshIndicator.find('i').removeClass('fa-spin');
+                    this.removePullToRefreshIndicator();
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.selection.isScrolling = true;
+                }
+            }
+            this.pullToRefreshStartY = null;
+            this.isPulling = false;
+            this.pullToRefreshTriggerd = false;
+            this.pullToRefreshStartY = null;
+        },
+
+        removePullToRefreshIndicator: function () {
+            try {
+                this.pullToRefreshIndicator.find('i').removeClass('fa-spin');
+                this.pullToRefreshIndicator.remove();
+            } catch (e) {
+
+            }
+        },
+
         // called whenever a model inside the collection changes
         onChange: function (model) {
             var li = this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(model)) + '"]'),
@@ -261,7 +355,10 @@ define('io.ox/core/tk/list', [
                     'focus .list-item': 'onItemFocus',
                     'blur .list-item': 'onItemBlur',
                     'click': 'onKeepFocus',
-                    'keydown .list-item': 'onItemKeydown'
+                    'keydown .list-item': 'onItemKeydown',
+                    'touchstart': 'onTouchStart',
+                    'touchend': 'onTouchEnd',
+                    'touchmove': 'onTouchMove'
                 };
                 // set special class if not on smartphones (different behavior)
                 if (_.device('!smartphone')) this.$el.addClass('visible-selection');
