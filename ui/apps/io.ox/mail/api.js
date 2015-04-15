@@ -334,27 +334,30 @@ define('io.ox/mail/api', [
      * @return { deferred} resolves as array
      */
     api.remove = function (ids, all) {
-
-        prepareRemove(ids, all);
-
-        return http.wait(
-            http.PUT({
-                module: 'mail',
-                params: { action: 'delete', timestamp: _.then() },
-                data: http.simplify(ids),
-                appendColumns: false
-            })
-            .done(function () {
-                // reset trash folder
-                var trashId = accountAPI.getFoldersByType('trash');
-                pool.resetFolder(trashId);
-                // update unread counter and folder item counter
-                folderAPI.reload(ids, trashId);
-                // trigger delete to update notification area
-                api.trigger('delete');
-                api.trigger('deleted-mails', ids);
-            })
-        );
+        try {
+            return http.wait(
+                http.PUT({
+                    module: 'mail',
+                    params: { action: 'delete', timestamp: _.then() },
+                    data: http.simplify(ids),
+                    appendColumns: false
+                })
+                .done(function () {
+                    // reset trash folder
+                    var trashId = accountAPI.getFoldersByType('trash');
+                    pool.resetFolder(trashId);
+                    // update unread counter and folder item counter
+                    folderAPI.reload(ids, trashId);
+                    // trigger delete to update notification area
+                    api.trigger('delete');
+                    api.trigger('deleted-mails', ids);
+                })
+            );
+        } finally {
+            // try/finally is used to set up http.wait() first
+            // otherwise we run into race-conditions (see bug 37707)
+            prepareRemove(ids, all);
+        }
     };
 
     /**
@@ -725,10 +728,13 @@ define('io.ox/mail/api', [
      * @return { deferred }
      */
     api.move = function (list, targetFolderId, all) {
-
-        prepareRemove(list, all);
-
-        return transfer('update', list, targetFolderId);
+        try {
+            return transfer('update', list, targetFolderId);
+        } finally {
+            // try/finally is used so that transfer() set up http.wait()
+            // otherwise we run into race-conditions (see bug 37707)
+            prepareRemove(list, all);
+        }
     };
 
     /**
