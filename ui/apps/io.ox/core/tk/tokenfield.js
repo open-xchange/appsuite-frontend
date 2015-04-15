@@ -263,9 +263,8 @@ define('io.ox/core/tk/tokenfield', [
                             }
                             return title;
                         });
-
                         // customize token
-                        ext.point(self.options.extPoint + '/token').invoke('draw', this, model, e);
+                        ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
                     }
                 },
                 'tokenfield:edittoken': function (e) {
