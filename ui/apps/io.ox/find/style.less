@@ -21,17 +21,20 @@
             max-height: 400px;
         }
 
-        // reduce size of box-shadow from 8px to 4px
-        // fixes display issue in Chrome (hidden top-bar; cause by fixed position)
-        .search-field.form-control:focus {
-            @color: @input-border-focus;
-            @color-rgba: rgba(red(@color), green(@color), blue(@color), .6);
-            .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px @{color-rgba}");
-        }
+        .search-field {
 
-        // keep placeholder at same position when switching to typeahead
-        .search-field .token-input.tt-input {
-            padding-left: 3px;
+            &.form-control:focus {
+                // reduce size of box-shadow from 8px to 4px
+                // fixes display issue in Chrome (hidden top-bar; cause by fixed position)
+                @color: @input-border-focus;
+                @color-rgba: rgba(red(@color), green(@color), blue(@color), .6);
+                .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px @{color-rgba}");
+            }
+
+            .token-input.tt-input {
+                // keep placeholder at same position when switching to typeahead
+                padding-left: 3px;
+            }
         }
     }
 
@@ -45,9 +48,11 @@
             font-style: normal;
             color: rgba(0, 0, 0, 0.5);
         }
+
         &.indent {
             padding-left: 24px;
         }
+
         &.dropdown-header {
             padding-top: 9px;
             margin-top: 9px;
@@ -55,25 +60,30 @@
             // reset bootstrap
             max-width: inherit;
         }
+
         &.dropdown-header:first-child {
             margin-top: 0;
             border-top: 0;
         }
+
         &.unselectable {
             cursor: default;
             color: rgba(128, 128, 128, 0.71);
         }
 
         &.contacts, &.contact, &.participant, &.task_participants {
+
             .image {
                 margin-right: 14px;
                 display: inline-block;
                 float: left;
                 .picture(42px, 42px);
             }
+
             .name {
                 .ellipsis();
             }
+
             .detail {
                 color: rgba(0, 0, 0, 0.5);
                 .ellipsis();
