@@ -962,7 +962,11 @@ define('io.ox/files/api', [
         var oldschool = { 'new': 'add:file', 'change': 'change:file', 'update': 'change:file', 'delete': 'remove:file' };
 
         function reloadVersions(file) {
-            return api.versions.load(file, { cache: false });
+            return api.versions.load(file, { cache: false }).done(function (versionList) {
+                // update model
+                var cid = _.cid(file), model = pool.get('detail').get(cid);
+                if (model) model.set('number_of_versions', versionList.length);
+            });
         }
 
         return function (type, file) {
@@ -1039,10 +1043,7 @@ define('io.ox/files/api', [
                 case 'remove:version':
                     // let's reload the version list
                     // since we might have just removed the current version
-                    return reloadVersions(file).done(function (list) {
-                        // update model
-                        var cid = _.cid(file), model = pool.get('detail').get(cid);
-                        if (model) model.set('number_of_versions', list.length);
+                    return reloadVersions(file).done(function () {
                         // the mediator will reload the current collection
                         api.trigger('remove:version', file);
                     });
