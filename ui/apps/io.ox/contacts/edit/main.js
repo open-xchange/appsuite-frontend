@@ -53,7 +53,10 @@ define('io.ox/contacts/edit/main', [
 
             var cont = function (data) {
 
-                app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                // if edit mode
+                if (data.id) {
+                    app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                }
 
                 win.show(function () {
 
