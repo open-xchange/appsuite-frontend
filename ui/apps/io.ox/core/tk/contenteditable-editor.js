@@ -294,7 +294,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
             if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
                 var containerHeight = el.parent().parent().height();
-                el.css('min-height', containerHeight - composeFieldsHeight - 30);
+                el.css('min-height', containerHeight - composeFieldsHeight - 32);
                 return;
             } else if (_.device('smartphone')) {
                 var composeFieldsHeight = el.parent().find('.mail-compose-fields').height(),
