@@ -244,26 +244,34 @@ define('io.ox/core/tk/list', [
             if (this.options.noPullToRefresh) return;
             var atTop = this.$el.scrollTop() === 0,
                 touches = e.originalEvent.touches[0],
-                currentY = touches.pageY;
+                currentY = touches.pageY,
+                currentX = touches.pageX;
             if (atTop) {
                 this.pullToRefreshStartY = currentY;
+                this.pullToRefreshStartX = currentX;
             }
         },
 
         onTouchMove: function (e) {
             var touches = e.originalEvent.touches[0],
                 currentY = touches.pageY;
+            // TODO
+            // fix for ios
+            // due to scrollbounce in the listview this works not reliable
+            if (_.device('ios')) return;
+
             if (this.pullToRefreshStartY && !this.isPulling) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
                     e.preventDefault();
                     e.stopPropagation();
                     // mark the list as scrolling, this will prevent selection from
-                    // performing cell swipes
+                    // performing cell swipes but only if we are not performing a cell swipe
                     this.selection.isScrolling = true;
                     this.isPulling = true;
                     this.$el.prepend(
                         this.pullToRefreshIndicator
                     );
+
                 }
             }
             if (this.isPulling && !this.pullToRefreshTriggerd) {

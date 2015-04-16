@@ -32,7 +32,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     // indexddb support on theses devices
 
     // we test for this by looking for the IDBVersionChangeEvent which these devices do not have
-    if ((defunct = !(window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB))) {
+    if ((defunct = !(window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB && !window.cordova))) {
         return $.when();
     }
 

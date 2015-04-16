@@ -170,7 +170,7 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
         },
 
         isUsable: function () {
-            return Modernizr.localstorage;
+            return !window.cordova && Modernizr.localstorage;
         },
 
         gc: function () {
