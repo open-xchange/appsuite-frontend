@@ -184,20 +184,28 @@ define('io.ox/contacts/toolbar', [
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                toolbar.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                var self = this;
-                if (!list) return $.when();
-                //get full data, needed for require checks for example
-                return api.getList(list).then(function (data) {
-                    // extract single object if length === 1
-                    data = data.length === 1 ? data[0] : data;
-                    // draw toolbar
-                    var baton = ext.Baton({ $el: toolbar.$list, data: data, app: self }),
-                        ret = ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                    return $.when.apply($, ret.value()).then(function () {
-                        toolbar.initButtons();
-                    });
-                });
+
+            function finalize(node) {
+                console.log('finish toolbar');
+                toolbar.$list.empty().append(node.contents());
+                toolbar.initButtons();
+            }
+
+            function render(app, node, callback, data) {
+                // extract single object if length === 1
+                data = data.length === 1 ? data[0] : data;
+                // draw toolbar
+                var baton = ext.Baton({ $el: node, data: data, app: app }),
+                    ret = ext.point('io.ox/contacts/classic-toolbar').invoke('draw', node, baton);
+                $.when.apply($, ret.value()).done(callback);
+            }
+
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
+                // toolbar.$list.empty();
+                var node = $('<div>');
+                var callback = _.lfo(render, this, node, _.lfo(finalize, node));
+                api.getList(list).done(callback);
             }, 10);
         }
     });
