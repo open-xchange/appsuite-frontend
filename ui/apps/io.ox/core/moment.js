@@ -35,7 +35,7 @@ define('io.ox/core/moment', [
     var defaultLang = 'en';
 
     function isMomentLanguage(lang) {
-        return ox.momentLanguages.indexOf(lang) > -1;
+        return ox.momentLanguages ? ox.momentLanguages.indexOf(lang) > -1 : false;
     }
 
     function normalizeLocale(key) {
