@@ -52,13 +52,12 @@ define('io.ox/mail/common-extensions', [
         },
 
         picture: function (baton) {
-            var data = baton.data, from = data.from,
-                size = _.device('retina') ? 80 : 40;
+            var data = baton.data, from = data.from;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
                     { email: data.picture || (from && from[0] && from[0][1]) },
-                    { width: size, height: size, effect: 'fadeIn' }
+                    { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );
         },

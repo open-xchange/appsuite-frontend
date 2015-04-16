@@ -734,6 +734,12 @@ define('io.ox/contacts/api', [
                 delete data.user_id;
             }
 
+            // use double size in combination retina
+            if (_.device('retina')) {
+                opt.width *= 2;
+                opt.height *= 2;
+            }
+
             // empty extend trick to restrict to non-undefined values
             params = $.extend({}, {
                 // identifier
