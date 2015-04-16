@@ -24,25 +24,25 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
-#: apps/io.ox/calendar/util.js:262 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:263 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
 msgstr[0] "%1$d jour"
 msgstr[1] "%1$d jours"
 
-#: apps/io.ox/calendar/util.js:258 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:259 module:io.ox/calendar
 msgid "%1$d Hour"
 msgid_plural "%1$d Hours"
 msgstr[0] "%1$d heure"
 msgstr[1] "%1$d heures"
 
-#: apps/io.ox/calendar/util.js:254 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:255 module:io.ox/calendar
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
 msgstr[0] "%1$d minute"
 msgstr[1] "%1$d minutes"
 
-#: apps/io.ox/calendar/util.js:266 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:267 module:io.ox/calendar
 msgid "%1$d Week"
 msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d semaine"
@@ -343,8 +343,8 @@ msgstr "%1$s recommande ce lien :"
 #. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
 #. %1$s is the start date
 #. %2$s is the end date
-#: apps/io.ox/calendar/util.js:159 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:189
+#: apps/io.ox/calendar/util.js:160 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:190
 #, c-format
 msgid "%1$s to %2$s"
 msgstr "%1$s à %2$s"
@@ -376,7 +376,7 @@ msgstr "%3$s %1$s %2$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:205 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:206 module:io.ox/calendar
 #: apps/io.ox/core/date.js:126 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -533,7 +533,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:536 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Un accusé de réception a été envoyé"
 
@@ -555,7 +555,7 @@ msgid "About"
 msgstr "À propos"
 
 #: apps/io.ox/calendar/edit/extensions.js:301 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Absent"
 msgstr "Absent"
 
@@ -826,7 +826,7 @@ msgstr "Ajouter la signature au-dessus du contenu cité"
 msgid "Add signature below quoted text"
 msgstr "Ajouter la signature en dessous du contenu cité"
 
-#: apps/io.ox/mail/compose/view.js:741 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:760 module:io.ox/mail
 msgid "Add subject"
 msgstr "Ajouter un sujet"
 
@@ -1040,7 +1040,7 @@ msgstr "Ajouter une carte de visite au format vCard"
 msgid "Application Toolbar"
 msgstr "Barre d'outils de l'application"
 
-#: apps/io.ox/mail/main.js:1163 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1172 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Il se peut que l'application ne fonctionne pas correctement tant que ce "
@@ -1170,7 +1170,7 @@ msgstr "Croissant"
 msgid "Assistant"
 msgstr "Assistant"
 
-#: apps/io.ox/mail/compose/view.js:183 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "Joindre ma vCard"
 
@@ -1425,7 +1425,7 @@ msgstr "Vue en calendrier"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
-#: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1369
+#: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1364
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
@@ -1444,7 +1444,7 @@ msgstr "Vue en calendrier"
 #: apps/io.ox/mail/actions/delete.js:63 apps/io.ox/mail/actions/delete.js:82
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:425
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:593
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:612
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:180
@@ -1807,7 +1807,7 @@ msgid "Company"
 msgstr "Société"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:401
+#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:418
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -1890,7 +1890,7 @@ msgstr "Les contacts ont été déplacés"
 msgid "Contains"
 msgstr "Contient"
 
-#: apps/io.ox/core/main.js:1370 module:io.ox/core
+#: apps/io.ox/core/main.js:1365 module:io.ox/core
 msgid "Continue"
 msgstr "Continuer"
 
@@ -2393,7 +2393,7 @@ msgstr "Abandonner les modifications"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:591 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:610 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Abandonner le message"
@@ -2539,7 +2539,7 @@ msgstr "Voulez-vous vraiment supprimer ce composant ?"
 msgid "Do you really want to discard your changes?"
 msgstr "Voulez-vous vraiment perdre toutes vos modifications ?"
 
-#: apps/io.ox/mail/compose/view.js:588 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:607 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Voulez-vous vraiment supprimer votre message ?"
 
@@ -2870,7 +2870,7 @@ msgstr "Modifier pour donner un nom."
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:211
-#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:159
+#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:160
 #: module:io.ox/mail
 msgid "Editor"
 msgstr "Éditeur"
@@ -2906,7 +2906,7 @@ msgstr "Adresses de courrier électronique"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:418
+#: apps/io.ox/mail/detail/view.js:411
 msgid "Email from %1$s: %2$s"
 msgstr "Courriel de %1$s : %2$s"
 
@@ -3069,14 +3069,14 @@ msgstr "Durée estimée en minutes"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:421 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:422 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "Tous les %1$d jours"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:463 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:464 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Tous les %1$d mois le %2$d du mois"
 
@@ -3084,26 +3084,26 @@ msgstr "Tous les %1$d mois le %2$d du mois"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:474 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Le %2$s %3$s un mois sur %1$d"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:448 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:449 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Toutes les %1$d semaines le %2$s"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:432 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "Toutes les %1$d semaine chaque jour"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:439 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:440 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Toutes les %1$d semaines les jours ouvrés"
 
@@ -3111,7 +3111,7 @@ msgstr "Toutes les %1$d semaines les jours ouvrés"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:491 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Tous les %1$d ans le %3$d %2$s"
 
@@ -3120,12 +3120,12 @@ msgstr "Tous les %1$d ans le %3$d %2$s"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:504 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Tous les %1$d ans le %2$s %3$s de %4$d"
 
-#: apps/io.ox/calendar/util.js:418 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:429
+#: apps/io.ox/calendar/util.js:419 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:430
 msgid "Every day"
 msgstr "Chaque jour"
 
@@ -3174,7 +3174,7 @@ msgstr "Exporter le dossier"
 msgid "External contact"
 msgstr "Contact externe"
 
-#: apps/io.ox/mail/common-extensions.js:483 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3319,7 +3319,7 @@ msgstr "Impressions"
 msgid "Feeling • Decoration"
 msgstr "Sentiment • Décoration"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:114
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:109
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:64
 #: module:io.ox/mail
 msgid "File"
@@ -3347,7 +3347,7 @@ msgstr "Nom de fichier"
 msgid "File quota"
 msgstr "Quota de fichiers"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:110
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:106
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr ""
@@ -3437,7 +3437,7 @@ msgid "Folder view"
 msgstr "Vue en dossier"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1596 module:io.ox/core
+#: apps/io.ox/core/main.js:1591 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3526,7 +3526,7 @@ msgid "Forward emails as"
 msgstr "Transférer les messages :"
 
 #: apps/io.ox/calendar/edit/extensions.js:302 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
 msgstr "Disponible"
 
@@ -3648,7 +3648,7 @@ msgstr "Groupe"
 msgid "Guest"
 msgstr "Invité"
 
-#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:162 module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr "en HTML"
@@ -3763,7 +3763,7 @@ msgstr "Masquer la trace d'erreurs"
 msgid "Hide this notification"
 msgstr "Cliquez pour fermer cette notification"
 
-#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
@@ -4241,7 +4241,7 @@ msgstr "Pertes"
 msgid "Loss: %1$s %"
 msgstr "Perte : %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:174 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
@@ -4261,7 +4261,7 @@ msgstr "Mo"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
 msgid "Mail"
 msgstr "Courrier"
 
@@ -4330,11 +4330,11 @@ msgstr "Le courrier électronique a été importé"
 msgid "Mail has been moved"
 msgstr "Le courriel a été déplacé"
 
-#: apps/io.ox/mail/compose/view.js:739 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:758 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Le message a un sujet vide. L'envoyer quand même ?"
 
-#: apps/io.ox/mail/compose/view.js:732 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:751 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Le message n'a pas de destinataire."
 
@@ -4354,8 +4354,8 @@ msgstr "Rappel par courriel"
 msgid "Mail reminder for"
 msgstr "Rappel par courriel de"
 
-#: apps/io.ox/mail/compose/view.js:460 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:495
+#: apps/io.ox/mail/compose/view.js:479 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:514
 msgid "Mail saved as draft"
 msgstr "Message enregistré en tant que brouillon"
 
@@ -4572,14 +4572,14 @@ msgstr "Mois"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:459 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Mensuel le %1$d du mois"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:469 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Le %1$s %2$s de chaque mois"
 
@@ -4705,7 +4705,7 @@ msgstr "Nouveau"
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
-#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1386 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nouveau message"
 
@@ -4929,7 +4929,7 @@ msgid "No recipients"
 msgstr "Pas de destinataires"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:251
+#: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "Pas de rappel"
 
@@ -4946,7 +4946,7 @@ msgstr "Pas de requêtes lentes"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:224 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:100
 #: module:plugins/notifications
@@ -4972,7 +4972,7 @@ msgstr "Pas de titre."
 msgid "None"
 msgstr "Aucun"
 
-#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
 msgid "Normal"
 msgstr "Normal"
 
@@ -5108,7 +5108,7 @@ msgid "On behalf of the owner"
 msgstr "de la part de"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:436 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
 msgid "On work days"
 msgstr "Les jours ouvrés"
 
@@ -5245,7 +5245,7 @@ msgstr "Optionnel 20"
 #: apps/io.ox/files/toolbar.js:215 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:349 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
+#: apps/io.ox/mail/compose/view.js:183 apps/io.ox/mail/toolbar.js:248
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "Options"
@@ -5456,7 +5456,7 @@ msgstr "Rose"
 msgid "Places"
 msgstr "Lieux"
 
-#: apps/io.ox/mail/compose/view.js:160 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
 msgid "Plain Text"
 msgstr "Texte pur"
 
@@ -5622,7 +5622,7 @@ msgstr ""
 "Veuillez choisir parmi les informations ci-dessous lesquelles utiliser pour "
 "créer votre compte %s :"
 
-#: apps/io.ox/core/main.js:1119 module:io.ox/core
+#: apps/io.ox/core/main.js:1114 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Veuillez vous reconnecter pour continuer"
@@ -5754,7 +5754,7 @@ msgstr "Modifier la tâche"
 msgid "Printout"
 msgstr "Impression"
 
-#: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:691 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
@@ -6140,12 +6140,12 @@ msgstr "Répondre à tous les destinataires"
 msgid "Reply to sender"
 msgstr "Répondre à l'expéditeur"
 
-#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:185 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Demander un accusé de réception"
 
 #: apps/io.ox/calendar/edit/extensions.js:299 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Reserved"
 msgstr "Réservé"
 
@@ -6176,7 +6176,7 @@ msgstr "Ressource"
 msgid "Resources"
 msgstr "Ressources"
 
-#: apps/io.ox/core/main.js:1362 module:io.ox/core
+#: apps/io.ox/core/main.js:1357 module:io.ox/core
 msgid "Restore applications"
 msgstr "Restaurer les applications"
 
@@ -6267,7 +6267,7 @@ msgstr "Enregistrer"
 msgid "Save as distribution list"
 msgstr "Enregistrer comme liste de diffusion"
 
-#: apps/io.ox/mail/compose/view.js:592 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:611 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Enregistrer en tant que brouillon"
 
@@ -6307,13 +6307,12 @@ msgid "Saved in"
 msgstr "Enregistré dans"
 
 #: apps/io.ox/contacts/view-detail.js:706 module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js:297 module:io.ox/mail
 #, fuzzy
 #| msgid "Saved in"
 msgid "Saved in:"
 msgstr "Enregistré dans"
 
-#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1110 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Pièce jointe au courrier enregistrée"
 
@@ -6417,7 +6416,7 @@ msgid "Send"
 msgstr "Envoyer"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:566 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Envoyer un accusé de réception"
 
@@ -6466,7 +6465,7 @@ msgid "Sender/From"
 msgstr "Expéditeur / De"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:903 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:922 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Envoyé depuis %s sur un portable"
 
@@ -6670,7 +6669,7 @@ msgstr "Afficher les fichiers et les dossiers cachés"
 msgid "Show icons"
 msgstr "Afficher les icônes"
 
-#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
 msgid "Show images"
 msgstr "Afficher les images"
 
@@ -6739,7 +6738,7 @@ msgid "Sign in"
 msgstr "Se connecter"
 
 #: apps/io.ox/core/main.js:924 module:io.ox/core apps/io.ox/core/main.js:963
-#: apps/io.ox/core/main.js:965 apps/io.ox/core/main.js:1099
+#: apps/io.ox/core/main.js:965 apps/io.ox/core/main.js:1094
 msgid "Sign out"
 msgstr "Se déconnecter"
 
@@ -6766,7 +6765,7 @@ msgstr "Signatures"
 msgid "Signed in as %1$s"
 msgstr "Connecté en tant que %1$s"
 
-#: apps/io.ox/core/main.js:1096 module:io.ox/core
+#: apps/io.ox/core/main.js:1091 module:io.ox/core
 #, fuzzy
 #| msgid "Signed in as %1$s"
 msgid "Signed in as:"
@@ -7142,7 +7141,7 @@ msgid "Telex"
 msgstr "Télex"
 
 #: apps/io.ox/calendar/edit/extensions.js:300 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js:29 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Temporary"
 msgstr "Temporaire"
 
@@ -7331,7 +7330,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "L'adresse de courrier électronique %1$s figure déjà dans la liste"
 
-#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:690 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Le courriel a été envoyé"
 
@@ -7390,7 +7389,7 @@ msgstr "Le dossier a été nettoyé."
 msgid "The folder has been emptied."
 msgstr "Le dossier a été vidé."
 
-#: apps/io.ox/core/main.js:1364 module:io.ox/core
+#: apps/io.ox/core/main.js:1359 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7441,7 +7440,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:569 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "L'émetteur souhaite être prévenu quand vous aurez lu ce message"
 
@@ -7476,7 +7475,7 @@ msgstr ""
 "La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ne "
 "s'arrête jamais</a>."
 
-#: apps/io.ox/calendar/util.js:518 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 #, fuzzy
 #| msgid "after %1$d appointment"
 #| msgid_plural "after %1$d appointments"
@@ -7485,7 +7484,7 @@ msgid_plural "The series ends after %1$d appointments"
 msgstr[0] "après %1$d rendez-vous"
 msgstr[1] "après %1$d rendez-vous"
 
-#: apps/io.ox/calendar/util.js:513 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
 #, fuzzy
 #| msgid "This file is locked by %1$s"
 msgid "The series ends on %1$s"
@@ -7620,13 +7619,13 @@ msgstr ""
 "Ces statistiques ne comprennent que les dossiers qui sont à moins de quatre "
 "dossiers de profondeur dans la structure des dossiers du dossier « %1$s »."
 
-#: apps/io.ox/mail/common-extensions.js:439 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:450
+#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Ce courriel est lu, appuyez pour le marquer comme non lu."
 
-#: apps/io.ox/mail/common-extensions.js:442 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:450
+#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Ce courriel est non lu, appuyez pour le marquer comme lu."
 
@@ -7756,7 +7755,7 @@ msgstr "Ce message a été ajouté au portail"
 msgid "This mail has no content"
 msgstr "Ce message n'a pas de contenu"
 
-#: apps/io.ox/mail/detail/view.js:245 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:239 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Ce message a été tronqué du fait des limites de taille."
 
@@ -7833,7 +7832,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:82 module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
-#: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:128
+#: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
@@ -7855,7 +7854,7 @@ msgstr "Afficher/cacher les options"
 msgid "Toggle panel"
 msgstr "Afficher/cacher les options"
 
-#: apps/io.ox/calendar/util.js:130 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:131 module:io.ox/calendar
 #: apps/plugins/portal/birthdays/register.js:90 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Tomorrow"
@@ -8174,13 +8173,6 @@ msgstr "Le nom d'utilisateur ne doit pas être vide."
 msgid "Vacation Notice"
 msgstr "Message d'absence"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:113
-#: module:io.ox/core/viewer
-#, fuzzy
-#| msgid "Version Comment"
-msgid "Version number"
-msgstr "Commentaire de version"
-
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:56
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
@@ -8241,7 +8233,7 @@ msgstr "En attente"
 msgid "Warning"
 msgstr "Avertissement"
 
-#: apps/io.ox/mail/common-extensions.js:509 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr ""
 "Avertissement : ce message pourrait être une tentative d'escroquerie par "
@@ -8271,7 +8263,7 @@ msgstr "Vue de la semaine"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:444 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:445 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Hebdomadaire les %1$s"
 
@@ -8330,7 +8322,7 @@ msgid ""
 "saved."
 msgstr ""
 
-#: apps/io.ox/calendar/util.js:201 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:202 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Journée entière"
 
@@ -8361,7 +8353,7 @@ msgstr "Année"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:486 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:487 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Annuel le %2$d %1$s"
 
@@ -8369,7 +8361,7 @@ msgstr "Annuel le %2$d %1$s"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Annuel le %1$s %2$s de %3$d"
 
@@ -8391,7 +8383,7 @@ msgstr "Jaune"
 msgid "Yes"
 msgstr "Oui"
 
-#: apps/io.ox/mail/compose/view.js:740 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:759 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Oui, envoyer sans sujet"
 
@@ -8399,7 +8391,7 @@ msgstr "Oui, envoyer sans sujet"
 msgid "Yes, with empty attachment"
 msgstr "Oui, avec une pièce jointe vide"
 
-#: apps/io.ox/calendar/util.js:121 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
 #: apps/io.ox/mail/util.js:61 module:io.ox/core
 #: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
@@ -8779,7 +8771,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "La photo que vous avez sélectionnée sera affichée après enregistrement"
 
-#: apps/io.ox/core/main.js:1118 module:io.ox/core
+#: apps/io.ox/core/main.js:1113 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Votre session a expiré"
@@ -8818,7 +8810,7 @@ msgstr "Agrandir"
 msgid "Zoom out"
 msgstr "Réduire"
 
-#: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
 msgid "accepted"
 msgstr "accepté"
 
@@ -8832,7 +8824,7 @@ msgstr[1] "après %1$d rendez-vous"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:397 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:398 module:io.ox/calendar
 msgid "and"
 msgstr "et"
 
@@ -8874,13 +8866,13 @@ msgstr "créer des objets et des sous-dossiers"
 msgid "daily"
 msgstr "quotidien"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Dark blue"
 msgid "dark blue"
 msgstr "Bleu foncé"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Mark read"
 msgid "dark green"
@@ -8906,7 +8898,7 @@ msgstr "jour du weekend"
 msgid "dd"
 msgstr "jj"
 
-#: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:38 module:io.ox/calendar
 msgid "declined"
 msgstr "décliné"
 
@@ -9029,7 +9021,7 @@ msgstr "agrandir"
 #: apps/io.ox/calendar/edit/recurrence-view.js:596
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:668
-#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "first"
 msgstr "premier"
 
@@ -9046,11 +9038,11 @@ msgstr "flickr.photos.search"
 #: apps/io.ox/calendar/edit/recurrence-view.js:605
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:674
-#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "fourth"
 msgstr "quatrième"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "gray"
 msgstr ""
 
@@ -9095,7 +9087,7 @@ msgstr "dans une semaine"
 #: apps/io.ox/calendar/edit/recurrence-view.js:593
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:676
-#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "last"
 msgstr "dernier"
 
@@ -9103,13 +9095,13 @@ msgstr "dernier"
 msgid "late in the evening"
 msgstr "tard dans la soirée"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Light blue"
 msgid "light blue"
 msgstr "Bleu clair"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Light green"
 msgid "light green"
@@ -9134,7 +9126,7 @@ msgstr "ne se termine jamais"
 msgid "next %1$s"
 msgstr "Échéance au %1$s"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Set color"
 msgid "no color"
@@ -9179,13 +9171,13 @@ msgstr "dans une semaine"
 msgid "one year"
 msgstr "Tél. (voiture)"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Orange"
 msgid "orange"
 msgstr "Orange"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "pink"
 msgstr ""
 
@@ -9193,7 +9185,7 @@ msgstr ""
 msgid "process subsequent rules"
 msgstr "traiter les règles suivantes"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Purple"
 msgid "purple"
@@ -9210,7 +9202,7 @@ msgstr "lire tous les objets"
 msgid "read own objects"
 msgstr "lire ses propres objets"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Red"
 msgid "red"
@@ -9226,7 +9218,7 @@ msgstr "supprimer"
 #: apps/io.ox/calendar/edit/recurrence-view.js:599
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:670
-#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "second"
 msgstr "deuxième"
 
@@ -9250,7 +9242,7 @@ msgstr "Mois"
 msgid "status "
 msgstr "état"
 
-#: apps/io.ox/calendar/util.js:38 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:39 module:io.ox/calendar
 msgid "tentative"
 msgstr "provisoire"
 
@@ -9269,7 +9261,7 @@ msgstr "la longueur de la ligne doit être un nombre"
 #: apps/io.ox/calendar/edit/recurrence-view.js:602
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:672
-#: apps/io.ox/calendar/util.js:27 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "third"
 msgstr "troisième"
 
@@ -9295,11 +9287,11 @@ msgstr "demain"
 msgid "tonight"
 msgstr "ce soir"
 
-#: apps/io.ox/calendar/util.js:35 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
 msgid "unconfirmed"
 msgstr "non confirmé"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:166
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:163
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
 #: apps/io.ox/mail/util.js:413 apps/io.ox/mail/util.js:428
 msgid "unknown"
@@ -9333,7 +9325,7 @@ msgid "weekly"
 msgstr "hebdomadaire"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:382 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:383 module:io.ox/calendar
 msgid "work days"
 msgstr "jours ouvrés"
 
@@ -9342,7 +9334,7 @@ msgstr "jours ouvrés"
 msgid "yearly"
 msgstr "annuel"
 
-#: apps/io.ox/calendar/util.js:41 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
 #| msgid "Yellow"
 msgid "yellow"
@@ -11588,6 +11580,11 @@ msgstr "aaaa"
 
 #~ msgid "Version history"
 #~ msgstr "Historique des versions"
+
+#, fuzzy
+#~| msgid "Version Comment"
+#~ msgid "Version number"
+#~ msgstr "Commentaire de version"
 
 #~ msgid "Video enabled"
 #~ msgstr "Vidéo activée"
