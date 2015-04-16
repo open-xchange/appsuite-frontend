@@ -40,8 +40,6 @@ define('io.ox/core/tk/typeahead', [
 
         options: {
             apiOptions: {},
-            drawAutocompleteItem: $.noop,
-            cbshow: $.noop,
             click: $.noop,
             blur: $.noop,
             tabindex: 1,
@@ -85,10 +83,6 @@ define('io.ox/core/tk/typeahead', [
 
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
-
-            this.options.drawAutocompleteItem = function (result) {
-                ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', this, result.model);
-            };
 
             /*
              * extension point for contact picture
@@ -178,16 +172,19 @@ define('io.ox/core/tk/typeahead', [
                                 query = dropdown.find('span.info').attr('data-query');
                             if (!emptyAction)
                                 self.model.set('query', query);
-                            if (dropdown.is(':visible'))
+                            if (dropdown.is(':visible')) {
                                 self.model.set('dropdown', 'opened');
+                            }
                         });
+
+                        dateset.onSync('opened', function () { debugger; });
                         self.registered = true;
                     }
                 },
                 templates: {
-                    suggestion: o.suggestion || function (searchresult) {
+                    suggestion: o.suggestion || function (result) {
                         var node = $('<div class="autocomplete-item">');
-                        o.drawAutocompleteItem.call(node, searchresult);
+                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result.model);
                         return node;
                     },
                     header: function (data) {
@@ -208,9 +205,6 @@ define('io.ox/core/tk/typeahead', [
                 tabindex: this.options.tabindex,
                 placeholder: this.options.placeholder
             }).on({
-                'typeahead:opened': function () {
-                    if (_.isFunction(o.cbshow)) o.cbshow();
-                },
                 // dirty hack to get a reliable info about open/close state
                 'typeahead:closed': function () {
                     var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
@@ -221,7 +215,10 @@ define('io.ox/core/tk/typeahead', [
                     o.click.call(this, e, item);
                     self.$el.trigger('select', item);
                 },
-                'blur': o.blur
+                'blur': o.blur,
+                'typeahead:cursorchanged': function () {
+                    // useful for debugging
+                }
             });
 
             if (this.options.init) {
