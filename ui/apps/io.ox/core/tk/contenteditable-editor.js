@@ -205,6 +205,15 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
 
+        // remove all toolbars in mobileapp
+        if (window.cordova) {
+            opt.toolbar = 'false';
+            opt.toolbar1 = 'false';
+            opt.toolbar2 = 'false';
+            opt.toolbar3 = 'false';
+            opt.plugins = 'autolink paste';
+        }
+
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
@@ -281,12 +290,18 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var resizeEditor = _.debounce(function () {
             if (el === null) return;
 
-            // TODO: Cleanup resize handling for tinyMCE
-            // This is a hack for the mobileapp
+            var composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
+
             if (_.device('smartphone') && $('.io-ox-mobile-mail-compose-window').length > 0) {
-                var composeFieldsHeight = el.parent().find('.mail-compose-fields').height(),
-                    containerHeight = el.parent().parent().height();
+                var containerHeight = el.parent().parent().height();
                 el.css('min-height', containerHeight - composeFieldsHeight - 30);
+                return;
+            } else if (_.device('smartphone')) {
+                var composeFieldsHeight = el.parent().find('.mail-compose-fields').height(),
+                    topBarHeight = $('#io-ox-topbar').height(),
+                    windowHeaderHeight = el.parents().find('.window-header').height(),
+                    editorPadding = 30;
+                el.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
                 return;
             }
 

@@ -1041,6 +1041,39 @@ define('io.ox/mail/compose/view', [
                 delete this.blocked[sendtype];
         },
 
+        handleScrollbars: function () {
+            if (_.device('smartphone')) return;
+            var self = this,
+                scrollPane = this.app.getWindowNode(),
+                toolbar = this.mcetoolbar,
+                editor = this.contentEditable,
+                fixed = false,
+                top = 0;
+
+            // get top position
+            scrollPane.on('scroll', _.debounce(function () {
+                // could also use: toolbar.get(0).offsetTop (need to check all browsers)
+                if (!fixed) top = toolbar.position().top + scrollPane.scrollTop();
+            }, 50, true));
+
+            scrollPane.on('scroll', function () {
+
+                if (top < scrollPane.scrollTop()) {
+                    // toolbar leaves viewport
+                    if (!fixed) {
+                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
+                        editor.css('margin-top', toolbar.height());
+                        $(window).trigger('resize.tinymce');
+                        fixed = true;
+                    }
+                } else if (fixed) {
+                    toolbar.removeClass('fixed').css('top', 0);
+                    editor.css('margin-top', 0);
+                    fixed = false;
+                }
+            });
+        },
+
         render: function () {
             var self = this;
 
@@ -1097,34 +1130,7 @@ define('io.ox/mail/compose/view', [
                 this.textarea
             );
 
-            var scrollPane = this.app.getWindowNode(),
-                toolbar = this.mcetoolbar,
-                editor = this.contentEditable,
-                fixed = false,
-                top = 0;
-
-            // get top position
-            scrollPane.on('scroll', _.debounce(function () {
-                // could also use: toolbar.get(0).offsetTop (need to check all browsers)
-                if (!fixed) top = toolbar.position().top + scrollPane.scrollTop();
-            }, 50, true));
-
-            scrollPane.on('scroll', function () {
-
-                if (top < scrollPane.scrollTop()) {
-                    // toolbar leaves viewport
-                    if (!fixed) {
-                        toolbar.addClass('fixed').css('top', self.$el.parent().offset().top);
-                        editor.css('margin-top', toolbar.height());
-                        $(window).trigger('resize.tinymce');
-                        fixed = true;
-                    }
-                } else if (fixed) {
-                    toolbar.removeClass('fixed').css('top', 0);
-                    editor.css('margin-top', 0);
-                    fixed = false;
-                }
-            });
+            this.handleScrollbars();
 
             this.initAutoSaveAsDraft();
 
