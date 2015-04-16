@@ -1176,7 +1176,7 @@ define('io.ox/core/desktop', [
                 };
 
                 this.preQuit = function () {
-                    this.hide();
+                    if (!window.cordova) this.hide();
                     this.state.open = false;
                     this.trigger('pre-quit');
                     ox.ui.windowManager.trigger('window.pre-quit', this);
