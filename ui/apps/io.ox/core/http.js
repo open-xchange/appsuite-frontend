@@ -49,7 +49,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '614': 'priority',
             '615': 'msgref',
             '651': 'flag_seen',
-            '652': 'account_name'
+            '652': 'account_name',
+            '654': 'original_folder_id',
+            '655': 'original_id'
         },
         'contacts': {
             '500': 'display_name',
