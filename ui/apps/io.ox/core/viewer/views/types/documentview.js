@@ -39,6 +39,12 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = 30;
+            // magic module id to source map
+            this.MODULE_SOURCE_MAP = {
+                1: 'calendar',
+                4: 'tasks',
+                7: 'contacts'
+            };
             // predefined zoom factors
             this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800];
             // current zoom factor, defaults at 100%
@@ -92,18 +98,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var self = this,
-                file = (this.model.isFile()) ? this.model.toJSON() : this.model.get('origData'),
-                fileContentType = this.model.get('file_mimetype'),
-                // generate document converter URL of the document
-                documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, file, {
-                    action: 'getdocument',
-                    documentformat: 'pdf',
-                    priority: 'instant',
-                    mimetype: fileContentType ? encodeURIComponent(fileContentType) : '',
-                    nocache: _.uniqueId() // needed to trick the browser cache (is not evaluated by the backend)
-                }),
-                // fire up PDF.JS with the document URL and get its loading promise
-                pageContainer = this.$el.find('.document-container');
+                pageContainer = this.$el.find('.document-container'),
+                convertParams = this.getConvertParams(this.model.get('source')),
+                documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
 
             /**
              * Calculates document page numbers to render depending on visilbility of the pages
@@ -220,7 +217,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 console.error('Core.Viewer.DocumentView.load(): failed loading PDF document.', self.model.get('filename'));
             }
 
-            // create the PDF document model
             this.pdfDocument = new PDFDocument(documentUrl);
 
             // display loading animation
@@ -320,6 +316,48 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         getMinZoomFactor: function () {
             return _.first(this.ZOOM_FACTORS);
+        },
+
+        /**
+         *  Build necessary params for the document conversion to PDF.
+         *  Also adds proprietary properties of Mail and PIM attachment objects.
+         *
+         *  @param {String} source
+         *   the source of the file model.
+         */
+        getConvertParams: function (source) {
+            var originalModel = this.model.get('origData'),
+                defaultParams = {
+                    action: 'getdocument',
+                    filename: encodeURIComponent(this.model.get('filename')),
+                    id: encodeURIComponent(this.model.get('id')),
+                    folder_id: encodeURIComponent(this.model.get('folder_id')),
+                    documentformat: 'pdf',
+                    priority: 'instant',
+                    mimetype: encodeURIComponent(this.model.get('file_mimetype')),
+                    nocache: _.uniqueId() // needed to trick the browser
+                },
+                paramExtension;
+            switch (source) {
+                case 'mail':
+                    paramExtension = {
+                        id: originalModel.mail.id,
+                        source: 'mail',
+                        attached: this.model.get('id')
+                    };
+                    break;
+                case 'pim':
+                    var moduleId = this.model.get('module');
+                    paramExtension = {
+                        source: this.MODULE_SOURCE_MAP[moduleId],
+                        attached: originalModel.attached,
+                        module: moduleId
+                    };
+                    break;
+                default:
+                    return defaultParams;
+            }
+            return _.extend(defaultParams, paramExtension);
         },
 
         /**

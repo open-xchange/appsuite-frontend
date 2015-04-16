@@ -315,88 +315,24 @@ define('io.ox/core/viewer/util', [
      * @param {String} module
      *  The name of the server module.
      *
-     * @param {Object} file
-     *  the OX Drive file descriptor object.
-     *
      * @param {Object} [params]
      *  Additional parameters inserted into the URL.
-     *
-     * @param {Object} [options]
-     *  Optional parameters:
-     *  @param {Boolean} [options.currentVersion=false]
-     *      If set to true, the version stored in the file descriptor will
-     *      NOT be inserted into the generated URL (thus, the server will
-     *      always access the current version of the document).
      *
      * @returns {String|Undefined}
      *  The final URL of the server request; or undefined, if the
      *  application is not connected to a document file, or the current
      *  session is invalid.
      */
-    Util.getServerModuleUrl = function (module, file, params, options) {
+    Util.getServerModuleUrl = function (module, params) {
         // return nothing if no file is present
-        if (!ox.session || !file) {
+        if (!ox.session) {
             return;
         }
-
-        var // the parameters for the file currently loaded
-            fileParams = Util.getFileParameters(file, Util.extendOptions(options, { encodeUrl: true })),
-            // unique ID of current App
-            currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID');
-
+        var currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID');
         // add default parameters (session and UID), and file parameters
-        params = _.extend({ session: ox.session, uid: currentAppUniqueID }, fileParams, params);
-
+        params = _.extend({ session: ox.session, uid: currentAppUniqueID }, params);
         // build and return the resulting URL
         return ox.apiRoot + '/' + module + '?' + _.map(params, function (value, name) { return name + '=' + value; }).join('&');
-    };
-
-    /**
-     * Returns an object with attributes describing the file currently
-     * opened by this application.
-     *
-     * @param {Object} file
-     *  the OX Drive file descriptor object.
-     *
-     * @param {Object} [options]
-     *  Optional parameters:
-     *  @param {Boolean} [options.encodeUrl=false]
-     *      If set to true, special characters not allowed in URLs will be
-     *      encoded.
-     *  @param {Boolean} [options.currentVersion=false]
-     *      If set to true, the version stored in the file descriptor will
-     *      NOT be inserted into the result (thus, the server will always
-     *      access the current version of the document).
-     *
-     * @returns {Object|Null}
-     *  An object with file attributes, if existing; otherwise null.
-     */
-    Util.getFileParameters = function (file, options) {
-
-        var // function to encode a string to be URI conforming if specified
-            encodeString = Util.getBooleanOption(options, 'encodeUrl', false) ? encodeURIComponent : _.identity,
-            // the resulting file parameters
-            parameters = null;
-
-        if (file) {
-            parameters = {};
-
-            // add the parameters to the result object, if they exist in the file descriptor
-            _.each(['id', 'folder_id', 'filename', 'version', 'source', 'attached', 'module'], function (name) {
-                if (_.isString(file[name])) {
-                    parameters[name] = encodeString(file[name]);
-                } else if (_.isNumber(file[name])) {
-                    parameters[name] = file[name];
-                }
-            });
-
-            // remove the version identifier, if specified
-            if (Util.getBooleanOption(options, 'currentVersion', false)) {
-                delete parameters.version;
-            }
-        }
-
-        return parameters;
     };
 
     return Util;
