@@ -17,6 +17,15 @@ define('io.ox/find/manager/facet-model', [
 
     'use strict';
 
+    // array of strings to hash
+    function toHash (list) {
+        var tmp = {};
+        list.forEach(function (id) {
+            tmp[id] = true;
+        });
+        return tmp;
+    }
+
     var FacetModel = Backbone.Model.extend({
 
         type: 'facet',
@@ -32,13 +41,16 @@ define('io.ox/find/manager/facet-model', [
                 type: 'facet'
             });
 
+            // use flags hash
+            this.flags = toHash(this.get('data').flags);
+
             // add value models to collection
             // TODO: may wrap add function of ValueCollection
             values.customAdd(data.values || data, this);
         },
 
         is: function (flag) {
-            return _.contains(this.get('data').flags, flag);
+            return this.flags[flag];
         },
 
         getType: function () {
@@ -51,6 +63,14 @@ define('io.ox/find/manager/facet-model', [
             return !!(_.filter(list, function (current) {
                 return type === current;
             }).length);
+        },
+
+        hide: function () {
+            this.flags.hidden = true;
+        },
+
+        show: function () {
+            delete this.flags.hidden;
         },
 
         isId: function (value) {

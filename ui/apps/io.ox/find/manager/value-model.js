@@ -197,7 +197,7 @@ define('io.ox/find/manager/value-model', [
                 // single value with dynamic/custom value (f.e. folder)
                 'custom': function () {
                     return {
-                        facet: this.get('facet').get('data').id,
+                        facet: this.get('facet').get('data').id.replace('.custom', ''),
                         value: this.getOption().value,
                         filter: this.getFilter()
                     };

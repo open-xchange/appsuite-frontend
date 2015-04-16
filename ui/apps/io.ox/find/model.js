@@ -13,9 +13,8 @@
 
 define('io.ox/find/model', [
     'io.ox/find/api',
-    'io.ox/backbone/modelFactory',
     'io.ox/find/manager/facet-collection'
-], function (api, ModelFactory, FacetCollection) {
+], function (api, FacetCollection) {
 
     'use strict';
 

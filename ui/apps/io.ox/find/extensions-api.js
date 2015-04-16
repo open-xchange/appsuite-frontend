@@ -23,13 +23,57 @@ define('io.ox/find/extensions-api',[
 
     var extensions = {
 
+        daterange: function (baton) {
+            if (_.device('smartphone')) return;
+
+            // for mail only
+            if (baton.request.params.module !== 'mail') return;
+
+            var query = baton.request.data.prefix,
+                facet, value;
+
+            // transform data facet
+            baton.data = _.filter(baton.data, function (f) {
+                // hack to add custom timespan value
+                if (f.id !== 'date') return true;
+                // clone
+                facet = _.copy(f);
+                value = _.copy(f.options[0]);
+                // adjust facet
+                delete facet.options;
+                facet = $.extend(facet, {
+                    id: facet.id + '.custom',
+                    style: 'custom',
+                    values: [ value ]
+                });
+                // adjust value
+                delete value.filter;
+                delete value.name;
+                value = $.extend(value, {
+                    id: 'custom',
+                    facet: facet.id,
+                    item: {
+                        name: query,
+                        detail: gt('as date')
+                    },
+                    value: query,
+                    options: []
+                });
+                // filter original data facet
+                return false;
+
+            });
+            // insert facet at lists head
+            if (facet) baton.data.unshift(facet);
+        },
+
         // add basic flags to facets (tokenfield/toolbar)
         flag: function (baton) {
             if (_.device('smartphone')) return;
 
             var whitelist = {
                     style: ['simple'],
-                    id: ['contacts', 'contact', 'participant', 'task_participants']
+                    id: ['contacts', 'contact', 'participant', 'task_participants', 'date.custom']
                 };
 
             // flag  facet

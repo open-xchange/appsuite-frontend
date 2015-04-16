@@ -79,6 +79,16 @@ module.exports = function (grunt) {
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/moment'
                     },
+                   {
+                        // static bower_components
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'moment.parseFormat/moment.parseFormat.js'
+                        ],
+                        cwd: 'bower_components',
+                        dest: 'build/static/3rd.party/moment'
+                    },
                     {
                         expand: true,
                         src: ['*.{png,svg,swf,gif,xap,css}', '!{jquery,*.min}.js'],

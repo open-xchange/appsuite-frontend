@@ -12,10 +12,19 @@
  */
 
 define('io.ox/find/manager/value-collection', [
-    'io.ox/find/manager/value-model'
-], function (ValueModel) {
+    'io.ox/find/manager/value-model',
+    'io.ox/core/extensions',
+    'io.ox/find/manager/extensions'
+], function (ValueModel, ext, extensions) {
 
     'use strict';
+
+    var POINT = ext.point('io.ox/find/manager/models');
+
+    POINT.extend({
+        index: 100,
+        customize: extensions.date
+    });
 
     var ValueCollection = Backbone.Collection.extend({
 
@@ -42,6 +51,15 @@ define('io.ox/find/manager/value-collection', [
                 self.trigger('change:list-of-actives', mapping[attr || 'option'], model.id);
                 self.facet.trigger('change:list-of-actives', mapping[attr || 'option'], model.id);
             });
+
+            // custom value models
+            this.valuemodels = {};
+            this.t = POINT.invoke('customize', this);
+        },
+
+        _createModel: function (item, facet) {
+            var Model = item.id === 'custom' ? this.valuemodels[facet.get('id')] : undefined;
+            return Model ? new Model({ data: item, facet: facet }) : new ValueModel({ data: item, facet: facet });
         },
 
         customAdd: function (list, facet) {
@@ -51,8 +69,17 @@ define('io.ox/find/manager/value-collection', [
             // add parent facet model
             _.each(list, function (item) {
                 // do not add duplicates
+                //TODO: check if model
                 if (self.get(item.id)) return;
-                self.add({ data: item, facet: facet });
+
+                // model = this._createModel(item, facet);
+
+                // var Model = item.id === 'custom' ? self.getValueModel(facet.get('id')) : undefined;
+                // var model = Model ? new Model({ data: item, facet: facet }) : new ValueModel({ data: item, facet: facet });
+                self.add(
+                    self._createModel(item, facet)
+                );
+                //self.add({ data: item, facet: facet });
             });
         },
         getActive: function () {
