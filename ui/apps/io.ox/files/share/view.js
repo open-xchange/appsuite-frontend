@@ -112,7 +112,8 @@ define('io.ox/files/share/view', [
                     groups: true
                 },
                 maxResults: 20,
-                lazyload: 'div.contact-image'
+                lazyload: 'div.contact-image',
+                leftAligned: true
             });
 
             this.append(
@@ -275,6 +276,9 @@ define('io.ox/files/share/view', [
             );
             baton.model.on('change:secured', function (model, val) {
                 passInput.prop('disabled', !val);
+                if (val) {
+                    passInput.focus();
+                }
             });
         }
     });

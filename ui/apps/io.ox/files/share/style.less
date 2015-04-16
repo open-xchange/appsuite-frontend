@@ -1,7 +1,23 @@
 .share-view {
 
-    .form-group.editgroup {
-        margin-bottom: 11px;
+    .tokenfield .twitter-typeahead .tt-dropdown-menu {
+        max-height: 150px;
+    }
+
+    .form-group {
+
+        &.editgroup {
+            margin-bottom: 11px;
+        }
+
+        &.expiresgroup .dropdown {
+            vertical-align: middle;
+        }
+
+    }
+
+    a.sharelink {
+        word-break: break-all;
     }
 
     &.invite .passwordgroup {

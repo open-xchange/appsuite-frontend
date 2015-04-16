@@ -98,7 +98,8 @@ define('io.ox/core/tk/tokenfield', [
                 dnd: true,
                 // dont't call init function in typeahead view
                 init: false,
-                extPoint: 'io.ox/core/tk/tokenfield'
+                extPoint: 'io.ox/core/tk/tokenfield',
+                leftAligned: false
             }, options);
 
             /*
@@ -310,6 +311,22 @@ define('io.ox/core/tk/tokenfield', [
                 model: this.model,
                 options: this.options
             });
+
+            // calculate postion for typeahead dropdown
+            if (_.device('smartphone') || o.leftAligned) {
+                this.tt = this.input.data('ttTypeahead');
+                this.tt.dropdown._show = function () {
+                    var width = 'auto', left = 0;
+                    if (_.device('smartphone')) {
+                        left = self.input.offset().left * -1;
+                        width = window.innerWidth;
+                    } else if (o.leftAligned) {
+                        left = self.tt.$node.position().left;
+                        left = Math.round(left) * -1 + 17;
+                    }
+                    this.$menu.css({ left: left, width: width }).show();
+                };
+            }
 
             // workaround: register handler for delayed autoselect
             if (this.options.delayedautoselect) {
