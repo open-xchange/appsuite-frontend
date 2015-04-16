@@ -63,8 +63,15 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
      * API methods
      */
 
+    var cache = {};
+
     findByMail = function (emails) {
-        return xingPut('find_by_mails', {},  { 'emails': emails });
+        if (!emails || emails.length === 0) return $.when({});
+        var key = emails.join(',');
+        if (cache[key]) return $.when(cache[key]);
+        return xingPut('find_by_mails', {}, { 'emails': emails }).done(function (result) {
+            cache[key] = result;
+        });
     };
 
     getUserfeed = function (params) {
