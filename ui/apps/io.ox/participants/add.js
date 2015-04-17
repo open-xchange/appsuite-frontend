@@ -48,10 +48,12 @@ define('io.ox/participants/add', [
         },
 
         keyDown: function (e) {
-            var data = this.typeahead.$el.typeahead('val');
             // enter
             if (e.which === 13) {
-                this.addParticipant(e, { model: { email1: data, id: Math.random() } });
+                var val = this.typeahead.$el.typeahead('val');
+                if (!_.isEmpty(val)) {
+                    this.addParticipant(e, { model: { email1: val, id: Math.random() } });
+                }
             }
         },
 
