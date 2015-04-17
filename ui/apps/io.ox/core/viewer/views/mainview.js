@@ -45,9 +45,9 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView = new DisplayerView({ collection: this.collection });
             this.sidebarView = new SidebarView({ collection: this.collection });
             // close viewer on events
-            this.listenTo(this.toolbarView, 'close', this.remove);
-            this.listenTo(ox, 'app:start app:resume', this.remove);
-            this.listenTo(EventDispatcher, 'viewer:close', this.remove);
+            this.listenTo(this.toolbarView, 'close', this.closeViewer.bind(this));
+            this.listenTo(ox, 'app:start app:resume', this.closeViewer.bind(this));
+            this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer.bind(this));
             // bind toggle side bar handler
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
             // handle DOM events
@@ -163,6 +163,14 @@ define('io.ox/core/viewer/views/mainview', [
             // workaround for a possible bug from swiper plugin that happens sporadically:
             // After an on resize call, the plugin 'resets' the active slide to the beginning.
             this.displayerView.swiper.slideTo(activeSlideIndex);
+        },
+
+        /**
+         * Viewer close handler. Hides viewer DOM first and then do cleanup.
+         */
+        closeViewer: function () {
+            this.$el.hide();
+            this.remove();
         },
 
         disposeView: function () {
