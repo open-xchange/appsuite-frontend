@@ -25,6 +25,8 @@ define('plugins/notifications/mail/register', [
     'use strict';
 
     function filter(model) {
+        // ignore virtual/all (used by search, for example)
+        if (/^default0\/virtual/.test(model.id)) return false;
         return /^default0\D/.test(model.id) && !account.is('spam|trash', model.id);
     }
 
