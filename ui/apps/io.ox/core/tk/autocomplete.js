@@ -455,6 +455,14 @@ define('io.ox/core/tk/autocomplete', [
                         if (value.length > 0) $(this).trigger('selected', val, (val || '').length >= o.minLength);
 
                         break;
+                    case 8:
+                        // backspace
+                        selected = scrollpane.find('.selected');
+                        if (selected.length) {
+                            e.preventDefault();
+                            self.focus();
+                        }
+                        break;
                     case 9:
                         // tab
                         // ignore back-tab
