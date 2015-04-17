@@ -540,7 +540,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:523 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Har sendt en kvittering for læsning"
 
@@ -814,7 +814,7 @@ msgid "Add participant/resource"
 msgstr "Tilføj deltager/ressource"
 
 #: apps/io.ox/files/share/view.js:108 module:io.ox/files
-#: apps/io.ox/files/share/view.js:120
+#: apps/io.ox/files/share/view.js:121
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -936,7 +936,7 @@ msgstr "Blokken avancerede kategorier blev lukket."
 msgid "Advanced facets block was opened."
 msgstr "Blokken avancerede kategorier blev åbnet."
 
-#: apps/io.ox/files/share/view.js:176 module:io.ox/files
+#: apps/io.ox/files/share/view.js:177 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -1302,7 +1302,7 @@ msgstr "Tilbage til aftale"
 msgid "Basic settings"
 msgstr "Grundlæggende indstillinger"
 
-#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:267 module:io.ox/mail
 msgid "Bcc"
 msgstr "Blind kopi til (Bcc)"
 
@@ -1418,7 +1418,7 @@ msgstr "Kalendervisning"
 #: apps/io.ox/calendar/week/perspective.js:162
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
-#: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:730
+#: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:730
 #: apps/io.ox/core/desktop.js:1614 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
@@ -1848,7 +1848,7 @@ msgstr "Konflikter:"
 msgid "Connector for Microsoft Outlook®"
 msgstr "Forbindelse til Microsoft Outlook®"
 
-#: apps/io.ox/contacts/edit/main.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:281 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Contact"
 msgstr "Kontakt"
@@ -1917,7 +1917,7 @@ msgstr "Samtaler"
 msgid "Copy"
 msgstr "Kopiér"
 
-#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -2033,8 +2033,8 @@ msgstr ""
 msgid "Create appointment"
 msgstr "Opret aftale"
 
-#: apps/io.ox/contacts/edit/main.js:64 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:65 apps/io.ox/contacts/edit/main.js:182
+#: apps/io.ox/contacts/edit/main.js:67 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:68 apps/io.ox/contacts/edit/main.js:185
 msgid "Create contact"
 msgstr "Opret kontakt"
 
@@ -2384,7 +2384,7 @@ msgstr "Kassér"
 #. Translation should be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js:381 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:347
+#: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:347
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:177 module:io.ox/tasks
 msgctxt "dialog"
 msgid "Discard changes"
@@ -2437,7 +2437,7 @@ msgstr "Distributionsliste"
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:206 apps/io.ox/contacts/model.js:280
 #: apps/io.ox/contacts/view-detail.js:48 apps/io.ox/participants/model.js:43
-#: module:io.ox/participants/model apps/io.ox/participants/views.js:184
+#: module:io.ox/participants/model apps/io.ox/participants/views.js:183
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
 msgstr "Distributionsliste"
@@ -2532,7 +2532,7 @@ msgstr "Vil du virkelig slette denne widget?"
 
 #: apps/io.ox/calendar/edit/main.js:378 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/editor/main.js:344
+#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:344
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:174 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
 msgstr "Vil du virkelig kassere dine ændringer?"
@@ -2594,7 +2594,7 @@ msgstr "Dokumenter"
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
-#: apps/io.ox/files/share/view.js:349 module:io.ox/files
+#: apps/io.ox/files/share/view.js:353 module:io.ox/files
 #: apps/io.ox/tasks/edit/view-template.js:262 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
@@ -2771,7 +2771,7 @@ msgstr "EB"
 msgid "Edit"
 msgstr "Redigér"
 
-#: apps/io.ox/contacts/edit/main.js:180 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:183 module:io.ox/contacts
 msgid "Edit Contact"
 msgstr "Redigér kontakt"
 
@@ -2789,7 +2789,7 @@ msgstr "Redigér tumblr kilde"
 msgid "Edit appointment"
 msgstr "Redigér aftale"
 
-#: apps/io.ox/contacts/edit/main.js:65 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:68 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:78
 msgid "Edit contact"
 msgstr "Redigér kontakt"
@@ -2998,7 +2998,7 @@ msgstr "Slut på arbejdstid"
 msgid "Ends on"
 msgstr "Slutter om"
 
-#: apps/io.ox/files/share/view.js:268 module:io.ox/files
+#: apps/io.ox/files/share/view.js:269 module:io.ox/files
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3139,7 +3139,7 @@ msgstr "Udvid form"
 msgid "Expand timeframe by one month"
 msgstr "Udvid tidsramme med en måned"
 
-#: apps/io.ox/files/share/view.js:217 module:io.ox/files
+#: apps/io.ox/files/share/view.js:218 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -3153,12 +3153,12 @@ msgid "Export folder"
 msgstr "Eksportér mappe"
 
 #: apps/io.ox/participants/model.js:42 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:148 module:io.ox/calendar/edit/main
-#: apps/io.ox/participants/views.js:175
+#: apps/io.ox/participants/views.js:147 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:174
 msgid "External contact"
 msgstr "Ekstern kontakt"
 
-#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Eksterne billeder er blevet blokkeret, for at beskytte dig imod spam!"
@@ -3604,7 +3604,7 @@ msgid "Green"
 msgstr "Grøn"
 
 #: apps/io.ox/participants/model.js:39 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:157 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:156 module:io.ox/calendar/edit/main
 msgid "Group"
 msgstr "Gruppe"
 
@@ -4486,8 +4486,8 @@ msgid "Members"
 msgstr "Medlemmer"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:147 module:io.ox/files
-#: apps/io.ox/files/share/view.js:155
+#: apps/io.ox/files/share/view.js:148 module:io.ox/files
+#: apps/io.ox/files/share/view.js:156
 #, fuzzy
 #| msgid "Message is unread"
 msgid "Message (optional)"
@@ -4712,7 +4712,7 @@ msgstr "Aftalepåmindelser"
 msgid "New calendar"
 msgstr "Ny kalender"
 
-#: apps/io.ox/contacts/edit/main.js:208 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:211 module:io.ox/contacts
 msgid "New contact"
 msgstr "Ny kontakt"
 
@@ -5227,7 +5227,7 @@ msgid "Order"
 msgstr "Rækkefølge"
 
 #: apps/io.ox/calendar/view-detail.js:191 module:io.ox/calendar
-#: apps/io.ox/participants/views.js:115 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:114 module:io.ox/calendar/edit/main
 msgid "Organizer"
 msgstr "Organisér"
 
@@ -5278,7 +5278,7 @@ msgstr "Deltagere"
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
-#: apps/io.ox/files/share/view.js:271 module:io.ox/files
+#: apps/io.ox/files/share/view.js:272 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
 #: apps/io.ox/mail/accounts/view-form.js:534
 msgid "Password"
@@ -5296,7 +5296,7 @@ msgstr "Adgangskoder skal bestå af %1$d til %2$d tegn."
 msgid "Password recovery"
 msgstr "Gendan adgangskode"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:263 module:io.ox/files
 #, fuzzy
 #| msgid "Password recovery"
 msgid "Password required"
@@ -5885,7 +5885,7 @@ msgstr "Nyligt ændrede filer"
 msgid "Recently used"
 msgstr "Nyligt brugt"
 
-#: apps/io.ox/files/share/view.js:242 module:io.ox/files
+#: apps/io.ox/files/share/view.js:243 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -6111,12 +6111,12 @@ msgstr "Nulstil denne liste"
 
 #: apps/io.ox/contacts/view-detail.js:52 module:io.ox/contacts
 #: apps/io.ox/participants/model.js:40 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:160 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:159 module:io.ox/calendar/edit/main
 msgid "Resource"
 msgstr "Ressource"
 
 #: apps/io.ox/participants/model.js:41 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:171 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:170 module:io.ox/calendar/edit/main
 msgid "Resource group"
 msgstr "Ressourcegruppe"
 
@@ -6371,7 +6371,7 @@ msgid "Send"
 msgstr "Send"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Send en kvittering for læsning"
 
@@ -6624,7 +6624,7 @@ msgstr "Vis skjulte filer og mapper"
 msgid "Show icons"
 msgstr "Vis ikoner"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:469 module:io.ox/mail
 msgid "Show images"
 msgstr "Vis billeder"
 
@@ -6755,7 +6755,7 @@ msgstr "Sociale konti bruges kun til at hente kontakt- og/eller kalenderdata"
 msgid "SoftBank"
 msgstr "SoftBank"
 
-#: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:101 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Nogle felter indeholder ugyldige data"
 
@@ -7383,7 +7383,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:556 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Afsenderen vil gerne have besked, når du har læst denne e-mail"
 
@@ -7556,13 +7556,13 @@ msgstr ""
 "Disse statistikker inkluderer kun mapper, som har en dybde på mindre end 4 "
 "mapper i mappestrukturen, fra mappen \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:437
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Denne e-mail er læst, tryk for at markere den som u-læst."
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:429 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:437
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Denne e-mail er u-læst, tryk for at markere den som læst."
 
@@ -7741,7 +7741,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titel"
 
-#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:245 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:548
@@ -8157,7 +8157,7 @@ msgstr "Venter"
 msgid "Warning"
 msgstr "Advarsel"
 
-#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:496 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Advarsel: Denne besked kan være en phishing eller fidus e-mail"
 
@@ -8737,7 +8737,7 @@ msgid "and"
 msgstr "og"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:282 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "og %1$d andre"
 
@@ -9055,25 +9055,25 @@ msgstr "ingen ændringstilladelse"
 msgid "no read permissions"
 msgstr "ingen læsetilladelser"
 
-#: apps/io.ox/files/share/view.js:198 module:io.ox/files
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Hel dag"
 
-#: apps/io.ox/files/share/view.js:200 module:io.ox/files
+#: apps/io.ox/files/share/view.js:201 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "hver måned"
 
-#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:200 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "om en uge"
 
-#: apps/io.ox/files/share/view.js:203 module:io.ox/files
+#: apps/io.ox/files/share/view.js:204 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -9140,7 +9140,7 @@ msgstr "set"
 msgid "select format"
 msgstr "vælg format"
 
-#: apps/io.ox/files/share/view.js:202 module:io.ox/files
+#: apps/io.ox/files/share/view.js:203 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -9181,7 +9181,7 @@ msgstr "denne eftermiddag"
 msgid "this morning"
 msgstr "denne morgen"
 
-#: apps/io.ox/files/share/view.js:201 module:io.ox/files
+#: apps/io.ox/files/share/view.js:202 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"

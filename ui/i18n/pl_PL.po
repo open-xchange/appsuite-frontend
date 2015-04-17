@@ -556,7 +556,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:523 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Zostało wysłane potwierdzenie przeczytania"
 
@@ -829,7 +829,7 @@ msgid "Add participant/resource"
 msgstr "Dodaj uczestnika/zasób"
 
 #: apps/io.ox/files/share/view.js:108 module:io.ox/files
-#: apps/io.ox/files/share/view.js:120
+#: apps/io.ox/files/share/view.js:121
 #, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
@@ -951,7 +951,7 @@ msgstr "Blok zaawansowanych aspektów został zamknięty."
 msgid "Advanced facets block was opened."
 msgstr "Blok zaawansowanych aspektów został otwarty."
 
-#: apps/io.ox/files/share/view.js:176 module:io.ox/files
+#: apps/io.ox/files/share/view.js:177 module:io.ox/files
 #, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
@@ -1321,7 +1321,7 @@ msgstr "Wróć do spotkania"
 msgid "Basic settings"
 msgstr "Ustawienia podstawowe"
 
-#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:267 module:io.ox/mail
 msgid "Bcc"
 msgstr "UDW"
 
@@ -1437,7 +1437,7 @@ msgstr "Widok kalendarza"
 #: apps/io.ox/calendar/week/perspective.js:162
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
-#: apps/io.ox/contacts/edit/main.js:255 apps/io.ox/contacts/main.js:730
+#: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:730
 #: apps/io.ox/core/desktop.js:1614 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
@@ -1868,7 +1868,7 @@ msgstr "Konflikty:"
 msgid "Connector for Microsoft Outlook®"
 msgstr "Łącznik dla programu Microsoft Outlook®"
 
-#: apps/io.ox/contacts/edit/main.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:281 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:64 module:io.ox/mail
 msgid "Contact"
 msgstr "Kontakt"
@@ -1937,7 +1937,7 @@ msgstr "Konwersacje"
 msgid "Copy"
 msgstr "Kopiuj"
 
-#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -2053,8 +2053,8 @@ msgstr ""
 msgid "Create appointment"
 msgstr "Utwórz spotkanie"
 
-#: apps/io.ox/contacts/edit/main.js:64 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:65 apps/io.ox/contacts/edit/main.js:182
+#: apps/io.ox/contacts/edit/main.js:67 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:68 apps/io.ox/contacts/edit/main.js:185
 msgid "Create contact"
 msgstr "Utwórz kontakt"
 
@@ -2407,7 +2407,7 @@ msgstr "Odrzuć"
 #. Translation should be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js:381 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:202 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:347
+#: apps/io.ox/contacts/edit/main.js:257 apps/io.ox/editor/main.js:347
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:177 module:io.ox/tasks
 msgctxt "dialog"
 msgid "Discard changes"
@@ -2460,7 +2460,7 @@ msgstr "Lista dystrybucyjna"
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:206 apps/io.ox/contacts/model.js:280
 #: apps/io.ox/contacts/view-detail.js:48 apps/io.ox/participants/model.js:43
-#: module:io.ox/participants/model apps/io.ox/participants/views.js:184
+#: module:io.ox/participants/model apps/io.ox/participants/views.js:183
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
 msgstr "Lista dystrybucyjna"
@@ -2558,7 +2558,7 @@ msgstr "Czy na pewno chcesz usunąć ten widget?"
 
 #: apps/io.ox/calendar/edit/main.js:378 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:199 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/editor/main.js:344
+#: apps/io.ox/contacts/edit/main.js:254 apps/io.ox/editor/main.js:344
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:174 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
 msgstr "Czy na pewno chcesz odrzucić zmiany?"
@@ -2621,7 +2621,7 @@ msgstr "Dokumenty"
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:211 module:io.ox/core
-#: apps/io.ox/files/share/view.js:349 module:io.ox/files
+#: apps/io.ox/files/share/view.js:353 module:io.ox/files
 #: apps/io.ox/tasks/edit/view-template.js:262 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
@@ -2799,7 +2799,7 @@ msgstr "EB"
 msgid "Edit"
 msgstr "Edytuj"
 
-#: apps/io.ox/contacts/edit/main.js:180 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:183 module:io.ox/contacts
 msgid "Edit Contact"
 msgstr "Edytuj kontakt"
 
@@ -2817,7 +2817,7 @@ msgstr "Edytuj kanał Tumblr"
 msgid "Edit appointment"
 msgstr "Edytuj spotkanie"
 
-#: apps/io.ox/contacts/edit/main.js:65 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:68 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:78
 msgid "Edit contact"
 msgstr "Edytuj kontakt"
@@ -3027,7 +3027,7 @@ msgstr "Koniec czasu pracy"
 msgid "Ends on"
 msgstr "Kończy się o"
 
-#: apps/io.ox/files/share/view.js:268 module:io.ox/files
+#: apps/io.ox/files/share/view.js:269 module:io.ox/files
 #, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
@@ -3168,7 +3168,7 @@ msgstr "Rozwiń formularz"
 msgid "Expand timeframe by one month"
 msgstr "Rozszerz przedział czasu o jeden miesiąc"
 
-#: apps/io.ox/files/share/view.js:217 module:io.ox/files
+#: apps/io.ox/files/share/view.js:218 module:io.ox/files
 msgid "Expires in"
 msgstr ""
 
@@ -3182,12 +3182,12 @@ msgid "Export folder"
 msgstr "Eksportuj folder"
 
 #: apps/io.ox/participants/model.js:42 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:148 module:io.ox/calendar/edit/main
-#: apps/io.ox/participants/views.js:175
+#: apps/io.ox/participants/views.js:147 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:174
 msgid "External contact"
 msgstr "Kontakt zewnętrzny"
 
-#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3635,7 +3635,7 @@ msgid "Green"
 msgstr "Zielony"
 
 #: apps/io.ox/participants/model.js:39 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:157 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:156 module:io.ox/calendar/edit/main
 msgid "Group"
 msgstr "Grupa"
 
@@ -4520,8 +4520,8 @@ msgid "Members"
 msgstr "Członkowie"
 
 #. placeholder text in share dialog
-#: apps/io.ox/files/share/view.js:147 module:io.ox/files
-#: apps/io.ox/files/share/view.js:155
+#: apps/io.ox/files/share/view.js:148 module:io.ox/files
+#: apps/io.ox/files/share/view.js:156
 #, fuzzy
 #| msgid "Message is unread"
 msgid "Message (optional)"
@@ -4746,7 +4746,7 @@ msgstr "Przypomnienia o spotkaniach"
 msgid "New calendar"
 msgstr "Nowy kalendarz"
 
-#: apps/io.ox/contacts/edit/main.js:208 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:211 module:io.ox/contacts
 msgid "New contact"
 msgstr "Nowy kontakt"
 
@@ -5266,7 +5266,7 @@ msgid "Order"
 msgstr "Kolejność"
 
 #: apps/io.ox/calendar/view-detail.js:191 module:io.ox/calendar
-#: apps/io.ox/participants/views.js:115 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:114 module:io.ox/calendar/edit/main
 msgid "Organizer"
 msgstr "Organizator"
 
@@ -5317,7 +5317,7 @@ msgstr "Uczestnicy"
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
-#: apps/io.ox/files/share/view.js:271 module:io.ox/files
+#: apps/io.ox/files/share/view.js:272 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
 #: apps/io.ox/mail/accounts/view-form.js:534
 msgid "Password"
@@ -5335,7 +5335,7 @@ msgstr "Długość hasła musi wynosić od %1$d do %2$d znaków."
 msgid "Password recovery"
 msgstr "Odzyskiwanie hasła"
 
-#: apps/io.ox/files/share/view.js:262 module:io.ox/files
+#: apps/io.ox/files/share/view.js:263 module:io.ox/files
 #, fuzzy
 #| msgid "Password recovery"
 msgid "Password required"
@@ -5924,7 +5924,7 @@ msgstr "Ostatnio zmienione pliki"
 msgid "Recently used"
 msgstr "Ostatnio używane"
 
-#: apps/io.ox/files/share/view.js:242 module:io.ox/files
+#: apps/io.ox/files/share/view.js:243 module:io.ox/files
 #, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
@@ -6150,12 +6150,12 @@ msgstr "Zresetuj tę listę"
 
 #: apps/io.ox/contacts/view-detail.js:52 module:io.ox/contacts
 #: apps/io.ox/participants/model.js:40 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:160 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:159 module:io.ox/calendar/edit/main
 msgid "Resource"
 msgstr "Zasób"
 
 #: apps/io.ox/participants/model.js:41 module:io.ox/participants/model
-#: apps/io.ox/participants/views.js:171 module:io.ox/calendar/edit/main
+#: apps/io.ox/participants/views.js:170 module:io.ox/calendar/edit/main
 msgid "Resource group"
 msgstr "Grupa zasobów"
 
@@ -6411,7 +6411,7 @@ msgid "Send"
 msgstr "Wyślij"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Wyślij potwierdzenie przeczytania"
 
@@ -6666,7 +6666,7 @@ msgstr "Pokaż ukryte pliki i foldery"
 msgid "Show icons"
 msgstr "Pokaż ikony"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:469 module:io.ox/mail
 msgid "Show images"
 msgstr "Pokaż obrazy"
 
@@ -6799,7 +6799,7 @@ msgstr ""
 msgid "SoftBank"
 msgstr "SoftBank"
 
-#: apps/io.ox/contacts/edit/main.js:98 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:101 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "Niektóre pola zawierają nieprawidłowe dane"
 
@@ -7438,7 +7438,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:556 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "Nadawca chce otrzymać powiadomienie o przeczytaniu tej wiadomości e-mail"
@@ -7615,13 +7615,13 @@ msgstr ""
 "W tej statystyce są uwzględniane foldery znajdujące się poniżej czwartego "
 "stopnia zagnieżdżenia w strukturze folderów w stosunku do folderu \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:437
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Ta wiadomość e-mail jest przeczytana. Oznacz ją jako nieprzeczytaną."
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:429 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:437
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Ta wiadomość e-mail jest nieprzeczytana. Oznacz ją jako przeczytaną."
 
@@ -7806,7 +7806,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Tytuł"
 
-#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:245 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:548
@@ -8222,7 +8222,7 @@ msgstr "Oczekujące"
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
-#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:496 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Ostrzeżenie: wiadomość może być próbą oszustwa."
 
@@ -8809,7 +8809,7 @@ msgid "and"
 msgstr "i"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:282 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "i %1$d innych"
 
@@ -9131,25 +9131,25 @@ msgstr "brak uprawnień do edycji"
 msgid "no read permissions"
 msgstr "brak uprawnień do odczytu"
 
-#: apps/io.ox/files/share/view.js:198 module:io.ox/files
+#: apps/io.ox/files/share/view.js:199 module:io.ox/files
 #, fuzzy
 #| msgid "Whole day"
 msgid "one day"
 msgstr "Całodniowe"
 
-#: apps/io.ox/files/share/view.js:200 module:io.ox/files
+#: apps/io.ox/files/share/view.js:201 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "one month"
 msgstr "co miesiąc"
 
-#: apps/io.ox/files/share/view.js:199 module:io.ox/files
+#: apps/io.ox/files/share/view.js:200 module:io.ox/files
 #, fuzzy
 #| msgid "in one week"
 msgid "one week"
 msgstr "za tydzień"
 
-#: apps/io.ox/files/share/view.js:203 module:io.ox/files
+#: apps/io.ox/files/share/view.js:204 module:io.ox/files
 #, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
@@ -9216,7 +9216,7 @@ msgstr "widoczność"
 msgid "select format"
 msgstr "Wybierz format"
 
-#: apps/io.ox/files/share/view.js:202 module:io.ox/files
+#: apps/io.ox/files/share/view.js:203 module:io.ox/files
 #, fuzzy
 #| msgid "Months"
 msgid "six months"
@@ -9257,7 +9257,7 @@ msgstr "tego popołudnia"
 msgid "this morning"
 msgstr "tego poranka"
 
-#: apps/io.ox/files/share/view.js:201 module:io.ox/files
+#: apps/io.ox/files/share/view.js:202 module:io.ox/files
 #, fuzzy
 #| msgid "every month"
 msgid "three months"
