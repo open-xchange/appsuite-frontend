@@ -38,7 +38,7 @@
 
         function update() {
             // might be disposed
-            if (!scrollpane) return;
+            if (!scrollpane || scrollpane.length === 0) return;
             // get viewport dimensions once
             var viewport = getViewport(scrollpane);
             // loop over all elements with class="lazyload"
