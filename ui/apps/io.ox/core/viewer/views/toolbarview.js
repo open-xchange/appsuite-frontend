@@ -262,7 +262,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         id: 'zoomin',
         requires: function (e) {
             var model = e.baton.model;
-            return (model.isOffice() || model.isPDF()) && ox.debug;
+            return model.isOffice() || model.isPDF();
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomin', baton);
@@ -272,7 +272,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         id: 'zoomout',
         requires: function (e) {
             var model = e.baton.model;
-            return (model.isOffice() || model.isPDF()) && ox.debug;
+            return model.isOffice() || model.isPDF();
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomout', baton);
