@@ -142,16 +142,8 @@ define('io.ox/files/common-extensions', [
                     // fix URL - would be cool if we had just one call for thumbnails ...
                     url = url.replace(/format=preview_image/, 'format=thumbnail_image');
 
-                    // use defer to ensure the node has already been added to the DOM
-                    _.defer(function () {
-                        img.lazyload({
-                            container: img.closest('.list-view'),
-                            error: error,
-                            event: 'scrollstop',
-                            load: load
-                        });
-                        img = null;
-                    });
+                    // use lazyload
+                    img.on({ 'load': load, 'error': error }).lazyload();
 
                     return this.append(
                         $('<div class="icon-thumbnail">').append(img)

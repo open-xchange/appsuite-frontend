@@ -38,7 +38,7 @@ module.exports = function (grunt) {
                             'lib/require-fix.js',
                             'lib/modernizr.js',
                             'bower_components/bigscreen/bigscreen.js',
-                            'bower_components/jquery.lazyload/jquery.lazyload.js',
+                            'src/lazyload.js',
                             'src/util.js',
                             'src/browser.js',
                             'src/plugins.js',
