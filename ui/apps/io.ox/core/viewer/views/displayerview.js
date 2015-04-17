@@ -134,7 +134,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
                 self.loadSlide(startIndex, 'both');
-                self.blendCaption(gt('%1$d of %2$d', startIndex, self.collection.length));
+                self.blendCaption(gt('%1$d of %2$d', startIndex + 1, self.collection.length));
                 // focus first active slide initially
                 self.focusActiveSlide();
             })
