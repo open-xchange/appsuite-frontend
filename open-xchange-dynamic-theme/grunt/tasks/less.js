@@ -21,7 +21,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build',
-        ['lint', 'copy_build', 'compile_po', 'newer:assemble', 'newer:concat',
+        ['lint', 'copy_build', 'compile_po', 'assemble', 'newer:concat',
          'newer:less']);
 
     grunt.loadNpmTasks('assemble');
