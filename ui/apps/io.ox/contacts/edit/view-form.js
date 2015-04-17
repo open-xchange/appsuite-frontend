@@ -162,13 +162,14 @@ define('io.ox/contacts/edit/view-form', [
             // Remove attachment handling if view is used with user data instead of contact data
             delete meta.sections.attachments;
             delete meta.i18n.attachments;
+            meta.sections.personal = _.without(meta.sections.personal, 'private_flag');
         }
 
         var point = views.point(ref + '/edit'),
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact container',
+                className: 'edit-contact compact' + (isMyContactData ? '' : ' container'),
                 render: function () {
                     this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
                     return this;
@@ -178,13 +179,13 @@ define('io.ox/contacts/edit/view-form', [
                     if (o && o.model.get('folder_id')) {
                         folderApi.get(o.model.get('folder_id')).done(function (folderData) {
                             if (folderUtils.is('public', folderData)) {
-                                ext.point('io.ox/contacts/edit/personal').disable('private_flag');
+                                ext.point(ref + '/edit/personal').disable('private_flag');
                             } else {
-                                ext.point('io.ox/contacts/edit/personal').enable('private_flag');
+                                ext.point(ref + '/edit/personal').enable('private_flag');
                             }
                         });
                     } else {
-                        ext.point('io.ox/contacts/edit/personal').enable('private_flag');
+                        ext.point(ref + '/edit/personal').enable('private_flag');
                     }
                 }
             });
@@ -204,9 +205,12 @@ define('io.ox/contacts/edit/view-form', [
             id: 'header',
             index: 10,
             draw: function (baton) {
-                var row = $('<div class="header">');
-                ext.point(ref + '/edit/buttons').invoke('draw', row, baton);
-                baton.app.getWindow().setHeader(row);
+                baton.parentView.toggle = toggle;
+                if (baton.app) {
+                    var row = $('<div class="header">');
+                    ext.point(ref + '/edit/buttons').invoke('draw', row, baton);
+                    baton.app.getWindow().setHeader(row);
+                }
             }
         });
 
@@ -241,7 +245,7 @@ define('io.ox/contacts/edit/view-form', [
         ext.point(ref + '/edit/buttons').extend({
             index: 300,
             id: 'showall',
-            draw: function () {
+            draw: function (baton) {
                 this.append(
                     $('<label class="checkbox-inline">').append(
                         $('<input>')
@@ -249,7 +253,10 @@ define('io.ox/contacts/edit/view-form', [
                             .attr({
                                 type: 'checkbox'
                             })
-                            .on('change', toggle),
+                            .on('change', function (e) {
+                                e.preventDefault();
+                                toggle.call(baton.parentView.$el);
+                            }),
                         $.txt(gt('Show all fields'))
                     )
                 );
@@ -273,16 +280,10 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        function toggle(e) {
-
-            if (e) {
-                e.preventDefault();
-            }
-
+        function toggle() {
             //make sure this works for links in head and body
-            var windowNode = $(this).closest('.io-ox-contacts-edit-window'),
-                // header = windowNode.find('.window-header'),
-                node = windowNode.find('.edit-contact');
+            var node = $(this).closest('.edit-contact').toggleClass('compact'),
+                isCompact = node.hasClass('compact');
 
             // update "has-content" class
             node.find('.field input[type="text"]').each(function () {
@@ -291,10 +292,6 @@ define('io.ox/contacts/edit/view-form', [
                     hasContent = $.trim(input.val()) !== '';
                 field.toggleClass('has-content', hasContent);
             });
-
-            node.toggleClass('compact');
-
-            var isCompact = node.hasClass('compact');
 
             // update hidden
             node.find('.block').each(function () {
@@ -309,8 +306,6 @@ define('io.ox/contacts/edit/view-form', [
                 var block = $(this);
                 block.addClass(index % 2 ? 'even' : 'odd');
             });
-
-            windowNode.find('.window-header .toggle-check').prop('checked', !isCompact);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -358,7 +353,7 @@ define('io.ox/contacts/edit/view-form', [
         point.basicExtend({
             id: 'final',
             index: 1000000000000,
-            draw: function () {
+            draw: function (baton) {
                 //check if all non rare non attachment fields are filled
                 var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');
 
@@ -366,7 +361,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">'));
                 //if all fields are filled the link must be compact view, not extend view
                 if (inputs.length === 0) {
-                    toggle();
+                    baton.parentView.toggle();
                 }
             }
         });
