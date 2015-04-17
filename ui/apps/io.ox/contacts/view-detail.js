@@ -480,7 +480,12 @@ define('io.ox/contacts/view-detail', [
                                     return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
                                 }
                             }
-                        })
+                        }),
+                        // --- rare ---
+                        simple(data, 'marital_status'),
+                        simple(data, 'number_of_children'),
+                        simple(data, 'spouse_name'),
+                        simple(data, 'anniversary')
                     )
                     .attr('data-block', 'personal')
                 );
@@ -500,7 +505,18 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'department'),
                         simple(data, 'profession'),
                         simple(data, 'company'),
-                        simple(data, 'room_number')
+                        simple(data, 'room_number'),
+                        // --- rare ---
+                        simple(data, 'employee_type'),
+                        simple(data, 'number_of_employees'),
+                        simple(data, 'sales_volume'),
+                        simple(data, 'tax_id'),
+                        simple(data, 'commercial_register'),
+                        simple(data, 'branches'),
+                        simple(data, 'business_category'),
+                        simple(data, 'info'),
+                        simple(data, 'manager_name'),
+                        simple(data, 'assistant_name')
                     )
                     .attr('data-block', 'job')
                 );
@@ -552,7 +568,19 @@ define('io.ox/contacts/view-detail', [
                         phone(data, 'telephone_other'),
                         simple(data, 'fax_business'),
                         simple(data, 'fax_home'),
-                        simple(data, 'fax_other')
+                        simple(data, 'fax_other'),
+                        // --- rare ---
+                        phone(data, 'telephone_company'),
+                        phone(data, 'telephone_car'),
+                        phone(data, 'telephone_isdn'),
+                        phone(data, 'telephone_pager'),
+                        phone(data, 'telephone_primary'),
+                        phone(data, 'telephone_radio'),
+                        phone(data, 'telephone_telex'),
+                        phone(data, 'telephone_ttytdd'),
+                        phone(data, 'telephone_ip'),
+                        phone(data, 'telephone_assistant'),
+                        phone(data, 'telephone_callback')
                     )
                     .attr('data-block', 'phone')
                 );
