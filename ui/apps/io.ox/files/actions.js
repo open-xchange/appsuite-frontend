@@ -475,6 +475,16 @@ define('io.ox/files/actions', [
         ref: 'io.ox/files/actions/editor'
     }));
 
+    // add another link for the viewer
+    ext.point('io.ox/core/viewer/toolbar/links/drive').extend(new links.Link({
+        id: 'editor',
+        index: 100,
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Edit'),
+        ref: 'io.ox/files/actions/editor'
+    }));
+
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
         index: index += 100,

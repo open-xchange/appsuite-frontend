@@ -67,6 +67,12 @@ define('io.ox/files/toolbar', [
                     this.parent().addClass('dropdown');
                 }
             },
+            'edit': {
+                prio: 'hi',
+                mobile: 'lo',
+                label: gt('Edit'),
+                ref: 'io.ox/files/actions/editor'
+            },
             'share': {
                 prio: 'hi',
                 mobile: 'lo',
