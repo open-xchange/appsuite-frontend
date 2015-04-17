@@ -155,9 +155,16 @@ define('io.ox/files/view-options', [
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
-            this.append(
-                new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item')
-            );
+
+            var view = new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item'),
+                results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
+
+            this.append(view, results);
+
+            baton.app.props.on('change:search', function (model, value) {
+                view.toggle(!value);
+                results.toggle(value);
+            });
         }
     });
 

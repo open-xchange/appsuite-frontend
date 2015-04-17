@@ -645,6 +645,19 @@ define('io.ox/files/main', [
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
+        },
+
+        // respond to search results
+        'search': function (app) {
+            app.get('find').on({
+                'find:query:result': function (response) {
+                    api.pool.add('detail', response.results);
+                    app.props.set('search', true);
+                },
+                'find:cancel': function () {
+                    app.props.set('search', false);
+                }
+            });
         }
     });
 
