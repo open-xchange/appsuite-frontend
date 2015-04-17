@@ -296,7 +296,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         initialize: function () {
             //console.info('ToolbarView.initialize()', options);
             // rerender on slide change
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render.bind(this));
+            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -371,7 +371,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
             // save current data as view model
             this.model = model;
-            this.listenTo(this.model, 'change', this.onModelChange.bind(this));
+            this.listenTo(this.model, 'change', this.onModelChange);
             // set device type
             Util.setDeviceClass(this.$el);
             toolbar.empty();

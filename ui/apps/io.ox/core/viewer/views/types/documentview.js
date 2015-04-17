@@ -255,6 +255,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onZoomIn: function () {
             if (this.isVisible()) {
                 this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'increase'));
+                EventDispatcher.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
             }
         },
 
@@ -264,6 +265,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onZoomOut: function () {
             if (this.isVisible()) {
                 this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'decrease'));
+                EventDispatcher.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
             }
         },
 

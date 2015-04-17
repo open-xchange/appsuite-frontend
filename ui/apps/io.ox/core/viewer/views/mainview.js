@@ -45,11 +45,11 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView = new DisplayerView({ collection: this.collection });
             this.sidebarView = new SidebarView({ collection: this.collection });
             // close viewer on events
-            this.listenTo(this.toolbarView, 'close', this.closeViewer.bind(this));
-            this.listenTo(ox, 'app:start app:resume', this.closeViewer.bind(this));
-            this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer.bind(this));
+            this.listenTo(this.toolbarView, 'close', this.closeViewer);
+            this.listenTo(ox, 'app:start app:resume', this.closeViewer);
+            this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer);
             // bind toggle side bar handler
-            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
+            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js

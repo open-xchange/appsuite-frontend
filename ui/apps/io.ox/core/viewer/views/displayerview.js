@@ -48,8 +48,10 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slidesToCache = 7;
             // instance of the swiper plugin
             this.swiper = null;
+            // listen to blend caption events
+            this.listenTo(EventDispatcher, 'viewer:blendcaption', this.blendCaption);
             // listen to delete event propagation from FilesAPI
-            this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
+            this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved);
         },
 
         /**
@@ -131,8 +133,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 // always load duplicate slides of the swiper plugin.
                 self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
-                self.blendSlideCaption(startIndex);
                 self.loadSlide(startIndex, 'both');
+                self.blendCaption(gt('%1$d of %2$d', startIndex, self.collection.length));
                 // focus first active slide initially
                 self.focusActiveSlide();
             })
@@ -323,26 +325,19 @@ define('io.ox/core/viewer/views/displayerview', [
             });
         },
         /**
-         * Blends in the caption of the passed slide index for a specific duration in milliseconds.
+         * Blends in the passed content element in a caption for a specific duration.
          *
-         * @param {Number} slideIndex
-         *  index of the slide, which caption is to be blended in.
+         * @param {jQuery} content
+         *  content to be displayed in the caption.
          *
          * @param {Number} duration
          *  Duration of the blend-in in milliseconds. Defaults to 3000 ms.
-         *
          */
-        blendSlideCaption: function (slideIndex, duration) {
+        blendCaption: function (content, duration) {
             //console.warn('BlendslideCaption', slideIndex);
             var duration = duration || 3000,
                 slideCaption = this.$el.find('.viewer-displayer-caption');
-            slideCaption.text(
-                //#. text of a viewer slide caption
-                //#. Example result: "1 of 10"
-                //#. %1$d is the slide index of the current
-                //#. %2$d is the total slide count
-                gt('%1$d of %2$d', (slideIndex + 1), this.collection.length)
-            );
+            slideCaption.empty().append(content);
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();
             this.captionTimeoutId = window.setTimeout(function () {
@@ -373,7 +368,11 @@ define('io.ox/core/viewer/views/displayerview', [
             // recalculate swiper active slide index, disregarding duplicate slides.
             if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
             if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
-            this.blendSlideCaption(activeSlideIndex);
+            //#. text of a viewer slide caption
+            //#. Example result: "1 of 10"
+            //#. %1$d is the slide index of the current
+            //#. %2$d is the total slide count
+            this.blendCaption(gt('%1$d of %2$d', activeSlideIndex + 1, this.collection.length));
             this.loadSlide(activeSlideIndex, preloadDirection);
             // a11y
             swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
