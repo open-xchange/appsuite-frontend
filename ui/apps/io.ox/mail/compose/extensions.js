@@ -311,6 +311,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         signature: function (baton) {
+            if (_.device('smartphone')) return;
             var self = this;
             baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
@@ -331,6 +332,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         signaturemenu: function (baton) {
+            if (_.device('smartphone')) return;
             var self = this,
             dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
                 .option('signature', '', gt('No signature'));
@@ -437,7 +439,7 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                if (capabilities.has('infostore')) {
+                if (capabilities.has('infostore') && _.device('!smartphone')) {
                     var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
                         fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
                             .on('change', addLocalFile.bind(this, baton.model))

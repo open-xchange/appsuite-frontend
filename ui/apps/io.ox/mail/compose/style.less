@@ -324,7 +324,19 @@
         }
     }
 }
-
+.ios, .android {
+    .hidden-file-picker {
+        font-size: 15px;
+        line-height: initial;
+        color: @link-color;
+        padding: 0;
+        padding-top: 1px;
+        &:focus, &:hover {
+            color: @link-color;
+            background-color: transparent;
+        }
+    }
+}
 @media (max-width: 480px), (max-device-width: 480px) {
     .io-ox-mail-compose {
         padding-top: 8px;
