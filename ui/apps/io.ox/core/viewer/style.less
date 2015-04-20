@@ -447,10 +447,6 @@ html.ios .io-ox-viewer {
                     display: block;
                     white-space: pre-wrap;
                     line-height: 16px;
-                    // padding: 3px;
-                    // border: 2px solid transparent;
-                    // .border-radius(4px);
-                    outline: none;
                     .user-select(text);
 
                     &.description-empty {
@@ -459,7 +455,8 @@ html.ios .io-ox-viewer {
                     }
 
                     &:active, &:focus{
-                        border-color: #444444;
+                        outline: 2px solid #444444;
+                        outline-offset: 2px;
                     }
 
                 }
