@@ -466,15 +466,17 @@ define('io.ox/files/main', [
                     $.when.apply(this, requests).done(function () {
                         var files,
                             selection = app.listView.selection,
-                            node;
+                            items;
 
                         files = _(arguments).map(function (file) {
-                            return { id: file.data, folder: app.folder.get() };
+                            return _.cid({ id: file.data, folder: app.folder.get() });
                         });
 
-                        selection.set(files);
-                        node = selection.getNode(_(selection.get()).first());
-                        selection.focus(0, node);
+                        items = selection.getItems(function () {
+                            return files.indexOf($(this).attr('data-cid')) >= 0;
+                        });
+
+                        selection.selectAll(items);
                     });
                 });
             });
