@@ -186,7 +186,6 @@ define('io.ox/contacts/toolbar', [
             );
 
             function finalize(node) {
-                console.log('finish toolbar');
                 toolbar.$list.empty().append(node.contents());
                 toolbar.initButtons();
             }
