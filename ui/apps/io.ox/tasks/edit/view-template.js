@@ -556,6 +556,9 @@ define('io.ox/tasks/edit/view-template', [
                         _($input[0].files).each(function (fileData) {
                             baton.attachmentList.addFile(fileData);
                         });
+                        //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                        //in file picker dialog - other browsers still seem to work)
+                        $input[0].value = '';
                         $input.trigger('reset.fileupload');
                     } else {
                         //IE
