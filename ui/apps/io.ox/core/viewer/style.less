@@ -324,142 +324,137 @@ html.ios .io-ox-viewer {
         }
     }
 
-    .viewer-fileinfo,
-    .viewer-filedescription,
-    .viewer-fileversions {
+    .sidebar-panel {
 
-        &.sidebar-panel {
+        background-color: transparent;
 
+        a.btn, div.dropdown > a { outline: none; }
+
+        .sidebar-panel-heading {
+            color: @viewer-sidebar-label-text-color;
             background-color: transparent;
+            border-bottom: 1px solid #555;
+            position: relative;
+            padding: 12px 0 5px 0;
 
-            a.btn, div.dropdown > a { outline: none; }
-
-            .sidebar-panel-heading {
-                color: @viewer-sidebar-label-text-color;
-                background-color: transparent;
-                border-bottom: 1px solid #555;
-                position: relative;
-                padding: 12px 0 5px 0;
-
-                .panel-toggle-btn {
-                    color: @viewer-control-color;
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 40px;
-                    &:active, &:focus, &:hover {
-                        background-color: @viewer-sidebar-active-bgcolor
-                    }
-                }
-
-                h3 {
-                    font-size: 13px;
-                    font-weight: bold;
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    cursor: default;
-                }
-
-                &.io-ox-busy:before {
-                    top: 185%;
+            .panel-toggle-btn {
+                color: @viewer-control-color;
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 40px;
+                &:active, &:focus, &:hover {
+                    background-color: @viewer-sidebar-active-bgcolor
                 }
             }
 
-            .sidebar-panel-body {
+            h3 {
+                font-size: 13px;
+                font-weight: bold;
+                margin-top: 0;
+                margin-bottom: 0;
+                cursor: default;
+            }
 
-                padding: 20px 0;
+            &.io-ox-busy:before {
+                top: 185%;
+            }
+        }
 
-                &.panel-collapsed {
-                    display: none;
+        .sidebar-panel-body {
+
+            padding: 20px 0;
+
+            &.panel-collapsed {
+                display: none;
+            }
+
+            &:after {
+                content: " ";
+                display: table;
+                clear: both;
+            }
+
+            dd, dt {
+                line-height: 16px;
+            }
+
+            dt {
+                width: 33%;
+                float: left;
+                color: @viewer-sidebar-label-text-color;
+                font-weight: normal;
+                cursor: default;
+            }
+
+            dd {
+                width: 66%;
+                float: left;
+                .user-select(text);
+
+                &.io-ox-busy:before {
+                    font-size: inherit;
+                    left: 0px;
+                    margin-left: 0px;
                 }
+            }
 
-                &:after {
-                    content: " ";
-                    display: table;
-                    clear: both;
-                }
+            .versiontable {
 
-                dd, dt {
+                white-space: nowrap;
+
+                td {
+                    padding: 0;
+                    border-top: none;
                     line-height: 16px;
+                    color: #ccc;
                 }
 
-                dt {
-                    width: 33%;
-                    float: left;
-                    color: @viewer-sidebar-label-text-color;
-                    font-weight: normal;
+                .version-content {
+
+                    padding: 0 0 8px 8px;
+
+                    .last_modified {
+                        float: right;
+                    }
+                    .size {
+                        text-align: left;
+                    }
+                    .version-comment {
+                        color: lightgrey;
+                    }
+                }
+
+                .dropdown > a {
+                    color: #fff;
+                    &:hover {
+                        color: #fff;
+                    }
+                    &:active, &:focus{
+                        background-color: #444444;
+                    }
+                    &.current {
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .description {
+                display: block;
+                white-space: pre-wrap;
+                line-height: 16px;
+                .user-select(text);
+
+                &.description-empty {
+                    .user-select(none);
                     cursor: default;
                 }
 
-                dd {
-                    width: 66%;
-                    float: left;
-                    .user-select(text);
-
-                    &.io-ox-busy:before {
-                        font-size: inherit;
-                        left: 0px;
-                        margin-left: 0px;
-                    }
+                &:active, &:focus{
+                    outline: 2px solid #444444;
+                    outline-offset: 2px;
                 }
 
-                .versiontable {
-
-                    white-space: nowrap;
-
-                    td {
-                        padding: 0;
-                        border-top: none;
-                        line-height: 16px;
-                        color: #ccc;
-                    }
-
-                    .version-content {
-
-                        padding: 0 0 8px 8px;
-
-                        .last_modified {
-                            float: right;
-                        }
-                        .size {
-                            text-align: left;
-                        }
-                        .version-comment {
-                            color: lightgrey;
-                        }
-                    }
-
-                    .dropdown > a {
-                        color: #fff;
-                        &:hover {
-                            color: #fff;
-                        }
-                        &:active, &:focus{
-                            background-color: #444444;
-                        }
-                        &.current {
-                            font-weight: bold;
-                        }
-                    }
-                }
-
-                .description {
-                    display: block;
-                    white-space: pre-wrap;
-                    line-height: 16px;
-                    .user-select(text);
-
-                    &.description-empty {
-                        .user-select(none);
-                        cursor: default;
-                    }
-
-                    &:active, &:focus{
-                        outline: 2px solid #444444;
-                        outline-offset: 2px;
-                    }
-
-                }
             }
         }
     }
