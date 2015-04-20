@@ -53,7 +53,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 } else if (version2.current_version) {
                     return versions.length;
                 }
-                return version2.creation_date - version1.creation_date;
+                return version2.last_modified - version1.last_modified;
             }
 
             panelBody.empty();
