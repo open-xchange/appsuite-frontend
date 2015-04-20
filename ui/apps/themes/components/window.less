@@ -77,7 +77,7 @@
 
     &.header-top {
 
-        .window-body{
+        .window-body {
             top: 48px;
             bottom: 0;
         }
@@ -105,6 +105,11 @@
                 margin-right: 8px;
                 height: 32px;
             }
+        }
+
+        .window-content {
+            // always reserve space for scroll bar
+            overflow-y: scroll !important;
         }
 
         @media (max-width: 480px), (max-device-width: 480px) {

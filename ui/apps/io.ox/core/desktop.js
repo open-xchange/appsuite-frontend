@@ -1070,9 +1070,19 @@ define('io.ox/core/desktop', [
 
                 this.shown = shown.promise();
 
+                function considerScrollbarWidth(element) {
+                    // get scrollbar width and fix header
+                    var test = $('<div style="width: 100px; visibility: hidden; overflow-y: scroll;">').appendTo('body'),
+                        width = 100 - test[0].clientWidth;
+                    test.remove();
+                    // apply padding
+                    element.css('padding-right', width);
+                }
+
                 this.setHeader = function (node) {
                     this.nodes.header.append(node.addClass('container'));
                     this.nodes.outer.addClass('header-top');
+                    considerScrollbarWidth(this.nodes.header);
                     return this.nodes.header;
                 };
 
