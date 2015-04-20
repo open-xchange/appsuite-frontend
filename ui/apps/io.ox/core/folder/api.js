@@ -57,6 +57,10 @@ define('io.ox/core/folder/api',
         pool.unfetch(model.id);
     }
 
+    function isVirtual(id) {
+        return /^virtual/.test(id);
+    }
+
     function isFlat(id) {
         return /^(contacts|calendar|tasks)$/.test(id);
     }
@@ -161,7 +165,7 @@ define('io.ox/core/folder/api',
         // 2. apply custom order
         list = sort.apply(id, list);
         // 3. inject index
-        _(list).each(injectIndex.bind(this, id));
+        _(list).each(injectIndex.bind(null, id));
         // done
         return list;
     }
@@ -211,6 +215,7 @@ define('io.ox/core/folder/api',
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
+                virtual.refresh();
                 api.trigger('refresh');
             });
         }
@@ -224,13 +229,21 @@ define('io.ox/core/folder/api',
 
     function VirtualFolder(id, getter) {
         this.id = id;
-        this.getter = getter.bind(this);
+        this.getter = getter;
     }
 
     VirtualFolder.prototype.concat = function () {
-        var id = this.id;
         return $.when.apply($, arguments).then(function () {
-            return _(arguments).chain().flatten().map(injectIndex.bind(this, id)).value();
+            return _(arguments).flatten();
+        });
+    };
+
+    VirtualFolder.prototype.list = function () {
+        var id = this.id;
+        return this.getter().done(function (array) {
+            _(array).each(injectIndex.bind(null, id));
+            pool.addCollection(getCollectionId(id), array);
+            pool.getModel(id).set('subfolders', array.length > 0);
         });
     };
 
@@ -238,9 +251,9 @@ define('io.ox/core/folder/api',
 
         hash: {},
 
-        get: function (id) {
+        list: function (id) {
             var folder = this.hash[id];
-            return folder !== undefined ? folder.getter() : $.Deferred().reject();
+            return folder !== undefined ? folder.list() : $.Deferred().reject();
         },
 
         add: function (id, getter) {
@@ -251,8 +264,12 @@ define('io.ox/core/folder/api',
         concat: function () {
             if (ox.debug) console.warn('Deprecated! Please use this.concat()');
             return $.when.apply($, arguments).then(function () {
-                return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
+                return _(arguments).chain().flatten().map(injectIndex.bind(null, 'concat')).value();
             });
+        },
+
+        refresh: function () {
+            _(this.hash).invoke('list');
         }
     };
 
@@ -350,9 +367,7 @@ define('io.ox/core/folder/api',
         }
 
         // special handling for virtual folders
-        if (/^virtual/.test(id)) return virtual.get(id).done(function (array) {
-            pool.addCollection(collectionId, array);
-        });
+        if (isVirtual(id)) return virtual.list(id);
 
         return http.GET({
             module: 'folders',
@@ -598,6 +613,10 @@ define('io.ox/core/folder/api',
         return update(id, { folder_id: target }).done(function (newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
+            // update all virtual folders
+            virtual.refresh();
+            // add folder to collection
+            pool.getCollection(target).add(model);
             // trigger event
             api.trigger('move', id, newId);
         });
@@ -647,6 +666,7 @@ define('io.ox/core/folder/api',
             })
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
+                virtual.refresh();
                 api.trigger('create', data);
                 api.trigger('create:' + id, data);
             })
@@ -925,6 +945,7 @@ define('io.ox/core/folder/api',
         can: util.can,
         virtual: virtual,
         isFlat: isFlat,
+        isVirtual: isVirtual,
         getFlatCollection: getFlatCollection,
         getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,

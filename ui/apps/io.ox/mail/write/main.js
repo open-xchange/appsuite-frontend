@@ -1388,7 +1388,7 @@ define('io.ox/mail/write/main',
                                 $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
                                     $('img:not(.emoji):eq(' + index + ')', t).attr('src', $(el).attr('src'));
                                 });
-                                editor.setContent(t.html());
+                                if (t) editor.setContent(t.html());
                             });
                             app.dirty(false);
                             notifications.yell('success', gt('Mail saved as draft'));

@@ -491,7 +491,7 @@ define('io.ox/mail/settings/signatures/register',
                     $('<button type="button" class="btn btn-primary" tabindex="1">')
                         .text(gt('Unset default signature'))
                         .on('click', function () {
-                            settings.set('defaultSignature', '');
+                            settings.set('defaultSignature', '').save();
                             fnDrawAll();
                         })
                 );
