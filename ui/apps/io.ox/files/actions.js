@@ -72,7 +72,7 @@ define('io.ox/files/actions', [
             requires: function (e) {
                 return util.conditionChain(
                     e.collection.has('one'),
-                    (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
+                    (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
                     util.isFolderType('!trash', e.baton)
                 );
