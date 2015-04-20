@@ -11,13 +11,12 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebar/fileinfoview', [
-    'io.ox/backbone/disposable',
+    'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/core/viewer/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Ext, EventDispatcher, Util, FolderAPI, gt) {
+], function (PanelBaseView, Ext, EventDispatcher, FolderAPI, gt) {
 
     'use strict';
 
@@ -28,11 +27,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         index: 100,
         id: 'fileinfo',
         draw: function (baton) {
-            //console.info('FileInfoView.draw()');
             if (!baton.model) {
                 return;
             }
-            var panel, panelBody,
+            var panelBody,
                 model = baton.model,
                 fileName = model.get('filename') || '-',
                 size = model.get('file_size'),
@@ -41,8 +39,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
 
-            panel = Util.createPanelNode({ title: gt('General Info') });
-            panelBody = panel.find('.sidebar-panel-body').append(
+            panelBody = this.find('.sidebar-panel-body').empty().append(
                 $('<dl>').append(
                     // filename
                     $('<dt>').text(gt('Filename')),
@@ -71,8 +68,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             .fail(function () {
                 panelBody.find('dl>dd.saved-in').text('-').idle();
             });
-
-            this.empty().attr({ role: 'tablist' }).append(panel);
         }
     });
 
@@ -80,35 +75,23 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
      * The FileInfoView is intended as a sub view of the SidebarView and
      * is responsible for displaying the general file details.
      */
-    var FileInfoView = DisposableView.extend({
+    var FileInfoView = PanelBaseView.extend({
 
         className: 'viewer-fileinfo',
 
         initialize: function () {
-            //console.info('FileInfoView.initialize()', this.model);
+            this.setPanelHeader(gt('General info'));
+            this.togglePanel(true);
+            // attach event handlers
+            this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));
         },
 
-        /**
-         * Listens on model change events.
-         */
-        onModelChange: function (model) {
-            //console.info('FileInfoView.onModelChangeDescription()', model);
-            var baton = Ext.Baton({ model: model, data: model.isFile() ? model.toJSON() : model.get('origData') });
-            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
-        },
-
         render: function () {
-            //console.info('FileInfoView.render()');
-            if (!this.model) {
-                return this;
+            if (this.model) {
+                var baton = Ext.Baton({ model: this.model, data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData') });
+                Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
             }
-            // add model change listener
-            this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.onModelChange.bind(this));
-
-            var baton = Ext.Baton({ model: this.model, data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData') });
-            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
-
             return this;
         },
 
@@ -116,7 +99,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            //console.info('FileDescriptionView.disposeView()');
             if (this.model) {
                 this.model.off().stopListening();
                 this.model = null;

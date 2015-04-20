@@ -10,8 +10,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/util', [
-    'gettext!io.ox/core/viewer'
-], function (gt) {
+], function () {
 
     'use strict';
 
@@ -114,86 +113,6 @@ define('io.ox/core/viewer/util', [
     Util.setDeviceClass = function (node) {
         node = (node instanceof $) ? node : $(node);
         node.addClass( _.device('smartphone') ? 'smartphone' : (_.device('tablet') ? 'tablet' : '') );
-    };
-
-    /**
-     * Creates Bootstrap panel markup
-     *
-     *  @param {Object} options
-     *      @param {String} options.title
-     *          The panel header title.
-     *      @param {String} [options.collapsed = false]
-     *          If true the panel body is collapsed by default.
-     *
-     * @returns {jQuery}
-     *  The jQuery panel node.
-     */
-    Util.createPanelNode = function (options) {
-        var options = $.extend({ title: '', collapsed: false }, options || {}),
-            panelId = _.uniqueId('panel-'),
-            panelHeader,
-            panelBody,
-            toggleButton,
-            buttonIcon,
-            panel;
-
-        /**
-         * Panel toggle button handler, switches the panel header icon.
-         */
-        function onTogglePanel (event) {
-            event.preventDefault();
-
-            if (panelBody.hasClass('panel-collapsed')) {
-                buttonIcon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
-                toggleButton.attr('aria-expanded', 'true');
-                panelHeader.attr('aria-expanded', 'true');
-                panelBody.slideDown().removeClass('panel-collapsed');
-            } else {
-                buttonIcon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
-                toggleButton.attr('aria-expanded', 'false');
-                panelHeader.attr('aria-expanded', 'false');
-                panelBody.slideUp().addClass('panel-collapsed');
-            }
-        }
-
-        toggleButton = $('<a>', {
-            'class': 'panel-toggle-btn btn',
-            href: '#',
-            tabindex: 1,
-            title: gt('Toggle panel'),
-            role: 'button',
-            'aria-label': options.title,
-            'aria-controls': panelId,
-            'aria-expanded': options.collapsed ? 'false' : 'true'
-        });
-
-        toggleButton[0].onclick = onTogglePanel;
-
-        buttonIcon = $('<i>', { 'aria-hidden': 'true' }).addClass('fa fa-chevron-' + (options.collapsed ? 'right' : 'down'));
-
-        panelHeader = $('<div>', { 'class': 'sidebar-panel-heading', role: 'tab', 'aria-expanded': options.collapsed ? 'false' : 'true' }).append(
-            $('<h3>').text(options.title),
-            toggleButton.append(
-                buttonIcon
-            )
-        );
-
-        panelBody = $('<div>', {
-            'class': 'sidebar-panel-body',
-            id: panelId,
-            role: 'tabpanel',
-            'aria-label': options.title,
-            'aria-hidden': (options.collapsed ? 'true' : 'false')
-        })
-        .addClass(options.collapsed ? 'panel-collapsed' : '')
-        .css('display', (options.collapsed ? 'none' : 'block'));
-
-        panel = $('<div>', { 'class': 'sidebar-panel' }).append(
-            panelHeader,
-            panelBody
-        );
-
-        return panel;
     };
 
     /**

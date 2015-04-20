@@ -328,11 +328,9 @@ html.ios .io-ox-viewer {
     .viewer-filedescription,
     .viewer-fileversions {
 
-        .sidebar-panel {
+        &.sidebar-panel {
 
             background-color: transparent;
-            border: 0;
-            margin-bottom: 0;
 
             a.btn, div.dropdown > a { outline: none; }
 
@@ -370,6 +368,10 @@ html.ios .io-ox-viewer {
             .sidebar-panel-body {
 
                 padding: 20px 0;
+
+                &.panel-collapsed {
+                    display: none;
+                }
 
                 &:after {
                     content: " ";
