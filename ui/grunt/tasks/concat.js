@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                             // load moment before require, because of anonymous define
                             'build/static/3rd.party/moment/moment.js',
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
-                            'build/static/3rd.party/moment/moment-formatInterval.js',
+                            'build/static/3rd.party/moment/moment-interval.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',

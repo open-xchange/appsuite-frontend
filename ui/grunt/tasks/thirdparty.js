@@ -74,7 +74,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'moment-timezone/builds/moment-timezone-with-data.js',
-                            'moment-interval/moment-formatInterval.js'
+                            'moment-interval/moment-interval.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/moment'
