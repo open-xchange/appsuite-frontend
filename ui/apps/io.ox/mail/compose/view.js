@@ -292,7 +292,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
 
-            this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+            this.signatures = this.model.getSignatures();
 
             var mailto, params;
             // triggerd by mailto?
@@ -912,16 +912,6 @@ define('io.ox/mail/compose/view', [
             if (this.model.get('initial')) {
                 this.setSelectedSignature(this.model.get('signature'));
             }
-        },
-
-        getMobileSignature: function () {
-            var value = settings.get('mobileSignature');
-            if (value === undefined) {
-                value =
-                    //#. %s is the product name
-                    gt('Sent from %s via mobile', ox.serverConfig.productName);
-            }
-            return value;
         },
 
         setSelectedSignature: function (model, id) {

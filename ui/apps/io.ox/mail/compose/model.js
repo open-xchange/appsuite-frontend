@@ -55,7 +55,7 @@ define('io.ox/mail/compose/model', [
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
                 sent_date: '',
-                signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
+                signature: settings.get('defaultSignature'),
                 currentSignature: '',
                 csid: mailAPI.csid(),
                 size: '',
@@ -68,6 +68,8 @@ define('io.ox/mail/compose/model', [
         },
 
         initialize: function () {
+            if (_.device('smartphone')) this.setMobileSignature();
+
             var list = this.get('attachments');
             if (_.isObject(list) && !_.isEmpty(list)) {
                 var editorMode = this.get('editorMode') === 'text' ? 'text' : 'html';
@@ -203,6 +205,28 @@ define('io.ox/mail/compose/model', [
             content = this.convertAllToUnified(content);
 
             return content;
+        },
+
+        getSignatures: function () {
+            if (_.device('!smartphone')) return [];
+
+            var value = settings.get('mobileSignature');
+
+            if (value === undefined) {
+                value =
+                    //#. %s is the product name
+                    gt('Sent from %s via mobile', ox.serverConfig.productName);
+            }
+
+            return [{ id: '0', content: value, misc: { insertion: 'below' } }];
+        },
+
+        setMobileSignature: function () {
+            if (settings.get('mobileSignatureType') === 'custom') {
+                this.set('signature', '0');
+            } else {
+                this.set('signature', '1');
+            }
         },
 
         parse: function (list) {
