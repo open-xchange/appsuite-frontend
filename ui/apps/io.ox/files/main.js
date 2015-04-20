@@ -56,7 +56,7 @@ define('io.ox/files/main', [
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
-                name: 'fluid',
+                name: 'main',
                 container: c,
                 startPage: true
             });
@@ -94,7 +94,7 @@ define('io.ox/files/main', [
             });
 
             app.pages.addPage({
-                name: 'fluid',
+                name: 'main',
                 startPage: true,
                 navbar: new Bars.NavbarView({
                     baton: baton,
@@ -102,17 +102,17 @@ define('io.ox/files/main', [
                 }),
                 toolbar: new Bars.ToolbarView({
                     baton: baton,
-                    page: 'fluid',
+                    page: 'main',
                     extension: 'io.ox/files/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     baton: baton,
-                    page: 'fluid/multiselect',
+                    page: 'main/multiselect',
                     extension: 'io.ox/files/mobile/toolbar'
                 })
             });
 
-            app.pages.addPage({
+            /*app.pages.addPage({
                 name: 'detailView',
                 navbar: new Bars.NavbarView({
                     baton: baton,
@@ -124,12 +124,12 @@ define('io.ox/files/main', [
                     extension: 'io.ox/files/mobile/toolbar'
 
                 })
-            });
+            });*/
 
             // important
             // tell page controller about special navigation rules
             app.pages.setBackbuttonRules({
-                'fluid': 'folderTree'
+                'main': 'folderTree'
             });
         },
 
@@ -140,7 +140,7 @@ define('io.ox/files/main', [
 
             if (!_.device('smartphone')) return;
 
-            app.pages.getNavbar('fluid')
+            app.pages.getNavbar('main')
                 .setLeft(gt('Folders'))
                 .setRight(
                     //#. Used as a button label to enter the "edit mode"
@@ -152,26 +152,26 @@ define('io.ox/files/main', [
                 .setLeft(false)
                 .setRight(gt('Edit'));
 
-            app.pages.getNavbar('detailView')
+            /*app.pages.getNavbar('detailView')
                 // no title
                 .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
                 );
-
+            */
             // tell each page's back button what to do
-            app.pages.getNavbar('fluid')
+            app.pages.getNavbar('main')
                 .on('leftAction', function () {
                     app.pages.goBack();
                 }).hide('.right');
 
-            app.pages.getNavbar('detailView').on('leftAction', function () {
+            /*app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
-            });
+            });*/
 
             // TODO restore last folder as starting point
-            app.pages.showPage('fluid');
+            app.pages.showPage('main');
         },
 
         /*
@@ -205,7 +205,7 @@ define('io.ox/files/main', [
             var tree = new TreeView({ app: app, contextmenu: true, module: 'infostore', root: settings.get('rootFolderId', 9) });
 
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'fluid' });
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'main' });
             page.append(tree.render().$el);
         },
 
@@ -217,7 +217,7 @@ define('io.ox/files/main', [
 
             function update() {
                 app.folder.getData().done(function (d) {
-                    app.pages.getNavbar('fluid').setTitle(d.title);
+                    app.pages.getNavbar('main').setTitle(d.title);
                 });
             }
 
@@ -271,7 +271,8 @@ define('io.ox/files/main', [
          */
         'list-view-control': function (app) {
             app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
-            app.getWindow().nodes.main.append(
+            var node = _.device('smartphone') ? app.pages.getPage('main') : app.getWindow().nodes.main;
+            node.append(
                 app.listControl.render().$el
                     //#. items list (e.g. mails)
                     .attr('aria-label', gt('Item list'))
@@ -395,7 +396,7 @@ define('io.ox/files/main', [
          */
         'change:layout': function (app) {
 
-            if (_.device('smartphone')) return;
+            //if (_.device('smartphone')) return;
 
             function applyLayout() {
 
@@ -426,14 +427,14 @@ define('io.ox/files/main', [
          */
         'selection-doubleclick': function (app) {
 
-            if (_.device('smartphone')) return;
+            var ev = _.device('touch') ? 'tap' : 'dblclick';
 
-            app.listView.$el.on('dblclick', '.file-type-folder', function (e) {
+            app.listView.$el.on(ev, '.file-type-folder', function (e) {
                 var obj = _.cid($(e.currentTarget).attr('data-cid'));
                 app.folder.set(obj.id);
             });
 
-            app.listView.$el.on('dblclick', '.list-item:not(.file-type-folder)', function (e) {
+            app.listView.$el.on(ev, '.list-item:not(.file-type-folder)', function (e) {
                 var cid = $(e.currentTarget).attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
@@ -529,7 +530,7 @@ define('io.ox/files/main', [
         /*
          * Delete file
          * leave detailview if file is deleted
-         */
+
         'delete:file-mobile': function (app) {
             if (_.device('!smartphone')) return;
             api.on('delete', function () {
@@ -538,7 +539,7 @@ define('io.ox/files/main', [
                 }
             });
         },
-
+        */
         /*
          * Set folderview property
          */
@@ -571,7 +572,7 @@ define('io.ox/files/main', [
             if (_.device('!smartphone')) return;
 
             // bind action on button
-            app.pages.getNavbar('fluid').on('rightAction', function () {
+            app.pages.getNavbar('main').on('rightAction', function () {
                 app.props.set('showCheckboxes', !app.props.get('showCheckboxes'));
             });
 
@@ -581,19 +582,19 @@ define('io.ox/files/main', [
                 app.selection.clear();
                 if (app.props.get('showCheckboxes')) {
                     $view.removeClass('checkboxes-hidden');
-                    app.pages.getNavbar('fluid').setRight(gt('Cancel')).hide('.left');
+                    app.pages.getNavbar('main').setRight(gt('Cancel')).hide('.left');
                 } else {
                     $view.addClass('checkboxes-hidden');
-                    app.pages.getNavbar('fluid').setRight(gt('Edit')).show('.left');
+                    app.pages.getNavbar('main').setRight(gt('Edit')).show('.left');
                 }
             });
         },
 
-        // 'toggle-secondary-toolbar': function (app) {
-        //     app.props.on('change:showCheckboxes', function (model, state) {
-        //         app.pages.toggleSecondaryToolbar('fluid', state);
-        //     });
-        // },
+        'toggle-secondary-toolbar': function (app) {
+            app.props.on('change:showCheckboxes', function (model, state) {
+                app.pages.toggleSecondaryToolbar('main', state);
+            });
+        },
 
         /*
          * Folerview toolbar
@@ -651,6 +652,7 @@ define('io.ox/files/main', [
 
         // respond to search results
         'search': function (app) {
+            if (_.device('smartphone')) return;
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);
