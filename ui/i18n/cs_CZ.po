@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-02-22 18:02+0100\n"
+"PO-Revision-Date: 2015-04-20 09:31+0200\n"
 "Last-Translator: Robert Krátký <rkratky@gmail.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -115,13 +115,12 @@ msgstr[2] "%1$d položek vybráno"
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js:141 module:io.ox/core
-#, fuzzy
 #| msgid "Add member"
 msgid "%1$d member"
 msgid_plural "%1$d members"
-msgstr[0] "Přidat člena"
-msgstr[1] "Přidat člena"
-msgstr[2] "Přidat člena"
+msgstr[0] "%1$d člen"
+msgstr[1] "%1$d členové"
+msgstr[2] "%1$d členů"
 
 #: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
@@ -2003,17 +2002,15 @@ msgstr "Vytvořit nový účet %1$s"
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js:84
-#, fuzzy
 #| msgid "Create new rule"
 msgid "Create new group"
-msgstr "Vytvořit nové pravidlo"
+msgstr "Vytvořit novou skupinu"
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
 #: apps/plugins/administration/resources/settings/toolbar.js:80
-#, fuzzy
 #| msgid "Create new rule"
 msgid "Create new resource"
-msgstr "Vytvořit nové pravidlo"
+msgstr "Vytvořit nový zdroj"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Create new rule"
@@ -2212,7 +2209,6 @@ msgstr "Smazat skupinu"
 
 #: apps/plugins/administration/resources/settings/toolbar.js:62
 #: module:io.ox/core
-#, fuzzy
 #| msgid "Delete Resource"
 #| msgid_plural "Delete Resources"
 msgid "Delete resource"
@@ -2387,22 +2383,20 @@ msgstr "Opravdu chcete smazat složku „%s“?"
 
 #. %1$s is the group name
 #: apps/plugins/administration/groups/settings/toolbar.js:64 module:io.ox/core
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Opravdu chcete smazat tento účet?"
+msgstr "Opravdu chcete smazat skupinu „%1$s“? Tuto akci nelze vzít zpět."
 
 #. %1$s is the resource name
 #: apps/plugins/administration/resources/settings/toolbar.js:60
 #: module:io.ox/core
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid ""
 "Do you really want to delete the resource \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Opravdu chcete smazat tento účet?"
+msgstr "Opravdu chcete smazat zdroj „%1$s“? Tuto akci nelze vzít zpět."
 
 #: apps/io.ox/contacts/actions.js:43 module:io.ox/contacts
 msgid "Do you really want to delete these items?"
@@ -2715,16 +2709,14 @@ msgid "Edit draft"
 msgstr "Upravit koncept"
 
 #: apps/plugins/administration/groups/settings/edit.js:138 module:io.ox/core
-#, fuzzy
 #| msgid "Add group"
 msgid "Edit group"
-msgstr "Přidat skupinu"
+msgstr "Upravit skupinu"
 
 #: apps/plugins/administration/resources/settings/edit.js:83 module:io.ox/core
-#, fuzzy
 #| msgid "Edit rule"
 msgid "Edit resource"
-msgstr "Upravit pravidlo"
+msgstr "Upravit zdroj"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Edit rule"
@@ -3792,8 +3784,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak %3$s"
-"‚Přidat na domácí stránku‘%4$s"
+"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak "
+"%3$s‚Přidat na domácí stránku‘%4$s"
 
 #: apps/io.ox/contacts/model.js:288 module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4098,10 +4090,9 @@ msgid "Mail address"
 msgstr "Poštovní adresa"
 
 #: apps/plugins/administration/resources/settings/edit.js:55 module:io.ox/core
-#, fuzzy
 #| msgid "Mail address"
 msgid "Mail address (mandatory)"
-msgstr "Poštovní adresa"
+msgstr "Poštovní adresa (povinné)"
 
 #: apps/io.ox/contacts/view-detail.js:525 module:io.ox/contacts
 msgid "Mail and Messaging"
@@ -5793,10 +5784,9 @@ msgstr "Odstranit"
 
 #. %1$s is the user name of the group member
 #: apps/plugins/administration/groups/settings/members.js:83 module:io.ox/core
-#, fuzzy
 #| msgid "Remove"
 msgid "Remove %1$s"
-msgstr "Odstranit"
+msgstr "Odstranit %1$s"
 
 #: apps/io.ox/backbone/mini-views/attachments.js:88
 #: module:io.ox/core/tk/attachments
@@ -5829,7 +5819,6 @@ msgid "Remove from recipient list"
 msgstr "Odstranit ze seznamů adresátů"
 
 #: apps/plugins/administration/groups/settings/members.js:81 module:io.ox/core
-#, fuzzy
 #| msgid "Remove Member"
 msgid "Remove member"
 msgstr "Odstranit člena"
@@ -6632,7 +6621,7 @@ msgstr "Spustit vyhledávání"
 
 #: apps/plugins/administration/groups/settings/edit.js:48 module:io.ox/core
 msgid "Start typing to search for user names"
-msgstr ""
+msgstr "Začněte psát a uživatelská jména budou automaticky vyhledávána"
 
 #: apps/io.ox/calendar/edit/template.js:154 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core
@@ -6868,19 +6857,14 @@ msgid "Thank you for your feedback"
 msgstr "Děkujeme za zpětnou vazbu"
 
 #: apps/plugins/portal/oxdriveclients/register.js:93 module:plugins/portal
-#, fuzzy
-#| msgid ""
-#| "The %s client lets you store and share your photos, files, documents and "
-#| "videos, anytime,anywhere. Access any file you save to OX Drive from all "
-#| "your computers, iPhone, iPad or from within OX App Suite itself."
 msgid ""
 "The %s client lets you store and share your photos, files, documents and "
 "videos, anytime, anywhere. Access any file you save to %s from all your "
 "computers, iPhone, iPad or from within %s itself."
 msgstr ""
 "Klient %s vám umožní ukládat a sdílet své fotografie, soubory, dokumenty a "
-"videa - kdykoliv a kdekoliv. Přistupovat k souborům na OX Drive můžete ze "
-"všech svých počítačů, z iPhonu, iPadu nebo přímo z OX App Suite."
+"videa - kdykoliv a kdekoliv. Přistupovat k souborům na %s můžete ze všech "
+"svých počítačů, z iPhonu, iPadu nebo přímo z %s."
 
 #: apps/io.ox/files/guidance/main.js:92 module:io.ox/files
 msgctxt "help"
