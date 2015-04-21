@@ -24,16 +24,15 @@ define('io.ox/core/tk/list-selection', [
         behavior = settings.get('selectionMode', 'normal'),
         // mobile stuff
         THRESHOLD_X = 5, // touchmove threshold for mobiles in PX
-        THRESHOLD_STICK = 80, // threshold in px
+        THRESHOLD_STICK = 40, // threshold in px
         THRESHOLD_REMOVE = 250, //px
         LOCKDISTANCE = 190,
-        MOVE_UP_TIME = 150,
-        CELL_HEIGHT = '-63px',
-        // animation support
-        cell,
-        tension = 350,
-        friction = 20,
-        animDuration = 625;
+        MOVE_UP_TIME = 200,
+        UNFOLD_TIME = 100,
+        UNFOLD_TIME_FULL = 50,
+        RESET_CELL_TIME = 100,
+        CELL_HEIGHT = '-68px',
+        cell;
 
     if (_.device('smartphone')) {
         require(['static/3rd.party/velocity/velocity.min.js']);
@@ -537,9 +536,9 @@ define('io.ox/core/tk/list-selection', [
                 this.t0 = 0;
                 this.otherUnfolded = false;
                 $(self).velocity({
-                    'translateX': [0, [tension, friction], a]
+                    'translateX': [0, a]
                 }, {
-                    duration: animDuration,
+                    duration: RESET_CELL_TIME,
                     complete: function () {
                         $(self).removeAttr('style');
                         $(self).removeClass('unfolded');
@@ -584,7 +583,7 @@ define('io.ox/core/tk/list-selection', [
             this.distanceX = (this.startX - currentX) * -1; // invert value
             this.scrolling = false;
 
-            if (currentX > this.startX  && !this.unfolded) return; // left to right is not allowed at the start
+            if (currentX > this.startX && !this.unfolded ) return; // left to right is not allowed at the start
 
             if (e.data.isScrolling) {
                 this.scrolling = true;
@@ -599,6 +598,7 @@ define('io.ox/core/tk/list-selection', [
             if (Math.abs(this.distanceX) > THRESHOLD_X || this.isMoving) {
                 e.preventDefault(); // prevent further scrolling
                 this.isMoving = true;
+                e.data.view.isSwiping = true;
                 if (!this.target) {
                     // do expensive jquery select only once
                     this.target = $(e.currentTarget);
@@ -623,29 +623,34 @@ define('io.ox/core/tk/list-selection', [
                     this.expandDelete = true;
                     this.btnMore.hide();
 
-                    this.btnDelete.velocity({
-                        width: ['100%', [tension, friction]]
+                    /*this.btnDelete.velocity({
+                        width: ['100%', EASING]
                     }, {
-                        duration: 300
-                    });
+                        duration: 100,
+                        mobileHA: true
+                    });*/
+                    this.btnDelete.css('width', '100%');
 
                 } else if (this.expandDelete && Math.abs(this.distanceX) <= THRESHOLD_REMOVE) {
                     // remove style
                     this.expandDelete = false;
-                    this.btnDelete.velocity({
-                        width: ['95px', [tension, friction]]
+                    /*this.btnDelete.velocity({
+                        width: ['95px', EASING]
                     }, {
-                        duration: 300
-                    });
+                        duration: 100,
+                        mobileHA: true
+                    })*/
+                    this.btnDelete.css('width', '95px');
                     this.btnMore.show();
                 }
             }
         },
 
         onTouchEnd: function (e) {
+
             if (this.scrolling) return; // return if simple list scroll
 
-            this.remove = this.unfold = false;
+            this.remove = this.unfold = e.data.view.isSwiping = false;
             this.isMoving = false;
             // left to right on closed cells is not allowed, we have to check this in touchmove and touchend
             if ((this.distanceX > 0) && !this.unfolded) return;
@@ -679,8 +684,7 @@ define('io.ox/core/tk/list-selection', [
                 cell.velocity({
                     translateX: [-LOCKDISTANCE, this.distanceX]
                 }, {
-                    duration: 150,
-                    easing: 'easeOut',
+                    duration: UNFOLD_TIME,
                     complete: function () {
                         cell.addClass('unfolded');
                     }
@@ -690,25 +694,27 @@ define('io.ox/core/tk/list-selection', [
                 e.data.currentSelection = this; // save this for later use
             } else if (this.remove) {
                 var self = this,
+                    theView = e.data.view,
                     resetStyle = function () {
                         this.removeAttr('style');
                         // reset velocitie's transfrom cache manually
                         _(this).each(function (listItem) {
                             $(listItem).data('velocity').transformCache = {};
                         });
-                        e.data.view.off('remove-mobile', resetStyle);
+                        theView.off('remove-mobile', resetStyle);
                     };
 
                 $(this).velocity({
-                    translateX: ['-100%', [tension, friction]]
+                    translateX: ['-100%', this.distanceX]
                 }, {
-                    duration: 250,
+                    duration: UNFOLD_TIME_FULL,
                     complete: function () {
                         self.btnMore.remove();
-                        self.startX = 0;
-                        self.startY = 0;
+                        self.startX = self.startY = 0;
                         cell.data('velocity').transformCache = {};
+
                         var cellsBelow = $(self).nextAll();
+
                         cellsBelow.velocity({
                             translateY: CELL_HEIGHT
                         }, {
@@ -717,8 +723,8 @@ define('io.ox/core/tk/list-selection', [
                                 var node = $(self).closest(SELECTABLE),
                                 cid = node.attr('data-cid');
                                 // bind reset event
-                                e.data.view.on('remove-mobile', resetStyle, cellsBelow);
-                                e.data.view.trigger('selection:delete', [cid]);
+                                theView.on('remove-mobile', resetStyle, cellsBelow);
+                                theView.trigger('selection:delete', [cid]);
                                 self.swipeCell.remove();
                                 self.swipeCell = null;
                                 $(self).removeClass('unfolded');

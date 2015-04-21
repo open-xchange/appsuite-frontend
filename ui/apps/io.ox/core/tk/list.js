@@ -260,7 +260,7 @@ define('io.ox/core/tk/list', [
                 currentY = touches.pageY,
                 distance = currentY - this.pullToRefreshStartY;
 
-            if (this.pullToRefreshStartY && !this.isPulling) {
+            if (this.pullToRefreshStartY && !this.isPulling && !this.isSwiping) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
                     e.preventDefault();
                     e.stopPropagation();
