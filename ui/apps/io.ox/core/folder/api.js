@@ -269,10 +269,6 @@ define('io.ox/core/folder/api',
             var folder = this.hash[id];
             return folder !== undefined ? folder.list() : $.Deferred().reject();
         },
-        list: function (id) {
-            var folder = this.hash[id];
-            return folder !== undefined ? folder.list() : $.Deferred().reject();
-        },
 
         add: function (id, getter) {
             this.hash[id] = new VirtualFolder(id, getter);
