@@ -157,7 +157,7 @@ define('io.ox/core/settings/downloads/pane', [
         index: 1000000000000,
         title: gt('Downloads'),
         pane: 'io.ox/core/settings/downloads/pane',
-        advancedMode: true,
+        advancedMode: false,
         settingsgroup: 'tools'
     });
 
