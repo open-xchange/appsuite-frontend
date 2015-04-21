@@ -399,6 +399,9 @@ define('io.ox/core/folder/node', [
 
             // simple tree-based disable callback
             if (o.tree.options.disable(data, o)) this.$el.addClass('disabled');
+
+            // register for 'dispose' event (using inline function to make this testable via spyOn)
+            this.$el.on('dispose', this.remove.bind(this));
         },
 
         getCounter: function () {

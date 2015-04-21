@@ -2,7 +2,13 @@ open-xchange-appsuite-help (7.8.0-0) unstable; urgency=medium
 
   * prepare for 7.8.0 release
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 05 Nov 2014 16:22:07 +0100
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 05 Nov 2014 15:22:07 +0000
+
+open-xchange-appsuite-help (7.6.2-13) stable; urgency=low
+
+  * Build for patch 2015-04-13 (2474)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 14 Apr 2015 16:51:18 +0000
 
 open-xchange-appsuite-help (7.6.2-12) stable; urgency=low
 
@@ -86,25 +92,25 @@ open-xchange-appsuite-help (7.6.1-21) stable; urgency=low
 
   * Build for patch 2015-04-13 (2473)
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 14 Apr 2015 19:29:39 +0200
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 14 Apr 2015 17:29:39 +0000
 
 open-xchange-appsuite-help (7.6.1-20) stable; urgency=low
 
   * Build for patch 2015-03-29 (2475)
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 27 Mar 2015 16:24:22 +0100
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 27 Mar 2015 15:24:22 +0000
 
 open-xchange-appsuite-help (7.6.1-19) stable; urgency=low
 
   * Build for patch 2015-03-30 (2459)
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 25 Mar 2015 08:33:40 +0100
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 25 Mar 2015 07:33:40 +0000
 
 open-xchange-appsuite-help (7.6.1-18) stable; urgency=low
 
   * Build for patch 2015-03-30 (2446)
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 23 Mar 2015 16:32:29 +0100
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 23 Mar 2015 15:32:29 +0000
 
 open-xchange-appsuite-help (7.6.1-17) stable; urgency=low
 

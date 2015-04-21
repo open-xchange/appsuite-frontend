@@ -2,7 +2,13 @@ open-xchange-appsuite (7.8.0-0) unstable; urgency=medium
 
   * prepare for 7.8.0 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 05 Nov 2014 16:20:51 +0100
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 05 Nov 2014 15:20:51 +0000
+
+open-xchange-appsuite (7.6.2-13) stable; urgency=low
+
+  * Build for patch 2015-04-13 (2474)
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 14 Apr 2015 16:48:05 +0000
 
 open-xchange-appsuite (7.6.2-12) stable; urgency=low
 
@@ -86,25 +92,25 @@ open-xchange-appsuite (7.6.1-21) stable; urgency=low
 
   * Build for patch 2015-04-13 (2473)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 14 Apr 2015 19:26:55 +0200
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 14 Apr 2015 17:26:55 +0000
 
 open-xchange-appsuite (7.6.1-20) stable; urgency=low
 
   * Build for patch 2015-03-29 (2475)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 27 Mar 2015 16:22:02 +0100
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 27 Mar 2015 15:22:02 +0000
 
 open-xchange-appsuite (7.6.1-19) stable; urgency=low
 
   * Build for patch 2015-03-30 (2459)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 25 Mar 2015 08:30:57 +0100
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 25 Mar 2015 07:30:57 +0000
 
 open-xchange-appsuite (7.6.1-18) stable; urgency=low
 
   * Build for patch 2015-03-30 (2446)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 23 Mar 2015 16:29:49 +0100
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 23 Mar 2015 15:29:49 +0000
 
 open-xchange-appsuite (7.6.1-17) stable; urgency=low
 

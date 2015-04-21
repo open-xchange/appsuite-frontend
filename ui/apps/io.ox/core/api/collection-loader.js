@@ -52,6 +52,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                     return;
                 }
             }
+
             Pool.preserve(function () {
                 var method = methods[type];
                 collection[method](data, { parse: true });

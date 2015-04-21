@@ -92,6 +92,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 %changelog
 * Tue Apr 14 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2015-04-13 (2473)
+* Tue Apr 14 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-04-13 (2474)
 * Fri Mar 27 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2015-03-29 (2475)
 * Wed Mar 25 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -102,6 +104,8 @@ Build for patch 2015-03-30 (2446)
 Build for patch 2015-03-16
 * Fri Mar 13 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Twelfth candidate for 7.6.2 release
+* Fri Mar 13 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-03-16
 * Fri Mar 06 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Eleventh candidate for 7.6.2 release
 * Wed Mar 04 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
