@@ -634,7 +634,10 @@ define('io.ox/calendar/week/view', [
             if (_.device('!large')) return;
 
             function drawDropdown() {
-                var list = settings.get('renderTimezones'),
+                var list = _.intersection(
+                        settings.get('favoriteTimezones', []),
+                        settings.get('renderTimezones', [])
+                    ),
                     favorites = _(settings.get('favoriteTimezones', [])).chain().map(function (fav) {
                         return [fav, list.indexOf(fav) >= 0];
                     }).object().value(),
@@ -672,6 +675,13 @@ define('io.ox/calendar/week/view', [
                     dropdown.option(fav, true, moment.tz(fav).format('([GMT]Z) ') + fav);
                 });
 
+                dropdown.link('settings', 'Configure favorites', function () {
+                    var options = { id: 'io.ox/calendar' };
+                    ox.launch('io.ox/settings/main', options).done(function () {
+                        this.setSettingsPane(options);
+                    });
+                });
+
                 $('a', dropdown.$ul).attr('data-keep-open', 'true');
                 $('.dropdown', self.timeLabelBar).remove();
                 self.timeLabelBar.append(dropdown.render().$el);
@@ -691,17 +701,22 @@ define('io.ox/calendar/week/view', [
             }
 
             function drawTimezoneLabels() {
+                var list = _.intersection(
+                    settings.get('favoriteTimezones', []),
+                    settings.get('renderTimezones', [])
+                );
+
                 $('.timezone', self.timeLabelBar).remove();
                 self.timeLabelBar.prepend(
-                    _(settings.get('renderTimezones', [])).map(function (tz) {
+                    _(list).map(function (tz) {
                         return $('<div class="timezone">').text(moment().tz(tz).zoneAbbr());
                     })
                 );
 
-                if (settings.get('renderTimezones', []).length > 0) {
-                    self.timeLabelBar.css('width', ((settings.get('renderTimezones').length + 1) * 80) + 'px');
-                    self.fulltimeCon.css('margin-left', ((settings.get('renderTimezones').length + 1) * 80) + 'px');
-                    self.dayLabel.css('left', ((settings.get('renderTimezones').length + 1) * 80) + 'px');
+                if (list.length > 0) {
+                    self.timeLabelBar.css('width', ((list.length + 1) * 80) + 'px');
+                    self.fulltimeCon.css('margin-left', ((list.length + 1) * 80) + 'px');
+                    self.dayLabel.css('left', ((list.length + 1) * 80) + 'px');
                 } else {
                     self.timeLabelBar.css('width', '');
                     self.fulltimeCon.css('margin-left', '');
@@ -709,12 +724,13 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            settings.on('change:favoriteTimezones', function (e, value) {
+            var update = _.throttle(function () {
                 drawDropdown();
-                settings.set('renderTimezones', _.intersection(settings.get('renderTimezones', []), value));
-            });
+                drawTimezoneLabels();
+            }, 100, { trailing: false });
 
-            settings.on('change:renderTimezones', drawTimezoneLabels);
+            settings.on('change:renderTimezones', update);
+            settings.on('change:favoriteTimezones', update);
 
             this.timeLabelBar = $('<div class="time-label-bar">');
             drawDropdown();
@@ -817,26 +833,32 @@ define('io.ox/calendar/week/view', [
                 )
             );
 
-            function renderSecondaryTimeLabels() {
+            var renderSecondaryTimeLabels = _.throttle(function () {
+                var list = _.intersection(
+                    settings.get('favoriteTimezones', []),
+                    settings.get('renderTimezones', [])
+                );
+
                 $('.secondary-timezone', self.pane).remove();
                 $('.week-container-label', self.pane).before(
-                    _(settings.get('renderTimezones', [])).map(function (tz) {
+                    _(list).map(function (tz) {
                         return self.renderTimeLabel(tz).addClass('secondary-timezone');
                     })
                 );
                 self.adjustCellHeight();
 
-                if (settings.get('renderTimezones', []).length > 0) {
-                    self.weekCon.css('margin-left', ((settings.get('renderTimezones').length + 1) * 80) + 'px');
+                if (list.length > 0) {
+                    self.weekCon.css('margin-left', ((list.length + 1) * 80) + 'px');
                     self.pane.addClass('secondary');
                 } else {
                     self.weekCon.css('margin-left', '');
                     self.pane.removeClass('secondary');
                 }
-            }
+            }, 100, { trailing: false });
 
             if (_.device('large')) {
                 renderSecondaryTimeLabels();
+                settings.on('change:favoriteTimezones', renderSecondaryTimeLabels);
                 settings.on('change:renderTimezones', renderSecondaryTimeLabels);
             }
 

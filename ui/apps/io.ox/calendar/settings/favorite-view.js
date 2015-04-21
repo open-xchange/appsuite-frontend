@@ -117,6 +117,7 @@ define('io.ox/calendar/settings/favorite-view', [
 
             list = _(list).without(value);
             this.model.set('favoriteTimezones', list);
+            this.model.set('renderTimezones', _.intersection(list, this.model.get('renderTimezones', [])));
             this.drawFavorites();
         }
 

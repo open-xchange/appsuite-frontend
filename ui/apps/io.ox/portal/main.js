@@ -94,6 +94,7 @@ define('io.ox/portal/main', [
 
     function openSettings() {
         var options = { id: app.get('name') };
+        debugger;
         ox.launch('io.ox/settings/main', options).done(function () {
             this.setSettingsPane(options);
         });
