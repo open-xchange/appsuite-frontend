@@ -62,14 +62,27 @@
         // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
         z-index: 1;
 
+        .time-label-bar {
+            position: absolute;
+            width: @weekview-time-width;
+            display: table;
+            text-align: right;
+
+            div {
+                display: table-cell;
+                vertical-align: bottom;
+                padding-right: 7px;
+                width: 80px;
+            }
+        }
+
         .fulltime-container {
 
-            position: absolute;
             height: @weekview-footer-height;
             .overflow-y(scroll);
             .overflow-x(hidden);
             border-bottom: 1px solid @weekview-border;
-            left: @weekview-time-width;
+            margin-left: @weekview-time-width;
             right: 0;
 
             .fulltime {
@@ -112,7 +125,7 @@
             .week-container-label {
 
                 width: @weekview-time-width;
-                position: absolute;
+                float: left;
 
                 .time {
 
@@ -140,13 +153,18 @@
 
                 }
 
+                &.secondary-timezone {
+                    .time {
+                        &.in {
+                            font-weight: normal;
+                        }
+                    }
+                }
             }
 
             .week-container {
 
-                left: @weekview-time-width;
-                right: 0;
-                position: absolute;
+                margin-left: @weekview-time-width;
 
                 .timeline {
                     position: absolute;
@@ -344,8 +362,12 @@
         @adjusted-width: @weekview-time-width * 1.25;
 
         .week-view-container {
+            .time-label-bar {
+                width: @adjusted-width;
+            }
+
             .fulltime-container {
-                left: @adjusted-width;
+                margin-left: @adjusted-width;
             }
 
             .scrollpane {
@@ -354,7 +376,13 @@
                }
 
                .week-container {
-                   left: @adjusted-width;
+                   margin-left: @adjusted-width;
+               }
+
+               &.secondary {
+                   .week-container-label {
+                       width: @weekview-time-width;
+                   }
                }
             }
         }
@@ -391,7 +419,7 @@
         .week-view-container {
 
             .fulltime-container {
-                left: @weekview-time-widthSmall;
+                margin-left: @weekview-time-widthSmall;
             }
 
             .scrollpane {
@@ -407,7 +435,7 @@
                 }
 
                 .week-container {
-                    left:  @weekview-time-widthSmall;
+                    margin-left:  @weekview-time-widthSmall;
                 }
 
             }

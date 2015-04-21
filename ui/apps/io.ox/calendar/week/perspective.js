@@ -376,6 +376,7 @@ define('io.ox/calendar/week/perspective', [
             this.app = app;
             this.main
                 .addClass('week-view')
+                .addClass('secondary-time-label')
                 .empty()
                 .attr({
                     'role': 'navigation',
