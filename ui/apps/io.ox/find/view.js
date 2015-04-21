@@ -186,7 +186,8 @@ define('io.ox/find/view', [
             box.outerHeight(box.outerHeight() + delta);
             facets.outerHeight(facets.outerHeight() + delta);
             tree.offset({ top: tree.offset().top + delta });
-            winbody.offset({ top: winbody.offset().top + delta });
+            if (this.app.isActive())
+                winbody.offset({ top: winbody.offset().top + delta });
         },
 
         register: function () {

@@ -275,9 +275,27 @@ define('io.ox/find/view-tokenfield', [
             return none && this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
         },
 
+        empty: function () {
+            var self = this;
+            var tokens = this.api('getTokens');
+            _.each(tokens, function (token) {
+                self.ui.field.trigger(
+                    $.Event('tokenfield:removetoken', { attrs: token })
+                );
+            });
+            // params: add, triggerChange
+            this.api('setTokens', [], false, false);
+            _.each(tokens, function (token) {
+                self.ui.field.trigger(
+                    $.Event('tokenfield:removedtoken', { attrs: token })
+                );
+            });
+        },
+
         reset: function () {
             this.ui.container.find('.token-input').val('');
-            this.api('setTokens', []);
+            // remove all tokens
+            this.empty();
             this.setPlaceholder();
             // tokenfield manually sets width -  has to be removed here
             this.ui.container.find('.token-input').css('width', 'auto');

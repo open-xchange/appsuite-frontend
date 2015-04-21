@@ -59,9 +59,10 @@ define('io.ox/find/view-searchbox', [
         _onResize: function () {
             var self = this;
             _.defer(function () {
-                var delta = self.$el.height() - self._height.current;
+                var current = _.max([self._height.initial, self.$el.height()]),
+                    delta = current - self._height.current;
                 if (!delta) return;
-                self._height.current = self.$el.height();
+                self._height.current = current;
                 self.trigger('resize', delta);
             });
         },
