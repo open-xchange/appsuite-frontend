@@ -77,8 +77,19 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            util.createRecipientsArray(baton.data).done(function (recipients) {
-                ox.registry.call('mail-compose', 'compose', {to: recipients, subject: baton.data.title});
+            util.resolveParticipants(baton.data).done(function (recipients) {
+                recipients = _(recipients)
+                    .chain()
+                    .filter(function (rec) {
+                        // don't add myself
+                        // don't add if mail address is missing (yep, edge-case)
+                        return rec.id !== ox.user_id && !!rec.mail;
+                    })
+                    .map(function (rec) {
+                        return [rec.display_name, rec.mail];
+                    })
+                    .value();
+                ox.registry.call('mail-compose', 'compose', { to: recipients, subject: baton.data.title });
             });
         }
     });
@@ -114,8 +125,8 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            util.createDistlistArray(baton.data).done(function (distlist) {
-                ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
+            util.resolveParticipants(baton.data).done(function (distlist) {
+                ox.load(['io.ox/contacts/distrib/main', 'settings!io.ox/core']).done(function (m, coreSettings) {
                     m.getApp().launch().done(function () {
                         this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
                     });
