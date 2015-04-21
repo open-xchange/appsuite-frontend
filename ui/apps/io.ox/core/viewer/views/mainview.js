@@ -18,8 +18,9 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/backbone/disposable',
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
+    'settings!io.ox/core',
     'less!io.ox/core/viewer/style'
-], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, DisposableView, NodeTouch, Util) {
+], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, DisposableView, NodeTouch, Util, Settings) {
 
     'use strict';
 
@@ -50,6 +51,7 @@ define('io.ox/core/viewer/views/mainview', [
             this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer);
             // bind toggle side bar handler
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar);
+            this.listenTo(EventDispatcher, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js
@@ -69,6 +71,7 @@ define('io.ox/core/viewer/views/mainview', [
          * @returns {MainView}
          */
         render: function (model) {
+            var state = Settings.get('viewer:sidebar:state') || false;
             //console.warn('MainView.render()', data);
             if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
@@ -84,6 +87,8 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayerView.render(model).el,
                 this.sidebarView.render(model).el
             );
+            // set initial sidebar state
+            this.sidebarView.toggleSidebar(state);
             return this;
         },
 
@@ -140,9 +145,14 @@ define('io.ox/core/viewer/views/mainview', [
             EventDispatcher.trigger('viewer:window:resize');
         },
 
-        // eventually necessary actions after the sidebar button is toggled
+        // toggle sidebar after the sidebar button is clicked
         onToggleSidebar: function () {
             //console.warn('MainView.onToggleSidebar()');
+            this.sidebarView.toggleSidebar();
+        },
+
+        // handle sidebar toggle
+        onSideBarToggled: function (/*state*/) {
             this.refreshViewSizes();
         },
 
@@ -159,16 +169,18 @@ define('io.ox/core/viewer/views/mainview', [
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
             if (swiper) {
                 swiper.onResize();
+                // workaround for a possible bug from swiper plugin that happens sporadically:
+                // After an on resize call, the plugin 'resets' the active slide to the beginning.
+                this.displayerView.swiper.slideTo(activeSlideIndex);
             }
-            // workaround for a possible bug from swiper plugin that happens sporadically:
-            // After an on resize call, the plugin 'resets' the active slide to the beginning.
-            this.displayerView.swiper.slideTo(activeSlideIndex);
         },
 
         /**
          * Viewer close handler. Hides viewer DOM first and then do cleanup.
          */
         closeViewer: function () {
+            // save sidebar state
+            Settings.set('viewer:sidebar:state', this.sidebarView.opened).save();
             this.$el.hide();
             this.remove();
         },
@@ -177,7 +189,7 @@ define('io.ox/core/viewer/views/mainview', [
             //console.info('MainView.disposeView()');
             this.toolbarView.remove();
             this.displayerView.remove();
-            //this.sidebarView.remove();
+            this.sidebarView.remove();
             this.collection.off().stopListening().each(function (model) {
                 model.off().stopListening();
             });

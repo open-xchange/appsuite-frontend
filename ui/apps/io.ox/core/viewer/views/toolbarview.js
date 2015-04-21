@@ -19,8 +19,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
     'io.ox/core/viewer/util',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, gt) {
+], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -294,9 +295,12 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         initialize: function () {
-            //console.info('ToolbarView.initialize()', options);
+            //console.info('ToolbarView.initialize()');
+            this.sideBarState = Settings.get('viewer:sidebar:state') || false;
             // rerender on slide change
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render);
+            // handle side bar toggle
+            this.listenTo(EventDispatcher, 'viewer:sidebar:change:state', this.onSidebarToggled.bind(this));
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -311,13 +315,19 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         /**
          * Toggles the visibility of the sidebar.
-         *
-         * @param {Event} event
          */
-        onToggleSidebar: function (event) {
-            //console.warn('ToolbarView.onClose()', event);
-            $(event.currentTarget).toggleClass('active');
+        onToggleSidebar: function () {
+            //console.info('ToolbarView.onToggleSidebar()');
             EventDispatcher.trigger('viewer:toggle:sidebar');
+        },
+
+        /**
+         * Handles changes of the side bar toggle state
+         */
+        onSidebarToggled: function (state) {
+            //console.info('ToolbarView.onSidebarToggled()');
+            this.$('.viewer-toolbar-togglesidebar').toggleClass('active', state).focus();
+            this.sideBarState = state;
         },
 
         /**
@@ -390,6 +400,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_LINKS_ID + '/' + appName
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
+
+            this.$('.viewer-toolbar-togglesidebar').toggleClass('active', this.sideBarState);
             return this;
         },
 

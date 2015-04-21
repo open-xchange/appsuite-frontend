@@ -51,19 +51,27 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (model) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
-                if (!model) {
-                    return;
+                if (model) {
+                    this.model = model;
+                    this.renderSections();
                 }
-                this.model = model;
-                this.renderSections();
             });
+        },
 
-            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', function () {
-                //console.warn('SidebarbarView viewer:toggle:sidebar');
-                this.$el.toggleClass('opened');
-                this.opened = !this.opened;
-                this.renderSections();
-            });
+        /**
+         * Toggles the side bar depending on the state.
+         *  A state of 'true' opens the panel, 'false' closes the panel and
+         *  'undefined' toggles the side bar.
+         *
+         * @param {Boolean} [state].
+         *  The panel state.
+         */
+        toggleSidebar: function (state) {
+            // determine current state if undefined
+            this.opened = _.isUndefined(state) ? !this.opened : Boolean(state);
+            this.$el.toggleClass('opened', this.opened);
+            EventDispatcher.trigger('viewer:sidebar:change:state', this.opened);
+            this.renderSections();
         },
 
         /**
