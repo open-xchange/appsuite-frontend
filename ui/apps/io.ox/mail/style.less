@@ -1083,7 +1083,8 @@ textarea.inplace-editor {
         font-size: 13px;
         border-left: 2px solid #ddd;
         padding: 0 0 0 16px;
-        margin: 16px 0 16px 38px;
+        margin: 16px 0 16px 0;
+
     }
 
     blockquote blockquote {
@@ -1253,7 +1254,11 @@ textarea.inplace-editor {
             }
         }
 
-        &.fixed-width-font, &.fixed-width-font.plain-text {
+        &.fixed-width-font, &.fixed-width-font.plain-text,
+        &.fixed-width-font blockquote,
+        &.fixed-width-font.plain-text blockquote,
+        &.fixed-width-font blockquote p,
+        &.fixed-width-font.plain-text blockquote p {
             font-family: monospace;
         }
 

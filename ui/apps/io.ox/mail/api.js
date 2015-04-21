@@ -765,17 +765,18 @@ define('io.ox/mail/api', [
     };
 
     var react = function (action, obj, view) {
-        var isDraft = false;
+        var isDraft = (action === 'edit'),
+            isAlternative = (view === 'alternative');
 
-        if (action === 'edit') {
-            isDraft = true;
-            action = 'get';
-        }
+        if (isAlternative) view = obj.content_type === 'text/plain' ? 'text' : 'html';
 
         // get proper view first
         view = $.trim(view || 'text').toLowerCase();
         view = view === 'text/plain' ? 'text' : view;
         view = view === 'text/html' ? 'html' : view;
+
+        if (view === 'html' && obj.content_type === 'text/plain' && !isDraft) view = 'text';
+        if (view === 'text' && obj.content_type === 'text/plain' && isDraft)  view = 'raw';
 
         // attach original message on touch devices?
         var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
@@ -784,8 +785,9 @@ define('io.ox/mail/api', [
         return http.PUT({
             module: 'mail',
             // using jQuery's params because it ignores undefined values
+
             params: $.extend({}, {
-                action: action || '',
+                action: isDraft ? 'get' : action || '',
                 attachOriginalMessage: attachOriginalMessage,
                 view: view,
                 setFrom: (/reply|replyall|forward/.test(action)),
@@ -799,62 +801,34 @@ define('io.ox/mail/api', [
             appendColumns: false
         })
         .then(function (data) {
-            var text = '', quote = '', tmp = '';
+            var text = '',
+                tmp = '';
             // inject csid
             data.csid = csid;
             // transform pseudo-plain text to real text
             if (data.attachments && data.attachments.length) {
                 if (data.attachments[0].content === '') {
                     // nothing to do - nothing to break
-                } else if (!isDraft) {
+                } else {
                     //content-type specific
-                    if (data.attachments[0].content_type === 'text/plain') {
-                        $('<div>')
-                            // escape everything but BR tags
-                            .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
-                            .contents().each(function () {
-                                if (this.tagName === 'BR') {
-                                    text += '\n';
-                                } else {
-                                    text += $(this).text();
-                                }
-                            });
-                        // remove white space
-                        text = $.trim(text);
-                        // polish for html editing
-                        if (view === 'html') {
-                            // escape '<'
-                            text = text.replace(/</ig, '&lt;');
-                            // replace '\n>' sequences by blockquote-tags
-                            _(text.split(/\n/).concat('\n')).each(function (line) {
-                                if (/^> /.test(line)) {
-                                    quote += line.substr(2) + '\n';
-                                } else {
-                                    tmp += (quote !== '' ? '<blockquote type="cite"><p>' + quote + '</p></blockquote>' : '') + line + '\n';
-                                    quote = '';
-                                }
-                            });
-                            // transform line-feeds back to BR
-                            data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
-                        } else {
-                            // replace
-                            data.attachments[0].content = $.trim(text);
-                        }
-                    } else if (data.attachments[0].content_type === 'text/html') {
+                    if (data.attachments[0].content_type === 'text/html') {
                         // robust approach for large mails
                         tmp = document.createElement('DIV');
                         tmp.innerHTML = data.attachments[0].content;
                         _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
                             node.removeAttribute('style');
                         });
-                        data.attachments[0].content = tmp.innerHTML;
+                        text = tmp.innerHTML;
                         tmp = null;
+                    } else {
+                        text = $.trim(data.attachments[0].content);
                     }
                 }
             } else {
                 data.attachments = data.attachments || [{}];
-                data.attachments[0].content = '';
             }
+            // replace
+            data.attachments[0].content = text;
             return data;
         });
     };

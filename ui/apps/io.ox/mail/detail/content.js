@@ -126,7 +126,12 @@ define('io.ox/mail/detail/content', [
                 return line;
             })
             .join('');
-        if (settings.get('isColorQuoted', true)) text = markupQuotes(text);
+        var hasBlockquotes = text.match(/(&gt; )+/g);
+        if (hasBlockquotes) {
+            $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
+                text = markupQuotes(text);
+            });
+        }
         return text;
     };
 
