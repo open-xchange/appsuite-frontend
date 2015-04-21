@@ -170,7 +170,7 @@ define('io.ox/core/folder/api',
         // 2. apply custom order
         list = sort.apply(id, list);
         // 3. inject index
-        _(list).each(injectIndex.bind(this, id));
+        _(list).each(injectIndex.bind(null, id));
         // done
         return list;
     }
@@ -234,13 +234,21 @@ define('io.ox/core/folder/api',
 
     function VirtualFolder(id, getter) {
         this.id = id;
-        this.getter = getter.bind(this);
+        this.getter = getter;
     }
 
     VirtualFolder.prototype.concat = function () {
-        var id = this.id;
         return $.when.apply($, arguments).then(function () {
-            return _(arguments).chain().flatten().map(injectIndex.bind(this, id)).value();
+            return _(arguments).flatten();
+        });
+    };
+
+    VirtualFolder.prototype.list = function () {
+        var id = this.id;
+        return this.getter().done(function (array) {
+            _(array).each(injectIndex.bind(null, id));
+            pool.addCollection(getCollectionId(id), array);
+            pool.getModel(id).set('subfolders', array.length > 0);
         });
     };
 
@@ -257,9 +265,9 @@ define('io.ox/core/folder/api',
 
         hash: {},
 
-        get: function (id) {
+        list: function (id) {
             var folder = this.hash[id];
-            return folder !== undefined ? folder.getter() : $.Deferred().reject();
+            return folder !== undefined ? folder.list() : $.Deferred().reject();
         },
         list: function (id) {
             var folder = this.hash[id];
@@ -274,7 +282,7 @@ define('io.ox/core/folder/api',
         concat: function () {
             if (ox.debug) console.warn('Deprecated! Please use this.concat()');
             return $.when.apply($, arguments).then(function () {
-                return _(arguments).chain().flatten().map(injectIndex.bind(this, 'concat')).value();
+                return _(arguments).chain().flatten().map(injectIndex.bind(null, 'concat')).value();
             });
         },
 

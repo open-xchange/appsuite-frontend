@@ -104,6 +104,9 @@ define('io.ox/core/folder/extensions',
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
+                // always show the folder for altnamespace
+                // otherwise the user cannot create folders
+                empty: !!api.altnamespace,
                 // convention! virtual folders are identified by their id starting with "virtual"
                 folder: 'virtual/myfolders',
                 icons: tree.options.icons,
