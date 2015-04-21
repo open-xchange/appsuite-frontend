@@ -971,8 +971,8 @@ define('io.ox/calendar/week/view', [
             this.kwInfo.empty().append(
                 $('<span>').text(
                     gt.noI18n(
-                        // this.columns > 1 ?
-                        // this.startDate.formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
+                        this.columns > 1 ?
+                        this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days')) :
                         this.startDate.format('ddd, l')
                     )
                 ),
@@ -989,9 +989,9 @@ define('io.ox/calendar/week/view', [
                 this.navbarDates = {
                     cw: gt('CW %1$d', this.startDate.format('w')),
                     date: gt.noI18n(
-                        // this.columns > 1 ?
-                        // this.startDate.formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
-                        this.startDate.format('ddd, l')
+                        this.columns > 1 ?
+                        this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days')) :
+                        this.startDate.format('l')
                     )
                 };
                 // bubbling event to get it in page controller

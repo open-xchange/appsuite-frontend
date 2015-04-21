@@ -159,7 +159,7 @@ define('io.ox/calendar/util', [
                         //#, c-format
                         return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
                     }
-                    return startDate.format(fmtstr) + ' \u2013 ' + endDate.format(fmtstr);
+                    return startDate.formatInterval(endDate, 'date');
                 }
             } else {
                 return '';
@@ -189,7 +189,7 @@ define('io.ox/calendar/util', [
                     //#, c-format
                     return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
                 }
-                return start.format('LT') + ' \u2013 ' + end.format('LT');
+                return start.formatInterval(end, 'time');
             }
         },
 
