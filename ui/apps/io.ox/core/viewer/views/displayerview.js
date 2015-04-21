@@ -327,17 +327,18 @@ define('io.ox/core/viewer/views/displayerview', [
         /**
          * Blends in the passed content element in a caption for a specific duration.
          *
-         * @param {jQuery} content
-         *  content to be displayed in the caption.
+         * @param {String} text
+         *  Text to be displayed in the caption.
          *
          * @param {Number} duration
          *  Duration of the blend-in in milliseconds. Defaults to 3000 ms.
          */
-        blendCaption: function (content, duration) {
+        blendCaption: function (text, duration) {
             //console.warn('BlendslideCaption', slideIndex);
             var duration = duration || 3000,
-                slideCaption = this.$el.find('.viewer-displayer-caption');
-            slideCaption.empty().append(content);
+                slideCaption = this.$el.find('.viewer-displayer-caption'),
+                captionContent = $('<div class="caption-content">').text(text);
+            slideCaption.empty().append(captionContent);
             window.clearTimeout(this.captionTimeoutId);
             slideCaption.show();
             this.captionTimeoutId = window.setTimeout(function () {

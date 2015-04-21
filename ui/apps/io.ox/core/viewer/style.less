@@ -250,18 +250,20 @@ html.ios .io-ox-viewer {
 
         .viewer-displayer-caption {
             position: fixed;
+            z-index: 1;
             left: 0;
             right: 0;
-            margin: auto;
             bottom: 40px;
-            height: 24px;
-            line-height: 24px;
-            width: 100px;
             text-align: center;
-            background: rgba(0,0,0,0.7);
-            .border-radius(4px);
             display: none;
-            z-index: 1;
+            .caption-content {
+                display: inline-block;
+                min-height: 24px;
+                line-height: 24px;
+                padding: 0 15px;
+                background: rgba(0,0,0,0.7);
+                .border-radius(4px);
+            }
             &.smartphone {
                 bottom: 6px;
             }

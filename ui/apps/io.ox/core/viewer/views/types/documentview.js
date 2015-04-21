@@ -16,8 +16,9 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/eventdispatcher',
+    'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher) {
+], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher, gt) {
 
     'use strict';
 
@@ -58,6 +59,30 @@ define('io.ox/core/viewer/views/types/documentview', [
             // bind zoom handlers
             EventDispatcher.on('viewer:document:zoomin', this.onZoomIn.bind(this));
             EventDispatcher.on('viewer:document:zoomout', this.onZoomOut.bind(this));
+            // bind scroll event for showing current page number
+            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
+            // defaults
+            this.currentDominantPageIndex = 1;
+            this.numberOfPages = 1;
+        },
+
+        /**
+         *  Scroll event handler: shows the current page in the caption on scroll.
+         */
+        onScrollHandler: function () {
+            var currentDominantPageIndex = this.currentDominantPageIndex,
+                newDominantPageIndex = this.getDominantPage();
+            if (!newDominantPageIndex) {
+                return;
+            }
+            if (currentDominantPageIndex !== newDominantPageIndex) {
+                this.currentDominantPageIndex = newDominantPageIndex;
+                //#. text of a viewer document page caption
+                //#. Example result: "Page 5 of 10"
+                //#. %1$d is the current page index
+                //#. %2$d is the total number of pages
+                EventDispatcher.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
+            }
         },
 
         /**
@@ -68,8 +93,8 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         render: function () {
             //console.warn('DocumentView.render()', this.model.get('filename'));
-            var pageContainer = $('<div class="document-container io-ox-core-pdf">');
-            this.$el.empty().append(pageContainer);
+            this.pageContainer = $('<div class="document-container io-ox-core-pdf">');
+            this.$el.empty().append(this.pageContainer);
             return this;
         },
 
@@ -83,6 +108,58 @@ define('io.ox/core/viewer/views/types/documentview', [
         prefetch: function () {
             //console.warn('DocumentView.prefetch()', this.model.get('filename'));
             return this;
+        },
+
+        /**
+         * Approximation of the 'dominant' page: the best page to be shown
+         * in the slide caption. The page which cuts the center of the viewport
+         * with a tolerance offset will be chosen.
+         *
+         * @returns {Number | null} dominantPageIndex
+         *  the page index of null if no page is found
+         */
+        getDominantPage: function () {
+            var visiblePages = this.getPagesToRender(),
+                tolerance = this.currentZoomFactor / 2,
+                dominantPageIndex = null,
+                self = this;
+            visiblePages.forEach(function (index) {
+                var pageBounds = self.pages[index - 1].getBoundingClientRect(),
+                    screenMiddle = self.pageContainer.innerHeight() / 2;
+                if ((pageBounds.top + tolerance <= screenMiddle) &&
+                    (pageBounds.bottom - tolerance >= screenMiddle)) {
+                    dominantPageIndex = index;
+                }
+            });
+            return dominantPageIndex;
+        },
+
+        /**
+         * Calculates document page numbers to render depending on visilbility of the pages
+         * in the viewport (window).
+         *
+         * @returns {Array} pagesToRender
+         *  an array of page numbers which should be rendered.
+         */
+        getPagesToRender: function () {
+            //console.warn('DocumentView.getPagesToRender()', this.pages);
+            var pagesToRender = [];
+            // Whether the page element is visible in the viewport, wholly or partially.
+            function isPageVisible(pageElement) {
+                var pageRect = pageElement.getBoundingClientRect();
+                function isInWindow(verticalPosition) {
+                    return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
+                }
+                return isInWindow(pageRect.top) ||
+                    isInWindow(pageRect.bottom) ||
+                    (pageRect.top < 0 && pageRect.bottom > window.innerHeight);
+            }
+            // return the visible pages
+            _.each(this.pages, function (element, index) {
+                if (!isPageVisible(element)) { return; }
+                pagesToRender.push(index + 1);
+            });
+            return pagesToRender;
         },
 
         /**
@@ -101,35 +178,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 pageContainer = this.$el.find('.document-container'),
                 convertParams = this.getConvertParams(this.model.get('source')),
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
-
-            /**
-             * Calculates document page numbers to render depending on visilbility of the pages
-             * in the viewport (window).
-             *
-             * @returns {Array} pagesToRender
-             *  an array of page numbers which should be rendered.
-             */
-            function getPagesToRender() {
-                //console.warn('DocumentView.getPagesToRender()', pageContainer);
-                var pages = pageContainer.find('.document-page'),
-                    pagesToRender = [];
-                // Whether the page element is visible in the viewport, wholly or partially.
-                function isPageVisible(pageElement) {
-                    var pageRect = pageElement.getBoundingClientRect();
-                    function isInWindow(verticalPosition) {
-                        return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
-                    }
-                    return isInWindow(pageRect.top) ||
-                        isInWindow(pageRect.bottom) ||
-                        (pageRect.top < 0 && pageRect.bottom > window.innerHeight);
-                }
-                // return the visible pages
-                _.each(pages, function (element, index) {
-                    if (!isPageVisible(element)) { return; }
-                    pagesToRender.push(index + 1);
-                });
-                return pagesToRender;
-            }
 
             /**
              * Returns the pageNode with the given pageNumber.
@@ -173,7 +221,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             function pdfDocumentLoadSuccess(pageCount) {
 
                 // forward 'resolved' errors to error handler
-                if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
+                if ((_.isObject(pageCount) && (pageCount.cause.length > 0)) || !this.pdfDocument) {
                     pdfDocumentLoadError();
                     return;
                 }
@@ -192,9 +240,12 @@ define('io.ox/core/viewer/views/types/documentview', [
                         pageSize = self.pdfView.getRealPageSize(index + 1);
                     pageContainer.append(jqPage.attr(pageSize).css(pageSize));
                 });
+                // save values to the view instance, for performance
+                this.numberOfPages = pageCount;
+                this.pages = this.$el.find('.document-page');
                 // set callbacks at this.pdfView to start rendering
                 var renderCallbacks = {
-                    getVisiblePageNumbers: getPagesToRender,
+                    getVisiblePageNumbers: this.getPagesToRender.bind(this),
                     getPageNode: getPageNode,
                     beginRendering: beginPageRendering,
                     endRendering: endPageRendering
@@ -277,7 +328,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         changeZoomLevel: function (action) {
             var currentZoomFactor = this.currentZoomFactor,
-                pages = this.$el.find('.document-page'),
                 pdfView = this.pdfView,
                 nextZoomFactor;
             // search for next bigger/smaller zoom factor in the avaliable zoom factors
@@ -297,7 +347,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
             }
             // forward zoom to PDF.js and adapt node sizes
-            _.each(pages, function (page, pageIndex) {
+            _.each(this.pages, function (page, pageIndex) {
                 pdfView.setPageZoom(nextZoomFactor / 100, pageIndex + 1);
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
@@ -394,6 +444,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             //console.warn('DocumentView.disposeView()');
             this.unload(true);
+            this.$el.off();
             EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
         }
 
