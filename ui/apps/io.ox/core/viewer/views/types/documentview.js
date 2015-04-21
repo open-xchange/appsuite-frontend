@@ -291,7 +291,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         getDefaultScale: function () {
             var maxWidth = window.innerWidth - (this.PAGE_SIDE_MARGIN * 2),
-                pageDefaultSize = this.pdfDocument.getDefaultPageSize(),
+                pageDefaultSize = this.pdfDocument && this.pdfDocument.getDefaultPageSize(),
                 pageDefaultWidth = pageDefaultSize && pageDefaultSize.width;
 
             if ((!pageDefaultWidth) || (maxWidth >= pageDefaultWidth)) {
