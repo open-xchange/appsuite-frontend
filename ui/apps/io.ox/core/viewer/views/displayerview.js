@@ -51,7 +51,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // listen to blend caption events
             this.listenTo(EventDispatcher, 'viewer:blendcaption', this.blendCaption);
             // listen to delete event propagation from FilesAPI
-            this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved);
+            this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
         },
 
         /**
