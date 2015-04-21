@@ -65,16 +65,27 @@ define('plugins/portal/oxdriveclients/register',
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
-                        href: url,
-                        target: '_blank'
-                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
+                href: url,
+                target: '_blank'
+            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
+        } else if (platform === 'windows' && settings.get('standaloneWindowsClient') === true) {
+            return [
+                $('<i class="fa fa-download">'),
+                $.txt(' '),
+                $('<a class="shoplink">').attr({
+                    href: ox.apiRoot + url + '?session=' + ox.session,
+                    target: '_blank'
+                }).text(gt.format(gt('Download %s'), settings.get('productName')))
+            ];
         } else if (platform === 'windows' && capabilities.has('oxupdater')) {
-            return  [$('<i class="fa fa-download">'),
-                    $('<a class="shoplink">').attr({
-                        href: ox.apiRoot + url + '?session=' + ox.session,
-                        target: '_blank',
-                    }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
-                    ];
+            return [
+                $('<i class="fa fa-download">'),
+                $.txt(' '),
+                $('<a class="shoplink">').attr({
+                    href: ox.apiRoot + url + '?session=' + ox.session,
+                    target: '_blank'
+                }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
+            ];
         } else {
             return $();
         }
