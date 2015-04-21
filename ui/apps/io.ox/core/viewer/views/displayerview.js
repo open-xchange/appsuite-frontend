@@ -443,14 +443,14 @@ define('io.ox/core/viewer/views/displayerview', [
                 removedFileModelIndex = this.collection.indexOf(removedFileModel);
             // remove the deleted file(s) from Viewer collection
             this.collection.remove(removedFileModel);
-            // remove slide from the swiper plugin
-            this.swiper.removeSlide(removedFileModelIndex + 1);
-            // render the duplicate slides
-            this.handleDuplicatesSlides();
             // reset the invalidated local loaded slides array
             this.loadedSlides = [];
             // remove corresponding view type of the file
             this.slideViews.splice(removedFileModelIndex, 1);
+            // remove slide from the swiper plugin
+            this.swiper.removeSlide(removedFileModelIndex + 1);
+            // render the duplicate slides
+            this.handleDuplicatesSlides();
             // close viewer we don't have any files to show
             if (this.collection.length === 0) {
                 EventDispatcher.trigger('viewer:close');
@@ -492,6 +492,10 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             if (!(this.params.observer && this.support.observer)) {
                 this.update(true);
+            }
+            var slidesCount = this.slides.not('.swiper-slide-duplicate').length;
+            if (newActiveIndex >= slidesCount) {
+                newActiveIndex = slidesCount;
             }
             this.slideTo(newActiveIndex, 0, true);
         },
