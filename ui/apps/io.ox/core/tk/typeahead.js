@@ -48,7 +48,7 @@ define('io.ox/core/tk/typeahead', [
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
-            autoselect: false,
+            autoselect: true,
             // Highlight found query characters in bold
             highlight: true,
             // Typeahead will not show a hint
@@ -176,8 +176,6 @@ define('io.ox/core/tk/typeahead', [
                                 self.model.set('dropdown', 'opened');
                             }
                         });
-
-                        dateset.onSync('opened', function () { debugger; });
                         self.registered = true;
                     }
                 },
