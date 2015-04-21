@@ -30,8 +30,10 @@ define('io.ox/core/tk/list', [
         40: 'cursor:down'
     },
     // PULL TO REFRESH constants
-    PTR_START = 5,              // Threshold when pull-to-refresh starts
-    PTR_TRIGGER = 150;          // threshold when refresh is done
+    PTR_START =           5,    // Threshold when pull-to-refresh starts
+    PTR_TRIGGER =       150,    // threshold when refresh is done
+    PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
+    PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
     // helper
     function NOOP() { return $.when(); }
@@ -51,8 +53,8 @@ define('io.ox/core/tk/list', [
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
         pullToRefreshIndicator: $(
-            '<div class="pull-to-refresh" style="top: -70px">' +
-            '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
+            '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
+            '<div id="ptr-spinner" class="spinner slight-drop-shadow" style="opacity: 1">' +
             '<i class="fa fa-refresh"/></div></div>'
         ),
 
@@ -253,12 +255,10 @@ define('io.ox/core/tk/list', [
         },
 
         onTouchMove: function (e) {
+
             var touches = e.originalEvent.touches[0],
-                currentY = touches.pageY;
-            // TODO
-            // fix for ios
-            // due to scrollbounce in the listview this works not reliable
-            if (_.device('ios')) return;
+                currentY = touches.pageY,
+                distance = currentY - this.pullToRefreshStartY;
 
             if (this.pullToRefreshStartY && !this.isPulling) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
@@ -271,65 +271,89 @@ define('io.ox/core/tk/list', [
                     this.$el.prepend(
                         this.pullToRefreshIndicator
                     );
-
                 }
             }
-            if (this.isPulling && !this.pullToRefreshTriggerd) {
+
+            if (this.isPulling && distance <= PTR_MAX_PULLDOWM /*&& !this.pullToRefreshTriggerd*/) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                var distance = currentY - this.pullToRefreshStartY,
-                    opacity = (1 / PTR_TRIGGER) * distance,
-                    rotationAngle = (360 / PTR_TRIGGER) * distance,
+                var rotationAngle = (PTR_ROTATE_ANGLE / PTR_MAX_PULLDOWM) * distance,
                     top = -70 + ((70 / PTR_TRIGGER) * distance);
 
                 this.pullToRefreshIndicator
-                    .css({
-                        'opacity': opacity,
-                        'top': top +  'px'
-                    })
-                    .find('i')
-                    .css('transform', 'rotateZ(' + rotationAngle + 'deg)');
+                    .css('-webkit-transform', 'translate3d(0,' + top +  'px,0)');
+
+                $('#ptr-spinner').css('-webkit-transform', 'rotateZ(' + rotationAngle + 'deg)');
 
                 this.selection.isScrolling = true;
 
                 if ((currentY - this.pullToRefreshStartY) >= PTR_TRIGGER) {
                     this.pullToRefreshTriggerd = true;
                 }
+            } else if (this.isPulling && distance >= PTR_MAX_PULLDOWM) {
+                e.preventDefault();
+                e.stopPropagation();
             }
         },
 
         onTouchEnd: function (e) {
-            // reset stuff
             if (this.pullToRefreshTriggerd) {
-                this.pullToRefreshIndicator.find('i').addClass('fa-spin');
+                // bring the indicator in position
+                this.pullToRefreshIndicator.css({
+                    'transition': 'transform 50ms',
+                    '-webkit-transform': 'translate3d(0,0,0)'
+                });
+                // let it spin
+                $('#ptr-spinner').addClass('fa-spin');
                 // trigger event to do the refresh elsewhere
                 ox.trigger('pull-to-refresh', this);
+
                 e.preventDefault();
                 e.stopPropagation();
+                // reset
                 this.selection.isScrolling = false;
 
             } else {
                 if (this.isPulling) {
-                    this.pullToRefreshIndicator.find('i').removeClass('fa-spin');
-                    this.removePullToRefreshIndicator();
+                    // threshold was not reached, just remove the ptr indicator
+                    this.removePullToRefreshIndicator(true);
                     e.preventDefault();
                     e.stopPropagation();
                     this.selection.isScrolling = true;
                 }
             }
+            // reset everything
             this.pullToRefreshStartY = null;
             this.isPulling = false;
             this.pullToRefreshTriggerd = false;
             this.pullToRefreshStartY = null;
         },
 
-        removePullToRefreshIndicator: function () {
-            try {
-                this.pullToRefreshIndicator.find('i').removeClass('fa-spin');
-                this.pullToRefreshIndicator.remove();
-            } catch (e) {
+        removePullToRefreshIndicator: function (simple) {
+            var self = this;
+            // simple remove for unfinished ptr-drag
+            if (simple) {
+                self.pullToRefreshIndicator.css({
+                    'transition': 'transform 50ms',
+                    '-webkit-transform': 'translate3d(0,-70px,0)'
+                });
+                setTimeout(function () {
+                    self.pullToRefreshIndicator.removeAttr('style').remove();
+                }, 100);
 
+            } else {
+                // fancy remove with scale-out animation
+                setTimeout(function () {
+                    self.pullToRefreshIndicator.addClass('scale-down');
+                    setTimeout(function () {
+                        self.pullToRefreshIndicator
+                            .removeAttr('style')
+                            .removeClass('scale-down');
+                        $('#ptr-spinner').removeClass('fa-spin');
+                        self.pullToRefreshIndicator.remove();
+                    }, 100);
+                }, 250);
             }
         },
 
