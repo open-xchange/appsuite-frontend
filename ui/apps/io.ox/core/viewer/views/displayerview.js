@@ -123,8 +123,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.carouselRoot = carouselRoot;
 
             // create slides from file collection and append them to the carousel
-            // TODO move this.collection
-            this.createSlides(this.collection, carouselInner)
+            this.createSlides(carouselInner)
             .done(function () {
                 // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
@@ -173,9 +172,6 @@ define('io.ox/core/viewer/views/displayerview', [
          * After all slides where successfully created, they are appended
          * to the given DOM node.
          *
-         * @param {Object} collection
-         *  the Viewer collection to create the slides from.
-         *
          * @param {jQuery} node
          *  the jQuery element to attach the created slides to.
          *
@@ -184,8 +180,9 @@ define('io.ox/core/viewer/views/displayerview', [
          *  of jQuery slide elements; or rejected with an array of error strings,
          *  in case of an error.
          */
-        createSlides: function (collection, node) {
+        createSlides: function (node) {
             var promises = [],
+                collection = this.collection,
                 resultDef;
 
             collection.each(function (model) {
