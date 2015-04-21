@@ -519,14 +519,12 @@ define('io.ox/core/extPatterns/links', [
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
         var wrap = options.wrap === undefined ? true : !!options.wrap;
-        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap)
-            .done(function () {
-                //if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
-                if (options.emptyCallback && baton.$el.hasClass('empty')) {
-                    options.emptyCallback();
-                }
-                injectDividers(baton.$el);
-            });
+        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap).done(function () {
+            // if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
+            if (!baton.$el) return;
+            if (options.emptyCallback && baton.$el.hasClass('empty')) options.emptyCallback();
+            injectDividers(baton.$el);
+        });
         return baton.$el;
     };
 
