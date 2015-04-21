@@ -239,6 +239,8 @@ define('io.ox/core/tk/tokenfield', [
                         });
                         self.collection.addUniquely(models);
                         self.redrawTokens();
+                        // clean input
+                        self.input.data('ttTypeahead').input.$input.val('');
                         return false;
                     }
 
