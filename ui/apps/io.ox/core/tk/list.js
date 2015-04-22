@@ -54,8 +54,8 @@ define('io.ox/core/tk/list', [
 
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
-            '<div id="ptr-spinner" class="spinner slight-drop-shadow" style="opacity: 1">' +
-            '<i class="fa fa-refresh"/></div></div>'
+            '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
+            '<i id="ptr-spinner" class="fa fa-refresh"/></div></div>'
         ),
 
         onItemFocus: function () {

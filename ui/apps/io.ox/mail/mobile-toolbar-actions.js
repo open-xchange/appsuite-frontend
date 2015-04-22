@@ -208,7 +208,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         if (current.toolbar) current.toolbar.setBaton(baton);
         if (current.secondaryToolbar) current.secondaryToolbar.setBaton(baton);
 
-    }, 10);
+    }, 50);
 
     // multi select toolbar links need some attention
     // in case nothing is selected disabled buttons
