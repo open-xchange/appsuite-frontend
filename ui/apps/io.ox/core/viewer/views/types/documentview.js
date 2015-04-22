@@ -35,7 +35,6 @@ define('io.ox/core/viewer/views/types/documentview', [
     var DocumentView =  BaseView.extend({
 
         initialize: function () {
-            //console.warn('DocumentView.initialize()', this.model.get('filename'));
             //The name of the document converter server module.
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
@@ -64,6 +63,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             // defaults
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
+            this.disposed = null;
         },
 
         /**
@@ -92,7 +92,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         render: function () {
-            //console.warn('DocumentView.render()', this.model.get('filename'));
             this.pageContainer = $('<div class="document-container io-ox-core-pdf">');
             this.$el.empty().append(this.pageContainer);
             return this;
@@ -106,7 +105,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         prefetch: function () {
-            //console.warn('DocumentView.prefetch()', this.model.get('filename'));
             return this;
         },
 
@@ -142,7 +140,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  an array of page numbers which should be rendered.
          */
         getPagesToRender: function () {
-            //console.warn('DocumentView.getPagesToRender()', this.pages);
             var pagesToRender = [];
             // Whether the page element is visible in the viewport, wholly or partially.
             function isPageVisible(pageElement) {
@@ -169,7 +166,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         show: function () {
-            //console.warn('DocumentView.show()', this.model.get('filename'));
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 return;
@@ -219,13 +215,15 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  page count of the pdf document delivered by the PDF.js library.
              */
             function pdfDocumentLoadSuccess(pageCount) {
-
-                // forward 'resolved' errors to error handler
-                if ((_.isObject(pageCount) && (pageCount.cause.length > 0)) || !this.pdfDocument) {
-                    pdfDocumentLoadError();
+                // do nothing and quit if a document is already disposed.
+                if (this.disposed) {
                     return;
                 }
-
+                // forward 'resolved' errors to error handler
+                if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
+                    pdfDocumentLoadError(pageCount);
+                    return;
+                }
                 var pdfDocument = this.pdfDocument,
                     defaultScale = this.getDefaultScale();
                 // create the PDF view after successful loading;
@@ -264,8 +262,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             /**
              * Error handler for the PDF loading process.
              */
-            function pdfDocumentLoadError() {
-                console.error('Core.Viewer.DocumentView.load(): failed loading PDF document.', self.model.get('filename'));
+            function pdfDocumentLoadError(pageCount) {
+                console.error('Core.Viewer.DocumentView.show(): failed loading PDF document.', pageCount.cause);
             }
 
             this.pdfDocument = new PDFDocument(documentUrl);
@@ -419,7 +417,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  If true also Swiper slide duplicates will be unloaded.
          */
         unload: function (dispose) {
-            //console.warn('DocumentView.unload()', this.pdfView, this.pdfDocument);
 
             // never unload slide duplicates
             if (!this.$el.hasClass('swiper-slide-duplicate') || dispose) {
@@ -433,6 +430,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 }
                 // clear document container content
                 this.$el.find('div.document-container').empty();
+                // save disposed status
+                this.disposed = dispose;
             }
 
             return this;
@@ -442,7 +441,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            //console.warn('DocumentView.disposeView()');
             this.unload(true);
             this.$el.off();
             EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
