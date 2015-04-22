@@ -667,9 +667,11 @@ define('io.ox/calendar/week/view', [
                             tagName: 'div'
                         })
                         .header(gt('Standard timezone'))
-                        .option('default', true, drawOption.bind(coreSettings.get('timezone')))
-                        .header(gt('Favorites'));
+                        .option('default', true, drawOption.bind(coreSettings.get('timezone')));
 
+                if (settings.get('favoriteTimezones', []).length > 0) {
+                    dropdown.header(gt('Favorites'));
+                }
                 $('li[role="presentation"]', dropdown.$ul).first().addClass('disabled');
                 $('a', dropdown.$ul).first().removeAttr('data-value').removeData('value');
 
