@@ -94,6 +94,8 @@ define('io.ox/calendar/list/view-grid-template', [
 
                 if (!data.full_time && (util.getDurationInDays(data) > 0)) {
                     fields.date.show();
+                } else {
+                    fields.date.hide();
                 }
 
                 tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
