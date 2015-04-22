@@ -112,10 +112,12 @@ define('io.ox/core/settings/downloads/pane', [
             index: 200,
             draw: function () {
 
-                var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session,
-                    // "standalone" takes care of custom branded drive clients that run without the updater
-                    standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
+                // "standalone" takes care of custom branded drive clients that run without the updater
+                var standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
                     hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
+                    windowsClientUrl = standaloneClient ?
+                        linkTo.Windows :
+                        ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session,
                     windowsClientLabel = standaloneClient ?
                         //.# String will include the product name, "OX Drive for Windows"
                         gt.format(gt('%s client for Windows'), productName) :
@@ -129,8 +131,7 @@ define('io.ox/core/settings/downloads/pane', [
                             $.txt(windowsClientLabel),
                             $('<br>'),
                             $('<i class="fa fa-download">'),
-                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download installation file'))
-
+                            $('<a>', { href: windowsClientUrl, target: '_blank' }).addClass('action').text(gt('Download installation file'))
                         ) : [],
                         $('<div class="shop-link-container">').append(
                             //.# String will include the product name, "OX Drive for Mac OS"
