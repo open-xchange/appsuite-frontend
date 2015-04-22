@@ -308,9 +308,11 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Close the viewer.
          */
-        onClose: function () {
+        onClose: function (event) {
             //console.info('ToolbarView.onClose()');
-            this.trigger('close');
+            event.preventDefault();
+            event.stopPropagation();
+            this.trigger('viewer:close');
         },
 
         /**

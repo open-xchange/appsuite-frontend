@@ -46,7 +46,7 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView = new DisplayerView({ collection: this.collection });
             this.sidebarView = new SidebarView({ collection: this.collection });
             // close viewer on events
-            this.listenTo(this.toolbarView, 'close', this.closeViewer);
+            this.listenTo(this.toolbarView, 'viewer:close', this.closeViewer);
             this.listenTo(ox, 'app:start app:resume', this.closeViewer);
             this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer);
             // bind toggle side bar handler
