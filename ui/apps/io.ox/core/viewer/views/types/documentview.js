@@ -47,7 +47,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 7: 'contacts'
             };
             // predefined zoom factors
-            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800];
+            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
             // current zoom factor, defaults at 100%
             this.currentZoomFactor = 100;
             // the PDFView instance
