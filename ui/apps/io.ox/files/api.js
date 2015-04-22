@@ -81,13 +81,16 @@ define('io.ox/files/api', [
             backbone.Model.call( this, normalizedAttrs, options );
 
             this.listenTo(this, 'change:filename', function (m, newName) {
-                //update versions if filename is changed
+                //maybe update versions if filename is changed
                 var versions = this.get('versions');
-                versions.forEach(function (v) {
-                    if (v.version === m.get('version')) {
-                        v.filename = newName;
+                if (!versions) return;
+
+                for (var i = 0; i < versions.length; i++) {
+                    if (versions[i].version === m.get('version')) {
+                        versions[i].filename = newName;
+                        break;
                     }
-                });
+                }
                 this.set('versions', versions);
             });
         },
