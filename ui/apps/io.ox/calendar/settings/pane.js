@@ -18,7 +18,8 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/core/notifications',
     'gettext!io.ox/calendar',
     'io.ox/backbone/mini-views',
-    'io.ox/calendar/settings/favorite-view'
+    'io.ox/calendar/settings/favorite-view',
+    'less!io.ox/calendar/settings/style.less'
 ], function (settings, calendarSettingsModel, ext, notifications, gt, mini, FavoriteView) {
 
     'use strict';
@@ -85,7 +86,7 @@ define('io.ox/calendar/settings/pane', [
         id: 'calendarsettings',
         draw: function () {
             var self = this,
-                pane = $('<div class="io-ox-tasks-settings">');
+                pane = $('<div class="io-ox-calendar-settings">');
             self.append($('<div>').addClass('section').append(pane));
             ext.point(POINT + '/pane').invoke('draw', pane);
         }

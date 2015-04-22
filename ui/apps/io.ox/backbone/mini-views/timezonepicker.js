@@ -22,7 +22,10 @@ define('io.ox/backbone/mini-views/timezonepicker', [
     'use strict';
 
     function getDisplayName(timezone) {
-        return moment.tz(timezone).format('([GMT]Z) ') + timezone;
+        var tz = moment.tz(timezone),
+            displayName = tz.format('Z ') + tz.zoneAbbr() + ' ' + timezone;
+
+        return displayName.replace(/_/g, ' ');
     }
 
     var available = settingOptions.get('availableTimeZones'),

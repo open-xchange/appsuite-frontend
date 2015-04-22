@@ -636,7 +636,7 @@ define('io.ox/calendar/week/view', [
             function drawOption () {
                 var timezone = moment.tz(this);
 
-                return $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this + $('<span class="offset">').text(timezone.format(' (Z)')).prop('outerHTML');
+                return $('<span class="offset">').text(timezone.format('Z')).prop('outerHTML') + $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this;
             }
 
             function drawDropdown() {

@@ -30,7 +30,7 @@ define('io.ox/calendar/settings/favorite-view', [
 
         tagName: 'div',
 
-        className: 'expertmode',
+        className: 'expertmode favorite-view',
 
         events: {
             'click button': 'addFavorite',
@@ -44,8 +44,14 @@ define('io.ox/calendar/settings/favorite-view', [
         drawFavorites: function () {
             this.node.empty().append(
                 _(this.model.get('favoriteTimezones')).map(function (timezone) {
+                    var tz = moment.tz(timezone);
+
                     return $('<li class="widget-settings-view">').append(
-                        $('<span class="pull-left">').text(moment().tz(timezone).format('([GMT]Z) ') + timezone),
+                        $('<span class="pull-left">').append(
+                            $('<span class="offset">').text(tz.format('Z')),
+                            $('<span class="timezone-abbr">').text(tz.zoneAbbr()),
+                            $.txt(timezone.replace(/_/g, ' '))
+                        ),
                         $('<div class="widget-controls">').append(
                             $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
                             .attr({
