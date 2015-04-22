@@ -157,8 +157,8 @@ msgstr[1] "%1$d minuter"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:137 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:375
+#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:373
 #, fuzzy
 #| msgid "%1$s of %2$s"
 msgid "%1$d of %2$d"
@@ -278,7 +278,7 @@ msgstr "%1$s %2$s."
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:370 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1736
+#: apps/io.ox/calendar/week/view.js:1892
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Preliminär)"
@@ -453,23 +453,29 @@ msgid_plural "%d weeks"
 msgstr[0] "%d vecka"
 msgstr[1] "%d veckor"
 
-#: apps/io.ox/core/settings/downloads/pane.js:140 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:147 module:io.ox/core
 msgid "%s client for Android"
 msgstr "%s-klient för Android"
 
-#: apps/io.ox/core/settings/downloads/pane.js:130 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:137 module:io.ox/core
 msgid "%s client for Mac OS"
 msgstr "%s-klient för Mac OS"
 
-#: apps/io.ox/core/settings/downloads/pane.js:122 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:121 module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%s client for Windows"
+msgstr "%s-klient för Android"
+
+#: apps/io.ox/core/settings/downloads/pane.js:123 module:io.ox/core
 msgid "%s client for Windows (Installation via the OX Updater)"
 msgstr "%s-klient för Windows (installation via OX Uppdatering)"
 
-#: apps/io.ox/core/settings/downloads/pane.js:135 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:142 module:io.ox/core
 msgid "%s client for iOS"
 msgstr "%s-klient för iOS"
 
-#: apps/plugins/portal/oxdriveclients/register.js:129 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:139 module:plugins/portal
 msgid "%s is also available for other platforms:"
 msgstr "%s finns också för andra plattformar:"
 
@@ -861,7 +867,7 @@ msgid "Add widget"
 msgstr "Lägg till komponent"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:400 module:io.ox/portal
+#: apps/io.ox/portal/main.js:401 module:io.ox/portal
 msgid "Add your %1$s account"
 msgstr "Lägg till ditt %1$s-konto"
 
@@ -1001,7 +1007,7 @@ msgstr "Tillåt HTML-formaterad e-post"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Tillåt laddning i förväg av externt länkade bilder"
 
-#: apps/io.ox/portal/main.js:464 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Ett fel inträffade."
 
@@ -1088,7 +1094,7 @@ msgid "Appointment invitations"
 msgstr "Inbjudningar till möten"
 
 #: apps/io.ox/calendar/month/perspective.js:455 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:382
+#: apps/io.ox/calendar/week/perspective.js:383
 msgid "Appointment list"
 msgstr "Möten"
 
@@ -1370,7 +1376,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:130 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:827 apps/io.ox/calendar/week/view.js:835
+#: apps/io.ox/calendar/week/view.js:982 apps/io.ox/calendar/week/view.js:990
 msgid "CW %1$d"
 msgstr "KV %1$d"
 
@@ -1443,7 +1449,7 @@ msgstr "Kalendervy"
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:621 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:121
 #: apps/io.ox/settings/accounts/settings/pane.js:135
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1631,8 +1637,8 @@ msgstr "Rensa"
 msgid "Clear field"
 msgstr "Rensa fält"
 
-#: apps/io.ox/calendar/week/view.js:788 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:792
+#: apps/io.ox/calendar/week/view.js:943 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:947
 msgid "Click for whole day appointment"
 msgstr "Klicka för heldagsmöte"
 
@@ -1690,7 +1696,7 @@ msgstr "Klicka för att försöka igen"
 msgid "Click to retry later."
 msgstr "Klicka för att försöka senare."
 
-#: apps/io.ox/portal/main.js:467 module:io.ox/portal
+#: apps/io.ox/portal/main.js:468 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Klicka för att försöka igen."
 
@@ -1702,8 +1708,8 @@ msgstr "Klicka för att ladda upp bild"
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/permissions/permissions.js:477
-#: apps/io.ox/core/viewer/views/toolbarview.js:113
 #: apps/io.ox/core/viewer/views/toolbarview.js:114
+#: apps/io.ox/core/viewer/views/toolbarview.js:115
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:50 module:io.ox/files
@@ -2101,7 +2107,7 @@ msgstr "Ange färg"
 msgid "Custom name"
 msgstr "Anpassad"
 
-#: apps/io.ox/portal/main.js:136 module:io.ox/portal
+#: apps/io.ox/portal/main.js:137 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Anpassa sidan"
 
@@ -2213,7 +2219,7 @@ msgstr "Uppskjutet"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:189 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:168
+#: apps/io.ox/core/viewer/views/toolbarview.js:169
 #: apps/io.ox/files/actions.js:502 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2222,7 +2228,7 @@ msgstr "Uppskjutet"
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:367
 #: apps/io.ox/mail/settings/signatures/register.js:368
-#: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:619
+#: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:620
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:119
 #: apps/io.ox/settings/accounts/settings/pane.js:116
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:310
@@ -2280,7 +2286,7 @@ msgstr "Ta bort version"
 msgid "Delete whole series"
 msgstr "Ta bort hela serien"
 
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:616 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:115
 msgid "Delete widget"
 msgstr "Ta bort komponent"
@@ -2354,8 +2360,8 @@ msgstr "Direktlänk: %1$s"
 msgid "Disable"
 msgstr "Avaktivera"
 
-#: apps/io.ox/portal/main.js:197 module:io.ox/portal
-#: apps/io.ox/portal/main.js:198 apps/io.ox/portal/main.js:508
+#: apps/io.ox/portal/main.js:198 module:io.ox/portal
+#: apps/io.ox/portal/main.js:199 apps/io.ox/portal/main.js:509
 msgid "Disable widget"
 msgstr "Avaktivera komponent"
 
@@ -2517,7 +2523,7 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Vill du verkligen ta bort uppgiften?"
 msgstr[1] "Vill du verkligen ta bort uppgifterna?"
 
-#: apps/io.ox/portal/main.js:616 module:io.ox/portal
+#: apps/io.ox/portal/main.js:617 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 msgid "Do you really want to delete this widget?"
 msgstr "Vill du verkligen ta bort komponenten?"
@@ -2596,18 +2602,18 @@ msgstr "Dokument"
 msgid "Done"
 msgstr "Klart"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:57 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:58 module:io.ox/core
 msgid "Double click to rename"
 msgstr ""
 
-#: apps/io.ox/calendar/week/view.js:644 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:766 module:io.ox/calendar
 msgid "Doubleclick in this row for whole day appointment"
 msgstr "Dubbelklicka i den här raden för heldagsmöte"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:140
-#: apps/io.ox/core/viewer/views/toolbarview.js:183
-#: apps/io.ox/core/viewer/views/toolbarview.js:203
+#: apps/io.ox/core/viewer/views/toolbarview.js:141
+#: apps/io.ox/core/viewer/views/toolbarview.js:184
+#: apps/io.ox/core/viewer/views/toolbarview.js:204
 #: apps/io.ox/files/actions.js:493 module:io.ox/files
 #: apps/io.ox/files/actions.js:620 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2615,11 +2621,17 @@ msgstr "Dubbelklicka i den här raden för heldagsmöte"
 msgid "Download"
 msgstr "Ladda ner"
 
-#: apps/plugins/portal/oxdriveclients/register.js:92 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:78 module:plugins/portal
+#, fuzzy
+#| msgid "Downloads"
+msgid "Download %s"
+msgstr "Nedladdningar"
+
+#: apps/plugins/portal/oxdriveclients/register.js:102 module:plugins/portal
 msgid "Download %s for %s now"
 msgstr "Ladda ner %s för %s nu"
 
-#: apps/plugins/portal/oxdriveclients/register.js:77 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:87 module:plugins/portal
 msgid "Download %s via the OX Updater"
 msgstr "Ladda ner %s via OX Uppdatering"
 
@@ -2627,7 +2639,7 @@ msgstr "Ladda ner %s via OX Uppdatering"
 msgid "Download entire folder"
 msgstr "Ladda ner hela mappen"
 
-#: apps/io.ox/core/settings/downloads/pane.js:125 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:132 module:io.ox/core
 msgid "Download installation file"
 msgstr "Ladda ner installationsfil"
 
@@ -2640,8 +2652,8 @@ msgstr "Ladda ner installationsfil (för Windows)"
 msgid "Download the %s client for %s"
 msgstr "Ladda ner %s-klienten för %s"
 
-#: apps/io.ox/core/settings/downloads/pane.js:158 module:io.ox/core
-#: apps/io.ox/core/settings/downloads/pane.js:168
+#: apps/io.ox/core/settings/downloads/pane.js:165 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:175
 msgid "Downloads"
 msgstr "Nedladdningar"
 
@@ -2788,7 +2800,7 @@ msgstr "Redigera möte"
 msgid "Edit contact"
 msgstr "Redigera kontakt"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:133 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:134 module:io.ox/core
 #: apps/io.ox/files/actions.js:563 module:io.ox/files
 msgid "Edit description"
 msgstr "Ändra beskrivning"
@@ -3254,6 +3266,7 @@ msgid "Favorited"
 msgstr "Favoritmärkt"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js:70 module:io.ox/core
+#: apps/io.ox/calendar/week/view.js:669 module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js:69
 msgid "Favorites"
 msgstr "Favoriter"
@@ -3312,8 +3325,8 @@ msgstr "Filen har kopierats"
 msgid "File has been moved"
 msgstr "Filen har flyttats"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:46 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:52
+#: apps/io.ox/core/viewer/views/toolbarview.js:47 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:53
 msgid "File name"
 msgstr "Filnamn"
 
@@ -3337,7 +3350,7 @@ msgstr "Fil: %1$s"
 msgid "Filename"
 msgstr "Filnamn"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:58 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:59 module:io.ox/core
 msgid "Filename, double click to rename"
 msgstr ""
 
@@ -3419,8 +3432,8 @@ msgstr ""
 "Mapp med namnet \"%1$s\" kommer döljas. Aktivera inställningen \"Visa dolda "
 "filer och mappar\" för att komma åt mappen igen."
 
-#: apps/io.ox/core/folder/node.js:458 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:465
+#: apps/io.ox/core/folder/node.js:461 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:468
 msgid "Folder-specific actions"
 msgstr "Mappspecifika åtgärder"
 
@@ -3543,8 +3556,8 @@ msgstr "Gb"
 msgid "General info"
 msgstr ""
 
-#: apps/plugins/portal/oxdriveclients/register.js:87 module:plugins/portal
-#: apps/plugins/portal/oxdriveclients/register.js:139
+#: apps/plugins/portal/oxdriveclients/register.js:97 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:149
 msgid "Get %s"
 msgstr "Hämta %s"
 
@@ -3566,8 +3579,8 @@ msgstr ""
 "Få nyheter från ditt XING-nätverk levererade till dig. Håll kontakten och "
 "bli underrättad om nya affärsmöjligheter."
 
-#: apps/io.ox/portal/main.js:372 module:io.ox/portal
-#: apps/io.ox/portal/main.js:394
+#: apps/io.ox/portal/main.js:373 module:io.ox/portal
+#: apps/io.ox/portal/main.js:395
 msgid "Get started here"
 msgstr "Kom igång här"
 
@@ -4062,7 +4075,7 @@ msgid "June"
 msgstr "Juni"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:625 module:io.ox/portal
+#: apps/io.ox/portal/main.js:626 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:125
 msgid "Just disable widget"
 msgstr "Bara avaktivera komponenten"
@@ -4811,11 +4824,11 @@ msgstr "Uppgiftspåminnelser"
 msgid "Next"
 msgstr "Nästa"
 
-#: apps/io.ox/calendar/week/view.js:673 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:795 module:io.ox/calendar
 msgid "Next Day"
 msgstr "Nästa dag"
 
-#: apps/io.ox/calendar/week/view.js:673 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:795 module:io.ox/calendar
 msgid "Next Week"
 msgstr "Nästa vecka"
 
@@ -5111,8 +5124,8 @@ msgstr "Öppna mappvy"
 msgid "Open in browser"
 msgstr "Öppna i webbläsare"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:177 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
+#: apps/io.ox/core/viewer/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
 #, fuzzy
 #| msgid "Open in browser"
 msgid "Open in browser tab"
@@ -5266,6 +5279,14 @@ msgstr "Pb"
 #: apps/io.ox/files/view-options.js:117 module:io.ox/files
 msgid "PDFs"
 msgstr ""
+
+#. text of a viewer document page caption
+#. Example result: "Page 5 of 10"
+#. %1$d is the current page index
+#. %2$d is the total number of pages
+#: apps/io.ox/core/viewer/views/types/documentview.js:84 module:io.ox/core
+msgid "Page %1$d of %2$d"
+msgstr "Sida %1$d av %2$d"
 
 #: apps/io.ox/contacts/model.js:248 module:io.ox/contacts
 msgid "Pager"
@@ -5601,7 +5622,7 @@ msgstr "Uppdatera din webbläsare."
 msgid "Plus"
 msgstr "Plus"
 
-#: apps/io.ox/portal/main.js:581 module:io.ox/portal
+#: apps/io.ox/portal/main.js:582 module:io.ox/portal
 msgid "Portal"
 msgstr "Portal"
 
@@ -5684,11 +5705,11 @@ msgstr "Förhandsgranska"
 msgid "Previous"
 msgstr "Föregående"
 
-#: apps/io.ox/calendar/week/view.js:674 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:796 module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Föregående dag"
 
-#: apps/io.ox/calendar/week/view.js:674 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:796 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Föregående vecka"
 
@@ -6064,7 +6085,7 @@ msgstr "November"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:126
+#: apps/io.ox/core/viewer/views/toolbarview.js:127
 #: apps/io.ox/files/actions.js:553 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6243,8 +6264,8 @@ msgid "Save attachment"
 msgstr "Spara bilaga"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:189
-#: apps/io.ox/core/viewer/views/toolbarview.js:209
+#: apps/io.ox/core/viewer/views/toolbarview.js:190
+#: apps/io.ox/core/viewer/views/toolbarview.js:210
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Spara till Drive"
@@ -6398,7 +6419,7 @@ msgstr "Skicka som intern länk"
 msgid "Send as vCard"
 msgstr "Skicka som vCard"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:161 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:162 module:io.ox/core
 #: apps/io.ox/files/actions.js:513 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:124
 msgid "Send by mail"
@@ -6498,7 +6519,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Inställningar"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:154 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:155 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:79 apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -6729,7 +6750,7 @@ msgid "Signatures"
 msgstr "Signaturer"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:116 module:io.ox/portal
+#: apps/io.ox/portal/main.js:117 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Inskriven som %1$s"
 
@@ -6862,6 +6883,7 @@ msgid "Standard folders"
 msgstr "Standardmappar"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js:69 module:io.ox/core
+#: apps/io.ox/calendar/week/view.js:667 module:io.ox/calendar
 #, fuzzy
 #| msgid "Standard folders"
 msgid "Standard timezone"
@@ -7129,7 +7151,7 @@ msgstr "Text"
 msgid "Thank you for your feedback"
 msgstr "Tack för dina synpunkter"
 
-#: apps/plugins/portal/oxdriveclients/register.js:93 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:103 module:plugins/portal
 #, fuzzy
 #| msgid ""
 #| "The %s client lets you store and share your photos, files, documents and "
@@ -7832,7 +7854,7 @@ msgstr "De 10 du oftast skickar e-post till"
 msgid "Total cost"
 msgstr "Total kostnad"
 
-#: apps/io.ox/core/folder/node.js:442 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:445 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Totalt: %1$d"
 
@@ -7950,7 +7972,7 @@ msgstr "Ny prenumeration"
 msgid "Unread"
 msgstr "Oläst"
 
-#: apps/io.ox/core/folder/node.js:443 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:446 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Oläst: %1$d"
 
@@ -8031,7 +8053,7 @@ msgid "Use SSL connection"
 msgstr "Använd SSL-anslutning"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:101 module:io.ox/core
-#: apps/io.ox/calendar/week/view.js:112 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:114 module:io.ox/calendar
 #: apps/io.ox/search/facets/extensions.js:519
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
@@ -8149,8 +8171,8 @@ msgstr ""
 msgid "View attachment"
 msgstr "Spara bilaga"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:99 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:100
+#: apps/io.ox/core/viewer/views/toolbarview.js:100 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:101
 #, fuzzy
 #| msgid "Hide details"
 msgid "View details"
@@ -8162,7 +8184,7 @@ msgstr "Dölj detaljer"
 msgid "View source"
 msgstr "Visa källa"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:359 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:369 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -8209,7 +8231,7 @@ msgid "Weekly on %1$s"
 msgstr "Varje vecka på %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:390 module:io.ox/portal
+#: apps/io.ox/portal/main.js:391 module:io.ox/portal
 msgid "Welcome to %1$s"
 msgstr "Välkommen till %1$s"
 
@@ -8729,13 +8751,13 @@ msgstr "Din tidszon"
 msgid "ZB"
 msgstr "Zb"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:85 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
+#: apps/io.ox/core/viewer/views/toolbarview.js:86 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:87
 msgid "Zoom in"
 msgstr "Förstora"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:72 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:73
+#: apps/io.ox/core/viewer/views/toolbarview.js:73 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:74
 msgid "Zoom out"
 msgstr "Förminska"
 
@@ -12331,9 +12353,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Ägare %1$s till standardmappen %2$s måste behålla "
 #~ "administrationsrättigheter till mappen"
-
-#~ msgid "Page %1$d of %2$d"
-#~ msgstr "Sida %1$d av %2$d"
 
 #~ msgid "Page number"
 #~ msgstr "Sidnummer"
