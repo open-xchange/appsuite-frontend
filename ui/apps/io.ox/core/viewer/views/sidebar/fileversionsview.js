@@ -179,7 +179,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             this.on('dispose', this.disposeView.bind(this));
             this.$el.on('open', this.onOpen.bind(this));
             this.listenTo(this.model, 'change:number_of_versions', this.render);
-            this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version', this.renderVersions);
+            this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version change:filename', this.renderVersions);
         },
 
         onOpen: function () {
