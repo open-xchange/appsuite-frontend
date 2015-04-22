@@ -1078,7 +1078,7 @@ define('io.ox/core/main', [
                 var sc = ox.serverConfig;
                 if (sc.banner === false || settings.get('banner/visible') === false || _.device('!desktop')) return;
 
-                var banner = $('#io-ox-core').toggleClass('show-banner');
+                var banner = $('#io-ox-core').addClass('show-banner');
 
                 // set title
                 banner.find('.banner-title').append(

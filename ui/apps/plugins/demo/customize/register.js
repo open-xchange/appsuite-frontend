@@ -13,8 +13,9 @@
 
 define('plugins/demo/customize/register', [
     'io.ox/core/notifications',
+    'io.ox/core/extPatterns/stage',
     'settings!plugins/demo/customize'
-], function (notifications, settings) {
+], function (notifications, Stage, settings) {
 
     'use strict';
 
@@ -71,7 +72,6 @@ define('plugins/demo/customize/register', [
         '    </div>' +
         '  </div>' +
         '</div>' +
-        '<div id="customize-text"><span class="title">Purple CableCom</span><span class="logo"></span></div>' +
         '<style id="customize-css"></style>' +
         '<style id="customize-css-logo"></style>'
     );
@@ -79,7 +79,7 @@ define('plugins/demo/customize/register', [
     $('#customize-dialog').modal({ backdrop: false, keyboard: true, show: false });
 
     // show modal dialog
-    $(document).on('click', '#io-ox-top-logo-small, #customize-text', function (e) {
+    $(document).on('click', '#io-ox-top-logo-small, #io-ox-banner', function (e) {
         if (e.altKey) $('#customize-dialog').modal('toggle');
     });
 
@@ -89,17 +89,17 @@ define('plugins/demo/customize/register', [
         },
         presets = [
             { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
-            { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA', headerSize: 2, headerColor: '#ffffff', headerBackground: '#275276' }, // blue
-            { topbarColor: '#992019', selectionColor: '#535353', linkColor: '#6e6e6e', headerSize: 2, headerColor: '#ffffff', headerBackground: '#6b1711' }, // red
-            { topbarColor: '#49a8c6', selectionColor: '#50607f', linkColor: '#ce5200', headerSize: 2, headerColor: '#ffffff', headerBackground: '#50607f' }, // purple
-            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 2, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
-            { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 2, headerColor: '#555555', topbarVisible: false }, // pink
+            { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA', headerSize: 4, headerColor: '#ffffff', headerBackground: '#275276' }, // blue
+            { topbarColor: '#992019', selectionColor: '#535353', linkColor: '#6e6e6e', headerSize: 4, headerColor: '#ffffff', headerBackground: '#6b1711' }, // red
+            { topbarColor: '#49a8c6', selectionColor: '#50607f', linkColor: '#ce5200', headerSize: 4, headerColor: '#ffffff', headerBackground: '#50607f' }, // purple
+            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 4, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
+            { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 4, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#474243', selectionColor: '#656465', linkColor: '#377fb5' }, // gray
             { topbarColor: '#424242', selectionColor: '#39A9E1', linkColor: '#0088cc' }, // 7.4.2
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700' }, // gray/orange
-            { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 3, headerColor: '#d24518', topbarVisible: false, headerText: '**Purple** |||CableCom|||' }, // gray/orange
-            { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', headerSize: 3, headerColor: '#555555', topbarVisible: false }, // gray/red
-            { topbarColor: '#625e61', selectionColor: '#585453', linkColor: '#6388ba', headerSize: 3, headerColor: '#ffe600', headerBackground: '#454244', headerText: '**Purple** ||CableCom||' } // yellow
+            { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 4, headerColor: '#d24518', topbarVisible: false, headerText: '**Purple** |||CableCom|||' }, // gray/orange
+            { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', headerSize: 4, headerColor: '#555555', topbarVisible: false }, // gray/red
+            { topbarColor: '#625e61', selectionColor: '#585453', linkColor: '#6388ba', headerSize: 6, headerColor: '#ffe600', headerBackground: '#454244', headerText: '**Purple** ||CableCom||' } // yellow
         ],
         current = 0,
         model = new Backbone.Model();
@@ -144,16 +144,15 @@ define('plugins/demo/customize/register', [
         $('#customize-css').text(
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
-            '#customize-text {\n' +
-            '  position: absolute; top: 0; left: 0; width: 100%; font-weight: 300; padding: 0 10px;\n' +
+            '#io-ox-core.show-banner #io-ox-banner {\n' +
             '  color: ' + model.get('headerColor') + '; background-color: ' + model.get('headerBackground') + ';\n' +
             '  background-image: ' + gradient(model) + '; z-index: 0;\n' +
             '}\n' +
-            '#customize-text .logo {\n' +
-            '  position: absolute; top: 0; bottom: 0; right: 0; left: 50%; padding: 10px;\n' +
-            '  background-position: right; background-origin: content-box; background-repeat: no-repeat;\n' +
+            '#io-ox-banner .banner-logo {\n' +
+            '  width: 60px; height: 100%;\n' +
+            '  background-position: left center; background-origin: content-box; background-repeat: no-repeat;\n' +
             '}\n' +
-            '#customize-text .logo.left { background-position: left; left: 0; }\n' +
+            '#io-ox-banner .banner-logo.left { background-position: left; left: 0; }\n' +
             '.hide-small-logo #io-ox-top-logo-small { display: none; }\n' +
             '#io-ox-core { z-index: 1; }\n' +
             // top bar
@@ -190,16 +189,21 @@ define('plugins/demo/customize/register', [
     //
     model.on('change:topbarColor change:selectionColor change:linkColor change:headerColor change:headerBackground change:headerGradient', updateStylesheet);
 
+    function applyHeaderSize() {
+        var value = model.get('headerSize');
+        var topbar = model.get('topbarVisible') ? 40 : 0;
+        value = value === 0 ? 0 : 32 + value * 8;
+        $('#io-ox-core').toggleClass('show-banner', value > 0);
+        $('#io-ox-topbar').css('top', value);
+        $('#io-ox-screens').css('top', value + topbar);
+        $('#io-ox-banner').css({ fontSize: Math.floor(value / 3.0) + 'px', lineHeight: (value - 20) + 'px', height: value + 'px', padding: '10px 16px' });
+        // maybe we need to toggle the header logo
+        updateLogo();
+    }
     //
     // header size
     //
-    model.on('change:headerSize', function (model, value) {
-        value = value === 0 ? 0 : 30 + 20 + value * 5;
-        $('#io-ox-core').css('top', value);
-        $('#customize-text').css({ fontSize: Math.floor(value / 3.0) + 'px', lineHeight: (value - 20) + 'px', height: value + 'px', padding: '10px' });
-        // maybe we need to toggle the header logo
-        updateLogo();
-    });
+    model.on('change:headerSize', applyHeaderSize);
 
     //
     // header text
@@ -212,17 +216,20 @@ define('plugins/demo/customize/register', [
             .replace(/\|\|\|([^\|]+)\|\|\|/g,   '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
             .replace(/\|\|([^\|]+)\|\|/g,       '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
             .replace(/\|([^\|]+)\|/g,           '<span style="opacity: 0.5;">$1</span>');
-        $('#customize-text .title').html(value);
+        $('#io-ox-banner .banner-title').html(value);
         // empty > logo left?
-        $('#customize-text .logo').toggleClass('left', value === '');
+        // $('#customize-text .logo').toggleClass('left', value === '');
     });
 
     //
     // Top-bar visible
     //
     model.on('change:topbarVisible', function (model, value) {
+        var height = model.get('headerSize') > 0 ? $('#io-ox-banner').outerHeight() : 0,
+            top = height + (value ? 40 : 0);
         $('#io-ox-topbar').toggle(value);
-        $('#io-ox-screens').css({ top: value ? 40 : 0, borderTop: value ? 'none' : '1px solid #ccc' });
+        $('#io-ox-screens').css({ top: top });
+        $('#io-ox-banner').css({ borderBottom: !value ? '1px solid rgba(0, 0, 0, 0.15)' : '0' });
         updateLogo();
     });
 
@@ -261,6 +268,7 @@ define('plugins/demo/customize/register', [
         if (_.isEmpty(data)) applyPreset(0); else model.set(data);
         // make sure this is called once!
         updateStylesheet();
+        applyHeaderSize();
     };
 
     var url = '';
@@ -285,13 +293,13 @@ define('plugins/demo/customize/register', [
         }
         // update additional logo
         if (url !== '' && model.get('headerSize') > 0) {
-            $('#customize-text .logo').css({
+            $('#io-ox-banner .banner-logo').show().css({
                 backgroundImage: 'url(' + url + ')',
                 backgroundSize: 'contain'
             });
             $('html').addClass('hide-small-logo');
         } else {
-            $('#customize-text .logo').css({
+            $('#io-ox-banner .banner-logo').hide().css({
                 backgroundImage: 'none'
             });
             $('html').removeClass('hide-small-logo');
@@ -379,7 +387,11 @@ define('plugins/demo/customize/register', [
         if (data) model.set(JSON.parse(data));
     });
 
-    initialize();
+    new Stage('io.ox/core/stages', {
+        id: 'customize-banner',
+        before: 'curtain',
+        run: initialize
+    });
 
     // debugging
     window.customize = {
@@ -393,6 +405,10 @@ define('plugins/demo/customize/register', [
         reset: function () {
             applyPreset(0);
             settings.set('presets/default', {}).save();
+        },
+        toggle: function () {
+            // in case you locked yourself out
+            $('#customize-dialog').modal('toggle');
         }
     };
 });
