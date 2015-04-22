@@ -483,18 +483,23 @@ html.ios8-standalone-ipad-fix {
 // property
 @media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
+    .ios, .android {
+        #io-ox-topbar {
+            .launcher-dropdown {
+                i:before {
+                    content: "\f0c9";
+                }
+            }
+            .launchers-secondary .launcher.dropdown {
+                i:before {
+                    content: "\f013";
+                }
+            }
+        }
+    }
+
     #io-ox-topbar {
 
-        .launcher-dropdown {
-            i:before {
-                content: "\f0c9";
-            }
-        }
-        .launchers-secondary .launcher.dropdown {
-            i:before {
-                content: "\f013";
-            }
-        }
         .launcher a.notifications-icon {
             padding: 12px 5px;
 
