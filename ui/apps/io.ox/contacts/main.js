@@ -662,6 +662,7 @@ define('io.ox/contacts/main', [
         'store-view-options': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function () {
+                if (app.props.get('find-result')) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('showCheckboxes', data.checkboxes)

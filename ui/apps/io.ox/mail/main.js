@@ -412,6 +412,7 @@ define('io.ox/mail/main', [
          */
         'store-view-options': function (app) {
             app.props.on('change', _.debounce(function () {
+                if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })

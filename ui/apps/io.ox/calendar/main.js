@@ -397,7 +397,7 @@ define('io.ox/calendar/main', [
         'store-view-options': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function (model, options) {
-                if (!options || options.fluent) return;
+                if (!options || options.fluent || app.props.get('find-result')) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('viewView', data.layout)
