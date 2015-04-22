@@ -40,7 +40,7 @@ define('plugins/notifications/mail/register', [
             .chain()
             .filter(filter)
             .reduce(function (sum, model) {
-                return sum + (model && model.get('unread')) || 0;
+                return sum + (model && model.get('unread')) || 0;
             }, 0)
             .value();
 
@@ -58,13 +58,14 @@ define('plugins/notifications/mail/register', [
         index: 100,
         register: function () {
             folderApi.on('change:unread', update);
+            folderApi.on('pool:add', update);
             update();
         }
     });
 
     var ids = new Backbone.Collection();
 
-    //new mail title and desktop notifications
+    // new mail title and desktop notifications
     // removes mails of a whole folder from notificationview
     function removeFolder(folder) {
         var mails = _.compact(_(ids.models).map(function (item) {
@@ -85,7 +86,7 @@ define('plugins/notifications/mail/register', [
             }),
             newItems = _.difference(newIds, oldIds);
         if (newItems.length) {
-            //if theres multiple items or no specific notification given, use the generic
+            // if theres multiple items or no specific notification given, use the generic
             require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
                 if (newItems.length > 1) {
                     desktopNotifications.show({
@@ -111,7 +112,7 @@ define('plugins/notifications/mail/register', [
         }
     }
 
-    //special add function to consider mails that might have been read elsewhere (didn't throw update:set-seen in appsuite)
+    // special add function to consider mails that might have been read elsewhere (didn't throw update:set-seen in appsuite)
     api.on('new-mail', function (e, recent, unseen) {
         var whitelist = _(unseen).map(function (item) { return item.id; }),
             collectionIds = _(ids.models).map(function (item) { return item.attributes.id; }),
