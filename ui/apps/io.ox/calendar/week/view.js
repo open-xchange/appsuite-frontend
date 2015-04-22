@@ -33,6 +33,7 @@ define('io.ox/calendar/week/view', [
         gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
         minCellHeight:  24,     // min height of one single fragment in px
+        paneHeight:     0,      // the height of the pane. is stored if the pane is not visible
         fulltimeHeight: 20,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in scrollpane header
         appWidth:       98,     // max width of an appointment in %
@@ -902,8 +903,9 @@ define('io.ox/calendar/week/view', [
          */
         adjustCellHeight: function () {
             var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)),18);
+            this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
-                Math.max(this.pane.height() / (cells * this.fragmentation),
+                Math.max(this.paneHeight / (cells * this.fragmentation),
                 this.minCellHeight)
             );
 
