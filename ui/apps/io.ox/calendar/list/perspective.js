@@ -176,6 +176,7 @@ define('io.ox/calendar/list/perspective', [
                 app.pages.getToolbar('detailView').setBaton(baton);
 
             } else {
+                baton.disable('io.ox/calendar/detail', 'inline-actions');
                 right.idle().empty().append(viewDetail.draw(baton));
             }
         }
