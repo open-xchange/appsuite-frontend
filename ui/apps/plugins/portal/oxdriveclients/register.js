@@ -91,6 +91,11 @@ define('plugins/portal/oxdriveclients/register', [
         }
     }
 
+    function createAppIcon() {
+        var icon = settings.get('appIconAsBase64');
+        return $('<div class="appicon">').css('background-image', icon && ('url(' + icon + ')'));
+    }
+
     ext.point('io.ox/portal/widget/oxdriveclients').extend({
 
         //.# Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
@@ -110,28 +115,25 @@ define('plugins/portal/oxdriveclients/register', [
         preview: function (baton) {
             var platform = getPlatform(),
                 link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
-            this.append($('<ul class="oxdrive content pointer list-unstyled">').append(
-                $('<li class="first">').append($('<div class="appicon">').css('background-image', settings.get('appIconAsBase64'))),
-                $('<li class="message">').append($('<h4>').text(baton.message)),
-                $('<li class="teaser">').text(baton.teaser),
-                $('<li class="link">').append(link))
+            this.append(
+                $('<ul class="oxdrive content pointer list-unstyled">').append(
+                    $('<li class="first">').append(createAppIcon()),
+                    $('<li class="message">').append($('<h4>').text(baton.message)),
+                    $('<li class="teaser">').text(baton.teaser),
+                    $('<li class="link">').append(link)
+                )
             );
         },
 
         draw: function (baton) {
-            var ul, platform = getPlatform();
+            var ul, platform = getPlatform(),
+                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
             this.append(
                 ul = $('<ul class="oxdrive content pointer list-unstyled">').append(
-                    $('<li class="first">').append(
-                        $('<div class="appicon">').css('background-image', settings.get('appIconAsBase64'))
-                    ),
-                    $('<li class="message">').append(
-                        $('<h3>').text(baton.message)
-                    ),
+                    $('<li class="first">').append(createAppIcon()),
+                    $('<li class="message">').append($('<h3>').text(baton.message)),
                     $('<li class="teaser">').text(baton.teaser),
-                    $('<li class="link">').append(
-                        getShopLinkWithImage(platform, settings.get('linkTo/' + platform))
-                    )
+                    $('<li class="link">').append(link)
                 )
             );
             // all other platforms
