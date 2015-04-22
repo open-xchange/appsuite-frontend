@@ -287,6 +287,7 @@ define('io.ox/core/notifications/subview', [
                 if (this.collection.size() === 0) {
                     this.render(this.$el.parent());
                 }
+                this.trigger('responsive-remove');
             }
         },
         unHide: function (model) {

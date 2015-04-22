@@ -87,6 +87,7 @@ define('io.ox/core/notifications/badgeview', [
             if (!views[view.model.get('id')]) {
                 views[view.model.get('id')] = view;
                 view.collection.on('add reset remove', _.bind(self.delayedUpdate, self));
+                view.on('responsive-remove', _.bind(self.delayedUpdate, self));
             }
             return view;
         },

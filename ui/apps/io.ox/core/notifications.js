@@ -71,7 +71,14 @@ define('io.ox/core/notifications', [
                     self.model.get('markedForRedraw')[collection.subviewId] = true;
                     self.delayedUpdate.call(self);
                 });
+
                 subview.on('autoopen', _.bind(self.show, self));
+                subview.on('responsive-remove', _.bind(function () {
+                    if (self.$el.children('.notifications').length === 0) {
+                        self.render();
+                    }
+                }, self));
+
                 this.badgeview.registerView(subview);
             }
             return subview;
@@ -90,7 +97,7 @@ define('io.ox/core/notifications', [
                 }
             });
 
-            if (self.$el.children(':not(.notification-placeholder)').length === 0) {
+            if (self.$el.children('.notifications').length === 0) {
                 self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
             } else {
                 //draw headline
