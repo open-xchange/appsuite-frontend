@@ -171,10 +171,12 @@ define('io.ox/find/main', [
                             searchcid = _.bind(manager.getResponseCid, manager),
                             defaultLoader = parent.listView.loader,
                             mode = 'default';
+
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
                                 module: app.getModuleParam(),
                                 mode: 'search',
+                                LIMIT: defaultLoader.LIMIT,
                                 fetch: function (params) {
                                     var self = this,
                                         limit = params.limit.split(','),
