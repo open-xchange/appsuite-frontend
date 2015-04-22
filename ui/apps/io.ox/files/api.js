@@ -79,6 +79,17 @@ define('io.ox/files/api', [
             }
             // call parent constructor
             backbone.Model.call( this, normalizedAttrs, options );
+
+            this.listenTo(this, 'change:filename', function (m, newName) {
+                //update versions if filename is changed
+                var versions = this.get('versions');
+                versions.forEach(function (v) {
+                    if (v.version === m.get('version')) {
+                        v.filename = newName;
+                    }
+                });
+                this.set('versions', versions);
+            });
         },
 
         isFolder: function () {
