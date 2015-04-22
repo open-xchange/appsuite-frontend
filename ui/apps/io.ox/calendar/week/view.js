@@ -663,9 +663,7 @@ define('io.ox/calendar/week/view', [
                     model = new TimezoneModel(favorites),
                     dropdown = new Dropdown({
                             model: model,
-                            label: function () {
-                                return moment().tz(coreSettings.get('timezone')).zoneAbbr() + $('<i class="fa fa-caret-down" aria-hidden="true">').prop('outerHTML');
-                            },
+                            label: moment().tz(coreSettings.get('timezone')).zoneAbbr(),
                             tagName: 'div'
                         })
                         .header(gt('Standard timezone'))
@@ -692,6 +690,7 @@ define('io.ox/calendar/week/view', [
                 $('a', dropdown.$ul).attr('data-keep-open', 'true');
                 $('.dropdown', self.timeLabelBar).remove();
                 self.timeLabelBar.append(dropdown.render().$el);
+                $('.dropdown-label', dropdown.$el).append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
                 model.on('change', function (model) {
                     var list = [];
