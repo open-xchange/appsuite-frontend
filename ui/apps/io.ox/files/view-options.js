@@ -161,7 +161,7 @@ define('io.ox/files/view-options', [
 
             this.append(view, results);
 
-            baton.app.props.on('change:search', function (model, value) {
+            baton.app.props.on('change:find-result', function (model, value) {
                 view.toggle(!value);
                 results.toggle(value);
             });

@@ -651,15 +651,11 @@ define('io.ox/files/main', [
         },
 
         // respond to search results
-        'search': function (app) {
+        'find': function (app) {
             if (_.device('smartphone')) return;
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);
-                    app.props.set('search', true);
-                },
-                'find:cancel': function () {
-                    app.props.set('search', false);
                 }
             });
         }

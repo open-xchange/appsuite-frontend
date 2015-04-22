@@ -99,8 +99,23 @@ define('io.ox/find/main', [
                 app.set('window', app.get('parent').getWindow());
             },
 
+            'state': function  (app) {
+                if (!app.get('inplace')) return;
+
+                var parent = app.get('parent');
+                app.on({
+                    'find:query:result': function () {
+                        parent.props.set('find-result', true);
+                    },
+                    'find:idle': function () {
+                        parent.props.set('find-result', false);
+                    }
+                });
+            },
+
             'reset': function (app) {
                 if (!app.get('inplace')) return;
+
                 // reset on folder click
                 app.listenTo(app.get('parent'), 'folder:change', app.cancel);
             },
@@ -142,7 +157,6 @@ define('io.ox/find/main', [
             },
 
             'listview': function (app) {
-
                 if (!app.get('inplace')) return;
 
                 app.on('change:state', function (e, state) {
@@ -236,6 +250,7 @@ define('io.ox/find/main', [
 
             'quit': function (app) {
                 if (!app.get('inplace')) return;
+
                 // also quit when parent app quits
                 app.listenTo(app.get('parent'), 'quit', app.quit);
             },
