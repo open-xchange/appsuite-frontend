@@ -16,11 +16,11 @@
 
 (function ($) {
 
-    $.fn.lazyload = function () {
+    $.fn.lazyload = function (options) {
         this.each(function () {
             _.defer(function () {
                 // look for potential scrollpane
-                this.closest('.scrollpane, .scrollable, .list-view').lazyloadScrollpane();
+                this.closest('.scrollpane, .scrollable, .list-view').lazyloadScrollpane(options);
                 this.trigger('scroll');
             }.bind($(this).addClass('lazyload')));
         });
@@ -92,6 +92,14 @@
             'load': function () {
 
                 var original = node.attr('data-original');
+
+                // backend sends 1x1 white pixel when picture was not found
+                // use fallback if there is one(like our contact dummypicture)
+                if (this.width === 1 && options.fallback) {
+                    original = options.fallback;
+                    // no need to fadein the dummypicture over an existing dummypicture
+                    options.effect = 'show';
+                }
 
                 if (options.effect !== 'show') node.hide();
 

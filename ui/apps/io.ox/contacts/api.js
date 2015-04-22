@@ -633,15 +633,6 @@ define('io.ox/contacts/api', [
         });
 
         function load(node, url, opt) {
-            function fail () {
-                node.css('background-image', 'url(' + fallback + ')');
-                node = url = opt = null;
-            }
-            function success () {
-                cachesURLs[url] = url;
-                node.css('background-image', 'url(' + url + ')');
-                node = url = opt = null;
-            }
             _.defer(function () {
                 // use lazyload?
                 opt.container = opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
@@ -649,12 +640,8 @@ define('io.ox/contacts/api', [
                     node.css('background-image', 'url(' + fallback + ')')
                         .attr('data-original', url)
                         .lazyload({
-                            container: opt.container,
-                            effect: opt.effect,
-                            error: fail,
-                            load: function (elements_left, settings, image) {
-                                (image.width === 1 ? fail : success)();
-                            }
+                            fallback: fallback,
+                            effect: opt.effect
                         });
                 } else {
                     $(new Image()).on('load error', function (e) {
