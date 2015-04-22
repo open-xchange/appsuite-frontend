@@ -281,19 +281,13 @@ define('io.ox/mail/write/main',
             if (isHTML) {
                 ed.find('.io-ox-signature').each(function () {
                     var node = $(this),
-                        text = node.html()
-                            //remove added image urls(tiny adds them automatically)
-                            .replace(/ data-mce-src="[^"]+"\s?/, '')
-                            //remove empty alt attribute(added by tiny)
-                            .replace(/ alt=""/, '');
+                        text = node.text(),
+                        unchanged = _(app.getSignatures()).find(function (signature) {
+                            return $('<div>').html(signature.content).text().replace(/\s+/g, '') === text.replace(/\s+/g, '');
+                        });
 
-                    if (app.isSignature(text)) {
-                        // remove entire node
-                        node.remove();
-                    } else {
-                        // was modified so remove class
-                        node.removeClass('io-ox-signature');
-                    }
+                    // remove entire block unless it seems edited
+                    if (unchanged) node.remove(); else node.removeClass('io-ox-signature');
                 });
             } else {
                 if (currentSignature) {
