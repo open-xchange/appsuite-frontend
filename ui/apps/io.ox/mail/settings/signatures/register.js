@@ -33,7 +33,7 @@ define('io.ox/mail/settings/signatures/register', [
         draw: function (baton) {
             this.append(
                 $('<div class="form-group">').append(
-                    baton.$.name = $('<input type="text" class="form-control">').attr({ 'id': 'signature-name', 'tabindex': 1, 'placeholder': 'Signature name' })
+                    baton.$.name = $('<input type="text" class="form-control">').attr({ 'id': 'signature-name', 'tabindex': 1, 'placeholder': gt('Signature name') })
                 )
             );
         }
