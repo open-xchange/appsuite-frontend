@@ -802,8 +802,11 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleTokenfield: function (e) {
+            var isString = typeof e === 'string',
+                type = isString ? e : $(e.target).attr('data-type');
+
             if (_.device('smartphone')) {
-                e.preventDefault();
+                if (!isString) e.preventDefault();
                 var input = this.$el.find('[data-extension-id="cc"], [data-extension-id="bcc"]');
                 if (input.hasClass('hidden')) {
                     input.removeClass('hidden');
@@ -816,9 +819,8 @@ define('io.ox/mail/compose/view', [
                 }
                 return input;
             }
-            var isString = typeof e === 'string',
-                type = isString ? e : $(e.target).attr('data-type'),
-                button = this.$el.find('[data-type="' + type + '"]'),
+
+            var button = this.$el.find('[data-type="' + type + '"]'),
                 input = this.$el.find('[data-extension-id="' + type + '"]');
             if (!isString) e.preventDefault();
             if (input.hasClass('hidden') || isString) {
