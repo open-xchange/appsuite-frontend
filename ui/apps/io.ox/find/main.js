@@ -187,6 +187,12 @@ define('io.ox/find/main', [
                                 },
                                 cid: searchcid
                             });
+                        // collection cache used: trigger event ususally trigger by apiproxy
+                        parent.listView.on('collection:cache', function () {
+                            if (this.loader.mode === 'search') {
+                                app.trigger('find:query:result', { results: this.loader.collection.toJSON() });
+                            }
+                        });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
                                 var view = app.view.model,
