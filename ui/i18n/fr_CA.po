@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-04-18 23:32+0200\n"
-"Last-Translator: Nicolas Ternisien <nicolas@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2015-04-22 10:00+0100\n"
+"Last-Translator: \n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: apps/io.ox/backbone/basicModel.js:130 module:io.ox/core
 msgid "Invalid data"
@@ -58,7 +58,7 @@ msgstr "Jour"
 #: apps/io.ox/calendar/month/perspective.js:454
 #: apps/io.ox/calendar/util.js:170 apps/io.ox/calendar/util.js:208
 #: apps/io.ox/calendar/week/view.js:151 apps/io.ox/calendar/week/view.js:713
-#: apps/io.ox/search/facets/extensions.js:512
+#: apps/io.ox/search/facets/extensions.js:515
 #: apps/plugins/portal/birthdays/register.js:86 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:159
 msgid "Today"
@@ -77,7 +77,7 @@ msgstr "Date"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:99 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:113 module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:532
+#: apps/io.ox/search/facets/extensions.js:535
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -1038,12 +1038,12 @@ msgid "Location"
 msgstr "Lieu"
 
 #: apps/io.ox/calendar/edit/template.js:154 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:551 module:io.ox/core
 msgid "Starts on"
 msgstr "Commence le"
 
 #: apps/io.ox/calendar/edit/template.js:174 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:550 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:553 module:io.ox/core
 msgid "Ends on"
 msgstr "Se termine le"
 
@@ -1111,7 +1111,7 @@ msgstr "Type"
 #: apps/io.ox/calendar/list/view-grid-template.js:73 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:75
 #: apps/io.ox/contacts/view-detail.js:152 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:315 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:330 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 #: apps/io.ox/tasks/edit/view-template.js:363 module:io.ox/tasks/edit
 msgid "Private"
@@ -2948,7 +2948,7 @@ msgid "Saved attachment"
 msgstr "Pièce jointe enregistrée"
 
 #: apps/io.ox/core/api/folder.js:72 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:275
+#: apps/io.ox/core/folder/api.js:292
 msgid "Accessing global address book is not permitted"
 msgstr "Il n'est pas permis d'accéder au carnet d'adresses global"
 
@@ -2961,13 +2961,13 @@ msgstr ""
 "prochaine fois que vous entrerez dans l'application."
 
 #: apps/io.ox/core/api/folder.js:551 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:618
+#: apps/io.ox/core/folder/api.js:637
 #: apps/io.ox/core/pubsub/subscriptions.js:172 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
 #: apps/io.ox/core/api/folder.js:688 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:570
+#: apps/io.ox/core/folder/api.js:585
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -3020,13 +3020,13 @@ msgstr "Nouveau dossier"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:370
+#: apps/io.ox/core/folder/extensions.js:385
 msgid "New private folder"
 msgstr "Nouveau dossier privé"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:393
+#: apps/io.ox/core/folder/extensions.js:408
 msgid "New public folder"
 msgstr "Nouveau dossier public"
 
@@ -3266,8 +3266,8 @@ msgstr "Chercher des éléments"
 #: apps/io.ox/core/desktop.js:1922 apps/io.ox/core/main.js:753
 #: apps/io.ox/search/autocomplete/extensions.js:167
 #: apps/io.ox/search/autocomplete/extensions.js:210
-#: apps/io.ox/search/main.js:199 module:io.ox/search
-#: apps/io.ox/search/main.js:260 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:200 module:io.ox/search
+#: apps/io.ox/search/main.js:261 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Chercher"
@@ -3356,7 +3356,7 @@ msgstr "Exporter"
 #: apps/io.ox/core/extPatterns/links.js:360 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:371
 #: apps/io.ox/mail/write/view-main.js:710 module:io.ox/mail
-#: apps/io.ox/search/facets/extensions.js:696
+#: apps/io.ox/search/facets/extensions.js:699
 msgid "More"
 msgstr "Plus"
 
@@ -3366,12 +3366,12 @@ msgid "New subfolder"
 msgstr "Nouveau sous-dossier"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:393
+#: apps/io.ox/core/folder/extensions.js:408
 msgid "New public calendar"
 msgstr "Nouvel agenda public"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:370
+#: apps/io.ox/core/folder/extensions.js:385
 msgid "New private calendar"
 msgstr "Nouvel agenda privé"
 
@@ -3539,43 +3539,43 @@ msgstr "Afficher"
 msgid "Hide"
 msgstr "Masquer"
 
-#: apps/io.ox/core/folder/extensions.js:97 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:115 module:io.ox/core
 msgid "My folders"
 msgstr "Mes dossiers"
 
-#: apps/io.ox/core/folder/extensions.js:134 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:149 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:274
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js:39 module:io.ox/mail
 msgid "Add mail account"
 msgstr "Ajouter un compte de courrier électronique"
 
-#: apps/io.ox/core/folder/extensions.js:327 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:342 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 msgid "Public"
 msgstr "Public"
 
-#: apps/io.ox/core/folder/extensions.js:337 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:352 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 msgid "Shared"
 msgstr "Partagé"
 
-#: apps/io.ox/core/folder/extensions.js:343 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:358 module:io.ox/core
 msgid "Hidden"
 msgstr "Caché"
 
-#: apps/io.ox/core/folder/extensions.js:436 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:451 module:io.ox/core
 msgid "Shared by other users"
 msgstr "Partagé par d'autres utilisateurs"
 
-#: apps/io.ox/core/folder/extensions.js:450 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:453
+#: apps/io.ox/core/folder/extensions.js:467 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:470
 #: apps/io.ox/core/tk/folderviews.js:970
 msgid "You share this folder with other users"
 msgstr "Vous partagez ce dossier avec d'autres utilisateurs"
 
-#: apps/io.ox/core/folder/extensions.js:468 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:471
+#: apps/io.ox/core/folder/extensions.js:485 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:488
 #: apps/io.ox/core/tk/folderviews.js:947
 msgid "This folder has publications and/or subscriptions"
 msgstr "Ce dossier comporte des publications ou des abonnements"
@@ -3592,16 +3592,16 @@ msgstr "Retirer des favoris"
 msgid "Add to favorites"
 msgstr "Ajouter aux favoris"
 
-#: apps/io.ox/core/folder/node.js:420 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:429 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Total : %1$d"
 
-#: apps/io.ox/core/folder/node.js:421 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:430 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Non lu : %1$d"
 
-#: apps/io.ox/core/folder/node.js:436 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:443 apps/io.ox/core/tk/folderviews.js:878
+#: apps/io.ox/core/folder/node.js:445 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:452 apps/io.ox/core/tk/folderviews.js:878
 msgid "Folder-specific actions"
 msgstr "Actions sur le dossier"
 
@@ -4460,30 +4460,34 @@ msgstr ""
 msgid "Download the %s client for %s"
 msgstr "Télécharger le client %s pour %s"
 
-#: apps/io.ox/core/settings/downloads/pane.js:122 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:121 module:io.ox/core
+msgid "%s client for Windows"
+msgstr "Client %s pour Windows"
+
+#: apps/io.ox/core/settings/downloads/pane.js:123 module:io.ox/core
 msgid "%s client for Windows (Installation via the OX Updater)"
 msgstr ""
 "Client %s pour Windows (installation à travers le Programme de mise à jour "
 "OX)"
 
-#: apps/io.ox/core/settings/downloads/pane.js:125 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:132 module:io.ox/core
 msgid "Download installation file"
 msgstr "Télécharger le fichier d'installation"
 
-#: apps/io.ox/core/settings/downloads/pane.js:130 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:137 module:io.ox/core
 msgid "%s client for Mac OS"
 msgstr "Client %s pour Mac OS"
 
-#: apps/io.ox/core/settings/downloads/pane.js:135 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:142 module:io.ox/core
 msgid "%s client for iOS"
 msgstr "Client %s pour iOS"
 
-#: apps/io.ox/core/settings/downloads/pane.js:140 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:147 module:io.ox/core
 msgid "%s client for Android"
 msgstr "Client %s pour Android"
 
-#: apps/io.ox/core/settings/downloads/pane.js:158 module:io.ox/core
-#: apps/io.ox/core/settings/downloads/pane.js:167
+#: apps/io.ox/core/settings/downloads/pane.js:165 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:174
 msgid "Downloads"
 msgstr "Téléchargements"
 
@@ -5608,7 +5612,7 @@ msgid "Confirmation"
 msgstr "Confirmation"
 
 #: apps/io.ox/files/util.js:60 module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:352 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:355 module:io.ox/core
 msgid "Adjust"
 msgstr "Ajuster"
 
@@ -6337,33 +6341,33 @@ msgstr "Abandonner le message"
 msgid "Save as draft"
 msgstr "Enregistrer en tant que brouillon"
 
-#: apps/io.ox/mail/compose/view.js:701 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:698 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1213
 msgid "The email has been sent"
 msgstr "Le courriel a été envoyé"
 
-#: apps/io.ox/mail/compose/view.js:762 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:759 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1271
 msgid "Mail has no recipient."
 msgstr "Le message n'a pas de destinataire."
 
-#: apps/io.ox/mail/compose/view.js:769 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:766 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1278
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Le message a un sujet vide. L'envoyer quand même ?"
 
-#: apps/io.ox/mail/compose/view.js:770 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:767 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1279
 msgid "Yes, send without subject"
 msgstr "Oui, envoyer sans sujet"
 
-#: apps/io.ox/mail/compose/view.js:771 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:768 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1280
 msgid "Add subject"
 msgstr "Ajouter un sujet"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:917 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:914 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:246
 msgid "Sent from %s via mobile"
 msgstr "Envoyé depuis %s sur un mobile"
@@ -7305,40 +7309,40 @@ msgid "Show advanced filters"
 msgstr "Afficher les filtres avancés"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:186 module:io.ox/core
 msgid "Advanced facets block was closed."
 msgstr "Le bloc des facettes avancées a été fermé."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:186 module:io.ox/core
 msgid "Advanced facets block was opened."
 msgstr "Le bloc des facettes avancées a été ouvert."
 
-#: apps/io.ox/search/facets/extensions.js:281 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:369
+#: apps/io.ox/search/facets/extensions.js:284 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:372
 msgid "All"
 msgstr "Tous"
 
-#: apps/io.ox/search/facets/extensions.js:320 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:323 module:io.ox/core
 msgid "Remove facet"
 msgstr "Supprimer la facette"
 
-#: apps/io.ox/search/facets/extensions.js:328 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:331 module:io.ox/core
 msgid "Remove"
 msgstr "Supprimer"
 
-#: apps/io.ox/search/facets/extensions.js:347 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:603
+#: apps/io.ox/search/facets/extensions.js:350 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:606
 msgid "Toggle options"
 msgstr "Afficher/cacher les options"
 
-#: apps/io.ox/search/facets/extensions.js:608 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:611 module:io.ox/core
 msgid "Change folder"
 msgstr "Changer de dossier"
 
-#: apps/io.ox/search/facets/extensions.js:621 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:624
-#: apps/io.ox/search/facets/extensions.js:631
+#: apps/io.ox/search/facets/extensions.js:624 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:627
+#: apps/io.ox/search/facets/extensions.js:634
 msgid "All folders"
 msgstr "Tous les dossiers"
 
@@ -7928,8 +7932,8 @@ msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
 msgstr ""
-"Voulez-vous vraiment supprimer le groupe \"%1$s\" ? Cette action ne peut être "
-"annulée !"
+"Voulez-vous vraiment supprimer le groupe \"%1$s\" ? Cette action ne peut "
+"être annulée !"
 
 #: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
 msgid "Delete group"
@@ -8485,20 +8489,24 @@ msgstr "Il n'y a pas de messages dans votre boîte de réception"
 msgid "your platform"
 msgstr "votre plate-forme"
 
-#: apps/plugins/portal/oxdriveclients/register.js:76 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:78 module:plugins/portal
+msgid "Download %s"
+msgstr "Télécharger %s"
+
+#: apps/plugins/portal/oxdriveclients/register.js:87 module:plugins/portal
 msgid "Download %s via the OX Updater"
 msgstr "Télécharger %s à travers le Programme de mise à jour OX"
 
-#: apps/plugins/portal/oxdriveclients/register.js:86 module:plugins/portal
-#: apps/plugins/portal/oxdriveclients/register.js:139
+#: apps/plugins/portal/oxdriveclients/register.js:97 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:150
 msgid "Get %s"
 msgstr "Obtenir %s"
 
-#: apps/plugins/portal/oxdriveclients/register.js:91 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:102 module:plugins/portal
 msgid "Download %s for %s now"
 msgstr "Télécharger maintenant %s pour %s"
 
-#: apps/plugins/portal/oxdriveclients/register.js:93 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:104 module:plugins/portal
 msgid ""
 "The %s client lets you store and share your photos, files, documents and "
 "videos, anytime, anywhere. Access any file you save to %s from all your "
@@ -8509,7 +8517,7 @@ msgstr ""
 "enregistré dans votre %s depuis votre ordinateur, votre iPhone, votre iPad "
 "ou depuis la %s elle-même."
 
-#: apps/plugins/portal/oxdriveclients/register.js:129 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:140 module:plugins/portal
 msgid "%s is also available for other platforms:"
 msgstr "%s est également disponible pour d'autres plates-formes :"
 

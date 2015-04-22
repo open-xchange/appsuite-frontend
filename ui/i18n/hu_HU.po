@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-04-19 11:33+0200\n"
+"PO-Revision-Date: 2015-04-22 10:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian <hu@bureau-cornavin.com>\n"
 "Language: hu_HU\n"
@@ -55,7 +55,7 @@ msgstr "Nap"
 #: apps/io.ox/calendar/month/perspective.js:454
 #: apps/io.ox/calendar/util.js:170 apps/io.ox/calendar/util.js:208
 #: apps/io.ox/calendar/week/view.js:151 apps/io.ox/calendar/week/view.js:713
-#: apps/io.ox/search/facets/extensions.js:512
+#: apps/io.ox/search/facets/extensions.js:515
 #: apps/plugins/portal/birthdays/register.js:86 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:159
 msgid "Today"
@@ -74,17 +74,22 @@ msgstr "Dátum"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:99 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:113 module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:532
+#: apps/io.ox/search/facets/extensions.js:535
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
 "key."
-msgstr "A kurzorbillentyűkkel módosíthatja a dátumot. A Ctrl nyomva tartásával az év, a Shift nyomva tartásával a hónap módosítható. Az Esc megnyomásával kiléphet a dátumválasztóból"
+msgstr ""
+"A kurzorbillentyűkkel módosíthatja a dátumot. A Ctrl nyomva tartásával az "
+"év, a Shift nyomva tartásával a hónap módosítható. Az Esc megnyomásával "
+"kiléphet a dátumválasztóból"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:103 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr "Az idő módosításához használja a fel/le nyilakat. Bezárni az Esc gomb megnyomásával lehet."
+msgstr ""
+"Az idő módosításához használja a fel/le nyilakat. Bezárni az Esc gomb "
+"megnyomásával lehet."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:110 module:io.ox/core
 #: apps/io.ox/calendar/settings/pane.js:118 module:io.ox/calendar
@@ -170,7 +175,9 @@ msgstr "Megerősítési állapot módosítása"
 msgid ""
 "You are about to change your confirmation status. Please leave a comment for "
 "other participants."
-msgstr "A megerősítési állapotának megváltoztatására készül. Hagyjon egy megjegyzést a többi résztvevőnek."
+msgstr ""
+"A megerősítési állapotának megváltoztatására készül. Hagyjon egy megjegyzést "
+"a többi résztvevőnek."
 
 #: apps/io.ox/calendar/acceptdeny.js:94 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:263 module:io.ox/calendar/main
@@ -288,7 +295,9 @@ msgstr "Ütközések figyelmen kívül hagyása"
 msgid ""
 "Do you want to confirm the whole series or just one appointment within the "
 "series?"
-msgstr "A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót kívánja jóváhagyni?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
+"kívánja jóváhagyni?"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/acceptdeny.js:224 module:io.ox/calendar
@@ -310,13 +319,17 @@ msgstr "Találkozó"
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
-msgstr "A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót kívánja szerkeszteni?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
+"kívánja szerkeszteni?"
 
 #: apps/io.ox/calendar/actions.js:269 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
-msgstr "A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót kívánja törölni?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
+"kívánja törölni?"
 
 #: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid "Delete whole series"
@@ -628,14 +641,17 @@ msgstr "Kattintson a hivatkozásokra az értékek megváltoztatásához."
 #: apps/io.ox/calendar/edit/recurrence-view.js:517
 #: module:io.ox/calendar/edit/main
 msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "Kattintson egy mondatra a találkozó megismétlési idejének kiválasztásához."
+msgstr ""
+"Kattintson egy mondatra a találkozó megismétlési idejének kiválasztásához."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:518
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
 "data-widget=\"options\">weekly</a>."
-msgstr "A találkozó <a href=\"#\" data-attribute=\"recurrenceType\" data-widget=\"options\">hetente</a> ismétlődik."
+msgstr ""
+"A találkozó <a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
+"\"options\">hetente</a> ismétlődik."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:523
 #: module:io.ox/calendar/edit/main
@@ -663,7 +679,9 @@ msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
 "a>."
-msgstr "A találkozó minden <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span>. nap</a> ismétlődik."
+msgstr ""
+"A találkozó minden <a href=\"#\"  data-widget=\"number\" data-attribute="
+"\"interval\"><span class=\"number-control\">2</span>. nap</a> ismétlődik."
 
 #. as in: The appointment is repeated every day
 #. This is inserted into an HTML construct and is the form without the number
@@ -678,7 +696,10 @@ msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
 "a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr "A találkozó minden <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span>. héten</a> <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">hétfőn ismétlődik</a>."
+msgstr ""
+"A találkozó minden <a href=\"#\"  data-widget=\"number\" data-attribute="
+"\"interval\"><span class=\"number-control\">2</span>. héten</a> <a href=\"#"
+"\"  data-widget=\"days\" data-attribute=\"days\">hétfőn ismétlődik</a>."
 
 #. as in: The appointment is repeated every week
 #. This is inserted into an HTML construct and is the form without the number
@@ -694,7 +715,11 @@ msgid ""
 "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
 "href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
 "class=\"number-control\">2</span> months</a>."
-msgstr "A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a>. napján ismétlődik."
+msgstr ""
+"A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
+"\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\" "
+"data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-"
+"control\">10</span></a>. napján ismétlődik."
 
 #. as in: The appointment is repeated every month
 #. This is inserted into an HTML construct and is the form without the number
@@ -712,7 +737,11 @@ msgid ""
 "attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
 "a>."
-msgstr "A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">második</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján ismétlődik."
+msgstr ""
+"A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
+"\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\" "
+"data-widget=\"options\" data-attribute=\"ordinal\">második</a> <a href=\"#\" "
+"data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján ismétlődik."
 
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
@@ -778,7 +807,11 @@ msgid ""
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
 "\">October</a>."
-msgstr "A találkozó minden év <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">október</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a>. napján ismétlődik."
+msgstr ""
+"A találkozó minden év <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"month\">október</a> <a href=\"#\" data-widget=\"number\" data-attribute="
+"\"dayInMonth\"><span class=\"number-control\">10</span></a>. napján "
+"ismétlődik."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:663
 #: module:io.ox/calendar/edit/main
@@ -859,7 +892,11 @@ msgid ""
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
 "data-attribute=\"month\">October</a>."
-msgstr "A találkozó <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">október</a> minden <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">első</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján ismétlődik."
+msgstr ""
+"A találkozó <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+"\">október</a> minden <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"ordinal\">első</a> <a href=\"#\" data-widget=\"options\" data-attribute="
+"\"day\">szerdai</a> napján ismétlődik."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:731
 #: module:io.ox/calendar/edit/main
@@ -887,7 +924,9 @@ msgstr "befejeződik"
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">never ends</a>."
-msgstr "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">soha nem fejeződik be</a>."
+msgstr ""
+"Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">soha nem fejeződik be</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:749
 #: module:io.ox/calendar/edit/main
@@ -895,7 +934,10 @@ msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
 "\"datePicker\">11/03/2013</a>."
-msgstr "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">befejeződik</a> ekkor: <a href=\"#\" data-attribute=\"until\" data-widget=\"datePicker\">11/03/2013</a>."
+msgstr ""
+"Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">befejeződik</a> ekkor: <a href=\"#\" data-attribute=\"until\" data-widget="
+"\"datePicker\">11/03/2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:759
 #: module:io.ox/calendar/edit/main
@@ -903,7 +945,10 @@ msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
 "\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">befejeződik</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\"><span class=\"number-control\">2</span> találkozó után</a>."
+msgstr ""
+"Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+"\">befejeződik</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+"\"number\"><span class=\"number-control\">2</span> találkozó után</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:1110
 #: module:io.ox/calendar/edit/main
@@ -985,12 +1030,12 @@ msgid "Location"
 msgstr "Hely"
 
 #: apps/io.ox/calendar/edit/template.js:154 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:548 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:551 module:io.ox/core
 msgid "Starts on"
 msgstr "Kezdődik"
 
 #: apps/io.ox/calendar/edit/template.js:174 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:550 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:553 module:io.ox/core
 msgid "Ends on"
 msgstr "Befejeződik"
 
@@ -1058,7 +1103,7 @@ msgstr "Típus"
 #: apps/io.ox/calendar/list/view-grid-template.js:73 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:75
 #: apps/io.ox/contacts/view-detail.js:152 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:315 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:330 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 #: apps/io.ox/tasks/edit/view-template.js:363 module:io.ox/tasks/edit
 msgid "Private"
@@ -1130,14 +1175,19 @@ msgid ""
 "If you spot a free time, just select this area. To do this, move the cursor "
 "to the start time, hold the mouse button, and <b>drag the mouse</b> to the "
 "end time."
-msgstr "Ha szabad időt vesz részre, válassza ezt a területet. Ehhez vigye a kurzort a kezdési időre, tartsa lenyomva az egérgombot és <b>húzza az egeret</b> a befejezési időre."
+msgstr ""
+"Ha szabad időt vesz részre, válassza ezt a területet. Ehhez vigye a kurzort "
+"a kezdési időre, tartsa lenyomva az egérgombot és <b>húzza az egeret</b> a "
+"befejezési időre."
 
 #: apps/io.ox/calendar/freebusy/templates.js:103
 #: module:io.ox/calendar/freebusy
 msgid ""
 "You will automatically return to the appointment dialog. The selected start "
 "and end time as well as the current participant list will be applied."
-msgstr "Automatikusan vissza fog térni a találkozó ablakba. A kijelölt kezdési és befejezési idő, valamint a jelenlegi résztvevőlista hozzá lesz fűzve."
+msgstr ""
+"Automatikusan vissza fog térni a találkozó ablakba. A kijelölt kezdési és "
+"befejezési idő, valamint a jelenlegi résztvevőlista hozzá lesz fűzve."
 
 #: apps/io.ox/calendar/freebusy/templates.js:107
 #: module:io.ox/calendar/freebusy
@@ -1174,7 +1224,9 @@ msgstr "Megjegyzés"
 msgid ""
 "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
 "Appointments will therefore be created in your private calendar."
-msgstr "Nem hozhat létre találkozókat %2$s „%1$s” naptárában. Emiatt a találkozók a saját naptárában kerülnek létrehozásra."
+msgstr ""
+"Nem hozhat létre találkozókat %2$s „%1$s” naptárában. Emiatt a találkozók a "
+"saját naptárában kerülnek létrehozásra."
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
@@ -1183,7 +1235,9 @@ msgstr "Nem hozhat létre találkozókat %2$s „%1$s” naptárában. Emiatt a 
 msgid ""
 "You are not allowed to create appointments in \"%1$s\". Appointments will "
 "therefore be created in your private calendar."
-msgstr "Nem hozhat létre találkozókat „%1$s” naptárban. Emiatt a találkozók a saját naptárában kerülnek létrehozásra."
+msgstr ""
+"Nem hozhat létre találkozókat „%1$s” naptárban. Emiatt a találkozók a saját "
+"naptárában kerülnek létrehozásra."
 
 #: apps/io.ox/calendar/invitations/register.js:28 module:io.ox/calendar/main
 #: apps/io.ox/calendar/invitations/register.js:32
@@ -1297,13 +1351,15 @@ msgstr "Ütközések megjelenítése"
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
-msgstr "Nem frissíthető a megerősítési állapot: valószínűleg a találkozót törölték."
+msgstr ""
+"Nem frissíthető a megerősítési állapot: valószínűleg a találkozót törölték."
 
 #: apps/io.ox/calendar/invitations/register.js:528 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
-msgstr "Nem frissíthető a megerősítési állapot: valószínűleg a feladatot törölték."
+msgstr ""
+"Nem frissíthető a megerősítési állapot: valószínűleg a feladatot törölték."
 
 #: apps/io.ox/calendar/list/perspective.js:55 module:io.ox/calendar
 #: apps/io.ox/calendar/list/perspective.js:66
@@ -1399,7 +1455,9 @@ msgstr "A kezdő dátumnak a befejező dátum előtt kell lennie."
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
-msgstr "A találkozó dátumának módosításakor egy, az ismétlődő találkozókba nem illeszkedő találkozót hoz létre. Szeretné folytatni ezt a műveletet?"
+msgstr ""
+"A találkozó dátumának módosításakor egy, az ismétlődő találkozókba nem "
+"illeszkedő találkozót hoz létre. Szeretné folytatni ezt a műveletet?"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:136 module:io.ox/calendar
@@ -1563,7 +1621,9 @@ msgstr "4 hét"
 msgid ""
 "The setting has been saved and will become active when you enter the "
 "application the next time."
-msgstr "A beállítás mentésre került, és az alkalmazásba való következő belépéskor lesz aktív."
+msgstr ""
+"A beállítás mentésre került, és az alkalmazásba való következő belépéskor "
+"lesz aktív."
 
 #: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 #: apps/io.ox/core/main.js:226 module:io.ox/core
@@ -1630,7 +1690,9 @@ msgstr "Bejövő értesítő levelek"
 msgid ""
 "Automatically delete a notification mail after it has been accepted or "
 "declined?"
-msgstr "Automatikusan törli az értesítő levelet annak elfogadása vagy elutasítása után?"
+msgstr ""
+"Automatikusan törli az értesítő levelet annak elfogadása vagy elutasítása "
+"után?"
 
 #: apps/io.ox/calendar/toolbar.js:42 module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:33 module:io.ox/mail
@@ -2163,7 +2225,9 @@ msgstr "Névjegy eltávolítása"
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
-msgstr "Névjegyek kézi hozzáadásához adjon meg egy érvényes e-mail címet (például janos.kovacs@pelda.hu vagy \"Kovács János\" <kj@pelda.hu>)"
+msgstr ""
+"Névjegyek kézi hozzáadásához adjon meg egy érvényes e-mail címet (például "
+"janos.kovacs@pelda.hu vagy \"Kovács János\" <kj@pelda.hu>)"
 
 #: apps/io.ox/contacts/distrib/main.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:175
@@ -2254,7 +2318,11 @@ msgid ""
 "%2$s %3$s\n"
 "%4$s\n"
 "%5$s"
-msgstr "%1$s\n%2$s %3$s\n%4$s\n%5$s"
+msgstr ""
+"%1$s\n"
+"%2$s %3$s\n"
+"%4$s\n"
+"%5$s"
 
 #: apps/io.ox/contacts/edit/view-form.js:260 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:325
@@ -2675,8 +2743,10 @@ msgstr "E-mail"
 #: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
-msgstr[0] "Megjegyzés: az egyik névjegy nem jelenik meg, mert nincs hozzá telefonszám"
-msgstr[1] "Megjegyzés: %1$d névjegy nem jelenik meg, mert nincs hozzá telefonszám"
+msgstr[0] ""
+"Megjegyzés: az egyik névjegy nem jelenik meg, mert nincs hozzá telefonszám"
+msgstr[1] ""
+"Megjegyzés: %1$d névjegy nem jelenik meg, mert nincs hozzá telefonszám"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -2859,7 +2929,7 @@ msgid "Saved attachment"
 msgstr "Melléklet mentve"
 
 #: apps/io.ox/core/api/folder.js:72 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:275
+#: apps/io.ox/core/folder/api.js:292
 msgid "Accessing global address book is not permitted"
 msgstr "A globális címjegyzék elérése nem engedélyezett"
 
@@ -2867,20 +2937,24 @@ msgstr "A globális címjegyzék elérése nem engedélyezett"
 msgid ""
 "The settings for collecting contacts in this folder will become disabled "
 "when you enter the application the next time."
-msgstr "A névjegyek összegyűjtése ebből a mappából letiltásra kerül, amikor legközelebb belép az alkalmazásba."
+msgstr ""
+"A névjegyek összegyűjtése ebből a mappából letiltásra kerül, amikor "
+"legközelebb belép az alkalmazásba."
 
 #: apps/io.ox/core/api/folder.js:551 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:618
+#: apps/io.ox/core/folder/api.js:637
 #: apps/io.ox/core/pubsub/subscriptions.js:172 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Új mappa"
 
 #: apps/io.ox/core/api/folder.js:688 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:570
+#: apps/io.ox/core/folder/api.js:585
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
-msgstr "A beállítások nem menthetők. Legalább egy adminisztrációs jogokkal rendelkező felhasználónak kell lennie."
+msgstr ""
+"A beállítások nem menthetők. Legalább egy adminisztrációs jogokkal "
+"rendelkező felhasználónak kell lennie."
 
 #: apps/io.ox/core/api/folder.js:1153 module:io.ox/core
 #: apps/io.ox/core/folder/breadcrumb.js:64
@@ -2893,7 +2967,9 @@ msgstr "%s almappája"
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
-msgstr "A(z) „%1$s” nevű mappa elrejtésre kerül. Engedélyezze a „Rejtett fájlok és mappák megjelenítése” beállítást ezen mappa ismételt eléréséhez."
+msgstr ""
+"A(z) „%1$s” nevű mappa elrejtésre kerül. Engedélyezze a „Rejtett fájlok és "
+"mappák megjelenítése” beállítást ezen mappa ismételt eléréséhez."
 
 #: apps/io.ox/core/api/folder.js:1325 module:io.ox/core
 msgid "File names must not be empty"
@@ -2925,13 +3001,13 @@ msgstr "Új mappa"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:370
+#: apps/io.ox/core/folder/extensions.js:385
 msgid "New private folder"
 msgstr "Új személyes mappa"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:393
+#: apps/io.ox/core/folder/extensions.js:408
 msgid "New public folder"
 msgstr "Új nyilvános mappa"
 
@@ -3112,7 +3188,10 @@ msgstr[1] "%d perc"
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
-msgstr "A munka jelenlegi állapotának automatikus mentése sikertelen. Mentse munkáját az adatvesztés elkerülése érdekében, ha a böngésző váratlanul bezáródna."
+msgstr ""
+"A munka jelenlegi állapotának automatikus mentése sikertelen. Mentse "
+"munkáját az adatvesztés elkerülése érdekében, ha a böngésző váratlanul "
+"bezáródna."
 
 #: apps/io.ox/core/desktop.js:265 module:io.ox/core
 msgid "Could not get a default folder for this application."
@@ -3168,8 +3247,8 @@ msgstr "Elemek keresése"
 #: apps/io.ox/core/desktop.js:1922 apps/io.ox/core/main.js:753
 #: apps/io.ox/search/autocomplete/extensions.js:167
 #: apps/io.ox/search/autocomplete/extensions.js:210
-#: apps/io.ox/search/main.js:199 module:io.ox/search
-#: apps/io.ox/search/main.js:260 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:200 module:io.ox/search
+#: apps/io.ox/search/main.js:261 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Keresés"
@@ -3185,7 +3264,11 @@ msgid ""
 "adjustable/removable. Below theses common facets additonal advanced facets "
 "are listed. To narrow down search result please adjust active facets or add "
 "new ones"
-msgstr "A keresési eredmény megjeleníti az összes aktív lapot, hogy azokat könnyedén lehessen beállítani/eltávolítani. Ezek alatt az általános lapok alatt további speciális lapok találhatók. A keresés szűkítéséhez állítsa be a lapokat vagy adjon hozzá újakat."
+msgstr ""
+"A keresési eredmény megjeleníti az összes aktív lapot, hogy azokat könnyedén "
+"lehessen beállítani/eltávolítani. Ezek alatt az általános lapok alatt "
+"további speciális lapok találhatók. A keresés szűkítéséhez állítsa be a "
+"lapokat vagy adjon hozzá újakat."
 
 #: apps/io.ox/core/desktop.js:1796 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1797
@@ -3213,7 +3296,9 @@ msgstr "Keresés ki/be"
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
-msgstr "Az alkalmazás indítása sikertelen. Ezt kapcsolatproblémák okozhatják. Próbálja újra."
+msgstr ""
+"Az alkalmazás indítása sikertelen. Ezt kapcsolatproblémák okozhatják. "
+"Próbálja újra."
 
 #: apps/io.ox/core/emoji/view.js:221 module:io.ox/mail/emoji
 msgid "Reset this list"
@@ -3249,7 +3334,7 @@ msgstr "Exportálás"
 #: apps/io.ox/core/extPatterns/links.js:360 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:371
 #: apps/io.ox/mail/write/view-main.js:710 module:io.ox/mail
-#: apps/io.ox/search/facets/extensions.js:696
+#: apps/io.ox/search/facets/extensions.js:699
 msgid "More"
 msgstr "Tovább"
 
@@ -3259,12 +3344,12 @@ msgid "New subfolder"
 msgstr "Új almappa"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:393
+#: apps/io.ox/core/folder/extensions.js:408
 msgid "New public calendar"
 msgstr "Új nyilvános naptár"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:370
+#: apps/io.ox/core/folder/extensions.js:385
 msgid "New private calendar"
 msgstr "Új személyes naptár"
 
@@ -3298,7 +3383,8 @@ msgstr "Üzenetek archiválása"
 
 #: apps/io.ox/core/folder/actions/archive.js:39 module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
-msgstr "Minden %1$d napnál régebbi üzenet áthelyezésre kerül az archívum mappába"
+msgstr ""
+"Minden %1$d napnál régebbi üzenet áthelyezésre kerül az archívum mappába"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:42 module:io.ox/core
@@ -3430,43 +3516,43 @@ msgstr "Megjelenítés"
 msgid "Hide"
 msgstr "Elrejtés"
 
-#: apps/io.ox/core/folder/extensions.js:97 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:115 module:io.ox/core
 msgid "My folders"
 msgstr "Saját mappák"
 
-#: apps/io.ox/core/folder/extensions.js:134 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:149 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:274
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js:39 module:io.ox/mail
 msgid "Add mail account"
 msgstr "E-mail fiók hozzáadása"
 
-#: apps/io.ox/core/folder/extensions.js:327 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:342 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 msgid "Public"
 msgstr "Nyilvános"
 
-#: apps/io.ox/core/folder/extensions.js:337 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:352 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:992
 msgid "Shared"
 msgstr "Megosztott"
 
-#: apps/io.ox/core/folder/extensions.js:343 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:358 module:io.ox/core
 msgid "Hidden"
 msgstr "Rejtett"
 
-#: apps/io.ox/core/folder/extensions.js:436 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:451 module:io.ox/core
 msgid "Shared by other users"
 msgstr "Más felhasználó által megosztott"
 
-#: apps/io.ox/core/folder/extensions.js:450 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:453
+#: apps/io.ox/core/folder/extensions.js:467 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:470
 #: apps/io.ox/core/tk/folderviews.js:970
 msgid "You share this folder with other users"
 msgstr "Ezt a mappát megosztja más felhasználókkal"
 
-#: apps/io.ox/core/folder/extensions.js:468 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:471
+#: apps/io.ox/core/folder/extensions.js:485 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:488
 #: apps/io.ox/core/tk/folderviews.js:947
 msgid "This folder has publications and/or subscriptions"
 msgstr "A mappa tartalmaz publikációkat és/vagy feliratkozásokat"
@@ -3483,16 +3569,16 @@ msgstr "Eltávolítás a kedvencek közül"
 msgid "Add to favorites"
 msgstr "Hozzáadás a kedvencekhez"
 
-#: apps/io.ox/core/folder/node.js:420 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:429 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Összesen: %1$d"
 
-#: apps/io.ox/core/folder/node.js:421 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:430 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Olvasatlan: %1$d"
 
-#: apps/io.ox/core/folder/node.js:436 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:443 apps/io.ox/core/tk/folderviews.js:878
+#: apps/io.ox/core/folder/node.js:445 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:452 apps/io.ox/core/tk/folderviews.js:878
 msgid "Folder-specific actions"
 msgstr "Mappaspecifikus műveletek"
 
@@ -3523,7 +3609,9 @@ msgstr "vCard"
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
-msgstr "Meglévő események figyelmen kívül hagyása. Ez például nyilvános szabadságnaptárak importálásakor hasznos."
+msgstr ""
+"Meglévő események figyelmen kívül hagyása. Ez például nyilvános "
+"szabadságnaptárak importálásakor hasznos."
 
 #: apps/io.ox/core/import/import.js:140 module:io.ox/core
 msgid "Note on CSV files:"
@@ -3533,7 +3621,9 @@ msgstr "Megjegyzés a CSV fájlokon:"
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
-msgstr "A CVS fájl első sora az oszlopneveket határozza meg. Az elválasztáshoz vessző vagy pontosvessző használható."
+msgstr ""
+"A CVS fájl első sora az oszlopneveket határozza meg. Az elválasztáshoz "
+"vessző vagy pontosvessző használható."
 
 #: apps/io.ox/core/import/import.js:149 module:io.ox/core
 msgid "Learn more"
@@ -3596,7 +3686,9 @@ msgstr "Nyelvek"
 #: apps/io.ox/core/login-i18n.js:29 module:io.ox/core/login
 msgid ""
 "No connection to server. Please check your internet connection and retry."
-msgstr "Nincs kapcsolat a kiszolgálóhoz. Ellenőrizze internetkapcsolatát, és próbálja újra."
+msgstr ""
+"Nincs kapcsolat a kiszolgálóhoz. Ellenőrizze internetkapcsolatát, és "
+"próbálja újra."
 
 #: apps/io.ox/core/login-i18n.js:31 module:io.ox/core/login
 msgid "Please enter your credentials."
@@ -3649,7 +3741,9 @@ msgstr "Automatikusan ki lett jelentkeztetve"
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
-msgstr "Nem támogatott előnézet - Egyes funkciók le vannak tiltva, és a stabilitás nem garantált az idei általános kiadásig"
+msgstr ""
+"Nem támogatott előnézet - Egyes funkciók le vannak tiltva, és a stabilitás "
+"nem garantált az idei általános kiadásig"
 
 #: apps/io.ox/core/login-i18n.js:47 module:io.ox/core/login
 msgid "Offline mode"
@@ -3800,7 +3894,9 @@ msgstr "Alkalmazások visszaállítása"
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
-msgstr "A következő alkalmazások állíthatók helyre. Távolítsa el a helyreállítási pontot, ha nem szeretné visszaállítani."
+msgstr ""
+"A következő alkalmazások állíthatók helyre. Távolítsa el a helyreállítási "
+"pontot, ha nem szeretné visszaállítani."
 
 #: apps/io.ox/core/main.js:1294 module:io.ox/core
 msgid "Continue"
@@ -3970,7 +4066,8 @@ msgstr "Valaki megosztott Önnel egy fájlt"
 #: apps/io.ox/core/pubsub/notifications/subscription.js:53 module:io.ox/core
 msgid ""
 "Someone shared a folder with you. Would you like to subscribe those %1$s?"
-msgstr "Valaki megosztott Önnel egy mappát. Szeretne feliratkozni ezekre: %1$s?"
+msgstr ""
+"Valaki megosztott Önnel egy mappát. Szeretne feliratkozni ezekre: %1$s?"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:57 module:io.ox/core
 msgid "Show file"
@@ -3995,7 +4092,9 @@ msgstr "Előfizetés hozzáadása. Ez eltarthat pár másodpercig ..."
 msgid ""
 "Created private folder '%1$s' in %2$s and subscribed successfully to shared "
 "folder"
-msgstr "„%1$s” privát mappa létrehozva itt: %2$s, és sikeres feliratkozás a megosztott mappára"
+msgstr ""
+"„%1$s” privát mappa létrehozva itt: %2$s, és sikeres feliratkozás a "
+"megosztott mappára"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:89 module:io.ox/core
 msgid "An unknown error occurred"
@@ -4065,7 +4164,9 @@ msgstr "Figyelem"
 msgid ""
 "The shared data will be accessible to everyone on the Internet. Please "
 "consider, which data you want to share."
-msgstr "A megosztott adatot bárki elérheti az interneten keresztül. Gondolja meg, hogy milyen adatokat oszt meg."
+msgstr ""
+"A megosztott adatot bárki elérheti az interneten keresztül. Gondolja meg, "
+"hogy milyen adatokat oszt meg."
 
 #: apps/io.ox/core/pubsub/publications.js:421 module:io.ox/core/pubsub
 msgid "Privacy Notice"
@@ -4085,7 +4186,19 @@ msgid ""
 "consider carefully where you store and to whom you forward personal data. "
 "Please ensure appropriate access protection, e.g. by proper password "
 "protection."
-msgstr "Ezen szolgáltatás használatakor Ön, mint az adatok jelenlegi tulajdonosa felelős a magánszférával kapcsolatos szabályok betartásáért és a jogi szabályozás tiszteletben tartásáért (szerzői jogi és személyiségi jogi). Különösen személyes adatok megosztásakor Ön a felelős a szövetségi adatvédelmi törvény (BDSG, Németország) vagy saját országának adatvédelmi törvényei szerint. Az európai és más nemzeti szabályozások szerint Ön felelős az adatgazdálkodásért, és nem tehet közzé vagy továbbíthat személyes adatokat az adott személy hozzájárulása nélkül. A jogi kötelezettségeken kívül különös óvatosságot javaslunk a személyes adatok kezelésekor. Alaposan fontolja meg, hogy hol tárol és kinek továbbít személyes adatokat. Biztosítsa a hozzáférés megfelelő korlátozását például megfelelő jelszavas védelemmel."
+msgstr ""
+"Ezen szolgáltatás használatakor Ön, mint az adatok jelenlegi tulajdonosa "
+"felelős a magánszférával kapcsolatos szabályok betartásáért és a jogi "
+"szabályozás tiszteletben tartásáért (szerzői jogi és személyiségi jogi). "
+"Különösen személyes adatok megosztásakor Ön a felelős a szövetségi "
+"adatvédelmi törvény (BDSG, Németország) vagy saját országának adatvédelmi "
+"törvényei szerint. Az európai és más nemzeti szabályozások szerint Ön "
+"felelős az adatgazdálkodásért, és nem tehet közzé vagy továbbíthat személyes "
+"adatokat az adott személy hozzájárulása nélkül. A jogi kötelezettségeken "
+"kívül különös óvatosságot javaslunk a személyes adatok kezelésekor. Alaposan "
+"fontolja meg, hogy hol tárol és kinek továbbít személyes adatokat. "
+"Biztosítsa a hozzáférés megfelelő korlátozását például megfelelő jelszavas "
+"védelemmel."
 
 #: apps/io.ox/core/pubsub/publications.js:428 module:io.ox/core/pubsub
 msgid "Show legal information"
@@ -4104,7 +4217,9 @@ msgid ""
 "Note: Refreshing this subscription will replace the calendar content with "
 "the external content. Changes you have made inside appsuite will be "
 "overwritten"
-msgstr "Megjegyzés: Ezen feliratkozás frissítése lecseréli a naptártartalmat a külső tartalommal. Az appsuite-on belül végzett módosítások felül lesznek írva."
+msgstr ""
+"Megjegyzés: Ezen feliratkozás frissítése lecseréli a naptártartalmat a külső "
+"tartalommal. Az appsuite-on belül végzett módosítások felül lesznek írva."
 
 #: apps/io.ox/core/pubsub/settings/pane.js:237 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
@@ -4130,17 +4245,23 @@ msgstr "Feliratkozás frissítése"
 msgid ""
 "A refresh takes some time, so please be patient, while the refresh runs in "
 "the background. Only one refresh per subscription and per session is allowed."
-msgstr "A frissítés eltart egy kis ideig, legyen türelmes amíg az lefut a háttérben. Feliratkozásonként és munkamenetenként csak egy frissítés engedélyezett."
+msgstr ""
+"A frissítés eltart egy kis ideig, legyen türelmes amíg az lefut a háttérben. "
+"Feliratkozásonként és munkamenetenként csak egy frissítés engedélyezett."
 
 #: apps/io.ox/core/pubsub/settings/pane.js:402 module:io.ox/core/pubsub
 msgid ""
 "This folder has publications but you are not allowed to view or edit them"
-msgstr "Ez a mappa publikációkat tartalmaz, de nem nézheti meg vagy szerkesztheti azokat"
+msgstr ""
+"Ez a mappa publikációkat tartalmaz, de nem nézheti meg vagy szerkesztheti "
+"azokat"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:404 module:io.ox/core/pubsub
 msgid ""
 "This folder has subscriptions but you are not allowed to view or edit them"
-msgstr "Ez a mappa feliratkozásokat tartalmaz, de nem nézheti meg vagy szerkesztheti azokat"
+msgstr ""
+"Ez a mappa feliratkozásokat tartalmaz, de nem nézheti meg vagy szerkesztheti "
+"azokat"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:410 module:io.ox/core/pubsub
 msgid "This folder has no publications"
@@ -4210,7 +4331,9 @@ msgstr "Új mappa hozzáadása ehhez a feliratkozáshoz"
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
-msgstr "Megjegyzés: Ez a feliratkozás lecseréli a naptártartalmat a külső tartalommal. Emiatt új mappát kell létrehoznia ehhez a feliratkozáshoz."
+msgstr ""
+"Megjegyzés: Ez a feliratkozás lecseréli a naptártartalmat a külső "
+"tartalommal. Emiatt új mappát kell létrehoznia ehhez a feliratkozáshoz."
 
 #: apps/io.ox/core/pubsub/subscriptions.js:378 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:381
@@ -4221,7 +4344,9 @@ msgstr "Feliratkozások hozzávetőleges időtartama"
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
-msgstr "A feliratkozás adatainak frissítése eltarthat egy ideig. Például 100 névjegy importálása eltarthat 5 percig is. Várjon türelemmel."
+msgstr ""
+"A feliratkozás adatainak frissítése eltarthat egy ideig. Például 100 névjegy "
+"importálása eltarthat 5 percig is. Várjon türelemmel."
 
 #: apps/io.ox/core/relogin.js:45 module:io.ox/core
 msgid "Your IP address has changed"
@@ -4252,7 +4377,11 @@ msgid ""
 "Follow the instructions and install the updater. Installs latest versions of "
 "Windows® client software. The Updater automatically informs about new "
 "updates. You can download the updates from within the Updater."
-msgstr "A letöltött fájl futtatásakor a telepítővarázsló indul el. Kövesse az utasításokat és telepítse a frissítést. Telepítse a Windows® kliensprogram legfrissebb változatát. A frissítések ezután az Updater programból telepíthetők."
+msgstr ""
+"A letöltött fájl futtatásakor a telepítővarázsló indul el. Kövesse az "
+"utasításokat és telepítse a frissítést. Telepítse a Windows® kliensprogram "
+"legfrissebb változatát. A frissítések ezután az Updater programból "
+"telepíthetők."
 
 #: apps/io.ox/core/settings/downloads/pane.js:68 module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4262,7 +4391,9 @@ msgstr "Microsoft Outlook® konnektor"
 msgid ""
 "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
-msgstr "E-mailek, naptár, névjegyek és feladatok, valamint nyilvános, megosztott és rendszermappák szinkronizálása Microsoft Outlook® kliensekkel."
+msgstr ""
+"E-mailek, naptár, névjegyek és feladatok, valamint nyilvános, megosztott és "
+"rendszermappák szinkronizálása Microsoft Outlook® kliensekkel."
 
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
 msgid "Notifier"
@@ -4272,35 +4403,41 @@ msgstr "Értesítő"
 msgid ""
 "Informs about the current status of E-Mails and appointments without having "
 "to display the user interface or another Windows® client."
-msgstr "Tájékoztatja a levelek és találkozók aktuális állapotáról a felhasználói felület vagy másik Windows® kliens megjelenítése nélkül."
+msgstr ""
+"Tájékoztatja a levelek és találkozók aktuális állapotáról a felhasználói "
+"felület vagy másik Windows® kliens megjelenítése nélkül."
 
 #: apps/io.ox/core/settings/downloads/pane.js:107 module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js:70 module:plugins/portal
 msgid "Download the %s client for %s"
 msgstr "%s kliens letöltése ehhez: %s"
 
-#: apps/io.ox/core/settings/downloads/pane.js:122 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:121 module:io.ox/core
+msgid "%s client for Windows"
+msgstr "%s kliens Windowshoz"
+
+#: apps/io.ox/core/settings/downloads/pane.js:123 module:io.ox/core
 msgid "%s client for Windows (Installation via the OX Updater)"
 msgstr "%s kliens Windowshoz (telepítés az OX frissítőn keresztül)"
 
-#: apps/io.ox/core/settings/downloads/pane.js:125 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:132 module:io.ox/core
 msgid "Download installation file"
 msgstr "Telepítőfájl letöltése"
 
-#: apps/io.ox/core/settings/downloads/pane.js:130 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:137 module:io.ox/core
 msgid "%s client for Mac OS"
 msgstr "%s kliens Mac OS-hez"
 
-#: apps/io.ox/core/settings/downloads/pane.js:135 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:142 module:io.ox/core
 msgid "%s client for iOS"
 msgstr "%s kliens iOS-hez"
 
-#: apps/io.ox/core/settings/downloads/pane.js:140 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:147 module:io.ox/core
 msgid "%s client for Android"
 msgstr "%s kliens Androidhoz"
 
-#: apps/io.ox/core/settings/downloads/pane.js:158 module:io.ox/core
-#: apps/io.ox/core/settings/downloads/pane.js:167
+#: apps/io.ox/core/settings/downloads/pane.js:165 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:174
 msgid "Downloads"
 msgstr "Letöltések"
 
@@ -4360,7 +4497,10 @@ msgstr "Statisztika újratöltése"
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
 "gray graph shows a trivial network ping to recognize slow connections."
-msgstr "A kék grafikon mutatja kérések időtartamának eloszlását százalékban. A szürke grafikon a hálózat pinget mutatja, hogy felismerhetők legyenek a lassú kapcsolatok."
+msgstr ""
+"A kék grafikon mutatja kérések időtartamának eloszlását százalékban. A "
+"szürke grafikon a hálózat pinget mutatja, hogy felismerhetők legyenek a "
+"lassú kapcsolatok."
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:223 module:io.ox/core
 msgid "Errors"
@@ -4388,7 +4528,8 @@ msgstr "Nincs elveszett kérés"
 
 #: apps/io.ox/core/settings/pane.js:66 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
-msgstr "A beállítás életbe lépéséhez újratöltés vagy újra bejelentkezés szükséges."
+msgstr ""
+"A beállítás életbe lépéséhez újratöltés vagy újra bejelentkezés szükséges."
 
 #: apps/io.ox/core/settings/pane.js:73 module:io.ox/core
 #: apps/io.ox/settings/main.js:255
@@ -4534,26 +4675,33 @@ msgstr "%1$d %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
-msgstr "A fájl („%1$s”) nem tölthető fel, mert meghaladja a maximális %2$s fájlméretet"
+msgstr ""
+"A fájl („%1$s”) nem tölthető fel, mert meghaladja a maximális %2$s "
+"fájlméretet"
 
 #: apps/io.ox/core/tk/attachments.js:352 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/upload.js:267 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
 "%2$s"
-msgstr "A fájl („%1$s”) nem tölthető fel, mert meghaladja a kvótakorlátot (%2$s)"
+msgstr ""
+"A fájl („%1$s”) nem tölthető fel, mert meghaladja a kvótakorlátot (%2$s)"
 
 #: apps/io.ox/core/tk/attachments.js:358 module:io.ox/core/tk/attachments
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
 "publication maximum file size of %2$s"
-msgstr "A fájl („%1$s”) nem tölthető fel, mert meghaladja a melléklet-közzétételi maximális %2$s fájlméretet"
+msgstr ""
+"A fájl („%1$s”) nem tölthető fel, mert meghaladja a melléklet-közzétételi "
+"maximális %2$s fájlméretet"
 
 #: apps/io.ox/core/tk/attachments.js:363 module:io.ox/core/tk/attachments
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
-msgstr "A fájl („%1$s”) nem tölthető fel, mert meghaladja az infostore kvótakorlátot (%2$s)"
+msgstr ""
+"A fájl („%1$s”) nem tölthető fel, mert meghaladja az infostore kvótakorlátot "
+"(%2$s)"
 
 #: apps/io.ox/core/tk/attachments.js:603 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/fluid/view-detail.js:227 module:io.ox/files
@@ -4812,7 +4960,8 @@ msgstr "Frissítés szükséges"
 msgid ""
 "This feature is not available. In order to use it, you need to upgrade your "
 "account now."
-msgstr "Ez a szolgáltatás nem érhető el. A használatához bővítenie kell fiókját."
+msgstr ""
+"Ez a szolgáltatás nem érhető el. A használatához bővítenie kell fiókját."
 
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
@@ -5176,7 +5325,8 @@ msgstr "Húzza ide a feltöltendő <b class='dndignore'>új fájlt</b>"
 #: apps/io.ox/files/actions.js:1056 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
-msgstr "Húzza ide a(z) „%1$s” feltöltendő <b class='dndignore'>új verzióját</b>"
+msgstr ""
+"Húzza ide a(z) „%1$s” feltöltendő <b class='dndignore'>új verzióját</b>"
 
 #: apps/io.ox/files/actions.js:1062 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
@@ -5210,7 +5360,9 @@ msgstr "Előző"
 #. helper text for slideshow widget navigation
 #: apps/io.ox/files/carousel.js:77 module:io.ox/files
 msgid "Use left/right arrow keys to navigate and escape key to exit view."
-msgstr "Használja a jobb/bal billentyűket a navigáláshoz. Az Escape megnyomásával pedig kiléphet a nézetből."
+msgstr ""
+"Használja a jobb/bal billentyűket a navigáláshoz. Az Escape megnyomásával "
+"pedig kiléphet a nézetből."
 
 #: apps/io.ox/files/filepicker.js:31 module:io.ox/files
 #: apps/io.ox/mail/write/view-main.js:606 module:io.ox/mail
@@ -5312,7 +5464,10 @@ msgid ""
 "Your capacity is shared with all members of your group. Your group is "
 "currently using %1$s of its %2$s available disk space. The amount of free "
 "space is %3$s. "
-msgstr "Az elérhető tárhelye meg van osztva csoportja minden tagjával. A csoportja jelenleg az elérhető %2$s lemezhelyből ennyit használ: %1$s. Szabad hely: %3$s."
+msgstr ""
+"Az elérhető tárhelye meg van osztva csoportja minden tagjával. A csoportja "
+"jelenleg az elérhető %2$s lemezhelyből ennyit használ: %1$s. Szabad hely: "
+"%3$s."
 
 #. %1$s used disk space
 #. %2$s total disk space
@@ -5321,7 +5476,9 @@ msgstr "Az elérhető tárhelye meg van osztva csoportja minden tagjával. A cso
 msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left. "
-msgstr "Jelenleg az elérhető %2$s lemezterületből ennyit használ: %1$s. Szabad hely: %3$s."
+msgstr ""
+"Jelenleg az elérhető %2$s lemezterületből ennyit használ: %1$s. Szabad hely: "
+"%3$s."
 
 #: apps/io.ox/files/guidance/statistics.js:236 module:io.ox/files
 msgid "Top 10 folder size"
@@ -5333,7 +5490,9 @@ msgstr "Top 10 mappa mérete"
 msgid ""
 "These statistics only include folders, which have a depth less than four in "
 "the folder structure from the folder \"%1$s\"."
-msgstr "Ez a statisztika csak a mappastruktúrában a(z) „%1$s” mappától számítva négy szintnél kisebb mélységű mappákat tartalmazza."
+msgstr ""
+"Ez a statisztika csak a mappastruktúrában a(z) „%1$s” mappától számítva négy "
+"szintnél kisebb mélységű mappákat tartalmazza."
 
 #: apps/io.ox/files/guidance/statistics.js:330 module:io.ox/files
 msgid "Top 10 file types"
@@ -5371,7 +5530,9 @@ msgstr "Mozaik"
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
 "when viewing or editing."
-msgstr "Ne feledje, a fájlkiterjesztések módosítása vagy eltávolítása problémákat fog okozni a megjelenítéskor és szerkesztéskor."
+msgstr ""
+"Ne feledje, a fájlkiterjesztések módosítása vagy eltávolítása problémákat "
+"fog okozni a megjelenítéskor és szerkesztéskor."
 
 #: apps/io.ox/files/util.js:49 module:io.ox/files
 msgid ""
@@ -5382,14 +5543,15 @@ msgstr "Valóban el kívánja távolítani a(z) „.%1$s” kiterjesztést a fá
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
 "\" ?"
-msgstr "Valóban meg kívánja változtatni a(z) „.%1$s” kiterjesztést erre: „.%2$s”?"
+msgstr ""
+"Valóban meg kívánja változtatni a(z) „.%1$s” kiterjesztést erre: „.%2$s”?"
 
 #: apps/io.ox/files/util.js:57 module:io.ox/files
 msgid "Confirmation"
 msgstr "Megerősítés"
 
 #: apps/io.ox/files/util.js:60 module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:352 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:355 module:io.ox/core
 msgid "Adjust"
 msgstr "Módosítás"
 
@@ -5397,7 +5559,9 @@ msgstr "Módosítás"
 msgid ""
 "You can drag and drop files from your computer to upload either a new file "
 "or another version of a file."
-msgstr "A számítógépén lévő fájlokat ide ejtve feltölthet egy új fájlt vagy egy fájl másik verzióját."
+msgstr ""
+"A számítógépén lévő fájlokat ide ejtve feltölthet egy új fájlt vagy egy fájl "
+"másik verzióját."
 
 #: apps/io.ox/files/views/create.js:73 module:io.ox/files
 #: apps/io.ox/files/views/create.js:112
@@ -5420,7 +5584,9 @@ msgstr "Kattintson ide a súgóközpontból kilépéshez"
 msgid ""
 "The unrecoverable items have been cleaned up successfully. Please refresh "
 "this page to see the changes."
-msgstr "A nem visszaállítható elemek sikeresen törölve lettek. Frissítse az oldalt a változások megtekintéséhez."
+msgstr ""
+"A nem visszaállítható elemek sikeresen törölve lettek. Frissítse az oldalt a "
+"változások megtekintéséhez."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:28 module:io.ox/keychain
 #: apps/io.ox/settings/accounts/settings/pane.js:108
@@ -5433,7 +5599,8 @@ msgstr "Jelszavak visszaállítása"
 #: apps/io.ox/keychain/secretRecoveryDialog.js:31 module:io.ox/keychain
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
-msgstr "Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
+msgstr ""
+"Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:33 module:io.ox/keychain
 msgid "Your old password"
@@ -5496,7 +5663,9 @@ msgstr "Ez nem érvényes e-mail cím"
 msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form. "
-msgstr "A fiókbeállítások nem kerültek mentésre. Nézze meg az űrlap ezzel kapcsolatos megjegyzéseit."
+msgstr ""
+"A fiókbeállítások nem kerültek mentésre. Nézze meg az űrlap ezzel "
+"kapcsolatos megjegyzéseit."
 
 #: apps/io.ox/mail/accounts/settings.js:107
 #: module:io.ox/mail/accounts/settings
@@ -5609,7 +5778,8 @@ msgstr "Másolat eltávolítása a kiszolgálóról az üzenet lekérése után"
 
 #: apps/io.ox/mail/accounts/view-form.js:478 module:io.ox/settings
 msgid "Deleting messages on local storage also deletes them on server"
-msgstr "A helyi tárolón lévő üzenet törlésekor az törlésre kerül a kiszolgálón is"
+msgstr ""
+"A helyi tárolón lévő üzenet törlésekor az törlésre kerül a kiszolgálón is"
 
 #: apps/io.ox/mail/accounts/view-form.js:487 module:io.ox/settings
 msgid "Outgoing server (SMTP)"
@@ -5692,7 +5862,9 @@ msgstr "Levélkvóta túllépve"
 #: apps/io.ox/mail/actions.js:102 module:io.ox/mail
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
-msgstr "Nem helyezhet e-maileket a Törölt elemek mappába, ha túllépte a levélkvótáját."
+msgstr ""
+"Nem helyezhet e-maileket a Törölt elemek mappába, ha túllépte a "
+"levélkvótáját."
 
 #: apps/io.ox/mail/actions.js:207 module:io.ox/mail
 msgid "Mail source"
@@ -5827,7 +5999,9 @@ msgstr "Ejtse ide a levél importálásához"
 msgid ""
 "You attached an empty file. It could be, that this file has been deleted on "
 "your hard drive. Send it anyway?"
-msgstr "Egy üres fájlt csatolt. Ez előfordulhat, ha ez a fájl törlésre került a merevlemezről. Mindenképpen elküldi?"
+msgstr ""
+"Egy üres fájlt csatolt. Ez előfordulhat, ha ez a fájl törlésre került a "
+"merevlemezről. Mindenképpen elküldi?"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:28 module:io.ox/mail
 msgid "Yes, with empty attachment"
@@ -5954,7 +6128,8 @@ msgstr "Tértivevény küldése"
 
 #: apps/io.ox/mail/common-extensions.js:558 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
-msgstr "A feladó értesítést szeretne kapni arról, hogy Ön elolvasta ezt az e-mailt"
+msgstr ""
+"A feladó értesítést szeretne kapni arról, hogy Ön elolvasta ezt az e-mailt"
 
 #: apps/io.ox/mail/compose/extensions.js:50 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:179
@@ -6095,33 +6270,33 @@ msgstr "Üzenet elvetése"
 msgid "Save as draft"
 msgstr "Mentés piszkozatként"
 
-#: apps/io.ox/mail/compose/view.js:701 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:698 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1213
 msgid "The email has been sent"
 msgstr "Az e-mail elküldve"
 
-#: apps/io.ox/mail/compose/view.js:762 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:759 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1271
 msgid "Mail has no recipient."
 msgstr "A levélnek nincs címzettje."
 
-#: apps/io.ox/mail/compose/view.js:769 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:766 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1278
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "A levél tárgya üres. Mindenképp elküldi?"
 
-#: apps/io.ox/mail/compose/view.js:770 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:767 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1279
 msgid "Yes, send without subject"
 msgstr "Igen, küldés tárgy nélkül"
 
-#: apps/io.ox/mail/compose/view.js:771 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:768 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1280
 msgid "Add subject"
 msgstr "Tárgy hozzáadása"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:917 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:914 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:246
 msgid "Sent from %s via mobile"
 msgstr "Küldve erről: %s mobilon"
@@ -6190,7 +6365,9 @@ msgstr "eltávolítás"
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
 "disabled."
-msgstr "A kurzorbillentyűkkel módosíthatja az elem pozícióját. A virtuális kurzormódnak letiltottnak kell lennie."
+msgstr ""
+"A kurzorbillentyűkkel módosíthatja az elem pozícióját. A virtuális "
+"kurzormódnak letiltottnak kell lennie."
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:419 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:221 module:io.ox/portal
@@ -6325,7 +6502,9 @@ msgstr "Levél megjelölése:"
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
 "rule to specific messages."
-msgstr "Ez a szabály minden üzenetre alkalmazva lesz. Vegyen fel egy feltételt a szabály bizonyos üzenetekre korlátozásához."
+msgstr ""
+"Ez a szabály minden üzenetre alkalmazva lesz. Vegyen fel egy feltételt a "
+"szabály bizonyos üzenetekre korlátozásához."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:448
 #: module:io.ox/settings/settings
@@ -6398,7 +6577,9 @@ msgstr "%1$d kiválasztva"
 
 #: apps/io.ox/mail/main.js:1173 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
-msgstr "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma megoldásáig."
+msgstr ""
+"Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
+"megoldásáig."
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js:46 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:52
@@ -6478,13 +6659,17 @@ msgstr "Törölt levelek végleges eltávolítása"
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
-msgstr "Automatikusan gyűjti a névjegyeket küldéskor az „Összegyűjtött címek” mappában"
+msgstr ""
+"Automatikusan gyűjti a névjegyeket küldéskor az „Összegyűjtött címek” "
+"mappában"
 
 #: apps/io.ox/mail/settings/pane.js:187 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading"
-msgstr "Automatikusan gyűjti a névjegyeket olvasáskor az „Összegyűjtött címek” mappában"
+msgstr ""
+"Automatikusan gyűjti a névjegyeket olvasáskor az „Összegyűjtött címek” "
+"mappában"
 
 #: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
@@ -6712,7 +6897,8 @@ msgstr "Szöveg"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
-msgstr "Ugyanazon feladónak küldött szabadságértesítők között eltelt napok száma"
+msgstr ""
+"Ugyanazon feladónak küldött szabadságértesítők között eltelt napok száma"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:138 module:io.ox/mail
 msgid "Enabled for the following addresses"
@@ -6788,7 +6974,10 @@ msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
 "files are not sent as attachments but kept on the server. The email you have "
 "sent just contains links to download these files."
-msgstr "Legalább egy csatolt fájl túllépi az e-mailenkénti méretkorlátot. Emiatt a fájlok nem kerülnek elküldésre mellékletként, hanem a kiszolgálón maradnak. Az elküldött levél hivatkozásokat tartalmaz ezekre a fájlokra."
+msgstr ""
+"Legalább egy csatolt fájl túllépi az e-mailenkénti méretkorlátot. Emiatt a "
+"fájlok nem kerülnek elküldésre mellékletként, hanem a kiszolgálón maradnak. "
+"Az elküldött levél hivatkozásokat tartalmaz ezekre a fájlokra."
 
 #: apps/io.ox/mail/write/view-main.js:129 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:185
@@ -6826,7 +7015,8 @@ msgstr "rejtett másolatban"
 #: apps/io.ox/mail/write/view-main.js:543 module:io.ox/mail
 msgid ""
 "You can drag and drop files from your computer here to add as attachment."
-msgstr "A számítógépén lévő fájlokat ide ejtve hozzáadhatja azokat mellékletként."
+msgstr ""
+"A számítógépén lévő fájlokat ide ejtve hozzáadhatja azokat mellékletként."
 
 #: apps/io.ox/mail/write/view-main.js:548 module:io.ox/mail
 msgid "Add Attachment"
@@ -7044,40 +7234,40 @@ msgid "Show advanced filters"
 msgstr "Speciális szűrők megjelenítése"
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:186 module:io.ox/core
 msgid "Advanced facets block was closed."
 msgstr "Speciális lapelemek bezárva."
 
 #. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:186 module:io.ox/core
 msgid "Advanced facets block was opened."
 msgstr "Speciális lapelemek nyitva."
 
-#: apps/io.ox/search/facets/extensions.js:281 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:369
+#: apps/io.ox/search/facets/extensions.js:284 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:372
 msgid "All"
 msgstr "Összes"
 
-#: apps/io.ox/search/facets/extensions.js:320 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:323 module:io.ox/core
 msgid "Remove facet"
 msgstr "Lap eltávolítása"
 
-#: apps/io.ox/search/facets/extensions.js:328 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:331 module:io.ox/core
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: apps/io.ox/search/facets/extensions.js:347 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:603
+#: apps/io.ox/search/facets/extensions.js:350 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:606
 msgid "Toggle options"
 msgstr "Beállítások átváltása"
 
-#: apps/io.ox/search/facets/extensions.js:608 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:611 module:io.ox/core
 msgid "Change folder"
 msgstr "Mappaváltás"
 
-#: apps/io.ox/search/facets/extensions.js:621 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:624
-#: apps/io.ox/search/facets/extensions.js:631
+#: apps/io.ox/search/facets/extensions.js:624 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:627
+#: apps/io.ox/search/facets/extensions.js:634
 msgid "All folders"
 msgstr "Összes mappa"
 
@@ -7089,7 +7279,8 @@ msgstr "Nem találhatók elemek"
 msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
-msgstr "A kijelölt mappa virtuális és nem kereshető. Válasszon ki egy másik mappát."
+msgstr ""
+"A kijelölt mappa virtuális és nem kereshető. Válasszon ki egy másik mappát."
 
 #: apps/io.ox/search/view-template.js:186 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -7103,7 +7294,9 @@ msgstr "Fiók hozzáadása"
 #: apps/io.ox/settings/accounts/settings/pane.js:91
 #: module:io.ox/settings/accounts
 msgid "Social accounts are only used to download contact and/or calendar data"
-msgstr "A közösségi fiókok csak névjegy és/vagy naptáradatok letöltésére lesznek felhasználva"
+msgstr ""
+"A közösségi fiókok csak névjegy és/vagy naptáradatok letöltésére lesznek "
+"felhasználva"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:92
 #: module:io.ox/settings/accounts
@@ -7122,7 +7315,12 @@ msgid ""
 "account password. If you change your primary password, your external "
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords:"
-msgstr "Biztonsági okokból az összes jelszó titkosítva van az elsődleges felhasználói fiók jelszavával. Amennyiben megváltoztatja az elsődleges jelszót, akkor előfordulhat, hogy a külső felhasználói fiókok nem fognak működni. Ebben az esetben a régi jelszót használhatja a felhasználói fiókok jelszavainak visszaállítására: "
+msgstr ""
+"Biztonsági okokból az összes jelszó titkosítva van az elsődleges "
+"felhasználói fiók jelszavával. Amennyiben megváltoztatja az elsődleges "
+"jelszót, akkor előfordulhat, hogy a külső felhasználói fiókok nem fognak "
+"működni. Ebben az esetben a régi jelszót használhatja a felhasználói fiókok "
+"jelszavainak visszaállítására: "
 
 #: apps/io.ox/settings/accounts/settings/pane.js:125
 #: module:io.ox/settings/accounts apps/io.ox/settings/main.js:261
@@ -7222,7 +7420,9 @@ msgstr "Inkonzisztens dátumok"
 #. If this happens the user gets the option to change the start date so it matches the due date
 #: apps/io.ox/tasks/common-extensions.js:103 module:io.ox/tasks
 msgid "The due date cannot be before start date. Adjust start date?"
-msgstr "Az esedékesség dátuma nem lehet a kezdés dátuma előtt. Módosítja a kezdés dátumát?"
+msgstr ""
+"Az esedékesség dátuma nem lehet a kezdés dátuma előtt. Módosítja a kezdés "
+"dátumát?"
 
 #: apps/io.ox/tasks/common-extensions.js:108 module:io.ox/tasks
 msgid "Canceled"
@@ -7654,7 +7854,9 @@ msgstr[1] "%1$d tag"
 msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Biztos, hogy törölni szeretné a(z) \"%1$s\" csoportot? Ez a művelet nem vonható vissza."
+msgstr ""
+"Biztos, hogy törölni szeretné a(z) \"%1$s\" csoportot? Ez a művelet nem "
+"vonható vissza."
 
 #: apps/plugins/administration/groups/settings/toolbar.js:66 module:io.ox/core
 msgid "Delete group"
@@ -7683,7 +7885,9 @@ msgstr "Új erőforrás létrehozása"
 msgid ""
 "Do you really want to delete the resource \"%1$s\"? This action cannot be "
 "undone!"
-msgstr "Biztos, hogy törölni szeretné a(z) \"%1$s\" erőforrás? Ez a művelet nem vonható vissza."
+msgstr ""
+"Biztos, hogy törölni szeretné a(z) \"%1$s\" erőforrás? Ez a művelet nem "
+"vonható vissza."
 
 #: apps/plugins/administration/resources/settings/toolbar.js:62
 #: module:io.ox/core
@@ -7700,13 +7904,17 @@ msgstr "Erőforrás törlése"
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
-msgstr "%1$d / %2$d értékelés megerősítése. Az értékeléshez nyomja meg ez Entert vagy módosítsa a jobb/bal nyíllal."
+msgstr ""
+"%1$d / %2$d értékelés megerősítése. Az értékeléshez nyomja meg ez Entert "
+"vagy módosítsa a jobb/bal nyíllal."
 
 #: apps/plugins/core/feedback/register.js:54 module:io.ox/core
 msgid ""
 "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
 "your rating."
-msgstr "%1$d / %2$d értékelés megerősítése. Az értékelést a jobb/bal nyíllal lehet módosítani."
+msgstr ""
+"%1$d / %2$d értékelés megerősítése. Az értékelést a jobb/bal nyíllal lehet "
+"módosítani."
 
 #: apps/plugins/core/feedback/register.js:138 module:io.ox/core
 msgid "Feedback"
@@ -7729,7 +7937,10 @@ msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
 "formular. When you have questions or problems please contact our support "
 "directly"
-msgstr "A támogatási kérdéseket nem ezen keresztül kezeljük. Amennyiben kérdése vagy problémája van, akkor lépjen kapcsolatba közvetlenül a technikai támogatással."
+msgstr ""
+"A támogatási kérdéseket nem ezen keresztül kezeljük. Amennyiben kérdése vagy "
+"problémája van, akkor lépjen kapcsolatba közvetlenül a technikai "
+"támogatással."
 
 #: apps/plugins/core/feedback/register.js:156 module:io.ox/core
 msgid "Your email address will be included when sending this feedback"
@@ -7813,7 +8024,9 @@ msgstr "Nyugdíjas"
 #: apps/plugins/halo/xing/register.js:77 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
-msgstr "Nincs közvetlenül ehhez kapcsolva: %s. A következő emberek vannak ehhez kapcsolva: %s:"
+msgstr ""
+"Nincs közvetlenül ehhez kapcsolva: %s. A következő emberek vannak ehhez "
+"kapcsolva: %s:"
 
 #: apps/plugins/halo/xing/register.js:101 module:plugins/portal
 msgid "Your shared contacts:"
@@ -7851,7 +8064,9 @@ msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
 msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
-msgstr "Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a %3$s„Kezdőképernyőhöz adás”%4$s gombra"
+msgstr ""
+"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a "
+"%3$s„Kezdőképernyőhöz adás”%4$s gombra"
 
 #: apps/plugins/notifications/calendar/register.js:27
 #: module:plugins/notifications
@@ -8138,7 +8353,9 @@ msgstr "Újra felhatalmazta ezt a %s fiókot."
 msgid ""
 "Sorry, we cannot help you here. Your provider needs to obtain a key from "
 "LinkedIn with the permission to do read messages."
-msgstr "Elnézést, nem tudunk segíteni. A szolgáltatónak be kell szereznie egy kulcsot a LinkedIntől, amely engedélyezi az üzenetek olvasását."
+msgstr ""
+"Elnézést, nem tudunk segíteni. A szolgáltatónak be kell szereznie egy "
+"kulcsot a LinkedIntől, amely engedélyezi az üzenetek olvasását."
 
 #: apps/plugins/portal/linkedIn/register.js:215 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:390
@@ -8193,27 +8410,35 @@ msgstr "Nincsenek levelek Beérkezett üzenetek mappában"
 msgid "your platform"
 msgstr "az Ön rendszere"
 
-#: apps/plugins/portal/oxdriveclients/register.js:76 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:78 module:plugins/portal
+msgid "Download %s"
+msgstr "%s letöltése"
+
+#: apps/plugins/portal/oxdriveclients/register.js:87 module:plugins/portal
 msgid "Download %s via the OX Updater"
 msgstr "%s letöltése az OX Updateren keresztül"
 
-#: apps/plugins/portal/oxdriveclients/register.js:86 module:plugins/portal
-#: apps/plugins/portal/oxdriveclients/register.js:139
+#: apps/plugins/portal/oxdriveclients/register.js:97 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:150
 msgid "Get %s"
 msgstr "%s beszerzése"
 
-#: apps/plugins/portal/oxdriveclients/register.js:91 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:102 module:plugins/portal
 msgid "Download %s for %s now"
 msgstr "%s letöltése ehhez: %s"
 
-#: apps/plugins/portal/oxdriveclients/register.js:93 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:104 module:plugins/portal
 msgid ""
 "The %s client lets you store and share your photos, files, documents and "
 "videos, anytime, anywhere. Access any file you save to %s from all your "
 "computers, iPhone, iPad or from within %s itself."
-msgstr "A(z) %s kliens lehetővé teszi fényképei, fájljai, dokumentumai és videói tárolását és megosztását bármikor, bárhol. Érje el a(z) %s területre mentett bármelyik fájlt, bármelyik számítógépéről, iPhone, iPad készülékéről vagy közvetlenül a(z) %s használatával."
+msgstr ""
+"A(z) %s kliens lehetővé teszi fényképei, fájljai, dokumentumai és videói "
+"tárolását és megosztását bármikor, bárhol. Érje el a(z) %s területre mentett "
+"bármelyik fájlt, bármelyik számítógépéről, iPhone, iPad készülékéről vagy "
+"közvetlenül a(z) %s használatával."
 
-#: apps/plugins/portal/oxdriveclients/register.js:129 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:140 module:plugins/portal
 msgid "%s is also available for other platforms:"
 msgstr "a(z) %s elérhető ás platformon is:"
 
@@ -8367,7 +8592,9 @@ msgstr "Tumblr"
 #: apps/plugins/portal/twitter/register.js:128 module:plugins/portal
 msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
-msgstr "Ez a widget ki van kapcsolva, mert a Twitter gyorsasági korlátja túl lett lépve."
+msgstr ""
+"Ez a widget ki van kapcsolva, mert a Twitter gyorsasági korlátja túl lett "
+"lépve."
 
 #: apps/plugins/portal/twitter/register.js:166 module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:105
@@ -8502,7 +8729,9 @@ msgstr "Jelszó erőssége: legendás"
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
 "and special characters like %1$s"
-msgstr "Jelszava biztonságosabb, ha nagybetűket, számokat, és speciális karaktereket is tartalmaz, mint például: %1$s"
+msgstr ""
+"Jelszava biztonságosabb, ha nagybetűket, számokat, és speciális karaktereket "
+"is tartalmaz, mint például: %1$s"
 
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
@@ -8533,7 +8762,9 @@ msgstr "Új jelszó ismét"
 msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
-msgstr "Ha megváltoztatja a jelszót, ki lesz jelentkeztetve. Győződjön meg róla, hogy mindent bezárt és elmentett."
+msgstr ""
+"Ha megváltoztatja a jelszót, ki lesz jelentkeztetve. Győződjön meg róla, "
+"hogy mindent bezárt és elmentett."
 
 #: apps/plugins/portal/userSettings/register.js:140 module:io.ox/core
 msgid "Change password and sign out"
@@ -8643,7 +8874,9 @@ msgstr "Probléma ezzel: %s. A hibaüzenet: „%s”"
 msgid ""
 "Please select which of the following data we may use to create your %s "
 "account:"
-msgstr "Válassza ki, a következők közül mely adatait használhatjuk %s fiókjának létrehozásához:"
+msgstr ""
+"Válassza ki, a következők közül mely adatait használhatjuk %s fiókjának "
+"létrehozásához:"
 
 #: apps/plugins/portal/xing/register.js:83 module:plugins/portal
 msgid "Mail address"
@@ -8655,7 +8888,11 @@ msgid ""
 "\n"
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
-msgstr "Keresse meg postafiókjában az ellenőrző levelet.\n\nKövesse az levélben található utmutatást és beállítás befejezéséhez térjen vissza a widgethez."
+msgstr ""
+"Keresse meg postafiókjában az ellenőrző levelet.\n"
+"\n"
+"Kövesse az levélben található utmutatást és beállítás befejezéséhez térjen "
+"vissza a widgethez."
 
 #: apps/plugins/portal/xing/register.js:158 module:plugins/portal
 msgid "Post a status update"
@@ -8679,7 +8916,9 @@ msgstr "Nem volt legutóbbi tevékenység a Xing hálózatában."
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
 "about new business opportunities."
-msgstr "Önnek küldött hírek a XING-ről. Használja kapcsolattartáshoz és az új üzleti lehetőségek megismeréséhez."
+msgstr ""
+"Önnek küldött hírek a XING-ről. Használja kapcsolattartáshoz és az új üzleti "
+"lehetőségek megismeréséhez."
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/plugins/portal/xing/register.js:293 module:plugins/portal
@@ -8688,7 +8927,9 @@ msgstr "Új %1$s fiók létrehozása"
 
 #: apps/plugins/portal/xing/register.js:330 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
-msgstr "Kattintson ide, hogy újrakapcsolódjon a xing felhasználói fiókjához, hogy megtekinthesse tevékenységeit."
+msgstr ""
+"Kattintson ide, hogy újrakapcsolódjon a xing felhasználói fiókjához, hogy "
+"megtekinthesse tevékenységeit."
 
 #: apps/plugins/portal/xing/register.js:348 module:plugins/portal
 msgid "Your %s newsfeed"
