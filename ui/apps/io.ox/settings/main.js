@@ -39,19 +39,21 @@ define('io.ox/settings/main', [
         // nodes
         left,
         right,
-        expertmode = coreSettings.get('settings/advancedMode', false),
+        // always true
+        // TODO: clean up code if we stick to the decision to remove this
+        expertmode = true,
         currentSelection = null,
         previousSelection = null,
         pool = api.pool;
 
-    function updateExpertMode() {
-        var nodes = $('.expertmode');
-        if (expertmode) {
-            nodes.show();
-        } else {
-            nodes.hide();
-        }
-    }
+    // function updateExpertMode() {
+    //     var nodes = $('.expertmode');
+    //     if (expertmode) {
+    //         nodes.show();
+    //     } else {
+    //         nodes.hide();
+    //     }
+    // }
 
     app.setLauncher(function (options) {
 
@@ -439,7 +441,7 @@ define('io.ox/settings/main', [
                     right.empty().idle();
                     vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    updateExpertMode();
+                    // updateExpertMode();
                     if (focus) vsplit.right.focus();
                 });
             } else {
@@ -448,7 +450,7 @@ define('io.ox/settings/main', [
                     right.empty().idle();
                     vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    updateExpertMode();
+                    // updateExpertMode();
                     if (focus) vsplit.right.focus();
                 });
             }
@@ -486,48 +488,9 @@ define('io.ox/settings/main', [
             }
         };
 
-        ext.point('settings/toolbar').extend({
-            id: 'info',
-            index: 200,
-            draw: function () {
-
-                var buildCheckbox = function () {
-                    var checkbox = $('<input type="checkbox" tabindex="1">').on('change', function () {
-                        expertmode = checkbox.prop('checked');
-                        coreSettings.set('settings/advancedMode', expertmode).save();
-
-                        getAllSettingsPanes().done(function (data) {
-                            addModelsToPool(data);
-                            updateExpertMode();
-                            tree.selection.resetSelected(tree.selection.getItems());
-                            if (!_.device('smartphone')) {
-                                tree.selection.pick(0);
-                            }
-                        });
-
-                    });
-                    checkbox.prop('checked', expertmode);
-                    return checkbox;
-                };
-
-                this.append(
-                    $('<div class="toolbar">').append(
-                        $('<div>').addClass('advanced-mode').append(
-                            $('<div>').addClass('checkbox').append(
-                                $('<label>').addClass('control-label').text(gt('Advanced Settings')).prepend(
-                                    buildCheckbox()
-                                )
-                            )
-                        )
-                    )
-                );
-            }
-        });
-
         // go!
         win.show(function () {
             paintTree().done(function () {
-                ext.point('settings/toolbar').invoke('draw', vsplit.left);
                 app.setSettingsPane(options);
             });
         });
