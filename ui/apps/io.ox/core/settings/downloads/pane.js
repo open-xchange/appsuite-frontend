@@ -116,7 +116,7 @@ define('io.ox/core/settings/downloads/pane', [
                 var standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
                     hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
                     windowsClientUrl = standaloneClient ?
-                        linkTo.Windows :
+                        ox.apiRoot + linkTo.Windows + '?session=' + ox.session :
                         ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session,
                     windowsClientLabel = standaloneClient ?
                         //.# String will include the product name, "OX Drive for Windows"
