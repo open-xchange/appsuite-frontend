@@ -206,6 +206,8 @@ define('io.ox/mail/toolbar',
 
     // local mediator
     function updateContactPicture() {
+        // disposed?
+        if (!this.model) return;
         // only show this option if preview pane is right (vertical/compact)
         var li = this.$el.find('[data-name="contactPictures"]').parent(),
             layout = this.model.get('layout');
