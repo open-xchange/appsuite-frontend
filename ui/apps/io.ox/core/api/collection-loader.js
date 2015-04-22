@@ -99,7 +99,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             if (collection.length > 0 && !collection.expired) {
                 _.defer(function () {
-                    collection.trigger(collection.length < limit ? 'reset load complete' : 'reset load');
+                    collection.trigger(collection.length < limit ? 'reset load cache complete' : 'reset load cache');
                 });
                 return collection;
             }
