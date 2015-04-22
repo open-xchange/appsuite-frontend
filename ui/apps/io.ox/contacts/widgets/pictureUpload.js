@@ -13,8 +13,9 @@
 define('io.ox/contacts/widgets/pictureUpload', [
     'io.ox/core/notifications',
     'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
     'less!io.ox/contacts/widgets/widgets'
-], function (notifications, gt) {
+], function (notifications, gt, settings) {
 
     'use strict';
 
@@ -57,8 +58,21 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     notifications.yell('success', gt('Your selected picture will be displayed after saving'));
                 } else {
                     fileData = input.files[0];
+                    // check if the picture is small enough
+                    if (fileData && settings.get('maxImageSize') && fileData.size > settings.get('maxImageSize')) {
+                        require(['io.ox/core/strings'], function (strings) {
+                            //#. %1$s maximum filesize
+                            notifications.yell('error', gt('Your selected picture exceeds the maximum allowed filesize of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
+                        });
+                        return;
+                    }
                 }
 
+                if (!fileData) {
+                    // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
+                    // prevent js error and infinite loading
+                    return;
+                }
                 this.model.set('pictureFile', fileData);
                 this.model.unset('image1');
 
