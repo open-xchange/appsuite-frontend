@@ -633,6 +633,12 @@ define('io.ox/calendar/week/view', [
 
             if (_.device('!large')) return;
 
+            function drawOption () {
+                var timezone = moment.tz(this);
+
+                return $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this + $('<span class="offset">').text(timezone.format(' (Z)')).prop('outerHTML');
+            }
+
             function drawDropdown() {
                 var list = _.intersection(
                         settings.get('favoriteTimezones', []),
@@ -657,25 +663,25 @@ define('io.ox/calendar/week/view', [
                     dropdown = new Dropdown({
                             model: model,
                             label: function () {
-                                return $('<span>').append(
-                                    moment().tz(coreSettings.get('timezone')).zoneAbbr(),
-                                    $('<i class="fa fa-caret-down" aria-hidden="true">')
-                                );
+                                return moment().tz(coreSettings.get('timezone')).zoneAbbr() + $('<i class="fa fa-caret-down" aria-hidden="true">').prop('outerHTML');
                             },
                             tagName: 'div'
                         })
                         .header(gt('Standard timezone'))
-                        .option('default', true, moment.tz(coreSettings.get('timezone')).format('([GMT]Z) ') + coreSettings.get('timezone'))
+                        .option('default', true, drawOption.bind(coreSettings.get('timezone')))
                         .header(gt('Favorites'));
 
                 $('li[role="presentation"]', dropdown.$ul).first().addClass('disabled');
                 $('a', dropdown.$ul).first().removeAttr('data-value').removeData('value');
 
                 _(settings.get('favoriteTimezones', [])).each(function (fav) {
-                    dropdown.option(fav, true, moment.tz(fav).format('([GMT]Z) ') + fav);
+                    if (fav !== coreSettings.get('timezone')) {
+                        dropdown.option(fav, true, drawOption.bind(fav));
+                    }
                 });
 
-                dropdown.link('settings', 'Configure favorites', function () {
+                dropdown.divider();
+                dropdown.link('settings', gt('Manage favorites'), function () {
                     var options = { id: 'io.ox/calendar' };
                     ox.launch('io.ox/settings/main', options).done(function () {
                         this.setSettingsPane(options);
@@ -724,8 +730,10 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            var update = _.throttle(function () {
-                drawDropdown();
+            var update = _.throttle(function (e) {
+                if (e.type === 'change:favoriteTimezones') {
+                    drawDropdown();
+                }
                 drawTimezoneLabels();
             }, 100, { trailing: false });
 
