@@ -452,7 +452,7 @@ define('io.ox/core/permissions/permissions', [
                                     bits: 257,
                                     group: isGroup
                                 };
-                            if (!('entity' in obj)) {
+                            if (!obj.entity) {
                                 notifications.yell(
                                     'error',
                                     //#. permissions dialog
