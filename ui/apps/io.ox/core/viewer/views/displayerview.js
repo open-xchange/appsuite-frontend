@@ -42,6 +42,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews = [];
             // local array of loaded slide indices.
             this.loadedSlides = [];
+            // local cache of scroll positions of documents
+            this.documentScrollPositions = [];
             // number of slides to be prefetched in the left/right direction of the active slide
             this.preloadOffset = 3;
             // number of slides to be kept loaded at one time in the browser.
@@ -87,7 +89,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     speed: 0,
                     initialSlide: startIndex,
                     runCallbacksOnInit: false,
-                    onSlideChangeEnd: this.onSlideChangeEnd.bind(this)
+                    onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
+                    onSlideChangeStart: this.onSlideChangeStart.bind(this)
                 };
 
             // enable touch and swiping for 'smartphone' devices
@@ -382,6 +385,29 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             EventDispatcher.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
+            // scroll to last position, if exists
+            var lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
+                activeView = this.slideViews[activeSlideIndex],
+                displayerEl = this.$el;
+            if (activeView.pdfDocument && displayerEl) {
+                activeView.pdfDocument.getLoadPromise().done(function () {
+                    displayerEl.find('[data-swiper-slide-index="' + activeSlideIndex + '"]').scrollTop(lastScrollPosition);
+                });
+            }
+        },
+
+        /**
+         * Slide change start handler:
+         * - save scroll positions of each slide while leaving it.
+         *
+         * @param {Swiper} swiper
+         *  the instance of the swiper plugin
+         */
+        onSlideChangeStart: function (swiper) {
+            var previousIndex = swiper.previousIndex - 1,
+                activeSlideView = this.slideViews[previousIndex],
+                scrollPosition = activeSlideView.$el.scrollTop();
+            this.documentScrollPositions[previousIndex] = scrollPosition;
         },
 
         /**
@@ -445,6 +471,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.collection.remove(removedFileModel);
             // reset the invalidated local loaded slides array
             this.loadedSlides = [];
+            // reset document scroll positions
+            this.documentScrollPositions = [];
             // remove corresponding view type of the file
             this.slideViews.splice(removedFileModelIndex, 1);
             // remove slide from the swiper plugin
