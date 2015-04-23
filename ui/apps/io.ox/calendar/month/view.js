@@ -127,7 +127,7 @@ define('io.ox/calendar/month/view', [
                     .addClass('week-info')
                     .append(
                         $('<span>').addClass('cw').text(
-                            gt('CW %1$d', this.weekStart.format('W'))
+                            gt('CW %1$d', this.weekStart.format('w'))
                         )
                     );
 
