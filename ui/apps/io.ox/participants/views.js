@@ -13,7 +13,7 @@
 define('io.ox/participants/views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
-    'gettext!io.ox/calendar/edit/main',
+    'gettext!io.ox/participants/views',
     'less!io.ox/participants/style'
 ], function (api, util, gt) {
 
