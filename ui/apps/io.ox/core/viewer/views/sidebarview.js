@@ -18,8 +18,9 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/files/api',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
-    'io.ox/core/viewer/views/sidebar/fileversionsview'
-], function (Ext, DisposableView, EventDispatcher, Util, FilesAPI, FileInfoView, FileDescriptionView, FileVersionsView) {
+    'io.ox/core/viewer/views/sidebar/fileversionsview',
+    'io.ox/core/viewer/views/sidebar/uploadnewversionview'
+], function (Ext, DisposableView, EventDispatcher, Util, FilesAPI, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView) {
 
     'use strict';
 
@@ -92,6 +93,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.$el.append(
                 new FileInfoView({ model: this.model }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
+                new UploadNewVersionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el
             );
         },

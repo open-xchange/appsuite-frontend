@@ -325,7 +325,23 @@ html.ios .io-ox-viewer {
             width: @viewer-sidebar-width-smartphone;
         }
     }
+    
+    .viewer-uploadnewversion {
+        > .form-group {
+            text-align: center;
 
+            > span {
+                width: 75%;
+                color: @viewer-text-color;
+                background-color: #444444;
+                border-color: #555555;
+                &:active, &:hover {
+                    border-color: #777777;
+                }
+            }
+        }
+    }
+    
     .sidebar-panel {
 
         background-color: transparent;
