@@ -161,33 +161,32 @@ define('io.ox/calendar/model', [
                 }
                 var self = this,
                     resetListUpdate = false,
-                    changeParticipantsUpdate = false,
-                    participants = this._participants = new pModel.Participants(this.get('participants'));
+                    changeParticipantsUpdate = false;
 
-                participants.invoke('fetch');
+                this._participants = new pModel.Participants(this.get('participants'));
 
-                function resetList() {
+                this._participants.invoke('fetch');
+
+                this._participants.on('add remove reset', function () {
                     if (changeParticipantsUpdate) {
                         return;
                     }
                     resetListUpdate = true;
-                    self.set('participants', participants.getAPIData(), { validate: true });
+                    self.set('participants', this.getAPIData(), { validate: true });
                     resetListUpdate = false;
-                }
-
-                participants.on('add remove reset', resetList);
+                });
 
                 this.on('change:participants', function () {
                     if (resetListUpdate) {
                         return;
                     }
                     changeParticipantsUpdate = true;
-                    participants.reset(self.get('participants'));
-                    participants.invoke('fetch');
+                    self._participants.reset(self.get('participants'));
+                    self._participants.invoke('fetch');
                     changeParticipantsUpdate = false;
                 });
 
-                return participants;
+                return this._participants;
             },
 
             setDefaultParticipants: function (options) {
