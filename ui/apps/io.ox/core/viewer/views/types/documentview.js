@@ -327,6 +327,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         changeZoomLevel: function (action) {
             var currentZoomFactor = this.currentZoomFactor,
                 pdfView = this.pdfView,
+                documentTopPosition = this.$el.scrollTop(),
                 nextZoomFactor;
             // search for next bigger/smaller zoom factor in the avaliable zoom factors
             switch (action) {
@@ -350,6 +351,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
             });
+            // adjust document scroll position according to new zoom
+            this.$el.scrollTop(documentTopPosition * nextZoomFactor / currentZoomFactor);
             // save the new zoom factor to the document view
             this.currentZoomFactor = nextZoomFactor;
         },
