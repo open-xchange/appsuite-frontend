@@ -14,15 +14,10 @@
 define('io.ox/participants/add', [
     'io.ox/participants/model',
     'io.ox/participants/views',
-    'io.ox/core/tk/typeahead',
-    'gettext!io.ox/participants/views'
-], function (pModel, pViews, Typeahead, gt) {
+    'io.ox/core/tk/typeahead'
+], function (pModel, pViews, Typeahead) {
 
     'use strict';
-
-    // TODO:
-    // - dont show existing participants in typeahead dropdown
-    // - exceptions for global address book
 
     var AddParticipantView = Backbone.View.extend({
 
@@ -49,19 +44,7 @@ define('io.ox/participants/add', [
                     label: model.getDisplayName(),
                     model: model
                 };
-            },
-            reduce: function () {
-                debugger;
-            },
-            blacklist: false
-        },
-
-        initialize: function (o) {
-            this.options = $.extend({}, this.options, o || {});
-            if (this.options.blacklist) {
-                this.options.blacklist = this.options.blacklist.split(',');
             }
-            this.options.click = _.bind(this.addParticipant, this);
         },
 
         keyDown: function (e) {
@@ -69,27 +52,23 @@ define('io.ox/participants/add', [
             if (e.which === 13) {
                 var val = this.typeahead.$el.typeahead('val');
                 if (!_.isEmpty(val)) {
-                    this.addParticipant(e, {
-                        model: { email1: val, id: Math.random() },
-                        value: val
-                    });
+                    this.addParticipant(e, { model: { email1: val, id: Math.random() } });
                 }
             }
         },
 
         addParticipant: function (e, data) {
-            // check blacklist
-            var inBlackList = this.options.blacklist && this.options.blacklist.indexOf(data.value) > -1;
-
-            if (inBlackList) {
-                require('io.ox/core/yell')('warning', gt('This email address cannot be used'));
-            }
-
-            if (this.collection && !inBlackList) {
+            if (this.collection) {
                 this.collection.addUniquely(data.model);
             }
             // clean typeahad input
             this.typeahead.$el.typeahead('val', '');
+        },
+
+        initialize: function (o) {
+            this.options = $.extend({}, this.options, o || {});
+
+            this.options.click = _.bind(this.addParticipant, this);
         },
 
         render: function () {

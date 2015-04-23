@@ -22,11 +22,10 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/tk/attachments',
     'io.ox/calendar/edit/recurrence-view',
     'io.ox/calendar/api',
-    'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/capabilities',
     'settings!io.ox/calendar'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, settings) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities, settings) {
 
     'use strict';
 
@@ -426,107 +425,96 @@ define('io.ox/calendar/edit/extensions', [
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var typeahead = new AddParticipant({
-                placeholder: gt('Add participant/resource'),
-                label: gt('Add participant/resource'),
-                collection: baton.model.getParticipants(),
-                blacklist: settings.get('participantBlacklist') || 'dream-team@open-xchange.com' // false
-            });
+            var pNode,
+                guid = _.uniqueId('form-control-label-');
             this.append(
-                typeahead.$el
+                pNode = $('<div class="col-md-6">').append(
+                    $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
+                    $('<input class="add-participant form-control">').attr({
+                        type: 'text',
+                        tabindex: 1,
+                        id: guid,
+                        placeholder: gt('Add participant/resource')
+                    })
+                )
             );
-            typeahead.render().$el.addClass('col-md-6');
 
-            // var pNode,
-            //     guid = _.uniqueId('form-control-label-');
-            // this.append(
-            //     pNode = $('<div class="col-md-6">').append(
-            //         $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-            //         $('<input class="add-participant form-control">').attr({
-            //             type: 'text',
-            //             tabindex: 1,
-            //             id: guid,
-            //             placeholder: gt('Add participant/resource')
-            //         })
-            //     )
-            // );
+            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
-            // require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
+                var collection = baton.model.getParticipants(),
+                    blackList = baton.parentView.blackList,
+                    autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
 
-            //     var collection = baton.model.getParticipants(),
-            //         blackList = baton.parentView.blackList,
-            //         autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
+                if (blackList) {
+                    collection.each(function (item) {
+                        if (item && blackList[item.getEmail()]) {
+                            collection.remove(item);
+                        }
+                    });
+                    collection.on('change', function (item) {
+                        if (item && blackList[item.getEmail()]) {
+                            collection.remove(item);
+                        }
+                    });
+                }
+                autocomplete.render();
 
-            //     if (blackList) {
-            //         collection.each(function (item) {
-            //             if (item && blackList[item.getEmail()]) {
-            //                 collection.remove(item);
-            //             }
-            //         });
-            //         collection.on('change', function (item) {
-            //             if (item && blackList[item.getEmail()]) {
-            //                 collection.remove(item);
-            //             }
-            //         });
-            //     }
-            //     autocomplete.render();
+                //add recipents to baton-data-node; used to filter sugestions list in view
+                autocomplete.on('update', function () {
+                    var baton = { list: [] };
+                    collection.each(function (item) {
+                        //participant vs. organizer
+                        var email = item.get('email1') || item.get('email2');
+                        if (email !== null)
+                            baton.list.push({ email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type') });
+                    });
+                    $.data(pNode, 'baton', baton);
+                });
 
-            //     //add recipents to baton-data-node; used to filter sugestions list in view
-            //     autocomplete.on('update', function () {
-            //         var baton = { list: [] };
-            //         collection.each(function (item) {
-            //             //participant vs. organizer
-            //             var email = item.get('email1') || item.get('email2');
-            //             if (email !== null)
-            //                 baton.list.push({ email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type') });
-            //         });
-            //         $.data(pNode, 'baton', baton);
-            //     });
+                autocomplete.on('select', function (data) {
+                    var alreadyParticipant = false, obj,
+                    userId;
+                    alreadyParticipant = collection.any(function (item) {
+                        if (data.type === 5) {
+                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
+                        } else if (data.type === 1) {
+                            return item.get('id') ===  data.internal_userid;
+                        } else {
+                            return (item.id === data.id && item.get('type') === data.type);
+                        }
+                    });
 
-            //     autocomplete.on('select', function (data) {
-            //         var alreadyParticipant = false, obj,
-            //         userId;
-            //         alreadyParticipant = collection.any(function (item) {
-            //             if (data.type === 5) {
-            //                 return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
-            //             } else if (data.type === 1) {
-            //                 return item.get('id') ===  data.internal_userid;
-            //             } else {
-            //                 return (item.id === data.id && item.get('type') === data.type);
-            //             }
-            //         });
+                    if (!alreadyParticipant) {
+                        if (blackList && blackList[contactUtil.getMail(data)]) {
+                            require('io.ox/core/yell')('warning', gt('This email address cannot be used for appointments'));
+                        } else {
+                            if (data.type !== 5) {
 
-            //         if (!alreadyParticipant) {
-            //             if (blackList && blackList[contactUtil.getMail(data)]) {
-            //                 require('io.ox/core/yell')('warning', gt('This email address cannot be used for appointments'));
-            //             } else {
-            //                 if (data.type !== 5) {
+                                if (data.mark_as_distributionlist) {
+                                    _.each(data.distribution_list, function (val) {
+                                        if (val.folder_id === 6) {
+                                            calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
+                                                userId = id;
+                                                obj = { id: userId, type: 1 };
+                                                collection.add(obj);
+                                            });
+                                        } else {
+                                            obj = { type: 5, mail: val.mail, display_name: val.display_name };
+                                            collection.add(obj);
+                                        }
+                                    });
+                                } else {
+                                    collection.add(data);
+                                }
 
-            //                     if (data.mark_as_distributionlist) {
-            //                         _.each(data.distribution_list, function (val) {
-            //                             if (val.folder_id === 6) {
-            //                                 calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
-            //                                     userId = id;
-            //                                     obj = { id: userId, type: 1 };
-            //                                     collection.add(obj);
-            //                                 });
-            //                             } else {
-            //                                 obj = { type: 5, mail: val.mail, display_name: val.display_name };
-            //                                 collection.add(obj);
-            //                             }
-            //                         });
-            //                     } else {
-            //                         collection.add(data);
-            //                     }
-
-            //                 } else {
-            //                     obj = { type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || '' };
-            //                     collection.add(obj);
-            //                 }
-            //             }
-            //         }
-            //     });
-            // });
+                            } else {
+                                obj = { type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || '' };
+                                collection.add(obj);
+                            }
+                        }
+                    }
+                });
+            });
         }
     });
 
