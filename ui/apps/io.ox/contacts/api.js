@@ -688,6 +688,12 @@ define('io.ox/contacts/api', [
                 data.image1_url = data.data.item.image_url;
             }
 
+            // use double size in combination retina
+            if (_.device('retina')) {
+                opt.width *= 2;
+                opt.height *= 2;
+            }
+
             // duck checks
             if (api.looksLikeResource(data)) {
 
@@ -728,12 +734,6 @@ define('io.ox/contacts/api', [
                 delete data.internal_userid;
                 delete data.userid;
                 delete data.user_id;
-            }
-
-            // use double size in combination retina
-            if (_.device('retina')) {
-                opt.width *= 2;
-                opt.height *= 2;
             }
 
             // empty extend trick to restrict to non-undefined values
