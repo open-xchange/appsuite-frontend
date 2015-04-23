@@ -497,6 +497,13 @@ define('io.ox/core/tk/attachments', [
             node.append(uploadButton);
         }
 
+        node.on('keypress', function (e) {
+            if (e.which === 32) {
+                input.focus(); // BUG #34034: FF needs to focus the input-element first
+                input.trigger('click');
+            }
+        });
+
         return node;
     };
 
