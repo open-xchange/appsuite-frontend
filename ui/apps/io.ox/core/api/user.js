@@ -99,6 +99,7 @@ define('io.ox/core/api/user', [
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
+            var def = $.Deferred();
             require(['io.ox/contacts/api'], function (contactsApi) {
                 //convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
                 if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
@@ -131,6 +132,7 @@ define('io.ox/core/api/user', [
                                 contactsApi.clearFetchCache()
                             )
                             .done(function () {
+                                def.resolve(data);
                                 api.trigger('update:' + _.ecid(data), data);
                                 api.trigger('update', data);
                                 api.trigger('refresh.list');
@@ -144,8 +146,11 @@ define('io.ox/core/api/user', [
                                 });
                             });
                         });
+                }, function (error) {
+                    def.reject(error);
                 });
             });
+            return def;
         }
     };
 
