@@ -797,7 +797,11 @@ define('io.ox/files/api', [
 
         return http.UPLOAD({
             module: options.module,
-            params: { action: options.action, filename: options.filename },
+            params: {
+                action: options.action,
+                filename: options.filename,
+                timestamp: _.now()
+            },
             data: formData,
             fixPost: true
         })
@@ -840,6 +844,7 @@ define('io.ox/files/api', [
          *     - options.filename - an optional filename (overrides the name value of options.file)
          *     - options.module - override the module used to upload to (default: 'files')
          *     - options.folder - the id of the folder to upload the file into
+         *     - options.id - the id of the file
          *
          *     - options.version_comment - optional meta data for the file object
          * @returns {object}
@@ -849,6 +854,7 @@ define('io.ox/files/api', [
         upload: function (options) {
             options.action = 'update';
             return performUpload(options, {
+                id: options.id,
                 folder_id: options.folder_id || options.folder,
                 version_comment: options.version_comment || ''
             })
