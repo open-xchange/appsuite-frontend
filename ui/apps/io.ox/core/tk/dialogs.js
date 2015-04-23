@@ -13,8 +13,9 @@
 
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
+    'io.ox/core/extensions',
     'less!io.ox/core/tk/dialog'
-], function (Events) {
+], function (Events, ext) {
 
     'use strict';
 
@@ -217,7 +218,8 @@ define('io.ox/core/tk/dialogs', [
                     break;
                 }
             };
-
+        // pass options to ext point
+        ext.point('io.ox/core/dialogs').invoke('customize', this, o);
         // append all elements
         o.container.append(
             nodes.wrapper
