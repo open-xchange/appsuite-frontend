@@ -163,6 +163,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'share',
                     ref: 'io.ox/files/actions/send'
                 },
+                'uploadnewversion': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Upload a new version'),
+                    section: 'import',
+                    ref: 'io.ox/files/actions/upload-new-version'
+                },
                 'delete': {
                     prio: 'lo',
                     mobile: 'lo',

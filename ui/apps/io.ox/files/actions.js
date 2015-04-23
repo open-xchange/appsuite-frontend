@@ -305,6 +305,18 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/upload-new-version', {
+        requires: function (e) {
+            // hide in mail compose preview
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/upload-new-version']).done(function (action) {
+                action(baton.data);
+            });
+        }
+    });
+
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             id: type,
