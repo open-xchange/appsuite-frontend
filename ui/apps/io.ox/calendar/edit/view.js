@@ -12,9 +12,8 @@
  */
 define('io.ox/calendar/edit/view', [
     'io.ox/backbone/views',
-    'settings!io.ox/calendar',
     'io.ox/calendar/edit/extensions'
-], function (views, settings) {
+], function (views) {
 
     'use strict';
 
@@ -25,20 +24,7 @@ define('io.ox/calendar/edit/view', [
         className: 'io-ox-calendar-edit container',
 
         init: function () {
-
-            this.blackList = null;
             this.collapsed = false;
-
-            var self = this,
-                blackListStr = settings.get('participantBlacklist') || '';
-
-            // create blacklist
-            if (blackListStr) {
-                this.blackList = {};
-                _(blackListStr.split(',')).each(function (item) {
-                    self.blackList[item.trim()] = true;
-                });
-            }
         },
 
         render: function () {
