@@ -14,15 +14,15 @@
 
 define('io.ox/participants/detail', [
     'io.ox/calendar/util',
-    'gettext!io.ox/calendar',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/core/api/resource',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/core/util',
+    'gettext!io.ox/participants/views',
     'less!io.ox/participants/style'
-], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil, coreUtil) {
+], function (util, userAPI, groupAPI, resourceAPI, ext, contactsUtil, coreUtil, gt) {
 
     'use strict';
 
