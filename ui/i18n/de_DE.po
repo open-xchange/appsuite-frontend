@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-04-15 13:31+0100\n"
+"PO-Revision-Date: 2015-04-23 15:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -439,10 +439,8 @@ msgid "%s client for Mac OS"
 msgstr "%s-Client für Mac OS"
 
 #: apps/io.ox/core/settings/downloads/pane.js:123 module:io.ox/core
-#, fuzzy
-#| msgid "%s client for Android"
 msgid "%s client for Windows"
-msgstr "%s-Client für Android"
+msgstr "%s-Client für Windows"
 
 #: apps/io.ox/core/settings/downloads/pane.js:125 module:io.ox/core
 msgid "%s client for Windows (Installation via the OX Updater)"
@@ -2553,10 +2551,8 @@ msgid "Download"
 msgstr "Download"
 
 #: apps/plugins/portal/oxdriveclients/register.js:78 module:plugins/portal
-#, fuzzy
-#| msgid "Downloads"
 msgid "Download %s"
-msgstr "Downloads"
+msgstr "%s herunterladen"
 
 #: apps/plugins/portal/oxdriveclients/register.js:107 module:plugins/portal
 msgid "Download %s for %s now"
@@ -4002,7 +3998,6 @@ msgstr "Kopie der Nachricht behalten"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:106
 #: module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Keep start and end time"
 msgstr "Start- und Endzeit beibehalten"
 
@@ -4296,10 +4291,8 @@ msgid "Manage applications"
 msgstr "Applikationen verwalten"
 
 #: apps/io.ox/calendar/week/view.js:685 module:io.ox/calendar
-#, fuzzy
-#| msgid "Favorites"
 msgid "Manage favorites"
-msgstr "Favoriten"
+msgstr "Favoriten verwalten"
 
 #: apps/io.ox/contacts/model.js:224 module:io.ox/contacts
 msgid "Manager"
@@ -6204,10 +6197,8 @@ msgid "Search here"
 msgstr "Hier suchen"
 
 #: apps/io.ox/files/view-options.js:160 module:io.ox/files
-#, fuzzy
-#| msgid "Search for items"
 msgid "Search results"
-msgstr "Nach Objekten suchen"
+msgstr "Suchergebnisse"
 
 #. search feature help text for screenreaders
 #: apps/io.ox/core/desktop.js:1553 module:io.ox/core
@@ -8532,13 +8523,10 @@ msgstr ""
 #. %1$s maximum filesize
 #: apps/io.ox/contacts/widgets/pictureUpload.js:65 module:io.ox/contacts
 #, fuzzy
-#| msgid ""
-#| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-#| "size of %2$s"
 msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie die maximale "
-"Dateigröße von %2$s übersteigt."
+"Das von Ihnen gewählte Bild übersteigt die maximal zulässige Dateigröße von "
+"%1$s."
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js:58 module:io.ox/contacts
 msgid "Your selected picture will be displayed after saving"
