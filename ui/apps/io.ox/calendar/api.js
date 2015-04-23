@@ -17,9 +17,10 @@ define('io.ox/calendar/api', [
     'io.ox/core/event',
     'settings!io.ox/core',
     'io.ox/core/notifications',
+    'io.ox/core/folder/api',
     'io.ox/core/api/factory',
     'io.ox/core/capabilities'
-], function (http, Events, coreConfig, notifications, factory, capabilities) {
+], function (http, Events, coreConfig, notifications, folderAPI, factory, capabilities) {
 
     'use strict';
 
@@ -314,6 +315,8 @@ define('io.ox/calendar/api', [
                 appendColumns: false
             })
             .then(function (obj) {
+                // update foldermodel so total attribute is correct (export option uses this)
+                folderAPI.reload(o);
                 if (!_.isUndefined(obj.conflicts)) {
                     return $.Deferred().reject(obj);
                 }
@@ -345,7 +348,8 @@ define('io.ox/calendar/api', [
 
         // appointment on the server
         remove: function (o) {
-            var keys = [];
+            var keys = [],
+                folders = [];
 
             o = _.isArray(o) ? o : [o];
 
@@ -366,6 +370,8 @@ define('io.ox/calendar/api', [
                     appendColumns: false
                 })
                 .done(function () {
+                    // gather folders to refresh
+                    folders.push(String(obj.folder_id || obj.folder));
                     api.caches.all = {};
                     _(keys).each(function (key) {
                         delete api.caches.get[key];
@@ -381,6 +387,7 @@ define('io.ox/calendar/api', [
             });
 
             return http.resume().then(function () {
+                folderAPI.reload(folders);
                 api.trigger('refresh.all');
             });
         },
@@ -701,12 +708,14 @@ define('io.ox/calendar/api', [
     Events.extend(api);
 
     var copymove = function (list, action, targetFolderId) {
+        var folders = [String(targetFolderId)];
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
         http.pause();
         // process all updates
         _(list).map(function (o) {
+            folders.push(String(o.folder_id || o.folder));
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -724,6 +733,7 @@ define('io.ox/calendar/api', [
         return http.resume()
             .then(function (result) {
 
+                folderAPI.reload(folders);
                 var def = $.Deferred();
 
                 _(result).each(function (val) {
