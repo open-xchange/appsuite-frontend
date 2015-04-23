@@ -459,7 +459,6 @@ define('io.ox/core/tk/autocomplete', [
                         // backspace
                         selected = scrollpane.find('.selected');
                         if (selected.length) {
-                            e.preventDefault();
                             self.focus();
                         }
                         break;
