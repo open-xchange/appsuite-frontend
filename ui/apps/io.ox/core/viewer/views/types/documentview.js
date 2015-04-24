@@ -170,8 +170,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             if (this.$el.find('.document-page').length > 0) {
                 return;
             }
-            var self = this,
-                pageContainer = this.$el.find('.document-container'),
+            var pageContainer = this.$el.find('.document-container'),
                 convertParams = this.getConvertParams(this.model.get('source')),
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
 
@@ -194,8 +193,8 @@ define('io.ox/core/viewer/views/types/documentview', [
              * @param pageNumbers
              *  The array of 1-based page numbers to be rendered
              */
-            function beginPageRendering(pageNumbers) {
-                console.log('Begin PDF rendering: ' + pageNumbers);
+            function beginPageRendering(/*pageNumbers*/) {
+                //console.log('Begin PDF rendering: ' + pageNumbers);
             }
 
             /**
@@ -204,8 +203,8 @@ define('io.ox/core/viewer/views/types/documentview', [
              * @param pageNumbers
              *  The array of 1-based page numbers that have been rendered
              */
-            function endPageRendering(pageNumbers) {
-                console.log('End PDF rendering: ' + pageNumbers);
+            function endPageRendering(/*pageNumbers*/) {
+                //console.log('End PDF rendering: ' + pageNumbers);
             }
 
             /**
@@ -225,14 +224,14 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
                 }
                 var pdfDocument = this.pdfDocument,
-                    defaultScale = this.getDefaultScale();
+                    defaultScale = this.getDefaultScale(),
+                    self = this;
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
                 // set default scale/zoom, according to device's viewport width
-                this.currentZoomFactor = defaultScale * 100;
-                this.pdfView.setPageZoom(defaultScale);
-                // draw page nodes and apply css sizes
+                this.setZoomLevel(defaultScale * 100);
+                //// draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var jqPage = $('<div class="document-page">'),
                         pageSize = self.pdfView.getRealPageSize(index + 1);
@@ -326,8 +325,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         changeZoomLevel: function (action) {
             var currentZoomFactor = this.currentZoomFactor,
-                pdfView = this.pdfView,
-                documentTopPosition = this.$el.scrollTop(),
                 nextZoomFactor;
             // search for next bigger/smaller zoom factor in the avaliable zoom factors
             switch (action) {
@@ -345,16 +342,34 @@ define('io.ox/core/viewer/views/types/documentview', [
                 default:
                     return;
             }
-            // forward zoom to PDF.js and adapt node sizes
+            // apply zoom level
+            this.setZoomLevel(nextZoomFactor);
+        },
+
+        /**
+         * Applies passed zoom level to the document.
+         *
+         * @param {Number} zoomLevel
+         *  zoom level numbers between 25 and 800 (supported zoom factors)
+         */
+        setZoomLevel: function (zoomLevel) {
+            if (!_.isNumber(zoomLevel) &&
+                zoomLevel < this.getMinZoomFactor &&
+                zoomLevel > this.getMaxZoomFactor() &&
+                !this.isVisible()) {
+                return;
+            }
+            var pdfView = this.pdfView,
+                documentTopPosition = this.$el.scrollTop();
             _.each(this.pages, function (page, pageIndex) {
-                pdfView.setPageZoom(nextZoomFactor / 100, pageIndex + 1);
+                pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
             });
             // adjust document scroll position according to new zoom
-            this.$el.scrollTop(documentTopPosition * nextZoomFactor / currentZoomFactor);
-            // save the new zoom factor to the document view
-            this.currentZoomFactor = nextZoomFactor;
+            this.$el.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
+            // save new zoom level to view
+            this.currentZoomFactor = zoomLevel;
         },
 
         /**
