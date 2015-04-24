@@ -82,7 +82,7 @@ define('io.ox/core/tk/list', [
 
         onScroll: _.debounce(function () {
 
-            if (this.isBusy || this.complete) return;
+            if (this.isBusy || this.complete || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
@@ -104,7 +104,7 @@ define('io.ox/core/tk/list', [
             this.idle();
             // trigger scroll event after initial load
             // takes care of the edge-case that the initial list cannot fill the viewport (see bug 37728)
-            if (!this.complete && false) this.onScroll();
+            if (!this.complete) this.onScroll();
         },
 
         onComplete: function () {
@@ -466,7 +466,7 @@ define('io.ox/core/tk/list', [
             // respond to window resize (see bug 37728)
             $(window).on('resize.list-view', this.onScroll.bind(this));
 
-            this.on('dispone', function () {
+            this.on('dispose', function () {
                 $(window).off('resize.list-view');
             });
         },
