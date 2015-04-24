@@ -33,17 +33,20 @@ define('io.ox/core/viewer/views/displayerview', [
         className: 'viewer-displayer',
 
         initialize: function () {
-            //console.warn('DisplayerView.initialize()');
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
             this.captionTimeoutId = null;
             // array of all slide content Backbone Views
             this.slideViews = [];
+            // array of slide duplicate views
+            this.slideDuplicateViews = [];
             // local array of loaded slide indices.
             this.loadedSlides = [];
             // local cache of scroll positions of documents
             this.documentScrollPositions = [];
+            // local cache of zoom level of documents
+            this.documentZoomLevels = [];
             // number of slides to be prefetched in the left/right direction of the active slide
             this.preloadOffset = 3;
             // number of slides to be kept loaded at one time in the browser.
@@ -65,7 +68,6 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {DisplayerView}
          */
         render: function (model) {
-            //console.warn('DisplayerView.render() data', data);
             if (!model) {
                 console.error('Core.Viewer.DisplayerView.render(): no file to render');
                 return;
@@ -161,6 +163,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     .then(function (ModelType) {
                         var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
                         view.render().prefetch().show();
+                        self.slideDuplicateViews.push(view);
                     },
                     function () {
                         console.warn('Cannot require a view type for', slideModel.get('filename'));
@@ -232,7 +235,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *      'both': [4,5,6,7,8,9,10]
          */
         loadSlide: function (slideToLoad, prefetchDirection) {
-            //console.warn('DisplayerView.loadSlide()', slideToLoad, preloadDirection);
 
             var self = this,
                 slideToLoad = slideToLoad || 0,
@@ -307,7 +309,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *   The changed model.
          */
         onModelChangeVersion: function (model) {
-            //console.log('DisplayerView.onModelChangeVersion()', 'changed:', model.changed);
             var index = this.collection.indexOf(model),
                 slideNode = this.slideViews[index].$el;
 
@@ -334,7 +335,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *  Duration of the blend-in in milliseconds. Defaults to 3000 ms.
          */
         blendCaption: function (text, duration) {
-            //console.warn('BlendslideCaption', slideIndex);
             var duration = duration || 3000,
                 slideCaption = this.$el.find('.viewer-displayer-caption'),
                 captionContent = $('<div class="caption-content">').text(text);
@@ -385,13 +385,24 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             EventDispatcher.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
-            // scroll to last position, if exists
-            var lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
+            // scroll to last position and apply last zoom, if exists
+            var activeSlideEl = this.$el.find('[data-swiper-slide-index="' + activeSlideIndex + '"]'),
+                lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
+                lastZoomLevel = this.documentZoomLevels[activeSlideIndex],
                 activeView = this.slideViews[activeSlideIndex],
-                displayerEl = this.$el;
-            if (activeView.pdfDocument && displayerEl) {
+                activeDuplicateView = _.find(this.slideDuplicateViews, function (view) {
+                    if (!view.$el) return false;
+                    return view.$el.attr('data-swiper-slide-index') === activeSlideIndex.toString();
+                });
+            if (activeView.pdfDocument) {
                 activeView.pdfDocument.getLoadPromise().done(function () {
-                    displayerEl.find('[data-swiper-slide-index="' + activeSlideIndex + '"]').scrollTop(lastScrollPosition);
+                    activeView.setZoomLevel(lastZoomLevel);
+                    if (activeDuplicateView) {
+                        activeDuplicateView.pdfDocument.getLoadPromise().done(function () {
+                            activeDuplicateView.setZoomLevel(lastZoomLevel);
+                        });
+                    }
+                    activeSlideEl.scrollTop(lastScrollPosition);
                 });
             }
         },
@@ -399,15 +410,21 @@ define('io.ox/core/viewer/views/displayerview', [
         /**
          * Slide change start handler:
          * - save scroll positions of each slide while leaving it.
+         * - save zoom level of each slide too
          *
          * @param {Swiper} swiper
          *  the instance of the swiper plugin
          */
         onSlideChangeStart: function (swiper) {
             var previousIndex = swiper.previousIndex - 1,
-                activeSlideView = this.slideViews[previousIndex],
-                scrollPosition = activeSlideView.$el.scrollTop();
-            this.documentScrollPositions[previousIndex] = scrollPosition;
+                activeSlideView = this.slideViews[previousIndex];
+            if (activeSlideView) {
+                var scrollPosition = activeSlideView.$el.scrollTop();
+                if (activeSlideView.pdfDocument) {
+                    this.documentScrollPositions[previousIndex] = scrollPosition;
+                    this.documentZoomLevels[previousIndex] = activeSlideView.currentZoomFactor;
+                }
+            }
         },
 
         /**
@@ -422,7 +439,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *  Current active swiper slide index
          */
         unloadDistantSlides: function (activeSlideIndex) {
-            //console.warn('DisplayerView.unloadDistantSlides() start', JSON.stringify(this.loadedSlides.sort()), activeSlideIndex);
             var self = this,
                 cacheOffset = Math.floor(this.slidesToCache / 2),
                 slidesCount = this.collection.length,
@@ -459,7 +475,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *  an array consisting of objects representing file models.
          */
         onFileRemoved: function (event, removedFiles) {
-            //console.warn('DisplayerView.onFileRemoved()', removedFiles);
             if (!_.isArray(removedFiles) || removedFiles.length < 1) {
                 return;
             }
@@ -496,7 +511,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *  the index of the slide to be removed, as a Number or Array.
          */
         removeSlide: function (slidesIndexes) {
-            //console.warn('Custom removeSlide()', slidesIndexes);
             if (this.params.loop) {
                 this.destroyLoop();
             }
@@ -529,7 +543,6 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         disposeView: function () {
-            //console.info('DisplayerView.disposeView()', this.swiper);
             this.swiper.removeAllSlides();
             this.swiper.destroy();
             this.swiper = null;
