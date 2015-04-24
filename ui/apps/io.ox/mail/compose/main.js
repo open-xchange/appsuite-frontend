@@ -9,16 +9,6 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
- *
- * To try new mail compose:
- *
- * Temporary:
- * ox.registry.set('mail-compose', 'io.ox/mail/compose/main');
- *
- * Permanently:
- * require('settings!io.ox/core').set('registry/mail-compose', 'io.ox/mail/compose/main').save();
- * To use old mail compose:
- * require('settings!io.ox/core').set('registry/mail-compose', undefined).save();
  */
 
 define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (mailAPI, gt) {
