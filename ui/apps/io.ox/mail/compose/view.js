@@ -292,7 +292,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
 
-            this.signatures = this.model.getSignatures();
+            this.signatures = options.signature || this.model.getSignatures();
 
             var mailto, params;
             // triggerd by mailto?
