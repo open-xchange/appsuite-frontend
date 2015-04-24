@@ -29,92 +29,59 @@ define('io.ox/mail/compose/model', [
             return {
                 preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
-                account_name: '',
-                attachment: '',
                 attachments: new Attachments.Collection(),
-                bcc: [],
-                cc: [],
-                color_label: '',
-                contacts_ids: [],
-                content_type: '',
-                disp_notification_to: false,
-                flag_seen: '',
-                flags: '',
                 folder_id: 'default0/INBOX',
-                from: '',
-                headers: {},
-                infostore_ids: [],
                 initial: true,
-                level: '',
-                modified: '',
-                msgref: '',
-                nested_msgs: [],
                 priority: 3,
-                received_date: '',
-                reply_to: '',
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
-                sent_date: '',
-                signature: settings.get('defaultSignature'),
-                currentSignature: '',
+                defaultSignatureId: settings.get('defaultSignature'),
                 csid: mailAPI.csid(),
-                size: '',
-                subject: '',
-                to: [],
-                unread: '',
-                user: [],
                 vcard: settings.get('appendVcard', false) ? 1 : 0
             };
         },
 
         initialize: function () {
-            if (_.device('smartphone')) this.setMobileSignature();
+            var self = this;
+            if (window.cordova) {
+                this.set('editorMode', 'html', { silent: true });
+                this.set('preferredEditorMode', 'html', { silent: true });
+            }
 
-            var list = this.get('attachments');
-            if (_.isObject(list) && !_.isEmpty(list)) {
+            var attachmentsCollection = this.get('attachments');
+
+            // Legacy support
+            // Todo: This should be removed soon
+            if (_.isObject(attachmentsCollection) && !_.isEmpty(attachmentsCollection)) {
                 var editorMode = this.get('editorMode') === 'text' ? 'text' : 'html';
-                if (editorMode in list) {
-                    list = [{
-                        content: list[editorMode][0].content,
+                if (editorMode in attachmentsCollection) {
+                    attachmentsCollection = [{
+                        content: attachmentsCollection[editorMode][0].content,
                         content_type: this.getContentType(),
                         disp: 'inline'
                     }];
                 }
             }
 
-            if (_.isArray(list)) {
-                this.set('attachments', new Attachments.Collection(list), { silent: true });
-                list = this.get('attachments');
+            if (_.isArray(attachmentsCollection)) {
+                this.set('attachments', new Attachments.Collection(attachmentsCollection), { silent: true });
+                attachmentsCollection = this.get('attachments');
             }
-            var content = list.at(0);
+
+            var content = attachmentsCollection.at(0);
             if (!content || content.get('disp') !== 'inline' || !_.isString(content.get('content'))) {
-                list.add({
+                attachmentsCollection.add({
                     content: '',
                     content_type: this.getContentType(),
                     disp: 'inline'
                 }, { at: 0, silent: true });
             }
 
-            if (this.get('contacts_ids')) {
-                list.add(this.get('contacts_ids').map(function (o) {
-                    o.group = 'contact';
-                    return o;
-                }), { silent: true });
-            }
-
-            if (this.get('infostore_ids')) {
-                list.add(this.get('infostore_ids').map(function (o) {
-                    o.group = 'file';
-                    return o;
-                }), { silent: true });
-            }
-
-            if (this.get('nested_msgs')) {
-                list.add(this.get('nested_msgs').map(function (o) {
-                    o.group = 'nested';
-                    return o;
-                }), { silent: true });
-            }
+            _.mapObject({ contacts_ids: 'contact', infostore_ids: 'file', nested_msgs: 'nested' }, function (v, k) {
+                if (self.get(k)) {
+                    attachmentsCollection.add(self.get(k).map(function (o) { o.group = v; return o; }), { silent: true });
+                }
+            });
 
             if (this.preferredEditorMode === 'alternative') {
                 this.set('editorMode', 'html', { silent: true });
@@ -127,10 +94,6 @@ define('io.ox/mail/compose/model', [
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
                     this.set('from', [address]);
                 }.bind(this));
-            }
-
-            if (this.get('mode') === 'edit') {
-                this.set({ 'signature': '' });
             }
 
             this.updateShadow();
@@ -208,7 +171,16 @@ define('io.ox/mail/compose/model', [
         },
 
         getSignatures: function () {
+            if (this.get('mode') === 'edit') {
+                this.set('defaultSignatureId', '', { silent: true });
+            }
             if (_.device('!smartphone')) return [];
+
+            if (settings.get('mobileSignatureType') === 'custom') {
+                this.set('defaultSignatureId', '0');
+            } else {
+                this.set('defaultSignatureId', '1');
+            }
 
             var value = settings.get('mobileSignature');
 
@@ -219,14 +191,6 @@ define('io.ox/mail/compose/model', [
             }
 
             return [{ id: '0', content: value, misc: { insertion: 'below' } }];
-        },
-
-        setMobileSignature: function () {
-            if (settings.get('mobileSignatureType') === 'custom') {
-                this.set('signature', '0');
-            } else {
-                this.set('signature', '1');
-            }
         },
 
         parse: function (list) {
@@ -253,18 +217,10 @@ define('io.ox/mail/compose/model', [
 
         getMail: function () {
             this.trigger('needsync');
-            var result;
-            var convert = emoji.converterFor({ to: emoji.sendEncoding() });
-            var content = this.get('attachments').at(0).get('content');
-            // get flat ids for data.infostore_ids
-            /*if (mail.data.infostore_ids) {
-                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
-            }
-            // get flat cids for data.contacts_ids
-            if (mail.data.contacts_ids) {
-                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
-            */
+            var result,
+                attachmentCollection = this.get('attachments'),
+                convert = emoji.converterFor({ to: emoji.sendEncoding() }),
+                content = attachmentCollection.at(0).get('content');
 
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
@@ -277,9 +233,9 @@ define('io.ox/mail/compose/model', [
             // fix inline images
             content = mailUtil.fixInlineImages(content);
 
-            this.get('attachments').at(0).set('content', content, { silent: true });
+            attachmentCollection.at(0).set('content', content, { silent: true });
 
-            result = this.pick(
+            result = _(this.toJSON()).pick(
                 'from',
                 'to',
                 'cc',
@@ -292,7 +248,9 @@ define('io.ox/mail/compose/model', [
                 'nested_msgs',
                 'sendtype',
                 'csid',
-                'initial'
+                'initial',
+                'msgref',
+                'disp_notification_to'
             );
 
             // remove display name from sender if necessary
@@ -300,49 +258,34 @@ define('io.ox/mail/compose/model', [
                 result.from[0][0] = null;
             }
 
-            if (this.get('msgref')) {
-                result.msgref = this.get('msgref');
-            }
-
-            if (this.get('disp_notification_to')) {
-                result.disp_notification_to = this.get('disp_notification_to');
-            }
-
-            // get flat cids for data.contacts_ids
-            result.contacts_ids = this.get('attachments').filter(function (a) {
-                return a.get('group') === 'contact';
-            }).map(function (o) {
-                return o.pick('folder_id', 'id');
+            return _.extend(result, {
+                attachments:    attachmentCollection.mailAttachments(),  // get all attachments
+                contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids
+                infostore_ids:  attachmentCollection.driveFiles(),       // get ids only for infostore_ids
+                files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
             });
 
-            result.attachments = this.get('attachments').filter(function (a) {
-                return a.get('disp') === 'inline' || a.get('disp') === 'attachment';
-            }).map(function (m, i) {
-                var attr;
-                if (i === 0 && m.attributes.content_type === 'text/plain') {
-                    attr = m.pick('content_type', 'content');
-                    // For "text/plain" mail bodies, the JSON boolean field "raw" may be specified inside the body's JSON representation to signal that the text content shall be kept as-is; meaning to keep all formatting intact
-                    attr.raw = true;
-                } else {
-                    attr = m.attributes;
-                }
-                return attr;
-            });
-
-            result.infostore_ids = this.get('attachments').filter(function (a) {
-                return a.get('group') === 'file';
-            }).map(function (m) {
-                return m.get('id');
-            });
-
-            result.files = this.get('attachments').filter(function (a) {
-                return a.get('group') === 'localFile';
-            }).map(function (m) {
-                return m.fileObj;
-            });
-
-            return result;
         },
+
+        getMailForAutosave: function () {
+            var mail = this.getMail();
+
+            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                delete mail.msgref;
+            }
+            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
+            }
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if ((mail.data.flags & 4) === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
+            }
+            return mail;
+        },
+
         convertAllToUnified: emoji.converterFor({
             from: 'all',
             to: 'unified'

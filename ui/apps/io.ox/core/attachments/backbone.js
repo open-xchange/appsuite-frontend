@@ -139,6 +139,18 @@ define('io.ox/core/attachments/backbone', [
                 this.get('disp') === 'inline' && this.get('filename');
         },
 
+        isContact: function () {
+            return this.get('group') === 'contact';
+        },
+
+        isDriveFile: function () {
+            return this.get('group') === 'file';
+        },
+
+        isLocalFile: function () {
+            return this.get('group') === 'localFile';
+        },
+
         needsUpload: function () {
             return this.get('uploaded') === 0;
         },
@@ -187,6 +199,38 @@ define('io.ox/core/attachments/backbone', [
             return this.filter(function (model) {
                 return model.isFileAttachment();
             });
+        },
+        mailAttachments: function () {
+            return this.filter(function (model) {
+                return model.get('disp') === 'inline' || model.get('disp') === 'attachment';
+            }).map(function (m, i) {
+                var attr;
+                if (i === 0 && m.attributes.content_type === 'text/plain') {
+                    attr = m.pick('content_type', 'content');
+                    // For "text/plain" mail bodies, the JSON boolean field "raw" may be specified inside the body's JSON representation to signal that the text content shall be kept as-is; meaning to keep all formatting intact
+                    attr.raw = true;
+                } else {
+                    attr = m.attributes;
+                }
+                return attr;
+            });
+        },
+        contactsIds: function () {
+            return this.filter(function (model) {
+                return model.isContact();
+            }).map(function (o) {
+                return o.pick('folder_id', 'id');
+            });
+        },
+        driveFiles: function () {
+            return _(this.filter(function (model) {
+                return model.isDriveFile();
+            })).pluck('id');
+        },
+        localFiles: function () {
+            return _(this.filter(function (model) {
+                return model.isLocalFile();
+            })).pluck('fileObj');
         }
     });
 

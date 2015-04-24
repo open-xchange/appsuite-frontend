@@ -53,7 +53,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
         app.failSave = function () {
             if (!app.view) return;
-            return _.extend({ module: 'io.ox/mail/compose' }, app.view.model.getFailSave());
+            return _.extend({ module: 'io.ox/mail/compose' }, app.model.getFailSave());
         };
 
         app.failRestore = function (point) {
@@ -77,10 +77,12 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle'], function () {
-                        require(['io.ox/mail/compose/view'], function (MailComposeView) {
-                            app.view = new MailComposeView({ data: obj, app: app });
+                        require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
+                            var data = /(compose|edit)/.test(obj.mode) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                            app.model = new MailComposeModel(data);
+                            app.view = new MailComposeView({ data: data, app: app, model: app.model });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                            app.view.fetchMail(obj).done(function () {
+                            app.view.fetchMail(data).done(function () {
                                 app.view.setMail()
                                 .done(function () {
                                     // Set window and toolbars visible again

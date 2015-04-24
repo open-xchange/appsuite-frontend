@@ -324,7 +324,7 @@ define('io.ox/mail/compose/extensions', [
 
                     if (sa.length >= 1) {
                         _.each(sa, function (item) {
-                            self.data('view').option('signature', item.id, item.displayName);
+                            self.data('view').option('defaultSignatureId', item.id, item.displayName);
                         });
                     }
                 });
@@ -335,7 +335,7 @@ define('io.ox/mail/compose/extensions', [
             if (_.device('smartphone')) return;
             var self = this,
             dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
-                .option('signature', '', gt('No signature'));
+                .option('defaultSignatureId', '', gt('No signature'));
             ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
             dropdown.$ul.addClass('pull-right');
             baton.view.signaturesLoading.done(function (sig) {

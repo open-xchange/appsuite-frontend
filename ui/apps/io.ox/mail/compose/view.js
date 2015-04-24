@@ -13,7 +13,6 @@
 
 define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/extensions',
-    'io.ox/mail/compose/model',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
     'io.ox/mail/api',
@@ -28,7 +27,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -258,13 +257,12 @@ define('io.ox/mail/compose/view', [
 
         initialize: function (options) {
             this.app = options.app;
-            this.model = new MailModel(this.filterData(options.data));
             this.editorHash = {};
             this.autosave = {};
             this.intervals = [];
             this.blocked = [];
-            this.editorMode = this.model.get('editorMode');
-            this.messageFormat = settings.get('messageFormat', 'html');
+            this.editorMode = options.editorMode || this.model.get('editorMode');
+            this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
@@ -287,15 +285,15 @@ define('io.ox/mail/compose/view', [
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
-            this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
-            this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
-            this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
-            this.listenTo(this.model, 'needsync', this.syncMail);
+            this.listenTo(this.model, 'keyup:subject change:subject',   this.setTitle);
+            this.listenTo(this.model, 'change:editorMode',              this.changeEditorMode);
+            this.listenTo(this.model, 'change:defaultSignatureId',      this.setSelectedSignature);
+            this.listenTo(this.model, 'needsync',                       this.syncMail);
 
             this.signatures = options.signature || this.model.getSignatures();
 
             var mailto, params;
-            // triggerd by mailto?
+            // triggered by mailto?
             if (mailto = _.url.hash('mailto')) {
 
                 var parseRecipients = function (recipients) {
@@ -312,9 +310,9 @@ define('io.ox/mail/compose/view', [
                 // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
-                if (to) { this.model.set('to',  parseRecipients(to), { silent: true }); }
-                if (params.cc) { this.model.set('cc',  parseRecipients(params.cc), { silent: true }); }
-                if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
+                if (to) {           this.model.set('to',  parseRecipients(to),          { silent: true }); }
+                if (params.cc) {    this.model.set('cc',  parseRecipients(params.cc),   { silent: true }); }
+                if (params.bcc) {   this.model.set('bcc', parseRecipients(params.bcc),  { silent: true }); }
 
                 this.setSubject(params.subject || '');
                 this.model.setContent(params.body || '');
@@ -323,11 +321,6 @@ define('io.ox/mail/compose/view', [
             }
 
             ext.point(POINT + '/mailto').invoke('setup');
-        },
-
-        filterData: function (data) {
-            if (/(compose|edit)/.test(data.mode)) return data;
-            return _.pick(data, 'id', 'folder_id', 'mode', 'csid', 'content_type');
         },
 
         markupQuotes: function (text) {
@@ -419,8 +412,8 @@ define('io.ox/mail/compose/view', [
 
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
-                var content = attachmentCollection.at(0).get('content');
-                var content_type = attachmentCollection.at(0).get('content_type');
+                var content = attachmentCollection.at(0).get('content'),
+                    content_type = attachmentCollection.at(0).get('content_type');
 
                 // Force text edit mode when alternative editorMode and text/plain mail
                 if (mode === 'edit' && self.editorMode === 'alternative' && content_type === 'text/plain') {
@@ -520,23 +513,9 @@ define('io.ox/mail/compose/view', [
 
         autoSaveDraft: function () {
 
-            var mail = this.model.getMail(),
-                def = new $.Deferred(),
-                self = this;
-
-            if (mail.msgref && mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                delete mail.msgref;
-            }
-            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
-            }
-
-            if (_(mail.flags).isUndefined()) {
-                mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if ((mail.data.flags & 4) === 0) {
-                mail.flags += mailAPI.FLAGS.DRAFT;
-            }
+            var def = new $.Deferred(),
+                self = this,
+                mail = this.getMailForAutosave();
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
@@ -708,7 +687,7 @@ define('io.ox/mail/compose/view', [
                 }
 
                 // send!
-                mailAPI.send(mail, mail.files /*view.form.find('.oldschool') */)
+                mailAPI.send(mail, mail.files)
                 .always(function (result) {
 
                     if (result.error && !result.warnings) {
@@ -949,7 +928,7 @@ define('io.ox/mail/compose/view', [
             this.editor.setContent(content);
 
             if (this.model.get('initial')) {
-                this.setSelectedSignature(this.model.get('signature'));
+                this.setSelectedSignature(this.model.get('defaultSignatureId'));
             }
         },
 
@@ -958,7 +937,7 @@ define('io.ox/mail/compose/view', [
             if (_.isString(model)) id = model;
 
             var newSignature = _.where(this.signatures, { id: String(id) })[0],
-                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
+                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
 
             if (prevSignature) {
                 this.removeSignature(prevSignature);
