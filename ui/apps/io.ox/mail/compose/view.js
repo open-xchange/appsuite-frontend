@@ -261,7 +261,6 @@ define('io.ox/mail/compose/view', [
             this.autosave = {};
             this.intervals = [];
             this.blocked = [];
-            this.editorMode = options.editorMode || this.model.get('editorMode');
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
             this.editor = null;
             this.composeMode = 'compose';
@@ -286,11 +285,9 @@ define('io.ox/mail/compose/view', [
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
             this.listenTo(this.model, 'keyup:subject change:subject',   this.setTitle);
-            this.listenTo(this.model, 'change:editorMode',              this.changeEditorMode);
+            this.listenTo(this.model, 'change:editorMode',              this.toggleEditorMode);
             this.listenTo(this.model, 'change:defaultSignatureId',      this.setSelectedSignature);
             this.listenTo(this.model, 'needsync',                       this.syncMail);
-
-            this.signatures = options.signature || this.model.getSignatures();
 
             var mailto, params;
             // triggered by mailto?
@@ -416,12 +413,11 @@ define('io.ox/mail/compose/view', [
                     content_type = attachmentCollection.at(0).get('content_type');
 
                 // Force text edit mode when alternative editorMode and text/plain mail
-                if (mode === 'edit' && self.editorMode === 'alternative' && content_type === 'text/plain') {
+                if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
                     self.model.set('editorMode', 'text', { silent: true });
-                    self.editorMode = 'text';
                 }
 
-                if (content_type === 'text/plain' && self.editorMode === 'html') {
+                if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
                     var hasBlockquotes = content.match(/(&gt; )+/g);
                     if (hasBlockquotes) {
                         $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
@@ -430,7 +426,7 @@ define('io.ox/mail/compose/view', [
                     }
                     attachmentCollection.at(0).set('content_type', 'text/html');
                 }
-                if (content_type === 'text/plain' && self.editorMode === 'text' && mode === 'edit') {
+                if (content_type === 'text/plain' && self.model.get('editorMode') === 'text' && mode === 'edit') {
                     content = textproc.htmltotext(content);
                 }
                 attachmentCollection.at(0).set('content', content);
@@ -499,7 +495,7 @@ define('io.ox/mail/compose/view', [
                 }
             }).then(function (result, data) {
                 // Replace inline images in contenteditable with links from draft response
-                if (self.editorMode === 'html') {
+                if (self.model.get('editorMode') === 'html') {
                     $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
                         $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
                     });
@@ -515,7 +511,7 @@ define('io.ox/mail/compose/view', [
 
             var def = new $.Deferred(),
                 self = this,
-                mail = this.getMailForAutosave();
+                mail = this.model.getMailForAutosave();
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
@@ -656,7 +652,7 @@ define('io.ox/mail/compose/view', [
                 def = $.Deferred();
 
             // force correct content-type
-            if (mail.attachments[0].content_type === 'text/plain' && this.editorMode === 'html') {
+            if (mail.attachments[0].content_type === 'text/plain' && this.model.get('editorMode') === 'html') {
                 mail.attachments[0].content_type = 'text/html';
             }
 
@@ -853,14 +849,13 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-
             var self = this,
-                editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'text' ? 'text-editor' : 'contenteditable-editor');
+                editorSrc = 'io.ox/core/tk/' + (this.model.get('editorMode') === 'text' ? 'text-editor' : 'contenteditable-editor');
 
             return require([editorSrc]).then(function (Editor) {
-                return (self.editorHash[self.editorMode] = new Editor(self.editorMode === 'text' ? self.textarea : self.contentEditable))
+                return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
                     .done(function () {
-                        self.editor = self.editorHash[self.editorMode];
+                        self.editor = self.editorHash[self.model.get('editorMode')];
                         self.editor.setPlainText(content);
                         self.editor.handleShow(true);
                         if (self.model.get('mode') !== 'compose') {
@@ -871,7 +866,7 @@ define('io.ox/mail/compose/view', [
         },
 
         reuseEditor: function (content) {
-            this.editor = this.editorHash[this.editorMode];
+            this.editor = this.editorHash[this.model.get('editorMode')];
             this.editor.setPlainText(content);
             this.editor.handleShow(true);
             return $.when();
@@ -887,7 +882,7 @@ define('io.ox/mail/compose/view', [
             return def;
         },
 
-        changeEditorMode: function () {
+        toggleEditorMode: function () {
             // be busy
             this.contentEditable.busy();
             this.textarea.prop('disabled', true).busy();
@@ -896,16 +891,13 @@ define('io.ox/mail/compose/view', [
                 var content = this.editor.getPlainText();
                 this.editor.clear();
                 this.editor.handleHide();
-
                 // toggle editor
-                this.editorMode = this.editorMode === 'html' ? 'text' : 'html';
-                this.model.setMailContentType(this.editorMode);
+                this.model.setMailContentType(this.model.get('editorMode'));
 
                 // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
-                return !this.editorHash[this.editorMode] ? this.loadEditor(content) : this.reuseEditor(content);
+                return !this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content);
 
             } else {
-                this.editorMode = this.model.get('editorMode');
                 // initial editor
                 return this.loadEditor();
             }
@@ -936,8 +928,10 @@ define('io.ox/mail/compose/view', [
 
             if (_.isString(model)) id = model;
 
-            var newSignature = _.where(this.signatures, { id: String(id) })[0],
-                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
+            var signatures = this.model.get('signatures');
+
+            var newSignature  = _(signatures).where({ id: String(id) })[0],
+                prevSignature = _(signatures).where({ id: _.isObject(model) ? model.previous('defaultSignatureId') : '' })[0];
 
             if (prevSignature) {
                 this.removeSignature(prevSignature);
@@ -962,7 +956,7 @@ define('io.ox/mail/compose/view', [
 
                     var node = $(this),
                         text = node.text(),
-                        unchanged = _(self.signatures).find(function (signature) {
+                        unchanged = _(self.model.get('signatures')).find(function (signature) {
                             return $('<div>').html(signature.content).text().replace(/\s+/g, '') === text.replace(/\s+/g, '');
                         });
 
@@ -978,7 +972,7 @@ define('io.ox/mail/compose/view', [
 
         isSignature: function (text) {
             var isHTML = !!this.editor.find;
-            return mailUtil.signatures.is(text, this.signatures, isHTML);
+            return mailUtil.signatures.is(text, this.model.get('signatures'), isHTML);
         },
 
         setSignature: function (signature) {
@@ -986,7 +980,7 @@ define('io.ox/mail/compose/view', [
                 isHTML = !!this.editor.find;
 
             // add signature?
-            if (this.signatures.length > 0) {
+            if (this.model.get('signatures').length > 0) {
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
                 if (isHTML) text = this.getParagraph(text);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
@@ -1010,7 +1004,7 @@ define('io.ox/mail/compose/view', [
 
         prependNewLine: function (content) {
             var content = this.editor.getContent(),
-                nl = this.editorMode === 'html' ? '<p><br></p>' : '\n\n';
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n\n';
             if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
                 this.editor.setContent(nl + content);
             }
@@ -1021,7 +1015,7 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
-            return this.changeEditorMode().then(function () {
+            return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             }).done(function () {
                 var mode = self.model.get('mode');

@@ -42,13 +42,8 @@ define('io.ox/mail/compose/model', [
         },
 
         initialize: function () {
-            var self = this;
-            if (window.cordova) {
-                this.set('editorMode', 'html', { silent: true });
-                this.set('preferredEditorMode', 'html', { silent: true });
-            }
-
-            var attachmentsCollection = this.get('attachments');
+            var self = this,
+                attachmentsCollection = this.get('attachments');
 
             // Legacy support
             // Todo: This should be removed soon
@@ -95,6 +90,8 @@ define('io.ox/mail/compose/model', [
                     this.set('from', [address]);
                 }.bind(this));
             }
+
+            if (!this.get('signatures')) this.getSignatures();
 
             this.updateShadow();
         },
@@ -177,9 +174,9 @@ define('io.ox/mail/compose/model', [
             if (_.device('!smartphone')) return [];
 
             if (settings.get('mobileSignatureType') === 'custom') {
-                this.set('defaultSignatureId', '0');
+                this.set('defaultSignatureId', '0', { silent: true });
             } else {
-                this.set('defaultSignatureId', '1');
+                this.set('defaultSignatureId', '1', { silent: true });
             }
 
             var value = settings.get('mobileSignature');

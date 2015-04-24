@@ -316,7 +316,7 @@ define('io.ox/mail/compose/extensions', [
             baton.view.signaturesLoading = $.Deferred();
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').always(function (signatures) {
-                    baton.view.signatures = signatures;
+                    baton.model.set('signatures', signatures);
                     baton.view.signaturesLoading.resolve(signatures);
                     var sa = _.map(signatures, function (o) {
                         return { 'id': o.id, 'displayName': o.displayname };
