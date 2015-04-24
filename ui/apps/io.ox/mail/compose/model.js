@@ -257,9 +257,9 @@ define('io.ox/mail/compose/model', [
                 files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
             });
 
-            // Drop empty values except for subject (may be empty) and priority (can be 0)
+            // Drop empty values except for subject (may be empty), Numbers (priority, vcard) or Booleans (disp_notification_to)
             result = _.omit(result, function (value, key) {
-                if (key === 'subject' || key === 'priority') return false;
+                if (key === 'subject' || _.isNumber(value) || _.isBoolean(value)) return false;
                 return _.isEmpty(value);
             });
 
