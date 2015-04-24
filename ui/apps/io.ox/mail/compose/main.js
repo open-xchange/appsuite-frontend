@@ -80,7 +80,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                         require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
                             var data = /(compose|edit)/.test(obj.mode) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
                             app.model = new MailComposeModel(data);
-                            app.view = new MailComposeView({ data: data, app: app, model: app.model });
+                            app.view = new MailComposeView({ app: app, model: app.model });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);
                             app.view.fetchMail(data).done(function () {
                                 app.view.setMail()

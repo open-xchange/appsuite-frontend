@@ -78,7 +78,7 @@ define('io.ox/mail/compose/model', [
                 }
             });
 
-            if (this.preferredEditorMode === 'alternative') {
+            if (this.get('preferredEditorMode') === 'alternative') {
                 this.set('editorMode', 'html', { silent: true });
                 if (this.get('content_type') === 'text/plain') {
                     this.set('editorMode', 'text', { silent: true });
