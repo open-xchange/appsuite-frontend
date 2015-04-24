@@ -11,8 +11,9 @@
  */
 define('io.ox/core/viewer/views/types/audioview',  [
     'io.ox/core/viewer/views/types/baseview',
+    'io.ox/files/api',
     'gettext!io.ox/core'
-], function (BaseView, gt) {
+], function (BaseView, FilesAPI, gt) {
 
     'use strict';
 
@@ -35,38 +36,44 @@ define('io.ox/core/viewer/views/types/audioview',  [
          *  the AudioView instance.
          */
         render: function () {
-            //console.warn('AudioView.render()', this.model.get('filename'));
-
-            var audio = $('<audio controls="true" class="viewer-displayer-item viewer-displayer-audio player-hidden">'),
-                source = $('<source>'),
-                fallback = $('<div>').text(gt('Your browser does not support HTML5 audio.')),
-                previewUrl = this.getPreviewUrl() || '',
-                contentType = this.model.get('file_mimetype') || '',
+            var audio,
+                source,
+                cover,
+                mimeType = this.model.getMimeType() || '',
+                audioUrl = this.getPreviewUrl() || '',
+                coverUrl = FilesAPI.getUrl(this.model.toJSON(), 'cover', { width: 280, height: 280 }),
                 self = this;
 
             // run own disposer function on dispose event from DisposableView
             this.on('dispose', this.disposeView.bind(this));
 
+            this.$el.empty().append(
+                $('<div class="viewer-displayer-item viewer-displayer-audio player-hidden">').append(
+                    cover = $('<img>').attr('src', _.unescapeHTML(coverUrl)),
+                    audio = $('<audio controls="true">').append(
+                        source = $('<source>'),
+                        $('<div>').text(gt('Your browser does not support HTML5 audio.'))
+                    )
+                )
+            );
+
             // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
             audio.on('loadeddata', function () {
-                self.$el.idle();
-                audio.removeClass('player-hidden');
-                // console.warn('AudioView.loadSlide() - loaded:', self.model.get('filename'));
+                self.$el.idle().find('.viewer-displayer-audio').removeClass('player-hidden');
             });
 
-            // register error handler
+            source.attr({ 'data-src': _.unescapeHTML(audioUrl), type: mimeType });
             source.on('error', function () {
-                // console.warn('AudioView.loadSlide() - error loading:', self.model.get('filename'));
-
                 self.$el.idle().append(
                     self.createNotificationNode(gt('Sorry, the audio file could not be played.'))
                 );
             });
 
-            source.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
-            audio.append(source, fallback);
+            // we don't know if the cover url is valid or not until we load it from the server
+            cover.one('error', function () {
+                cover.remove();
+            });
 
-            this.$el.empty().append(audio);
             return this;
         },
 
@@ -78,7 +85,6 @@ define('io.ox/core/viewer/views/types/audioview',  [
          *  the AudioView instance.
          */
         prefetch: function () {
-            //console.warn('AudioView.prefetch()', this.model.get('filename'));
             return this;
         },
 
@@ -90,9 +96,7 @@ define('io.ox/core/viewer/views/types/audioview',  [
          *  the AudioView instance.
          */
         show: function () {
-            //console.warn('AudioView.load()', this.model.get('filename'));
-
-            var audio = this.$el.find('audio.viewer-displayer-audio'),
+            var audio = this.$el.find('audio'),
                 audioSource = audio.find('source');
 
             if ((audio.length > 0) && (audioSource.length > 0)) {
@@ -113,13 +117,12 @@ define('io.ox/core/viewer/views/types/audioview',  [
          *  the AudioView instance.
          */
         unload: function () {
-            //onsole.warn('AudioView.unload()', this.model.get('filename'));
-            var audio = this.$el.find('audio.viewer-displayer-audio');
+            var audio = this.$el.find('audio');
 
             // never unload slide duplicates
             if (!this.$el.hasClass('swiper-slide-duplicate') && audio.length > 0) {
                 audio[0].pause();
-                audio.addClass('player-hidden');
+                this.$el.find('.viewer-displayer-audio').addClass('player-hidden');
                 audio.find('source').attr('src', '');
             }
 
@@ -130,11 +133,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
          * Destructor function of this view.
          */
         disposeView: function () {
-            //console.warn('ImageView.disposeView()', this.model.get('filename'));
-
-            var audio = this.$el.find('audio.viewer-displayer-audio');
             // remove event listeners from audio and source element
-            audio.off().find('source').off();
+            this.$el.find('audio').off().find('source').off();
         }
 
     });
