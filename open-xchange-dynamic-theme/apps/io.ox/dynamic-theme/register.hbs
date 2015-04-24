@@ -5,7 +5,7 @@ define('io.ox/dynamic-theme/register', [
     'text!io.ox/dynamic-theme/theme.less.in',
 ], function (settings, theme) {
     'use strict';
-    
+
     var less = (function () {
         var less = { tree: {} }, exports = less;
         function require(name) {
@@ -18,7 +18,7 @@ define('io.ox/dynamic-theme/register', [
         {{>functions}}
         {{>colors}}
         {{>tree}}
-        {{glob "lib/node_modules/less/lib/less/tree/*.js"}}
+        {{{glob "lib/node_modules/less/lib/less/tree/*.js"}}}
         {{>env}}
         {{>visitor}}
         {{>import-visitor}}
@@ -29,7 +29,7 @@ define('io.ox/dynamic-theme/register', [
         {{>source-map-output}}
         return less;
     }());
-    
+
     var data = [], colors = settings.get();
     colors.logoWidth = colors.logoWidth + 'px';
     colors.logoURL = 'url(' + colors.logoURL + ')';
@@ -37,7 +37,7 @@ define('io.ox/dynamic-theme/register', [
         data.push('@io-ox-dynamic-theme-' + i + ': ' + colors[i] + ';\n');
     }
     data.push(theme);
-    
+
     new less.Parser().parse(data.join(''), function (e, root) {
         if (e) {
             if (('console' in window) && console.error) console.error(e);
@@ -50,5 +50,5 @@ define('io.ox/dynamic-theme/register', [
             throw e;
         }
     });
-    
+
 });

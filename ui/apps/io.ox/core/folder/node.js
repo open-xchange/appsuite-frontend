@@ -75,7 +75,10 @@ define('io.ox/core/folder/node', [
                 }, this)
             );
 
-            this.model.set('subfolders', models.length > 0);
+            // see bug 37373
+            // This was caused by the filter method of the unified-folders extensionpoint which sets "subfolder = false" for the folder 1 model.
+            // Since this folder always has subfolders this is skipped.
+            if (this.folder !== '1') this.model.set('subfolders', models.length > 0);
             this.renderEmpty();
 
             // trigger events
@@ -108,12 +111,15 @@ define('io.ox/core/folder/node', [
 
         // respond to changed id
         onChangeId: function (model) {
-            var id = model.get('id'),
-                previous = model.previous('id'),
+            var id = String(model.get('id')),
+                previous = String(model.previous('id')),
                 selection = this.options.tree.selection,
                 selected = selection.get();
+            // update other ID attributes
+            if (this.folder === previous) this.folder = id;
+            if (this.options.model_id === previous) this.options.model_id = id;
+            if (this.options.contextmenu_id === previous) this.options.contextmenu_id = id;
             // update DOM
-            this.folder = this.model_id = String(id);
             this.renderAttributes();
             // trigger selection change event
             if (previous === selected) this.options.tree.trigger('change', id);
@@ -279,6 +285,7 @@ define('io.ox/core/folder/node', [
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
+                contextmenu_id: this.folder,    // use this id for the context menu
                 open: false,                    // state
                 sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
@@ -328,6 +335,7 @@ define('io.ox/core/folder/node', [
                     'data-id'       : this.folder,
                     'data-index'    : this.getIndex(),
                     'data-model'    : o.model_id,
+                    'data-contextmenu-id': o.contextmenu_id,
                     'role'          : 'treeitem',
                     'tabindex'      : '-1'
                 })
@@ -369,7 +377,8 @@ define('io.ox/core/folder/node', [
             if (!this.isVirtual) api.get(o.model_id);
 
             // fetch subfolders if not open but "empty" is false
-            if (o.empty === false && o.open === false) this.reset();
+            // or if it's a virtual folder and we're not sure if it has subfolders
+            if ((o.empty === false && o.open === false) || this.isVirtual) this.reset();
 
             // run through some custom callbacks
             var data = this.model.toJSON(), baton = ext.Baton({ view: this, data: data });
@@ -449,7 +458,8 @@ define('io.ox/core/folder/node', [
             this.$el.attr({
                 'data-id': this.folder,
                 'data-index': this.getIndex(),
-                'data-model': this.model_id
+                'data-model': this.options.model_id,
+                'data-contextmenu-id': this.options.contextmenu_id
             });
         },
 

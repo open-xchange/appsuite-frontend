@@ -65,19 +65,35 @@ define('plugins/portal/oxdriveclients/register',
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
-                        href: url,
-                        target: '_blank'
-                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
+                href: url,
+                target: '_blank'
+            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
+        } else if (platform === 'windows' && settings.get('standaloneWindowsClient') === true) {
+            return [
+                $('<i class="fa fa-download">'),
+                $.txt(' '),
+                $('<a class="shoplink">').attr({
+                    href: ox.apiRoot + url + '?session=' + ox.session,
+                    target: '_blank'
+                }).text(gt.format(gt('Download %s'), settings.get('productName')))
+            ];
         } else if (platform === 'windows' && capabilities.has('oxupdater')) {
-            return  [$('<i class="fa fa-download">'),
-                    $('<a class="shoplink">').attr({
-                        href: ox.apiRoot + url + '?session=' + ox.session,
-                        target: '_blank',
-                    }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
-                    ];
+            return [
+                $('<i class="fa fa-download">'),
+                $.txt(' '),
+                $('<a class="shoplink">').attr({
+                    href: ox.apiRoot + url + '?session=' + ox.session,
+                    target: '_blank'
+                }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
+            ];
         } else {
             return $();
         }
+    }
+
+    function createAppIcon() {
+        var icon = settings.get('appIconAsBase64');
+        return $('<div class="appicon">').css('background-image', icon && ('url(' + icon + ')'));
     }
 
     ext.point('io.ox/portal/widget/oxdriveclients').extend({
@@ -89,8 +105,9 @@ define('plugins/portal/oxdriveclients/register',
             var def = $.Deferred();
             // .# String will include a product name and a platform forming a sentence like "Download OX Drive for Windows now."
             baton.message = gt.format(gt('Download %s for %s now'), settings.get('productName'), getPlatform());
-            baton.teaser = gt.format(gt('The %s client lets you store and share your photos, files, documents and videos, anytime,' +
-                        'anywhere. Access any file you save to OX Drive from all your computers, iPhone, iPad or from within OX App Suite itself.'), settings.get('productName'));
+
+            baton.teaser = gt.format(gt('The %s client lets you store and share your photos, files, documents and videos, anytime, ' +
+                'anywhere. Access any file you save to %s from all your computers, iPhone, iPad or from within %s itself.'), settings.get('productName'), settings.get('productName'), ox.serverConfig.productName);
             baton.link = settings.get('linkTo/' + getPlatform());
 
             return def.resolve();
@@ -98,29 +115,29 @@ define('plugins/portal/oxdriveclients/register',
 
         preview: function (baton) {
             var platform = getPlatform(),
-                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
-            this.append($('<ul class="oxdrive content pointer list-unstyled">').append(
-                $('<li class="first">').append($('<div class="appicon">').css('background-image', settings.get('appIconAsBase64'))),
-                $('<li class="message">').append($('<h4>').text(baton.message)),
-                $('<li class="teaser">').text(baton.teaser),
-                $('<li class="link">').append(link))
+                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform)),
+                icon = settings.get('appIconAsBase64');
+            this.append(
+                $('<ul class="oxdrive content pointer list-unstyled">').append(
+                    $('<li class="first">').append(
+                        $('<div class="appicon">').css('background-image', icon && ('url(' + icon + ')'))
+                    ),
+                    $('<li class="message">').append($('<h4>').text(baton.message)),
+                    $('<li class="teaser">').text(baton.teaser),
+                    $('<li class="link">').append(link)
+                )
             );
         },
 
         draw: function (baton) {
-            var ul, platform = getPlatform();
+            var ul, platform = getPlatform(),
+                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
             this.append(
                 ul = $('<ul class="oxdrive content pointer list-unstyled">').append(
-                    $('<li class="first">').append(
-                        $('<div class="appicon">').css('background-image', settings.get('appIconAsBase64'))
-                    ),
-                    $('<li class="message">').append(
-                        $('<h3>').text(baton.message)
-                    ),
+                    $('<li class="first">').append(createAppIcon()),
+                    $('<li class="message">').append($('<h3>').text(baton.message)),
                     $('<li class="teaser">').text(baton.teaser),
-                    $('<li class="link">').append(
-                        getShopLinkWithImage(platform, settings.get('linkTo/' + platform))
-                    )
+                    $('<li class="link">').append(link)
                 )
             );
             // all other platforms
