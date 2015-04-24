@@ -250,17 +250,25 @@ define('io.ox/mail/compose/model', [
                 'disp_notification_to'
             );
 
-            // remove display name from sender if necessary
-            if (this.get('sendDisplayName') === false) {
-                result.from[0][0] = null;
-            }
-
-            return _.extend(result, {
+            result = _.extend(result, {
                 attachments:    attachmentCollection.mailAttachments(),  // get all attachments
                 contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids
                 infostore_ids:  attachmentCollection.driveFiles(),       // get ids only for infostore_ids
                 files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
             });
+
+            // Drop empty values except for subject (may be empty) and priority (can be 0)
+            result = _.omit(result, function (value, key) {
+                if (key === 'subject' || key === 'priority') return false;
+                return _.isEmpty(value);
+            });
+
+            // remove display name from sender if necessary
+            if (this.get('sendDisplayName') === false) {
+                result.from[0][0] = null;
+            }
+
+            return result;
 
         },
 
