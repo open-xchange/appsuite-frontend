@@ -49,22 +49,37 @@ define('io.ox/core/moment', [
         }
     }
 
-    // make global
-    window.moment = moment;
-
     // set locale
     var langISO = normalizeLocale(settings.get('language'));
     if (langISO !== defaultLang) {
         require(['static/3rd.party/moment/locale/' + langISO + '.js']);
     }
+
     // set timezone
     moment.tz.setDefault(settings.get('timezone'));
+
     // define threshold for humanize function
     moment.relativeTimeThreshold('s', 60);
     moment.relativeTimeThreshold('m', 55);
     moment.relativeTimeThreshold('h', 23);
     moment.relativeTimeThreshold('d', 29);
     moment.relativeTimeThreshold('M', 11);
+
+    // fix local function to work with timezone plugin
+    moment.fn.local = function (keepLocalTime) {
+        if (this._isUTC) {
+            this.utcOffset(0, keepLocalTime);
+            this._isUTC = false;
+            this._z = moment.defaultZone || null;
+            if (keepLocalTime) {
+                this.subtract(this._z.offset(this) * -1, 'm');
+            }
+        }
+        return this;
+    };
+
+    // make global
+    window.moment = moment;
 
     return moment;
 });
