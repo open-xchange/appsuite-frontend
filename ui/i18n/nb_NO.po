@@ -153,7 +153,7 @@ msgstr[1] "%1$d Minutter"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:141 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:376
 #, fuzzy
 #| msgid "%1$s of %2$s"
@@ -820,7 +820,7 @@ msgstr "Legg til signatur over sitert tekst"
 msgid "Add signature below quoted text"
 msgstr "Legg til signatur under sitert tekst"
 
-#: apps/io.ox/mail/compose/view.js:797 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:772 module:io.ox/mail
 msgid "Add subject"
 msgstr "Legg til emne"
 
@@ -1146,7 +1146,7 @@ msgstr "Stigende"
 msgid "Assistant"
 msgstr "Assistent"
 
-#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:183 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "Legg ved vCard"
 
@@ -1417,7 +1417,7 @@ msgstr "Kalendervisning"
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:427
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
 #: apps/io.ox/mail/settings/signatures/register.js:180
@@ -1774,8 +1774,8 @@ msgstr "Involverte firmaer"
 msgid "Company"
 msgstr "Firma"
 
-#: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:455
+#: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:82 apps/io.ox/mail/compose/view.js:444
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -2356,7 +2356,7 @@ msgstr "Forkast endringer"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:647 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Forkast melding"
@@ -2495,7 +2495,7 @@ msgstr "Ønsker du å slette denne widgeten?"
 msgid "Do you really want to discard your changes?"
 msgstr "Ønsker du virkelig å forkaste endringene?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:619 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Ønsker du virkelig å forkaste meldingen?"
 
@@ -2817,7 +2817,7 @@ msgstr "Rediger for å sette et navn."
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:211
-#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:160
+#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:159
 #: module:io.ox/mail
 msgid "Editor"
 msgstr "Redigeringprogram"
@@ -3585,7 +3585,7 @@ msgstr "Gruppe"
 msgid "Guest"
 msgstr "Gjest"
 
-#: apps/io.ox/mail/compose/view.js:162 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr "HTML"
@@ -3691,7 +3691,7 @@ msgstr "Skjul stakksporing"
 msgid "Hide this notification"
 msgstr "Klikk for å lukke denne meldingen"
 
-#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
@@ -4173,7 +4173,7 @@ msgstr "Tap"
 msgid "Loss: %1$s %"
 msgstr "Tap: %1$s"
 
-#: apps/io.ox/mail/compose/view.js:174 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
@@ -4193,7 +4193,7 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/mail/compose/model.js:249 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
 msgid "Mail"
 msgstr "E-post"
 
@@ -4262,11 +4262,11 @@ msgstr "E-post har blitt importert"
 msgid "Mail has been moved"
 msgstr "E-post har blitt flyttet"
 
-#: apps/io.ox/mail/compose/view.js:795 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:770 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "E-post har tomt emne. Sende den likevel?"
 
-#: apps/io.ox/mail/compose/view.js:788 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:763 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "E-post har ingen mottaker."
 
@@ -4286,8 +4286,8 @@ msgstr "E-postpåminnelse"
 msgid "Mail reminder for"
 msgstr "E-postpåminnelse for"
 
-#: apps/io.ox/mail/compose/view.js:516 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:551
+#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526
 msgid "Mail saved as draft"
 msgstr "E-post lagret som kladd"
 
@@ -4761,7 +4761,7 @@ msgstr "Oppgavepåminnelser"
 msgid "New task reminders"
 msgstr "Oppgavepåminnelser"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:117 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4876,7 +4876,7 @@ msgstr "Ingen trege forespørsler"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:249 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
@@ -4902,7 +4902,7 @@ msgstr "Ingen tittel."
 msgid "None"
 msgstr "Ingen"
 
-#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
 msgid "Normal"
 msgstr "Normal"
 
@@ -5171,7 +5171,7 @@ msgstr "Valgfritt 20"
 #: apps/io.ox/files/toolbar.js:221 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:183 apps/io.ox/mail/toolbar.js:248
+#: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "Alternativer"
@@ -5388,7 +5388,7 @@ msgstr "Rosa"
 msgid "Places"
 msgstr "Steder"
 
-#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:160 module:io.ox/mail
 msgid "Plain Text"
 msgstr "Ren tekst"
 
@@ -5647,7 +5647,7 @@ msgstr "Trykk [enter] for å åpne"
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:114 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:116 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Forrige"
@@ -5682,7 +5682,7 @@ msgstr "Utskriftsoppgaver"
 msgid "Printout"
 msgstr "Skriv ut"
 
-#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
@@ -6060,7 +6060,7 @@ msgstr "Svar til alle mottakere"
 msgid "Reply to sender"
 msgstr "Svar til avsender"
 
-#: apps/io.ox/mail/compose/view.js:185 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Be om lesekvittering"
 
@@ -6187,7 +6187,7 @@ msgstr "Lagre"
 msgid "Save as distribution list"
 msgstr "Lagre som distribusjonsliste"
 
-#: apps/io.ox/mail/compose/view.js:648 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Lagre som utkast"
 
@@ -6397,7 +6397,7 @@ msgid "Sender/From"
 msgstr "Avsender/Fra"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/model.js:218 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:187 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Sendt fra %s via mobil"
 
@@ -6741,7 +6741,7 @@ msgstr "Noe gikk galt under lagringen av endringene."
 msgid "Sorry, could not connect to %s right now."
 msgstr "Beklager, kunne ikke koble til %s akkurat nå."
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:62 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:68 module:io.ox/core
 #, fuzzy
 #| msgid "This file could not be uploaded."
 msgid "Sorry, the audio file could not be played."
@@ -7243,7 +7243,7 @@ msgstr "Forfallsdatoen kan ikke være før startdato. Justere startdato?"
 msgid "The email address %1$s is already in the list"
 msgstr "E-postadressen %1$s er allerede i listen"
 
-#: apps/io.ox/mail/compose/view.js:727 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "E-posten er sendt"
 
@@ -8023,7 +8023,7 @@ msgstr "Bruk egendefinert navn"
 msgid "Use fixed-width font for text mails"
 msgstr "Bruk fast-bredde skrifttype for tekst e-poster"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:116 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:118 module:io.ox/core
 #, fuzzy
 #| msgid "Use left/right arrow keys to navigate and escape key to exit view."
 msgid ""
@@ -8292,7 +8292,7 @@ msgstr "Gul"
 msgid "Yes"
 msgstr "Ja"
 
-#: apps/io.ox/mail/compose/view.js:796 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:771 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Ja, send uten emne"
 
@@ -8578,7 +8578,7 @@ msgstr "IP-adressen din er endret"
 msgid "Your applications"
 msgstr "Dine programmer"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:42 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:55 module:io.ox/core
 #, fuzzy
 #| msgid "Your browser is not supported!"
 msgid "Your browser does not support HTML5 audio."

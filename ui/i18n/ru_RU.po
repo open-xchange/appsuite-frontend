@@ -159,7 +159,7 @@ msgstr[2] "%1$d минут"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:141 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:376
 #, fuzzy
 msgid "%1$d of %2$d"
@@ -825,7 +825,7 @@ msgstr "Подпись над цитируемым текстом"
 msgid "Add signature below quoted text"
 msgstr "Подпись под цитируемым текстом"
 
-#: apps/io.ox/mail/compose/view.js:797 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:772 module:io.ox/mail
 msgid "Add subject"
 msgstr "Добавить тему"
 
@@ -1152,7 +1152,7 @@ msgstr "По возрастанию"
 msgid "Assistant"
 msgstr "Ассистент"
 
-#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:183 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "Вложить Vcard"
 
@@ -1422,7 +1422,7 @@ msgstr "Календарь"
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:427
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
 #: apps/io.ox/mail/settings/signatures/register.js:180
@@ -1780,8 +1780,8 @@ msgstr "Компании"
 msgid "Company"
 msgstr "Компания"
 
-#: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:455
+#: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:82 apps/io.ox/mail/compose/view.js:444
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -2353,7 +2353,7 @@ msgstr "Отменить изменения"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:647 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Удалить сообщение"
@@ -2492,7 +2492,7 @@ msgstr "Удалить модуль?"
 msgid "Do you really want to discard your changes?"
 msgstr "Отменить изменения?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:619 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Вы действительно хотите удалить сообщение?"
 
@@ -2810,7 +2810,7 @@ msgstr "Отредактируйте, чтобы определить имя."
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:211
-#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:160
+#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:159
 #: module:io.ox/mail
 msgid "Editor"
 msgstr "Редактор"
@@ -3567,7 +3567,7 @@ msgstr "Группы"
 msgid "Guest"
 msgstr "Гость"
 
-#: apps/io.ox/mail/compose/view.js:162 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr "HTML"
@@ -3675,7 +3675,7 @@ msgstr "Скрыть трассировку стека"
 msgid "Hide this notification"
 msgstr "Нажмите, чтобы закрыть уведомление"
 
-#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
@@ -4154,7 +4154,7 @@ msgstr "Потери"
 msgid "Loss: %1$s %"
 msgstr "Потери: %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:174 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
@@ -4174,7 +4174,7 @@ msgstr "МБ"
 msgid "MM"
 msgstr "мм"
 
-#: apps/io.ox/mail/compose/model.js:249 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
 msgid "Mail"
 msgstr "Почта"
 
@@ -4240,11 +4240,11 @@ msgstr "Импорт почты выполнен"
 msgid "Mail has been moved"
 msgstr "Почта перенесена"
 
-#: apps/io.ox/mail/compose/view.js:795 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:770 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Пустая тема сообщения. Отправить?"
 
-#: apps/io.ox/mail/compose/view.js:788 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:763 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Не указан получатель."
 
@@ -4264,8 +4264,8 @@ msgstr "Напоминание по почте"
 msgid "Mail reminder for"
 msgstr "Напоминание для "
 
-#: apps/io.ox/mail/compose/view.js:516 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:551
+#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526
 msgid "Mail saved as draft"
 msgstr "Черновик сохранен"
 
@@ -4725,7 +4725,7 @@ msgstr "Напоминания задач"
 msgid "New task reminders"
 msgstr "Напоминания задач"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:117 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4840,7 +4840,7 @@ msgstr "Нет медленных запросов"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:249 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
@@ -4866,7 +4866,7 @@ msgstr "Нет заголовка."
 msgid "None"
 msgstr "Нет"
 
-#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
 msgid "Normal"
 msgstr "Средний"
 
@@ -5137,7 +5137,7 @@ msgstr "Дополнительно 20"
 #: apps/io.ox/files/toolbar.js:221 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:183 apps/io.ox/mail/toolbar.js:248
+#: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "Параметры"
@@ -5353,7 +5353,7 @@ msgstr "Розовый"
 msgid "Places"
 msgstr "Места"
 
-#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:160 module:io.ox/mail
 msgid "Plain Text"
 msgstr "Текст"
 
@@ -5606,7 +5606,7 @@ msgstr "Нажмите [Enter], чтобы открыть"
 msgid "Preview"
 msgstr "Предварительный просмотр"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:114 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:116 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Назад"
@@ -5642,7 +5642,7 @@ msgstr "Изменить задачу"
 msgid "Printout"
 msgstr "Распечатка"
 
-#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
@@ -6016,7 +6016,7 @@ msgstr "Ответить всем"
 msgid "Reply to sender"
 msgstr "Ответить отправителю"
 
-#: apps/io.ox/mail/compose/view.js:185 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Запросить уведомление о прочтении"
 
@@ -6141,7 +6141,7 @@ msgstr "Сохранить"
 msgid "Save as distribution list"
 msgstr "Сохранить как список рассылки"
 
-#: apps/io.ox/mail/compose/view.js:648 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Сохранить черновик"
 
@@ -6342,7 +6342,7 @@ msgid "Sender/From"
 msgstr "Отправитель/от кого"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/model.js:218 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:187 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Отправлено с мобильного из %s"
 
@@ -6693,7 +6693,7 @@ msgstr "Не удалось сохранить изменения."
 msgid "Sorry, could not connect to %s right now."
 msgstr "Не удалось подключиться к %s."
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:62 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:68 module:io.ox/core
 #, fuzzy
 msgid "Sorry, the audio file could not be played."
 msgstr "Не удалось отправить файл."
@@ -7182,7 +7182,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "%1$s уже в списке"
 
-#: apps/io.ox/mail/compose/view.js:727 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Сообщение отправлено"
 
@@ -7943,7 +7943,7 @@ msgstr "Имя пользователя"
 msgid "Use fixed-width font for text mails"
 msgstr "Фиксированный шрифт для текстовых сообщений"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:116 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:118 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8203,7 +8203,7 @@ msgstr "Желтый"
 msgid "Yes"
 msgstr "Да"
 
-#: apps/io.ox/mail/compose/view.js:796 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:771 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Да, отправить без темы"
 
@@ -8478,7 +8478,7 @@ msgstr "Ваш IP-адрес был изменен"
 msgid "Your applications"
 msgstr "Ваши программы"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:42 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:55 module:io.ox/core
 #, fuzzy
 msgid "Your browser does not support HTML5 audio."
 msgstr "Ваш браузер не поддерживается."

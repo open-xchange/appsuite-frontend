@@ -160,7 +160,7 @@ msgstr[2] "%1$d minut"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:141 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:376
 #, fuzzy
 msgid "%1$d of %2$d"
@@ -828,7 +828,7 @@ msgstr "Přidat podpis nad citovaným textem"
 msgid "Add signature below quoted text"
 msgstr "Přidat podpis pod citovaným textem"
 
-#: apps/io.ox/mail/compose/view.js:797 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:772 module:io.ox/mail
 msgid "Add subject"
 msgstr "Přidat předmět"
 
@@ -1157,7 +1157,7 @@ msgstr "Vzestupně"
 msgid "Assistant"
 msgstr "Asistent(ka)"
 
-#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:183 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "Připojit vCard"
 
@@ -1425,7 +1425,7 @@ msgstr "Kalendář"
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:427
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:649
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
 #: apps/io.ox/mail/settings/signatures/register.js:180
@@ -1782,8 +1782,8 @@ msgstr "Firmy"
 msgid "Company"
 msgstr "Firma"
 
-#: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90 apps/io.ox/mail/compose/view.js:455
+#: apps/io.ox/mail/compose/main.js:26 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:82 apps/io.ox/mail/compose/view.js:444
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
 msgid "Compose"
@@ -2356,7 +2356,7 @@ msgstr "Zahodit změny"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:647 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodit zprávu"
@@ -2493,7 +2493,7 @@ msgstr "Opravdu chcete smazat tento widget?"
 msgid "Do you really want to discard your changes?"
 msgstr "Opravdu chcete zahodit své změny?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:619 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Opravdu chcete zprávu zahodit?"
 
@@ -2807,7 +2807,7 @@ msgstr "Nastavte název."
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:211
-#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:160
+#: apps/io.ox/editor/main.js:314 apps/io.ox/mail/compose/view.js:159
 #: module:io.ox/mail
 msgid "Editor"
 msgstr "Upravit"
@@ -3565,7 +3565,7 @@ msgstr "Skupiny"
 msgid "Guest"
 msgstr "Host"
 
-#: apps/io.ox/mail/compose/view.js:162 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr "HTML"
@@ -3673,7 +3673,7 @@ msgstr "Skrýt sledování zásobníku"
 msgid "Hide this notification"
 msgstr "Kliknutím zavřete toto upozornění"
 
-#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
@@ -4153,7 +4153,7 @@ msgstr "Ztráta"
 msgid "Loss: %1$s %"
 msgstr "Ztráta: %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:174 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
@@ -4173,7 +4173,7 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/mail/compose/model.js:249 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
 msgid "Mail"
 msgstr "Pošta"
 
@@ -4239,11 +4239,11 @@ msgstr "Pošta byla importována"
 msgid "Mail has been moved"
 msgstr "Zprávy byly přesunuty"
 
-#: apps/io.ox/mail/compose/view.js:795 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:770 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Zpráva nemá předmět. Poslat i tak?"
 
-#: apps/io.ox/mail/compose/view.js:788 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:763 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Zpráva nemá žádného adresáta."
 
@@ -4263,8 +4263,8 @@ msgstr "Poslat upomínku"
 msgid "Mail reminder for"
 msgstr "Poslat upomínku pro"
 
-#: apps/io.ox/mail/compose/view.js:516 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:551
+#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526
 msgid "Mail saved as draft"
 msgstr "Zpráva uložena jako koncept"
 
@@ -4724,7 +4724,7 @@ msgstr "Upomínky na úkoly"
 msgid "New task reminders"
 msgstr "Upomínky na úkoly"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:117 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4839,7 +4839,7 @@ msgstr "Žádné pomalé požadavky"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:249 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
 #: apps/io.ox/mail/util.js:377 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
@@ -4865,7 +4865,7 @@ msgstr "Žádný název."
 msgid "None"
 msgstr "Žádný"
 
-#: apps/io.ox/mail/compose/view.js:173 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:172 module:io.ox/mail
 msgid "Normal"
 msgstr "Normální"
 
@@ -5135,7 +5135,7 @@ msgstr "Nepovinné 20"
 #: apps/io.ox/files/toolbar.js:221 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:183 apps/io.ox/mail/toolbar.js:248
+#: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "Volby"
@@ -5351,7 +5351,7 @@ msgstr "Růžová"
 msgid "Places"
 msgstr "Místa"
 
-#: apps/io.ox/mail/compose/view.js:161 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:160 module:io.ox/mail
 msgid "Plain Text"
 msgstr "Prostý text"
 
@@ -5608,7 +5608,7 @@ msgstr "Stiskněte [Enter] pro otevření"
 msgid "Preview"
 msgstr "Náhled"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:114 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:116 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Předchozí"
@@ -5643,7 +5643,7 @@ msgstr "Tisknout úkoly"
 msgid "Printout"
 msgstr "Výtisk"
 
-#: apps/io.ox/mail/compose/view.js:171 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:170 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:692 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:104
@@ -6017,7 +6017,7 @@ msgstr "Odpovědět všem příjemcům"
 msgid "Reply to sender"
 msgstr "Odpovědět odesílateli"
 
-#: apps/io.ox/mail/compose/view.js:185 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:184 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Vyžádat potvrzení o doručení"
 
@@ -6142,7 +6142,7 @@ msgstr "Uložit"
 msgid "Save as distribution list"
 msgstr "Uložit jako distribuční seznam"
 
-#: apps/io.ox/mail/compose/view.js:648 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Uložit jako koncept"
 
@@ -6345,7 +6345,7 @@ msgid "Sender/From"
 msgstr "Odesílatel/od"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/model.js:218 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:187 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Posláno z %s z mobilního telefonu"
 
@@ -6695,7 +6695,7 @@ msgstr "Při ukládání vašich změn došlo k chybě."
 msgid "Sorry, could not connect to %s right now."
 msgstr "Je nám líto, v tuto chvíli se nepodařilo k %s připojit."
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:62 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:68 module:io.ox/core
 #, fuzzy
 msgid "Sorry, the audio file could not be played."
 msgstr "Soubor se nepodařilo nahrát"
@@ -7184,7 +7184,7 @@ msgstr "Datum dokončení nemůže být před datem začátku. Upravit datum za�
 msgid "The email address %1$s is already in the list"
 msgstr "E-mailová adresa %1$s už na seznamu je"
 
-#: apps/io.ox/mail/compose/view.js:727 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:702 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Zpráva byla odeslána"
 
@@ -7964,7 +7964,7 @@ msgstr "Uživatelské jméno"
 msgid "Use fixed-width font for text mails"
 msgstr "Pro textové e-maily používat písmo s pevnou šířkou"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:116 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:118 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8227,7 +8227,7 @@ msgstr "Žlutá"
 msgid "Yes"
 msgstr "Ano"
 
-#: apps/io.ox/mail/compose/view.js:796 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:771 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Ano, poslat bez předmětu"
 
@@ -8506,7 +8506,7 @@ msgstr "Vaše IP adresa se změnila"
 msgid "Your applications"
 msgstr "Vaše aplikace"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:42 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:55 module:io.ox/core
 #, fuzzy
 msgid "Your browser does not support HTML5 audio."
 msgstr "Váš prohlížeč není podporovaný."

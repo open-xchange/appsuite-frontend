@@ -488,7 +488,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js:427
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163
-#: apps/io.ox/mail/compose/view.js:649
+#: apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:260
 #: apps/io.ox/mail/main.js:1079
@@ -1928,7 +1928,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js:351
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:183
+#: apps/io.ox/mail/compose/view.js:182
 #: apps/io.ox/mail/toolbar.js:248
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
@@ -5669,14 +5669,14 @@ msgstr ""
 msgid "Get free upgrade"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:114
+#: apps/io.ox/core/viewer/views/displayerview.js:116
 #: module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53
 #: module:io.ox/core/wizard
 msgid "Previous"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:115
+#: apps/io.ox/core/viewer/views/displayerview.js:117
 #: module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47
 #: module:io.ox/core/wizard
@@ -5685,7 +5685,7 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:116
+#: apps/io.ox/core/viewer/views/displayerview.js:118
 #: module:io.ox/core
 msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
@@ -5694,7 +5694,7 @@ msgstr ""
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:139
+#: apps/io.ox/core/viewer/views/displayerview.js:141
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:376
 msgid "%1$d of %2$d"
@@ -5857,12 +5857,12 @@ msgstr ""
 msgid "Viewer Toolbar"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:42
+#: apps/io.ox/core/viewer/views/types/audioview.js:55
 #: module:io.ox/core
 msgid "Your browser does not support HTML5 audio."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:62
+#: apps/io.ox/core/viewer/views/types/audioview.js:68
 #: module:io.ox/core
 msgid "Sorry, the audio file could not be played."
 msgstr ""
@@ -5946,7 +5946,7 @@ msgstr ""
 #: apps/io.ox/editor/main.js:207
 #: apps/io.ox/editor/main.js:211
 #: apps/io.ox/editor/main.js:314
-#: apps/io.ox/mail/compose/view.js:160
+#: apps/io.ox/mail/compose/view.js:159
 #: module:io.ox/mail
 msgid "Editor"
 msgstr ""
@@ -7456,10 +7456,10 @@ msgstr ""
 msgid "Please select a valid image File to insert"
 msgstr ""
 
-#: apps/io.ox/mail/compose/main.js:36
+#: apps/io.ox/mail/compose/main.js:26
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/main.js:90
-#: apps/io.ox/mail/compose/view.js:455
+#: apps/io.ox/mail/compose/main.js:82
+#: apps/io.ox/mail/compose/view.js:444
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210
 #: apps/io.ox/mail/toolbar.js:43
@@ -7467,19 +7467,19 @@ msgid "Compose"
 msgstr ""
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/model.js:218
+#: apps/io.ox/mail/compose/model.js:187
 #: module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr ""
 
-#: apps/io.ox/mail/compose/model.js:249
+#: apps/io.ox/mail/compose/model.js:210
 #: module:io.ox/mail
 msgid "Mail"
 msgstr ""
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:249
+#: apps/io.ox/mail/compose/model.js:210
 #: module:io.ox/mail
 #: apps/io.ox/mail/util.js:377
 #: module:io.ox/core
@@ -7509,18 +7509,18 @@ msgstr ""
 msgid "Edit real names"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:161
+#: apps/io.ox/mail/compose/view.js:160
 #: module:io.ox/mail
 msgid "Plain Text"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:162
+#: apps/io.ox/mail/compose/view.js:161
 #: module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:171
+#: apps/io.ox/mail/compose/view.js:170
 #: module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:349
 #: module:io.ox/tasks/edit
@@ -7530,7 +7530,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:172
+#: apps/io.ox/mail/compose/view.js:171
 #: module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:343
 #: module:io.ox/tasks/edit
@@ -7539,12 +7539,12 @@ msgstr ""
 msgid "High"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:173
+#: apps/io.ox/mail/compose/view.js:172
 #: module:io.ox/mail
 msgid "Normal"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:174
+#: apps/io.ox/mail/compose/view.js:173
 #: module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:341
 #: module:io.ox/tasks/edit
@@ -7553,61 +7553,61 @@ msgstr ""
 msgid "Low"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:184
+#: apps/io.ox/mail/compose/view.js:183
 #: module:io.ox/mail
 msgid "Attach Vcard"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:185
+#: apps/io.ox/mail/compose/view.js:184
 #: module:io.ox/mail
 msgid "Request read receipt"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:516
+#: apps/io.ox/mail/compose/view.js:505
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:551
+#: apps/io.ox/mail/compose/view.js:526
 msgid "Mail saved as draft"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:644
+#: apps/io.ox/mail/compose/view.js:619
 #: module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr ""
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:647
+#: apps/io.ox/mail/compose/view.js:622
 #: module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:648
+#: apps/io.ox/mail/compose/view.js:623
 #: module:io.ox/mail
 msgid "Save as draft"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:727
+#: apps/io.ox/mail/compose/view.js:702
 #: module:io.ox/mail
 msgid "The email has been sent"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:788
+#: apps/io.ox/mail/compose/view.js:763
 #: module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:795
+#: apps/io.ox/mail/compose/view.js:770
 #: module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:796
+#: apps/io.ox/mail/compose/view.js:771
 #: module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:797
+#: apps/io.ox/mail/compose/view.js:772
 #: module:io.ox/mail
 msgid "Add subject"
 msgstr ""
