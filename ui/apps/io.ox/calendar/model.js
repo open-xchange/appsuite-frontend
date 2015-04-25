@@ -122,6 +122,7 @@ define('io.ox/calendar/model', [
                             endDate = moment(this.cache.end).startOf('day').hours(oldEnd.hours()).minutes(oldEnd.minutes()).subtract(1, 'day').valueOf();
                         }
                         // save
+                        length = endDate - startDate;
                         model.set('start_date', startDate, { validate: true });
                         model.set('end_date', endDate, { validate: true });
                     }
