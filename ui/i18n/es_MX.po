@@ -7370,8 +7370,8 @@ msgstr "Necesita actualizar o entrar de nuevo para que el ajuste surta efecto."
 msgid "The start date must be before the due date."
 msgstr "La fecha de comienzo debe ser anterior a la de fin."
 
-#: apps/io.ox/calendar/model.js:256 module:io.ox/calendar
-#: apps/io.ox/calendar/model.js:257
+#: apps/io.ox/calendar/model.js:257 module:io.ox/calendar
+#: apps/io.ox/calendar/model.js:258
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:90 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:91
 msgid "The start date must be before the end date."

@@ -1663,9 +1663,9 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: apps/io.ox/calendar/model.js:256
-#: module:io.ox/calendar
 #: apps/io.ox/calendar/model.js:257
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/model.js:258
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:90
 #: module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/filter.js:91
