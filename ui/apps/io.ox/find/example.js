@@ -76,8 +76,8 @@ define('io.ox/find/example', ['gettext!io.ox/core'], function (gt) {
     //
     _(hash).each(function (obj, id) {
         // use two characters as look-ahead
-        var key = id.substr(0, 2);
-        (tree[key] || (tree[key] = [])).push(_.extend(obj, { id: id }));
+        id = id.substr(0, 2);
+        (tree[id] || (tree[id] = [])).push(obj);
     });
 
     return {
@@ -88,8 +88,8 @@ define('io.ox/find/example', ['gettext!io.ox/core'], function (gt) {
 
         // main function
         lookup: function (str) {
-            var key = str.substr(0, 2), len = str.length;
-            return _(tree[key])
+            var id = str.substr(0, 2), len = str.length;
+            return _(tree[id])
                 .chain()
                 .filter(function (obj) {
                     return obj.id.substr(0, len) === str;
