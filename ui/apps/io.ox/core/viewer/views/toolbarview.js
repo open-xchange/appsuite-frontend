@@ -19,7 +19,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
     'io.ox/core/viewer/util',
-    'settings!io.ox/core',
+    'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
 ], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, Settings, gt) {
 
@@ -303,7 +303,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         initialize: function () {
             //console.info('ToolbarView.initialize()');
-            this.sideBarState = Settings.get('viewer:sidebar:state') || false;
+            this.sideBarState = Settings.getSidebarOpenState();
             // rerender on slide change
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render);
             // handle side bar toggle

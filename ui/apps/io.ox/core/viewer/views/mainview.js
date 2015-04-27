@@ -18,7 +18,7 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/backbone/disposable',
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
-    'settings!io.ox/core',
+    'io.ox/core/viewer/settings',
     'less!io.ox/core/viewer/style'
 ], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, DisposableView, NodeTouch, Util, Settings) {
 
@@ -71,7 +71,7 @@ define('io.ox/core/viewer/views/mainview', [
          * @returns {MainView}
          */
         render: function (model) {
-            var state = Settings.get('viewer:sidebar:state') || false;
+            var state = Settings.getSidebarOpenState();
             //console.warn('MainView.render()', data);
             if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
@@ -180,7 +180,7 @@ define('io.ox/core/viewer/views/mainview', [
          */
         closeViewer: function () {
             // save sidebar state
-            Settings.set('viewer:sidebar:state', this.sidebarView.opened).save();
+            Settings.setSidebarOpenState(this.sidebarView.opened);
             this.$el.hide();
             this.remove();
         },
