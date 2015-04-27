@@ -23,7 +23,6 @@ define([
         Collection = backbone.Collection;
 
     describe('OX Viewer', function () {
-        
         moment.locale('de');
         moment.tz.setDefault('Europe/Berlin');
 
