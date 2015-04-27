@@ -16,6 +16,6 @@ define('io.ox/contacts/actions/viewer', [
     'use strict';
 
     return function (baton) {
-        Viewer.launch(baton);
+        Viewer.launch({ files: baton });
     };
 });

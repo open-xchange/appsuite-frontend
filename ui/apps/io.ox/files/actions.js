@@ -226,7 +226,7 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/core/viewer/main']).done(function (viewer) {
-                viewer.launch(baton);
+                viewer.launch({ selection: baton.data, files: baton.collection.models });
             });
         }
     });

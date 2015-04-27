@@ -30,8 +30,8 @@ define('io.ox/core/pim/actions', [
             id: 'view_new',
             requires: 'some',
             multiple: function (baton) {
-                ox.load(['io.ox/tasks/actions/viewer']).done(function (action) {
-                    action(baton);
+                require(['io.ox/core/viewer/main'], function (Viewer) {
+                    Viewer.launch({ files: baton });
                 });
             }
         },

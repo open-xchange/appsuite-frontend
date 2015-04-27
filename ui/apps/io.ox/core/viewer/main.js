@@ -18,43 +18,36 @@ define('io.ox/core/viewer/main', [], function () {
     'use strict';
 
     /**
-    * Extracts the file list from the baton of the Viewer launch action.
-    *
-    * @param {Object} baton
-    *  The baton object delivered by the Viewer launch action.
-    *
-    * @returns {Array|null}
-    *  The file list or null.
-    */
-    function getFileList (baton) {
-        if (!baton) { return null; }
-        if (baton.collection) {
-            return baton.collection.models;
-        }
-        // exception for Mail and PIM
-        if (_.isArray(baton)) return baton;
-        return null;
-    }
-
-    /**
      * The OX Viewer component
      *
      * @constructor
      */
     var Viewer = function () {
+
         /**
-         * Main bootstrap file for the OX Viewer.
+         * Launches the OX Viewer.
+         *
+         * @param {Object} data
+         *  @param {Object} [data.selection]
+         *  a selected file, as a plain object. This is optional. The Viewer will start with the first file
+         *  in the data.files Array if this parameter is omitted.
+         *  @param {Object[]} data.files
+         *  an array of plain file objects or FilesAPI file models, which should to be displayed in the Viewer
          */
-        this.launch = function (baton) {
+        this.launch = function (data) {
+
+            if (!data) {
+                console.error('Core.Viewer.main.launch(): no data supplied');
+                return;
+            }
 
             var el = $('<div class="io-ox-viewer abs">');
             $('#io-ox-core').append(el);
 
             // resolve dependencies now for an instant response
             require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
-
-                var fileList = getFileList(baton);
-                if (!fileList) {
+                var fileList = data.files;
+                if (!(_.isArray(fileList) && fileList.length > 0)) {
                     console.error('Core.Viewer.main.launch(): no files to preview.');
                     el.remove();
                     el = null;
@@ -64,8 +57,8 @@ define('io.ox/core/viewer/main', [], function () {
                 this.fileCollection = new backbone.Collection();
                 this.fileCollection.reset(fileList, { parse: true });
                 // set the index of the selected file (Drive only)
-                if (baton.data) {
-                    this.fileCollection.setStartIndex(baton.data);
+                if (data.selection) {
+                    this.fileCollection.setStartIndex(data.selection);
                 }
                 // create main view and append main view to core
                 this.mainView = new MainView({ collection: this.fileCollection, el: el });

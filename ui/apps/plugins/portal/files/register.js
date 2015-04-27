@@ -90,7 +90,7 @@ define('plugins/portal/files/register', [
                 e.stopPropagation();
                 // open viewer
                 require(['io.ox/core/viewer/main'], function (viewer) {
-                    viewer.launch([e.data.file]);
+                    viewer.launch({ files: [e.data.file] });
                 });
             });
 

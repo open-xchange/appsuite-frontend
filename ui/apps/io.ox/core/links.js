@@ -8,7 +8,7 @@ define('io.ox/core/links', [], function () {
             // open file in side-popup
             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (viewer, api) {
                 api.get(_.cid(data.id)).done(function (data) {
-                    viewer.launch([data]);
+                    viewer.launch({ files: [data] });
                 });
             });
         } else {

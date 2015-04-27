@@ -448,24 +448,6 @@ define('io.ox/core/tk/attachments', [
 
         }, options);
     }
-    /*
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'viewer',
-        index: 100,
-        label: gt('Viewer'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/viewer'
-    }));
-     new links.Action('io.ox/core/tk/attachment/actions/viewer', {
-         id: 'viewer',
-         requires: 'some',
-         multiple: function (attachmentList) {
-         ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
-            Viewer.launch(attachmentList);
-         });
-     }
-     });
-    */
 
     var fileUploadWidget = function (options) {
 

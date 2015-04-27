@@ -128,7 +128,7 @@ define('plugins/portal/recentfiles/register', [
                             var models = filesAPI.resolve(items, false),
                                 collection = new Backbone.Collection(models);
                             baton = new ext.Baton({ data: data, collection: collection });
-                            viewer.launch(baton);
+                            viewer.launch({ selection: baton.data, files: baton.collection.models });
                         });
                     });
                 });
