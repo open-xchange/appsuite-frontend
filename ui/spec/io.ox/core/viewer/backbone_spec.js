@@ -13,7 +13,7 @@
 
 define([
     'io.ox/core/viewer/backbone',
-    'io.ox/core/files/api',
+    'io.ox/files/api',
     'io.ox/core/moment'
 ], function (backbone, FilesAPI, moment) {
 
