@@ -122,10 +122,17 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
             var def = new $.Deferred(),
                 // loader
                 load = function () {
+                    console.log('getting config via HTTP');
                     return http.GET({
                         module: 'config',
                         appendColumns: false,
                         processResponse: false
+                    })
+                    .then(function (data) {
+                        console.log('got data', data);
+                        return data;
+                    }, function () {
+                        console.log(arguments[0]);
                     })
                     .done(function (data) {
                         config = (data !== undefined ? data.data : {});
@@ -144,7 +151,7 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
                     if (ox.online) { load(); }
                     def.resolve(data);
                 } else if (ox.online) {
-                    load().done(def.resolve);
+                    load().then(def.resolve, def.resolve);
                 } else {
                     def.resolve(config = {});
                 }
