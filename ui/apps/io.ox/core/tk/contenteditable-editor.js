@@ -520,6 +520,29 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             }
             el = el.tinymce = initialized = rendered = ed = null;
         };
+
+        // Process pasted images
+
+        $(el).on('paste', function (e) {
+            var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            _(items).each(function (item) {
+                // skip images
+                if (!/^image/.test(item.type)) return;
+                // get blob
+                var blob = item.getAsFile();
+                require(['io.ox/mail/compose/inline-images', 'io.ox/core/yell'], function (inline, yell) {
+                    inline.api.inlineImage({ file: blob }).then(
+                        function success(response) {
+                            var url = inline.api.getInsertedImageUrl(response);
+                            if (!ed) return;
+                            ed.focus();
+                            ed.selection.setContent(ed.dom.createHTML('img', { src: url, width: '80%', alt: '' }));
+                        },
+                        yell
+                    );
+                });
+            });
+        });
     }
 
     if (!window.tinyMCE) {
