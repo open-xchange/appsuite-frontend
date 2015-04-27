@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-dynamic-theme",
-  "version": "7.6.2-13",
+  "version": "7.6.2-15",
   "dependencies": {
     "less": "1.7.3",
     "assemble": "^0.4.42"

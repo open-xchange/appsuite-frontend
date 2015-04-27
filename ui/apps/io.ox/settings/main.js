@@ -160,7 +160,7 @@ define('io.ox/settings/main',
             'role': 'main'
         }).scrollable();
 
-        grid = new VGrid(left, { editable: false, containerLabel: gt('Select'), multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
+        grid = new VGrid(left, { checkboxDisabled: true, containerLabel: gt('Select'), multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {

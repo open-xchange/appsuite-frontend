@@ -540,7 +540,7 @@ define('io.ox/core/tk/vgrid',
                 // get clone
                 return template.getClone(function () {
                     // add checkbox for edit mode
-                    if (options.editable) {
+                    if (!options.checkboxDisabled) {
                         return createCheckbox.call(this);
                     }
                 });
