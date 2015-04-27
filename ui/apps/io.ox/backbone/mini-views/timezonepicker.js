@@ -28,9 +28,11 @@ define('io.ox/backbone/mini-views/timezonepicker', [
         return displayName.replace(/_/g, ' ');
     }
 
-    var available = settingOptions.get('availableTimeZones'),
-        now = moment(),
-        timezones = _(moment.tz._zones)
+    var getTimezones = _.memoize(function () {
+        var available = settingOptions.get('availableTimeZones', {}),
+            now = moment();
+
+        return _(moment.tz._zones)
             .chain()
             .filter(function (tz) {
                 tz.displayName = getDisplayName(tz.name);
@@ -43,6 +45,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
                 return { label: tz.displayName, value: tz.name };
             })
             .value();
+    });
 
     var TimezonePicker = miniViews.SelectView.extend({
 
@@ -53,7 +56,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
                     return { label: getDisplayName(favorite), value: favorite };
                 });
             }
-            options.list = timezones;
+            options.list = getTimezones();
             miniViews.SelectView.prototype.initialize.call(this, options);
         },
 
