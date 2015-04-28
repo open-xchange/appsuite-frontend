@@ -280,7 +280,7 @@ define('io.ox/mail/compose/model', [
             }
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                this.model.set('sendtype', mail.sendtype, { silent: true });
+                this.set('sendtype', mail.sendtype, { silent: true });
             }
 
             if (_(mail.flags).isUndefined()) {
