@@ -96,6 +96,10 @@ define('io.ox/core/boot/fixes', [], function () {
         $('html').addClass('ios8-standalone-ipad-fix');
     }
 
+    if (_.device('smartphone')) {
+        $('html').addClass('smartphone');
+    }
+
     // Android
 
     if (_.device('Android')) {
