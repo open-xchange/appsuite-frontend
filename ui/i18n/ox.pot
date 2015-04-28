@@ -1657,6 +1657,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33
 #: module:io.ox/core
+#: apps/io.ox/find/example.js:68
 #: apps/plugins/portal/birthdays/register.js:87
 #: module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
@@ -2055,8 +2056,9 @@ msgstr ""
 
 #: apps/io.ox/calendar/util.js:122
 #: module:io.ox/calendar
-#: apps/io.ox/mail/util.js:61
+#: apps/io.ox/find/example.js:69
 #: module:io.ox/core
+#: apps/io.ox/mail/util.js:61
 #: apps/plugins/portal/birthdays/register.js:93
 #: module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
@@ -5362,14 +5364,14 @@ msgstr ""
 msgid "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota limit of %2$s"
 msgstr ""
 
-#: apps/io.ox/core/tk/attachments.js:473
+#: apps/io.ox/core/tk/attachments.js:455
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:428
 #: module:io.ox/mail
 msgid "Add attachments"
 msgstr ""
 
-#: apps/io.ox/core/tk/attachments.js:484
+#: apps/io.ox/core/tk/attachments.js:466
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:459
 #: module:io.ox/mail
@@ -6706,6 +6708,21 @@ msgstr ""
 #: apps/io.ox/files/view-options.js:160
 #: module:io.ox/files
 msgid "Search results"
+msgstr ""
+
+#: apps/io.ox/find/example.js:70
+#: module:io.ox/core
+msgid "Last week"
+msgstr ""
+
+#: apps/io.ox/find/example.js:71
+#: module:io.ox/core
+msgid "Last month"
+msgstr ""
+
+#: apps/io.ox/find/example.js:72
+#: module:io.ox/core
+msgid "Last year"
 msgstr ""
 
 #: apps/io.ox/find/extensions-api.js:238

@@ -660,7 +660,7 @@ msgstr "新規パブリック予定表"
 msgid "Add as public folder"
 msgstr "サブフォルダを追加"
 
-#: apps/io.ox/core/tk/attachments.js:473 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:455 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:428 module:io.ox/mail
 msgid "Add attachments"
 msgstr "添付ファイルを追加"
@@ -684,7 +684,7 @@ msgstr "配布リストを追加"
 msgid "Add files"
 msgstr "ファイルを追加"
 
-#: apps/io.ox/core/tk/attachments.js:484 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:459 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Drive から追加"
@@ -4000,6 +4000,12 @@ msgstr "言語に固有の既定値"
 msgid "Languages"
 msgstr "言語"
 
+#: apps/io.ox/find/example.js:71 module:io.ox/core
+#, fuzzy
+#| msgid "List month view"
+msgid "Last month"
+msgstr "リスト月ビュー"
+
 #: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
@@ -4009,6 +4015,18 @@ msgstr "姓"
 #: apps/io.ox/contacts/settings/pane.js:76 module:io.ox/contacts
 msgid "Last name, First name"
 msgstr "名、姓"
+
+#: apps/io.ox/find/example.js:70 module:io.ox/core
+#, fuzzy
+#| msgid "Last Week"
+msgid "Last week"
+msgstr "先週"
+
+#: apps/io.ox/find/example.js:72 module:io.ox/core
+#, fuzzy
+#| msgid "Last day"
+msgid "Last year"
+msgstr "最終日"
 
 #: apps/io.ox/core/main.js:223 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
@@ -7610,8 +7628,8 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/example.js:68 apps/plugins/portal/birthdays/register.js:87
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
 msgstr "今日"
 
@@ -8174,7 +8192,7 @@ msgid "Yes, with empty attachment"
 msgstr "空の添付ファイルで送信"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/io.ox/find/example.js:69 module:io.ox/core apps/io.ox/mail/util.js:61
 #: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
@@ -12638,17 +12656,11 @@ msgstr "yyyy"
 #~ msgid "Last Modified:"
 #~ msgstr "最終更新日時:"
 
-#~ msgid "Last Week"
-#~ msgstr "先週"
-
 #~ msgid "Last changed on %1$s by %2$s"
 #~ msgstr "%1$sに%2$sによって最新変更"
 
 #~ msgid "Last changing date:"
 #~ msgstr "最終更新日:"
-
-#~ msgid "Last day"
-#~ msgstr "最終日"
 
 #~ msgid "Last modified"
 #~ msgstr "最新更新日"
@@ -12715,9 +12727,6 @@ msgstr "yyyy"
 
 #~ msgid "List day view"
 #~ msgstr "リスト日ビュー"
-
-#~ msgid "List month view"
-#~ msgstr "リスト月ビュー"
 
 #~ msgid "List week view"
 #~ msgstr "リスト週ビュー"

@@ -685,7 +685,7 @@ msgstr "New public calendar"
 msgid "Add as public folder"
 msgstr "Add subfolder"
 
-#: apps/io.ox/core/tk/attachments.js:473 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:455 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:428 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Add attachments"
@@ -709,7 +709,7 @@ msgstr "Add distribution list"
 msgid "Add files"
 msgstr "Add files"
 
-#: apps/io.ox/core/tk/attachments.js:484 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:459 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Add from Drive"
@@ -4028,6 +4028,11 @@ msgstr "Language-specific default"
 msgid "Languages"
 msgstr "Languages"
 
+#: apps/io.ox/find/example.js:71 module:io.ox/core
+#, fuzzy
+msgid "Last month"
+msgstr "Months"
+
 #: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
@@ -4037,6 +4042,18 @@ msgstr "Last name"
 #: apps/io.ox/contacts/settings/pane.js:76 module:io.ox/contacts
 msgid "Last name, First name"
 msgstr "Last name, First name"
+
+#: apps/io.ox/find/example.js:70 module:io.ox/core
+#, fuzzy
+#| msgid "Last Week"
+msgid "Last week"
+msgstr "Last Week"
+
+#: apps/io.ox/find/example.js:72 module:io.ox/core
+#, fuzzy
+#| msgid "Last name"
+msgid "Last year"
+msgstr "Last name"
 
 #: apps/io.ox/core/main.js:223 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
@@ -7648,8 +7665,8 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/example.js:68 apps/plugins/portal/birthdays/register.js:87
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
 msgstr "Today"
 
@@ -8208,7 +8225,7 @@ msgid "Yes, with empty attachment"
 msgstr "Yes, with empty attachment"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/io.ox/find/example.js:69 module:io.ox/core apps/io.ox/mail/util.js:61
 #: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
@@ -9841,9 +9858,6 @@ msgstr "yyyy"
 
 #~ msgid "Label"
 #~ msgstr "Label"
-
-#~ msgid "Last Week"
-#~ msgstr "Last Week"
 
 #~ msgid "Last modified"
 #~ msgstr "Last modified"

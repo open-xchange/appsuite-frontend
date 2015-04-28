@@ -710,7 +710,7 @@ msgstr "Nový veřejný kalendář"
 msgid "Add as public folder"
 msgstr "Přidat podsložku"
 
-#: apps/io.ox/core/tk/attachments.js:473 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:455 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:428 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Přidat přílohy"
@@ -734,7 +734,7 @@ msgstr "Přidat distribuční seznam"
 msgid "Add files"
 msgstr "Přidat soubory"
 
-#: apps/io.ox/core/tk/attachments.js:484 module:io.ox/core/tk/attachments
+#: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/compose/extensions.js:459 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Přidat z Drive"
@@ -4037,6 +4037,11 @@ msgstr "Výchozí podle jazyka"
 msgid "Languages"
 msgstr "Jazyky"
 
+#: apps/io.ox/find/example.js:71 module:io.ox/core
+#, fuzzy
+msgid "Last month"
+msgstr "měsíc"
+
 #: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:86 module:io.ox/wizards/firstStart
@@ -4046,6 +4051,18 @@ msgstr "Příjmení"
 #: apps/io.ox/contacts/settings/pane.js:76 module:io.ox/contacts
 msgid "Last name, First name"
 msgstr "Příjmení, Jméno"
+
+#: apps/io.ox/find/example.js:70 module:io.ox/core
+#, fuzzy
+#| msgid "Last Week"
+msgid "Last week"
+msgstr "Minulý týden"
+
+#: apps/io.ox/find/example.js:72 module:io.ox/core
+#, fuzzy
+#| msgid "Last day"
+msgid "Last year"
+msgstr "Poslední den"
 
 #: apps/io.ox/core/main.js:223 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
@@ -7674,8 +7691,8 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/example.js:68 apps/plugins/portal/birthdays/register.js:87
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
 msgstr "Dnes"
 
@@ -8236,7 +8253,7 @@ msgid "Yes, with empty attachment"
 msgstr "Ano, s prázdnou přílohou"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/io.ox/find/example.js:69 module:io.ox/core apps/io.ox/mail/util.js:61
 #: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
@@ -13659,14 +13676,8 @@ msgstr "rrrr"
 #~ msgid "Last Modified:"
 #~ msgstr "Poslední úprava:"
 
-#~ msgid "Last Week"
-#~ msgstr "Minulý týden"
-
 #~ msgid "Last changed on %1$s by %2$s"
 #~ msgstr "Poslední změna %1$s uživatelem %2$s"
-
-#~ msgid "Last day"
-#~ msgstr "Poslední den"
 
 #~ msgid "Last modified"
 #~ msgstr "Poslední úprava"
