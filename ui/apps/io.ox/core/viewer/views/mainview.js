@@ -39,8 +39,11 @@ define('io.ox/core/viewer/views/mainview', [
             'keydown': 'onKeydown'
         },
 
-        initialize: function (/*options*/) {
+        initialize: function (options) {
             //console.info('MainView.initialize()');
+            if (options) {
+                _.extend(this, options);
+            }
             // create children views
             this.toolbarView = new ToolbarView({ collection: this.collection });
             this.displayerView = new DisplayerView({ collection: this.collection });
@@ -182,7 +185,11 @@ define('io.ox/core/viewer/views/mainview', [
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.opened);
             this.$el.hide();
-            this.remove();
+            if (this.app) {
+                this.app.quit();
+            } else {
+                this.remove();
+            }
         },
 
         disposeView: function () {

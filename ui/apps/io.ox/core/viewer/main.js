@@ -28,11 +28,15 @@ define('io.ox/core/viewer/main', [], function () {
          * Launches the OX Viewer.
          *
          * @param {Object} data
+         *  @param {Object[]} data.files
+         *  an array of plain file objects or FilesAPI file models, which should to be displayed in the Viewer
          *  @param {Object} [data.selection]
          *  a selected file, as a plain object. This is optional. The Viewer will start with the first file
          *  in the data.files Array if this parameter is omitted.
-         *  @param {Object[]} data.files
-         *  an array of plain file objects or FilesAPI file models, which should to be displayed in the Viewer
+         *  @param {jQuery} [data.container]
+         *  a container element where the viewer element should be appended to. Defaults to #io-ox-core element.
+         *  @param {Boolean} [data.app]
+         *  a reference to an app object, from which this viewer is launched.
          */
         this.launch = function (data) {
 
@@ -42,7 +46,8 @@ define('io.ox/core/viewer/main', [], function () {
             }
 
             var el = $('<div class="io-ox-viewer abs">');
-            $('#io-ox-core').append(el);
+
+            (data.container || $('#io-ox-core')).append(el);
 
             // resolve dependencies now for an instant response
             require(['io.ox/core/viewer/backbone', 'io.ox/core/viewer/views/mainview'], function (backbone, MainView) {
@@ -61,7 +66,7 @@ define('io.ox/core/viewer/main', [], function () {
                     this.fileCollection.setStartIndex(data.selection);
                 }
                 // create main view and append main view to core
-                this.mainView = new MainView({ collection: this.fileCollection, el: el });
+                this.mainView = new MainView({ collection: this.fileCollection, el: el, app: data.app });
 
             }.bind(this));
         };

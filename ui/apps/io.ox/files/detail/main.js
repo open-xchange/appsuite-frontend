@@ -14,7 +14,8 @@
 
 define('io.ox/files/detail/main', [
     'io.ox/files/api',
-    'gettext!io.ox/files'
+    'gettext!io.ox/files',
+    'io.ox/files/actions'
 ], function (api, gt) {
 
     'use strict';
@@ -35,16 +36,11 @@ define('io.ox/files/detail/main', [
                             'tabindex': 1,
                             'role': 'complementary',
                             'aria-label': label
-                        })
-                        .append(
-                            // TODO: replace by new viewer
-                            $('<div>Will be replaced by the new Viewer soon!</div>')
-                            .attr({
-                                'role': 'complementary',
-                                'aria-label': gt('File Details')
-                            })
-                        )
-                    );
+                        }));
+
+                    require(['io.ox/core/viewer/main'], function (Viewer) {
+                        Viewer.launch({ files: [data], app: app });
+                    });
 
                     app.setTitle(title);
 
