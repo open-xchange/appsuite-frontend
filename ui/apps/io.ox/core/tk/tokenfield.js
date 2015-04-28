@@ -180,8 +180,8 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     if (self.redrawLock) return;
-                    // preventDefault to supress creating incomplete token
-                    if (self.options.autoselect && !e.attrs.model) {
+                    // preventDefault to supress creating incomplete token only if options.allowAutoselectWithoutModel is false
+                    if (self.options.autoselect && !e.attrs.model && !self.options.allowAutoselectWithoutModel) {
                         e.preventDefault();
                         return false;
                     }
