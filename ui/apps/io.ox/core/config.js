@@ -127,12 +127,6 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
                         appendColumns: false,
                         processResponse: false
                     })
-                    .then(function (data) {
-                        return data;
-                    }, function () {
-                        console.warn('error getting config', arguments[0]);
-                        return arguments[0];
-                    })
                     .done(function (data) {
                         config = (data !== undefined ? data.data : {});
                         configCache.add('default', config);
@@ -150,7 +144,7 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
                     if (ox.online) { load(); }
                     def.resolve(data);
                 } else if (ox.online) {
-                    load().then(def.resolve, def.resolve);
+                    load().done(def.resolve);
                 } else {
                     def.resolve(config = {});
                 }
