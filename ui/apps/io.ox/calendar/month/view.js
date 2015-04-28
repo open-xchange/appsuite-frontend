@@ -137,7 +137,6 @@ define('io.ox/calendar/month/view', [
                 }
 
                 var dayCell = $('<div>')
-                .css('z-index', list.days.length - i)
                 .addClass((day.isFirst ? ' first' : '') +
                     (day.isFirst && i === 0 ? ' forceleftborder' : '') +
                     (day.isToday ? ' today' : '') +
