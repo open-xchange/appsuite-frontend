@@ -21,127 +21,30 @@
         margin-bottom: 10px;
 
         &.sender {
-
-            @media (max-width: 480px) {
-                display: none;
-            }
-
-            .dropdown {
-                padding-top: 8px;
-            }
+            .dropdown { padding-top: 8px; }
         }
 
         div.dropdown {
             display: inline-block;
             margin-bottom: 5px;
 
-            &.signatures {
-                margin-right: 15px;
-            }
+            &.signatures { margin-right: 15px; }
         }
 
-        &.subject input {
-            font-weight: bold;
-        }
+        &.subject input { font-weight: bold; }
 
-        &.attachments .inplace-dropzone {
-            margin: 0 15px;
-        }
+        &.attachments .inplace-dropzone { margin: 0 15px; }
 
-        &.attachments .io-ox-core-tk-attachment-list {
-            clear: both;
-        }
+        &.attachments .io-ox-core-tk-attachment-list { clear: both; }
 
         .token-input, &.subject input {
-            &::-webkit-input-placeholder {
-                color: transparent;
-            }
-            &:-moz-placeholder {
-                color: transparent;
-            }
-            &::-moz-placeholder {
-                color: transparent;
-            }
+            &::-webkit-input-placeholder,
+            &:-moz-placeholder,
+            &::-moz-placeholder,
             &:-ms-input-placeholder {
                 color: transparent;
             }
         }
-
-        @media (max-width: 480px) {
-
-            margin-bottom: 7px;
-
-            &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
-                .col-xs-11 {
-                    width: 90%;
-                    margin-right: -5px;
-                }
-            }
-            &[data-extension-id=subject] {
-                .col-xs-12 {
-                    padding-left: 7px;
-                }
-            }
-            &[data-extension-id=composetoolbar] {
-                padding-top:5px;
-            }
-
-            .maillabel {
-                padding-top: 3px;
-                &.col-xs-1 {
-                    width: 10%;
-                }
-
-            }
-
-            &.subject input {
-                padding-left: 8px;
-            }
-
-            &.composetoolbar {
-                margin-top: 5px;
-            }
-            &:not(.attachments) {
-                border-bottom: 1px solid #ccc;
-                padding-bottom: 5px;
-            }
-            .token-input, &.subject input {
-                &::-webkit-input-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-                &:-moz-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-                &::-moz-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-                &:-ms-input-placeholder {
-                    color: #aaa;
-                    font-weight: normal;
-                }
-            }
-
-            .twitter-typeahead {
-                // This should be removed when autocomplete is rendered inplace
-                display:block !important;
-            }
-
-            .form-control {
-                border: none;
-                //border-bottom: 1px solid #aaa;
-                border-radius: 0;
-                box-shadow: none;
-                &.focus, &:focus {
-                    //border-color: #66afe9;
-                }
-            }
-
-
-        }
-
     }
 
     .sender {
@@ -150,7 +53,6 @@
     }
 
     .header {
-
         margin-bottom: 5px;
 
         h1 {
@@ -158,9 +60,7 @@
             font-size: 20px;
         }
 
-        .btn {
-            margin-left: 10px;
-        }
+        .btn { margin-left: 10px; }
     }
 
     .recipient-actions {
@@ -209,9 +109,6 @@
         .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
         .mce-panel.mce-edit-area { border:1px solid #fff !important; }
 
-        @media (max-width: 480px) {
-            display: none;
-        }
     }
 
     textarea.editable, .mce-content-body.editable {
@@ -223,11 +120,6 @@
         &.mce-edit-focus {
             outline: none;
             .form-control-focus();
-            @media (max-width: 480px) {
-                &:focus {
-                    box-shadow: none;
-                }
-            }
         }
 
         a {
@@ -239,8 +131,10 @@
         }
 
         table {
+
             border: 0 none;
             line-height: normal;
+
             td, th { padding: 8px; }
         }
 
@@ -253,12 +147,6 @@
             blockquote { opacity: 1.0; }
         }
 
-        @media (max-width: 480px) {
-            border: none;
-            border-top: 1px solid #aaa;
-            outline: none;
-        }
-
     }
 
     .plain-text {
@@ -266,19 +154,14 @@
         border: 1px solid #ccc;
         padding: 18px 21px;
 
-        &.monospace {
-            font-family: monospace;
-        }
+        &.monospace { font-family: monospace; }
     }
 
     // Bootstrap Tokenfield overrides
     .tokenfield {
-
         &.form-control {
             // space for cc/bcc toggle
-            &.to {
-                padding-right: 65px;
-            }
+            &.to { padding-right: 65px; }
         }
 
     }
@@ -324,48 +207,119 @@
         }
     }
 }
-.ios, .android {
-    .hidden-file-picker {
-        font-size: 15px;
-        line-height: initial;
-        color: @link-color;
-        padding: 0;
-        padding-top: 1px;
-        &:focus, &:hover {
-            color: @link-color;
-            background-color: transparent;
-        }
-    }
-}
-@media (max-width: 480px), (max-device-width: 480px) {
-    .io-ox-mail-compose {
-        padding-top: 8px;
-        .tokenfield.form-control.to {
-            padding-right: 20px;
-        }
-        .recipient-actions a {
-            outline: 0;
-        }
-        textarea.editable, .mce-content-body.editable {
-            border-top:0;
-            padding: 0;
-            margin-top: 0;
-        }
-        .mail-attachment-list {
-            margin-left: -15px;
-            margin-right: -15px;
-            padding: 0px 15px 8px 15px;
-            border-bottom: 1px solid #ccc;
-            &.open {
-                border-bottom: 1px solid #ccc;
-            }
-            &.empty {
-                border-bottom: 0;
-            }
-        }
-    }
 
-    .io-ox-mail-compose-window.header-top .window-header .btn[data-action="save"] {
-        display: none;
+@media (max-width: 480px), (max-device-width: 480px),  (min-width : 321px) and (max-device-width: 780px) and (orientation: landscape) {
+    .ios, .android {
+        .io-ox-mail-compose {
+            padding-top: 8px;
+
+            & > .mail-compose-fields > .row {
+
+                margin-bottom: 7px;
+
+                &.sender { display: none; }
+
+                &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
+                    .col-xs-11 {
+                        width: 90%;
+                        margin-right: -5px;
+                    }
+                }
+                &[data-extension-id=subject] {
+                    .col-xs-12 { padding-left: 7px; }
+                }
+                &[data-extension-id=composetoolbar] { padding-top:5px; }
+
+                .maillabel {
+                    padding-top: 3px;
+                    &.col-xs-1 {
+                        width: 10%;
+                    }
+                }
+
+                &.subject input { padding-left: 8px; }
+
+                &.composetoolbar { margin-top: 5px; }
+
+                &:not(.attachments) {
+                    border-bottom: 1px solid #ccc;
+                    padding-bottom: 5px;
+                }
+                .token-input, &.subject input {
+                    &::-webkit-input-placeholder {
+                        color: #aaa;
+                        font-weight: normal;
+                    }
+                    &:-moz-placeholder {
+                        color: #aaa;
+                        font-weight: normal;
+                    }
+                    &::-moz-placeholder {
+                        color: #aaa;
+                        font-weight: normal;
+                    }
+                    &:-ms-input-placeholder {
+                        color: #aaa;
+                        font-weight: normal;
+                    }
+                }
+
+                .twitter-typeahead {
+                    // This should be removed when autocomplete is rendered inplace
+                    display:block !important;
+                }
+
+                .form-control {
+                    border: none;
+                    //border-bottom: 1px solid #aaa;
+                    border-radius: 0;
+                    box-shadow: none;
+                    &.focus, &:focus {
+                        //border-color: #66afe9;
+                    }
+                }
+            }
+
+            .tokenfield.form-control.to { padding-right: 20px; }
+
+            .recipient-actions a { outline: 0; }
+
+            textarea.editable, .mce-content-body.editable {
+                border-top:0;
+                padding: 0;
+                margin-top: 0;
+            }
+            .mail-attachment-list {
+                margin-left: -15px;
+                margin-right: -15px;
+                padding: 0px 15px 8px 15px;
+                border-bottom: 1px solid #ccc;
+                &.open { border-bottom: 1px solid #ccc; }
+                &.empty { border-bottom: 0; }
+            }
+            .hidden-file-picker {
+                font-size: 15px;
+                line-height: initial;
+                color: @link-color;
+                padding: 0;
+                padding-top: 1px;
+                &:focus, &:hover {
+                    color: @link-color;
+                    background-color: transparent;
+                }
+            }
+            textarea.editable, .mce-content-body.editable {
+                border: none;
+                outline: none;
+                &.mce-edit-focus {
+                    &:focus {
+                        box-shadow: none;
+                    }
+                }
+            }
+        }
+
+        .io-ox-mail-compose-window.header-top .window-header .btn[data-action="save"],
+        .editable-toolbar { display:none; }
     }
 }
