@@ -29,47 +29,47 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
         });
 
         it('should return proper image path for internal users', function () {
-            var url = api.pictureHalo({ internal_userid: 1, folder_id: 6, id: 1337 });
+            var url = api.pictureHalo($(), { internal_userid: 1, folder_id: 6, id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?internal_userid=1');
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for contacts', function () {
-            var url = api.pictureHalo({ folder_id: 6, id: 1337 });
+            var url = api.pictureHalo($(), { folder_id: 6, id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for contacts while ignoring internal_userid = 0', function () {
-            var url = api.pictureHalo({ folder_id: 6, id: 1337, internal_userid: 0 });
+            var url = api.pictureHalo($(), { folder_id: 6, id: 1337, internal_userid: 0 }, { urlOnly: true });
             expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
             expect(url).to.contain('uniq=');
         });
 
         it('should consider width, height, and scaleType', function () {
-            var url = api.pictureHalo({ folder_id: 6, id: 1337, width: 48, height: 48, scaleType: 'cover' });
+            var url = api.pictureHalo($(), { folder_id: 6, id: 1337, width: 48, height: 48, scaleType: 'cover' }, { urlOnly: true });
             expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337&width=48&height=48&scaleType=cover');
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for recipients', function () {
-            var url = api.pictureHalo({ email: 'test@open-xchange.com' });
+            var url = api.pictureHalo($(), { email: 'test@open-xchange.com' }, { urlOnly: true });
             expect(url).to.contain(ox.apiRoot + '/halo/contact/picture?email=test%40open-xchange.com');
             expect(url).to.contain('uniq=');
         });
 
         it('should return proper image path for distribution lists', function () {
-            var url = api.pictureHalo({ mark_as_distributionlist: true, folder_id: 6, id: 1337 });
+            var url = api.pictureHalo($(), { mark_as_distributionlist: true, folder_id: 6, id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.base + '/apps/themes/default/dummypicture_group.png');
         });
 
         it('should return proper image path for resources', function () {
-            var url = api.pictureHalo({ mailaddress: 'beamer@open-xchange.com', description: '', id: 1337 });
+            var url = api.pictureHalo($(), { mailaddress: 'beamer@open-xchange.com', description: '', id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.base + '/apps/themes/default/dummypicture_resource.png');
         });
 
         it('should return proper image path for groups', function () {
-            var url = api.pictureHalo({ members: [], id: 1337 });
+            var url = api.pictureHalo($(), { members: [], id: 1337 }, { urlOnly: true });
             expect(url).to.contain(ox.base + '/apps/themes/default/dummypicture_group.png');
         });
 
