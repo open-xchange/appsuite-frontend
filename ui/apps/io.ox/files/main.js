@@ -478,6 +478,7 @@ define('io.ox/files/main', [
                             return files.indexOf($(this).attr('data-cid')) >= 0;
                         });
 
+                        selection.selectNone();
                         selection.selectAll(items);
                     });
                 });
