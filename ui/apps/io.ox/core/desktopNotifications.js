@@ -20,7 +20,7 @@ define('io.ox/core/desktopNotifications', [
     'use strict';
 
     var desktopNotifications,
-        supported = !!Notification;
+        supported = !!window.Notification;
 
     //actually draws the message
     function draw(message) {
