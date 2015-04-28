@@ -185,15 +185,10 @@ define('io.ox/core/viewer/views/mainview', [
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.opened);
             this.$el.hide();
-            if (this.app) {
-                this.app.quit();
-            } else {
-                this.remove();
-            }
+            this.remove();
         },
 
         disposeView: function () {
-            //console.info('MainView.disposeView()');
             this.toolbarView.remove();
             this.displayerView.remove();
             this.sidebarView.remove();
@@ -205,6 +200,10 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView = null;
             this.sidebarView = null;
             $(window).off('resize.viewer');
+            if (this.app) {
+                this.app.quit();
+                this.app = null;
+            }
             return this;
         }
     });
