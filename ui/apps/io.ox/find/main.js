@@ -405,20 +405,23 @@ define('io.ox/find/main', [
                 app.placeholder.destroy();
                 delete app.placeholder;
             }
+
             // initialize views (tokenfield, typeahed, etc)
             app.set('state', 'launching');
-            require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
-                app.model = new MainModel({ app: app });
-                app.view = new MainView({ app: app, model: app.model });
-                // inplace: use parents view window
-                app.view.render();
-                register();
-                app.getConfig().then(function (data) {
-                    app.model.manager.update(data);
-                    // TODO: or delay 'app.view.render()' until this point
-                    app.view.ui.facets.render();
+            require(['io.ox/find/bundle'], function () {
+                require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
+                    app.model = new MainModel({ app: app });
+                    app.view = new MainView({ app: app, model: app.model });
+                    // inplace: use parents view window
+                    app.view.render();
+                    register();
+                    app.getConfig().then(function (data) {
+                        app.model.manager.update(data);
+                        // TODO: or delay 'app.view.render()' until this point
+                        app.view.ui.facets.render();
+                    });
+                    app.set('state', 'launched');
                 });
-                app.set('state', 'launched');
             });
         };
 

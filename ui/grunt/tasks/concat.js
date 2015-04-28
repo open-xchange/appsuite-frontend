@@ -285,6 +285,40 @@ module.exports = function (grunt) {
                         nonull: true
                     }
                 ]
+            },
+            find: {
+                options: {
+                    banner: 'define("io.ox/find/bundle", [], function () {\n\n' +
+                                '"use strict";\n\n',
+                    footer: '});\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'apps/io.ox/find/date/extensions.js',
+                            'apps/io.ox/find/date/lookup.js',
+                            'apps/io.ox/find/date/value-model.js',
+                            'apps/io.ox/find/manager/facet-collection.js',
+                            'apps/io.ox/find/manager/facet-model.js',
+                            'apps/io.ox/find/manager/value-collection.js',
+                            'apps/io.ox/find/manager/value-model.js',
+                            'apps/io.ox/find/api.js',
+                            'apps/io.ox/find/apiproxy.js',
+                            'apps/io.ox/find/extensions-api.js',
+                            'apps/io.ox/find/extensions-facets.js',
+                            'apps/io.ox/find/extensions-tokenfield.js',
+                            'apps/io.ox/find/model.js',
+                            'apps/io.ox/find/view-facets.js',
+                            'apps/io.ox/find/view-placeholder.js',
+                            'apps/io.ox/find/view-searchbox.js',
+                            'apps/io.ox/find/view-token.js',
+                            'apps/io.ox/find/view-tokenfield.js',
+                            'apps/io.ox/find/view.js'
+                        ],
+                        dest: 'build/apps/io.ox/find/bundle.js',
+                        nonull: true
+                    }
+                ]
             }
         }
     });
