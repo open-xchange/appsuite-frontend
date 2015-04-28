@@ -316,7 +316,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Close the viewer.
          */
         onClose: function (event) {
-            //console.info('ToolbarView.onClose()');
             event.preventDefault();
             event.stopPropagation();
             this.trigger('viewer:close');
@@ -326,7 +325,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Toggles the visibility of the sidebar.
          */
         onToggleSidebar: function () {
-            //console.info('ToolbarView.onToggleSidebar()');
             EventDispatcher.trigger('viewer:toggle:sidebar');
         },
 
@@ -334,7 +332,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Handles changes of the side bar toggle state
          */
         onSidebarToggled: function (state) {
-            //console.info('ToolbarView.onSidebarToggled()');
             this.$('.viewer-toolbar-togglesidebar').toggleClass('active', state).focus();
             this.sideBarState = state;
         },
@@ -346,7 +343,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          * @param {jQuery.Event} event
          */
         onRename: function (event) {
-            //console.warn('TooölbarView.onRename()', event);
             if ((this.model.isFile()) && (event.which === 32 || event.which === 13 || event.type === 'click')) {
                 event.preventDefault();
                 ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
@@ -354,7 +350,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         onModelChange: function (changedModel) {
-            //console.warn('ToolbarView.onModelChange()', changedModel);
             this.render(changedModel);
         },
 
@@ -368,7 +363,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          *  this view object itself.
          */
         render: function (model) {
-            //console.warn('ToolbarView.render()', data, this);
             if (!model) {
                 console.error('Core.Viewer.ToolbarView.render(): no file to render');
                 return this;
@@ -383,7 +377,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                     models: isDriveFile ? [model] : null,
                     data: isDriveFile ? model.toJSON() : origData
                 }),
-                appName = model.get('source');
+                appName = model.get('source'),
+                self = this;
             // remove listener from previous model
             if (this.model) {
                 this.stopListening(this.model, 'change');
@@ -409,7 +404,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_LINKS_ID + '/' + appName
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
-
+            // workaround for correct TAB traversal order:
+            // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
+            _.defer(function () {
+                self.$el.find('.dropdown').after(
+                    self.$el.find('.viewer-toolbar-close').parent()
+                );
+            });
             this.$('.viewer-toolbar-togglesidebar').toggleClass('active', this.sideBarState);
             return this;
         },
@@ -418,7 +419,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Destructor of this view
          */
         disposeView: function () {
-            //console.warn('ToolbarView.disposeView()');
             this.model.off().stopListening();
             this.model = null;
         }
