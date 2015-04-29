@@ -357,7 +357,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onModelChange: function (changedModel) {
             // ignore events that require no render
-            if (!this.model.previous('description') && changedModel.get('description') === '') {
+            if (!_.isString(this.model.previous('description')) && changedModel.get('description') === '') {
                 return;
             }
             this.render(changedModel);
