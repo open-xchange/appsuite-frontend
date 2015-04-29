@@ -125,6 +125,12 @@ define('io.ox/core/folder/node', [
             if (previous === selected) this.options.tree.trigger('change', id);
             // close sub-folders
             this.options.open = false;
+            // update collection
+            if (this.collection) {
+                this.collection = api.pool.getCollection(id);
+                this.isReset = false;
+                this.reset();
+            }
             this.onChangeSubFolders();
         },
 
