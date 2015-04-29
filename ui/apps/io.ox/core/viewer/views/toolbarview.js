@@ -349,7 +349,17 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
         },
 
+        /**
+         * Model change handler.
+         * - rerenders the toolbar
+         * @param {Object} changedModel
+         *  an object with changed model attributes.
+         */
         onModelChange: function (changedModel) {
+            // ignore events that require no render
+            if (!this.model.previous('description') && changedModel.get('description') === '') {
+                return;
+            }
             this.render(changedModel);
         },
 
@@ -379,6 +389,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }),
                 appName = model.get('source'),
                 self = this;
+
             // remove listener from previous model
             if (this.model) {
                 this.stopListening(this.model, 'change');
