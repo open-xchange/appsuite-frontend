@@ -418,6 +418,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             // workaround for correct TAB traversal order:
             // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
             _.defer(function () {
+                if (self.disposed) {
+                    return;
+                }
                 self.$el.find('.dropdown').after(
                     self.$el.find('.viewer-toolbar-close').parent()
                 );

@@ -130,6 +130,9 @@ define('io.ox/core/viewer/views/displayerview', [
             // create slides from file collection and append them to the carousel
             this.createSlides(carouselInner)
             .done(function () {
+                if (self.disposed) {
+                    return;
+                }
                 // initiate swiper
                 self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
                 // overwrite the original removeSlide function because its buggy
@@ -161,6 +164,9 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 TypesRegistry.getModelType(slideModel)
                     .then(function (ModelType) {
+                        if (self.disposed) {
+                            return;
+                        }
                         var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
                         view.render().prefetch().show();
                         self.slideDuplicateViews.push(view);
@@ -210,6 +216,9 @@ define('io.ox/core/viewer/views/displayerview', [
             resultDef = $.when.apply(null, promises);
 
             resultDef.done(function () {
+                if (this.disposed) {
+                    return;
+                }
                 // in case of 'done' the arguments array contains the View instances
                 for (var i = 0; i < arguments.length; i++) {
                     var view = arguments[i];
@@ -543,9 +552,11 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         disposeView: function () {
-            this.swiper.removeAllSlides();
-            this.swiper.destroy();
-            this.swiper = null;
+            if (this.swiper) {
+                this.swiper.removeAllSlides();
+                this.swiper.destroy();
+                this.swiper = null;
+            }
             this.captionTimeoutId = null;
             this.loadedSlides = null;
             this.slideViews = null;

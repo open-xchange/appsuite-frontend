@@ -127,7 +127,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 // after loading the file details we set at least an empty string as description.
                 // in order to distinguish between 'the file details have been loaded but the file has no description'
                 // and 'the file details have not been loaded yet so we don't know if it has a description'.
-                if (this.model.isFile()) {
+                if (this.model && this.model.isFile()) {
                     var description = (file && _.isString(file.description)) ? file.description : '';
                     this.model.set('description', description);
                 }
