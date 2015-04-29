@@ -16,13 +16,25 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
     'io.ox/files/api',
+    'io.ox/core/dropzone',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview',
-    'io.ox/core/viewer/views/sidebar/uploadnewversionview'
-], function (Ext, DisposableView, EventDispatcher, Util, FilesAPI, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView) {
+    'io.ox/core/viewer/views/sidebar/uploadnewversionview',
+    'gettext!io.ox/core/viewer'
+], function (Ext, DisposableView, EventDispatcher, Util, FilesAPI, Dropzone, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
 
     'use strict';
+
+    /**
+     * notifications lazy load
+     */
+    function notify () {
+        var self = this, args = arguments;
+        require(['io.ox/core/notifications'], function (notifications) {
+            notifications.yell.apply(self, args);
+        });
+    }
 
     // define extension points for this SidebarView
     Ext.point('io.ox/core/viewer/sidebar').extend({
@@ -45,13 +57,12 @@ define('io.ox/core/viewer/views/sidebarview', [
         opened: false,
 
         initialize: function () {
-            //console.info('SidebarView.initialize()');
             this.model = null;
+            this.zone = null;
 
             this.on('dispose', this.disposeView.bind(this));
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (model) {
-                //console.warn('SidebarbarView viewer:displayeditem:change', data);
                 if (model) {
                     this.model = model;
                     this.renderSections();
@@ -80,16 +91,29 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            //console.info('SidebarView.renderSections()', 'sidebar open', this.opened);
             // remove previous sections
             this.$el.empty();
+            // remove dropzone handler
+            if (this.zone) {
+                this.zone.off();
+                this.zone = null;
+            }
             // render sections only if side bar is open
             if (!this.model || !this.opened) {
                 return;
             }
             // load file details
             this.loadFileDetails();
-
+            // add dropzone for drive files
+            if (this.model.isFile()) {
+                this.zone = new Dropzone.Inplace({
+                    caption: gt('Drop new version here')
+                });
+                // drop handler
+                this.zone.on('drop', this.onNewVersionDropped.bind(this));
+                this.$el.append(this.zone.render().$el.addClass('abs'));
+            }
+            // render sections
             this.$el.append(
                 new FileInfoView({ model: this.model }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
@@ -99,7 +123,6 @@ define('io.ox/core/viewer/views/sidebarview', [
         },
 
         render: function (model) {
-            //console.info('SidebarView.render()', data);
             // a11y
             this.$el.attr({ tabindex: -1, role: 'complementary' }); // TODO: check if we need to set role 'tablist' now instead
             // set device type
@@ -116,14 +139,12 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and the number of versions.
          */
         loadFileDetails: function () {
-            //console.info('SidebarView.loadFileDetails()');
             if (!this.model) {
                 return;
             }
 
             FilesAPI.get(this.model.toJSON())
             .done(function (file) {
-                //console.info('SidebarView.loadFileDetails()', 'done', file);
                 // after loading the file details we set at least an empty string as description.
                 // in order to distinguish between 'the file details have been loaded but the file has no description'
                 // and 'the file details have not been loaded yet so we don't know if it has a description'.
@@ -132,6 +153,28 @@ define('io.ox/core/viewer/views/sidebarview', [
                     this.model.set('description', description);
                 }
             }.bind(this));
+        },
+
+        /**
+         * Handles new version drop.
+         *
+         * @param {Array} files.
+         *  An array of File objects.
+         */
+        onNewVersionDropped: function (files) {
+            // check for single item drop
+            if (!_.isArray(files) || files.length !== 1) {
+                notify({ error: gt('Drop only a single file as new version.') });
+                return;
+            }
+
+            FilesAPI.versions.upload({
+                file: _.first(files),
+                id: this.model.get('id'),
+                folder: this.model.get('folder_id'),
+                version_comment: ''
+            })
+            .fail(notify);
         },
 
         /**
@@ -159,8 +202,11 @@ define('io.ox/core/viewer/views/sidebarview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            //console.info('SidebarView.disposeView()');
             this.$el.disableTouch();
+            if (this.zone) {
+                this.zone.off();
+                this.zone = null;
+            }
             this.model = null;
         }
     });
