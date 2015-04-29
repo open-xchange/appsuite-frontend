@@ -476,6 +476,7 @@ define('io.ox/core/extPatterns/links',
                     'aria-haspopup': true,
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
                 })
+                .addClass(options.smart ? 'smart-dropdown' : '')
                 .append(
                     options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
                     options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
@@ -483,7 +484,6 @@ define('io.ox/core/extPatterns/links',
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )
         );
-        toggle.dropdown();
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 
