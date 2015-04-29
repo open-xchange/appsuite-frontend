@@ -10,7 +10,9 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/viewer/views/types/typesregistry', function () {
+define('io.ox/core/viewer/views/types/typesregistry', [
+'io.ox/core/capabilities'
+], function (Capabilities) {
 
     'use strict';
 
@@ -51,6 +53,10 @@ define('io.ox/core/viewer/views/types/typesregistry', function () {
 
             var modelTypeName = typesMap[model.getFileType()],
                 modelType = this.checkModelTypeForDebug(modelTypeName);
+
+            if ((model.isOffice() || model.isPDF()) && !Capabilities.has('document_preview')) {
+                modelType = 'defaultview';
+            }
 
             return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {
