@@ -629,11 +629,6 @@
             };
         }()),
 
-        // returns a subclass of Array
-        extendFromArray: function (protoProps, classProps) {
-            return inherits(Array, protoProps, classProps);
-        },
-
         // helper for benchmarking
         clock: (function () {
             var last = null, i = 1;
