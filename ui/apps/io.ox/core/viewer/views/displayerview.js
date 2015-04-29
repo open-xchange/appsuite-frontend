@@ -294,7 +294,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // remove listener from previous and attach to current model
             if (previousModel) {
-                this.stopListening(previousModel, 'change:version', this.onModelChangeVersion);
+                this.stopListening(previousModel, 'change:version change:number_of_versions', this.onModelChangeVersion);
             }
             this.listenTo(activeModel, 'change:version change:number_of_versions', this.onModelChangeVersion.bind(this));
         },
