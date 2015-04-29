@@ -79,7 +79,7 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
-            $(document).on(EVENTS, $.proxy(this.onDrag, this));
+            $(document).on(EVENTS, this.onDrag.bind(this));
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
         },
 
