@@ -29,6 +29,13 @@ define([
 
         beforeEach(function () {
             api.pool.get('detail').reset();
+            this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+                expect(xhr.url).to.contain('parent=4711');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: []
+                }));
+            });
             this.server.respondWith('GET', /api\/files\?action=all/, function (xhr) {
                 expect(xhr.url).to.contain('folder=4711');
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
@@ -90,7 +97,7 @@ define([
         describe('versions of files', function () {
             it('should be a list for each file', function () {
                 var server = this.server;
-                return api.versions({
+                return api.versions.load({
                     id: '1337'
                 }).then(function (versions) {
                     expect(versions).to.be.an('array');
@@ -102,10 +109,10 @@ define([
             });
             it('should cache versions', function () {
                 var server = this.server;
-                return api.versions({
+                return api.versions.load({
                     id: '1337'
                 }).then(function () {
-                    return api.versions({
+                    return api.versions.load({
                         id: '1337'
                     });
                 }).then(function (versions) {
