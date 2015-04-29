@@ -26,7 +26,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
         defaults: {
             startTimezone: coreSettings.get('timezone'),
             endTimezone: coreSettings.get('timezone'),
-            keepTime: true
+            convertTime: false
         }
     });
 
@@ -83,7 +83,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
             function drawNotice() {
                 node.empty();
                 if (baton.model.get('startTimezone') !== baton.model.get('endTimezone')) {
-                    node.text(gt('When you select different timezones the timezone of the end date will not be saved.'));
+                    node.text(gt('If you select different timezones, the appointment\'s start and end dates are saved in the timezone of the appointment\'s start date. A different end date timezone only allows a convenient conversion.'));
                 }
             }
 
@@ -103,8 +103,8 @@ define('io.ox/calendar/edit/timezone-dialog', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<div class="checkbox">').append(
-                        $('<label>').text(gt('Keep start and end time')).prepend(
-                            new mini.CheckboxView({ name: 'keepTime', model: baton.model }).render().$el
+                        $('<label>').text(gt('Convert the entered start and end dates to match the modified timezones')).prepend(
+                            new mini.CheckboxView({ name: 'convertTime', model: baton.model }).render().$el
                         )
                     )
                 )
@@ -143,7 +143,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
                 ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.getContentNode(), { model: model });
             })
             .on('change', function () {
-                if (model.get('keepTime')) {
+                if (model.get('convertTime')) {
                     var utcStart = getUtc('start_date', model.get('startTimezone')),
                         utcEnd = getUtc('end_date', model.get('endTimezone'));
 
