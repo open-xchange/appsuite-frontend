@@ -99,7 +99,8 @@ define('io.ox/mail/detail/view', [
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
         noCaret: true,
-        ref: 'io.ox/mail/links/inline'
+        ref: 'io.ox/mail/links/inline',
+        smart: true
     }));
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -286,6 +287,9 @@ define('io.ox/mail/detail/view', [
 
             // ignore click on dropdowns
             if ($(e.target).hasClass('dropdown-menu')) return;
+
+            // ignore clicks on overlays
+            if ($(e.target).hasClass('overlay')) return;
 
             // don't toggle single messages unless it's collapsed
             if (this.$el.siblings().length === 0 && this.$el.hasClass('expanded')) return;

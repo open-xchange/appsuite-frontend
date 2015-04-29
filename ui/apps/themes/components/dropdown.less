@@ -123,6 +123,21 @@ ul.dropdown-menu li a.disabled {
     .divider:first-child, .divider:last-child, .divider + .divider { display: none; }
 }
 
+.smart-dropdown-container {
+    ul {
+        position: fixed;
+        overflow-y: auto;
+        z-index: 10002;
+    }
+
+    .abs {
+        overflow: hidden;
+        z-index: 10001;
+        position: fixed;
+        cursor: default;
+    }
+}
+
 // TINY SCREENS
 @media (max-width: 700px) {
     .window-head {
