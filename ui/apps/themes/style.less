@@ -3792,6 +3792,21 @@ a.toolbar-action, .toolbar-action > a {
     margin-top: 6px;
 }
 
+.smart-dropdown-container {
+    ul {
+        position: fixed;
+        overflow-y: auto;
+        z-index: 10002;
+    }
+
+    .abs {
+        overflow: hidden;
+        z-index: 10001;
+        position: fixed;
+        cursor: default;
+    }
+}
+
 /** BOOTSTRAP FIXES **/
 
 .label.pointer {

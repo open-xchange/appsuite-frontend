@@ -407,7 +407,7 @@ define('io.ox/mail/common-extensions',
         }()),
 
         flagPicker: function (baton) {
-            flagPicker.draw(this, baton);
+            flagPicker.draw(this, baton, true);
         },
 
         unreadToggle: (function () {
