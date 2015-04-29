@@ -29,7 +29,8 @@ define('io.ox/files/detail/main', [
                 api.get(file).done(function (data) {
 
                     var label = gt('File Details'),
-                        title = data.filename || data.title;
+                        title = data.filename || data.title,
+                        fileModel = api.pool.get('detail').get(_.cid(data));
 
                     app.getWindowNode().addClass('detail-view-app').append(
                         $('<div class="f6-target detail-view-container">').attr({
@@ -39,7 +40,7 @@ define('io.ox/files/detail/main', [
                         }));
 
                     require(['io.ox/core/viewer/main'], function (Viewer) {
-                        Viewer.launch({ files: [data], app: app });
+                        Viewer.launch({ files: [fileModel], app: app });
                     });
 
                     app.setTitle(title);
