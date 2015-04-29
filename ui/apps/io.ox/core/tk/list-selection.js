@@ -555,7 +555,6 @@ define('io.ox/core/tk/list-selection', [
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX, currentY = touches.pageY,
                 t = $(this).css('transition','');
-
             // var unfold indicates if any node is unfolded
             // var unfolded indicates if currently touched node is unfolded
             this.startX = currentX;
@@ -578,8 +577,7 @@ define('io.ox/core/tk/list-selection', [
         onTouchMove: function (e) {
 
             var touches = e.originalEvent.touches[0],
-                currentX = touches.pageX + 9;
-
+                currentX = touches.pageX;
             this.distanceX = (this.startX - currentX) * -1; // invert value
             this.scrolling = false;
 
@@ -614,7 +612,7 @@ define('io.ox/core/tk/list-selection', [
                 // translate the moved cell
                 if (this.distanceX < 0) {
                     this.target.css({
-                        //'-webkit-transform': 'translateX(' + this.distanceX + 'px)',
+                        '-webkit-transform': 'translate3d(' + (this.distanceX + THRESHOLD_X) + 'px,0,0)',
                         'transform': 'translate3d(' + (this.distanceX + THRESHOLD_X) + 'px,0,0)'
                     });
                 }
@@ -622,7 +620,8 @@ define('io.ox/core/tk/list-selection', [
                 if (Math.abs(this.distanceX) >= THRESHOLD_REMOVE && !this.expandDelete) {
                     this.expandDelete = true;
                     this.btnMore.hide();
-
+                    // disabled due to
+                    // performance issues
                     /*this.btnDelete.velocity({
                         width: ['100%', EASING]
                     }, {
@@ -634,6 +633,8 @@ define('io.ox/core/tk/list-selection', [
                 } else if (this.expandDelete && Math.abs(this.distanceX) <= THRESHOLD_REMOVE) {
                     // remove style
                     this.expandDelete = false;
+                    // disabled due to
+                    // performance issues
                     /*this.btnDelete.velocity({
                         width: ['95px', EASING]
                     }, {
