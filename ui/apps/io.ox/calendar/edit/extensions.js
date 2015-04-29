@@ -152,7 +152,7 @@ define('io.ox/calendar/edit/extensions', [
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'start_date',
                     label: gt('Starts on'),
-                    timezoneButton: true,
+                    timezoneButton: settings.get('features/changeTimezone', false),
                     timezoneAttribute: 'timezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
@@ -174,7 +174,7 @@ define('io.ox/calendar/edit/extensions', [
                     display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
                     attribute: 'end_date',
                     label: gt('Ends on'),
-                    timezoneButton: true,
+                    timezoneButton: settings.get('features/changeTimezone', false),
                     timezoneAttribute: 'endTimezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
