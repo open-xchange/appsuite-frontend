@@ -255,7 +255,10 @@
     queryScreen();
 
     function isSmartphone() {
-        var size = Math.min(screen.width, screen.height) < 540,
+        var android = window.navigator.userAgent.match(/Android.*AppleWebKit\/([\d.]+)/),
+            stockBrowser = android && android[1] < 537,
+            ratio = stockBrowser ? (window.devicePixelRatio || 1) : 1,
+            size = Math.min(screen.width / ratio, screen.height / ratio) < 540,
             touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch),
             razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
 
