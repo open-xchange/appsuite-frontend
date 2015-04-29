@@ -630,7 +630,7 @@ msgstr "実際の時間 (分)"
 #: apps/io.ox/core/folder/actions/add.js:107 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:427 module:io.ox/mail
 msgid "Add"
 msgstr "追加"
 
@@ -661,7 +661,7 @@ msgid "Add as public folder"
 msgstr "サブフォルダを追加"
 
 #: apps/io.ox/core/tk/attachments.js:455 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:428 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:429 module:io.ox/mail
 msgid "Add attachments"
 msgstr "添付ファイルを追加"
 
@@ -685,12 +685,12 @@ msgid "Add files"
 msgstr "ファイルを追加"
 
 #: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:459 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:460 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Drive から追加"
 
 #: apps/io.ox/files/actions.js:448 module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js:452 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:453 module:io.ox/mail
 msgid "Add local file"
 msgstr "ローカル ファイルを追加"
 
@@ -931,7 +931,7 @@ msgstr "%1$d 日以上経過したメッセージは、アーカイブ フォル
 msgid "All my appointments"
 msgstr "すべてのアポイント"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:74 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:77 module:io.ox/core
 #, fuzzy
 msgid "All timezones"
 msgstr "タイムゾーン"
@@ -1123,8 +1123,8 @@ msgstr[0] "添付ファイルを保存しました。"
 #: apps/io.ox/calendar/edit/extensions.js:549 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:376 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:443 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:465
+#: apps/io.ox/mail/compose/extensions.js:444 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:466
 #: apps/io.ox/tasks/edit/view-template.js:502 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:92 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:224
@@ -1363,8 +1363,8 @@ msgstr "予定表ビュー"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:586
-#: apps/io.ox/files/main.js:637 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:587
+#: apps/io.ox/files/main.js:638 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1372,7 +1372,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29 module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js:63 apps/io.ox/mail/actions/delete.js:82
 #: apps/io.ox/mail/actions/reminder.js:35
-#: apps/io.ox/mail/compose/extensions.js:427
+#: apps/io.ox/mail/compose/extensions.js:428
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
@@ -1651,7 +1651,7 @@ msgid "Close"
 msgstr "閉じる"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:619 module:io.ox/files
+#: apps/io.ox/files/main.js:620 module:io.ox/files
 #: apps/io.ox/files/view-options.js:210 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2589,7 +2589,7 @@ msgid "Drop EML file here for import"
 msgstr ""
 "このメールをインポートするには、ここに EML ファイルをドロップしてください。"
 
-#: apps/io.ox/mail/compose/extensions.js:371 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:372 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "ここに添付ファイルをドロップしてください。"
 
@@ -2669,7 +2669,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:486
 #: module:io.ox/files apps/io.ox/files/actions.js:496
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
-#: apps/io.ox/files/main.js:589 apps/io.ox/files/main.js:637
+#: apps/io.ox/files/main.js:590 apps/io.ox/files/main.js:638
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3165,7 +3165,7 @@ msgstr "タイムゾーン"
 msgid "Favorited"
 msgstr "お気に入り"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:73 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:76 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:673 module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js:69
 msgid "Favorites"
@@ -3212,8 +3212,7 @@ msgstr "気持ち・装飾"
 msgid "File"
 msgstr "ファイル"
 
-#: apps/io.ox/files/detail/main.js:30 module:io.ox/files
-#: apps/io.ox/files/detail/main.js:44
+#: apps/io.ox/files/detail/main.js:31 module:io.ox/files
 msgid "File Details"
 msgstr "ファイルの詳細"
 
@@ -4812,7 +4811,7 @@ msgstr "宛先がありません。"
 msgid "No reminder"
 msgstr "アラームなし"
 
-#: apps/io.ox/mail/compose/extensions.js:338 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:339 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:339
 #: apps/io.ox/mail/settings/signatures/register.js:341
 #: apps/io.ox/mail/settings/signatures/register.js:403
@@ -5112,7 +5111,7 @@ msgstr "オプション 20"
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:221 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:352 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:182 apps/io.ox/mail/toolbar.js:248
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
@@ -6596,7 +6595,7 @@ msgstr "署名"
 msgid "Signature name"
 msgstr "署名タイトル"
 
-#: apps/io.ox/mail/compose/extensions.js:337 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:338 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:421
 msgid "Signatures"
 msgstr "署名"
@@ -6730,7 +6729,7 @@ msgstr ""
 msgid "Standard folders"
 msgstr "標準フォルダ"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:72 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:75 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:669 module:io.ox/calendar
 #, fuzzy
 msgid "Standard timezone"
@@ -6801,8 +6800,8 @@ msgstr "学生"
 
 #: apps/io.ox/calendar/edit/extensions.js:109 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:303
-#: apps/io.ox/mail/compose/extensions.js:307
+#: apps/io.ox/mail/compose/extensions.js:304
+#: apps/io.ox/mail/compose/extensions.js:308
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
@@ -8021,7 +8020,7 @@ msgstr "詳細を隠す"
 msgid "View source"
 msgstr "ソースを表示"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:378 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:372 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "エディタ用ツールバー"
