@@ -17,8 +17,9 @@ define('io.ox/tasks/model', [
     'io.ox/backbone/validation',
     'io.ox/core/extensions',
     'io.ox/participants/model',
+    'settings!io.ox/core',
     'gettext!io.ox/tasks'
-], function (api, ModelFactory, Validations, ext, pModel, gt) {
+], function (api, ModelFactory, Validations, ext, pModel, settings, gt) {
 
     'use strict';
 
@@ -29,6 +30,8 @@ define('io.ox/tasks/model', [
             folder_id: api.getDefaultFolder(),
             recurrence_type: 0,
             private_flag: false,
+            // helper timezone for datepicker, is removed before saving
+            timezone: settings.get('timezone'),
             //set always (OX6 does this too)
             notification: true
         },

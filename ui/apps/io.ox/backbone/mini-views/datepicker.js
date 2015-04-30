@@ -141,6 +141,9 @@ define('io.ox/backbone/mini-views/datepicker', [
                     self.nodes.dayField.datepicker({
                         clearBtn: self.options.clearButton,
                         parentEl: self.$el
+                    }).on('clearDate', function () {
+                        // clear the timefield too if the clearbutton is pressed
+                        self.nodes.timeField.val('');
                     });
 
                     // build and init timepicker based on combobox plugin
