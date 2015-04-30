@@ -457,6 +457,21 @@ define('io.ox/files/main', [
             api.on('add:file', _.throttle(function () {
                 app.listView.reload();
             }, 10000));
+            var myFolder = false,
+                doReload = _.debounce(function () {
+                    // we only need to reload if the current folder is affected
+                    if (myFolder) {
+                        myFolder = false;
+                        app.listView.reload();
+                    }
+                }, 100);
+            api.on('copy', function (e, list, targetFolder) {
+                var appfolder = app.folder.get();
+                if (appfolder === targetFolder) {
+                    myFolder = true;
+                }
+                doReload();
+            });
         },
 
         /*
