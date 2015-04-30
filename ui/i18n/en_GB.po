@@ -147,8 +147,8 @@ msgstr[1] "%1$d Minutes"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:141 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:376
+#: apps/io.ox/core/viewer/views/displayerview.js:144 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:385
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s of %2$s"
@@ -261,7 +261,7 @@ msgstr "%1$s %2$s."
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js:370 module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js:369 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:1903
 #, c-format
 msgid "%1$s (Tentative)"
@@ -909,7 +909,7 @@ msgid "Advanced options"
 msgstr "Advanced Settings"
 
 #: apps/io.ox/files/view-options.js:111 module:io.ox/files
-#: apps/io.ox/find/extensions-api.js:302 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:346 module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
 #: apps/io.ox/search/facets/extensions.js:280
 #: apps/io.ox/search/facets/extensions.js:368
@@ -922,7 +922,7 @@ msgstr "All"
 msgid "All Emoji"
 msgstr "All Emoji"
 
-#: apps/io.ox/find/extensions-api.js:238 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:282 module:io.ox/core
 #, fuzzy
 msgid "All Folders"
 msgstr "All folders"
@@ -1277,7 +1277,7 @@ msgstr "Birthdays"
 msgid "Black"
 msgstr "Black"
 
-#: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:69 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
@@ -1858,6 +1858,11 @@ msgstr "Conversations"
 msgctxt "app"
 msgid "Conversations"
 msgstr "Conversations"
+
+#: apps/io.ox/calendar/edit/timezone-dialog.js:106
+#: module:io.ox/calendar/edit/main
+msgid "Convert the entered start and end dates to match the modified timezones"
+msgstr ""
 
 #: apps/io.ox/contacts/actions.js:134 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:456
@@ -2658,6 +2663,16 @@ msgid ""
 msgstr ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Upload new version"
+msgid "Drop new version here"
+msgstr "Upload new version"
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:167 module:io.ox/core/viewer
+msgid "Drop only a single file as new version."
+msgstr ""
+
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js:89 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:61 module:io.ox/mail
@@ -2831,7 +2846,7 @@ msgstr "Email addresses"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:411
+#: apps/io.ox/mail/detail/view.js:415
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail from %1$s: %2$s"
 
@@ -3322,8 +3337,8 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:237 module:io.ox/calendar
-#: apps/io.ox/find/extensions-api.js:218 module:io.ox/core
-#: apps/io.ox/find/extensions-api.js:230 apps/io.ox/mail/detail/links.js:65
+#: apps/io.ox/find/extensions-api.js:262 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:274 apps/io.ox/mail/detail/links.js:65
 #: module:io.ox/mail apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Folder"
@@ -3360,8 +3375,8 @@ msgstr ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
 
-#: apps/io.ox/core/folder/node.js:461 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:468
+#: apps/io.ox/core/folder/node.js:467 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:474
 msgid "Folder-specific actions"
 msgstr "Folder-specific actions"
 
@@ -3523,14 +3538,14 @@ msgstr "Good evening, %s"
 msgid "Good morning, %s"
 msgstr "Good morning, %s"
 
-#: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:71 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Gray"
 
-#: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:70 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
@@ -3729,6 +3744,14 @@ msgid ""
 msgstr ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
+
+#: apps/io.ox/calendar/edit/timezone-dialog.js:86
+#: module:io.ox/calendar/edit/main
+msgid ""
+"If you select different timezones, the appointment's start and end dates are "
+"saved in the timezone of the appointment's start date. A different end date "
+"timezone only allows a convenient conversion."
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:98 module:io.ox/calendar/freebusy
 msgid ""
@@ -4008,11 +4031,6 @@ msgstr "Keep"
 msgid "Keep a copy of the message"
 msgstr "Keep a copy of the message"
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js:106
-#: module:io.ox/calendar/edit/main
-msgid "Keep start and end time"
-msgstr ""
-
 #: apps/io.ox/core/settings/pane.js:131 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:92 module:plugins/portal
 msgid "Language"
@@ -4027,7 +4045,25 @@ msgstr "Language-specific default"
 msgid "Languages"
 msgstr "Languages"
 
-#: apps/io.ox/find/example.js:71 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:105 module:io.ox/core
+#, fuzzy
+#| msgid "3 days"
+msgid "Last 30 days"
+msgstr "3 days"
+
+#: apps/io.ox/find/date/lookup.js:109 module:io.ox/core
+#, fuzzy
+#| msgid "5 days"
+msgid "Last 365 days"
+msgstr "5 days"
+
+#: apps/io.ox/find/date/lookup.js:101 module:io.ox/core
+#, fuzzy
+#| msgid "Last name"
+msgid "Last 7 days"
+msgstr "Last name"
+
+#: apps/io.ox/find/date/lookup.js:92 module:io.ox/core
 #, fuzzy
 msgid "Last month"
 msgstr "Months"
@@ -4042,13 +4078,13 @@ msgstr "Last name"
 msgid "Last name, First name"
 msgstr "Last name, First name"
 
-#: apps/io.ox/find/example.js:70 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:88 module:io.ox/core
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "Last Week"
 
-#: apps/io.ox/find/example.js:72 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:96 module:io.ox/core
 #, fuzzy
 #| msgid "Last name"
 msgid "Last year"
@@ -4084,14 +4120,14 @@ msgstr "Letters • Symbols"
 msgid "Life"
 msgstr "Life"
 
-#: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:76 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Light blue"
 
-#: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:73 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
@@ -4507,7 +4543,7 @@ msgstr "Months"
 
 #: apps/io.ox/core/extPatterns/links.js:362 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:375
-#: apps/io.ox/find/extensions-api.js:156
+#: apps/io.ox/find/extensions-api.js:200
 #: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr "More"
@@ -4861,7 +4897,7 @@ msgstr "No title."
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:273 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:67 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5141,7 +5177,7 @@ msgstr "Optional 20"
 msgid "Options"
 msgstr "Options"
 
-#: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:74 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
@@ -5340,7 +5376,7 @@ msgstr "Phone numbers"
 msgid "Pick a time here"
 msgstr "Pick a time here"
 
-#: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:75 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
@@ -5721,7 +5757,7 @@ msgstr "Public"
 msgid "Purchase confirmation"
 msgstr "Purchase confirmation"
 
-#: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:72 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
@@ -5845,7 +5881,7 @@ msgstr "Recurring tasks need a valid due date."
 msgid "Recurring tasks need a valid start date."
 msgstr "Recurring tasks need a valid start date."
 
-#: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:68 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
@@ -6399,8 +6435,8 @@ msgstr "Server unreachable"
 msgid "Server version"
 msgstr "Server version"
 
-#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:97 apps/io.ox/mail/toolbar.js:98
+#: apps/io.ox/core/tk/flag-picker.js:137 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:142 apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr "Set colour"
 
@@ -7587,7 +7623,7 @@ msgstr "This email has been added to the portal"
 msgid "This mail has no content"
 msgstr "This email has no content"
 
-#: apps/io.ox/mail/detail/view.js:239 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:240 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "This message has been truncated due to size limitations."
 
@@ -7664,8 +7700,9 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/example.js:68 apps/plugins/portal/birthdays/register.js:87
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/lookup.js:80
+#: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
 msgstr "Today"
 
@@ -7718,7 +7755,7 @@ msgstr "Top 10 you sent email to"
 msgid "Total cost"
 msgstr "Total cost"
 
-#: apps/io.ox/core/folder/node.js:445 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:451 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Total: %1$d"
 
@@ -7835,7 +7872,7 @@ msgstr "New subscription"
 msgid "Unread"
 msgstr "Unread"
 
-#: apps/io.ox/core/folder/node.js:446 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:452 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Unread: %1$d"
 
@@ -8055,7 +8092,7 @@ msgstr "Hide details"
 msgid "View source"
 msgstr "View source"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:372 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:382 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -8147,13 +8184,6 @@ msgstr ""
 "Windows® client software. The Updater automatically informs you of new "
 "updates. You can download the updates from within the Updater."
 
-#: apps/io.ox/calendar/edit/timezone-dialog.js:86
-#: module:io.ox/calendar/edit/main
-msgid ""
-"When you select different timezones the timezone of the end date will not be "
-"saved."
-msgstr ""
-
 #: apps/io.ox/calendar/util.js:202 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Whole day"
@@ -8201,7 +8231,7 @@ msgstr "Yearly on the %1$s %2$s of %3$d"
 msgid "Years"
 msgstr "Years"
 
-#: apps/io.ox/core/tk/flag-picker.js:33 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:77 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
@@ -8224,9 +8254,9 @@ msgid "Yes, with empty attachment"
 msgstr "Yes, with empty attachment"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/example.js:69 module:io.ox/core apps/io.ox/mail/util.js:61
-#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/lookup.js:84 module:io.ox/core
+#: apps/io.ox/mail/util.js:61 apps/plugins/portal/birthdays/register.js:93
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "Yesterday"
 
@@ -8648,6 +8678,19 @@ msgstr "and"
 #: apps/io.ox/mail/common-extensions.js:282 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "and %1$d others"
+
+#: apps/io.ox/find/extensions-api.js:57 module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "as date"
+msgstr "Start date"
+
+#: apps/io.ox/find/date/extensions.js:95 module:io.ox/find
+#: apps/io.ox/find/date/extensions.js:128
+#, fuzzy
+#| msgid "date range"
+msgid "as daterange"
+msgstr "date range"
 
 #: apps/io.ox/tasks/util.js:21 module:io.ox/tasks
 msgid "by noon"
@@ -9199,9 +9242,6 @@ msgstr "yyyy"
 #~ msgid "200%"
 #~ msgstr "200%"
 
-#~ msgid "3 days"
-#~ msgstr "3 days"
-
 #~ msgid "3 weeks"
 #~ msgstr "3 weeks"
 
@@ -9216,9 +9256,6 @@ msgstr "yyyy"
 
 #~ msgid "45 minutes"
 #~ msgstr "45 minutes"
-
-#~ msgid "5 days"
-#~ msgstr "5 days"
 
 #~ msgid "50%"
 #~ msgstr "50%"
@@ -10802,9 +10839,6 @@ msgstr "yyyy"
 
 #~ msgid "Upload new files"
 #~ msgstr "Upload new files"
-
-#~ msgid "Upload new version"
-#~ msgstr "Upload new version"
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

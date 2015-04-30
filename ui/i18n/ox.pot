@@ -1292,12 +1292,12 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:86
 #: module:io.ox/calendar/edit/main
-msgid "When you select different timezones the timezone of the end date will not be saved."
+msgid "If you select different timezones, the appointment's start and end dates are saved in the timezone of the appointment's start date. A different end date timezone only allows a convenient conversion."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:106
 #: module:io.ox/calendar/edit/main
-msgid "Keep start and end time"
+msgid "Convert the entered start and end dates to match the modified timezones"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:139
@@ -1657,7 +1657,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33
 #: module:io.ox/core
-#: apps/io.ox/find/example.js:68
+#: apps/io.ox/find/date/lookup.js:80
 #: apps/plugins/portal/birthdays/register.js:87
 #: module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
@@ -1717,7 +1717,7 @@ msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js:370
+#: apps/io.ox/calendar/month/view.js:369
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:1903
 #, c-format
@@ -2056,7 +2056,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/util.js:122
 #: module:io.ox/calendar
-#: apps/io.ox/find/example.js:69
+#: apps/io.ox/find/date/lookup.js:84
 #: module:io.ox/core
 #: apps/io.ox/mail/util.js:61
 #: apps/plugins/portal/birthdays/register.js:93
@@ -2286,9 +2286,9 @@ msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js:237
 #: module:io.ox/calendar
-#: apps/io.ox/find/extensions-api.js:218
+#: apps/io.ox/find/extensions-api.js:262
 #: module:io.ox/core
-#: apps/io.ox/find/extensions-api.js:230
+#: apps/io.ox/find/extensions-api.js:274
 #: apps/io.ox/mail/detail/links.js:65
 #: module:io.ox/mail
 #: apps/io.ox/search/main.js:73
@@ -3905,7 +3905,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:362
 #: module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:375
-#: apps/io.ox/find/extensions-api.js:156
+#: apps/io.ox/find/extensions-api.js:200
 #: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr ""
@@ -4274,19 +4274,19 @@ msgstr ""
 msgid "Add to favorites"
 msgstr ""
 
-#: apps/io.ox/core/folder/node.js:445
+#: apps/io.ox/core/folder/node.js:451
 #: module:io.ox/core
 msgid "Total: %1$d"
 msgstr ""
 
-#: apps/io.ox/core/folder/node.js:446
+#: apps/io.ox/core/folder/node.js:452
 #: module:io.ox/core
 msgid "Unread: %1$d"
 msgstr ""
 
-#: apps/io.ox/core/folder/node.js:461
+#: apps/io.ox/core/folder/node.js:467
 #: module:io.ox/core
-#: apps/io.ox/core/folder/node.js:468
+#: apps/io.ox/core/folder/node.js:474
 msgid "Folder-specific actions"
 msgstr ""
 
@@ -5090,7 +5090,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436
 #: module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:23
+#: apps/io.ox/core/tk/flag-picker.js:67
 #: module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113
 #: module:io.ox/files
@@ -5405,7 +5405,7 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:24
+#: apps/io.ox/core/tk/flag-picker.js:68
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings
@@ -5414,7 +5414,7 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:25
+#: apps/io.ox/core/tk/flag-picker.js:69
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings
@@ -5423,7 +5423,7 @@ msgstr ""
 msgid "Blue"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:26
+#: apps/io.ox/core/tk/flag-picker.js:70
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings
@@ -5432,7 +5432,7 @@ msgstr ""
 msgid "Green"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:27
+#: apps/io.ox/core/tk/flag-picker.js:71
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings
@@ -5441,7 +5441,7 @@ msgstr ""
 msgid "Gray"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:28
+#: apps/io.ox/core/tk/flag-picker.js:72
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings
@@ -5450,7 +5450,7 @@ msgstr ""
 msgid "Purple"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:29
+#: apps/io.ox/core/tk/flag-picker.js:73
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings
@@ -5459,7 +5459,7 @@ msgstr ""
 msgid "Light green"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:30
+#: apps/io.ox/core/tk/flag-picker.js:74
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings
@@ -5468,7 +5468,7 @@ msgstr ""
 msgid "Orange"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:31
+#: apps/io.ox/core/tk/flag-picker.js:75
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings
@@ -5477,7 +5477,7 @@ msgstr ""
 msgid "Pink"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:32
+#: apps/io.ox/core/tk/flag-picker.js:76
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings
@@ -5486,16 +5486,16 @@ msgstr ""
 msgid "Light blue"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:33
+#: apps/io.ox/core/tk/flag-picker.js:77
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:94
+#: apps/io.ox/core/tk/flag-picker.js:137
 #: module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:97
+#: apps/io.ox/core/tk/flag-picker.js:142
 #: apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr ""
@@ -5696,9 +5696,9 @@ msgstr ""
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:141
+#: apps/io.ox/core/viewer/views/displayerview.js:144
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:376
+#: apps/io.ox/core/viewer/views/displayerview.js:385
 msgid "%1$d of %2$d"
 msgstr ""
 
@@ -5789,6 +5789,16 @@ msgstr ""
 msgid "Upload a new version"
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:110
+#: module:io.ox/core/viewer
+msgid "Drop new version here"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:167
+#: module:io.ox/core/viewer
+msgid "Drop only a single file as new version."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/toolbarview.js:47
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:53
@@ -5854,7 +5864,7 @@ msgstr ""
 msgid "Open in browser tab"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:372
+#: apps/io.ox/core/viewer/views/toolbarview.js:382
 #: module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
@@ -6642,7 +6652,7 @@ msgstr ""
 
 #: apps/io.ox/files/view-options.js:111
 #: module:io.ox/files
-#: apps/io.ox/find/extensions-api.js:302
+#: apps/io.ox/find/extensions-api.js:346
 #: module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
 #: apps/io.ox/search/facets/extensions.js:280
@@ -6709,22 +6719,48 @@ msgstr ""
 msgid "Search results"
 msgstr ""
 
-#: apps/io.ox/find/example.js:70
+#: apps/io.ox/find/date/extensions.js:95
+#: module:io.ox/find
+#: apps/io.ox/find/date/extensions.js:128
+msgid "as daterange"
+msgstr ""
+
+#: apps/io.ox/find/date/lookup.js:88
 #: module:io.ox/core
 msgid "Last week"
 msgstr ""
 
-#: apps/io.ox/find/example.js:71
+#: apps/io.ox/find/date/lookup.js:92
 #: module:io.ox/core
 msgid "Last month"
 msgstr ""
 
-#: apps/io.ox/find/example.js:72
+#: apps/io.ox/find/date/lookup.js:96
 #: module:io.ox/core
 msgid "Last year"
 msgstr ""
 
-#: apps/io.ox/find/extensions-api.js:238
+#: apps/io.ox/find/date/lookup.js:101
+#: module:io.ox/core
+msgid "Last 7 days"
+msgstr ""
+
+#: apps/io.ox/find/date/lookup.js:105
+#: module:io.ox/core
+msgid "Last 30 days"
+msgstr ""
+
+#: apps/io.ox/find/date/lookup.js:109
+#: module:io.ox/core
+msgid "Last 365 days"
+msgstr ""
+
+#: apps/io.ox/find/extensions-api.js:57
+#: module:io.ox/core
+msgid "as date"
+msgstr ""
+
+#: apps/io.ox/find/extensions-api.js:282
 #: module:io.ox/core
 msgid "All Folders"
 msgstr ""
@@ -7659,11 +7695,11 @@ msgstr ""
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:222
 #: module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:411
+#: apps/io.ox/mail/detail/view.js:415
 msgid "Email from %1$s: %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/detail/view.js:239
+#: apps/io.ox/mail/detail/view.js:240
 #: module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr ""
