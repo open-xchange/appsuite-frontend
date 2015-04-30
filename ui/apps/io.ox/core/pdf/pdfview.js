@@ -20,6 +20,8 @@ define('io.ox/core/pdf/pdfview', [
 
     var PDFPAGE_SCALING = 96.0 / 72.0,
 
+        MAX_DEVICE_PIXEL_RATIO = 2.0,
+
         DEVICE_PIXEL_RATIO = (function () {
             var devicePixelRatio = 1;
 
@@ -33,9 +35,9 @@ define('io.ox/core/pdf/pdfview', [
             return devicePixelRatio;
         })(),
 
-        MAX_DEVICE_PIXEL_RATIO = 2.0,
+        DEVICE_PDFPAGE_SCALING = PDFPAGE_SCALING,
 
-        DEVICE_PDFPAGE_SCALING = PDFPAGE_SCALING * Math.min(DEVICE_PIXEL_RATIO, MAX_DEVICE_PIXEL_RATIO),
+        DEVICE_OUTPUTSCALING = Math.min(DEVICE_PIXEL_RATIO, MAX_DEVICE_PIXEL_RATIO),
 
         // render the optional text layer with a timeout of 200ms
         TEXT_LAYER_RENDER_DELAY = 200;
@@ -518,6 +520,7 @@ define('io.ox/core/pdf/pdfview', [
                     if (pageNode.children().length) {
                         var viewport = getPageViewport(pdfjsPage, pageZoom),
                             pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
+                            scaledSize = { width: pageSize.width * DEVICE_OUTPUTSCALING, height: pageSize.height * DEVICE_OUTPUTSCALING },
                             canvasWrapperNode = pageNode.children('.canvas-wrapper'),
                             canvasNode = canvasWrapperNode.children('canvas'),
                             textWrapperNode = pageNode.children('.text-wrapper'),
@@ -527,7 +530,7 @@ define('io.ox/core/pdf/pdfview', [
 
                         pageNode.attr(pageSize).css(pageSize);
                         canvasWrapperNode.attr(pageSize).css(pageSize);
-                        canvasNode.attr(pageSize).css(pageSize);
+                        canvasNode.attr(scaledSize).css(pageSize);
 
                         if (textWrapperNode.length) {
                             textWrapperNode.empty().attr(pageSize).css(pageSize);
@@ -539,6 +542,9 @@ define('io.ox/core/pdf/pdfview', [
                         }
 
                         var canvasCtx = canvasNode[0].getContext('2d');
+
+                        canvasCtx._transformMatrix = [DEVICE_OUTPUTSCALING, 0, 0, DEVICE_OUTPUTSCALING, 0, 0];
+                        canvasCtx.scale(DEVICE_OUTPUTSCALING, DEVICE_OUTPUTSCALING);
 
                         return pdfjsPage.render({
                             canvasContext: canvasCtx,
