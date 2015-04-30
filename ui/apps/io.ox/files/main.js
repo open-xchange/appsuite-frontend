@@ -457,6 +457,8 @@ define('io.ox/files/main', [
             api.on('add:file', _.throttle(function () {
                 app.listView.reload();
             }, 10000));
+            // always refresh when the last file has finished uploading
+            api.on('stop:upload', _.bind(app.listView.reload, app.listView));
             var myFolder = false,
                 doReload = _.debounce(function () {
                     // we only need to reload if the current folder is affected
