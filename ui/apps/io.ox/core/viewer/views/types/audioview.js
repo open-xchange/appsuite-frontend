@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/types/audioview',  [
                     cover = $('<img>').attr('src', _.unescapeHTML(coverUrl)),
                     audio = $('<audio controls="true">').append(
                         source = $('<source>'),
-                        $('<div>').text(gt('Your browser does not support HTML5 audio.'))
+                        $('<div>').text(gt('Your browser does not support the audio format of this file.'))
                     )
                 )
             );
@@ -65,7 +65,7 @@ define('io.ox/core/viewer/views/types/audioview',  [
             source.attr({ 'data-src': _.unescapeHTML(audioUrl), type: mimeType });
             source.on('error', function () {
                 self.$el.idle().append(
-                    self.createNotificationNode(gt('Sorry, the audio file could not be played.'))
+                    self.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
                 );
             });
 

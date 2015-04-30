@@ -39,7 +39,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
 
             var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
                 source = $('<source>'),
-                fallback = $('<div>').text(gt('Your browser does not support HTML5 video.')),
+                fallback = $('<div>').text(gt('Your browser does not support the video format of this file.')),
                 previewUrl = this.getPreviewUrl() || '',
                 contentType = this.model.get('file_mimetype') || '',
                 self = this;
@@ -59,7 +59,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
                 // console.warn('VideoType.loadSlide() - error loading:', self.model.get('filename'));
 
                 self.$el.idle().append(
-                    self.createNotificationNode(gt('Sorry, the video could not be played.'))
+                    self.createNotificationNode(gt('Your browser does not support the video format of this file.'))
                 );
             });
 

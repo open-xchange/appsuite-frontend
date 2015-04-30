@@ -31,9 +31,7 @@ define('io.ox/core/viewer/views/types/typesregistry', [
         audio: 'audioview',
         video: 'videoview',
         txt: 'textview'
-    },
-    // a list of types only available in debug mode
-    debugOnlyList = ['audioview', 'videoview'];
+    };
 
     var typesRegistry = {
 
@@ -48,11 +46,11 @@ define('io.ox/core/viewer/views/types/typesregistry', [
          *  file type object it could be required; or rejected, in case of an error.
          */
         getModelType: function (model) {
-            // console.warn('getModelType()', model.get('fileCategory'));
-            if (!model) { return $.Deferred().reject(); }
+            if (!model) {
+                return $.Deferred().reject();
+            }
 
-            var modelTypeName = typesMap[model.getFileType()],
-                modelType = this.checkModelTypeForDebug(modelTypeName);
+            var modelType = typesMap[model.getFileType()] || 'defaultview';
 
             if ((model.isOffice() || model.isPDF()) && !Capabilities.has('document_preview')) {
                 modelType = 'defaultview';
@@ -60,33 +58,12 @@ define('io.ox/core/viewer/views/types/typesregistry', [
 
             return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {
-                    // console.info('getModelType() loaded', modelType);
                     return $.Deferred().resolve(Type);
                 },
                 function () {
                     return $.Deferred().reject('could not require ' + modelType);
                 }
             );
-        },
-
-        /**
-         * In non debug mode, returns 'defaultview' for model types
-         * that are listed in the debugOnlyList.
-         *
-         * @param {String} type
-         *  the model type to check
-         *
-         * @returns {String}
-         *  the resulting model type.
-         */
-        checkModelTypeForDebug: function (type) {
-            if (!type) {
-                return 'defaultview';
-            } else if (!ox.debug && (_.contains(debugOnlyList, type))) {
-                return 'defaultview';
-            }
-
-            return type;
         }
 
     };
