@@ -265,9 +265,9 @@ define([
             });
 
             it('should return a date string for valid date', function () {
-                expect(util.getTime(1379508350), 'getTime').to.be.equal('16.1.1970');
-                expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('16.1.1970 23:11');
-                expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('16.1.1970 23:11');
+                expect(util.getTime(1379508350), 'getTime').to.be.equal('17.1.1970');
+                expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('17.1.1970 00:11');
+                expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('17.1.1970 00:11');
             });
         });
 
