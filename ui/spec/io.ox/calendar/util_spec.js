@@ -12,12 +12,10 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
+
     'use strict';
 
     describe('Util for calendar', function () {
-
-        moment.locale('de');
-        moment.tz.setDefault('Europe/Berlin');
 
         describe('can convert timestamp to even smarter dates', function () {
 
