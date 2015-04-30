@@ -294,10 +294,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             var userList = {
                 'timestamp': 1385422043857,
                 'data': [
-                    [1, 6, 'Max Muster1', 'Max', 'Muster1', 'Founder', 1, 'maxmuster1@open-xchange.com', null, 0],
-                    [2, 6, 'Max Muster2', 'Max', 'Muster1', '', 2, 'maxmuster2@open-xchange.com', null, 1],
-                    [3, 6, 'Max Muster3', 'Max', 'Muster1', null, 3, 'maxmuster3@open-xchange.com', null, 2],
-                    [4, 6, 'Max Muster4', 'Max', 'Muster1', 'CEO', 4, 'maxmuster4@open-xchange.com', null, 3]
+                    [1, 6, 'Max Muster1', 'Max', 'Muster1', 'Founder', 21, 'maxmuster1@open-xchange.com', null, 10],
+                    [2, 6, 'Max Muster2', 'Max', 'Muster1', '', 22, 'maxmuster2@open-xchange.com', null, 11],
+                    [3, 6, 'Max Muster3', 'Max', 'Muster1', null, 23, 'maxmuster3@open-xchange.com', null, 12],
+                    [4, 6, 'Max Muster4', 'Max', 'Muster1', 'CEO', 24, 'maxmuster4@open-xchange.com', null, 13]
                 ]
             };
 
@@ -307,7 +307,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 });
                 this.server.respondWith('PUT', /api\/group\?action=list/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
-                        '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
+                        '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[21,22,23,24],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
                     );
                 });
             });
@@ -321,10 +321,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': 'Founder',
-                        'internal_userid': 1,
+                        'internal_userid': 21,
                         'email1': 'maxmuster1@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 0,
+                        'contact_id': 10,
                         'mail': 'maxmuster1@open-xchange.com',
                         'mail_field': 1
                     }, {
@@ -334,10 +334,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': '',
-                        'internal_userid': 2,
+                        'internal_userid': 22,
                         'email1': 'maxmuster2@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 1,
+                        'contact_id': 11,
                         'mail': 'maxmuster2@open-xchange.com',
                         'mail_field': 1
                     }, {
@@ -347,10 +347,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': null,
-                        'internal_userid': 3,
+                        'internal_userid': 23,
                         'email1': 'maxmuster3@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 2,
+                        'contact_id': 12,
                         'mail': 'maxmuster3@open-xchange.com',
                         'mail_field': 1
                     }, {
@@ -360,10 +360,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                         'first_name': 'Max',
                         'last_name': 'Muster1',
                         'title': 'CEO',
-                        'internal_userid': 4,
+                        'internal_userid': 24,
                         'email1': 'maxmuster4@open-xchange.com',
                         'image1_url': null,
-                        'contact_id': 3,
+                        'contact_id': 13,
                         'mail': 'maxmuster4@open-xchange.com',
                         'mail_field': 1
                     }];
