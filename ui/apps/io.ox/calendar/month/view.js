@@ -355,7 +355,7 @@ define('io.ox/calendar/month/view', [
             }
 
             if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
-                classes = 'private disabled';
+                classes = 'private';
             } else {
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                 classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
