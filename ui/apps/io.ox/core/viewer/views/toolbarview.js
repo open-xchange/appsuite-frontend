@@ -18,10 +18,11 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
+    'io.ox/mail/api',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, Util, Settings, gt) {
+], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -196,6 +197,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Save to Drive'),
                     ref: 'io.ox/mail/actions/save-attachment'
+                },
+                'sendmailattachmentasmail': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    section: 'share',
+                    label: gt('Send as mail'),
+                    ref: 'io.ox/core/viewer/actions/toolbar/sendasmail'
                 }
             },
             pim: {
@@ -284,6 +292,35 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             EventDispatcher.trigger('viewer:document:zoomout', baton);
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
+        id: 'sendasmail',
+        requires: function (e) {
+            var model = e.baton.model;
+            return model.isOffice() || model.isPDF();
+        },
+        // TODO mail attachment is lost in the transport, dont know why yet
+        action: function (baton) {
+            var attachmentModel = baton.model;
+            MailAPI.get({ id: attachmentModel.get('id'), folder_id: attachmentModel.get('folder_id') }).done(function (/*mail*/) {
+                ox.registry.call('mail-compose', 'compose').then(function (MailApp) {
+                    // mimic old code from 7.6.2
+                    MailApp.app.model.get('attachments').add({
+                        atmsgref: attachmentModel.get('folder_id') + '/' + attachmentModel.get('id'),
+                        content: null,
+                        content_type: attachmentModel.get('file_mimetype'),
+                        disp: 'attachment',
+                        filename: attachmentModel.get('filename'),
+                        group: 'attachment',
+                        id: attachmentModel.get('id'),
+                        size: attachmentModel.get('file_size'),
+                        type: 'docx' // dummy extension
+                    });
+                    //MailApp.app.model.get('attachments').add(mail.attachments);
+                });
+            });
         }
     });
 
