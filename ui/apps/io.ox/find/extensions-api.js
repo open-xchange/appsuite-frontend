@@ -26,9 +26,6 @@ define('io.ox/find/extensions-api',[
         daterange: function (baton) {
             if (_.device('smartphone')) return;
 
-            // for mail only
-            if (baton.request.params.module !== 'mail') return;
-
             var query = baton.request.data.prefix,
                 facet, value;
 
