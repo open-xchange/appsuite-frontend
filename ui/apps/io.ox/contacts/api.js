@@ -634,12 +634,12 @@ define('io.ox/contacts/api', [
 
         function load(node, url, opt) {
             function fail () {
-                node.css('background-image', 'url(' + fallback + ')');
+                node.css('background-image', 'url(' + fallback + ')').off('.lazyload');
                 node = url = opt = null;
             }
             function success () {
                 cachesURLs[url] = url;
-                node.css('background-image', 'url(' + url + ')');
+                node.css('background-image', 'url(' + url + ')').off('.lazyload');
                 node = url = opt = null;
             }
             _.defer(function () {
