@@ -68,6 +68,7 @@ define('io.ox/find/view-facets', [
 
         register: function () {
             this.listenTo(this.app.model.manager, 'active', $.proxy(this.redraw, this));
+            this.listenTo(this.app, 'find:config-updated', $.proxy(this.render, this));
         },
 
         redraw: function (count) {
@@ -77,7 +78,7 @@ define('io.ox/find/view-facets', [
         },
 
         render: function () {
-            this.$el.empty();
+            this.reset();
             // container node
             ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
             // adjust height by parents height (maybe tokenfield has morge than on line visible)
@@ -94,7 +95,7 @@ define('io.ox/find/view-facets', [
         },
 
         reset: function () {
-            this.render();
+            this.$el.empty();
         },
 
         focus: function () {

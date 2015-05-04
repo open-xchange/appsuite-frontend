@@ -321,6 +321,9 @@ define('io.ox/find/main', [
             app.listenTo(app.view, {
                 'cancel': function () {
                     app.trigger('find:cancel');
+                },
+                'show': function () {
+                    app.updateConfig();
                 }
             });
 
@@ -397,6 +400,13 @@ define('io.ox/find/main', [
             });
         };
 
+        app.updateConfig = function () {
+            app.getConfig().then(function (data) {
+                app.model.manager.update(data);
+                app.trigger('find:config-updated');
+            });
+        };
+
         // overwrite defaults app.launch
         app.launch = function () {
             if (app.get('state') !== 'prepared') return;
@@ -412,14 +422,9 @@ define('io.ox/find/main', [
                 require(['io.ox/find/model', 'io.ox/find/view'], function (MainModel, MainView) {
                     app.model = new MainModel({ app: app });
                     app.view = new MainView({ app: app, model: app.model });
+                    register();
                     // inplace: use parents view window
                     app.view.render();
-                    register();
-                    app.getConfig().then(function (data) {
-                        app.model.manager.update(data);
-                        // TODO: or delay 'app.view.render()' until this point
-                        app.view.ui.facets.render();
-                    });
                     app.set('state', 'launched');
                 });
             });
