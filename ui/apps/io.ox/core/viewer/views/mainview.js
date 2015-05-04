@@ -54,7 +54,9 @@ define('io.ox/core/viewer/views/mainview', [
             this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer);
             // bind toggle side bar handler
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar);
-            this.listenTo(EventDispatcher, 'viewer:sidebar:change:state', this.onSideBarToggled);
+            this.listenTo(this.sidebarView, 'viewer:sidebar:change:state', this.onSideBarToggled);
+            // bind displayed item change handler
+            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.onDisplayedItemChange);
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js
@@ -86,9 +88,9 @@ define('io.ox/core/viewer/views/mainview', [
             Util.setDeviceClass(this.$el);
             // append toolbar view
             this.$el.append(
+                this.sidebarView.render(model).el,
                 this.toolbarView.render(model).el,
-                this.displayerView.render(model).el,
-                this.sidebarView.render(model).el
+                this.displayerView.render(model).el
             );
             // set initial sidebar state
             this.sidebarView.toggleSidebar(state);
@@ -146,6 +148,11 @@ define('io.ox/core/viewer/views/mainview', [
             //console.warn('MainView.onWindowResize()');
             this.refreshViewSizes();
             EventDispatcher.trigger('viewer:window:resize');
+        },
+
+        // handle change of displayed item
+        onDisplayedItemChange: function (model) {
+            this.sidebarView.setModel(model);
         },
 
         // toggle sidebar after the sidebar button is clicked

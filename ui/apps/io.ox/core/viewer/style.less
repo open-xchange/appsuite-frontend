@@ -164,6 +164,12 @@ html.ios .io-ox-viewer {
         }
     }
 
+    // show active sidebar button in toolbar when sidebar is opened
+    .viewer-sidebar.opened ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
+        color: #ffffff;
+        background-color: @viewer-toolbar-focus-bgcolor;
+    }
+
     .viewer-displayer {
         position: absolute;
         top: @viewer-toolbar-height;

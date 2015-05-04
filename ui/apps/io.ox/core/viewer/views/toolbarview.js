@@ -339,12 +339,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         initialize: function () {
-            //console.info('ToolbarView.initialize()');
-            this.sideBarState = Settings.getSidebarOpenState();
             // rerender on slide change
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render);
-            // handle side bar toggle
-            this.listenTo(EventDispatcher, 'viewer:sidebar:change:state', this.onSidebarToggled.bind(this));
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -363,14 +359,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onToggleSidebar: function () {
             EventDispatcher.trigger('viewer:toggle:sidebar');
-        },
-
-        /**
-         * Handles changes of the side bar toggle state
-         */
-        onSidebarToggled: function (state) {
-            this.$('.viewer-toolbar-togglesidebar').toggleClass('active', state).focus();
-            this.sideBarState = state;
         },
 
         /**
@@ -462,7 +450,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     self.$el.find('.viewer-toolbar-close').parent()
                 );
             });
-            this.$('.viewer-toolbar-togglesidebar').toggleClass('active', this.sideBarState);
             return this;
         },
 

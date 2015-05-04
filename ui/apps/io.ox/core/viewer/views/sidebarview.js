@@ -11,9 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebarview', [
-    'io.ox/core/extensions',
     'io.ox/backbone/disposable',
-    'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/dropzone',
@@ -22,7 +20,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/views/sidebar/fileversionsview',
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'gettext!io.ox/core/viewer'
-], function (Ext, DisposableView, EventDispatcher, Util, FilesAPI, Dropzone, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
+], function (DisposableView, Util, FilesAPI, Dropzone, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
 
     'use strict';
 
@@ -36,18 +34,11 @@ define('io.ox/core/viewer/views/sidebarview', [
         });
     }
 
-    // define extension points for this SidebarView
-    Ext.point('io.ox/core/viewer/sidebar').extend({
-        attributes: {},
-        classes: '',
-        index: 200,
-        id: 'sidebar'
-    });
-
     /**
      * The SidebarView is responsible for displaying the detail side bar.
      * This includes sections for file meta information, file description
      * and version history.
+     * Triggers 'viewer:sidebar:change:state' event when thr sidebar opens / closes.
      */
     var SidebarView = DisposableView.extend({
 
@@ -61,13 +52,6 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.zone = null;
 
             this.on('dispose', this.disposeView.bind(this));
-
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (model) {
-                if (model) {
-                    this.model = model;
-                    this.renderSections();
-                }
-            });
         },
 
         /**
@@ -82,7 +66,18 @@ define('io.ox/core/viewer/views/sidebarview', [
             // determine current state if undefined
             this.opened = _.isUndefined(state) ? !this.opened : Boolean(state);
             this.$el.toggleClass('opened', this.opened);
-            EventDispatcher.trigger('viewer:sidebar:change:state', this.opened);
+            this.trigger('viewer:sidebar:change:state', this.opened);
+            this.renderSections();
+        },
+
+        /**
+         * Sets a new model and renders the sections accordingly.
+         *
+         * @param {FilesAPI.Model} model.
+         *  The new model.
+         */
+        setModel: function (model) {
+            this.model = model || null;
             this.renderSections();
         },
 
@@ -122,6 +117,12 @@ define('io.ox/core/viewer/views/sidebarview', [
             );
         },
 
+        /**
+         * Renders the sidebar container.
+         *
+         * @param {FilesAPI.Model} model.
+         *  The initial model.
+         */
         render: function (model) {
             // a11y
             this.$el.attr({ tabindex: -1, role: 'complementary' }); // TODO: check if we need to set role 'tablist' now instead
@@ -194,7 +195,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             //console.info('SidebarView.onHorizontalSwipe()', 'event phase:', phase, 'distance:', distance);
 
             if (distance > 0) {
-                EventDispatcher.trigger('viewer:toggle:sidebar');
+                this.toggleSidebar();
             }
         },
 
