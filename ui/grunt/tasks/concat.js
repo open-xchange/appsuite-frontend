@@ -298,6 +298,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/find/date/extensions.js',
                             'apps/io.ox/find/date/lookup.js',
                             'apps/io.ox/find/date/value-model.js',
+                            'apps/io.ox/find/date/facet-model.js',
                             'apps/io.ox/find/manager/facet-collection.js',
                             'apps/io.ox/find/manager/facet-model.js',
                             'apps/io.ox/find/manager/value-collection.js',

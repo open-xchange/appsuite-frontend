@@ -61,6 +61,7 @@ define('io.ox/find/date/extensions',[
 
             var base = moment(value, format);
             baton.data.matched.push({
+                id: self.id,
                 start: base.clone(),
                 end: base.clone()
             });
@@ -92,6 +93,7 @@ define('io.ox/find/date/extensions',[
                     };
                 });
             baton.data.matched.push({
+                id: self.id,
                 detail: gt('as daterange'),
                 start: moment(list[0].value, list[0].format),
                 end:  moment(list[1].value, list[1].format)
@@ -125,6 +127,7 @@ define('io.ox/find/date/extensions',[
                 });
 
             baton.data.matched.push({
+                id: self.id,
                 detail: gt('as daterange'),
                 start: moment(list[0].value, list[0].format),
                 end:  moment(list[1].value, list[1].format)

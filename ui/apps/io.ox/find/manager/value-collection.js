@@ -13,22 +13,26 @@
 
 define('io.ox/find/manager/value-collection', [
     'io.ox/find/manager/value-model',
-    'io.ox/core/extensions',
-    'io.ox/find/manager/extensions'
-], function (ValueModel, ext, extensions) {
+    'io.ox/find/date/value-model',
+    'io.ox/core/extensions'
+], function (BaseModel, DateModel, ext) {
 
     'use strict';
 
-    var POINT = ext.point('io.ox/find/manager/models');
+    var POINT = ext.point('io.ox/find/manager/value');
 
     POINT.extend({
         index: 100,
-        customize: extensions.date
+        customize: function (valuemodels) {
+            var def = $.Deferred();
+            _.extend(valuemodels || {}, { 'date.custom': DateModel });
+            return def;
+        }
     });
 
     var ValueCollection = Backbone.Collection.extend({
 
-        model: ValueModel,
+        model: BaseModel,
 
         type: 'value-collection',
 
@@ -54,12 +58,12 @@ define('io.ox/find/manager/value-collection', [
 
             // custom value models
             this.valuemodels = {};
-            this.t = POINT.invoke('customize', this);
+            POINT.invoke('customize', this, this.valuemodels);
         },
 
         _createModel: function (item, facet) {
-            var Model = item.id === 'custom' ? this.valuemodels[facet.get('id')] : undefined;
-            return Model ? new Model({ data: item, facet: facet }) : new ValueModel({ data: item, facet: facet });
+            var Model = this.valuemodels[facet.get('id')] ||  BaseModel;
+            return new Model({ data: item, facet: facet });
         },
 
         customAdd: function (list, facet) {

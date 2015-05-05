@@ -85,6 +85,7 @@ define('io.ox/find/date/lookup', ['gettext!io.ox/core'], function (gt) {
         start: moment().subtract(1, 'day'),
         end: moment().subtract(1, 'day')
     });
+
     add(gt('Last week'), 0, {
         start: moment().subtract(7, 'day').startOf('week'),
         end: moment().subtract(7, 'day').endOf('week')
@@ -98,15 +99,15 @@ define('io.ox/find/date/lookup', ['gettext!io.ox/core'], function (gt) {
         end: moment().subtract(1, 'year').endOf('year')
     });
 
-    add(gt('Last 7 days'), 0, {
+    add(gt('Last 7 days'), 3, {
         start: moment().subtract(7, 'day'),
         end: moment()
     });
-    add(gt('Last 30 days'), 0, {
+    add(gt('Last 30 days'), 4, {
         start: moment().subtract(30, 'day'),
         end: moment()
     });
-    add(gt('Last 365 days'), 0, {
+    add(gt('Last 365 days'), 5, {
         start: moment().subtract(7, 'day'),
         end: moment()
     });

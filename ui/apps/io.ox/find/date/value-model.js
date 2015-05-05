@@ -12,11 +12,8 @@
  */
 
 define('io.ox/find/date/value-model', [
-    'io.ox/find/manager/value-model',
-    'gettext!io.ox/find',
-    'io.ox/core/extensions',
-    'io.ox/find/date/extensions'
-], function (ValueModel, gt, ext) {
+    'io.ox/find/manager/value-model'
+], function (ValueModel) {
 
     'use strict';
 
@@ -32,45 +29,21 @@ define('io.ox/find/date/value-model', [
         },
 
         // overwrite
-        initialize: function (/*obj*/) {
+        initialize: function (obj) {
             // super
             this._base('initialize', arguments);
+
+            var data = obj.data;
             // custom values
             this.set({
-                'date-input': this.get('data').value
+                'date-match': data.match
             });
             // event listeners
             this.register();
-            // clean input
-            var value = this.get('date-input').toLowerCase().trim();
-            this.set('date-value', value);
-            // update
-            this.process();
         },
 
         register: function () {
             this.on('change:date-match', this._onChangeDateMatch);
-        },
-
-        process: function () {
-            var value = this.get('date-value'),
-                format = moment.parseFormat(value),
-                baton = ext.Baton.ensure({ data: { matched: [], value: value, format: format }, options: { limit: 1 } });
-
-            // possible matchers add data to baton
-            ext.point('io.ox/find/date/matchers').invoke('match', this, baton);
-
-            var item = baton.data.matched[0];
-
-            // hide facet
-            if (!item) return this.get('facet').hide();
-
-            this.set({
-                'name': item.label || this.get('name'),
-                'detail': item.detail || this.get('detail'),
-                'date-match': item
-            });
-            return item;
         },
 
         asDates: function () {

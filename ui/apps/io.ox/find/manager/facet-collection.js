@@ -12,10 +12,23 @@
  */
 
 define('io.ox/find/manager/facet-collection', [
-    'io.ox/find/manager/facet-model'
-], function (FacetModel) {
+    'io.ox/find/manager/facet-model',
+    'io.ox/find/date/facet-model',
+    'io.ox/core/extensions'
+], function (BaseModel, DateModel, ext) {
 
     'use strict';
+
+    var POINT = ext.point('io.ox/find/manager/facet');
+
+    POINT.extend({
+        index: 100,
+        customize: function (valuemodels) {
+            var def = $.Deferred();
+            _.extend(valuemodels || {}, { 'date.custom': DateModel });
+            return def;
+        }
+    });
 
     // get properties from objects/models
     function flexget (obj, key) {
@@ -35,7 +48,7 @@ define('io.ox/find/manager/facet-collection', [
 
     var FacetCollection = Backbone.Collection.extend({
 
-        model: FacetModel,
+        model: BaseModel,
 
         type: 'facet-collection',
 
@@ -49,6 +62,9 @@ define('io.ox/find/manager/facet-collection', [
                     self.trigger('active', this.getActive().length);
                 }, 10)
             );
+            // custom value models
+            this.facetmodels = {};
+            POINT.invoke('customize', this, this.facetmodels);
         },
 
         /**
@@ -59,6 +75,20 @@ define('io.ox/find/manager/facet-collection', [
                 single = list.length === 1;
             if (!single) return;
             return _.where(list, { id: 'folder' }).length;
+        },
+
+        _createModel: function (data) {
+            var Model = this.facetmodels[data.id] || BaseModel;
+            return new Model(data);
+        },
+
+        add: function (models, options) {
+            var self = this;
+            var list = _.map([].concat(models), function (data) {
+                return self._createModel(data);
+            });
+
+            return this.set(list, _.extend({ merge: false }, options, { add: true, remove: false }));
         },
 
         /**
