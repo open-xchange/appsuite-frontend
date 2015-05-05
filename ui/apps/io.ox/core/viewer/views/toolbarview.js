@@ -301,24 +301,15 @@ define('io.ox/core/viewer/views/toolbarview', [
             var model = e.baton.model;
             return model.isOffice() || model.isPDF();
         },
-        // TODO mail attachment is lost in the transport, dont know why yet
         action: function (baton) {
-            var attachmentModel = baton.model;
-            MailAPI.get({ id: attachmentModel.get('id'), folder_id: attachmentModel.get('folder_id') }).done(function (/*mail*/) {
-                ox.registry.call('mail-compose', 'compose').then(function (MailApp) {
-                    // mimic old code from 7.6.2
-                    MailApp.app.model.get('attachments').add({
-                        atmsgref: attachmentModel.get('folder_id') + '/' + attachmentModel.get('id'),
-                        content: null,
-                        content_type: attachmentModel.get('file_mimetype'),
-                        disp: 'attachment',
-                        filename: attachmentModel.get('filename'),
-                        group: 'attachment',
-                        id: attachmentModel.get('id'),
-                        size: attachmentModel.get('file_size'),
-                        type: 'docx' // dummy extension
+            var viewedAttachment = baton.data;
+            MailAPI.get({ id: viewedAttachment.mail.id, folder_id: viewedAttachment.mail.folder_id }).done(function (mail) {
+                ox.registry.call('mail-compose', 'replyall', mail ).then(function (MailApp) {
+                    // look for currently viewed attachment in the list of attachments of the source email
+                    var attachmentToSend = _.find(mail.attachments, function (attachment) {
+                        return attachment.id === viewedAttachment.id;
                     });
-                    //MailApp.app.model.get('attachments').add(mail.attachments);
+                    MailApp.app.model.get('attachments').add(attachmentToSend);
                 });
             });
         }
