@@ -85,10 +85,11 @@ define('io.ox/mail/common-extensions',
         from: function (baton) {
             var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
-                field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
+                field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
+                useDisplayName = baton.options.sort !== 'from-to';
             this.append(
                 $('<div class="from">').append(
-                    util.getFrom(data, field)
+                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: true })
                 )
             );
         },

@@ -296,18 +296,27 @@ define('io.ox/mail/util',
             return tmp;
         },
 
-        getDisplayName: function (pair, forceShowMail) {
+        // pair: Array of display name and email address
+        // options:
+        // - showDisplayName: Show display name if available
+        // - showMailAddress: Always show mail address
+        // - reorderDisplayName: "last name, first name" becomes "first name last name"
+        getDisplayName: function (pair, options) {
 
             if (!_.isArray(pair)) return '';
+            options = _.extend({ reorderDisplayName: true, showDisplayName: true, showMailAddress: false }, options);
 
             var name = pair[0],
                 email = String(pair[1] || '').toLowerCase(),
                 display_name = util.unescapeDisplayName(name);
 
-            // fix order ("last name, firstname" becomes "first name last name")
-            display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+            if (options.showDisplayName === false) return email;
 
-            if (forceShowMail && display_name && email) {
+            if (options.reorderDisplayName) {
+                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+            }
+
+            if (options.displayMailAddress && display_name && email) {
                 display_name += ' <' + email + '>';
             }
 
@@ -319,18 +328,20 @@ define('io.ox/mail/util',
             return data && _.isArray(data.from) && data.from.length > 0 && !!data.from[0][1];
         },
 
+        // options.field: Which field to use, e.g. 'from' or 'to'
+        // options are also handed over to getDisplayName()
         // returns jquery set
-        getFrom: function (data, field) {
+        getFrom: function (data, options) {
 
             data = data || {};
-            field = field || 'from';
+            options = _.extend({ field: 'from' }, options);
 
             // get list
-            var list = _(data[field])
+            var list = _(data[options.field])
                 .chain()
                 .map(function (item) {
                     // reduce to display name
-                    return that.getDisplayName(item);
+                    return that.getDisplayName(item, options);
                 })
                 .filter(function (name) {
                     // skip empty names
@@ -341,7 +352,7 @@ define('io.ox/mail/util',
             // empty?
             if (list.length === 0) {
                 return $().add(
-                    $.txt(field === 'from' ? gt('Unknown sender') : gt('No recipients'))
+                    $.txt(options.field === 'from' ? gt('Unknown sender') : gt('No recipients'))
                 );
             }
 

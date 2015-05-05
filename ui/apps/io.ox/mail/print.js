@@ -39,7 +39,7 @@ define('io.ox/mail/print',
 
     function getList(data, field) {
         return _(data[field || 'from']).map(function (obj) {
-            return _.escape(util.getDisplayName(obj, true)).replace(/\s/g, '\u00A0');
+            return _.escape(util.getDisplayName(obj, { showMailAddress: true })).replace(/\s/g, '\u00A0');
         }).join('\u00A0\u2022 ');
     }
 
