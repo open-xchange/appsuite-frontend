@@ -726,7 +726,7 @@ define('io.ox/calendar/util',
                     });
                     return $.when.apply($, defs).then(function () {
                         _(arguments).each(function (result, i) {
-                            if (_.isArray(result)) {
+                            if (_.isArray(result) && result.length) {
                                 IDs.ext[i] = result[0];
                             }
                         });
