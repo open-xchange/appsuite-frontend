@@ -205,7 +205,7 @@ define([
             });
 
             it('should respond to missing data (others)', function () {
-                var result = util.getFrom({}, 'to');
+                var result = util.getFrom({}, { field: 'to' });
                 expect($(result).text()).to.equal('Keine Empfänger');
             });
 

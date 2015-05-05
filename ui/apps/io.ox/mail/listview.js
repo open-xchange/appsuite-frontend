@@ -282,18 +282,20 @@ define('io.ox/mail/listview', [
         ref: 'io.ox/mail/listview',
 
         initialize: function (options) {
-            var self = this;
-            options = _.extend({ threaded: true }, options);
+
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
 
-            // mirror threaded state
-            if (options.app) {
-                this.listenTo(options.app.props, {
-                    'change:thread': function (model) {
-                        self.threaded = model.get('thread');
-                    }
+            // track some states
+            if (options && options.app) {
+                var props = options.app.props;
+                _.extend(this.options, props.pick('thread', 'sort'));
+                this.listenTo(props, 'change:thread', function (model, value) {
+                    this.options.threaded = value;
+                });
+                this.listenTo(props, 'change:sort', function (model, value) {
+                    this.options.sort = value;
                 });
             }
         },
