@@ -910,7 +910,7 @@ msgid "Advanced options"
 msgstr "Configurações avançadas"
 
 #: apps/io.ox/files/view-options.js:111 module:io.ox/files
-#: apps/io.ox/find/extensions-api.js:346 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:343 module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
 #: apps/io.ox/search/facets/extensions.js:280
 #: apps/io.ox/search/facets/extensions.js:368
@@ -923,7 +923,7 @@ msgstr "Todos"
 msgid "All Emoji"
 msgstr "Todos os emoji"
 
-#: apps/io.ox/find/extensions-api.js:282 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:279 module:io.ox/core
 #, fuzzy
 msgid "All Folders"
 msgstr "Todas as pastas"
@@ -1669,8 +1669,8 @@ msgstr "Clique para enviar imagem"
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/permissions/permissions.js:477
-#: apps/io.ox/core/viewer/views/toolbarview.js:114
 #: apps/io.ox/core/viewer/views/toolbarview.js:115
+#: apps/io.ox/core/viewer/views/toolbarview.js:116
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:50 module:io.ox/files
@@ -2178,7 +2178,7 @@ msgstr "Adiado"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:189 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:176
+#: apps/io.ox/core/viewer/views/toolbarview.js:177
 #: apps/io.ox/files/actions.js:514 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2552,7 +2552,7 @@ msgstr "Documentos"
 msgid "Done"
 msgstr "Concluído"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:58 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:59 module:io.ox/core
 msgid "Double click to rename"
 msgstr ""
 
@@ -2561,9 +2561,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "Clique duas vezes nesta linha para compromisso de dia inteiro"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:141
-#: apps/io.ox/core/viewer/views/toolbarview.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:211
+#: apps/io.ox/core/viewer/views/toolbarview.js:142
+#: apps/io.ox/core/viewer/views/toolbarview.js:192
+#: apps/io.ox/core/viewer/views/toolbarview.js:219
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
 #: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2664,13 +2664,13 @@ msgid ""
 msgstr ""
 "Solte aqui para enviar uma <b class=\"dndignore\">nova versão</b> de \"%1$s\""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:105 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Enviar nova versão"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:167 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:168 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -2756,7 +2756,7 @@ msgstr "Editar compromisso"
 msgid "Edit contact"
 msgstr "Editar contato"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:134 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:135 module:io.ox/core
 #: apps/io.ox/files/actions.js:575 module:io.ox/files
 msgid "Edit description"
 msgstr "Editar descrição"
@@ -3272,8 +3272,8 @@ msgstr "O arquivo foi copiado"
 msgid "File has been moved"
 msgstr "O arquivo foi movido"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:47 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:53
+#: apps/io.ox/core/viewer/views/toolbarview.js:48 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:54
 msgid "File name"
 msgstr "Nome do arquivo"
 
@@ -3296,7 +3296,7 @@ msgstr "Arquivo: %1$s"
 msgid "Filename"
 msgstr "Nome do arquivo"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:59 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:60 module:io.ox/core
 msgid "Filename, double click to rename"
 msgstr ""
 
@@ -3341,8 +3341,8 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:242 module:io.ox/calendar
-#: apps/io.ox/find/extensions-api.js:262 module:io.ox/core
-#: apps/io.ox/find/extensions-api.js:274 apps/io.ox/mail/detail/links.js:65
+#: apps/io.ox/find/extensions-api.js:259 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:271 apps/io.ox/mail/detail/links.js:65
 #: module:io.ox/mail apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Pasta"
@@ -4549,7 +4549,7 @@ msgstr "Meses"
 
 #: apps/io.ox/core/extPatterns/links.js:362 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:375
-#: apps/io.ox/find/extensions-api.js:200
+#: apps/io.ox/find/extensions-api.js:197
 #: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr "Mais"
@@ -4841,7 +4841,7 @@ msgid "No items found"
 msgstr "Nenhum item localizado"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:334 module:io.ox/find
+#: apps/io.ox/find/main.js:337 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Nenhum item foi econtrado. Ajuste as facetas atualmente em uso."
 
@@ -5051,7 +5051,7 @@ msgstr "Em dias de trabalho"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:337 module:io.ox/find
+#: apps/io.ox/find/main.js:340 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Um item foi encontrado."
@@ -5081,8 +5081,8 @@ msgstr "Abrir visualização de pasta"
 msgid "Open in browser"
 msgstr "Abrir no navegador"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:185 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:205
+#: apps/io.ox/core/viewer/views/toolbarview.js:186 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:213
 #, fuzzy
 msgid "Open in browser tab"
 msgstr "Abrir no navegador"
@@ -6026,7 +6026,7 @@ msgstr "Remover membro"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:127
+#: apps/io.ox/core/viewer/views/toolbarview.js:128
 #: apps/io.ox/files/actions.js:565 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6203,8 +6203,8 @@ msgid "Save attachment"
 msgstr "Salvar anexo"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
-#: apps/io.ox/core/viewer/views/toolbarview.js:217
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
+#: apps/io.ox/core/viewer/views/toolbarview.js:225
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Salvar para Drive"
@@ -6351,13 +6351,17 @@ msgstr "Enviar uma confirmação de leitura"
 msgid "Send as internal link"
 msgstr "Enviar como link interno"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js:205 module:io.ox/core
+msgid "Send as mail"
+msgstr "Enviar como e-mail"
+
 #: apps/io.ox/contacts/actions.js:397 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:49 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:95
 msgid "Send as vCard"
 msgstr "Enviar como vCard"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:162 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:163 module:io.ox/core
 #: apps/io.ox/files/actions.js:525 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:124
 msgid "Send by mail"
@@ -6457,7 +6461,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Configurações"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:155 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:156 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:79 apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -7937,7 +7941,7 @@ msgid "Upload"
 msgstr "Enviar arquivo"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:96
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:169
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:170
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:63
 #: module:io.ox/files
 msgid "Upload a new version"
@@ -8097,8 +8101,8 @@ msgstr ""
 msgid "View attachment"
 msgstr "Visualizar todos os anexos"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:100 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:101
+#: apps/io.ox/core/viewer/views/toolbarview.js:101 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:102
 #, fuzzy
 msgid "View details"
 msgstr "Ocultar detalhes"
@@ -8109,7 +8113,7 @@ msgstr "Ocultar detalhes"
 msgid "View source"
 msgstr "Exibir fonte"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:382 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:407 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Barra de ferramentas do editor"
@@ -8671,13 +8675,13 @@ msgstr "Seu fuso horário"
 msgid "ZB"
 msgstr "ZB"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:86 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:87
+#: apps/io.ox/core/viewer/views/toolbarview.js:87 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:88
 msgid "Zoom in"
 msgstr "Ampliar"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:73 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:74
+#: apps/io.ox/core/viewer/views/toolbarview.js:74 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:75
 msgid "Zoom out"
 msgstr "Reduzir"
 
@@ -8704,7 +8708,7 @@ msgstr "e"
 msgid "and %1$d others"
 msgstr "e %1$d outros"
 
-#: apps/io.ox/find/extensions-api.js:57 module:io.ox/core
+#: apps/io.ox/find/extensions-api.js:54 module:io.ox/core
 #, fuzzy
 #| msgid "Start date"
 msgid "as date"
@@ -12610,9 +12614,6 @@ msgstr "aaaa"
 
 #~ msgid "Send E-Mail about this publication"
 #~ msgstr "Enviar e-mail sobre essa publicação"
-
-#~ msgid "Send as mail"
-#~ msgstr "Enviar como e-mail"
 
 #~ msgid "Sender"
 #~ msgstr "Remetente"

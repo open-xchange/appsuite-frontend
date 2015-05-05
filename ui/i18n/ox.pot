@@ -281,7 +281,7 @@ msgstr ""
 #: apps/io.ox/core/sub/settings/pane.js:189
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:176
+#: apps/io.ox/core/viewer/views/toolbarview.js:177
 #: apps/io.ox/files/actions.js:514
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
@@ -2286,9 +2286,9 @@ msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js:242
 #: module:io.ox/calendar
-#: apps/io.ox/find/extensions-api.js:262
+#: apps/io.ox/find/extensions-api.js:259
 #: module:io.ox/core
-#: apps/io.ox/find/extensions-api.js:274
+#: apps/io.ox/find/extensions-api.js:271
 #: apps/io.ox/mail/detail/links.js:65
 #: module:io.ox/mail
 #: apps/io.ox/search/main.js:73
@@ -3389,8 +3389,8 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/permissions/permissions.js:477
-#: apps/io.ox/core/viewer/views/toolbarview.js:114
 #: apps/io.ox/core/viewer/views/toolbarview.js:115
+#: apps/io.ox/core/viewer/views/toolbarview.js:116
 #: apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159
@@ -3905,7 +3905,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:362
 #: module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:375
-#: apps/io.ox/find/extensions-api.js:200
+#: apps/io.ox/find/extensions-api.js:197
 #: apps/io.ox/search/facets/extensions.js:678
 msgid "More"
 msgstr ""
@@ -4080,7 +4080,7 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/rename.js:65
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:127
+#: apps/io.ox/core/viewer/views/toolbarview.js:128
 #: apps/io.ox/files/actions.js:565
 #: module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68
@@ -4766,9 +4766,9 @@ msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:82
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:141
-#: apps/io.ox/core/viewer/views/toolbarview.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:211
+#: apps/io.ox/core/viewer/views/toolbarview.js:142
+#: apps/io.ox/core/viewer/views/toolbarview.js:192
+#: apps/io.ox/core/viewer/views/toolbarview.js:219
 #: apps/io.ox/files/actions.js:505
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:632
@@ -4782,8 +4782,8 @@ msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:83
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:197
-#: apps/io.ox/core/viewer/views/toolbarview.js:217
+#: apps/io.ox/core/viewer/views/toolbarview.js:198
+#: apps/io.ox/core/viewer/views/toolbarview.js:225
 #: apps/io.ox/mail/actions.js:745
 #: module:io.ox/mail
 msgid "Save to Drive"
@@ -5782,65 +5782,65 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:96
 #: module:io.ox/core/viewer
-#: apps/io.ox/core/viewer/views/toolbarview.js:169
+#: apps/io.ox/core/viewer/views/toolbarview.js:170
 #: module:io.ox/core
 #: apps/io.ox/files/actions/upload-new-version.js:63
 #: module:io.ox/files
 msgid "Upload a new version"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:110
+#: apps/io.ox/core/viewer/views/sidebarview.js:105
 #: module:io.ox/core/viewer
 msgid "Drop new version here"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:167
+#: apps/io.ox/core/viewer/views/sidebarview.js:168
 #: module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:47
+#: apps/io.ox/core/viewer/views/toolbarview.js:48
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:53
+#: apps/io.ox/core/viewer/views/toolbarview.js:54
 msgid "File name"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/toolbarview.js:58
-#: module:io.ox/core
-msgid "Double click to rename"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:59
 #: module:io.ox/core
+msgid "Double click to rename"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:60
+#: module:io.ox/core
 msgid "Filename, double click to rename"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:73
-#: module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:74
+#: module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:75
 msgid "Zoom out"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
-#: module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:87
+#: module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:88
 msgid "Zoom in"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:100
-#: module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:101
+#: module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:102
 msgid "View details"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:134
+#: apps/io.ox/core/viewer/views/toolbarview.js:135
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:575
 #: module:io.ox/files
 msgid "Edit description"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:155
+#: apps/io.ox/core/viewer/views/toolbarview.js:156
 #: module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43
 #: module:io.ox/files
@@ -5850,7 +5850,7 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:162
+#: apps/io.ox/core/viewer/views/toolbarview.js:163
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:525
 #: module:io.ox/files
@@ -5858,13 +5858,18 @@ msgstr ""
 msgid "Send by mail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:185
+#: apps/io.ox/core/viewer/views/toolbarview.js:186
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:205
+#: apps/io.ox/core/viewer/views/toolbarview.js:213
 msgid "Open in browser tab"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:382
+#: apps/io.ox/core/viewer/views/toolbarview.js:205
+#: module:io.ox/core
+msgid "Send as mail"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:407
 #: module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
@@ -6644,7 +6649,7 @@ msgstr ""
 
 #: apps/io.ox/files/view-options.js:111
 #: module:io.ox/files
-#: apps/io.ox/find/extensions-api.js:346
+#: apps/io.ox/find/extensions-api.js:343
 #: module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
 #: apps/io.ox/search/facets/extensions.js:280
@@ -6747,25 +6752,25 @@ msgstr ""
 msgid "Last 365 days"
 msgstr ""
 
-#: apps/io.ox/find/extensions-api.js:57
+#: apps/io.ox/find/extensions-api.js:54
 #: module:io.ox/core
 msgid "as date"
 msgstr ""
 
-#: apps/io.ox/find/extensions-api.js:282
+#: apps/io.ox/find/extensions-api.js:279
 #: module:io.ox/core
 msgid "All Folders"
 msgstr ""
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:334
+#: apps/io.ox/find/main.js:337
 #: module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr ""
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:337
+#: apps/io.ox/find/main.js:340
 #: module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
