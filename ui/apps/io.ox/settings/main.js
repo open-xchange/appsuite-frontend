@@ -124,6 +124,19 @@ define('io.ox/settings/main', [
             'role': 'main'
         }).scrollable();
 
+        grid = new VGrid(left, { checkboxDisabled: true, containerLabel: gt('Select'), multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
+
+        // disable the Deserializer
+        grid.setDeserialize(function (cid) {
+            return cid;
+        });
+
+        grid.addTemplate(tmpl.main);
+        grid.addLabelTemplate(tmpl.label);
+
+        //grid.requiresLabel = tmpl.requiresLabel;
+
+        // Create extensions for the apps
         var appsInitialized = appsAPI.getInstalled().done(function (installed) {
 
             var apps = _.filter(installed, function (item) {
