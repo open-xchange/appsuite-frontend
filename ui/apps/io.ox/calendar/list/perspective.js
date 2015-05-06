@@ -377,8 +377,8 @@ define('io.ox/calendar/list/perspective', [
             grid.selection.set(data);
         });
 
-        // refresh grid on all update events
-        api.on('update', grid.refresh);
+        // refresh grid on all update/delete events
+        api.on('update delete', grid.refresh);
 
         // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);
