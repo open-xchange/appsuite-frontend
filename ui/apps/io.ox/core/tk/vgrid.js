@@ -380,6 +380,7 @@ define('io.ox/core/tk/vgrid',
             fnScroll,
             deserialize,
             emptyMessage,
+            preSelection,
 
             loader = new ChunkLoader(function (subset) {
                 var load = loadData[currentMode] || loadData.all;
@@ -539,7 +540,7 @@ define('io.ox/core/tk/vgrid',
                 // get clone
                 return template.getClone(function () {
                     // add checkbox for edit mode
-                    if (options.editable) {
+                    if (!options.checkboxDisabled) {
                         return createCheckbox.call(this);
                     }
                 });
@@ -671,6 +672,12 @@ define('io.ox/core/tk/vgrid',
                     function (chunk) {
                         if (chunk && chunk.data) {
                             cont(chunk);
+
+                            if (preSelection) {
+                                // select element which has been set as preselected
+                                self.selection.set(preSelection);
+                                preSelection = undefined;
+                            }
                         }
                         // no fail handling here otherweise we get empty blocks
                         // just because of scrolling
@@ -1038,6 +1045,14 @@ define('io.ox/core/tk/vgrid',
             scrollpane.find('.io-ox-center').remove();
             container.css({ visibility: 'hidden' }).parent().busy();
             return this;
+        };
+
+        /*
+         * Set an element as preselected. Use this to select an element what will be added to
+         * the VGrid with the next list/all request. After drawing, this element will be selected.
+         */
+        this.setPreSelection = function (data) {
+            preSelection = data;
         };
 
         this.idle = function () {
