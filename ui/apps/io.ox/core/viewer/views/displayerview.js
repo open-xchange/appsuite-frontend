@@ -12,14 +12,13 @@
  */
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/files/api',
-    'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (FilesAPI, EventDispatcher, TypesRegistry, DisposableView, Util, gt) {
+], function (FilesAPI, TypesRegistry, DisposableView, Util, gt) {
 
     'use strict';
 
@@ -32,7 +31,10 @@ define('io.ox/core/viewer/views/displayerview', [
 
         className: 'viewer-displayer',
 
-        initialize: function () {
+        initialize: function (options) {
+            _.extend(this, options);
+            // event aggregator for communication between displayer view and type views
+            this.displayerEvents = _.extend({}, Backbone.Events);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
@@ -53,8 +55,11 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slidesToCache = 7;
             // instance of the swiper plugin
             this.swiper = null;
+            // forward zoom events
+            this.listenTo(this.mainEvents, 'viewer:zoomin', this.onZoomIn);
+            this.listenTo(this.mainEvents, 'viewer:zoomout', this.onZoomOut);
             // listen to blend caption events
-            this.listenTo(EventDispatcher, 'viewer:blendcaption', this.blendCaption);
+            this.listenTo(this.displayerEvents, 'viewer:blendcaption', this.blendCaption);
             // listen to delete event propagation from FilesAPI
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
         },
@@ -134,7 +139,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     return;
                 }
                 // initiate swiper
-                self.swiper = new window.Swiper('#viewer-carousel', swiperParameter);
+                self.swiper = new window.Swiper(self.carouselRoot[0], swiperParameter);
                 // overwrite the original removeSlide function because its buggy
                 self.swiper.removeSlide = self.removeSlide;
                 // always load duplicate slides of the swiper plugin.
@@ -167,7 +172,7 @@ define('io.ox/core/viewer/views/displayerview', [
                         if (self.disposed) {
                             return;
                         }
-                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element });
+                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element, displayerEvents: self.displayerEvents });
                         view.render().prefetch().show();
                         self.slideDuplicateViews.push(view);
                     },
@@ -195,6 +200,7 @@ define('io.ox/core/viewer/views/displayerview', [
         createSlides: function (node) {
             var promises = [],
                 collection = this.collection,
+                self = this,
                 resultDef;
 
             collection.each(function (model) {
@@ -202,7 +208,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 TypesRegistry.getModelType(model)
                 .then(function (ModelType) {
-                    var view = new ModelType({ model: model, collection: collection });
+                    var view = new ModelType({ model: model, collection: collection, displayerEvents: self.displayerEvents });
                     view.render();
                     return def.resolve(view);
                 },
@@ -326,7 +332,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // load model and create new slide slide content
             TypesRegistry.getModelType(model)
             .then(function (ModelType) {
-                var view = new ModelType({ model: model, collection: this.collection, el: slideNode });
+                var view = new ModelType({ model: model, collection: this.collection, el: slideNode, displayerEvents: this.displayerEvents });
                 view.render().prefetch().show();
                 this.slideViews[index] = view;
             }.bind(this),
@@ -392,7 +398,7 @@ define('io.ox/core/viewer/views/displayerview', [
             if (mediaSlide.length > 0) {
                 mediaSlide[0].pause();
             }
-            EventDispatcher.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
+            this.mainEvents.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
             // scroll to last position and apply last zoom, if exists
             var activeSlideEl = this.$el.find('[data-swiper-slide-index="' + activeSlideIndex + '"]'),
@@ -434,6 +440,20 @@ define('io.ox/core/viewer/views/displayerview', [
                     this.documentZoomLevels[previousIndex] = activeSlideView.currentZoomFactor;
                 }
             }
+        },
+
+        /**
+         * Publishes zoom-in event in the event aggregator
+         */
+        onZoomIn: function () {
+            this.displayerEvents.trigger('viewer:zoomin');
+        },
+
+        /**
+         * Publishes zoom-out event in the event aggregator
+         */
+        onZoomOut: function () {
+            this.displayerEvents.trigger('viewer:zoomout');
         },
 
         /**
@@ -505,7 +525,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.handleDuplicatesSlides();
             // close viewer we don't have any files to show
             if (this.collection.length === 0) {
-                EventDispatcher.trigger('viewer:close');
+                this.mainEvents.trigger('viewer:close');
                 return;
             }
             // do a swiper change end manually, because the plugin is not doing it (maybe a bug)

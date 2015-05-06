@@ -13,10 +13,9 @@
 define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
-    'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/folder/api',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, EventDispatcher, FolderAPI, gt) {
+], function (PanelBaseView, Ext, FolderAPI, gt) {
 
     'use strict';
 

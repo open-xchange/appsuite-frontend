@@ -47,9 +47,13 @@ define('io.ox/core/viewer/views/sidebarview', [
         // the visible state of the side bar, hidden per default.
         opened: false,
 
-        initialize: function () {
+        initialize: function (options) {
+            _.extend(this, options);
             this.model = null;
             this.zone = null;
+
+            // listen to slide change and set fresh model
+            this.listenTo(this.mainEvents, 'viewer:displayeditem:change', this.setModel);
 
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -66,7 +70,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             // determine current state if undefined
             this.opened = _.isUndefined(state) ? !this.opened : Boolean(state);
             this.$el.toggleClass('opened', this.opened);
-            this.trigger('viewer:sidebar:change:state', this.opened);
+            this.mainEvents.trigger('viewer:sidebar:change:state', this.opened);
             this.renderSections();
         },
 

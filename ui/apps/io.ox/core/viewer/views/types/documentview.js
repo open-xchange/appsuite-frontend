@@ -15,10 +15,9 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
-    'io.ox/core/viewer/eventdispatcher',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, EventDispatcher, gt) {
+], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, gt) {
 
     'use strict';
 
@@ -34,7 +33,8 @@ define('io.ox/core/viewer/views/types/documentview', [
      */
     var DocumentView =  BaseView.extend({
 
-        initialize: function () {
+        initialize: function (options) {
+            _.extend(this, options);
             //The name of the document converter server module.
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
@@ -56,8 +56,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
             // bind zoom handlers
-            EventDispatcher.on('viewer:document:zoomin', this.onZoomIn.bind(this));
-            EventDispatcher.on('viewer:document:zoomout', this.onZoomOut.bind(this));
+            this.listenTo(this.displayerEvents, 'viewer:zoomin', this.onZoomIn);
+            this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
             // bind scroll event for showing current page number
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
             // defaults
@@ -81,7 +81,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. Example result: "Page 5 of 10"
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
-                EventDispatcher.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
+                this.displayerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
             }
         },
 
@@ -303,7 +303,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onZoomIn: function () {
             if (this.isVisible()) {
                 this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'increase'));
-                EventDispatcher.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
+                this.displayerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
             }
         },
 
@@ -313,7 +313,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onZoomOut: function () {
             if (this.isVisible()) {
                 this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'decrease'));
-                EventDispatcher.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
+                this.displayerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
             }
         },
 
@@ -461,7 +461,6 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             this.unload(true);
             this.$el.off();
-            EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
         }
 
     });

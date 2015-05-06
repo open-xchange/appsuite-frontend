@@ -12,31 +12,28 @@
  */
 
 define('io.ox/core/viewer/views/types/textview', [
-    'io.ox/core/viewer/views/types/baseview',
-    'io.ox/core/viewer/eventdispatcher'
-], function (BaseView, EventDispatcher) {
+    'io.ox/core/viewer/views/types/baseview'
+], function (BaseView) {
 
     'use strict';
 
     var TextView = BaseView.extend({
 
+        initialize: function (options) {
+            _.extend(this, options);
+            this.listenTo(this.displayerEvents, 'viewer:zoomin', this.onZoomIn);
+            this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
+        },
+
         render: function () {
             // handle zoom events
             this.size = 13;
-            this.on('dispose', function () {
-                EventDispatcher.off('viewer:document:zoomin viewer:document:zoomout');
-            });
-            EventDispatcher.on({
-                'viewer:document:zoomin': this.zoomIn.bind(this),
-                'viewer:document:zoomout': this.zoomOut.bind(this)
-            });
             // quick hack to get rid of flex box
             this.$el.empty().css('display', 'block');
             return this;
         },
 
         prefetch: function () {
-            //console.warn('TextView.prefetch()', this.model.get('filename'));
             // simply load the document content via $.ajax
             var $el = this.$el.busy(),
                 previewUrl = this.getPreviewUrl();
@@ -58,7 +55,6 @@ define('io.ox/core/viewer/views/types/textview', [
          *  the TextView instance.
          */
         unload: function () {
-            //console.warn('TextView.unload()', this.model.get('filename'));
             this.$el.find('.plain-text-page').remove();
             return this;
         },
@@ -68,11 +64,11 @@ define('io.ox/core/viewer/views/types/textview', [
             this.$('.plain-text-page').css('fontSize', this.size);
         },
 
-        zoomIn: function () {
+        onZoomIn: function () {
             this.setFontSize(this.size + 2);
         },
 
-        zoomOut: function () {
+        onZoomOut: function () {
             this.setFontSize(this.size - 2);
         }
 

@@ -13,12 +13,11 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/core/viewer/eventdispatcher',
     'io.ox/files/api',
     'io.ox/core/api/user',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, LinksPattern, EventDispatcher, FilesAPI, UserAPI, Util, gt) {
+], function (PanelBaseView, Ext, LinksPattern, FilesAPI, UserAPI, Util, gt) {
 
     'use strict';
 

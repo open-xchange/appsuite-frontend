@@ -14,13 +14,12 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/toolbarview',
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
-    'io.ox/core/viewer/eventdispatcher',
     'io.ox/backbone/disposable',
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'less!io.ox/core/viewer/style'
-], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher, DisposableView, NodeTouch, Util, Settings) {
+], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings) {
 
     'use strict';
 
@@ -40,23 +39,20 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         initialize: function (options) {
-            //console.info('MainView.initialize()');
-            if (options) {
-                _.extend(this, options);
-            }
+            _.extend(this, options);
+            // create the event aggregator of this view.
+            this.mainEvents = _.extend({}, Backbone.Events);
             // create children views
-            this.toolbarView = new ToolbarView({ collection: this.collection });
-            this.displayerView = new DisplayerView({ collection: this.collection });
-            this.sidebarView = new SidebarView({ collection: this.collection });
+            this.toolbarView = new ToolbarView({ collection: this.collection, mainEvents: this.mainEvents });
+            this.displayerView = new DisplayerView({ collection: this.collection, mainEvents: this.mainEvents });
+            this.sidebarView = new SidebarView({ collection: this.collection, mainEvents: this.mainEvents });
             // close viewer on events
-            this.listenTo(this.toolbarView, 'viewer:close', this.closeViewer);
-            this.listenTo(ox, 'app:start app:resume', this.closeViewer);
-            this.listenTo(EventDispatcher, 'viewer:close', this.closeViewer);
+            this.listenTo(this.mainEvents, 'viewer:close', this.closeViewer);
+            this.listenTo(this.mainEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // bind toggle side bar handler
-            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar);
-            this.listenTo(this.sidebarView, 'viewer:sidebar:change:state', this.onSideBarToggled);
-            // bind displayed item change handler
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.onDisplayedItemChange);
+            this.listenTo(this.mainEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
+            // TODO this is not valid anymore if we want to open couple viewer apps in parallel
+            this.listenTo(ox, 'app:start app:resume', this.closeViewer);
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js
@@ -77,7 +73,6 @@ define('io.ox/core/viewer/views/mainview', [
          */
         render: function (model) {
             var state = Settings.getSidebarOpenState();
-            //console.warn('MainView.render()', data);
             if (!model) {
                 console.error('Core.Viewer.MainView.render(): no file to render');
                 return;
@@ -99,7 +94,6 @@ define('io.ox/core/viewer/views/mainview', [
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
-            //console.warn('MainView.onKeyDown() event', event, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
             var viewerRootEl = this.$el;
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
@@ -145,19 +139,11 @@ define('io.ox/core/viewer/views/mainview', [
 
         // refresh view sizes and broadcast window resize event
         onWindowResize: function () {
-            //console.warn('MainView.onWindowResize()');
             this.refreshViewSizes();
-            EventDispatcher.trigger('viewer:window:resize');
-        },
-
-        // handle change of displayed item
-        onDisplayedItemChange: function (model) {
-            this.sidebarView.setModel(model);
         },
 
         // toggle sidebar after the sidebar button is clicked
         onToggleSidebar: function () {
-            //console.warn('MainView.onToggleSidebar()');
             this.sidebarView.toggleSidebar();
         },
 
@@ -168,7 +154,6 @@ define('io.ox/core/viewer/views/mainview', [
 
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
-            //console.warn('MainView.refreshViewSizes()');
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
                 activeSlide = displayerEl.find('.swiper-slide-active'),

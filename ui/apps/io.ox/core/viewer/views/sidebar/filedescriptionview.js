@@ -14,9 +14,8 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
-    'io.ox/core/viewer/eventdispatcher',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, ActionsPattern, EventDispatcher, gt) {
+], function (PanelBaseView, Ext, ActionsPattern, gt) {
 
     'use strict';
 

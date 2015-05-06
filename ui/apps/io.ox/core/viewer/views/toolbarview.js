@@ -11,7 +11,6 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/toolbarview', [
-    'io.ox/core/viewer/eventdispatcher',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
@@ -22,7 +21,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -47,7 +46,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'lo',
                 title: gt('File name'),
                 customize: function (baton) {
-                    //console.warn('ToolbarView.meta.customize()', baton);
                     var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
@@ -100,6 +98,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                             tabindex: '1',
                             title: gt('View details'),
                             'aria-label': gt('View details')
+                        });
+                }
+            },
+            'popoutstandalone': {
+                prio: 'hi',
+                mobile: 'hi',
+                icon: 'fa  fa-external-link-square',
+                ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
+                customize: function () {
+                    this.addClass('viewer-toolbar-popoutstandalone')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Pop out standalone viewer'),
+                            'aria-label': gt('Pop out standalone viewer')
                         });
                 }
             },
@@ -257,42 +269,48 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         id: 'print',
-        action: function () {
-            //console.warn('ToolbarView.actions.print', baton);
-        }
+        action: function () {}
     });
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         id: 'togglesidebar',
-        action: function () {
-            //console.warn('ToolbarView.actions.togglesidebar', baton);
+        action: function () {}
+    });
+    new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
+        id: 'popoutstandalone',
+        requires: function () {
+            var currentApp = ox.ui.App.getCurrentApp().getName();
+            return ox.debug && (currentApp != 'io.ox/files/detail');
+        },
+        action: function (baton) {
+            var fileModel = baton.model;
+            //var popoutUrl = ox.abs + ox.root +
+            //    '/#!&app=io.ox/files' +
+            //    '&folder=' + encodeURIComponent(fileModel.get('folder_id')) +
+            //    '&id=' + encodeURIComponent(fileModel.get('folder_id')) + '.' + encodeURIComponent(fileModel.get('id'));
+            //window.open(popoutUrl,'_blank');
+            ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
-        action: function () {
-            //console.warn('ToolbarView.actions.close', baton);
-        }
+        action: function () {}
     });
     // define actions for the zoom function
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         id: 'zoomin',
         requires: function (e) {
             var model = e.baton.model;
-            return model.isOffice() || model.isPDF();
+            return model.isOffice() || model.isPDF() || model.isText();
         },
-        action: function (baton) {
-            EventDispatcher.trigger('viewer:document:zoomin', baton);
-        }
+        action: function () {}
     });
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         id: 'zoomout',
         requires: function (e) {
             var model = e.baton.model;
-            return model.isOffice() || model.isPDF();
+            return model.isOffice() || model.isPDF() || model.isText();
         },
-        action: function (baton) {
-            EventDispatcher.trigger('viewer:document:zoomout', baton);
-        }
+        action: function () {}
     });
 
     new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
@@ -324,14 +342,18 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         events: {
             'click a.viewer-toolbar-close': 'onClose',
+            'click a.viewer-toolbar-popoutstandalone': 'onClose',
             'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
             'click a.viewer-toolbar-filename': 'onRename',
-            'keydown a.viewer-toolbar-filename': 'onRename'
+            'keydown a.viewer-toolbar-filename': 'onRename',
+            'click a.viewer-toolbar-zoomin': 'onZoomIn',
+            'click a.viewer-toolbar-zoomout': 'onZoomOut'
         },
 
-        initialize: function () {
+        initialize: function (options) {
+            _.extend(this, options);
             // rerender on slide change
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', this.render);
+            this.listenTo(this.mainEvents, 'viewer:displayeditem:change', this.render);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -342,14 +364,14 @@ define('io.ox/core/viewer/views/toolbarview', [
         onClose: function (event) {
             event.preventDefault();
             event.stopPropagation();
-            this.trigger('viewer:close');
+            this.mainEvents.trigger('viewer:close');
         },
 
         /**
          * Toggles the visibility of the sidebar.
          */
         onToggleSidebar: function () {
-            EventDispatcher.trigger('viewer:toggle:sidebar');
+            this.mainEvents.trigger('viewer:toggle:sidebar');
         },
 
         /**
@@ -363,6 +385,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                 event.preventDefault();
                 ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.toJSON() });
             }
+        },
+
+        /**
+         * Publishes zoom-in event to the MainView event aggregator.
+         */
+        onZoomIn: function () {
+            this.mainEvents.trigger('viewer:zoomin');
+        },
+
+        /**
+         * Publishes zoom-out event to the MainView event aggregator.
+         */
+        onZoomOut: function () {
+            this.mainEvents.trigger('viewer:zoomout');
         },
 
         /**
