@@ -114,10 +114,13 @@ define('plugins/portal/oxdriveclients/register', [
 
         preview: function (baton) {
             var platform = getPlatform(),
-                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
+                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform)),
+                icon = settings.get('appIconAsBase64');
             this.append(
                 $('<ul class="oxdrive content pointer list-unstyled">').append(
-                    $('<li class="first">').append(createAppIcon()),
+                    $('<li class="first">').append(
+                        $('<div class="appicon">').css('background-image', icon && ('url(' + icon + ')'))
+                    ),
                     $('<li class="message">').append($('<h4>').text(baton.message)),
                     $('<li class="teaser">').text(baton.teaser),
                     $('<li class="link">').append(link)
