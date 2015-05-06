@@ -27,6 +27,11 @@ define([
             { id: '1339', folder_id: '4711', title: 'five' }
         ];
 
+        var testVersions = [
+            { id: '1337', folder_id: '4711', version: 1 },
+            { id: '1337', folder_id: '4711', version: 2 }
+        ];
+
         beforeEach(function () {
             api.pool.get('detail').reset();
             this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
@@ -47,10 +52,7 @@ define([
             this.server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                     timestamp: 1368791630910,
-                    data: [
-                        { id: '1337', folder_id: '4711', version: 1 },
-                        { id: '1337', folder_id: '4711', version: 2 }
-                    ]
+                    data: testVersions
                 }));
             });
 
@@ -76,6 +78,7 @@ define([
                 //set default folder for files app
                 coreSettings.set('folder/infostore', '4711');
                 var c = api.collectionLoader.load();
+                ox.fakeServer.instance = this.server;
                 c.on('load', function (m) {
                     expect(c).to.have.length(3);
                     done();
@@ -95,10 +98,19 @@ define([
         });
 
         describe('versions of files', function () {
+            beforeEach(function () {
+                return api.get({
+                    id: '1337',
+                    folder: '4711'
+                });
+            });
+
             it('should be a list for each file', function () {
                 var server = this.server;
+                console.log(api.pool.get(_.cid({ id: '1337', folder_id: '4711' })));
                 return api.versions.load({
-                    id: '1337'
+                    id: '1337',
+                    folder: '4711'
                 }).then(function (versions) {
                     expect(versions).to.be.an('array');
                     expect(versions).to.have.length(2);
@@ -110,10 +122,12 @@ define([
             it('should cache versions', function () {
                 var server = this.server;
                 return api.versions.load({
-                    id: '1337'
+                    id: '1337',
+                    folder: '4711'
                 }).then(function () {
                     return api.versions.load({
-                        id: '1337'
+                        id: '1337',
+                        folder: '4711'
                     });
                 }).then(function (versions) {
                     expect(versions).to.be.an('array');
@@ -126,7 +140,7 @@ define([
         });
 
         describe('locking', function () {
-            var def1337, def1338, stub;
+            var def1337, def1338;
 
             beforeEach(function () {
                 def1337 = $.Deferred();
@@ -135,28 +149,22 @@ define([
                 return api.get({
                     id: '1338',
                     folder: '4711'
-                }).then(function (m) {
+                }).then(function (data) {
+                    var m = api.pool.get('detail').get(_.cid(data));
                     m.set(testFiles[1]);
                     m.on('change:locked_until', def1338.resolve);
                     return api.get({
                         id: '1337',
                         folder: '4711'
                     });
-                }).then(function (m) {
+                }).then(function (data) {
+                    var m = api.pool.get('detail').get(_.cid(data));
                     m.set(testFiles[0]);
                     m.on('change:locked_until', def1337.resolve);
                 });
             });
 
-            afterEach(function () {
-                if (stub) stub.restore();
-                stub = null;
-            });
-
             it('should trigger "change:locked_until" when locking a single file', function () {
-                stub = sinon.stub(api.collectionLoader, 'reload', function () {
-                    this.collection.get('4711.1337').set('locked_until', 1730130259255);
-                });
                 api.lock({
                     id: '1337',
                     folder: '4711'
@@ -167,10 +175,6 @@ define([
                 });
             });
             it('should trigger "change:locked_until" when locking a list of files', function () {
-                stub = sinon.stub(api.collectionLoader, 'reload', function () {
-                    this.collection.get('4711.1337').set('locked_until', 1730130259255);
-                    this.collection.get('4711.1338').set('locked_until', 1730130259255);
-                });
                 api.lock([{
                     id: '1337',
                     folder: '4711'
@@ -181,8 +185,8 @@ define([
                 }]);
 
                 return $.when(def1337, def1338).done(function (val1337, val1338) {
-                    expect(val1337[1]).to.be.a('number').and.eq(1730130259255);
-                    expect(val1338[1]).to.be.a('number').and.eq(1730130259255);
+                    expect(val1337[1]).to.be.a('number').and.above(0);
+                    expect(val1338[1]).to.be.a('number').and.above(0);
                 });
             });
             it('should trigger "change:locked_until" when unlocking a single file', function () {
@@ -278,14 +282,27 @@ define([
                         data: []
                     }));
                 });
-                return api.get({ id: '1337', folder_id: '4711' }).then(function (m) {
+                var file, removedVersion;
+                return api.get({ id: '1337', folder_id: '4711' }).then(function (data) {
+                    file = data;
+                    var m = api.pool.get('detail').get(_.cid(file));
                     var def = $.Deferred();
                     m.on('change:versions', def.resolve);
-                    return $.when(m, def);
-                }).then(function (m) {
+                    api.versions.load(data);
+                    return def;
+                }).then(function () {
+                    var m = api.pool.get('detail').get(_.cid(file));
                     expect(m.get('versions')).to.have.length(2);
-                    return $.when(m, api.detach(m.get('versions')[0]));
-                }).then(function (m) {
+                    //temporarily remove the version from the fakeserver response
+                    removedVersion = testVersions.pop();
+                    return api.versions.remove({
+                        id: '1337',
+                        folder_id: '4711',
+                        version: 1
+                    });
+                }).then(function () {
+                    testVersions.push(removedVersion);
+                    var m = api.pool.get('detail').get(_.cid(file));
                     expect(m.get('versions')).to.have.length(1);
                 }, function () {
                     throw 'api.detach failed';
