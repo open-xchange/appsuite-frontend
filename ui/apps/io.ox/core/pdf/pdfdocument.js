@@ -198,7 +198,13 @@ define('io.ox/core/pdf/pdfdocument', [
                 loadDef.resolve({ cause: 'importError' });
             }
         }, function () {
-            loadDef.resolve({ cause: 'importError' });
+            $.get(pdfConverterURL).always(function (data) {
+                loadDef.resolve(
+                  (_.isObject(data) && _.isString(data.responseText)) ?
+                      $.parseJSON(data.responseText) :
+                          { cause: 'filterError' });
+
+            });
         });
 
     } // class PDFDocument
