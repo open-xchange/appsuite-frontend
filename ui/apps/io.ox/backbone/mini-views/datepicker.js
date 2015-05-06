@@ -86,12 +86,14 @@ define('io.ox/backbone/mini-views/datepicker', [
                         });
 
                         // render timezone badge
+                        var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
+
                         if (self.options.timezoneButton && !self.mobileMode) {
                             timezoneContainer = $('<div class="timezone input-group-btn">').append(
-                                self.nodes.timezoneField = $('<button class="btn btn-default" tabindex="1" type="button">')
+                                self.nodes.timezoneField = $('<button class="btn btn-default" tabindex="1" type="button">').text(timezoneAbbreviation)
                             );
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">');
+                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
                         }
 
                         // add a11y
