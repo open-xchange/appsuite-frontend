@@ -40,12 +40,14 @@ define('io.ox/core/boot/login/standard', [
         if ($.trim(username).length === 0) {
             return fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
         }
-        if ($.trim(password).length === 0) {
+        if ($.trim(password).length === 0 && !util.isPasswordOptional()) {
             return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
         login(username, password).then(
             function success(data) {
+                // don't respond to submit any more
+                form.off('submit');
                 // store credentials
                 if (!util.isAnonymous()) storeCredentials(form);
                 // clear URL hash
@@ -54,8 +56,6 @@ define('io.ox/core/boot/login/standard', [
                 if (data.module && data.folder) {
                     _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder });
                 }
-                // don't respond to submit any more
-                form.off('submit');
                 // success
                 restore();
                 ox.trigger('login:success', data);
@@ -65,10 +65,9 @@ define('io.ox/core/boot/login/standard', [
     };
 
     function login(name, password) {
-
-        if (util.isAnonymous()) {
+        if (util.isSharing()) {
             return session.login({
-                action: 'anonymous',
+                action: _.url.hash('login_type'),
                 name: name,
                 password: password,
                 store: $('#io-ox-login-store-box').prop('checked'),
@@ -133,7 +132,6 @@ define('io.ox/core/boot/login/standard', [
 
     // post form into iframe to store username and password
     function storeCredentials(form) {
-
         var location = window.location.pathname.replace(/[^/]+$/, '') + 'busy.html'; // blank does not work in chrome
         util.debug('Store credentials', location);
         form.find('input[name="location"]').val(location);

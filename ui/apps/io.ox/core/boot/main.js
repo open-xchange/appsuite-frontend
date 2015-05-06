@@ -82,6 +82,10 @@ define('io.ox/core/boot/main', [
             });
         },
 
+        guest: function () {
+            this.useForm();
+        },
+
         anonymous: function () {
             this.useForm();
         },

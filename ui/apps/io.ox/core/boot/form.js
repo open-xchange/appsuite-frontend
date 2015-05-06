@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/boot/form', [
-
+    'io.ox/core/http',
     'io.ox/core/boot/util',
     'io.ox/core/boot/language',
     'io.ox/core/boot/support',
@@ -20,19 +20,68 @@ define('io.ox/core/boot/form', [
     'io.ox/core/manifests',
     'io.ox/core/capabilities'
 
-], function (util, language, support, login, manifests, capabilities) {
+], function (http, util, language, support, login, manifests, capabilities) {
 
     'use strict';
 
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt, isGuest = util.isGuest();
+        var sc = ox.serverConfig, gt = util.gt;
 
         util.debug('Show form ...');
 
-        if (isGuest) {
-            // prefill
-            $('#io-ox-login-username').val(_.url.hash('share')).prop('readonly', true);
+        // sharing
+        if (util.isSharing()) {
+            // prefill or hide username input in guest mode
+            if (util.isGuest()) {
+                var loginName = _.url.hash('login_name');
+                if (_.isEmpty(loginName)) {
+                    $('#io-ox-login-username').hide();
+                } else {
+                    $('#io-ox-login-username, #io-ox-login-restoremail').val(loginName).prop('readonly', true);
+                }
+            }
+
+            if (util.isAnonymous()) {
+                $('#io-ox-login-username').hide();
+            }
+
+            // message
+            if (_.url.hash('message')) {
+                var type = _.url.hash('message_type') || 'info';
+                util.feedback(type.toLowerCase(), _.url.hash('message'));
+            }
+
+            // add skip button
+            if (util.isPasswordOptional()) {
+                $('#login-button').after(
+                    $('<input class="btn btn-primary">').attr({
+                        type: 'submit',
+                        value: gt('Skip'),
+                        name: 'skip',
+                        id: 'skip-button',
+                        'data-i18n': 'Skip'
+                    })
+                );
+            }
+
+            $('#io-ox-forgot-password, #io-ox-backtosignin').find('a').click(function (e) {
+                e.preventDefault();
+                $('#io-ox-password-forget-form, #io-ox-login-form').toggle();
+            });
+
+            $('#io-ox-password-forget-form').submit(function () {
+                $(this).find('input[name="share"]').val(_.url.hash('share'));
+            });
+        } else {
+            // hide forgot password?
+            var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
+            if (!forgotPassword || util.isSharing()) {
+                // either not configured or guest user
+                $('#io-ox-forgot-password').remove();
+            } else {
+                $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
+            }
         }
 
         language.render();
@@ -61,15 +110,6 @@ define('io.ox/core/boot/form', [
             box.on('change', function () {
                 _.setCookie('staySignedIn', $(this).prop('checked'));
             });
-        }
-
-        // hide forgot password?
-        var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
-        if (!forgotPassword || isGuest) {
-            // either not configured or guest user
-            $('#io-ox-forgot-password').remove();
-        } else {
-            $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
         }
 
         // set username input type to text in IE
@@ -109,7 +149,7 @@ define('io.ox/core/boot/form', [
                 $('#io-ox-login-form').on('submit', login);
                 $('#io-ox-login-username').prop('disabled', false);
                 // focus password or username
-                $(isGuest ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
+                $(util.isGuest() ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
             });
         });
     };

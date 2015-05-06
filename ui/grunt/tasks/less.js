@@ -39,6 +39,7 @@ module.exports = function (grunt) {
                             'bower_components/bootstrap/less/grid.less',
                             'bower_components/bootstrap/less/forms.less',
                             'bower_components/bootstrap/less/buttons.less',
+                            'bower_components/bootstrap/less/utilities.less',
                             'apps/themes/login/login.less'
                         ],
                         expand: true,

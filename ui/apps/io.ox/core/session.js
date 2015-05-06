@@ -159,12 +159,8 @@ define('io.ox/core/session', [
                         rampup: true,
                         rampupFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('name', 'password', 'language', 'rampup', 'rampupFor')
+                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target')
                 );
-
-                // copy optional share-specific parameters to avoid undefineds
-                if (options.share) params.share = options.share;
-                if (options.target) params.target = options.target;
 
                 return (
                     pending = http.POST({

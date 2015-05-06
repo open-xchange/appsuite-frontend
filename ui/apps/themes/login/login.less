@@ -173,31 +173,29 @@ html, body {
             border:1px solid rgba(0, 0, 0, 0.2);
         }
     }
+
+    h1 {
+        font-family: @light-font-family;
+        font-weight: 100;
+        line-height: 1.15em;
+        color: #fff;
+
+        small { color: #6FBBEC; }
+    }
 }
 
 #io-ox-login-header {
+    h1 { margin: 1em 0 1em 0 };
     height: 45%;
     text-align: right;
     vertical-align: middle;
     cursor: default;
-
-    h1 {
-        font-family: @light-font-family;
-        font-size: 36px;
-        font-weight: 100;
-        line-height: 1.15em;
-        color: #fff;
-        margin: 1em 0 1em 0;
-
-        small { color: #6FBBEC; }
-    }
 }
 
 #io-ox-login-header-prefix { color: #6cbafc; }
 
 #io-ox-login-form-container {
     height: 40%;
-    margin: 0;
     vertical-align: top;
 }
 
@@ -279,9 +277,9 @@ html, body {
 }
 
 @media (max-width: 767px) {
-    #io-ox-login-header {
+    #io-ox-login-container {
         height: 15%;
-        h1 { font-size: 14pt; margin: 2em 0 2em 0; }
+        h1 { font-size: 14pt; }
     }
 }
 
