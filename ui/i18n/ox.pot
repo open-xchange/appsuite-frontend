@@ -5752,8 +5752,8 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/mail/util.js:42
 #: module:io.ox/core
-#: apps/io.ox/mail/util.js:413
-#: apps/io.ox/mail/util.js:428
+#: apps/io.ox/mail/util.js:424
+#: apps/io.ox/mail/util.js:439
 msgid "unknown"
 msgstr ""
 
@@ -5869,7 +5869,7 @@ msgstr ""
 msgid "Send as mail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:407
+#: apps/io.ox/core/viewer/views/toolbarview.js:398
 #: module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
@@ -6716,38 +6716,38 @@ msgstr ""
 msgid "Search results"
 msgstr ""
 
-#: apps/io.ox/find/date/extensions.js:95
+#: apps/io.ox/find/date/extensions.js:97
 #: module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:128
+#: apps/io.ox/find/date/extensions.js:131
 msgid "as daterange"
 msgstr ""
 
-#: apps/io.ox/find/date/lookup.js:88
+#: apps/io.ox/find/date/lookup.js:89
 #: module:io.ox/core
 msgid "Last week"
 msgstr ""
 
-#: apps/io.ox/find/date/lookup.js:92
+#: apps/io.ox/find/date/lookup.js:93
 #: module:io.ox/core
 msgid "Last month"
 msgstr ""
 
-#: apps/io.ox/find/date/lookup.js:96
+#: apps/io.ox/find/date/lookup.js:97
 #: module:io.ox/core
 msgid "Last year"
 msgstr ""
 
-#: apps/io.ox/find/date/lookup.js:101
+#: apps/io.ox/find/date/lookup.js:102
 #: module:io.ox/core
 msgid "Last 7 days"
 msgstr ""
 
-#: apps/io.ox/find/date/lookup.js:105
+#: apps/io.ox/find/date/lookup.js:106
 #: module:io.ox/core
 msgid "Last 30 days"
 msgstr ""
 
-#: apps/io.ox/find/date/lookup.js:109
+#: apps/io.ox/find/date/lookup.js:110
 #: module:io.ox/core
 msgid "Last 365 days"
 msgstr ""
@@ -7349,7 +7349,7 @@ msgstr ""
 msgid "has attachments"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:245
+#: apps/io.ox/mail/common-extensions.js:246
 #: module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
@@ -7360,64 +7360,64 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:256
+#: apps/io.ox/mail/common-extensions.js:257
 #: module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:267
+#: apps/io.ox/mail/common-extensions.js:268
 #: module:io.ox/mail
 msgid "Bcc"
 msgstr ""
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:282
+#: apps/io.ox/mail/common-extensions.js:283
 #: module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:426
+#: apps/io.ox/mail/common-extensions.js:427
 #: module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:437
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:429
+#: apps/io.ox/mail/common-extensions.js:430
 #: module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:437
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is unread, press to mark it as read."
-msgstr ""
-
-#: apps/io.ox/mail/common-extensions.js:469
-#: module:io.ox/mail
-msgid "Show images"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js:470
 #: module:io.ox/mail
+msgid "Show images"
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js:471
+#: module:io.ox/mail
 msgid "External images have been blocked to protect you against potential spam!"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:496
+#: apps/io.ox/mail/common-extensions.js:497
 #: module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:523
+#: apps/io.ox/mail/common-extensions.js:524
 #: module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr ""
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:553
+#: apps/io.ox/mail/common-extensions.js:554
 #: module:io.ox/mail
 msgid "Send a read receipt"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:556
+#: apps/io.ox/mail/common-extensions.js:557
 #: module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7530,7 +7530,7 @@ msgstr ""
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:210
 #: module:io.ox/mail
-#: apps/io.ox/mail/util.js:377
+#: apps/io.ox/mail/util.js:388
 #: module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
@@ -8292,31 +8292,31 @@ msgstr ""
 msgid "via"
 msgstr ""
 
-#: apps/io.ox/mail/util.js:332
+#: apps/io.ox/mail/util.js:343
 #: module:io.ox/core
 msgid "Unknown sender"
 msgstr ""
 
-#: apps/io.ox/mail/util.js:332
+#: apps/io.ox/mail/util.js:343
 #: module:io.ox/core
 msgid "No recipients"
 msgstr ""
 
-#: apps/io.ox/mail/util.js:391
+#: apps/io.ox/mail/util.js:402
 #: module:io.ox/core
 #: apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr ""
 
-#: apps/io.ox/mail/util.js:392
+#: apps/io.ox/mail/util.js:403
 #: module:io.ox/core
 #: apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr ""
 
-#: apps/io.ox/mail/util.js:398
+#: apps/io.ox/mail/util.js:409
 #: module:io.ox/core
 msgid "Primary account"
 msgstr ""

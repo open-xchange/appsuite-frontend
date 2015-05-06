@@ -518,7 +518,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:523 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "A tértivevény elküldve"
 
@@ -1259,7 +1259,7 @@ msgstr "Vissza a találkozóhoz"
 msgid "Basic settings"
 msgstr "Alapbeállítások"
 
-#: apps/io.ox/mail/common-extensions.js:267 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
 msgid "Bcc"
 msgstr "Titkos másolat"
 
@@ -1880,7 +1880,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Másolás"
 
-#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -3115,7 +3115,7 @@ msgstr "Mappa exportálása"
 msgid "External contact"
 msgstr "Külső névjegy"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
@@ -3692,7 +3692,7 @@ msgstr "Magas"
 msgid "High contrast theme"
 msgstr "Magas kontrasztú témák"
 
-#: apps/io.ox/mail/util.js:391 module:io.ox/core apps/io.ox/tasks/util.js:310
+#: apps/io.ox/mail/util.js:402 module:io.ox/core apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Magas prioritás"
@@ -3893,8 +3893,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a %3$s"
-"„Kezdőképernyőhöz adás”%4$s gombra"
+"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a "
+"%3$s„Kezdőképernyőhöz adás”%4$s gombra"
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "Instant Messenger 1"
@@ -4049,25 +4049,25 @@ msgstr "Nyelvspecifikus alapértelmezés"
 msgid "Languages"
 msgstr "Nyelvek"
 
-#: apps/io.ox/find/date/lookup.js:105 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
 #, fuzzy
 #| msgid "3 days"
 msgid "Last 30 days"
 msgstr "3 nap"
 
-#: apps/io.ox/find/date/lookup.js:109 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
 #, fuzzy
 #| msgid "5 days"
 msgid "Last 365 days"
 msgstr "5 nap"
 
-#: apps/io.ox/find/date/lookup.js:101 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
 #, fuzzy
 #| msgid "Last name"
 msgid "Last 7 days"
 msgstr "Vezetéknév"
 
-#: apps/io.ox/find/date/lookup.js:92 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
 #, fuzzy
 msgid "Last month"
 msgstr "Hónap"
@@ -4082,13 +4082,13 @@ msgstr "Vezetéknév"
 msgid "Last name, First name"
 msgstr "Vezetéknév, utónév"
 
-#: apps/io.ox/find/date/lookup.js:88 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "Múlt héten"
 
-#: apps/io.ox/find/date/lookup.js:96 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
 #, fuzzy
 #| msgid "Last name"
 msgid "Last year"
@@ -4206,7 +4206,7 @@ msgstr "Veszteség: %1$s %"
 msgid "Low"
 msgstr "Alacsony"
 
-#: apps/io.ox/mail/util.js:392 module:io.ox/core apps/io.ox/tasks/util.js:304
+#: apps/io.ox/mail/util.js:403 module:io.ox/core apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Alacsony prioritás"
@@ -4864,7 +4864,7 @@ msgstr "Nincsenek értesítések"
 msgid "No priority"
 msgstr "Nincs prioritás"
 
-#: apps/io.ox/mail/util.js:332 module:io.ox/core
+#: apps/io.ox/mail/util.js:343 module:io.ox/core
 msgid "No recipients"
 msgstr "Nincsenek címzettek"
 
@@ -4887,7 +4887,7 @@ msgstr "Nincs lassú kérés"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
-#: apps/io.ox/mail/util.js:377 module:io.ox/core
+#: apps/io.ox/mail/util.js:388 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
 #, c-format
@@ -5666,7 +5666,7 @@ msgstr "Előző nap"
 msgid "Previous Week"
 msgstr "Előző hét"
 
-#: apps/io.ox/mail/util.js:398 module:io.ox/core
+#: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
 msgstr "Elsődleges fiók"
 
@@ -6342,7 +6342,7 @@ msgid "Send"
 msgstr "Küldés"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Tértivevény küldése"
 
@@ -6591,7 +6591,7 @@ msgstr "Rejtett fájlok és mappák megjelenítése"
 msgid "Show icons"
 msgstr "Ikonok megjelenítése"
 
-#: apps/io.ox/mail/common-extensions.js:469 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
@@ -7332,7 +7332,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:556 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "A feladó értesítést szeretne kapni arról, hogy Ön elolvasta ezt az e-mailt"
@@ -7500,13 +7500,13 @@ msgstr ""
 "Ez a statisztika csak a mappastruktúrában a(z) „%1$s” mappától számítva négy "
 "szintnél kisebb mélységű mappákat tartalmazza."
 
-#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:437
+#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Ez egy olvasott levél, kattintson hogy olvasatlan legyen."
 
-#: apps/io.ox/mail/common-extensions.js:429 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:437
+#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Ez egy olvasatlan levél, kattintson ahhoz hogy olvasott legyen."
 
@@ -7685,7 +7685,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Megszólítás"
 
-#: apps/io.ox/mail/common-extensions.js:245 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
@@ -7858,7 +7858,7 @@ msgstr "Egységes"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Ismeretlen hiba a tumblr blog ellenőrzésekor."
 
-#: apps/io.ox/mail/util.js:332 module:io.ox/core
+#: apps/io.ox/mail/util.js:343 module:io.ox/core
 msgid "Unknown sender"
 msgstr "ismeretlen feladó"
 
@@ -8098,7 +8098,7 @@ msgstr "Részletek elrejtése"
 msgid "View source"
 msgstr "Forrás megtekintése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:407 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -8112,7 +8112,7 @@ msgstr "Várakozás"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: apps/io.ox/mail/common-extensions.js:496 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
 
@@ -8683,7 +8683,7 @@ msgid "and"
 msgstr "és"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:282 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "és %1$d további"
 
@@ -8693,8 +8693,8 @@ msgstr "és %1$d további"
 msgid "as date"
 msgstr "Kezdés dátuma"
 
-#: apps/io.ox/find/date/extensions.js:95 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:128
+#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
+#: apps/io.ox/find/date/extensions.js:131
 #, fuzzy
 #| msgid "date range"
 msgid "as daterange"
@@ -9145,7 +9145,7 @@ msgstr "megerősítetlen"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:121
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
-#: apps/io.ox/mail/util.js:413 apps/io.ox/mail/util.js:428
+#: apps/io.ox/mail/util.js:424 apps/io.ox/mail/util.js:439
 msgid "unknown"
 msgstr "ismeretlen"
 

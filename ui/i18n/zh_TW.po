@@ -516,7 +516,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:523 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "已寄出送達回執"
 
@@ -1244,7 +1244,7 @@ msgstr "回到約會"
 msgid "Basic settings"
 msgstr "基礎設定"
 
-#: apps/io.ox/mail/common-extensions.js:267 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
 msgid "Bcc"
 msgstr "密件抄送"
 
@@ -1860,7 +1860,7 @@ msgstr ""
 msgid "Copy"
 msgstr "複製"
 
-#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -3079,7 +3079,7 @@ msgstr "匯出文件夾"
 msgid "External contact"
 msgstr "外部聯絡人"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "為保護您的隱私，已阻止預載外部圖片"
@@ -3645,7 +3645,7 @@ msgstr "高"
 msgid "High contrast theme"
 msgstr "高對比佈景主題"
 
-#: apps/io.ox/mail/util.js:391 module:io.ox/core apps/io.ox/tasks/util.js:310
+#: apps/io.ox/mail/util.js:402 module:io.ox/core apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "高優先順序"
@@ -3994,25 +3994,25 @@ msgstr "不同語言的細部設定"
 msgid "Languages"
 msgstr "語言"
 
-#: apps/io.ox/find/date/lookup.js:105 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
 #, fuzzy
 #| msgid "3 days"
 msgid "Last 30 days"
 msgstr "3 天"
 
-#: apps/io.ox/find/date/lookup.js:109 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
 #, fuzzy
 #| msgid "5 days"
 msgid "Last 365 days"
 msgstr "5 天"
 
-#: apps/io.ox/find/date/lookup.js:101 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
 #, fuzzy
 #| msgid "Last name"
 msgid "Last 7 days"
 msgstr "姓氏"
 
-#: apps/io.ox/find/date/lookup.js:92 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
 #, fuzzy
 msgid "Last month"
 msgstr "月"
@@ -4027,13 +4027,13 @@ msgstr "姓氏"
 msgid "Last name, First name"
 msgstr "姓，名"
 
-#: apps/io.ox/find/date/lookup.js:88 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "上週"
 
-#: apps/io.ox/find/date/lookup.js:96 module:io.ox/core
+#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
 #, fuzzy
 #| msgid "Last name"
 msgid "Last year"
@@ -4151,7 +4151,7 @@ msgstr "失去 %1$s %"
 msgid "Low"
 msgstr "低"
 
-#: apps/io.ox/mail/util.js:392 module:io.ox/core apps/io.ox/tasks/util.js:304
+#: apps/io.ox/mail/util.js:403 module:io.ox/core apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "低優先順序"
@@ -4807,7 +4807,7 @@ msgstr "無通知"
 msgid "No priority"
 msgstr "無優先順序"
 
-#: apps/io.ox/mail/util.js:332 module:io.ox/core
+#: apps/io.ox/mail/util.js:343 module:io.ox/core
 msgid "No recipients"
 msgstr "無收件人"
 
@@ -4830,7 +4830,7 @@ msgstr "無慢速請求"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
-#: apps/io.ox/mail/util.js:377 module:io.ox/core
+#: apps/io.ox/mail/util.js:388 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
 #, c-format
@@ -5599,7 +5599,7 @@ msgstr "前一天"
 msgid "Previous Week"
 msgstr "上週"
 
-#: apps/io.ox/mail/util.js:398 module:io.ox/core
+#: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
 msgstr "主要帳號"
 
@@ -6269,7 +6269,7 @@ msgid "Send"
 msgstr "發送"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "傳送送達回執"
 
@@ -6518,7 +6518,7 @@ msgstr "顯示隱藏檔案與資料夾"
 msgid "Show icons"
 msgstr "顯示圖示"
 
-#: apps/io.ox/mail/common-extensions.js:469 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
 msgid "Show images"
 msgstr "顯示圖片"
 
@@ -7239,7 +7239,7 @@ msgstr "選擇的資料夾是虛擬資料夾，無法搜尋。請選擇其他資
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:556 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "寄件者想在您閱讀此郵件時收到通知"
 
@@ -7399,13 +7399,13 @@ msgid ""
 "the folder structure from the folder \"%1$s\"."
 msgstr "這些統計只包含資料夾，自「%1$s」資料夾開始以下小於四層深度的結構。"
 
-#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:437
+#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "已閱讀此郵件，點擊此處標示為未讀。"
 
-#: apps/io.ox/mail/common-extensions.js:429 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:437
+#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "未閱讀此郵件，點擊此處標示為已讀。"
 
@@ -7577,7 +7577,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "頭銜"
 
-#: apps/io.ox/mail/common-extensions.js:245 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
@@ -7750,7 +7750,7 @@ msgstr "統一"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "檢查 tumblr 部落格時發生未知錯誤。"
 
-#: apps/io.ox/mail/util.js:332 module:io.ox/core
+#: apps/io.ox/mail/util.js:343 module:io.ox/core
 msgid "Unknown sender"
 msgstr "未知的寄件者"
 
@@ -7982,7 +7982,7 @@ msgstr "隱藏詳情"
 msgid "View source"
 msgstr "檢視原始碼"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:407 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "編輯器工具欄"
@@ -7997,7 +7997,7 @@ msgstr "等待中"
 msgid "Warning"
 msgstr "警告"
 
-#: apps/io.ox/mail/common-extensions.js:496 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：該郵件可能存在郵件欺詐"
 
@@ -8551,7 +8551,7 @@ msgid "and"
 msgstr "與"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:282 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "及其他 %1$d 位"
 
@@ -8561,8 +8561,8 @@ msgstr "及其他 %1$d 位"
 msgid "as date"
 msgstr "起始日期"
 
-#: apps/io.ox/find/date/extensions.js:95 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:128
+#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
+#: apps/io.ox/find/date/extensions.js:131
 #, fuzzy
 #| msgid "date range"
 msgid "as daterange"
@@ -9013,7 +9013,7 @@ msgstr "未確認"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:121
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
-#: apps/io.ox/mail/util.js:413 apps/io.ox/mail/util.js:428
+#: apps/io.ox/mail/util.js:424 apps/io.ox/mail/util.js:439
 msgid "unknown"
 msgstr "未知"
 
