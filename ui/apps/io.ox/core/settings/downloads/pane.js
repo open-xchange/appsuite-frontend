@@ -41,7 +41,7 @@ define('io.ox/core/settings/downloads/pane',
     /*
      * Default download: Updater
      */
-    if (capabilities.has('oxupdater')) {
+    if (capabilities.has('oxupdater') && driveClientsSettings.get('standaloneWindowsClient') !== true) {
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
             id: 'updater',
             index: 100,
@@ -112,18 +112,26 @@ define('io.ox/core/settings/downloads/pane',
             index: 200,
             draw: function () {
 
-                var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
+                // "standalone" takes care of custom branded drive clients that run without the updater
+                var standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
+                    hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
+                    windowsClientUrl = standaloneClient ?
+                        ox.apiRoot + linkTo.Windows + '?session=' + ox.session :
+                        ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session,
+                    windowsClientLabel = standaloneClient ?
+                        //.# String will include the product name, "OX Drive for Windows"
+                        gt.format(gt('%s client for Windows'), productName) :
+                        //.# String will include the product name, "OX Drive for Windows"
+                        gt.format(gt('%s client for Windows (Installation via the OX Updater)'), productName);
 
                 this.append(
                     $('<section class="oxdrive">').append(
                         $('<h2>').text(productName),
-                        products['com.openexchange.updater.drive'] ? $('<div class="shop-link-container">').append(
-                            //.# String will include the product name, "OX Drive for Windows"
-                            gt.format(gt('%s client for Windows (Installation via the OX Updater)'), productName),
+                        hasWindowsClient ? $('<div class="shop-link-container">').append(
+                            $.txt(windowsClientLabel),
                             $('<br>'),
                             $('<i class="fa fa-download">'),
-                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download installation file'))
-
+                            $('<a>', { href: windowsClientUrl, target: '_blank' }).addClass('action').text(gt('Download installation file'))
                         ) : [],
                         $('<div class="shop-link-container">').append(
                             //.# String will include the product name, "OX Drive for Mac OS"
