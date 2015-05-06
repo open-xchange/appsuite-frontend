@@ -768,7 +768,9 @@ define('io.ox/contacts/main', [
 
             api.on('create', function (e, data) {
                 data.folder_id = data.folder_id || data.folder;
-                app.grid.setPreSelection(data);
+                app.folder.set(data.folder_id).done(function () {
+                    app.grid.setPreSelection(data);
+                });
             });
         },
 
