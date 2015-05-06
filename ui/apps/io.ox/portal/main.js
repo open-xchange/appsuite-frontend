@@ -50,7 +50,7 @@ define('io.ox/portal/main', [
             var tasks;
             if (type === 'tasks') {
                 tasks = _(baton.data).filter(function (task) {
-                    return task.end_date !== null && task.status !== 3;
+                    return task.end_time !== null && task.status !== 3;
                 });
                 if (_.isEmpty(tasks)) return false;
             }

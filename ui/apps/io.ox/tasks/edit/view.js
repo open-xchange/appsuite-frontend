@@ -36,15 +36,15 @@ define('io.ox/tasks/edit/view', [
             //this prevents errors on saving because recurrence needs both fields filled
             this.model.on('change:recurrence_type', function (model, value) {
                 if (value) {
-                    if (!(model.get('start_date')) && model.get('start_date') !== 0) {
-                        if (model.get('end_date') !== undefined && model.get('end_date') !== null) {
-                            model.set('start_date',  moment(model.get('end_date')).subtract(1, 'day').valueOf(), { validate: true });
+                    if (!(model.get('start_time')) && model.get('start_time') !== 0) {
+                        if (model.get('end_time') !== undefined && model.get('end_time') !== null) {
+                            model.set('start_time',  moment(model.get('end_time')).subtract(1, 'day').valueOf(), { validate: true });
                         } else {
-                            model.set('start_date', _.now(), { validate: true });
+                            model.set('start_time', _.now(), { validate: true });
                         }
                     }
-                    if (!(model.get('end_date')) && model.get('end_date') !== 0) {
-                        model.set('end_date', moment(model.get('start_date')).add(1, 'day').valueOf(), { validate: true });
+                    if (!(model.get('end_time')) && model.get('end_time') !== 0) {
+                        model.set('end_time', moment(model.get('start_time')).add(1, 'day').valueOf(), { validate: true });
                     }
                 }
             });
@@ -118,7 +118,7 @@ define('io.ox/tasks/edit/view', [
                             return val;
                         }),
                     attributes = _(_(self.model.attributes)
-                        .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments', 'priority']))
+                        .pick(['start_time', 'end_time', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments', 'priority']))
                         .filter(function (val) {
                             return val;
                         });

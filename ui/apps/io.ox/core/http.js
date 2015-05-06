@@ -235,7 +235,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '312': 'currency',
             '313': 'trip_meter',
             '314': 'companies',
-            '315': 'date_completed'
+            '315': 'date_completed',
+            '316': 'start_time',
+            '317': 'end_time',
+            '401': 'full_time'
         },
         'folders': {
             '1': 'id',

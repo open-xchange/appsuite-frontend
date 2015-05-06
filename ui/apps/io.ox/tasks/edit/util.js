@@ -57,6 +57,36 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                 );
 
             return { progress: progress, wrapper: wrapper };
+        },
+        sanitizeBeforeSave: function (baton) {
+
+            // check if waiting for attachmenthandling is needed
+            var list = baton.attachmentList;
+            if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
+                //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
+                baton.model.attributes.tempAttachmentIndicator = true;
+            }
+
+            // remove hours and minutes when full_time attribute it set
+            if (baton.model.get('full_time')) {
+                if (baton.model.get('end_time')) {
+                    baton.model.set('end_time', moment.utc(baton.model.get('end_time')).startOf('day').valueOf(), { silent: true });
+                }
+                if (baton.model.get('start_time')) {
+                    baton.model.set('start_time', moment.utc(baton.model.get('start_time')).startOf('day').valueOf(), { silent: true });
+                }
+            }
+
+            // cleanup datepicker helper timezone
+            baton.model.unset('timezone', { silent: true });
+
+            // accept any formating
+            if (baton.model.get('actual_costs')) {
+                baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
+            }
+            if (baton.model.get('target_costs')) {
+                baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
+            }
         }
     };
 

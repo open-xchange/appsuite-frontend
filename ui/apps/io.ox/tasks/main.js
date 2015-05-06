@@ -265,7 +265,7 @@ define('io.ox/tasks/main', [
                 if (sort !== 'urgency') {
                     column = sort;
                 } else {
-                    column = 202;
+                    column = 317;
                 }
                 return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).pipe(function (data) {
                     if (sort !== 'urgency') {
@@ -314,7 +314,7 @@ define('io.ox/tasks/main', [
                         .find('.fa-arrow-down').css('opacity', 0.4);
                 }
                 //update api property (used cid in api.updateAllCache, api.create)
-                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 202;
+                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 317;
                 api.options.requests.all.order = props.order;
             }
 
@@ -687,7 +687,7 @@ define('io.ox/tasks/main', [
                 .header(gt('Sort options'))
                 .option('sort', 'urgency', gt('Urgency'))
                 .option('sort', '300', gt('Status'))
-                .option('sort', '202', gt('Due date'))
+                .option('sort', '317', gt('Due date'))
                 .option('sort', '200', gt('Subject'))
                 .option('sort', '309', gt('Priority'))
                 .divider()

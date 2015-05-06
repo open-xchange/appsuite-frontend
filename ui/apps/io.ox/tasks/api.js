@@ -67,8 +67,8 @@ define('io.ox/tasks/api', [
                     }
                 }
                 //check overdue
-                if (modifications.status || (modifications.end_date !== undefined)) {
-                    if (currentValues.status !== 3 && currentValues.end_date < _.utc()) {
+                if (modifications.status || (modifications.end_time !== undefined)) {
+                    if (currentValues.status !== 3 && currentValues.end_time < _.utc()) {
                         api.trigger('mark:overdue', [currentValues]);
                     } else {
                         api.trigger('unmark:overdue', [currentValues]);
@@ -227,9 +227,9 @@ define('io.ox/tasks/api', [
         requests: {
             all: {
                 folder: folderAPI.getDefaultFolder('tasks'),
-                columns: '1,20,101,200,202,203,220,300,301',
+                columns: '1,20,101,200,203,220,300,301,317',
                 extendColumns: 'io.ox/tasks/api/all',
-                sort: '202',
+                sort: '317',
                 order: 'asc',
                 // allow DB cache
                 cache: true,
@@ -237,7 +237,7 @@ define('io.ox/tasks/api', [
             },
             list: {
                 action: 'list',
-                columns: '1,2,20,101,200,202,203,220,221,300,301,309',
+                columns: '1,2,20,101,200,203,220,221,300,301,309,317,401',
                 extendColumns: 'io.ox/tasks/api/list',
                 timezone: 'UTC'
             },
@@ -247,9 +247,9 @@ define('io.ox/tasks/api', [
             },
             search: {
                 action: 'search',
-                columns: '1,2,20,101,200,202,203,220,221,300,301,309',
+                columns: '1,2,20,101,200,203,220,221,300,301,309,317',
                 extendColumns: 'io.ox/tasks/api/all',
-                sort: '202',
+                sort: '317',
                 order: 'asc',
                 timezone: 'UTC',
                 getData: function (query) {
@@ -389,7 +389,7 @@ define('io.ox/tasks/api', [
             // update cache
             var sortChanged = false;
             //data that is important for sorting changed, so clear the all cache
-            if (task.title || task.end_date || task.status) {
+            if (task.title || task.end_time || task.status) {
                 sortChanged = true;
             }
             return $.when(
@@ -570,19 +570,19 @@ define('io.ox/tasks/api', [
             module: 'tasks',
             params: { action: 'all',
                 folder: api.getDefaultFolder(),
-                columns: '1,20,200,202,203,221,300,309',
-                sort: '202',
+                columns: '1,20,200,203,221,300,309,317',
+                sort: '317',
                 order: 'asc',
                 timezone: 'UTC'
             }
         }).then(function (list) {
-            // sorted by end_date filter over due Tasks
+            // sorted by end_time filter over due Tasks
             var now = new Date(),
                 userId = ox.user_id,
                 dueTasks = [],
                 confirmTasks = [];
             for (var i = 0; i < list.length; i++) {
-                var filterOverdue = (list[i].end_date < now.getTime() && list[i].status !== 3 && list[i].end_date !== null);
+                var filterOverdue = (list[i].end_time < now.getTime() && list[i].status !== 3 && list[i].end_time !== null);
                 if (filterOverdue) {
                     dueTasks.push(list[i]);
                 }

@@ -113,7 +113,7 @@ define('io.ox/tasks/view-detail', [
         draw: function (baton) {
             var task = baton.interpretedData,
                 fields = {
-                    start_date: gt('Start date'),
+                    start_time: gt('Start date'),
                     target_duration: gt('Estimated duration in minutes'),
                     actual_duration: gt('Actual duration in minutes'),
                     target_costs: gt('Estimated costs'),
@@ -165,12 +165,12 @@ define('io.ox/tasks/view-detail', [
         index: 100,
         id: 'infopanel',
         draw: function (task) {
-            if (task.end_date) {
+            if (task.end_time) {
                 this.append(
                         $('<div>').addClass('end-date').text(
                             //#. %1$s due date of a task
                             //#, c-format
-                            gt('Due %1$s', _.noI18n(task.end_date))
+                            gt('Due %1$s', _.noI18n(task.end_time))
                         )
                 );
             }

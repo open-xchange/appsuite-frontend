@@ -49,8 +49,8 @@ define('plugins/notifications/tasks/register', [
                 data = util.interpretTask(baton.model.attributes),
                 descriptionId = _.uniqueId('notification-description-'),
                 node = self.addClass('taskNotification');
-            if (_.noI18n(data.end_date)) {
-                endText = gt('end date ') + _.noI18n(data.end_date);
+            if (_.noI18n(data.end_time)) {
+                endText = gt('end date ') + _.noI18n(data.end_time);
             }
             //#. %1$s task title
             //#. %2$s task end date
@@ -66,7 +66,7 @@ define('plugins/notifications/tasks/register', [
                     $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                     $('<span class="span-to-div title">').text(_.noI18n(data.title)),
                     $('<div class"clearfix">').append(
-                        $('<span class="end_date">').text(_.noI18n(data.end_date)),
+                        $('<span class="end_date">').text(_.noI18n(data.end_time)),
                         $('<span class="status pull-right">').text(data.status).addClass(data.badge)
                     ),
                     $('<div class="actions">').append(
@@ -116,7 +116,7 @@ define('plugins/notifications/tasks/register', [
                     },
                     specificDesktopNotification: function (model) {
                         var data = util.interpretTask(model.attributes),
-                            endDateText = _.isEmpty(data.end_date) ? '' : ', ' + data.end_date;
+                            endDateText = _.isEmpty(data.end_time) ? '' : ', ' + data.end_time;
 
                         return {
                             title: gt('New overdue task'),
@@ -204,7 +204,7 @@ define('plugins/notifications/tasks/register', [
                     },
                     specificDesktopNotification: function (model) {
                         var data = util.interpretTask(model.attributes),
-                            endDateText = _.isEmpty(data.end_date) ? '' : ', ' + data.end_date;
+                            endDateText = _.isEmpty(data.end_time) ? '' : ', ' + data.end_time;
 
                         return {
                             title: gt('New task reminder'),
@@ -272,8 +272,8 @@ define('plugins/notifications/tasks/register', [
             var task = util.interpretTask(baton.model.toJSON()),
                 endText = '',
                 descriptionId = _.uniqueId('notification-description-');
-            if (baton.model.get('end_date')) {
-                endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
+            if (baton.model.get('end_time')) {
+                endText = gt('end date ') + _.noI18n(baton.model.get('end_time'));
             }
             //#. %1$s task title
             //#. %2$s task end date
@@ -292,7 +292,7 @@ define('plugins/notifications/tasks/register', [
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div title">').text(_.noI18n(task.title)),
                 $('<div class="clearfix">').append(
-                    $('<span class="end_date">').text(_.noI18n(task.end_date)),
+                    $('<span class="end_date">').text(_.noI18n(task.end_time)),
                     $('<span class="status">').text(task.status).addClass(task.badge)),
                 $('<div class="actions">').append(
                     $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
@@ -339,7 +339,7 @@ define('plugins/notifications/tasks/register', [
                     },
                     specificDesktopNotification: function (model) {
                         var data = util.interpretTask(model.attributes),
-                            endDateText = _.isEmpty(data.end_date) ? '' : ', ' + data.end_date;
+                            endDateText = _.isEmpty(data.end_time) ? '' : ', ' + data.end_time;
 
                         return {
                             title: gt('New task invitation'),

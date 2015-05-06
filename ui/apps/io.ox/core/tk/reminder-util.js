@@ -75,13 +75,13 @@ define('io.ox/core/tk/reminder-util', [
             info = [
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
-                $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
+                $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_time'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))
             ];
             var endText = '',
                 statusText = '';
-            if (_.noI18n(model.get('end_date'))) {
-                endText = gt('end date ') + _.noI18n(model.get('end_date'));
+            if (_.noI18n(model.get('end_time'))) {
+                endText = gt('end date ') + _.noI18n(model.get('end_time'));
             }
             if (_.noI18n(model.get('status'))) {
                 statusText = gt('status ') + _.noI18n(model.get('status'));

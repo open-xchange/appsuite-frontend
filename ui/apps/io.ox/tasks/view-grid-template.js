@@ -24,10 +24,10 @@ define('io.ox/tasks/view-grid-template', [
         // main grid template
         main: {
             build: function () {
-                var title, status, end_date, user, progress, private_flag;
+                var title, status, end_time, user, progress, private_flag;
                 this.addClass('tasks').append(
                     $('<div class="first-row">').append(
-                        end_date = $('<span>').addClass('end_date'),
+                        end_time = $('<span>').addClass('end_date'),
                         private_flag = $('<i class="fa fa-lock private-flag">').hide(),
                         title = $('<div>').addClass('title')
                     ),
@@ -38,7 +38,7 @@ define('io.ox/tasks/view-grid-template', [
                     )
                 );
 
-                return { title: title, private_flag: private_flag, end_date: end_date, status: status, user: user, progress: progress };
+                return { title: title, private_flag: private_flag, end_time: end_time, status: status, user: user, progress: progress };
             },
 
             set: function (task, fields, index, prev, grid) {
@@ -51,7 +51,7 @@ define('io.ox/tasks/view-grid-template', [
 
                 var a11yLabel = '';
                 fields.title.text(a11yLabel = _.noI18n(data.title));
-                fields.end_date.text(_.noI18n(data.end_date));
+                fields.end_time.text(_.noI18n(data.end_time));
                 //important. with addClass old classes aren't removed correctly
                 fields.status.attr('class', 'status ' + data.badge)
                     .text(data.status || _.noI18n('\u00A0'));

@@ -53,8 +53,8 @@ define('io.ox/tasks/print', [
             return _.extend(unified, {
                 original: data,
                 subject: data.title,
-                start: getDate(data, 'start_date', 'l'),
-                due: getDate(data, 'end_date', 'l'),
+                start: getDate(data, 'start_time', 'l'),
+                due: getDate(data, 'end_time', 'l'),
                 recurrence: calendarUtil.getRecurrenceString(data),
                 state: getState(data),
                 content: $.trim(data.note),

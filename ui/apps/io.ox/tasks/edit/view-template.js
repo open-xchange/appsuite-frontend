@@ -55,22 +55,7 @@ define('io.ox/tasks/edit/view-template', [
                     .text(saveBtnText)
                     .on('click', function () {
                         app.getWindow().busy();
-
-                        // cleanup datepicker helper timezone
-                        baton.model.unset('timezone', { silent: true });
-                        // check if waiting for attachmenthandling is needed
-                        var list = baton.attachmentList;
-                        if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
-                            //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
-                            baton.model.attributes.tempAttachmentIndicator = true;
-                        }
-                        //accept any formating
-                        if (baton.model.get('actual_costs')) {
-                            baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
-                        }
-                        if (baton.model.get('target_costs')) {
-                            baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
-                        }
+                        util.sanitizeBeforeSave(baton);
 
                         baton.model.save().done(function () {
                             app.markClean();
@@ -175,10 +160,13 @@ define('io.ox/tasks/edit/view-template', [
                 new DatePicker({
                     model: baton.model,
                     className: 'col-xs-6 collapsed',
-                    attribute: 'start_date',
+                    attribute: 'start_time',
                     label: gt('Start date'),
-                    clearButton: true
-                }).render().$el.attr('data-extension-id', 'start_date')
+                    clearButton: true,
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME'
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                }).render().$el.attr('data-extension-id', 'start_time')
             );
         }
     });
@@ -192,26 +180,46 @@ define('io.ox/tasks/edit/view-template', [
                 new DatePicker({
                     model: baton.model,
                     className: 'col-xs-6 collapsed',
-                    attribute: 'end_date',
+                    attribute: 'end_time',
                     label: gt('Due date'),
-                    clearButton: true
-                }).render().$el.attr('data-extension-id', 'end_date')
+                    clearButton: true,
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME'
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                }).render().$el.attr('data-extension-id', 'end_time')
             );
         }
     });
+
+    // full time
+    point.extend({
+        id: 'full_time',
+        index: 700,
+        className: 'col-md-6 collapsed',
+        render: function () {
+            this.$el.append(
+                $('<div>').addClass('checkbox').append(
+                    $('<label class="control-label">').append(
+                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                        $.txt(gt('All day'))
+                    )
+                )
+            );
+        }
+    }, { row: '5' });
 
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'col-sm-12 collapsed',
         tabindex: 1,
-        index: 700
-    }), { row: '5' });
+        index: 800
+    }), { row: '6' });
 
     //reminder selection
     point.basicExtend({
         id: 'alarm_select',
-        index: 800,
-        row: '6',
+        index: 900,
+        row: '7',
         draw: function (baton) {
             var selector;
             this.append($('<div class="col-sm-6 collapsed">').append(
@@ -233,8 +241,8 @@ define('io.ox/tasks/edit/view-template', [
     // reminder date
     point.basicExtend({
         id: 'alarm',
-        index: 900,
-        row: '6',
+        index: 1000,
+        row: '7',
         draw: function (baton) {
             this.append(
                 new DatePicker({
@@ -253,7 +261,7 @@ define('io.ox/tasks/edit/view-template', [
     // status
     point.extend({
         id: 'status',
-        index: 1000,
+        index: 1100,
         className: 'col-sm-3 collapsed',
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
@@ -290,12 +298,12 @@ define('io.ox/tasks/edit/view-template', [
                 }
             });
         }
-    }, { row: '7' });
+    }, { row: '8' });
 
     point.basicExtend({
         id: 'progress',
-        index: 1100,
-        row: '7',
+        index: 1200,
+        row: '8',
         draw: function (baton) {
             var progressField = util.buildProgress(baton.model.get('percent_completed'));
             this.append($('<div class="col-sm-3 collapsed">')
@@ -334,7 +342,7 @@ define('io.ox/tasks/edit/view-template', [
     // priority
     point.extend({
         id: 'priority',
-        index: 1200,
+        index: 1300,
         className: 'col-sm-3 collapsed',
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
@@ -360,12 +368,12 @@ define('io.ox/tasks/edit/view-template', [
                 )
             );
         }
-    }, { row: '7' });
+    }, { row: '8' });
 
     //privateflag
     point.extend({
         id: 'private_flag',
-        index: 1300,
+        index: 1400,
         className: 'checkbox col-sm-3 collapsed',
         render: function () {
             this.$el.append(
@@ -378,12 +386,12 @@ define('io.ox/tasks/edit/view-template', [
                 )
             );
         }
-    }, { row: '7' });
+    }, { row: '8' });
 
     // participants label
     point.extend({
         id: 'participants_legend',
-        index: 1400,
+        index: 1500,
         className: 'col-md-12 collapsed',
         render: function () {
             this.$el.append(
@@ -392,12 +400,12 @@ define('io.ox/tasks/edit/view-template', [
                 )
             );
         }
-    }, { row: '8' });
+    }, { row: '9' });
 
     point.basicExtend({
         id: 'participants_list',
-        index: 1500,
-        row: '9',
+        index: 1600,
+        row: '10',
         draw: function (baton) {
             this.append(
                 new pViews.UserContainer({
@@ -411,8 +419,8 @@ define('io.ox/tasks/edit/view-template', [
 
     point.basicExtend({
         id: 'add_participant',
-        index: 1600,
-        row: '10',
+        index: 1700,
+        row: '11',
         draw: function (options) {
             var node = $('<div class="col-sm-6 collapsed">').appendTo(this),
                 guid = _.uniqueId('form-control-label-');
@@ -496,7 +504,7 @@ define('io.ox/tasks/edit/view-template', [
     // attachments label
     point.extend({
         id: 'attachments_legend',
-        index: 1700,
+        index: 1800,
         className: 'col-md-12 collapsed',
         render: function () {
             this.$el.append(
@@ -505,12 +513,12 @@ define('io.ox/tasks/edit/view-template', [
                 )
             );
         }
-    }, { row: '11' });
+    }, { row: '12' });
 
     point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
         registerAs: 'attachmentList',
-        index: 1800,
+        index: 1900,
         module: 4,
         className: 'collapsed',
         finishedCallback: function (model, id, errors) {
@@ -540,13 +548,13 @@ define('io.ox/tasks/edit/view-template', [
             }
         }
     }), {
-        row: '12'
+        row: '13'
     });
 
     point.basicExtend({
         id: 'attachment_upload',
-        index: 1900,
-        row: '13',
+        index: 2000,
+        row: '14',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),
                 $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid).addClass('col-sm-12 collapsed'),
@@ -591,8 +599,8 @@ define('io.ox/tasks/edit/view-template', [
 
     point.basicExtend({
         id: 'expand_detail_link',
-        index: 2000,
-        row: '14',
+        index: 2100,
+        row: '15',
         draw: function (baton) {
             var text = gt('Hide details');
             if (baton.parentView.detailsCollapsed) {
@@ -614,7 +622,7 @@ define('io.ox/tasks/edit/view-template', [
     //estimated duration
     point.extend({
         id: 'target_duration',
-        index: 2100,
+        index: 2200,
         className: 'col-sm-6 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -623,12 +631,12 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'target_duration', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '15' });
+    }, { row: '16' });
 
     //actual duration
     point.extend({
         id: 'actual_duration',
-        index: 2200,
+        index: 2300,
         className: 'col-sm-6 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -637,12 +645,12 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'actual_duration', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '15' });
+    }, { row: '16' });
 
     //estimated costs
     point.extend({
         id: 'target_costs',
-        index: 2300,
+        index: 2400,
         className: 'col-sm-6 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -651,12 +659,12 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'target_costs', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '16' });
+    }, { row: '17' });
 
     //actual costs
     point.extend({
         id: 'actual_costs',
-        index: 2400,
+        index: 2500,
         className: 'col-sm-4 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -665,12 +673,12 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'actual_costs', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '16' });
+    }, { row: '17' });
 
     //currency
     point.extend({
         id: 'currency',
-        index: 2500,
+        index: 2600,
         className: 'col-sm-2 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
@@ -692,12 +700,12 @@ define('io.ox/tasks/edit/view-template', [
                 )
             );
         }
-    }, { row: '16' });
+    }, { row: '17' });
 
     // distance
     point.extend({
         id: 'trip_meter',
-        index: 2600,
+        index: 2700,
         className: 'col-sm-12 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -706,12 +714,12 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'trip_meter', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '17' });
+    }, { row: '18' });
 
     // billing information
     point.extend({
         id: 'billing_information',
-        index: 2700,
+        index: 2800,
         className: 'col-sm-12 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -720,12 +728,12 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'billing_information', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '18' });
+    }, { row: '19' });
 
     // companies
     point.extend({
         id: 'companies',
-        index: 2800,
+        index: 2900,
         className: 'col-sm-12 task-edit-details',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -734,7 +742,7 @@ define('io.ox/tasks/edit/view-template', [
                 new mini.InputView({ name: 'companies', model: this.model }).render().$el.attr({ id: guid })
             );
         }
-    }, { row: '19' });
+    }, { row: '20' });
 
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',

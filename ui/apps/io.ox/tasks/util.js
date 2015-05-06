@@ -163,7 +163,7 @@ define('io.ox/tasks/util', [
             },
 
             isOverdue: function (task) {
-                return ( task.end_date !== undefined && task.end_date !== null && task.end_date < _.now() && task.status !== 3 );
+                return ( task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3 );
             },
 
             //change status number to status text. format enddate to presentable string
@@ -217,8 +217,8 @@ define('io.ox/tasks/util', [
                 }
 
                 // convert UTC timestamps to local time
-                task.end_date = formatTime(task.end_date, 'l');
-                task.start_date = formatTime(task.start_date, 'l');
+                task.end_time = formatTime(task.end_time, task.full_time ? 'l' : 'l LT');
+                task.start_time = formatTime(task.start_time, task.full_time ? 'l' : 'l LT');
                 task.alarm = formatTime(task.alarm, 'l LT');
                 task.date_completed = formatTime(task.date_completed, 'l LT');
 
@@ -253,10 +253,10 @@ define('io.ox/tasks/util', [
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
                         /* jshint eqeqeq: false */
-                        if (a.end_date > b.end_date) {
+                        if (a.end_time > b.end_time) {
                             return 1;
-                        // use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
-                        } else if (a.end_date == b.end_date) {
+                        // use == here so end_time=null and end_time=undefined are equal. may happen with done tasks
+                        } else if (a.end_time == b.end_time) {
                             return alphabetSort(a, b);
                         } else {
                             return -1;
@@ -267,19 +267,19 @@ define('io.ox/tasks/util', [
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
-                    } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
-                        //tasks without end_date
+                    } else if (tasks[i].end_time === null || tasks[i].end_time === undefined) {
+                        //tasks without end_time
                         emptyDateArray.push(tasks[i]);
                     } else {
-                        // tasks with end_date
+                        // tasks with end_time
                         dateArray.push(tasks[i]);
                     }
                 }
-                //sort by end_date and alphabet
+                //sort by end_time and alphabet
                 resultArray.sort(dateSort);
                 //sort by alphabet
                 emptyDateArray.sort(alphabetSort);
-                //sort by end_date and alphabet
+                //sort by end_time and alphabet
                 dateArray.sort(dateSort);
 
                 if (order === 'desc') {

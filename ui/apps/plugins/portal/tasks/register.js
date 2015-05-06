@@ -52,7 +52,7 @@ define('plugins/portal/tasks/register', [
             this.addClass('with-summary show-summary');
 
             var tasks = _(baton.data).filter(function (task) {
-                    return task.end_date !== null && task.status !== 3;
+                    return task.end_time !== null && task.status !== 3;
                 }),
                 sum = $('<div>').addClass('summary');
 
@@ -64,10 +64,10 @@ define('plugins/portal/tasks/register', [
                 sum.append(
                     $('<li class="item" tabindex="1">').data('item', task).append(
                             $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
-                            task.end_date === '' ? $() :
+                            task.end_time === '' ? $() :
                                 $('<span class="accent">').text(
                                     //#. Due on date
-                                    gt('Due on %1$s', _.noI18n(task.end_date))
+                                    gt('Due on %1$s', _.noI18n(task.end_time))
                                 ),
                             $.txt(' '),
                             $('<span class="status pull-right">').text(task.status).addClass(task.badge),
@@ -89,7 +89,7 @@ define('plugins/portal/tasks/register', [
                 tasks;
 
             tasks = _(baton.data).filter(function (task) {
-                return task.end_date !== null && task.status !== 3;
+                return task.end_time !== null && task.status !== 3;
             });
 
             if (tasks.length === 0) {
@@ -107,10 +107,10 @@ define('plugins/portal/tasks/register', [
                 content.append(
                     $('<li class="item" tabindex="1">').data('item', task).append(
                         $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
-                        task.end_date === '' ? $() :
+                        task.end_time === '' ? $() :
                             $('<span class="accent">').text(
                                 //#. Due on date
-                                gt('Due on %1$s', _.noI18n(task.end_date))
+                                gt('Due on %1$s', _.noI18n(task.end_time))
                             ),
                         $.txt(' '),
                         $('<span class="pull-right">').text(task.status).addClass(task.badge),
