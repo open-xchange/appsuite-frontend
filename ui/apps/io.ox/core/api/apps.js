@@ -25,13 +25,13 @@ define('io.ox/core/api/apps', [
             favorites: [],
             installed: [],
             categories: [],
+            topbar: [],
             apps: {}
         },
         api;
 
     // Construct App Data
     _(manifests.manager.apps).each(function (appManifest) {
-
         if (!appManifest.path || !appManifest.category) {
             if (ox.debug && _.device('!karma')) console.warn('Ignored app. Missing path/category', appManifest);
             return;
@@ -42,6 +42,8 @@ define('io.ox/core/api/apps', [
         appData.installed.push(id);
         appData.apps[id] = appManifest;
         appData.categories.push(appManifest.category);
+
+        if (appManifest.topbar) appData.topbar.push(id);
     });
 
     appData.categories = _(appData.categories).uniq();
@@ -221,6 +223,10 @@ define('io.ox/core/api/apps', [
 
         getAvailable: function () {
             return getSpecial('installed');
+        },
+
+        getTopbarApps: function () {
+            return getSpecial('topbar');
         },
 
         /**

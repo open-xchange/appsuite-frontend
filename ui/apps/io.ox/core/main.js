@@ -1009,6 +1009,7 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
                 var favorites = appAPI.getAllFavorites(),
+                    topbarApps = appAPI.getTopbarApps(),
                     topbar = settings.get('topbar/order'),
                     self = this,
                     hash = {};
@@ -1017,6 +1018,7 @@ define('io.ox/core/main', [
                 if (topbar) {
                     // get hash of exisiting favorites
                     _(favorites).each(function (obj) { hash[obj.id] = obj; });
+                    _(topbarApps).each(function (obj) {hash[obj.id] = obj; });
                     // get proper order
                     favorites = _(topbar.split(','))
                         .chain()
@@ -1026,6 +1028,11 @@ define('io.ox/core/main', [
                         .compact()
                         .value();
                 } else {
+                    if (topbarApps.length > 0) {
+                        _(topbarApps).each(function (obj) {
+                            if (_.where(favorites, { id: obj.id }).length === 0) favorites.push(obj);
+                        });
+                    }
                     // sort by index
                     favorites.sort(function (a, b) {
                         return ext.indexSorter(a, b);
