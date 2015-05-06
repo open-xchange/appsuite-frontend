@@ -126,7 +126,7 @@ define('io.ox/files/api', [
         },
 
         isText: function (type) {
-            return /^(text\/plain|application\/rtf)$/.test(type || this.getMimeType());
+            return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
         },
 
         isEncrypted: function () {
