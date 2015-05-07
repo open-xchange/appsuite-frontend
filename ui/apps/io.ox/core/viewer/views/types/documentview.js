@@ -21,6 +21,11 @@ define('io.ox/core/viewer/views/types/documentview', [
 
     'use strict';
 
+    var PDF_ERROR_NOTIFICATIONS = {
+        default: gt('Sorry, there is no preview available for this file.'),
+        passwordProtected: gt('This document is password protected and cannot be displayed. Please open it with your local PDF viewer.')
+    };
+
     /**
      * The image file type. Implements the ViewerType interface.
      *
@@ -220,7 +225,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 }
                 // forward 'resolved' errors to error handler
                 if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
-                    pdfDocumentLoadError(pageCount);
+                    pdfDocumentLoadError.call(this, pageCount);
                     return;
                 }
                 var pdfDocument = this.pdfDocument,
@@ -262,7 +267,13 @@ define('io.ox/core/viewer/views/types/documentview', [
              * Error handler for the PDF loading process.
              */
             function pdfDocumentLoadError(pageCount) {
-                console.error('Core.Viewer.DocumentView.show(): failed loading PDF document.', pageCount.cause);
+                console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', pageCount.cause);
+                var notificationText = PDF_ERROR_NOTIFICATIONS[pageCount.cause || 'default'],
+                    notificationIconClass;
+                if (pageCount.cause === 'passwordProtected') {
+                    notificationIconClass = 'fa-lock';
+                }
+                this.displayNotification(notificationText, notificationIconClass);
             }
 
             this.pdfDocument = new PDFDocument(documentUrl);
@@ -272,7 +283,7 @@ define('io.ox/core/viewer/views/types/documentview', [
 
             // wait for PDF document to finish loading
             $.when(this.pdfDocument.getLoadPromise())
-                .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError)
+                .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError.bind(this))
                 .always(pdfDocumentLoadFinished.bind(this));
 
             return this;

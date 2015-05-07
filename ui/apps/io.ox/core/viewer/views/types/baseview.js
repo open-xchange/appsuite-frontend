@@ -35,17 +35,34 @@ define('io.ox/core/viewer/views/types/baseview', [
          *
          * @param {String} [notification='']
          *  the notification String, if omitted no notification text will be added.
+         *
+         * @param {String} [iconClass]
+         *  a CSS class name to be applied on the file icon.
          */
-        createNotificationNode: function (notification) {
+        createNotificationNode: function (notification, iconClass) {
             var node = $('<div class="viewer-displayer-notification">'),
-                filename = this.model.get('filename') || '';
+                filename = this.model.get('filename') || '',
+                iconClass = iconClass || Util.getIconClass(this.model);
 
             node.append(
-                $('<i class="fa">').addClass(Util.getIconClass(this.model)),
+                $('<i class="fa">').addClass(iconClass),
                 $('<p>').text(filename),
                 $('<p class="apology">').text(notification || '')
             );
             return node;
+        },
+
+        /**
+         * Gives user a good notification message if something went awry.
+         *
+         * @param {String} notification
+         *  a notification string to be displayed.
+         * @param {String} [iconClass]
+         *  a CSS class name to be applied on the file icon.
+         */
+        displayNotification: function (notification, iconClass) {
+            var notificationNode = this.createNotificationNode(notification, iconClass);
+            this.$el.idle().empty().append(notificationNode);
         },
 
         /**
