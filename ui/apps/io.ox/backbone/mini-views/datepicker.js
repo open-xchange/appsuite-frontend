@@ -96,7 +96,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
-                                    calendarUtil.addTimezonePopover(timezoneContainer, { start_date: self.model.get('start_date'), end_date: self.model.get('end_date') });
+                                    calendarUtil.addTimezonePopover(timezoneContainer, self.model.attributes);
                                 });
                             }
                         }

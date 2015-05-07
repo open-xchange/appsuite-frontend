@@ -303,7 +303,6 @@ define('io.ox/calendar/util', [
         },
 
         addTimezonePopover: function (parent, data) {
-            console.log(data);
             var current = moment(data.start_date);
 
             function getContent() {
@@ -341,7 +340,7 @@ define('io.ox/calendar/util', [
                     selector: '#io-ox-core',
                     padding: 10
                 },
-                content: getContent(),
+                content: getContent,
                 html: true,
                 placement: function (tip) {
                     // add missing outer class
