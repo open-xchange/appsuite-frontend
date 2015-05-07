@@ -16,7 +16,7 @@ define('io.ox/find/date/patterns',[
     'gettext!io.ox/find'
 ], function (ext, gt) {
 
-    'use strict';
+    'use strgrunt deict';
 
     var POINT = ext.point('io.ox/find/date/patterns'),
         index = 0,
@@ -146,9 +146,11 @@ define('io.ox/find/date/patterns',[
             year;
 
         // Add to hash
-        function add(value, index, obj) {
-            var id = String(value).toLowerCase();
-            hash[id] = _.extend(obj, { label: value, id: id, index: index });
+        function add(values, index, obj) {
+            [].concat(values).forEach(function (value) {
+                var id = String(value).toLowerCase();
+                hash[id] = _.extend({}, obj, { label: value, id: id, index: index });
+            });
         }
 
         //
@@ -198,24 +200,22 @@ define('io.ox/find/date/patterns',[
             start: moment(),
             end: moment()
         });
-        add(gt('Yesterday'), 0, {
+        add([ gt('Last day'), gt('Yesterday') ], 0, {
             start: moment().subtract(1, 'day'),
             end: moment().subtract(1, 'day')
         });
-
-        add(gt('Last week'), 0, {
+        add([ gt('Last week'), gt('Previous week') ], 0, {
             start: moment().subtract(7, 'day').startOf('week'),
             end: moment().subtract(7, 'day').endOf('week')
         });
-        add(gt('Last month'), 1, {
+        add([ gt('Last month'), gt('Previous month') ], 1, {
             start: moment().subtract(1, 'month').startOf('month'),
             end: moment().subtract(1, 'month').endOf('month')
         });
-        add(gt('Last year'), 2, {
+        add([ gt('Last year'), gt('Previous year') ], 2, {
             start: moment().subtract(1, 'year').startOf('year'),
             end: moment().subtract(1, 'year').endOf('year')
         });
-
         add(gt('Last 7 days'), 3, {
             start: moment().subtract(7, 'day'),
             end: moment()
@@ -253,6 +253,8 @@ define('io.ox/find/date/patterns',[
     return {
         lookup: lookup,
         getMatches: function (value, options) {
+
+            value = (value || '').toLowerCase();
 
             var format = moment.parseFormat(value),
                 opt = _.extend({ limit: 3 }, options || {}),
