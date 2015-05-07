@@ -43,7 +43,10 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 max = getLimit(ListViewControl.maxWidth, total),
                 app = this.listView.app,
                 width;
-
+            // there is no right side so there is no need to resize, causes strange behavior, see Bug 38186
+            if (right.length === 0) {
+                return;
+            }
             $(document).on({
                 'mousemove.resize': function (e) {
                     width = Math.max(min, Math.min(e.pageX - base, max));
@@ -70,6 +73,10 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 max = getLimit(ListViewControl.maxHeight, total),
                 app = this.listView.app,
                 height;
+            // there is no right side so there is no need to resize, causes strange behavior, see Bug 38186
+            if (right.length === 0) {
+                return;
+            }
             $(document).on({
                 'mousemove.resize': function (e) {
                     height = Math.max(min, Math.min(e.pageY - base, max));

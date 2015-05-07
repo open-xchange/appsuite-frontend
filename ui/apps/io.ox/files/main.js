@@ -281,8 +281,6 @@ define('io.ox/files/main', [
                     .attr('aria-label', gt('Item list options'))
                     .end()
             );
-            // make resizable
-            app.listControl.resizable();
         },
 
         /*
