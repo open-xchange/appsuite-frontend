@@ -19,6 +19,8 @@ define('io.ox/find/date/value-model', [
 
     var DateValueModel = ValueModel.extend({
 
+        type: 'valueDate',
+
         _base: function (name, args) {
             return DateValueModel.__super__[name].apply(this, args);
         },

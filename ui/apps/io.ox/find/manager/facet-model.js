@@ -28,7 +28,7 @@ define('io.ox/find/manager/facet-model', [
 
     var FacetModel = Backbone.Model.extend({
 
-        type: 'facet',
+        type: 'facetBase',
 
         initialize: function (data) {
             var values = new ValueCollection([], {}, { facet: this });

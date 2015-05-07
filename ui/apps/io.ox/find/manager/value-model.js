@@ -19,7 +19,7 @@ define('io.ox/find/manager/value-model', [
 
     var ValueModel = Backbone.Model.extend({
 
-        type: 'value',
+        type: 'valueBase',
 
         initialize: function (obj) {
             var data = obj.data,

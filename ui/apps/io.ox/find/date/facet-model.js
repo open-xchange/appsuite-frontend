@@ -14,32 +14,36 @@
 define('io.ox/find/date/facet-model', [
     'io.ox/find/manager/facet-model',
     'io.ox/core/extensions',
-    'io.ox/find/date/extensions'
-], function (FacetModel, ext) {
+    'io.ox/find/date/patterns'
+], function (FacetModel, ext, patterns) {
 
     'use strict';
 
     var DateFacetModel = FacetModel.extend({
+
+        type: 'facetDate',
 
         _base: function (name, args) {
             return DateFacetModel.__super__[name].apply(this, args);
         },
 
         // overwrite
-        initialize: function (/*obj*/) {
+        initialize: function (data) {
+            this.prepare(data);
             // super
             this._base('initialize', arguments);
         },
 
         // overwrite
-        update: function (data) {
-            var base = data.values[0],
+        prepare: function (data) {
+            var values = data.values || data,
+                base = values[0],
                 value = base.value.toLowerCase().trim(),
-                matchers = this.getMatches(value);
+                matches = patterns.getMatches(value);
             // empty
             data.values = [];
             // add for each match a snew value
-            _.each(matchers, function (item) {
+            _.each(matches, function (item) {
                 var target = $.extend(true, {}, base);
                 target.value = item.label;
                 target.id = item.id;
@@ -48,20 +52,12 @@ define('io.ox/find/date/facet-model', [
                 target.item.detail =  item.detail || target.item.detail;
                 data.values.push(target);
             });
-            // show/hide
-            if (matchers.length) this.show(); else this.hide();
-            // call super update
-            return this._base('update', [ data ]);
         },
 
-        getMatches: function (value) {
-            var format = moment.parseFormat(value),
-                baton = ext.Baton.ensure({ data: { matched: [], value: value, format: format }, options: { limit: 3 } });
-
-            // possible matchers add data to baton
-            ext.point('io.ox/find/date/matchers').invoke('match', this, baton);
-
-            return baton.data.matched;
+        update: function (data) {
+            this.prepare(data);
+            if (data.values.length) this.show(); else this.hide();
+            return this._base('update', [ data ]);
         }
 
     });

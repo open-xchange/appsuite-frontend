@@ -295,8 +295,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'apps/io.ox/find/date/extensions.js',
-                            'apps/io.ox/find/date/lookup.js',
+                            'apps/io.ox/find/date/patterns.js',
                             'apps/io.ox/find/date/value-model.js',
                             'apps/io.ox/find/date/facet-model.js',
                             'apps/io.ox/find/manager/facet-collection.js',
