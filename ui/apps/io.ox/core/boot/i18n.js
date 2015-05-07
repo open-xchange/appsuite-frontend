@@ -39,6 +39,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('You need to use iOS %n or higher.');
         gt('Your operating system is not supported.');
         gt('Please update your browser.');
+        //#. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
         gt('For best results, please use ');
         gt('You have been automatically signed out');
         gt('Unsupported Preview - Certain functions disabled and stability ' +
