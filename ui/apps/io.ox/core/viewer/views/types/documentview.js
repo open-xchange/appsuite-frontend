@@ -235,7 +235,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
                 // set default scale/zoom, according to device's viewport width
-                this.setZoomLevel(defaultScale * 100);
+                this.pdfView.setPageZoom(defaultScale);
                 //// draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var jqPage = $('<div class="document-page">'),
@@ -365,7 +365,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         setZoomLevel: function (zoomLevel) {
             if (!_.isNumber(zoomLevel) &&
-                zoomLevel < this.getMinZoomFactor &&
+                zoomLevel < this.getMinZoomFactor() &&
                 zoomLevel > this.getMaxZoomFactor() &&
                 !this.isVisible()) {
                 return;
