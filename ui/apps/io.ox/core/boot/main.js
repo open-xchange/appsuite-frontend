@@ -181,7 +181,7 @@ define('io.ox/core/boot/main', [
             // load user config
             config.user().done(function () {
                 // apply session data (again) & page title
-                session.set(data);
+                if (data) session.set(data);
                 util.setPageTitle(ox.serverConfig.pageTitle);
                 // load UI
                 exports.loadUI();

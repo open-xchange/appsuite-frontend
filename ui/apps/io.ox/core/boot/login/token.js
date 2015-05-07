@@ -92,9 +92,6 @@ define('io.ox/core/boot/login/token', [
             context_id: data.context_id
         });
 
-        var redirect = '#';
-        if (hash.ref) redirect += hash.ref;
-
         // cleanup url
         _.url.hash({
             language: null,
@@ -106,8 +103,6 @@ define('io.ox/core/boot/login/token', [
             store: null,
             ref: null
         });
-
-        _.url.redirect(redirect);
 
         ox.trigger('login:success');
     }

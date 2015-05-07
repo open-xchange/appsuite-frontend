@@ -37,7 +37,7 @@ define('io.ox/core/boot/login/standard', [
         $('#io-ox-login-feedback').busy().empty();
 
         // user name and password shouldn't be empty
-        if ($.trim(username).length === 0) {
+        if ($.trim(username).length === 0 && !util.isAnonymous()) {
             return fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
         }
         if ($.trim(password).length === 0 && !util.isPasswordOptional()) {
