@@ -104,6 +104,7 @@ define([
             expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add condition') + ')'), 'Add condition element').to.have.length(1);
             expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add action') + ')'), 'Add action element').to.have.length(1);
             expect($popup.find('[data-action="check-for-stop"]'), 'check for stop action element').to.have.length(1);
+            expect($popup.find('[data-action="check-for-stop"]:checked'), 'check if stop action element is checked').to.have.length(1);
 
             expect($popup.find('.alert.alert-info'), 'initial alert for empty conditions').to.have.length(1);
 
@@ -136,9 +137,22 @@ define([
         it('should draw the "Sender/From" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
 
+            expect($popup.find('.alert.alert-info'), 'remove alert info element if a condition is displayed').to.have.length(0);
+
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
             expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
+
+            expect($popup.find('li input[data-action="change-text-test"]').hasClass('warning'), 'set warnig class if field is empty').to.be.true;
+            expect($popup.find('button[data-action="save"]:disabled'), 'disable save button if field is empty').to.have.length(1);
+            $popup.find('li input[data-action="change-text-test"]').val('test').keyup();
+
+            expect($popup.find('li input[data-action="change-text-test"]').hasClass('warning'), 'remove warnig class if field is filled').to.be.false;
+            expect($popup.find('button[data-action="save"]:disabled'), 'reenable save button if field is filled').to.have.length(0);
+            $popup.find('li input[data-action="change-text-test"]').val('').keyup();
+
+            expect($popup.find('li input[data-action="change-text-test"]').hasClass('warning'), 'set warnig class if field value has been cleared').to.be.true;
+            expect($popup.find('button[data-action="save"]:disabled'), 'disable save button if field value has been cleared').to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
             expect($popup.find('li li a[data-value="is"]')).to.have.length(1);
