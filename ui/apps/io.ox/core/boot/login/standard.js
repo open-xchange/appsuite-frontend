@@ -108,13 +108,24 @@ define('io.ox/core/boot/login/standard', [
         // show error
         if (error && error.error === '0 general') {
             util.feedback('error', 'No connection to server. Please check your internet connection and retry.');
+        } else if (error && error.code === 'LGI-0011') {
+            //password expired
+            util.feedback('error', function () {
+                return [$.txt(util.gt('Your password is expired. Please change your password to continue.')),
+                        $('<br>'),
+                        // don't use a button here or it will trigger a submit event
+                        $('<a target="_blank" role="button" id="io-ox-login-password-button" class="btn btn-primary btn">')
+                            .text(util.gt('Change password'))
+                            // error_params[0] should contain a url to password change manager or sth.
+                            .attr( 'href', error.error_params[0] )];
+            });
         } else {
             util.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
         }
         // restore form
         restore();
         // reset focus
-        var id = (_.isString(focus) && focus) || (util.isAnonymous() && 'password') || 'username';
+        var id = (_.isString(focus) && focus) || (util.isAnonymous() && 'password') || 'username';
         $('#io-ox-login-' + id).focus().select();
         // event
         ox.trigger('login:fail', error);

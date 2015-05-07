@@ -117,7 +117,7 @@ html, body {
 
 #io-ox-login-screen {
     .no-margin { margin: 0; }
-    a {
+    a:not(#io-ox-login-password-button) {
         color: #ABD7FF;
         &:hover, &:focus { color: #fff; }
     }
@@ -229,6 +229,11 @@ html, body {
     margin-top: 13px;
     margin-bottom: 13px;
     min-height: 3em; /* for busy animation */
+}
+
+#io-ox-login-password-button {
+    font-weight: 700;
+    margin-top: 7px;
 }
 
 #io-ox-login-footer {
