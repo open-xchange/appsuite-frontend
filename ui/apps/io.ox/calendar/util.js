@@ -296,26 +296,15 @@ define('io.ox/calendar/util', [
 
             parent.append(
                 $.txt(gt.noI18n(this.getTimeInterval(data))),
-                $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())).popover({
-                    container: '#io-ox-core',
-                    viewport: {
-                        selector: '#io-ox-core',
-                        padding: 10
-                    },
-                    content: getContent(),
-                    html: true,
-                    placement: function (tip) {
-                        // add missing outer class
-                        $(tip).addClass('timezones');
-                        // get placement
-                        return 'left';
-                    },
-                    title: this.getTimeInterval(data) + ' ' + current.zoneAbbr(),
-                    trigger: 'hover focus'
-                }).on('blur dispose', function () {
-                    $(this).popover('hide');
-                })
+                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())), data)
             );
+
+            return parent;
+        },
+
+        addTimezonePopover: function (parent, data) {
+            console.log(data);
+            var current = moment(data.start_date);
 
             function getContent() {
                 // hard coded for demo purposes
@@ -345,6 +334,26 @@ define('io.ox/calendar/util', [
 
                 return div;
             }
+
+            parent.popover({
+                container: '#io-ox-core',
+                viewport: {
+                    selector: '#io-ox-core',
+                    padding: 10
+                },
+                content: getContent(),
+                html: true,
+                placement: function (tip) {
+                    // add missing outer class
+                    $(tip).addClass('timezones');
+                    // get placement
+                    return 'left';
+                },
+                title: this.getTimeInterval(data) + ' ' + current.zoneAbbr(),
+                trigger: 'hover focus'
+            }).on('blur dispose', function () {
+                $(this).popover('hide');
+            });
 
             return parent;
         },
