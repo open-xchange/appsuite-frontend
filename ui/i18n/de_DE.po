@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-04-23 15:25+0100\n"
+"PO-Revision-Date: 2015-05-07 12:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -973,10 +973,8 @@ msgid "An error occurred. Please try again."
 msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
 
 #: apps/io.ox/core/tk/iframe.js:48 module:io.ox/core/tk/iframe
-#, fuzzy
-#| msgid "An error occurred. Please try again later"
 msgid "An error occurred. There is no valid token available."
-msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
+msgstr "Es trat ein Fehler auf. Es ist kein gültiges Token verfügbar."
 
 #: apps/plugins/portal/twitter/register.js:166 module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:104
@@ -1856,8 +1854,11 @@ msgstr "Konversationen"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:106
 #: module:io.ox/calendar/edit/main
+#, fuzzy
 msgid "Convert the entered start and end dates to match the modified timezones"
 msgstr ""
+"Eingegebenes Start- und Enddatum so konvertieren, dass Sie den geänderten "
+"Zeitzonen entsprechen"
 
 #: apps/io.ox/contacts/actions.js:134 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:456
@@ -2663,14 +2664,13 @@ msgstr ""
 "hier fallenlassen"
 
 #: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
-#, fuzzy
-#| msgid "Upload new version"
 msgid "Drop new version here"
-msgstr "Neue Version hochladen"
+msgstr "Neue Version hier fallenlassen"
 
 #: apps/io.ox/core/viewer/views/sidebarview.js:172 module:io.ox/core/viewer
+#, fuzzy
 msgid "Drop only a single file as new version."
-msgstr ""
+msgstr "Nur eine einzelne Datei als neue Version fallenlassen."
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js:89 module:io.ox/tasks
@@ -2935,9 +2935,8 @@ msgstr "Ende"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:64
 #: module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "End date timezone"
-msgstr "Enddatum für Zeitzone"
+msgstr "Zeitzone für Enddatum"
 
 #: apps/io.ox/calendar/settings/pane.js:129 module:io.ox/calendar
 msgid "End of working time"
@@ -3200,7 +3199,6 @@ msgid "Favorite"
 msgstr "Favoriten"
 
 #: apps/io.ox/calendar/settings/pane.js:219 module:io.ox/calendar
-#, fuzzy
 msgid "Favorite timezones"
 msgstr "Zeitzonen-Favoriten"
 
@@ -3500,7 +3498,6 @@ msgstr "GB"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:82
 #: module:io.ox/core/viewer
-#, fuzzy
 msgid "General info"
 msgstr "Allgemeine Infos"
 
@@ -3745,11 +3742,16 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:86
 #: module:io.ox/calendar/edit/main
+#, fuzzy
 msgid ""
 "If you select different timezones, the appointment's start and end dates are "
 "saved in the timezone of the appointment's start date. A different end date "
 "timezone only allows a convenient conversion."
 msgstr ""
+"Wenn Sie unterschiedliche Zeitzonen wählen, werden das Start- und "
+"Enddatumsdatum in der Zeitzone des Startdatums des Termins gespeichert. Eine "
+"unterschiedliche Zeitzone für das Enddatum erlaubt lediglich eine einfache "
+"Konvertierung."
 
 #: apps/io.ox/calendar/freebusy/templates.js:98 module:io.ox/calendar/freebusy
 msgid ""
@@ -4044,27 +4046,23 @@ msgstr "Sprachen"
 
 #: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
 #, fuzzy
-#| msgid "3 days"
 msgid "Last 30 days"
-msgstr "3 Tage"
+msgstr "Letzten 30 Tage"
 
 #: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
 #, fuzzy
-#| msgid "5 days"
 msgid "Last 365 days"
-msgstr "5 Tage"
+msgstr "Letzten 365 Tage"
 
 #: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
 #, fuzzy
-#| msgid "Last name"
 msgid "Last 7 days"
-msgstr "Nachname"
+msgstr "Letzten 7 Tage"
 
 #: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
 #, fuzzy
-#| msgid "six months"
 msgid "Last month"
-msgstr "sechs Monate"
+msgstr "Letzter Monat"
 
 #: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
@@ -4084,9 +4082,8 @@ msgstr "Letzte Woche"
 
 #: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
 #, fuzzy
-#| msgid "Last name"
 msgid "Last year"
-msgstr "Nachname"
+msgstr "Letztes Jahr"
 
 #: apps/io.ox/core/main.js:223 module:io.ox/core
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
@@ -6310,10 +6307,8 @@ msgid "Select all"
 msgstr "Alle wählen"
 
 #: apps/io.ox/files/actions/upload-new-version.js:58 module:io.ox/files
-#, fuzzy
-#| msgid "Select folder"
 msgid "Select file"
-msgstr "Ordner wählen"
+msgstr "Datei wählen"
 
 #: apps/io.ox/core/folder/picker.js:72 module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:58
@@ -6792,7 +6787,6 @@ msgstr "Beginnt am"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:42
 #: module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Start date timezone"
 msgstr "Zeitzone für Startdatum"
 
@@ -7308,7 +7302,6 @@ msgstr ""
 "werden. Bitte wählen Sie einen anderen Ordner."
 
 #: apps/io.ox/calendar/settings/favorite-view.js:99 module:io.ox/calendar
-#, fuzzy
 msgid "The selected timezone is already a favorite."
 msgstr "Die gewählte Zeitzone ist bereits ein Favorit."
 
@@ -7714,7 +7707,6 @@ msgstr "Optionen an/aus"
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:39
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:40
-#, fuzzy
 msgid "Toggle panel"
 msgstr "Panel an/aus"
 
@@ -7986,7 +7978,6 @@ msgid "Use fixed-width font for text mails"
 msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
 #: apps/io.ox/core/viewer/views/displayerview.js:123 module:io.ox/core
-#, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
@@ -8067,7 +8058,6 @@ msgstr "Ansicht"
 
 #: apps/io.ox/core/pim/actions.js:80 module:io.ox/core
 #: apps/io.ox/mail/actions.js:713 module:io.ox/mail
-#, fuzzy
 msgid "View (New)"
 msgstr "Ansicht (neu)"
 
@@ -8087,7 +8077,6 @@ msgid "View source"
 msgstr "Quelldaten anzeigen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:434 module:io.ox/core
-#, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Viewer-Werkzeugleiste"
 
@@ -8517,17 +8506,13 @@ msgstr "Ihre Applikationen"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js:55 module:io.ox/core
 #: apps/io.ox/core/viewer/views/types/audioview.js:68
-#, fuzzy
-#| msgid "Your browser does not support HTML5 audio."
 msgid "Your browser does not support the audio format of this file."
-msgstr "Ihr Browser unterstützt kein HTML5 Audio."
+msgstr "Ihr Browser unterstützt das Audio-Format dieser Datei nicht."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js:42 module:io.ox/core
 #: apps/io.ox/core/viewer/views/types/videoview.js:62
-#, fuzzy
-#| msgid "Your browser does not support HTML5 video."
 msgid "Your browser does not support the video format of this file."
-msgstr "Ihr Browser unterstützt kein HTML5 Video."
+msgstr "Ihr Browser unterstützt das Video-Format dieser Datei nicht."
 
 #: apps/io.ox/core/boot/i18n.js:34 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:34 module:io.ox/core/login
@@ -8681,16 +8666,14 @@ msgstr "und %1$d weitere"
 
 #: apps/io.ox/find/extensions-api.js:54 module:io.ox/core
 #, fuzzy
-#| msgid "Start date"
 msgid "as date"
-msgstr "Beginnt am"
+msgstr "als Datum"
 
 #: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
 #: apps/io.ox/find/date/extensions.js:131
 #, fuzzy
-#| msgid "date range"
 msgid "as daterange"
-msgstr "Zeitraum"
+msgstr "als Zeitraum"
 
 #: apps/io.ox/tasks/util.js:21 module:io.ox/tasks
 msgid "by noon"
