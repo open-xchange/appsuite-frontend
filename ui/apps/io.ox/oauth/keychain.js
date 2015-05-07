@@ -202,6 +202,12 @@ define.async('io.ox/oauth/keychain', [
 
             return def;
         };
+
+        if (this.id === 'facebook' || this.id === 'xing' || this.id === 'twitter' || this.id === 'linkedin') {
+            this.canAdd = function () {
+                return self.getAll().length === 0;
+            };
+        }
     }
 
     // Fetch services & accounts
