@@ -90,6 +90,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 #%{docroot}
 
 %changelog
+* Tue May 05 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-05-04 (2496)
 * Fri Apr 24 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2015-09-09 (2495)
 * Thu Apr 23 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
