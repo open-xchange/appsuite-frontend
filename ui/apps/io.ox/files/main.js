@@ -273,14 +273,6 @@ define('io.ox/files/main',
             win.trigger('change:perspective', 'fluid', app.props.get('layout'));
         },
 
-
-        /*
-         * Set folderview property
-         */
-        'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
-        },
-
         /*
          * Store view options
          */
@@ -310,14 +302,19 @@ define('io.ox/files/main',
         },
 
         /*
+         * Set folderview property
+         */
+        'prop-folderview': function (app) {
+            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+        },
+
+        /*
          * Respond to layout change
          */
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 ox.ui.Perspective.show(app, value);
             });
-
-            window.drive = app;
         },
 
         /*

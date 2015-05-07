@@ -11,15 +11,17 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/register',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/mail',
-     'settings!io.ox/mail',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/api/snippets',
-     'io.ox/core/http',
-     'less!io.ox/mail/settings/signatures/style'
-    ], function (ext, gt, settings, dialogs, snippets, http) {
+define('io.ox/mail/settings/signatures/register', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/mail',
+    'settings!io.ox/mail',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/api/snippets',
+    'io.ox/backbone/mini-views',
+    'io.ox/core/http',
+    'io.ox/core/config',
+    'less!io.ox/mail/settings/signatures/style'
+], function (ext, gt, settings, dialogs, snippets, mini, http, config) {
 
     'use strict';
 
@@ -31,7 +33,7 @@ define('io.ox/mail/settings/signatures/register',
         draw: function (baton) {
             this.append(
                 $('<div class="form-group">').append(
-                    baton.$.name = $('<input type="text" class="form-control">').attr({ 'id': 'signature-name', 'tabindex': 1, 'placeholder': 'Signature name' })
+                    baton.$.name = $('<input type="text" class="form-control">').attr({ 'id': 'signature-name', 'tabindex': 1, 'placeholder': gt('Signature name') })
                 )
             );
         }
@@ -244,99 +246,78 @@ define('io.ox/mail/settings/signatures/register',
 
     function fnImportSignatures(evt, signatures) {
 
-        var popup = new dialogs.SidePopup({
-            modal: true,
-            tabTrap: true
-        })
-        .show(evt, function ($pane) {
-            $pane.addClass('io-ox-signature-import');
-            var $container;
-            var $entirePopup = $pane.closest('.io-ox-sidepopup');
+        // create modal dialog with a list of old signatures (ox 6)
+        var dialog = new dialogs.ModalDialog({ async: true }),
+            Model = Backbone.Model.extend({
+                defaults: {
+                    check: false
+                }
+            }),
+            model = new Model();
+        dialog.header($('<h4>').text(gt('Import signatures')))
+        .append(
+            $('<p class="help-block">').text(gt('You can import existing signatures from the previous product generation.')),
+            $('<div>').addClass('checkbox').append(
+                $('<label>').text(gt('Delete old signatures after import')).prepend(
+                    new mini.CheckboxView({ name: 'check', model: model }).render().$el
+                )
+            ),
+            $('<ul class="io-ox-signature-import">').append(
+                _(signatures).map(function (sig) {
+                    //replace div and p elements to br's and remove all other tags.
+                    var preview = (sig.signature_text || '')
+                        .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
+                        .replace(/<(?:.|\n)*?>/gm, '')
+                        .replace(/(\n)+/g, '<br>');
 
-            function busy() {
-                dialogs.busy($entirePopup);
-            }
-
-            function idle() {
-                dialogs.idle($entirePopup);
-            }
-
-            $container = $('<table>').appendTo($pane);
-            _(signatures).each(function (classicSignature, index) {
-
-                var $row = $('<tr>').addClass('sig-row').appendTo($container);
-                var preview = (classicSignature.signature_text || '')
-                                // remove subsequent white-space
-                                .replace(/\s\s+/g, ' ')
-                                // reduce special char sequences
-                                .replace(/(\W\W\W)\W+/g, '$1 ');
-
-                $row.append(
-                    $('<td>').css({width: '10%', textAlign: 'center'}).append(
-                        $('<input type="checkbox">').attr('data-index', index)
-                    ),
-                    $('<td>').css({width: '80%', padding: '10px'}).append(
-                        classicSignature.signature_name, $('<br>'),
-                        $('<div>').text(gt.noI18n(preview)).addClass('classic-sig-preview')
-                    )
-                );
-
-                var specializedClick = false;
-                $row.find(':checkbox').on('click', function () {
-                    specializedClick = true;
-                });
-
-                $row.on('click', function () {
-                    if (specializedClick) {
-                        specializedClick = false;
-                        return;
+                    // if preview is empty or a single br-tag, do not append a preview
+                    if (preview === '' || preview === '<br>') {
+                        return '';
                     }
-                    var $checkbox = $(this).find(':checkbox');
-                    $checkbox.prop('checked', !$checkbox.prop('checked'));
-                });
+
+                    return $('<li>').append(
+                        $('<div class="signature-name">').text(sig.signature_name),
+                        $('<div class="signature-preview">').append(preview)
+                    );
+                })
+            )
+        )
+        .addPrimaryButton('import', gt('Import'))
+        .addButton('cancel', gt('Cancel'));
+
+        // show dialog
+        dialog.show();
+
+        dialog.on('import', function () {
+            dialog.busy();
+
+            var deferreds = _(signatures).map(function (sig) {
+                return snippets.create({
+                    type: 'signature',
+                    module: 'io.ox/mail',
+                    displayname: sig.signature_name,
+                    content: sig.signature_text,
+                    misc: {
+                        insertion: sig.position,
+                        'content-type': 'text/html'
+                    },
+                    meta: {
+                        imported: sig
+                    }
+                }).fail(require('io.ox/core/notifications').yell);
             });
 
-            $pane.append($('<a href="#">').text(gt('Select all')).on('click', function () {
-                $container.find(':checkbox').each(function () {
-                    if (!$(this).prop('checked')) {
-                        $(this).prop('checked', true);
-                    }
-                });
-                return false;
-            }));
+            if (model.get('check')) config.remove('gui.mail.signatures');
 
-            $pane.append($('<br>'), $('<br>'), $('<br>'));
-
-            var $button = $('<button type="button" class="btn btn-primary">')
-                .text(gt('Import signatures')).appendTo($pane);
-
-            $button.on('click', function () {
-                busy();
-                var deferreds = [];
-                $container.find(':checked').each(function () {
-                    var index = $(this).data('index');
-                    var classicSignature = signatures[index];
-
-                    deferreds.push(
-                        snippets.create({
-
-                        type: 'signature',
-                        module: 'io.ox/mail',
-                        displayname: classicSignature.signature_name,
-                        content: classicSignature.signature_text,
-                        misc: {
-                            insertion: classicSignature.position,
-                            'content-type': 'text/html'
-                        },
-                        meta: {
-                            imported: classicSignature
-                        }
-                    }).fail(require('io.ox/core/notifications').yell));
-                });
-
-                $.when.apply($, deferreds).always(function () { idle(); popup.close(); });
+            $.when.apply(this, deferreds).then(function success() {
+                dialog.close();
+                if (model.get('check')) {
+                    config.save();
+                    evt.target.remove();
+                }
+            }, function fail() {
+                dialog.idle();
             });
-
         });
     }
 
@@ -347,7 +328,7 @@ define('io.ox/mail/settings/signatures/register',
             var $node, $list, signatures;
             this.append($node = $('<fieldset class="io-ox-signature-settings">'));
             function fnDrawAll() {
-                snippets.getAll('signature').done(function (sigs) {
+                snippets.getAll('signature').then(function (sigs) {
                     signatures = {};
                     $list.empty();
                     _(sigs).each(function (signature) {
@@ -392,7 +373,7 @@ define('io.ox/mail/settings/signatures/register',
                         }
                         $list.append($item);
                     });
-                });
+                }, require('io.ox/core/notifications').yell);
             }
             var radioNone, radioCustom, signatureText;
             try {
@@ -496,18 +477,15 @@ define('io.ox/mail/settings/signatures/register',
                         })
                 );
 
-                require(['io.ox/core/config'], function (config) {
-                    if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
-                        section.append(
-
-                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
-                                fnImportSignatures(e, config.get('gui.mail.signatures'));
-                                return false;
-                            })
-                        );
-                    }
-                    section = null;
-                });
+                if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
+                    section.append(
+                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
+                            fnImportSignatures(e, config.get('gui.mail.signatures'));
+                            return false;
+                        })
+                    );
+                }
+                section = null;
             }
         }
     });

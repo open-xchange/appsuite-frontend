@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-04-22 11:04+0100\n"
+"PO-Revision-Date: 2015-04-22 16:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -38,13 +38,13 @@ msgid "Year"
 msgstr "An"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:581 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:592 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:158
 msgid "Month"
 msgstr "Lună"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:560 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:571 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:79 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:155
 msgid "Day"
@@ -120,7 +120,7 @@ msgstr "Meniu inclus %1$s"
 #: apps/io.ox/files/mobile-toolbar-actions.js:111
 #: apps/io.ox/files/mobile-toolbar-actions.js:124
 #: apps/io.ox/mail/detail/view.js:97 apps/io.ox/mail/detail/view.js:98
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:747
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:785
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:140
 #: apps/io.ox/mail/mobile-toolbar-actions.js:141
@@ -212,8 +212,8 @@ msgstr "Respinge"
 
 #: apps/io.ox/calendar/acceptdeny.js:107 module:io.ox/calendar
 #: apps/io.ox/calendar/acceptdeny.js:192 apps/io.ox/calendar/acceptdeny.js:226
-#: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/actions.js:272
-#: apps/io.ox/calendar/actions.js:284 apps/io.ox/calendar/edit/main.js:127
+#: apps/io.ox/calendar/actions.js:174 apps/io.ox/calendar/actions.js:283
+#: apps/io.ox/calendar/actions.js:295 apps/io.ox/calendar/edit/main.js:127
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:361
 #: apps/io.ox/calendar/main.js:252 apps/io.ox/calendar/main.js:318
 #: apps/io.ox/calendar/month/perspective.js:117
@@ -255,9 +255,10 @@ msgstr "Respinge"
 #: apps/io.ox/mail/compose/view.js:621
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1009
-#: apps/io.ox/mail/settings/signatures/register.js:179
+#: apps/io.ox/mail/settings/signatures/register.js:181
+#: apps/io.ox/mail/settings/signatures/register.js:286
 #: apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1466 apps/io.ox/mail/write/view-main.js:605
+#: apps/io.ox/mail/write/main.js:1460 apps/io.ox/mail/write/view-main.js:605
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:625 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
@@ -300,48 +301,48 @@ msgstr "Doriți să confirmați toată seria sau doar o întâlnire din serie?"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/acceptdeny.js:224 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:161
+#: apps/io.ox/calendar/actions.js:172
 #: apps/io.ox/calendar/week/perspective.js:158
 msgid "Series"
 msgstr "Serie"
 
 #: apps/io.ox/calendar/acceptdeny.js:225 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:325
+#: apps/io.ox/calendar/actions.js:173 apps/io.ox/calendar/edit/main.js:325
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:267
 #: apps/io.ox/calendar/week/perspective.js:159
 #: apps/io.ox/mail/detail/links.js:220 module:io.ox/mail
 msgid "Appointment"
 msgstr "Întâlnire"
 
-#: apps/io.ox/calendar/actions.js:158 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:169 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:156
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
 msgstr "Doriți să editați toată seria sau doar anumite întâlniri din serie?"
 
-#: apps/io.ox/calendar/actions.js:269 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:280 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
 msgstr "Doriți să ștergeți toată seria sau doar o anumită întâlnire din serie?"
 
-#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:281 module:io.ox/calendar
 msgid "Delete whole series"
 msgstr "Șterge toată seria"
 
-#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:282 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:73
 msgid "Delete appointment"
 msgstr "Șterge întâlnirea"
 
-#: apps/io.ox/calendar/actions.js:282 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:293 module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
 msgstr "Doriți să ștergeți întâlnirea?"
 
 #. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:652
+#: apps/io.ox/calendar/actions.js:294 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:663
 #: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:107
 #: apps/io.ox/calendar/toolbar.js:72 apps/io.ox/contacts/actions.js:53
@@ -358,8 +359,8 @@ msgstr "Doriți să ștergeți întâlnirea?"
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:86
 #: apps/io.ox/mail/actions.js:105 apps/io.ox/mail/actions.js:923
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:382
-#: apps/io.ox/mail/settings/signatures/register.js:383
+#: apps/io.ox/mail/settings/signatures/register.js:363
+#: apps/io.ox/mail/settings/signatures/register.js:364
 #: apps/io.ox/mail/toolbar.js:76 apps/io.ox/portal/main.js:623
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -379,8 +380,8 @@ msgstr "Doriți să ștergeți întâlnirea?"
 msgid "Delete"
 msgstr "Șterge"
 
-#: apps/io.ox/calendar/actions.js:401 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:413 apps/io.ox/calendar/actions.js:661
+#: apps/io.ox/calendar/actions.js:412 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:424 apps/io.ox/calendar/actions.js:672
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:98
 #: apps/io.ox/calendar/toolbar.js:89 apps/io.ox/contacts/actions.js:157
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:722
@@ -399,39 +400,39 @@ msgstr "Șterge"
 msgid "Move"
 msgstr "Mută"
 
-#: apps/io.ox/calendar/actions.js:543 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:554 module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js:181 apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Întâlnire nouă"
 
-#: apps/io.ox/calendar/actions.js:567 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:578 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:156
 msgid "Workweek"
 msgstr "Săptămână de lucru"
 
-#: apps/io.ox/calendar/actions.js:574 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:81 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:157
 msgid "Week"
 msgstr "Săptămână"
 
-#: apps/io.ox/calendar/actions.js:588 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:599 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:159 apps/io.ox/files/actions.js:791
 #: module:io.ox/files apps/io.ox/files/actions.js:1395
-#: apps/io.ox/files/toolbar.js:210 apps/io.ox/mail/toolbar.js:236
+#: apps/io.ox/files/toolbar.js:210 apps/io.ox/mail/toolbar.js:238
 #: module:io.ox/mail
 msgid "List"
 msgstr "Listă"
 
-#: apps/io.ox/calendar/actions.js:603 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:614 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:50
 msgid "Scheduling"
 msgstr "Programare"
 
-#: apps/io.ox/calendar/actions.js:618 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:670 apps/io.ox/calendar/toolbar.js:82
+#: apps/io.ox/calendar/actions.js:629 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:681 apps/io.ox/calendar/toolbar.js:82
 #: apps/io.ox/calendar/toolbar.js:166 apps/io.ox/contacts/actions.js:678
 #: module:io.ox/contacts apps/io.ox/contacts/toolbar.js:102
 #: apps/io.ox/core/print.js:108 module:io.ox/core
@@ -442,7 +443,7 @@ msgid "Print"
 msgstr "Imprimă"
 
 #. Used as a button label to enter the "edit mode"
-#: apps/io.ox/calendar/actions.js:634 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:645 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:221 apps/io.ox/calendar/main.js:227
 #: apps/io.ox/calendar/main.js:247 apps/io.ox/calendar/main.js:318
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/contacts/actions.js:696
@@ -460,8 +461,8 @@ msgstr "Imprimă"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:160
 #: apps/io.ox/mail/main.js:146 apps/io.ox/mail/main.js:152
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:1013
-#: apps/io.ox/mail/settings/signatures/register.js:376
-#: apps/io.ox/mail/settings/signatures/register.js:378
+#: apps/io.ox/mail/settings/signatures/register.js:357
+#: apps/io.ox/mail/settings/signatures/register.js:359
 #: apps/io.ox/portal/settings/pane.js:321 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:323
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -478,20 +479,20 @@ msgstr "Imprimă"
 msgid "Edit"
 msgstr "Editează"
 
-#: apps/io.ox/calendar/actions.js:643 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:654 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:66
 msgid "Change status"
 msgstr "Modifică starea"
 
-#: apps/io.ox/calendar/actions.js:686 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:697 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Trimite mailul tuturor participanților"
 
-#: apps/io.ox/calendar/actions.js:695 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:706 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "Invită la întâlnirea nouă"
 
-#: apps/io.ox/calendar/actions.js:704 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:715 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1006 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Salvează ca listă de distribuție"
@@ -987,7 +988,7 @@ msgstr "Renunță"
 #: apps/io.ox/mail/actions/attachmentSave.js:69 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:85
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/settings/signatures/register.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/write/view-main.js:56 apps/io.ox/oauth/settings.js:80
 #: module:io.ox/settings/oauth apps/io.ox/tasks/edit/view-template.js:48
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:92
@@ -1134,7 +1135,7 @@ msgstr "Informează toți participanții prin e-mail."
 #: apps/io.ox/calendar/view-detail.js:326 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:115 module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js:345 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:363
+#: apps/io.ox/mail/compose/extensions.js:366
 #: apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/tasks/edit/view-template.js:487 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:91 module:io.ox/tasks
@@ -1142,14 +1143,14 @@ msgstr "Informează toți participanții prin e-mail."
 msgid "Attachments"
 msgstr "Fișiere atașate"
 
-#: apps/io.ox/calendar/edit/template.js:534 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:537 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:363 module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js:721 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:724 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 "Glisați aici pentru a încărca un <b class=\"dndignore\">fișier atașat nou</b>"
 
-#: apps/io.ox/calendar/edit/template.js:588 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:591 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:51 module:io.ox/calendar
 msgid "Find a free time"
@@ -1713,14 +1714,14 @@ msgstr "Stare"
 #: apps/io.ox/calendar/toolbar.js:153 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:167 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:208 module:io.ox/files
-#: apps/io.ox/mail/toolbar.js:231 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:233 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:142
 msgid "View"
 msgstr "Vedere"
 
 #: apps/io.ox/calendar/toolbar.js:154 module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:209 module:io.ox/files
-#: apps/io.ox/mail/toolbar.js:232 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:234 module:io.ox/mail
 msgid "Layout"
 msgstr "Aspect"
 
@@ -1729,7 +1730,7 @@ msgstr "Aspect"
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:214 module:io.ox/files
 #: apps/io.ox/mail/compose/view.js:143 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:153 apps/io.ox/mail/toolbar.js:238
+#: apps/io.ox/mail/compose/view.js:153 apps/io.ox/mail/toolbar.js:240
 #: apps/io.ox/tasks/toolbar.js:143
 msgid "Options"
 msgstr "Opțiuni"
@@ -1738,14 +1739,14 @@ msgstr "Opțiuni"
 #: apps/io.ox/contacts/toolbar.js:169 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:502 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:215 module:io.ox/files
-#: apps/io.ox/mail/toolbar.js:239 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:241 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:144
 msgid "Folder view"
 msgstr "Vedere dosar"
 
 #: apps/io.ox/calendar/toolbar.js:163 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:170 module:io.ox/contacts
-#: apps/io.ox/mail/toolbar.js:240 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:242 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:145
 msgid "Checkboxes"
 msgstr "Casete de selectare"
@@ -1995,7 +1996,7 @@ msgstr "Conflicte:"
 
 #: apps/io.ox/calendar/week/perspective.js:85 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:221
-#: apps/io.ox/mail/write/main.js:1041 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1035 module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "A apărut o eroare. Încercați din nou. "
 
@@ -2195,7 +2196,7 @@ msgstr "Editează lista de distribuție"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:458
 #: apps/io.ox/core/pubsub/publications.js:231 module:io.ox/core/pubsub
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:567
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:605
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Nume"
@@ -2356,7 +2357,7 @@ msgstr "Editează pentru a seta un nume."
 msgid "Couldn't load contact data."
 msgstr "Nu s-au putut încărca datele de contact."
 
-#: apps/io.ox/contacts/main.js:719 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:728 module:io.ox/contacts
 msgid "Item List"
 msgstr "Listă elemente"
 
@@ -3066,7 +3067,7 @@ msgid "Close folder view"
 msgstr "Închide vederea dosar"
 
 #: apps/io.ox/core/commons.js:893 module:io.ox/core
-#: apps/io.ox/core/tk/autocomplete.js:369 module:io.ox/mail
+#: apps/io.ox/core/tk/autocomplete.js:377 module:io.ox/mail
 msgid "Retry"
 msgstr "Încearcă din nou"
 
@@ -3512,6 +3513,7 @@ msgstr "Descarcă dosarul complet"
 
 #: apps/io.ox/core/folder/contextmenu.js:313 module:io.ox/core
 #: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/mail/settings/signatures/register.js:285 module:io.ox/mail
 msgid "Import"
 msgstr "Importă"
 
@@ -4263,7 +4265,7 @@ msgstr ""
 #: apps/io.ox/core/pubsub/settings/pane.js:237 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
 #: apps/io.ox/mail/mailfilter/settings/filter.js:140 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:308
+#: apps/io.ox/mail/mailfilter/settings/filter.js:310
 #: apps/io.ox/portal/settings/pane.js:340 module:io.ox/portal
 msgid "Disable"
 msgstr "Dezactivează"
@@ -4271,7 +4273,7 @@ msgstr "Dezactivează"
 #: apps/io.ox/core/pubsub/settings/pane.js:237 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:238
 #: apps/io.ox/mail/mailfilter/settings/filter.js:140 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:308
+#: apps/io.ox/mail/mailfilter/settings/filter.js:310
 #: apps/io.ox/portal/settings/pane.js:344 module:io.ox/portal
 msgid "Enable"
 msgstr "Activează"
@@ -4456,32 +4458,28 @@ msgstr ""
 msgid "Download the %s client for %s"
 msgstr "Descarcă clientul %s pentru %s"
 
-#: apps/io.ox/core/settings/downloads/pane.js:121 module:io.ox/core
-msgid "%s client for Windows"
-msgstr "Client %s pentru Windows"
-
-#: apps/io.ox/core/settings/downloads/pane.js:123 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:122 module:io.ox/core
 msgid "%s client for Windows (Installation via the OX Updater)"
 msgstr "Client %s pentru Windows (Instalare prin aplicația de actualizare OX)"
 
-#: apps/io.ox/core/settings/downloads/pane.js:132 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:125 module:io.ox/core
 msgid "Download installation file"
 msgstr "Descarcă fișierul de instalare"
 
-#: apps/io.ox/core/settings/downloads/pane.js:137 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:130 module:io.ox/core
 msgid "%s client for Mac OS"
 msgstr "Client %s pentru Mac OS"
 
-#: apps/io.ox/core/settings/downloads/pane.js:142 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:135 module:io.ox/core
 msgid "%s client for iOS"
 msgstr "Client %s pentru iOS"
 
-#: apps/io.ox/core/settings/downloads/pane.js:147 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:140 module:io.ox/core
 msgid "%s client for Android"
 msgstr "Client %s pentru Android"
 
-#: apps/io.ox/core/settings/downloads/pane.js:165 module:io.ox/core
-#: apps/io.ox/core/settings/downloads/pane.js:174
+#: apps/io.ox/core/settings/downloads/pane.js:158 module:io.ox/core
+#: apps/io.ox/core/settings/downloads/pane.js:167
 msgid "Downloads"
 msgstr "Descărcări"
 
@@ -4622,7 +4620,7 @@ msgstr "Temă cu contrast ridicat"
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:81
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:334
 #: module:io.ox/tasks/edit
 msgid "None"
@@ -4753,12 +4751,12 @@ msgid "Upload file"
 msgstr "Încarcă un fișier"
 
 #: apps/io.ox/core/tk/attachments.js:614 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:357 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:360 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Adaugă din Drive"
 
-#: apps/io.ox/core/tk/autocomplete.js:366 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:864 module:io.ox/core
+#: apps/io.ox/core/tk/autocomplete.js:374 module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js:871 module:io.ox/core
 msgid "Could not load this list"
 msgstr "Nu s-a putut încărca lista"
 
@@ -4773,70 +4771,70 @@ msgid "close"
 msgstr "închide"
 
 #: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:159
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Roșu"
 
 #: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Albastru"
 
 #: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:162
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Verde"
 
 #: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:158
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Gri"
 
 #: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Violet"
 
 #: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:161
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "Verde deschis"
 
 #: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:160
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "Portocaliu"
 
 #: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Roz"
 
 #: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Albastru deschis"
 
 #: apps/io.ox/core/tk/flag-picker.js:33 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:73
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr "Galben"
@@ -4860,7 +4858,7 @@ msgstr "necitit"
 
 #: apps/io.ox/core/tk/folderviews.js:895 module:io.ox/core
 #: apps/io.ox/mail/compose/model.js:223 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:797
+#: apps/io.ox/mail/write/main.js:791
 msgid "Mail"
 msgstr "Mail"
 
@@ -4982,8 +4980,7 @@ msgid "Item list options"
 msgstr "Opțiuni listă elemente"
 
 #: apps/io.ox/core/tk/vgrid.js:316 module:io.ox/core
-#: apps/io.ox/mail/settings/signatures/register.js:299 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:100
+#: apps/io.ox/mail/view-options.js:100 module:io.ox/mail
 msgid "Select all"
 msgstr "Selectează tot"
 
@@ -4992,7 +4989,7 @@ msgid "Toggle checkboxes"
 msgstr "Comutare casete de selectare"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:743 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:750 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "Gol"
@@ -5989,12 +5986,12 @@ msgid "Reminder has been created"
 msgstr "Mementoul a fost creat"
 
 #: apps/io.ox/mail/actions.js:860 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:65 apps/io.ox/mail/write/main.js:698
+#: apps/io.ox/mail/compose/extensions.js:65 apps/io.ox/mail/write/main.js:692
 msgid "Compose new mail"
 msgstr "Compune un mail nou"
 
 #: apps/io.ox/mail/actions.js:881 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:700 apps/plugins/portal/twitter/util.js:230
+#: apps/io.ox/mail/write/main.js:694 apps/plugins/portal/twitter/util.js:230
 #: module:plugins/portal
 msgid "Reply"
 msgstr "Răspunde"
@@ -6005,7 +6002,7 @@ msgstr "Răspunde tuturor"
 
 #: apps/io.ox/mail/actions.js:902 module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64 apps/io.ox/mail/toolbar.js:68
-#: apps/io.ox/mail/write/main.js:701
+#: apps/io.ox/mail/write/main.js:695
 msgid "Forward"
 msgstr "Redirecționează"
 
@@ -6237,7 +6234,7 @@ msgstr "Adaugă fișier local"
 #: apps/io.ox/mail/compose/main.js:83 apps/io.ox/mail/compose/view.js:431
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:43
-#: apps/io.ox/mail/write/main.js:216 apps/io.ox/mail/write/main.js:765
+#: apps/io.ox/mail/write/main.js:216 apps/io.ox/mail/write/main.js:759
 msgid "Compose"
 msgstr "Compune"
 
@@ -6246,7 +6243,7 @@ msgstr "Compune"
 #: apps/io.ox/mail/compose/model.js:223 module:io.ox/mail
 #: apps/io.ox/mail/util.js:389 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
-#: apps/io.ox/mail/write/main.js:797
+#: apps/io.ox/mail/write/main.js:791
 #: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:65
 #, c-format
@@ -6299,63 +6296,63 @@ msgid "Request read receipt"
 msgstr "Solicită confirmare de citire"
 
 #: apps/io.ox/mail/compose/view.js:154 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:432
+#: apps/io.ox/mail/settings/signatures/register.js:413
 #: apps/io.ox/mail/write/view-main.js:643
 msgid "Signatures"
 msgstr "Semnături"
 
 #: apps/io.ox/mail/compose/view.js:155 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:414
+#: apps/io.ox/mail/settings/signatures/register.js:395
 #: apps/io.ox/mail/write/view-main.js:991
 msgid "No signature"
 msgstr "Nicio semnătură"
 
 #: apps/io.ox/mail/compose/view.js:490 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:523 apps/io.ox/mail/write/main.js:1329
-#: apps/io.ox/mail/write/main.js:1394
+#: apps/io.ox/mail/compose/view.js:523 apps/io.ox/mail/write/main.js:1323
+#: apps/io.ox/mail/write/main.js:1388
 msgid "Mail saved as draft"
 msgstr "Mesaj salvat ca schiță"
 
 #: apps/io.ox/mail/compose/view.js:616 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1461
+#: apps/io.ox/mail/write/main.js:1455
 msgid "Do you really want to discard your message?"
 msgstr "Sigur doriți să renunțați la acest mesaj?"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
 #: apps/io.ox/mail/compose/view.js:619 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1464
+#: apps/io.ox/mail/write/main.js:1458
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Renunță la messaj"
 
 #: apps/io.ox/mail/compose/view.js:620 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1465
+#: apps/io.ox/mail/write/main.js:1459
 msgid "Save as draft"
 msgstr "Salvează ca schiță"
 
 #: apps/io.ox/mail/compose/view.js:698 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1213
+#: apps/io.ox/mail/write/main.js:1207
 msgid "The email has been sent"
 msgstr "E-mailul a fost trimis"
 
 #: apps/io.ox/mail/compose/view.js:759 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1271
+#: apps/io.ox/mail/write/main.js:1265
 msgid "Mail has no recipient."
 msgstr "Mesajul nu are niciun destinatar."
 
 #: apps/io.ox/mail/compose/view.js:766 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1278
+#: apps/io.ox/mail/write/main.js:1272
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Subiectul mesajului este gol. Trimiteți oricum?"
 
 #: apps/io.ox/mail/compose/view.js:767 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1279
+#: apps/io.ox/mail/write/main.js:1273
 msgid "Yes, send without subject"
 msgstr "Da, trimite fără subiect"
 
 #: apps/io.ox/mail/compose/view.js:768 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1280
+#: apps/io.ox/mail/write/main.js:1274
 msgid "Add subject"
 msgstr "Adaugă subiect"
 
@@ -6424,7 +6421,7 @@ msgstr "procesează regulile ulterioare"
 msgid "remove"
 msgstr "elimină"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:264 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:266 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:263 module:io.ox/portal
 msgid ""
 "Use cursor keys to change the item position. Virtual cursor mode has to be "
@@ -6433,21 +6430,21 @@ msgstr ""
 "Utilizați tastele cursor pentru a schimba poziția elementului. Modul cursor "
 "virtual trebuie să fie dezactivat."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:419 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:421 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:221 module:io.ox/portal
 msgid "the item has been moved"
 msgstr "elementul a fost mutat"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:458 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:460 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr "Reguli de filtrare a mesajelor"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:460 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:462 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Adaugă o regulă nouă"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:478 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:480 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Nu a fost definită nicio regulă"
 
@@ -6561,7 +6558,7 @@ msgstr "Marcați e-mailul cu"
 msgid "Flag mail with"
 msgstr "Marchează mesajul cu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:151
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:162
 #: module:io.ox/settings/settings
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
@@ -6570,38 +6567,38 @@ msgstr ""
 "Această regulă se aplică tuturor mesajelor. Adăugați o condiție pentru a "
 "restricționa această regulă la anumite mesaje."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:448
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:486
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "Caracterul \" \" nu este permis."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:746
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:784
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Condiții"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:756
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:794
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Adaugă condiție"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:761
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:799
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Adaugă o acțiune"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:775
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:813
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Nume regulă"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:792
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:830
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:796
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:834
 msgid "Apply rule if all conditions are met"
 msgstr "Aplică regula dacă toate condițiile sunt respectate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:792
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:830
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Aplică regula dacă oricare din condiții este respectată."
@@ -6803,64 +6800,78 @@ msgstr "Abonare dosar IMAP"
 msgid "Change subscription"
 msgstr "Modifică abonamentul"
 
-#: apps/io.ox/mail/settings/signatures/register.js:112 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:36 module:io.ox/mail
+msgid "Signature name"
+msgstr "Nume semnătură"
+
+#: apps/io.ox/mail/settings/signatures/register.js:114 module:io.ox/mail
 msgid "Add signature above quoted text"
 msgstr "Adaugă semnătura deasupra textului între ghilimele"
 
-#: apps/io.ox/mail/settings/signatures/register.js:113 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:115 module:io.ox/mail
 msgid "Add signature below quoted text"
 msgstr "Adaugă semnătura sub textul între ghilimele"
 
-#: apps/io.ox/mail/settings/signatures/register.js:160 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:162 module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Introduceți un nume corect"
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:172 module:io.ox/mail
 msgid "Add signature"
 msgstr "Adaugă o semnătură "
 
-#: apps/io.ox/mail/settings/signatures/register.js:170 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:172 module:io.ox/mail
 msgid "Edit signature"
 msgstr "Editează semnătura"
 
-#: apps/io.ox/mail/settings/signatures/register.js:311 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:503
+#: apps/io.ox/mail/settings/signatures/register.js:257 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:482
 msgid "Import signatures"
 msgstr "Importă semnăturile"
 
+#: apps/io.ox/mail/settings/signatures/register.js:259 module:io.ox/mail
+msgid ""
+"You can import existing signatures from the previous product generation."
+msgstr ""
+
+#: apps/io.ox/mail/settings/signatures/register.js:261 module:io.ox/mail
+#, fuzzy
+msgid "Delete old signatures after import"
+msgstr "Selectează dosarul care trebuie importat"
+
 #. This signature is set as default
-#: apps/io.ox/mail/settings/signatures/register.js:366 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:374
-#: apps/io.ox/mail/settings/signatures/register.js:473
+#: apps/io.ox/mail/settings/signatures/register.js:347 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:355
+#: apps/io.ox/mail/settings/signatures/register.js:454
 msgid "(Default)"
 msgstr "(Implicit)"
 
 #. Action to make this signature the new default
-#: apps/io.ox/mail/settings/signatures/register.js:367 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:374
-#: apps/io.ox/mail/settings/signatures/register.js:471
+#: apps/io.ox/mail/settings/signatures/register.js:348 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:355
+#: apps/io.ox/mail/settings/signatures/register.js:452
 msgid "Set as default"
 msgstr "Setează ca implicit"
 
 #. A11y for an action button, read the display name and the action
 #. %1$s is the displayable name of the signature
 #. %2$s is the action: one of the msgids "(Default)", "Edit", "Delete" or "Set as default"
-#: apps/io.ox/mail/settings/signatures/register.js:373 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:378
-#: apps/io.ox/mail/settings/signatures/register.js:383
+#: apps/io.ox/mail/settings/signatures/register.js:354 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:359
+#: apps/io.ox/mail/settings/signatures/register.js:364
 msgid "%1$s, %2$s"
 msgstr "%1$s, %2$s"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:405 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:386 module:io.ox/mail
 msgid "Signature"
 msgstr "Semnătură"
 
-#: apps/io.ox/mail/settings/signatures/register.js:486 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:467 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Adaugă o semnătură nouă"
 
-#: apps/io.ox/mail/settings/signatures/register.js:492 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:473 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "Anulează setarea semnăturii implicite"
 
@@ -6892,27 +6903,27 @@ msgstr "%1$d mesaje în această conversație"
 msgid "Compose new email"
 msgstr "Compune un mesaj nou"
 
-#: apps/io.ox/mail/toolbar.js:233 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:235 module:io.ox/mail
 msgid "Vertical"
 msgstr "Vertical"
 
-#: apps/io.ox/mail/toolbar.js:234 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:236 module:io.ox/mail
 msgid "Compact"
 msgstr "Compact"
 
-#: apps/io.ox/mail/toolbar.js:235 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:237 module:io.ox/mail
 msgid "Horizontal"
 msgstr "Orizontal"
 
-#: apps/io.ox/mail/toolbar.js:241 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:243 module:io.ox/mail
 msgid "Contact pictures"
 msgstr "Imagini contact"
 
-#: apps/io.ox/mail/toolbar.js:242 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:244 module:io.ox/mail
 msgid "Exact dates"
 msgstr "Date exacte"
 
-#: apps/io.ox/mail/toolbar.js:244 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:246 module:io.ox/mail
 msgid "Statistics"
 msgstr "Statistici"
 
@@ -7022,15 +7033,15 @@ msgstr "Selectați un fișier imagine corect de inserat"
 msgid "Your answer"
 msgstr "Răspunsul dumneavoastră"
 
-#: apps/io.ox/mail/write/main.js:355 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:349 module:io.ox/mail
 msgid "Drop the file anywhere to add attachment"
 msgstr "Glisați fișieul oriunde pentru a adăuga ca fișier atașat"
 
-#: apps/io.ox/mail/write/main.js:699 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:693 module:io.ox/mail
 msgid "Reply all"
 msgstr "Răspunde tuturor"
 
-#: apps/io.ox/mail/write/main.js:1188 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1182 module:io.ox/mail
 msgid ""
 "One or more attached files exceed the size limit per email. Therefore, the "
 "files are not sent as attachments but kept on the server. The email you have "
@@ -7573,57 +7584,57 @@ msgstr "Introduceți o valoare cuprinsă între 0 și 100."
 msgid "Medium"
 msgstr "Mediu"
 
-#: apps/io.ox/tasks/edit/view-template.js:577 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:587
+#: apps/io.ox/tasks/edit/view-template.js:580 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:590
 msgid "Hide details"
 msgstr "Ascunde detaliile"
 
-#: apps/io.ox/tasks/edit/view-template.js:579 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:587
+#: apps/io.ox/tasks/edit/view-template.js:582 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:590
 msgid "Show details"
 msgstr "Afișează detaliile"
 
-#: apps/io.ox/tasks/edit/view-template.js:601 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:604 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:96 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:116
 msgid "Estimated duration in minutes"
 msgstr "Durată estimată în minute"
 
-#: apps/io.ox/tasks/edit/view-template.js:612 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:615 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:97 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:117
 msgid "Actual duration in minutes"
 msgstr "Durată efectivă în minute"
 
-#: apps/io.ox/tasks/edit/view-template.js:624 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:627 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:98 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:118
 msgid "Estimated costs"
 msgstr "Costuri estimate"
 
-#: apps/io.ox/tasks/edit/view-template.js:635 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:638 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:99 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:119
 msgid "Actual costs"
 msgstr "Costuri curente"
 
-#: apps/io.ox/tasks/edit/view-template.js:666 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:669 module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Monedă"
 
-#: apps/io.ox/tasks/edit/view-template.js:678 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:681 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:100 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:120
 msgid "Distance"
 msgstr "Distanță"
 
-#: apps/io.ox/tasks/edit/view-template.js:689 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:692 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:101 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:121
 msgid "Billing information"
 msgstr "Informații de facturare"
 
-#: apps/io.ox/tasks/edit/view-template.js:700 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:703 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:102 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:122
 msgid "Companies"
@@ -8476,34 +8487,31 @@ msgstr "Niciun mesaj în dosarul dumneavoastră de mesaje primite"
 msgid "your platform"
 msgstr "platforma dumneavoastră"
 
-#: apps/plugins/portal/oxdriveclients/register.js:78 module:plugins/portal
-msgid "Download %s"
-msgstr "Descarcă %s"
-
-#: apps/plugins/portal/oxdriveclients/register.js:87 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:76 module:plugins/portal
 msgid "Download %s via the OX Updater"
 msgstr "Descarcă %s prin aplicația de actualizare OX"
 
-#: apps/plugins/portal/oxdriveclients/register.js:97 module:plugins/portal
-#: apps/plugins/portal/oxdriveclients/register.js:150
+#: apps/plugins/portal/oxdriveclients/register.js:86 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:138
 msgid "Get %s"
 msgstr "Obține %s"
 
-#: apps/plugins/portal/oxdriveclients/register.js:102 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:91 module:plugins/portal
 msgid "Download %s for %s now"
 msgstr "Descarcă %s pentru %s acum"
 
-#: apps/plugins/portal/oxdriveclients/register.js:104 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:92 module:plugins/portal
 msgid ""
 "The %s client lets you store and share your photos, files, documents and "
-"videos, anytime, anywhere. Access any file you save to %s from all your "
-"computers, iPhone, iPad or from within %s itself."
+"videos, anytime,anywhere. Access any file you save to OX Drive from all your "
+"computers, iPhone, iPad or from within OX App Suite itself."
 msgstr ""
 "Clientul %s vă permite stocarea și partajarea de fotografii, fișiere, "
 "documente și înregistrări video oricând și oriunde. Puteți accesa fișierele "
-"salvate în %s de pe orice calculator, iPhone, iPad sau prin %s."
+"salvate în OX Drive de pe orice calculator, iPhone, iPad sau prin OX App "
+"Suite."
 
-#: apps/plugins/portal/oxdriveclients/register.js:140 module:plugins/portal
+#: apps/plugins/portal/oxdriveclients/register.js:128 module:plugins/portal
 msgid "%s is also available for other platforms:"
 msgstr "%s este disponibil și pentru alte platforme:"
 
@@ -12797,9 +12805,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Select a contact category"
 #~ msgstr "Selectează o categorie de contacte"
 
-#~ msgid "Select a folder for import"
-#~ msgstr "Selectează dosarul care trebuie importat"
-
 #~ msgid "Select a task category"
 #~ msgstr "Selectează o categorie de sarcini"
 
@@ -12983,9 +12988,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Sierra Leone"
 #~ msgstr "Sierra Leone"
-
-#~ msgid "Signature name"
-#~ msgstr "Nume semnătură"
 
 #~ msgid "Signature position"
 #~ msgstr "Poziție semnătură"

@@ -175,12 +175,20 @@ define('io.ox/core/tk/autocomplete',
             listModeOff = function () {
                     $('.autocomplete-popup').off('blur', '.autocomplete-item', fnBlur);
                     $('.autocomplete-popup').off('keydown', '.autocomplete-item', fnKeyDown);
+                    // Bug 37471 - [L3] Search in IE11: dropdown list disappears
+                    if (_.device('ie')) {
+                        _.defer(function () {
+                            self.on('blur', fnBlur);
+                        });
+                    }
                 },
 
             listModeOn = function () {
                     _.defer(function () {
                         $('.autocomplete-popup').on('blur', '.autocomplete-item', fnBlur);
                         $('.autocomplete-popup').on('keydown', '.autocomplete-item', fnKeyDown);
+                        // Bug 37471 - [L3] Search in IE11: dropdown list disappears
+                        if (_.device('ie')) self.off('blur', fnBlur);
                     });
                 },
 
@@ -450,6 +458,14 @@ define('io.ox/core/tk/autocomplete',
                         var value = $.trim($(this).val());
                         if (value.length > 0) $(this).trigger('selected', val, (val || '').length >= o.minLength);
 
+                        break;
+                    case 8:
+                        // backspace
+                        selected = scrollpane.find('.selected');
+                        if (selected.length) {
+                            e.preventDefault();
+                            self.focus();
+                        }
                         break;
                     case 9:
                         // tab

@@ -249,6 +249,10 @@ define('io.ox/participants/model', [
             };
             if (this.get('type') === 5) {
                 ret.mail = this.getEmail();
+                var dn = util.getMailFullName(this.toJSON());
+                if (!_.isEmpty(dn)) {
+                    ret.display_name = dn;
+                }
             } else if (this.has('id')) {
                 ret.id = this.get('id');
             }

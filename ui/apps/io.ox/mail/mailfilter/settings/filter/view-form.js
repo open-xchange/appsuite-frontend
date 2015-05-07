@@ -66,6 +66,17 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'flag': gt('Flag mail with')
         },
 
+        actionCapabilities = {
+            'keep': 'keep',
+            'discard': 'discard',
+            'redirect': 'redirect',
+            'move': 'move',
+            'reject': 'reject',
+            'markmail': 'addflags',
+            'tag': 'addflags',
+            'flag': 'addflags'
+        },
+
         COLORS = {
             NONE: { value: 0, text: gt('None') },
             RED: { value: 1, text: gt('Red') },
@@ -158,9 +169,30 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return arrayOfParts.join('/');
         },
 
+        toggleSaveButton = function (footer, pane) {
+            if (pane.find('.warning').length === 0) {
+                footer.find('[data-action="save"]').prop('disabled', false);
+            } else {
+                footer.find('[data-action="save"]').prop('disabled', true);
+            }
+        },
+
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
+
+            initialize: function (opt) {
+                var unsupported = [];
+                _.each(actionCapabilities, function (val, key) {
+                    var index = _.indexOf(opt.config.actioncommands, val);
+                    if (index === -1) {
+                        unsupported.push(key);
+                    }
+                });
+                actionsTranslations = _.omit(actionsTranslations, unsupported);
+                this.listView = opt.listView;
+            },
+
             render: function () {
 
                 var baton = ext.Baton({ model: this.model, view: this });
@@ -176,6 +208,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 'click [data-action="change-value-actions"]': 'onChangeValueAction',
                 'change [data-action="change-text-test"]': 'onChangeTextTest',
+                'keyup [data-action="change-text-test"]': 'onKeyupTextTest',
                 'change [data-action="change-text-test-second"]': 'onChangeTextTestSecond',
 
                 'change [data-action="change-text-action"]': 'onChangeTextAction',
@@ -207,7 +240,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 this.model.set('test', testArray);
                 this.render();
-
+                toggleSaveButton(this.dialog.getFooter(), this.$el);
             },
 
             onRemoveAction: function (e) {
@@ -327,7 +360,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     }
 
                     this.model.set('test', testArray);
-
+                    this.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
                 } else if (data.action === 'create') {
                     var actionArray = this.model.get('actioncmds');
                     actionArray.push(_.copy(DEFAULTS.actions[data.value], true));
@@ -400,6 +433,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 this.model.set('test', testArray);
 
+            },
+
+            onKeyupTextTest: function (e) {
+                e.preventDefault();
+                toggleSaveButton(this.dialog.getFooter(), this.$el);
             },
 
             onChangeTextTestSecond: function (e) {

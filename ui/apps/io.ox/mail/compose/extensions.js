@@ -351,6 +351,9 @@ define('io.ox/mail/compose/extensions', [
                         fileInput,
                         dropdown.append(
                             $('<a href="#">').append($.txt(gt('Add local file'))).on('click', function () {
+                                //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                                //in file picker dialog - other browsers still seem to work)
+                                fileInput[0].value = '';
                                 fileInput.trigger('click');
                             })
                         )
