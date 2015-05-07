@@ -43,15 +43,17 @@ define('io.ox/core/viewer/views/types/documentview', [
             //The name of the document converter server module.
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
-            this.PAGE_SIDE_MARGIN = 30;
+            this.PAGE_SIDE_MARGIN = _.device('desktop') ? 30 : 15;
             // magic module id to source map
             this.MODULE_SOURCE_MAP = {
                 1: 'calendar',
                 4: 'tasks',
                 7: 'contacts'
             };
-            // predefined zoom factors
-            this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
+            // predefined zoom factors.
+            // Limit zoom factor on iOS because of canvas size restrictions.
+            // https://github.com/mozilla/pdf.js/issues/2439
+            this.ZOOM_FACTORS = _.device('iOS') ? [25, 35, 50, 75, 100] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
             // current zoom factor, defaults at 100%
             this.currentZoomFactor = 100;
             // the PDFView instance
