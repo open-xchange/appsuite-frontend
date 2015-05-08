@@ -823,7 +823,7 @@ define('io.ox/mail/compose/view', [
                 if (input.hasClass('hidden')) {
                     input.removeClass('hidden');
                 } else {
-                    if (this.model.get('cc').length === 0 && this.model.get('bcc').length === 0) {
+                    if (_.isEmpty(this.model.attributes.cc) && _.isEmpty(this.model.attributes.bcc)) {
                         this.model.set('cc', []);
                         this.model.set('bcc', []);
                         input.addClass('hidden');
