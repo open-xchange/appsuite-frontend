@@ -39,31 +39,6 @@
         }
     }
 
-    .twitter-typeahead {
-
-        & > .token-input.tt-input, & > .token-input.tt-hint {
-            height: 22px;
-            border: 0;
-            padding: 0 5px;
-        }
-
-        & > .token-input.tt-hint {
-            width: 100% !important;
-        }
-
-        .tt-dropdown-menu {
-            min-width: 320px;
-            max-height: 200px;
-            overflow-x: hidden;
-            overflow-y: auto;
-            @media all and (min-width: 320px) and (max-width: 480px) {
-                border-radius: 0;
-                border: 1px solid #fff;
-                border-top-color: #ccc;
-            }
-        }
-    }
-
     // background color if dropable widget is active
     &.drophover {
 
@@ -75,5 +50,30 @@
             background-color: #eee;
         }
 
+    }
+}
+
+.twitter-typeahead {
+
+    & > .token-input.tt-input, & > .token-input.tt-hint {
+        height: 22px;
+        border: 0;
+        padding: 0 5px;
+    }
+
+    & > .token-input.tt-hint {
+        width: 100% !important;
+    }
+
+    .tt-dropdown-menu {
+        min-width: 320px;
+        max-height: 200px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        @media all and (min-width: 320px) and (max-width: 480px) {
+            border-radius: 0;
+            border: 1px solid #fff;
+            border-top-color: #ccc;
+        }
     }
 }
