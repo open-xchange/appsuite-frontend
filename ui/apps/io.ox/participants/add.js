@@ -50,9 +50,6 @@ define('io.ox/participants/add', [
                     model: model
                 };
             },
-            reduce: function () {
-                debugger;
-            },
             blacklist: false
         },
 
@@ -62,6 +59,7 @@ define('io.ox/participants/add', [
                 this.options.blacklist = this.options.blacklist.split(',');
             }
             this.options.click = _.bind(this.addParticipant, this);
+            this.options.reduce = _.bind(this.reduceDuplicates, this);
         },
 
         keyDown: function (e) {
@@ -77,17 +75,28 @@ define('io.ox/participants/add', [
             }
         },
 
+        /**
+         * remove duplicate entries from typeahead dropdown
+         * @param  {array} data result array by autocomplete API
+         * @return {array}      filtered data set
+         */
+        reduceDuplicates: function (data) {
+            var inCollection = this.collection.invoke('getEmail');
+            return _(data).filter(function (res) {
+                return inCollection.indexOf(res.email) < 0;
+            });
+        },
+
         addParticipant: function (e, data) {
             // check blacklist
             var inBlackList = this.options.blacklist && this.options.blacklist.indexOf(data.value) > -1;
 
             if (inBlackList) {
                 require('io.ox/core/yell')('warning', gt('This email address cannot be used'));
-            }
-
-            if (this.collection && !inBlackList) {
+            } else {
                 this.collection.addUniquely(data.model);
             }
+
             // clean typeahad input
             this.typeahead.$el.typeahead('val', '');
         },
