@@ -23,18 +23,18 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
                     'status': 3,
                     'title': 'Top Test'
                 }, {
-                    'end_date': 1895104800000,
+                    'end_time': 1895104800000,
                     'status': 1,
                     'title': 'Blabla'
                 },
                 {
-                    'end_date': 1895104800000,
+                    'end_time': 1895104800000,
                     'status': 1,
                     'title': 'Abc'
                 }, {
                     'status': 1,
                     'title': 'Test Title',
-                    'end_date': 1384999200000
+                    'end_time': 1384999200000
                 }
             ]
         };
@@ -198,7 +198,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
 
             it('should sort overdue tasks to first position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[0]).to.deep.equal({ 'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
+                expect(result[0]).to.deep.equal({ 'status': 1, 'title': 'Test Title', 'end_time': 1384999200000 });
             });
 
             it('should sort done tasks to last position', function () {
@@ -208,8 +208,8 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
 
             it('should sort same dates alphabetically', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[1]).to.deep.equal({ 'end_date': 1895104800000, 'status': 1, 'title': 'Abc' });
-                expect(result[2]).to.deep.equal({ 'end_date': 1895104800000, 'status': 1, 'title': 'Blabla' });
+                expect(result[1]).to.deep.equal({ 'end_time': 1895104800000, 'status': 1, 'title': 'Abc' });
+                expect(result[2]).to.deep.equal({ 'end_time': 1895104800000, 'status': 1, 'title': 'Blabla' });
             });
         });
     });

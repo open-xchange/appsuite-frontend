@@ -51,7 +51,7 @@ define([
         });
         describe('should contain', function () {
             it('a headline', function () {
-                expect(header.find('h1.clear-title').length).to.equal(1);
+                expect(header.find('h1').length).to.equal(1);
                 expect(header.find('button[data-action="save"]').length).to.equal(1);
                 expect(header.find('button[data-action="discard"]').length).to.equal(1);
             });
@@ -77,7 +77,7 @@ define([
             it('reminder controls', function () {
                 expect(node.find('#task-edit-reminder-select').length).to.equal(1);
             });
-            it('a status controls', function () {
+            it('status controls', function () {
                 expect(node.find('[data-extension-id="status"] select').length).to.equal(1);
                 expect(node.find('[data-extension-id="status"] select').children().length).to.equal(5);
                 expect(node.find('#task-edit-progress-field').length).to.equal(1);
@@ -85,8 +85,8 @@ define([
                 expect(node.find('[data-action="minus"]').length).to.equal(1);
                 expect(node.find('[data-extension-id="priority"] select').length).to.equal(1);
                 expect(node.find('[data-extension-id="priority"] select').children().length).to.equal(4);
-                expect(node.find('.private-flag').length).to.equal(1);
-                expect(node.find('.private-flag input[type="checkbox"]').length).to.equal(1);
+                expect(node.find('[data-extension-id="private_flag"]').length).to.equal(1);
+                expect(node.find('[data-extension-id="private_flag"] input[type="checkbox"]').length).to.equal(1);
             });
             // it('a correct participants tab', function () {
             //     //wait a little, until everything is painted (paint is async)
@@ -108,7 +108,7 @@ define([
         });
         describe('headline', function () {
             it('should have correct text', function () {
-                expect(header.find('h1.clear-title').text()).to.equal(gt('Create task'));
+                expect(header.find('h1').text()).to.equal(gt('Create task'));
                 expect(header.find('button[data-action="save"]').text()).to.equal(gt('Create'));
             });
         });
