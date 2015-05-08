@@ -45,7 +45,8 @@ define('io.ox/participants/model', [
 
         defaults: {
             display_name: '',
-            email1: ''
+            email1: '',
+            type: 5
         },
 
         initialize: function () {
@@ -190,7 +191,9 @@ define('io.ox/participants/model', [
         },
 
         getDisplayName: function () {
-            return util.getMailFullName(this.toJSON()) || this.getEmail();
+            var dn = util.getMailFullName(this.toJSON());
+            //display name: 'email only' participant
+            return dn || this.getEmail() !== '' ? this.getEmail().split('@')[0] : name;
         },
 
         getEmail: function () {

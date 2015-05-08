@@ -68,7 +68,7 @@ define('io.ox/participants/add', [
                 var val = this.typeahead.$el.typeahead('val');
                 if (!_.isEmpty(val)) {
                     this.addParticipant(e, {
-                        model: { email1: val, id: Math.random() },
+                        model: { email1: val, id: Math.random(), field: 'email1' },
                         value: val
                     });
                 }
