@@ -1477,8 +1477,8 @@ msgstr "Vista de calendari"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:604
-#: apps/io.ox/files/main.js:655 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:602
+#: apps/io.ox/files/main.js:653 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1779,7 +1779,7 @@ msgid "Close"
 msgstr "Tanca"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:637 module:io.ox/files
+#: apps/io.ox/files/main.js:635 module:io.ox/files
 #: apps/io.ox/files/view-options.js:210 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2834,7 +2834,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:486
 #: module:io.ox/files apps/io.ox/files/actions.js:496
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
-#: apps/io.ox/files/main.js:607 apps/io.ox/files/main.js:655
+#: apps/io.ox/files/main.js:605 apps/io.ox/files/main.js:653
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3137,14 +3137,14 @@ msgstr "Durada estimada en minuts"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:422 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:436 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "Cada %1$d dies"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:464 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:478 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Cada %1$d mesos el dia %2$d"
 
@@ -3152,26 +3152,26 @@ msgstr "Cada %1$d mesos el dia %2$d"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:489 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Cada %1$d mesos el %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:449 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:463 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Cada %1$d setmanes en %2$s"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:447 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "Cada %1$d setmanes tots els dies"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:440 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:454 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Cada %1$d setmanes els dies feiners"
 
@@ -3179,7 +3179,7 @@ msgstr "Cada %1$d setmanes els dies feiners"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:506 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Cada %1$d anys el %3$d de/d' %2$s"
 
@@ -3188,12 +3188,12 @@ msgstr "Cada %1$d anys el %3$d de/d' %2$s"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Cada %1$d anys el %2$s %3$s de/d' %4$d"
 
-#: apps/io.ox/calendar/util.js:419 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:430
+#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:444
 msgid "Every day"
 msgstr "Cada dia"
 
@@ -3547,8 +3547,7 @@ msgid "Food"
 msgstr "Menjar"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
 #, fuzzy
 #| msgid "For best results, please use"
 msgid "For best results, please use "
@@ -3569,7 +3568,6 @@ msgstr ""
 "recuperar les contrasenyes de tots els vostres comptes:"
 
 #: apps/io.ox/core/boot/i18n.js:27 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:27 module:io.ox/core/login
 msgid "Forgot your password?"
 msgstr "Heu oblidat la vostra contrasenya?"
 
@@ -4210,7 +4208,6 @@ msgid "Language-specific default"
 msgstr "Valors predeterminats per a aquest idioma"
 
 #: apps/io.ox/core/boot/i18n.js:28 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:28 module:io.ox/core/login
 msgid "Languages"
 msgstr "Llengües"
 
@@ -4704,14 +4701,14 @@ msgstr "Mes"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:474 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Mensualment el dia %1$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Mensualment el %1$s %2$s"
 
@@ -5005,7 +5002,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "No hi ha aniversaris en les properes %1$d setmanes"
 
 #: apps/io.ox/core/boot/i18n.js:29 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:29 module:io.ox/core/login
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -5223,8 +5219,7 @@ msgstr "Desconnectat"
 msgid "Offline"
 msgstr "Desconnectat"
 
-#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:47 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Mode desconnectat"
 
@@ -5238,7 +5233,7 @@ msgid "On behalf of the owner"
 msgstr ""
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:451 module:io.ox/calendar
 msgid "On work days"
 msgstr "Els dies feiners"
 
@@ -5436,7 +5431,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:84 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:89 module:io.ox/core
 #, fuzzy
 #| msgid "%1$s of %2$s"
 msgid "Page %1$d of %2$d"
@@ -5453,7 +5448,6 @@ msgid "Participants"
 msgstr "Participants"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
 #: apps/io.ox/files/share/view.js:272 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
@@ -5651,7 +5645,7 @@ msgstr "Per favor, indicau una URL per al feed."
 msgid "Please enter a search query"
 msgstr "Per favor, indicau un terme de cerca"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:208 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:213 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -5709,12 +5703,10 @@ msgid "Please enter value between 0 and 100."
 msgstr "Per favor, indicau un valor entre 0 i 100."
 
 #: apps/io.ox/core/boot/i18n.js:31 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:31 module:io.ox/core/login
 msgid "Please enter your credentials."
 msgstr "Per favor, introduïu les vostres credencials."
 
 #: apps/io.ox/core/boot/i18n.js:32 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:32 module:io.ox/core/login
 msgid "Please enter your password."
 msgstr "Per favor, introduïu la vostra clau."
 
@@ -5777,7 +5769,6 @@ msgid "Please specify these missing variables: "
 msgstr "Per favor, especificau aquestes variables que falten:"
 
 #: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:41 module:io.ox/core/login
 msgid "Please update your browser."
 msgstr "Per favor, actualitzau el vostre navegador."
 
@@ -6902,7 +6893,6 @@ msgid "Shown as"
 msgstr "Mostra com a"
 
 #: apps/io.ox/core/boot/i18n.js:25 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:25 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:55 module:io.ox/core
 msgid "Sign in"
 msgstr "Inicia la sessió"
@@ -7002,6 +6992,7 @@ msgid "Sorry, there is no data available for you on %s."
 msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js:46 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:25
 #, fuzzy
 #| msgid "Sorry, there is no data available for you on %s."
 msgid "Sorry, there is no preview available for this file."
@@ -7113,7 +7104,6 @@ msgid "Status"
 msgstr "Estat"
 
 #: apps/io.ox/core/boot/i18n.js:26 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:26 module:io.ox/core/login
 msgid "Stay signed in"
 msgstr "Mantén-m'hi connectat"
 
@@ -7630,7 +7620,7 @@ msgstr ""
 "La sèrie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">mai "
 "finalitza</a>."
 
-#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
 #, fuzzy
 #| msgid "after %1$d appointment"
 #| msgid_plural "after %1$d appointments"
@@ -7639,7 +7629,7 @@ msgid_plural "The series ends after %1$d appointments"
 msgstr[0] "després de la %1$d cita"
 msgstr[1] "després de %1$d cites"
 
-#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:528 module:io.ox/calendar
 #, fuzzy
 #| msgid "This file is locked by %1$s"
 msgid "The series ends on %1$s"
@@ -7778,7 +7768,6 @@ msgid "This E-mail is unread, press to mark it as read."
 msgstr "No heu llegit aquest correu, premeu per a marcar-lo com a llegit"
 
 #: apps/io.ox/core/boot/i18n.js:35 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:35 module:io.ox/core/login
 msgid "This browser is not supported on your current platform."
 msgstr "Aquest navegador no és compatible amb la vostra plataforma actual."
 
@@ -7789,6 +7778,12 @@ msgstr "Aquest contacte és privat i no es pot compartir"
 #: apps/io.ox/contacts/actions/addToPortal.js:34 module:io.ox/mail
 msgid "This distribution list has been added to the portal"
 msgstr "Aquesta llista de distribució s'ha afegit al portal"
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+msgid ""
+"This document is password protected and cannot be displayed. Please open it "
+"with your local PDF viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:489 module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
@@ -7939,7 +7934,7 @@ msgstr "Fil"
 msgid "Tiles"
 msgstr "Fitxes"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:114 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:119 module:io.ox/core
 msgid "Time"
 msgstr "Hora"
 
@@ -8166,8 +8161,7 @@ msgstr "No llegits: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Els documents sense desar es perdran. Voleu sortir?"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:45 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -8253,7 +8247,7 @@ msgstr "Urgència"
 msgid "Use SSL connection"
 msgstr "Empra una connexió SSL"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:103 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:108 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:115 module:io.ox/calendar
 #: apps/io.ox/search/facets/extensions.js:519
 msgid ""
@@ -8298,7 +8292,7 @@ msgstr "Introdueix el nom d'usuari i la clau separats"
 msgid "Use unified mail for this account"
 msgstr "Empra el correu unificat per a aquest compte"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:107 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:112 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr ""
@@ -8315,7 +8309,6 @@ msgid "User fields"
 msgstr "Camps d'usuari"
 
 #: apps/io.ox/core/boot/i18n.js:23 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:23 module:io.ox/core/login
 #: apps/plugins/administration/groups/settings/edit.js:50 module:io.ox/core
 msgid "User name"
 msgstr "Nom d'usuari"
@@ -8431,7 +8424,7 @@ msgstr "Vista de setmana"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:445 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:459 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Setmanalment en %1$s"
 
@@ -8514,7 +8507,7 @@ msgstr "Any"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:487 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:501 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Anualment el %2$d de/d' %1$s"
 
@@ -8522,7 +8515,7 @@ msgstr "Anualment el %2$d de/d' %1$s"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:513 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Anualment el %1$s %2$s de/d' %3$d"
 
@@ -8690,8 +8683,7 @@ msgstr "Heu acceptat aquesta cita"
 msgid "You have accepted this task"
 msgstr "Heu acceptat aquesta tasca"
 
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:44 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Heu sortit automàticament"
 
@@ -8733,13 +8725,11 @@ msgstr "Us agrada això"
 
 #. %n in the lowest version of Android
 #: apps/io.ox/core/boot/i18n.js:37 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
 msgid "You need to use Android %n or higher."
 msgstr "Necessitau emprar Android %n o posterior."
 
 #. %n is the lowest version of iOS
 #: apps/io.ox/core/boot/i18n.js:39 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:39 module:io.ox/core/login
 msgid "You need to use iOS %n or higher."
 msgstr "Necessitau emprar iOS %n o superior."
 
@@ -8849,17 +8839,14 @@ msgid "Your browser does not support the video format of this file."
 msgstr "El vostre explorador no és compatible"
 
 #: apps/io.ox/core/boot/i18n.js:34 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:34 module:io.ox/core/login
 msgid "Your browser is not supported!"
 msgstr "El vostre explorador no és compatible"
 
 #: apps/io.ox/core/boot/i18n.js:33 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:33 module:io.ox/core/login
 msgid "Your browser version is not supported!"
 msgstr "La versió del vostre explorador no és compatible"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:48 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "La funcionalitat de cookies del vostre navegador està desactivada. Per "
@@ -8910,7 +8897,6 @@ msgid "Your old password"
 msgstr "La vostra contrasenya anterior"
 
 #: apps/io.ox/core/boot/i18n.js:40 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:40 module:io.ox/core/login
 msgid "Your operating system is not supported."
 msgstr "El vostre sistema operatiu no és compatible."
 
@@ -8997,7 +8983,7 @@ msgstr[1] "després de %1$d cites"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:398 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:412 module:io.ox/calendar
 msgid "and"
 msgstr "i"
 
@@ -9507,7 +9493,7 @@ msgid "weekly"
 msgstr "setmanal"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:383 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:397 module:io.ox/calendar
 msgid "work days"
 msgstr "dies feiners"
 

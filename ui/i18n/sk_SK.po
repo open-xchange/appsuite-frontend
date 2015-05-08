@@ -1426,8 +1426,8 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:604
-#: apps/io.ox/files/main.js:655 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:602
+#: apps/io.ox/files/main.js:653 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1714,7 +1714,7 @@ msgid "Close"
 msgstr "Zatvoriť"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:637 module:io.ox/files
+#: apps/io.ox/files/main.js:635 module:io.ox/files
 #: apps/io.ox/files/view-options.js:210 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2742,7 +2742,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:486
 #: module:io.ox/files apps/io.ox/files/actions.js:496
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
-#: apps/io.ox/files/main.js:607 apps/io.ox/files/main.js:655
+#: apps/io.ox/files/main.js:605 apps/io.ox/files/main.js:653
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3035,14 +3035,14 @@ msgstr "Odhadované trvanie v minútach"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:422 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:436 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "Každých %1$d dní"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:464 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:478 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "%1$d. deň každých %1$d mesiacov"
 
@@ -3050,26 +3050,26 @@ msgstr "%1$d. deň každých %1$d mesiacov"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:489 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "%2$s %3$s každého %1$d. mesiaca"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:449 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:463 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "V %2$s každého %1$d. týždňa"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:447 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "Každý deň každého %1$d. týždňa"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:440 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:454 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "V pracovné dni každého %1$d. týždňa"
 
@@ -3077,7 +3077,7 @@ msgstr "V pracovné dni každého %1$d. týždňa"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:506 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Každý %1$d. rok %3$d. %2$s"
 
@@ -3086,12 +3086,12 @@ msgstr "Každý %1$d. rok %3$d. %2$s"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Každých %1$d rokov %2$s %3$s v %4$d"
 
-#: apps/io.ox/calendar/util.js:419 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:430
+#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:444
 msgid "Every day"
 msgstr "každý deň"
 
@@ -3442,8 +3442,7 @@ msgid "Food"
 msgstr "Jedlo"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "Aby ste dosiahli najlepšie výsledky, použite "
 
@@ -3461,7 +3460,6 @@ msgstr ""
 "všetky heslá účtov:"
 
 #: apps/io.ox/core/boot/i18n.js:27 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:27 module:io.ox/core/login
 msgid "Forgot your password?"
 msgstr "Zabudli ste heslo?"
 
@@ -4075,7 +4073,6 @@ msgid "Language-specific default"
 msgstr "Predvoľby špecifické pre jazyk"
 
 #: apps/io.ox/core/boot/i18n.js:28 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:28 module:io.ox/core/login
 msgid "Languages"
 msgstr "Jazyky"
 
@@ -4562,14 +4559,14 @@ msgstr "Mesiac"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:474 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "%1$d. deň každého mesiaca"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "%1$s %2$s každého mesiaca"
 
@@ -4846,7 +4843,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "Žiadne narodeniny v najbližších  %1$d týždňoch"
 
 #: apps/io.ox/core/boot/i18n.js:29 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:29 module:io.ox/core/login
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -5061,8 +5057,7 @@ msgstr "Vypnuté"
 msgid "Offline"
 msgstr "Režime offline"
 
-#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:47 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Režime offline"
 
@@ -5077,7 +5072,7 @@ msgid "On behalf of the owner"
 msgstr "v mene"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:451 module:io.ox/calendar
 msgid "On work days"
 msgstr "V pracovné dni"
 
@@ -5273,7 +5268,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:84 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:89 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Strana %1$d z %2$d"
 
@@ -5288,7 +5283,6 @@ msgid "Participants"
 msgstr "Účastníci"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
 #: apps/io.ox/files/share/view.js:272 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
@@ -5487,7 +5481,7 @@ msgstr "Prosím, zadajte URL kanálu"
 msgid "Please enter a search query"
 msgstr "Prosím, zadajte hľadaný text."
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:208 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:213 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -5541,12 +5535,10 @@ msgid "Please enter value between 0 and 100."
 msgstr "Prosím, zadajte platnú hodnotu medzi 0 a 100."
 
 #: apps/io.ox/core/boot/i18n.js:31 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:31 module:io.ox/core/login
 msgid "Please enter your credentials."
 msgstr "Prosím, zadajte svoje prihlasovacie údaje."
 
 #: apps/io.ox/core/boot/i18n.js:32 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:32 module:io.ox/core/login
 msgid "Please enter your password."
 msgstr "Prosím, zadajte svoje heslo."
 
@@ -5603,7 +5595,6 @@ msgid "Please specify these missing variables: "
 msgstr "Prosím, uveďte tieto chýbajúce premenné: "
 
 #: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:41 module:io.ox/core/login
 msgid "Please update your browser."
 msgstr "Prosím aktualizujte svoj prehliadač."
 
@@ -6693,7 +6684,6 @@ msgid "Shown as"
 msgstr "Zobraziť ako"
 
 #: apps/io.ox/core/boot/i18n.js:25 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:25 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:55 module:io.ox/core
 msgid "Sign in"
 msgstr "Prihlásiť sa"
@@ -6789,6 +6779,7 @@ msgid "Sorry, there is no data available for you on %s."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js:46 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:25
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
@@ -6896,7 +6887,6 @@ msgid "Status"
 msgstr "Stav"
 
 #: apps/io.ox/core/boot/i18n.js:26 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:26 module:io.ox/core/login
 msgid "Stay signed in"
 msgstr "Zostať prihlásený"
 
@@ -7405,7 +7395,7 @@ msgstr ""
 "Séria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">nikdy "
 "nekončí</a>."
 
-#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
 #, fuzzy
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
@@ -7413,7 +7403,7 @@ msgstr[0] "po %1$d schôdzke"
 msgstr[1] "po %1$d schôdzkach"
 msgstr[2] "po %1$d schôdzkach"
 
-#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:528 module:io.ox/calendar
 #, fuzzy
 msgid "The series ends on %1$s"
 msgstr "Tento súbor zamkol používateľ %1$s"
@@ -7551,7 +7541,6 @@ msgid "This E-mail is unread, press to mark it as read."
 msgstr "Tento email je neprečítaný, stlačením ho označíte ako prečítaný."
 
 #: apps/io.ox/core/boot/i18n.js:35 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:35 module:io.ox/core/login
 msgid "This browser is not supported on your current platform."
 msgstr "Tento prehliadač nie je na vašej terajšej platforme podporovaný."
 
@@ -7562,6 +7551,12 @@ msgstr "Tento kontakt je súkromný a nie je možné ho zdieľať"
 #: apps/io.ox/contacts/actions/addToPortal.js:34 module:io.ox/mail
 msgid "This distribution list has been added to the portal"
 msgstr "Tento distribučný zoznam bol pridaný na portál"
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+msgid ""
+"This document is password protected and cannot be displayed. Please open it "
+"with your local PDF viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:489 module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
@@ -7707,7 +7702,7 @@ msgstr "Vlákno"
 msgid "Tiles"
 msgstr "Dlaždice"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:114 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:119 module:io.ox/core
 msgid "Time"
 msgstr "Čas"
 
@@ -7928,8 +7923,7 @@ msgstr "Neprečítaných: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Neuložené dokumenty budú stratené. Chcete sa teraz odhlásiť?"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:45 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -8009,7 +8003,7 @@ msgstr "Naliehavosť"
 msgid "Use SSL connection"
 msgstr "Použiť pripojenie SSL"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:103 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:108 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:115 module:io.ox/calendar
 #: apps/io.ox/search/facets/extensions.js:519
 msgid ""
@@ -8055,7 +8049,7 @@ msgstr "Použiť samostatné prihlasovacie meno a heslo"
 msgid "Use unified mail for this account"
 msgstr "Použiť pre tento účet Zjednotenú poštu"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:107 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:112 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr ""
@@ -8072,7 +8066,6 @@ msgid "User fields"
 msgstr "Používateľom definované"
 
 #: apps/io.ox/core/boot/i18n.js:23 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:23 module:io.ox/core/login
 #: apps/plugins/administration/groups/settings/edit.js:50 module:io.ox/core
 msgid "User name"
 msgstr "Meno používateľa"
@@ -8184,7 +8177,7 @@ msgstr "Zobrazenie týždňa"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:445 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:459 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Týždenne v %1$s"
 
@@ -8266,7 +8259,7 @@ msgstr "Rok"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:487 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:501 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Každý rok %2$d. %1$s"
 
@@ -8274,7 +8267,7 @@ msgstr "Každý rok %2$d. %1$s"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:513 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Každý rok %1$s %2$s v %3$d"
 
@@ -8438,8 +8431,7 @@ msgstr "Prijali ste túto schôdzku"
 msgid "You have accepted this task"
 msgstr "Prijali ste túto úlohu"
 
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:44 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Boli ste automaticky odhlásení"
 
@@ -8481,13 +8473,11 @@ msgstr "Toto sa vám páči"
 
 #. %n in the lowest version of Android
 #: apps/io.ox/core/boot/i18n.js:37 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
 msgid "You need to use Android %n or higher."
 msgstr "Musíte použiť Android %n alebo vyšší."
 
 #. %n is the lowest version of iOS
 #: apps/io.ox/core/boot/i18n.js:39 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:39 module:io.ox/core/login
 msgid "You need to use iOS %n or higher."
 msgstr "Musíte použiť iOS %n alebo vyšší."
 
@@ -8589,17 +8579,14 @@ msgid "Your browser does not support the video format of this file."
 msgstr "Váš prehliadač nie je podporovaný!"
 
 #: apps/io.ox/core/boot/i18n.js:34 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:34 module:io.ox/core/login
 msgid "Your browser is not supported!"
 msgstr "Váš prehliadač nie je podporovaný!"
 
 #: apps/io.ox/core/boot/i18n.js:33 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:33 module:io.ox/core/login
 msgid "Your browser version is not supported!"
 msgstr "Vaša verzia prehliadača nie je podporovaná!"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:48 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "Funkcia cookies vášho prehliadača je vypnutá. Prosím, zapnite ju."
 
@@ -8643,7 +8630,6 @@ msgid "Your old password"
 msgstr "Vaše staré heslo"
 
 #: apps/io.ox/core/boot/i18n.js:40 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:40 module:io.ox/core/login
 msgid "Your operating system is not supported."
 msgstr "Váš operačný systém nie je podporovaný."
 
@@ -8728,7 +8714,7 @@ msgstr[2] "po %1$d schôdzkach"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:398 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:412 module:io.ox/calendar
 msgid "and"
 msgstr "a"
 
@@ -9231,7 +9217,7 @@ msgid "weekly"
 msgstr "týždenne"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:383 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:397 module:io.ox/calendar
 msgid "work days"
 msgstr "pracovné dni"
 

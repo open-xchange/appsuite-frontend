@@ -1403,8 +1403,8 @@ msgstr "Naptár nézet"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:604
-#: apps/io.ox/files/main.js:655 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:602
+#: apps/io.ox/files/main.js:653 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1692,7 +1692,7 @@ msgid "Close"
 msgstr "Bezárás"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:637 module:io.ox/files
+#: apps/io.ox/files/main.js:635 module:io.ox/files
 #: apps/io.ox/files/view-options.js:210 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2723,7 +2723,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:486
 #: module:io.ox/files apps/io.ox/files/actions.js:496
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
-#: apps/io.ox/files/main.js:607 apps/io.ox/files/main.js:655
+#: apps/io.ox/files/main.js:605 apps/io.ox/files/main.js:653
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3017,14 +3017,14 @@ msgstr "Becsült időtartam percben"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:422 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:436 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "Minden %1$d. nap"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:464 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:478 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Minden %1$d. hónap %2$d. napján"
 
@@ -3032,26 +3032,26 @@ msgstr "Minden %1$d. hónap %2$d. napján"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:489 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Minden %1$d. hónap %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:449 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:463 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Minden %1$d. héten %2$s napon"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:447 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "Minden %1$d. hét minden napján"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:440 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:454 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Minden %1$d. hét munkanapjain"
 
@@ -3059,7 +3059,7 @@ msgstr "Minden %1$d. hét munkanapjain"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:506 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Minden %1$d. év %2$s %3$d. napján"
 
@@ -3068,12 +3068,12 @@ msgstr "Minden %1$d. év %2$s %3$d. napján"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Minden %1$d. év %4$d %2$s %3$s napján"
 
-#: apps/io.ox/calendar/util.js:419 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:430
+#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:444
 msgid "Every day"
 msgstr "Minden nap"
 
@@ -3419,8 +3419,7 @@ msgid "Food"
 msgstr "Étel"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "A legjobb eredmények érdekében használja a következőt:"
 
@@ -3439,7 +3438,6 @@ msgstr ""
 "jelszavainak visszaállítására: "
 
 #: apps/io.ox/core/boot/i18n.js:27 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:27 module:io.ox/core/login
 msgid "Forgot your password?"
 msgstr "Elfelejtette a jelszót?"
 
@@ -4052,7 +4050,6 @@ msgid "Language-specific default"
 msgstr "Nyelvspecifikus alapértelmezés"
 
 #: apps/io.ox/core/boot/i18n.js:28 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:28 module:io.ox/core/login
 msgid "Languages"
 msgstr "Nyelvek"
 
@@ -4537,14 +4534,14 @@ msgstr "Hónap"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:474 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Havonta a(z) %1$d. napon"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Minden hónap %1$s %2$s"
 
@@ -4821,7 +4818,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "Nincsenek születésnapok a következő %1$d héten"
 
 #: apps/io.ox/core/boot/i18n.js:29 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:29 module:io.ox/core/login
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -5034,8 +5030,7 @@ msgstr "Ki"
 msgid "Offline"
 msgstr "Nem érhető el"
 
-#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:47 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "Kapcsolat nélküli mód"
 
@@ -5050,7 +5045,7 @@ msgid "On behalf of the owner"
 msgstr "meghatalmazó:"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:451 module:io.ox/calendar
 msgid "On work days"
 msgstr "Munkanapokon"
 
@@ -5245,7 +5240,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:84 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:89 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%1$d/%2$d oldal"
 
@@ -5260,7 +5255,6 @@ msgid "Participants"
 msgstr "Résztvevők"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
 #: apps/io.ox/files/share/view.js:272 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
@@ -5459,7 +5453,7 @@ msgstr "Adjon meg egy hírforrás URL-t."
 msgid "Please enter a search query"
 msgstr "Adjon meg egy keresőkifejezést"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:208 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:213 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -5513,12 +5507,10 @@ msgid "Please enter value between 0 and 100."
 msgstr "Adjon meg egy 0 és 100 közti értéket."
 
 #: apps/io.ox/core/boot/i18n.js:31 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:31 module:io.ox/core/login
 msgid "Please enter your credentials."
 msgstr "Adja meg a hitelesítési adatait."
 
 #: apps/io.ox/core/boot/i18n.js:32 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:32 module:io.ox/core/login
 msgid "Please enter your password."
 msgstr "Adja meg jelszavát."
 
@@ -5576,7 +5568,6 @@ msgid "Please specify these missing variables: "
 msgstr "Adja meg ezeket a hiányzó változókat:"
 
 #: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:41 module:io.ox/core/login
 msgid "Please update your browser."
 msgstr "Frissítse böngészőjét."
 
@@ -6665,7 +6656,6 @@ msgid "Shown as"
 msgstr "Megjelenik mint"
 
 #: apps/io.ox/core/boot/i18n.js:25 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:25 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:55 module:io.ox/core
 msgid "Sign in"
 msgstr "Bejelentkezés"
@@ -6761,6 +6751,7 @@ msgid "Sorry, there is no data available for you on %s."
 msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js:46 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:25
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
@@ -6868,7 +6859,6 @@ msgid "Status"
 msgstr "Állapot"
 
 #: apps/io.ox/core/boot/i18n.js:26 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:26 module:io.ox/core/login
 msgid "Stay signed in"
 msgstr "Maradjon bejelentkezve"
 
@@ -7380,14 +7370,14 @@ msgstr ""
 "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">soha nem fejeződik be</a>."
 
-#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
 #, fuzzy
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
 msgstr[0] "%1$d találkozó után"
 msgstr[1] "%1$d találkozó után"
 
-#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:528 module:io.ox/calendar
 #, fuzzy
 msgid "The series ends on %1$s"
 msgstr "A fájlt %1$s zárolta"
@@ -7523,7 +7513,6 @@ msgid "This E-mail is unread, press to mark it as read."
 msgstr "Ez egy olvasatlan levél, kattintson ahhoz hogy olvasott legyen."
 
 #: apps/io.ox/core/boot/i18n.js:35 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:35 module:io.ox/core/login
 msgid "This browser is not supported on your current platform."
 msgstr "A böngészője nem támogatott ezen a platformon."
 
@@ -7534,6 +7523,12 @@ msgstr "Ez a névjegy személyes és nem osztható meg"
 #: apps/io.ox/contacts/actions/addToPortal.js:34 module:io.ox/mail
 msgid "This distribution list has been added to the portal"
 msgstr "Ez a disztribúciós lista hozzáadva a portálhoz"
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+msgid ""
+"This document is password protected and cannot be displayed. Please open it "
+"with your local PDF viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:489 module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
@@ -7676,7 +7671,7 @@ msgstr "Szál"
 msgid "Tiles"
 msgstr "Mozaik"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:114 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:119 module:io.ox/core
 msgid "Time"
 msgstr "Idő"
 
@@ -7897,8 +7892,7 @@ msgstr "Olvasatlan: %1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Az el nem mentett dokumentumok elvesznek. Szeretne most kilépni?"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:45 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -7978,7 +7972,7 @@ msgstr "Sürgősség"
 msgid "Use SSL connection"
 msgstr "SSL-kapcsolat használata"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:103 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:108 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:115 module:io.ox/calendar
 #: apps/io.ox/search/facets/extensions.js:519
 msgid ""
@@ -8025,7 +8019,7 @@ msgstr "Külön felhasználónév és jelszó használata"
 msgid "Use unified mail for this account"
 msgstr "Egységes levelezés használata ehhez a fiókhoz"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:107 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:112 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr ""
@@ -8042,7 +8036,6 @@ msgid "User fields"
 msgstr "Felhasználói mezők"
 
 #: apps/io.ox/core/boot/i18n.js:23 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:23 module:io.ox/core/login
 #: apps/plugins/administration/groups/settings/edit.js:50 module:io.ox/core
 msgid "User name"
 msgstr "Felhasználónév"
@@ -8152,7 +8145,7 @@ msgstr "Hét nézet"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:445 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:459 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Hetente ekkor: %1$s"
 
@@ -8233,7 +8226,7 @@ msgstr "Év"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:487 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:501 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Minden év %1$s %2$d. napján"
 
@@ -8241,7 +8234,7 @@ msgstr "Minden év %1$s %2$d. napján"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:513 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Minden év %3$d %1$s %2$s napján"
 
@@ -8405,8 +8398,7 @@ msgstr "Elfogadta ezt a találkozót"
 msgid "You have accepted this task"
 msgstr "Elfogadta ezt a feladatot"
 
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:44 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "Automatikusan ki lett jelentkeztetve"
 
@@ -8447,13 +8439,11 @@ msgstr "Kedveli ezt"
 
 #. %n in the lowest version of Android
 #: apps/io.ox/core/boot/i18n.js:37 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
 msgid "You need to use Android %n or higher."
 msgstr "Az Android %n vagy újabb verziója szükséges."
 
 #. %n is the lowest version of iOS
 #: apps/io.ox/core/boot/i18n.js:39 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:39 module:io.ox/core/login
 msgid "You need to use iOS %n or higher."
 msgstr "Az iOS %n vagy újabb verziója szükséges."
 
@@ -8554,17 +8544,14 @@ msgid "Your browser does not support the video format of this file."
 msgstr "A böngészője nem támogatott"
 
 #: apps/io.ox/core/boot/i18n.js:34 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:34 module:io.ox/core/login
 msgid "Your browser is not supported!"
 msgstr "A böngészője nem támogatott"
 
 #: apps/io.ox/core/boot/i18n.js:33 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:33 module:io.ox/core/login
 msgid "Your browser version is not supported!"
 msgstr "A böngésző verziója nem támogatott"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:48 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "A böngésző süti funkciója ki van kapcsolva. Kapcsolja azt vissza."
 
@@ -8608,7 +8595,6 @@ msgid "Your old password"
 msgstr "Régi jelszava"
 
 #: apps/io.ox/core/boot/i18n.js:40 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:40 module:io.ox/core/login
 msgid "Your operating system is not supported."
 msgstr "Az operációs rendszere nem támogatott."
 
@@ -8690,7 +8676,7 @@ msgstr[1] "%1$d találkozó után"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:398 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:412 module:io.ox/calendar
 msgid "and"
 msgstr "és"
 
@@ -9189,7 +9175,7 @@ msgid "weekly"
 msgstr "hetente"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:383 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:397 module:io.ox/calendar
 msgid "work days"
 msgstr "munkanapok"
 

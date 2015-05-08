@@ -1387,8 +1387,8 @@ msgstr "日历视图"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:604
-#: apps/io.ox/files/main.js:655 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:602
+#: apps/io.ox/files/main.js:653 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1673,7 +1673,7 @@ msgid "Close"
 msgstr "关闭"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:637 module:io.ox/files
+#: apps/io.ox/files/main.js:635 module:io.ox/files
 #: apps/io.ox/files/view-options.js:210 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2690,7 +2690,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:486
 #: module:io.ox/files apps/io.ox/files/actions.js:496
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
-#: apps/io.ox/files/main.js:607 apps/io.ox/files/main.js:655
+#: apps/io.ox/files/main.js:605 apps/io.ox/files/main.js:653
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -2982,14 +2982,14 @@ msgstr "预估持续时间（分钟）"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:422 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:436 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "每 %1$d 天"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:464 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:478 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "每 %1$d 月的第 %2$d 天"
 
@@ -2997,26 +2997,26 @@ msgstr "每 %1$d 月的第 %2$d 天"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:489 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "每 %1$d 月的 %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:449 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:463 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "每 %1$d 周的 %2$s"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:447 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "每 %1$d 周的每一天"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:440 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:454 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "每 %1$d 周的工作天"
 
@@ -3024,7 +3024,7 @@ msgstr "每 %1$d 周的工作天"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:506 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "每 %1$d 年的 %2$s 月 %3$d 日"
 
@@ -3033,12 +3033,12 @@ msgstr "每 %1$d 年的 %2$s 月 %3$d 日"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "每 %1$d 年 %4$d 月的第 %2$s 个 %3$s"
 
-#: apps/io.ox/calendar/util.js:419 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:430
+#: apps/io.ox/calendar/util.js:433 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:444
 msgid "Every day"
 msgstr "每天"
 
@@ -3379,8 +3379,7 @@ msgid "Food"
 msgstr "食物"
 
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
-#: apps/io.ox/core/boot/i18n.js:42 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
 msgid "For best results, please use "
 msgstr "为了最好的结果，请使用"
 
@@ -3396,7 +3395,6 @@ msgstr ""
 "的外部户口可能停止运作。如是者，您可以以你的旧密码以还原所有户口密码："
 
 #: apps/io.ox/core/boot/i18n.js:27 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:27 module:io.ox/core/login
 msgid "Forgot your password?"
 msgstr "忘记密码？"
 
@@ -4000,7 +3998,6 @@ msgid "Language-specific default"
 msgstr "语言指定的默认值"
 
 #: apps/io.ox/core/boot/i18n.js:28 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:28 module:io.ox/core/login
 msgid "Languages"
 msgstr "语言"
 
@@ -4485,14 +4482,14 @@ msgstr "月"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:474 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "每月 %1$d 日"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "每月的第 %1$s 个 %2$s"
 
@@ -4769,7 +4766,6 @@ msgid "No birthdays within the next %1$d weeks"
 msgstr "往后 %1$d 星期没有生日"
 
 #: apps/io.ox/core/boot/i18n.js:29 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:29 module:io.ox/core/login
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr "连接失败。请检查您的 Internet 设置重试。"
@@ -4976,8 +4972,7 @@ msgstr "离线"
 msgid "Offline"
 msgstr "离线"
 
-#: apps/io.ox/core/boot/i18n.js:46 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:47 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
 msgid "Offline mode"
 msgstr "脱机模式"
 
@@ -4992,7 +4987,7 @@ msgid "On behalf of the owner"
 msgstr "代表"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:451 module:io.ox/calendar
 msgid "On work days"
 msgstr "在工作天"
 
@@ -5187,7 +5182,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:84 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:89 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "第 %1$d 页（共 %2$d 页）"
 
@@ -5202,7 +5197,6 @@ msgid "Participants"
 msgstr "参与者"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
 #: apps/io.ox/files/share/view.js:272 module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js:455 module:io.ox/settings
@@ -5400,7 +5394,7 @@ msgstr "请输入一个 feed URL。"
 msgid "Please enter a search query"
 msgstr "请输入一个搜索查詢"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:208 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:213 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -5454,12 +5448,10 @@ msgid "Please enter value between 0 and 100."
 msgstr "请输入 1 到 100 间的数值。"
 
 #: apps/io.ox/core/boot/i18n.js:31 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:31 module:io.ox/core/login
 msgid "Please enter your credentials."
 msgstr "请输入您的凭据。"
 
 #: apps/io.ox/core/boot/i18n.js:32 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:32 module:io.ox/core/login
 msgid "Please enter your password."
 msgstr "请输入您的密码。"
 
@@ -5511,7 +5503,6 @@ msgid "Please specify these missing variables: "
 msgstr "请指定这些缺少的变量："
 
 #: apps/io.ox/core/boot/i18n.js:41 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:41 module:io.ox/core/login
 msgid "Please update your browser."
 msgstr "请更新您的浏览器。"
 
@@ -6594,7 +6585,6 @@ msgid "Shown as"
 msgstr "显示为"
 
 #: apps/io.ox/core/boot/i18n.js:25 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:25 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:55 module:io.ox/core
 msgid "Sign in"
 msgstr "登录"
@@ -6688,6 +6678,7 @@ msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 没有您的可用数据。"
 
 #: apps/io.ox/core/viewer/views/types/defaultview.js:46 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:25
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "抱歉，%s 没有您的可用数据。"
@@ -6795,7 +6786,6 @@ msgid "Status"
 msgstr "状态"
 
 #: apps/io.ox/core/boot/i18n.js:26 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:26 module:io.ox/core/login
 msgid "Stay signed in"
 msgstr "保持登入"
 
@@ -7289,14 +7279,14 @@ msgstr ""
 "系列 <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">永不结束"
 "</a>。"
 
-#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
 #, fuzzy
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
 msgstr[0] "%1$d 次约会后"
 msgstr[1] "%1$d 次约会后"
 
-#: apps/io.ox/calendar/util.js:514 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:528 module:io.ox/calendar
 #, fuzzy
 msgid "The series ends on %1$s"
 msgstr "此文件被 %1$s 锁着"
@@ -7425,7 +7415,6 @@ msgid "This E-mail is unread, press to mark it as read."
 msgstr "此电子邮件未读，单击以标记成已读。"
 
 #: apps/io.ox/core/boot/i18n.js:35 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:35 module:io.ox/core/login
 msgid "This browser is not supported on your current platform."
 msgstr "在您当前平台上不支持此浏览器。"
 
@@ -7436,6 +7425,12 @@ msgstr "此联系人为私人，不能予以分享。"
 #: apps/io.ox/contacts/actions/addToPortal.js:34 module:io.ox/mail
 msgid "This distribution list has been added to the portal"
 msgstr "此通讯组列表已添加到门户"
+
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+msgid ""
+"This document is password protected and cannot be displayed. Please open it "
+"with your local PDF viewer."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:489 module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
@@ -7571,7 +7566,7 @@ msgstr "帖子"
 msgid "Tiles"
 msgstr "方块"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:114 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:119 module:io.ox/core
 msgid "Time"
 msgstr "时间"
 
@@ -7792,8 +7787,7 @@ msgstr "未读：%1$d"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "将会失去未保存的文档，您确定现在要注销？"
 
-#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:45 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:45 module:io.ox/core/boot
 msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
@@ -7870,7 +7864,7 @@ msgstr "紧急"
 msgid "Use SSL connection"
 msgstr "使用 SSL 连接"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:103 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:108 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:115 module:io.ox/calendar
 #: apps/io.ox/search/facets/extensions.js:519
 msgid ""
@@ -7912,7 +7906,7 @@ msgstr "使用分离的用户名称和密码"
 msgid "Use unified mail for this account"
 msgstr "该户口使用统一邮件"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:107 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:112 module:io.ox/core
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr "使用上下键以更改时间，按下 ESC 键以关闭选择。"
@@ -7927,7 +7921,6 @@ msgid "User fields"
 msgstr "用户定义"
 
 #: apps/io.ox/core/boot/i18n.js:23 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:23 module:io.ox/core/login
 #: apps/plugins/administration/groups/settings/edit.js:50 module:io.ox/core
 msgid "User name"
 msgstr "用户名"
@@ -8038,7 +8031,7 @@ msgstr "周视图"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:445 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:459 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "每周的 %1$s"
 
@@ -8117,7 +8110,7 @@ msgstr "年"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:487 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:501 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "每年的 %1$s %2$d"
 
@@ -8125,7 +8118,7 @@ msgstr "每年的 %1$s %2$d"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:513 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "每年 %3$d 月的第 %1$s 个 %2$s"
 
@@ -8279,8 +8272,7 @@ msgstr "您已接受此约会"
 msgid "You have accepted this task"
 msgstr "您已接受此任务"
 
-#: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:44 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 msgid "You have been automatically signed out"
 msgstr "您已被自动注销"
 
@@ -8321,13 +8313,11 @@ msgstr "您喜欢这个"
 
 #. %n in the lowest version of Android
 #: apps/io.ox/core/boot/i18n.js:37 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
 msgid "You need to use Android %n or higher."
 msgstr "您需要使用 Android %n 或更新版本。"
 
 #. %n is the lowest version of iOS
 #: apps/io.ox/core/boot/i18n.js:39 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:39 module:io.ox/core/login
 msgid "You need to use iOS %n or higher."
 msgstr "您需要使用 %n 或更新版本。"
 
@@ -8427,17 +8417,14 @@ msgid "Your browser does not support the video format of this file."
 msgstr "不支持您的浏览器！"
 
 #: apps/io.ox/core/boot/i18n.js:34 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:34 module:io.ox/core/login
 msgid "Your browser is not supported!"
 msgstr "不支持您的浏览器！"
 
 #: apps/io.ox/core/boot/i18n.js:33 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:33 module:io.ox/core/login
 msgid "Your browser version is not supported!"
 msgstr "不支持您的浏览器版本。"
 
-#: apps/io.ox/core/boot/i18n.js:47 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:48 module:io.ox/core/login
+#: apps/io.ox/core/boot/i18n.js:48 module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "您的浏览器停用 cookie 功能，请您启用它。"
 
@@ -8480,7 +8467,6 @@ msgid "Your old password"
 msgstr "您的旧密码"
 
 #: apps/io.ox/core/boot/i18n.js:40 module:io.ox/core/boot
-#: apps/io.ox/core/login-i18n.js:40 module:io.ox/core/login
 msgid "Your operating system is not supported."
 msgstr "不支持您的操作系统！"
 
@@ -8558,7 +8544,7 @@ msgstr[1] "%1$d 次约会后"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:398 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:412 module:io.ox/calendar
 msgid "and"
 msgstr "与"
 
@@ -9057,7 +9043,7 @@ msgid "weekly"
 msgstr "每周"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:383 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:397 module:io.ox/calendar
 msgid "work days"
 msgstr "工作日"
 
