@@ -226,11 +226,13 @@ define('io.ox/core/import/import', [
                         folder: id
                     })
                     .done(function (data) {
-                        //get failed records
+
+                        // get failed records
                         var failed = _.filter(data, function (item) {
                             return item && item.error;
                         });
-                        //cache
+
+                        // cache
                         try {
                             // todo: clean that up; fails for calendar
                             if (baton.api.caches.all.grepRemove) {
@@ -245,13 +247,22 @@ define('io.ox/core/import/import', [
                             if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
                             ox.trigger('refresh^');
                         }
-                        //partially failed?
+
+                        // partially failed?
                         if (failed.length === 0) {
+                            // all good; no failures
                             notifications.yell('success', gt('Data imported successfully'));
+                        } else if (data.length === failed.length) {
+                            // failed
+                            // #. Failure message if no data (e.g. appointments) could be imported
+                            var custom = { error: gt('Failed to import any data') };
+                            failHandler([].concat(custom, failed));
                         } else {
-                            var custom = { error: gt('Data only partially imported ( %1$s of %2$s records)', (data.length - failed.length), data.length) };
+                            // partially failed
+                            var custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
                             failHandler([].concat(custom, failed));
                         }
+
                         popup.close();
                     })
                     .fail(failHandler);
