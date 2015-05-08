@@ -275,7 +275,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         id: 'togglesidebar',
-        action: function () {}
+        action: function (baton) {
+            baton.context.onToggleSidebar();
+        }
     });
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
         id: 'popoutstandalone',
@@ -290,6 +292,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             //    '&folder=' + encodeURIComponent(fileModel.get('folder_id')) +
             //    '&id=' + encodeURIComponent(fileModel.get('folder_id')) + '.' + encodeURIComponent(fileModel.get('id'));
             //window.open(popoutUrl,'_blank');
+            baton.context.onClose();
             ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
@@ -304,7 +307,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             var model = e.baton.model;
             return model.isOffice() || model.isPDF() || model.isText();
         },
-        action: function () {}
+        action: function (baton) {
+            baton.context.onZoomIn();
+        }
     });
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         id: 'zoomout',
@@ -312,7 +317,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             var model = e.baton.model;
             return model.isOffice() || model.isPDF() || model.isText();
         },
-        action: function () {}
+        action: function (baton) {
+            baton.context.onZoomOut();
+        }
     });
 
     new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
@@ -344,12 +351,8 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         events: {
             'click a.viewer-toolbar-close': 'onClose',
-            'click a.viewer-toolbar-popoutstandalone': 'onClose',
-            'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
             'click a.viewer-toolbar-filename': 'onRename',
-            'keydown a.viewer-toolbar-filename': 'onRename',
-            'click a.viewer-toolbar-zoomin': 'onZoomIn',
-            'click a.viewer-toolbar-zoomout': 'onZoomOut'
+            'keydown a.viewer-toolbar-filename': 'onRename'
         },
 
         initialize: function (options) {
@@ -436,6 +439,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
                 isDriveFile = model.isFile(),
                 baton = Ext.Baton({
+                    context: this,
                     $el: toolbar,
                     model: model,
                     models: isDriveFile ? [model] : null,
