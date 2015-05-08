@@ -98,7 +98,6 @@ define('io.ox/participants/model', [
         },
 
         fetch: function () {
-            console.log('fetch', this);
             var self = this, df = new $.Deferred();
 
             function setUser(data) {
