@@ -86,10 +86,10 @@ define('io.ox/participants/views', [
         },
 
         setDisplayName: function () {
-            var name = this.model.getDisplayName();
-            //display name: 'email only' participant
-            name = name === '...' && this.model.getEmail() !== '' ? this.model.getEmail().split('@')[0] : name;
-            util.renderPersonalName({ $el: this.nodes.$text, name: name }, this.model.toJSON());
+            util.renderPersonalName({
+                $el: this.nodes.$text,
+                name: this.model.getDisplayName()
+            }, this.model.toJSON());
         },
 
         setCustomImage: function () {
