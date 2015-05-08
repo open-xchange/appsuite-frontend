@@ -292,7 +292,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             //    '&folder=' + encodeURIComponent(fileModel.get('folder_id')) +
             //    '&id=' + encodeURIComponent(fileModel.get('folder_id')) + '.' + encodeURIComponent(fileModel.get('id'));
             //window.open(popoutUrl,'_blank');
-            baton.context.onClose();
             ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
@@ -351,6 +350,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         events: {
             'click a.viewer-toolbar-close': 'onClose',
+            'click a.viewer-toolbar-popoutstandalone': 'onClose',
             'click a.viewer-toolbar-filename': 'onRename',
             'keydown a.viewer-toolbar-filename': 'onRename'
         },

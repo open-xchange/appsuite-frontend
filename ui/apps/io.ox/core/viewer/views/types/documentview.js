@@ -76,7 +76,9 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         *  Scroll event handler: shows the current page in the caption on scroll.
+         *  Scroll event handler:
+         *  -shows the current page in the caption on scroll.
+         *  -blends in navigation controls.
          */
         onScrollHandler: function () {
             var currentDominantPageIndex = this.currentDominantPageIndex,
@@ -91,6 +93,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
                 this.displayerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
+                this.displayerEvents.trigger('viewer:blendnavigation');
             }
         },
 

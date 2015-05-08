@@ -23,6 +23,7 @@ define('io.ox/core/viewer/views/types/textview', [
             _.extend(this, options);
             this.listenTo(this.displayerEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
+            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
         },
 
         render: function () {
@@ -70,6 +71,14 @@ define('io.ox/core/viewer/views/types/textview', [
 
         onZoomOut: function () {
             this.setFontSize(this.size - 2);
+        },
+
+        /**
+         *  Scroll event handler:
+         *  -blends in navigation controls.
+         */
+        onScrollHandler: function () {
+            this.displayerEvents.trigger('viewer:blendnavigation');
         }
 
     });

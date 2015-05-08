@@ -39,6 +39,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
             this.captionTimeoutId = null;
+            // timeout object for navigation items
+            this.navigationTimeoutId = null;
             // array of all slide content Backbone Views
             this.slideViews = [];
             // array of slide duplicate views
@@ -60,8 +62,11 @@ define('io.ox/core/viewer/views/displayerview', [
             this.listenTo(this.mainEvents, 'viewer:zoomout', this.onZoomOut);
             // listen to blend caption events
             this.listenTo(this.displayerEvents, 'viewer:blendcaption', this.blendCaption);
+            this.listenTo(this.displayerEvents, 'viewer:blendnavigation', this.blendNavigation);
             // listen to delete event propagation from FilesAPI
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
+            // blend in navigation by user activity
+            this.$el.on('mousemove', _.throttle(this.blendNavigation.bind(this), 500));
         },
 
         /**
@@ -143,6 +148,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 // preload selected file and its neighbours initially
                 self.loadSlide(startIndex, 'both');
                 self.blendCaption(gt('%1$d of %2$d', startIndex + 1, self.collection.length));
+                self.blendNavigation();
                 // focus first active slide initially
                 self.focusActiveSlide();
             })
@@ -356,6 +362,30 @@ define('io.ox/core/viewer/views/displayerview', [
                 slideCaption.fadeOut();
             }, duration);
         },
+
+        /**
+         * Blends in navigation elements after user activity events like mouseover.
+         */
+        blendNavigation: (function () {
+            var x,y;
+            return function (event) {
+                // for Chrome's bug: it fires mousemove events without mouse movements
+                if (event) {
+                    if (event.clientX === x && event.clientY === y) {
+                        return;
+                    }
+                    x = event.clientX;
+                    y = event.clientY;
+                }
+                var duration = 3000,
+                    navigationArrows = this.$el.find('.swiper-button-control');
+                window.clearTimeout(this.navigationTimeoutId);
+                navigationArrows.show();
+                this.navigationTimeoutId = window.setTimeout(function () {
+                    navigationArrows.fadeOut();
+                }, duration);
+            };
+        })(),
 
         /**
          * Focuses the swiper's current active slide.
