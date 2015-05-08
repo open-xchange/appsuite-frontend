@@ -430,7 +430,7 @@ define('io.ox/calendar/edit/extensions', [
                 placeholder: gt('Add participant/resource'),
                 label: gt('Add participant/resource'),
                 collection: baton.model.getParticipants(),
-                blacklist: settings.get('participantBlacklist') || 'dream-team@open-xchange.com' // false
+                blacklist: settings.get('participantBlacklist') || false
             });
             this.append(
                 typeahead.$el
