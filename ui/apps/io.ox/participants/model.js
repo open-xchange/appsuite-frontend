@@ -98,7 +98,7 @@ define('io.ox/participants/model', [
         },
 
         fetch: function () {
-
+            console.log('fetch', this);
             var self = this, df = new $.Deferred();
 
             function setUser(data) {
@@ -193,7 +193,7 @@ define('io.ox/participants/model', [
         getDisplayName: function () {
             var dn = util.getMailFullName(this.toJSON());
             //display name: 'email only' participant
-            return dn || this.getEmail() !== '' ? this.getEmail().split('@')[0] : name;
+            return dn || (this.getEmail() !== '' ? this.getEmail().split('@')[0] : name);
         },
 
         getEmail: function () {
