@@ -43,7 +43,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             // high priority links
             'filename': {
                 prio: 'hi',
-                mobile: 'lo',
+                mobile: 'hi',
                 title: gt('File name'),
                 customize: function (baton) {
                     var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
@@ -63,9 +63,10 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'zoomout': {
                 prio: 'hi',
-                mobile: 'hi',
+                mobile: 'lo',
                 icon: 'fa fa-search-minus',
                 ref: TOOLBAR_ACTION_ID + '/zoomout',
+                label: gt('Zoom out'),
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
                         tabindex: '1',
@@ -76,8 +77,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'zoomin': {
                 prio: 'hi',
-                mobile: 'hi',
+                mobile: 'lo',
                 icon: 'fa fa-search-plus',
+                label: gt('Zoom in'),
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({

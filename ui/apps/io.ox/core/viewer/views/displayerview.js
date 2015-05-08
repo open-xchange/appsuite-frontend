@@ -122,11 +122,7 @@ define('io.ox/core/viewer/views/displayerview', [
             nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button', 'aria-label': gt('Next') });
             carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
-
-            // only show next and prev buttons on desktop
-            if (_.device('desktop')) {
-                carouselRoot.append(prevSlide, nextSlide);
-            }
+            carouselRoot.append(prevSlide, nextSlide);
 
             // append carousel to view
             this.$el.append(carouselRoot, caption).attr({ tabindex: -1, role: 'main' });
@@ -411,10 +407,10 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
             if (activeView.pdfDocument) {
                 activeView.pdfDocument.getLoadPromise().done(function () {
-                    activeView.setZoomLevel(lastZoomLevel);
+                    activeView.setZoomLevel(lastZoomLevel || activeView.getDefaultZoomFactor());
                     if (activeDuplicateView) {
                         activeDuplicateView.pdfDocument.getLoadPromise().done(function () {
-                            activeDuplicateView.setZoomLevel(lastZoomLevel);
+                            activeDuplicateView.setZoomLevel(lastZoomLevel || activeView.getDefaultZoomFactor());
                         });
                     }
                     activeSlideEl.scrollTop(lastScrollPosition);
@@ -437,7 +433,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 var scrollPosition = activeSlideView.$el.scrollTop();
                 if (activeSlideView.pdfDocument) {
                     this.documentScrollPositions[previousIndex] = scrollPosition;
-                    this.documentZoomLevels[previousIndex] = activeSlideView.currentZoomFactor;
+                    this.documentZoomLevels[previousIndex] = activeSlideView.getDefaultZoomFactor();
                 }
             }
         },

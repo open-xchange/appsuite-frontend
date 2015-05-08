@@ -18,7 +18,7 @@
 @viewer-toolbar-height: 40px;
 @viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
-@viewer-toolbar-filename-width-smartphone-portrait: 170px;
+@viewer-toolbar-filename-width-smartphone-portrait: 130px;
 @viewer-toolbar-filename-width-smartphone-landscape: 320px;
 @viewer-toolbar-color: #999;
 @viewer-toolbar-hover-bgcolor: #333333;
@@ -302,19 +302,18 @@ html.ios .io-ox-viewer {
         }
 
         .swiper-button-control {
-            color: #777777;
-            background: none;
+            margin-top: -50px;
+            color: rgba(255,255,255, 0.3);
+            background: rgba(0,0,0,0.5);
             outline: none;
             width: 50px;
             height: 50px;
+            border-radius: 2px;
+            text-align: center;
             i {
-                position: absolute;
-                top: 50%;
+                line-height: 50px;
                 font-size: 3rem;
-                transform: translateY(-50%);
             }
-            &.left i { left: 20px; }
-            &.right i { right: 20px; }
             &:hover, &:focus { color: #FFFFFF; }
         }
 

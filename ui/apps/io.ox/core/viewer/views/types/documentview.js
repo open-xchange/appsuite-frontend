@@ -71,6 +71,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
+            // disable slide swiping per default on documents
+            this.$el.addClass('swiper-no-swiping');
         },
 
         /**
@@ -222,7 +224,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadSuccess(pageCount) {
                 // do nothing and quit if a document is already disposed.
-                if (this.disposed) {
+                if (this.disposed || !this.pdfDocument) {
                     return;
                 }
                 // forward 'resolved' errors to error handler
@@ -308,6 +310,15 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return 1;
             }
             return PDFView.round(maxWidth / pageDefaultWidth, 1 / 100);
+        },
+
+        /**
+         * Returns default zoom factor of this document, after it's initially displayed
+         * in the viewport.
+         * @returns {Number} zoom factor
+         */
+        getDefaultZoomFactor: function () {
+            return this.getDefaultScale() * 100;
         },
 
         /**
