@@ -97,9 +97,8 @@ define('io.ox/core/api/autocomplete', [
                         var retData = [], data = _(arguments).toArray();
 
                         _(self.apis).each(function (module, index) {
-                            var type = module.type,
-                                items = _(data[index]).map(function (data) {
-                                    return { data: data, type: type };
+                            var items = _(data[index]).map(function (data) {
+                                    return { data: data, type: module.type };
                                 });
                             switch (module.type) {
                             case 'custom':
