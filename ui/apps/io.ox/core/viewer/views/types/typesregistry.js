@@ -56,6 +56,9 @@ define('io.ox/core/viewer/views/types/typesregistry', [
                 modelType = 'defaultview';
             }
 
+            // special check for nested messages
+            if (model.isMailAttachment() && model.get('file_mimetype') === 'message/rfc822') modelType = 'mailview';
+
             return require(['io.ox/core/viewer/views/types/' + modelType]).then(
                 function (Type) {
                     return $.Deferred().resolve(Type);

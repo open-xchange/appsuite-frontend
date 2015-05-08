@@ -27,7 +27,7 @@ define('io.ox/core/viewer/views/types/baseview', [
 
         // create slide root node
         // <div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">
-        className: 'swiper-slide',
+        className: 'swiper-slide scrollable',
         attributes: { tabindex: -1, role: 'option', 'aria-selected': 'false' },
 
         /**

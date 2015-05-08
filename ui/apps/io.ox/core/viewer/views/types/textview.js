@@ -39,7 +39,7 @@ define('io.ox/core/viewer/views/types/textview', [
             var $el = this.$el.busy(),
                 previewUrl = this.getPreviewUrl();
             $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
-                $el.idle().append($('<div class="plain-text-page">').text(text));
+                $el.idle().append($('<div class="white-page letter plain-text">').text(text));
                 $el = null;
             });
             return this;
@@ -56,13 +56,13 @@ define('io.ox/core/viewer/views/types/textview', [
          *  the TextView instance.
          */
         unload: function () {
-            this.$el.find('.plain-text-page').remove();
+            this.$el.find('.white-page').remove();
             return this;
         },
 
         setFontSize: function (value) {
             this.size = Math.min(Math.max(value, 9), 21);
-            this.$('.plain-text-page').css('fontSize', this.size);
+            this.$('.white-page').css('fontSize', this.size);
         },
 
         onZoomIn: function () {

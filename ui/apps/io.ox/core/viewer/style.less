@@ -199,7 +199,6 @@ html.ios .io-ox-viewer {
                 -ms-flex-align: center;
                 -webkit-align-items: center;
                 align-items: center;
-                overflow: auto;
                 outline: none;
             }
             .io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
@@ -267,17 +266,24 @@ html.ios .io-ox-viewer {
             }
         }
 
-        .plain-text-page {
+        .white-page {
             color: #333;
             background-color: #fff;
-            font: 13px/1.23077em monospace;
-            white-space: pre-wrap;
             width: 100%;
             max-width: 21cm;
-            padding: 77px 3cm;
+            padding: 16px;
             margin: 32px auto;
             min-height: 90%;
             .user-select(text);
+        }
+
+        .letter {
+            padding: 77px 3cm;
+        }
+
+        .plain-text {
+            font: 13px/1.23077em monospace;
+            white-space: pre-wrap;
         }
 
         .viewer-displayer-caption {
