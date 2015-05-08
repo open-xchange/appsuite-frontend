@@ -34,7 +34,9 @@ define([
             return waitsFor(function () {
                 return popup.find('.notification-placeholder,.no-news-message').length > 0;
             }).then(function () {
-                expect(popup.find('.notification-placeholder,.no-news-message').length).to.equal(1);
+                //there is a placeholder for each collection
+                //may be force a fixed number of collections, that are rendered, but this check is okay for now
+                expect(popup.find('.notification-placeholder,.no-news-message').length).to.be.above(1);
                 //nothing else should be there
                 expect(popup.find('.notification-placeholder,.no-news-message').length).to.equal(popup.children().length);
             });
