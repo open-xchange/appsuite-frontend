@@ -141,8 +141,8 @@ msgstr[1] ""
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:149 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:391
+#: apps/io.ox/core/viewer/views/displayerview.js:150 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:417
 msgid "%1$d of %2$d"
 msgstr ""
 
@@ -1623,8 +1623,8 @@ msgstr "Зураг аплод хийхийн тулд дарна уу"
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/permissions/permissions.js:477
-#: apps/io.ox/core/viewer/views/toolbarview.js:127
-#: apps/io.ox/core/viewer/views/toolbarview.js:128
+#: apps/io.ox/core/viewer/views/toolbarview.js:129
+#: apps/io.ox/core/viewer/views/toolbarview.js:130
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:50 module:io.ox/files
@@ -2025,12 +2025,12 @@ msgstr ""
 msgid "Dark colors"
 msgstr ""
 
-#: apps/io.ox/core/import/import.js:250 module:io.ox/core
+#: apps/io.ox/core/import/import.js:254 module:io.ox/core
 msgid "Data imported successfully"
 msgstr ""
 
-#: apps/io.ox/core/import/import.js:252 module:io.ox/core
-msgid "Data only partially imported ( %1$s of %2$s records)"
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:63 module:io.ox/core
@@ -2127,7 +2127,7 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:189 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:189
+#: apps/io.ox/core/viewer/views/toolbarview.js:191
 #: apps/io.ox/files/actions.js:514 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2496,9 +2496,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:154
-#: apps/io.ox/core/viewer/views/toolbarview.js:204
-#: apps/io.ox/core/viewer/views/toolbarview.js:231
+#: apps/io.ox/core/viewer/views/toolbarview.js:156
+#: apps/io.ox/core/viewer/views/toolbarview.js:206
+#: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
 #: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2690,7 +2690,7 @@ msgstr "Уулзалтыг засварлах"
 msgid "Edit contact"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:147 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:149 module:io.ox/core
 #: apps/io.ox/files/actions.js:575 module:io.ox/files
 msgid "Edit description"
 msgstr ""
@@ -3082,6 +3082,11 @@ msgstr ""
 #: apps/io.ox/mail/accounts/settings.js:216
 #: module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
+msgstr ""
+
+#. Failure message if no data (e.g. appointments) could be imported
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+msgid "Failed to import any data"
 msgstr ""
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:53 module:io.ox/keychain
@@ -4625,7 +4630,7 @@ msgstr ""
 msgid "New task reminders"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:127 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4922,8 +4927,8 @@ msgstr ""
 msgid "Open in browser"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:198 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:225
+#: apps/io.ox/core/viewer/views/toolbarview.js:200 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:227
 msgid "Open in browser tab"
 msgstr ""
 
@@ -5080,7 +5085,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:89 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr ""
 
@@ -5404,8 +5409,8 @@ msgstr "Хөтөчийн хувилбараа дээшлүүлнэ үү."
 msgid "Plus"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:113 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:114
+#: apps/io.ox/core/viewer/views/toolbarview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:116
 msgid "Pop out standalone viewer"
 msgstr ""
 
@@ -5484,7 +5489,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:121 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:126 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr ""
@@ -5845,7 +5850,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:140
+#: apps/io.ox/core/viewer/views/toolbarview.js:142
 #: apps/io.ox/files/actions.js:565 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6022,8 +6027,8 @@ msgid "Save attachment"
 msgstr ""
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:210
-#: apps/io.ox/core/viewer/views/toolbarview.js:237
+#: apps/io.ox/core/viewer/views/toolbarview.js:212
+#: apps/io.ox/core/viewer/views/toolbarview.js:239
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr ""
@@ -6161,7 +6166,7 @@ msgstr ""
 msgid "Send as internal link"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:217 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:219 module:io.ox/core
 msgid "Send as mail"
 msgstr ""
 
@@ -6171,7 +6176,7 @@ msgstr ""
 msgid "Send as vCard"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:175 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:177 module:io.ox/core
 #: apps/io.ox/files/actions.js:525 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:124
 msgid "Send by mail"
@@ -6271,7 +6276,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:168 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:170 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:79 apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -7641,7 +7646,7 @@ msgid "Upload"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:96
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:182
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:184
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:63
 #: module:io.ox/files
 #, fuzzy
@@ -7703,7 +7708,7 @@ msgstr ""
 msgid "Use fixed-width font for text mails"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:123 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:128 module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
@@ -7790,8 +7795,8 @@ msgstr ""
 msgid "View attachment"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:99 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:100
+#: apps/io.ox/core/viewer/views/toolbarview.js:101 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:102
 msgid "View details"
 msgstr ""
 
@@ -7801,7 +7806,7 @@ msgstr ""
 msgid "View source"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:434 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:439 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -8322,13 +8327,15 @@ msgstr ""
 msgid "ZB"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:85 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
+#: apps/io.ox/core/viewer/views/toolbarview.js:82 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:87
+#: apps/io.ox/core/viewer/views/toolbarview.js:88
 msgid "Zoom in"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:72 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:69 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:73
+#: apps/io.ox/core/viewer/views/toolbarview.js:74
 msgid "Zoom out"
 msgstr ""
 

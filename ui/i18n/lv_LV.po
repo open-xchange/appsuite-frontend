@@ -159,8 +159,8 @@ msgstr[2] "%1$d minūtes"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:149 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:391
+#: apps/io.ox/core/viewer/views/displayerview.js:150 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:417
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s no %2$s"
@@ -1697,8 +1697,8 @@ msgstr "Noklikšķiniet, lai ielādētu attēlu"
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/permissions/permissions.js:477
-#: apps/io.ox/core/viewer/views/toolbarview.js:127
-#: apps/io.ox/core/viewer/views/toolbarview.js:128
+#: apps/io.ox/core/viewer/views/toolbarview.js:129
+#: apps/io.ox/core/viewer/views/toolbarview.js:130
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:50 module:io.ox/files
@@ -2103,12 +2103,14 @@ msgstr "Pielāgot šo lapu"
 msgid "Dark colors"
 msgstr "Tumšas krāsas"
 
-#: apps/io.ox/core/import/import.js:250 module:io.ox/core
+#: apps/io.ox/core/import/import.js:254 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Dati ir veiksmīgi importēti"
 
-#: apps/io.ox/core/import/import.js:252 module:io.ox/core
-msgid "Data only partially imported ( %1$s of %2$s records)"
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+#, fuzzy
+#| msgid "Data only partially imported ( %1$s of %2$s records)"
+msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Dati ir tikai daļēji importēti ( %1$s no %2$s ierakstiem)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:63 module:io.ox/core
@@ -2206,7 +2208,7 @@ msgstr "Atlikts"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:189 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:189
+#: apps/io.ox/core/viewer/views/toolbarview.js:191
 #: apps/io.ox/files/actions.js:514 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2588,9 +2590,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "Dubultklišķis rindā, lai izveidotu visas dienas tikšanos"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:154
-#: apps/io.ox/core/viewer/views/toolbarview.js:204
-#: apps/io.ox/core/viewer/views/toolbarview.js:231
+#: apps/io.ox/core/viewer/views/toolbarview.js:156
+#: apps/io.ox/core/viewer/views/toolbarview.js:206
+#: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
 #: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
@@ -2788,7 +2790,7 @@ msgstr "Rediģēt tikšanos"
 msgid "Edit contact"
 msgstr "Rediģēt kontaktpersonu"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:147 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:149 module:io.ox/core
 #: apps/io.ox/files/actions.js:575 module:io.ox/files
 msgid "Edit description"
 msgstr "Rediģēt apsrakstu"
@@ -3192,6 +3194,13 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
 msgstr "Kļūda pieslēdzoties."
+
+#. Failure message if no data (e.g. appointments) could be imported
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+#, fuzzy
+#| msgid "Failed to recover accounts"
+msgid "Failed to import any data"
+msgstr "Kļūda pie kontu atkopšanas"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:53 module:io.ox/keychain
 msgid "Failed to recover accounts"
@@ -4802,7 +4811,7 @@ msgstr "Uzdevumu atgādinājumi"
 msgid "New task reminders"
 msgstr "Uzdevumu atgādinājumi"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:122 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:127 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -5115,8 +5124,8 @@ msgstr "Atvērt mapes skatu"
 msgid "Open in browser"
 msgstr "Atvērt pārlūkā"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:198 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:225
+#: apps/io.ox/core/viewer/views/toolbarview.js:200 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:227
 #, fuzzy
 msgid "Open in browser tab"
 msgstr "Atvērt pārlūkā"
@@ -5274,7 +5283,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:89 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Lapa %1$d no %2$d"
 
@@ -5606,8 +5615,8 @@ msgstr "Lūdzu jauniniet savu pārlūkprogrammu."
 msgid "Plus"
 msgstr "Plus"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:113 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:114
+#: apps/io.ox/core/viewer/views/toolbarview.js:115 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:116
 msgid "Pop out standalone viewer"
 msgstr ""
 
@@ -5687,7 +5696,7 @@ msgstr "Lai atvērtu, piespiediet [enter]"
 msgid "Preview"
 msgstr "Apskats"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:121 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:126 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Iepriekšējais"
@@ -6058,7 +6067,7 @@ msgstr "Noņemt dalībnieku"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:140
+#: apps/io.ox/core/viewer/views/toolbarview.js:142
 #: apps/io.ox/files/actions.js:565 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6235,8 +6244,8 @@ msgid "Save attachment"
 msgstr "Saglabāt pievienojumu"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:210
-#: apps/io.ox/core/viewer/views/toolbarview.js:237
+#: apps/io.ox/core/viewer/views/toolbarview.js:212
+#: apps/io.ox/core/viewer/views/toolbarview.js:239
 #: apps/io.ox/mail/actions.js:745 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Saglabāt diskā Drive"
@@ -6384,7 +6393,7 @@ msgstr "Nosūtīt lasīšanas apstiprinājumu"
 msgid "Send as internal link"
 msgstr "Sūtīt kā iekšēju saiti"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:217 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:219 module:io.ox/core
 msgid "Send as mail"
 msgstr "Sūtīt kā e-pastu"
 
@@ -6394,7 +6403,7 @@ msgstr "Sūtīt kā e-pastu"
 msgid "Send as vCard"
 msgstr "Sūtīt kā vCard"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:175 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:177 module:io.ox/core
 #: apps/io.ox/files/actions.js:525 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:124
 msgid "Send by mail"
@@ -6494,7 +6503,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Iestatījumi"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:168 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:170 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:79 apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -7976,7 +7985,7 @@ msgid "Upload"
 msgstr "Ielādēt"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:96
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:182
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:184
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:63
 #: module:io.ox/files
 msgid "Upload a new version"
@@ -8045,7 +8054,7 @@ msgstr "Lietotāja vārds"
 msgid "Use fixed-width font for text mails"
 msgstr "Lietot fiksēta garuma fontu teksta formāta vēstulēs"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:123 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:128 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8135,8 +8144,8 @@ msgstr ""
 msgid "View attachment"
 msgstr "Skatīt visus pievienojumus"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:99 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:100
+#: apps/io.ox/core/viewer/views/toolbarview.js:101 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:102
 #, fuzzy
 msgid "View details"
 msgstr "Paslēpt detaļas"
@@ -8147,7 +8156,7 @@ msgstr "Paslēpt detaļas"
 msgid "View source"
 msgstr "Skatīt avotu"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:434 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:439 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Redaktora rīkjosla"
@@ -8704,13 +8713,15 @@ msgstr "Jūsu laika zona"
 msgid "ZB"
 msgstr "ZB"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:85 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:86
+#: apps/io.ox/core/viewer/views/toolbarview.js:82 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:87
+#: apps/io.ox/core/viewer/views/toolbarview.js:88
 msgid "Zoom in"
 msgstr "Palielināt"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:72 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:69 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:73
+#: apps/io.ox/core/viewer/views/toolbarview.js:74
 msgid "Zoom out"
 msgstr "Samazināt"
 
