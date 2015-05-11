@@ -55,7 +55,7 @@ define([
                 expect(this.node.find('li')).to.have.length(5);
             });
             it('not draw year if its year 1', function () {
-                expect($(this.node.find('.accent')[4]).text()).to.equal('Jun. 12');
+                expect($(this.node.find('.accent')[4]).text()).to.equal('12.6.');
             });
             it('recognize yesterday/today/tomorrow', function () {
                 expect($(this.node.find('.accent')[0]).text()).to.equal('Gestern');
