@@ -94,7 +94,11 @@ define('io.ox/core/import/import', [
         draw: function (baton) {
             var label = $('<span class="filename">');
             this.append(
-                baton.nodes.file_upload = attachments.fileUploadWidget({ tabindex: 0, multi: false }).append(label)
+                baton.nodes.file_upload = attachments.fileUploadWidget({
+                    tabindex: 0,
+                    multi: false,
+                    buttontext: gt('Upload file')
+                }).append(label)
             );
             var $input = baton.nodes.file_upload.find('input[type="file"]');
             $input.on('change', function (e) {
