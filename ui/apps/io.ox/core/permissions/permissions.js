@@ -460,7 +460,6 @@ define('io.ox/core/permissions/permissions',
                     }
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
-                        console.log('oder hier?');
                         if (isFolderAdmin) {
                             api.update(folder_id, { permissions: collection.toJSON() }).then(function success () {
                                 dialog.close();
