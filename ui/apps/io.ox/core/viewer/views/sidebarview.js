@@ -48,10 +48,11 @@ define('io.ox/core/viewer/views/sidebarview', [
         opened: false,
 
         initialize: function (options) {
-            _.extend(this, options);
+            _.extend(this, {
+                mainEvents: options.mainEvents || _.extend({}, Backbone.Events)
+            });
             this.model = null;
             this.zone = null;
-
             // listen to slide change and set fresh model
             this.listenTo(this.mainEvents, 'viewer:displayeditem:change', this.setModel);
 
