@@ -32,11 +32,11 @@ define('io.ox/core/tk/iframe', [
 
             app.setWindow(win);
 
-            win.addClass(o.class);
+            win.addClass(o.cssNamespace);
 
             win.setTitle(o.pageTitle);
 
-            http.GET({
+            return http.GET({
                 module: 'token',
                 params: {
                     action: 'acquireToken'
@@ -69,7 +69,6 @@ define('io.ox/core/tk/iframe', [
             }
 
             win.show();
-
         }
 
         return {
