@@ -4050,25 +4050,25 @@ msgstr "Sprachenabhängiger Standard"
 msgid "Languages"
 msgstr "Sprachen"
 
-#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
-#, fuzzy
+#: apps/io.ox/find/date/patterns.js:223 module:io.ox/find
 msgid "Last 30 days"
-msgstr "Letzten 30 Tage"
+msgstr "letzten 30 Tage"
 
-#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
-#, fuzzy
+#: apps/io.ox/find/date/patterns.js:227 module:io.ox/find
 msgid "Last 365 days"
-msgstr "Letzten 365 Tage"
+msgstr "letzten 365 Tage"
 
-#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
-#, fuzzy
+#: apps/io.ox/find/date/patterns.js:219 module:io.ox/find
 msgid "Last 7 days"
-msgstr "Letzten 7 Tage"
+msgstr "letzten 7 Tage"
 
-#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
-#, fuzzy
+#: apps/io.ox/find/date/patterns.js:203 module:io.ox/find
+msgid "Last day"
+msgstr "letzten 7 Tage"
+
+#: apps/io.ox/find/date/patterns.js:211 module:io.ox/find
 msgid "Last month"
-msgstr "Letzter Monat"
+msgstr "letzten Monat"
 
 #: apps/io.ox/contacts/model.js:191 module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
@@ -4080,14 +4080,11 @@ msgstr "Nachname"
 msgid "Last name, First name"
 msgstr "Nachname, Vorname"
 
-#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
-#, fuzzy
-#| msgid "Last Week"
+#: apps/io.ox/find/date/patterns.js:207 module:io.ox/find
 msgid "Last week"
 msgstr "Letzte Woche"
 
-#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
-#, fuzzy
+#: apps/io.ox/find/date/patterns.js:215 module:io.ox/find
 msgid "Last year"
 msgstr "Letztes Jahr"
 
@@ -5651,6 +5648,18 @@ msgstr "Vorheriger Tag"
 #: apps/io.ox/calendar/week/view.js:806 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Letzte Woche"
+
+#: apps/io.ox/find/date/patterns.js:211 module:io.ox/find
+msgid "Previous month"
+msgstr "Letzter Monat"
+
+#: apps/io.ox/find/date/patterns.js:207 module:io.ox/find
+msgid "Previous week"
+msgstr "Letzte Woche"
+
+#: apps/io.ox/find/date/patterns.js:215 module:io.ox/find
+msgid "Previous year"
+msgstr "Vorherigers Jahr"
 
 #: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
@@ -7693,7 +7702,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/date/lookup.js:80
+#: apps/io.ox/find/date/patterns.js:199 module:io.ox/find
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
@@ -8078,7 +8087,7 @@ msgstr "Details anzeigen"
 msgid "View source"
 msgstr "Quelldaten anzeigen"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:439 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr "Viewer-Werkzeugleiste"
 
@@ -8242,9 +8251,10 @@ msgid "Yes, with empty attachment"
 msgstr "Ja, mit leerer Anlage"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/date/lookup.js:84 module:io.ox/core
-#: apps/io.ox/mail/util.js:61 apps/plugins/portal/birthdays/register.js:93
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/patterns.js:203 module:io.ox/find
+#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "Gestern"
 
@@ -8662,13 +8672,10 @@ msgid "and %1$d others"
 msgstr "und %1$d weitere"
 
 #: apps/io.ox/find/extensions-api.js:54 module:io.ox/core
-#, fuzzy
 msgid "as date"
 msgstr "als Datum"
 
-#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:131
-#, fuzzy
+#: module:io.ox/find apps/io.ox/find/date/patterns.js:130
 msgid "as daterange"
 msgstr "als Zeitraum"
 
@@ -12150,9 +12157,6 @@ msgstr "JJJJ"
 
 #~ msgid "pop3"
 #~ msgstr "POP3"
-
-#~ msgid "previous week"
-#~ msgstr "letzte Woche"
 
 #~ msgid "private"
 #~ msgstr "Privat"
