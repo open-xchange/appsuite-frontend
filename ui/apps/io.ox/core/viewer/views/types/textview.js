@@ -39,6 +39,7 @@ define('io.ox/core/viewer/views/types/textview', [
             var $el = this.$el.busy(),
                 previewUrl = this.getPreviewUrl();
             $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
+                $el.addClass('swiper-no-swiping');
                 $el.idle().append($('<div class="white-page letter plain-text">').text(text));
                 $el = null;
             });
