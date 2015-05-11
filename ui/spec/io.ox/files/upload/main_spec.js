@@ -20,7 +20,7 @@ define([
 
     describe('upload api', function () {
         it('has no inital estimation time', function () {
-            expect(upload.getEstimatedTime()).to.equal(gt('%1$s seconds', 0));
+            expect(upload.getEstimatedTime()).to.equal('0 Sekunden');
         });
 
         describe('time estimation', function () {
@@ -58,7 +58,7 @@ define([
                 upload.stop();
             });
             it('calculates nothing without progress', function () {
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s seconds', 0));
+                expect(upload.getEstimatedTime()).to.equal('0 Sekunden');
             });
             it('returns pending deffered object', function () {
                 var request = upload.progress(file, 0, [file]);
@@ -72,7 +72,7 @@ define([
                 clock.tick(1000);
                 uploadProgress({ loaded: 1, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s weeks', 2));
+                expect(upload.getEstimatedTime()).to.equal('2 Wochen');
             });
             it('calculates 1 week', function () {
                 upload.progress(file, 0, [file]);
@@ -80,7 +80,7 @@ define([
                 clock.tick(800);
                 uploadProgress({ loaded: 1, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s week', 1));
+                expect(upload.getEstimatedTime()).to.equal('1 Woche');
             });
             it('calculates days', function () {
                 upload.progress(file, 0, [file]);
@@ -88,7 +88,7 @@ define([
                 clock.tick(1100);
                 uploadProgress({ loaded: 2, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s days', 6));
+                expect(upload.getEstimatedTime()).to.equal('6 Tage');
             });
             it('calculates 1 day', function () {
                 upload.progress(file, 0, [file]);
@@ -96,7 +96,7 @@ define([
                 clock.tick(450);
                 uploadProgress({ loaded: 5, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s day', 1));
+                expect(upload.getEstimatedTime()).to.equal('1 Tag');
             });
             it('calculates hours', function () {
                 upload.progress(file, 0, [file]);
@@ -104,7 +104,7 @@ define([
                 clock.tick(450);
                 uploadProgress({ loaded: 20, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s hours', 6));
+                expect(upload.getEstimatedTime()).to.equal('6 Stunden');
             });
             it('calculates 1 hour', function () {
                 upload.progress(file, 0, [file]);
@@ -112,7 +112,7 @@ define([
                 clock.tick(120);
                 uploadProgress({ loaded: 30, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s hour', 1));
+                expect(upload.getEstimatedTime()).to.equal('1 Stunde');
             });
             it('calculates minutes', function () {
                 upload.progress(file, 0, [file]);
@@ -120,7 +120,7 @@ define([
                 clock.tick(100);
                 uploadProgress({ loaded: 83, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s minutes', 20));
+                expect(upload.getEstimatedTime()).to.equal('20 Minuten');
             });
             it('calculates 1 minute', function () {
                 upload.progress(file, 0, [file]);
@@ -128,7 +128,7 @@ define([
                 clock.tick(25);
                 uploadProgress({ loaded: 350, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s minute', 1));
+                expect(upload.getEstimatedTime()).to.equal('1 Minute');
             });
             it('calculates seconds', function () {
                 upload.progress(file, 0, [file]);
@@ -136,7 +136,7 @@ define([
                 clock.tick(20);
                 uploadProgress({ loaded: 350, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s seconds', 57));
+                expect(upload.getEstimatedTime()).to.equal('57 Sekunden');
             });
             it('calculates 1 second', function () {
                 upload.progress(file, 0, [file]);
@@ -144,7 +144,7 @@ define([
                 clock.tick(1);
                 uploadProgress({ loaded: 1000, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s second', 1));
+                expect(upload.getEstimatedTime()).to.equal('1 Sekunde');
             });
             it('calculates progress', function () {
                 upload.progress(file, 0, [file]);
@@ -152,12 +152,12 @@ define([
                 clock.tick(20);
                 uploadProgress({ loaded: 350, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s seconds', 57));
+                expect(upload.getEstimatedTime()).to.equal('57 Sekunden');
 
                 clock.tick(28000);
                 uploadProgress({ loaded: 500000, total: 1000000 });
 
-                expect(upload.getEstimatedTime()).to.equal(gt('%1$s seconds', 28));
+                expect(upload.getEstimatedTime()).to.equal('28 Sekunden');
             });
         });
     });
