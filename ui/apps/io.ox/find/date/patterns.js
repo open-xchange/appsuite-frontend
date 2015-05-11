@@ -16,7 +16,7 @@ define('io.ox/find/date/patterns',[
     'gettext!io.ox/find'
 ], function (ext, gt) {
 
-    'use strgrunt deict';
+    'use strict';
 
     var POINT = ext.point('io.ox/find/date/patterns'),
         index = 0,
@@ -24,9 +24,9 @@ define('io.ox/find/date/patterns',[
             fulldate: '((\\d{1,2})[/.-](\\d){1,2}[/.-](\\d{4})|(\\d{4})[/.-](\\d){1,2}[/.-](\\d{1,2}))',
             connector: '(\\s)?(' + ['-', '\\.\\.', 'to', 'bis', 'à', 'au', 'a'].join('|') + ')(\\s)?'
         },
-        reFulldate = RegExp('^' + exp.fulldate + '$'),
-        reParts = RegExp(exp.fulldate, 'g'),
-        reRange = RegExp('^' + exp.fulldate + exp.connector + exp.fulldate + '$');
+        reFulldate = new RegExp('^' + exp.fulldate + '$'),
+        reParts = new RegExp(exp.fulldate, 'g'),
+        reRange = new RegExp('^' + exp.fulldate + exp.connector + exp.fulldate + '$');
 
     // 2014 | April 2014 | Yesterday | Last week ...
     POINT.extend({
