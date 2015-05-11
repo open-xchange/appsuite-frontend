@@ -20,7 +20,13 @@ define('io.ox/find/date/patterns',[
 
     var POINT = ext.point('io.ox/find/date/patterns'),
         index = 0,
-        rangeconnector = '(' + ['-', '\\.\\.', 'to', 'bis', 'à', 'au', 'a'].join('|') + ')';
+        exp = {
+            fulldate: '((\\d{1,2})[/.-](\\d){1,2}[/.-](\\d{4})|(\\d{4})[/.-](\\d){1,2}[/.-](\\d{1,2}))',
+            connector: '(\\s)?(' + ['-', '\\.\\.', 'to', 'bis', 'à', 'au', 'a'].join('|') + ')(\\s)?'
+        },
+        reFulldate = RegExp('^' + exp.fulldate + '$'),
+        reParts = RegExp(exp.fulldate, 'g'),
+        reRange = RegExp('^' + exp.fulldate + exp.connector + exp.fulldate + '$');
 
     // 2014 | April 2014 | Yesterday | Last week ...
     POINT.extend({
@@ -29,36 +35,27 @@ define('io.ox/find/date/patterns',[
         match: function (baton) {
             var value = baton.data.value,
                 free = baton.options.limit - baton.data.matched.length;
-
             if (free <= 0) return;
-
+            // add
             baton.data.matched = baton.data.matched.concat(
                 lookup(value).slice(0, free)
             );
         }
     });
 
-    // 10.04. | 10.04.2014 | 10/04/ | 10/04/2014 | 2014-04-10
+    // 04.04.2014
     POINT.extend({
         index: index += 100,
         id: 'format-full-date',
-        regex: /^([MoDoY]{1,4}[/.][MoDoY]{1,4}[/.][MoDoY]{0,4}|(YY){1,2}-[Mo]{1,2}[-][Do]{1,2})$/,
+        regex: reFulldate,
         match: function (baton) {
             var self = baton.extension,
-                format = baton.data.format,
-                value = baton.data.value;
+                value = baton.data.value, base;
 
             if (baton.options.limit === baton.data.matched.length) return;
-
-            if (!self.regex.test(format)) return;
-
-            // add year?
-            if (/^[MoDo]{1,2}[/.][MoDo]{1,2}[/.]$/.test(format)) {
-                value = value + moment().year();
-                format = moment.parseFormat(value);
-            }
-
-            var base = moment(value, format);
+            if (!self.regex.test(value)) return;
+            // add
+            base = moment(value, getFormat(value));
             baton.data.matched.push({
                 id: self.id,
                 start: base.clone(),
@@ -67,72 +64,64 @@ define('io.ox/find/date/patterns',[
         }
     });
 
-    // 04.04.2014 - 10.04.2014 | 04/04/2014 - 10/04/2014
+    // 04.04.2014 - 10.04.2014
     POINT.extend({
         index: index += 100,
         id: 'range',
-        regex: new RegExp('^((\\d){1,2}(\\/|\\.)(\\d){1,2}(\\/|\\.)(\\d\\d){1,2})(\\s?)' + rangeconnector + '(\\s?)((\\d){1,2}(\\/|\\.)(\\d){1,2}(\\/|\\.)(\\d\\d){1,2})$'),
+        regex: reRange,
         match: function (baton) {
             var self = baton.extension,
-                value = baton.data.value;
+                value = baton.data.value,
+                parts, list, left, right, autofix;
 
             if (baton.options.limit === baton.data.matched.length) return;
 
             // check for range separator and rougly for date format
             if (!self.regex.test(value)) return;
 
-            // extract stard/end
-            var parts = value.match(/(\d{1,2}[\/\.]\d{1,2}[\/\.](\d\d){1,2})/g);
-            if (parts.length !== 2) return;
-
-            var list = _.map(parts, function (part) {
-                    return {
-                        value: part,
-                        format: moment.parseFormat(part)
-                    };
-                });
+            // split and get formats
+            parts = value.match(reParts).slice(0,2);
+            list = _.map(parts, function (part) {
+                return {
+                    value: part,
+                    format: getFormat(part)
+                };
+            });
+            // autofix
+            left = moment(list[0].value, list[0].format);
+            right = moment(list[1].value, list[1].format);
+            autofix = left.diff(right, 'days') > 0;
+            // add
             baton.data.matched.push({
                 id: self.id,
                 detail: gt('as daterange'),
-                start: moment(list[0].value, list[0].format),
-                end:  moment(list[1].value, list[1].format)
+                start: autofix ? right : left,
+                end: autofix ? left : right
             });
         }
     });
 
-    // 2014-04-04 to 2014-04-10
-    POINT.extend({
-        index: index += 100,
-        id: 'range-hyphen',
-        regex: new RegExp('^((\\d\\d){1,2}(-)(\\d){1,2}(-)(\\d){1,2})(\\s?)' + rangeconnector + '(\\s?)((\\d\\d){1,2}(-)(\\d){1,2}(-)(\\d){1,2})$'),
-        match: function (baton) {
-            var self = baton.extension,
-                value = baton.data.value;
-
-            if (baton.options.limit === baton.data.matched.length) return;
-
-            // check for range separator and rougly for date format
-            if (!self.regex.test(value)) return;
-
-            // extract stard/end
-            var parts = value.match(/((\d\d){1,2}[-]\d{1,2}[-](\d){1,2})/g);
-            if (parts.length !== 2) return;
-
-            var list = _.map(parts, function (part) {
-                    return {
-                        value: part,
-                        format: moment.parseFormat(part)
-                    };
-                });
-
-            baton.data.matched.push({
-                id: self.id,
-                detail: gt('as daterange'),
-                start: moment(list[0].value, list[0].format),
-                end:  moment(list[1].value, list[1].format)
-            });
-        }
-    });
+    var getFormat = (function () {
+        var regexEndian = /(\d{1,4})([\/\.\-])(\d{1,2})[\/\.\-](\d{1,4})/,
+            replaceEndian = function (matchedPart, first, separator, second, third) {
+            var hasYearSuffix = first.length < third.length,
+                parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];
+            // special case: MM/DD/YYYY
+            if (separator === '/' && hasYearSuffix) {
+                parts[0] = first.replace(/./g, 'M');
+                parts[1] = second.replace(/./g, 'D');
+            }
+            // month: always in the middle
+            parts[1] = parts[1] || second.replace(/./g, 'M');
+            // day: fill up last undefined part
+            parts[0] = parts[0] || first.replace(/./g, 'D');
+            parts[2] = parts[2] || third.replace(/./g, 'D');
+            return parts.join(separator);
+        };
+        return function (value) {
+            return value.replace(regexEndian, replaceEndian);
+        };
+    })();
 
     // generated list of fixed values
     var lookup = (function () {
@@ -254,11 +243,10 @@ define('io.ox/find/date/patterns',[
         lookup: lookup,
         getMatches: function (value, options) {
 
-            value = (value || '').toLowerCase();
+            value = String(value || '').toLowerCase();
 
-            var format = moment.parseFormat(value),
-                opt = _.extend({ limit: 3 }, options || {}),
-                baton = ext.Baton.ensure({ data: { matched: [], value: value, format: format }, options: opt });
+            var opt = _.extend({ limit: 3 }, options || {}),
+                baton = ext.Baton.ensure({ data: { matched: [], value: value }, options: opt });
 
             // possible matches add data to baton
             ext.point('io.ox/find/date/patterns').invoke('match', this, baton);
