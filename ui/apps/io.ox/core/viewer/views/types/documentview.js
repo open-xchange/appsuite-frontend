@@ -71,8 +71,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
-            // disable slide swiping per default on documents
-            this.$el.addClass('swiper-no-swiping');
         },
 
         /**
@@ -261,6 +259,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 };
 
                 this.pdfView.setRenderCallbacks(renderCallbacks);
+                // disable slide swiping per default on documents
+                this.$el.addClass('swiper-no-swiping');
             }
 
             /**
