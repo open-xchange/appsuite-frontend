@@ -651,7 +651,6 @@ define('io.ox/mail/main', [
         'selection-mobile': function (app) {
 
             if (!_.device('smartphone')) return;
-
             app.listView.on({
                 'selection:empty': function () {
                     if (app.props.get('checkboxes')) app.showMultiple(false);
@@ -666,7 +665,7 @@ define('io.ox/mail/main', [
 
                     if (app.listView.selection.get().length === 1 && !app.props.get('checkboxes')) {
                         // check for thread
-                        var cid = list[0].substr(7),
+                        var cid = app.props.get('thread') ? list[0].substr(7) : list[0],
                             isThread = this.collection.get(cid).get('threadSize') > 1;
 
                         if (isThread) {
