@@ -35,7 +35,6 @@ module.exports = function (grunt) {
                             'build/static/3rd.party/moment/moment.js',
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
                             'build/static/3rd.party/moment/moment-interval.js',
-                            'build/static/3rd.party/moment/moment.parseFormat.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',
