@@ -40,6 +40,12 @@ define('io.ox/core/viewer/views/mainview', [
 
         initialize: function (options) {
             _.extend(this, options);
+            // apps with 'simple window' class (Portal) scrolls behind the viewer.
+            // Hide it for the moment as a workaround.
+            // TODO find a better solution
+            if (!this.standalone) {
+                this.$el.parent().find('.simple-window').hide();
+            }
             // create the event aggregator of this view.
             this.mainEvents = _.extend({}, Backbone.Events);
             // create children views
@@ -176,6 +182,9 @@ define('io.ox/core/viewer/views/mainview', [
         closeViewer: function () {
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.opened);
+            if (!this.standalone) {
+                this.$el.parent().find('.simple-window').show();
+            }
             this.$el.hide();
             this.remove();
         },

@@ -35,6 +35,8 @@ define('io.ox/core/viewer/main', [], function () {
          *  in the data.files Array if this parameter is omitted.
          *  @param {jQuery} [data.container]
          *  a container element where the viewer element should be appended to. Defaults to #io-ox-core element.
+         *  @param {String} [data.standalone = false]
+         *  whether viewer should be launched in standalone mode.
          *  @param {Boolean} [data.app]
          *  a reference to an app object, from which this viewer is launched.
          */
