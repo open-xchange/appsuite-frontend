@@ -23,6 +23,14 @@ define([
         title: 'Hallo, World!',
         pageTitle: 'Hallo, World!',
         domain: 'https://example.com/',
+        cssNamespace: 'hallo_world',
+        acquireToken: true
+    },
+    appOptionsWithoutTokken = {
+        name: 'com.example',
+        title: 'Hallo, World!',
+        pageTitle: 'Hallo, World!',
+        domain: 'https://example.com/',
         cssNamespace: 'hallo_world'
     },
     response = {
@@ -75,6 +83,26 @@ define([
 
         it('should render the iframe src', function () {
             expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptions.domain + '?ox_token=' + response.data.token);
+        });
+
+    });
+
+    describe('iframe app without tokken', function () {
+
+        beforeEach(function (done) {
+            app = main(appOptionsWithoutTokken).getApp();
+            app.launch().done(function () {
+                done();
+            });
+
+        });
+
+        it('should render the iframe', function () {
+            expect(app.getWindow().nodes.main.find('iframe').length).to.equal(1);
+        });
+
+        it('should render the iframe src without appended tokken', function () {
+            expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptions.domain);
         });
 
     });

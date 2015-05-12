@@ -36,19 +36,24 @@ define('io.ox/core/tk/iframe', [
 
             win.setTitle(o.pageTitle);
 
-            return http.GET({
-                module: 'token',
-                params: {
-                    action: 'acquireToken'
-                }
-            }).done(function (data) {
-                if (data && data.token) {
-                    initWindowAndShow(win, data);
-                } else {
-                    notifications.yell('error', gt('An error occurred. There is no valid token available.'));
-                    initWindowAndShow(win, data);
-                }
-            });
+            if (o.acquireToken) {
+
+                return http.GET({
+                    module: 'token',
+                    params: {
+                        action: 'acquireToken'
+                    }
+                }).done(function (data) {
+                    if (data && data.token) {
+                        initWindowAndShow(win, data);
+                    } else {
+                        notifications.yell('error', gt('An error occurred. There is no valid token available.'));
+                        initWindowAndShow(win, data);
+                    }
+                });
+            } else {
+                initWindowAndShow(win);
+            }
 
         });
 
