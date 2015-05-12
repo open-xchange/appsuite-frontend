@@ -437,7 +437,8 @@ define('io.ox/files/main', [
                 var cid = $(e.currentTarget).attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
-                ox.load(['io.ox/core/viewer/main']).done(function (viewer) {
+                ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
+                    var viewer = new Viewer();
                     viewer.launch( { selection: baton.data, files: baton.collection.models });
                 });
             });

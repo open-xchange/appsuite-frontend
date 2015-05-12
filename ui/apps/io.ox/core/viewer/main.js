@@ -68,11 +68,11 @@ define('io.ox/core/viewer/main', [], function () {
                     this.fileCollection.setStartIndex(data.selection);
                 }
                 // create main view and append main view to core
-                this.mainView = new MainView({ collection: this.fileCollection, el: el, app: data.app });
+                this.mainView = new MainView({ collection: this.fileCollection, el: el, app: data.app, standalone: data.standalone });
 
             }.bind(this));
         };
     };
 
-    return new Viewer();
+    return Viewer;
 });

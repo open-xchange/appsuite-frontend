@@ -123,10 +123,11 @@ define('plugins/portal/recentfiles/register', [
                     e.stopPropagation();
                     var items = $(e.delegateTarget).data('items'),
                         item = $(e.currentTarget).data('item');
-                    require(['io.ox/core/viewer/main'], function (viewer) {
+                    require(['io.ox/core/viewer/main'], function (Viewer) {
                         filesAPI.get(item).done(function (data) {
                             var models = filesAPI.resolve(items, false),
-                                collection = new Backbone.Collection(models);
+                                collection = new Backbone.Collection(models),
+                                viewer = new Viewer();
                             baton = new ext.Baton({ data: data, collection: collection });
                             viewer.launch({ selection: baton.data, files: baton.collection.models });
                         });

@@ -6,8 +6,9 @@ define('io.ox/core/links', [], function () {
         var data = $(this).data();
         if (data.id) {
             // open file in side-popup
-            require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (viewer, api) {
+            require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
                 api.get(_.cid(data.id)).done(function (data) {
+                    var viewer = new Viewer();
                     viewer.launch({ files: [data] });
                 });
             });

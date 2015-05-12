@@ -40,8 +40,10 @@ define('io.ox/files/detail/main', [
                         }));
 
                     require(['io.ox/core/viewer/main'], function (Viewer) {
-                        Viewer.launch({ files: [fileModel], app: app });
-                        //Viewer.launch({ files: [fileModel], app: app, container: app.getWindowNode() });
+                        var launchParams = { files: [fileModel], app: app },
+                            viewer = new Viewer();
+                        if (ox.debug) launchParams = { files: [fileModel], app: app, container: app.getWindowNode(), standalone: true };
+                        viewer.launch(launchParams);
                     });
 
                     app.setTitle(title);

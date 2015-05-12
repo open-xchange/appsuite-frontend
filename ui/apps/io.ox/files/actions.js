@@ -225,7 +225,8 @@ define('io.ox/files/actions', [
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
-            ox.load(['io.ox/core/viewer/main']).done(function (viewer) {
+            ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
+                var viewer = new Viewer();
                 viewer.launch({ selection: baton.data, files: baton.collection.models });
             });
         }

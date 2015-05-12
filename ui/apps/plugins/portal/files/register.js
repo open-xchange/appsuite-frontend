@@ -89,7 +89,8 @@ define('plugins/portal/files/register', [
                 // stop propagation to avoid side-popup
                 e.stopPropagation();
                 // open viewer
-                require(['io.ox/core/viewer/main'], function (viewer) {
+                require(['io.ox/core/viewer/main'], function (Viewer) {
+                    var viewer = new Viewer();
                     viewer.launch({ files: [e.data.file] });
                 });
             });

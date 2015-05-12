@@ -31,7 +31,8 @@ define('io.ox/core/pim/actions', [
             requires: 'some',
             multiple: function (baton) {
                 require(['io.ox/core/viewer/main'], function (Viewer) {
-                    Viewer.launch({ files: baton });
+                    var viewer = new Viewer();
+                    viewer.launch({ files: baton });
                 });
             }
         },
