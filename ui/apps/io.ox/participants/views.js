@@ -45,7 +45,7 @@ define('io.ox/participants/views', [
                 $img: $('<div>'),
                 $text: $('<div class="participant-name">'),
                 $mail: this.options.halo ? $('<a>') : $('<span>'),
-                $extra: $('<a>'),
+                $extra: $('<span>'),
                 $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),

@@ -82,7 +82,7 @@ define('io.ox/core/tk/tokenfield', [
             options = _.extend({}, {
                 // defines tokendata
                 harmonize: function (data) {
-                    var model = new pModel.Participant(data.data);
+                    var model = new pModel.Participant(data);
                     return {
                         value: model.getTarget(),
                         label: model.getDisplayName(),
