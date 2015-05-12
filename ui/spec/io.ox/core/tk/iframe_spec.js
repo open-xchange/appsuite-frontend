@@ -26,7 +26,7 @@ define([
         cssNamespace: 'hallo_world',
         acquireToken: true
     },
-    appOptionsWithoutTokken = {
+    appOptionsWithoutToken = {
         name: 'com.example',
         title: 'Hallo, World!',
         pageTitle: 'Hallo, World!',
@@ -87,10 +87,10 @@ define([
 
     });
 
-    describe('iframe app without tokken', function () {
+    describe('iframe app without token', function () {
 
         beforeEach(function (done) {
-            app = main(appOptionsWithoutTokken).getApp();
+            app = main(appOptionsWithoutToken).getApp();
             app.launch().done(function () {
                 done();
             });
@@ -101,7 +101,7 @@ define([
             expect(app.getWindow().nodes.main.find('iframe').length).to.equal(1);
         });
 
-        it('should render the iframe src without appended tokken', function () {
+        it('should render the iframe src without appended token', function () {
             expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptions.domain);
         });
 
