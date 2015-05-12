@@ -15,13 +15,16 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
     describe('Mail Compose', function () {
         describe('draft mails', function () {
-            var app, clock;
+
+            var app, clock, pictureHalo, snippetsGetAll;
             beforeEach(function () {
-                this.server.respondWith('GET', /api\/halo\/contact\/picture/, function (xhr) {
-                    xhr.respond(200, 'image/gif', '');
+                return require(['io.ox/core/api/snippets', 'io.ox/contacts/api'], function (snippetAPI, contactsAPI) {
+                    snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
+                    pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                }).then(function () {
+                    app = compose.getApp();
+                    return app.launch();
                 });
-                app = compose.getApp();
-                return app.launch();
             });
             afterEach(function () {
                 if (clock) {
@@ -31,12 +34,17 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 if (app.view && app.view.model) {
                     app.view.model.dirty(false);
                 }
+                snippetsGetAll.restore();
+                pictureHalo.restore();
                 return app.quit();
             });
+
             describe('auto save', function () {
                 beforeEach(function () {
                     return require(['settings!io.ox/mail'], function (settings) {
                         settings.set('autoSaveDraftsAfter', '1_minute');
+                        //load plaintext editor, much faster than spinning up tinymce all the time
+                        settings.set('messageFormat', 'text');
                     }).then(function () {
                         return app.compose({ folder_id: 'default0/INBOX' });
                     });
@@ -68,6 +76,8 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 beforeEach(function () {
                     return require(['settings!io.ox/mail'], function (settings) {
                         settings.set('autoSaveDraftsAfter', 'disabled');
+                        //load plaintext editor, much faster than spinning up tinymce all the time
+                        settings.set('messageFormat', 'text');
                     }).then(function () {
                         return app.compose({ folder_id: 'default0/INBOX' });
                     });
