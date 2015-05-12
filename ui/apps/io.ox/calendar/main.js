@@ -359,7 +359,7 @@ define('io.ox/calendar/main', [
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
-                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'colorScheme': app.settings.get('colorScheme', 'custom'),
                 'mobileFolderSelectMode': false
             });

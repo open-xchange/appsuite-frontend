@@ -417,7 +417,7 @@ define('io.ox/tasks/main', [
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'folderEditMode': false
             });
         },
