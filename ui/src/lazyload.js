@@ -20,7 +20,7 @@
         this.each(function () {
             _.defer(function () {
                 // look for potential scrollpane
-                this.closest('.scrollpane, .scrollable, .list-view, .preview-container').lazyloadScrollpane();
+                this.closest('.scrollpane, .scrollable, .list-view, .tt-dropdown-menu, .preview-container').lazyloadScrollpane();
                 this.trigger('scroll');
             }.bind($(this).addClass('lazyload')));
         });
