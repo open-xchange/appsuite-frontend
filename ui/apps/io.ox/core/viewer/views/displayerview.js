@@ -105,7 +105,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     onSlideChangeStart: this.onSlideChangeStart.bind(this)
                 };
 
-            // enable touch and swiping for 'smartphone' devices
+            // enable touch and swiping for mobile devices
             if (_.device('smartphone') || _.device('tablet')) {
                 swiperParameter = _.extend(swiperParameter, {
                     followFinger: true,
@@ -115,19 +115,14 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
             }
 
-            // disable swiping and hide navigation if there is only one slide.
-            if (this.collection.length === 1) {
-                swiperParameter.onlyExternal = true;
-                prevSlide.hide();
-                nextSlide.hide();
-            }
-
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button', 'aria-label': gt('Previous') });
             nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button', 'aria-label': gt('Next') });
             carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
-            carouselRoot.append(prevSlide, nextSlide);
+            if (this.collection.length > 1) {
+                carouselRoot.append(prevSlide, nextSlide);
+            }
 
             // append carousel to view
             this.$el.append(carouselRoot, caption).attr({ tabindex: -1, role: 'main' });
@@ -367,7 +362,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * Blends in navigation elements after user activity events like mouseover.
          */
         blendNavigation: (function () {
-            var x,y;
+            var x, y;
             return function (event) {
                 // for Chrome's bug: it fires mousemove events without mouse movements
                 if (event) {
@@ -376,6 +371,9 @@ define('io.ox/core/viewer/views/displayerview', [
                     }
                     x = event.clientX;
                     y = event.clientY;
+                }
+                if (!this.$el) {
+                    return;
                 }
                 var duration = 3000,
                     navigationArrows = this.$el.find('.swiper-button-control');
@@ -415,6 +413,7 @@ define('io.ox/core/viewer/views/displayerview', [
             //#. %1$d is the slide index of the current
             //#. %2$d is the total slide count
             this.blendCaption(gt('%1$d of %2$d', activeSlideIndex + 1, this.collection.length));
+            this.blendNavigation();
             this.loadSlide(activeSlideIndex, preloadDirection);
             // a11y
             swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
