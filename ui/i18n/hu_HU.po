@@ -1013,7 +1013,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:1173 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1172 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
@@ -1390,7 +1390,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:183
 #: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
@@ -1416,7 +1416,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -2081,11 +2081,11 @@ msgstr "Oldal testre szabása"
 msgid "Dark colors"
 msgstr "Sötét színek"
 
-#: apps/io.ox/core/import/import.js:254 module:io.ox/core
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Az adatok sikeresen importálva"
 
-#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+#: apps/io.ox/core/import/import.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Data only partially imported ( %1$s of %2$s records)"
 msgid "Data only partially imported (%1$s of %2$s records)"
@@ -2241,7 +2241,7 @@ msgstr "Erőforrás törlése"
 msgid "Delete task"
 msgstr "Feladat törlése"
 
-#: apps/io.ox/files/actions.js:646 module:io.ox/files
+#: apps/io.ox/files/actions.js:654 module:io.ox/files
 msgid "Delete version"
 msgstr "Verzió törlése"
 
@@ -2577,7 +2577,7 @@ msgstr "Egész napos találkozóért kattintson duplán erre a sorra"
 #: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
-#: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/files/actions.js:636 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2662,27 +2662,27 @@ msgstr "Ejtse ide a levél importálásához"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Húzza ide a feltöltendő <b class=\"dndignore\">új mellékletet</b>"
 
-#: apps/io.ox/files/actions.js:656 module:io.ox/files
+#: apps/io.ox/files/actions.js:664 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Húzza ide a feltöltendő <b class='dndignore'>új fájlt</b>"
 
-#: apps/io.ox/files/actions.js:678 module:io.ox/files
+#: apps/io.ox/files/actions.js:686 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr "Húzza ide a feltöltendő <b class='dndignore'>új verziót</b>"
 
-#: apps/io.ox/files/actions.js:672 module:io.ox/files
+#: apps/io.ox/files/actions.js:680 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Húzza ide a(z) „%1$s” feltöltendő <b class='dndignore'>új verzióját</b>"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Új verzió feltöltése"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:172 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -2729,7 +2729,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1083
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3173,7 +3173,7 @@ msgid "Failed to connect."
 msgstr "A kapcsolódás meghiúsult."
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
 #, fuzzy
 #| msgid "Failed to recover accounts"
 msgid "Failed to import any data"
@@ -3798,7 +3798,7 @@ msgstr "Figyelmeztetések mellőzése"
 msgid "Ignore conflicts"
 msgstr "Ütközések figyelmen kívül hagyása"
 
-#: apps/io.ox/core/import/import.js:123 module:io.ox/core
+#: apps/io.ox/core/import/import.js:127 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3816,12 +3816,12 @@ msgid "Images"
 msgstr "Kép"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
-#: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/core/import/import.js:182
 #: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "Importálás"
 
-#: apps/io.ox/core/import/import.js:170 module:io.ox/core
+#: apps/io.ox/core/import/import.js:174 module:io.ox/core
 msgid "Import from file"
 msgstr "Importálás fájlból"
 
@@ -4062,25 +4062,31 @@ msgstr "Nyelvspecifikus alapértelmezés"
 msgid "Languages"
 msgstr "Nyelvek"
 
-#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:212 module:io.ox/find
 #, fuzzy
 #| msgid "3 days"
 msgid "Last 30 days"
 msgstr "3 nap"
 
-#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:216 module:io.ox/find
 #, fuzzy
 #| msgid "5 days"
 msgid "Last 365 days"
 msgstr "5 nap"
 
-#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:208 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last 7 days"
 msgstr "Vezetéknév"
 
-#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#, fuzzy
+#| msgid "Last name"
+msgid "Last day"
+msgstr "Vezetéknév"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
 #, fuzzy
 msgid "Last month"
 msgstr "Hónap"
@@ -4095,13 +4101,13 @@ msgstr "Vezetéknév"
 msgid "Last name, First name"
 msgstr "Vezetéknév, utónév"
 
-#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "Múlt héten"
 
-#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last year"
@@ -4117,7 +4123,7 @@ msgstr "Indító legördülő. Nyomja meg az Entert a legördülőre ugráshoz."
 msgid "Layout"
 msgstr "Elrendezés"
 
-#: apps/io.ox/core/import/import.js:149 module:io.ox/core
+#: apps/io.ox/core/import/import.js:153 module:io.ox/core
 msgid "Learn more"
 msgstr "További információ"
 
@@ -4362,7 +4368,7 @@ msgstr "Levelek naponként (%)"
 msgid "Main window"
 msgstr "Főablak"
 
-#: apps/io.ox/files/actions.js:639 module:io.ox/files
+#: apps/io.ox/files/actions.js:645 module:io.ox/files
 msgid "Make this the current version"
 msgstr "Legyen ez az aktuális verzió"
 
@@ -4945,7 +4951,7 @@ msgstr "Nem indult el"
 msgid "Note"
 msgstr "Megjegyzés"
 
-#: apps/io.ox/core/import/import.js:140 module:io.ox/core
+#: apps/io.ox/core/import/import.js:144 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Megjegyzés a CSV fájlokon:"
 
@@ -5071,7 +5077,7 @@ msgid "Only showing items related to folder \"%1$s\""
 msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 
 #: apps/io.ox/files/actions.js:477 module:io.ox/files
-#: apps/io.ox/files/actions.js:625
+#: apps/io.ox/files/actions.js:627
 msgid "Open"
 msgstr "Megnyitás"
 
@@ -5249,7 +5255,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:93 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%1$d/%2$d oldal"
 
@@ -5547,11 +5553,11 @@ msgid ""
 msgstr ""
 "Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
 
-#: apps/io.ox/core/import/import.js:212 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Válassza ki a fájlt az importáláshoz"
 
-#: apps/io.ox/core/import/import.js:216 module:io.ox/core
+#: apps/io.ox/core/import/import.js:220 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Válasszon egy érvényes iCal fájlt az importáláshoz"
 
@@ -5677,6 +5683,24 @@ msgstr "Előző nap"
 #: apps/io.ox/calendar/week/view.js:806 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Előző hét"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
+#, fuzzy
+#| msgid "Previous"
+msgid "Previous month"
+msgstr "Előző"
+
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
+#, fuzzy
+#| msgid "previous week"
+msgid "Previous week"
+msgstr "előző hét"
+
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous year"
+msgstr "Előző nap"
 
 #: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
@@ -7277,7 +7301,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "Az első 90 nap ingyenes."
 
-#: apps/io.ox/core/import/import.js:143 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -7488,7 +7512,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "Probléma a XING-gel. A hibaüzenet: „%s”"
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:205 module:io.ox/core
+#: apps/io.ox/core/import/import.js:209 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Nem volt importálható találkozó"
 
@@ -7721,7 +7745,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/date/lookup.js:80
+#: apps/io.ox/find/date/patterns.js:188 module:io.ox/find
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
@@ -7947,6 +7971,10 @@ msgstr "Feltöltés"
 #: module:io.ox/files
 msgid "Upload a new version"
 msgstr "Új verzió feltöltése"
+
+#: apps/io.ox/core/import/import.js:100 module:io.ox/core
+msgid "Upload file"
+msgstr "Fájl feltöltése"
 
 #: apps/io.ox/files/filepicker.js:166 module:io.ox/files
 #, fuzzy
@@ -8274,9 +8302,10 @@ msgid "Yes, with empty attachment"
 msgstr "Igen, üres melléklettel"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/date/lookup.js:84 module:io.ox/core
-#: apps/io.ox/mail/util.js:61 apps/plugins/portal/birthdays/register.js:93
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "Tegnap"
 
@@ -8702,8 +8731,7 @@ msgstr "és %1$d további"
 msgid "as date"
 msgstr "Kezdés dátuma"
 
-#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:131
+#: apps/io.ox/find/date/patterns.js:97 module:io.ox/find
 #, fuzzy
 #| msgid "date range"
 msgid "as daterange"
@@ -11471,9 +11499,6 @@ msgstr "yyyy"
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Fiókadatok frissítése. Ez eltarthat pár másodpercig."
 
-#~ msgid "Upload file"
-#~ msgstr "Fájl feltöltése"
-
 #~ msgid "Upload new file"
 #~ msgstr "Új fájl feltöltése"
 
@@ -11705,9 +11730,6 @@ msgstr "yyyy"
 
 #~ msgid "open"
 #~ msgstr "megnyitás"
-
-#~ msgid "previous week"
-#~ msgstr "előző hét"
 
 #~ msgid "september"
 #~ msgstr "szeptember"

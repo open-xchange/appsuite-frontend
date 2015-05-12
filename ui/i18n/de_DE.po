@@ -1002,7 +1002,7 @@ msgstr "Visitenkarte anhängen"
 msgid "Application Toolbar"
 msgstr "Applikations-Werkzeugleiste"
 
-#: apps/io.ox/mail/main.js:1173 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1172 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Die Applikation wird möglicherweise nicht erwartungsgemäß funktionieren, "
@@ -1374,7 +1374,7 @@ msgstr "Kalenderansicht"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:183
 #: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
@@ -1400,7 +1400,7 @@ msgstr "Kalenderansicht"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -2067,11 +2067,11 @@ msgstr "Diese Seite personalisieren"
 msgid "Dark colors"
 msgstr "Dunkle Farben"
 
-#: apps/io.ox/core/import/import.js:254 module:io.ox/core
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Daten wurden erfolgreich importiert"
 
-#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+#: apps/io.ox/core/import/import.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Data only partially imported ( %1$s of %2$s records)"
 msgid "Data only partially imported (%1$s of %2$s records)"
@@ -2226,7 +2226,7 @@ msgstr "Ressource löschen"
 msgid "Delete task"
 msgstr "Aufgabe löschen"
 
-#: apps/io.ox/files/actions.js:646 module:io.ox/files
+#: apps/io.ox/files/actions.js:654 module:io.ox/files
 msgid "Delete version"
 msgstr "Version löschen"
 
@@ -2562,7 +2562,7 @@ msgstr "Für ganztägigen Termin auf diese Zeile doppelklicken"
 #: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
-#: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/files/actions.js:636 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2647,29 +2647,29 @@ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 "Zum Hochladen einer <b class=\"dndignore\">neuen Anlage</b> hier fallenlassen"
 
-#: apps/io.ox/files/actions.js:656 module:io.ox/files
+#: apps/io.ox/files/actions.js:664 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 "Zum Hochladen einer <b class=\"dndignore\">neuen Datei</b> hier fallenlassen"
 
-#: apps/io.ox/files/actions.js:678 module:io.ox/files
+#: apps/io.ox/files/actions.js:686 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 "Zum Hochladen einer <b class=\"dndignore\">neuen Version</b> hier "
 "fallenlassen"
 
-#: apps/io.ox/files/actions.js:672 module:io.ox/files
+#: apps/io.ox/files/actions.js:680 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Zum Hochladen einer <b class=\"dndignore\">neuen Version</b> von \"%1$s\" "
 "hier fallenlassen"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
 msgid "Drop new version here"
 msgstr "Neue Version hier fallenlassen"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:172 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
 #, fuzzy
 msgid "Drop only a single file as new version."
 msgstr "Nur eine einzelne Datei als neue Version fallenlassen."
@@ -2717,7 +2717,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1083
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3159,7 +3159,7 @@ msgid "Failed to connect."
 msgstr "Verbindung ist fehlgeschlagen"
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
 #, fuzzy
 #| msgid "Failed to recover accounts"
 msgid "Failed to import any data"
@@ -3787,7 +3787,7 @@ msgstr "Warnhinweise ignorieren"
 msgid "Ignore conflicts"
 msgstr "Konflikte ignorieren"
 
-#: apps/io.ox/core/import/import.js:123 module:io.ox/core
+#: apps/io.ox/core/import/import.js:127 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3804,12 +3804,12 @@ msgid "Images"
 msgstr "Bilder"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
-#: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/core/import/import.js:182
 #: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "Importieren"
 
-#: apps/io.ox/core/import/import.js:170 module:io.ox/core
+#: apps/io.ox/core/import/import.js:174 module:io.ox/core
 msgid "Import from file"
 msgstr "Aus Datei importieren"
 
@@ -4050,23 +4050,23 @@ msgstr "Sprachenabhängiger Standard"
 msgid "Languages"
 msgstr "Sprachen"
 
-#: apps/io.ox/find/date/patterns.js:223 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:212 module:io.ox/find
 msgid "Last 30 days"
 msgstr "letzten 30 Tage"
 
-#: apps/io.ox/find/date/patterns.js:227 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:216 module:io.ox/find
 msgid "Last 365 days"
 msgstr "letzten 365 Tage"
 
-#: apps/io.ox/find/date/patterns.js:219 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:208 module:io.ox/find
 msgid "Last 7 days"
 msgstr "letzten 7 Tage"
 
-#: apps/io.ox/find/date/patterns.js:203 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
 msgid "Last day"
 msgstr "letzten 7 Tage"
 
-#: apps/io.ox/find/date/patterns.js:211 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
 msgid "Last month"
 msgstr "letzten Monat"
 
@@ -4080,11 +4080,11 @@ msgstr "Nachname"
 msgid "Last name, First name"
 msgstr "Nachname, Vorname"
 
-#: apps/io.ox/find/date/patterns.js:207 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 msgid "Last week"
 msgstr "Letzte Woche"
 
-#: apps/io.ox/find/date/patterns.js:215 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
 msgid "Last year"
 msgstr "Letztes Jahr"
 
@@ -4100,7 +4100,7 @@ msgstr ""
 msgid "Layout"
 msgstr "Layout"
 
-#: apps/io.ox/core/import/import.js:149 module:io.ox/core
+#: apps/io.ox/core/import/import.js:153 module:io.ox/core
 msgid "Learn more"
 msgstr "Weitere Infos"
 
@@ -4345,7 +4345,7 @@ msgstr "E-Mails pro Wochentag (%)"
 msgid "Main window"
 msgstr "Hauptfenster"
 
-#: apps/io.ox/files/actions.js:639 module:io.ox/files
+#: apps/io.ox/files/actions.js:645 module:io.ox/files
 msgid "Make this the current version"
 msgstr "Diese als aktuelle Version markieren"
 
@@ -4911,7 +4911,7 @@ msgstr "Nicht begonnen"
 msgid "Note"
 msgstr "Hinweis"
 
-#: apps/io.ox/core/import/import.js:140 module:io.ox/core
+#: apps/io.ox/core/import/import.js:144 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Hinweis zu CSV-Dateien:"
 
@@ -5039,7 +5039,7 @@ msgstr ""
 "Es werden nur Objekte angezeigt, die zum Ordner \"%1$s\" in Bezug stehen."
 
 #: apps/io.ox/files/actions.js:477 module:io.ox/files
-#: apps/io.ox/files/actions.js:625
+#: apps/io.ox/files/actions.js:627
 msgid "Open"
 msgstr "Öffnen"
 
@@ -5218,7 +5218,7 @@ msgstr "PDFs"
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:93 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Seite %1$d von %2$d"
 
@@ -5518,11 +5518,11 @@ msgstr ""
 "Bitte geben Sie das alte Passwort an, sodass die Account-Passwörter "
 "wiederhergestellt werden können."
 
-#: apps/io.ox/core/import/import.js:212 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Wählen Sie eine zu importierende Datei"
 
-#: apps/io.ox/core/import/import.js:216 module:io.ox/core
+#: apps/io.ox/core/import/import.js:220 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Wählen Sie bitte eine gültige iCal-Datei für den Import."
 
@@ -5649,15 +5649,15 @@ msgstr "Vorheriger Tag"
 msgid "Previous Week"
 msgstr "Letzte Woche"
 
-#: apps/io.ox/find/date/patterns.js:211 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
 msgid "Previous month"
 msgstr "Letzter Monat"
 
-#: apps/io.ox/find/date/patterns.js:207 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 msgid "Previous week"
 msgstr "Letzte Woche"
 
-#: apps/io.ox/find/date/patterns.js:215 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
 msgid "Previous year"
 msgstr "Vorherigers Jahr"
 
@@ -7243,7 +7243,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "Die ersten 90 Tage sind kostenlos."
 
-#: apps/io.ox/core/import/import.js:143 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -7461,7 +7461,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "Es trat ein Problem mit Xing auf. Die Fehlermeldung lautet: \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:205 module:io.ox/core
+#: apps/io.ox/core/import/import.js:209 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Es sind keine Termindaten zum Importieren vorhanden"
 
@@ -7702,7 +7702,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/date/patterns.js:199 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:188 module:io.ox/find
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
@@ -7929,6 +7929,10 @@ msgstr "Hochladen"
 msgid "Upload a new version"
 msgstr "Neue Version hochladen"
 
+#: apps/io.ox/core/import/import.js:100 module:io.ox/core
+msgid "Upload file"
+msgstr "Datei hochladen"
+
 #: apps/io.ox/files/filepicker.js:166 module:io.ox/files
 msgid "Upload local file"
 msgstr "Lokale Datei hochladen"
@@ -8087,7 +8091,7 @@ msgstr "Details anzeigen"
 msgid "View source"
 msgstr "Quelldaten anzeigen"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:439 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr "Viewer-Werkzeugleiste"
 
@@ -8251,7 +8255,7 @@ msgid "Yes, with empty attachment"
 msgstr "Ja, mit leerer Anlage"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/date/patterns.js:203 module:io.ox/find
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
 #: apps/io.ox/mail/util.js:61 module:io.ox/core
 #: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
@@ -8675,7 +8679,7 @@ msgstr "und %1$d weitere"
 msgid "as date"
 msgstr "als Datum"
 
-#: module:io.ox/find apps/io.ox/find/date/patterns.js:130
+#: apps/io.ox/find/date/patterns.js:97 module:io.ox/find
 msgid "as daterange"
 msgstr "als Zeitraum"
 
@@ -11838,9 +11842,6 @@ msgstr "JJJJ"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Die Account-Daten werden aktualisiert. Dies kann eine Weile dauern."
-
-#~ msgid "Upload file"
-#~ msgstr "Datei hochladen"
 
 #~ msgid "Upload new file"
 #~ msgstr "Neue Datei hochladen"

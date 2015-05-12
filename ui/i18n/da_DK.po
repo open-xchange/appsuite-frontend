@@ -1025,7 +1025,7 @@ msgstr "Tilføj \"vCard\"-visitkort"
 msgid "Application Toolbar"
 msgstr "Programværktøjslinjen"
 
-#: apps/io.ox/mail/main.js:1173 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1172 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Programmet virker ikke nødvendigvis som forventet før dette problem er løst."
@@ -1399,7 +1399,7 @@ msgstr "Kalendervisning"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:183
 #: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
@@ -1425,7 +1425,7 @@ msgstr "Kalendervisning"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -2088,11 +2088,11 @@ msgstr "Tilpas denne side"
 msgid "Dark colors"
 msgstr "Mørke farver"
 
-#: apps/io.ox/core/import/import.js:254 module:io.ox/core
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Data importeret med succes"
 
-#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+#: apps/io.ox/core/import/import.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Data only partially imported ( %1$s of %2$s records)"
 msgid "Data only partially imported (%1$s of %2$s records)"
@@ -2248,7 +2248,7 @@ msgstr "Slet ressource"
 msgid "Delete task"
 msgstr "Slet opgave"
 
-#: apps/io.ox/files/actions.js:646 module:io.ox/files
+#: apps/io.ox/files/actions.js:654 module:io.ox/files
 msgid "Delete version"
 msgstr "Slet version"
 
@@ -2576,7 +2576,7 @@ msgstr "Dobbeltklik i denne række for en heldagsaftale"
 #: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
-#: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/files/actions.js:636 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2661,27 +2661,27 @@ msgstr "Slip her for at importere denne e-mail"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Slip her for at overføre en <b class=\"dndignore\">ny vedhæftning</b>"
 
-#: apps/io.ox/files/actions.js:656 module:io.ox/files
+#: apps/io.ox/files/actions.js:664 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Slip her for at overføre en <b class=\"dndignore\">ny fil</b>"
 
-#: apps/io.ox/files/actions.js:678 module:io.ox/files
+#: apps/io.ox/files/actions.js:686 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr "Slip her for at overføre en <b class=\"dndignore\">ny version</b>"
 
-#: apps/io.ox/files/actions.js:672 module:io.ox/files
+#: apps/io.ox/files/actions.js:680 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Slip her for at overføre en <b class=\"dndignore\">ny version</b> af \"%1$s\""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Overfør en ny version"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:172 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -2728,7 +2728,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1083
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3171,7 +3171,7 @@ msgid "Failed to connect."
 msgstr "Kunne ikke forbinde."
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
 #, fuzzy
 #| msgid "Failed to recover accounts"
 msgid "Failed to import any data"
@@ -3797,7 +3797,7 @@ msgstr "Ignorér advarsler"
 msgid "Ignore conflicts"
 msgstr "Ignorér konflikter"
 
-#: apps/io.ox/core/import/import.js:123 module:io.ox/core
+#: apps/io.ox/core/import/import.js:127 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3815,12 +3815,12 @@ msgid "Images"
 msgstr "Billede 1"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
-#: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/core/import/import.js:182
 #: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "Import"
 
-#: apps/io.ox/core/import/import.js:170 module:io.ox/core
+#: apps/io.ox/core/import/import.js:174 module:io.ox/core
 msgid "Import from file"
 msgstr "Importér fra fil"
 
@@ -4061,25 +4061,31 @@ msgstr "Sprogspecifik standard"
 msgid "Languages"
 msgstr "Sprog"
 
-#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:212 module:io.ox/find
 #, fuzzy
 #| msgid "3 days"
 msgid "Last 30 days"
 msgstr "3 dage"
 
-#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:216 module:io.ox/find
 #, fuzzy
 #| msgid "5 days"
 msgid "Last 365 days"
 msgstr "5 dage"
 
-#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:208 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last 7 days"
 msgstr "Efternavn"
 
-#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#, fuzzy
+#| msgid "Last name"
+msgid "Last day"
+msgstr "Efternavn"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
 #, fuzzy
 msgid "Last month"
 msgstr "Måneder"
@@ -4094,13 +4100,13 @@ msgstr "Efternavn"
 msgid "Last name, First name"
 msgstr "Efternavn, Fornavn"
 
-#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "Sidste uge"
 
-#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last year"
@@ -4116,7 +4122,7 @@ msgstr "Starter drop-ned liste. Tryk [enter] for at gå til hop-ned."
 msgid "Layout"
 msgstr "Layout"
 
-#: apps/io.ox/core/import/import.js:149 module:io.ox/core
+#: apps/io.ox/core/import/import.js:153 module:io.ox/core
 msgid "Learn more"
 msgstr "Lær mere"
 
@@ -4361,7 +4367,7 @@ msgstr "E-mails pr. ugedag (%)"
 msgid "Main window"
 msgstr "Hovedvindue"
 
-#: apps/io.ox/files/actions.js:639 module:io.ox/files
+#: apps/io.ox/files/actions.js:645 module:io.ox/files
 msgid "Make this the current version"
 msgstr "Gør denne til nuværende version"
 
@@ -4944,7 +4950,7 @@ msgstr "Ikke startet"
 msgid "Note"
 msgstr "Note"
 
-#: apps/io.ox/core/import/import.js:140 module:io.ox/core
+#: apps/io.ox/core/import/import.js:144 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Note om CSV-filer:"
 
@@ -5068,7 +5074,7 @@ msgid "Only showing items related to folder \"%1$s\""
 msgstr "Viser kun elementer relaterede til mappen \"%1$s\""
 
 #: apps/io.ox/files/actions.js:477 module:io.ox/files
-#: apps/io.ox/files/actions.js:625
+#: apps/io.ox/files/actions.js:627
 msgid "Open"
 msgstr "Åbn"
 
@@ -5246,7 +5252,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:93 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Side %1$d af %2$d"
 
@@ -5543,11 +5549,11 @@ msgid ""
 msgstr ""
 "Angiv venligst den gamle adgangskode, så kontoadgangskoderne kan gendannes."
 
-#: apps/io.ox/core/import/import.js:212 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Vælg venligst en fil at importere"
 
-#: apps/io.ox/core/import/import.js:216 module:io.ox/core
+#: apps/io.ox/core/import/import.js:220 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Vælg venligst en gyldig \"iCal\"-fil at importere"
 
@@ -5673,6 +5679,24 @@ msgstr "Foregående dag"
 #: apps/io.ox/calendar/week/view.js:806 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Foregående uge"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
+#, fuzzy
+#| msgid "Previous"
+msgid "Previous month"
+msgstr "Foregående"
+
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
+#, fuzzy
+#| msgid "previous week"
+msgid "Previous week"
+msgstr "foregående uge"
+
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous year"
+msgstr "Foregående dag"
 
 #: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
@@ -7266,7 +7290,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "De første 90 dage er gratis."
 
-#: apps/io.ox/core/import/import.js:143 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -7478,7 +7502,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "Der var et problem med XING.  Fejlmeddelelsen var: \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:205 module:io.ox/core
+#: apps/io.ox/core/import/import.js:209 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Der var ingen aftaleoplysninger at importere"
 
@@ -7713,7 +7737,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/date/lookup.js:80
+#: apps/io.ox/find/date/patterns.js:188 module:io.ox/find
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
@@ -7941,6 +7965,12 @@ msgstr "Overfør fil"
 #: module:io.ox/files
 msgid "Upload a new version"
 msgstr "Overfør en ny version"
+
+#: apps/io.ox/core/import/import.js:100 module:io.ox/core
+#, fuzzy
+#| msgid "Upload new file"
+msgid "Upload file"
+msgstr "Overfør ny fil"
 
 #: apps/io.ox/files/filepicker.js:166 module:io.ox/files
 #, fuzzy
@@ -8268,9 +8298,10 @@ msgid "Yes, with empty attachment"
 msgstr "Ja, med tom vedhæftning"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/date/lookup.js:84 module:io.ox/core
-#: apps/io.ox/mail/util.js:61 apps/plugins/portal/birthdays/register.js:93
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "I går"
 
@@ -8695,8 +8726,7 @@ msgstr "og %1$d andre"
 msgid "as date"
 msgstr "Startdato"
 
-#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:131
+#: apps/io.ox/find/date/patterns.js:97 module:io.ox/find
 #, fuzzy
 #| msgid "date range"
 msgid "as daterange"
@@ -10782,9 +10812,6 @@ msgstr "åååå"
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Opdatere kontoens data. Dette kan tage nogle sekunder."
 
-#~ msgid "Upload new file"
-#~ msgstr "Overfør ny fil"
-
 #~ msgid "Upload new files"
 #~ msgstr "Overfør nye filer"
 
@@ -10943,9 +10970,6 @@ msgstr "åååå"
 
 #~ msgid "open"
 #~ msgstr "åbn"
-
-#~ msgid "previous week"
-#~ msgstr "foregående uge"
 
 #~ msgid "show all"
 #~ msgstr "Vis alle"

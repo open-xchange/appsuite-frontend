@@ -987,7 +987,7 @@ msgstr "vCard を添付"
 msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
 
-#: apps/io.ox/mail/main.js:1173 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1172 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "この問題が解決されない場合、アプリケーションは正常に動作しない可能性がありま"
@@ -1357,7 +1357,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:183
 #: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
@@ -1383,7 +1383,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -2046,11 +2046,11 @@ msgstr "このページをカスタマイズ"
 msgid "Dark colors"
 msgstr "暗色"
 
-#: apps/io.ox/core/import/import.js:254 module:io.ox/core
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "データは正しくインポートされました。"
 
-#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+#: apps/io.ox/core/import/import.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Data only partially imported ( %1$s of %2$s records)"
 msgid "Data only partially imported (%1$s of %2$s records)"
@@ -2208,7 +2208,7 @@ msgstr "設備を削除"
 msgid "Delete task"
 msgstr "仕事を削除"
 
-#: apps/io.ox/files/actions.js:646 module:io.ox/files
+#: apps/io.ox/files/actions.js:654 module:io.ox/files
 msgid "Delete version"
 msgstr "バージョンを削除"
 
@@ -2535,7 +2535,7 @@ msgstr "終日のアポイントを作成するには、この行をダブル �
 #: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
-#: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/files/actions.js:636 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2625,32 +2625,32 @@ msgstr ""
 "<b class=\"dndignore\">新規の添付ファイル</b> をアップロードするには、ここに"
 "ドロップしてください。"
 
-#: apps/io.ox/files/actions.js:656 module:io.ox/files
+#: apps/io.ox/files/actions.js:664 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 "<b class=\"dndignore\">新規ファイル</b> をアップロードするには、ここにドロッ"
 "プしてください。"
 
-#: apps/io.ox/files/actions.js:678 module:io.ox/files
+#: apps/io.ox/files/actions.js:686 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 "<b class=\"dndignore\">新規バージョン</b> をアップロードするには、ここにド"
 "ロップしてください。"
 
-#: apps/io.ox/files/actions.js:672 module:io.ox/files
+#: apps/io.ox/files/actions.js:680 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "\"%1$s\" の <b class=\"dndignore\">新規バージョン</b> をアップロードするに"
 "は、ここにドロップしてください。"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "新規バージョンをアップロード"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:172 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -2697,7 +2697,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1083
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3139,7 +3139,7 @@ msgid "Failed to connect."
 msgstr "接続に失敗しました。"
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
 #, fuzzy
 #| msgid "Failed to recover accounts"
 msgid "Failed to import any data"
@@ -3766,7 +3766,7 @@ msgstr "警告を無視"
 msgid "Ignore conflicts"
 msgstr "競合を無視"
 
-#: apps/io.ox/core/import/import.js:123 module:io.ox/core
+#: apps/io.ox/core/import/import.js:127 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3784,12 +3784,12 @@ msgid "Images"
 msgstr "画像"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
-#: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/core/import/import.js:182
 #: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "インポート"
 
-#: apps/io.ox/core/import/import.js:170 module:io.ox/core
+#: apps/io.ox/core/import/import.js:174 module:io.ox/core
 msgid "Import from file"
 msgstr "ファイルからインポート"
 
@@ -4030,25 +4030,31 @@ msgstr "言語に固有の既定値"
 msgid "Languages"
 msgstr "言語"
 
-#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:212 module:io.ox/find
 #, fuzzy
 #| msgid "3 days"
 msgid "Last 30 days"
 msgstr "3 日"
 
-#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:216 module:io.ox/find
 #, fuzzy
 #| msgid "5 days"
 msgid "Last 365 days"
 msgstr "5 日"
 
-#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:208 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last 7 days"
 msgstr "姓"
 
-#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#, fuzzy
+#| msgid "Last name"
+msgid "Last day"
+msgstr "姓"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
 #, fuzzy
 #| msgid "List month view"
 msgid "Last month"
@@ -4064,13 +4070,13 @@ msgstr "姓"
 msgid "Last name, First name"
 msgstr "名、姓"
 
-#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "先週"
 
-#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
 #, fuzzy
 #| msgid "Last day"
 msgid "Last year"
@@ -4087,7 +4093,7 @@ msgstr ""
 msgid "Layout"
 msgstr "レイアウト"
 
-#: apps/io.ox/core/import/import.js:149 module:io.ox/core
+#: apps/io.ox/core/import/import.js:153 module:io.ox/core
 msgid "Learn more"
 msgstr "詳細は、こちらをご覧ください"
 
@@ -4334,7 +4340,7 @@ msgstr "1 日あたりのメール数 (%)"
 msgid "Main window"
 msgstr "メイン ウィンドウ"
 
-#: apps/io.ox/files/actions.js:639 module:io.ox/files
+#: apps/io.ox/files/actions.js:645 module:io.ox/files
 msgid "Make this the current version"
 msgstr "これを最新のバージョンにする"
 
@@ -4919,7 +4925,7 @@ msgstr "未開始"
 msgid "Note"
 msgstr "通知内容"
 
-#: apps/io.ox/core/import/import.js:140 module:io.ox/core
+#: apps/io.ox/core/import/import.js:144 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSVファイルについての注意："
 
@@ -5040,7 +5046,7 @@ msgid "Only showing items related to folder \"%1$s\""
 msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示しています。"
 
 #: apps/io.ox/files/actions.js:477 module:io.ox/files
-#: apps/io.ox/files/actions.js:625
+#: apps/io.ox/files/actions.js:627
 msgid "Open"
 msgstr "開く"
 
@@ -5218,7 +5224,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:93 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%2$d ページ中の %1$d ページ"
 
@@ -5514,11 +5520,11 @@ msgid ""
 msgstr ""
 "アカウント パスワードを復元するため、ご利用のパスワードを入力してください。"
 
-#: apps/io.ox/core/import/import.js:212 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "インポートするファイルを選択してください。"
 
-#: apps/io.ox/core/import/import.js:216 module:io.ox/core
+#: apps/io.ox/core/import/import.js:220 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "インポートする有効な iCal ファイルを選択してください。"
 
@@ -5642,6 +5648,24 @@ msgstr "前日"
 #: apps/io.ox/calendar/week/view.js:806 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "先週"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
+#, fuzzy
+#| msgid "Previous"
+msgid "Previous month"
+msgstr "前"
+
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
+#, fuzzy
+#| msgid "previous week"
+msgid "Previous week"
+msgstr "先週"
+
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous year"
+msgstr "前日"
 
 #: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
@@ -7232,7 +7256,7 @@ msgstr ""
 msgid "The first 90 days are free."
 msgstr "最初の 90 日間は無償です。"
 
-#: apps/io.ox/core/import/import.js:143 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -7439,7 +7463,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "XING に問題があります。エラー メッセージ: \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:205 module:io.ox/core
+#: apps/io.ox/core/import/import.js:209 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "インポートするアポイント データがありません。"
 
@@ -7673,7 +7697,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/date/lookup.js:80
+#: apps/io.ox/find/date/patterns.js:188 module:io.ox/find
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
@@ -7901,6 +7925,10 @@ msgstr "アップロード"
 #: module:io.ox/files
 msgid "Upload a new version"
 msgstr "新規バージョンをアップロード"
+
+#: apps/io.ox/core/import/import.js:100 module:io.ox/core
+msgid "Upload file"
+msgstr "ファイルをアップロード"
 
 #: apps/io.ox/files/filepicker.js:166 module:io.ox/files
 #, fuzzy
@@ -8229,9 +8257,10 @@ msgid "Yes, with empty attachment"
 msgstr "空の添付ファイルで送信"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/date/lookup.js:84 module:io.ox/core
-#: apps/io.ox/mail/util.js:61 apps/plugins/portal/birthdays/register.js:93
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "昨日"
 
@@ -8654,8 +8683,7 @@ msgstr "残り %1$d 個の添付ファイル"
 msgid "as date"
 msgstr "開始日"
 
-#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:131
+#: apps/io.ox/find/date/patterns.js:97 module:io.ox/find
 #, fuzzy
 #| msgid "date range"
 msgid "as daterange"
@@ -15754,9 +15782,6 @@ msgstr "yyyy"
 #~ msgid "Upload a picture"
 #~ msgstr "写真をアップロード"
 
-#~ msgid "Upload file"
-#~ msgstr "ファイルをアップロード"
-
 #~ msgid "Upload new file"
 #~ msgstr "新規ファイルをアップロード"
 
@@ -16435,9 +16460,6 @@ msgstr "yyyy"
 
 #~ msgid "predefined"
 #~ msgstr "あらかじめ定義された項目"
-
-#~ msgid "previous week"
-#~ msgstr "先週"
 
 #~ msgid "reserved"
 #~ msgstr "予定あり"

@@ -1007,7 +1007,7 @@ msgstr "追加 vcard"
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
 
-#: apps/io.ox/mail/main.js:1173 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1172 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
@@ -1374,7 +1374,7 @@ msgstr "日历视图"
 #: apps/io.ox/core/folder/actions/common.js:47
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:179
+#: apps/io.ox/core/folder/picker.js:95 apps/io.ox/core/import/import.js:183
 #: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
@@ -1400,7 +1400,7 @@ msgstr "日历视图"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:624
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1079
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1078
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -2060,11 +2060,11 @@ msgstr "自定义本页"
 msgid "Dark colors"
 msgstr "深颜色"
 
-#: apps/io.ox/core/import/import.js:254 module:io.ox/core
+#: apps/io.ox/core/import/import.js:258 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "数据导入成功"
 
-#: apps/io.ox/core/import/import.js:262 module:io.ox/core
+#: apps/io.ox/core/import/import.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Data only partially imported ( %1$s of %2$s records)"
 msgid "Data only partially imported (%1$s of %2$s records)"
@@ -2220,7 +2220,7 @@ msgstr "删除资源"
 msgid "Delete task"
 msgstr "删除任务"
 
-#: apps/io.ox/files/actions.js:646 module:io.ox/files
+#: apps/io.ox/files/actions.js:654 module:io.ox/files
 msgid "Delete version"
 msgstr "删除版本"
 
@@ -2544,7 +2544,7 @@ msgstr "在此行里双击以查看全天约会"
 #: apps/io.ox/core/viewer/views/toolbarview.js:206
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:505 module:io.ox/files
-#: apps/io.ox/files/actions.js:632 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/files/actions.js:636 apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:737 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
@@ -2630,26 +2630,26 @@ msgstr "拖放到这里以导入此邮件"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "拖放到这里已上载一个 <b class=\"dndignore\">新附件</b>"
 
-#: apps/io.ox/files/actions.js:656 module:io.ox/files
+#: apps/io.ox/files/actions.js:664 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "拖到这里以上载一个 <b  class=\"dndignore\">新文件</b>"
 
-#: apps/io.ox/files/actions.js:678 module:io.ox/files
+#: apps/io.ox/files/actions.js:686 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr "拖到这里以上载一个 <b class=\"dndignore\">新版本</b>"
 
-#: apps/io.ox/files/actions.js:672 module:io.ox/files
+#: apps/io.ox/files/actions.js:680 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "拖到这里以上载 \"%1$s\" 的一个 <b class=\"dndignore\">新版本</b>"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:110 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "上载新版本"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:172 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -2696,7 +2696,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1083
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1082
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3137,7 +3137,7 @@ msgid "Failed to connect."
 msgstr "连接失败。"
 
 #. Failure message if no data (e.g. appointments) could be imported
-#: apps/io.ox/core/import/import.js:258 module:io.ox/core
+#: apps/io.ox/core/import/import.js:262 module:io.ox/core
 #, fuzzy
 #| msgid "Failed to recover accounts"
 msgid "Failed to import any data"
@@ -3750,7 +3750,7 @@ msgstr "忽略警告"
 msgid "Ignore conflicts"
 msgstr "忽略冲突"
 
-#: apps/io.ox/core/import/import.js:123 module:io.ox/core
+#: apps/io.ox/core/import/import.js:127 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3766,12 +3766,12 @@ msgid "Images"
 msgstr "图像"
 
 #: apps/io.ox/core/folder/contextmenu.js:388 module:io.ox/core
-#: apps/io.ox/core/import/import.js:178
+#: apps/io.ox/core/import/import.js:182
 #: apps/io.ox/mail/settings/signatures/register.js:284 module:io.ox/mail
 msgid "Import"
 msgstr "导入"
 
-#: apps/io.ox/core/import/import.js:170 module:io.ox/core
+#: apps/io.ox/core/import/import.js:174 module:io.ox/core
 msgid "Import from file"
 msgstr "从文件导入"
 
@@ -4010,25 +4010,31 @@ msgstr "语言指定的默认值"
 msgid "Languages"
 msgstr "语言"
 
-#: apps/io.ox/find/date/lookup.js:106 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:212 module:io.ox/find
 #, fuzzy
 #| msgid "3 days"
 msgid "Last 30 days"
 msgstr "3 天"
 
-#: apps/io.ox/find/date/lookup.js:110 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:216 module:io.ox/find
 #, fuzzy
 #| msgid "5 days"
 msgid "Last 365 days"
 msgstr "5 天"
 
-#: apps/io.ox/find/date/lookup.js:102 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:208 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last 7 days"
 msgstr "姓氏"
 
-#: apps/io.ox/find/date/lookup.js:93 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#, fuzzy
+#| msgid "Last name"
+msgid "Last day"
+msgstr "姓氏"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
 #, fuzzy
 msgid "Last month"
 msgstr "月"
@@ -4043,13 +4049,13 @@ msgstr "姓氏"
 msgid "Last name, First name"
 msgstr "姓氏，名字"
 
-#: apps/io.ox/find/date/lookup.js:89 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
 #| msgid "Last Week"
 msgid "Last week"
 msgstr "上周"
 
-#: apps/io.ox/find/date/lookup.js:97 module:io.ox/core
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
 #, fuzzy
 #| msgid "Last name"
 msgid "Last year"
@@ -4065,7 +4071,7 @@ msgstr "执行器下拉。请按 [enter] 以跳到下拉。"
 msgid "Layout"
 msgstr "布局"
 
-#: apps/io.ox/core/import/import.js:149 module:io.ox/core
+#: apps/io.ox/core/import/import.js:153 module:io.ox/core
 msgid "Learn more"
 msgstr "了解更多"
 
@@ -4310,7 +4316,7 @@ msgstr "每工作日邮件数（%）"
 msgid "Main window"
 msgstr "主窗口"
 
-#: apps/io.ox/files/actions.js:639 module:io.ox/files
+#: apps/io.ox/files/actions.js:645 module:io.ox/files
 msgid "Make this the current version"
 msgstr "定此为当前版本"
 
@@ -4891,7 +4897,7 @@ msgstr "未开始"
 msgid "Note"
 msgstr "备注"
 
-#: apps/io.ox/core/import/import.js:140 module:io.ox/core
+#: apps/io.ox/core/import/import.js:144 module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSV 文件上的备注："
 
@@ -5013,7 +5019,7 @@ msgid "Only showing items related to folder \"%1$s\""
 msgstr "只显示和 \"%1$s\" 文件夹有关的项目"
 
 #: apps/io.ox/files/actions.js:477 module:io.ox/files
-#: apps/io.ox/files/actions.js:625
+#: apps/io.ox/files/actions.js:627
 msgid "Open"
 msgstr "打开"
 
@@ -5191,7 +5197,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:93 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "第 %1$d 页（共 %2$d 页）"
 
@@ -5484,11 +5490,11 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "请您提供旧密码以复原户口密码。"
 
-#: apps/io.ox/core/import/import.js:212 module:io.ox/core
+#: apps/io.ox/core/import/import.js:216 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "请选择一个汇入的文件"
 
-#: apps/io.ox/core/import/import.js:216 module:io.ox/core
+#: apps/io.ox/core/import/import.js:220 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "请选择一个有效 iCal 文件作汇入"
 
@@ -5612,6 +5618,24 @@ msgstr "前一天"
 #: apps/io.ox/calendar/week/view.js:806 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "上周"
+
+#: apps/io.ox/find/date/patterns.js:200 module:io.ox/find
+#, fuzzy
+#| msgid "Previous"
+msgid "Previous month"
+msgstr "前一个"
+
+#: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
+#, fuzzy
+#| msgid "previous week"
+msgid "Previous week"
+msgstr "上周"
+
+#: apps/io.ox/find/date/patterns.js:204 module:io.ox/find
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous year"
+msgstr "前一天"
 
 #: apps/io.ox/mail/util.js:409 module:io.ox/core
 msgid "Primary account"
@@ -7191,7 +7215,7 @@ msgstr "因为文件 \"%1$s\" 超出限额 %2$s，所以未能上载。"
 msgid "The first 90 days are free."
 msgstr "开始 90 天为免费。"
 
-#: apps/io.ox/core/import/import.js:143 module:io.ox/core
+#: apps/io.ox/core/import/import.js:147 module:io.ox/core
 msgid ""
 "The first record of a valid CSV file must define proper column names. "
 "Supported separators are comma and semi-colon."
@@ -7392,7 +7416,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "XING 有一个问题，错误消息为： \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:205 module:io.ox/core
+#: apps/io.ox/core/import/import.js:209 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "没有可以导入的约会数据"
 
@@ -7616,7 +7640,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:90
 #: apps/io.ox/calendar/toolbar.js:58 apps/io.ox/calendar/util.js:129
 #: apps/io.ox/core/tk/datepicker.js:33 module:io.ox/core
-#: apps/io.ox/find/date/lookup.js:80
+#: apps/io.ox/find/date/patterns.js:188 module:io.ox/find
 #: apps/plugins/portal/birthdays/register.js:87 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:158
 msgid "Today"
@@ -7839,6 +7863,10 @@ msgstr "上载"
 #: module:io.ox/files
 msgid "Upload a new version"
 msgstr "上载一个新版本"
+
+#: apps/io.ox/core/import/import.js:100 module:io.ox/core
+msgid "Upload file"
+msgstr "上载档案"
 
 #: apps/io.ox/files/filepicker.js:166 module:io.ox/files
 #, fuzzy
@@ -8158,9 +8186,10 @@ msgid "Yes, with empty attachment"
 msgstr "是，和空的附件"
 
 #: apps/io.ox/calendar/util.js:122 module:io.ox/calendar
-#: apps/io.ox/find/date/lookup.js:84 module:io.ox/core
-#: apps/io.ox/mail/util.js:61 apps/plugins/portal/birthdays/register.js:93
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:158
+#: apps/io.ox/find/date/patterns.js:192 module:io.ox/find
+#: apps/io.ox/mail/util.js:61 module:io.ox/core
+#: apps/plugins/portal/birthdays/register.js:93 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:158
 msgid "Yesterday"
 msgstr "昨天"
 
@@ -8570,8 +8599,7 @@ msgstr "和 %1$d 位收件人"
 msgid "as date"
 msgstr "起始日期"
 
-#: apps/io.ox/find/date/extensions.js:97 module:io.ox/find
-#: apps/io.ox/find/date/extensions.js:131
+#: apps/io.ox/find/date/patterns.js:97 module:io.ox/find
 #, fuzzy
 #| msgid "date range"
 msgid "as daterange"
@@ -12339,9 +12367,6 @@ msgstr "年"
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "更新户口数据，可能需时片刻。"
 
-#~ msgid "Upload file"
-#~ msgstr "上载档案"
-
 #~ msgid "Upload new file"
 #~ msgstr "上载新文件"
 
@@ -12560,9 +12585,6 @@ msgstr "年"
 
 #~ msgid "open"
 #~ msgstr "打开"
-
-#~ msgid "previous week"
-#~ msgstr "上周"
 
 #~ msgid "september"
 #~ msgstr "九月"
