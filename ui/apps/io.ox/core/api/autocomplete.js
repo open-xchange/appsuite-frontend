@@ -27,6 +27,12 @@ define('io.ox/core/api/autocomplete', [
         var that = this;
 
         this.options = $.extend({
+            users: false,
+            contacts: false,
+            resources: false,
+            groups: false,
+            distributionlists: false,
+            msisdn: false,
             split: true,
             limit: 0
         }, options);

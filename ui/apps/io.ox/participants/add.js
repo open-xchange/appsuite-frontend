@@ -39,7 +39,8 @@ define('io.ox/participants/add', [
                 contacts: true,
                 users: true,
                 groups: true,
-                resources: true
+                resources: true,
+                distributionlists: true
             },
             harmonize: function (data) {
                 var model = new pModel.Participant(data);
