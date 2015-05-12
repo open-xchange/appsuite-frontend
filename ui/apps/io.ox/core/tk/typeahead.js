@@ -16,10 +16,11 @@ define('io.ox/core/tk/typeahead', [
     'io.ox/core/extensions',
     'io.ox/core/api/autocomplete',
     'io.ox/contacts/api',
+    'io.ox/participants/views',
     'settings!io.ox/contacts',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
-], function (ext, AutocompleteAPI, contactAPI, settings) {
+], function (ext, AutocompleteAPI, contactAPI, pViews, settings) {
 
     'use strict';
 
@@ -61,6 +62,8 @@ define('io.ox/core/tk/typeahead', [
             reduce: _.identity,
             // harmonize returned data from 'source'
             harmonize: _.identity,
+            // filter result set after reduce and harmonize
+            filter: _.identity,
             // lazyload selector
             lazyload: null,
             // call typeahead function in render method
@@ -88,50 +91,16 @@ define('io.ox/core/tk/typeahead', [
              * extension point for contact picture
              */
             ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'contactPicture',
+                id: 'view',
                 index: 100,
                 draw: function (participant) {
-                    var node;
-                    this.append(
-                        node = $('<div class="contact-image lazyload">')
-                            .css('background-image', 'url(' + contactAPI.getFallbackImage() + ')')
-                    );
-                    // apply picture halo lazy load
-                    contactAPI.pictureHalo(
-                        node,
-                        participant.toJSON(),
-                        { width: 42, height: 42 }
-                    );
-                }
-            });
-
-            /*
-             * extension point for display name
-             */
-            ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'displayName',
-                index: 200,
-                draw: function (participant) {
-                    this.append(
-                        $('<div class="recipient-name">').text(participant.getDisplayName())
-                    );
-                }
-            });
-
-            // /*
-            //  * extension point for halo link
-            //  */
-            ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'emailAddress',
-                index: 300,
-                draw: function (participant) {
-                    this.append(
-                        $('<div class="ellipsis email">').append(
-                            $.txt(participant.getTarget() + ' '),
-                            participant.getFieldName() !== '' ?
-                                $('<span style="color: #888;">').text('(' + participant.getFieldName() + ')') : participant.getTypeString()
-                        )
-                    );
+                    var pview = new pViews.ParticipantEntryView({
+                            model: participant,
+                            prefetched: true,
+                            closeButton: false,
+                            halo: false
+                        });
+                    this.append(pview.render().$el);
                 }
             });
 
@@ -158,6 +127,7 @@ define('io.ox/core/tk/typeahead', [
                             data = o.placement === 'top' ? data.reverse() : data;
                             return _(data).map(o.harmonize);
                         })
+                        .then(o.filter)
                         .then(customEvent.bind(self, 'finished'))
                         .then(customEvent.bind(self, 'idle'))
                         .then(callback);

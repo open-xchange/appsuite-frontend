@@ -21,7 +21,6 @@ define('io.ox/participants/add', [
     'use strict';
 
     // TODO:
-    // - dont show existing participants in typeahead dropdown
     // - exceptions for global address book
 
     var AddParticipantView = Backbone.View.extend({
@@ -43,7 +42,7 @@ define('io.ox/participants/add', [
                 resources: true
             },
             harmonize: function (data) {
-                var model = new pModel.Participant(data.data);
+                var model = new pModel.Participant(data);
                 return {
                     value: model.getTarget(),
                     label: model.getDisplayName(),
@@ -59,7 +58,7 @@ define('io.ox/participants/add', [
                 this.options.blacklist = this.options.blacklist.split(',');
             }
             this.options.click = _.bind(this.addParticipant, this);
-            this.options.reduce = _.bind(this.reduceDuplicates, this);
+            this.options.filter = _.bind(this.reduceDuplicates, this);
         },
 
         keyDown: function (e) {
@@ -81,9 +80,9 @@ define('io.ox/participants/add', [
          * @return {array}      filtered data set
          */
         reduceDuplicates: function (data) {
-            var inCollection = this.collection.invoke('getEmail');
+            var inCollection = this.collection.invoke('getTarget');
             return _(data).filter(function (res) {
-                return inCollection.indexOf(res.email) < 0;
+                return inCollection.indexOf(res.model.getTarget()) < 0;
             });
         },
 
