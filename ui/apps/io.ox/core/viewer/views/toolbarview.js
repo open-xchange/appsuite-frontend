@@ -44,6 +44,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'filename': {
                 prio: 'hi',
                 mobile: 'hi',
+                ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
                 customize: function (baton) {
                     var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
@@ -273,12 +274,19 @@ define('io.ox/core/viewer/views/toolbarview', [
         id: 'print',
         action: function () {}
     });
+    new Action(TOOLBAR_ACTION_ID + '/rename', {
+        id: 'rename',
+        requires: function (e) {
+            return !e.baton.context.standalone;
+        }
+    });
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         id: 'togglesidebar',
         action: function (baton) {
             baton.context.onToggleSidebar();
         }
     });
+
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
         id: 'popoutstandalone',
         requires: function () {
@@ -287,16 +295,14 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             var fileModel = baton.model;
-            //var popoutUrl = ox.abs + ox.root +
-            //    '/#!&app=io.ox/files' +
-            //    '&folder=' + encodeURIComponent(fileModel.get('folder_id')) +
-            //    '&id=' + encodeURIComponent(fileModel.get('folder_id')) + '.' + encodeURIComponent(fileModel.get('id'));
-            //window.open(popoutUrl,'_blank');
             ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
+        requires: function (e) {
+            return !e.baton.context.standalone;
+        },
         action: function () {}
     });
     // define actions for the zoom function
