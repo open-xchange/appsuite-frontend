@@ -49,16 +49,19 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.mainEvents = _.extend({}, Backbone.Events);
             // create children views
-            this.toolbarView = new ToolbarView({ collection: this.collection, mainEvents: this.mainEvents });
-            this.displayerView = new DisplayerView({ collection: this.collection, mainEvents: this.mainEvents });
-            this.sidebarView = new SidebarView({ collection: this.collection, mainEvents: this.mainEvents });
+            var childViewParams = { collection: this.collection, mainEvents: this.mainEvents, standalone: this.standalone };
+            this.toolbarView = new ToolbarView(childViewParams);
+            this.displayerView = new DisplayerView(childViewParams);
+            this.sidebarView = new SidebarView(childViewParams);
             // close viewer on events
             this.listenTo(this.mainEvents, 'viewer:close', this.closeViewer);
             this.listenTo(this.mainEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // bind toggle side bar handler
             this.listenTo(this.mainEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // TODO this is not valid anymore if we want to open couple viewer apps in parallel
-            this.listenTo(ox, 'app:start app:resume', this.closeViewer);
+            if (!ox.debug) {
+                this.listenTo(ox, 'app:start app:resume', this.closeViewer);
+            }
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js
@@ -201,7 +204,7 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView = null;
             this.sidebarView = null;
             $(window).off('resize.viewer');
-            if (this.app) {
+            if (!this.standalone && this.app) {
                 this.app.quit();
                 this.app = null;
             }
