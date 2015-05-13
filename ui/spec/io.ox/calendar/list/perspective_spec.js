@@ -14,7 +14,9 @@
 define([
     'io.ox/calendar/main',
     'fixture!io.ox/calendar/list/calendar-list.json',
-    'waitsFor'
+    'waitsFor',
+    //pre-load list perspective for faster tests
+    'io.ox/calendar/list/perspective'
 ], function (main, fixture, waitsFor) {
     'use strict';
 
@@ -56,7 +58,6 @@ define([
         });
 
         it('should open the listview perspective', function () {
-            this.timeout(10000);
             var app = main.getApp();
             return app.launch().then(function () {
                 return ox.ui.Perspective.show(app, 'list');
@@ -184,7 +185,7 @@ define([
 
                 it('and it should show the duration of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
-                    expect(right.find('.time').text()).to.equal('13:00-14:00UTC');
+                    expect(right.find('.time').text()).to.equal('14:00–15:00');
                 });
 
                 it('and it should show the notes of the appointment', function () {

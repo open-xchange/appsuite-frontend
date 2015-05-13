@@ -153,9 +153,9 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
 
             it('should not mix up first and last messages', function () {
                 var items = this.view.getItems();
-                expect(items.eq(0).find('.date').text()).to.equal('13.11.2013 22:42');
-                expect(items.eq(1).find('.date').text()).to.equal('13.11.2013 16:42');
-                expect(items.eq(2).find('.date').text()).to.equal('13.11.2013 10:42');
+                expect(items.eq(0).find('.date').text()).to.equal('13.11.2013 23:42');
+                expect(items.eq(1).find('.date').text()).to.equal('13.11.2013 17:42');
+                expect(items.eq(2).find('.date').text()).to.equal('13.11.2013 11:42');
             });
 
             describe('Add a message', function () {
