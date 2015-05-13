@@ -199,18 +199,23 @@ define('io.ox/participants/views', [
                 // remove from collection by cid
                 var cid = removable.attr('data-cid');
                 this.model.collection.remove(this.model.collection.get(cid));
+                this.remove();
             }
         }
     });
 
     var UserContainer = Backbone.View.extend({
+
         tagName: 'div',
+
         className: 'participantsrow col-xs-12',
+
         initialize: function (options) {
             _.extend({ halo: true }, options);
-            options.collection.on('add remove reset', _.bind(this.updateContainer, this));
+            options.collection.on('add reset', _.bind(this.updateContainer, this));
             this.options = options;
         },
+
         render: function () {
             var self = this,
                 counter = 1;
@@ -233,6 +238,7 @@ define('io.ox/participants/views', [
             self.$el.append(row).toggleClass('empty', this.collection.length === 0);
             return this;
         },
+
         createParticipantNode: function (participant) {
             return new ParticipantEntryView({
                 model: participant,
@@ -242,11 +248,13 @@ define('io.ox/participants/views', [
                 callbacks: this.options.baton.callbacks || {}
             }).render().$el;
         },
+
         updateContainer: function () {
             this.nodes = {};
             this.$el.empty();
             this.render();
         }
+
     });
 
     return {
