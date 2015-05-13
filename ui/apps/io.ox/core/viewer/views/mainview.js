@@ -46,6 +46,9 @@ define('io.ox/core/viewer/views/mainview', [
             if (!this.standalone) {
                 this.$el.parent().find('.simple-window').hide();
             }
+            // set default theme
+            var themeClass = this.standalone ? 'viewer-light-theme' : 'viewer-dark-theme';
+            this.setTheme(themeClass);
             // create the event aggregator of this view.
             this.mainEvents = _.extend({}, Backbone.Events);
             // create children views
@@ -177,6 +180,16 @@ define('io.ox/core/viewer/views/mainview', [
                 // After an on resize call, the plugin 'resets' the active slide to the beginning.
                 this.displayerView.swiper.slideTo(activeSlideIndex);
             }
+        },
+
+        /**
+         * Sets viewer theme.
+         *
+         * @param {String} themeClass
+         * CSS theme class to be applied to viewer.
+         */
+        setTheme: function (themeClass) {
+            this.$el.removeClass().addClass('io-ox-viewer abs ' + themeClass);
         },
 
         /**

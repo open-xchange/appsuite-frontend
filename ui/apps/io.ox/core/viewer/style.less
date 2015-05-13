@@ -11,54 +11,80 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
-
-@viewer-text-color: #ffffff;
-@viewer-background-color: rgba(0, 0, 0, 0.85);
-
 @viewer-toolbar-height: 40px;
-@viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-filename-width-smartphone-portrait: 130px;
 @viewer-toolbar-filename-width-smartphone-landscape: 320px;
-@viewer-toolbar-color: #999;
-@viewer-toolbar-hover-bgcolor: #333333;
-@viewer-toolbar-focus-bgcolor: #222222;
-@viewer-toolbar-active-bgcolor: #222222;
 @viewer-toolbar-link-width: 48px;
 @viewer-toolbar-link-width-smartphone: 50px;
-
-@viewer-control-color: @viewer-toolbar-color;
-
-@viewer-sidebar-bgcolor: #1a1a1a;
 @viewer-sidebar-width: 360px;
 @viewer-sidebar-width-smartphone: 100%;
-@viewer-sidebar-active-bgcolor: #333333;
-@viewer-sidebar-label-text-color: #999999;
-
 @viewer-audio-cover-size: 280px;
 
-/* enable iOS momentum scrolling */
-html.ios .io-ox-viewer {
-    .viewer-sidebar, .swiper-slide.swiper-slide-active { -webkit-overflow-scrolling: touch; }
+.viewer-dark-colors () {
+    @viewer-text-color: #ffffff;
+    @viewer-scrollbar-track-color: @viewer-sidebar-bgcolor;
+    @viewer-scrollbar-thumb-color: #333333;
+    @viewer-scrollbar-thumb-hover-color: #444444;
+    @viewer-scrollbar-base-color: #666666;
+    @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
+    @viewer-background-color: rgba(0, 0, 0, 0.85);
+    @viewer-toolbar-bgcolor: #000000;
+    @viewer-toolbar-color: #999999;
+    @viewer-toolbar-border-color: #000000;
+    @viewer-toolbar-hover-color: #999;
+    @viewer-toolbar-hover-bgcolor: #333333;
+    @viewer-toolbar-focus-color: #FFFFFF;
+    @viewer-toolbar-focus-bgcolor: #222222;
+    @viewer-toolbar-active-color: #FFFFFF;
+    @viewer-toolbar-active-bgcolor: #222222;
+    @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
+    @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.5);
+    @viewer-displayer-caption-color: #FFFFFF;
+    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.7);
+    @viewer-control-color: @viewer-toolbar-color;
+    @viewer-sidebar-bgcolor: #1a1a1a;
+    @viewer-sidebar-border-color: #000000;
+    @viewer-sidebar-active-bgcolor: #333333;
+    @viewer-sidebar-label-text-color: #999999;
+    @viewer-sidebar-uploadnewversion-bgcolor: #444444;
+    @viewer-sidebar-uploadnewversion-bordercolor: #555555;
+    @viewer-sidebar-uploadnewversion-hovercolor: #777777;
 }
 
-/* set the text context of responsive labels according to the device and it's orientation */
-
-/* the default */
-*.viewer-responsive-label[data-label-normal]:before {
-    content: attr(data-label-normal);
-}
-
-/* for smartphones with orientation portrait */
-*.smartphone *.viewer-responsive-label[data-label-normal]:before {
-    @media(orientation: portrait) {
-        content: attr(data-label-short);
-    }
+.viewer-light-colors () {
+    @viewer-text-color: #333333;
+    @viewer-scrollbar-track-color: #DDDDDD;
+    @viewer-scrollbar-thumb-color: #AAAAAA;
+    @viewer-scrollbar-thumb-hover-color: #777777;
+    @viewer-scrollbar-base-color: #666666;
+    @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
+    @viewer-background-color: rgba(255, 255, 255, 1);
+    @viewer-toolbar-bgcolor: #ffffff;
+    @viewer-toolbar-color: #3c73aa;
+    @viewer-toolbar-border-color: #DDDDDD;
+    @viewer-toolbar-hover-color: #284d71;
+    @viewer-toolbar-hover-bgcolor: #EEEEEE;
+    @viewer-toolbar-focus-color: #FFFFFF;
+    @viewer-toolbar-focus-bgcolor: #DDDDDD;
+    @viewer-toolbar-active-color: #284d71;
+    @viewer-toolbar-active-bgcolor: #AAAAAA;
+    @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
+    @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.2);
+    @viewer-displayer-caption-color: #FFFFFF;
+    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.3);
+    @viewer-control-color: @viewer-toolbar-color;
+    @viewer-sidebar-bgcolor: #f5f5f5;
+    @viewer-sidebar-border-color: #DDDDDD;
+    @viewer-sidebar-active-bgcolor: rgba(0,0,0, 0.2);
+    @viewer-sidebar-label-text-color: #999999;
+    @viewer-sidebar-uploadnewversion-bgcolor: rgba(0,0,0,.1);
+    @viewer-sidebar-uploadnewversion-bordercolor: rgba(0,0,0,0.1);
+    @viewer-sidebar-uploadnewversion-hovercolor: rgba(0,0,0,0.5);
 }
 
 
 /* OX Viewer Sidebar generic styles */
-
 .viewer-sidebar {
     position: absolute;
     width: @viewer-sidebar-width;
@@ -79,7 +105,6 @@ html.ios .io-ox-viewer {
         }
     }
 }
-
 
 /* OX Viewer Sidebar section panel generic styles */
 
@@ -186,11 +211,23 @@ html.ios .io-ox-viewer {
         }
     }
 }
-    
 
-/* OX Viewer */
+/* set the text context of responsive labels according to the device and it's orientation */
+// a mixin containing all styles for viewer
+.viewer-styles() {
 
-.io-ox-viewer {
+    /* the default */
+    *.viewer-responsive-label[data-label-normal]:before {
+        content: attr(data-label-normal);
+    }
+
+    /* for smartphones with orientation portrait */
+    *.smartphone *.viewer-responsive-label[data-label-normal]:before {
+        @media (orientation: portrait) {
+            content: attr(data-label-short);
+        }
+    }
+
     font-size: 13px;
     background-color: @viewer-background-color;
     color: @viewer-text-color;
@@ -201,19 +238,19 @@ html.ios .io-ox-viewer {
         width: 8px;
     }
     ::-webkit-scrollbar-track {
-        background: #000;//@viewer-sidebar-bgcolor;
+        background: @viewer-scrollbar-track-color;
     }
     ::-webkit-scrollbar-thumb {
-        background: #333;
+        background: @viewer-scrollbar-thumb-color;
         width: 8px;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #444;
+        background: @viewer-scrollbar-thumb-hover-color;
     }
 
-    scrollbar-base-color: #666666;
-    scrollbar-track-color: @viewer-sidebar-bgcolor;
-    scrollbar-arrow-color: @viewer-sidebar-label-text-color;
+    scrollbar-base-color: @viewer-scrollbar-base-color;
+    scrollbar-track-color: @viewer-scrollbar-track-color;
+    scrollbar-arrow-color: @viewer-sidebar-label-text-color @viewer-scrollbar-arrow-color;
 
     .viewer-toolbar {
         position: absolute;
@@ -226,6 +263,7 @@ html.ios .io-ox-viewer {
         padding-left: 0;
         text-align: right;
         z-index: 2;
+        border-bottom: 1px solid @viewer-toolbar-border-color;
         i.fa {
             font-size: 14px;
         }
@@ -243,12 +281,12 @@ html.ios .io-ox-viewer {
                 text-decoration: none;
                 color: @viewer-toolbar-color;
                 &:hover {
-                    color: #ffffff;
+                    color: @viewer-toolbar-hover-color;
                     background-color: @viewer-toolbar-hover-bgcolor;
                 }
                 &:focus,
                 &:active {
-                    color: #ffffff;
+                    color: @viewer-toolbar-focus-color;
                     background-color: @viewer-toolbar-focus-bgcolor;
                 }
             }
@@ -261,13 +299,25 @@ html.ios .io-ox-viewer {
                 i {
                     margin-right: 16px;
                     font-size: 14px;
-                };
-                i.fa-file-excel-o { color: #44B957; }
-                i.fa-file-word-o { color: #1A9DD4; }
-                i.fa-file-powerpoint-o { color: #EE5F37; }
-                i.fa-file-pdf-o { color: #CF1E28; }
-                i.fa-file-image-o { color: #EE5F37; }
-                i.fa-file-text-o { color: #4285f4; }
+                }
+                i.fa-file-excel-o {
+                    color: #44B957;
+                }
+                i.fa-file-word-o {
+                    color: #1A9DD4;
+                }
+                i.fa-file-powerpoint-o {
+                    color: #EE5F37;
+                }
+                i.fa-file-pdf-o {
+                    color: #CF1E28;
+                }
+                i.fa-file-image-o {
+                    color: #EE5F37;
+                }
+                i.fa-file-text-o {
+                    color: #4285f4;
+                }
                 &:hover, &:active, &:focus {
                     color: @viewer-toolbar-color;
                     background: @viewer-toolbar-hover-bgcolor;
@@ -279,22 +329,29 @@ html.ios .io-ox-viewer {
                     cursor: pointer;
                 }
                 &:focus {
-                    background-color: @viewer-toolbar-active-bgcolor ;
+                    background-color: @viewer-toolbar-active-bgcolor;
                 }
             }
-            > a.active { background-color: @viewer-toolbar-active-bgcolor ; }
-            &.dropdown.open { background-color: @viewer-toolbar-active-bgcolor; }
-            .dropdown-menu { margin: 0; }
+            > a.active {
+                color: @viewer-toolbar-active-color;
+                background-color: @viewer-toolbar-active-bgcolor;
+            }
+            &.dropdown.open {
+                background-color: @viewer-toolbar-active-bgcolor;
+            }
+            .dropdown-menu {
+                margin: 0;
+            }
         }
         &.smartphone > li > a {
             min-width: @viewer-toolbar-link-width-smartphone;
 
-            @media(orientation: portrait) {
+            @media (orientation: portrait) {
                 &.viewer-toolbar-filename {
                     max-width: @viewer-toolbar-filename-width-smartphone-portrait;
                 }
             }
-            @media(orientation: landscape) {
+            @media (orientation: landscape) {
                 &.viewer-toolbar-filename {
                     max-width: @viewer-toolbar-filename-width-smartphone-landscape;
                 }
@@ -304,7 +361,7 @@ html.ios .io-ox-viewer {
 
     // show active sidebar button in toolbar when sidebar is opened
     .viewer-sidebar.opened ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
-        color: #ffffff;
+        color: @viewer-toolbar-color;
         background-color: @viewer-toolbar-focus-bgcolor;
     }
 
@@ -339,7 +396,9 @@ html.ios .io-ox-viewer {
                 align-items: center;
                 outline: none;
             }
-            .io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
+            .io-ox-busy::before {
+                color: rgba(255, 255, 255, 0.3);
+            }
         }
 
         .viewer-displayer-item {
@@ -353,7 +412,7 @@ html.ios .io-ox-viewer {
             max-width: 100%;
         }
 
-        .viewer-displayer-image{
+        .viewer-displayer-image {
             display: none;
         }
 
@@ -399,8 +458,8 @@ html.ios .io-ox-viewer {
                 width: 450px;
                 background: #ffffff;
                 color: #000000;
-//                font-size: 3rem;
-//                padding: 20px;
+                //                font-size: 3rem;
+                //                padding: 20px;
             }
         }
 
@@ -437,7 +496,8 @@ html.ios .io-ox-viewer {
                 min-height: 24px;
                 line-height: 24px;
                 padding: 0 15px;
-                background: rgba(0,0,0,0.7);
+                color: @viewer-displayer-caption-color;
+                background: @viewer-displayer-caption-bgcolor;
                 .border-radius(4px);
             }
             &.smartphone {
@@ -448,8 +508,8 @@ html.ios .io-ox-viewer {
         .swiper-button-control {
             display: none;
             margin-top: -50px;
-            color: rgba(255,255,255, 0.5);
-            background: rgba(0,0,0,0.5);
+            color: @viewer-displayer-navigation-color;
+            background: @viewer-displayer-navigation-bgcolor;
             outline: none;
             width: 50px;
             height: 50px;
@@ -459,7 +519,9 @@ html.ios .io-ox-viewer {
                 line-height: 50px;
                 font-size: 3rem;
             }
-            &:hover, &:focus { color: #FFFFFF; }
+            &:hover, &:focus {
+                color: #FFFFFF;
+            }
         }
 
         .viewer-displayer-notification {
@@ -480,8 +542,7 @@ html.ios .io-ox-viewer {
             }
         }
     }
-    
-    
+
     /* OX Viewer Sidebar specific styles */
 
     .viewer-sidebar {
@@ -491,7 +552,7 @@ html.ios .io-ox-viewer {
         bottom: 0;
         width: @viewer-sidebar-width;
         background-color: @viewer-sidebar-bgcolor;
-        border-left: 1px solid #000;
+        border-left: 1px solid @viewer-sidebar-border-color;
         outline: none;
         &.opened {
             display: block;
@@ -507,23 +568,27 @@ html.ios .io-ox-viewer {
                 color: @viewer-sidebar-label-text-color;
             }
         }
-        
+
         .viewer-uploadnewversion > .form-group > span {
             color: @viewer-text-color;
-            background-color: #444444;
-            border-color: #555555;
+            background-color: @viewer-sidebar-uploadnewversion-bgcolor;
+            border-color: @viewer-sidebar-uploadnewversion-bordercolor;
             &:active, &:hover {
-                border-color: #777777;
+                border-color: @viewer-sidebar-uploadnewversion-hovercolor;
             }
         }
     }
-
 
     /* OX Viewer Sidebar section panel specific styles */
 
     .sidebar-panel {
 
-        a.btn, div.dropdown > a { outline: none; }
+        a.btn, div.dropdown > a {
+            outline: none;
+        }
+        a.btn, div.dropdown > a {
+            outline: none;
+        }
 
         .sidebar-panel-heading {
             color: @viewer-sidebar-label-text-color;
@@ -570,20 +635,38 @@ html.ios .io-ox-viewer {
                     &:hover {
                         color: #fff;
                     }
-                    &:active, &:focus{
+                    &:active, &:focus {
                         background-color: #444444;
                     }
                 }
             }
 
             .description {
-                &:active, &:focus{
+                &:active, &:focus {
                     outline: 2px solid #444444;
                     outline-offset: 2px;
                 }
-
             }
         }
     }
-
 }
+
+// generate dark and light themes
+.io-ox-viewer {
+
+    &.viewer-dark-theme {
+        .viewer-dark-colors();
+        .viewer-styles();
+    }
+
+    &.viewer-light-theme {
+        .viewer-light-colors();
+        .viewer-styles();
+    }
+}
+
+/* enable iOS momentum scrolling */
+html.ios .io-ox-viewer {
+    .viewer-sidebar, .swiper-slide.swiper-slide-active { -webkit-overflow-scrolling: touch; }
+}
+
