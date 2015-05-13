@@ -22,7 +22,7 @@
         "beforeOpeningRoundBrace": true
     },
     "validateLineBreaks": "LF",
-    "validateQuoteMarks": { "mark": "'", "escape": true },
+    "validateQuoteMarks": { "mark": "'", "escape": false },
     "validateJSDoc": {
         "checkParamNames": false,
         "requireParamTypes": false

@@ -154,7 +154,7 @@ define('io.ox/core/notifications/subview', [
             desktopNotificationSupport: true,
             genericDesktopNotification: {
                 title: gt('New notifications'),
-                body: gt("You've got new notifications"),
+                body: gt('You\'ve got new notifications'),
                 icon: ''
             },
             specificDesktopNotification: null,

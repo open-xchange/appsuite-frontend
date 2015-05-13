@@ -191,7 +191,7 @@ define('plugins/notifications/calendar/register', [
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New appointment reminders'),
-                        body: gt("You've got appointment reminders"),
+                        body: gt('You\'ve got appointment reminders'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -238,7 +238,7 @@ define('plugins/notifications/calendar/register', [
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New appointment invitation'),
-                        body: gt("You've got appointment invitations"),
+                        body: gt('You\'ve got appointment invitations'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {

@@ -244,7 +244,7 @@ define.async('io.ox/core/date', [
     }
 
     var reLetters = 'GyYMwWDdFEuaHkKhmsSzZvV'.split('').join('+|') + '+';
-    var regex = new RegExp('(' + reLetters + ")|'((?:[^']|'')+)'|('')", 'g');
+    var regex = new RegExp('(' + reLetters + ')|\'((?:[^\']|\'\')+)\'|(\'\')', 'g');
 
     function num(n, x) {
         var s = x.toString();
@@ -326,15 +326,15 @@ define.async('io.ox/core/date', [
                 if (fmt) {
                     return funs[fmt.charAt(0)](fmt.length, date);
                 } else if (text) {
-                    return text.replace(/''/g, "'");
+                    return text.replace(/''/g, '\'');
                 } else if (quote) {
-                    return "'";
+                    return '\'';
                 }
             });
     }
 
     var pregexStr = '(' + reLetters + ')(?!' + reLetters + ')|(' + reLetters +
-        ')(?=' + reLetters + ")|'((?:[^']|'')+)'|('')|([$^\\\\.*+?()[\\]{}|])";
+        ')(?=' + reLetters + ')|\'((?:[^\']|\'\')+)\'|(\'\')|([$^\\\\.*+?()[\\]{}|])';
     var pregex = new RegExp(pregexStr, 'g');
 
     function escape(rex) {
@@ -446,7 +446,7 @@ define.async('io.ox/core/date', [
                 } else if (text) {
                     return text;
                 } else if (quote) {
-                    return "'";
+                    return '\'';
                 } else if (escape) {
                     return '\\' + escape;
                 }

@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                 enable_debug: '<%= String(local.debug) %>',
                 base: 'v=<%= assemble.options.version %>',
                 cap: '<%= String(local.cap || "") %>',
-                momentLanguages:  "['" + momentLanguages.join("','") + "']"
+                momentLanguages:  '["' + momentLanguages.join('","') + '"]'
             },
             base: {
                 options: {
