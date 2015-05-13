@@ -60,8 +60,12 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.pdfView = null;
             // the PDFDocument instance
             this.pdfDocument = null;
+            // a Deferred object indicating the load process of this document view.
+            this.documentLoad = $.Deferred();
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
+            // bind zoom handlers
+            this.listenTo(this.displayerEvents, 'viewer:resize', this.onResize);
             // bind zoom handlers
             this.listenTo(this.displayerEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
@@ -261,6 +265,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.pdfView.setRenderCallbacks(renderCallbacks);
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
+                // resolve the document load Deferred: thsi document view is fully loaded.
+                this.documentLoad.resolve();
             }
 
             /**
@@ -281,10 +287,11 @@ define('io.ox/core/viewer/views/types/documentview', [
                     notificationIconClass = 'fa-lock';
                 }
                 this.displayNotification(notificationText, notificationIconClass);
+                // resolve the document load Deferred: thsi document view is fully loaded.
+                this.documentLoad.reject();
             }
 
             this.pdfDocument = new PDFDocument(documentUrl);
-
             // display loading animation
             pageContainer.busy();
 
@@ -305,7 +312,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  Document zoom scale in floating point number.
          */
         getDefaultScale: function () {
-            var maxWidth = window.innerWidth - (this.PAGE_SIDE_MARGIN * 2),
+            var maxWidth = this.$el.innerWidth() - (this.PAGE_SIDE_MARGIN * 2),
                 pageDefaultSize = this.pdfDocument && this.pdfDocument.getDefaultPageSize(),
                 pageDefaultWidth = pageDefaultSize && pageDefaultSize.width;
 
@@ -480,6 +487,12 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             return this;
+        },
+
+        onResize: function () {
+            this.documentLoad.done(function () {
+                _.debounce(this.setZoomLevel, 1000).call(this, this.getDefaultZoomFactor());
+            }.bind(this));
         },
 
         /**

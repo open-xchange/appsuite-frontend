@@ -66,7 +66,7 @@ define('io.ox/core/viewer/views/mainview', [
                 this.listenTo(ox, 'app:start app:resume', this.closeViewer);
             }
             // handle DOM events
-            $(window).on('resize.viewer', this.onWindowResize.bind(this));
+            $(window).on('resize.viewer', this.refreshViewSizes.bind(this));
             // clean stuff on dispose event from core/commons.js
             this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
@@ -149,11 +149,6 @@ define('io.ox/core/viewer/views/mainview', [
             }
         },
 
-        // refresh view sizes and broadcast window resize event
-        onWindowResize: function () {
-            this.refreshViewSizes();
-        },
-
         // toggle sidebar after the sidebar button is clicked
         onToggleSidebar: function () {
             this.sidebarView.toggleSidebar();
@@ -171,9 +166,9 @@ define('io.ox/core/viewer/views/mainview', [
                 activeSlide = displayerEl.find('.swiper-slide-active'),
                 activeSlideIndex = activeSlide.index(),
                 swiper = this.displayerView.swiper;
-
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
+            this.mainEvents.trigger('viewer:resize');
             if (swiper) {
                 swiper.onResize();
                 // workaround for a possible bug from swiper plugin that happens sporadically:

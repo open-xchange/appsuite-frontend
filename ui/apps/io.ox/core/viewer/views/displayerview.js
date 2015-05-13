@@ -57,6 +57,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slidesToCache = 7;
             // instance of the swiper plugin
             this.swiper = null;
+            // listen to resize event from main view
+            this.listenTo(this.mainEvents, 'viewer:resize', this.onResize);
             // forward zoom events
             this.listenTo(this.mainEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.mainEvents, 'viewer:zoomout', this.onZoomOut);
@@ -594,6 +596,10 @@ define('io.ox/core/viewer/views/displayerview', [
                 newActiveIndex = slidesCount;
             }
             this.slideTo(newActiveIndex, 0, true);
+        },
+
+        onResize: function () {
+            this.displayerEvents.trigger('viewer:resize');
         },
 
         disposeView: function () {
