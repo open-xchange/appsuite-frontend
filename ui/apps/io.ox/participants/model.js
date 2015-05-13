@@ -46,14 +46,34 @@ define('io.ox/participants/model', [
         defaults: {
             display_name: '',
             email1: '',
-            type: 5
+            type: 5 // external
         },
 
         initialize: function () {
             var self = this;
 
+            // fix type attribute / for example autocomplete api
             if (_.isString(this.get('type'))) {
-                this.fixType();
+                var newType = 0;
+                switch (this.get('type')) {
+                    case 'user':
+                        newType = this.TYPE_USER;
+                        break;
+                    case 'group':
+                        newType = this.TYPE_USER_GROUP;
+                        break;
+                    case 'resource':
+                        newType = this.TYPE_RESOURCE;
+                        break;
+                    case 'contact':
+                        if (this.get('mark_as_distributionlist')) {
+                            newType = this.TYPE_DISTLIST_USER_GROUP;
+                        } else {
+                            newType = this.TYPE_EXTERNAL_USER;
+                        }
+                        break;
+                }
+                this.set('type', newType);
             }
 
             if (this.get('internal_userid')) {
@@ -137,12 +157,14 @@ define('io.ox/participants/model', [
                 break;
             case self.TYPE_USER_GROUP:
                 //fetch user group
+                if ('display_name' in this.attributes && 'members' in this.attributes) break;
                 groupAPI.get({ id: self.get('id') }).done(function (group) {
                     self.set(group);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
+                if ('display_name' in this.attributes) break;
                 resourceAPI.get({ id: self.get('id') }).done(function (resource) {
                     self.set(resource);
                     df.resolve();
@@ -216,29 +238,6 @@ define('io.ox/participants/model', [
             console.warn('deprecated');
         },
 
-        fixType: function () {
-            var newType = 0;
-            switch (this.get('type')) {
-                case 'user':
-                    newType = this.TYPE_USER;
-                    break;
-                case 'group':
-                    newType = this.TYPE_USER_GROUP;
-                    break;
-                case 'resource':
-                    newType = this.TYPE_RESOURCE;
-                    break;
-                case 'contact':
-                    if (this.get('mark_as_distributionlist')) {
-                        newType = this.TYPE_DISTLIST_USER_GROUP;
-                    } else {
-                        newType = this.TYPE_EXTERNAL_USER;
-                    }
-                    break;
-            }
-            this.set('type', newType);
-        },
-
         getAPIData: function () {
             var ret = {
                 type: this.get('type')
@@ -283,17 +282,62 @@ define('io.ox/participants/model', [
         },
 
         addUniquely: function (models, opt) {
-            var self = this;
-            if (!_.isArray(models)) {
-                models = [models];
-            }
-            var toAdd = [];
-            _(models).each(function (participant) {
-                if (!self.get(participant.id)) {
-                    toAdd.push(participant);
+            var self = this,
+                tmpDistList = [];
+
+            function addParticipant(participant) {
+                if (!(participant instanceof self.model)) {
+                    participant = new self.model(participant);
                 }
-            });
-            return this.add(toAdd, opt);
+
+                // check double entries
+                if (!self.get(participant.id)) {
+                    self.add(participant, opt);
+                }
+            }
+
+            models = _([].concat(models))
+                .chain()
+                .map(function (participant) {
+                    // ensure models
+                    if (!(participant instanceof self.model)) {
+                        participant = new self.model(participant);
+                    }
+                    return participant;
+                })
+                .filter(function (participant) {
+                    // resolev distribution lists
+                    if (participant.get('mark_as_distributionlist')) {
+                        tmpDistList = tmpDistList.concat(participant.get('distribution_list'));
+                        return false;
+                    }
+                    return true;
+                })
+                .each(function (participant) {
+                    addParticipant(participant);
+                });
+
+            if (tmpDistList.length > 0) {
+                _.each(tmpDistList, function (val) {
+                    if (val.folder_id === 6) {
+                        return contactAPI.get({ id: val.id, folder: 6 }).then(function (data) {
+                            addParticipant({ id: data.user_id, type: 1 });
+                        });
+                    } else {
+                        addParticipant(val);
+                    }
+                });
+            }
+            // alreadyParticipant = collection.any(function (item) {
+            //     if (data.type === 5) {
+            //
+            //         return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
+            //     } else if (data.type === 1) {
+            //         return item.get('id') ===  data.internal_userid;
+            //     } else {
+            //         return (item.id === data.id && item.get('type') === data.type);
+            //     }
+            // });
         }
     });
 
