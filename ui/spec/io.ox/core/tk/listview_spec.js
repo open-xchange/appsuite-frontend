@@ -16,6 +16,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
     'use strict';
 
     describe('The ListView.', function () {
+        var pictureHalo;
 
         beforeEach(function () {
 
@@ -34,10 +35,19 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
             $('body', document).append(
                 this.list.render().$el
             );
+
+            return require(['io.ox/contacts/api'], function (contactsAPI) {
+                pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+            });
         });
 
-        afterEach(function () {
-            this.list.remove();
+        afterEach(function (done) {
+            pictureHalo.restore();
+            //wait a little bit for debounced code to run
+            _.delay(function () {
+                this.list.remove();
+                done();
+            }.bind(this), 60);
         });
 
         describe('drawing an empty list', function () {
