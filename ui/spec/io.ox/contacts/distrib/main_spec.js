@@ -88,7 +88,6 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], functi
                 header = app.getWindow().nodes.header;
             expect(createForm.find('input.add-participant').length, 'find input for name').to.equal(1);
             expect(header.find('button.btn.btn-primary').length, 'find save button').to.equal(1);
-            expect(createForm.find('button[data-action="add"]').length, 'find add button').to.equal(1);
             expect(createForm.find('[data-extension-id="displayname"] input').length, 'find display name').to.equal(1);
         });
 
