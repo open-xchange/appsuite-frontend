@@ -26,13 +26,14 @@ define('io.ox/core/tk/flag-picker', [
             $parent = $this.parent(),
             $ul = $('ul', $parent).first(),
             $zIndex = $parent.parents("*[style*='z-index']"),
+            transformOffset = $parent.parents("*[style*='translate3d']").first().offset() || { top: 0, left: 0 },
             $container = $this.closest('.scrollable');
 
         if (!$parent.hasClass('open') || _.device('smartphone')) return;
 
         var positions = {
-            top: Math.max($container.offset().top, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - 7)),
-            right: ($container.offset().left + $container.outerWidth() - $this.offset().left - $this.outerWidth() + $this.width() + 7),
+            top: Math.max($container.offset().top, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - 7)) - transformOffset.top,
+            right: ($container.offset().left + $container.outerWidth() - $this.offset().left - $this.outerWidth() + $this.width() + 7) + transformOffset.left,
             left: 'initial',
             bottom: 'initial'
         };
@@ -60,7 +61,14 @@ define('io.ox/core/tk/flag-picker', [
         });
 
         $parent.addClass('smart-dropdown-container');
-        $parent.append($('<div class="abs overlay">').on('mousewheel touchmove', false));
+        $parent.append(
+            $('<div class="abs overlay">')
+                .css({
+                    left: -transformOffset.left,
+                    right: transformOffset.left
+                })
+                .on('mousewheel touchmove', false)
+        );
     });
 
     var colorNames = {
