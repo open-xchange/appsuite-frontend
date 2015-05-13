@@ -99,7 +99,6 @@ define([
 
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['false'];
-                    expect(model.isDriveFile()).to.be['true'];
                 });
             });
 
@@ -116,7 +115,7 @@ define([
                     expect(model.get('filename')).to.equal('cola.jpg');
                     expect(model.get('file_size')).to.equal(106120);
                     expect(model.get('version')).to.equal('1');
-                    expect(model.get('content_type')).to.equal('image/jpeg');
+                    expect(model.getMimeType()).to.equal('image/jpeg');
                     expect(model.get('id')).to.equal('124/374');
                     expect(model.get('folder_id')).to.equal('124');
                     expect(model.get('meta')).to.deep.equal({});
@@ -125,7 +124,6 @@ define([
 
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['false'];
-                    expect(model.isDriveFile()).to.be['true'];
                 });
             });
 
@@ -147,7 +145,6 @@ define([
 
                     expect(model.isMailAttachment()).to.be['true'];
                     expect(model.isPIMAttachment()).to.be['false'];
-                    expect(model.isDriveFile()).to.be['false'];
                 });
             });
 
@@ -170,7 +167,6 @@ define([
 
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['true'];
-                    expect(model.isDriveFile()).to.be['false'];
                 });
             });
 
