@@ -25,8 +25,8 @@ define('io.ox/core/tk/flag-picker', [
         var $this = $(this),
             $parent = $this.parent(),
             $ul = $('ul', $parent).first(),
-            $zIndex = $parent.parents("*[style*='z-index']"),
-            transformOffset = $parent.parents("*[style*='translate3d']").first().offset() || { top: 0, left: 0 },
+            $zIndex = $parent.parents('[style*="z-index"]'),
+            transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
             $container = $this.closest('.scrollable');
 
         if (!$parent.hasClass('open') || _.device('smartphone')) return;
