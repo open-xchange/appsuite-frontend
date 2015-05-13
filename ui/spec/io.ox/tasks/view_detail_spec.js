@@ -67,7 +67,7 @@ define([
                 expect(node.find('.state')).to.have.length(1);
                 expect(node.find('.note')).to.have.length(1);
                 //recurrence/datecompleted, start_date, target_duration, actual_duration, target_costs, actual_costs, trip_meter, billing_information, companies
-                expect(node.find('.task-details').children()).to.have.length(18);
+                expect(node.find('.task-details').children()).to.have.length(16);
             });
 
             it('should draw every participant', function (done) {//find out why this fails in phantom, chrome is fine
