@@ -305,7 +305,10 @@ define('io.ox/calendar/util', [
         addTimezonePopover: function (parent, data, opt) {
             var current = moment(data.start_date);
 
-            opt = opt || {};
+            opt = _.extend({
+                placement: 'left',
+                trigger: 'hover focus'
+            }, opt);
 
             function getContent() {
                 // hard coded for demo purposes
@@ -352,10 +355,10 @@ define('io.ox/calendar/util', [
                     // add missing outer class
                     $(tip).addClass('timezones');
                     // get placement
-                    return opt.placement || 'left';
+                    return opt.placement;
                 },
                 title: getTitle,
-                trigger: 'hover focus'
+                trigger: opt.trigger
             }).on('blur dispose', function () {
                 $(this).popover('hide');
             });

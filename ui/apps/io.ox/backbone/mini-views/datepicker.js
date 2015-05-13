@@ -19,6 +19,15 @@ define('io.ox/backbone/mini-views/datepicker', [
 
     'use strict';
 
+    // close popovers when clicking outside and only allows one open popover
+    $('body').on('click', function (e) {
+        $('[data-toggle="popover"]').each(function () {
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                $(this).popover('hide');
+            }
+        });
+    });
+
     // Bootstrap DatePicker
     var DatePickerView = Backbone.View.extend({
 
@@ -93,10 +102,17 @@ define('io.ox/backbone/mini-views/datepicker', [
                                 self.nodes.timezoneField = $('<button class="btn btn-default" tabindex="1" type="button">').text(timezoneAbbreviation)
                             );
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon" data-toggle="popover">').text(timezoneAbbreviation);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
-                                    calendarUtil.addTimezonePopover(timezoneContainer, self.model.attributes, { placement: 'top' });
+                                    calendarUtil.addTimezonePopover(
+                                        timezoneContainer,
+                                        self.model.attributes,
+                                        {
+                                            placement: 'top',
+                                            trigger: 'click focus'
+                                        }
+                                    );
                                 });
                             }
                         }
