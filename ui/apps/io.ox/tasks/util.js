@@ -304,12 +304,18 @@ define('io.ox/tasks/util',
                     emptyDateArray = [],
                     //sort by alphabet
                     alphabetSort = function (a, b) {
-                            if (a.title.toLowerCase() > b.title.toLowerCase()) {
-                                return 1;
-                            } else {
-                                return -1;
-                            }
-                        },
+                        if (!a.title) {
+                            return -1;
+                        }
+                        if (!b.title) {
+                            return 1;
+                        }
+                        if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    },
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
                             /* jshint eqeqeq: false */
