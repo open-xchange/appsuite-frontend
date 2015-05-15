@@ -168,9 +168,9 @@ define('io.ox/core/viewer/views/mainview', [
                 swiper = this.displayerView.swiper;
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
-            this.mainEvents.trigger('viewer:resize');
             if (swiper) {
                 swiper.onResize();
+                this.mainEvents.trigger('viewer:resize');
                 // workaround for a possible bug from swiper plugin that happens sporadically:
                 // After an on resize call, the plugin 'resets' the active slide to the beginning.
                 this.displayerView.swiper.slideTo(activeSlideIndex);

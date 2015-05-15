@@ -71,6 +71,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
             // bind scroll event for showing current page number
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
+            // create a debounced version of zoom function
+            this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // defaults
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
@@ -387,10 +389,9 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  zoom level numbers between 25 and 800 (supported zoom factors)
          */
         setZoomLevel: function (zoomLevel) {
-            if (!_.isNumber(zoomLevel) &&
-                zoomLevel < this.getMinZoomFactor() &&
-                zoomLevel > this.getMaxZoomFactor() &&
-                !this.isVisible()) {
+            if (!_.isNumber(zoomLevel) || !this.pdfView || !this.isVisible ||
+                (zoomLevel === this.currentZoomFactor) ||
+                (zoomLevel < this.getMinZoomFactor()) || (zoomLevel > this.getMaxZoomFactor())) {
                 return;
             }
             var pdfView = this.pdfView,
@@ -489,9 +490,16 @@ define('io.ox/core/viewer/views/types/documentview', [
             return this;
         },
 
+        /**
+         * Resize handler of the document view.
+         * - calculates and sets a new initial zoom factor
+         */
         onResize: function () {
             this.documentLoad.done(function () {
-                _.debounce(this.setZoomLevel, 1000).call(this, this.getDefaultZoomFactor());
+                if (this.isVisible) {
+                    var defaultZoomFactor = this.getDefaultZoomFactor();
+                    this.setZoomLevelDebounced(defaultZoomFactor);
+                }
             }.bind(this));
         },
 
