@@ -96,7 +96,6 @@ define('io.ox/core/tk/typeahead', [
                 draw: function (participant) {
                     var pview = new pViews.ParticipantEntryView({
                             model: participant,
-                            prefetched: true,
                             closeButton: false,
                             halo: false
                         });
