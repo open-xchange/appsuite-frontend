@@ -395,6 +395,47 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
+         * Returns the active Swiper slide jQuery node.
+         *
+         * @returns {jQuery}
+         *  The active node.
+         */
+        getActiveSlideNode: function () {
+            if (!this.swiper || !this.swiper.slides) {
+                return $();
+            }
+            return this.swiper.slides.eq(this.swiper.activeIndex);
+        },
+
+        /**
+         * Returns the previous Swiper slide jQuery node,
+         * including a possible Swiper duplicate node.
+         *
+         * Note: swiper.previousIndex is not correct, if the active slide was a duplicate slide.
+         *       therefore we check the data-swiper-slide-index attribute.
+         *
+         * @returns {jQuery}
+         *  The previous node.
+         */
+        getPreviousSlideNode: function () {
+            if (!this.swiper || !this.swiper.slides) {
+                return $();
+            }
+            var previousSlideIndex = this.swiper.previousIndex - 1,
+                collectionLength = this.collection.length;
+
+            // recalculate previous swiper slide index, disregarding duplicate slides.
+            if (previousSlideIndex < 0) {
+                previousSlideIndex = previousSlideIndex + collectionLength;
+            }
+            if (previousSlideIndex >= collectionLength) {
+                previousSlideIndex = previousSlideIndex % collectionLength;
+            }
+
+            return this.swiper.slides.filter('[data-swiper-slide-index="' + previousSlideIndex + '"]');
+        },
+
+        /**
          * Handler for the slideChangeEnd event of the swiper plugin.
          * - preload neighboring slides
          * - broadcast 'viewer:displayeditem:change' event
@@ -404,9 +445,10 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         onSlideChangeEnd: function (swiper) {
             var activeSlideIndex = swiper.activeIndex - 1,
+                activeSlideNode = this.getActiveSlideNode(),
+                previousSlideNode = this.getPreviousSlideNode(),
                 collectionLength = this.collection.length,
-                preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left',
-                mediaSlide;
+                preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
             // recalculate swiper active slide index, disregarding duplicate slides.
             if (activeSlideIndex < 0) { activeSlideIndex = activeSlideIndex + collectionLength; }
             if (activeSlideIndex >= collectionLength) { activeSlideIndex = activeSlideIndex % collectionLength; }
@@ -418,18 +460,16 @@ define('io.ox/core/viewer/views/displayerview', [
             this.blendNavigation();
             this.loadSlide(activeSlideIndex, preloadDirection);
             // a11y
-            swiper.slides[swiper.activeIndex].setAttribute('aria-selected', 'true');
-            swiper.slides[swiper.previousIndex].setAttribute('aria-selected', 'false');
+            activeSlideNode.attr('aria-selected', 'true');
+            previousSlideNode.attr('aria-selected', 'false');
             // pause playback on audio and video slides
-            mediaSlide = $(swiper.slides[swiper.previousIndex]).find('audio, video');
-            if (mediaSlide.length > 0) {
-                mediaSlide[0].pause();
-            }
+            previousSlideNode.find('audio, video').each(function () {
+                this.pause();
+            });
             this.mainEvents.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
             // scroll to last position and apply last zoom, if exists
-            var activeSlideEl = this.$el.find('[data-swiper-slide-index="' + activeSlideIndex + '"]'),
-                lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
+            var lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
                 lastZoomLevel = this.documentZoomLevels[activeSlideIndex],
                 activeView = this.slideViews[activeSlideIndex],
                 activeDuplicateView = _.find(this.slideDuplicateViews, function (view) {
@@ -444,7 +484,7 @@ define('io.ox/core/viewer/views/displayerview', [
                             activeDuplicateView.setZoomLevel(lastZoomLevel || activeView.getDefaultZoomFactor());
                         });
                     }
-                    activeSlideEl.scrollTop(lastScrollPosition);
+                    activeSlideNode.scrollTop(lastScrollPosition);
                 });
             }
         },
