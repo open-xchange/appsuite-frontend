@@ -159,7 +159,7 @@ define('io.ox/participants/views', [
                 this.setRows('', gt('Resource'));
                 if (this.options.halo) {
                     data = this.model.toJSON();
-                    data.callbacks = this.options.callbacks || {};
+                    data.callbacks = this.options.baton.callbacks || {};
                     this.nodes.$extra
                         .attr({ href: '#', tabindex: '1' })
                         .data(data)
@@ -240,11 +240,10 @@ define('io.ox/participants/views', [
             this.collection.each(function (participant) {
                 var view = new ParticipantEntryView({
                     tagName: 'li',
+                    className: 'col-xs-12 col-sm-6',
                     model: participant,
                     baton: self.options.baton,
-                    className: 'col-xs-12 col-sm-6',
-                    halo: true,
-                    callbacks: self.options.baton.callbacks || {}
+                    halo: true
                 }).render().$el;
 
                 // bring organizer up
