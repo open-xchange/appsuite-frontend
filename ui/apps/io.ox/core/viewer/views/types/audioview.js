@@ -37,44 +37,49 @@ define('io.ox/core/viewer/views/types/audioview',  [
          */
         render: function () {
             var audio,
-                source,
                 cover,
                 mimeType = this.model.getMimeType() || '',
                 audioUrl = this.getPreviewUrl() || '',
-                coverUrl = FilesAPI.getUrl(this.model.toJSON(), 'cover', { width: 280, height: 280 }),
-                self = this;
+                coverUrl = FilesAPI.getUrl(this.model.toJSON(), 'cover', { width: 280, height: 280 });
 
             // run own disposer function on dispose event from DisposableView
             this.on('dispose', this.disposeView.bind(this));
 
             this.$el.empty().append(
                 $('<div class="viewer-displayer-item viewer-displayer-audio player-hidden">').append(
-                    cover = $('<img>').attr('src', _.unescapeHTML(coverUrl)),
+                    cover = $('<img class="cover">'),
                     audio = $('<audio controls="true">').append(
-                        source = $('<source>'),
                         $('<div>').text(gt('Your browser does not support the audio format of this file.'))
                     )
                 )
             );
-
-            // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
-            audio.on('loadeddata', function () {
-                self.$el.idle().find('.viewer-displayer-audio').removeClass('player-hidden');
-            });
-
-            source.attr({ 'data-src': _.unescapeHTML(audioUrl), type: mimeType });
-            source.on('error', function () {
-                self.$el.idle().append(
-                    self.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
-                );
-            });
 
             // we don't know if the cover url is valid or not until we load it from the server
             cover.one('error', function () {
                 cover.remove();
             });
 
+            audio.attr({ 'data-src': _.unescapeHTML(audioUrl), 'type': mimeType });
+            cover.attr('data-src', _.unescapeHTML(coverUrl));
+
             return this;
+        },
+
+        /**
+         * Audio data load handler
+         */
+        onLoadedData: function () {
+            this.$el.idle().find('.viewer-displayer-audio').removeClass('player-hidden');
+        },
+
+        /**
+         * Audio load error handler
+         */
+        onError: function () {
+            this.$el.idle().find('div.viewer-displayer-notification').remove();
+            this.$el.append(
+                this.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
+            );
         },
 
         /**
@@ -89,20 +94,25 @@ define('io.ox/core/viewer/views/types/audioview',  [
         },
 
         /**
-         * "Shows" the audio slide by transferring the audio source from the 'data-src'
-         *  to the 'src' attribute of the <source> HTMLElement.
+         * "Shows" the audio slide by transferring the audio and the cover source
+         * from the 'data-src' to the 'src' attribute.
          *
          * @returns {AudioView}
          *  the AudioView instance.
          */
         show: function () {
             var audio = this.$el.find('audio'),
-                audioSource = audio.find('source');
+                cover = this.$el.find('img.cover');
 
-            if ((audio.length > 0) && (audioSource.length > 0)) {
-                this.$el.busy();
-                this.$el.find('div.viewer-displayer-notification').remove();
-                audioSource.attr('src', audioSource.attr('data-src'));
+            if ((audio.length > 0)) {
+                this.$el.busy().find('div.viewer-displayer-notification').remove();
+                // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
+                audio.on({
+                    'loadeddata': this.onLoadedData.bind(this),
+                    'error': this.onError.bind(this)
+                });
+                cover.attr('src', cover.attr('data-src'));
+                audio.attr('src', audio.attr('data-src'));
                 audio[0].load();
             }
 
@@ -110,20 +120,26 @@ define('io.ox/core/viewer/views/types/audioview',  [
         },
 
         /**
-         * "Unloads" the audio slide by replacing the src attribute of
-         * the source element to an empty String.
+         * "Unloads" the audio slide by removing the src attribute from
+         * the audio element and calling load() again.
          *
          * @returns {AudioView}
          *  the AudioView instance.
          */
         unload: function () {
-            var audio = this.$el.find('audio');
-
             // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') && audio.length > 0) {
-                audio[0].pause();
+            if (this.$el.hasClass('swiper-slide-duplicate')) {
+                return this;
+            }
+            var audio = this.$el.find('audio');
+            if (audio.length > 0) {
                 this.$el.find('.viewer-displayer-audio').addClass('player-hidden');
-                audio.find('source').attr('src', '');
+                audio.off();
+                audio[0].pause();
+                // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
+                // https://code.google.com/p/chromium/issues/detail?id=234779
+                audio.removeAttr('src');
+                audio[0].load();
             }
 
             return this;
@@ -133,8 +149,9 @@ define('io.ox/core/viewer/views/types/audioview',  [
          * Destructor function of this view.
          */
         disposeView: function () {
-            // remove event listeners from audio and source element
-            this.$el.find('audio').off().find('source').off();
+            // remove event listeners from audio element and cover image
+            this.$el.find('audio').off();
+            this.$el.find('img.cover').off();
         }
 
     });
