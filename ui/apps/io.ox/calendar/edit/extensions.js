@@ -390,23 +390,7 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed'
     });
 
-    // participants label
-    point.extend({
-        id: 'participants_legend',
-        index: 1300,
-        className: 'col-md-12',
-        render: function () {
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('Participants'))
-                )
-            );
-        }
-    }, {
-        rowClass: 'collapsed form-spacer'
-    });
-
-    // participants
+    // participants container
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
@@ -414,13 +398,12 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getParticipants(),
-                baton: baton,
-                sortBy: 'organizer'
+                baton: baton
             }).render().$el);
         }
     });
 
-    // add participants
+    // add participants view
     point.basicExtend({
         id: 'add-participant',
         index: 1500,

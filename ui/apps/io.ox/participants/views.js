@@ -211,39 +211,54 @@ define('io.ox/participants/views', [
         className: 'participantsrow col-xs-12',
 
         initialize: function (options) {
-            _.extend({ halo: true }, options);
-            options.collection.on('add reset', _.bind(this.updateContainer, this));
             this.options = options;
+            this.listenTo(this.collection, 'add remove reset', this.updateContainer);
         },
 
         render: function () {
-            var self = this,
-                row = $('<div class="row">');
-
-            // bring organizer up
-            this.collection.each(function (participant) {
-                var view = new ParticipantEntryView({
-                    model: participant,
-                    baton: self.options.baton,
-                    className: 'col-xs-12 col-sm-6',
-                    halo: self.options.halo,
-                    callbacks: self.options.baton.callbacks || {}
-                }).render();
-
-                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    self.$el.prepend(view.$el);
-                } else {
-                    self.$el.append(view.$el);
-                }
-            });
-
-            this.$el.append(row).toggleClass('empty', this.collection.length === 0);
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(this.options.label || gt('Participants')),
+                    this.$ul = $('<ul class="list-unstyled">')
+                )
+            );
+            this.renderUser();
+            // this.$el.append($ul).toggleClass('empty', this.collection.length === 0);
             return this;
         },
 
+        renderUser: function () {
+            var self = this;
+
+            if (this.collection.length === 0) {
+                this.$ul.append(
+                    $('<li>').text(gt('This list has no contacts yet'))
+                );
+                return;
+            }
+
+            this.collection.each(function (participant) {
+                var view = new ParticipantEntryView({
+                    tagName: 'li',
+                    model: participant,
+                    baton: self.options.baton,
+                    className: 'col-xs-12 col-sm-6',
+                    halo: true,
+                    callbacks: self.options.baton.callbacks || {}
+                }).render().$el;
+
+                // bring organizer up
+                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                    self.$ul.prepend(view);
+                } else {
+                    self.$ul.append(view);
+                }
+            });
+        },
+
         updateContainer: function () {
-            this.$el.empty();
-            this.render();
+            this.$ul.empty();
+            this.renderUser();
         }
 
     });

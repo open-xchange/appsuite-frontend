@@ -388,20 +388,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '8' });
 
-    // participants label
-    point.extend({
-        id: 'participants_legend',
-        index: 1500,
-        className: 'col-md-12 collapsed',
-        render: function () {
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('Participants')).addClass('find-free-time')
-                )
-            );
-        }
-    }, { row: '9' });
-
     point.basicExtend({
         id: 'participants_list',
         index: 1600,
@@ -410,9 +396,8 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
-                    baton: baton,
-                    className: 'participantsrow col-xs-12 collapsed'
-                }).render().$el
+                    baton: baton
+                }).render().$el.addClass('collapsed')
             );
         }
     });
