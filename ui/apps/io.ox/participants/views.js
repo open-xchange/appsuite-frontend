@@ -218,39 +218,30 @@ define('io.ox/participants/views', [
 
         render: function () {
             var self = this,
-                counter = 1;
-            this.nodes = {};
+                row = $('<div class="row">');
 
             // bring organizer up
             this.collection.each(function (participant) {
+                var view = new ParticipantEntryView({
+                    model: participant,
+                    baton: self.options.baton,
+                    className: 'col-xs-12 col-sm-6',
+                    halo: self.options.halo,
+                    callbacks: self.options.baton.callbacks || {}
+                }).render();
+
                 if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    // 0 is reserved for the organizer
-                    self.nodes[0] = self.createParticipantNode(participant);
+                    self.$el.prepend(view.$el);
                 } else {
-                    self.nodes[counter] = self.createParticipantNode(participant);
-                    counter++;
+                    self.$el.append(view.$el);
                 }
             });
-            var row = $('<div class="row">');
-            _(this.nodes).chain().values().each(function (node) {
-                row.append(node);
-            });
-            self.$el.append(row).toggleClass('empty', this.collection.length === 0);
+
+            this.$el.append(row).toggleClass('empty', this.collection.length === 0);
             return this;
         },
 
-        createParticipantNode: function (participant) {
-            return new ParticipantEntryView({
-                model: participant,
-                baton: this.options.baton,
-                className: 'col-xs-12 col-sm-' + (this.options.singlerow ? 12 : 6),
-                halo: this.options.halo,
-                callbacks: this.options.baton.callbacks || {}
-            }).render().$el;
-        },
-
         updateContainer: function () {
-            this.nodes = {};
             this.$el.empty();
             this.render();
         }
