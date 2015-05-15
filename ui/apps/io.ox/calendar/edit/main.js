@@ -152,6 +152,8 @@ define('io.ox/calendar/edit/main', [
                                         .show()
                                         .done(function (action) {
                                             if (action === 'cancel') {
+                                                // add temp timezone attribute again
+                                                self.model.set('endTimezone', self.model.previousAttributes().endTimezone,  { silent: true });
                                                 return;
                                             }
                                             if (action === 'ignore') {
