@@ -429,7 +429,7 @@ define('io.ox/contacts/edit/view-form', [
         function drawDefault(options, model) {
             var input;
             this.append(
-                $('<label class="control-label col-md-12">').append(
+                $('<label class="control-label col-xs-12">').append(
                     $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
                     new mini.ErrorView({ selector: '.row' }).render().$el
@@ -451,7 +451,7 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawTextarea(options, model) {
             this.append(
-                $('<label>').addClass('control-label col-md-12').append(
+                $('<label>').addClass('control-label col-xs-12').append(
                     $.txt('\u00A0'), $('<br>'),
                     new mini.TextView({ name: options.field, model: model }).render().$el
                 )
@@ -523,7 +523,7 @@ define('io.ox/contacts/edit/view-form', [
                         module: 7,
                         changeCallback: propagateAttachmentChange
                     }).render().$el,
-                    new attachmentViews.UploadView({ model: model }).render().$el.addClass('col-md-12')
+                    new attachmentViews.UploadView({ model: model }).render().$el.addClass('col-xs-12')
                 )
             );
         }
