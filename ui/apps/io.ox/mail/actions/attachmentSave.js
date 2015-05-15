@@ -74,6 +74,7 @@ define('io.ox/mail/actions/attachmentSave', [
                 root: '9',
                 settings: settings,
                 title: gt('Save attachment'),
+                hideTrashfolder: true,
 
                 done: function (target) {
                     commit(list, target);

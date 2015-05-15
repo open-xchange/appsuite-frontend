@@ -38,6 +38,7 @@ define('io.ox/core/folder/picker', [
     //     last         {bool}      Prefer last folder used (needs settings and persistent)
     //     list         {array}     list of items, use first to determine first folder
     //     module       {string}    module, e.g. 'mail'
+    //     hideTrashfolder {bool}   hides the trashfolder, used when saving attachments to drive see Bug 38280
     //     persistent   {string}    If string, this path is used to store open and last nodes; needs settings
     //     root         {string}    tree root id, e.g. '1'
     //     selection    {bool}      "Done" callback needs selected item (true/false)
@@ -67,6 +68,7 @@ define('io.ox/core/folder/picker', [
             indent: true,
             module: 'mail',
             persistent: false,
+            hideTrashfolder: false,
             root: '1',
             selection: true,
             title: gt('Select folder'),
@@ -120,6 +122,7 @@ define('io.ox/core/folder/picker', [
             root: o.root,
             customize: o.customize,
             disable: o.disable,
+            hideTrashfolder: o.hideTrashfolder,
             // highlight current selection
             highlight: true,
             highlightclass: _.device('smartphone') ? 'visible-selection-smartphone' : 'visible-selection'

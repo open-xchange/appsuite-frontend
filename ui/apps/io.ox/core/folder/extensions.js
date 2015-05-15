@@ -181,15 +181,23 @@ define('io.ox/core/folder/extensions', [
         },
 
         rootFolders: function (tree) {
-            this.append(
-                new TreeNodeView({
+            var options = {
                     folder: tree.root,
                     headless: true,
                     open: true,
                     tree: tree,
                     parent: tree
-                })
-                .render().$el
+                };
+
+            if (tree.options.hideTrashfolder) {
+                options.filter = function (id, model) {
+                    //exclude trashfolder
+                    return !api.is('trash', model.attributes);
+                };
+            }
+
+            this.append(
+                new TreeNodeView(options).render().$el
             );
         }
     };

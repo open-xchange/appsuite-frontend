@@ -44,7 +44,8 @@ define('io.ox/core/folder/tree', [
                 icons: settings.get('features/folderIcons', false),
                 root: 'default0/INBOX',
                 highlight: _.device('!smartphone'),
-                highlightclass: 'visible-selection'
+                highlightclass: 'visible-selection',
+                hideTrashfolder: false
             }, options);
 
             this.all = !!options.all;
