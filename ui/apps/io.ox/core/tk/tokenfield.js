@@ -237,7 +237,7 @@ define('io.ox/core/tk/tokenfield', [
                                 value: m.mail
                             }, { silent: true });
                         });
-                        self.collection.addUniquely(models);
+                        self.collection.add(models);
                         self.redrawTokens();
                         // clean input
                         self.input.data('ttTypeahead').input.$input.val('');
@@ -251,7 +251,7 @@ define('io.ox/core/tk/tokenfield', [
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
                     // add model to the collection and save cid to the token
-                    self.collection.addUniquely(e.attrs.model);
+                    self.collection.add(e.attrs.model);
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
@@ -360,7 +360,7 @@ define('io.ox/core/tk/tokenfield', [
                     },
                     receive: function (e, ui) {
                         var tokenData = ui.item.data();
-                        self.collection.addUniquely(tokenData.attrs.model);
+                        self.collection.add(tokenData.attrs.model);
                         self.resort.call(self);
                     },
                     remove: function (e, ui) {

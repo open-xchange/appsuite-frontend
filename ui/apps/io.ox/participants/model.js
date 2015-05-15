@@ -279,6 +279,8 @@ define('io.ox/participants/model', [
                 });
                 self.remove(duplicates);
             });
+            this.oldAdd = this.add;
+            this.add = this.addUniquely;
         },
 
         addUniquely: function (models, opt) {
@@ -292,7 +294,7 @@ define('io.ox/participants/model', [
 
                 // check double entries
                 if (!self.get(participant.id)) {
-                    self.add(participant, opt);
+                    self.oldAdd(participant, opt);
                 }
             }
 

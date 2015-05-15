@@ -198,7 +198,7 @@ define('io.ox/calendar/model', [
                         if (options.create) {
                             // it's a private folder for the current user, add him by default
                             // as participant
-                            self.getParticipants().addUniquely({ id: userID, type: 1 });
+                            self.getParticipants().add({ id: userID, type: 1 });
 
                             // use a new, custom and unused property in his model to specify that he can't be removed
                             self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
@@ -210,11 +210,11 @@ define('io.ox/calendar/model', [
                     } else if (folderAPI.is('public', folder)) {
                         if (options.create) {
                             // if public folder, current user will be added
-                            self.getParticipants().addUniquely({ id: userID, type: 1 });
+                            self.getParticipants().add({ id: userID, type: 1 });
                         }
                     } else if (folderAPI.is('shared', folder)) {
                         // in a shared folder the owner (created_by) will be added by default
-                        self.getParticipants().addUniquely({ id: folder.created_by, type: 1 });
+                        self.getParticipants().add({ id: folder.created_by, type: 1 });
                     }
 
                 });

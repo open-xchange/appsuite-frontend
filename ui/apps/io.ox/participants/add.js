@@ -94,7 +94,7 @@ define('io.ox/participants/add', [
             if (inBlackList) {
                 require('io.ox/core/yell')('warning', gt('This email address cannot be used'));
             } else {
-                this.collection.addUniquely(data.model);
+                this.collection.add(data.model);
             }
 
             // clean typeahad input
