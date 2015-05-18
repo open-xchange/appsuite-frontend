@@ -225,13 +225,22 @@ define('io.ox/participants/model', [
             return this.get(this.get('field')) || this.getDisplayName();
         },
 
-        getFieldName: function () {
-            var field = this.get('field') || '';
-            return field !== '' ? ContactModel.fields[field] : '';
+        getFieldString: function () {
+            return this.get('field') ? ContactModel.fields[this.get('field')] : '';
         },
 
         getTypeString: function () {
             return this.TYPE_STRINGS[this.get('type')] || '';
+        },
+
+        getFieldNumber: function () {
+            if (_.isNumber(this.get('mail_field'))) {
+                return this.get('mail_field');
+            } else if (this.get('field')) {
+                return parseInt(this.get('field').slice(-1), 10);
+            } else {
+                return 0;
+            }
         },
 
         getImage: function () {
