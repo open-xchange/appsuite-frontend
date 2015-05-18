@@ -32,8 +32,6 @@ define('io.ox/core/tk/iframe', [
 
             app.setWindow(win);
 
-            win.addClass(o.cssNamespace);
-
             win.setTitle(o.pageTitle);
 
             if (o.acquireToken) {
@@ -58,8 +56,8 @@ define('io.ox/core/tk/iframe', [
         });
 
         function initWindowAndShow(win, data) {
-            var domain = o.domain,
-                iframe =   $('<iframe>', { src: domain, frameborder: 0 }),
+            var url = o.url,
+                iframe =   $('<iframe>', { src: url, frameborder: 0 }),
                 urlWithOxToken;
             iframe.css({
                 width: '100%',
@@ -69,7 +67,7 @@ define('io.ox/core/tk/iframe', [
             win.nodes.main.append(iframe);
 
             if (data && data.token) {
-                urlWithOxToken = domain + '?ox_token=' + data.token;
+                urlWithOxToken = url + '?ox_token=' + data.token;
                 iframe.attr('src', urlWithOxToken);
             }
 
