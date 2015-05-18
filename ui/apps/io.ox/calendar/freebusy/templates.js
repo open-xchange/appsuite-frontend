@@ -87,12 +87,6 @@ define('io.ox/calendar/freebusy/templates', [
             return $('<div class="abs free-busy-controls">');
         },
 
-        getAutoCompleteControls: function () {
-            return $('<div class="abs autocomplete-controls">').append(
-                $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...')
-            );
-        },
-
         getPopover: function (standalone) {
 
             var part1 = gt('If you spot a free time, just select this area. ' +

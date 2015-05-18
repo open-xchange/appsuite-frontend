@@ -68,6 +68,10 @@ define('io.ox/participants/add', [
             }
         },
 
+        setFocus: function () {
+            if (this.typeahead) this.typeahead.$el.focus();
+        },
+
         /**
          * remove duplicate entries from typeahead dropdown
          * @param  {array} data result array by autocomplete API
