@@ -134,7 +134,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             // set device type
             Util.setDeviceClass(this.$el);
             // attach the touch handlers
-            this.$el.enableTouch({ selector: null, horSwipeHandler: this.onHorizontalSwipe });
+            if (this.$el.enableTouch) {
+                this.$el.enableTouch({ selector: null, horSwipeHandler: this.onHorizontalSwipe });
+            }
             // initially set model
             this.model = model;
             return this;
