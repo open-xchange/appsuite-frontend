@@ -35,13 +35,6 @@ define('io.ox/participants/add', [
 
         options: {
             label: '',
-            apiOptions: {
-                contacts: true,
-                users: true,
-                groups: true,
-                resources: true,
-                distributionlists: true
-            },
             harmonize: function (data) {
                 var model = new pModel.Participant(data);
                 return {
