@@ -35,39 +35,39 @@ define('io.ox/core/viewer/views/types/videoview',  [
          *  the VideoView instance.
          */
         render: function () {
-            //console.warn('VideoView.render()', this.model.get('filename'));
-
             var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
-                source = $('<source>'),
-                fallback = $('<div>').text(gt('Your browser does not support the video format of this file.')),
                 previewUrl = this.getPreviewUrl() || '',
-                contentType = this.model.get('file_mimetype') || '',
-                self = this;
+                contentType = this.model.get('file_mimetype') || '';
 
             // run own disposer function on dispose event from DisposableView
             this.on('dispose', this.disposeView.bind(this));
 
-            // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
-            video.on('loadeddata', function () {
-                self.$el.idle();
-                video.removeClass('player-hidden');
-                // console.warn('VideoType.loadSlide() - loaded:', self.model.get('filename'));
-            });
+            this.$el.empty().append(
+                video.append(
+                    $('<div>').text(gt('Your browser does not support the video format of this file.'))
+                )
+            );
 
-            // register error handler
-            source.on('error', function () {
-                // console.warn('VideoType.loadSlide() - error loading:', self.model.get('filename'));
+            video.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
 
-                self.$el.idle().append(
-                    self.createNotificationNode(gt('Your browser does not support the video format of this file.'))
-                );
-            });
-
-            source.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
-            video.append(source, fallback);
-
-            this.$el.empty().append(video);
             return this;
+        },
+
+        /**
+         * Video data load handler
+         */
+        onLoadedData: function () {
+            this.$el.idle().find('.viewer-displayer-video').removeClass('player-hidden');
+        },
+
+        /**
+         * Video load error handler
+         */
+        onError: function () {
+            this.$el.idle().find('div.viewer-displayer-notification').remove();
+            this.$el.append(
+                this.createNotificationNode(gt('Your browser does not support the video format of this file.'))
+            );
         },
 
         /**
@@ -78,27 +78,27 @@ define('io.ox/core/viewer/views/types/videoview',  [
          *  the VideoView instance.
          */
         prefetch: function () {
-            //console.warn('VideoView.prefetch()', this.model.get('filename'));
             return this;
         },
 
         /**
          * "Shows" the video slide by transferring the video source from the 'data-src'
-         *  to the 'src' attribute of the <source> HTMLElement.
+         *  to the 'src' attribute.
          *
          * @returns {VideoView}
          *  the VideoView instance.
          */
         show: function () {
-            //console.warn('VideoView.show()', this.model.get('filename'));
+            var video = this.$el.find('video');
 
-            var video = this.$el.find('video.viewer-displayer-video'),
-                videoSource = video.find('source');
-
-            if ((video.length > 0) && (videoSource.length > 0)) {
-                this.$el.busy();
-                this.$el.find('div.viewer-displayer-notification').remove();
-                videoSource.attr('src', videoSource.attr('data-src'));
+            if ((video.length > 0)) {
+                this.$el.busy().find('div.viewer-displayer-notification').remove();
+                // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
+                video.on({
+                    'loadeddata': this.onLoadedData.bind(this),
+                    'error': this.onError.bind(this)
+                });
+                video.attr('src', video.attr('data-src'));
                 video[0].load(); // reset and start selecting and loading a new media resource from scratch
             }
 
@@ -106,22 +106,26 @@ define('io.ox/core/viewer/views/types/videoview',  [
         },
 
         /**
-         * "Unloads" the video slide by replacing the src attribute of
-         * the <source> element to an empty String.
+         * "Unloads" the video slide by removing the src attribute from
+         * the video element and calling load() again.
          *
          * @returns {VideoView}
          *  the VideoView instance.
          */
         unload: function () {
-            //console.warn('VideoView.unload()', this.model.get('filename'));
-
-            var video = this.$el.find('video.viewer-displayer-video');
-
             // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') && video.length > 0) {
+            if (this.$el.hasClass('swiper-slide-duplicate')) {
+                return this;
+            }
+            var video = this.$el.find('video');
+            if (video.length > 0) {
+                this.$el.find('.viewer-displayer-video').addClass('player-hidden');
+                video.off();
                 video[0].pause();
-                video.addClass('player-hidden');
-                video.find('source').attr('src', '');
+                // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
+                // https://code.google.com/p/chromium/issues/detail?id=234779
+                video.removeAttr('src');
+                video[0].load();
             }
 
             return this;
@@ -131,11 +135,8 @@ define('io.ox/core/viewer/views/types/videoview',  [
          * Destructor function of this view.
          */
         disposeView: function () {
-            //console.warn('ImageView.disposeView()', this.model.get('filename'));
-
-            var video = this.$el.find('video.viewer-displayer-video');
-            // remove event listeners from video and source element
-            video.off().find('source').off();
+            // remove event listeners from video element
+            this.$el.find('video').off();
         }
 
     });
