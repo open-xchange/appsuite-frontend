@@ -180,7 +180,7 @@ define('io.ox/core/desktop', [
             var save = $.proxy(this.saveRestorePoint, this);
             $(window).on('unload', save);
             // 10 secs
-            this.set('saveRestorePointTimer', setInterval(save, 10 * 1000));
+            if (!this.disableRestorePointTimer) this.set('saveRestorePointTimer', setInterval(save, 10 * 1000));
 
             // add folder management
             this.folder = (function () {
