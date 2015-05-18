@@ -40,7 +40,13 @@ define('io.ox/core/tk/typeahead', [
         className: 'form-control',
 
         options: {
-            apiOptions: {},
+            apiOptions: {
+                contacts: false,
+                users: false,
+                groups: false,
+                resources: false,
+                distributionlists: false
+            },
             click: $.noop,
             blur: $.noop,
             tabindex: 1,

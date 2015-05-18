@@ -410,6 +410,13 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed',
         draw: function (baton) {
             var typeahead = new AddParticipant({
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true,
+                    resources: true,
+                    distributionlists: true
+                },
                 placeholder: gt('Add participant/resource'),
                 label: gt('Add participant/resource'),
                 collection: baton.model.getParticipants(),

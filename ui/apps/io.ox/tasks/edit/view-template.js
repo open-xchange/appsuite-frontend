@@ -408,6 +408,13 @@ define('io.ox/tasks/edit/view-template', [
         row: '11',
         draw: function (baton) {
             var typeahead = new AddParticipant({
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true,
+                    resources: true,
+                    distributionlists: true
+                },
                 placeholder: gt('Add participant/resource'),
                 label: gt('Add participant/resource'),
                 collection: baton.model.getParticipants()
