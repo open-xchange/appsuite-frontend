@@ -20,20 +20,20 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             // remove comments
             .replace(/<!--(.*?)-->/g, '')
             // remove emoji images and convert them back to unicode characters
-            .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
-            // remove class attribute and custom attributes
-            .replace(/(data-[^=]+|class)="[^"]*"/ig, '')
-            // remove relative links (remove if links don't start with a protocol)
-            .replace(/<a[^>]+href="(?!.+:)[^"].+?">(.+)<\/\s?a>/gi, '$1')
-            // remove &nbsp;
-            .replace(/&nbsp;/ig, ' ')
-            // fix missing white-space before/after links
-            .replace(/([^>\s])<a/ig, '$1 <a')
-            .replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
-            // beautify simple quotes
-            .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
-            // beautify dashes
-            .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
+            .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1');
+        // remove class attribute and custom attributes
+        //.replace(/(data-[^=]+|class)="[^"]*"/ig, '')
+        // remove relative links (remove if links don't start with a protocol)
+        //.replace(/<a[^>]+href="(?!.+:)[^"].+?">(.+)<\/\s?a>/gi, '$1')
+        // remove &nbsp;
+        //.replace(/&nbsp;/ig, ' ');
+        // fix missing white-space before/after links
+        //.replace(/([^>\s])<a/ig, '$1 <a')
+        //.replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
+        // beautify simple quotes
+        //.replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
+        // beautify dashes
+        //.replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
 
         o.content = emoji.processEmoji(o.content);
     },
