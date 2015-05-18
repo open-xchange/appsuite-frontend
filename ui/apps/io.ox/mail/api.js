@@ -1044,7 +1044,11 @@ define('io.ox/mail/api', [
         form.append('json_0', JSON.stringify(data));
         // add files
         _(files).each(function (file, index) {
-            form.append('file_' + index, file);
+            if (window.cordova && _.device('android')) {
+                form.append('file_' + index, file, file.name);
+            } else {
+                form.append('file_' + index, file);
+            }
         });
 
         return http.UPLOAD({
