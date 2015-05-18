@@ -199,7 +199,7 @@ define('io.ox/calendar/model', [
                             // it's a private folder for the current user, add him by default
                             // as participant
                             self.getParticipants().add({ id: userID, type: 1 });
-
+                            self.set('organizerId', userID);
                             // use a new, custom and unused property in his model to specify that he can't be removed
                             self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
                         } else {
