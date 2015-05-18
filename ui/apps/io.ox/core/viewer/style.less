@@ -402,12 +402,6 @@
         }
 
         .viewer-displayer-item {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            margin: auto;
             max-height: 100%;
             max-width: 100%;
         }
@@ -417,22 +411,16 @@
         }
 
         .viewer-displayer-audio {
-            position: relative;
             &.player-hidden {
-                // audio is not loading with 'display: none;', 'visibility: hidden;' or 'width: / height: 1px'
-                top: -10000px;
-                left: -10000px;
+                display: none;
             }
 
             img {
                 display: block;
-                left: 0;
-                right: 0;
-                margin: auto;
                 max-width: @viewer-audio-cover-size;
                 max-height: @viewer-audio-cover-size;
-                border: 4px solid black;
-                border-radius: 10px;
+                margin-bottom: 4px;
+                border-radius: 6px;
             }
 
             audio {
@@ -444,9 +432,7 @@
         .viewer-displayer-video {
             min-height: 34px;
             &.player-hidden {
-                // video is not loading with 'display: none;', 'visibility: hidden;' or 'width: / height: 1px'
-                top: -10000px;
-                left: -10000px;
+                display: none;
             }
         }
 
@@ -525,12 +511,6 @@
         }
 
         .viewer-displayer-notification {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            margin: auto;
             height: 100px;
             text-align: center;
             color: @viewer-toolbar-color;
