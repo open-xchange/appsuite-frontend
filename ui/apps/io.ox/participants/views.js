@@ -159,7 +159,10 @@ define('io.ox/participants/views', [
                 this.setRows('', gt('Resource'));
                 if (this.options.halo) {
                     data = this.model.toJSON();
-                    data.callbacks = this.options.baton.callbacks || {};
+                    data.callbacks = {};
+                    if (this.options.baton && this.options.baton.callbacks) {
+                        data.callbacks = this.options.baton.callbacks;
+                    }
                     this.nodes.$extra
                         .attr({ href: '#', tabindex: '1' })
                         .data(data)
