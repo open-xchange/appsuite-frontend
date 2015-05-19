@@ -140,11 +140,11 @@ define('io.ox/core/viewer/views/mainview', [
                     break;
                 case 37: // left arrow
                     this.displayerView.swiper.slidePrev();
-                    this.displayerView.$el.find('.swiper-slide-active').focus();
+                    this.displayerView.focusActiveSlide();
                     break;
                 case 39: // right arrow
                     this.displayerView.swiper.slideNext();
-                    this.displayerView.$el.find('.swiper-slide-active').focus();
+                    this.displayerView.focusActiveSlide();
                     break;
             }
         },
@@ -163,7 +163,7 @@ define('io.ox/core/viewer/views/mainview', [
         refreshViewSizes: function () {
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
-                activeSlide = displayerEl.find('.swiper-slide-active'),
+                activeSlide = this.displayerView.getActiveSlideNode(),
                 activeSlideIndex = activeSlide.index(),
                 swiper = this.displayerView.swiper;
             displayerEl.css({ width: window.innerWidth - rightOffset });
