@@ -1002,7 +1002,7 @@ msgstr "Произошла ошибка."
 msgid "An error occurred. Please try again."
 msgstr "Произошла ошибка. Повторите попытку."
 
-#: apps/io.ox/core/tk/iframe.js:50 module:io.ox/core/tk/iframe
+#: apps/io.ox/core/tk/iframe.js:48 module:io.ox/core/tk/iframe
 #, fuzzy
 #| msgid "An error occurred. Please try again later"
 msgid "An error occurred. There is no valid token available."
@@ -2693,7 +2693,7 @@ msgstr ""
 msgid "Drop new version here"
 msgstr "Отправить новую версию"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:175 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4684,7 +4684,7 @@ msgstr "Создать"
 msgid "New Folder"
 msgstr "Создать папку"
 
-#: apps/io.ox/mail/api.js:1360 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
 msgid "New Mail"
 msgstr "Новые"
 
@@ -6271,7 +6271,7 @@ msgstr "Сохранено в"
 msgid "Saved in:"
 msgstr "Сохранено в"
 
-#: apps/io.ox/mail/api.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Вложение сохранено"
 
@@ -8564,8 +8564,8 @@ msgstr "Ваши программы"
 msgid "Your browser does not support the audio format of this file."
 msgstr "Ваш браузер не поддерживается."
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:42 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:62
+#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:69
 #, fuzzy
 msgid "Your browser does not support the video format of this file."
 msgstr "Ваш браузер не поддерживается."

@@ -5473,7 +5473,7 @@ msgstr ""
 msgid "Set color"
 msgstr ""
 
-#: apps/io.ox/core/tk/iframe.js:50
+#: apps/io.ox/core/tk/iframe.js:48
 #: module:io.ox/core/tk/iframe
 msgid "An error occurred. There is no valid token available."
 msgstr ""
@@ -5772,7 +5772,7 @@ msgstr ""
 msgid "Drop new version here"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:173
+#: apps/io.ox/core/viewer/views/sidebarview.js:175
 #: module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
@@ -5891,9 +5891,9 @@ msgstr ""
 msgid "Sorry, there is no preview available for this image."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:42
+#: apps/io.ox/core/viewer/views/types/videoview.js:47
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:62
+#: apps/io.ox/core/viewer/views/types/videoview.js:69
 msgid "Your browser does not support the video format of this file."
 msgstr ""
 
@@ -7305,12 +7305,12 @@ msgstr ""
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1084
+#: apps/io.ox/mail/api.js:1088
 #: module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1360
+#: apps/io.ox/mail/api.js:1364
 #: module:io.ox/mail
 msgid "New Mail"
 msgstr ""

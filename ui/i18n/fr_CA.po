@@ -988,7 +988,7 @@ msgstr "Une erreur s'est produite."
 msgid "An error occurred. Please try again."
 msgstr "Une erreur s'est produite. Veuillez réessayer."
 
-#: apps/io.ox/core/tk/iframe.js:50 module:io.ox/core/tk/iframe
+#: apps/io.ox/core/tk/iframe.js:48 module:io.ox/core/tk/iframe
 #, fuzzy
 #| msgid "An error occurred. Please try again later"
 msgid "An error occurred. There is no valid token available."
@@ -2698,7 +2698,7 @@ msgstr ""
 msgid "Drop new version here"
 msgstr "Téléverser une nouvelle version"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:175 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4706,7 +4706,7 @@ msgstr "Nouveau"
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
-#: apps/io.ox/mail/api.js:1360 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nouveau message"
 
@@ -6308,7 +6308,7 @@ msgstr "Enregistré dans"
 msgid "Saved in:"
 msgstr "Enregistré dans"
 
-#: apps/io.ox/mail/api.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Fichier joint au courrier enregistré"
 
@@ -8653,8 +8653,8 @@ msgstr "Vos applications"
 msgid "Your browser does not support the audio format of this file."
 msgstr "Votre navigateur n'est pas pris en charge."
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:42 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:62
+#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:69
 #, fuzzy
 msgid "Your browser does not support the video format of this file."
 msgstr "Votre navigateur n'est pas pris en charge."

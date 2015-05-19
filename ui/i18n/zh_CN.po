@@ -975,7 +975,7 @@ msgstr "发生一个错误。"
 msgid "An error occurred. Please try again."
 msgstr "发生了一个错误。请重试。"
 
-#: apps/io.ox/core/tk/iframe.js:50 module:io.ox/core/tk/iframe
+#: apps/io.ox/core/tk/iframe.js:48 module:io.ox/core/tk/iframe
 #, fuzzy
 #| msgid "An error occurred. Please try again later"
 msgid "An error occurred. There is no valid token available."
@@ -2649,7 +2649,7 @@ msgstr "拖到这里以上载 \"%1$s\" 的一个 <b class=\"dndignore\">新版�
 msgid "Drop new version here"
 msgstr "上载新版本"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:175 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4626,7 +4626,7 @@ msgstr "新建"
 msgid "New Folder"
 msgstr "新文件夹"
 
-#: apps/io.ox/mail/api.js:1360 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
 msgid "New Mail"
 msgstr "新邮件"
 
@@ -6198,7 +6198,7 @@ msgstr "保存在"
 msgid "Saved in:"
 msgstr "保存在"
 
-#: apps/io.ox/mail/api.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存邮件附件"
 
@@ -8448,8 +8448,8 @@ msgstr "您的应用"
 msgid "Your browser does not support the audio format of this file."
 msgstr "不支持您的浏览器！"
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:42 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:62
+#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:69
 #, fuzzy
 msgid "Your browser does not support the video format of this file."
 msgstr "不支持您的浏览器！"

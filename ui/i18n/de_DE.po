@@ -972,7 +972,7 @@ msgstr "Es trat ein Fehler auf."
 msgid "An error occurred. Please try again."
 msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
 
-#: apps/io.ox/core/tk/iframe.js:50 module:io.ox/core/tk/iframe
+#: apps/io.ox/core/tk/iframe.js:48 module:io.ox/core/tk/iframe
 msgid "An error occurred. There is no valid token available."
 msgstr "Es trat ein Fehler auf. Es ist kein gültiges Token verfügbar."
 
@@ -2669,7 +2669,7 @@ msgstr ""
 msgid "Drop new version here"
 msgstr "Neue Version hier fallenlassen"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:173 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:175 module:io.ox/core/viewer
 #, fuzzy
 msgid "Drop only a single file as new version."
 msgstr "Nur eine einzelne Datei als neue Version fallenlassen."
@@ -4649,7 +4649,7 @@ msgstr "Neu"
 msgid "New Folder"
 msgstr "Neuer Ordner"
 
-#: apps/io.ox/mail/api.js:1360 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
 msgid "New Mail"
 msgstr "Neue E-Mails"
 
@@ -6222,7 +6222,7 @@ msgstr "Gespeichert unter"
 msgid "Saved in:"
 msgstr "Gespeichert unter:"
 
-#: apps/io.ox/mail/api.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "E-Mail-Anlage wurde gespeichert"
 
@@ -8522,8 +8522,8 @@ msgstr "Ihre Applikationen"
 msgid "Your browser does not support the audio format of this file."
 msgstr "Ihr Browser unterstützt das Audio-Format dieser Datei nicht."
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:42 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:62
+#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:69
 msgid "Your browser does not support the video format of this file."
 msgstr "Ihr Browser unterstützt das Video-Format dieser Datei nicht."
 
