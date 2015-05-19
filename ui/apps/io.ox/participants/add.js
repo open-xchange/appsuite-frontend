@@ -34,7 +34,8 @@ define('io.ox/participants/add', [
             var pview = new pViews.ParticipantEntryView({
                     model: participant,
                     closeButton: false,
-                    halo: false
+                    halo: false,
+                    field: true
                 });
             this.append(pview.render().$el);
         }
