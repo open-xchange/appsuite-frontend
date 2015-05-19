@@ -61,7 +61,7 @@ define('plugins/administration/resources/settings/pane', [
             // define list view component
             this.listView = new ListView({ ignoreFocus: true, pagination: false, ref: 'administration/resources/listview' });
             this.listView.toggleCheckboxes(false);
-            this.listView.getCID = function (model) { return model.id; };
+            this.listView.getCompositeKey = function (model) { return model.id; };
 
             // load all resources
             this.listView.setCollection(resourceAPI.collection);
