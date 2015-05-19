@@ -118,9 +118,11 @@
         margin: 0;
 
         li.item {
-
+            @media (max-width: 480px) {
+                display: block;
+            }
             position: relative;
-            display: block;
+            display: inline-block;
             padding: 0;
             margin: 0 14px 0 0;
             line-height: 20px;
@@ -184,13 +186,12 @@
         }
 
         &:not(.lazy) {
-
-            padding: 3px 0px 0px 9px;
-            margin: 0 0 5px 0;
-            height: 32px;
-            line-height: 24px;
-
             @media (max-width: 480px) {
+                padding: 3px 0px 0px 9px;
+                margin: 0 0 5px 0;
+                height: 32px;
+                line-height: 24px;
+
                 span.filesize { white-space: nowrap; }
             }
         }
