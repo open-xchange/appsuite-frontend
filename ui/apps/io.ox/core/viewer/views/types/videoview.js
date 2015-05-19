@@ -42,11 +42,19 @@ define('io.ox/core/viewer/views/types/videoview',  [
             // run own disposer function on dispose event from DisposableView
             this.on('dispose', this.disposeView.bind(this));
 
+            // remove event listeners from video element before removing it from the DOM
+            this.$el.find('video').off();
             this.$el.empty().append(
                 video.append(
                     $('<div>').text(gt('Your browser does not support the video format of this file.'))
                 )
             );
+
+            // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
+            video.on({
+                'loadeddata': this.onLoadedData.bind(this),
+                'error': this.onError.bind(this)
+            });
 
             video.attr({ 'data-src': _.unescapeHTML(previewUrl), type: contentType });
 
@@ -93,11 +101,6 @@ define('io.ox/core/viewer/views/types/videoview',  [
 
             if ((video.length > 0)) {
                 this.$el.busy().find('div.viewer-displayer-notification').remove();
-                // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
-                video.on({
-                    'loadeddata': this.onLoadedData.bind(this),
-                    'error': this.onError.bind(this)
-                });
                 video.attr('src', video.attr('data-src'));
                 video[0].load(); // reset and start selecting and loading a new media resource from scratch
             }
@@ -120,7 +123,6 @@ define('io.ox/core/viewer/views/types/videoview',  [
             var video = this.$el.find('video');
             if (video.length > 0) {
                 this.$el.find('.viewer-displayer-video').addClass('player-hidden');
-                video.off();
                 video[0].pause();
                 // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
                 // https://code.google.com/p/chromium/issues/detail?id=234779

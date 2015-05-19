@@ -45,6 +45,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
             // run own disposer function on dispose event from DisposableView
             this.on('dispose', this.disposeView.bind(this));
 
+            // remove event listeners from audio element before removing it from the DOM
+            this.$el.find('audio').off();
             this.$el.empty().append(
                 $('<div class="viewer-displayer-item viewer-displayer-audio player-hidden">').append(
                     cover = $('<img class="cover">'),
@@ -57,6 +59,12 @@ define('io.ox/core/viewer/views/types/audioview',  [
             // we don't know if the cover url is valid or not until we load it from the server
             cover.one('error', function () {
                 cover.remove();
+            });
+
+            // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
+            audio.on({
+                'loadeddata': this.onLoadedData.bind(this),
+                'error': this.onError.bind(this)
             });
 
             audio.attr({ 'data-src': _.unescapeHTML(audioUrl), 'type': mimeType });
@@ -106,11 +114,6 @@ define('io.ox/core/viewer/views/types/audioview',  [
 
             if ((audio.length > 0)) {
                 this.$el.busy().find('div.viewer-displayer-notification').remove();
-                // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
-                audio.on({
-                    'loadeddata': this.onLoadedData.bind(this),
-                    'error': this.onError.bind(this)
-                });
                 cover.attr('src', cover.attr('data-src'));
                 audio.attr('src', audio.attr('data-src'));
                 audio[0].load();
@@ -134,7 +137,6 @@ define('io.ox/core/viewer/views/types/audioview',  [
             var audio = this.$el.find('audio');
             if (audio.length > 0) {
                 this.$el.find('.viewer-displayer-audio').addClass('player-hidden');
-                audio.off();
                 audio[0].pause();
                 // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
                 // https://code.google.com/p/chromium/issues/detail?id=234779
