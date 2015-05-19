@@ -166,8 +166,6 @@ define('io.ox/calendar/model', [
 
                 this._participants = new pModel.Participants(this.get('participants'));
 
-                this._participants.invoke('fetch');
-
                 this._participants.on('add remove reset', function () {
                     if (changeParticipantsUpdate) {
                         return;
