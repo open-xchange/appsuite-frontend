@@ -29,9 +29,9 @@ define('io.ox/core/api/autocomplete', [
         this.options = $.extend({
             users: false,
             contacts: false,
+            distributionlists: false,
             resources: false,
             groups: false,
-            distributionlists: false,
             msisdn: false,
             split: true,
             limit: 0
@@ -102,22 +102,18 @@ define('io.ox/core/api/autocomplete', [
                     .then(function () {
                         // unify and process
                         var retData = [], data = _(arguments).toArray();
-
                         _(self.apis).each(function (module, index) {
                             var items = _(data[index]).map(function (data) {
                                     data.type = module.type;
                                     return data;
                                 });
+                            retData = retData.concat(items);
                             switch (module.type) {
-                            case 'custom':
-                            case 'user':
-                            case 'contact':
-                                retData = self.processContactResults(retData.concat(items), query);
-                                break;
-                            case 'resource':
-                            case 'group':
-                                retData = retData.concat(items);
-                                break;
+                                case 'custom':
+                                case 'user':
+                                case 'contact':
+                                    retData = self.processContactResults(retData, query);
+                                    break;
                             }
                         });
                         // add to cache
@@ -137,46 +133,43 @@ define('io.ox/core/api/autocomplete', [
          * @return { array }
          */
         processContactResults: function (data, query) {
-
             var tmp = [], hash = {}, self = this;
 
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
                 if (obj.mark_as_distributionlist) {
-                    // distribution list
-                    tmp.push(obj);
+                    // filter distribution lists
+                    if (self.options.distributionlists) tmp.push(obj);
                 } else {
                     //process each field
                     _.each(self.fields, function (field) {
                         if (obj[field]) {
                             // magic for users beyond global adress book
                             if (obj.folder_id !== 6 && obj.type === 'user') return;
+                            // remove users from contact api results
+                            if (self.options.users && obj.folder_id === 6 && obj.type === 'contact') return;
 
-                            var data = _(obj).clone();
+                            var clone = _.extend({}, obj);
                             //store target value
-                            data.field = field;
-                            tmp.push(data);
+                            clone.field = field;
+                            tmp.push(clone);
                         }
                     });
                 }
             });
 
-            //distinguish email and phone objects
-            function getTarget(obj) {
-                return obj[obj.field];
+            // check hash for double entries
+            function inHash(obj) {
+                return hash[obj[obj.field]] ? false : (hash[obj[obj.field]] = true);
             }
 
-            // 2/2: filter distribution lists & remove email duplicates
+            // 2/2: remove email duplicates
             tmp = _(tmp).filter(function (obj) {
-                if (obj.mark_as_distributionlist === true) {
-                    if (self.options.distributionlists === false) {
-                        return false;
-                    }
+                if (obj.mark_as_distributionlist) {
                     return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
-                } else {
-                    return hash[getTarget(obj)] ? false : (hash[getTarget(obj)] = true);
                 }
+                return inHash(obj);
             });
             hash = null;
             return tmp;
