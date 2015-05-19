@@ -127,8 +127,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 apiOptions: {
                     contacts: true
                 },
-                placeholder: gt('Add participant/resource'),
-                label: gt('Add participant/resource'),
+                placeholder: gt('Add contact') + ' \u2026',
+                label: gt('Add contact'),
                 collection: this.baton.member
             });
             this.$el.append(
