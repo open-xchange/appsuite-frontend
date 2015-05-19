@@ -28,7 +28,7 @@ define('io.ox/calendar/freebusy/controller', [
     'settings!io.ox/core',
     'less!io.ox/calendar/week/style',
     'less!io.ox/calendar/freebusy/style'
-], function (dialogs, WeekView, templates, folderAPI, AddParticipant, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
+], function (dialogs, WeekView, templates, folderAPI, AddParticipant, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
 
     'use strict';
 
@@ -311,7 +311,7 @@ define('io.ox/calendar/freebusy/controller', [
             this.getCalendarViewInstance('workweek');
 
             // participants collection
-            this.participants = new participantsModel.Participants([]);
+            this.participants = new pModel.Participants([]);
             this.participantsView = templates.getParticipantsView();
 
             function customize() {
@@ -322,7 +322,7 @@ define('io.ox/calendar/freebusy/controller', [
 
             function drawParticipant(model) {
                 self.participantsView.append(
-                    new participantsView.ParticipantEntryView({ model: model, halo: true, customize: customize })
+                    new pView.ParticipantEntryView({ model: model, halo: true, customize: customize })
                         .render(customize).$el
                 );
             }
