@@ -53,9 +53,6 @@ define('io.ox/participants/add', [
         options: {
             placeholder: gt('Add participant/resource'),
             label: gt('Add participant/resource'),
-            harmonize: function (data) {
-                return new pModel.Participant(data);
-            },
             extPoint: 'io.ox/participants/add',
             blacklist: false
         },
@@ -66,7 +63,16 @@ define('io.ox/participants/add', [
                 this.options.blacklist = this.options.blacklist.split(',');
             }
             this.options.click = _.bind(this.addParticipant, this);
-            this.options.filter = _.bind(this.reduceDuplicates, this);
+            this.options.harmonize = _.bind(function (data) {
+                data = _(data).map(function (m) {
+                    return new pModel.Participant(m);
+                });
+                // remove duplicate entries from typeahead dropdown
+                var inCollection = this.collection.invoke('getTarget');
+                return _(data).filter(function (model) {
+                    return inCollection.indexOf(model.getTarget()) < 0;
+                });
+            }, this);
         },
 
         keyDown: function (e) {
@@ -81,18 +87,6 @@ define('io.ox/participants/add', [
 
         setFocus: function () {
             if (this.typeahead) this.typeahead.$el.focus();
-        },
-
-        /**
-         * remove duplicate entries from typeahead dropdown
-         * @param  {array} data result array by autocomplete API
-         * @return {array}      filtered data set
-         */
-        reduceDuplicates: function (data) {
-            var inCollection = this.collection.invoke('getTarget');
-            return _(data).filter(function (model) {
-                return inCollection.indexOf(model.getTarget()) < 0;
-            });
         },
 
         addParticipant: function (e, model, value) {
