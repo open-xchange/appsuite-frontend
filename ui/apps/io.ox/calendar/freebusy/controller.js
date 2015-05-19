@@ -322,8 +322,12 @@ define('io.ox/calendar/freebusy/controller', [
 
             function drawParticipant(model) {
                 self.participantsView.append(
-                    new pView.ParticipantEntryView({ model: model, halo: true, customize: customize })
-                        .render(customize).$el
+                    new pView.ParticipantEntryView({
+                        model: model,
+                        halo: true,
+                        closeButton: true,
+                        customize: customize
+                    }).render().$el
                 );
             }
 

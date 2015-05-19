@@ -68,9 +68,9 @@ define('io.ox/participants/add', [
                     return new pModel.Participant(m);
                 });
                 // remove duplicate entries from typeahead dropdown
-                var inCollection = this.collection.invoke('getTarget');
+                var col = this.collection;
                 return _(data).filter(function (model) {
-                    return inCollection.indexOf(model.getTarget()) < 0;
+                    return !col.get(model.cid);
                 });
             }, this);
         },
