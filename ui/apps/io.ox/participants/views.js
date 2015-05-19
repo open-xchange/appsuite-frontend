@@ -25,13 +25,7 @@ define('io.ox/participants/views', [
 
         className: 'participant-wrapper',
 
-        // idAttribute: 'cid',
-        //
-        // $('<div class="ellipsis email">').append(
-        //     $.txt(participant.getTarget() + ' '),
-        //     participant.getFieldName() !== '' ?
-        //         $('<span style="color: #888;">').text('(' + participant.getFieldName() + ')') : participant.getTypeString()
-        // )
+        IMG_CSS: 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' '),
 
         events: {
             'click .remove': 'onRemove',
@@ -70,10 +64,9 @@ define('io.ox/participants/views', [
                 )
             };
 
+            this.setCustomImage();
             this.setDisplayName();
             this.setTypeStyle();
-            this.setOrganizer();
-            this.setCustomImage();
 
             if (this.options.closeButton && this.model.get('ui_removable') !== false) {
                 this.$el.addClass('removable');
@@ -108,79 +101,31 @@ define('io.ox/participants/views', [
                 data,
                 { width: 54, height: 54 }
             );
-        },
-
-        setOrganizer: function () {
-
-            if (!this.options.baton) return;
-
-            var organizerId = this.options.baton.model.get('organizerId');
-
-            if (this.model.get('id') === organizerId) {
-                this.$el.addClass('three-rows');
-                this.nodes.$extra.text(gt('Organizer'));
-            }
+            this.nodes.$img.addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
         },
 
         setRows: function (mail, extra) {
-            mail = mail || '';
+            extra = extra || this.model.getTypeString() || '';
             this.nodes.$mail.text(gt.noI18n(mail));
-            this.nodes.$extra.text(extra || '');
+            this.nodes.$extra.text(gt.noI18n(extra));
             if (mail && extra) {
                 this.$el.addClass('three-rows');
             }
         },
 
-        setImageClass: (function () {
-
-            var types = 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' ');
-
-            return function (type) {
-                this.nodes.$img.attr('class', 'participant-image ' + (types[parseInt(type, 10)] || ''));
-            };
-
-        }()),
-
         setTypeStyle: function  () {
 
-            var type = this.model.get('type'), mail, data;
+            var mail = this.model.getTarget(),
+                extra = null;
 
-            this.setImageClass(type);
-
-            switch (type) {
+            switch (this.model.get('type')) {
             case 1:
-                mail = this.model.get('field') ? this.model.get(this.model.get('field')) : this.model.getEmail();
-                this.setRows(mail, this.model.get('external') ? gt('External contact') : '');
-                if (this.options.halo) {
-                    this.nodes.$mail
-                        .attr({ href: '#', tabindex: '1' })
-                        .data({ email1: mail })
-                        .addClass('halo-link');
-                }
-                break;
-            case 2:
-                this.setRows('', gt('Group'));
-                break;
-            case 3:
-                this.setRows('', gt('Resource'));
-                if (this.options.halo) {
-                    data = this.model.toJSON();
-                    data.callbacks = {};
-                    if (this.options.baton && this.options.baton.callbacks) {
-                        data.callbacks = this.options.baton.callbacks;
-                    }
-                    this.nodes.$extra
-                        .attr({ href: '#', tabindex: '1' })
-                        .data(data)
-                        .addClass('pointer halo-resource-link');
-                }
-                break;
-            case 4:
-                this.setRows('', gt('Resource group'));
-                break;
             case 5:
-                mail = this.model.getEmail();
-                this.setRows(mail, gt('External contact'));
+                // set organizer
+                if (this.options.baton && this.model.get('id') === this.options.baton.model.get('organizerId')) {
+                    extra = gt('Organizer');
+                }
+
                 if (mail && this.options.halo) {
                     this.nodes.$mail
                         .attr({ href: '#', tabindex: '1' })
@@ -188,10 +133,22 @@ define('io.ox/participants/views', [
                         .addClass('halo-link');
                 }
                 break;
-            case 6:
-                this.setRows('', gt('Distribution list'));
+            case 3:
+                if (this.options.halo) {
+                    var data = this.model.toJSON();
+                    data.callbacks = {};
+                    if (this.options.baton && this.options.baton.callbacks) {
+                        data.callbacks = this.options.baton.callbacks;
+                    }
+                    this.nodes.$extra = $('<a>')
+                        .attr({ href: '#', tabindex: '1' })
+                        .data(data)
+                        .addClass('halo-resource-link');
+                }
                 break;
             }
+
+            this.setRows(mail, extra);
         },
 
         fnKey: function (e) {

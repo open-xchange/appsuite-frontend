@@ -27,12 +27,15 @@ define('io.ox/participants/model', [
 
     var Model = Backbone.Model.extend({
 
+        TYPE_UNKNOWN: 0,
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
         TYPE_RESOURCE: 3,
         TYPE_RESOURCE_GROUP: 4,
         TYPE_EXTERNAL_USER: 5,
-        TYPE_DISTLIST_USER_GROUP: 6,
+        TYPE_DISTLIST: 6,
+
+        TYPE_LABEL: 'unknown internal usergroup resource resourcegroup external distlist'.split(' '),
 
         TYPE_STRINGS: {
             1: '',
@@ -54,7 +57,7 @@ define('io.ox/participants/model', [
 
             // fix type attribute / for example autocomplete api
             if (_.isString(this.get('type'))) {
-                var newType = 0;
+                var newType = this.TYPE_UNKNOWN;
                 switch (this.get('type')) {
                     case 'user':
                         newType = this.TYPE_USER;
@@ -67,7 +70,7 @@ define('io.ox/participants/model', [
                         break;
                     case 'contact':
                         if (this.get('mark_as_distributionlist')) {
-                            newType = this.TYPE_DISTLIST_USER_GROUP;
+                            newType = this.TYPE_DISTLIST;
                         } else {
                             newType = this.TYPE_EXTERNAL_USER;
                         }
@@ -89,27 +92,10 @@ define('io.ox/participants/model', [
                     type: this.TYPE_USER
                 });
             } else {
-                switch (this.get('type')) {
-                    case this.TYPE_USER:
-                        this.cid = 'internal_' + this.get('id');
-                        break;
-                    case this.TYPE_USER_GROUP:
-                        this.cid = 'usergroup_' + this.get('id');
-                        break;
-                    case this.TYPE_RESOURCE:
-                        this.cid = 'resource_' + this.get('id');
-                        break;
-                    case this.TYPE_RESOURCE_GROUP:
-                        this.cid = 'resourcegroup_' + this.get('id');
-                        break;
-                    case this.TYPE_EXTERNAL_USER:
-                        this.set('id', this.getEmail());
-                        this.cid = 'external_' + this.get('id');
-                        break;
-                    case this.TYPE_DISTLIST_USER_GROUP:
-                        this.cid = 'distlist_' + this.get('id');
-                        break;
+                if (this.get('type') === this.TYPE_EXTERNAL_USER) {
+                    this.set('id', this.getEmail());
                 }
+                this.cid = this.TYPE_LABEL[this.get('type')] + '_' + this.get('id');
             }
 
             this.fetch().done(function () {
@@ -117,104 +103,10 @@ define('io.ox/participants/model', [
             });
         },
 
-        fetch: function () {
-            var self = this, df = new $.Deferred();
-
-            function setUser(data) {
-                self.set(data);
-                df.resolve();
-            }
-
-            function setExternalContact(data) {
-                self.set({
-                    display_name: data.display_name,
-                    email1: self.get('mail') || self.get('email1'),
-                    image1_url: data.image1_url,
-                    type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
-                    id: data.internal_userid ? data.internal_userid : self.get('id')
-                });
-                self.id = self.get('id');
-            }
-
-            switch (self.get('type')) {
-            case self.TYPE_USER:
-                // fetch user contact
-                if (self.isComplete()) {
-                    setUser(self.toJSON());
-                } else {
-                    userAPI.get({ id: self.get('id') }).then(
-                        function (data) {
-                            setUser(data);
-                        },
-                        function () {
-                            if (!self.get('display_name')) {
-                                self.set('display_name', self.get('mail'));
-                            }
-                            df.resolve();
-                        }
-                    );
-                }
-                break;
-            case self.TYPE_USER_GROUP:
-                //fetch user group
-                if ('display_name' in this.attributes && 'members' in this.attributes) break;
-                groupAPI.get({ id: self.get('id') }).done(function (group) {
-                    self.set(group);
-                    df.resolve();
-                });
-                break;
-            case self.TYPE_RESOURCE:
-                if ('display_name' in this.attributes) break;
-                resourceAPI.get({ id: self.get('id') }).done(function (resource) {
-                    self.set(resource);
-                    df.resolve();
-                });
-                break;
-            case self.TYPE_RESOURCE_GROUP:
-                self.set('display_name', 'resource group');
-                df.resolve();
-                break;
-            case self.TYPE_EXTERNAL_USER:
-                // has
-                if (self.isComplete()) {
-                    setExternalContact(self.toJSON());
-                } else {
-                    contactAPI.getByEmailaddress(self.get('mail') || self.get('email1')).done(function (data) {
-                        if (data && data.display_name) {
-                            setExternalContact(data);
-                        } else {
-                            self.set({
-                                display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
-                                email1: self.get('mail') || self.get('email1')
-                            });
-                        }
-                        df.resolve();
-                    });
-                }
-                break;
-            case self.TYPE_DISTLIST_USER_GROUP:
-                //fetch user group
-                contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
-                    self.set(group);
-                    df.resolve();
-                });
-                break;
-            default:
-                df.resolve();
-                break;
-            }
-
-            return df;
-        },
-
-        isComplete: function () {
-            return 'display_name' in this.attributes && 'image1_url' in this.attributes;
-        },
-
         getDisplayName: function () {
             var dn = util.getMailFullName(this.toJSON());
-            //display name: 'email only' participant
-            return dn || (this.getEmail() !== '' ? this.getEmail().split('@')[0] : name);
+            // 'email only' participant
+            return dn || (this.getEmail() !== '' ? this.getEmail().split('@')[0] : '');
         },
 
         getEmail: function () {
@@ -222,11 +114,11 @@ define('io.ox/participants/model', [
         },
 
         getTarget: function () {
-            return this.get(this.get('field')) || this.getDisplayName();
+            return this.get(this.get('field')) || this.getEmail();
         },
 
         getFieldString: function () {
-            return this.get('field') ? ContactModel.fields[this.get('field')] : '';
+            return this.has('field') ? ContactModel.fields[this.get('field')] : '';
         },
 
         getTypeString: function () {
@@ -261,6 +153,96 @@ define('io.ox/participants/model', [
                 ret.id = this.get('id');
             }
             return ret;
+        },
+
+        fetch: function () {
+            var self = this, df = new $.Deferred();
+
+            function setUser(data) {
+                self.set(data);
+                df.resolve();
+            }
+
+            function setExternalContact(data) {
+                self.set({
+                    display_name: data.display_name,
+                    email1: self.get('mail') || self.get('email1'),
+                    image1_url: data.image1_url,
+                    type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
+                    id: data.internal_userid ? data.internal_userid : self.get('id')
+                });
+                self.id = self.get('id');
+            }
+
+            switch (self.get('type')) {
+            case self.TYPE_USER:
+                // fetch user contact
+                if (this.get('display_name') && 'image1_url' in this.attributes) {
+                    setUser(self.toJSON());
+                } else {
+                    userAPI.get({ id: self.get('id') }).then(
+                        function (data) {
+                            setUser(data);
+                        },
+                        function () {
+                            if (!self.get('display_name')) {
+                                self.set('display_name', self.get('mail'));
+                            }
+                            df.resolve();
+                        }
+                    );
+                }
+                break;
+            case self.TYPE_USER_GROUP:
+                //fetch user group
+                if (this.get('display_name') && this.get('members')) break;
+                groupAPI.get({ id: self.get('id') }).done(function (group) {
+                    self.set(group);
+                    df.resolve();
+                });
+                break;
+            case self.TYPE_RESOURCE:
+                if (this.get('display_name')) break;
+                resourceAPI.get({ id: self.get('id') }).done(function (resource) {
+                    self.set(resource);
+                    df.resolve();
+                });
+                break;
+            case self.TYPE_RESOURCE_GROUP:
+                self.set('display_name', 'resource group');
+                df.resolve();
+                break;
+            case self.TYPE_EXTERNAL_USER:
+                // has
+                if (this.get('display_name') && 'image1_url' in this.attributes) {
+                    setExternalContact(self.toJSON());
+                } else {
+                    contactAPI.getByEmailaddress(self.get('mail') || self.get('email1')).done(function (data) {
+                        if (data && data.display_name) {
+                            setExternalContact(data);
+                        } else {
+                            self.set({
+                                display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
+                                email1: self.get('mail') || self.get('email1')
+                            });
+                        }
+                        df.resolve();
+                    });
+                }
+                break;
+            case self.TYPE_DISTLIST:
+                //fetch user group
+                contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
+                    self.set(group);
+                    df.resolve();
+                });
+                break;
+            default:
+                df.resolve();
+                break;
+            }
+
+            return df;
         }
 
     });
