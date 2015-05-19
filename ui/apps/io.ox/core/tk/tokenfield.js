@@ -83,12 +83,14 @@ define('io.ox/core/tk/tokenfield', [
             options = _.extend({}, {
                 // defines tokendata
                 harmonize: function (data) {
-                    var model = new pModel.Participant(data);
-                    return {
-                        value: model.getTarget(),
-                        label: model.getDisplayName(),
-                        model: model
-                    };
+                    return _(data).map(function (m) {
+                        var model = new pModel.Participant(m);
+                        return {
+                            value: model.getTarget(),
+                            label: model.getDisplayName(),
+                            model: model
+                        };
+                    });
                 },
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,

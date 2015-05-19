@@ -116,16 +116,14 @@ define('io.ox/core/tk/typeahead', [
                         .then(customEvent.bind(self, 'processing'))
                         .then(o.reduce)
                         .then(function (data) {
+                            // max results
                             if (o.maxResults) {
-                                return data.slice(0, o.maxResults);
+                                data = data.slice(0, o.maxResults);
                             }
-                            return data;
+                            // order
+                            return o.placement === 'top' ? data.reverse() : data;
                         })
-                        .then(function (data) {
-                            data = o.placement === 'top' ? data.reverse() : data;
-                            return _(data).map(o.harmonize);
-                        })
-                        .then(o.filter)
+                        .then(o.harmonize)
                         .then(customEvent.bind(self, 'finished'))
                         .then(customEvent.bind(self, 'idle'))
                         .then(callback);
