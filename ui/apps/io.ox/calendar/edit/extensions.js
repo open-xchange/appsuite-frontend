@@ -417,8 +417,6 @@ define('io.ox/calendar/edit/extensions', [
                     resources: true,
                     distributionlists: true
                 },
-                placeholder: gt('Add participant/resource'),
-                label: gt('Add participant/resource'),
                 collection: baton.model.getParticipants(),
                 blacklist: settings.get('participantBlacklist') || false
             });

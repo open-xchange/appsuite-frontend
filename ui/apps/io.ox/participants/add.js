@@ -34,7 +34,8 @@ define('io.ox/participants/add', [
         typeahead: null,
 
         options: {
-            label: '',
+            placeholder: gt('Add participant/resource'),
+            label: gt('Add participant/resource'),
             harmonize: function (data) {
                 var model = new pModel.Participant(data);
                 return {

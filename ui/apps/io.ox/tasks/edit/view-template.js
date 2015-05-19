@@ -415,8 +415,6 @@ define('io.ox/tasks/edit/view-template', [
                     resources: true,
                     distributionlists: true
                 },
-                placeholder: gt('Add participant/resource'),
-                label: gt('Add participant/resource'),
                 collection: baton.model.getParticipants()
             });
             this.append(

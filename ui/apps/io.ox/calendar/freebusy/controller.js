@@ -413,8 +413,6 @@ define('io.ox/calendar/freebusy/controller', [
                     distributionlists: true,
                     split: false
                 },
-                placeholder: gt('Add participant/resource'),
-                label: gt('Add participant/resource'),
                 collection: this.participants
             });
 
