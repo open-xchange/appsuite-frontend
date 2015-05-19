@@ -35,6 +35,7 @@ define('io.ox/participants/views', [
         options: {
             halo: false,
             closeButton: false,
+            field: false,
             customize: $.noop
         },
 
@@ -117,6 +118,10 @@ define('io.ox/participants/views', [
 
             var mail = this.model.getTarget(),
                 extra = null;
+
+            if (this.options.field && this.model.getFieldString()) {
+                mail += ' (' + this.model.getFieldString() + ')';
+            }
 
             switch (this.model.get('type')) {
             case 1:
