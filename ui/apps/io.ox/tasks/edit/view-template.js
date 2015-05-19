@@ -407,7 +407,7 @@ define('io.ox/tasks/edit/view-template', [
         index: 1700,
         row: '11',
         draw: function (baton) {
-            var typeahead = new AddParticipant({
+            var view = new AddParticipant({
                 apiOptions: {
                     contacts: true,
                     users: true,
@@ -418,9 +418,9 @@ define('io.ox/tasks/edit/view-template', [
                 collection: baton.model.getParticipants()
             });
             this.append(
-                typeahead.$el
+                view.$el
             );
-            typeahead.render().$el.addClass('col-xs-12 collapsed');
+            view.render().$el.addClass('col-xs-12 collapsed');
         }
     });
 

@@ -12,16 +12,33 @@
  */
 
 define('io.ox/participants/add', [
+    'io.ox/core/extensions',
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/core/tk/typeahead',
     'gettext!io.ox/participants/views'
-], function (pModel, pViews, Typeahead, gt) {
+], function (ext, pModel, pViews, Typeahead, gt) {
 
     'use strict';
 
     // TODO:
     // - exceptions for global address book
+
+    /*
+     * extension point for autocomplete item
+     */
+    ext.point('io.ox/participants/add/autoCompleteItem').extend({
+        id: 'view',
+        index: 100,
+        draw: function (participant) {
+            var pview = new pViews.ParticipantEntryView({
+                    model: participant,
+                    closeButton: false,
+                    halo: false
+                });
+            this.append(pview.render().$el);
+        }
+    });
 
     var AddParticipantView = Backbone.View.extend({
 
@@ -37,13 +54,9 @@ define('io.ox/participants/add', [
             placeholder: gt('Add participant/resource'),
             label: gt('Add participant/resource'),
             harmonize: function (data) {
-                var model = new pModel.Participant(data);
-                return {
-                    value: model.getTarget(),
-                    label: model.getDisplayName(),
-                    model: model
-                };
+                return new pModel.Participant(data);
             },
+            extPoint: 'io.ox/participants/add',
             blacklist: false
         },
 
@@ -61,10 +74,7 @@ define('io.ox/participants/add', [
             if (e.which === 13) {
                 var val = this.typeahead.$el.typeahead('val');
                 if (!_.isEmpty(val)) {
-                    this.addParticipant(e, {
-                        model: { email1: val, id: Math.random(), field: 'email1', type: 5 },
-                        value: val
-                    });
+                    this.addParticipant(e, { id: Math.random(), email1: val, field: 'email1', type: 5 }, val );
                 }
             }
         },
@@ -80,23 +90,23 @@ define('io.ox/participants/add', [
          */
         reduceDuplicates: function (data) {
             var inCollection = this.collection.invoke('getTarget');
-            return _(data).filter(function (res) {
-                return inCollection.indexOf(res.model.getTarget()) < 0;
+            return _(data).filter(function (model) {
+                return inCollection.indexOf(model.getTarget()) < 0;
             });
         },
 
-        addParticipant: function (e, data) {
+        addParticipant: function (e, model, value) {
             // check blacklist
-            var inBlackList = this.options.blacklist && this.options.blacklist.indexOf(data.value) > -1;
+            var inBlackList = this.options.blacklist && this.options.blacklist.indexOf(value) > -1;
 
             if (inBlackList) {
                 require('io.ox/core/yell')('warning', gt('This email address cannot be used'));
             } else {
-                this.collection.add(data.model);
+                this.collection.add(model);
             }
 
             // clean typeahad input
-            this.typeahead.$el.typeahead('val', '');
+            if (value) this.typeahead.$el.typeahead('val', '');
         },
 
         render: function () {
