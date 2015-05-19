@@ -15,12 +15,10 @@
 define('io.ox/core/tk/typeahead', [
     'io.ox/core/extensions',
     'io.ox/core/api/autocomplete',
-    'io.ox/contacts/api',
-    'io.ox/participants/views',
     'settings!io.ox/contacts',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
-], function (ext, AutocompleteAPI, contactAPI, pViews, settings) {
+], function (ext, AutocompleteAPI, settings) {
 
     'use strict';
 
@@ -94,18 +92,13 @@ define('io.ox/core/tk/typeahead', [
             o = this.options = $.extend({}, this.options, o || {});
 
             /*
-             * extension point for contact picture
+             * extension point for autocomplete item
              */
             ext.point(o.extPoint + '/autoCompleteItem').extend({
                 id: 'view',
                 index: 100,
-                draw: function (participant) {
-                    var pview = new pViews.ParticipantEntryView({
-                            model: participant,
-                            closeButton: false,
-                            halo: false
-                        });
-                    this.append(pview.render().$el);
+                draw: function (data) {
+                    this.text(data);
                 }
             });
 
@@ -157,7 +150,7 @@ define('io.ox/core/tk/typeahead', [
                 templates: {
                     suggestion: o.suggestion || function (result) {
                         var node = $('<div class="autocomplete-item">');
-                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result.model);
+                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result);
                         return node;
                     },
                     header: function (data) {

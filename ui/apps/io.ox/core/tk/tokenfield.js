@@ -16,12 +16,13 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/core/extensions',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
+    'io.ox/participants/views',
     'io.ox/contacts/api',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, contactAPI) {
+], function (ext, Typeahead, pModel, pViews, contactAPI) {
 
     'use strict';
 
@@ -117,6 +118,19 @@ define('io.ox/core/tk/tokenfield', [
                             { width: 16, height: 16, scaleType: 'contain' }
                         )
                     );
+                }
+            });
+
+            ext.point(options.extPoint + '/autoCompleteItem').extend({
+                id: 'view',
+                index: 100,
+                draw: function (data) {
+                    var pview = new pViews.ParticipantEntryView({
+                            model: data.model,
+                            closeButton: false,
+                            halo: false
+                        });
+                    this.append(pview.render().$el);
                 }
             });
 
