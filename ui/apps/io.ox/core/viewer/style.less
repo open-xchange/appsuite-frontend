@@ -86,6 +86,19 @@
 
 /* OX Viewer Sidebar generic styles */
 .viewer-sidebar {
+    
+    /* set the text context of responsive labels according to the device and it's orientation */
+    /* the default */
+    *.viewer-responsive-label[data-label-normal]:before {
+        content: attr(data-label-normal);
+    }
+    /* for smartphones with orientation portrait */
+    *.smartphone *.viewer-responsive-label[data-label-normal]:before {
+        @media (orientation: portrait) {
+            content: attr(data-label-short);
+        }
+    }
+    
     position: absolute;
     width: @viewer-sidebar-width;
     padding: 16px;
@@ -212,21 +225,8 @@
     }
 }
 
-/* set the text context of responsive labels according to the device and it's orientation */
 // a mixin containing all styles for viewer
 .viewer-styles() {
-
-    /* the default */
-    *.viewer-responsive-label[data-label-normal]:before {
-        content: attr(data-label-normal);
-    }
-
-    /* for smartphones with orientation portrait */
-    *.smartphone *.viewer-responsive-label[data-label-normal]:before {
-        @media (orientation: portrait) {
-            content: attr(data-label-short);
-        }
-    }
 
     font-size: 13px;
     background-color: @viewer-background-color;
