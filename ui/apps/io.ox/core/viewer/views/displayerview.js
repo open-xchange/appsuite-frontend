@@ -391,7 +391,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * Focuses the swiper's current active slide.
          */
         focusActiveSlide: function () {
-            this.$el.find('.swiper-slide-active').focus();
+            this.getActiveSlideNode().focus();
         },
 
         /**
