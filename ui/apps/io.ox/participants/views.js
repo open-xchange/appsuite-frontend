@@ -23,23 +23,39 @@ define('io.ox/participants/views', [
 
         tagName: 'div',
 
+        className: 'participant-wrapper',
+
+        // idAttribute: 'cid',
+        //
+        // $('<div class="ellipsis email">').append(
+        //     $.txt(participant.getTarget() + ' '),
+        //     participant.getFieldName() !== '' ?
+        //         $('<span style="color: #888;">').text('(' + participant.getFieldName() + ')') : participant.getTypeString()
+        // )
+
         events: {
             'click .remove': 'onRemove',
             'keydown': 'fnKey'
         },
 
+        options: {
+            halo: false,
+            closeButton: false,
+            customize: $.noop
+        },
+
         initialize: function (options) {
-            this.options = options;
+            this.options = $.extend({}, this.options, options || {});
+            this.listenTo(this.model, 'change', function (model) {
+                if (model && model.changed) {
+                    this.$el.empty();
+                    this.render();
+                }
+            });
         },
 
         render: function () {
-            var self = this;
-
-            // we set the class this way because some controller pass an existing node
-            this.$el.addClass('participant-wrapper')
-                .attr({
-                    'data-cid': this.model.cid
-                });
+            this.$el.attr({ 'data-cid': this.model.cid });
 
             this.nodes = {
                 $img: $('<div>'),
@@ -59,16 +75,9 @@ define('io.ox/participants/views', [
             this.setOrganizer();
             this.setCustomImage();
 
-            if (this.options.closeButton !== false && this.model.get('ui_removable') !== false) {
+            if (this.options.closeButton && this.model.get('ui_removable') !== false) {
                 this.$el.addClass('removable');
             }
-
-            this.model.on('change', function (model) {
-                if (model && model.changed) {
-                    self.$el.empty();
-                    self.render();
-                }
-            });
 
             this.$el.append(
                 this.nodes.$img,
@@ -78,9 +87,7 @@ define('io.ox/participants/views', [
                 this.nodes.$removeButton
             );
 
-            if (this.options.customize) {
-                this.options.customize.call(this);
-            }
+            this.options.customize.call(this);
 
             return this;
         },
@@ -129,8 +136,7 @@ define('io.ox/participants/views', [
             var types = 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' ');
 
             return function (type) {
-                type = parseInt(type, 10);
-                this.nodes.$img.attr('class', 'participant-image ' + (types[type] || ''));
+                this.nodes.$img.attr('class', 'participant-image ' + (types[parseInt(type, 10)] || ''));
             };
 
         }()),
@@ -189,21 +195,14 @@ define('io.ox/participants/views', [
         },
 
         fnKey: function (e) {
-            // DEL
-            if (e.which === 46) this.onRemove(e);
+            // del or backspace
+            if (e.which === 46 || e.which === 8) this.onRemove(e);
         },
 
         onRemove: function (e) {
-
             e.preventDefault();
-
-            var removable = $(e.target).closest('.participant-wrapper.removable');
-            if (removable.length) {
-                // remove from collection by cid
-                var cid = removable.attr('data-cid');
-                this.model.collection.remove(this.model.collection.get(cid));
-                this.remove();
-            }
+            // remove from collection
+            this.model.collection.remove(this.model);
         }
     });
 
@@ -243,11 +242,11 @@ define('io.ox/participants/views', [
             this.collection.each(function (participant) {
                 var view = new ParticipantEntryView({
                     tagName: 'li',
-                    className: 'col-xs-12 col-sm-6',
                     model: participant,
                     baton: self.options.baton,
-                    halo: true
-                }).render().$el;
+                    halo: true,
+                    closeButton: true
+                }).render().$el.addClass('col-xs-12 col-sm-6');
 
                 // bring organizer up
                 if (participant.get('id') === self.options.baton.model.get('organizerId')) {
