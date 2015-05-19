@@ -21,6 +21,7 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/api/account',
      'io.ox/core/date',
      'io.ox/core/strings',
+     'io.ox/core/folder/api',
      'io.ox/core/folder/title',
      'io.ox/core/notifications',
      'io.ox/contacts/api',
@@ -29,7 +30,7 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, emoji, util, api, account, date, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+    ], function (ext, links, actions, emoji, util, api, account, date, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -83,13 +84,18 @@ define('io.ox/mail/common-extensions',
         },
 
         from: function (baton) {
+
             var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
                 field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
-                useDisplayName = baton.options.sort !== 'from-to';
+                // get folder data to check capabilities:
+                // if bit 4096 is set, the server sort by local part not display name
+                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
+                useDisplayName = baton.options.sort !== 'from-to' || !(capabilities & 4096);
+
             this.append(
                 $('<div class="from">').append(
-                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: true })
+                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: useDisplayName })
                 )
             );
         },

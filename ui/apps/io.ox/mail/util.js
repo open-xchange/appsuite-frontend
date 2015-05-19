@@ -304,11 +304,19 @@ define('io.ox/mail/util',
         getDisplayName: function (pair, options) {
 
             if (!_.isArray(pair)) return '';
-            options = _.extend({ reorderDisplayName: true, showDisplayName: true, showMailAddress: false }, options);
 
-            var name = pair[0],
-                email = String(pair[1] || '').toLowerCase(),
+            options = _.extend({
+                reorderDisplayName: true,
+                showDisplayName: true,
+                showMailAddress: false,
+                unescapeDisplayName: true
+            }, options);
+
+            var name = pair[0], email = String(pair[1] || '').toLowerCase(), display_name = name;
+
+            if (options.unescapeDisplayName === true) {
                 display_name = util.unescapeDisplayName(name);
+            }
 
             if (options.showDisplayName === false) return email;
 
