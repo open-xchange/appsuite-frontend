@@ -22,17 +22,23 @@ define([
         name: 'com.example',
         title: 'Hallo, World!',
         pageTitle: 'Hallo, World!',
-        domain: 'https://example.com/',
-        cssNamespace: 'hallo_world',
+        url: 'https://example.com/index.html?test=test',
         acquireToken: true
     },
     appOptionsWithoutToken = {
         name: 'com.example',
         title: 'Hallo, World!',
         pageTitle: 'Hallo, World!',
-        domain: 'https://example.com/',
-        cssNamespace: 'hallo_world'
+        url: 'https://example.com'
     },
+    appOptionsWithoutParameter = {
+        name: 'com.example',
+        title: 'Hallo, World!',
+        pageTitle: 'Hallo, World!',
+        url: 'https://example.com/index.html',
+        acquireToken: true
+    },
+
     response = {
         'timestamp': 1379403021960,
         'data': {
@@ -73,16 +79,12 @@ define([
             expect(app.getWindow().nodes.outer.attr('data-app-name')).to.equal(appOptions.name);
         });
 
-        it('should render the css namespace', function () {
-            expect(app.getWindow().nodes.outer.hasClass(appOptions.cssNamespace)).to.be.true;
-        });
-
         it('should render the iframe', function () {
             expect(app.getWindow().nodes.main.find('iframe').length).to.equal(1);
         });
 
         it('should render the iframe src', function () {
-            expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptions.domain + '?ox_token=' + response.data.token);
+            expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptions.url + '&ox_token=' + response.data.token);
         });
 
     });
@@ -102,8 +104,29 @@ define([
         });
 
         it('should render the iframe src without appended token', function () {
-            expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptions.domain);
+            expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptionsWithoutToken.url);
         });
 
     });
+
+    describe('iframe app without appended parameter', function () {
+
+        beforeEach(function (done) {
+            app = main(appOptionsWithoutParameter).getApp();
+            app.launch().done(function () {
+                done();
+            });
+
+            this.server.respondWith('GET', /api\/token\?action=acquireToken/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(response));
+            });
+
+        });
+
+        it('should render the iframe src', function () {
+            expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptionsWithoutParameter.url + '?ox_token=' + response.data.token);
+        });
+
+    });
+
 });

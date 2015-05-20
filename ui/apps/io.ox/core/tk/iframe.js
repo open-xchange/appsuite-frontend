@@ -67,7 +67,9 @@ define('io.ox/core/tk/iframe', [
             win.nodes.main.append(iframe);
 
             if (data && data.token) {
-                urlWithOxToken = url + '?ox_token=' + data.token;
+
+                urlWithOxToken = /[?]/.test(url) ? url + '&ox_token=' + data.token : url + '?ox_token=' + data.token;
+
                 iframe.attr('src', urlWithOxToken);
             }
 
