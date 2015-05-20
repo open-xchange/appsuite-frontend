@@ -80,8 +80,10 @@ define('plugins/administration/groups/settings/edit', [
                     new common.InputView({ name: 'display_name', id: guid, model: this.model }).render().$el
                 ),
                 // auto-complete
-                $('<label class="sr-only">').attr({ for: guid }).text(gt('Start typing to search for user names')),
-                view.$el.attr({ id: guid }),
+                $('<div class="form-group">').append(
+                    $('<label class="sr-only">', { 'for': guid = _.uniqueId('input') }).text(gt('Start typing to search for user names')),
+                    view.$el.attr({ id: guid })
+                ),
                 // members view
                 $('<div class="form-group">').append(
                     $('<label>', { 'for': guid = _.uniqueId('list') }).text(gt('Members')),
