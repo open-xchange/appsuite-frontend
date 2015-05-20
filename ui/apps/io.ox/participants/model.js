@@ -38,6 +38,7 @@ define('io.ox/participants/model', [
         TYPE_LABEL: 'unknown internal usergroup resource resourcegroup external distlist'.split(' '),
 
         TYPE_STRINGS: {
+            0: gt('Unknown'),
             1: '',
             2: gt('Group'),
             3: gt('Resource'),
@@ -53,7 +54,6 @@ define('io.ox/participants/model', [
         },
 
         initialize: function () {
-            var self = this;
 
             // fix type attribute / for example autocomplete api
             if (_.isString(this.get('type'))) {
@@ -80,27 +80,18 @@ define('io.ox/participants/model', [
             }
 
             if (this.get('internal_userid')) {
-                this.cid = 'internal_' + this.get('internal_userid');
                 this.set({
                     id: this.get('internal_userid'),
                     type: this.TYPE_USER
                 });
-            } else if (this.get('entity')) {
-                this.cid = 'entity_' + parseInt(this.get('entity'), 10);
-                this.set({
-                    id: parseInt(this.get('entity'), 10),
-                    type: this.TYPE_USER
-                });
-            } else {
-                if (this.get('type') === this.TYPE_EXTERNAL_USER) {
-                    this.set('id', this.getEmail());
-                }
-                this.cid = this.TYPE_LABEL[this.get('type')] + '_' + this.get('id');
             }
+            if (this.get('type') === this.TYPE_EXTERNAL_USER) {
+                this.set('id', this.getEmail());
+            }
+            // set cid
+            this.cid = this.TYPE_LABEL[this.get('type')] + '_' + this.get('id');
 
-            this.fetch().done(function () {
-                self.trigger('fetch');
-            });
+            this.fetch();
         },
 
         getDisplayName: function () {
@@ -135,10 +126,6 @@ define('io.ox/participants/model', [
             }
         },
 
-        getImage: function () {
-            console.warn('deprecated');
-        },
-
         getAPIData: function () {
             var ret = {
                 type: this.get('type')
@@ -156,12 +143,7 @@ define('io.ox/participants/model', [
         },
 
         fetch: function () {
-            var self = this, df = new $.Deferred();
-
-            function setUser(data) {
-                self.set(data);
-                df.resolve();
-            }
+            var self = this;
 
             function setExternalContact(data) {
                 self.set({
@@ -175,74 +157,53 @@ define('io.ox/participants/model', [
             }
 
             switch (self.get('type')) {
-            case self.TYPE_USER:
-                // fetch user contact
-                if (this.get('display_name') && 'image1_url' in this.attributes) {
-                    setUser(self.toJSON());
-                } else {
-                    userAPI.get({ id: self.get('id') }).then(
-                        function (data) {
-                            setUser(data);
-                        },
-                        function () {
-                            if (!self.get('display_name')) {
-                                self.set('display_name', self.get('mail'));
-                            }
-                            df.resolve();
-                        }
-                    );
-                }
-                break;
-            case self.TYPE_USER_GROUP:
-                //fetch user group
-                if (this.get('display_name') && this.get('members')) break;
-                groupAPI.get({ id: self.get('id') }).done(function (group) {
-                    self.set(group);
-                    df.resolve();
-                });
-                break;
-            case self.TYPE_RESOURCE:
-                if (this.get('display_name')) break;
-                resourceAPI.get({ id: self.get('id') }).done(function (resource) {
-                    self.set(resource);
-                    df.resolve();
-                });
-                break;
-            case self.TYPE_RESOURCE_GROUP:
-                self.set('display_name', 'resource group');
-                df.resolve();
-                break;
-            case self.TYPE_EXTERNAL_USER:
-                // has
-                if (this.get('display_name') && 'image1_url' in this.attributes) {
-                    setExternalContact(self.toJSON());
-                } else {
-                    contactAPI.getByEmailaddress(self.get('mail') || self.get('email1')).done(function (data) {
-                        if (data && data.display_name) {
-                            setExternalContact(data);
-                        } else {
-                            self.set({
-                                display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
-                                email1: self.get('mail') || self.get('email1')
-                            });
-                        }
-                        df.resolve();
+                case self.TYPE_USER:
+                    // fetch user contact
+                    if (this.get('display_name') && 'image1_url' in this.attributes) break;
+                    userAPI.get({ id: self.get('id') }).then(function (data) {
+                        self.set(data);
                     });
-                }
-                break;
-            case self.TYPE_DISTLIST:
-                //fetch user group
-                contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
-                    self.set(group);
-                    df.resolve();
-                });
-                break;
-            default:
-                df.resolve();
-                break;
+                    break;
+                case self.TYPE_USER_GROUP:
+                    //fetch user group
+                    if (this.get('display_name') && this.get('members')) break;
+                    groupAPI.get({ id: self.get('id') }).then(function (group) {
+                        self.set(group);
+                    });
+                    break;
+                case self.TYPE_RESOURCE:
+                    if (this.get('display_name')) break;
+                    resourceAPI.get({ id: self.get('id') }).then(function (resource) {
+                        self.set(resource);
+                    });
+                    break;
+                case self.TYPE_RESOURCE_GROUP:
+                    self.set('display_name', 'resource group');
+                    break;
+                case self.TYPE_EXTERNAL_USER:
+                    if (this.get('display_name') && 'image1_url' in this.attributes) {
+                        setExternalContact(self.toJSON());
+                    } else {
+                        contactAPI.getByEmailaddress(self.getEmail()).then(function (data) {
+                            if (data && data.display_name) {
+                                setExternalContact(data);
+                            } else {
+                                self.set({
+                                    display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
+                                    email1: self.getEmail()
+                                });
+                            }
+                        });
+                    }
+                    break;
+                case self.TYPE_DISTLIST:
+                    contactAPI.get({ id: self.get('id'), folder_id: self.get('folder_id') }).done(function (group) {
+                        self.set(group);
+                    });
+                    break;
+                default:
+                    break;
             }
-
-            return df;
         }
 
     });
@@ -257,19 +218,20 @@ define('io.ox/participants/model', [
 
         initialize: function () {
             var self = this;
-            self.on('change', function () {
-                // Deduplication
-                var idMap = {};
-                var duplicates = [];
+            this.on('change', function () {
+                // Deduplication on model change
+                var idMap = {},
+                    duplicates = [];
                 self.each(function (p) {
-                    if (idMap[p.id]) {
+                    if (idMap[p.cid]) {
                         duplicates.push(p);
                     } else {
-                        idMap[p.id] = true;
+                        idMap[p.cid] = true;
                     }
                 });
                 self.remove(duplicates);
             });
+            // wrap add function
             this.oldAdd = this.add;
             this.add = this.addUniquely;
         },
