@@ -153,8 +153,7 @@ define('io.ox/core/tk/typeahead', [
                     },
                     header: function (data) {
                         // workaround: add a hidden info node that stores query
-                        return $('<span class="info hidden">')
-                                .attr('data-query', data.query);
+                        return $('<span class="info hidden">').attr('data-query', data.query);
                     }
                 }
             }];
