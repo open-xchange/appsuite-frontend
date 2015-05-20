@@ -19,12 +19,12 @@ define('io.ox/mail/mailfilter/settings/register', [
 
     'use strict';
 
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
         id: 'io.ox/mailfilter',
         title: gt('Mail Filter Rules'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
-        index: 500,
+        index: 300,
         advancedMode: true,
         settingsgroup: 'main/mail'
     });

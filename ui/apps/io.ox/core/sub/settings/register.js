@@ -19,13 +19,13 @@ define('io.ox/core/sub/settings/register', [
 
     'use strict';
 
-    var point = ext.point('io.ox/settings/pane'), id = 'io.ox/core/sub';
+    var point = ext.point('io.ox/settings/pane/tools'), id = 'io.ox/core/sub';
 
     point.extend({
         id: id,
         title: gt('Subscriptions'),
         ref: 'io.ox/core/sub',
-        settingsgroup: 'tools'
+        index: 100
     });
 
     if (!capabilities.has('subscription')) {

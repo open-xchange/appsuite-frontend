@@ -21,13 +21,12 @@ define('io.ox/core/settings/errorlog/settings/pane', [
 
     'use strict';
 
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/tools').extend({
         id: 'errorlog',
         title: gt('Error log'),
         ref: 'io.ox/core/settings/errorlog',
-        index: 1000000000000,
-        advancedMode: true,
-        settingsgroup: 'tools'
+        index: 200,
+        advancedMode: true
     });
 
     var ErrorLogView = Backbone.View.extend({

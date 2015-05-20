@@ -36,12 +36,12 @@ define('io.ox/mail/vacationnotice/settings/register', [
             return arrayOfValues;
         };
 
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
         id: 'io.ox/vacation',
         title: gt('Vacation Notice'),
         ref: 'io.ox/vacation',
         loadSettingPane: false,
-        index: 300,
+        index: 100,
         lazySaveSettings: true,
         settingsgroup: 'main/mail'
     });

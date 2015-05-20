@@ -160,13 +160,12 @@ define('io.ox/core/settings/downloads/pane', [
     //
     // draw settings pane
     //
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/tools').extend({
         id: 'io.ox/core/downloads',
-        index: 1000000000000,
+        index: 300,
         title: gt('Downloads'),
         pane: 'io.ox/core/settings/downloads/pane',
-        advancedMode: false,
-        settingsgroup: 'tools'
+        advancedMode: false
     });
 
     ext.point('io.ox/core/settings/downloads/pane').extend({

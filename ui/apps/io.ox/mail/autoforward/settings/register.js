@@ -22,12 +22,12 @@ define('io.ox/mail/autoforward/settings/register', [
 
     var filterModel;
 
-    ext.point('io.ox/settings/pane').extend({
+    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
         id: 'io.ox/autoforward',
         title: gt('Auto Forward'),
         ref: 'io.ox/autoforward',
         loadSettingPane: false,
-        index: 400,
+        index: 200,
         lazySaveSettings: true,
         settingsgroup: 'main/mail'
     });

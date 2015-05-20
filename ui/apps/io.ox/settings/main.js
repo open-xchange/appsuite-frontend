@@ -44,7 +44,8 @@ define('io.ox/settings/main', [
         expertmode = true,
         currentSelection = null,
         previousSelection = null,
-        pool = api.pool;
+        pool = api.pool,
+        mainGroups = [];
 
     // function updateExpertMode() {
     //     var nodes = $('.expertmode');
@@ -137,10 +138,16 @@ define('io.ox/settings/main', [
                 return true;
             });
 
-            var index = 200;
+            ext.point('io.ox/settings/pane').extend({
+                id: 'main',
+                index: 200,
+                subgroup: 'io.ox/settings/pane/main'
+            });
+
+            var index = 100;
 
             _(apps).each(function (app) {
-                ext.point('io.ox/settings/pane').extend(_.extend({}, {
+                ext.point('io.ox/settings/pane/main').extend(_.extend({}, {
                     title: app.description,
                     ref: app.id,
                     index: index
@@ -204,22 +211,12 @@ define('io.ox/settings/main', [
 
                 this.append(
 
-                    new TreeNodeView(_.extend({}, defaults, {
-                        model_id: 'virtual/settings/general'
-                    }))
-                    .render().$el.addClass('standard-folders'),
-                    new TreeNodeView(_.extend({}, defaults, {
-                        model_id: 'virtual/settings/main'
-                    }))
-                    .render().$el.addClass('standard-folders'),
-                    new TreeNodeView(_.extend({}, defaults, {
-                        model_id: 'virtual/settings/tools'
-                    }))
-                    .render().$el.addClass('standard-folders'),
-                    new TreeNodeView(_.extend({}, defaults, {
-                        model_id: 'virtual/settings/external'
-                    }))
-                    .render().$el.addClass('standard-folders')
+                    mainGroups.map(function (groupName) {
+                        return new TreeNodeView(_.extend({}, defaults, {
+                            model_id: groupName
+                        }))
+                        .render().$el.addClass('standard-folders');
+                    })
 
                 );
             }
@@ -227,18 +224,11 @@ define('io.ox/settings/main', [
 
         ext.point('io.ox/core/foldertree/settings/app').extend(_.extend({}, defaultExtension));
 
-        var listOfVirtualFolders = ['settings/general', 'settings/main', 'settings/external', 'settings/tools'];
-
         var getter = function () {
             var def = $.Deferred();
             def.resolve(pool.getCollection(this.id).models);
             return def;
         };
-
-        //create virtual folders
-        _.each(listOfVirtualFolders, function (val) {
-            api.virtual.add('virtual/' + val, getter);
-        });
 
         // tree view
         var tree = new TreeView({
@@ -299,62 +289,60 @@ define('io.ox/settings/main', [
             return dfd;
         }
 
-        function addModelsToPool(allApps) {
-            var collectedModels = {
-                general: [],
-                main: [],
-                tools: [],
-                external: [],
-                submenu: []
-            };
-            _.each(allApps, function (val) {
-                var menuStrucktur = [],
-                    defaultModel = {
-                        id: 'virtual/' + val.id,
+        function addModelsToPool(groupList) {
+            var externalList = [];
+
+            function processSubgroup(extPoint, subgroup) {
+                subgroup = subgroup + '/' + extPoint.id;
+                var list = _(ext.point(subgroup).list()).map(function (p) {
+                    processSubgroup(p, subgroup);
+
+                    return pool.addModel({
+                        id: 'virtual/settings/' + p.id,
+                        module: 'settings',
+                        own_rights: 134225984,
+                        title: /*#, dynamic*/gt.pgettext('app', p.title),
+                        subfolders: false,
+                        meta: p
+                    }).toJSON();
+                });
+
+                if (list.length > 0) {
+                    api.virtual.add('virtual/settings/' + extPoint.id, getter);
+                    pool.addCollection('virtual/settings/' + extPoint.id, list, { reset: true });
+                }
+            }
+
+            _.each(groupList, function (val) {
+                if (val.subgroup) {
+                    mainGroups.push('virtual/settings/' + val.id);
+                    var list = _(ext.point(val.subgroup).list()).map(function (p) {
+                        processSubgroup(p, val.subgroup);
+
+                        return pool.addModel({
+                            id: 'virtual/settings/' + p.id,
+                            module: 'settings',
+                            own_rights: 134225984,
+                            title: /*#, dynamic*/gt.pgettext('app', p.title),
+                            subfolders: false,
+                            meta: p
+                        }).toJSON();
+                    });
+                    pool.addCollection('virtual/settings/' + val.id, list, { reset: true });
+                } else {
+                    // this handles all old settings without a settingsgroup
+                    externalList.push(pool.addModel({
+                        id: 'virtual/settings/' + val.id,
                         module: 'settings',
                         own_rights: 134225984,
                         title: /*#, dynamic*/gt.pgettext('app', val.title),
                         subfolders: false,
                         meta: val
-                    };
-
-                if (val.settingsgroup) {
-                    menuStrucktur = val.settingsgroup.split('/');
-                }
-
-                pool.addModel(_.extend(defaultModel, { menuStrucktur: menuStrucktur }));
-
-                if (menuStrucktur.length === 1) {
-                    collectedModels[val.settingsgroup].push(pool.getModel('virtual/' + val.id).toJSON());
-
-                } else if (menuStrucktur.length === 0) {
-                    collectedModels.external.push(pool.getModel('virtual/' + val.id).toJSON());
-                } else if (menuStrucktur.length >= 1) {
-                    collectedModels.submenu.push(pool.getModel('virtual/' + val.id).toJSON());
+                    }).toJSON());
                 }
             });
 
-            _.each(collectedModels, function (val, key) {
-                if (key === 'submenu') {
-                    var sort = {};
-                    _.each(val, function (val) {
-                        if (!sort[val.menuStrucktur[1]]) {
-                            sort[val.menuStrucktur[1]] = [];
-                        }
-                        sort[val.menuStrucktur[1]].push(val);
-
-                    });
-                    _.each(sort, function (val, key) {
-                        //create virtual folders
-                        api.virtual.add('virtual/io.ox/' + key, getter);
-
-                        pool.addCollection('virtual/io.ox/' + key, val, { reset: true });
-                    });
-
-                } else {
-                    pool.addCollection('virtual/settings/' + key, val, { reset: true });
-                }
-            });
+            pool.addCollection('virtual/settings/external', externalList, { reset: true });
         }
 
         // Create extensions for the config jump pages
@@ -412,17 +400,33 @@ define('io.ox/settings/main', [
         });
 
         ext.point('io.ox/settings/pane').extend({
+            id: 'general',
+            index: 100,
+            subgroup: 'io.ox/settings/pane/general'
+        });
+
+        ext.point('io.ox/settings/pane/general').extend({
             title: gt('Basic settings'),
-            index: 50,
-            id: 'io.ox/core',
-            settingsgroup: 'general'
+            index: 100,
+            id: 'io.ox/core'
+        });
+
+        ext.point('io.ox/settings/pane/general').extend({
+            title: gt('Mail and Social Accounts'),
+            index: 200,
+            id: 'io.ox/settings/accounts'
         });
 
         ext.point('io.ox/settings/pane').extend({
-            title: gt('Mail and Social Accounts'),
-            index: 600,
-            id: 'io.ox/settings/accounts',
-            settingsgroup: 'general'
+            id: 'tools',
+            index: 300,
+            subgroup: 'io.ox/settings/pane/tools'
+        });
+
+        ext.point('io.ox/settings/pane').extend({
+            id: 'external',
+            index: 400,
+            subgroup: 'io.ox/settings/pane/external'
         });
 
         var showSettings = function (baton, focus) {
