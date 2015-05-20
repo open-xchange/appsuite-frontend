@@ -50,7 +50,7 @@ define('io.ox/participants/views', [
         },
 
         render: function () {
-            this.$el.attr({ 'data-cid': this.model.cid });
+            this.$el.attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
 
             this.nodes = {
                 $img: $('<div>'),
@@ -68,10 +68,6 @@ define('io.ox/participants/views', [
             this.setCustomImage();
             this.setDisplayName();
             this.setTypeStyle();
-
-            if (this.options.closeButton && this.model.get('ui_removable') !== false) {
-                this.$el.addClass('removable');
-            }
 
             this.$el.append(
                 this.nodes.$img,
@@ -129,6 +125,8 @@ define('io.ox/participants/views', [
                 // set organizer
                 if (this.options.baton && this.model.get('id') === this.options.baton.model.get('organizerId')) {
                     extra = gt('Organizer');
+                    // don't remove organizer
+                    this.$el.removeClass('removable');
                 }
 
                 if (mail && this.options.halo) {
@@ -186,42 +184,49 @@ define('io.ox/participants/views', [
                     this.$ul = $('<ul class="list-unstyled">')
                 )
             );
-            this.renderUser();
-            // this.$el.append($ul).toggleClass('empty', this.collection.length === 0);
+            return this.renderAll();
+        },
+
+        renderParticipant: function (participant) {
+            var self = this;
+            var view = new ParticipantEntryView({
+                tagName: 'li',
+                model: participant,
+                baton: self.options.baton,
+                halo: true,
+                closeButton: true
+            }).render().$el.addClass('col-xs-12 col-sm-6');
+
+            // bring organizer up
+            if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                self.$ul.prepend(view);
+            } else {
+                self.$ul.append(view);
+            }
+        },
+
+        renderAll: function () {
+            var self = this;
+            this.renderEmptyLabel();
+            this.collection.each(function (model) {
+                self.renderParticipant(model);
+            });
             return this;
         },
 
-        renderUser: function () {
-            var self = this;
-
+        renderEmptyLabel: function () {
             if (this.collection.length === 0) {
                 this.$ul.append(
                     $('<li>').text(gt('This list has no contacts yet'))
                 );
-                return;
             }
-
-            this.collection.each(function (participant) {
-                var view = new ParticipantEntryView({
-                    tagName: 'li',
-                    model: participant,
-                    baton: self.options.baton,
-                    halo: true,
-                    closeButton: true
-                }).render().$el.addClass('col-xs-12 col-sm-6');
-
-                // bring organizer up
-                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    self.$ul.prepend(view);
-                } else {
-                    self.$ul.append(view);
-                }
-            });
+            return this.$ul.toggleClass('empty', this.collection.length === 0);
         },
 
         updateContainer: function () {
             this.$ul.empty();
-            this.renderUser();
+            this.renderAll();
+            return this;
         }
 
     });

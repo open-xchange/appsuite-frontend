@@ -190,31 +190,24 @@ define('io.ox/calendar/model', [
 
             setDefaultParticipants: function (options) {
                 var self = this;
-                return folderAPI.get(self.get('folder_id')).done(function (folder) {
-                    var userID = ox.user_id;
+                return folderAPI.get(this.get('folder_id')).then(function (folder) {
+                    var userID = ox.user_id,
+                        add = function (id) {
+                            self.getParticipants().add({ id: id, type: 1 });
+                        };
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {
-                            // it's a private folder for the current user, add him by default
-                            // as participant
-                            self.getParticipants().add({ id: userID, type: 1 });
+                            // if private folder, current user will be the organizer
                             self.set('organizerId', userID);
-                            // use a new, custom and unused property in his model to specify that he can't be removed
-                            self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                        } else {
-                            if (self.get('organizerId') === userID) {
-                                self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                            }
+                            add(userID);
                         }
                     } else if (folderAPI.is('public', folder)) {
-                        if (options.create) {
-                            // if public folder, current user will be added
-                            self.getParticipants().add({ id: userID, type: 1 });
-                        }
+                        // if public folder, current user will be added
+                        if (options.create) add(userID);
                     } else if (folderAPI.is('shared', folder)) {
                         // in a shared folder the owner (created_by) will be added by default
-                        self.getParticipants().add({ id: folder.created_by, type: 1 });
+                        add(folder.created_by);
                     }
-
                 });
             }
         },
