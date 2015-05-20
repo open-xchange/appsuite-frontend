@@ -14,18 +14,19 @@
 define('io.ox/core/permissions/permissions', [
     'io.ox/core/extensions',
     'io.ox/core/notifications',
-    'io.ox/core/folder/api',
     'io.ox/core/folder/breadcrumb',
+    'io.ox/core/folder/api',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
-    'io.ox/core/tk/dialogs',
     'io.ox/contacts/api',
+    'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
-    'io.ox/calendar/edit/view-addparticipants',
-    'io.ox/core/http',
+    'io.ox/core/tk/typeahead',
+    'io.ox/participants/model',
+    'io.ox/participants/views',
     'gettext!io.ox/core',
     'less!io.ox/core/permissions/style'
-], function (ext, notifications, api, BreadcrumbView, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+], function (ext, notifications, BreadcrumbView, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
 
     'use strict';
 
@@ -403,6 +404,23 @@ define('io.ox/core/permissions/permissions', [
                         if (_.device('desktop')) {
                             dialog.addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 }).addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
                         }
+
+                        /*
+                         * extension point for autocomplete item
+                         */
+                        ext.point('io.ox/core/permissions/permissions/autoCompleteItem').extend({
+                            id: 'view',
+                            index: 100,
+                            draw: function (participant) {
+                                this.append(new pViews.ParticipantEntryView({
+                                    model: participant,
+                                    closeButton: false,
+                                    halo: false,
+                                    field: true
+                                }).render().$el);
+                            }
+                        });
+
                         var cascadePermissionsFlag = false,
                             buildCheckbox = function () {
                                 var checkbox = $('<input type="checkbox" tabindex="1">')
@@ -418,54 +436,53 @@ define('io.ox/core/permissions/permissions', [
                                     buildCheckbox()
                                 )
                             ),
+                            view = new Typeahead({
+                                apiOptions: {
+                                    users: true,
+                                    groups: true,
+                                    split: false
+                                },
+                                placeholder: gt('Add user/group'),
+                                harmonize: function (data) {
+                                    data = _(data).map(function (m) {
+                                        return new pModel.Participant(m);
+                                    });
+                                    // remove duplicate entries from typeahead dropdown
+                                    return _(data).filter(function (model) {
+                                        return !collection.get(model.id);
+                                    });
+                                },
+                                click: function (e, member) {
+                                    var data = member.toJSON(),
+                                        isGroup = data.type === 2,
+                                        obj = {
+                                            entity: isGroup ? data.id : data.internal_userid,
+                                            // default is 'view folder' plus 'read all'
+                                            bits: 257,
+                                            group: isGroup
+                                        };
+                                    if (!obj.entity) {
+                                        notifications.yell(
+                                            'error',
+                                            //#. permissions dialog
+                                            //#. error message when selected user or group can not be used
+                                            gt('This is not a valid user or group.')
+                                        );
+                                    } else {
+                                        // duplicate check
+                                        collection.add(new Permission(obj));
+                                    }
+                                },
+                                extPoint: 'io.ox/core/permissions/permissions'
+                            }),
+                            guid = _.uniqueId('input'),
                             node =  $('<div class="autocomplete-controls">').append(
-                                $('<input type="text" tabindex="1" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
-                                    autocomplete.trigger('update');
-                                })
-                            ),
-                            autocomplete = new AddParticipantsView({ el: node });
-
-                        autocomplete.render({
-                            autoselect: true,
-                            parentSelector: '.permissions-dialog > .modal-header',
-                            placement: 'bottom',
-                            contacts: false,
-                            distributionlists: false,
-                            groups: true,
-                            resources: false,
-                            users: true,
-                            split: false
-                        });
-                        //add recipents to baton-data-node; used to filter sugestions list in view
-                        autocomplete.on('update', function () {
-                            var baton = { list: [] };
-                            collection.any(function (item) {
-                                baton.list.push({ id: item.get('entity'), type: item.get('group') ? 2 : 1 });
-                            });
-                            $.data(node, 'baton', baton);
-                        });
-                        autocomplete.on('select', function (data) {
-                            var isGroup = data.type === 2,
-                                obj = {
-                                    entity: isGroup ? data.id : data.internal_userid,
-                                    // default is 'view folder' plus 'read all'
-                                    bits: 257,
-                                    group: isGroup
-                                };
-                            if (!obj.entity) {
-                                notifications.yell(
-                                    'error',
-                                    //#. permissions dialog
-                                    //#. error message when selected user or group can not be used
-                                    gt('This is not a valid user or group.')
-                                );
-                            } else {
-                                // duplicate check
-                                if (!collection.any(function (item) { return item.entity === obj.entity; })) {
-                                    collection.add(new Permission(obj));
-                                }
-                            }
-                        });
+                                $('<div class="form-group">').append(
+                                    $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                                    view.$el.attr({ id: guid })
+                                )
+                            );
+                        view.render();
                         if (_.device('desktop')) {
                             dialog.getHeader().append(node);
                             dialog.getFooter().prepend(checkboxNode);
