@@ -57,8 +57,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         this.attr({
                             title: gt('Double click to rename'),
                             'aria-label': gt('Filename, double click to rename')
-                        })
-                            .addClass('viewer-toolbar-rename');
+                        });
                     }
                 }
             },

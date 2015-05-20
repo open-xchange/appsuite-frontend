@@ -86,7 +86,7 @@
 
 /* OX Viewer Sidebar generic styles */
 .viewer-sidebar {
-    
+
     /* set the text context of responsive labels according to the device and it's orientation */
     /* the default */
     *.viewer-responsive-label[data-label-normal]:before {
@@ -98,7 +98,7 @@
             content: attr(data-label-short);
         }
     }
-    
+
     position: absolute;
     width: @viewer-sidebar-width;
     padding: 16px;
@@ -290,48 +290,6 @@
                     background-color: @viewer-toolbar-focus-bgcolor;
                 }
             }
-            > a.viewer-toolbar-filename {
-                max-width: @viewer-toolbar-filename-width;
-                padding: 0 16px;
-                text-align: left;
-                cursor: pointer;
-                .ellipsis();
-                i {
-                    margin-right: 16px;
-                    font-size: 14px;
-                }
-                i.fa-file-excel-o {
-                    color: #44B957;
-                }
-                i.fa-file-word-o {
-                    color: #1A9DD4;
-                }
-                i.fa-file-powerpoint-o {
-                    color: #EE5F37;
-                }
-                i.fa-file-pdf-o {
-                    color: #CF1E28;
-                }
-                i.fa-file-image-o {
-                    color: #EE5F37;
-                }
-                i.fa-file-text-o {
-                    color: #4285f4;
-                }
-                &:hover, &:active, &:focus {
-                    color: @viewer-toolbar-color;
-                    background: @viewer-toolbar-hover-bgcolor;
-                }
-            }
-            > a.viewer-toolbar-rename {
-                &:hover {
-                    background: @viewer-toolbar-hover-bgcolor;
-                    cursor: pointer;
-                }
-                &:focus {
-                    background-color: @viewer-toolbar-active-bgcolor;
-                }
-            }
             > a.active {
                 color: @viewer-toolbar-active-color;
                 background-color: @viewer-toolbar-active-bgcolor;
@@ -343,18 +301,52 @@
                 margin: 0;
             }
         }
-        &.smartphone > li > a {
-            min-width: @viewer-toolbar-link-width-smartphone;
 
-            @media (orientation: portrait) {
-                &.viewer-toolbar-filename {
-                    max-width: @viewer-toolbar-filename-width-smartphone-portrait;
+        .viewer-toolbar-filename {
+            max-width: @viewer-toolbar-filename-width;
+            padding: 0 16px;
+            text-align: left;
+            cursor: pointer;
+            .ellipsis();
+            i {
+                margin-right: 16px;
+                font-size: 14px;
+            }
+            i.fa-file-excel-o {
+                color: #44B957;
+            }
+            i.fa-file-word-o {
+                color: #1A9DD4;
+            }
+            i.fa-file-powerpoint-o {
+                color: #EE5F37;
+            }
+            i.fa-file-pdf-o {
+                color: #CF1E28;
+            }
+            i.fa-file-image-o {
+                color: #EE5F37;
+            }
+            i.fa-file-text-o {
+                color: #4285f4;
+            }
+            &:hover, &:active, &:focus {
+                color: @viewer-toolbar-color;
+                background: @viewer-toolbar-hover-bgcolor;
+            }
+            @media (orientation: portrait) and (min-width: 320px) {
+                i {
+                    margin-right: 5px;
+                }
+                @media (min-width: 320px) {
+                    width: 130px;
+                }
+                @media (min-width: 360px) {
+                    width: 175px;
                 }
             }
             @media (orientation: landscape) {
-                &.viewer-toolbar-filename {
-                    max-width: @viewer-toolbar-filename-width-smartphone-landscape;
-                }
+                width: @viewer-toolbar-filename-width-smartphone-landscape;
             }
         }
     }
