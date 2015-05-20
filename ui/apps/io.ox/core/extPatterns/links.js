@@ -322,6 +322,8 @@ define('io.ox/core/extPatterns/links', [
      * @param {object}  options
      * @param {boolean} options.dropdown force usage of 'more...'
      * @param {string} add options.title for better accessibility (add context to 'Inline menu')
+     * @param {boolean} options.compactDropdown = false
+     *  if set to true, low prio links dropdown will use a compact hamburger icon.
      */
     var InlineLinks = function (options) {
 
@@ -362,7 +364,7 @@ define('io.ox/core/extPatterns/links', [
                             'aria-label': isSmartphone ? gt('Actions') : gt('More')
                         })
                         .append(
-                            isSmartphone ?
+                            isSmartphone && !extension.compactDropdown ?
                                 $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
                                 $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
                         )
