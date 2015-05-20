@@ -475,6 +475,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             toolbarPoint.extend(new LinksPattern.InlineLinks({
                 id: appName,
                 dropdown: true,
+                compactDropdown: true,
                 ref: TOOLBAR_LINKS_ID + '/' + appName
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
