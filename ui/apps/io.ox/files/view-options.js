@@ -142,7 +142,7 @@ define('io.ox/files/view-options', [
             ext.point('io.ox/files/select/options').invoke('draw', dropdown.$el, baton);
 
             this.append(
-                dropdown.render().$el.addClass('grid-options toolbar-item pull-right')
+                dropdown.render().$el.addClass('grid-options toolbar-item ' + (_.device('smartphone') ? 'pull-left' : 'pull-right'))
             );
         }
     });
@@ -155,6 +155,9 @@ define('io.ox/files/view-options', [
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
+            if (_.device('smartphone')) {
+                return;
+            }
 
             var view = new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item'),
                 results = $('<div class="toolbar-item">').text(gt('Search results')).hide();

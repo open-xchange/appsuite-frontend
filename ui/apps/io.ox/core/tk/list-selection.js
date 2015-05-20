@@ -68,22 +68,24 @@ define('io.ox/core/tk/list-selection', [
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (isTouch && _.device('android || ios') && _.device('smartphone')) {
-            this.view.$el
-                .on('touchstart', SELECTABLE, this, this.onTouchStart)
-                .on('touchmove', SELECTABLE, this, this.onTouchMove)
-                .on('touchend', SELECTABLE, this, this.onTouchEnd)
-                .on('tap', SWIPEDELETE,  $.proxy(function (e) {
-                    this.onSwipeDelete(e);
-                }, this))
-                .on('tap', SWIPEMORE,  $.proxy(function (e) {
-                    this.onSwipeMore(e);
-                }, this));
-        } else if (isTouch) {
-            this.view.$el
-                .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
-                .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
-                .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
+        if (!this.view.options.noSwipe) {
+            if (isTouch && _.device('android || ios') && _.device('smartphone')) {
+                this.view.$el
+                    .on('touchstart', SELECTABLE, this, this.onTouchStart)
+                    .on('touchmove', SELECTABLE, this, this.onTouchMove)
+                    .on('touchend', SELECTABLE, this, this.onTouchEnd)
+                    .on('tap', SWIPEDELETE,  $.proxy(function (e) {
+                        this.onSwipeDelete(e);
+                    }, this))
+                    .on('tap', SWIPEMORE,  $.proxy(function (e) {
+                        this.onSwipeMore(e);
+                    }, this));
+            } else if (isTouch) {
+                this.view.$el
+                    .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
+                    .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
+                    .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
+            }
         }
     }
 

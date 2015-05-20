@@ -260,7 +260,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -395,8 +395,6 @@ define('io.ox/files/main', [
          */
         'change:layout': function (app) {
 
-            //if (_.device('smartphone')) return;
-
             function applyLayout() {
 
                 var layout = app.props.get('layout');
@@ -408,6 +406,25 @@ define('io.ox/files/main', [
                 } else {
                     app.listView.$el.addClass('grid-layout tile-layout').removeClass('column-layout icon-layout');
                 }
+
+                if (_.device('smartphone')) {
+                    onOrientationChange();
+                }
+            }
+
+            function onOrientationChange() {
+                if (_.device('landscape')) {
+                    //use 3 items per row on smartphones in landscape orientation
+                    app.listView.$el.removeClass('grid-2').addClass('grid-3');
+                } else {
+                    //use 2 items per row on smartphones in portrait orientation
+                    app.listView.$el.removeClass('grid-3').addClass('grid-2');
+                }
+            }
+
+            if (_.device('smartphone')) {
+                //use debounce here or some smartphone animations are not finished yet, resulting in incorrect orientationstate (seen on S4)
+                $(window).on('orientationchange', _.debounce(onOrientationChange, 500));
             }
 
             app.props.on('change:layout', function () {
