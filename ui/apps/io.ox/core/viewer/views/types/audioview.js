@@ -84,7 +84,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
          * Audio load error handler
          */
         onError: function () {
-            this.$el.idle().find('div.viewer-displayer-notification').remove();
+            this.$el.idle().find('.viewer-displayer-audio').addClass('player-hidden');
+            this.$el.find('div.viewer-displayer-notification').remove();
             this.$el.append(
                 this.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
             );

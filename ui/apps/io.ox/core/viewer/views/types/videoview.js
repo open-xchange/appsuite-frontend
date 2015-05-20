@@ -72,7 +72,8 @@ define('io.ox/core/viewer/views/types/videoview',  [
          * Video load error handler
          */
         onError: function () {
-            this.$el.idle().find('div.viewer-displayer-notification').remove();
+            this.$el.idle().find('.viewer-displayer-video').addClass('player-hidden');
+            this.$el.find('div.viewer-displayer-notification').remove();
             this.$el.append(
                 this.createNotificationNode(gt('Your browser does not support the video format of this file.'))
             );
