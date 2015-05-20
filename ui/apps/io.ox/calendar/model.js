@@ -191,22 +191,18 @@ define('io.ox/calendar/model', [
             setDefaultParticipants: function (options) {
                 var self = this;
                 return folderAPI.get(this.get('folder_id')).then(function (folder) {
-                    var userID = ox.user_id,
-                        add = function (id) {
-                            self.getParticipants().add({ id: id, type: 1 });
-                        };
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {
                             // if private folder, current user will be the organizer
-                            self.set('organizerId', userID);
-                            add(userID);
+                            self.set('organizerId', ox.user_id);
+                            self.getParticipants().add({ id: ox.user_id, type: 1 });
                         }
                     } else if (folderAPI.is('public', folder)) {
                         // if public folder, current user will be added
-                        if (options.create) add(userID);
+                        if (options.create) self.getParticipants().add({ id: ox.user_id, type: 1 });
                     } else if (folderAPI.is('shared', folder)) {
                         // in a shared folder the owner (created_by) will be added by default
-                        add(folder.created_by);
+                        self.getParticipants().add({ id: folder.created_by, type: 1 });
                     }
                 });
             }
