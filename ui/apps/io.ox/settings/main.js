@@ -342,7 +342,7 @@ define('io.ox/settings/main', [
                 }
             });
 
-            pool.addCollection('virtual/settings/external', externalList, { reset: true });
+            pool.getCollection('virtual/settings/external').add(externalList);
         }
 
         // Create extensions for the config jump pages
