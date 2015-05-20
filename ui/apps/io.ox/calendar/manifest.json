@@ -8,7 +8,6 @@
         "requires": "calendar",
         "refreshable": true,
         "index": 800,
-        "settingsgroup": "main",
         "help": {
             "base": "help",
             "target": "ox.appsuite.user.chap.calendar.html"

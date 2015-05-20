@@ -7,7 +7,6 @@
     "requires": "webmail",
     "refreshable": true,
     "index": 200,
-    "settingsgroup": "main",
     "help": {
         "base": "help",
         "target": "ox.appsuite.user.chap.email.html"

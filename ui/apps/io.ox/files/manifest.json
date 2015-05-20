@@ -7,7 +7,6 @@
     "requires": "infostore",
     "refreshable": true,
     "index": 1000,
-    "settingsgroup": "main",
     "advancedMode": true,
     "help": {
         "base": "help",

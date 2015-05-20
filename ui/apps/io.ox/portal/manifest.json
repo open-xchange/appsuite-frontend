@@ -7,7 +7,6 @@
     "requires": "portal",
     "refreshable": true,
     "index": 100,
-    "settingsgroup": "main",
     "help": {
         "base": "help",
         "target": "ox.appsuite.user.sect.portal.customize.html"

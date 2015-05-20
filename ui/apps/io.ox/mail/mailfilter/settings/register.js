@@ -25,8 +25,7 @@ define('io.ox/mail/mailfilter/settings/register', [
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
         index: 300,
-        advancedMode: true,
-        settingsgroup: 'main/mail'
+        advancedMode: true
     });
 
     ext.point('io.ox/mailfilter/settings/detail').extend({
