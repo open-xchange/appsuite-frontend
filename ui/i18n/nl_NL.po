@@ -525,7 +525,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:530 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Een leesbevestiging is verzonden"
 
@@ -1274,7 +1274,7 @@ msgstr "Terug naar afspraak"
 msgid "Basic settings"
 msgstr "Basisinstellingen"
 
-#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -1898,7 +1898,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:263 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -3141,7 +3141,7 @@ msgstr "Exporteer map"
 msgid "External contact"
 msgstr "Extern contact"
 
-#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:477 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3728,7 +3728,7 @@ msgstr "Hoog"
 msgid "High contrast theme"
 msgstr "Hoog-contrast thema"
 
-#: apps/io.ox/mail/util.js:402 module:io.ox/core apps/io.ox/tasks/util.js:310
+#: apps/io.ox/mail/util.js:410 module:io.ox/core apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Hoge prioriteit"
@@ -4247,7 +4247,7 @@ msgstr "Verlies: %1$s %"
 msgid "Low"
 msgstr "Laag"
 
-#: apps/io.ox/mail/util.js:403 module:io.ox/core apps/io.ox/tasks/util.js:304
+#: apps/io.ox/mail/util.js:411 module:io.ox/core apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Lage prioriteit"
@@ -4905,7 +4905,7 @@ msgstr "Geen kennisgevingen"
 msgid "No priority"
 msgstr "Geen prioriteit"
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:351 module:io.ox/core
 msgid "No recipients"
 msgstr "Geen ontvangers"
 
@@ -4928,7 +4928,7 @@ msgstr "Geen langzame verzoeken"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
-#: apps/io.ox/mail/util.js:388 module:io.ox/core
+#: apps/io.ox/mail/util.js:396 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
 #, c-format
@@ -5732,7 +5732,7 @@ msgstr "vorige week"
 msgid "Previous year"
 msgstr "Vorige Dag"
 
-#: apps/io.ox/mail/util.js:409 module:io.ox/core
+#: apps/io.ox/mail/util.js:417 module:io.ox/core
 msgid "Primary account"
 msgstr "Primair account"
 
@@ -6410,7 +6410,7 @@ msgid "Send"
 msgstr "Verzenden"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:560 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Verzend een leesbevestiging"
 
@@ -6661,7 +6661,7 @@ msgstr "Verborgen bestanden en mappen tonen"
 msgid "Show icons"
 msgstr "Toon pictogrammen"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
 msgid "Show images"
 msgstr "Afbeeldingen tonen"
 
@@ -7407,7 +7407,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:563 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "De verzender wil een bevestiging ontvangen als u dit e-mailbericht heeft "
@@ -7578,13 +7578,13 @@ msgstr ""
 "Deze statistieken bevatten alleen mappen welke minder dan vier niveaus "
 "hebben in de mappenboom onder de map \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Dit e-mailbericht is gelezen, klik om deze als ongelezen te markeren."
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:436 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Dit e-mailbericht is ongelezen, klik om deze als gelezen te markeren."
 
@@ -7773,7 +7773,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titel"
 
-#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
@@ -7946,7 +7946,7 @@ msgstr "Standaard"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Onbekende fout bij het controleren van Tumblr blog."
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:351 module:io.ox/core
 msgid "Unknown sender"
 msgstr "Onbekende verzender"
 
@@ -7960,7 +7960,7 @@ msgstr "Deblokkeren"
 msgid "Unnamed subscription"
 msgstr "Nieuw abonnement"
 
-#: apps/io.ox/mail/common-extensions.js:43 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:44 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:33
 msgid "Unread"
 msgstr "Ongelezen"
@@ -8207,7 +8207,7 @@ msgstr "Wachten"
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
 
@@ -8622,14 +8622,14 @@ msgstr "Uw IP-adres is gewijzigd"
 msgid "Your applications"
 msgstr "Uw applicaties"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:52 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/audioview.js:81
+#: apps/io.ox/core/viewer/views/types/audioview.js:54 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:89
 #, fuzzy
 msgid "Your browser does not support the audio format of this file."
 msgstr "Uw browser wordt niet ondersteund!"
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:69
+#: apps/io.ox/core/viewer/views/types/videoview.js:49 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:77
 #, fuzzy
 msgid "Your browser does not support the video format of this file."
 msgstr "Uw browser wordt niet ondersteund!"
@@ -8775,7 +8775,7 @@ msgid "and"
 msgstr "en"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:289 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "en %1$d anderen"
 
@@ -9002,7 +9002,7 @@ msgstr "vierde"
 msgid "gray"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:45 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:46 module:io.ox/mail
 msgid "has attachments"
 msgstr "heeft bijlagen"
 
@@ -9238,7 +9238,7 @@ msgstr "niet bevestigd"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:120
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
-#: apps/io.ox/mail/util.js:424 apps/io.ox/mail/util.js:439
+#: apps/io.ox/mail/util.js:432 apps/io.ox/mail/util.js:447
 msgid "unknown"
 msgstr "onbekend"
 

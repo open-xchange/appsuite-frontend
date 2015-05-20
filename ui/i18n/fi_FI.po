@@ -516,7 +516,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:530 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Ilmoitus viestin lukemisesta lähetetty"
 
@@ -1260,7 +1260,7 @@ msgstr "Takaisin tapaamiseen"
 msgid "Basic settings"
 msgstr "Perusasetukset"
 
-#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
 msgid "Bcc"
 msgstr "Piilokopio"
 
@@ -1880,7 +1880,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Kopioi"
 
-#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:263 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -3106,7 +3106,7 @@ msgstr "Vie kansio"
 msgid "External contact"
 msgstr "Ulkoinen yhteystieto"
 
-#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:477 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Viestissä olevia kuvia ei näytetä yksityisyytesi suojaamiseksi."
@@ -3688,7 +3688,7 @@ msgstr "Korkea"
 msgid "High contrast theme"
 msgstr "Korkean kontrastin teema"
 
-#: apps/io.ox/mail/util.js:402 module:io.ox/core apps/io.ox/tasks/util.js:310
+#: apps/io.ox/mail/util.js:410 module:io.ox/core apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Tärkeä"
@@ -4206,7 +4206,7 @@ msgstr "Kadotetut: %1$s %"
 msgid "Low"
 msgstr "Matala"
 
-#: apps/io.ox/mail/util.js:403 module:io.ox/core apps/io.ox/tasks/util.js:304
+#: apps/io.ox/mail/util.js:411 module:io.ox/core apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Vähemmän tärkeä"
@@ -4862,7 +4862,7 @@ msgstr "Ei ilmoituksia"
 msgid "No priority"
 msgstr "Ei asetettua tärkeyttä"
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:351 module:io.ox/core
 msgid "No recipients"
 msgstr "Ei vastaanottajia"
 
@@ -4885,7 +4885,7 @@ msgstr "Ei hitaita pyyntöjä"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
-#: apps/io.ox/mail/util.js:388 module:io.ox/core
+#: apps/io.ox/mail/util.js:396 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
 #, c-format
@@ -5680,7 +5680,7 @@ msgstr "edellinen viikko"
 msgid "Previous year"
 msgstr "Edellinen päivä"
 
-#: apps/io.ox/mail/util.js:409 module:io.ox/core
+#: apps/io.ox/mail/util.js:417 module:io.ox/core
 msgid "Primary account"
 msgstr "Ensisijainen tili"
 
@@ -6356,7 +6356,7 @@ msgid "Send"
 msgstr "Lähetä"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:560 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Lähetä ilmoitus viestin lukemisesta"
 
@@ -6607,7 +6607,7 @@ msgstr "Näytä piilotetut tiedostot ja kansiot"
 msgid "Show icons"
 msgstr "Näytä kuvakkeet"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
 msgid "Show images"
 msgstr "Näytä kuvat"
 
@@ -7343,7 +7343,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:563 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "Lähettäjä haluaisi saada vahvistuksen, kun olet lukenut tämän sähköpostin"
@@ -7513,13 +7513,13 @@ msgstr ""
 "Näihin tilastoihin sisätyvät vain kansiot, jotka ovat hakemistopuussa neljä "
 "tai vähemmän askelta kansiosta %1$s."
 
-#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Tämä sähköposti on luettu, paina merkitäksesi se lukemattomaksi."
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:436 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
 
@@ -7704,7 +7704,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titteli"
 
-#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
@@ -7877,7 +7877,7 @@ msgstr "Perus"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Tuntematon virhe tumblr blogia tarkistettaessa."
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:351 module:io.ox/core
 msgid "Unknown sender"
 msgstr "Tuntematon lähettäjä"
 
@@ -7891,7 +7891,7 @@ msgstr "Avaa lukitus"
 msgid "Unnamed subscription"
 msgstr "Uusi tilaus"
 
-#: apps/io.ox/mail/common-extensions.js:43 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:44 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:33
 msgid "Unread"
 msgstr "Lukematon"
@@ -8134,7 +8134,7 @@ msgstr "Odottaa"
 msgid "Warning"
 msgstr "Varoitus"
 
-#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varoitus: Tämä viesti voi olla urkinta- tai huijausposti"
 
@@ -8547,14 +8547,14 @@ msgstr "IP osoitteesi on muuttunut"
 msgid "Your applications"
 msgstr "Sovelluksesi"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:52 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/audioview.js:81
+#: apps/io.ox/core/viewer/views/types/audioview.js:54 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:89
 #, fuzzy
 msgid "Your browser does not support the audio format of this file."
 msgstr "Selaimesi ei ole tuettu!"
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:69
+#: apps/io.ox/core/viewer/views/types/videoview.js:49 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:77
 #, fuzzy
 msgid "Your browser does not support the video format of this file."
 msgstr "Selaimesi ei ole tuettu!"
@@ -8699,7 +8699,7 @@ msgid "and"
 msgstr "ja"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:289 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "ja %1$d muuta"
 
@@ -8926,7 +8926,7 @@ msgstr "neljäntenä"
 msgid "gray"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:45 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:46 module:io.ox/mail
 msgid "has attachments"
 msgstr "on liitteitä"
 
@@ -9160,7 +9160,7 @@ msgstr "vahvistamaton"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:120
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
-#: apps/io.ox/mail/util.js:424 apps/io.ox/mail/util.js:439
+#: apps/io.ox/mail/util.js:432 apps/io.ox/mail/util.js:447
 msgid "unknown"
 msgstr "tuntematon"
 

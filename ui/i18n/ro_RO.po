@@ -544,7 +544,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:524 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:530 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "A fost trimisă o confirmare de citire"
 
@@ -1290,7 +1290,7 @@ msgstr "Înapoi la întâlnire"
 msgid "Basic settings"
 msgstr "Setări de bază"
 
-#: apps/io.ox/mail/common-extensions.js:268 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -1914,7 +1914,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Copiază"
 
-#: apps/io.ox/mail/common-extensions.js:257 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:263 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -3149,7 +3149,7 @@ msgstr "Exportă dosarul"
 msgid "External contact"
 msgstr "Contact extern"
 
-#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:477 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3735,7 +3735,7 @@ msgstr "Ridicat"
 msgid "High contrast theme"
 msgstr "Temă cu contrast ridicat"
 
-#: apps/io.ox/mail/util.js:402 module:io.ox/core apps/io.ox/tasks/util.js:310
+#: apps/io.ox/mail/util.js:410 module:io.ox/core apps/io.ox/tasks/util.js:310
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Prioritate ridicată"
@@ -4256,7 +4256,7 @@ msgstr "Pierdere: %1$s %"
 msgid "Low"
 msgstr "Jos"
 
-#: apps/io.ox/mail/util.js:403 module:io.ox/core apps/io.ox/tasks/util.js:304
+#: apps/io.ox/mail/util.js:411 module:io.ox/core apps/io.ox/tasks/util.js:304
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Prioritate scăzută"
@@ -4913,7 +4913,7 @@ msgstr "Nicio notificare "
 msgid "No priority"
 msgstr "Nicio prioritate"
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:351 module:io.ox/core
 msgid "No recipients"
 msgstr "Niciun destinatar"
 
@@ -4936,7 +4936,7 @@ msgstr "Nicio cerere lentă"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:210 module:io.ox/mail
-#: apps/io.ox/mail/util.js:388 module:io.ox/core
+#: apps/io.ox/mail/util.js:396 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:103
 #: module:plugins/notifications
 #, c-format
@@ -5736,7 +5736,7 @@ msgstr "săptămâna trecută"
 msgid "Previous year"
 msgstr "Ziua precedentă"
 
-#: apps/io.ox/mail/util.js:409 module:io.ox/core
+#: apps/io.ox/mail/util.js:417 module:io.ox/core
 msgid "Primary account"
 msgstr "Cont principal"
 
@@ -6413,7 +6413,7 @@ msgid "Send"
 msgstr "Trimite"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:554 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:560 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Trimite o confirmare de citire"
 
@@ -6664,7 +6664,7 @@ msgstr "Afișează fișierele și dosarele ascunse"
 msgid "Show icons"
 msgstr "Afișează pictograme"
 
-#: apps/io.ox/mail/common-extensions.js:470 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
 msgid "Show images"
 msgstr "Afișează imaginile"
 
@@ -7406,7 +7406,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:557 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:563 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Expeditorul dorește să primească o notificare când citiți acest e-mail"
 
@@ -7578,13 +7578,13 @@ msgstr ""
 "Aceste statistici includ doar dosare aflate la nivel cel mult patru în "
 "structura dosarului \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:427 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Acest mesaj a fost citit, apăsați pentru marcare ca necitit."
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:438
+#: apps/io.ox/mail/common-extensions.js:436 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Acest mesaj nu a fost citit, apăsați pentru marcare ca citit."
 
@@ -7777,7 +7777,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titulatură"
 
-#: apps/io.ox/mail/common-extensions.js:246 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
@@ -7950,7 +7950,7 @@ msgstr "Unificat"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Eroare necunoscută la verificarea blogului tumblr."
 
-#: apps/io.ox/mail/util.js:343 module:io.ox/core
+#: apps/io.ox/mail/util.js:351 module:io.ox/core
 msgid "Unknown sender"
 msgstr "Expeditor necunoscut"
 
@@ -7964,7 +7964,7 @@ msgstr "Deblochează"
 msgid "Unnamed subscription"
 msgstr "Abonament nou"
 
-#: apps/io.ox/mail/common-extensions.js:43 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:44 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:33
 msgid "Unread"
 msgstr "Necitite"
@@ -8209,7 +8209,7 @@ msgstr "Așteptare"
 msgid "Warning"
 msgstr "Avertisment"
 
-#: apps/io.ox/mail/common-extensions.js:497 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Avertisment: Este posibil ca acest mesaj să fie o escrocherie"
 
@@ -8626,14 +8626,14 @@ msgstr "Adresa dumneavoastră IP a fost modificată"
 msgid "Your applications"
 msgstr "Aplicațiile dumneavoastră"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:52 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/audioview.js:81
+#: apps/io.ox/core/viewer/views/types/audioview.js:54 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:89
 #, fuzzy
 msgid "Your browser does not support the audio format of this file."
 msgstr "Navigatorul dumneavoastră nu este suportat!"
 
-#: apps/io.ox/core/viewer/views/types/videoview.js:47 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/videoview.js:69
+#: apps/io.ox/core/viewer/views/types/videoview.js:49 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/videoview.js:77
 #, fuzzy
 msgid "Your browser does not support the video format of this file."
 msgstr "Navigatorul dumneavoastră nu este suportat!"
@@ -8783,7 +8783,7 @@ msgid "and"
 msgstr "și"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:283 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:289 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "și %1$d alții"
 
@@ -9013,7 +9013,7 @@ msgstr "a patra"
 msgid "gray"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:45 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:46 module:io.ox/mail
 msgid "has attachments"
 msgstr "conține fișiere atașate"
 
@@ -9248,7 +9248,7 @@ msgstr "neconfirmat"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js:120
 #: module:io.ox/core/viewer apps/io.ox/mail/util.js:42 module:io.ox/core
-#: apps/io.ox/mail/util.js:424 apps/io.ox/mail/util.js:439
+#: apps/io.ox/mail/util.js:432 apps/io.ox/mail/util.js:447
 msgid "unknown"
 msgstr "necunoscut"
 
