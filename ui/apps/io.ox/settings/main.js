@@ -303,9 +303,8 @@ define('io.ox/settings/main', [
                         module: 'settings',
                         own_rights: 134225984,
                         title: /*#, dynamic*/gt.pgettext('app', p.title),
-                        subfolders: false,
                         meta: p
-                    }).toJSON();
+                    });
                 });
 
                 if (list.length > 0) {
@@ -325,9 +324,8 @@ define('io.ox/settings/main', [
                             module: 'settings',
                             own_rights: 134225984,
                             title: /*#, dynamic*/gt.pgettext('app', p.title),
-                            subfolders: false,
                             meta: p
-                        }).toJSON();
+                        });
                     });
                     pool.addCollection('virtual/settings/' + val.id, list, { reset: true });
                 } else {
@@ -337,7 +335,6 @@ define('io.ox/settings/main', [
                         module: 'settings',
                         own_rights: 134225984,
                         title: /*#, dynamic*/gt.pgettext('app', val.title),
-                        subfolders: false,
                         meta: val
                     }).toJSON());
                 }
@@ -482,8 +479,8 @@ define('io.ox/settings/main', [
         app.setSettingsPane = function (options) {
             if (options && options.id) {
                 return paintTree().done(function () {
-                    var baton = new ext.Baton({ data: pool.getModel('virtual/' + options.id).get('meta'), options: options || {} });
-                    tree.trigger('virtual', 'virtual/' + options.id, {}, baton);
+                    var baton = new ext.Baton({ data: pool.getModel('virtual/settings/' + options.id).get('meta'), options: options || {} });
+                    tree.trigger('virtual', 'virtual/settings/' + options.id, {}, baton);
                 });
             } else {
                 if (!_.device('smartphone')) {
