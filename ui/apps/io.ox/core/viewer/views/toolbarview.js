@@ -363,7 +363,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         initialize: function (options) {
             _.extend(this, options);
             // rerender on slide change
-            this.listenTo(this.mainEvents, 'viewer:displayeditem:change', this.render);
+            this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.render);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -374,14 +374,14 @@ define('io.ox/core/viewer/views/toolbarview', [
         onClose: function (event) {
             event.preventDefault();
             event.stopPropagation();
-            this.mainEvents.trigger('viewer:close');
+            this.viewerEvents.trigger('viewer:close');
         },
 
         /**
          * Toggles the visibility of the sidebar.
          */
         onToggleSidebar: function () {
-            this.mainEvents.trigger('viewer:toggle:sidebar');
+            this.viewerEvents.trigger('viewer:toggle:sidebar');
         },
 
         /**
@@ -401,14 +401,14 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Publishes zoom-in event to the MainView event aggregator.
          */
         onZoomIn: function () {
-            this.mainEvents.trigger('viewer:zoomin');
+            this.viewerEvents.trigger('viewer:zoomin');
         },
 
         /**
          * Publishes zoom-out event to the MainView event aggregator.
          */
         onZoomOut: function () {
-            this.mainEvents.trigger('viewer:zoomout');
+            this.viewerEvents.trigger('viewer:zoomout');
         },
 
         /**

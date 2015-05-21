@@ -21,8 +21,8 @@ define('io.ox/core/viewer/views/types/textview', [
 
         initialize: function (options) {
             _.extend(this, options);
-            this.listenTo(this.displayerEvents, 'viewer:zoomin', this.onZoomIn);
-            this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
+            this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
+            this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
         },
 
@@ -79,7 +79,7 @@ define('io.ox/core/viewer/views/types/textview', [
          *  -blends in navigation controls.
          */
         onScrollHandler: function () {
-            this.displayerEvents.trigger('viewer:blendnavigation');
+            this.viewerEvents.trigger('viewer:blendnavigation');
         }
 
     });

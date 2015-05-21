@@ -64,11 +64,10 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.documentLoad = $.Deferred();
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
-            // bind zoom handlers
-            this.listenTo(this.displayerEvents, 'viewer:resize', this.onResize);
-            // bind zoom handlers
-            this.listenTo(this.displayerEvents, 'viewer:zoomin', this.onZoomIn);
-            this.listenTo(this.displayerEvents, 'viewer:zoomout', this.onZoomOut);
+            // bind resize and zoom handler
+            this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
+            this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
+            this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
             // bind scroll event for showing current page number
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
             // create a debounced version of zoom function
@@ -96,8 +95,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. Example result: "Page 5 of 10"
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
-                this.displayerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
-                this.displayerEvents.trigger('viewer:blendnavigation');
+                this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
+                this.viewerEvents.trigger('viewer:blendnavigation');
             }
         },
 
@@ -340,7 +339,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onZoomIn: function () {
             if (this.isVisible()) {
                 this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'increase'));
-                this.displayerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
+                this.viewerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
             }
         },
 
@@ -350,7 +349,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onZoomOut: function () {
             if (this.isVisible()) {
                 this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'decrease'));
-                this.displayerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
+                this.viewerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
             }
         },
 

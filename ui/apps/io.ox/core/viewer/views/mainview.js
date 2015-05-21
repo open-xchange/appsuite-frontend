@@ -50,17 +50,17 @@ define('io.ox/core/viewer/views/mainview', [
             var themeClass = this.standalone ? 'viewer-light-theme' : 'viewer-dark-theme';
             this.setTheme(themeClass);
             // create the event aggregator of this view.
-            this.mainEvents = _.extend({}, Backbone.Events);
+            this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, mainEvents: this.mainEvents, standalone: this.standalone };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
             // close viewer on events
-            this.listenTo(this.mainEvents, 'viewer:close', this.closeViewer);
-            this.listenTo(this.mainEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
+            this.listenTo(this.viewerEvents, 'viewer:close', this.closeViewer);
+            this.listenTo(this.viewerEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // bind toggle side bar handler
-            this.listenTo(this.mainEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // TODO this is not valid anymore if we want to open couple viewer apps in parallel
             if (!ox.debug) {
                 this.listenTo(ox, 'app:start app:resume', this.closeViewer);
@@ -170,7 +170,7 @@ define('io.ox/core/viewer/views/mainview', [
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
             if (swiper) {
                 swiper.onResize();
-                this.mainEvents.trigger('viewer:resize');
+                this.viewerEvents.trigger('viewer:resize');
                 // workaround for a possible bug from swiper plugin that happens sporadically:
                 // After an on resize call, the plugin 'resets' the active slide to the beginning.
                 this.displayerView.swiper.slideTo(activeSlideIndex);

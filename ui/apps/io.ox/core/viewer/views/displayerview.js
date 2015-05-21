@@ -33,8 +33,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
         initialize: function (options) {
             _.extend(this, options);
-            // event aggregator for communication between displayer view and type views
-            this.displayerEvents = _.extend({}, Backbone.Events);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
@@ -57,14 +55,9 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slidesToCache = 7;
             // instance of the swiper plugin
             this.swiper = null;
-            // listen to resize event from main view
-            this.listenTo(this.mainEvents, 'viewer:resize', this.onResize);
-            // forward zoom events
-            this.listenTo(this.mainEvents, 'viewer:zoomin', this.onZoomIn);
-            this.listenTo(this.mainEvents, 'viewer:zoomout', this.onZoomOut);
             // listen to blend caption events
-            this.listenTo(this.displayerEvents, 'viewer:blendcaption', this.blendCaption);
-            this.listenTo(this.displayerEvents, 'viewer:blendnavigation', this.blendNavigation);
+            this.listenTo(this.viewerEvents, 'viewer:blendcaption', this.blendCaption);
+            this.listenTo(this.viewerEvents, 'viewer:blendnavigation', this.blendNavigation);
             // listen to delete event propagation from FilesAPI
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
             // blend in navigation by user activity
@@ -193,7 +186,7 @@ define('io.ox/core/viewer/views/displayerview', [
                         if (self.disposed) {
                             return;
                         }
-                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element, displayerEvents: self.displayerEvents });
+                        var view = new ModelType({ model: slideModel, collection: self.collection, el: element, viewerEvents: self.viewerEvents });
                         view.render().prefetch().show();
                         self.slideDuplicateViews.push(view);
                     },
@@ -229,7 +222,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 TypesRegistry.getModelType(model)
                 .then(function (ModelType) {
-                    var view = new ModelType({ model: model, collection: collection, displayerEvents: self.displayerEvents });
+                    var view = new ModelType({ model: model, collection: collection, viewerEvents: self.viewerEvents });
                     view.render();
                     return def.resolve(view);
                 },
@@ -353,7 +346,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // load model and create new slide slide content
             TypesRegistry.getModelType(model)
             .then(function (ModelType) {
-                var view = new ModelType({ model: model, collection: this.collection, el: slideNode, displayerEvents: this.displayerEvents });
+                var view = new ModelType({ model: model, collection: this.collection, el: slideNode, viewerEvents: this.viewerEvents });
                 view.render().prefetch().show();
                 this.slideViews[index] = view;
             }.bind(this),
@@ -488,7 +481,7 @@ define('io.ox/core/viewer/views/displayerview', [
             previousSlideNode.find('audio, video').each(function () {
                 this.pause();
             });
-            this.mainEvents.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
+            this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
             // scroll to last position and apply last zoom, if exists
             var lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
@@ -529,20 +522,6 @@ define('io.ox/core/viewer/views/displayerview', [
                     this.documentZoomLevels[previousIndex] = activeSlideView.getDefaultZoomFactor();
                 }
             }
-        },
-
-        /**
-         * Publishes zoom-in event in the event aggregator
-         */
-        onZoomIn: function () {
-            this.displayerEvents.trigger('viewer:zoomin');
-        },
-
-        /**
-         * Publishes zoom-out event in the event aggregator
-         */
-        onZoomOut: function () {
-            this.displayerEvents.trigger('viewer:zoomout');
         },
 
         /**
@@ -614,7 +593,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.handleDuplicatesSlides();
             // close viewer we don't have any files to show
             if (this.collection.length === 0) {
-                this.mainEvents.trigger('viewer:close');
+                this.viewerEvents.trigger('viewer:close');
                 return;
             }
             // do a swiper change end manually, because the plugin is not doing it (maybe a bug)
@@ -658,10 +637,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 newActiveIndex = slidesCount;
             }
             this.slideTo(newActiveIndex, 0, true);
-        },
-
-        onResize: function () {
-            this.displayerEvents.trigger('viewer:resize');
         },
 
         disposeView: function () {
