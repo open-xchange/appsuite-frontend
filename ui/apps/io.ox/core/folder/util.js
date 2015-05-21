@@ -251,10 +251,22 @@ define('io.ox/core/folder/util', [
         }
     }
 
+    /*
+     * Expects a TreeNodeView and expands this view and all parent views.
+     */
+    function open(view) {
+        if (!view) return;
+        if (!view.toggle) return;
+
+        view.toggle('open');
+        if (view.options) open(view.options.parent);
+    }
+
     return {
         bits: bits,
         is: is,
         can: can,
-        getDefaultFolder: getDefaultFolder
+        getDefaultFolder: getDefaultFolder,
+        open: open
     };
 });
