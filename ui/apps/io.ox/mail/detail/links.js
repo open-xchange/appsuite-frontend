@@ -60,10 +60,28 @@ define('io.ox/mail/detail/links', [
     (function () {
 
         var keys = 'all prefix link app params param name suffix'.split(' '),
-            app = { contacts: 'contacts', calendar: 'calendar', task: 'tasks', infostore: 'files' },
-            items = { contacts: gt('Contact'), calendar: gt('Appointment'), tasks: gt('Task'), files: gt('File') },
-            folders = { contacts: gt('Address Book'), calendar: gt('Calendar'), tasks: gt('Tasks'), files: gt('Folder') },
-            regDeepLink = /^([\s\S]*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))([\s\S]*)$/i,
+            app = {
+                'io.ox/contacts': 'contacts',
+                'io.ox/calendar': 'calendar',
+                'io.ox/task': 'tasks',
+                'io.ox/infostore': 'files',
+                'io.ox/files': 'files'
+            },
+            items = {
+                contacts: gt('Contact'),
+                calendar: gt('Appointment'),
+                tasks: gt('Task'),
+                files: gt('File'),
+                'io.ox/office/text': gt('Document'),
+                'io.ox/office/spreadsheet': gt('Spreadsheet')
+            },
+            folders = {
+                contacts: gt('Address Book'),
+                calendar: gt('Calendar'),
+                tasks: gt('Tasks'),
+                files: gt('Folder')
+            },
+            regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|perspective)=[^&\s]+)+))([\s\S]*)$/i,
             regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i;
 
         isDeepLink = function (str) {
@@ -84,13 +102,16 @@ define('io.ox/mail/detail/links', [
         processDeepLink = function (node) {
 
             var data = parseDeepLink(node.nodeValue),
+                text = ('id' in data ? items[data.app] : folders[data.app]) || gt('Link'),
                 link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
                     .attr('href', data.link)
-                    .text('id' in data ? items[data.app] : folders[data.app]);
+                    .text(text);
 
             // internal document?
             if (isValidHost(data.link)) {
-                link.addClass('deep-link-' + data.app).data(data);
+                // add either specific css class or generic "app" deep-link
+                var className = /^(contacts|calendar|tasks|files)/.test(data.app) ? data.app : 'app';
+                link.addClass('deep-link-' + className).data(data);
             }
 
             // move up?
@@ -267,6 +288,7 @@ define('io.ox/mail/detail/links', [
 
     return {
         handlers: handlers,
+        isValidHost: isValidHost,
         isDeepLink: isDeepLink,
         parseDeepLink: parseDeepLink,
         processDeepLink: processDeepLink,

@@ -1,6 +1,37 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 define('io.ox/core/links', [], function () {
+
     'use strict';
 
+    //
+    // Generic app
+    //
+    $(document).on('click', '.deep-link-app', function (e) {
+        e.preventDefault();
+        var data = $(this).data(),
+            // special handling for text and spreadsheet
+            options = /^io.ox\/office\//.test(data.app) ?
+                { action: 'load', file: { folder_id: data.folder, id: data.id }} :
+                _(data).pick('folder', 'folder_id', 'id');
+
+        ox.launch(data.app + '/main', options);
+    });
+
+    //
+    // Files
+    //
     $(document).on('click', '.deep-link-files', function (e) {
         e.preventDefault();
         var data = $(this).data();
@@ -21,6 +52,9 @@ define('io.ox/core/links', [], function () {
         }
     });
 
+    //
+    // Address book
+    //
     $(document).on('click', '.deep-link-contacts', function (e) {
         e.preventDefault();
         var data = $(this).data();
@@ -36,6 +70,9 @@ define('io.ox/core/links', [], function () {
         });
     });
 
+    //
+    // Calendar
+    //
     $(document).on('click', '.deep-link-calendar', function (e) {
         e.preventDefault();
         var data = $(this).data();
@@ -51,6 +88,9 @@ define('io.ox/core/links', [], function () {
         }
     });
 
+    //
+    // Tasks
+    //
     $(document).on('click', '.deep-link-tasks', function (e) {
         e.preventDefault();
         var data = $(this).data();
@@ -66,6 +106,9 @@ define('io.ox/core/links', [], function () {
         });
     });
 
+    //
+    // Mail
+    //
     $(document).on('click', '.mailto-link', function (e) {
 
         e.preventDefault();
