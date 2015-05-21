@@ -118,7 +118,7 @@ define.async('io.ox/oauth/keychain', [
                     // TODO handle a possible error object in response
                     var id = response.data.id;
 
-                    //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug)
+                    //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug 37891)
                     getAll().done(function (services, accounts) {
                         if (accounts[id]) {
                             def.resolve(accounts[id]);
