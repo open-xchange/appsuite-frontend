@@ -80,8 +80,8 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         onTap: function (event, tapCount) {
             if (tapCount === 2) {
-                var zoomAction = this.doubleTapZoomed ? this.onZoomOut : this.onZoomIn;
-                zoomAction.call(this);
+                var zoomAction = this.doubleTapZoomed ? 'viewer:zoomout' : 'viewer:zoomin';
+                this.viewerEvents.trigger(zoomAction);
                 this.doubleTapZoomed = !this.doubleTapZoomed;
             }
         },
