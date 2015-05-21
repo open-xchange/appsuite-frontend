@@ -50,6 +50,11 @@
     @viewer-sidebar-uploadnewversion-bgcolor: #444444;
     @viewer-sidebar-uploadnewversion-bordercolor: #555555;
     @viewer-sidebar-uploadnewversion-hovercolor: #777777;
+    @viewer-sidebar-versions-text-color: #CCCCCC;
+    @viewer-sidebar-versions-comment-color: lightgrey;
+    @viewer-sidebar-versions-dropdown-color: #FFFFFF;
+    @viewer-sidebar-versions-dropdown-active-bgcolor: #444444;
+    @viewer-sidebar-description-outline-color: #444444;
 }
 
 .viewer-light-colors () {
@@ -81,6 +86,11 @@
     @viewer-sidebar-uploadnewversion-bgcolor: rgba(0,0,0,.1);
     @viewer-sidebar-uploadnewversion-bordercolor: rgba(0,0,0,0.1);
     @viewer-sidebar-uploadnewversion-hovercolor: rgba(0,0,0,0.5);
+    @viewer-sidebar-versions-text-color: #333333;
+    @viewer-sidebar-versions-comment-color: darkgrey;
+    @viewer-sidebar-versions-dropdown-color: #222222;
+    @viewer-sidebar-versions-dropdown-active-bgcolor: transparent;
+    @viewer-sidebar-description-outline-color: #777777;
 }
 
 
@@ -612,27 +622,27 @@
             .versiontable {
 
                 td {
-                    color: #cccccc;
+                    color: @viewer-sidebar-versions-text-color;
                 }
 
                 .version-comment {
-                    color: lightgrey;
+                    color: @viewer-sidebar-versions-comment-color;
                 }
 
                 .dropdown > a {
-                    color: #fff;
+                    color: @viewer-sidebar-versions-dropdown-color;
                     &:hover {
-                        color: #fff;
+                        color: @viewer-sidebar-versions-dropdown-color;
                     }
                     &:active, &:focus {
-                        background-color: #444444;
+                        background-color: @viewer-sidebar-versions-dropdown-active-bgcolor;
                     }
                 }
             }
 
             .description {
                 &:active, &:focus {
-                    outline: 2px solid #444444;
+                    outline: 2px solid @viewer-sidebar-description-outline-color;
                     outline-offset: 2px;
                 }
             }
