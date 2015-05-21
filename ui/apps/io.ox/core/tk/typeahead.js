@@ -46,30 +46,17 @@ define('io.ox/core/tk/typeahead', [
                 distributionlists: false
             },
             click: $.noop,
-            blur: $.noop,
             tabindex: 1,
-            // The minimum character length needed before suggestions start getting rendered
-            minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
             autoselect: true,
-            // Highlight found query characters in bold
-            highlight: true,
             // Typeahead will not show a hint
             hint: true,
-            // Get data
-            source: function (query) {
-                return this.api.search(query);
-            },
             // Filter items
             reduce: _.identity,
             // harmonize returned data from 'source'
             harmonize: _.identity,
-            // filter result set after reduce and harmonize
-            filter: _.identity,
-            // lazyload selector
-            lazyload: null,
             // call typeahead function in render method
             init: true,
             extPoint: 'io.ox/core/tk/typeahead'
@@ -106,13 +93,15 @@ define('io.ox/core/tk/typeahead', [
 
             this.typeaheadOptions = [{
                 autoselect: o.autoselect,
-                minLength: o.minLength,
-                highlight: o.highlight,
+                // The minimum character length needed before suggestions start getting rendered
+                minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
+                // Highlight found query characters in bold
+                highlight: true,
                 hint: o.hint
             }, {
                 source: function (query, callback) {
                     customEvent.call(self, 'requesting');
-                    o.source.call(self, query)
+                    self.api.search(query)
                         .then(customEvent.bind(self, 'processing'))
                         .then(o.reduce)
                         .then(function (data) {
@@ -178,7 +167,6 @@ define('io.ox/core/tk/typeahead', [
                     o.click.call(this, e, item);
                     self.$el.trigger('select', item);
                 },
-                'blur': o.blur,
                 'typeahead:cursorchanged': function () {
                     // useful for debugging
                 }
