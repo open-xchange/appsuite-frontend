@@ -111,8 +111,6 @@ define('io.ox/files/share/view', [
                     users: true,
                     groups: true
                 },
-                maxResults: 20,
-                lazyload: 'div.contact-image',
                 leftAligned: true
             });
 
