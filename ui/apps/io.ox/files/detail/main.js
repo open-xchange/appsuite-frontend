@@ -47,6 +47,9 @@ define('io.ox/files/detail/main', [
                     });
 
                     app.setTitle(title);
+                    app.listenTo(fileModel, 'change:filename change:title', function (model) {
+                        app.setTitle(model.get('filename') || model.get('title'));
+                    });
 
                     api.one('delete:' + _.ecid(data), function () {
                         app.quit();
