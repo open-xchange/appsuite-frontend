@@ -45,7 +45,7 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
                 $('<div class="sidebar-panel-body panel-collapsed" role="tabpanel" aria-label="" aria-hidden="true">', { id: panelId })
             );
 
-            this.$el.on('click', '.panel-toggle-btn', this.onTogglePanel.bind(this));
+            this.$el.on('click', '.sidebar-panel-heading', this.onTogglePanel.bind(this));
 
             // call parent constructor that also calls initialize
             DisposableView.prototype.constructor.apply(this, arguments);
