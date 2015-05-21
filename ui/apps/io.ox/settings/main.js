@@ -243,12 +243,14 @@ define('io.ox/settings/main', [
             indent: true,
             module: 'settings'
         });
+        tree.preselect(_.url.hash('folder'));
 
         tree.on('virtual', function (id, item, baton) {
             var focus = true;
 
             tree.selection.resetSelected(tree.selection.getItems());
             tree.selection.preselect(id);
+            app.folder.set(id);
             var item = tree.selection.byId(id),
                 view = item.closest('li').data('view');
             folderUtil.open(view.options.parent);
@@ -498,11 +500,19 @@ define('io.ox/settings/main', [
         };
 
         // go!
-        win.show(function () {
-            paintTree().done(function () {
-                app.setSettingsPane(options);
+        commons.addFolderSupport(app, null, 'settings', 'virtual/settings/io.ox/core')
+            .always(function always() {
+                win.show(function () {
+                    paintTree().done(function () {
+                        app.setSettingsPane(options);
+                    });
+                });
+            })
+            .fail(function fail(result) {
+                var errorMsg = (result && result.error) ? result.error + ' ' : '';
+                errorMsg += gt('Application may not work as expected until this problem is solved.');
+                notifications.yell('error', errorMsg);
             });
-        });
     });
 
     return {
