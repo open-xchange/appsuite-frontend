@@ -115,14 +115,21 @@ define.async('io.ox/oauth/keychain', [
                     if (!response.data) {
                         return;
                     }
-
                     // TODO handle a possible error object in response
-                    cache[service.id].accounts[response.data.id] = response.data;
-                    def.resolve(response.data);
-                    self.trigger('create', response.data);
-                    self.trigger('refresh.all refresh.list');
-                    ox.trigger('refresh-portal');
-                    notifications.yell('success', gt('Account added successfully'));
+                    var id = response.data.id;
+
+                    //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug)
+                    getAll().done(function (services, accounts) {
+                        if (accounts[id]) {
+                            def.resolve(accounts[id]);
+                            self.trigger('create', accounts[id]);
+                            self.trigger('refresh.all refresh.list');
+                            ox.trigger('refresh-portal');
+                            notifications.yell('success', gt('Account added successfully'));
+                        } else {
+                            notifications.yell('error', gt('Account could not be added'));
+                        }
+                    });
                 };
 
                 popupWindow.location = ox.apiRoot + '/oauth/accounts?' + $.param(params);
@@ -210,29 +217,42 @@ define.async('io.ox/oauth/keychain', [
         }
     }
 
-    // Fetch services & accounts
-    $.when(
-        http.GET({
-            module: 'oauth/services',
-            params: {
-                action: 'all'
-            }
-        }),
-        http.GET({
-            module: 'oauth/accounts',
-            params: {
-                action: 'all'
-            }
-        }))
-        .done(function (services, accounts) {
+    function getAll() {
+        // Fetch services & accounts
+        return $.when(
+            http.GET({
+                module: 'oauth/services',
+                params: {
+                    action: 'all'
+                }
+            }),
+            http.GET({
+                module: 'oauth/accounts',
+                params: {
+                    action: 'all'
+                }
+            }))
+            .done(function (services, accounts) {
+                //build cache
+                cache = {};
 
+                _(services[0]).each(function (service) {
+                    cache[service.id] = $.extend({ accounts: {}}, service);
+                });
+
+                _(accounts[0]).each(function (account) {
+                    cache[account.serviceId].accounts[account.id] = account;
+                });
+            });
+    }
+
+    getAll().done(function (services, accounts) {
             // build and register extensions
-            cache = {};
             _(services[0]).each(function (service) {
-                var keychainAPI = new OAuthKeychainAPI(service);
-                cache[service.id] = $.extend({ accounts: {}}, service);
-                point.extend(keychainAPI);
 
+                var keychainAPI = new OAuthKeychainAPI(service);
+
+                point.extend(keychainAPI);
                 keychainAPI.on('create', function () {
                     // Some standard event handlers
                     require(['plugins/halo/api'], function (haloAPI) {
@@ -246,10 +266,6 @@ define.async('io.ox/oauth/keychain', [
                         haloAPI.halo.refreshServices();
                     });
                 });
-            });
-
-            _(accounts[0]).each(function (account) {
-                cache[account.serviceId].accounts[account.id] = account;
             });
 
             // Resolve loading
