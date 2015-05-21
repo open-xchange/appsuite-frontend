@@ -53,7 +53,7 @@
                 // we assume that elements are in order, i.e. we can stop the loop if we are below or right of the viewport
                 if (belowViewport(viewport, offset) || rightOfViewport(viewport, offset)) return false;
                 // otherwise
-                element.trigger('appear').removeClass('lazyload');
+                element.trigger('appear');
             });
         }
 
@@ -83,10 +83,9 @@
     // central appear event
 
     function onAppear(options) {
-
         if (this.loaded) return;
 
-        var node = $(this);
+        var node = $(this).removeClass('lazyload');
 
         $('<img>').on({
             'load': function () {

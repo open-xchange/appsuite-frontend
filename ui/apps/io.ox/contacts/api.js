@@ -635,7 +635,6 @@ define('io.ox/contacts/api', [
         function load(node, url, opt) {
             function fail () {
                 node.css('background-image', 'url(' + fallback + ')').off('.lazyload');
-                node.attr('data-original', fallback);
                 node = url = opt = null;
             }
             function success () {
