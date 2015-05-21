@@ -683,7 +683,7 @@ define('io.ox/calendar/week/view', [
 
                 dropdown.divider();
                 dropdown.link('settings', gt('Manage favorites'), function () {
-                    var options = { id: 'io.ox/calendar' };
+                    var options = { id: 'io.ox/timezones' };
                     ox.launch('io.ox/settings/main', options).done(function () {
                         this.setSettingsPane(options);
                     });

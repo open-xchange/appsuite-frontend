@@ -12,21 +12,16 @@
  */
 
 define('io.ox/calendar/settings/pane', [
-    'settings!io.ox/calendar',
     'io.ox/calendar/settings/model',
     'io.ox/core/extensions',
-    'io.ox/core/notifications',
     'gettext!io.ox/calendar',
     'io.ox/backbone/mini-views',
-    'io.ox/calendar/settings/favorite-view',
     'less!io.ox/calendar/settings/style.less'
-], function (settings, calendarSettingsModel, ext, notifications, gt, mini, FavoriteView) {
+], function (model, ext, gt, mini) {
 
     'use strict';
 
-    var model =  settings.createModel(calendarSettingsModel),
-        POINT = 'io.ox/calendar/settings/detail',
-        reloadMe = [],
+    var POINT = 'io.ox/calendar/settings/detail',
 
         optionsInterval = function () {
             return _.map([5,10,15,20,30,60], function (i) {
@@ -63,23 +58,6 @@ define('io.ox/calendar/settings/pane', [
             });
             return list;
         };
-
-    model.on('change', function (model) {
-        var showNotice = _(reloadMe).any(function (attr) {
-            return model.changed[attr];
-        });
-        model.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
-            function success() {
-
-                if (showNotice) {
-                    notifications.yell(
-                        'success',
-                        gt('The setting has been saved and will become active when you enter the application the next time.')
-                    );
-                }
-            }
-        );
-    });
 
     ext.point(POINT).extend({
         index: 100,
@@ -204,21 +182,6 @@ define('io.ox/calendar/settings/pane', [
                             )
                         )
                     )
-                )
-            );
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 500,
-        id: 'favorite-timezone',
-        draw: function () {
-            this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').append(
-                        $('<h2>').text(gt('Favorite timezones'))
-                    ),
-                    new FavoriteView({ model: model }).render().$el
                 )
             );
         }
