@@ -341,8 +341,9 @@ define('io.ox/core/viewer/views/displayerview', [
             var index = this.collection.indexOf(model),
                 slideNode = this.slideViews[index].$el;
 
-            // unload current slide content
-            this.slideViews[index].unload();
+            // unload current slide content and dispose the view instance
+            // the DOM node is re-used, so the dispose function won't be called automatically.
+            this.slideViews[index].unload().dispose();
             // load model and create new slide slide content
             TypesRegistry.getModelType(model)
             .then(function (ModelType) {
