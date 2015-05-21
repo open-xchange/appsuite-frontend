@@ -662,13 +662,16 @@ define('io.ox/mail/main', [
                     if (app.props.get('checkboxes')) app.showMultiple(list);
                 },
                 'selection:action': function (list) {
+                    var isDraftFolder = _.contains(account.getFoldersByType('drafts'), this.model.get('folder'));
 
                     if (app.listView.selection.get().length === 1 && !app.props.get('checkboxes')) {
                         // check for thread
                         var cid = app.props.get('thread') ? list[0].substr(7) : list[0],
                             isThread = this.collection.get(cid).get('threadSize') > 1;
 
-                        if (isThread) {
+                        if (isDraftFolder) {
+                            ox.registry.call('mail-compose', 'edit', _.cid(list[0]));
+                        } else if (isThread) {
                             app.showThreadOverview(list[0]);
                             app.pages.changePage('threadView');
                         } else {
