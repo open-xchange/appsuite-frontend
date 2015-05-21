@@ -61,7 +61,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // listen to delete event propagation from FilesAPI
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
             // blend in navigation by user activity
-            this.$el.on('mousemove', _.throttle(this.blendNavigation.bind(this), 500));
+            this.$el.on('mousemove click', _.throttle(this.blendNavigation.bind(this), 500));
             // enable touch handler for double tap zoom
             this.$el.enableTouch({ tapHandler: this.onTap.bind(this) });
             // wheter double tap zoom is already triggered
@@ -383,7 +383,7 @@ define('io.ox/core/viewer/views/displayerview', [
             var x, y;
             return function (event) {
                 // for Chrome's bug: it fires mousemove events without mouse movements
-                if (event) {
+                if (event && event.type === 'mousemove') {
                     if (event.clientX === x && event.clientY === y) {
                         return;
                     }

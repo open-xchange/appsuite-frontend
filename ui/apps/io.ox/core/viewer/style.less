@@ -428,16 +428,31 @@
             }
         }
 
+        .document-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            overflow: auto;
+            .document-page-thumbnail {
+                width: 80px;
+                height: 120px;
+                margin: 30px auto;
+                background: #ffffff;
+            }
+        }
+
         .document-container {
             width: 100%;
             height: 100%;
+            overflow: auto;
             .document-page {
                 margin: 40px auto;
                 width: 450px;
                 background: #ffffff;
                 color: #000000;
-                //                font-size: 3rem;
-                //                padding: 20px;
             }
         }
 

@@ -68,8 +68,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
             this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
-            // bind scroll event for showing current page number
-            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // defaults
@@ -96,8 +94,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
                 this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
-                this.viewerEvents.trigger('viewer:blendnavigation');
             }
+            this.viewerEvents.trigger('viewer:blendnavigation');
         },
 
         /**
@@ -107,8 +105,9 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         render: function () {
-            this.pageContainer = $('<div class="document-container io-ox-core-pdf">');
-            this.$el.empty().append(this.pageContainer);
+            this.documentContainer = $('<div class="document-container io-ox-core-pdf">');
+            //this.documentThumbnail = $('<div class="document-thumbnail">');
+            this.$el.empty().append(this.documentThumbnail, this.documentContainer);
             return this;
         },
 
@@ -138,7 +137,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 self = this;
             visiblePages.forEach(function (index) {
                 var pageBounds = self.pages[index - 1].getBoundingClientRect(),
-                    screenMiddle = self.pageContainer.innerHeight() / 2;
+                    screenMiddle = self.documentContainer.innerHeight() / 2;
                 if ((pageBounds.top + tolerance <= screenMiddle) &&
                     (pageBounds.bottom - tolerance >= screenMiddle)) {
                     dominantPageIndex = index;
@@ -185,7 +184,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             if (this.$el.find('.document-page').length > 0) {
                 return;
             }
-            var pageContainer = this.$el.find('.document-container'),
+            var documentContainer = this.documentContainer,
+                //documentThumbnail = this.documentThumbnail,
                 convertParams = this.getConvertParams(this.model.get('source')),
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
 
@@ -199,7 +199,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  The jquery page node for the requested page number.
              */
             function getPageNode(pageNumber) {
-                return (_.isNumber(pageNumber) && (pageNumber >= 1)) ? pageContainer.children().eq(pageNumber - 1) : null;
+                return (_.isNumber(pageNumber) && (pageNumber >= 1)) ? documentContainer.children().eq(pageNumber - 1) : null;
             }
 
             /**
@@ -223,7 +223,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             /**
-             * Success handler for the PDF loading process.
              *
              * @param {Number} pageCount
              *  page count of the pdf document delivered by the PDF.js library.
@@ -247,11 +246,13 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // set default scale/zoom, according to device's viewport width
                 this.pdfView.setPageZoom(defaultScale);
                 this.currentZoomFactor = this.getDefaultZoomFactor();
-                //// draw page nodes and apply css sizes
+                // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
-                    var jqPage = $('<div class="document-page">'),
+                    var documentPage = $('<div class="document-page">'),
+                        //documentPageThumbnail = $('<div class="document-page-thumbnail">'),
                         pageSize = self.pdfView.getRealPageSize(index + 1);
-                    pageContainer.append(jqPage.attr(pageSize).css(pageSize));
+                    documentContainer.append(documentPage.attr(pageSize).css(pageSize));
+                    //documentThumbnail.append(documentPageThumbnail);
                 });
                 // save values to the view instance, for performance
                 this.numberOfPages = pageCount;
@@ -263,10 +264,10 @@ define('io.ox/core/viewer/views/types/documentview', [
                     beginRendering: beginPageRendering,
                     endRendering: endPageRendering
                 };
-
                 this.pdfView.setRenderCallbacks(renderCallbacks);
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
+                this.documentContainer.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
@@ -275,7 +276,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              * Actions which always have to be done after pdf document loading process
              */
             function pdfDocumentLoadFinished() {
-                pageContainer.idle();
+                documentContainer.idle();
             }
 
             /**
@@ -295,7 +296,7 @@ define('io.ox/core/viewer/views/types/documentview', [
 
             this.pdfDocument = new PDFDocument(documentUrl);
             // display loading animation
-            pageContainer.busy();
+            documentContainer.busy();
 
             // wait for PDF document to finish loading
             $.when(this.pdfDocument.getLoadPromise())
