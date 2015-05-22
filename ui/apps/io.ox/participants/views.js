@@ -133,10 +133,12 @@ define('io.ox/participants/views', [
                     if (this.options.baton && this.options.baton.callbacks) {
                         data.callbacks = this.options.baton.callbacks;
                     }
-                    this.nodes.$extra = $('<a>')
+                    var link = $('<a>')
                         .attr({ href: '#', tabindex: '1' })
                         .data(data)
                         .addClass('halo-resource-link');
+                    this.nodes.$extra.replaceWith(link);
+                    this.nodes.$extra = link;
                 }
                 break;
             }
