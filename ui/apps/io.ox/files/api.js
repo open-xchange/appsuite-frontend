@@ -982,11 +982,10 @@ define('io.ox/files/api', [
         var oldschool = { 'new': 'add:file', 'change': 'change:file', 'update': 'change:file', 'delete': 'remove:file' };
 
         function reloadVersions(file) {
-            return api.versions.load(file, { cache: false }).done(function (versionList) {
-                // update model
-                var cid = _.cid(file), model = pool.get('detail').get(cid);
-                if (model) model.set('number_of_versions', versionList.length);
-            });
+            http.pause();
+            api.get(file, { cache: false });
+            api.versions.load(file, { cache: false });
+            return http.resume();
         }
 
         return function (type, file) {
