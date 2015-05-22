@@ -45,6 +45,9 @@ define('io.ox/core/tk/typeahead', [
                 resources: false,
                 distributionlists: false
             },
+            source: function (query) {
+                return this.api.search(query);
+            },
             click: $.noop,
             tabindex: 1,
             // Max limit for draw operation in dropdown
@@ -101,7 +104,7 @@ define('io.ox/core/tk/typeahead', [
             }, {
                 source: function (query, callback) {
                     customEvent.call(self, 'requesting');
-                    self.api.search(query)
+                    o.source.call(self, query)
                         .then(customEvent.bind(self, 'processing'))
                         .then(o.reduce)
                         .then(function (data) {
