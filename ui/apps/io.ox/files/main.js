@@ -19,6 +19,7 @@ define('io.ox/files/main', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
+    'io.ox/core/folder/node',
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
@@ -36,7 +37,7 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/upload/dropzone'
-], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api, sidebar, SidebarView) {
 
     'use strict';
 
@@ -306,6 +307,43 @@ define('io.ox/files/main', [
                 var options = app.getViewOptions(id);
                 app.props.set(options);
                 app.listView.model.set('folder', id);
+            });
+        },
+
+        /*
+         * Respond to virtual myshares
+         */
+        'myshares': function (app) {
+
+            // add virtual folder to folder api
+            folderAPI.virtual.add('virtual/myshares', function () {
+                return $.when([]);
+            });
+
+            ext.point('io.ox/core/foldertree/infostore/app').extend({
+                id: 'myshares',
+                index: 100,
+                draw: function (tree) {
+                    this.append(
+                        new TreeNodeView({
+                            title: gt('My shares'),
+                            folder: 'virtual/myshares',
+                            icons: tree.options.icons,
+                            tree: tree,
+                            parent: tree
+                        })
+                        .render().$el.addClass('myshares')
+                    );
+                }
+            });
+
+            app.folderView.tree.on('virtual', function (id) {
+                if (id !== 'virtual/myshares') return;
+                console.log('show myshares', id);
+            });
+
+            app.folderView.tree.on('change', function (id) {
+                console.log('hide myshares', id);
             });
         },
 
