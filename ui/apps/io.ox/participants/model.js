@@ -82,18 +82,16 @@ define('io.ox/participants/model', [
             // It's a kind of magic
             if (this.get('internal_userid')) {
                 if (this.get('type') === this.TYPE_USER && this.has('field') && this.get('field') !== 'email1') {
-                    this.set({
-                        type: this.TYPE_EXTERNAL_USER
-                    });
+                    this.set('type', this.TYPE_EXTERNAL_USER);
                 } else {
                     this.set({
                         id: this.get('internal_userid'),
                         type: this.TYPE_USER
                     });
                 }
-
             }
 
+            // Fix id for unknown external users
             if (this.get('type') === this.TYPE_EXTERNAL_USER && !this.has('id')) {
                 this.set('id', this.getEmail());
             }
