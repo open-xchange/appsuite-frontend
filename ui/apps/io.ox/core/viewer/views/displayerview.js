@@ -45,10 +45,6 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideDuplicateViews = [];
             // local array of loaded slide indices.
             this.loadedSlides = [];
-            // local cache of scroll positions of documents
-            this.documentScrollPositions = [];
-            // local cache of zoom level of documents
-            this.documentZoomLevels = [];
             // number of slides to be prefetched in the left/right direction of the active slide
             this.preloadOffset = 3;
             // number of slides to be kept loaded at one time in the browser.
@@ -484,25 +480,6 @@ define('io.ox/core/viewer/views/displayerview', [
             });
             this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(activeSlideIndex));
             this.unloadDistantSlides(activeSlideIndex);
-            // scroll to last position and apply last zoom, if exists
-            var lastScrollPosition = this.documentScrollPositions[activeSlideIndex] || 0,
-                lastZoomLevel = this.documentZoomLevels[activeSlideIndex],
-                activeView = this.slideViews[activeSlideIndex],
-                activeDuplicateView = _.find(this.slideDuplicateViews, function (view) {
-                    if (!view.$el) return false;
-                    return view.$el.attr('data-swiper-slide-index') === activeSlideIndex.toString();
-                });
-            if (activeView.pdfDocument) {
-                activeView.pdfDocument.getLoadPromise().done(function () {
-                    activeView.setZoomLevel(lastZoomLevel || activeView.getDefaultZoomFactor());
-                    if (activeDuplicateView) {
-                        activeDuplicateView.pdfDocument.getLoadPromise().done(function () {
-                            activeDuplicateView.setZoomLevel(lastZoomLevel || activeView.getDefaultZoomFactor());
-                        });
-                    }
-                    activeSlideNode.scrollTop(lastScrollPosition);
-                });
-            }
         },
 
         /**
@@ -517,10 +494,15 @@ define('io.ox/core/viewer/views/displayerview', [
             var previousIndex = swiper.previousIndex - 1,
                 activeSlideView = this.slideViews[previousIndex];
             if (activeSlideView) {
-                var scrollPosition = activeSlideView.$el.scrollTop();
+                //var scrollPosition = activeSlideView.$el.scrollTop();
+                var scrollPosition = activeSlideView.$el.find('.document-container').scrollTop();
                 if (activeSlideView.pdfDocument) {
-                    this.documentScrollPositions[previousIndex] = scrollPosition;
-                    this.documentZoomLevels[previousIndex] = activeSlideView.getDefaultZoomFactor();
+
+                    //TODO: also store scroll position when Viewer closes.
+
+                    activeSlideView.setInitialScrollPosition(activeSlideView.model.get('id'), scrollPosition);
+                    //this.documentZoomLevels[previousIndex] = activeSlideView.getDefaultZoomFactor();
+                    //activeSlideView.setZoomLevel(this.model.get('id'), zoomLevel); setting to default would override the zoom level !?
                 }
             }
         },
@@ -584,8 +566,9 @@ define('io.ox/core/viewer/views/displayerview', [
             this.collection.remove(removedFileModel);
             // reset the invalidated local loaded slides array
             this.loadedSlides = [];
-            // reset document scroll positions
-            this.documentScrollPositions = [];
+            // reset document zoom level and scroll positions
+            this.removeInitialZoomLevel(removedFileModel.get('id'));
+            this.removeInitialScrollPosition(removedFileModel.get('id'));
             // remove corresponding view type of the file
             this.slideViews.splice(removedFileModelIndex, 1);
             // remove slide from the swiper plugin

@@ -20,6 +20,11 @@ define('io.ox/core/viewer/views/types/baseview', [
 
     'use strict';
 
+    var // hash map of document zoom levels
+        zoomLevelMap = {},
+        // hash map of document scroll positions
+        scrollPositionMap = {};
+
     /**
      * The base class for filetype views.
      */
@@ -88,6 +93,86 @@ define('io.ox/core/viewer/views/types/baseview', [
          */
         isVisible: function () {
             return this.$el.hasClass('swiper-slide-active');
+        },
+
+        /**
+         * Returns a previously stored zoom level for the given Drive model file id.
+         *
+         * @param {String} fileId
+         *  The file model id.
+         *
+         * @returns {Number}
+         *  the zoom level.
+         */
+        getInitialZoomLevel: function (fileId) {
+            return zoomLevelMap[fileId];
+        },
+
+        /**
+         * Stores the zoom level for the given Drive model file id.
+         *
+         * @param {String} fileId
+         *  The file model id.
+         *
+         * @param {Number} zoomLevel
+         *  the zoom level.
+         */
+        setInitialZoomLevel: function (fileId, zoomLevel) {
+            if (_.isNumber(zoomLevel)) {
+                zoomLevelMap[fileId] = zoomLevel;
+            }
+        },
+
+        /**
+         * Removes the zoom level specified by the the Drive model file id.
+         *
+         * @param {String} fileId
+         *  The file model id.
+         */
+        removeInitialZoomLevel: function (fileId) {
+            if (fileId in zoomLevelMap) {
+                delete zoomLevelMap[fileId];
+            }
+        },
+
+        /**
+         * Returns a previously stored scroll position for the given Drive model file id.
+         *
+         * @param {String} fileId
+         *  The file model id.
+         *
+         * @returns {Number}
+         *  the scroll position.
+         */
+        getInitialScrollPosition: function (fileId) {
+            return scrollPositionMap[fileId];
+        },
+
+        /**
+         * Stores the scroll position for the given Drive model file id.
+         *
+         * @param {String} fileId
+         *  The file model id.
+         *
+         * @param {Number} scrollPosition
+         *  the scroll position.
+         */
+        setInitialScrollPosition: function (fileId, scrollPosition) {
+            if (_.isNumber(scrollPosition)) {
+                scrollPositionMap[fileId] = scrollPosition;
+            }
+        },
+
+        /**
+         * Removes the scroll position specified by the the Drive model file id.
+         *
+         * @param {String} fileId
+         *  The file model id.
+         */
+        removeInitialScrollPosition: function (fileId) {
+            if (fileId in scrollPositionMap) {
+                delete scrollPositionMap[fileId];
+            }
         }
 
     });
