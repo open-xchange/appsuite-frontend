@@ -246,7 +246,8 @@ define('io.ox/mail/mobile-toolbar-actions', [
             if (!_.device('smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
-            app.listView.on('selection:change change', function () {
+            // selection:action also triggers if the same mail is opened again, so the toolbar has to be drawn
+            app.listView.on('selection:change change selection:action', function () {
                 // don't update in folderview
                 if (app.pages.getCurrentPage().name === 'folderView') return;
                 app.updateToolbar(app.listView.selection.get());

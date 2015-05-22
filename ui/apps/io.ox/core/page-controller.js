@@ -80,7 +80,7 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
 
         /*
          * changePage
-         * changes the acutal page to the given one
+         * changes the actual page to the given one
          * with given animation and options
          */
         this.changePage = function (to, options) {
