@@ -39,6 +39,8 @@ define('io.ox/participants/views', [
             customize: $.noop
         },
 
+        nodes: {},
+
         initialize: function (options) {
             this.options = $.extend({}, this.options, options || {});
             this.listenTo(this.model, 'change', function (model) {
@@ -50,35 +52,24 @@ define('io.ox/participants/views', [
         },
 
         render: function () {
-            this.$el.attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
-
-            this.nodes = {
-                $img: $('<div>'),
-                $text: $('<div class="participant-name">'),
-                $mail: this.options.halo ? $('<a>') : $('<span>'),
-                $extra: $('<span>'),
-                $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
+            debugger;
+            this.$el.append(
+                this.nodes.$img = $('<div>'),
+                this.nodes.$text = $('<div class="participant-name">'),
+                $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
+                $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
+                $('<a href="#" class="remove" role="button" tabindex="1">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
                     )
                 )
-            };
+            ).attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
 
             this.setCustomImage();
             this.setDisplayName();
             this.setTypeStyle();
-
-            this.$el.append(
-                this.nodes.$img,
-                this.nodes.$text,
-                $('<div class="participant-email">').append(this.nodes.$mail),
-                $('<div class="extra-decorator">').append(this.nodes.$extra),
-                this.nodes.$removeButton
-            );
-
             this.options.customize.call(this);
-
             return this;
         },
 
@@ -163,6 +154,7 @@ define('io.ox/participants/views', [
             e.preventDefault();
             // remove from collection
             this.model.collection.remove(this.model);
+            this.remove();
         }
     });
 
@@ -174,7 +166,18 @@ define('io.ox/participants/views', [
 
         initialize: function (options) {
             this.options = options;
-            this.listenTo(this.collection, 'add remove reset', this.updateContainer);
+            this.listenTo(this.collection, 'add', function (model) {
+                this.renderEmptyLabel();
+                this.renderParticipant(model);
+            });
+            this.listenTo(this.collection, 'remove', function () {
+                this.renderEmptyLabel();
+            });
+            this.listenTo(this.collection, 'reset', function () {
+                this.$ul.empty();
+                this.renderAll();
+            });
+            this.$empty = $('<li>').text(gt('This list has no contacts yet'));
         },
 
         render: function () {
@@ -216,17 +219,11 @@ define('io.ox/participants/views', [
 
         renderEmptyLabel: function () {
             if (this.collection.length === 0) {
-                this.$ul.append(
-                    $('<li>').text(gt('This list has no contacts yet'))
-                );
+                this.$ul.append(this.$empty);
+            } else {
+                this.$empty.remove();
             }
             return this.$ul.toggleClass('empty', this.collection.length === 0);
-        },
-
-        updateContainer: function () {
-            this.$ul.empty();
-            this.renderAll();
-            return this;
         }
 
     });
