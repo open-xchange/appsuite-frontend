@@ -95,7 +95,11 @@ define('io.ox/mail/actions', [
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
-            ox.registry.call('mail-compose', 'forward', baton.isThread ? baton.first() : baton.data);
+            var data = baton.isThread ? baton.first() : baton.data;
+            if (baton.data.length > 0) {
+                data = baton.data.map(function (o) { return _.pick(o, 'id', 'folder_id'); });
+            }
+            ox.registry.call('mail-compose', 'forward', data);
         }
     });
 
