@@ -1176,7 +1176,8 @@ define('io.ox/core/main', [
                 var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id;
 
                 _.url.hash({
-                    app: hash.app + '/detail',
+                    // special treatment for files (viewer + drive app)
+                    app: hash.app === 'io.ox/files' ? 'io.ox/files' : hash.app + '/detail',
                     folder: hash.folder,
                     id: id
                 });
@@ -1187,7 +1188,8 @@ define('io.ox/core/main', [
 
                 // old-school: module + folder + id
                 _.url.hash({
-                    app: 'io.ox/' + hash.m + '/detail',
+                    // special treatment for files (viewer + drive app)
+                    app: hash.m === 'io.ox/files' ? 'io.ox/files' : hash.m + '/detail',
                     folder: hash.f,
                     id: hash.i
                 });
@@ -1506,6 +1508,16 @@ define('io.ox/core/main', [
                         debug('Auto launch:', details.app);
                         launch = ox.launch(details.app);
                         method = details.method;
+                        // TODO: all pretty hard-wired here; looks for better solution
+                        // special case: open viewer too?
+                        var hash = _.url.hash();
+                        if (hash.app === 'io.ox/files' && hash.id !== undefined) {
+                            require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
+                                api.get(hash).done(function (data) {
+                                    new Viewer().launch({ files: [data] });
+                                });
+                            });
+                        }
                         // explicit call?
                         if (method) {
                             launch.done(function () {
