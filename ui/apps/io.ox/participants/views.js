@@ -52,7 +52,6 @@ define('io.ox/participants/views', [
         },
 
         render: function () {
-            debugger;
             this.$el.append(
                 this.nodes.$img = $('<div>'),
                 this.nodes.$text = $('<div class="participant-name">'),
