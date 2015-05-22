@@ -125,10 +125,7 @@ define('io.ox/files/share/view', [
 
             // bind collection to share model
             tokenfieldView.collection.on('change add remove sort', function () {
-                var recipients = this.map(function (model) {
-                    return model;
-                });
-                baton.model.set('recipients', recipients, { silent: true });
+                baton.model.set('recipients', this.toArray(), { silent: true });
             });
         }
     });
