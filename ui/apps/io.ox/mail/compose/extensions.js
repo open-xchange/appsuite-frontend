@@ -490,10 +490,7 @@ define('io.ox/mail/compose/extensions', [
         mailto: function () {
             // register mailto!
             if (settings.get('features/registerProtocolHandler', true)) {
-                // only for browsers != firefox due to a bug in firefox
-                // https://bugzilla.mozilla.org/show_bug.cgi?id=440620
-                // maybe this will be fixed in the future by mozilla
-                if (navigator.registerProtocolHandler && !_.browser.Firefox) {
+                if (navigator.registerProtocolHandler) {
                     var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                     navigator.registerProtocolHandler(
                         'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
