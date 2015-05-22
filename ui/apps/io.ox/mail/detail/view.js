@@ -439,6 +439,11 @@ define('io.ox/mail/detail/view', [
 
             ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
 
+            // Remove smart-dropdown class when in portal sidepopup
+            if (_.url.hash('app').split('/').slice(-1)[0] === 'portal') {
+                this.$el.find('.detail-view-header [data-toggle="dropdown"]').removeClass('smart-dropdown');
+            }
+
             // global event for tracking purposes
             ox.trigger('mail:detail:render', this);
 
