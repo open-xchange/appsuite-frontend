@@ -149,8 +149,8 @@ msgstr[1] "%1$d Minuten"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:162 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:475
+#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:471
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s van %2$s"
@@ -827,11 +827,11 @@ msgid "Add timezone"
 msgstr "Actie toevoegen"
 
 #: apps/io.ox/contacts/actions.js:463 module:io.ox/contacts
-#: apps/io.ox/mail/actions.js:697 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:701 module:io.ox/mail
 msgid "Add to address book"
 msgstr "Aan adresboek toevoegen"
 
-#: apps/io.ox/mail/actions.js:705 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:709 module:io.ox/mail
 msgid "Add to calendar"
 msgstr "Aan agenda toevoegen"
 
@@ -842,7 +842,7 @@ msgstr "Toevoegen aan favorieten"
 #: apps/io.ox/contacts/actions.js:440 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125 apps/io.ox/files/actions.js:556
 #: module:io.ox/files apps/io.ox/files/toolbar.js:145
-#: apps/io.ox/mail/actions.js:686 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:690 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:182
 msgid "Add to portal"
 msgstr "Toevoegen aan het portaal"
@@ -1126,7 +1126,7 @@ msgstr "Archief"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:181 apps/io.ox/mail/actions.js:635
+#: apps/io.ox/core/folder/contextmenu.js:181 apps/io.ox/mail/actions.js:639
 #: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js:116
 #: apps/io.ox/mail/toolbar.js:116
 msgctxt "verb"
@@ -1414,7 +1414,7 @@ msgstr "Agendaoverzicht"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:183
-#: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
+#: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1373
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
@@ -1882,7 +1882,7 @@ msgstr "Contacten zijn verplaatst"
 msgid "Contains"
 msgstr "Bevat"
 
-#: apps/io.ox/core/main.js:1372 module:io.ox/core
+#: apps/io.ox/core/main.js:1374 module:io.ox/core
 msgid "Continue"
 msgstr "Verder"
 
@@ -1906,8 +1906,8 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:82 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:344
 #: module:io.ox/files apps/io.ox/files/actions.js:596
-#: apps/io.ox/files/toolbar.js:159 apps/io.ox/mail/actions.js:206
-#: apps/io.ox/mail/actions.js:624
+#: apps/io.ox/files/toolbar.js:159 apps/io.ox/mail/actions.js:210
+#: apps/io.ox/mail/actions.js:628
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:146
 msgid "Copy"
@@ -2216,7 +2216,7 @@ msgstr "Uitgesteld"
 #: apps/io.ox/files/actions.js:515 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:115 apps/io.ox/mail/actions.js:519
+#: apps/io.ox/files/toolbar.js:115 apps/io.ox/mail/actions.js:523
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:367
@@ -2612,7 +2612,7 @@ msgstr "Dubbelklik in deze regel voor een dagafspraak"
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:506 module:io.ox/files
 #: apps/io.ox/files/actions.js:637 apps/io.ox/files/toolbar.js:108
-#: apps/io.ox/mail/actions.js:737 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:741 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
 msgstr "Downloaden"
@@ -2686,7 +2686,7 @@ msgstr "Laat bijlagen hier los"
 msgid "Drop files here for import"
 msgstr "Sleep het EML bestand hiernaartoe om deze te importeren"
 
-#: apps/io.ox/mail/actions.js:763 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:767 module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr "Sleep hiernaartoe om deze e-mail te importeren"
 
@@ -2767,7 +2767,7 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/actions.js:497
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
 #: apps/io.ox/files/main.js:623 apps/io.ox/files/main.js:671
-#: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
+#: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:513
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1085
@@ -3447,7 +3447,7 @@ msgid "Folder view"
 msgstr "Mappenoverzicht"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1598 module:io.ox/core
+#: apps/io.ox/core/main.js:1610 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3520,7 +3520,7 @@ msgstr "Formaat"
 msgid "Format emails as"
 msgstr "E-mails opmaken als:"
 
-#: apps/io.ox/mail/actions.js:498 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:502 module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64 apps/io.ox/mail/toolbar.js:68
 msgid "Forward"
 msgstr "Doorsturen"
@@ -4014,7 +4014,7 @@ msgstr "Uitnodigingen voor %s"
 
 #: apps/io.ox/contacts/actions.js:413 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:56 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:71 apps/io.ox/mail/actions.js:593
+#: apps/io.ox/contacts/toolbar.js:71 apps/io.ox/mail/actions.js:597
 msgid "Invite to appointment"
 msgstr "Uitnodigen voor een afspraak"
 
@@ -4360,7 +4360,7 @@ msgstr "Quotum aantal e-mails"
 msgid "Mail from %1$s, %2$s"
 msgstr "E-mailbericht van %1$s %2$s"
 
-#: apps/io.ox/mail/actions.js:206 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:210 module:io.ox/mail
 msgid "Mail has been copied"
 msgstr "Uw e-mailberichten zijn gekopieerd"
 
@@ -4368,7 +4368,7 @@ msgstr "Uw e-mailberichten zijn gekopieerd"
 msgid "Mail has been imported"
 msgstr "E-mailbericht is geïmporteerd "
 
-#: apps/io.ox/mail/actions.js:205 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:209 module:io.ox/mail
 msgid "Mail has been moved"
 msgstr "De e-mailberichten zijn verplaatst"
 
@@ -4416,11 +4416,11 @@ msgstr ""
 msgid "Mailing list"
 msgstr "Mailing lijst"
 
-#: apps/io.ox/mail/actions.js:206 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:210 module:io.ox/mail
 msgid "Mails have been copied"
 msgstr "Uw e-mailberichten zijn gekopieerd"
 
-#: apps/io.ox/mail/actions.js:205 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:209 module:io.ox/mail
 msgid "Mails have been moved"
 msgstr "Uw e-mailberichten zijn verplaatst"
 
@@ -4501,7 +4501,7 @@ msgstr "Markeren als klaar"
 msgid "Mark as read"
 msgstr "Markeren als gelezen"
 
-#: apps/io.ox/mail/actions.js:563 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:567 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:84
 msgid "Mark as spam"
 msgstr "Markeren als ongewenst"
@@ -4523,14 +4523,14 @@ msgstr "Markeer e-mail als"
 #. Translation should be as short a possible
 #. Instead of "Mark as read" it's just "Mark read"
 #. German, for example, should be just "Gelesen"
-#: apps/io.ox/mail/actions.js:547 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:551 module:io.ox/mail
 msgid "Mark read"
 msgstr "Markeren als gelezen"
 
 #. Translation should be as short a possible
 #. Instead of "Mark as unread" it's just "Mark unread"
 #. German, for example, should be just "Ungelesen"
-#: apps/io.ox/mail/actions.js:533 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:537 module:io.ox/mail
 msgid "Mark unread"
 msgstr "Markeren als ongelezen"
 
@@ -4653,7 +4653,7 @@ msgstr "Er zijn meer dan de momenteel getoonde %1$s elementen gevonden"
 #: apps/io.ox/core/folder/contextmenu.js:306 module:io.ox/core
 #: apps/io.ox/files/actions.js:343 module:io.ox/files
 #: apps/io.ox/files/actions.js:586 apps/io.ox/files/toolbar.js:150
-#: apps/io.ox/mail/actions.js:205 apps/io.ox/mail/actions.js:614
+#: apps/io.ox/mail/actions.js:209 apps/io.ox/mail/actions.js:618
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:139
 #: apps/io.ox/tasks/actions.js:319 module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js:46 apps/io.ox/tasks/actions/move.js:58
@@ -4858,7 +4858,7 @@ msgstr "Taakherinnering"
 msgid "New task reminders"
 msgstr "Taakherinnering"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:137 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -5002,7 +5002,7 @@ msgstr "Geen"
 msgid "Normal"
 msgstr "Normaal"
 
-#: apps/io.ox/mail/actions.js:573 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:577 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:91
 msgid "Not spam"
 msgstr "Niet ongewenst"
@@ -5161,7 +5161,7 @@ msgid "Open folder view"
 msgstr "Mappenoverzicht openen"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
-#: apps/io.ox/mail/actions.js:729 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:733 module:io.ox/mail
 msgid "Open in browser"
 msgstr "Openen in een nieuw window"
 
@@ -5748,12 +5748,12 @@ msgid "Press [enter] to open"
 msgstr "Druk op [enter] om te openen"
 
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/actions.js:721 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:725 module:io.ox/mail
 #: apps/io.ox/preview/main.js:118 module:io.ox/preview
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Vorige"
@@ -5792,7 +5792,7 @@ msgstr "Primair account"
 #: apps/io.ox/calendar/toolbar.js:88 apps/io.ox/calendar/toolbar.js:176
 #: apps/io.ox/contacts/actions.js:404 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
-#: module:io.ox/core apps/io.ox/mail/actions.js:645 module:io.ox/mail
+#: module:io.ox/core apps/io.ox/mail/actions.js:649 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:153 apps/io.ox/tasks/actions.js:337
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
 msgid "Print"
@@ -6085,7 +6085,7 @@ msgstr "Herinner me opnieuw"
 #: apps/io.ox/calendar/actions/acceptdeny.js:50 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js:275 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:601 module:io.ox/calendar/main
-#: apps/io.ox/mail/actions.js:676 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:680 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:175
 msgid "Reminder"
 msgstr "Herinnering"
@@ -6165,12 +6165,12 @@ msgstr "Herhaal"
 msgid "Repeat new password"
 msgstr "Herhaal nieuw wachtwoord"
 
-#: apps/io.ox/mail/actions.js:477 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:481 module:io.ox/mail
 #: apps/plugins/portal/twitter/util.js:225 module:plugins/portal
 msgid "Reply"
 msgstr "Beantwoorden"
 
-#: apps/io.ox/mail/actions.js:487 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:491 module:io.ox/mail
 msgid "Reply All"
 msgstr "Alle Beantwoorden"
 
@@ -6218,7 +6218,7 @@ msgstr "Bronnaam"
 msgid "Resources"
 msgstr "Bronnen"
 
-#: apps/io.ox/core/main.js:1364 module:io.ox/core
+#: apps/io.ox/core/main.js:1366 module:io.ox/core
 msgid "Restore applications"
 msgstr "Applicaties herstellen"
 
@@ -6309,7 +6309,7 @@ msgid "Save"
 msgstr "Opslaan"
 
 #: apps/io.ox/calendar/actions.js:478 module:io.ox/calendar
-#: apps/io.ox/mail/actions.js:602 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:606 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Opslaan als distributielijst"
 
@@ -6317,7 +6317,7 @@ msgstr "Opslaan als distributielijst"
 msgid "Save as draft"
 msgstr "Als concept opslaan"
 
-#: apps/io.ox/mail/actions.js:655 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:659 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:160
 msgid "Save as file"
 msgstr "Opslaan als bestand"
@@ -6329,7 +6329,7 @@ msgstr "Bijlage opslaan"
 #: apps/io.ox/core/pim/actions.js:84 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:212
 #: apps/io.ox/core/viewer/views/toolbarview.js:239
-#: apps/io.ox/mail/actions.js:745 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:749 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Opslaan naar Drive"
 
@@ -6507,7 +6507,7 @@ msgstr "E-mailbericht verzenden"
 msgid "Send mail to all participants"
 msgstr "Verstuur een e-mail naar alle deelnemers"
 
-#: apps/io.ox/mail/actions.js:584 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:588 module:io.ox/mail
 msgid "Send new mail"
 msgstr "Verzend nieuw e-mailbericht"
 
@@ -7416,7 +7416,7 @@ msgstr "De map is opgeschoond."
 msgid "The folder has been emptied."
 msgstr "De map is leeg gemaakt."
 
-#: apps/io.ox/core/main.js:1366 module:io.ox/core
+#: apps/io.ox/core/main.js:1368 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -8161,7 +8161,7 @@ msgstr "Gebruikersnaam"
 msgid "Use fixed-width font for text mails"
 msgstr "Gebruik lettertype met vaste breedte voor tekstberichten"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:138 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8241,11 +8241,11 @@ msgid "View"
 msgstr "Overzicht"
 
 #: apps/io.ox/core/pim/actions.js:81 module:io.ox/core
-#: apps/io.ox/mail/actions.js:713 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:717 module:io.ox/mail
 msgid "View (New)"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:754 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:758 module:io.ox/mail
 #, fuzzy
 msgid "View attachment"
 msgstr "Bijlage opslaan"
@@ -8257,7 +8257,7 @@ msgid "View details"
 msgstr "Details verbergen"
 
 #. source in terms of source code
-#: apps/io.ox/mail/actions.js:666 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:670 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:168
 msgid "View source"
 msgstr "Bron tonen"

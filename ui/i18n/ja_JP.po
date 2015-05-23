@@ -133,8 +133,8 @@ msgstr[0] "%1$d 分"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:162 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:475
+#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:471
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%2$s 中の %1$s"
@@ -795,11 +795,11 @@ msgid "Add timezone"
 msgstr "アクションを追加"
 
 #: apps/io.ox/contacts/actions.js:463 module:io.ox/contacts
-#: apps/io.ox/mail/actions.js:697 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:701 module:io.ox/mail
 msgid "Add to address book"
 msgstr "アドレス帳に追加"
 
-#: apps/io.ox/mail/actions.js:705 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:709 module:io.ox/mail
 msgid "Add to calendar"
 msgstr "予定表に追加"
 
@@ -810,7 +810,7 @@ msgstr "お気に入りに追加"
 #: apps/io.ox/contacts/actions.js:440 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:125 apps/io.ox/files/actions.js:556
 #: module:io.ox/files apps/io.ox/files/toolbar.js:145
-#: apps/io.ox/mail/actions.js:686 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:690 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:182
 msgid "Add to portal"
 msgstr "ポータルに追加"
@@ -1092,7 +1092,7 @@ msgstr "アーカイブ"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:43 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:181 apps/io.ox/mail/actions.js:635
+#: apps/io.ox/core/folder/contextmenu.js:181 apps/io.ox/mail/actions.js:639
 #: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js:116
 #: apps/io.ox/mail/toolbar.js:116
 msgctxt "verb"
@@ -1373,7 +1373,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:183
-#: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1371
+#: apps/io.ox/core/main.js:512 apps/io.ox/core/main.js:1373
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:404 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
@@ -1837,7 +1837,7 @@ msgstr "連絡先を移動しました。"
 msgid "Contains"
 msgstr "次の文字列を含む"
 
-#: apps/io.ox/core/main.js:1372 module:io.ox/core
+#: apps/io.ox/core/main.js:1374 module:io.ox/core
 msgid "Continue"
 msgstr "続行"
 
@@ -1861,8 +1861,8 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:82 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:117 apps/io.ox/files/actions.js:344
 #: module:io.ox/files apps/io.ox/files/actions.js:596
-#: apps/io.ox/files/toolbar.js:159 apps/io.ox/mail/actions.js:206
-#: apps/io.ox/mail/actions.js:624
+#: apps/io.ox/files/toolbar.js:159 apps/io.ox/mail/actions.js:210
+#: apps/io.ox/mail/actions.js:628
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:146
 msgid "Copy"
@@ -2171,7 +2171,7 @@ msgstr "延期"
 #: apps/io.ox/files/actions.js:515 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
-#: apps/io.ox/files/toolbar.js:115 apps/io.ox/mail/actions.js:519
+#: apps/io.ox/files/toolbar.js:115 apps/io.ox/mail/actions.js:523
 #: apps/io.ox/mail/actions/delete.js:62 apps/io.ox/mail/actions/delete.js:81
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:367
@@ -2561,7 +2561,7 @@ msgstr "終日のアポイントを作成するには、この行をダブル �
 #: apps/io.ox/core/viewer/views/toolbarview.js:233
 #: apps/io.ox/files/actions.js:506 module:io.ox/files
 #: apps/io.ox/files/actions.js:637 apps/io.ox/files/toolbar.js:108
-#: apps/io.ox/mail/actions.js:737 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:741 module:io.ox/mail
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
 msgstr "ダウンロード"
@@ -2638,7 +2638,7 @@ msgid "Drop files here for import"
 msgstr ""
 "このメールをインポートするには、ここに EML ファイルをドロップしてください。"
 
-#: apps/io.ox/mail/actions.js:763 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:767 module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr "このメールをインポートするには、ここにドロップしてください。"
 
@@ -2719,7 +2719,7 @@ msgstr "EB"
 #: module:io.ox/files apps/io.ox/files/actions.js:497
 #: apps/io.ox/files/main.js:147 apps/io.ox/files/main.js:153
 #: apps/io.ox/files/main.js:623 apps/io.ox/files/main.js:671
-#: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:509
+#: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:513
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
 #: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1085
@@ -3393,7 +3393,7 @@ msgid "Folder view"
 msgstr "フォルダ ビュー"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1598 module:io.ox/core
+#: apps/io.ox/core/main.js:1610 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3465,7 +3465,7 @@ msgstr "フォーマット"
 msgid "Format emails as"
 msgstr "メールのフォーマット"
 
-#: apps/io.ox/mail/actions.js:498 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:502 module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64 apps/io.ox/mail/toolbar.js:68
 msgid "Forward"
 msgstr "転送"
@@ -3960,7 +3960,7 @@ msgstr "%s に出席依頼"
 
 #: apps/io.ox/contacts/actions.js:413 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:56 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:71 apps/io.ox/mail/actions.js:593
+#: apps/io.ox/contacts/toolbar.js:71 apps/io.ox/mail/actions.js:597
 msgid "Invite to appointment"
 msgstr "アポイントへの出席を依頼"
 
@@ -4307,7 +4307,7 @@ msgstr "メール数割当量"
 msgid "Mail from %1$s, %2$s"
 msgstr "%1$s %2$s からのメール"
 
-#: apps/io.ox/mail/actions.js:206 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:210 module:io.ox/mail
 msgid "Mail has been copied"
 msgstr "メールをコピーしました。"
 
@@ -4315,7 +4315,7 @@ msgstr "メールをコピーしました。"
 msgid "Mail has been imported"
 msgstr "メールをインポートしました。"
 
-#: apps/io.ox/mail/actions.js:205 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:209 module:io.ox/mail
 msgid "Mail has been moved"
 msgstr "メールを移動しました。"
 
@@ -4363,11 +4363,11 @@ msgstr ""
 msgid "Mailing list"
 msgstr "メーリング リスト"
 
-#: apps/io.ox/mail/actions.js:206 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:210 module:io.ox/mail
 msgid "Mails have been copied"
 msgstr "メールをコピーしました。"
 
-#: apps/io.ox/mail/actions.js:205 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:209 module:io.ox/mail
 msgid "Mails have been moved"
 msgstr "メールを移動しました。"
 
@@ -4448,7 +4448,7 @@ msgstr "完了の印を付ける"
 msgid "Mark as read"
 msgstr "既読にする"
 
-#: apps/io.ox/mail/actions.js:563 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:567 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:84
 msgid "Mark as spam"
 msgstr "スパム メールの印を付ける"
@@ -4470,14 +4470,14 @@ msgstr "次の印をメールに付ける"
 #. Translation should be as short a possible
 #. Instead of "Mark as read" it's just "Mark read"
 #. German, for example, should be just "Gelesen"
-#: apps/io.ox/mail/actions.js:547 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:551 module:io.ox/mail
 msgid "Mark read"
 msgstr "既読にする"
 
 #. Translation should be as short a possible
 #. Instead of "Mark as unread" it's just "Mark unread"
 #. German, for example, should be just "Ungelesen"
-#: apps/io.ox/mail/actions.js:533 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:537 module:io.ox/mail
 msgid "Mark unread"
 msgstr "未読にする"
 
@@ -4601,7 +4601,7 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js:306 module:io.ox/core
 #: apps/io.ox/files/actions.js:343 module:io.ox/files
 #: apps/io.ox/files/actions.js:586 apps/io.ox/files/toolbar.js:150
-#: apps/io.ox/mail/actions.js:205 apps/io.ox/mail/actions.js:614
+#: apps/io.ox/mail/actions.js:209 apps/io.ox/mail/actions.js:618
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:139
 #: apps/io.ox/tasks/actions.js:319 module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js:46 apps/io.ox/tasks/actions/move.js:58
@@ -4806,7 +4806,7 @@ msgstr "仕事のアラーム"
 msgid "New task reminders"
 msgstr "仕事のアラーム"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:137 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4951,7 +4951,7 @@ msgstr "なし"
 msgid "Normal"
 msgstr "標準"
 
-#: apps/io.ox/mail/actions.js:573 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:577 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:91
 msgid "Not spam"
 msgstr "スパムではありません。"
@@ -5104,7 +5104,7 @@ msgid "Open folder view"
 msgstr "フォルダ ビューを開く"
 
 #: apps/io.ox/core/pim/actions.js:82 module:io.ox/core
-#: apps/io.ox/mail/actions.js:729 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:733 module:io.ox/mail
 msgid "Open in browser"
 msgstr "ブラウザで開く"
 
@@ -5681,12 +5681,12 @@ msgid "Press [enter] to open"
 msgstr "Enter キーを押して開く"
 
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/actions.js:721 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:725 module:io.ox/mail
 #: apps/io.ox/preview/main.js:118 module:io.ox/preview
 msgid "Preview"
 msgstr "プレビュー"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "前"
@@ -5725,7 +5725,7 @@ msgstr "既定のアカウント"
 #: apps/io.ox/calendar/toolbar.js:88 apps/io.ox/calendar/toolbar.js:176
 #: apps/io.ox/contacts/actions.js:404 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
-#: module:io.ox/core apps/io.ox/mail/actions.js:645 module:io.ox/mail
+#: module:io.ox/core apps/io.ox/mail/actions.js:649 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:153 apps/io.ox/tasks/actions.js:337
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
 msgid "Print"
@@ -6013,7 +6013,7 @@ msgstr "再通知 "
 #: apps/io.ox/calendar/actions/acceptdeny.js:50 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js:275 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:601 module:io.ox/calendar/main
-#: apps/io.ox/mail/actions.js:676 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:680 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:175
 msgid "Reminder"
 msgstr "アラーム"
@@ -6093,12 +6093,12 @@ msgstr "定期的なアポイント"
 msgid "Repeat new password"
 msgstr "新しいパスワード (再入力)"
 
-#: apps/io.ox/mail/actions.js:477 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:481 module:io.ox/mail
 #: apps/plugins/portal/twitter/util.js:225 module:plugins/portal
 msgid "Reply"
 msgstr "返信"
 
-#: apps/io.ox/mail/actions.js:487 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:491 module:io.ox/mail
 msgid "Reply All"
 msgstr "全員に返信"
 
@@ -6146,7 +6146,7 @@ msgstr "設備名"
 msgid "Resources"
 msgstr "設備"
 
-#: apps/io.ox/core/main.js:1364 module:io.ox/core
+#: apps/io.ox/core/main.js:1366 module:io.ox/core
 msgid "Restore applications"
 msgstr "アプリケーションを復元"
 
@@ -6237,7 +6237,7 @@ msgid "Save"
 msgstr "保存"
 
 #: apps/io.ox/calendar/actions.js:478 module:io.ox/calendar
-#: apps/io.ox/mail/actions.js:602 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:606 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "配布リストとして保存"
 
@@ -6245,7 +6245,7 @@ msgstr "配布リストとして保存"
 msgid "Save as draft"
 msgstr "下書きを保存"
 
-#: apps/io.ox/mail/actions.js:655 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:659 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:160
 msgid "Save as file"
 msgstr "ファイルとして保存"
@@ -6257,7 +6257,7 @@ msgstr "添付ファイルを保存"
 #: apps/io.ox/core/pim/actions.js:84 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:212
 #: apps/io.ox/core/viewer/views/toolbarview.js:239
-#: apps/io.ox/mail/actions.js:745 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:749 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Drive に保存"
 
@@ -6432,7 +6432,7 @@ msgstr "メールを送信"
 msgid "Send mail to all participants"
 msgstr "すべての出席者にメールを送信"
 
-#: apps/io.ox/mail/actions.js:584 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:588 module:io.ox/mail
 msgid "Send new mail"
 msgstr "新規メールを送信"
 
@@ -7330,7 +7330,7 @@ msgstr "フォルダのクリーン アップが完了しました。"
 msgid "The folder has been emptied."
 msgstr "フォルダを空にしました。"
 
-#: apps/io.ox/core/main.js:1366 module:io.ox/core
+#: apps/io.ox/core/main.js:1368 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -8060,7 +8060,7 @@ msgstr "ユーザ名"
 msgid "Use fixed-width font for text mails"
 msgstr "テキスト メールに固定幅フォントを使用"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:138 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8139,11 +8139,11 @@ msgid "View"
 msgstr "表示"
 
 #: apps/io.ox/core/pim/actions.js:81 module:io.ox/core
-#: apps/io.ox/mail/actions.js:713 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:717 module:io.ox/mail
 msgid "View (New)"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:754 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:758 module:io.ox/mail
 #, fuzzy
 msgid "View attachment"
 msgstr "すべての添付ファイルを表示"
@@ -8155,7 +8155,7 @@ msgid "View details"
 msgstr "詳細を隠す"
 
 #. source in terms of source code
-#: apps/io.ox/mail/actions.js:666 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:670 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:168
 msgid "View source"
 msgstr "ソースを表示"
