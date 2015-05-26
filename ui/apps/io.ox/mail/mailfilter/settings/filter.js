@@ -352,12 +352,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditVacation: function (e) {
                         e.preventDefault();
-                        baton.tree.trigger('virtual', 'virtual/' + 'io.ox/vacation', {});
+                        baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/vacation', {});
                     },
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
-                        baton.tree.trigger('virtual', 'virtual/' + 'io.ox/autoforward', {});
+                        baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/autoforward', {});
                     },
 
                     dragViaKeyboard: function (e) {
