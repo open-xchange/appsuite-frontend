@@ -64,16 +64,29 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.documentLoad = $.Deferred();
             // call view destroyer on viewer global dispose event
             this.on('dispose', this.disposeView.bind(this));
-            // bind resize and zoom handler
+            // bind resize, zoom and close handler
             this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
             this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
+            this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onBeforeClose);
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // defaults
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
+        },
+
+        /**
+         * Viewer before close handler:
+         * - saves the scroll position of the document.
+         */
+        onBeforeClose: function () {
+            if (this.isVisible()) {
+                var fileId = this.model.get('id'),
+                    fileScrollPosition = this.documentContainer.scrollTop();
+                this.setInitialScrollPosition(fileId, fileScrollPosition);
+            }
         },
 
         /**
@@ -238,16 +251,10 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
                 }
                 var pdfDocument = this.pdfDocument,
-                    //defaultScale = this.getDefaultScale(),
                     self = this;
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
-
-                // set default scale/zoom, according to device's viewport width
-                //this.pdfView.setPageZoom(defaultScale);
-                //this.currentZoomFactor = this.getDefaultZoomFactor();
-
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var documentPage = $('<div class="document-page">'),
@@ -270,7 +277,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
                 this.documentContainer.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
-
                 // set scale/zoom, with stored values or default, according to device's viewport width
                 var zoomLevel = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
                 this.setZoomLevel(zoomLevel);
@@ -279,7 +285,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 if (lastScrollPosition) {
                     this.$el.find('.document-container').scrollTop(lastScrollPosition);
                 }
-
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
