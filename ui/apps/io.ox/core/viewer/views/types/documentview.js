@@ -403,19 +403,18 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         setZoomLevel: function (zoomLevel) {
             if (!_.isNumber(zoomLevel) || !this.pdfView || !this.isVisible ||
-                (zoomLevel === this.currentZoomFactor) ||
                 (zoomLevel < this.getMinZoomFactor()) || (zoomLevel > this.getMaxZoomFactor())) {
                 return;
             }
             var pdfView = this.pdfView,
-                documentTopPosition = this.$el.scrollTop();
+                documentTopPosition = this.documentContainer.scrollTop();
             _.each(this.pages, function (page, pageIndex) {
                 pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
             });
             // adjust document scroll position according to new zoom
-            this.$el.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
+            this.documentContainer.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
             // save new zoom level to view
             this.currentZoomFactor = zoomLevel;
             this.setInitialZoomLevel(this.model.get('id'), zoomLevel);
