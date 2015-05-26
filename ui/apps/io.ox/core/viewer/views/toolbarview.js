@@ -105,7 +105,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                mobile: 'hi',
+                mobile: 'lo',
+                label: gt('Pop out'),
                 icon: 'fa  fa-external-link-square',
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
                 customize: function () {
@@ -290,7 +291,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         id: 'popoutstandalone',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
-            return ox.debug && (currentApp != 'io.ox/files/detail');
+            return currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
             var fileModel = baton.model;
