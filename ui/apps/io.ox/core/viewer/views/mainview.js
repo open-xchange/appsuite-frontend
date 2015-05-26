@@ -188,9 +188,13 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         /**
-         * Viewer close handler. Hides viewer DOM first and then do cleanup.
+         * Viewer close handler.
+         * - triggers an 'viewer:beforeclose' event.
+         * - save sidebar state into the Settings.
+         * - Hides viewer DOM first and then do cleanup.
          */
         closeViewer: function () {
+            this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.opened);
             if (!this.standalone) {
