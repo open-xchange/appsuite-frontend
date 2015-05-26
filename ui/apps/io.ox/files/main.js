@@ -27,20 +27,23 @@ define('io.ox/files/main', [
     'io.ox/core/page-controller',
     'io.ox/core/capabilities',
     'io.ox/files/api',
+    'io.ox/core/viewer/views/sidebarview',
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',
     'less!io.ox/files/style',
+    'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/upload/dropzone'
-], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api, Sidebarview) {
 
     'use strict';
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
-        win;
+        win,
+        sidebarView = new Sidebarview({});
 
     app.mediator({
 
@@ -273,14 +276,17 @@ define('io.ox/files/main', [
             app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
             var node = _.device('smartphone') ? app.pages.getPage('main') : app.getWindow().nodes.main;
             node.append(
-                app.listControl.render().$el
+                $('<div class="container">').append(
+                    app.listControl.render().$el
                     //#. items list (e.g. mails)
                     .attr('aria-label', gt('Item list'))
                     .find('.toolbar')
                     //#. toolbar with 'select all' and 'sort by'
                     .attr('aria-label', gt('Item list options'))
                     .end()
+                )
             );
+            app.listControl.resizable();
         },
 
         /*
@@ -351,6 +357,34 @@ define('io.ox/files/main', [
             });
         },
 
+        'selection:change': function () {
+            if (_.device('!touch')) {
+                app.listView.on('selection:change', function () {
+                    if (app.listView.selection.isEmpty()) {
+                        sidebarView.$el.empty();
+                        app.getWindow().nodes.main.append(
+                            sidebarView.$el.addClass('rightside').append(
+                                $('<div class="io-ox-center">').append(
+                                    $('<div class="summary empty">').text(gt('No elements selected'))
+                                )
+                            )
+                        );
+                        sidebarView.$el.find('.io-ox-center').wrapAll('<div class="wrapper">');
+                    } else {
+                        var modelData = _(api.resolve(app.listView.selection.get(), false)).invoke('toJSON'),
+                            fileModel = app.listView.collection.findWhere({ id: modelData[0].id });
+                        sidebarView.render(fileModel);
+                        sidebarView.renderSections();
+
+                        app.getWindow().nodes.main.append(
+                            sidebarView.$el.addClass('rightside')
+                        );
+                        sidebarView.$el.children().wrapAll('<div class="wrapper">');
+                    }
+                });
+            }
+        },
+
         /*
          * Respond to changed filter
          */
@@ -395,9 +429,21 @@ define('io.ox/files/main', [
          */
         'change:layout': function (app) {
 
-            function applyLayout() {
+            app.applyLayout = function () {
 
-                var layout = app.props.get('layout');
+                var layout = app.props.get('layout'),
+                    savedWidth = app.settings.get('listview/width/' + _.display(), '360'),
+                    left = app.listControl.$el.parent(),
+                    right = sidebarView.$el;
+
+                function applyWidth(x) {
+                    var width = x === undefined ? '' :  x + 'px';
+                    left.css('width', width);
+                    right.css('left', width);
+                }
+
+                // remove inline styles from using the resize bar
+                left.css({ width: '' });
 
                 if (layout === 'list') {
                     app.listView.$el.addClass('column-layout').removeClass('grid-layout icon-layout tile-layout');
@@ -406,11 +452,12 @@ define('io.ox/files/main', [
                 } else {
                     app.listView.$el.addClass('grid-layout tile-layout').removeClass('column-layout icon-layout');
                 }
+                applyWidth(savedWidth);
 
                 if (_.device('smartphone')) {
                     onOrientationChange();
                 }
-            }
+            };
 
             function onOrientationChange() {
                 if (_.device('landscape')) {
@@ -429,13 +476,13 @@ define('io.ox/files/main', [
 
             app.props.on('change:layout', function () {
                 _.defer(function () {
-                    applyLayout();
+                    app.applyLayout();
                     app.listView.redraw();
                     $(document).trigger('resize');
                 });
             });
 
-            applyLayout();
+            app.applyLayout();
         },
 
         /*
@@ -530,6 +577,21 @@ define('io.ox/files/main', [
             });
 
             app.listView.toggleCheckboxes(app.props.get('checkboxes'));
+        },
+
+        'change:details': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            app.props.on('change:details', function (model, value) {
+                sidebarView.opened = value;
+                app.props.set('details', value);
+                sidebarView.$el.toggleClass('opened', sidebarView.opened);
+                app.listControl.$el.parent().toggleClass('leftside', sidebarView.opened);
+                app.applyLayout();
+                app.listView.trigger('selection:change');
+            });
+
         },
 
         /*

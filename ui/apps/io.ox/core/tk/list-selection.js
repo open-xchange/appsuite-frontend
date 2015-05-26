@@ -213,6 +213,10 @@ define('io.ox/core/tk/list-selection', [
             return e && (e.metaKey || e.ctrlKey || this.isCheckmark(e));
         },
 
+        isEmpty: function () {
+            return _.isEmpty(this.get());
+        },
+
         resetTabIndex: function (items, skip) {
             items = items.filter('[tabindex="1"]');
             items.not(skip).attr('tabindex', '-1');
