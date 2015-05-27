@@ -27,19 +27,20 @@ define('io.ox/core/tk/flag-picker', [
             $ul = $('ul', $parent).first(),
             $zIndex = $parent.parents('[style*="z-index"]'),
             transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
-            $container = $this.closest('.scrollable');
+            $container = $this.closest('.scrollable'),
+            margin = 7;
 
         if (!$parent.hasClass('open') || _.device('smartphone')) return;
 
         var positions = {
-            top: Math.max($container.offset().top, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - 7)) - transformOffset.top,
-            right: ($container.offset().left + $container.outerWidth() - $this.offset().left - $this.outerWidth() + $this.width() + 7) + transformOffset.left,
+            top: Math.max($container.offset().top + margin, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - margin)) - transformOffset.top,
+            right: ($(window).width() - $this.offset().left - $this.outerWidth() + $this.width() + margin) + transformOffset.left,
             left: 'initial',
             bottom: 'initial'
         };
 
-        if (positions.top + $ul.outerHeight() > $container.offset().top + $container.innerHeight()) {
-            positions.bottom = 7;
+        if (positions.top + $ul.outerHeight() > $container.offset().top + $container.innerHeight() - margin) {
+            positions.bottom = $(window).height() - $container.offset().top - $container.innerHeight() + margin;
         }
 
         $ul.css(positions);
@@ -68,6 +69,11 @@ define('io.ox/core/tk/flag-picker', [
                     right: transformOffset.left
                 })
                 .on('mousewheel touchmove', false)
+                .on('click', function (e) {
+                    $this.dropdown('toggle');
+                    e.preventDefault();
+                    e.stopPropagation();
+                })
         );
     });
 
