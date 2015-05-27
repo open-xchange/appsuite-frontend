@@ -50,7 +50,7 @@ define('io.ox/core/tk/flag-picker',
             z.css('z-index', 10000);
         });
 
-        $parent.one('hidden.bs.dropdown', function () {
+        function reset() {
             $zIndex.each(function () {
                 var z = $(this);
                 z.css('z-index', z.data('oldIndex'));
@@ -59,7 +59,9 @@ define('io.ox/core/tk/flag-picker',
             $parent.removeClass('smart-dropdown-container');
             $parent.find('.abs').remove();
             $ul.css({ top: '', left: '', bottom: '', right: '' });
-        });
+        }
+
+        $parent.one('hidden.bs.dropdown', reset);
 
         $parent.addClass('smart-dropdown-container');
         $parent.append(
@@ -70,7 +72,8 @@ define('io.ox/core/tk/flag-picker',
                 })
                 .on('mousewheel touchmove', false)
                 .on('click', function (e) {
-                    $this.dropdown('toggle');
+                    $parent.removeClass('open');
+                    reset();
                     e.preventDefault();
                     e.stopPropagation();
                 })
