@@ -763,6 +763,9 @@ define('io.ox/tours/main',
         id: 'tours',
         index: 1000,
         run: function () {
+            if (_.device('smartphone')) {//tablets are fine just disable phones
+                return $.when();
+            }
 
             ox.load(['io.ox/tours/main', 'settings!io.ox/tours']).done(function (tours, tourSettings) {
                 var disableTour = tourSettings.get('server/disableTours'),
