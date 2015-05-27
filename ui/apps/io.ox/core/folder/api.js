@@ -687,12 +687,12 @@ define('io.ox/core/folder/api', [
 
         // prepare move
         var model = pool.getModel(id);
+        removeFromAllCollections(model);
 
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
 
         return update(id, { folder_id: target }).done(function (newId) {
-            removeFromAllCollections(model);
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
             // update all virtual folders
