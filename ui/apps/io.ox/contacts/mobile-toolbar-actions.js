@@ -160,12 +160,14 @@ define('io.ox/contacts/mobile-toolbar-actions',
 
             //single select
             app.grid.selection.on('select pagechange:detailView', function () {
+                //don't override secondary toolbar
+                if (app.props.get('checkboxes') === true ) return;
+
                 var data = app.grid.selection.get();
                 app.updateToolbar(data[0]);
             });
 
-            // multiselect
-            app.grid.selection.on('change', function  (e, list) {
+            function updateSecondaryToolbar(list) {
                 if (app.props.get('checkboxes') !== true ) return;
                 if (list.length === 0) {
                     // reset to remove old baton
@@ -179,7 +181,10 @@ define('io.ox/contacts/mobile-toolbar-actions',
                     // handle updated baton to pageController
                     app.pages.getSecondaryToolbar('listView').setBaton(baton);
                 });
-            });
+            }
+            // multiselect
+            app.grid.selection.on('change', function (e, list) { updateSecondaryToolbar(list); });
+            app.props.on('change:checkboxes', function () { updateSecondaryToolbar(app.grid.selection.get()); });
         }
     });
 
