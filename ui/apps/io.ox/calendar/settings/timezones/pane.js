@@ -15,7 +15,7 @@ define('io.ox/calendar/settings/timezones/pane', [
     'io.ox/calendar/settings/model',
     'gettext!io.ox/calendar',
     'io.ox/core/extensions',
-    'io.ox/calendar/settings/favorite-view',
+    'io.ox/calendar/settings/timezones/favorite-view',
     'less!io.ox/calendar/settings/timezones/style.less'
 ], function (model, gt, ext, FavoriteView) {
 

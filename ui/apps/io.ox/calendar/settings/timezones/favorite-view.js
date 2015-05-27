@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/calendar/settings/favorite-view', [
+define('io.ox/calendar/settings/timezones/favorite-view', [
     'io.ox/backbone/mini-views/timezonepicker',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
