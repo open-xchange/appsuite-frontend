@@ -12,12 +12,13 @@
 define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/views/types/baseview',
+    'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, gt) {
+], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, Util, gt) {
 
     'use strict';
 
@@ -119,8 +120,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         render: function () {
             this.documentContainer = $('<div class="document-container io-ox-core-pdf">');
-            //this.documentThumbnail = $('<div class="document-thumbnail">');
-            this.$el.empty().append(this.documentThumbnail, this.documentContainer);
+            this.$el.empty().append(this.documentContainer);
             return this;
         },
 
@@ -198,7 +198,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var documentContainer = this.documentContainer,
-                //documentThumbnail = this.documentThumbnail,
                 convertParams = this.getConvertParams(this.model.get('source')),
                 documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
 
@@ -255,13 +254,14 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // create the PDF view after successful loading;
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
+                // create a thumbnail view and append it
+                this.thumbnailsView = new ThumbnailView({ pageCount: pageCount, viewerEvents: this.viewerEvents });
+                this.$el.append(this.thumbnailsView.render().el);
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var documentPage = $('<div class="document-page">'),
-                        //documentPageThumbnail = $('<div class="document-page-thumbnail">'),
                         pageSize = self.pdfView.getRealPageSize(index + 1);
                     documentContainer.append(documentPage.attr(pageSize).css(pageSize));
-                    //documentThumbnail.append(documentPageThumbnail);
                 });
                 // save values to the view instance, for performance
                 this.numberOfPages = pageCount;
@@ -527,6 +527,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             this.unload(true);
             this.$el.off();
+            this.thumbnailsView.remove();
         }
 
     });
