@@ -130,6 +130,9 @@ define('io.ox/core/folder/actions/move', [
                     if (module === 'mail' && data.module === 'system') return;
                     if (same || !move) this.addClass('disabled');
                 },
+                disable: function (data) {
+                    return id === data.id || /^virtual\//.test(data.id);
+                },
                 flat: flat,
                 indent: !flat,
                 module: module,
