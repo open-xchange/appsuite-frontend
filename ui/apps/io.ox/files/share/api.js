@@ -72,6 +72,51 @@ define('io.ox/files/share/api', [
         },
 
         /**
+         * get all shares
+         * @return { deferred } an array with share data
+         */
+        list: function () {
+            return http.GET({
+                module: 'share/management',
+                params: {
+                    action: 'all',
+                    timezone: 'UTC'
+                }
+            });
+        },
+
+        /**
+         * get a share
+         * @param  { string }   token
+         * @return { deferred } a JSON object with share data
+         */
+        get: function (token) {
+            return http.GET({
+                module: 'share/management',
+                params: {
+                    action: 'get',
+                    timezone: 'UTC',
+                    token: token
+                }
+            });
+        },
+
+        /**
+         * delete shares
+         * @param  { array }   shares
+         * @return { deferred } empty data and timestamp
+         */
+        remove: function (shares) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'delete'
+                },
+                data: shares
+            });
+        },
+
+        /**
          * delete a link
          * @param  { string }   token
          * @return { deferred } empty data and timestamp
