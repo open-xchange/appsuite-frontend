@@ -861,7 +861,9 @@ define('io.ox/core/folder/api',
             if (collection.fetched) list(id, { cache: false });
         });
         // go!
-        http.resume();
+        http.resume().done(function () {
+            virtual.refresh();
+        });
     }
 
     ox.on('please:refresh refresh^', refresh);
