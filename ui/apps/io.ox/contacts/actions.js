@@ -177,12 +177,13 @@ define('io.ox/contacts/actions',
         capabilities: 'webmail',
 
         requires: function (e) {
-            var ctx = e.context;
-            if (ctx.id === 0 || ctx.folder_id === 0) {
-                // e.g. non-existing contacts in halo view
-                return false;
+            var contact = e.context;
+            // e.g. non-existing contacts in halo view
+            if (contact.id === 0 || contact.folder_id === 0) {
+                // check if contains mail
+                return !!(contact.email1 || contact.email2 || contact.email3);
             } else {
-                var list = [].concat(ctx);
+                var list = [].concat(contact);
                 return tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }})
                     .pipe(function (list) {
                         var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
@@ -194,28 +195,40 @@ define('io.ox/contacts/actions',
         },
 
         multiple: function (list) {
-
-            function mapList(obj) {
-                return [obj.display_name, obj.mail];
+            var def = null;
+            if (list.length === 1 && (list[0].id === 0 || list[0].folder_id === 0)) {
+                var adress = list[0].email1 || list[0].email2 || list[0].email3;
+                def = $.Deferred().resolve([[adress, adress]]);
+            } else {
+                def = api.getList(list, true, {
+                    check: function (obj) {
+                        return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
+                    }
+                }).then(function (list) {
+                    // set recipient
+                    return _.chain(list)
+                        .map(function (obj) {
+                            if (obj.distribution_list && obj.distribution_list.length) {
+                                return _(obj.distribution_list).map(function (obj) {
+                                    return [obj.display_name, obj.mail];
+                                });
+                            } else {
+                                return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
+                            }
+                        })
+                        .flatten(true)
+                        .filter(function (obj) {
+                            return !!obj[1];
+                        })
+                        .value();
+                });
             }
 
-            function mapContact(obj) {
-                if (obj.distribution_list && obj.distribution_list.length) {
-                    return _(obj.distribution_list).map(mapList);
-                } else {
-                    return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
-                }
-            }
-
-            function filterContact(obj) {
-                return !!obj[1];
-            }
-
-            tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
-                // set recipient
-                var data = { to: _.chain(list).map(mapContact).flatten(true).filter(filterContact).value() };
+            def.done(function (recipients) {
                 // open compose
-                ox.registry.call('mail-compose', 'compose', data);
+                ox.registry.call('mail-compose', 'compose', {
+                    to: recipients
+                });
             });
         }
     });
@@ -260,7 +273,8 @@ define('io.ox/contacts/actions',
             var ctx = e.context;
             // e.g. non-existing contacts in halo view
             if (ctx.id === 0 || ctx.folder_id === 0) {
-                return false;
+                // check if contains mail
+                return !!(ctx.email1 || ctx.email2 || ctx.email3);
             } else {
                 var list = [].concat(ctx);
                 return tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }})
@@ -273,7 +287,8 @@ define('io.ox/contacts/actions',
         },
 
         multiple: function (list) {
-            var distLists = [];
+            var def = null,
+                distLists = [];
 
             function mapContact(obj) {
                 if (obj.distribution_list && obj.distribution_list.length) {
@@ -281,7 +296,7 @@ define('io.ox/contacts/actions',
                     return;
                 } else if (obj.internal_userid || obj.user_id) {
                     // internal user
-                    return { type: 1, id: obj.internal_userid || obj.user_id};
+                    return { type: 1, id: obj.internal_userid || obj.user_id };
                 } else {
                     // external user
                     return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
@@ -304,42 +319,49 @@ define('io.ox/contacts/actions',
                 return cleaned;
             }
 
-            tentativeLoad(list, {check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
-                // set participants
-                var def = $.Deferred(),
-                    resolvedContacts = [],
-                    cleanedList = filterForDistlists(list),
-                    participants = _.chain(cleanedList).map(mapContact).flatten(true).filter(filterContact).value();
+            // check for anonymous contacts
+            if (list.length === 1 && (list[0].id === 0 || list[0].folder_id === 0)) {
+                var adress = list[0].email1 || list[0].email2 || list[0].email3;
+                def = $.Deferred().resolve([{ type: 5, mail: adress }]);
+            } else {
 
-                distLists = _.union(distLists);
-                //remove external participants without contact or they break the request
-                var externalParticipants = [];
-                _(distLists).each(function (participant) {
-                    if (!participant.id) {
-                        externalParticipants.push(participant);
+                def = api.getList(list, true, {
+                    check: function (obj) {
+                        return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
                     }
-                });
-                distLists = _.difference(distLists, externalParticipants);
+                }).then(function (list) {
+                    // set participants
+                    var participants = _.chain(filterForDistlists(list)).map(mapContact).flatten(true).filter(filterContact).value(),
+                        externalParticipants = [];
 
-                api.getList(distLists).done(function (obj) {
-                    //put everyone back in
-                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);
-                    def.resolve();
-                });
+                    distLists = _.union(distLists);
+                    //remove external participants without contact or they break the request
+                    _(distLists).each(function (participant) {
+                        if (!participant.id) {
+                            externalParticipants.push(participant);
+                        }
+                    });
+                    distLists = _.difference(distLists, externalParticipants);
 
-                // open app
-                def.done(function () {
-                    resolvedContacts = _.chain(resolvedContacts).map(mapContact).flatten(true).filter(filterContact).value();
-
-                    participants = participants.concat(resolvedContacts);
-
-                    require(['io.ox/calendar/edit/main'], function (m) {
-                        m.getApp().launch().done(function () {
-                            this.create({ participants: participants, folder_id: coreConfig.get('folder/calendar') });
+                    return api.getList(distLists)
+                        .then(function (obj) {
+                            var resolvedContacts = _.chain([].concat(obj, externalParticipants))
+                                .map(mapContact)
+                                .flatten(true)
+                                .filter(filterContact)
+                                .value();
+                            return participants.concat(resolvedContacts);
                         });
+
+                });
+            }
+
+            def.done(function (participants) {
+                require(['io.ox/calendar/edit/main', 'settings!io.ox/core'], function (m, coreSettings) {
+                    m.getApp().launch().done(function () {
+                        this.create({ participants: participants, folder_id: coreSettings.get('folder/calendar') });
                     });
                 });
-
             });
         }
     });

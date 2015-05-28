@@ -224,6 +224,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Tue May 19 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-05-26 (2521)
 * Fri May 15 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-05-26 (2520)
 * Tue May 05 2015 Marcus Klein <marcus.klein@open-xchange.com>
