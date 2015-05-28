@@ -156,8 +156,7 @@ define('io.ox/contacts/widgets/exif', function () {
                 return vals;
             }
             break;
-        case 5:
-            // rational = two long values, first is numerator, second is denominator
+        case 5: // rational = two long values, first is numerator, second is denominator
             if (numValues === 1) {
                 return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
             } else {

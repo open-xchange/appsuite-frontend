@@ -67,7 +67,7 @@ define('io.ox/core/tk/autocomplete', [
         }, o || {});
 
         var scrollpane = o.container.scrollable();
-
+        var autoselect = {};
         var self = $(this),
 
             // last search
@@ -383,31 +383,24 @@ define('io.ox/core/tk/autocomplete', [
                 lastSearch.resolve('failed', query);
             },
 
-            autoSelectFirst = function () {
+            autoSelectFirst = function (value) {
+                // in case value is defined only autoselect when ENTER press was registered
+                if (value && !autoselect[value]) return;
+                delete autoselect[value];
                 scrollpane.find('.autocomplete-item:visible:not(.unselectable),' +
                                 '.autocomplete-item.default').first().click();
             },
 
-            //waits for finished server call/drawn dropdown
-            autoSelectFirstWait = _.debounce(function () {
-                /*
-                 * EXAMPLE:
-                 * 123...t°......4.t¹..t²..t³....
-                 * t°: search request ('123')
-                 * t¹: search response
-                 * t²: enter
-                 * t³: search request ('1234')
-                */
-                lastSearch.done(function (state, query) {
-                    if (self.val() !== query) {
-                        //t¹
-                        autoSelectFirstWait();
-                    } else {
-                        //else
-                        autoSelectFirst();
-                    }
-                });
-            }, o.delay),
+            _onSearchEnter = function () {
+                var val = self.val();
+                if (val.length < o.minLength) return;
+                // mark current input value as 'to be autoselected'
+                autoselect[val] = true;
+                // be sure current response is relevant and is already resolved
+                lastSearch.done(autoSelectFirst);
+                // ensure autocomplete response is/was triggered for current value (fnKeyUp is debounced)
+                fnKeyUpProcess();
+            },
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
@@ -446,7 +439,7 @@ define('io.ox/core/tk/autocomplete', [
                             if (o.mode === 'participant') {
                                 autoSelectFirst();
                             } else {
-                                autoSelectFirstWait();
+                                _onSearchEnter();
                             }
                         }
 
@@ -507,8 +500,10 @@ define('io.ox/core/tk/autocomplete', [
                         break;*/
                     case 13:
                         // enter
+                        // var val = $.trim($(this).val());
+                        // if (o.mode !== 'participant' && val.length > 0) {
                         if (o.mode !== 'participant') {
-                            autoSelectFirstWait();
+                            _onSearchEnter();
                         }
                         /* falls through */
                     case 9:
@@ -530,11 +525,13 @@ define('io.ox/core/tk/autocomplete', [
                 o.source(val)
                     .then(o.reduce)
                     .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
+
+                // check if some delayed auto select is registered
+                lastSearch.then(autoSelectFirst);
             },
 
-            // handle key up (debounced)
-            fnKeyUp = _.debounce(function (e, options) {
-
+            fnKeyUpProcess = function (e, options) {
+                e = e || new $.Event();
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
                 this.focus();
@@ -554,7 +551,10 @@ define('io.ox/core/tk/autocomplete', [
                     lastValue = val;
                     close();
                 }
-            }, o.delay);
+            },
+
+            // handle key up (debounced)
+            fnKeyUp = _.debounce(fnKeyUpProcess, o.delay);
 
         /**
          * get the selected item
