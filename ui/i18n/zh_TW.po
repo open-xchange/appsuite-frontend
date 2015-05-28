@@ -1286,7 +1286,7 @@ msgstr "生日"
 msgid "Black"
 msgstr "黑色"
 
-#: apps/io.ox/core/tk/flag-picker.js:77 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:86 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
@@ -3549,14 +3549,14 @@ msgstr "%s 晚安"
 msgid "Good morning, %s"
 msgstr "%s 早安"
 
-#: apps/io.ox/core/tk/flag-picker.js:79 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:88 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "灰色"
 
-#: apps/io.ox/core/tk/flag-picker.js:78 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:87 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
@@ -4128,14 +4128,14 @@ msgstr "書信‧符號"
 msgid "Life"
 msgstr "生活"
 
-#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "亮藍"
 
-#: apps/io.ox/core/tk/flag-picker.js:81 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
@@ -4662,7 +4662,7 @@ msgstr "大自然"
 msgid "New"
 msgstr "新增"
 
-#: apps/io.ox/core/folder/api.js:721 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:730 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新資料夾"
@@ -4908,7 +4908,7 @@ msgstr "無標題。"
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:273 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:75 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5186,7 +5186,7 @@ msgstr "選項 20"
 msgid "Options"
 msgstr "選項"
 
-#: apps/io.ox/core/tk/flag-picker.js:82 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
@@ -5391,7 +5391,7 @@ msgstr "電話號碼"
 msgid "Pick a time here"
 msgstr "請在此選擇一個時間"
 
-#: apps/io.ox/core/tk/flag-picker.js:83 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
@@ -5790,7 +5790,7 @@ msgstr "列印任務"
 msgid "Purchase confirmation"
 msgstr "確認購買"
 
-#: apps/io.ox/core/tk/flag-picker.js:80 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:89 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
@@ -5910,7 +5910,7 @@ msgstr "重複發生的任務需要有效到期日。"
 msgid "Recurring tasks need a valid start date."
 msgstr "重複發生的任務需要有效開始日期。"
 
-#: apps/io.ox/core/tk/flag-picker.js:76 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
@@ -6471,8 +6471,8 @@ msgstr "無法連線到伺服器"
 msgid "Server version"
 msgstr "伺服器版本"
 
-#: apps/io.ox/core/tk/flag-picker.js:145 module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:150 apps/io.ox/mail/toolbar.js:98
+#: apps/io.ox/core/tk/flag-picker.js:154 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:159 apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr "設定色彩"
 
@@ -8238,7 +8238,7 @@ msgstr "每年 %3$d 月的 %1$s %2$s"
 msgid "Years"
 msgstr "年"
 
-#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"

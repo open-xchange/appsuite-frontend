@@ -1325,7 +1325,7 @@ msgstr "Aniversări"
 msgid "Black"
 msgstr "Negru"
 
-#: apps/io.ox/core/tk/flag-picker.js:77 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:86 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
@@ -3625,14 +3625,14 @@ msgstr "Bună seara, %s"
 msgid "Good morning, %s"
 msgstr "Bună dimineața, %s"
 
-#: apps/io.ox/core/tk/flag-picker.js:79 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:88 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Gri"
 
-#: apps/io.ox/core/tk/flag-picker.js:78 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:87 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
@@ -4214,14 +4214,14 @@ msgstr "Litere • Simboluri"
 msgid "Life"
 msgstr "Viață"
 
-#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Albastru deschis"
 
-#: apps/io.ox/core/tk/flag-picker.js:81 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
@@ -4748,7 +4748,7 @@ msgstr "Natură"
 msgid "New"
 msgstr "Nou"
 
-#: apps/io.ox/core/folder/api.js:721 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:730 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Dosar nou"
@@ -4996,7 +4996,7 @@ msgstr "Niciun titlu."
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:273 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:75 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5280,7 +5280,7 @@ msgstr "Opțional 20"
 msgid "Options"
 msgstr "Opțiuni"
 
-#: apps/io.ox/core/tk/flag-picker.js:82 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
@@ -5485,7 +5485,7 @@ msgstr "Numere de telefon"
 msgid "Pick a time here"
 msgstr "Alege o oră aici"
 
-#: apps/io.ox/core/tk/flag-picker.js:83 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
@@ -5890,7 +5890,7 @@ msgstr "Sarcini publice"
 msgid "Purchase confirmation"
 msgstr "Confirmare achiziție"
 
-#: apps/io.ox/core/tk/flag-picker.js:80 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:89 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
@@ -6016,7 +6016,7 @@ msgid "Recurring tasks need a valid start date."
 msgstr ""
 "Este necesară o dată de început corectă pentru sarcinile care se repetă."
 
-#: apps/io.ox/core/tk/flag-picker.js:76 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
@@ -6579,8 +6579,8 @@ msgstr "Server inaccesibil"
 msgid "Server version"
 msgstr "Versiune server"
 
-#: apps/io.ox/core/tk/flag-picker.js:145 module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:150 apps/io.ox/mail/toolbar.js:98
+#: apps/io.ox/core/tk/flag-picker.js:154 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:159 apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr "Setează culoarea"
 
@@ -8410,7 +8410,7 @@ msgstr "Anual în data de %1$s %2$s a lunii %3$d"
 msgid "Years"
 msgstr "Ani"
 
-#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
