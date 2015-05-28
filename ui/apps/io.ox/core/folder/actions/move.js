@@ -16,10 +16,15 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/folder/picker',
     'io.ox/core/notifications',
     'io.ox/core/tk/dialogs',
-    'gettext!io.ox/core'
-], function (api, picker, notifications, dialogs, gt) {
+    'gettext!io.ox/core',
+    'io.ox/mail/api'
+], function (api, picker, notifications, dialogs, gt, mailAPI) {
 
     'use strict';
+
+    var virtualMapping = {
+        'virtual/myfolders': 'default0' + mailAPI.separator + 'INBOX'
+    };
 
     return {
 
@@ -119,6 +124,7 @@ define('io.ox/core/folder/actions/move', [
                 async: true,
                 addClass: 'zero-padding',
                 done: function (target, dialog) {
+                    if (!!virtualMapping[target]) target = virtualMapping[target];
                     api.move(id, target).then(dialog.close, dialog.idle).fail(notifications.yell);
                 },
                 customize: function (baton) {
@@ -129,6 +135,10 @@ define('io.ox/core/folder/actions/move', [
 
                     if (module === 'mail' && data.module === 'system') return;
                     if (same || !move) this.addClass('disabled');
+                },
+                disable: function (data) {
+                    var move = id === data.id || /^virtual\//.test(data.id);
+                    return move && !virtualMapping[data.id];
                 },
                 flat: flat,
                 indent: !flat,
