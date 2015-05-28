@@ -121,6 +121,11 @@ function recurse(defs, subDir, parent) {
 function compileLess(input, outputFile, sourceFileName) {
     var fileName = outputFile.toString();
     var themeName = fileName.slice(12, fileName.indexOf('/', 12));
+    var searchPaths = [
+        'apps/3rd.party/bootstrap/less',
+        'apps/3rd.party/font-awesome/less',
+        'apps/themes'
+    ];
     var importConfig = {
             reference: [
                 'variables.less',
@@ -134,7 +139,13 @@ function compileLess(input, outputFile, sourceFileName) {
     var imports = [];
     for (directive in importConfig) {
         importConfig[directive].forEach(function (file) {
-            imports.push('@import (' + directive + ') "' + file + '";');
+            searchPaths.forEach(function (path) {
+                try {
+                    readFile(less.modules.path.join(path, file)); // simple "fs.existsSync", will throw if file does not exist
+                    imports.push('@import (' + directive + ') "' + less.modules.path.join(path, file) + '";');
+                } catch (e) {
+                }
+            });
         });
     }
     input = imports.join('\n') + '\n' + input;
@@ -142,12 +153,7 @@ function compileLess(input, outputFile, sourceFileName) {
     new less.Parser({
         syncImport: true,
         relativeUrls: false,
-        paths: [
-            'apps/3rd.party/bootstrap/less',
-            'apps/3rd.party/font-awesome/less',
-            'apps/themes',
-            'apps/themes/' + themeName
-        ],
+        paths: searchPaths,
         filename: '' + sourceFileName
     }).parse(input, function (e, css) {
         if (e) return error(e, sourceFileName);
