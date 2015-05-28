@@ -24,9 +24,10 @@ define('io.ox/mail/api', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'io.ox/core/tk/visibility-api-util',
+    'io.ox/core/yell',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt) {
+], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, yell, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -258,7 +259,7 @@ define('io.ox/mail/api', [
                 // add new model
                 pool.add('detail', data);
             }
-        });
+        }).fail(yell);
     };
 
     api.getAll = function (options, useCache) {
