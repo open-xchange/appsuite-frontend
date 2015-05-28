@@ -122,16 +122,18 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
                         return lang[a] <= lang[b] ? -1 : +1;
                     });
 
-                if (langCount < maxLang && !_.url.hash('language-select')) {
+                if (langCount < maxLang && !_.url.hash('language-select') && _.device('!smartphone')) {
                     for (id in langSorted) {
                         i++;
-                        node.attr({ 'role': 'menu', 'aria-labelledby': 'io-ox-languages-label' }).append(
-                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '" lang="' + langSorted[id] + '">')
-                                .on('click', { id: langSorted[id] }, $.proxy(this.onChangeLanguage, this))
-                                .text(lang[langSorted[id]])
+                        node.append(
+                            $('<li>').append(
+                                $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '" lang="' + langSorted[id] + '">')
+                                    .on('click', { id: langSorted[id] }, $.proxy(this.onChangeLanguage, this))
+                                    .text(lang[langSorted[id]])
+                            )
                         );
                         if (i < langCount && langCount < maxLang) {
-                            node.append($('<span class="language-delimiter">').text('\u00A0\u00A0\u2022\u00A0 '));
+                            // node.append($('<span class="language-delimiter">').text('\u00A0\u00A0\u2022\u00A0 '));
                         }
                     }
                 } else {

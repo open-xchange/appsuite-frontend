@@ -154,6 +154,7 @@ html, body {
 }
 
 #io-ox-login-container {
+    position: relative;
     color: white;
     height: 100%;
     width: 100%;
@@ -185,10 +186,14 @@ html, body {
 }
 
 #io-ox-login-header {
-    h1 { margin: 1em 0 1em 0 };
+    h1 {
+        margin: 0;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    };
     height: 45%;
     text-align: right;
-    vertical-align: middle;
     cursor: default;
 }
 
@@ -196,7 +201,6 @@ html, body {
 
 #io-ox-login-form-container {
     height: 40%;
-    vertical-align: top;
 }
 
 #io-ox-login-username:invalid:focus {
@@ -204,10 +208,8 @@ html, body {
     border: 1px solid #CCC;
 }
 
-#io-ox-login-store label {
-    font-weight: normal;
+#io-ox-login-store {
     margin-top: 0;
-    padding-left: 20px; // to fix checkbox' margin-left: -20px
 }
 
 #login-box-content td {
@@ -235,22 +237,33 @@ html, body {
 }
 
 #io-ox-login-footer {
+    .footer-wrapper {
+        position: absolute;
+        bottom: 0;
+    }
     height: 15%;
-    vertical-align: bottom;
 }
 
 #io-ox-languages {
-    margin-bottom: 0.7em;
     select { margin-top: 0.6em; }
-    i {
-        cursor: default;
-        font-style: normal;
+    ul {
+        display: inline;
+        padding: 0 0 0 9px;
+        li {
+            display: inline-block;
+            a {
+                white-space: nowrap;
+                &:after {
+                    content: "•";
+                    padding: 0 7px;
+                    color: fade(@link-color, 30%);
+                }
+            }
+            &:last-child a:after {
+                content: "";
+            }
+        }
     }
-    a { white-space: nowrap; }
-}
-
-.language-delimiter {
-    color: fade(@link-color, 30%);
 }
 
 #io-ox-copyright {
@@ -277,7 +290,7 @@ html, body {
 }
 
 @media (max-width: 767px) {
-    #io-ox-login-container {
+    #io-ox-login-header {
         height: 15%;
         h1 { font-size: 14pt; }
     }
