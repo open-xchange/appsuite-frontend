@@ -23,6 +23,7 @@ define('io.ox/files/main', [
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
+    'io.ox/files/share/myshares',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
@@ -37,7 +38,7 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/upload/dropzone'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api, sidebar, SidebarView) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, MySharesView, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
 
     'use strict';
 
@@ -314,6 +315,7 @@ define('io.ox/files/main', [
          * Respond to virtual myshares
          */
         'myshares': function (app) {
+            if (!capabilities.has('publication')) return;
 
             // add virtual folder to folder api
             folderAPI.virtual.add('virtual/myshares', function () {
@@ -337,13 +339,22 @@ define('io.ox/files/main', [
                 }
             });
 
-            app.folderView.tree.on('virtual', function (id) {
-                if (id !== 'virtual/myshares') return;
-                console.log('show myshares', id);
-            });
-
-            app.folderView.tree.on('change', function (id) {
-                console.log('hide myshares', id);
+            app.folderView.tree.on({
+                'virtual': function (id) {
+                    if (id !== 'virtual/myshares') return;
+                    if (app.myshares) {
+                        app.myshares.$el.show().siblings().hide();
+                    } else {
+                        app.myshares = new MySharesView();
+                        app.getWindow().nodes.body.prepend(app.myshares.render().$el);
+                        app.myshares.$el.siblings().hide();
+                    }
+                },
+                'change': function () {
+                    if (app.myshares) {
+                        app.myshares.$el.hide().siblings().show();
+                    }
+                }
             });
         },
 

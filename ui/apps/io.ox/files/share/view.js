@@ -27,7 +27,7 @@ define('io.ox/files/share/view', [
     'use strict';
 
     var INDEX = 0,
-        POINT = 'io.ox/files/share',
+        POINT = 'io.ox/files/share/wizard',
         trans = {
             invite: gt('Invite people via email. Every recipient will get an individual link to access the shared files.'),
             link: gt('Create a link to copy and paste in an email, instant messenger or social network. Please note that anyone who gets the link can access the share.')
