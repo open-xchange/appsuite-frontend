@@ -887,7 +887,9 @@ define('io.ox/core/folder/api',
             flat({ module: module, cache: false });
         });
         // go!
-        http.resume();
+        http.resume().done(function () {
+            virtual.refresh();
+        });
     }
 
     ox.on('please:refresh refresh^', refresh);
