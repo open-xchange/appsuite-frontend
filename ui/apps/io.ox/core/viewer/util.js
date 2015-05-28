@@ -10,7 +10,8 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/util', [
-], function () {
+    'io.ox/core/http'
+], function (CoreHTTP) {
 
     'use strict';
 
@@ -136,103 +137,7 @@ define('io.ox/core/viewer/util', [
     };
 
     /**
-     * Extracts a property value from the passed object. If the property does
-     * not exist, returns the specified default value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some properties. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the property to be returned.
-     *
-     * @param {Any} [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified property.
-     *
-     * @returns {Any}
-     *  The value of the specified property, or the default value.
-     */
-    Util.getOption = function (options, name, def) {
-        return (_.isObject(options) && (name in options)) ? options[name] : def;
-    };
-
-    /**
-     * Extracts a boolean property from the passed object. If the property does
-     * not exist, or is not a boolean value, returns the specified default
-     * value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some properties. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the boolean property to be returned.
-     *
-     * @param {Any} [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified property, or if the property is
-     *  not a boolean value. May be any value (not only booleans).
-     *
-     * @returns {Any}
-     *  The value of the specified property, or the default value.
-     */
-    Util.getBooleanOption = function (options, name, def) {
-        var value = Util.getOption(options, name);
-        return _.isBoolean(value) ? value : def;
-    };
-
-    /**
-     * Creates and returns a merged options map from the passed objects. Unlike
-     * Underscore's extend() method, does not modify the passed objects, but
-     * creates and returns a clone. Additionally, extends embedded plain JS
-     * objects deeply instead of replacing them, for example, extending the
-     * objects {a:{b:1}} and {a:{c:2}} will result in {a:{b:1,c:2}}.
-     *
-     * @param {Object} [...]
-     *  One or more objects whose properties will be inserted into the
-     *  resulting object.
-     *
-     * @returns {Object}
-     *  A new object containing all properties of the passed objects.
-     */
-    Util.extendOptions = function () {
-
-        var // the resulting options
-            result = {};
-
-        function isPlainObject(value) {
-            return _.isObject(value) && (value.constructor === Object);
-        }
-
-        function extend(options, extensions) {
-            _.each(extensions, function (value, name) {
-                if (isPlainObject(value)) {
-                    // extension value is a plain object: ensure that the options map contains an embedded object
-                    if (!isPlainObject(options[name])) {
-                        options[name] = {};
-                    }
-                    extend(options[name], value);
-                } else {
-                    // extension value is not a plain object: clear old value, even if it was an object
-                    options[name] = value;
-                }
-            });
-        }
-
-        // add all objects to the clone
-        for (var index = 0; index < arguments.length; index += 1) {
-            if (_.isObject(arguments[index])) {
-                extend(result, arguments[index]);
-            }
-        }
-
-        return result;
-    };
-
-    /**
      * Creates and returns the URL of a server request.
-     *
-     * @param {String} module
-     *  The name of the server module.
      *
      * @param {Object} [params]
      *  Additional parameters inserted into the URL.
@@ -242,16 +147,52 @@ define('io.ox/core/viewer/util', [
      *  application is not connected to a document file, or the current
      *  session is invalid.
      */
-    Util.getServerModuleUrl = function (module, params) {
+    Util.getConverterUrl = function (params) {
+
         // return nothing if no file is present
         if (!ox.session) {
             return;
         }
-        var currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID');
+
+        var currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID'),
+            module = 'oxodocumentconverter';
+
         // add default parameters (session and UID), and file parameters
         params = _.extend({ session: ox.session, uid: currentAppUniqueID }, params);
+
         // build and return the resulting URL
         return ox.apiRoot + '/' + module + '?' + _.map(params, function (value, name) { return name + '=' + value; }).join('&');
+
+    };
+
+    /**
+     * Sends a request to the document converter.
+     *
+     * @params {Object} params
+     *  an object containing converter parameters.
+     *
+     * @returns {jQuery.Promise}
+     *  the promise from the Ajax request enriched with an abort method.
+     */
+    Util.sendConverterRequest = function (params) {
+
+        var // properties passed to the server request
+            requestProps = { module:'oxodocumentconverter', params: params },
+            // the Deferred object representing the core AJAX request
+            ajaxRequest = null,
+            // the Promise returned by this method
+            promise = null;
+
+        // send the AJAX request
+        ajaxRequest = CoreHTTP.GET(requestProps);
+
+        // reject, if the response contains 'hasErrors:true'
+        promise = ajaxRequest.then(function (response) {
+            return response.hasErrors ? $.Deferred().reject(response) : response;
+        });
+
+        // add an abort() method, forward invocation to AJAX request
+        return _.extend(promise, { abort: function () { ajaxRequest.abort(); } });
     };
 
     return Util;

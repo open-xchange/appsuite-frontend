@@ -41,8 +41,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
         initialize: function (options) {
             _.extend(this, options);
-            //The name of the document converter server module.
-            this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = _.device('desktop') ? 30 : 15;
             // magic module id to source map
@@ -218,7 +216,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
             var documentContainer = this.documentContainer,
                 convertParams = this.getConvertParams(this.model.get('source')),
-                documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
+                documentUrl = Util.getConverterUrl(convertParams);
 
             /**
              * Returns the pageNode with the given pageNumber.
@@ -332,7 +330,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.documentLoad.reject();
             }
 
+            // create a pdf document object with the document PDF url
             this.pdfDocument = new PDFDocument(documentUrl);
+
             // display loading animation
             documentContainer.busy();
 
