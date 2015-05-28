@@ -950,29 +950,31 @@ define('io.ox/mail/api', [
      * @return { deferred }
      */
     api.send = function (data, files, form) {
-
         var deferred,
             flatten = function (recipient) {
                 var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
                     address = String(recipient[1] || ''),
                     typesuffix = recipient[2] || '',
-                    isMSISDN;
+                    isMSISDN = typesuffix === '/TYPE=PLMN';
+
                 // don't send display name for MSISDN numbers
-                isMSISDN = typesuffix === '/TYPE=PLMN' || /\/TYPE=PLMN$/.test(address);
-                // always use angular brackets!
-                if (isMSISDN) return '<' + address + typesuffix + '>';
+                if (isMSISDN && !/\/TYPE=PLMN$/.test(address)) {
+                    name = null;
+                    address = address + typesuffix;
+                }
                 // otherise ... check if name is empty or name and address are identical
-                return name === '' || name === address ? address : '"' + name + '" <' + address + '>';
+                if (name === '' || name === address) name = null;
+                return [name, address];
             };
 
         // clone data (to avoid side-effects)
         data = _.clone(data);
 
         // flatten from, to, cc, bcc
-        data.from = _(data.from).map(flatten).join(', ');
-        data.to = _(data.to).map(flatten).join(', ');
-        data.cc = _(data.cc).map(flatten).join(', ');
-        data.bcc = _(data.bcc).map(flatten).join(', ');
+        data.from = _(data.from).map(flatten);
+        data.to = _(data.to).map(flatten);
+        data.cc = _(data.cc).map(flatten);
+        data.bcc = _(data.bcc).map(flatten);
 
         function mapArgs(obj) {
             return {
