@@ -12,10 +12,10 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt": "^0.4.5",
     "assemble-less": "^0.7.0",
-    "underscore": "^1.7.0",
-    "less": "^1.7.0"
+    "underscore": "^1.8.0",
+    "less": "^1.7.5"
   },
   "optionalDependencies": {
-    "open-xchange-shared-grunt-config": "^0.8.0"
+    "open-xchange-shared-grunt-config": "^0.11.4"
   }
 }
