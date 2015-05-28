@@ -70,12 +70,29 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
             this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onBeforeClose);
+            this.listenTo(this.viewerEvents, 'viewer:document:scrolltopage', this.onScrollToPage);
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // defaults
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
+        },
+
+        /**
+         * Scroll-to-page handler:
+         * - scrolls to the desired page number.
+         * @param {Number} pageNumber
+         */
+        onScrollToPage: function (pageNumber) {
+            if (this.isVisible() && _.isNumber(pageNumber) && pageNumber > 0 && pageNumber <= this.pages.length) {
+                //console.warn('DocumentView.onScrollToPage()', pageNumber);
+                var targetPageNode = this.documentContainer.find('.document-page[data-page=' + pageNumber + ']');
+                if (targetPageNode.length !== 0) {
+                    var targetScrollTop = targetPageNode[0].offsetTop - this.PAGE_SIDE_MARGIN;
+                    this.documentContainer.scrollTop(targetScrollTop);
+                }
+            }
         },
 
         /**
@@ -94,6 +111,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  Scroll event handler:
          *  -shows the current page in the caption on scroll.
          *  -blends in navigation controls.
+         *  -selects the corresponding thumbnail in the thumbnail pane.
          */
         onScrollHandler: function () {
             var currentDominantPageIndex = this.currentDominantPageIndex,
@@ -108,6 +126,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
                 this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
+                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex);
             }
             this.viewerEvents.trigger('viewer:blendnavigation');
         },
@@ -261,6 +280,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 _.times(pageCount, function (index) {
                     var documentPage = $('<div class="document-page">'),
                         pageSize = self.pdfView.getRealPageSize(index + 1);
+                    documentPage.attr('data-page', index + 1);
                     documentContainer.append(documentPage.attr(pageSize).css(pageSize));
                 });
                 // save values to the view instance, for performance
@@ -285,6 +305,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 if (lastScrollPosition) {
                     this.$el.find('.document-container').scrollTop(lastScrollPosition);
                 }
+                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage());
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
@@ -527,7 +548,9 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             this.unload(true);
             this.$el.off();
-            this.thumbnailsView.remove();
+            if (this.thumbnailsView) {
+                this.thumbnailsView.remove();
+            }
         }
 
     });

@@ -438,8 +438,10 @@
             }
         }
 
-        @document-thumbnailview-bgcolor: rgba(255,255,255,0.2);
-        @document-thumbnail-link-focus-color: rgba(255,255,255,0.2);
+        @document-thumbnailview-bgcolor: #222222;
+        @document-thumbnail-link-focus-color: #777777;
+        @document-thumbnail-link-hover-color: #444444;
+        @document-thumbnail-link-selected-color: #777777;
         @document-thumbnail-bgcolor: #ffffff;
         @document-thumbnail-border-color: #e0e0e0;
         @document-thumbnail-number-color: #ffffff;
@@ -447,17 +449,27 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 120px;
+            width: 150px;
             height: 100%;
             background: @document-thumbnailview-bgcolor;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
             .document-thumbnail-link {
-                display: inline-block;
+                display: block;
                 width: 120px;
                 height: 150px;
                 padding: 20px 0;
-                &:hover, &:active, &:focus {
-                    background: @document-thumbnail-link-focus-color
+                margin: 2px auto;
+                cursor: pointer;
+                &:hover {
+                    background: @document-thumbnail-link-hover-color;
+                    text-decoration: none;
+                }
+                &:active, &:focus {
+                    background: @document-thumbnail-link-focus-color;
+                }
+                &.selected {
+                    background: @document-thumbnail-link-selected-color;
                 }
             }
             .document-thumbnail {
@@ -471,6 +483,7 @@
                 color: @document-thumbnail-number-color;
                 text-align:center;
                 margin-top: 5px;
+                font-weight: bold;
             }
         }
 
