@@ -138,8 +138,8 @@ function compileLess(input, outputFile, sourceFileName) {
         };
     var imports = [];
     for (directive in importConfig) {
-        importConfig[directive].forEach(function (file) {
-            searchPaths.forEach(function (path) {
+        searchPaths.forEach(function (path) {
+            importConfig[directive].forEach(function (file) {
                 try {
                     readFile(less.modules.path.join(path, file)); // simple "fs.existsSync", will throw if file does not exist
                     imports.push('@import (' + directive + ') "' + less.modules.path.join(path, file) + '";');
