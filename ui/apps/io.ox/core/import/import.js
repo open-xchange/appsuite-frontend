@@ -165,7 +165,8 @@ define('io.ox/core/import/import',
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
                         failHandler = function (data) {
-                            var list = _(data).chain()
+                            var list = _(data)
+                                .chain()
                                 .map(function (item) {
                                     if (item && item.code === 'CON-0600') {
                                         //append first value which caused conversion error (csv import)
@@ -173,12 +174,16 @@ define('io.ox/core/import/import',
                                     }
                                     return item && item.error;
                                 })
-                                .compact();
-                            notifications.yell('error', list.length ?
-                                list.join('\n\n') :
-                                //#. Error message if calender import failed
-                                gt('There was no appointment data to import')
-                            );
+                                .compact()
+                                .value();
+                            notifications.yell({
+                                type: 'error',
+                                message: list.length ?
+                                    list.join('\n\n') :
+                                    //#. Error message if calender import failed
+                                    gt('There was no appointment data to import'),
+                                duration: -1
+                            });
                             popup.idle();
                         };
 
