@@ -371,8 +371,7 @@ define('io.ox/files/main', [
                         );
                         sidebarView.$el.find('.io-ox-center').wrapAll('<div class="wrapper">');
                     } else {
-                        var modelData = _(api.resolve(app.listView.selection.get(), false)).invoke('toJSON'),
-                            fileModel = app.listView.collection.findWhere({ id: modelData[0].id });
+                        var fileModel = app.listView.collection.get(app.listView.selection.get()[0]);
                         sidebarView.render(fileModel);
                         sidebarView.renderSections();
 

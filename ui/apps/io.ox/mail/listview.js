@@ -318,7 +318,7 @@ define('io.ox/mail/listview', [
 
         reprocessThread: function (model) {
             // only used when in thread mode
-            if (!this.threaded) return;
+            if (!this.options.threaded) return;
 
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);

@@ -461,7 +461,7 @@ define('io.ox/core/tk/list', [
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(function () {
                         self.selection.isScrolling = false;
-                    }, 250);
+                    }, 500);
                 });
             }
 

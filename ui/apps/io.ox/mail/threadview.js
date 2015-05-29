@@ -277,9 +277,9 @@ define('io.ox/mail/threadview', [
         },
 
         onRemove: function (model) {
-
             var children = this.getItems(),
                 li = children.filter('[data-cid="' + model.cid + '"]'),
+                first = li.length ? li.attr('data-cid') && children.first().attr('data-cid') : false,
                 top = this.$messages.scrollTop();
 
             if (li.length === 0) return;
@@ -292,6 +292,11 @@ define('io.ox/mail/threadview', [
 
             // clear view if this was the last message
             if (children.length === 1) this.empty(); else this.updateHeader();
+
+            // auto open next mail if this was the latest mail in the thread
+            if (children.length > 1 && first) {
+                this.autoSelectMail();
+            }
         },
 
         onPoolRemove: function (model) {

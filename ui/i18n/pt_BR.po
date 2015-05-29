@@ -200,7 +200,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:441 module:io.ox/core
+#: apps/io.ox/settings/main.js:451 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -1024,7 +1024,7 @@ msgid "Application Toolbar"
 msgstr "Barra de ferramentas do aplicativo"
 
 #: apps/io.ox/mail/main.js:1175 module:io.ox/mail
-#: apps/io.ox/settings/main.js:513 module:io.ox/core
+#: apps/io.ox/settings/main.js:523 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "O aplicativo pode não funcionar como esperado até este problema ser "
@@ -1278,7 +1278,7 @@ msgid "Back to appointment"
 msgstr "Voltar ao compromisso"
 
 #: apps/io.ox/core/settings/pane.js:63 module:io.ox/core
-#: apps/io.ox/settings/main.js:415
+#: apps/io.ox/settings/main.js:425
 msgid "Basic settings"
 msgstr "Configurações básicas"
 
@@ -1302,7 +1302,7 @@ msgstr "Aniversários"
 msgid "Black"
 msgstr "Preto"
 
-#: apps/io.ox/core/tk/flag-picker.js:77 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:86 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
@@ -1419,8 +1419,8 @@ msgstr "Visualização do calendário"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:682
-#: apps/io.ox/files/main.js:733 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:681
+#: apps/io.ox/files/main.js:732 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1708,7 +1708,7 @@ msgid "Close"
 msgstr "Fechar"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:715 module:io.ox/files
+#: apps/io.ox/files/main.js:714 module:io.ox/files
 #: apps/io.ox/files/view-options.js:213 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2748,7 +2748,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:487
 #: module:io.ox/files apps/io.ox/files/actions.js:497
 #: apps/io.ox/files/main.js:150 apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:685 apps/io.ox/files/main.js:733
+#: apps/io.ox/files/main.js:684 apps/io.ox/files/main.js:732
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:513
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3435,8 +3435,8 @@ msgstr ""
 "A pasta com nome \"%1$s\" será oculta. Ative a configuração \" Exibir pastas "
 "e arquivos ocultos\" para acessar essa pasta novamente."
 
-#: apps/io.ox/core/folder/node.js:467 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:474
+#: apps/io.ox/core/folder/node.js:474 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:481
 msgid "Folder-specific actions"
 msgstr "Ações específicas de pasta"
 
@@ -3597,14 +3597,14 @@ msgstr "Boa noite, %s"
 msgid "Good morning, %s"
 msgstr "Bom dia, %s"
 
-#: apps/io.ox/core/tk/flag-picker.js:79 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:88 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Cinza"
 
-#: apps/io.ox/core/tk/flag-picker.js:78 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:87 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
@@ -4185,14 +4185,14 @@ msgstr "Cartas • símbolos"
 msgid "Life"
 msgstr "Vida"
 
-#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Azul claro"
 
-#: apps/io.ox/core/tk/flag-picker.js:81 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
@@ -4322,7 +4322,7 @@ msgid "Mail and Messaging"
 msgstr "E-mail e mensagem"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:84
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:421
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:431
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "E-mail e contas sociais"
@@ -4645,7 +4645,7 @@ msgstr "Mover"
 msgid "Move all messages"
 msgstr "Abrir/fechar todas as mensagens"
 
-#: apps/io.ox/core/folder/actions/move.js:137 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:147 module:io.ox/core
 msgid "Move folder"
 msgstr "Mover pasta"
 
@@ -4719,12 +4719,12 @@ msgstr "Natureza"
 msgid "New"
 msgstr "Novo"
 
-#: apps/io.ox/core/folder/api.js:721 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:730 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Nova pasta"
 
-#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1367 module:io.ox/mail
 msgid "New Mail"
 msgstr "Novo e-mail"
 
@@ -4967,7 +4967,7 @@ msgstr "Nenhum título."
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:273 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:75 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5248,7 +5248,7 @@ msgstr "Opcional 20"
 msgid "Options"
 msgstr "Opções"
 
-#: apps/io.ox/core/tk/flag-picker.js:82 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
@@ -5453,7 +5453,7 @@ msgstr "Números de telefone"
 msgid "Pick a time here"
 msgstr "Escolha uma hora aqui"
 
-#: apps/io.ox/core/tk/flag-picker.js:83 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
@@ -5858,7 +5858,7 @@ msgstr "Tarefas públicas"
 msgid "Purchase confirmation"
 msgstr "Obter confirmação"
 
-#: apps/io.ox/core/tk/flag-picker.js:80 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:89 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
@@ -5982,7 +5982,7 @@ msgstr "Tarefas recorrentes necessitam de uma data de término válida."
 msgid "Recurring tasks need a valid start date."
 msgstr "Tarefas recorrentes necessitam de uma data de início válida. "
 
-#: apps/io.ox/core/tk/flag-picker.js:76 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
@@ -6329,7 +6329,7 @@ msgstr "Salvo em"
 msgid "Saved in:"
 msgstr "Salvo em"
 
-#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1091 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Salvar e-mail anexo"
 
@@ -6544,13 +6544,13 @@ msgstr "Servidor inacessível"
 msgid "Server version"
 msgstr "Versão do servidor"
 
-#: apps/io.ox/core/tk/flag-picker.js:145 module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:150 apps/io.ox/mail/toolbar.js:98
+#: apps/io.ox/core/tk/flag-picker.js:154 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:159 apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr "Definir cor"
 
 #: apps/io.ox/core/main.js:794 module:io.ox/core apps/io.ox/core/main.js:945
-#: apps/io.ox/settings/main.js:122 apps/io.ox/settings/main.js:441
+#: apps/io.ox/settings/main.js:130 apps/io.ox/settings/main.js:451
 msgid "Settings"
 msgstr "Configurações"
 
@@ -7886,7 +7886,7 @@ msgstr "Top 10 para quem você envia e-mail"
 msgid "Total cost"
 msgstr "Custo total"
 
-#: apps/io.ox/core/folder/node.js:451 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:458 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Total: %1$d"
 
@@ -8004,7 +8004,7 @@ msgstr "Nova inscrição"
 msgid "Unread"
 msgstr "Não lido"
 
-#: apps/io.ox/core/folder/node.js:452 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:459 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Não lido: %1$d"
 
@@ -8372,7 +8372,7 @@ msgstr "Anualmente no %1$s %2$s de %3$d"
 msgid "Years"
 msgstr "Anos"
 
-#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
@@ -8472,7 +8472,7 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Você pode salvar rapidamente suas alterações com Ctrl+Enter."
 
-#: apps/io.ox/core/folder/actions/move.js:59 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:64 module:io.ox/core
 msgid "You cannot move items to virtual folders"
 msgstr "Você não pode mover itens para pastas virtuais"
 

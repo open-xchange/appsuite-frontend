@@ -220,11 +220,11 @@ msgid "Further information"
 msgstr "Dodatkowe informacje"
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803 module:io.ox/tours
+#: apps/io.ox/tours/main.js:806 module:io.ox/tours
 msgid "Getting started"
 msgstr "Wprowadzenie"
 
-#: apps/io.ox/tours/main.js:829 module:io.ox/tours
+#: apps/io.ox/tours/main.js:832 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Przewodnik po tej aplikacji"
 

@@ -337,6 +337,13 @@ define('io.ox/core/folder/node', [
                 'destroy': this.destroy.bind(this)
             });
 
+            var offset = 0;
+            if (o.tree.options.highlightclass === 'visible-selection-smartphone') {
+                // cannot be done in css because dynamic padding-left is applied
+                // using a margin would result in unclickable area and no selection background-color on the left side
+                offset = 22;
+            }
+
             // draw scaffold
             this.$el
                 .attr({
@@ -354,7 +361,7 @@ define('io.ox/core/folder/node', [
                 .append(
                     // folder
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
-                    .css('padding-left', o.level * this.indentation)
+                    .css('padding-left', (o.level * this.indentation) +  offset)
                     .append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),

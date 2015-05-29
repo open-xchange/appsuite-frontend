@@ -93,6 +93,9 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             // unescape inner quotes
             str = str.replace(/\\"/g, '"');
 
+            // unescape escaped backslashes
+            str = str.replace(/\\{2}/g, '\\');
+
             return str;
         },
 

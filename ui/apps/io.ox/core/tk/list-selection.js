@@ -23,14 +23,14 @@ define('io.ox/core/tk/list-selection', [
         isTouch = _.device('touch'),
         behavior = settings.get('selectionMode', 'normal'),
         // mobile stuff
-        THRESHOLD_X = 5, // touchmove threshold for mobiles in PX
-        THRESHOLD_STICK = 40, // threshold in px
-        THRESHOLD_REMOVE = 250, //px
-        LOCKDISTANCE = 190,
-        MOVE_UP_TIME = 200,
-        UNFOLD_TIME = 100,
-        UNFOLD_TIME_FULL = 50,
-        RESET_CELL_TIME = 100,
+        THRESHOLD_X =        20, // touchmove threshold for mobiles in PX
+        THRESHOLD_STICK =    40, // threshold in px
+        THRESHOLD_REMOVE =  250, //px
+        LOCKDISTANCE =      190,
+        MOVE_UP_TIME =      200,
+        UNFOLD_TIME =       100,
+        UNFOLD_TIME_FULL =   50,
+        RESET_CELL_TIME =   100,
         CELL_HEIGHT = '-68px',
         cell;
 
@@ -502,21 +502,31 @@ define('io.ox/core/tk/list-selection', [
                     });
                     self.view.off('remove-mobile', resetStyle);
                 };
-            // animate cell and delete mail afterwards
-            cellsBelow.velocity({
-                translateY: CELL_HEIGHT
-            }, {
-                duration: MOVE_UP_TIME,
-                complete: function () {
-                    self.view.trigger('selection:delete', [cid]);
-                    self.view.on('remove-mobile', resetStyle, cellsBelow);
-                    self.view.trigger('selection:delete', [cid]);
-                    self.currentSelection.swipeCell.remove();
-                    self.currentSelection.swipeCell = null;
-                    $(self.view).removeClass('unfolded');
-                    self.currentSelection.unfolded = false;
-                }
-            });
+            if (cellsBelow.length > 0) {
+                // animate cell and delete mail afterwards
+                cellsBelow.velocity({
+                    translateY: CELL_HEIGHT
+                }, {
+                    duration: MOVE_UP_TIME,
+                    complete: function () {
+                        self.view.trigger('selection:delete', [cid]);
+                        self.view.on('remove-mobile', resetStyle, cellsBelow);
+                        self.view.trigger('selection:delete', [cid]);
+                        self.currentSelection.swipeCell.remove();
+                        self.currentSelection.swipeCell = null;
+                        $(self.view).removeClass('unfolded');
+                        self.currentSelection.unfolded = false;
+                    }
+                });
+            } else {
+                self.view.trigger('selection:delete', [cid]);
+                self.view.on('remove-mobile', resetStyle, cellsBelow);
+                self.view.trigger('selection:delete', [cid]);
+                self.currentSelection.swipeCell.remove();
+                self.currentSelection.swipeCell = null;
+                $(self.view).removeClass('unfolded');
+                self.currentSelection.unfolded = false;
+            }
         },
 
         onSwipeMore: function (e) {
@@ -722,22 +732,34 @@ define('io.ox/core/tk/list-selection', [
 
                         var cellsBelow = $(self).nextAll();
 
-                        cellsBelow.velocity({
-                            translateY: CELL_HEIGHT
-                        }, {
-                            duration: MOVE_UP_TIME,
-                            complete: function () {
-                                var node = $(self).closest(SELECTABLE),
-                                cid = node.attr('data-cid');
-                                // bind reset event
-                                theView.on('remove-mobile', resetStyle, cellsBelow);
-                                theView.trigger('selection:delete', [cid]);
-                                self.swipeCell.remove();
-                                self.swipeCell = null;
-                                $(self).removeClass('unfolded');
-                                self.unfolded = false;
-                            }
-                        });
+                        if (cellsBelow.length > 0) {
+                            cellsBelow.velocity({
+                                translateY: CELL_HEIGHT
+                            }, {
+                                duration: MOVE_UP_TIME,
+                                complete: function () {
+                                    var node = $(self).closest(SELECTABLE),
+                                    cid = node.attr('data-cid');
+                                    // bind reset event
+                                    theView.on('remove-mobile', resetStyle, cellsBelow);
+                                    theView.trigger('selection:delete', [cid]);
+                                    self.swipeCell.remove();
+                                    self.swipeCell = null;
+                                    $(self).removeClass('unfolded');
+                                    self.unfolded = false;
+                                }
+                            });
+                        } else {
+                            var node = $(self).closest(SELECTABLE),
+                            cid = node.attr('data-cid');
+                            // bind reset event
+                            theView.on('remove-mobile', resetStyle, cellsBelow);
+                            theView.trigger('selection:delete', [cid]);
+                            self.swipeCell.remove();
+                            self.swipeCell = null;
+                            $(self).removeClass('unfolded');
+                            self.unfolded = false;
+                        }
                     }
                 });
             } else if (this.distanceX) {

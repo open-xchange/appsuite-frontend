@@ -695,12 +695,12 @@ msgid "To sign out, click the System menu icon on the upper right side of the me
 msgstr ""
 
 #. Tour name; general introduction
-#: apps/io.ox/tours/main.js:803
+#: apps/io.ox/tours/main.js:806
 #: module:io.ox/tours
 msgid "Getting started"
 msgstr ""
 
-#: apps/io.ox/tours/main.js:829
+#: apps/io.ox/tours/main.js:832
 #: module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr ""

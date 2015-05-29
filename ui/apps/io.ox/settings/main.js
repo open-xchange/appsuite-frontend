@@ -48,7 +48,8 @@ define('io.ox/settings/main', [
         currentSelection = null,
         previousSelection = null,
         pool = api.pool,
-        mainGroups = [];
+        mainGroups = [],
+        disabledSettingsPanes;
 
     // function updateExpertMode() {
     //     var nodes = $('.expertmode');
@@ -66,6 +67,13 @@ define('io.ox/settings/main', [
             title: 'Settings',
             chromeless: true
         }));
+
+        function disableListetSettingsPanes(subgroup) {
+            _.each(ext.point(subgroup).list(), function (p) {
+                var result = _.indexOf(disabledSettingsPanes, p.id) === -1 ? false : true;
+                if (result) ext.point(subgroup).disable(p.id);
+            });
+        }
 
         var changeStatus = false,
             ignoreChangeEvent,
@@ -161,12 +169,12 @@ define('io.ox/settings/main', [
 
         var getAllSettingsPanes = function () {
             var def = $.Deferred(),
-                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [],
                 actionPoints = {
                     'redirect': 'io.ox/autoforward',
                     'vacation': 'io.ox/vacation'
                 };
 
+            disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
             function filterAvailableSettings(point) {
                 var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
                 if (expertmode && shown) {
@@ -303,6 +311,7 @@ define('io.ox/settings/main', [
 
             function processSubgroup(extPoint, subgroup) {
                 subgroup = subgroup + '/' + extPoint.id;
+                disableListetSettingsPanes(subgroup);
                 var list = _(ext.point(subgroup).list()).map(function (p) {
                     processSubgroup(p, subgroup);
 
@@ -324,6 +333,7 @@ define('io.ox/settings/main', [
             _.each(groupList, function (val) {
                 if (val.subgroup) {
                     mainGroups.push('virtual/settings/' + val.id);
+                    disableListetSettingsPanes(val.subgroup);
                     var list = _(ext.point(val.subgroup).list()).map(function (p) {
                         processSubgroup(p, val.subgroup);
 

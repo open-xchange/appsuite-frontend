@@ -197,7 +197,7 @@ msgstr ""
 "%5$s%4$s\n"
 "%2$s %3$s%1$s"
 
-#: apps/io.ox/settings/main.js:441 module:io.ox/core
+#: apps/io.ox/settings/main.js:451 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -1014,7 +1014,7 @@ msgid "Application Toolbar"
 msgstr "應用程式工具列"
 
 #: apps/io.ox/mail/main.js:1175 module:io.ox/mail
-#: apps/io.ox/settings/main.js:513 module:io.ox/core
+#: apps/io.ox/settings/main.js:523 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
@@ -1262,7 +1262,7 @@ msgid "Back to appointment"
 msgstr "回到約會"
 
 #: apps/io.ox/core/settings/pane.js:63 module:io.ox/core
-#: apps/io.ox/settings/main.js:415
+#: apps/io.ox/settings/main.js:425
 msgid "Basic settings"
 msgstr "基礎設定"
 
@@ -1286,7 +1286,7 @@ msgstr "生日"
 msgid "Black"
 msgstr "黑色"
 
-#: apps/io.ox/core/tk/flag-picker.js:77 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:86 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
@@ -1401,8 +1401,8 @@ msgstr "日曆視圖"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:682
-#: apps/io.ox/files/main.js:733 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:681
+#: apps/io.ox/files/main.js:732 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1687,7 +1687,7 @@ msgid "Close"
 msgstr "關閉"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:715 module:io.ox/files
+#: apps/io.ox/files/main.js:714 module:io.ox/files
 #: apps/io.ox/files/view-options.js:213 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2717,7 +2717,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:487
 #: module:io.ox/files apps/io.ox/files/actions.js:497
 #: apps/io.ox/files/main.js:150 apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:685 apps/io.ox/files/main.js:733
+#: apps/io.ox/files/main.js:684 apps/io.ox/files/main.js:732
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:513
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3392,8 +3392,8 @@ msgstr ""
 "資料夾「%1$S」將會被隱藏，請啟用「顯示隱藏檔案與資料夾」選項以再次存取此資料"
 "夾。"
 
-#: apps/io.ox/core/folder/node.js:467 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:474
+#: apps/io.ox/core/folder/node.js:474 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:481
 msgid "Folder-specific actions"
 msgstr "資料夾行為"
 
@@ -3549,14 +3549,14 @@ msgstr "%s 晚安"
 msgid "Good morning, %s"
 msgstr "%s 早安"
 
-#: apps/io.ox/core/tk/flag-picker.js:79 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:88 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "灰色"
 
-#: apps/io.ox/core/tk/flag-picker.js:78 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:87 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
@@ -4128,14 +4128,14 @@ msgstr "書信‧符號"
 msgid "Life"
 msgstr "生活"
 
-#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "亮藍"
 
-#: apps/io.ox/core/tk/flag-picker.js:81 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
@@ -4265,7 +4265,7 @@ msgid "Mail and Messaging"
 msgstr "郵件與訊息"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:84
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:421
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:431
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "郵件與社交帳戶"
@@ -4588,7 +4588,7 @@ msgstr "移動"
 msgid "Move all messages"
 msgstr "開啟/關閉所有訊息"
 
-#: apps/io.ox/core/folder/actions/move.js:137 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:147 module:io.ox/core
 msgid "Move folder"
 msgstr "移動文件夾"
 
@@ -4662,12 +4662,12 @@ msgstr "大自然"
 msgid "New"
 msgstr "新增"
 
-#: apps/io.ox/core/folder/api.js:721 module:io.ox/core
+#: apps/io.ox/core/folder/api.js:730 module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171 module:io.ox/core/sub
 msgid "New Folder"
 msgstr "新資料夾"
 
-#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1367 module:io.ox/mail
 msgid "New Mail"
 msgstr "新增郵件"
 
@@ -4908,7 +4908,7 @@ msgstr "無標題。"
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:273 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:75 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5186,7 +5186,7 @@ msgstr "選項 20"
 msgid "Options"
 msgstr "選項"
 
-#: apps/io.ox/core/tk/flag-picker.js:82 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
@@ -5391,7 +5391,7 @@ msgstr "電話號碼"
 msgid "Pick a time here"
 msgstr "請在此選擇一個時間"
 
-#: apps/io.ox/core/tk/flag-picker.js:83 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
@@ -5790,7 +5790,7 @@ msgstr "列印任務"
 msgid "Purchase confirmation"
 msgstr "確認購買"
 
-#: apps/io.ox/core/tk/flag-picker.js:80 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:89 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
@@ -5910,7 +5910,7 @@ msgstr "重複發生的任務需要有效到期日。"
 msgid "Recurring tasks need a valid start date."
 msgstr "重複發生的任務需要有效開始日期。"
 
-#: apps/io.ox/core/tk/flag-picker.js:76 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
@@ -6257,7 +6257,7 @@ msgstr "保存於"
 msgid "Saved in:"
 msgstr "保存於"
 
-#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1091 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "儲存郵件附件"
 
@@ -6471,13 +6471,13 @@ msgstr "無法連線到伺服器"
 msgid "Server version"
 msgstr "伺服器版本"
 
-#: apps/io.ox/core/tk/flag-picker.js:145 module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:150 apps/io.ox/mail/toolbar.js:98
+#: apps/io.ox/core/tk/flag-picker.js:154 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:159 apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr "設定色彩"
 
 #: apps/io.ox/core/main.js:794 module:io.ox/core apps/io.ox/core/main.js:945
-#: apps/io.ox/settings/main.js:122 apps/io.ox/settings/main.js:441
+#: apps/io.ox/settings/main.js:130 apps/io.ox/settings/main.js:451
 msgid "Settings"
 msgstr "選項"
 
@@ -7767,7 +7767,7 @@ msgstr "前十名收件者"
 msgid "Total cost"
 msgstr "總成本"
 
-#: apps/io.ox/core/folder/node.js:451 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:458 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "全部: %1$s"
 
@@ -7884,7 +7884,7 @@ msgstr "新增訂閱"
 msgid "Unread"
 msgstr "未讀"
 
-#: apps/io.ox/core/folder/node.js:452 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:459 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未讀: %1$d"
 
@@ -8238,7 +8238,7 @@ msgstr "每年 %3$d 月的 %1$s %2$s"
 msgid "Years"
 msgstr "年"
 
-#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
@@ -8328,7 +8328,7 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "您可以按下 Ctrl+Enter 快速儲存您的修改。"
 
-#: apps/io.ox/core/folder/actions/move.js:59 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:64 module:io.ox/core
 msgid "You cannot move items to virtual folders"
 msgstr "您無法將項目移動至虛擬資料夾"
 
