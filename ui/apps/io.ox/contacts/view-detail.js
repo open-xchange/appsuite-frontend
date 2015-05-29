@@ -18,12 +18,14 @@ define('io.ox/contacts/view-detail', [
     'io.ox/contacts/api',
     'io.ox/contacts/actions',
     'io.ox/contacts/model',
+    'io.ox/participants/views',
+    'io.ox/participants/model',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/extPatterns/links',
     'io.ox/core/util',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, BreadcrumbView, links, coreUtil, gt) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, gt) {
 
     'use strict';
 
@@ -227,18 +229,11 @@ define('io.ox/contacts/view-detail', [
         draw: function (data) {
             // draw member
             this.append(
-                $('<div class="member">').append(
-                    api.pictureHalo(
-                        $('<div class="member-picture">'),
-                       data,
-                       { width: 48, height: 48 }
-                    ),
-                    coreUtil.renderPersonalName({
-                        $el: $('<div class="member-name">'),
-                        name: data.display_name
-                    }, data),
-                    $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
-                )
+                new pViews.ParticipantEntryView({
+                    tagName: 'li',
+                    model: new pModel.Participant(data),
+                    halo: true
+                }).render().$el
             );
         }
     });
@@ -247,7 +242,11 @@ define('io.ox/contacts/view-detail', [
 
         draw: function (baton) {
 
-            var list = _.copy(baton.data.distribution_list || [], true), hash = {};
+            var list = _.copy(baton.data.distribution_list || [], true),
+                hash = {},
+                $list = $('<ul class="member-list list-unstyled">');
+
+            this.append($list);
 
             // if there are no members in the list
             if (list.length === 0) {
@@ -268,7 +267,7 @@ define('io.ox/contacts/view-detail', [
                     }
                 })
                 .each(function (member) {
-                    ext.point('io.ox/contacts/detail/member').invoke('draw', this, member);
+                    ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);
                 }, this);
         }
     });
