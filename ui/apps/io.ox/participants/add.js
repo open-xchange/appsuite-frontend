@@ -71,7 +71,7 @@ define('io.ox/participants/add', [
                 // remove duplicate entries from typeahead dropdown
                 var col = this.collection;
                 return _(data).filter(function (model) {
-                    return !col.get(model.cid);
+                    return !col.get(model);
                 });
             }, this);
         },
