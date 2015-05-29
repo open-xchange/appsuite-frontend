@@ -174,10 +174,18 @@ define('io.ox/core/viewer/util', [
      * @returns {jQuery.Promise}
      *  the promise from the Ajax request enriched with an abort method.
      */
-    Util.sendConverterRequest = function (params) {
+    Util.sendConverterRequest = function (file, params) {
 
-        var // properties passed to the server request
-            requestProps = { module:'oxodocumentconverter', params: params },
+        var converterParams = _.extend(params, {
+                session: ox.session,
+                uid: ox.ui.App.getCurrentApp().get('uniqueID'),
+                id: file.id,
+                folder_id: file.folder_id,
+                filename: file.filename,
+                version: file.version
+            }),
+            // properties passed to the server request
+            requestProps = { module:'oxodocumentconverter', params: converterParams },
             // the Deferred object representing the core AJAX request
             ajaxRequest = null,
             // the Promise returned by this method
@@ -188,11 +196,74 @@ define('io.ox/core/viewer/util', [
 
         // reject, if the response contains 'hasErrors:true'
         promise = ajaxRequest.then(function (response) {
-            return response.hasErrors ? $.Deferred().reject(response) : response;
+            return response.error ? $.Deferred().reject(response) : response;
         });
 
         // add an abort() method, forward invocation to AJAX request
         return _.extend(promise, { abort: function () { ajaxRequest.abort(); } });
+    };
+
+    /**
+     * Creates thumbnail image of a document page.
+     *
+     * @param {Object} file
+     *  an OX Viewer file descriptor.
+     *
+     * @param {Object} params
+     *  @param {String} params.jobID
+     *   conversion job ID from the document converter.
+     *  @param {String} params.pageNumber
+     *   a document page number
+     *  @param {String} params.width
+     *   thumbnail width in pixels.
+     *  @param {String} params.height
+     *   thumbnail height in pixels.
+     *  @param {String} params.zoom
+     *   thumbnail image zoon level.
+     *
+     * @returns {jQuery} image
+     *  the image node as jQuery element.
+     */
+    Util.createDocumentThumbnailImage = function (file, params) {
+        var imageUrlParams = _.extend({
+                action: 'convertdocument',
+                convert_action: 'getpage',
+                id: file.id,
+                folder_id: file.folder_id,
+                filename: file.filename,
+                version: file.version
+            }, {
+                job_id: params.jobID,
+                page_number: params.pageNumber,
+                target_format: params.format,
+                target_width: params.width,
+                target_height: params.height,
+                target_zoom: params.zoom
+            }),
+            image = $('<img class="thumbnail-image">'),
+            imageUrl = Util.getConverterUrl(imageUrlParams);
+        image.attr('src', imageUrl);
+        return image;
+    };
+
+    /**
+     * Ends the thumbnail conversion job.
+     *
+     * @param {String} jobId
+     *  the conversion job ID
+     *
+     * @returns {jQuery.Promise}
+     */
+    Util.endConvertJob = function (jobId) {
+        if (!jobId) {
+            return;
+        }
+        var params = {
+            action: 'convertdocument',
+            convert_action: 'endconvert',
+            job_id: jobId
+        };
+        return Util.sendConverterRequest(params);
     };
 
     return Util;

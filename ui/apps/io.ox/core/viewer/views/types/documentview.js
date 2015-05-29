@@ -256,7 +256,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              * @param {Number} pageCount
              *  page count of the pdf document delivered by the PDF.js library.
              */
-            function pdfDocumentLoadSuccess(pageCount) {
+            function pdfDocumentLoadSuccess(pageCount, convertData) {
                 // do nothing and quit if a document is already disposed.
                 if (this.disposed || !this.pdfDocument) {
                     return;
@@ -272,7 +272,11 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the initial zoom factor is already set to 1.0
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
                 // create a thumbnail view and append it
-                this.thumbnailsView = new ThumbnailView({ pageCount: pageCount, viewerEvents: this.viewerEvents });
+                this.thumbnailsView = new ThumbnailView({
+                    model: this.model,
+                    viewerEvents: this.viewerEvents,
+                    convertData: convertData
+                });
                 this.$el.append(this.thumbnailsView.render().el);
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
@@ -333,11 +337,20 @@ define('io.ox/core/viewer/views/types/documentview', [
             // create a pdf document object with the document PDF url
             this.pdfDocument = new PDFDocument(documentUrl);
 
+            // send converter request for image thumbnails
+            this.thumbnailLoadPromise = Util.sendConverterRequest(this.model.toJSON(), {
+                action: 'convertdocument',
+                convert_format: 'preview',
+                convert_action: 'beginconvert'
+            });
+
+            // TODO end conversion job
+
             // display loading animation
             documentContainer.busy();
 
             // wait for PDF document to finish loading
-            $.when(this.pdfDocument.getLoadPromise())
+            $.when(this.pdfDocument.getLoadPromise(), this.thumbnailLoadPromise)
                 .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError.bind(this))
                 .always(pdfDocumentLoadFinished.bind(this));
 

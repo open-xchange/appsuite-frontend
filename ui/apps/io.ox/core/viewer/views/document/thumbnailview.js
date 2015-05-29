@@ -11,8 +11,9 @@
  */
 define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/viewer/util',
     'gettext!io.ox/core'
-], function (DisposableView) {
+], function (DisposableView, Util) {
 
     'use strict';
 
@@ -32,10 +33,21 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
         render: function () {
             //console.warn('ThumbnailView.render()');
-            _.times(this.pageCount, function (pageNumber) {
+            _.times(this.convertData.pageCount, function (pageNumber) {
+                // temporary limit thumbnails to 20 for testing
+                if (pageNumber > 20) return;
                 var thumbnailLink = $('<a class="document-thumbnail-link">'),
                     thumbnail = $('<div class="document-thumbnail">'),
+                    thumbnailImage = Util.createDocumentThumbnailImage(this.model.toJSON(), {
+                        jobID: this.convertData.jobID,
+                        pageNumber: pageNumber + 1,
+                        format: 'jpg',
+                        width: 160,
+                        height: 200,
+                        zoom: 1
+                    }),
                     thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
+                thumbnail.append(thumbnailImage);
                 thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
                     'role': 'button',
                     'aria-selected': false,
