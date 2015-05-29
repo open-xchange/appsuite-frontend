@@ -453,14 +453,12 @@ define('io.ox/core/permissions/permissions', [
                                     });
                                 },
                                 click: function (e, member) {
-                                    var data = member.toJSON(),
-                                        isGroup = data.type === 2,
-                                        obj = {
-                                            entity: isGroup ? data.id : data.internal_userid,
-                                            // default is 'view folder' plus 'read all'
-                                            bits: 257,
-                                            group: isGroup
-                                        };
+                                    var obj = {
+                                        entity: member.get('id'),
+                                        // default is 'view folder' plus 'read all'
+                                        bits: 257,
+                                        group: member.get('type') === 2
+                                    };
                                     if (!obj.entity) {
                                         notifications.yell(
                                             'error',
