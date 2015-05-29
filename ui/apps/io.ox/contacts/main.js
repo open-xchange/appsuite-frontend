@@ -573,7 +573,8 @@ define('io.ox/contacts/main',
 
         'update:image': function () {
             api.on('update:image', function (evt, updated) {
-                if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
+                //compare cids, because of all kind of different results from some strange API
+                if (_.cid(updated) === _.cid(app.currentContact)) {
                     app.showContact(app.currentContact);
                 }
             });
