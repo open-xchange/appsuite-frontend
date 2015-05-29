@@ -149,6 +149,12 @@ define('io.ox/core/api/autocomplete', [
                             if (obj.folder_id !== 6 && obj.type === 'user') return;
                             // remove users from contact api results
                             if (self.options.users && obj.folder_id === 6 && obj.type === 'contact') return;
+                            // convert user from contact api to real user
+                            if (obj.type === 'user' && obj.internal_userid) {
+                                obj.contact_id = obj.id;
+                                obj.id = obj.internal_userid;
+                                delete obj.internal_userid;
+                            }
 
                             var clone = _.extend({}, obj);
                             //store target value

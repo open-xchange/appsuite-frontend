@@ -27,6 +27,8 @@ define('io.ox/participants/model', [
 
     var Model = Backbone.Model.extend({
 
+        idAttribute: 'pid',
+
         TYPE_UNKNOWN: 0,
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
@@ -50,10 +52,12 @@ define('io.ox/participants/model', [
         defaults: {
             display_name: '',
             email1: '',
+            field: 'email1',
             type: 5 // external
         },
 
         initialize: function () {
+            var self = this;
 
             // fix type attribute / for example autocomplete api
             if (_.isString(this.get('type'))) {
@@ -79,15 +83,36 @@ define('io.ox/participants/model', [
                 this.set('type', newType);
             }
 
+            // handling for distribution list members
+            if (this.get('mail_field')) {
+                this.set('field', 'email' + this.get('mail_field'));
+            }
+
+            this.fetch().then(function () {
+                self.magic();
+            });
+        },
+
+        magic: function () {
             // It's a kind of magic
-            if (this.get('internal_userid')) {
-                if (this.get('type') === this.TYPE_USER && this.has('field') && this.get('field') !== 'email1') {
-                    this.set('type', this.TYPE_EXTERNAL_USER);
+            // convert external user having an internal user id to internal users
+            if (this.has('field')) {
+                if (this.get('field') === 'email1') {
+                    if (this.get('type') === this.TYPE_EXTERNAL_USER && this.get('internal_userid')) {
+                        this.set({
+                            'type': this.TYPE_USER,
+                            'contact_id': this.get('id'),
+                            'id': this.get('internal_userid')
+                        });
+                    }
                 } else {
-                    this.set({
-                        id: this.get('internal_userid'),
-                        type: this.TYPE_USER
-                    });
+                    if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+                        this.set({
+                            'type': this.TYPE_EXTERNAL_USER,
+                            'internal_userid': this.get('id'),
+                            'id': this.get('contact_id')
+                        });
+                    }
                 }
             }
 
@@ -97,9 +122,8 @@ define('io.ox/participants/model', [
             }
 
             // set cid
-            this.cid = this.TYPE_LABEL[this.get('type')] + '_' + this.get('id');
-
-            this.fetch();
+            this.cid = [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_');
+            this.set('pid', this.cid);
         },
 
         getDisplayName: function () {
@@ -138,9 +162,12 @@ define('io.ox/participants/model', [
             var ret = {
                 type: this.get('type')
             };
+            if (this.get('field')) {
+                ret.field = this.get('field');
+            }
             if (this.get('type') === 5) {
-                ret.mail = this.getEmail();
-                var dn = util.getMailFullName(this.toJSON());
+                ret.mail = this.getTarget();
+                var dn = this.getDisplayName(this.toJSON());
                 if (!_.isEmpty(dn)) {
                     ret.display_name = dn;
                 }
@@ -154,25 +181,30 @@ define('io.ox/participants/model', [
             var self = this,
                 setModel = function (data) { self.set(data); };
 
-            switch (self.get('type')) {
-                case self.TYPE_USER:
+            switch (this.get('type')) {
+                case this.TYPE_USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
-                    return userAPI.get({ id: self.get('id') }).then(setModel);
-                case self.TYPE_USER_GROUP:
+                    return userAPI.get({ id: this.get('id') }).then(setModel);
+                case this.TYPE_USER_GROUP:
                     if (this.get('display_name') && this.get('members')) break;
-                    return groupAPI.get({ id: self.get('id') }).then(setModel);
-                case self.TYPE_RESOURCE:
+                    return groupAPI.get({ id: this.get('id') }).then(setModel);
+                case this.TYPE_RESOURCE:
                     if (this.get('display_name')) break;
-                    return resourceAPI.get({ id: self.get('id') }).then(setModel);
-                case self.TYPE_RESOURCE_GROUP:
-                    self.set('display_name', 'resource group');
+                    return resourceAPI.get({ id: this.get('id') }).then(setModel);
+                case this.TYPE_RESOURCE_GROUP:
+                    this.set('display_name', 'resource group');
                     break;
-                case self.TYPE_EXTERNAL_USER:
+                case this.TYPE_EXTERNAL_USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
-                    return contactAPI.getByEmailaddress(self.getEmail()).then(setModel);
-                case self.TYPE_DISTLIST:
+                    if (this.get('id')) {
+                        return contactAPI.get(this.pick('id', 'folder_id')).then(setModel);
+                    } else {
+                        return contactAPI.getByEmailaddress(this.getEmail()).then(setModel);
+                    }
+                    break;
+                case this.TYPE_DISTLIST:
                     if (this.get('display_name') && 'distribution_list' in this.attributes) break;
-                    return contactAPI.get(self.pick('id', 'folder_id')).then(setModel);
+                    return contactAPI.get(this.pick('id', 'folder_id')).then(setModel);
                 default:
                     break;
             }
@@ -212,18 +244,8 @@ define('io.ox/participants/model', [
         addUniquely: function (models, opt) {
             var self = this,
                 tmpDistList = [];
-            function addParticipant(participant) {
-                if (!(participant instanceof self.model)) {
-                    participant = new self.model(participant);
-                }
 
-                // check double entries
-                if (!self.get(participant.cid)) {
-                    self.oldAdd(participant, opt);
-                }
-            }
-
-            models = _([].concat(models))
+            _([].concat(models))
                 .chain()
                 .map(function (participant) {
                     // ensure models
@@ -241,17 +263,17 @@ define('io.ox/participants/model', [
                     return true;
                 })
                 .each(function (participant) {
-                    addParticipant(participant);
+                    self.oldAdd(participant, opt);
                 });
 
             if (tmpDistList.length > 0) {
                 _.each(tmpDistList, function (val) {
                     if (val.folder_id === 6) {
                         return contactAPI.get({ id: val.id, folder: 6 }).then(function (data) {
-                            addParticipant({ id: data.user_id, type: 1 });
+                            self.oldAdd({ id: data.user_id, type: 1 }, opt);
                         });
                     } else {
-                        addParticipant(val);
+                        self.oldAdd(val, opt);
                     }
                 });
             }
