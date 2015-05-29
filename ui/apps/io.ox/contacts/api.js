@@ -212,6 +212,10 @@ define('io.ox/contacts/api', [
             }
         },
         pipe: {
+            get: function (data) {
+                if (data.user_id) data.internal_userid = data.user_id;
+                return convertResponseToGregorian(data);
+            },
             all: function (response) {
                 // japanese sorting
                 if (ox.language === 'ja_JP') {
@@ -238,7 +242,6 @@ define('io.ox/contacts/api', [
                 api.trigger('list:ready');
                 return data;
             },
-            get: convertResponseToGregorian,
             search: convertResponseToGregorian,
             advancedsearch: convertResponseToGregorian
         }
