@@ -184,7 +184,7 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/settings/main.js:441 module:io.ox/core
+#: apps/io.ox/settings/main.js:451 module:io.ox/core
 msgid "%1$s %2$s"
 msgstr "%2$s %1$s"
 
@@ -995,7 +995,7 @@ msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
 
 #: apps/io.ox/mail/main.js:1175 module:io.ox/mail
-#: apps/io.ox/settings/main.js:513 module:io.ox/core
+#: apps/io.ox/settings/main.js:523 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "この問題が解決されない場合、アプリケーションは正常に動作しない可能性がありま"
@@ -1244,7 +1244,7 @@ msgid "Back to appointment"
 msgstr "アポイントに戻る"
 
 #: apps/io.ox/core/settings/pane.js:63 module:io.ox/core
-#: apps/io.ox/settings/main.js:415
+#: apps/io.ox/settings/main.js:425
 msgid "Basic settings"
 msgstr "基本設定"
 
@@ -1385,8 +1385,8 @@ msgstr "予定表ビュー"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:682
-#: apps/io.ox/files/main.js:733 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:681
+#: apps/io.ox/files/main.js:732 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1673,7 +1673,7 @@ msgid "Close"
 msgstr "閉じる"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:715 module:io.ox/files
+#: apps/io.ox/files/main.js:714 module:io.ox/files
 #: apps/io.ox/files/view-options.js:213 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2719,7 +2719,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:487
 #: module:io.ox/files apps/io.ox/files/actions.js:497
 #: apps/io.ox/files/main.js:150 apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:685 apps/io.ox/files/main.js:733
+#: apps/io.ox/files/main.js:684 apps/io.ox/files/main.js:732
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:513
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3402,8 +3402,8 @@ msgstr ""
 "\"%1$s\" の名前のフォルダは隠しフォルダになっています。\"隠しフォルダと隠し"
 "ファイルを表示\" を有効にすると、このフォルダにアクセスできるようになります。"
 
-#: apps/io.ox/core/folder/node.js:467 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:474
+#: apps/io.ox/core/folder/node.js:474 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:481
 msgid "Folder-specific actions"
 msgstr "フォルダ アクション"
 
@@ -4291,7 +4291,7 @@ msgid "Mail and Messaging"
 msgstr "メールとメッセージング"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:84
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:421
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:431
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "メール アカウントとソーシャル アカウント"
@@ -4616,7 +4616,7 @@ msgstr "移動"
 msgid "Move all messages"
 msgstr "すべてのメッセージを開く/閉じる"
 
-#: apps/io.ox/core/folder/actions/move.js:137 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:147 module:io.ox/core
 msgid "Move folder"
 msgstr "フォルダを移動"
 
@@ -4695,7 +4695,7 @@ msgstr "新規"
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: apps/io.ox/mail/api.js:1364 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1367 module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
 
@@ -6291,7 +6291,7 @@ msgstr "保存先:"
 msgid "Saved in:"
 msgstr "保存先:"
 
-#: apps/io.ox/mail/api.js:1088 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1091 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存された添付ファイル"
 
@@ -6511,7 +6511,7 @@ msgid "Set color"
 msgstr "色を設定"
 
 #: apps/io.ox/core/main.js:794 module:io.ox/core apps/io.ox/core/main.js:945
-#: apps/io.ox/settings/main.js:122 apps/io.ox/settings/main.js:441
+#: apps/io.ox/settings/main.js:130 apps/io.ox/settings/main.js:451
 msgid "Settings"
 msgstr "設定"
 
@@ -7827,7 +7827,7 @@ msgstr "次のユーザに送信した上位 10 通のメール"
 msgid "Total cost"
 msgstr "総コスト"
 
-#: apps/io.ox/core/folder/node.js:451 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:458 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "合計: %1$d"
 
@@ -7944,7 +7944,7 @@ msgstr "新規の登録"
 msgid "Unread"
 msgstr "未読にする"
 
-#: apps/io.ox/core/folder/node.js:452 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:459 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "未読: %1$d"
 
@@ -8406,7 +8406,7 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Ctrl キー + Enter キーで、変更をすぐに保存できます。"
 
-#: apps/io.ox/core/folder/actions/move.js:59 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:64 module:io.ox/core
 msgid "You cannot move items to virtual folders"
 msgstr "仮想フォルダにアイテムを移動できません。"
 
