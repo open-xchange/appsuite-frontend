@@ -260,7 +260,8 @@ define('io.ox/contacts/widgets/canvasresize',
                     methods.transformCoordinate(canvas, width, height, orientation);
 
                     // over image size
-                    if (methods.detectSubsampling(img)) {
+                    // only for safari
+                    if (_.device('safari') && methods.detectSubsampling(img)) {
                         iw /= 2;
                         ih /= 2;
                     }
