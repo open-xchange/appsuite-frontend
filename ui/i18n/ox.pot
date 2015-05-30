@@ -5074,7 +5074,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436
 #: module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:84
+#: apps/io.ox/core/tk/flag-picker.js:90
 #: module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113
 #: module:io.ox/files
@@ -5373,7 +5373,7 @@ msgstr ""
 
 #: apps/io.ox/core/tk/autocomplete.js:372
 #: module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:868
+#: apps/io.ox/core/tk/vgrid.js:870
 #: module:io.ox/core
 msgid "Could not load this list"
 msgstr ""
@@ -5389,7 +5389,7 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:85
+#: apps/io.ox/core/tk/flag-picker.js:91
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings
@@ -5398,7 +5398,7 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:86
+#: apps/io.ox/core/tk/flag-picker.js:92
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings
@@ -5407,7 +5407,7 @@ msgstr ""
 msgid "Blue"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:87
+#: apps/io.ox/core/tk/flag-picker.js:93
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings
@@ -5416,7 +5416,7 @@ msgstr ""
 msgid "Green"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:88
+#: apps/io.ox/core/tk/flag-picker.js:94
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings
@@ -5425,7 +5425,7 @@ msgstr ""
 msgid "Gray"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:89
+#: apps/io.ox/core/tk/flag-picker.js:95
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings
@@ -5434,7 +5434,7 @@ msgstr ""
 msgid "Purple"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:90
+#: apps/io.ox/core/tk/flag-picker.js:96
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings
@@ -5443,7 +5443,7 @@ msgstr ""
 msgid "Light green"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:91
+#: apps/io.ox/core/tk/flag-picker.js:97
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings
@@ -5452,7 +5452,7 @@ msgstr ""
 msgid "Orange"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:92
+#: apps/io.ox/core/tk/flag-picker.js:98
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings
@@ -5461,7 +5461,7 @@ msgstr ""
 msgid "Pink"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:93
+#: apps/io.ox/core/tk/flag-picker.js:99
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings
@@ -5470,16 +5470,16 @@ msgstr ""
 msgid "Light blue"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:94
+#: apps/io.ox/core/tk/flag-picker.js:100
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr ""
 
-#: apps/io.ox/core/tk/flag-picker.js:154
+#: apps/io.ox/core/tk/flag-picker.js:160
 #: module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:159
+#: apps/io.ox/core/tk/flag-picker.js:165
 #: apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr ""
@@ -5612,7 +5612,7 @@ msgid "Multiselect"
 msgstr ""
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js:308
+#: apps/io.ox/core/tk/vgrid.js:310
 #: module:io.ox/core
 #: apps/io.ox/files/main.js:285
 #: module:io.ox/files
@@ -5621,20 +5621,20 @@ msgstr ""
 msgid "Item list options"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:316
+#: apps/io.ox/core/tk/vgrid.js:318
 #: module:io.ox/core
 #: apps/io.ox/mail/view-options.js:101
 #: module:io.ox/mail
 msgid "Select all"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:322
+#: apps/io.ox/core/tk/vgrid.js:324
 #: module:io.ox/core
 msgid "Toggle checkboxes"
 msgstr ""
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:750
+#: apps/io.ox/core/tk/vgrid.js:752
 #: module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
