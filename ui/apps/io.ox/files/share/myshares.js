@@ -85,7 +85,7 @@ define('io.ox/files/share/myshares', [
         getShares: function () {
             return api.all().then(function (data) {
                 // convert to share models
-                return data
+                return data;
             });
         }
 
