@@ -86,7 +86,7 @@ define('io.ox/core/tk/tokenfield', [
                     return _(data).map(function (m) {
                         var model = new pModel.Participant(m);
                         return {
-                            value: model.getTarget(),
+                            value: model.getTarget({ fallback: true }),
                             label: model.getDisplayName(),
                             model: model
                         };
