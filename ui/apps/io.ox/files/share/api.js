@@ -75,7 +75,7 @@ define('io.ox/files/share/api', [
          * get all shares
          * @return { deferred } an array with share data
          */
-        list: function () {
+        all: function () {
             return http.GET({
                 module: 'share/management',
                 params: {

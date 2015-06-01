@@ -11,7 +11,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/files/share/view', [
+define('io.ox/files/share/wizard', [
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'io.ox/files/share/model',
@@ -281,7 +281,7 @@ define('io.ox/files/share/view', [
     /*
      * main view
      */
-    var ShareView = DisposableView.extend({
+    var ShareWizard = DisposableView.extend({
 
         tagName: 'form',
 
@@ -364,5 +364,5 @@ define('io.ox/files/share/view', [
 
     });
 
-    return ShareView;
+    return ShareWizard;
 });

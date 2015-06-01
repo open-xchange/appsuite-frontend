@@ -13,10 +13,10 @@
 
 define('io.ox/files/actions/share', [
     'io.ox/core/tk/dialogs',
-    'io.ox/files/share/view',
+    'io.ox/files/share/wizard',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
-], function (dialogs, ShareView, notifications, gt) {
+], function (dialogs, ShareWizard, notifications, gt) {
 
     'use strict';
 
@@ -27,7 +27,7 @@ define('io.ox/files/actions/share', [
             count = baton.models.length,
             first = baton.models[0],
             filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
-            view = new ShareView({ files: baton.models });
+            view = new ShareWizard({ files: baton.models });
 
         // build header
         if (first.isFile()) {

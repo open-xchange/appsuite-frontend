@@ -15,7 +15,8 @@ define('io.ox/files/share/myshares', [
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/files/share/api',
-    'gettext!io.ox/files'
+    'gettext!io.ox/files',
+    'less!io.ox/files/share/style'
 ], function (ext, DisposableView, api, gt) {
 
     'use strict';
@@ -46,7 +47,7 @@ define('io.ox/files/share/myshares', [
         id: 'shares',
         index: INDEX += 100,
         draw: function (baton) {
-            return api.list().then(function (shares) {
+            this.getShares().then(function (shares) {
                 _(shares).each(function (share) {
                     baton.view.$ul.append($('<li>').text(share.token));
                 });
@@ -79,6 +80,13 @@ define('io.ox/files/share/myshares', [
 
             return this;
 
+        },
+
+        getShares: function () {
+            return api.all().then(function (data) {
+                // convert to share models
+                return data
+            });
         }
 
     });
