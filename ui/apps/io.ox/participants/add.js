@@ -81,7 +81,7 @@ define('io.ox/participants/add', [
             if (e.which === 13) {
                 var val = this.typeahead.$el.typeahead('val');
                 if (!_.isEmpty(val)) {
-                    this.addParticipant(e, { id: Math.random(), email1: val, field: 'email1', type: 5 }, val );
+                    this.addParticipant(e, { email1: val, field: 'email1', type: 5 }, val );
                 }
             }
         },
