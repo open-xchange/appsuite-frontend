@@ -106,6 +106,7 @@ define('io.ox/core/viewer/views/mainview', [
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
+            event.stopPropagation();
             var viewerRootEl = this.$el;
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {

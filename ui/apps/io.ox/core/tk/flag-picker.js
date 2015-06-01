@@ -32,18 +32,23 @@ define('io.ox/core/tk/flag-picker', [
 
         if (!$parent.hasClass('open') || _.device('smartphone')) return;
 
-        var positions = {
-            top: Math.max($container.offset().top + margin, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - margin)) - transformOffset.top,
-            right: ($(window).width() - $this.offset().left - $this.outerWidth() + $this.width() + margin) + transformOffset.left,
-            left: 'initial',
-            bottom: 'initial'
-        };
+        function computeBounds() {
+            var positions = {
+                top: Math.max($container.offset().top + margin, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - margin)) - transformOffset.top,
+                right: ($(window).width() - $this.offset().left - $this.outerWidth() + $this.width() + margin) + transformOffset.left,
+                left: 'initial',
+                bottom: 'initial'
+            };
 
-        if (positions.top + $ul.outerHeight() > $container.offset().top + $container.innerHeight() - margin) {
-            positions.bottom = $(window).height() - $container.offset().top - $container.innerHeight() + margin;
+            if (positions.top + $ul.outerHeight() > $container.offset().top + $container.innerHeight() - margin) {
+                positions.bottom = $(window).height() - $container.offset().top - $container.innerHeight() + margin;
+            }
+
+            $ul.css(positions);
         }
 
-        $ul.css(positions);
+        computeBounds();
+        $parent.on('ready', computeBounds);
         $zIndex.each(function () {
             var z = $(this);
             z.data('oldIndex', z.css('z-index'));
@@ -59,6 +64,7 @@ define('io.ox/core/tk/flag-picker', [
             $parent.removeClass('smart-dropdown-container');
             $parent.find('.abs').remove();
             $ul.css({ top: '', left: '', bottom: '', right: '' });
+            $parent.off('ready', computeBounds);
         }
 
         $parent.one('hidden.bs.dropdown', reset);
