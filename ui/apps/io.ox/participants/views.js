@@ -105,7 +105,7 @@ define('io.ox/participants/views', [
             var mail = this.model.getTarget(),
                 extra = null;
 
-            if (this.options.field && this.model.getFieldString()) {
+            if (mail && this.options.field && this.model.getFieldString()) {
                 mail += ' (' + this.model.getFieldString() + ')';
             }
 

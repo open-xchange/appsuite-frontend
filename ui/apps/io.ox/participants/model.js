@@ -136,8 +136,9 @@ define('io.ox/participants/model', [
             return util.getMail(this.toJSON());
         },
 
-        getTarget: function () {
-            if (this.get('type') === this.TYPE_DISTLIST) return 'distribution_list';
+        getTarget: function (opt) {
+            opt = _.extend({ fallback: false }, opt);
+            if (opt.fallback && this.get('type') === this.TYPE_DISTLIST) return 'distribution_list';
             return this.get(this.get('field')) || this.getEmail();
         },
 

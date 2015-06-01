@@ -97,13 +97,13 @@ define('io.ox/contacts/distrib/create-dist-view', [
                             id: m.get('id'),
                             folder_id: m.get('folder_id'),
                             display_name: m.getDisplayName(),
-                            mail: m.getEmail(),
+                            mail: m.getTarget(),
                             mail_field: m.getFieldNumber()
                         };
                     } else {
                         return {
                             display_name: m.getDisplayName(),
-                            mail: m.getEmail(),
+                            mail: m.getTarget(),
                             mail_field: 0
                         };
                     }

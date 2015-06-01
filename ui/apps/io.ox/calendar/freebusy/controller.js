@@ -126,7 +126,7 @@ define('io.ox/calendar/freebusy/controller', [
                     var tempParticipant = { id: model.get('id'), type: model.get('type') };
                     if (model.get('type') === 5) {
                         // External participants need more data for an appointment
-                        tempParticipant.id = tempParticipant.mail = model.getEmail();
+                        tempParticipant.id = tempParticipant.mail = model.getTarget();
                         tempParticipant.display_name = model.getDisplayName();
                         tempParticipant.image1_url = model.get('image1_url');
                     }
