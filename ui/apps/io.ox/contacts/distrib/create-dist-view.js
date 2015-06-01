@@ -92,9 +92,9 @@ define('io.ox/contacts/distrib/create-dist-view', [
 
             this.listenTo(this.baton.member, 'add remove reset', function (ctx, col) {
                 var all = col.map(function (m) {
-                    if (_.isNumber(m.get('id'))) {
+                    if (_.isNumber(m.getContactID())) {
                         return {
-                            id: m.get('id'),
+                            id: m.getContactID(),
                             folder_id: m.get('folder_id'),
                             display_name: m.getDisplayName(),
                             mail: m.getTarget(),
