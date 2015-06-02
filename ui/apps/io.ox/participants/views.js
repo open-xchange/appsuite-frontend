@@ -49,6 +49,9 @@ define('io.ox/participants/views', [
                     this.render();
                 }
             });
+            this.listenTo(this.model, 'remove', function () {
+                this.remove();
+            });
         },
 
         render: function () {
@@ -155,7 +158,6 @@ define('io.ox/participants/views', [
             e.preventDefault();
             // remove from collection
             this.model.collection.remove(this.model);
-            this.remove();
         }
     });
 
