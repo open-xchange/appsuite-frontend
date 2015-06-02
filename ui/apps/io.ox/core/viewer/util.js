@@ -208,6 +208,27 @@ define('io.ox/core/viewer/util', [
     };
 
     /**
+     * Starts the thumbnail conversion job.
+     *
+     * @param {String} jobId
+     *  the conversion job ID.
+     *
+     * @returns {jQuery.Promise}
+     *  the promise from document converter request.
+     */
+    Util.beginConvert = function (file) {
+        if (!file) {
+            return;
+        }
+        var params = {
+            action: 'convertdocument',
+            convert_format: 'image',
+            convert_action: 'beginconvert'
+        };
+        return Util.sendConverterRequest(file, params);
+    };
+
+    /**
      * Ends the thumbnail conversion job.
      *
      * @param {String} jobId
@@ -216,17 +237,15 @@ define('io.ox/core/viewer/util', [
      * @returns {jQuery.Promise}
      *  the promise from document converter request.
      */
-    Util.endConvertJob = function (file, jobId) {
+    Util.endConvert = function (file, jobId) {
         if (!jobId) {
             return;
         }
-
         var params = {
             action: 'convertdocument',
             convert_action: 'endconvert',
             job_id: jobId
         };
-
         return Util.sendConverterRequest(file, params);
     };
 

@@ -15,12 +15,13 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/dropzone',
+    'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview',
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Util, FilesAPI, Dropzone, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
+], function (DisposableView, Util, FilesAPI, Dropzone, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
 
     'use strict';
 
@@ -51,11 +52,20 @@ define('io.ox/core/viewer/views/sidebarview', [
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events)
             });
+            // build tab navigation and its panes
+            var tabsList = $('<ul class="viewer-sidebar-tabs">'),
+                detailTabLink = $('<a class="selected">').text(gt('Detail')),
+                detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
+                detailPane = $('<div class="viewer-sidebar-detailpane viewer-sidebar-pane">'),
+                thumbnailTabLink = $('<a>').text(gt('Thumbnail')),
+                thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
+                thumbnailPane = $('<div class="viewer-sidebar-thumbnailpane viewer-sidebar-pane">');
+            tabsList.append(detailTab, thumbnailTab);
+            this.$el.append(tabsList, detailPane, thumbnailPane);
             this.model = null;
             this.zone = null;
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
-
             this.on('dispose', this.disposeView.bind(this));
         },
 
@@ -92,7 +102,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         renderSections: function () {
             // remove previous sections
-            this.$el.empty();
+            this.$el.find('.viewer-sidebar-detailpane').empty();
             // remove dropzone handler
             if (this.zone) {
                 this.zone.off();
@@ -114,12 +124,17 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.$el.append(this.zone.render().$el.addClass('abs'));
             }
             // render sections
-            this.$el.append(
+            this.$el.find('.viewer-sidebar-detailpane').append(
                 new FileInfoView({ model: this.model }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el
             );
+
+            this.$el.find('.viewer-sidebar-thumbnailpane').append(new ThumbnailView({
+                model: this.model,
+                viewerEvents: this.viewerEvents
+            }).el);
         },
 
         /**

@@ -438,59 +438,6 @@
             }
         }
 
-        @document-thumbnailview-bgcolor: #222222;
-        @document-thumbnail-link-focus-color: #777777;
-        @document-thumbnail-link-hover-color: #444444;
-        @document-thumbnail-link-selected-color: #777777;
-        @document-thumbnail-bgcolor: #ffffff;
-        @document-thumbnail-border-color: #e0e0e0;
-        @document-thumbnail-number-color: #ffffff;
-        .document-thumbnails-view {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 150px;
-            height: 100%;
-            background: @document-thumbnailview-bgcolor;
-            overflow-y: auto;
-            overflow-x: hidden;
-            .document-thumbnail-link {
-                display: block;
-                width: 120px;
-                height: 150px;
-                padding: 20px 0;
-                margin: 2px auto;
-                cursor: pointer;
-                &:hover {
-                    background: @document-thumbnail-link-hover-color;
-                    text-decoration: none;
-                }
-                &:active, &:focus {
-                    background: @document-thumbnail-link-focus-color;
-                }
-                &.selected {
-                    background: @document-thumbnail-link-selected-color;
-                }
-            }
-            .document-thumbnail {
-                width: 80px;
-                height: 100px;
-                margin: 0 auto;
-                background: @document-thumbnail-bgcolor;
-                .thumbnail-image {
-                    width: 80px;
-                    height: 100px;
-                }
-            }
-
-            .page-number {
-                color: @document-thumbnail-number-color;
-                text-align:center;
-                margin-top: 5px;
-                font-weight: bold;
-            }
-        }
-
         .document-container {
             width: 100%;
             height: 100%;
@@ -611,6 +558,98 @@
             border-color: @viewer-sidebar-uploadnewversion-bordercolor;
             &:active, &:hover {
                 border-color: @viewer-sidebar-uploadnewversion-hovercolor;
+            }
+        }
+
+        @viewer-sidebar-tab-color: #ffffff;
+        @viewer-sidebar-activetab-bordercolor: #3c73aa;
+        @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
+        @viewer-sidebar-activetab-hovercolor: rgba(255,255,255,0.15);
+        .viewer-sidebar-tabs {
+            list-style: none;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 0;
+            li {
+                display: inline-block;
+                width: 50%;
+            }
+            a {
+                display: block;
+                font-weight: bold;
+                color: @viewer-sidebar-tab-color;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+                cursor: pointer;
+                text-decoration: none;
+                margin-right: 2px;
+                &.selected {
+                    border-bottom: 2px solid @viewer-sidebar-activetab-bordercolor;
+                    background-color: @viewer-sidebar-activetab-bgcolor;
+                }
+                &:hover {
+                    background-color: @viewer-sidebar-activetab-hovercolor;
+                }
+            }
+        }
+
+        .viewer-sidebar-pane {
+            &.viewer-sidebar-detailpane {
+
+            }
+            &.viewer-sidebar-thumbnailpane {
+                display: none;
+            }
+        }
+
+        @document-thumbnailview-bgcolor: #222222;
+        @document-thumbnail-link-focus-color: #777777;
+        @document-thumbnail-link-hover-color: #444444;
+        @document-thumbnail-link-selected-color: #777777;
+        @document-thumbnail-bgcolor: #ffffff;
+        @document-thumbnail-border-color: #e0e0e0;
+        @document-thumbnail-number-color: #ffffff;
+        .document-thumbnails-view {
+            width: 150px;
+            height: 100%;
+            background: @document-thumbnailview-bgcolor;
+            overflow-y: auto;
+            overflow-x: hidden;
+            .document-thumbnail-link {
+                display: block;
+                width: 120px;
+                height: 150px;
+                padding: 20px 0;
+                margin: 2px auto;
+                cursor: pointer;
+                &:hover {
+                    background: @document-thumbnail-link-hover-color;
+                    text-decoration: none;
+                }
+                &:active, &:focus {
+                    background: @document-thumbnail-link-focus-color;
+                }
+                &.selected {
+                    background: @document-thumbnail-link-selected-color;
+                }
+            }
+            .document-thumbnail {
+                width: 80px;
+                height: 100px;
+                margin: 0 auto;
+                background: @document-thumbnail-bgcolor;
+                .thumbnail-image {
+                    width: 80px;
+                    height: 100px;
+                }
+            }
+
+            .page-number {
+                color: @document-thumbnail-number-color;
+                text-align:center;
+                margin-top: 5px;
+                font-weight: bold;
             }
         }
     }

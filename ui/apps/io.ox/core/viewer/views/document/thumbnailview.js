@@ -29,28 +29,43 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             //console.warn('ThumbnailView.initialize()');
             _.extend(this, options);
             this.listenTo(this.viewerEvents, 'viewer:document:selectthumbnail', this.selectThumbnail);
+            // listen to render thumbnails call
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:renderthumbnails', this.render);
+            // dispose view on global dispose
+            this.on('dispose', this.disposeView.bind(this));
+            this.thumbnailLoadPromise = null;
         },
 
         render: function () {
             //console.warn('ThumbnailView.render()');
-            _.times(this.convertData.pageCount, function (pageNumber) {
-                // temporary limit thumbnails to 20 for testing
-                if (pageNumber > 20) return;
-                var thumbnailLink = $('<a class="document-thumbnail-link">'),
-                    thumbnail = $('<div class="document-thumbnail">'),
-                    thumbnailImage = this.createDocumentThumbnailImage({
-                        jobID: this.convertData.jobID,
-                        pageNumber: pageNumber + 1
-                    }),
-                    thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
-                thumbnail.append(thumbnailImage);
-                thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
-                    'role': 'button',
-                    'aria-selected': false,
-                    'data-page': pageNumber + 1
+            var self = this;
+            function beginConvertSuccess(convertData) {
+                //console.warn('ThumbnailsView.beginConvertSuccess()', convertData);
+                _.times(convertData.pageCount, function (pageNumber) {
+                    // temporary limit thumbnails to 20 for testing
+                    if (pageNumber > 20) return;
+                    var thumbnailLink = $('<a class="document-thumbnail-link">'),
+                        thumbnail = $('<div class="document-thumbnail">'),
+                        thumbnailImage = self.createDocumentThumbnailImage({
+                            jobID: convertData.jobID,
+                            pageNumber: pageNumber + 1
+                        }),
+                        thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
+                    thumbnail.append(thumbnailImage);
+                    thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
+                        'role': 'button',
+                        'aria-selected': false,
+                        'data-page': pageNumber + 1
+                    });
+                    self.$el.append(thumbnailLink);
                 });
-                this.$el.append(thumbnailLink);
-            }.bind(this));
+                return convertData;
+            }
+            function beginConvertError(response) {
+                //console.warn('Core.Viewer.ThumbnailView.beginConvertError: ', response);
+                return $.Deferred().reject(response).promise();
+            }
+            this.thumbnailLoadPromise = Util.beginConvert(this.model.toJSON()).then(beginConvertSuccess, beginConvertError);
             return this;
         },
 
@@ -122,8 +137,10 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
         disposeView: function () {
             //console.warn('ThumbnailView.disposeView()');
-            Util.endConvertJob(this.model.toJSON(), this.convertData.jobID);
-            this.remove();
+            var file = this.model.toJSON();
+            this.thumbnailLoadPromise.done(function (convertData) {
+                Util.endConvert(file, convertData.jobID);
+            });
         }
 
     });
