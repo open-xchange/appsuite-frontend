@@ -264,7 +264,7 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
-                // bind mial-model to collection
+                // bind mail-model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
                     if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {
