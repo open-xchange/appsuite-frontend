@@ -59,6 +59,7 @@ define('plugins/administration/groups/settings/edit', [
                 placeholder: gt('User name'),
                 harmonize: function (data) {
                     data = _(data).map(function (m) {
+                        m.internal_userid = m.id;
                         return new members.Member(m);
                     });
                     // remove duplicate entries from typeahead dropdown
