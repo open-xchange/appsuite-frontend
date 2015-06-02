@@ -193,6 +193,7 @@ define('io.ox/search/facets/extensions',
                     e.stopPropagation();
                     e.preventDefault();
                     // mobile
+                    $('#io-ox-core').removeClass('menu-blur');
                     $(this).closest('.custom-dropdown').toggle();
                     ox.idle();
 
