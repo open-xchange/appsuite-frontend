@@ -78,7 +78,7 @@ define('io.ox/core/folder/node', [
             // see bug 37373
             // This was caused by the filter method of the unified-folders extensionpoint which sets "subfolder = false" for the folder 1 model.
             // Since this folder always has subfolders this is skipped.
-            if (this.folder !== '1') this.model.set('subfolders', models.length > 0);
+            if (this.folder !== '1' && this.folder !== 'default0') this.model.set('subfolders', models.length > 0);
             this.renderEmpty();
 
             // trigger events
