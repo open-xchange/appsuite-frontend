@@ -122,9 +122,8 @@ define('io.ox/participants/model', [
             if (this.get('type') === this.TYPE_EXTERNAL_USER && !this.has('id')) {
                 this.set('id', this.getEmail(), { silent: true });
             }
-            // set cid
-            this.cid = [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_');
-            this.set('pid', this.cid, { silent: true });
+            // set pid
+            this.set('pid', [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_'), { silent: true });
         },
 
         getContactID: function () {
