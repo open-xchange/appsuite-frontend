@@ -1324,7 +1324,7 @@ msgstr "Narodeniny"
 msgid "Black"
 msgstr "Čierna"
 
-#: apps/io.ox/core/tk/flag-picker.js:86 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
@@ -1965,7 +1965,7 @@ msgid "Could not load new Tweets."
 msgstr "Nebolo možné načítať nové tweety."
 
 #: apps/io.ox/core/tk/autocomplete.js:372 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:868 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:870 module:io.ox/core
 msgid "Could not load this list"
 msgstr "Nepodarilo sa načítať tento zoznam."
 
@@ -2956,7 +2956,7 @@ msgid "Employment"
 msgstr "Zamestnanie"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:750 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:752 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "Prázdne"
@@ -3619,14 +3619,14 @@ msgstr "Dobrý večer, %s"
 msgid "Good morning, %s"
 msgstr "Dobré ráno, %s"
 
-#: apps/io.ox/core/tk/flag-picker.js:88 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Šedá"
 
-#: apps/io.ox/core/tk/flag-picker.js:87 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
@@ -4051,7 +4051,7 @@ msgid "Item list"
 msgstr "Zoznam položiek"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js:308 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
 #: apps/io.ox/files/main.js:285 module:io.ox/files apps/io.ox/mail/main.js:448
 #: module:io.ox/mail
 msgid "Item list options"
@@ -4208,14 +4208,14 @@ msgstr "Písmená • Symboly"
 msgid "Life"
 msgstr "Život"
 
-#: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:99 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Svetlomodrá"
 
-#: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:96 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
@@ -4990,7 +4990,7 @@ msgstr "Bez názvu."
 #. Auth type. None. No authentication
 #: apps/io.ox/core/settings/pane.js:273 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/flag-picker.js:84 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -5274,7 +5274,7 @@ msgstr "Voliteľné 20"
 msgid "Options"
 msgstr "Možnosti"
 
-#: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:97 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
@@ -5479,7 +5479,7 @@ msgstr "Telefónne čísla"
 msgid "Pick a time here"
 msgstr "Tu vyberte čas"
 
-#: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:98 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
@@ -5883,7 +5883,7 @@ msgstr "Verejné úlohy"
 msgid "Purchase confirmation"
 msgstr "Potvrdenie objednávky"
 
-#: apps/io.ox/core/tk/flag-picker.js:89 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:95 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
@@ -6007,7 +6007,7 @@ msgstr "Opakujúce sa úlohy potrebujú platný dátum konca."
 msgid "Recurring tasks need a valid start date."
 msgstr "Opakujúce sa úlohy musia mať platný dátum začiatku."
 
-#: apps/io.ox/core/tk/flag-picker.js:85 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
@@ -6440,7 +6440,7 @@ msgid ""
 "anonymously, select the checkbox and leave the field empty."
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:316 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:318 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:101 module:io.ox/mail
 msgid "Select all"
 msgstr "Vybrať všetko"
@@ -6570,8 +6570,8 @@ msgstr "Server je nedostupný"
 msgid "Server version"
 msgstr "Verzia servera"
 
-#: apps/io.ox/core/tk/flag-picker.js:154 module:io.ox/mail
-#: apps/io.ox/core/tk/flag-picker.js:159 apps/io.ox/mail/toolbar.js:98
+#: apps/io.ox/core/tk/flag-picker.js:160 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:165 apps/io.ox/mail/toolbar.js:98
 msgid "Set color"
 msgstr "Nastaviť farbu"
 
@@ -7857,7 +7857,7 @@ msgstr ""
 msgid "Today"
 msgstr "Dnes"
 
-#: apps/io.ox/core/tk/vgrid.js:322 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:324 module:io.ox/core
 msgid "Toggle checkboxes"
 msgstr "Zmeniť označenie políčok"
 
@@ -8387,7 +8387,7 @@ msgstr "Každý rok %1$s %2$s v %3$d"
 msgid "Years"
 msgstr "Roky"
 
-#: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:100 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
