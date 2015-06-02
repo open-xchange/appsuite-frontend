@@ -138,9 +138,12 @@ define('io.ox/core/tk/tokenfield', [
 
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
+            var Participants = Backbone.Collection.extend({
+                model: pModel.Participant
+            });
 
             // initialize collection
-            this.collection = options.collection || new pModel.Participants();
+            this.collection = options.collection || new Participants();
 
             // update comparator function
             this.collection.comparator = function (model) {
