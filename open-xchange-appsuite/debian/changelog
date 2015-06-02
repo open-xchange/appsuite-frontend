@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.6.1-23) stable; urgency=low
+
+  * Build for patch 2015-06-08 (2539)
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 02 Jun 2015 20:00:31 +0200
+
 open-xchange-appsuite (7.6.1-22) stable; urgency=low
 
   * Build for patch 2015-05-26 (2520)
