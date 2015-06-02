@@ -56,6 +56,8 @@ define('io.ox/participants/model', [
             type: 5 // external
         },
 
+        loading: null,
+
         initialize: function () {
             var self = this;
 
@@ -88,7 +90,7 @@ define('io.ox/participants/model', [
                 this.set('field', 'email' + this.get('mail_field'));
             }
 
-            this.fetch().then(function () {
+            this.loading = this.fetch().then(function () {
                 self.magic();
             });
         },
@@ -118,12 +120,19 @@ define('io.ox/participants/model', [
 
             // Fix id for unknown external users
             if (this.get('type') === this.TYPE_EXTERNAL_USER && !this.has('id')) {
-                this.set('id', this.getEmail());
+                this.set('id', this.getEmail(), { silent: true });
             }
-
             // set cid
             this.cid = [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_');
-            this.set('pid', this.cid);
+            this.set('pid', this.cid, { silent: true });
+        },
+
+        getContactID: function () {
+            if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+                return this.get('contact_id');
+            } else {
+                return this.get('id');
+            }
         },
 
         getDisplayName: function () {
@@ -230,10 +239,11 @@ define('io.ox/participants/model', [
                 var idMap = {},
                     duplicates = [];
                 self.each(function (p) {
-                    if (idMap[p.cid]) {
+                    if (!p.id) return;
+                    if (idMap[p.id]) {
                         duplicates.push(p);
                     } else {
-                        idMap[p.cid] = true;
+                        idMap[p.id] = true;
                     }
                 });
                 self.remove(duplicates);
@@ -244,41 +254,29 @@ define('io.ox/participants/model', [
         },
 
         addUniquely: function (models, opt) {
-            var self = this,
-                tmpDistList = [];
-
+            var self = this;
             _([].concat(models))
-                .chain()
-                .map(function (participant) {
-                    // ensure models
-                    if (!(participant instanceof self.model)) {
-                        participant = new self.model(participant);
-                    }
-                    return participant;
-                })
-                .filter(function (participant) {
-                    // resolev distribution lists
-                    if (participant.get('mark_as_distributionlist')) {
-                        tmpDistList = tmpDistList.concat(participant.get('distribution_list'));
-                        return false;
-                    }
-                    return true;
-                })
                 .each(function (participant) {
-                    self.oldAdd(participant, opt);
-                });
-
-            if (tmpDistList.length > 0) {
-                _.each(tmpDistList, function (val) {
-                    if (val.folder_id === 6) {
-                        return contactAPI.get({ id: val.id, folder: 6 }).then(function (data) {
-                            self.oldAdd({ id: data.user_id, type: 1 }, opt);
-                        });
+                    // resolve distribution lists
+                    var add;
+                    if (participant instanceof self.model) {
+                        if (participant.get('mark_as_distributionlist')) {
+                            add = participant.get('distribution_list');
+                        }
                     } else {
-                        self.oldAdd(val, opt);
+                        if (participant.mark_as_distributionlist) {
+                            add = participant.distribution_list;
+                        }
                     }
+                    _([].concat(add || participant)).each(function (data) {
+                        // check if model
+                        var mod = data instanceof self.model ? data : new self.model(data);
+                        // wait for fetch, then add to collection
+                        mod.loading.then(function () {
+                            self.oldAdd(mod, opt);
+                        });
+                    });
                 });
-            }
         }
     });
 
