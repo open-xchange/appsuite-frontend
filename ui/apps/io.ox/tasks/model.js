@@ -48,8 +48,7 @@ define('io.ox/tasks/model', [
                     var self = this,
                         resetListUpdate = false,
                         changeParticipantsUpdate = false;
-
-                    this._participants = new pModel.Participants(this.get('participants'));
+                    this._participants = new pModel.Participants(this.get('participants'), { silent: false });
 
                     this._participants.on('add remove reset', function () {
                         if (changeParticipantsUpdate) {
@@ -66,10 +65,8 @@ define('io.ox/tasks/model', [
                         }
                         changeParticipantsUpdate = true;
                         self._participants.reset(self.get('participants'));
-                        self._participants.invoke('fetch');
                         changeParticipantsUpdate = false;
                     });
-
                     return this._participants;
                 },
                 // special functions for datepicker
