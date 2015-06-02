@@ -211,9 +211,10 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         show: function () {
             // ignore already loaded documents
-            if (this.$el.find('.document-page').length > 0) {
+            if (this.$el.find('.document-page').length > 0 || !this.isVisible()) {
                 return;
             }
+            //console.warn('DocumentView.show()');
             var documentContainer = this.documentContainer,
                 convertParams = this.getConvertParams(this.model.get('source')),
                 documentUrl = Util.getConverterUrl(convertParams);
@@ -266,12 +267,11 @@ define('io.ox/core/viewer/views/types/documentview', [
                     pdfDocumentLoadError.call(this, pageCount);
                     return;
                 }
+                //console.warn('DocumentView.pdfDocumentLoadSuccess()', convertData);
                 var pdfDocument = this.pdfDocument,
                     self = this;
-                // create the PDF view after successful loading;
-                // the initial zoom factor is already set to 1.0
+                // create the PDF view and Thumbnail view after successful loading
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
-                // create a thumbnail view and append it
                 this.thumbnailsView = new ThumbnailView({
                     model: this.model,
                     viewerEvents: this.viewerEvents,
@@ -299,14 +299,14 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
                 this.documentContainer.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
-                // set scale/zoom, with stored values or default, according to device's viewport width
+                // set scale/zoom and scroll position, with stored or default values
                 var zoomLevel = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
                 this.setZoomLevel(zoomLevel);
-                // set scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id'));
                 if (lastScrollPosition) {
                     this.$el.find('.document-container').scrollTop(lastScrollPosition);
                 }
+                // select/highlight the corresponding thumbnail according to displayed document page
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage());
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
@@ -322,11 +322,11 @@ define('io.ox/core/viewer/views/types/documentview', [
             /**
              * Error handler for the PDF loading process.
              */
-            function pdfDocumentLoadError(pageCount) {
-                console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', pageCount.cause);
-                var notificationText = PDF_ERROR_NOTIFICATIONS[pageCount.cause || 'default'],
+            function pdfDocumentLoadError(response) {
+                console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', response.cause);
+                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause || 'default'],
                     notificationIconClass;
-                if (pageCount.cause === 'passwordProtected') {
+                if (response.cause === 'passwordProtected') {
                     notificationIconClass = 'fa-lock';
                 }
                 this.displayNotification(notificationText, notificationIconClass);
@@ -340,11 +340,9 @@ define('io.ox/core/viewer/views/types/documentview', [
             // send converter request for image thumbnails
             this.thumbnailLoadPromise = Util.sendConverterRequest(this.model.toJSON(), {
                 action: 'convertdocument',
-                convert_format: 'preview',
+                convert_format: 'html',
                 convert_action: 'beginconvert'
             });
-
-            // TODO end conversion job
 
             // display loading animation
             documentContainer.busy();
@@ -562,7 +560,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.unload(true);
             this.$el.off();
             if (this.thumbnailsView) {
-                this.thumbnailsView.remove();
+                this.thumbnailsView.disposeView();
             }
         }
 

@@ -38,13 +38,9 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 if (pageNumber > 20) return;
                 var thumbnailLink = $('<a class="document-thumbnail-link">'),
                     thumbnail = $('<div class="document-thumbnail">'),
-                    thumbnailImage = Util.createDocumentThumbnailImage(this.model.toJSON(), {
+                    thumbnailImage = this.createDocumentThumbnailImage({
                         jobID: this.convertData.jobID,
-                        pageNumber: pageNumber + 1,
-                        format: 'jpg',
-                        width: 160,
-                        height: 200,
-                        zoom: 1
+                        pageNumber: pageNumber + 1
                     }),
                     thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
                 thumbnail.append(thumbnailImage);
@@ -56,6 +52,43 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 this.$el.append(thumbnailLink);
             }.bind(this));
             return this;
+        },
+
+        /**
+         * Creates thumbnail image of a document page.
+         *
+         * @param {Object} params
+         *  @param {String} params.jobID
+         *   conversion job ID from the document converter.
+         *  @param {String} params.pageNumber
+         *   a document page number
+         *
+         * @returns {jQuery} image
+         *  the image node as jQuery element.
+         */
+        createDocumentThumbnailImage: function (params) {
+            //console.warn('ThumbnailView.createDocumentThumbnailImage()', params);
+            var file = this.model.toJSON(),
+                defaultParams = {
+                    action: 'convertdocument',
+                    convert_action: 'getpage',
+                    target_format: 'png',
+                    target_width: 160,
+                    target_height: 200,
+                    target_zoom: 1,
+                    id: encodeURIComponent(file.id),
+                    folder_id: file.folder_id,
+                    filename: file.filename,
+                    version: file.version
+                },
+                imageUrlParams = _.extend(defaultParams, {
+                    job_id: params.jobID,
+                    page_number: params.pageNumber
+                }),
+                image = $('<img class="thumbnail-image">'),
+                imageUrl = Util.getConverterUrl(imageUrlParams);
+            image.attr('src', imageUrl);
+            return image;
         },
 
         /**
@@ -85,6 +118,12 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
         getVisibleThumbnails: function () {
             //console.warn('ThumbnailView.getVisibileThumbnails()');
+        },
+
+        disposeView: function () {
+            //console.warn('ThumbnailView.disposeView()');
+            Util.endConvertJob(this.model.toJSON(), this.convertData.jobID);
+            this.remove();
         }
 
     });

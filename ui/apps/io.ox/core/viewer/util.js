@@ -194,9 +194,13 @@ define('io.ox/core/viewer/util', [
         // send the AJAX request
         ajaxRequest = CoreHTTP.GET(requestProps);
 
-        // reject, if the response contains 'hasErrors:true'
         promise = ajaxRequest.then(function (response) {
-            return response.error ? $.Deferred().reject(response) : response;
+            var def = $.Deferred();
+            // TODO temp workaround, because document endconvert request does not return any response
+            if (!response) {
+                return { data: {} };
+            }
+            return response.error ? def.reject(response).promise() : response;
         });
 
         // add an abort() method, forward invocation to AJAX request
@@ -204,66 +208,26 @@ define('io.ox/core/viewer/util', [
     };
 
     /**
-     * Creates thumbnail image of a document page.
-     *
-     * @param {Object} file
-     *  an OX Viewer file descriptor.
-     *
-     * @param {Object} params
-     *  @param {String} params.jobID
-     *   conversion job ID from the document converter.
-     *  @param {String} params.pageNumber
-     *   a document page number
-     *  @param {String} params.width
-     *   thumbnail width in pixels.
-     *  @param {String} params.height
-     *   thumbnail height in pixels.
-     *  @param {String} params.zoom
-     *   thumbnail image zoon level.
-     *
-     * @returns {jQuery} image
-     *  the image node as jQuery element.
-     */
-    Util.createDocumentThumbnailImage = function (file, params) {
-        var imageUrlParams = _.extend({
-                action: 'convertdocument',
-                convert_action: 'getpage',
-                id: file.id,
-                folder_id: file.folder_id,
-                filename: file.filename,
-                version: file.version
-            }, {
-                job_id: params.jobID,
-                page_number: params.pageNumber,
-                target_format: params.format,
-                target_width: params.width,
-                target_height: params.height,
-                target_zoom: params.zoom
-            }),
-            image = $('<img class="thumbnail-image">'),
-            imageUrl = Util.getConverterUrl(imageUrlParams);
-        image.attr('src', imageUrl);
-        return image;
-    };
-
-    /**
      * Ends the thumbnail conversion job.
      *
      * @param {String} jobId
-     *  the conversion job ID
+     *  the conversion job ID.
      *
      * @returns {jQuery.Promise}
+     *  the promise from document converter request.
      */
-    Util.endConvertJob = function (jobId) {
+    Util.endConvertJob = function (file, jobId) {
         if (!jobId) {
             return;
         }
+
         var params = {
             action: 'convertdocument',
             convert_action: 'endconvert',
             job_id: jobId
         };
-        return Util.sendConverterRequest(params);
+
+        return Util.sendConverterRequest(file, params);
     };
 
     return Util;
