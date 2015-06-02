@@ -169,6 +169,7 @@ define('io.ox/core/tk/typeahead', [
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item);
                     self.$el.trigger('select', item);
+                    self.$el.typeahead('val', '');
                 },
                 'typeahead:cursorchanged': function () {
                     // useful for debugging

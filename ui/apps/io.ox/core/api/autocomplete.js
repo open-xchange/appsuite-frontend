@@ -112,7 +112,7 @@ define('io.ox/core/api/autocomplete', [
                                 case 'custom':
                                 case 'user':
                                 case 'contact':
-                                    retData = self.processContactResults(retData, query);
+                                    retData = self.processContactResults(retData);
                                     break;
                             }
                         });
@@ -129,10 +129,9 @@ define('io.ox/core/api/autocomplete', [
          * process contact results
          * @param  {string} type
          * @param  {array}  data (contains results array)
-         * @param  {string} query
          * @return { array }
          */
-        processContactResults: function (data, query) {
+        processContactResults: function (data) {
             var tmp = [], hash = {}, self = this;
 
             // improve response
@@ -167,15 +166,15 @@ define('io.ox/core/api/autocomplete', [
 
             // check hash for double entries
             function inHash(obj) {
-                return hash[obj[obj.field]] ? false : (hash[obj[obj.field]] = true);
+                return hash[obj] ? false : (hash[obj] = true);
             }
 
             // 2/2: remove email duplicates
             tmp = _(tmp).filter(function (obj) {
                 if (obj.mark_as_distributionlist) {
-                    return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
+                    return inHash(_.cid(obj));
                 }
-                return inHash(obj);
+                return inHash(obj[obj.field]);
             });
             hash = null;
             return tmp;
