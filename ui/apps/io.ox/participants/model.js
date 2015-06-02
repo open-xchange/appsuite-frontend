@@ -125,7 +125,7 @@ define('io.ox/participants/model', [
             // set pid
             this.set('pid', [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_'), { silent: true });
             // for typeahead hint
-            this.value = this.getTarget();
+            this.value = this.getTarget() || this.getDisplayName();
         },
 
         getContactID: function () {
