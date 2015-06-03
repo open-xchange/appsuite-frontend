@@ -43,7 +43,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 //console.warn('ThumbnailsView.beginConvertSuccess()', convertData);
                 _.times(convertData.pageCount, function (pageNumber) {
                     // temporary limit thumbnails to 20 for testing
-                    if (pageNumber > 20) return;
+                    if (pageNumber > 30) return;
                     var thumbnailLink = $('<a class="document-thumbnail-link">'),
                         thumbnail = $('<div class="document-thumbnail">'),
                         thumbnailImage = self.createDocumentThumbnailImage({
@@ -87,9 +87,8 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 defaultParams = {
                     action: 'convertdocument',
                     convert_action: 'getpage',
-                    target_format: 'png',
-                    target_width: 160,
-                    target_height: 200,
+                    target_format: 'jpg',
+                    target_width: 200,
                     target_zoom: 1,
                     id: encodeURIComponent(file.id),
                     folder_id: file.folder_id,

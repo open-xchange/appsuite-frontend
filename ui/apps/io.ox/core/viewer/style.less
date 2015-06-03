@@ -562,9 +562,10 @@
         }
 
         @viewer-sidebar-tab-color: #ffffff;
+        @viewer-sidebar-tab-bordercolor: #555555;
         @viewer-sidebar-activetab-bordercolor: #3c73aa;
         @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
-        @viewer-sidebar-activetab-hovercolor: rgba(255,255,255,0.15);
+        @viewer-sidebar-hovercolor: rgba(255,255,255,0.2);
         .viewer-sidebar-tabs {
             list-style: none;
             width: 100%;
@@ -583,27 +584,24 @@
                 text-align: center;
                 cursor: pointer;
                 text-decoration: none;
-                margin-right: 2px;
+                border-bottom: 2px solid @viewer-sidebar-tab-bordercolor;
                 &.selected {
                     border-bottom: 2px solid @viewer-sidebar-activetab-bordercolor;
                     background-color: @viewer-sidebar-activetab-bgcolor;
                 }
                 &:hover {
-                    background-color: @viewer-sidebar-activetab-hovercolor;
+                    background-color: @viewer-sidebar-hovercolor;
                 }
             }
         }
 
         .viewer-sidebar-pane {
-            &.viewer-sidebar-detailpane {
-
-            }
-            &.viewer-sidebar-thumbnailpane {
+            &.thumbnail-pane {
                 display: none;
             }
         }
 
-        @document-thumbnailview-bgcolor: #222222;
+        @document-thumbnailview-bgcolor: #1A1A1A;
         @document-thumbnail-link-focus-color: #777777;
         @document-thumbnail-link-hover-color: #444444;
         @document-thumbnail-link-selected-color: #777777;
@@ -611,17 +609,15 @@
         @document-thumbnail-border-color: #e0e0e0;
         @document-thumbnail-number-color: #ffffff;
         .document-thumbnails-view {
-            width: 150px;
             height: 100%;
             background: @document-thumbnailview-bgcolor;
             overflow-y: auto;
             overflow-x: hidden;
             .document-thumbnail-link {
-                display: block;
+                display: inline-block;
                 width: 120px;
-                height: 150px;
-                padding: 20px 0;
-                margin: 2px auto;
+                padding: 10px 10px 0px 10px;
+                margin: 5px 15px;
                 cursor: pointer;
                 &:hover {
                     background: @document-thumbnail-link-hover-color;
@@ -635,13 +631,12 @@
                 }
             }
             .document-thumbnail {
-                width: 80px;
-                height: 100px;
+                width: 100px;
+                height: 130px;
                 margin: 0 auto;
                 background: @document-thumbnail-bgcolor;
                 .thumbnail-image {
-                    width: 80px;
-                    height: 100px;
+                    width: 100%;
                 }
             }
 

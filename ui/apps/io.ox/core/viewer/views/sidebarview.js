@@ -54,19 +54,53 @@ define('io.ox/core/viewer/views/sidebarview', [
             });
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="selected">').text(gt('Detail')),
+                detailTabLink = $('<a class="selected tablink" data-show="detail">').text(gt('Detail')),
                 detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
-                detailPane = $('<div class="viewer-sidebar-detailpane viewer-sidebar-pane">'),
-                thumbnailTabLink = $('<a>').text(gt('Thumbnail')),
+                detailPane = $('<div class="viewer-sidebar-pane detail-pane">'),
+                thumbnailTabLink = $('<a class="tablink"  data-show="thumbnail">').text(gt('Thumbnail')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
-                thumbnailPane = $('<div class="viewer-sidebar-thumbnailpane viewer-sidebar-pane">');
+                thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane">');
             tabsList.append(detailTab, thumbnailTab);
             this.$el.append(tabsList, detailPane, thumbnailPane);
+            tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
             this.model = null;
             this.zone = null;
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        onTabClicked: function (event) {
+            //console.warn('SidebarView.onTabActivated()', event);
+            var target = $(event.target),
+                action = target.attr('data-show'),
+                actionHandler = this.onDetailActivated,
+                paneClass = '.detail-pane';
+            event.preventDefault();
+            this.$('.tablink').removeClass('selected');
+            this.$('.viewer-sidebar-pane').hide();
+            target.addClass('selected');
+            switch (action) {
+                case 'detail':
+                    actionHandler = this.onDetailActivated;
+                    paneClass = '.detail-pane';
+                    break;
+                case 'thumbnail':
+                    actionHandler = this.onThumbnailActivated;
+                    paneClass = '.thumbnail-pane';
+                    break;
+                default: break;
+            }
+            actionHandler.call(this);
+            this.$(paneClass).show();
+        },
+
+        onDetailActivated: function () {
+            //console.warn('SidebarView.onDetailActivated()');
+        },
+
+        onThumbnailActivated: function () {
+            //console.warn('SidebarView.onThumbnailActivated()');
         },
 
         /**
@@ -101,8 +135,9 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
+            var detailPane = this.$('.detail-pane');
             // remove previous sections
-            this.$el.find('.viewer-sidebar-detailpane').empty();
+            detailPane.empty();
             // remove dropzone handler
             if (this.zone) {
                 this.zone.off();
@@ -124,14 +159,14 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.$el.append(this.zone.render().$el.addClass('abs'));
             }
             // render sections
-            this.$el.find('.viewer-sidebar-detailpane').append(
+            detailPane.append(
                 new FileInfoView({ model: this.model }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el
             );
-
-            this.$el.find('.viewer-sidebar-thumbnailpane').append(new ThumbnailView({
+            // create thumbnails view
+            this.$('.thumbnail-pane').append(new ThumbnailView({
                 model: this.model,
                 viewerEvents: this.viewerEvents
             }).el);
