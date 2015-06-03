@@ -407,7 +407,7 @@ define('io.ox/mail/common-extensions', [
                         data = collection.get(id).toJSON();
                         baton = ext.Baton({ startItem: data, data: list });
 
-                        actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
+                        actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                     });
 
                     def.resolve(view);
