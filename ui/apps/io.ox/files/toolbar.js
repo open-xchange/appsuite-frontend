@@ -222,7 +222,7 @@ define('io.ox/files/toolbar', [
                 .option('checkboxes', true, gt('Checkboxes'))
                 .option('folderview', true, gt('Folder view'));
 
-            if (_.device('!touch')) dropdown.option('details', true, gt('Details'));
+            if (_.device('!touch')) dropdown.option('details', true, gt('File details'));
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
