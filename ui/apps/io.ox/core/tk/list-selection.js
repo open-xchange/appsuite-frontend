@@ -326,15 +326,16 @@ define('io.ox/core/tk/list-selection', [
                 index = items.length - 1;
             }
             this.select(index, items);
-            this.view.trigger('selection:action', this.get());
         },
 
         previous: function () {
             this.move(-1);
+            this.view.trigger('selection:action', this.get());
         },
 
         next: function () {
             this.move(1);
+            this.view.trigger('selection:action', this.get());
         },
 
         // to anticipate a removal of multiple items
