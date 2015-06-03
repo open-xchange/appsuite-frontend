@@ -50,7 +50,7 @@ define('io.ox/files/share/myshares', [
         draw: function () {
             this.append(
                 $('<div class="icon">').append(
-                    $('<i class="fa fa-folder fa-2x">')
+                    $('<i class="fa fa-folder">')
                 )
             );
         }
@@ -94,7 +94,10 @@ define('io.ox/files/share/myshares', [
         draw: function () {
             this.append(
                 $('<div class="actions">').append(
-                    $('<a href="#">').append(
+                    $('<a href="#" class="edit">').append(
+                        $('<i class="fa fa-gear">')
+                    ),
+                    $('<a href="#" class="remove">').append(
                         $('<i class="fa fa-trash">')
                     )
                 )
@@ -111,10 +114,27 @@ define('io.ox/files/share/myshares', [
 
         className: 'share-view',
 
+        events: {
+            'click .actions .remove': 'onRemove',
+            'click .actions .edit': 'onEdit',
+            'keydown': 'fnKey'
+        },
+
         initialize: function () {
 
             this.baton = ext.Baton({
                 view: this
+            });
+
+            this.listenTo(this.model, 'change', function (model) {
+                if (model && model.changed) {
+                    this.$el.empty();
+                    this.render();
+                }
+            });
+
+            this.listenTo(this.model, 'remove', function () {
+                this.remove();
             });
 
         },
@@ -128,6 +148,21 @@ define('io.ox/files/share/myshares', [
             ext.point(POINT + '/share').invoke('draw', wrapper, this.baton);
 
             return this;
+        },
+
+        fnKey: function (e) {
+            // del or backspace
+            if (e.which === 46 || e.which === 8) this.onRemove(e);
+        },
+
+        onRemove: function (e) {
+            e.preventDefault();
+            this.model.collection.remove(this.model);
+        },
+
+        onEdit: function (e) {
+            e.preventDefault();
+            console.log('edit', this.model);
         }
 
     });
@@ -155,6 +190,8 @@ define('io.ox/files/share/myshares', [
 
             this.listenTo(this.collection, 'reset', this.updateShares);
 
+            // this.listenTo(ox, 'refresh^', this.getShares);
+
         },
 
         render: function () {
@@ -170,7 +207,7 @@ define('io.ox/files/share/myshares', [
 
         getShares: function () {
             var self = this;
-            return api.all(this.options.module).then(function (data) {
+            return api.all().then(function (data) {
                 self.collection.reset(data);
             });
         },
