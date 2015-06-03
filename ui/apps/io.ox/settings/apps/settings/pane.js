@@ -88,8 +88,7 @@ define('io.ox/settings/apps/settings/pane', [
                 $('<div class="widget-controls">').append(
                     $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
                     .attr({
-                        'data-id': 'the id',
-                        'title': 'a title'
+                        'title': gt('Delete')
                     }).append('<i class="fa fa-trash-o">')
                 )
             );
