@@ -67,7 +67,14 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.zone = null;
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
+            // bind scroll handler
+            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        onScrollHandler: function (event) {
+            console.warn('Sidebar.onScrollHandler()');
+            this.viewerEvents.trigger('viewer:sidebar:scroll', event);
         },
 
         onTabClicked: function (event) {

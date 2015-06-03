@@ -607,7 +607,8 @@
         @document-thumbnail-link-selected-color: #777777;
         @document-thumbnail-bgcolor: #ffffff;
         @document-thumbnail-border-color: #e0e0e0;
-        @document-thumbnail-number-color: #ffffff;
+        @document-thumbnail-number-color: #999999;
+        @document-thumbnail-number-hover-color: #FFFFFF;
         .document-thumbnails-view {
             height: 100%;
             background: @document-thumbnailview-bgcolor;
@@ -622,12 +623,18 @@
                 &:hover {
                     background: @document-thumbnail-link-hover-color;
                     text-decoration: none;
+                    .page-number {
+                        color: @document-thumbnail-number-hover-color;
+                    }
                 }
                 &:active, &:focus {
                     background: @document-thumbnail-link-focus-color;
                 }
                 &.selected {
                     background: @document-thumbnail-link-selected-color;
+                    .page-number {
+                        color: @document-thumbnail-number-hover-color;
+                    }
                 }
             }
             .document-thumbnail {

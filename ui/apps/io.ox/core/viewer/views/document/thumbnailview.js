@@ -31,6 +31,8 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             this.listenTo(this.viewerEvents, 'viewer:document:selectthumbnail', this.selectThumbnail);
             // listen to render thumbnails call
             this.listenTo(this.viewerEvents, 'viewer:sidebar:renderthumbnails', this.render);
+            // listen to sidebar scroll
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.onScrollHandler);
             // dispose view on global dispose
             this.on('dispose', this.disposeView.bind(this));
             this.thumbnailLoadPromise = null;
@@ -132,8 +134,35 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             thumbnail.addClass('selected').attr('aria-selected', true);
         },
 
-        getVisibleThumbnails: function () {
+        onScrollHandler: function () {
+            console.warn('ThumbnailView.onScrollHandler()');
+        },
+
+        /**
+         * Detect visible nodes from given nodes array.
+         *
+         * @returns {Array} visibleNodes
+         *  an array of indices of visible nodes.
+         */
+        getVisibleNodes: function (nodes) {
             //console.warn('ThumbnailView.getVisibileThumbnails()');
+            var visibleNodes = [];
+            // Whether the page element is visible in the viewport, wholly or partially.
+            function isNodeVisible(node) {
+                var nodeBoundingRect = node.getBoundingClientRect();
+                function isInWindow(verticalPosition) {
+                    return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
+                }
+                return isInWindow(nodeBoundingRect.top) ||
+                    isInWindow(nodeBoundingRect.bottom) ||
+                    (nodeBoundingRect.top < 0 && nodeBoundingRect.bottom > window.innerHeight);
+            }
+            // return the visible pages
+            _.each(nodes, function (element, index) {
+                if (!isNodeVisible(element)) { return; }
+                visibleNodes.push(index + 1);
+            });
+            return visibleNodes;
         },
 
         disposeView: function () {
