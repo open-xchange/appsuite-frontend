@@ -7730,17 +7730,18 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
+#: apps/io.ox/mail/detail/mobileView.js:184
+#: module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:240
+msgid "This message has been truncated due to size limitations."
+msgstr ""
+
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/mobileView.js:222
+#: apps/io.ox/mail/detail/mobileView.js:247
 #: module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js:415
 msgid "Email from %1$s: %2$s"
-msgstr ""
-
-#: apps/io.ox/mail/detail/view.js:240
-#: module:io.ox/mail
-msgid "This message has been truncated due to size limitations."
 msgstr ""
 
 #: apps/io.ox/mail/import.js:45

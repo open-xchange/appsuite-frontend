@@ -2851,7 +2851,7 @@ msgstr "电子邮件地址"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js:247 module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js:415
 msgid "Email from %1$s: %2$s"
 msgstr "来自 %1$s 的电子邮件：%2$d"
@@ -7641,7 +7641,8 @@ msgstr "此邮件已添加到门户"
 msgid "This mail has no content"
 msgstr "此邮件没有内容"
 
-#: apps/io.ox/mail/detail/view.js:240 module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js:184 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:240
 msgid "This message has been truncated due to size limitations."
 msgstr "此消息已因体积限制而被截短。"
 
