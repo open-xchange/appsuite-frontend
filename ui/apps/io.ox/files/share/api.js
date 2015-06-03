@@ -75,12 +75,13 @@ define('io.ox/files/share/api', [
          * get all shares
          * @return { deferred } an array with share data
          */
-        all: function () {
+        all: function (module) {
             return http.GET({
                 module: 'share/management',
                 params: {
                     action: 'all',
-                    timezone: 'UTC'
+                    timezone: 'UTC',
+                    module: module
                 }
             });
         },
