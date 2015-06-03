@@ -121,10 +121,17 @@ define.async('io.ox/oauth/keychain',
 
                     //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug)
                     getAll().done(function (services, accounts) {
-                        if (accounts[id]) {
-                            def.resolve(accounts[id]);
-                            self.trigger('create', accounts[id]);
-                            self.trigger('refresh.all refresh.list');
+                        var account;
+                        for (var i = 0; i < accounts.length; i++) {
+                            if (accounts[0][i].id === id) {
+                                account = accounts[0][i];
+                                break;
+                            }
+                        }
+                        if (account) {
+                            def.resolve(account);
+                            self.trigger('create', account);
+                            self.trigger('refresah.all refresh.list');
                             ox.trigger('refresh-portal');
                             notifications.yell('success', gt('Account added successfully'));
                         } else {
