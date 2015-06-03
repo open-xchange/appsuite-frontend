@@ -65,7 +65,9 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 //console.warn('Core.Viewer.ThumbnailView.beginConvertError: ', response);
                 return $.Deferred().reject(response).promise();
             }
-            this.thumbnailLoadPromise = Util.beginConvert(this.model.toJSON()).then(beginConvertSuccess, beginConvertError);
+            this.thumbnailLoadPromise = Util.beginConvert(this.model.toJSON())
+                .done(beginConvertSuccess)
+                .fail(beginConvertError);
             return this;
         },
 
@@ -135,11 +137,18 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
         },
 
         disposeView: function () {
-            //console.warn('ThumbnailView.disposeView()');
-            var file = this.model.toJSON();
-            this.thumbnailLoadPromise.done(function (convertData) {
-                Util.endConvert(file, convertData.jobID);
-            });
+            //console.warn('ThumbnailView.disposeView()', this.model.toJSON());
+            var promise = this.thumbnailLoadPromise;
+            if (promise) {
+                // cancel any pending thumbnail loading
+                if (promise.state() === 'pending') {
+                    promise.abort();
+                }
+                // close convert jobs while quitting
+                promise.done(function (response) {
+                    Util.endConvert(this.model.toJSON(), response.jobID);
+                }.bind(this));
+            }
         }
 
     });
