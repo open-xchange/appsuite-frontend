@@ -359,15 +359,16 @@ define('io.ox/tasks/api', [
             useFolder = api.getDefaultFolder();
         }
 
-        //make sure we have an integer here
-        if (task.status) {
+        if (task.status !== undefined) {
+
+            // status might be undefined during an update
+            // we only touch the completion date if we know the status (see bug 38587)
+
+            // make sure we have an integer here
             task.status = parseInt(task.status, 10);
-        }
-        if (task.status === 3) {
-            // make sure we have date_completed
-            task.date_completed = task.date_completed || _.now();
-        } else if (task.status !== 3 && task.status !== '3') {
-            task.date_completed = null;
+
+            // update/keep date_completed when status is 3 (done)
+            task.date_completed = task.status === 3 ? (task.date_completed || _.now()) : null;
         }
 
         if (task.priority === 0) {

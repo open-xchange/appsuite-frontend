@@ -70,8 +70,9 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         scrollIntoView: function (id) {
+            // scroll viewport to top (see bug 38411)
             var node = this.byId(id);
-            if (node.length) node[0].scrollIntoView(false);
+            if (node.length) node[0].scrollIntoView(true);
         },
 
         onClick: function (e) {

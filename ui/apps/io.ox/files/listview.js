@@ -42,6 +42,20 @@ define('io.ox/files/listview', [
     });
 
     //
+    // Extension for detail sidebar
+    //
+
+    ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
+        index: 200,
+        id: 'thumbnail',
+        draw: function (baton) {
+            var column = $('<div class="sidebar-panel-thumbnail" role="tabpanel">');
+            extensions.thumbnail.call(column, baton);
+            this.append(column);
+        }
+    });
+
+    //
     // Extensions
     //
 

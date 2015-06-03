@@ -163,6 +163,31 @@ define('io.ox/mail/detail/mobileView', [
         }
     });
 
+    ext.point('io.ox/mail/mobile/detail/body').extend({
+        id: 'max-size',
+        after: 'content',
+        draw: function (baton) {
+
+            var isTruncated = _(baton.data.attachments).some(function (attachment) { return attachment.truncated; });
+            if (!isTruncated) return;
+
+            var url = 'api/mail?' + $.param({
+                action: 'get',
+                view: 'document',
+                folder: baton.data.folder_id,
+                id: baton.data.id,
+                session: ox.session
+            });
+
+            this.append(
+                $('<div class="max-size-warning">').append(
+                    $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
+                    $('<a role="button" target="_blank">').attr('href', url).text('Show entire message')
+                )
+            );
+        }
+    });
+
     /*
      * Used for header information in threads on mobile (threadView page)
      * Uses all extension points from desktop view

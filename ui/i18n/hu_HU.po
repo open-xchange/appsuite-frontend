@@ -2884,7 +2884,7 @@ msgstr "E-mail címek"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js:247 module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js:415
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail innen: %1$s: %2$s"
@@ -7742,7 +7742,8 @@ msgstr "A levél hozzáadva a portálhoz"
 msgid "This mail has no content"
 msgstr "A levélnek nincs tartalma"
 
-#: apps/io.ox/mail/detail/view.js:240 module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js:184 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:240
 msgid "This message has been truncated due to size limitations."
 msgstr "A levél a méretkorlát miatt le lett vágva."
 

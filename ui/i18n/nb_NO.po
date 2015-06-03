@@ -2906,7 +2906,7 @@ msgstr "E-postadresser"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/mobileView.js:222 module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js:247 module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js:415
 msgid "Email from %1$s: %2$s"
 msgstr "E-post fra %1$s: %2$s"
@@ -7816,7 +7816,8 @@ msgstr "Denne e-posten har blitt lagt til portalen"
 msgid "This mail has no content"
 msgstr "Denne e-posten har ingen innhold"
 
-#: apps/io.ox/mail/detail/view.js:240 module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js:184 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:240
 msgid "This message has been truncated due to size limitations."
 msgstr "Meldingen har blitt avkortet på grunn av størrelsesbegrensninger."
 
