@@ -17,7 +17,7 @@ define('io.ox/files/share/model', [
 
     'use strict';
 
-    var ShareModel = Backbone.Model.extend({
+    var WizardShare = Backbone.Model.extend({
 
         idAttribute: 'token',
 
@@ -196,5 +196,25 @@ define('io.ox/files/share/model', [
 
     });
 
-    return ShareModel;
+    var Share = Backbone.Model.extend({
+
+        idAttribute: 'token',
+
+        initialize: function (option) {
+            this.set('files', option.files);
+        }
+
+    });
+
+    var Shares = Backbone.Collection.extend({
+
+        model: Share
+
+    });
+
+    return {
+        WizardShare: WizardShare,
+        Share: Share,
+        Shares: Shares
+    };
 });

@@ -22,7 +22,7 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/yell',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, ShareModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt) {
+], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt) {
 
     'use strict';
 
@@ -285,11 +285,11 @@ define('io.ox/files/share/wizard', [
 
         tagName: 'form',
 
-        className: 'share-view',
+        className: 'share-wizard',
 
         initialize: function (options) {
             var self = this;
-            this.model = new ShareModel({ files: options.files });
+            this.model = new sModel.WizardShare({ files: options.files });
             this.baton = ext.Baton({
                 model: this.model,
                 view: this,
