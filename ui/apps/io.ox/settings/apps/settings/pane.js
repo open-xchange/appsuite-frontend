@@ -76,20 +76,19 @@ define('io.ox/settings/apps/settings/pane', [
                             .text(client.website)
                     ),
                     $('<div>').text(client.description),
-                    $('<div class="permissions">').text(
-                        //#. %1$s string with permissions
-                        gt('Permissions: %1$s', _(model.get('scopes')).values().join(' '))
+                    $('<div class="permissions">').append(
+                        $('<span>').text(gt('Permissions:')),
+                        _(model.get('scopes')).values().join(' ')
                     ),
-                    $('<div class="date pull-left">').text(
-                        //#. %1$s date of approval
-                        gt('Approved: %1$s', moment(model.get('date'), 'x').format('l'))
+                    $('<div class="date pull-left">').append(
+                        $('<span>').text(gt('Approved:')),
+                        moment(model.get('date'), 'x').format('l')
                     )
                 ),
                 $('<div class="widget-controls">').append(
                     $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
                     .attr({
-                        'data-id': 'the id',
-                        'title': 'a title'
+                        'title': gt('Delete')
                     }).append('<i class="fa fa-trash-o">')
                 )
             );

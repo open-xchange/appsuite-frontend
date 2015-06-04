@@ -423,8 +423,8 @@ define('io.ox/files/main', [
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
 
                 if (mainWidth > 0 && sidebarView.opened) {
-                    list.$el.closest('.leftside').css('width', mainWidth - 320);
-                    sidebarView.$el.css('left', mainWidth - 320);
+                    list.$el.closest('.leftside').css('width', mainWidth - 320 + 'px');
+                    sidebarView.$el.css('left', mainWidth - 320 + 'px');
                 }
             });
 
@@ -438,8 +438,14 @@ define('io.ox/files/main', [
 
             app.applyLayout = function () {
                 var layout = app.props.get('layout'),
-                    details = app.props.get('details', false);
-                sidebarView.$el.css('width', '320px');
+                    details = app.props.get('details', false),
+                    mainWidth = app.getWindow().nodes.main.outerWidth(),
+                    list = app.listView;
+
+                if (mainWidth > 0 && sidebarView.opened) {
+                    list.$el.closest('.leftside').css('width', mainWidth - 320 + 'px');
+                    sidebarView.$el.css('left', mainWidth - 320 + 'px');
+                }
 
                 if (details) {
                     sidebarView.opened = true;

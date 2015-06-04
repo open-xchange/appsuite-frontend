@@ -291,30 +291,6 @@ define('io.ox/mail/actions', [
 
     // Attachments
 
-    new Action('io.ox/mail/actions/preview-attachment', {
-        id: 'preview',
-        requires: function (e) {
-            return require(['io.ox/preview/main']).pipe(function (p) {
-                var list = _.getArray(e.context);
-                // is at least one attachment supported?
-                return e.collection.has('some') && _.device('!smartphone') && _(list).reduce(function (memo, obj) {
-                    return memo || new p.Preview({
-                        filename: obj.filename,
-                        // fixes 'audio/mp3; name="Metallica - 01 - Enter Sandman.mp3"''
-                        mimetype: String(obj.content_type || '').split(';')[0],
-                        attachment: true
-                    })
-                    .supportsPreview();
-                }, false);
-            });
-        },
-        multiple: function (list, baton) {
-            require(['io.ox/mail/actions/previewAttachment'], function (action) {
-                action.multiple(list, baton);
-            });
-        }
-    });
-
     new Action('io.ox/mail/actions/open-attachment', {
         id: 'open',
         requires: 'one',
@@ -326,7 +302,7 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/actions/slideshow-attachment', {
+    new Action('io.ox/mail/actions/view-attachment', {
         id: 'viewer',
         // TODO capabilites check, files filter?
         requires: 'some',
@@ -714,16 +690,8 @@ define('io.ox/mail/actions', [
         id: 'view_new',
         index: 100,
         mobile: 'high',
-        label: gt('View (New)'),
-        ref: 'io.ox/mail/actions/slideshow-attachment'
-    }));
-
-    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'preview',
-        index: 200,
-        mobile: 'high',
-        label: gt('Preview'),
-        ref: 'io.ox/mail/actions/preview-attachment'
+        label: gt('View'),
+        ref: 'io.ox/mail/actions/view-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({

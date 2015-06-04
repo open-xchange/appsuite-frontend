@@ -381,7 +381,7 @@ define('io.ox/mail/threadview', [
             dnd.enable({
                 container: this.$el,
                 draggable: true,
-                selectable: '.detail-view-header',
+                selectable: '.detail-view-header .contact-picture',
                 simple: true
             });
         },

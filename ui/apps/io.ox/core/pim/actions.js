@@ -78,7 +78,7 @@ define('io.ox/core/pim/actions', [
     };
 
     var labels = {
-        view: gt('View (New)'),
+        view: gt('View'),
         open: gt('Open in browser'),
         download: gt('Download'),
         save: gt('Save to Drive')

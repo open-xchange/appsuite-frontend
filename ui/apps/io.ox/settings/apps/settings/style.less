@@ -2,17 +2,24 @@
     .selectable {
         text-align: left;
         margin-left: 60px;
+        margin-right: 45px;
 
-        * {
+        div {
             margin-bottom: 3px;
+
+            &:first-child {
+                padding-top: 5px;
+                margin-bottom: 9px;
+            }
         }
 
-        .permissions {
+        .permissions, .date {
             color: #777;
-        }
 
-        .date {
-            color: #777;
+            span {
+                font-weight: bold;
+                margin-right: 0.4em;
+            }
         }
     }
 
