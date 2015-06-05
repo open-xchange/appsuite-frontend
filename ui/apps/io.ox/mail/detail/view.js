@@ -74,7 +74,7 @@ define('io.ox/mail/detail/view', [
         id: 'drag-support',
         index: INDEX_header += 100,
         draw: function (baton) {
-            this.attr({
+            this.find('.contact-picture').attr({
                 'data-drag-data': _.cid(baton.data),
                 'data-drag-message': util.getSubject(baton.data)
             });

@@ -1,0 +1,73 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.generic-sidebar-container {
+
+    @default-width: 240px;
+
+    &.has-left > .generic-sidebar-wrapper {
+        left: @default-width;
+    }
+
+    &.has-right > .generic-sidebar-wrapper {
+        right: @default-width;
+    }
+
+    &.has-left > .generic-sidebar {
+        left: 0;
+        right: auto;
+    }
+
+    &.has-right > .generic-sidebar {
+        right: 0;
+        left: auto;
+    }
+
+    .generic-sidebar {
+        width: @default-width;
+        background-color: #f5f5f5;
+    }
+}
+
+//
+// Don't show on smartphones
+//
+@media all and (max-width: 540px) {
+    .generic-sidebar-container .generic-sidebar {
+        display: none;
+    }
+}
+
+//
+// More width on large screens (> 1280px)
+//
+
+@media all and (min-width: 1281px) {
+
+    .generic-sidebar-container {
+
+        @default-width: 320px;
+
+        &.has-left > .generic-sidebar-wrapper {
+            left: @default-width;
+        }
+
+        &.has-right > .generic-sidebar-wrapper {
+            right: @default-width;
+        }
+
+        .generic-sidebar {
+            width: @default-width;
+        }
+    }
+}

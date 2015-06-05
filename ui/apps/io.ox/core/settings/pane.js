@@ -74,6 +74,10 @@ define('io.ox/core/settings/pane', [
         id: 'my-contact-data',
         index: '10000',
         draw: function () {
+
+            // check if users can edit their own data (see bug 34617)
+            if (settings.get('user/internalUserEdit', true) === false) return;
+
             this.append(
                 $('<div data-extension-id="my-contact-data">').append(
                     $('<div class="form-group">').append(
