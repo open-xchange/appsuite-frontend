@@ -15,8 +15,7 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/calendar/settings/model',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
-    'io.ox/backbone/mini-views',
-    'less!io.ox/calendar/settings/style.less'
+    'io.ox/backbone/mini-views'
 ], function (model, ext, gt, mini) {
 
     'use strict';
