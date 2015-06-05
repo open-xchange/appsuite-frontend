@@ -566,6 +566,7 @@
         @viewer-sidebar-activetab-bordercolor: #3c73aa;
         @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
         @viewer-sidebar-hovercolor: rgba(255,255,255,0.2);
+        @document-sidebar-busy-color: rgba(255, 255, 255, 0.3);
         .viewer-sidebar-tabs {
             list-style: none;
             width: 100%;
@@ -596,8 +597,14 @@
         }
 
         .viewer-sidebar-pane {
+            min-height: 200px;
+            background: @document-thumbnailview-bgcolor;
+            overflow: hidden;
             &.thumbnail-pane {
                 display: none;
+                &.io-ox-busy::before {
+                    color: @document-sidebar-busy-color;
+                }
             }
         }
 
@@ -605,54 +612,50 @@
         @document-thumbnail-link-focus-color: #777777;
         @document-thumbnail-link-hover-color: #444444;
         @document-thumbnail-link-selected-color: #777777;
-        @document-thumbnail-bgcolor: #ffffff;
+        @document-thumbnail-bgcolor: #FFFFFF;
         @document-thumbnail-border-color: #e0e0e0;
         @document-thumbnail-number-color: #999999;
         @document-thumbnail-number-hover-color: #FFFFFF;
-        .document-thumbnails-view {
-            height: 100%;
-            background: @document-thumbnailview-bgcolor;
-            overflow-y: auto;
-            overflow-x: hidden;
-            .document-thumbnail-link {
-                display: inline-block;
-                width: 120px;
-                padding: 10px 10px 0px 10px;
-                margin: 5px 15px;
-                cursor: pointer;
-                &:hover {
-                    background: @document-thumbnail-link-hover-color;
-                    text-decoration: none;
-                    .page-number {
-                        color: @document-thumbnail-number-hover-color;
-                    }
-                }
-                &:active, &:focus {
-                    background: @document-thumbnail-link-focus-color;
-                }
-                &.selected {
-                    background: @document-thumbnail-link-selected-color;
-                    .page-number {
-                        color: @document-thumbnail-number-hover-color;
-                    }
-                }
-            }
-            .document-thumbnail {
-                width: 100px;
-                height: 130px;
-                margin: 0 auto;
-                background: @document-thumbnail-bgcolor;
-                .thumbnail-image {
-                    width: 100%;
-                }
-            }
 
-            .page-number {
-                color: @document-thumbnail-number-color;
-                text-align:center;
-                margin-top: 5px;
-                font-weight: bold;
+        .document-thumbnail-link {
+            display: inline-block;
+            width: 120px;
+            padding: 10px 10px 0px 10px;
+            margin: 5px 15px;
+            cursor: pointer;
+            &:hover {
+                background: @document-thumbnail-link-hover-color;
+                text-decoration: none;
+                .page-number {
+                    color: @document-thumbnail-number-hover-color;
+                }
             }
+            &:active, &:focus {
+                background: @document-thumbnail-link-focus-color;
+            }
+            &.selected {
+                background: @document-thumbnail-link-selected-color;
+                .page-number {
+                    color: @document-thumbnail-number-hover-color;
+                }
+            }
+        }
+
+        .document-thumbnail {
+            width: 100px;
+            height: 130px;
+            margin: 0 auto;
+            background: @document-thumbnail-bgcolor;
+            .thumbnail-image {
+                width: 100%;
+            }
+        }
+
+        .page-number {
+            color: @document-thumbnail-number-color;
+            text-align:center;
+            margin-top: 5px;
+            font-weight: bold;
         }
     }
 

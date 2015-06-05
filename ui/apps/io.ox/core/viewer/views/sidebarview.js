@@ -73,7 +73,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         },
 
         onScrollHandler: function (event) {
-            console.warn('Sidebar.onScrollHandler()');
+            //console.warn('Sidebar.onScrollHandler()');
             this.viewerEvents.trigger('viewer:sidebar:scroll', event);
         },
 
@@ -107,7 +107,15 @@ define('io.ox/core/viewer/views/sidebarview', [
         },
 
         onThumbnailActivated: function () {
-            //console.warn('SidebarView.onThumbnailActivated()');
+            // create thumbnails view
+            if (this.$('.document-thumbnail').length === 0) {
+                var thumbnailView = new ThumbnailView({
+                    el: this.$('.thumbnail-pane'),
+                    model: this.model,
+                    viewerEvents: this.viewerEvents
+                });
+                thumbnailView.render();
+            }
         },
 
         /**
@@ -172,11 +180,6 @@ define('io.ox/core/viewer/views/sidebarview', [
                 new UploadNewVersionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el
             );
-            // create thumbnails view
-            this.$('.thumbnail-pane').append(new ThumbnailView({
-                model: this.model,
-                viewerEvents: this.viewerEvents
-            }).el);
         },
 
         /**

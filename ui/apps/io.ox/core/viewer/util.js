@@ -249,5 +249,37 @@ define('io.ox/core/viewer/util', [
         return Util.sendConverterRequest(file, params);
     };
 
+    /**
+     * Detect visible nodes from given nodes array.
+     *
+     * @returns {Array} visibleNodes
+     *  an array of indices of visible nodes.
+     */
+    Util.getVisibleNodes = function (nodes) {
+        var visibleNodes = [];
+        // Whether the page element is visible in the viewport, wholly or partially.
+        function isNodeVisible(node) {
+            var nodeBoundingRect = node.getBoundingClientRect();
+            function isInWindow(verticalPosition) {
+                return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
+            }
+            return isInWindow(nodeBoundingRect.top) ||
+                isInWindow(nodeBoundingRect.bottom) ||
+                (nodeBoundingRect.top < 0 && nodeBoundingRect.bottom > window.innerHeight);
+        }
+        // return the visible pages
+        _.each(nodes, function (element, index) {
+            if (!isNodeVisible(element)) { return; }
+            visibleNodes.push(index + 1);
+        });
+        return visibleNodes;
+    };
+
+    Util.createAbortableDeferred = function (abortFunction) {
+        return _.extend($.Deferred(), {
+            abort: abortFunction
+        });
+    };
+
     return Util;
 });

@@ -19,93 +19,118 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
     var ThumbnailView = DisposableView.extend({
 
-        className: 'document-thumbnails-view',
-
         events: {
             'click .document-thumbnail-link': 'onThumbnailClicked'
         },
 
         initialize: function (options) {
-            //console.warn('ThumbnailView.initialize()');
             _.extend(this, options);
             this.listenTo(this.viewerEvents, 'viewer:document:selectthumbnail', this.selectThumbnail);
             // listen to render thumbnails call
             this.listenTo(this.viewerEvents, 'viewer:sidebar:renderthumbnails', this.render);
             // listen to sidebar scroll
-            this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.onScrollHandler);
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.onSidebarScrolled);
             // dispose view on global dispose
             this.on('dispose', this.disposeView.bind(this));
-            this.thumbnailLoadPromise = null;
+            this.thumbnailLoadDef = Util.createAbortableDeferred($.noop);
+            this.thumbnailImages = [];
         },
 
         render: function () {
-            //console.warn('ThumbnailView.render()');
             var self = this;
+            this.$el.busy();
             function beginConvertSuccess(convertData) {
-                //console.warn('ThumbnailsView.beginConvertSuccess()', convertData);
+                self.convertData = convertData;
                 _.times(convertData.pageCount, function (pageNumber) {
-                    // temporary limit thumbnails to 20 for testing
-                    if (pageNumber > 30) return;
-                    var thumbnailLink = $('<a class="document-thumbnail-link">'),
-                        thumbnail = $('<div class="document-thumbnail">'),
-                        thumbnailImage = self.createDocumentThumbnailImage({
-                            jobID: convertData.jobID,
-                            pageNumber: pageNumber + 1
-                        }),
-                        thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
-                    thumbnail.append(thumbnailImage);
-                    thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
-                        'role': 'button',
-                        'aria-selected': false,
-                        'data-page': pageNumber + 1
-                    });
-                    self.$el.append(thumbnailLink);
+                    var thumbnailNode = self.createThumbnailNode(pageNumber);
+                    self.$el.append(thumbnailNode);
                 });
+                self.$el.idle();
+                self.loadThumbnails(convertData);
                 return convertData;
             }
             function beginConvertError(response) {
-                //console.warn('Core.Viewer.ThumbnailView.beginConvertError: ', response);
-                return $.Deferred().reject(response).promise();
+                return $.Deferred().reject(response);
             }
-            this.thumbnailLoadPromise = Util.beginConvert(this.model.toJSON())
+            function beginConvertFinished() {
+                self.$el.idle();
+            }
+            this.thumbnailLoadDef = Util.beginConvert(this.model.toJSON())
                 .done(beginConvertSuccess)
-                .fail(beginConvertError);
+                .fail(beginConvertError)
+                .always(beginConvertFinished);
             return this;
         },
 
         /**
-         * Creates thumbnail image of a document page.
+         * Creates a complete thumbnail node.
          *
-         * @param {Object} params
-         *  @param {String} params.jobID
-         *   conversion job ID from the document converter.
-         *  @param {String} params.pageNumber
-         *   a document page number
+         * @param {Number} pageNumber
+         *  the page that should be shown in the thumbnail.
          *
-         * @returns {jQuery} image
-         *  the image node as jQuery element.
+         * @returns {jQuery} thumbnailLink
          */
-        createDocumentThumbnailImage: function (params) {
-            //console.warn('ThumbnailView.createDocumentThumbnailImage()', params);
-            var file = this.model.toJSON(),
-                defaultParams = {
+        createThumbnailNode: function (pageNumber) {
+            var thumbnailLink = $('<a class="document-thumbnail-link">'),
+                thumbnail = $('<div class="document-thumbnail">'),
+                thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
+                thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
+            thumbnail.append(thumbnailImage).busy();
+            this.thumbnailImages.push(thumbnailImage);
+            thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
+                'role': 'button',
+                'aria-selected': false,
+                'data-page': pageNumber + 1
+            });
+            return thumbnailLink;
+        },
+
+        /**
+         * Loads thumbnail images, which are visible in the browser window.
+         *
+         * @param {Object} convertData
+         *  a response object from document converter containing
+         *  the convert jobID and the total page count.
+         */
+        loadThumbnails: function (convertData) {
+            var params = {
                     action: 'convertdocument',
                     convert_action: 'getpage',
                     target_format: 'jpg',
                     target_width: 200,
                     target_zoom: 1,
-                    id: encodeURIComponent(file.id),
-                    folder_id: file.folder_id,
-                    filename: file.filename,
-                    version: file.version
+                    job_id: convertData.jobID,
+                    page_number: convertData.pageNumber,
+                    id: encodeURIComponent(this.model.get('id')),
+                    folder_id: this.model.get('folder_id'),
+                    filename: encodeURIComponent(this.model.get('filename')),
+                    version: this.model.get('version')
                 },
-                imageUrlParams = _.extend(defaultParams, {
-                    job_id: params.jobID,
-                    page_number: params.pageNumber
-                }),
-                image = $('<img class="thumbnail-image">'),
-                imageUrl = Util.getConverterUrl(imageUrlParams);
-            image.attr('src', imageUrl);
+                thumbnailNodes = this.$('.document-thumbnail'),
+                thumbnailsToLoad = Util.getVisibleNodes(thumbnailNodes);
+            _.each(thumbnailsToLoad, function (pageNumber) {
+                var image = this.thumbnailImages[pageNumber - 1];
+                if (image.src) {
+                    return;
+                }
+                params.page_number = pageNumber;
+                var thumbnailUrl = Util.getConverterUrl(params);
+                image.src = thumbnailUrl;
+            }.bind(this));
+        },
+
+        /**
+         * Creates thumbnail image of a document page.
+         *
+         * @returns {HTMLImageElement} image
+         *  the image HTML element.
+         */
+        createDocumentThumbnailImage: function (className) {
+            var image = new Image();
+            image.className = className;
+            image.onload = function () {
+                $(image.parentNode).idle();
+            };
             return image;
         },
 
@@ -116,7 +141,6 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * @param {jQueryEvent} event
          */
         onThumbnailClicked: function (event) {
-            //console.warn('ThumbnailView.onThumbnailClicked()');
             var clickedThumbnail = $(event.currentTarget),
                 clickedPageNumber = clickedThumbnail.data('page');
             this.selectThumbnail(clickedPageNumber);
@@ -128,56 +152,36 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * @param {Number} pageNumber
          */
         selectThumbnail: function (pageNumber) {
-            //console.warn('ThumbnailView.selectThumbnail()');
             var thumbnail = this.$el.find('.document-thumbnail-link[data-page=' + pageNumber + ']');
             thumbnail.siblings().removeClass('selected').attr('aria-selected', false);
             thumbnail.addClass('selected').attr('aria-selected', true);
         },
 
-        onScrollHandler: function () {
-            console.warn('ThumbnailView.onScrollHandler()');
-        },
-
         /**
-         * Detect visible nodes from given nodes array.
-         *
-         * @returns {Array} visibleNodes
-         *  an array of indices of visible nodes.
+         * Sidebar scroll handler:
+         * - loads necessary thumbnail images
          */
-        getVisibleNodes: function (nodes) {
-            //console.warn('ThumbnailView.getVisibileThumbnails()');
-            var visibleNodes = [];
-            // Whether the page element is visible in the viewport, wholly or partially.
-            function isNodeVisible(node) {
-                var nodeBoundingRect = node.getBoundingClientRect();
-                function isInWindow(verticalPosition) {
-                    return verticalPosition >= 0 && verticalPosition <= window.innerHeight;
-                }
-                return isInWindow(nodeBoundingRect.top) ||
-                    isInWindow(nodeBoundingRect.bottom) ||
-                    (nodeBoundingRect.top < 0 && nodeBoundingRect.bottom > window.innerHeight);
-            }
-            // return the visible pages
-            _.each(nodes, function (element, index) {
-                if (!isNodeVisible(element)) { return; }
-                visibleNodes.push(index + 1);
-            });
-            return visibleNodes;
+        onSidebarScrolled: function () {
+            this.thumbnailLoadDef.done(function (convertData) {
+                this.loadThumbnails(convertData);
+            }.bind(this));
         },
 
         disposeView: function () {
-            //console.warn('ThumbnailView.disposeView()', this.model.toJSON());
-            var promise = this.thumbnailLoadPromise;
-            if (promise) {
-                // cancel any pending thumbnail loading
-                if (promise.state() === 'pending') {
-                    promise.abort();
-                }
-                // close convert jobs while quitting
-                promise.done(function (response) {
-                    Util.endConvert(this.model.toJSON(), response.jobID);
-                }.bind(this));
+            var def = this.thumbnailLoadDef;
+            // cancel any pending thumbnail loading
+            if (def.state() === 'pending') {
+                def.abort();
             }
+            // close convert jobs while quitting
+            def.done(function (response) {
+                Util.endConvert(this.model.toJSON(), response.jobID);
+            }.bind(this));
+            // unbind image on load handlers
+            _.each(this.thumbnailImages, function (image) {
+                image.onload = null;
+            });
+            this.thumbnailImages = null;
         }
 
     });
