@@ -29,7 +29,9 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             // listen to render thumbnails call
             this.listenTo(this.viewerEvents, 'viewer:sidebar:renderthumbnails', this.render);
             // listen to sidebar scroll
-            this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.onSidebarScrolled);
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.refreshThumbnails);
+            // listen to window resize
+            this.listenTo(this.viewerEvents, 'viewer:resize', this.refreshThumbnails);
             // dispose view on global dispose
             this.on('dispose', this.disposeView.bind(this));
             this.thumbnailLoadDef = Util.createAbortableDeferred($.noop);
@@ -158,10 +160,9 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
         },
 
         /**
-         * Sidebar scroll handler:
-         * - loads necessary thumbnail images
+         * Refresh thumbnails by loading visible ones.
          */
-        onSidebarScrolled: function () {
+        refreshThumbnails: function () {
             this.thumbnailLoadDef.done(function (convertData) {
                 this.loadThumbnails(convertData);
             }.bind(this));
