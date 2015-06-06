@@ -398,7 +398,7 @@ msgstr[1] "%d óra"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
 #: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
@@ -1231,7 +1231,7 @@ msgstr ""
 "Automatikusan gyűjti a névjegyeket küldéskor az „Összegyűjtött címek” "
 "mappában"
 
-#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Automatically delete incoming notifications after the appointment has been "
@@ -1370,7 +1370,7 @@ msgstr "CalDAV URL"
 msgid "Calendar"
 msgstr "Naptár"
 
-#: apps/io.ox/calendar/settings/pane.js:78 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
 #: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -2164,7 +2164,7 @@ msgstr "Alapértelmezett cím"
 msgid "Default app after sign in"
 msgstr "Alapértelmezett app belépés után"
 
-#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:135 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Alapértelmezett figyelmeztetés"
 
@@ -2908,7 +2908,7 @@ msgstr "E-mail értesítés a feladat létrehozójának?"
 msgid "Email notification for task participant?"
 msgstr "E-mail értesítés a feladat résztvevőinek?"
 
-#: apps/io.ox/calendar/settings/pane.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
 #, fuzzy
 msgid "Email notifications"
 msgstr "E-mail értesítés feladatról"
@@ -2981,7 +2981,7 @@ msgstr "Vége"
 msgid "End date timezone"
 msgstr "befejező dátum"
 
-#: apps/io.ox/calendar/settings/pane.js:107 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Munkaidő vége"
 
@@ -4454,7 +4454,7 @@ msgstr "Március"
 msgid "Marital status"
 msgstr "Családi állapot"
 
-#: apps/io.ox/calendar/settings/pane.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:143 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Egész napos találkozók szabadnak jelölése"
 
@@ -4731,7 +4731,7 @@ msgstr "Új mappa"
 msgid "New Mail"
 msgstr "Új levél"
 
-#: apps/io.ox/calendar/settings/pane.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Új találkozó"
@@ -4936,7 +4936,7 @@ msgstr "Nincs prioritás"
 msgid "No recipients"
 msgstr "Nincsenek címzettek"
 
-#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "Nincs emlékeztető"
@@ -5918,20 +5918,20 @@ msgstr "Cikk olvasása a tumblr.com-on"
 msgid "Reauthorize"
 msgstr "Újra felhatalmazás"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:169 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
 msgstr "E-mail értesítés a találkozó résztvevőinek?"
 
-#: apps/io.ox/calendar/settings/pane.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:164 module:io.ox/calendar
 #, fuzzy
 msgid "Receive notification for appointment changes"
 msgstr "E-mail értesítés találkozóról"
@@ -6666,7 +6666,7 @@ msgstr "Megjegyzések megjelenítése"
 msgid "Show conflicts"
 msgstr "Ütközések megjelenítése"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:114 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Elutasított találkozók megjelenítése"
 
@@ -6927,7 +6927,7 @@ msgstr "Kezdés dátuma"
 msgid "Start date timezone"
 msgstr "Kezdés dátuma"
 
-#: apps/io.ox/calendar/settings/pane.js:99 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Munkaidő kezdete"
 
@@ -7787,7 +7787,7 @@ msgstr "Mozaik"
 msgid "Time"
 msgstr "Idő"
 
-#: apps/io.ox/calendar/settings/pane.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:90 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Időskála percben"
 

@@ -442,7 +442,7 @@ msgstr[1] "%d hores"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
 #: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
@@ -1303,7 +1303,7 @@ msgstr ""
 "Recopila contactes automàticament a la carpeta \"Adreces recopilades\" en "
 "enviar un correu"
 
-#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
 #, fuzzy
 #| msgid ""
 #| "Automatically delete a notification mail after it has been accepted or "
@@ -1445,7 +1445,7 @@ msgstr "URL de CalDAV"
 msgid "Calendar"
 msgstr "Calendari"
 
-#: apps/io.ox/calendar/settings/pane.js:78 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
 #: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -2262,7 +2262,7 @@ msgstr "Adreça predeterminada"
 msgid "Default app after sign in"
 msgstr "Aplicació predeterminada en iniciar sessió"
 
-#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:135 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Recordatori predeterminat"
 
@@ -3031,7 +3031,7 @@ msgstr "Notificar per correu al creador de la tasca?"
 msgid "Email notification for task participant?"
 msgstr "Notificar per correu als participants de la tasca?"
 
-#: apps/io.ox/calendar/settings/pane.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for task"
 msgid "Email notifications"
@@ -3106,7 +3106,7 @@ msgstr "Fi"
 msgid "End date timezone"
 msgstr "Troba una hora lliure"
 
-#: apps/io.ox/calendar/settings/pane.js:107 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Final de la jornada laboral"
 
@@ -4626,7 +4626,7 @@ msgstr "març"
 msgid "Marital status"
 msgstr "Estat civil"
 
-#: apps/io.ox/calendar/settings/pane.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:143 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Marca totes les cites de dia sencer com a lliure"
 
@@ -4910,7 +4910,7 @@ msgstr "Nova carpeta"
 msgid "New Mail"
 msgstr "Nou correu"
 
-#: apps/io.ox/calendar/settings/pane.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Nova cita"
@@ -5127,7 +5127,7 @@ msgstr "Sense prioritat"
 msgid "No recipients"
 msgstr "Sense destinataris"
 
-#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "Sense recordatori"
@@ -6133,7 +6133,7 @@ msgstr "Llegiu l'article a tumblr.com"
 msgid "Reauthorize"
 msgstr "Torna'l a autoritzar"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:169 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment participant?"
 msgid ""
@@ -6141,13 +6141,13 @@ msgid ""
 "decline"
 msgstr "Notificació per correu electrònic a cada participant de la cita?"
 
-#: apps/io.ox/calendar/settings/pane.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:164 module:io.ox/calendar
 #, fuzzy
 #| msgid "Email notification for appointment"
 msgid "Receive notification for appointment changes"
@@ -6906,7 +6906,7 @@ msgstr "Mostra els comentaris"
 msgid "Show conflicts"
 msgstr "Mostra els conflictes"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:114 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Mostra les cites rebutjades"
 
@@ -7177,7 +7177,7 @@ msgstr "Data d'inici"
 msgid "Start date timezone"
 msgstr "Data d'inici"
 
-#: apps/io.ox/calendar/settings/pane.js:99 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Inici de la jornada laboral"
 
@@ -8055,7 +8055,7 @@ msgstr "Fitxes"
 msgid "Time"
 msgstr "Hora"
 
-#: apps/io.ox/calendar/settings/pane.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:90 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Escala de temps en minuts"
 

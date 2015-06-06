@@ -396,7 +396,7 @@ msgstr[1] "%d 小時"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
 #: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
@@ -1218,7 +1218,7 @@ msgid ""
 "sending"
 msgstr "寄件時自動將收集到的聯絡人加入到「收集到的地址」資料夾？"
 
-#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Automatically delete incoming notifications after the appointment has been "
@@ -1353,7 +1353,7 @@ msgstr "CalDAV URL"
 msgid "Calendar"
 msgstr "日曆"
 
-#: apps/io.ox/calendar/settings/pane.js:78 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
 #: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -2142,7 +2142,7 @@ msgstr "預設地址"
 msgid "Default app after sign in"
 msgstr "登入後的預設應用程式"
 
-#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:135 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "預設提醒時間"
 
@@ -2874,7 +2874,7 @@ msgstr "向任務建立者發送電子郵件通知？"
 msgid "Email notification for task participant?"
 msgstr "向任務參與者發送電子郵件通知？"
 
-#: apps/io.ox/calendar/settings/pane.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
 #, fuzzy
 msgid "Email notifications"
 msgstr "任務電子郵件通知"
@@ -2945,7 +2945,7 @@ msgstr "結束"
 msgid "End date timezone"
 msgstr "結束日期"
 
-#: apps/io.ox/calendar/settings/pane.js:107 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
 msgstr "工作時間結束"
 
@@ -4399,7 +4399,7 @@ msgstr "三月"
 msgid "Marital status"
 msgstr "婚姻狀況"
 
-#: apps/io.ox/calendar/settings/pane.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:143 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "將全天約會標示為空閒"
 
@@ -4676,7 +4676,7 @@ msgstr "新資料夾"
 msgid "New Mail"
 msgstr "新增郵件"
 
-#: apps/io.ox/calendar/settings/pane.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "新約會"
@@ -4879,7 +4879,7 @@ msgstr "無優先順序"
 msgid "No recipients"
 msgstr "無收件人"
 
-#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "無提醒"
@@ -5846,20 +5846,20 @@ msgstr "於 tumblr.com 閱讀文章"
 msgid "Reauthorize"
 msgstr "重新授權"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:169 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
 msgstr "向約會參與者發送電子郵件通知？"
 
-#: apps/io.ox/calendar/settings/pane.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:164 module:io.ox/calendar
 #, fuzzy
 msgid "Receive notification for appointment changes"
 msgstr "約會電子郵件通知"
@@ -6593,7 +6593,7 @@ msgstr "顯示注釋"
 msgid "Show conflicts"
 msgstr "顯示衝突"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:114 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "顯示拒絕的約會"
 
@@ -6851,7 +6851,7 @@ msgstr "起始日期"
 msgid "Start date timezone"
 msgstr "起始日期"
 
-#: apps/io.ox/calendar/settings/pane.js:99 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "工作時間開始"
 
@@ -7679,7 +7679,7 @@ msgstr "磚塊"
 msgid "Time"
 msgstr "時間"
 
-#: apps/io.ox/calendar/settings/pane.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:90 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "按分鐘設置間隔"
 

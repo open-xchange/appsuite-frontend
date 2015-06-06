@@ -418,7 +418,7 @@ msgstr[2] "%d hodin"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
 #: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
@@ -1252,7 +1252,7 @@ msgid ""
 "sending"
 msgstr "Při odesílání automaticky ukládat kontakty ve složce „Sebrané adresy“"
 
-#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Automatically delete incoming notifications after the appointment has been "
@@ -1388,7 +1388,7 @@ msgstr "CalDAV URL"
 msgid "Calendar"
 msgstr "Kalendář"
 
-#: apps/io.ox/calendar/settings/pane.js:78 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
 #: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -2181,7 +2181,7 @@ msgstr "Výchozí adresa"
 msgid "Default app after sign in"
 msgstr "Výchozí aplikace po přihlášení"
 
-#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:135 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Výchozí upomínka"
 
@@ -2916,7 +2916,7 @@ msgstr "E-mailové oznámení pro autora úkolu?"
 msgid "Email notification for task participant?"
 msgstr "E-mailové oznámení pro účastníka úkolu?"
 
-#: apps/io.ox/calendar/settings/pane.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
 #, fuzzy
 msgid "Email notifications"
 msgstr "E-mailové oznámení úkolu"
@@ -2988,7 +2988,7 @@ msgstr "Konec"
 msgid "End date timezone"
 msgstr "koncové datum "
 
-#: apps/io.ox/calendar/settings/pane.js:107 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Konec pracovní doby"
 
@@ -4459,7 +4459,7 @@ msgstr "Březen"
 msgid "Marital status"
 msgstr "Rodinný stav"
 
-#: apps/io.ox/calendar/settings/pane.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:143 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Označit všechny denní schůzky jako volné"
 
@@ -4736,7 +4736,7 @@ msgstr "Nová složka"
 msgid "New Mail"
 msgstr "Nová zpráva"
 
-#: apps/io.ox/calendar/settings/pane.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Nová schůzka"
@@ -4941,7 +4941,7 @@ msgstr "Žádná priorita"
 msgid "No recipients"
 msgstr "Žádní adresáti"
 
-#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "Žádná upomínka"
@@ -5923,20 +5923,20 @@ msgstr "Přečíst článek na tumblr.com"
 msgid "Reauthorize"
 msgstr "Znovu autorizovat"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:169 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
 msgstr "E-mailové oznámení pro účastníka schůzky?"
 
-#: apps/io.ox/calendar/settings/pane.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:164 module:io.ox/calendar
 #, fuzzy
 msgid "Receive notification for appointment changes"
 msgstr "E-mailové oznámení schůzky"
@@ -6674,7 +6674,7 @@ msgstr "Zobrazit komentáře"
 msgid "Show conflicts"
 msgstr "Zobrazit konflikty"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:114 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Zobrazit odmítnuté schůzky"
 
@@ -6934,7 +6934,7 @@ msgstr "Datum začátku"
 msgid "Start date timezone"
 msgstr "Datum začátku"
 
-#: apps/io.ox/calendar/settings/pane.js:99 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Začátek pracovní doby"
 
@@ -7802,7 +7802,7 @@ msgstr "Dlaždice"
 msgid "Time"
 msgstr "Čas"
 
-#: apps/io.ox/calendar/settings/pane.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:90 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Časový rozsah v minutách"
 
