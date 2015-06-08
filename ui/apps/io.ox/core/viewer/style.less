@@ -302,6 +302,7 @@
         text-align: right;
         z-index: 2;
         border-bottom: 1px solid @viewer-toolbar-border-color;
+        .user-select(none);
         i.fa {
             font-size: 14px;
         }
@@ -318,6 +319,7 @@
                 text-align: center;
                 text-decoration: none;
                 color: @viewer-toolbar-color;
+                border-bottom: 1px solid @viewer-toolbar-border-color;
                 &:hover {
                     color: @viewer-toolbar-hover-color;
                     background-color: @viewer-toolbar-hover-bgcolor;
@@ -393,32 +395,41 @@
             top: 0;
             left: ~"calc(50% - 320px)";
             display: flex;
-            justify-contet: center;
-            align-atims: center;
+            justify-content: center;
+            align-items: center;
         }
 
+        @viewer-toolbar-link-disabled-color: #CCCCCC;
         .viewer-toolbar-navigation-button {
             cursor: pointer;
+            &.disabled {
+                color: @viewer-toolbar-link-disabled-color;
+                cursor: auto;
+                @viewer-toolbar-disabled-hover: #FFFFFF;
+                &:hover, &:focus, &:active {
+                    background: @viewer-toolbar-disabled-hover;
+                }
+            }
         }
 
         @viewer-toolbar-page-bordercolor: #e0e0e0;
         .viewer-toolbar-page-wrapper {
             border: 1px solid @viewer-toolbar-page-bordercolor;
             height: 30px;
-            margin: 5px;
+            margin: 5px 10px;
         }
         .viewer-toolbar-page {
             display: block;
             height: 28px;
             line-height: 28px;
-            width: 50px;
+            width: 35px;
             padding: 5px;
-            text-align: center;
+            text-align: right;
             -webkit-appearance:none;
             border: 0;
         }
         .viewer-toolbar-page-total {
-            margin: 0 5px;
+            color: @link-color;
         }
     }
 
