@@ -42,6 +42,7 @@
     @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.5);
     @viewer-displayer-caption-color: #FFFFFF;
     @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.7);
+    @viewer-displayer-document-shadowcolor: rgba(255, 255, 255, 0.2);
     @viewer-control-color: @viewer-toolbar-color;
     @viewer-sidebar-bgcolor: #1a1a1a;
     @viewer-sidebar-border-color: #000000;
@@ -55,6 +56,19 @@
     @viewer-sidebar-versions-dropdown-color: #FFFFFF;
     @viewer-sidebar-versions-dropdown-active-bgcolor: #444444;
     @viewer-sidebar-description-outline-color: #444444;
+    @viewer-sidebar-tab-color: #ffffff;
+    @viewer-sidebar-tab-bordercolor: #555555;
+    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
+    @viewer-sidebar-tab-hovercolor: rgba(255,255,255,0.2);
+    @document-sidebar-busy-color: rgba(255, 255, 255, 0.3);
+    @document-thumbnail-link-focus-color: #777777;
+    @document-thumbnail-link-hover-color: #444444;
+    @document-thumbnail-link-selected-color: #777777;
+    @document-thumbnail-bgcolor: #FFFFFF;
+    @document-thumbnail-border-color: #e0e0e0;
+    @document-thumbnail-number-color: #999999;
+    @document-thumbnail-number-hover-color: #FFFFFF;
 }
 
 .viewer-light-colors () {
@@ -64,7 +78,7 @@
     @viewer-scrollbar-thumb-hover-color: #777777;
     @viewer-scrollbar-base-color: #666666;
     @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
-    @viewer-background-color: rgba(255, 255, 255, 1);
+    @viewer-background-color: #f5f5f5;
     @viewer-toolbar-bgcolor: #ffffff;
     @viewer-toolbar-color: #3c73aa;
     @viewer-toolbar-border-color: #DDDDDD;
@@ -77,7 +91,8 @@
     @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
     @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.2);
     @viewer-displayer-caption-color: #FFFFFF;
-    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.3);
+    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.6);
+    @viewer-displayer-document-shadowcolor: rgba(0, 0, 0, 0.2);
     @viewer-control-color: @viewer-toolbar-color;
     @viewer-sidebar-bgcolor: #f5f5f5;
     @viewer-sidebar-border-color: #DDDDDD;
@@ -91,6 +106,19 @@
     @viewer-sidebar-versions-dropdown-color: #222222;
     @viewer-sidebar-versions-dropdown-active-bgcolor: transparent;
     @viewer-sidebar-description-outline-color: #777777;
+    @viewer-sidebar-tab-color: #333333;
+    @viewer-sidebar-tab-bordercolor: rgba(0,0,0,0.2);
+    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bgcolor: rgba(0,0,0,0.1);
+    @viewer-sidebar-tab-hovercolor: rgba(0,0,0,0.2);
+    @document-sidebar-busy-color: rgba(0,0,0,0.3);
+    @document-thumbnail-link-focus-color: rgba(0,0,0,0.1);
+    @document-thumbnail-link-hover-color: rgba(0,0,0,0.05);
+    @document-thumbnail-link-selected-color: rgba(0,0,0,0.15);
+    @document-thumbnail-bgcolor: #FFFFFF;
+    @document-thumbnail-border-color: #e0e0e0;
+    @document-thumbnail-number-color: #333333;
+    @document-thumbnail-number-hover-color: #333333;
 }
 
 
@@ -359,6 +387,39 @@
                 width: @viewer-toolbar-filename-width-smartphone-landscape;
             }
         }
+
+        .viewer-toolbar-navigation {
+            position: absolute;
+            top: 0;
+            left: ~"calc(50% - 320px)";
+            display: flex;
+            justify-contet: center;
+            align-atims: center;
+        }
+
+        .viewer-toolbar-navigation-button {
+            cursor: pointer;
+        }
+
+        @viewer-toolbar-page-bordercolor: #e0e0e0;
+        .viewer-toolbar-page-wrapper {
+            border: 1px solid @viewer-toolbar-page-bordercolor;
+            height: 30px;
+            margin: 5px;
+        }
+        .viewer-toolbar-page {
+            display: block;
+            height: 28px;
+            line-height: 28px;
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+            -webkit-appearance:none;
+            border: 0;
+        }
+        .viewer-toolbar-page-total {
+            margin: 0 5px;
+        }
     }
 
     // show active sidebar button in toolbar when sidebar is opened
@@ -447,6 +508,7 @@
                 width: 450px;
                 background: #ffffff;
                 color: #000000;
+                box-shadow: 0 0 8px @viewer-displayer-document-shadowcolor;
             }
         }
 
@@ -561,12 +623,7 @@
             }
         }
 
-        @viewer-sidebar-tab-color: #ffffff;
-        @viewer-sidebar-tab-bordercolor: #555555;
-        @viewer-sidebar-activetab-bordercolor: #3c73aa;
-        @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
-        @viewer-sidebar-hovercolor: rgba(255,255,255,0.2);
-        @document-sidebar-busy-color: rgba(255, 255, 255, 0.3);
+
         .viewer-sidebar-tabs {
             list-style: none;
             width: 100%;
@@ -591,31 +648,22 @@
                     background-color: @viewer-sidebar-activetab-bgcolor;
                 }
                 &:hover {
-                    background-color: @viewer-sidebar-hovercolor;
+                    background-color: @viewer-sidebar-tab-hovercolor;
                 }
             }
         }
 
         .viewer-sidebar-pane {
             min-height: 200px;
-            background: @document-thumbnailview-bgcolor;
             overflow: hidden;
             &.thumbnail-pane {
                 display: none;
                 &.io-ox-busy::before {
+                    top: 100px;
                     color: @document-sidebar-busy-color;
                 }
             }
         }
-
-        @document-thumbnailview-bgcolor: #1A1A1A;
-        @document-thumbnail-link-focus-color: #777777;
-        @document-thumbnail-link-hover-color: #444444;
-        @document-thumbnail-link-selected-color: #777777;
-        @document-thumbnail-bgcolor: #FFFFFF;
-        @document-thumbnail-border-color: #e0e0e0;
-        @document-thumbnail-number-color: #999999;
-        @document-thumbnail-number-hover-color: #FFFFFF;
 
         .document-thumbnail-link {
             display: inline-block;
@@ -646,6 +694,7 @@
             height: 130px;
             margin: 0 auto;
             background: @document-thumbnail-bgcolor;
+            border: 1px solid @document-thumbnail-border-color;
             .thumbnail-image {
                 width: 100%;
             }
