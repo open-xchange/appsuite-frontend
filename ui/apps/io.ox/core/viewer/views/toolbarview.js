@@ -365,8 +365,18 @@ define('io.ox/core/viewer/views/toolbarview', [
             _.extend(this, options);
             // rerender on slide change
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.render);
+            // show current page on the navigation page box
+            this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        onPageChange: function (pageNumber, pageTotal) {
+            //console.warn('ToolbarView.onPageChange()', pageNumber);
+            this.$('.viewer-toolbar-page').val(pageNumber);
+            if (pageTotal) {
+                this.$('.viewer-toolbar-page-total').text(gt('of %1$d', pageTotal));
+            }
         },
 
         /**
@@ -480,6 +490,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_LINKS_ID + '/' + appName
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
+            var first = $('<a class="viewer-toolbar-navigation-button">').append($('<i class="fa fa-step-backward">')),
+                previous = $('<a class="viewer-toolbar-navigation-button">').append($('<i class="fa fa-fast-backward">')),
+                pageInput = $('<input type="text" class="viewer-toolbar-page">'),
+                pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
+                totalPage = $('<div class="viewer-toolbar-page-total">'),
+                next = $('<a class="viewer-toolbar-navigation-button">').append($('<i class="fa fa-step-forward">')),
+                last = $('<a class="viewer-toolbar-navigation-button">').append($('<i class="fa fa-fast-forward">')),
+                group = $('<li class="viewer-toolbar-navigation" role="presentation">');
+            group.append(first, previous, pageInputWrapper, totalPage, next, last);
+            this.$el.prepend(group);
             // workaround for correct TAB traversal order:
             // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
             _.defer(function () {

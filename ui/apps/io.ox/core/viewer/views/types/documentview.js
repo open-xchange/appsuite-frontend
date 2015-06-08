@@ -123,8 +123,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. Example result: "Page 5 of 10"
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
-                this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
-                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex);
+                this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages))
+                    .trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
+                    .trigger('viewer:document:pagechange', this.currentDominantPageIndex);
             }
             this.viewerEvents.trigger('viewer:blendnavigation');
         },
@@ -301,8 +302,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                     this.$el.find('.document-container').scrollTop(lastScrollPosition);
                 }
                 // select/highlight the corresponding thumbnail according to displayed document page
-                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage());
-                this.viewerEvents.trigger('viewer:sidebar:renderthumbnails');
+                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
+                    .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount)
+                    .trigger('viewer:sidebar:renderthumbnails');
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
