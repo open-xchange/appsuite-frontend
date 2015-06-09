@@ -176,6 +176,10 @@ define('io.ox/core/viewer/util', [
      */
     Util.sendConverterRequest = function (file, params) {
 
+        if (!ox.ui.App.getCurrentApp()) {
+            return;
+        }
+
         var converterParams = _.extend(params, {
                 session: ox.session,
                 uid: ox.ui.App.getCurrentApp().get('uniqueID'),
