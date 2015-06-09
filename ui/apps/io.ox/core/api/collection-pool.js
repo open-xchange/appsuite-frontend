@@ -140,6 +140,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             return module;
         };
 
+        this.gc = function () {
+            gc.call(this, hash);
+        };
+
         // clear pool on global refresh
         ox.on('refresh^', _.throttle(gc.bind(this, hash), 5000));
     }

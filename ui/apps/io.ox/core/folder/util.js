@@ -263,6 +263,7 @@ define('io.ox/core/folder/util', [
     }
 
     return {
+        perm: perm,
         bits: bits,
         is: is,
         can: can,
