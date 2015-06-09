@@ -717,7 +717,8 @@ define('io.ox/core/tk/list-selection', [
                         this.removeAttr('style');
                         // reset velocitie's transfrom cache manually
                         _(this).each(function (listItem) {
-                            $(listItem).data('velocity').transformCache = {};
+                            var vel = $(listItem).data('velocity');
+                            if (vel) vel.transformCache = {};
                         });
                         theView.off('remove-mobile', resetStyle);
                     };
