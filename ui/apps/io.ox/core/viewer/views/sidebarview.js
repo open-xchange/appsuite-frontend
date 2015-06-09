@@ -50,8 +50,20 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         initialize: function (options) {
             _.extend(this, {
-                viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events)
+                viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
+                standalone: options.standalone
             });
+            this.model = null;
+            this.zone = null;
+            // listen to slide change and set fresh model
+            this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
+            // bind scroll handler
+            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
+            this.on('dispose', this.disposeView.bind(this));
+            this.initTabNavigation();
+        },
+
+        initTabNavigation: function () {
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
                 detailTabLink = $('<a class="selected tablink" data-show="detail">').text(gt('Detail')),
@@ -60,16 +72,12 @@ define('io.ox/core/viewer/views/sidebarview', [
                 thumbnailTabLink = $('<a class="tablink"  data-show="thumbnail">').text(gt('Thumbnail')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
                 thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane">');
-            tabsList.append(detailTab, thumbnailTab);
-            this.$el.append(tabsList, detailPane, thumbnailPane);
-            tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
-            this.model = null;
-            this.zone = null;
-            // listen to slide change and set fresh model
-            this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
-            // bind scroll handler
-            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
-            this.on('dispose', this.disposeView.bind(this));
+            if (this.standalone) {
+                tabsList.append(detailTab, thumbnailTab);
+                this.$el.append(tabsList);
+                tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
+            }
+            this.$el.append(detailPane, thumbnailPane);
         },
 
         onScrollHandler: function (event) {
@@ -98,8 +106,8 @@ define('io.ox/core/viewer/views/sidebarview', [
                     break;
                 default: break;
             }
-            actionHandler.call(this);
             this.$(paneClass).show();
+            actionHandler.call(this);
         },
 
         onDetailActivated: function () {
@@ -150,7 +158,8 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            var detailPane = this.$('.detail-pane');
+            var detailPane = this.$('.detail-pane'),
+                navigationTabs = this.$('.viewer-sidebar-tabs');
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -161,6 +170,11 @@ define('io.ox/core/viewer/views/sidebarview', [
             // render sections only if side bar is open
             if (!this.model || !this.opened) {
                 return;
+            }
+            if (this.model.isOffice() || this.model.isPDF()) {
+                navigationTabs.show();
+            } else {
+                navigationTabs.hide();
             }
             // load file details
             this.loadFileDetails();
