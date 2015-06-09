@@ -36,8 +36,10 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.collection = null;
         this.loading = false;
 
-        function apply(loader, type, params, data) {
-            var collection = loader.collection;
+        function apply(collection, type, params, loader, data) {
+
+            // don't use loader.collection to avoid cross-collection issues (see bug 38286)
+
             if (type === 'paginate' && collection.length > 0) {
                 // check if first fetched item matches last existing item
                 // use case: reload on new messages; race-conditions with external clients
@@ -52,7 +54,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                     return;
                 }
             }
-
             Pool.preserve(function () {
                 var method = methods[type];
                 collection[method](data, { parse: true });
@@ -62,8 +63,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection.trigger(type);
         }
 
-        function fail(loader, type, e) {
-            loader.collection.trigger(type + ':fail', e);
+        function fail(collection, type, e) {
+            collection.trigger(type + ':fail', e);
         }
 
         function process(params, type) {
@@ -72,8 +73,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // trigger proper event
             this.collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = _.lfo(apply, this, type, params),
-                cb_fail = _.lfo(fail, this, type),
+            var cb_apply = _.lfo(apply, this.collection, type, params, this),
+                cb_fail = _.lfo(fail, this.collection, type),
                 self = this;
             // fetch data
             return this.fetch(params)
