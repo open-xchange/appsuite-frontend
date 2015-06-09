@@ -40,14 +40,13 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
 
         render: function () {
             var self = this;
-            this.$el.busy();
+            this.$el.addClass('io-ox-busy');
             function beginConvertSuccess(convertData) {
                 self.convertData = convertData;
                 _.times(convertData.pageCount, function (pageNumber) {
                     var thumbnailNode = self.createThumbnailNode(pageNumber);
                     self.$el.append(thumbnailNode);
                 });
-                self.$el.idle();
                 self.loadThumbnails(convertData);
                 return convertData;
             }
@@ -55,7 +54,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 return $.Deferred().reject(response);
             }
             function beginConvertFinished() {
-                self.$el.idle();
+                self.$el.removeClass('io-ox-busy');
             }
             this.thumbnailLoadDef = Util.beginConvert(this.model.toJSON())
                 .done(beginConvertSuccess)

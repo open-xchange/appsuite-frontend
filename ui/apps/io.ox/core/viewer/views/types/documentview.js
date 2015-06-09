@@ -212,10 +212,9 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         show: function () {
             // ignore already loaded documents
-            if (this.$el.find('.document-page').length > 0 || !this.isVisible()) {
+            if (this.$el.find('.document-page').length > 0) {
                 return;
             }
-            //console.warn('DocumentView.show()');
             var documentContainer = this.documentContainer,
                 convertParams = this.getConvertParams(this.model.get('source')),
                 documentUrl = Util.getConverterUrl(convertParams);
@@ -313,7 +312,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              * Actions which always have to be done after pdf document loading process
              */
             function pdfDocumentLoadFinished() {
-                documentContainer.idle();
+                documentContainer.removeClass('io-ox-busy');
             }
 
             /**
@@ -335,7 +334,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.pdfDocument = new PDFDocument(documentUrl);
 
             // display loading animation
-            documentContainer.busy();
+            documentContainer.addClass('io-ox-busy');
 
             // wait for PDF document to finish loading
             $.when(this.pdfDocument.getLoadPromise())
