@@ -633,6 +633,8 @@ define('io.ox/core/tk/list', [
 
         addBusyIndicator: function () {
             var indicator = this.getBusyIndicator();
+            // ensure the indicator is the last element in the list
+            if (indicator.index() < this.$el.children().length) indicator.appendTo(this.$el);
             return indicator.length ? indicator : this.busyIndicator.clone().appendTo(this.$el);
         },
 
