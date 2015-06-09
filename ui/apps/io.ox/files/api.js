@@ -822,15 +822,17 @@ define('io.ox/files/api', [
      *     - promise can be aborted using promise.abort function
      */
     api.upload = function (options) {
-        var fid = options.folder_id || options.folder;
+        var folder_id = options.folder_id || options.folder;
         options.action = 'new';
         return performUpload(options, {
-            folder_id: fid,
+            folder_id: folder_id,
             description: options.description || ''
         })
-        .done(function (result) {
+        .then(function (result) {
             // result.data just provides the new file id
-            api.propagate('add:file', { id: result.data, folder_id: fid });
+            api.propagate('add:file', { id: result.data, folder_id: folder_id });
+            // return id and folder id
+            return { id: result.data, folder_id: folder_id };
         });
     };
 
@@ -985,7 +987,10 @@ define('io.ox/files/api', [
             http.pause();
             api.get(file, { cache: false });
             api.versions.load(file, { cache: false });
-            return http.resume();
+            return http.resume().then(function (response) {
+                // explicitly return the file data
+                return response[0].data;
+            });
         }
 
         return function (type, file) {

@@ -1764,7 +1764,7 @@ msgstr ""
 msgid "The setting has been saved and will become active when you enter the application the next time."
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:49
+#: apps/io.ox/calendar/settings/pane.js:48
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
@@ -1772,7 +1772,7 @@ msgstr ""
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50
+#: apps/io.ox/calendar/settings/pane.js:49
 #: module:io.ox/calendar
 #: apps/io.ox/core/date.js:184
 #: module:io.ox/core
@@ -1782,7 +1782,7 @@ msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/calendar/settings/pane.js:78
+#: apps/io.ox/calendar/settings/pane.js:77
 #: module:io.ox/calendar
 #: apps/io.ox/core/main.js:234
 #: module:io.ox/core
@@ -1791,63 +1791,63 @@ msgctxt "app"
 msgid "Calendar"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:91
+#: apps/io.ox/calendar/settings/pane.js:90
 #: module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:99
+#: apps/io.ox/calendar/settings/pane.js:98
 #: module:io.ox/calendar
 msgid "Start of working time"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:107
+#: apps/io.ox/calendar/settings/pane.js:106
 #: module:io.ox/calendar
 msgid "End of working time"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:115
+#: apps/io.ox/calendar/settings/pane.js:114
 #: module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:132
+#: apps/io.ox/calendar/settings/pane.js:131
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:136
+#: apps/io.ox/calendar/settings/pane.js:135
 #: module:io.ox/calendar
 msgid "Default reminder"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:144
+#: apps/io.ox/calendar/settings/pane.js:143
 #: module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:161
+#: apps/io.ox/calendar/settings/pane.js:160
 #: module:io.ox/calendar
 msgid "Email notifications"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:165
+#: apps/io.ox/calendar/settings/pane.js:164
 #: module:io.ox/calendar
 msgid "Receive notification for appointment changes"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:170
+#: apps/io.ox/calendar/settings/pane.js:169
 #: module:io.ox/calendar
 msgid "Receive notification as appointment creator when participants accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:175
+#: apps/io.ox/calendar/settings/pane.js:174
 #: module:io.ox/calendar
 msgid "Receive notification as appointment participant when other participants accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:180
+#: apps/io.ox/calendar/settings/pane.js:179
 #: module:io.ox/calendar
 msgid "Automatically delete incoming notifications after the appointment has been accepted or declined"
 msgstr ""

@@ -393,7 +393,7 @@ msgstr[1] "%d Stunden"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
 #: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
@@ -1216,7 +1216,7 @@ msgstr ""
 "Beim Versenden Kontakte automatisch im Ordner \"Gesammelte Adressen\" "
 "speichern"
 
-#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
 msgid ""
 "Automatically delete incoming notifications after the appointment has been "
 "accepted or declined"
@@ -1354,7 +1354,7 @@ msgstr "CalDAV URL"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: apps/io.ox/calendar/settings/pane.js:78 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
 #: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -2150,7 +2150,7 @@ msgstr "Standard-Adresse"
 msgid "Default app after sign in"
 msgstr "Standard-App nach dem Anmelden"
 
-#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:135 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "Standard-Erinnerung"
 
@@ -2894,7 +2894,7 @@ msgstr "E-Mail-Benachrichtigung für Aufgabenersteller?"
 msgid "Email notification for task participant?"
 msgstr "E-Mail-Benachrichtigung für Aufgabenteilnehmer?"
 
-#: apps/io.ox/calendar/settings/pane.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
 msgid "Email notifications"
 msgstr "E-Mail-Benachrichtigungen"
 
@@ -2965,7 +2965,7 @@ msgstr "Ende"
 msgid "End date timezone"
 msgstr "Zeitzone für Enddatum"
 
-#: apps/io.ox/calendar/settings/pane.js:107 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
 msgstr "Arbeitszeit endet um"
 
@@ -4431,7 +4431,7 @@ msgstr "März"
 msgid "Marital status"
 msgstr "Familienstand"
 
-#: apps/io.ox/calendar/settings/pane.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:143 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Alle Tagestermine als 'Frei' markieren"
 
@@ -4703,7 +4703,7 @@ msgstr "Neuer Ordner"
 msgid "New Mail"
 msgstr "Neue E-Mails"
 
-#: apps/io.ox/calendar/settings/pane.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "Neuer Termin"
@@ -4897,7 +4897,7 @@ msgstr "Keine Priorität"
 msgid "No recipients"
 msgstr "Keine Empfänger"
 
-#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "Keine Erinnerung"
@@ -5876,14 +5876,14 @@ msgstr "Artikel auf tumblr.com lesen"
 msgid "Reauthorize"
 msgstr "Erneut autorisieren"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:169 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
 msgstr ""
 "Benachrichtigung als Terminersteller, wenn Teilnehmer zusagen oder ablehnen"
 
-#: apps/io.ox/calendar/settings/pane.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
@@ -5891,7 +5891,7 @@ msgstr ""
 "Benachrichtigung als Terminteilnehmer, wenn andere Teilnehmer zusagen oder "
 "ablehnen"
 
-#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:164 module:io.ox/calendar
 msgid "Receive notification for appointment changes"
 msgstr "Benachrichtigung bei Terminänderungen"
 
@@ -6615,7 +6615,7 @@ msgstr "Kommentar anzeigen"
 msgid "Show conflicts"
 msgstr "Konflikte anzeigen"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:114 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "Abgelehnte Termine anzeigen"
 
@@ -6871,7 +6871,7 @@ msgstr "Beginnt am"
 msgid "Start date timezone"
 msgstr "Zeitzone für Startdatum"
 
-#: apps/io.ox/calendar/settings/pane.js:99 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "Arbeitszeit beginnt um"
 
@@ -7746,7 +7746,7 @@ msgstr "Kacheln"
 msgid "Time"
 msgstr "Zeit"
 
-#: apps/io.ox/calendar/settings/pane.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:90 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "Zeit-Intervall in Minuten"
 

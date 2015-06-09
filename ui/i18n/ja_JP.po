@@ -379,7 +379,7 @@ msgstr[0] "%d 時間"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/calendar/settings/pane.js:50 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
 #: apps/io.ox/core/date.js:184 module:io.ox/core
 #, c-format
 msgid "%d minute"
@@ -1200,7 +1200,7 @@ msgid ""
 "sending"
 msgstr "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
 
-#: apps/io.ox/calendar/settings/pane.js:180 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:179 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Automatically delete incoming notifications after the appointment has been "
@@ -1337,7 +1337,7 @@ msgstr "CalDAV URL"
 msgid "Calendar"
 msgstr "予定表"
 
-#: apps/io.ox/calendar/settings/pane.js:78 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:77 module:io.ox/calendar
 #: apps/io.ox/core/main.js:234 module:io.ox/core
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
@@ -2130,7 +2130,7 @@ msgstr "既定の住所"
 msgid "Default app after sign in"
 msgstr "サイン イン後に表示する既定のアプリケーション"
 
-#: apps/io.ox/calendar/settings/pane.js:136 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:135 module:io.ox/calendar
 msgid "Default reminder"
 msgstr "既定のアラーム"
 
@@ -2876,7 +2876,7 @@ msgstr "作成者にメールで通知"
 msgid "Email notification for task participant?"
 msgstr "出席者にメールで通知"
 
-#: apps/io.ox/calendar/settings/pane.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:160 module:io.ox/calendar
 #, fuzzy
 msgid "Email notifications"
 msgstr "仕事をメールで通知"
@@ -2947,7 +2947,7 @@ msgstr "終了"
 msgid "End date timezone"
 msgstr "終了日 "
 
-#: apps/io.ox/calendar/settings/pane.js:107 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
 msgstr "稼働時間の終了時刻"
 
@@ -4426,7 +4426,7 @@ msgstr "3 月"
 msgid "Marital status"
 msgstr "既婚/未婚"
 
-#: apps/io.ox/calendar/settings/pane.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:143 module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "終日のアポイントを空き時間として表示"
 
@@ -4704,7 +4704,7 @@ msgstr "新規フォルダ"
 msgid "New Mail"
 msgstr "新規メール"
 
-#: apps/io.ox/calendar/settings/pane.js:132 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:131 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:43
 msgid "New appointment"
 msgstr "新規アポイント"
@@ -4910,7 +4910,7 @@ msgstr "優先度 (なし)"
 msgid "No recipients"
 msgstr "宛先がありません。"
 
-#: apps/io.ox/calendar/settings/pane.js:49 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:252
 msgid "No reminder"
 msgstr "アラームなし"
@@ -5880,20 +5880,20 @@ msgstr "tumblr.com の記事を閲覧"
 msgid "Reauthorize"
 msgstr "再認証"
 
-#: apps/io.ox/calendar/settings/pane.js:170 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:169 module:io.ox/calendar
 #, fuzzy
 msgid ""
 "Receive notification as appointment creator when participants accept or "
 "decline"
 msgstr "出席者にメールで通知"
 
-#: apps/io.ox/calendar/settings/pane.js:175 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:165 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:164 module:io.ox/calendar
 #, fuzzy
 msgid "Receive notification for appointment changes"
 msgstr "アポイントをメールで通知"
@@ -6625,7 +6625,7 @@ msgstr "コメントを表示"
 msgid "Show conflicts"
 msgstr "競合を表示"
 
-#: apps/io.ox/calendar/settings/pane.js:115 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:114 module:io.ox/calendar
 msgid "Show declined appointments"
 msgstr "辞退したアポイントを表示"
 
@@ -6886,7 +6886,7 @@ msgstr "開始日"
 msgid "Start date timezone"
 msgstr "開始日"
 
-#: apps/io.ox/calendar/settings/pane.js:99 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "稼働時間の開始時刻"
 
@@ -7739,7 +7739,7 @@ msgstr "タイル"
 msgid "Time"
 msgstr "時間"
 
-#: apps/io.ox/calendar/settings/pane.js:91 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:90 module:io.ox/calendar
 msgid "Time scale in minutes"
 msgstr "時間の間隔 (分)"
 
