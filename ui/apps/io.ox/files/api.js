@@ -15,7 +15,6 @@
 
 define('io.ox/files/api', [
     'io.ox/core/http',
-    'io.ox/core/event',
     'io.ox/core/folder/api',
     'io.ox/core/api/backbone',
     'io.ox/core/api/collection-pool',
@@ -24,7 +23,7 @@ define('io.ox/files/api', [
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, Events, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, filesSettings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, settings, filesSettings, gt) {
 
     'use strict';
 
@@ -368,7 +367,7 @@ define('io.ox/files/api', [
     };
 
     // add event hub
-    Events.extend(api);
+    _.extend(api, Backbone.Events);
 
     api.pool = pool;
 
