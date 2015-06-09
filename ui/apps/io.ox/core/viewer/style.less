@@ -397,6 +397,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: row;
         }
 
         @viewer-toolbar-link-disabled-color: #CCCCCC;
@@ -414,6 +415,7 @@
 
         @viewer-toolbar-page-bordercolor: #e0e0e0;
         .viewer-toolbar-page-wrapper {
+            display: inline-block;
             border: 1px solid @viewer-toolbar-page-bordercolor;
             height: 30px;
             margin: 5px 10px;
@@ -430,6 +432,7 @@
         }
         .viewer-toolbar-page-total {
             color: @link-color;
+            display: inline-block;
         }
     }
 
@@ -700,7 +703,7 @@
 
         .document-thumbnail {
             width: 100px;
-            height: 130px;
+            height: 132px;
             margin: 0 auto;
             background: @document-thumbnail-bgcolor;
             border: 1px solid @document-thumbnail-border-color;

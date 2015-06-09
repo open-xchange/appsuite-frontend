@@ -259,7 +259,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                     dominantPageIndex = index;
                 }
             });
-            return dominantPageIndex;
+            return dominantPageIndex || visiblePages[0];
         },
 
         /**

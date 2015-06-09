@@ -372,7 +372,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         onPageChange: function (pageNumber, pageTotal) {
-            //console.warn('ToolbarView.onPageChange()', pageNumber);
             var pageInput = this.$('.viewer-toolbar-page'),
                 pageTotalDisplay = this.$('.viewer-toolbar-page-total');
             pageInput.val(pageNumber).attr('data-page-number', pageNumber).trigger('change', { preventPageScroll: true });
