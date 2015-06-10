@@ -119,18 +119,18 @@ define('io.ox/mail/toolbar', [
         //
         // --- LO ----
         //
-        'markunread': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Mark as unread'),
-            ref: 'io.ox/mail/actions/markunread',
-            section: 'flags'
-        },
         'markread': {
             prio: 'lo',
             mobile: 'lo',
             label: gt('Mark as read'),
             ref: 'io.ox/mail/actions/markread',
+            section: 'flags'
+        },
+        'markunread': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Mark as unread'),
+            ref: 'io.ox/mail/actions/markunread',
             section: 'flags'
         },
         'move': {

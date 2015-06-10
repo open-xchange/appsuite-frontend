@@ -13,7 +13,6 @@
 
 // definitions
 @icon-size: 16px;
-@unread-toggle-width: 48px;
 
 // phone
 @phone-font-size: 16px;
@@ -285,7 +284,7 @@
     .date, .size {
         .fontWeight(300);
         display: inline-block;
-        margin-left: 0.5em;
+        margin-left: 16px;
         float: right;
     }
 
@@ -315,7 +314,7 @@
     .actions {
         font-size: 14px;
         a {
-        	padding-left: 14px;
+        	padding-left: 16px;
         }
     }
 
@@ -513,18 +512,13 @@
     }
 
     .unread-toggle {
-        position: absolute;
-        left: 60px;
-        width: @unread-toggle-width;
-        height: 40px;
-        text-align: center;
+        float: right;
         font-size: 14px;
+        padding-left: 16px;
         color: #767676;
         &:hover { text-decoration: none; color: #aaa; }
         i.fa:before { content: "\f003"; } // fa-envelope-o
     }
-
-    &.no-padding .unread-toggle { left: 40px; }
 
     &.unread .unread-toggle {
         color: @link-color;
@@ -534,7 +528,7 @@
     .flag-picker {
         float: right;
         display: inline-block;
-        margin-left: 7px;
+        margin-left: 16px;
         position: relative;
         .dropdown-toggle {
             font-size: 14px;

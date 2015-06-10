@@ -85,20 +85,20 @@ define('io.ox/mail/mobile-toolbar-actions', [
             section: 'file-op',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
         },
-        'markunread': {
-            prio: 'hi',
-            mobile: 'hi',
-            drawDisabled: true,
-            label: gt('Mark as unread'),
-            ref: 'io.ox/mail/actions/markunread',
-            section: 'flags'
-        },
         'markread': {
             prio: 'hi',
             mobile: 'hi',
             drawDisabled: true,
             label: gt('Mark as read'),
             ref: 'io.ox/mail/actions/markread',
+            section: 'flags'
+        },
+        'markunread': {
+            prio: 'hi',
+            mobile: 'hi',
+            drawDisabled: true,
+            label: gt('Mark as unread'),
+            ref: 'io.ox/mail/actions/markunread',
             section: 'flags'
         },
         'copy': {
