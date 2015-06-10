@@ -53,7 +53,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         picture: function (baton) {
-            var data = baton.data, from = data.from;
+            var data = baton.data, from = account.is('sent|drafts', data.folder_id) ? data.to : data.from;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
