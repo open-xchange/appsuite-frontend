@@ -32,10 +32,10 @@ plugins/upsell//bubbles:
         content: "Take a photo and instantly have it on your laptop? Work on a document at work and have it instantly on your home computer? Synchronise folders on computers, phones and tablets with OX Drive. Try it and you will wonder how you lived without it. "
       bubble5:
         app: 'io.ox/mail'
-        content: "Keep track of your emails from any device natively: Upgrade to Mobile Synchronisation and all your emails, appointments, tasks and contacts will appear on all your devices. Loose your device: No problem! Simply sync your new device and you are back in action again."
+        content: "Keep track of your emails from any device natively: Upgrade to Mobile Synchronisation and all your emails, appointments, tasks and contacts will appear on all your devices. Lose your device: No problem! Simply sync your new device and you are back in action again."
       bubble6:
         app: 'io.ox/contacts'
-        content: "Different address books on different devices? If you loose your phone or your computer breaks what would happen? Upgrade to Mobile Synchronisation and all your contacts will be synchronised to all your devices. Loose a device or get a new one: No problem."
+        content: "Different address books on different devices? If you lose your phone or your computer breaks what would happen? Upgrade to Mobile Synchronisation and all your contacts will be synchronised to all your devices. Lose a device or get a new one: No problem."
 
 plugins/upsell//ads:
   delayInMilliseconds: 10000
