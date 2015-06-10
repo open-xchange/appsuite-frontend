@@ -24,6 +24,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'use strict';
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
+        testCapabilities = {},
 
         sizeValues = {
             'over': gt('Is bigger than'),
@@ -53,6 +54,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
             'size': gt('Size (bytes)')
+        },
+
+        conditionsMapping = {
+            'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
+            'envelope': ['envelope'],
+            'size': ['size']
         },
 
         actionsTranslations = {
@@ -132,11 +139,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             }
         },
 
+        filterValues = function (testType, possibleValues) {
+            var availableValues = {};
+            _.each(possibleValues, function (value, key) {
+                if (_.indexOf(testCapabilities[testType], key) !== -1) availableValues[key] = value;
+            });
+            return availableValues;
+        },
+
         FilterDetailView = Backbone.View.extend({
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
 
             initialize: function (opt) {
+
+                _.each(opt.config.tests, function (value) {
+                    testCapabilities[value.test] = value.comparison;
+                });
+
                 var unsupported = [];
                 _.each(actionCapabilities, function (val, key) {
                     var index = _.indexOf(opt.config.actioncommands, val);
@@ -145,6 +165,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     }
                 });
                 actionsTranslations = _.omit(actionsTranslations, unsupported);
+
+                _.each(conditionsMapping, function (list, conditionGroup) {
+                    if (!_.has(testCapabilities, conditionGroup)) {
+                        _.each(conditionsMapping[conditionGroup], function (condition) {
+                            delete headerTranslation[condition] ;
+                        });
+                    }
+                });
+
                 this.listView = opt.listView;
             },
 
@@ -528,7 +557,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             $('<div>').addClass('col-md-6').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-md-6').append(
-                                        elements.drawOptions(test.comparison, sizeValues)
+                                        elements.drawOptions(test.comparison, filterValues(test.id, sizeValues))
                                     ),
                                     $('<div class="col-md-6">').append(
                                         elements.drawInputfieldTest(test.comparison, test.size)
@@ -561,7 +590,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                     ),
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-3').append(
-                                            elements.drawOptions(test.comparison, containsValues)
+                                            elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
                                         ),
                                         $('<div class="col-md-9">').append(
                                             elements.drawInputfieldTest(name + ' ' + test.comparison, test.values[0])
@@ -580,7 +609,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 $('<div>').addClass('col-md-6').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-3').append(
-                                            elements.drawOptions(test.comparison, containsValues)
+                                            elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
                                         ),
                                         $('<div class="col-md-9">').append(
                                             elements.drawInputfieldTest(name + ' ' + test.comparison, test.values[0])
@@ -602,7 +631,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             $('<div>').addClass(' col-md-6').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-md-3').append(
-                                        elements.drawOptions(test.comparison, containsValues)
+                                        elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
                                     ),
                                     $('<div class="col-md-9">').append(
                                         elements.drawInputfieldTest(headerTranslation[test.id] + ' ' + test.comparison, test.values[0])
