@@ -8518,8 +8518,8 @@ msgstr "您的 IP 地址已更改"
 msgid "Your applications"
 msgstr "您的应用"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:54 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/audioview.js:90
+#: apps/io.ox/core/viewer/views/types/audioview.js:63 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:91
 #, fuzzy
 msgid "Your browser does not support the audio format of this file."
 msgstr "不支持您的浏览器！"

@@ -8724,8 +8724,8 @@ msgstr "Votre adresse IP a changé"
 msgid "Your applications"
 msgstr "Vos applications"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:54 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/audioview.js:90
+#: apps/io.ox/core/viewer/views/types/audioview.js:63 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:91
 #, fuzzy
 msgid "Your browser does not support the audio format of this file."
 msgstr "Votre navigateur n'est pas pris en charge."

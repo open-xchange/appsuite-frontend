@@ -8702,8 +8702,8 @@ msgstr "Adresa dumneavoastră IP a fost modificată"
 msgid "Your applications"
 msgstr "Aplicațiile dumneavoastră"
 
-#: apps/io.ox/core/viewer/views/types/audioview.js:54 module:io.ox/core
-#: apps/io.ox/core/viewer/views/types/audioview.js:90
+#: apps/io.ox/core/viewer/views/types/audioview.js:63 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/audioview.js:91
 #, fuzzy
 msgid "Your browser does not support the audio format of this file."
 msgstr "Navigatorul dumneavoastră nu este suportat!"
