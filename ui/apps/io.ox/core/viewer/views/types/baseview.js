@@ -45,16 +45,13 @@ define('io.ox/core/viewer/views/types/baseview', [
          *  a CSS class name to be applied on the file icon.
          */
         createNotificationNode: function (notification, iconClass) {
-            var node = $('<div class="viewer-displayer-notification">'),
-                filename = this.model.get('filename') || '',
-                iconClass = iconClass || Util.getIconClass(this.model);
 
-            node.append(
+            iconClass = iconClass || Util.getIconClass(this.model);
+
+            return $('<div class="viewer-displayer-notification">').append(
                 $('<i class="fa">').addClass(iconClass),
-                $('<p>').text(filename),
                 $('<p class="apology">').text(notification || '')
             );
-            return node;
         },
 
         /**
