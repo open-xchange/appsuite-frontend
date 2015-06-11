@@ -588,9 +588,11 @@ define('io.ox/core/tk/list-selection', [
         },
 
         onTouchMove: function (e) {
-
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX;
+            // return early on multitouch
+            if (e.originalEvent.touches.length > 1) return;
+
             this.distanceX = (this.startX - currentX) * -1; // invert value
             this.scrolling = false;
 
