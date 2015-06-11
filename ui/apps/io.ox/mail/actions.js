@@ -60,6 +60,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel', 'some')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -77,6 +79,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel', 'some')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -98,7 +102,7 @@ define('io.ox/mail/actions', [
 
             var data;
             // Only first mail of thread is selected on multiselection, as most commonly users don't want to forward whole threads
-            if (baton.selection && baton.selection.length) {
+            if (baton.selection && baton.selection.length > 1) {
                 data = baton.selection.map(function (o) {
                     return _.cid(o.replace(/^thread./, ''));
                 });
@@ -115,6 +119,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -142,6 +148,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be at least one message and top-level
             if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
