@@ -357,6 +357,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a.viewer-toolbar-close': 'onClose',
             'click a.viewer-toolbar-popoutstandalone': 'onClose',
+            'click a[data-action="spreadsheet_edit"]': 'onClose',
+            'click a[data-action="text_edit"]': 'onClose',
             'click a.viewer-toolbar-filename': 'onRename',
             'keydown a.viewer-toolbar-filename': 'onRename'
         },
