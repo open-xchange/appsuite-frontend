@@ -479,6 +479,10 @@ define('io.ox/mail/compose/view', [
             delete mail.vcard;
 
             return attachmentEmpty.emptinessCheck(mail.files).then(function () {
+                return self.waitForPendingImages();
+            }).then(function () {
+                mail.attachments[0].content = self.model.getMail().attachments[0].content;
+
                 return mailAPI.send(mail, mail.files);
             }).then(function (result) {
                 var opt = self.parseMsgref(result.data);
@@ -645,6 +649,17 @@ define('io.ox/mail/compose/view', [
             return def;
         },
 
+        waitForPendingImages: function () {
+            if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return;
+
+            var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
+                    return $(this).attr('id');
+                }),
+                deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
+
+            return $.when.apply(this, deferreds);
+        },
+
         send: function () {
             // get mail
             var self = this,
@@ -682,78 +697,91 @@ define('io.ox/mail/compose/view', [
                     mail.sendtype = mailAPI.SENDTYPE.DRAFT;
                 }
 
-                // send!
-                mailAPI.send(mail, mail.files)
-                .always(function (result) {
+                self.waitForPendingImages().then(function () {
+                    // use actual content since the image urls could have changed
+                    mail.attachments[0].content = self.model.getMail().attachments[0].content;
 
-                    if (result.error && !result.warnings) {
-                        if (win) { win.idle().show(); }
-                        self.app.launch();
-                        // TODO: check if backend just says "A severe error occurred"
-                        notifications.yell(result);
-                        return;
-                    }
+                    // send!
+                    mailAPI.send(mail, mail.files)
+                    .always(function (result) {
 
-                    if (result.warnings) {
-                        notifications.yell('warning', result.warnings.error);
-                    } else {
-                        // success - some want to be notified, other's not
-                        if (settings.get('features/notifyOnSent', false)) {
-                            notifications.yell('success', gt('The email has been sent'));
+                        if (result.error && !result.warnings) {
+                            if (win) { win.idle().show(); }
+                            self.app.launch();
+                            // TODO: check if backend just says "A severe error occurred"
+                            notifications.yell(result);
+                            return;
                         }
-                    }
 
-                    // update base mail
-                    var isReply = mail.sendtype === mailAPI.SENDTYPE.REPLY,
-                        isForward = mail.sendtype === mailAPI.SENDTYPE.FORWARD,
-                        sep = mailAPI.separator,
-                        base, folder, id, msgrefs, ids;
-
-                    if (isReply || isForward) {
-                        //single vs. multiple
-                        if (mail.msgref) {
-                            msgrefs = [ mail.msgref ];
+                        if (result.warnings) {
+                            notifications.yell('warning', result.warnings.error);
                         } else {
-                            msgrefs = _.chain(mail.attachments)
-                                .filter(function (attachment) {
-                                    return attachment.content_type === 'message/rfc822';
-                                })
-                                .map(function (attachment) { return attachment.msgref; })
-                                .value();
-                        }
-                        //prepare
-                        ids = _.map(msgrefs, function (obj) {
-                            base = _(obj.split(sep));
-                            folder = base.initial().join(sep);
-                            id = base.last();
-                            return { folder_id: folder, id: id };
-                        });
-                        // update cache
-                        mailAPI.getList(ids).pipe(function (data) {
-                            // update answered/forwarded flag
-                            if (isReply || isForward) {
-                                var len = data.length;
-                                for (var i = 0; i < len; i++) {
-                                    if (isReply) data[i].flags |= 1;
-                                    if (isForward) data[i].flags |= 256;
-                                }
+                            // success - some want to be notified, other's not
+                            if (settings.get('features/notifyOnSent', false)) {
+                                notifications.yell('success', gt('The email has been sent'));
                             }
-                            $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
-                            .done(function () {
-                                mailAPI.trigger('refresh.list');
-                            });
-                        });
-                    }
+                        }
 
-                    //remove sync listener
-                    //causes problems with inline images that are already deleted on the backend (see Bug 32599)
-                    self.stopListening(self.model, 'needsync', self.syncMail);
-                    self.model.dirty(false);
-                    self.app.quit();
-                })
-                .always(function (result) {
+                        // update base mail
+                        var isReply = mail.sendtype === mailAPI.SENDTYPE.REPLY,
+                            isForward = mail.sendtype === mailAPI.SENDTYPE.FORWARD,
+                            sep = mailAPI.separator,
+                            base, folder, id, msgrefs, ids;
+
+                        if (isReply || isForward) {
+                            //single vs. multiple
+                            if (mail.msgref) {
+                                msgrefs = [ mail.msgref ];
+                            } else {
+                                msgrefs = _.chain(mail.attachments)
+                                    .filter(function (attachment) {
+                                        return attachment.content_type === 'message/rfc822';
+                                    })
+                                    .map(function (attachment) { return attachment.msgref; })
+                                    .value();
+                            }
+                            //prepare
+                            ids = _.map(msgrefs, function (obj) {
+                                base = _(obj.split(sep));
+                                folder = base.initial().join(sep);
+                                id = base.last();
+                                return { folder_id: folder, id: id };
+                            });
+                            // update cache
+                            mailAPI.getList(ids).pipe(function (data) {
+                                // update answered/forwarded flag
+                                if (isReply || isForward) {
+                                    var len = data.length;
+                                    for (var i = 0; i < len; i++) {
+                                        if (isReply) data[i].flags |= 1;
+                                        if (isForward) data[i].flags |= 256;
+                                    }
+                                }
+                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
+                                .done(function () {
+                                    mailAPI.trigger('refresh.list');
+                                });
+                            });
+                        }
+
+                        //remove sync listener
+                        //causes problems with inline images that are already deleted on the backend (see Bug 32599)
+                        self.stopListening(self.model, 'needsync', self.syncMail);
+                        self.model.dirty(false);
+                        self.app.quit();
+                    })
+                    .always(function (result) {
+                        self.unblockReuse(mail.sendtype);
+                        def.resolve(result);
+                    });
+                }, function (error) {
+                    if (win) { win.idle().show(); }
+
+                    self.app.launch();
+                    notifications.yell(error);
+
                     self.unblockReuse(mail.sendtype);
-                    def.resolve(result);
+                    def.resolve(error);
                 });
             }
 
