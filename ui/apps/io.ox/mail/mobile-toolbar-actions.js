@@ -181,22 +181,22 @@ define('io.ox/mail/mobile-toolbar-actions', [
         ref: 'io.ox/mail/mobile/navbar/links'
     }));
 
-    var updateToolbar = _.debounce(function (list) {
+    var updateToolbar = _.debounce(function (selection) {
 
-        if (!list) return;
+        if (!selection) return;
 
         // remember if this list is based on a single thread
         var isThread = this.props.get('thread');
 
         // resolve thread
-        list = api.resolve(list, isThread);
+        var list = api.resolve(selection, isThread);
         if (list.length === 0) isThread = false;
 
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
 
         // draw toolbar
-        var baton = ext.Baton({ data: list, isThread: isThread, app: this });
+        var baton = ext.Baton({ data: list, isThread: isThread, selection: selection, app: this });
 
         // handle updated baton to pageController
         var current = this.pages.getCurrentPage();
