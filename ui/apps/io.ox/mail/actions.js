@@ -97,10 +97,10 @@ define('io.ox/mail/actions', [
         action: function (baton) {
 
             var data;
-
-            if (baton.app && baton.app.listView.selection.get().length > 1) {
-                data = baton.app.listView.selection.get().map(function (o) {
-                    return _.cid(o.replace(/thread./, ''));
+            // Only first mail of thread is selected on multiselection, as most commonly users don't want to forward whole threads
+            if (baton.selection && baton.selection.length) {
+                data = baton.selection.map(function (o) {
+                    return _.cid(o.replace(/^thread./, ''));
                 });
             } else {
                 data = baton.first();
