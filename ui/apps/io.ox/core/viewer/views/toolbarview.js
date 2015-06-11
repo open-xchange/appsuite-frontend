@@ -497,7 +497,6 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Destructor of this view
          */
         disposeView: function () {
-            this.model.off().stopListening();
             this.model = null;
         }
 
