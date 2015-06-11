@@ -197,13 +197,11 @@ define('io.ox/core/folder/util', [
         case 'rename':
         case 'rename:folder':
             // can rename?
-            // missing admin privileges or system folder
-            if (!isAdmin || isSystem) return false;
-            // special new rename bit
-            if (perm(rights, 30) === 1) return true;
-            if (!isMail) return true;
-            // default folder cannot be renamed
-            return !is('defaultfolder', data);
+            // for mail we can check bit 30
+            if (isMail) return perm(rights, 30) === 1;
+            // for all other apps: if we have admin privileges
+            // and it's not a system folder, we can rename the folder
+            return isAdmin && !isSystem;
         case 'create:folder':
             // check 3rd bit (value is 4! see http://oxpedia.org/wiki/index.php?title=HTTP_API#PermissionFlags)
             // backend promised that it's sufficient to check this bit; isAdmin would be wrong here
