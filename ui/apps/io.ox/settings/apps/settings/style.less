@@ -1,36 +1,54 @@
-.io-ox-app-settings {
-    .selectable {
-        text-align: left;
-        margin-left: 60px;
-        margin-right: 45px;
+.rightside {
+    .scrollable-pane {
+        .io-ox-app-settings {
 
-        div {
-            margin-bottom: 3px;
+            line-height: 16px;
 
-            &:first-child {
-                padding-top: 5px;
-                margin-bottom: 9px;
+            .settings-list {
+                li {
+
+                    &.widget-settings-view {
+                        padding: 16px;
+                        margin-bottom: 8px;
+                    }
+
+                    img {
+                        float: left;
+                        width: 64px;
+                        height: 64px;
+                    }
+
+                    .remove {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        right: 0;
+                        width: 45px;
+                        cursor: pointer;
+                        max-height: 45px;
+                    }
+
+                    .selectable {
+                        text-align: left;
+                        margin-left: 74px;
+                        margin-right: 45px;
+
+                        div, .widget-title {
+                            margin-top: 3px;
+                            padding-bottom: 5px;
+                        }
+
+                        .permissions, .date {
+                            color: #777;
+
+                            span {
+                                font-weight: bold;
+                                margin-right: 0.4em;
+                            }
+                        }
+                    }
+                }
             }
-        }
-
-        .permissions, .date {
-            color: #777;
-
-            span {
-                font-weight: bold;
-                margin-right: 0.4em;
-            }
-        }
-    }
-
-    .widget-settings-view {
-        img {
-            float: left;
-            width: 50px;
-        }
-
-        .remove {
-            max-height: 45px;
         }
     }
 }
