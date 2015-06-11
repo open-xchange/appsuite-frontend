@@ -95,13 +95,18 @@ define('io.ox/mail/actions', [
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
-            ox.registry.call(
-                'mail-compose',
-                'forward',
-                !(baton.app && baton.app.listView.selection.get().length > 1) ? baton.first() : baton.data.map(function (o) {
-                    return _.pick(o, 'id', 'folder_id');
-                })
-            );
+
+            var data;
+
+            if (baton.app && baton.app.listView.selection.get().length > 1) {
+                data = baton.app.listView.selection.get().map(function (o) {
+                    return _.cid(o.replace(/thread./, ''));
+                });
+            } else {
+                data = baton.first();
+            }
+
+            ox.registry.call('mail-compose', 'forward', data);
         }
     });
 
