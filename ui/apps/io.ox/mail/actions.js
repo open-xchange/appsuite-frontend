@@ -98,7 +98,7 @@ define('io.ox/mail/actions', [
             ox.registry.call(
                 'mail-compose',
                 'forward',
-                baton.isThread && baton.app.listView.selection.get().length === 1 ? baton.first() : baton.data.map(function (o) {
+                !(baton.app && baton.app.listView.selection.get().length > 1) ? baton.first() : baton.data.map(function (o) {
                     return _.pick(o, 'id', 'folder_id');
                 })
             );
