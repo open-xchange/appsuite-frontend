@@ -58,28 +58,6 @@ define('io.ox/core/viewer/views/displayerview', [
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
             // blend in navigation by user activity
             this.$el.on('mousemove click', _.throttle(this.blendNavigation.bind(this), 500));
-            // enable touch handler for double tap zoom
-            this.$el.enableTouch({ tapHandler: this.onTap.bind(this) });
-            // wheter double tap zoom is already triggered
-            this.doubleTapZoomed = false;
-        },
-
-        /**
-         * Tap event handler.
-         * - zooms documents a step in and out in case of a double tap.
-         *
-         * @param {jQuery.Event} event
-         *  The jQuery event object.
-         *
-         * @param {Number} taps
-         *  The count of taps, indicating a single or double tap.
-         */
-        onTap: function (event, tapCount) {
-            if (tapCount === 2) {
-                var zoomAction = this.doubleTapZoomed ? 'viewer:zoomout' : 'viewer:zoomin';
-                this.viewerEvents.trigger(zoomAction);
-                this.doubleTapZoomed = !this.doubleTapZoomed;
-            }
         },
 
         /**

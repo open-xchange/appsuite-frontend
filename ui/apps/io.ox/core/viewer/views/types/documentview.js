@@ -75,7 +75,88 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
+            // disable display flex styles, for pinch to zoom
+            this.$el.css({ 'display': 'block' });
+            // wheter double tap zoom is already triggered
+            this.doubleTapZoomed = false;
         },
+
+        /**
+         * Tap event handler.
+         * - zooms documents a step in and out in case of a double tap.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery event object.
+         *
+         * @param {Number} taps
+         *  The count of taps, indicating a single or double tap.
+         */
+        onTap: function (event, tapCount) {
+            if (tapCount === 2) {
+                var zoomAction = this.doubleTapZoomed ? 'viewer:zoomout' : 'viewer:zoomin';
+                this.viewerEvents.trigger(zoomAction);
+                this.doubleTapZoomed = !this.doubleTapZoomed;
+            }
+        },
+
+        /**
+         * Handles pinch events.
+         *
+         * @param {String} phase
+         * The current pinch phase ('start', 'move', 'end' or 'cancel')
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery tracking event.
+         *
+         * @param {Number} distance
+         * The current distance in px between the two fingers
+         *
+         * @param {Point} midPoint
+         * The current center position between the two fingers
+         */
+        onPinch: (function () {
+            //console.warn('onPinch()');
+            var startDistance,
+                moveDelta,
+                transformScale,
+                zoomFactor,
+                transformOriginX,
+                transformOriginY;
+
+            return function pinchHandler(phase, event, distance, midPoint) {
+                switch (phase) {
+                    case 'start':
+                        //console.warn('START ==> ' + distance + ' ', JSON.stringify(midPoint));
+                        startDistance = distance;
+                        break;
+                    case 'move':
+                        moveDelta = distance - startDistance;
+                        transformScale = distance / startDistance;
+                        transformOriginX = midPoint.x + this.$el.scrollLeft();
+                        transformOriginY = midPoint.y + this.$el.scrollTop();
+                        //console.warn('MOVE ==> ' + moveDelta + ' ' + transformScale + ' pinchpoint:' + JSON.stringify(midPoint));
+                        this.documentContainer.css({
+                            'transform-origin': transformOriginX + 'px ' + transformOriginY + 'px',
+                            'transform': 'scale(' + transformScale + ')'
+                        });
+                        break;
+                    case 'end':
+                        //console.warn('END ==> scale:' + transformScale + ' currentzoom:' + this.currentZoomFactor);
+                        zoomFactor = transformScale * this.currentZoomFactor;
+                        zoomFactor = Util.minMax(zoomFactor, this.getMinZoomFactor(), this.getMaxZoomFactor());
+                        this.setZoomLevel(zoomFactor);
+                        this.$el.scrollLeft(transformOriginX);
+                        this.documentContainer.removeAttr('style');
+                        break;
+                    case 'cancel':
+                        //console.warn('CANCEL ==>');
+                        this.documentContainer.removeAttr('style');
+                        break;
+                    default:
+                        break;
+                }
+            };
+        })(),
 
         /**
          * Scroll-to-page handler:
@@ -131,13 +212,17 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Creates and renders an Image slide.
+         * Creates and renders an document slide.
          *
          * @returns {DocumentView}
          *  the DocumentView instance.
          */
         render: function () {
             this.documentContainer = $('<div class="document-container io-ox-core-pdf">');
+            this.documentContainer.enableTouch({
+                tapHandler: this.onTap.bind(this),
+                pinchHandler: this.onPinch.bind(this)
+            });
             this.$el.empty().append(this.documentContainer);
             return this;
         },
@@ -433,14 +518,16 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var pdfView = this.pdfView,
-                documentTopPosition = this.documentContainer.scrollTop();
+                documentTopPosition = this.$el.scrollTop(),
+                documentLeftPosition = this.$el.scrollLeft();
             _.each(this.pages, function (page, pageIndex) {
                 pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
             });
             // adjust document scroll position according to new zoom
-            this.documentContainer.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
+            this.$el.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
+            this.$el.scrollLeft(documentLeftPosition * zoomLevel / this.currentZoomFactor);
             // save new zoom level to view
             this.currentZoomFactor = zoomLevel;
             this.setInitialZoomLevel(this.model.get('id'), zoomLevel);
