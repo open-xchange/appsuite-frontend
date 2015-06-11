@@ -447,7 +447,7 @@ define('io.ox/files/main', [
                     sidebarView.$el.css('left', mainWidth - 320 + 'px');
                 }
 
-                if (details) {
+                if (details && _.device('!touch')) {
                     sidebarView.opened = true;
                     sidebarView.$el.toggleClass('opened', sidebarView.opened);
                     app.listControl.$el.parent().toggleClass('leftside border-right', sidebarView.opened);
