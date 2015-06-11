@@ -54,12 +54,15 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                     return;
                 }
             }
+
             Pool.preserve(function () {
                 var method = methods[type];
                 collection[method](data, { parse: true });
             });
-            var isComplete = (type === 'load' && data.length < loader.LIMIT) || (type === 'paginate' && data.length <= 1);
-            if (isComplete) collection.trigger('complete');
+
+            // track completeness
+            collection.complete = (type === 'load' && data.length < loader.LIMIT) || (type === 'paginate' && data.length <= 1);
+            if (collection.complete) collection.trigger('complete');
             collection.trigger(type);
         }
 
@@ -91,16 +94,16 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         this.load = function (params) {
 
-            var collection, limit = this.LIMIT;
+            var collection;
 
             params = this.getQueryParams(params || {});
-            params.limit = '0,' + limit;
+            params.limit = '0,' + this.LIMIT;
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
             if (collection.length > 0 && !collection.expired) {
                 _.defer(function () {
-                    collection.trigger(collection.length < limit ? 'reset load cache complete' : 'reset load cache');
+                    collection.trigger(collection.complete ? 'reset load cache complete' : 'reset load cache');
                 });
                 return collection;
             }

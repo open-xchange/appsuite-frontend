@@ -121,16 +121,18 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             }
 
             // register new collection
-            hash[cid] = { access: _.now(), collection: new this.Collection() };
+            var collection = new this.Collection();
+            hash[cid] = { access: _.now(), collection: collection };
 
-            // add "expired" attribute
-            hash[cid].collection.expired = false;
+            // add attributes
+            collection.expired = false;
+            collection.complete = false;
 
             // to simplify debugging
-            hash[cid].collection.cid = cid;
+            collection.cid = cid;
 
             // propagate changes in all collections
-            return hash[cid].collection.on({
+            return collection.on({
                 'remove': propagateRemove.bind(this, module),
                 'change': propagateChange.bind(this, module)
             });
