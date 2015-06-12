@@ -53,7 +53,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         picture: function (baton) {
-            var data = baton.data, from = data.from;
+            var data = baton.data, from = account.is('sent|drafts', data.folder_id) ? data.to : data.from;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
@@ -423,27 +423,30 @@ define('io.ox/mail/common-extensions', [
 
         unreadToggle: (function () {
 
+            function getAriaLabel(data) {
+                return util.isUnseen(data) ?
+                    gt('This message is unread, press this button to mark it as read.') :
+                    gt('This message is read, press this button to mark it as unread.');
+
+            }
+
             function toggle(e) {
                 e.preventDefault();
-                var view = e.data.view, data = view.model.toJSON(), node = e.data.node;
+                var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
-
-                if (util.isUnseen(data)) {
-                    api.markRead(data);
-                    node.attr('aria-label', gt('This E-mail is read, press to mark it as unread.'));
-                } else {
-                    api.markUnread(data);
-                    node.attr('aria-label', gt('This E-mail is unread, press to mark it as read.'));
-                }
+                if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
+                $(this).attr('aria-label', getAriaLabel(data));
             }
 
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
 
-                var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
-                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa" aria-hidden="true"/></a>');
-                this.append(button.on('click', { view: baton.view, node: button }, toggle)
+                this.append(
+                    $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                    .attr('aria-label', getAriaLabel(baton.data))
+                    .append('<i class="fa" aria-hidden="true">')
+                    .on('click', { model: baton.view.model }, toggle)
                 );
             };
         }()),

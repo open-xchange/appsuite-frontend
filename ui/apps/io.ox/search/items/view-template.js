@@ -71,9 +71,15 @@ define('io.ox/search/items/view-template', [
 
     var refresh = _.debounce(function (e) {
                     if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/search')
-                        e.data.trigger('needs-refresh');
+                        if (e && e.data && e.data.trigger) {
+                            //jQuery event
+                            e.data.trigger('needs-refresh');
+                        } else {
+                            //backbone event
+                            this.trigger('needs-refresh');
+                        }
                     // hide sidepanel
-                    if (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)
+                    if (e && e.type && (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0))
                         $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
                 }, 100);
 
@@ -101,7 +107,12 @@ define('io.ox/search/items/view-template', [
             require(dep, function (view, api) {
                 // ignore last element when greater than 'size' (only used to determine if more results exists)
                 var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
-                if (api) {
+                if (api && api._events) {
+                    //Backbone event hub
+                    api.off(events, refresh);
+                    api.on(events, refresh, items);
+                } else if (api && api.events) {
+                    //jQuery event hub
                     api.off(events, refresh);
                     api.on(events, items, refresh);
                 }

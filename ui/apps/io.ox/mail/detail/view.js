@@ -81,13 +81,6 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-    // TODO: relocate
-    // ext.point('io.ox/mail/detail/header').extend({
-    //     id: 'unread-toggle',
-    //     index: INDEX_header += 100,
-    //     draw: extensions.unreadToggle
-    // });
-
     /* move the actions menu to the top in sidepanel on smartphones */
     var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header';
 
@@ -102,6 +95,12 @@ define('io.ox/mail/detail/view', [
         ref: 'io.ox/mail/links/inline',
         smart: true
     }));
+
+    ext.point('io.ox/mail/detail/header').extend({
+        id: 'unread-toggle',
+        index: INDEX_header += 100,
+        draw: extensions.unreadToggle
+    });
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'date',

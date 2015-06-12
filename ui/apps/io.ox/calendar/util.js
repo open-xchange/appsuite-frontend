@@ -544,7 +544,9 @@ define('io.ox/calendar/util', [
 
             var text = $.trim(gt.noI18n(data.note) || '')
                 .replace(/\n{3,}/g, '\n\n')
-                .replace(/</g, '&lt;');
+                .replace(/</g, '&lt;')
+                //use br to keep linebreaks when pasting (see 38714)
+                .replace(/\n/g, '<br>');
 
             return util.urlify(text);
         },

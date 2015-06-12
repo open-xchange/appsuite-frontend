@@ -78,8 +78,19 @@ define('io.ox/files/actions', [
                 );
             },
             action: function (baton) {
-                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;
-                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
+                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
+                    // if this was opened from the viewer, close it now
+                    if (baton.context && baton.context.viewerEvents) {
+                        baton.context.viewerEvents.trigger('viewer:close');
+                    }
+                    return;
+                }
+                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id }).done(function () {
+                    // if this was opened from the viewer, close it now
+                    if (baton.context && baton.context.viewerEvents) {
+                        baton.context.viewerEvents.trigger('viewer:close');
+                    }
+                });
             }
         });
 
@@ -91,6 +102,7 @@ define('io.ox/files/actions', [
                 );
             },
             action: function (baton) {
+                debugger;
                 ox.launch('io.ox/editor/main').done(function () {
                     this.create({ folder: baton.app.folder.get() });
                 });

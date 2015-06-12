@@ -754,7 +754,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
                 if (isUnreachable(xhr)) {
                     that.trigger('unreachable');
-                    ox.trigger('connection:down');
+                    ox.trigger('connection:down', error, r.o);
                 } else {
                     that.trigger('reachable');
                     ox.trigger('connection:online connection:up');

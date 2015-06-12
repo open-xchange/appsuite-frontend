@@ -40,10 +40,9 @@ define('io.ox/core/viewer/views/types/defaultview',  [
          *  the DefaultView instance.
          */
         render: function () {
-            //console.warn('DefaultView.render()', this.model.get('filename'));
 
             this.$el.empty().append(
-                this.createNotificationNode(gt('Sorry, there is no preview available for this file.'))
+                this.createNotificationNode(gt('There is no preview for this file type'))
             );
 
             return this;

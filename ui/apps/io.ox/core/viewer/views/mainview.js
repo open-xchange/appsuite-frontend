@@ -209,9 +209,6 @@ define('io.ox/core/viewer/views/mainview', [
             this.toolbarView.remove();
             this.displayerView.remove();
             this.sidebarView.remove();
-            this.collection.off().stopListening().each(function (model) {
-                model.off().stopListening();
-            });
             this.collection = null;
             this.toolbarView = null;
             this.displayerView = null;

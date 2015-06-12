@@ -447,7 +447,7 @@ define('io.ox/files/main', [
                     sidebarView.$el.css('left', mainWidth - 320 + 'px');
                 }
 
-                if (details) {
+                if (details && _.device('!touch')) {
                     sidebarView.opened = true;
                     sidebarView.$el.toggleClass('opened', sidebarView.opened);
                     app.listControl.$el.parent().toggleClass('leftside border-right', sidebarView.opened);
@@ -506,13 +506,13 @@ define('io.ox/files/main', [
 
             var ev = _.device('touch') ? 'tap' : 'dblclick';
 
-            app.listView.$el.on(ev, '.file-type-folder', function (e) {
-                var obj = _.cid($(e.currentTarget).attr('data-cid'));
+            app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
+                var obj = _.cid($(e.currentTarget).parent().attr('data-cid'));
                 app.folder.set(obj.id);
             });
 
-            app.listView.$el.on(ev, '.list-item:not(.file-type-folder)', function (e) {
-                var cid = $(e.currentTarget).attr('data-cid'),
+            app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
+                var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
                 ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
