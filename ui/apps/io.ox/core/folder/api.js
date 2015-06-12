@@ -78,17 +78,28 @@ define('io.ox/core/folder/api', [
 
     function bubbleSubtotal(model, value, attribute) {
 
-        if (isVirtual(model.id)) return;
-
         // attribute may be subtotal or unread
         var previous = model._previousAttributes[attribute] !== undefined && model._previousAttributes[attribute] !== null ? model._previousAttributes[attribute] : 0,
             difference = value - previous,
-            parent = pool.models[model.get('folder_id')];
+            parent = pool.models[model.get('folder_id')],
+            virtualParents = model.get('virtual_parents');
 
         // system folders don't matter
         // bubble through the tree in parent direction
         if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
             parent.set('subtotal', calculateSubtotal(parent));
+        }
+
+        // if this is a subfolder of a virtual folder we must bubble there too
+        if (difference !== 0 && virtualParents && virtualParents.length > 0) {
+            _(virtualParents).each(function (virtualParentId) {
+                if (pool.models[virtualParentId] && pool.collections[virtualParentId]._byId[model.get('id')]) {
+                    pool.models[virtualParentId].set('subtotal', calculateSubtotal(pool.models[virtualParentId]));
+                } else {
+                    //virtual folder does not exist anymore or this folder is no longer part of it's collection
+                    model.set('virtual_parents', _(model.get('virtual_parents')).without(virtualParentId));
+                }
+            });
         }
     }
 
@@ -109,11 +120,15 @@ define('io.ox/core/folder/api', [
     var FolderModel = Backbone.Model.extend({
         constructor: function () {
             Backbone.Model.apply(this, arguments);
-            this.on({
-                'change:id': onChangeModelId,
-                'change:subtotal': onChangeSubtotal,
-                'change:unread': onChangeUnread
-            });
+            this.set('virtual_parents', []);
+            // only apply unread Events to mail or undefined folders (some virtual folders might have an undefined module)
+            if (this.get('module') === 'mail' || this.get('module') === undefined) {
+                this.on({
+                    'change:id': onChangeModelId,
+                    'change:subtotal': onChangeSubtotal,
+                    'change:unread': onChangeUnread
+                });
+            }
         }
     });
 
@@ -166,13 +181,24 @@ define('io.ox/core/folder/api', [
             // update collection
             var collection = this.getCollection(id),
                 type = collection.fetched ? 'set' : 'reset';
+            // remove old virtual parent references
+            if (this.models[id] && isVirtual(id)) {
+                _(collection.models).each(function (model) {
+                    model.set('virtual_parents', _(model.get('virtual_parents')).without(id));
+                });
+            }
             collection[type](models);
             collection.fetched = true;
-
-            if (!isVirtual(id) && this.models[id] && this.models[id].get('module') !== 'system') {
+            if (this.models[id] && this.models[id].get('module') !== 'system') {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
                     subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
+                    // add virtual parent references
+                    if (isVirtual(id)) {
+                        var newParents = models[i].get('virtual_parents');
+                        newParents.push(id);
+                        models[i].set('virtual_parents', _.uniq(newParents));
+                    }
                 }
                 this.models[id].set('subtotal', subtotal);
             }
