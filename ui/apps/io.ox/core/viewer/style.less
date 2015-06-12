@@ -24,8 +24,8 @@
 .viewer-dark-colors () {
     @viewer-text-color: #ffffff;
     @viewer-scrollbar-track-color: @viewer-sidebar-bgcolor;
-    @viewer-scrollbar-thumb-color: #333333;
-    @viewer-scrollbar-thumb-hover-color: #444444;
+    @viewer-scrollbar-thumb-color: #555555;
+    @viewer-scrollbar-thumb-hover-color: #777777;
     @viewer-scrollbar-base-color: #666666;
     @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
     @viewer-background-color: rgba(0, 0, 0, 0.85);
@@ -249,14 +249,14 @@
     z-index: 1000;
 
     ::-webkit-scrollbar {
-        width: 8px;
+        width: 12px;
     }
     ::-webkit-scrollbar-track {
         background: @viewer-scrollbar-track-color;
     }
     ::-webkit-scrollbar-thumb {
         background: @viewer-scrollbar-thumb-color;
-        width: 8px;
+        width: 12px;
     }
     ::-webkit-scrollbar-thumb:hover {
         background: @viewer-scrollbar-thumb-hover-color;
