@@ -67,7 +67,10 @@ define('io.ox/tasks/edit/main', [
             } else {
                 //check if only default Values are present
                 var data = taskModel.changedSinceLoading(),
-                    defaults = model.defaults;
+                    defaults = _.copy(model.defaults);
+                // default folder_id does not matter here (wrong in every folder beside the default folder), so make it equal
+                defaults.folder_id = data.folder_id;
+
                 check = !(_.isEqual(data, defaults));
             }
 
