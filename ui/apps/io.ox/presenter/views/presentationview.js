@@ -183,13 +183,7 @@ define('io.ox/presenter/views/presentationview', [
          * Focuses the swiper's current active slide.
          */
         focusActiveSlide: function () {
-
-            console.info('Presenter - focusActiveSlide', 'active element', document.activeElement);
-            console.info('Presenter - focusActiveSlide', 'active slide', this.getActiveSlideNode());
-
             this.getActiveSlideNode().focus();
-
-            console.info('Presenter - focusActiveSlide', 'active element', document.activeElement);
         },
 
         /**

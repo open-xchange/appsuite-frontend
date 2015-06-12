@@ -40,7 +40,7 @@ define('io.ox/presenter/views/mainview', [
             this.presentationView = new PresentationView({ model: this.model, presenterEvents: this.presenterEvents });
 
             // handle DOM events
-            $(window).on('resize', this.onWindowResize.bind(this));
+            $(window).on('resize.presenter', this.onWindowResize.bind(this));
 
             // clean stuff on dispose event from core/commons.js
             this.on('dispose', this.disposeView.bind(this));
@@ -130,7 +130,7 @@ define('io.ox/presenter/views/mainview', [
         disposeView: function () {
             console.log('Presenter - dispose MainView');
 
-            $(window).off('resize', this.onWindowResize);
+            $(window).off('resize.presenter');
             this.presentationView.remove();
             this.model.off().stopListening();
             this.presentationView = null;
