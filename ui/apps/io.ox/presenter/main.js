@@ -14,14 +14,38 @@
 define('io.ox/presenter/main', [
     'io.ox/files/api',
     'io.ox/core/page-controller',
-    'gettext!io.ox/presenter'
-], function (FilesAPI, PageController, gt) {
+    'io.ox/presenter/views/mainview',
+    'less!io.ox/presenter/style'
+], function (FilesAPI, PageController, MainView) {
 
     'use strict';
 
     var NAME = 'io.ox/presenter';
 
     ox.ui.App.mediator(NAME, {
+
+        'pages-desktop': function (app) {
+            if (_.device('smartphone')) return;
+
+            // add page controller
+            app.pages = new PageController(app);
+
+            app.getWindow().nodes.main.addClass('io-ox-presenter');
+
+            // create 2 pages
+            /*
+            app.pages.addPage({
+                name: 'listView',
+                container: app.getWindow().nodes.main,
+                classes: 'leftside border-right'
+            });
+            */
+            app.pages.addPage({
+                name: 'presentationView',
+                container: app.getWindow().nodes.main,
+                classes: 'rightside fullwidth'
+            });
+        },
 
         'start-presentation': function (app) {
 
@@ -31,23 +55,12 @@ define('io.ox/presenter/main', [
 
                 FilesAPI.get(file).done(function (data) {
 
-                    var label = gt('Presenter'),
-                        title = data.filename || data.title;
+                    var title = data.filename || data.title,
+                        fileModel = FilesAPI.pool.get('detail').get(_.cid(data)),
+                        page = app.pages.getPage('presentationView'),
+                        view = new MainView({ model: fileModel });
 
-                    app.getWindowNode().addClass('detail-view-app').append(
-                        $('<div class="f6-target detail-view-container">').attr({
-                            'tabindex': 1,
-                            'role': 'complementary',
-                            'aria-label': label
-                        })
-                        .append(
-                            $('<div>Will be replaced by the Presenter App soon!</div>')
-                            .attr({
-                                'role': 'complementary',
-                                'aria-label': gt('Presenter')
-                            })
-                        )
-                    );
+                    page.append(view.render().$el);
 
                     app.setTitle(title);
 

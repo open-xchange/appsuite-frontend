@@ -1,0 +1,73 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ */
+
+ .io-ox-presenter {
+
+    .fullwidth {
+        width: 100%;
+        left: 0;
+    }
+
+    .presenter-presentation-view {
+        outline: none;
+
+        .swiper-slide {
+            overflow: scroll;
+        }
+
+        .swiper-button-control {
+            //display: none;
+            //margin-top: -50px;
+            color: rgb(60, 115, 170);
+            background: rgba(211, 211, 211, 0.3);
+            //outline: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 2px;
+            text-align: center;
+            i {
+                line-height: 50px;
+                font-size: 3rem;
+            }
+            &:hover, &:focus {
+                color: rgb(40, 77, 113);
+                background: rgba(211, 211, 211, 0.6);
+            }
+        }
+
+        .presentation-caption {
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            text-align: center;
+            display: none;
+            pointer-events: none;
+            .caption-content {
+                display: inline-block;
+                min-height: 24px;
+                line-height: 24px;
+                padding: 0 15px;
+                color: #FFFFFF;
+                background: rgba(0, 0, 0, 0.3);
+                .border-radius(4px);
+            }
+            &.smartphone {
+                bottom: 6px;
+            }
+        }
+    }
+
+ }
+ 
