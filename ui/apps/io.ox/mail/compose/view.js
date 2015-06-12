@@ -650,7 +650,7 @@ define('io.ox/mail/compose/view', [
         },
 
         waitForPendingImages: function () {
-            if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return;
+            if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.Deferred().resolve();
 
             var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
                     return $(this).attr('id');
