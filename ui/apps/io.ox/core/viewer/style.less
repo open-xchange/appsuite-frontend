@@ -29,6 +29,7 @@
     @viewer-scrollbar-base-color: #666666;
     @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
     @viewer-background-color: rgba(0, 0, 0, 0.85);
+    @viewer-busy-color: rgba(255, 255, 255, 0.3);
     @viewer-toolbar-bgcolor: #000000;
     @viewer-toolbar-color: #999999;
     @viewer-toolbar-border-color: #000000;
@@ -42,6 +43,7 @@
     @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.5);
     @viewer-displayer-caption-color: #FFFFFF;
     @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.7);
+    @viewer-displayer-document-shadowcolor: rgba(255, 255, 255, 0.2);
     @viewer-control-color: @viewer-toolbar-color;
     @viewer-sidebar-bgcolor: #1a1a1a;
     @viewer-sidebar-border-color: #000000;
@@ -64,7 +66,8 @@
     @viewer-scrollbar-thumb-hover-color: #777777;
     @viewer-scrollbar-base-color: #666666;
     @viewer-scrollbar-arrow-color: @viewer-sidebar-label-text-color;
-    @viewer-background-color: rgba(255, 255, 255, 1);
+    @viewer-background-color: #f5f5f5;
+    @viewer-busy-color: rgba(0, 0, 0, 0.3);
     @viewer-toolbar-bgcolor: #ffffff;
     @viewer-toolbar-color: #3c73aa;
     @viewer-toolbar-border-color: #DDDDDD;
@@ -77,7 +80,8 @@
     @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
     @viewer-displayer-navigation-bgcolor: rgba(0, 0, 0, 0.2);
     @viewer-displayer-caption-color: #FFFFFF;
-    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.3);
+    @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.6);
+    @viewer-displayer-document-shadowcolor: rgba(0, 0, 0, 0.2);
     @viewer-control-color: @viewer-toolbar-color;
     @viewer-sidebar-bgcolor: #f5f5f5;
     @viewer-sidebar-border-color: #DDDDDD;
@@ -463,6 +467,7 @@
                 width: 450px;
                 background: #ffffff;
                 color: #000000;
+                box-shadow: 0 0 8px @viewer-displayer-document-shadowcolor;
             }
         }
 
