@@ -472,6 +472,10 @@
                 -webkit-align-items: center;
                 align-items: center;
                 outline: none;
+                &.swiper-slide-document {
+                    display: block;
+                    height: 100%;
+                }
             }
             .io-ox-busy::before {
                 color: @viewer-busy-color;
@@ -515,6 +519,7 @@
 
         .document-container {
             //overflow: auto;
+            align-self: flex-start;
             .document-page {
                 margin: 40px auto;
                 width: 450px;
@@ -587,7 +592,13 @@
         }
 
         .viewer-displayer-notification {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -50px;
             height: 100px;
+            width: 100%;
+            padding: 0 40px;
             text-align: center;
             color: @viewer-toolbar-color;
             i {

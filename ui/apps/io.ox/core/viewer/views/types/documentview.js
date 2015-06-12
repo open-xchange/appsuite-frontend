@@ -76,7 +76,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.numberOfPages = 1;
             this.disposed = null;
             // disable display flex styles, for pinch to zoom
-            this.$el.css({ 'display': 'block' });
+            this.$el.addClass('swiper-slide-document');
             // wheter double tap zoom is already triggered
             this.doubleTapZoomed = false;
         },
@@ -397,7 +397,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              * Actions which always have to be done after pdf document loading process
              */
             function pdfDocumentLoadFinished() {
-                documentContainer.removeClass('io-ox-busy');
+                this.$el.removeClass('io-ox-busy');
             }
 
             /**
@@ -419,7 +419,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.pdfDocument = new PDFDocument(documentUrl);
 
             // display loading animation
-            documentContainer.addClass('io-ox-busy');
+            this.$el.addClass('io-ox-busy');
 
             // wait for PDF document to finish loading
             $.when(this.pdfDocument.getLoadPromise())
