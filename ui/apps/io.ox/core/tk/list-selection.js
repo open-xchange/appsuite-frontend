@@ -40,11 +40,16 @@ define('io.ox/core/tk/list-selection', [
         this.view = view;
         this.behavior = behavior;
         this.view.$el
-            // normal click/keybard navigation
+            .on('mousedown', $.proxy(this.onMousedown, this))
+            .on('mouseup', $.proxy(this.onMouseup, this))
+            // normal click/keyboard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
             .on(isTouch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if focus is outside
             .on('focus', $.proxy(function () {
+                if (this.view.mousedown) {
+                    return;
+                }
                 var items = this.getItems(),
                     first = items.filter('[tabindex="1"]'),
                     index = items.index(first),
@@ -456,6 +461,13 @@ define('io.ox/core/tk/list-selection', [
                 this.onPageUpDown(e);
                 break;
             }
+        },
+
+        onMousedown: function () {
+            this.view.mousedown = true;
+        },
+        onMouseup: function () {
+            this.view.mousedown = false;
         },
 
         onClick: function (e) {
