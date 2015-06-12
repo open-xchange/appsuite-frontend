@@ -181,7 +181,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onBeforeClose: function () {
             if (this.isVisible()) {
                 var fileId = this.model.get('id'),
-                    fileScrollPosition = this.documentContainer.scrollTop();
+                    fileScrollPosition = this.$el.scrollTop();
                 this.setInitialScrollPosition(fileId, fileScrollPosition);
             }
         },
@@ -383,7 +383,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.setZoomLevel(zoomLevel);
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id'));
                 if (lastScrollPosition) {
-                    this.$el.find('.document-container').scrollTop(lastScrollPosition);
+                    this.$el.scrollTop(lastScrollPosition);
                 }
                 // select/highlight the corresponding thumbnail according to displayed document page
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())

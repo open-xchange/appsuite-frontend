@@ -472,15 +472,9 @@ define('io.ox/core/viewer/views/displayerview', [
             var previousIndex = swiper.previousIndex - 1,
                 activeSlideView = this.slideViews[previousIndex];
             if (activeSlideView) {
-                //var scrollPosition = activeSlideView.$el.scrollTop();
-                var scrollPosition = activeSlideView.$el.find('.document-container').scrollTop();
+                var scrollPosition = activeSlideView.$el.scrollTop();
                 if (activeSlideView.pdfDocument) {
-
-                    //TODO: also store scroll position when Viewer closes.
-
                     activeSlideView.setInitialScrollPosition(activeSlideView.model.get('id'), scrollPosition);
-                    //this.documentZoomLevels[previousIndex] = activeSlideView.getDefaultZoomFactor();
-                    //activeSlideView.setZoomLevel(this.model.get('id'), zoomLevel); setting to default would override the zoom level !?
                 }
             }
         },
