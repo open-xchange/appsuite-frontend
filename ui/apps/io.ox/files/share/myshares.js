@@ -47,10 +47,10 @@ define('io.ox/files/share/myshares', [
     ext.point(POINT + '/share').extend({
         id: 'icon',
         index: INDEX += 100,
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<div class="icon">').append(
-                    $('<i class="fa fa-folder">')
+                    $('<i class="fa fa-' + (baton.view.model.isFolder() ? 'folder' : 'file') + '">')
                 )
             );
         }
@@ -64,7 +64,10 @@ define('io.ox/files/share/myshares', [
         index: INDEX += 100,
         draw: function (baton) {
             this.append(
-                 $('<div class="info">').text(baton.view.model.get('share_url'))
+                $('<div class="info">').append(
+                    $('<div class="filename">').text('Filename/Foldername'),
+                    $('<div class="url">').text(baton.view.model.get('share_url'))
+                )
             );
         }
     });
@@ -157,7 +160,7 @@ define('io.ox/files/share/myshares', [
 
         onRemove: function (e) {
             e.preventDefault();
-            this.model.collection.remove(this.model);
+            this.model.destroy();
         },
 
         onEdit: function (e) {
@@ -190,7 +193,7 @@ define('io.ox/files/share/myshares', [
 
             this.listenTo(this.collection, 'reset', this.updateShares);
 
-            // this.listenTo(ox, 'refresh^', this.getShares);
+            this.listenTo(ox, 'refresh^', this.getShares);
 
         },
 

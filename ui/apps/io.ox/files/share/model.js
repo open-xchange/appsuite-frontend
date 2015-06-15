@@ -202,6 +202,19 @@ define('io.ox/files/share/model', [
 
         initialize: function (option) {
             this.set('files', option.files);
+        },
+
+        isFolder: function () {
+            return true;
+        },
+
+        sync: function (action, model) {
+            switch (action) {
+                case 'delete':
+                    return api.remove(model.get('token'));
+                default:
+                    break;
+            }
         }
 
     });

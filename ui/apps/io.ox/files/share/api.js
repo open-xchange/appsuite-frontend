@@ -108,6 +108,9 @@ define('io.ox/files/share/api', [
          * @return { deferred } empty data and timestamp
          */
         remove: function (shares) {
+            if (_.isString(shares)) {
+                shares = [ shares ];
+            }
             return http.PUT({
                 module: 'share/management',
                 params: {
