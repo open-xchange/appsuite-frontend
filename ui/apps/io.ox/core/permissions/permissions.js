@@ -459,7 +459,7 @@ define('io.ox/core/permissions/permissions', [
                                         bits: 257,
                                         group: member.get('type') === 2
                                     };
-                                    if (!obj.entity) {
+                                    if (!_.isNumber(obj.entity)) {
                                         notifications.yell(
                                             'error',
                                             //#. permissions dialog
