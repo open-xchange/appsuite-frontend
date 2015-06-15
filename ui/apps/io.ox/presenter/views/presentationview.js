@@ -585,7 +585,12 @@ define('io.ox/presenter/views/presentationview', [
         disposeView: function () {
             console.log('Presenter - dispose PresentationView');
 
-            this.model = null;
+            // destroy the swiper instance
+            if (this.swiper) {
+                this.swiper.removeAllSlides();
+                this.swiper.destroy();
+                this.swiper = null;
+            }
 
             // destroy the pdf view and model instances
             if (this.pdfView) {
@@ -596,6 +601,11 @@ define('io.ox/presenter/views/presentationview', [
                 this.pdfDocument.destroy();
                 this.pdfDocument = null;
             }
+
+            this.model = null;
+            this.captionTimeoutId = null;
+            this.carouselRoot = null;
+            this.documentContainer = null;
         }
     });
 
