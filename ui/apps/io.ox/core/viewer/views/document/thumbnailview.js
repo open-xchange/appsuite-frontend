@@ -11,8 +11,7 @@
  */
 define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/disposable',
-    'io.ox/core/viewer/util',
-    'gettext!io.ox/core'
+    'io.ox/core/viewer/util'
 ], function (DisposableView, Util) {
 
     'use strict';
@@ -154,8 +153,21 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          */
         selectThumbnail: function (pageNumber) {
             var thumbnail = this.$el.find('.document-thumbnail-link[data-page=' + pageNumber + ']');
-            thumbnail.siblings().removeClass('selected').attr('aria-selected', false);
-            thumbnail.addClass('selected').attr('aria-selected', true);
+            if (thumbnail.length > 0) {
+                thumbnail.siblings().removeClass('selected').attr('aria-selected', false);
+                thumbnail.addClass('selected').attr('aria-selected', true);
+                // scroll if the selected thumbnail is not wholly visible
+                var thumbnailRect = thumbnail[0].getBoundingClientRect(),
+                    sidebar = this.$el.parent('.viewer-sidebar'),
+                    thumbnailTopOffset = thumbnail[0].offsetTop,
+                    marginOffset = 10;
+                if (thumbnailRect.bottom > window.innerHeight) {
+                    sidebar.scrollTop(thumbnailTopOffset + thumbnail.outerHeight() - sidebar.outerHeight() + marginOffset);
+                }
+                if (thumbnailRect.top < sidebar.scrollTop()) {
+                    sidebar.scrollTop(thumbnailTopOffset - marginOffset);
+                }
+            }
         },
 
         /**
