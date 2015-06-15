@@ -762,7 +762,7 @@ define('io.ox/files/main', [
 
         // respond to search results
         'find': function (app) {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || !app.get('find')) return;
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);
