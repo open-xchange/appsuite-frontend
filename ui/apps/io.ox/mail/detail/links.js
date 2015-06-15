@@ -239,7 +239,7 @@ define('io.ox/mail/detail/links', [
         'long-character-sequences': {
             test: function (node) {
                 var text = node.nodeValue;
-                return text.length >= 30 && /\S{30}/.test(text);
+                return text.length >= 30 && /\S{30}/.test(text) && $(node).closest('a').length === 0;
             },
             process: function (node) {
                 return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };
