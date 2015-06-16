@@ -19,6 +19,73 @@ define('io.ox/core/tk/flag-picker',
 
     'use strict';
 
+    // appends a listener for dropdowns to center them in scrollpane.
+    // move this code to another file if this should be used globally.
+    $(document).on('click', '.smart-dropdown', function () {
+        var $this = $(this),
+            $parent = $this.parent(),
+            $ul = $('ul', $parent).first(),
+            $zIndex = $parent.parents('[style*="z-index"]'),
+            transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
+            $container = $this.closest('.scrollable'),
+            margin = 7;
+
+        if (!$parent.hasClass('open') || _.device('smartphone')) return;
+
+        function computeBounds() {
+            var positions = {
+                top: Math.max($container.offset().top + margin, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - margin)) - transformOffset.top,
+                right: ($(window).width() - $this.offset().left - $this.outerWidth() + $this.width() + margin) + transformOffset.left,
+                left: 'initial',
+                bottom: 'initial'
+            };
+
+            if (positions.top + $ul.outerHeight() > $container.offset().top + $container.innerHeight() - margin) {
+                positions.bottom = $(window).height() - $container.offset().top - $container.innerHeight() + margin;
+            }
+
+            $ul.css(positions);
+        }
+
+        computeBounds();
+        $parent.on('ready', computeBounds);
+        $zIndex.each(function () {
+            var z = $(this);
+            z.data('oldIndex', z.css('z-index'));
+            z.css('z-index', 10000);
+        });
+
+        function reset() {
+            $zIndex.each(function () {
+                var z = $(this);
+                z.css('z-index', z.data('oldIndex'));
+                z.removeData('oldIndex');
+            });
+            $parent.removeClass('smart-dropdown-container');
+            $parent.find('.abs').remove();
+            $ul.css({ top: '', left: '', bottom: '', right: '' });
+            $parent.off('ready', computeBounds);
+        }
+
+        $parent.one('hidden.bs.dropdown', reset);
+
+        $parent.addClass('smart-dropdown-container');
+        $parent.append(
+            $('<div class="abs overlay">')
+                .css({
+                    left: -transformOffset.left,
+                    right: transformOffset.left
+                })
+                .on('mousewheel touchmove', false)
+                .on('click', function (e) {
+                    $parent.removeClass('open');
+                    reset();
+                    e.preventDefault();
+                    e.stopPropagation();
+                })
+        );
+    });
+
     var colorNames = {
         NONE:       gt('None'),
         RED:        gt('Red'),
@@ -53,7 +120,6 @@ define('io.ox/core/tk/flag-picker',
     var that = {
 
         appendDropdown: function (node, data) {
-
             node.after(
                 // drop down
                 $('<ul class="dropdown-menu" role="menu">')
@@ -82,7 +148,7 @@ define('io.ox/core/tk/flag-picker',
             node.parent().addClass('dropdown flag-picker');
         },
 
-        draw: function (node, baton) {
+        draw: function (node, baton, overlay) {
 
             var data = baton.data,
                 // to fix buggy -1
@@ -91,7 +157,9 @@ define('io.ox/core/tk/flag-picker',
 
             node.append(
                 $('<div>').append(
-                    link = $('<a href="#" tabindex="1" title="' + gt('Set color') + '">').append(
+                    link = $('<a href="#" tabindex="1" title="' + gt('Set color') + '">')
+                    .addClass(overlay ? 'smart-dropdown' : '')
+                    .append(
                         $('<i class="flag-dropdown-icon">').attr({
                             'data-color': color,
                             'title': gt('Set color')

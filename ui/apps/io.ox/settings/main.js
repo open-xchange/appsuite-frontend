@@ -19,11 +19,13 @@ define('io.ox/settings/main',
      'gettext!io.ox/core',
      'settings!io.ox/settings/configjump',
      'settings!io.ox/core',
+     'io.ox/core/api/mailfilter',
+     'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
      'less!io.ox/settings/style'
-    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities) {
+    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, mailfilterAPI, notifications, capabilities) {
 
     'use strict';
 
@@ -265,21 +267,48 @@ define('io.ox/settings/main',
 
         var getAllSettingsPanes = function () {
             var def = $.Deferred(),
-                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
+                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [],
+                actionPoints = {
+                    'redirect': 'io.ox/autoforward',
+                    'vacation': 'io.ox/vacation'
+                };
 
-            appsInitialized.done(function () {
-
-                def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
+                function filterAvailableSettings(point) {
                     var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
                     if (expertmode && shown) {
                         return true;
                     } else if (!point.advancedMode && shown) {
                         return true;
                     }
-                }));
-            });
+                }
 
-            appsInitialized.fail(def.reject);
+                if (capabilities.has('mailfilter')) {
+                    mailfilterAPI.getConfig().done(function (config) {
+                        _.each(actionPoints, function (val, key) {
+                            if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+                        });
+                        appsInitialized.done(function () {
+                            def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
+                        });
+
+                        appsInitialized.fail(def.reject);
+                    }).fail(function (response) {
+                        notifications.yell('error', response.error_desc);
+                    }).always(function () {
+                        appsInitialized.done(function () {
+                            def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
+                        });
+
+                        appsInitialized.fail(def.reject);
+                    });
+                } else {
+                appsInitialized.done(function () {
+
+                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
+                });
+
+                appsInitialized.fail(def.reject);
+            }
 
             return def;
         };

@@ -154,6 +154,8 @@ define('io.ox/core/folder/node', [
         },
 
         toggle: function (state) {
+            // for whatever reason, this.options might be nulled (see bug 37483)
+            if (this.options === null) return;
             this.options.open = state;
             this.onChangeSubFolders();
             this.options.tree.trigger(state ? 'open' : 'close', this.folder);

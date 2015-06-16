@@ -12,8 +12,9 @@
  */
 define('io.ox/core/api/mailfilter',
     ['io.ox/core/http',
-     'io.ox/core/event'
-    ], function (http, Events) {
+     'io.ox/core/event',
+     'io.ox/core/capabilities'
+    ], function (http, Events, capabilities) {
 
     'use strict';
 
@@ -117,9 +118,11 @@ define('io.ox/core/api/mailfilter',
      * @fires  api#refresh.all
      * @return {promise}
      */
-    ox.on('refresh^', function () {
-        api.refresh();
-    });
+    if (capabilities.has('mailfilter')) {
+        ox.on('refresh^', function () {
+            api.refresh();
+        });
+    }
 
     return api;
 });

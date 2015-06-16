@@ -1308,28 +1308,37 @@ define('io.ox/mail/api',
      */
     api.send = function (data, files, form) {
 
-        var deferred,
-            flatten = function (recipient) {
-                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
-                    address = String(recipient[1] || ''),
-                    typesuffix = recipient[2] || '',
-                    isMSISDN;
-                // don't send display name for MSISDN numbers
+        var deferred;
+
+        function processRecipient(recipient) {
+
+            var name = $.trim(recipient[0] || '')
+                    // remove outer quotes only
+                    .replace(/^"(.+)"$/, '$1')
+                    .replace(/^'(.+)'$/, '$1'),
+                address = String(recipient[1] || ''),
+                typesuffix = recipient[2] || '',
                 isMSISDN = typesuffix === '/TYPE=PLMN' || /\/TYPE=PLMN$/.test(address);
-                // always use angular brackets!
-                if (isMSISDN) return '<' + address + typesuffix + '>';
-                // otherise ... check if name is empty or name and address are identical
-                return name === '' || name === address ? address : '"' + name + '" <' + address + '>';
-            };
+
+            // check if name is empty or name and address are identical
+            // generally don't send display name for MSISDN numbers
+            if (name === '' || name === address || isMSISDN) name = null;
+
+            // add type suffix if not yet added
+            if (isMSISDN && !/\/TYPE=PLMN$/.test(address)) address = address + typesuffix;
+
+            // return array notation (no further escaping needed)
+            return [name, address];
+        }
 
         // clone data (to avoid side-effects)
         data = _.clone(data);
 
         // flatten from, to, cc, bcc
-        data.from = _(data.from).map(flatten).join(', ');
-        data.to = _(data.to).map(flatten).join(', ');
-        data.cc = _(data.cc).map(flatten).join(', ');
-        data.bcc = _(data.bcc).map(flatten).join(', ');
+        data.from = _(data.from).map(processRecipient);
+        data.to = _(data.to).map(processRecipient);
+        data.cc = _(data.cc).map(processRecipient);
+        data.bcc = _(data.bcc).map(processRecipient);
 
         function mapArgs(obj) {
             return {
