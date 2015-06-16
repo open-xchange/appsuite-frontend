@@ -401,7 +401,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.pdfView.setRenderCallbacks(renderCallbacks);
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
-                this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
+                this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 500));
                 // set scale/zoom and scroll position, with stored or default values
                 var zoomLevel = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
                 this.setZoomLevel(zoomLevel);
