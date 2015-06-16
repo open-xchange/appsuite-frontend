@@ -65,7 +65,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         drawOptions: function (activeValue, values) {
 
             var active = values[activeValue];
-            return $('<div class="action dropup value">').append(
+            return $('<div class="action value">').append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {

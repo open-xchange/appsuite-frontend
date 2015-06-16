@@ -18,8 +18,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/mail/mailfilter/settings/filter/form-elements',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views',
-    'io.ox/core/folder/picker'
-], function (notifications, gt, ext, elements, DEFAULTS, mini, picker) {
+    'io.ox/core/folder/picker',
+    'io.ox/backbone/mini-views/datepicker'
+], function (notifications, gt, ext, elements, DEFAULTS, mini, picker, DatePicker) {
 
     'use strict';
 
@@ -44,6 +45,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'regex': gt('Regex')
         },
 
+        timeValues = {
+            'ge': gt('starts on'),
+            'le': gt('ends on'),
+            'is': gt('is on')
+        },
+
         headerTranslation = {
             'From': gt('Sender/From'),
             'any': gt('Any recipient'),
@@ -53,13 +60,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
-            'size': gt('Size (bytes)')
+            'size': gt('Size (bytes)'),
+            'body': gt('Content'),
+            'currentdate': gt('Current Date')
         },
 
         conditionsMapping = {
             'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
             'envelope': ['envelope'],
-            'size': ['size']
+            'size': ['size'],
+            'body': ['body']
         },
 
         actionsTranslations = {
@@ -181,6 +191,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/view').invoke('draw', this.$el.empty(), baton);
+                toggleSaveButton(this.dialog.getFooter(), this.$el);
                 return this;
 
             },
@@ -224,7 +235,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 this.model.set('test', testArray);
                 this.render();
-                toggleSaveButton(this.dialog.getFooter(), this.$el);
             },
 
             onRemoveAction: function (e) {
@@ -365,11 +375,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     list = link.closest('li'),
                     label =  list.find('label.sr-only'),
                     testTitle = list.find('.list-title').text(),
-                    type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
 
                     testArray =  this.model.get('test'),
-                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
+                    translatedValue;
+
+                switch (list.attr('data-type')) {
+                    case 'size':
+                        translatedValue = sizeValues[value];
+                        break;
+                    case 'value':
+                        translatedValue = containsValues[value];
+                        break;
+                    case 'currentdate':
+                        translatedValue = timeValues[value];
+                }
 
                 label.text(testTitle + ' ' + value);
                 link.text(translatedValue);
@@ -409,13 +429,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
                     testArray =  this.model.get('test');
-
                 if (checkForMultipleTests(this.el).length > 1) {
                     testArray.tests[testID][type] = type === 'size' ? value : [value];
                 } else {
                     testArray[type] = type === 'size' ? value : [value];
                 }
-
                 this.model.set('test', testArray);
 
             },
@@ -566,6 +584,65 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             )
                         )
                     );
+                } else if (test.id === 'body') {
+                    listTests.append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'values', 'data-test-id': num }).append(
+                            elements.drawDeleteButton('test'),
+                            $('<div>').addClass('col-md-6 singleline').append(
+                                $('<span>').addClass('list-title').text(headerTranslation[test.id])
+                            ),
+                            $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-md-6').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
+                                    ),
+                                    $('<div class="col-md-6">').append(
+                                        elements.drawInputfieldTest(test.comparison, test.values[0])
+                                    )
+                                )
+                            )
+                        )
+                    );
+                } else if (test.id === 'currentdate') {
+                    var TimeModel = Backbone.Model.extend({
+                        }),
+                        model = new TimeModel();
+
+                    model.set('datevalue', test.datevalue);
+
+                    model.on('change:datevalue', function () {
+                        test.datevalue = [model.get('datevalue')];
+                        listTests.find('[data-test-id="' + num + '"] input').removeClass('warning');
+                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
+                    });
+
+                    listTests.append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'currentdate', 'data-test-id': num }).append(
+                            elements.drawDeleteButton('test'),
+                            $('<div>').addClass('col-md-6 singleline').append(
+                                $('<span>').addClass('list-title').text(headerTranslation[test.id])
+                            ),
+                            $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-md-6').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, timeValues))
+                                    ),
+                                    $('<div class="col-md-6">').append(
+                                        new DatePicker({
+                                            model: model,
+                                            className: 'col-xs-6',
+                                            display: 'DATE',
+                                            attribute: 'datevalue',
+                                            label: gt('datepicker')
+                                        }).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    );
+                    listTests.find('fieldset legend').addClass('sr-only');
+                    if (test.datevalue.length === 0) listTests.find('[data-test-id="' + num + '"] input').addClass('warning');
+
                 } else if (test.id === 'header') {
                     var name;
                     if (test.headers[3]) {
@@ -772,7 +849,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
-                    toggle: 'dropup'
+                    toggle: 'dropdown'
                 }),
                 headlineActions, listActions,
                 elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {
