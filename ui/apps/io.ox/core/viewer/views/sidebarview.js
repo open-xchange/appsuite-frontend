@@ -15,13 +15,14 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/dropzone',
+    'io.ox/core/viewer/settings',
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview',
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Util, FilesAPI, Dropzone, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
+], function (DisposableView, Util, FilesAPI, Dropzone, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
 
     'use strict';
 
@@ -110,6 +111,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.$('.viewer-sidebar-pane').hide();
             this.$('.detail-pane').show();
             this.renderSections();
+            if (this.standalone) {
+                ViewerSettings.setSidebarActiveTab('detail');
+            }
         },
 
         activateThumbnailView: function () {
@@ -121,6 +125,9 @@ define('io.ox/core/viewer/views/sidebarview', [
                     viewerEvents: this.viewerEvents
                 });
                 thumbnailView.render();
+            }
+            if (this.standalone) {
+                ViewerSettings.setSidebarActiveTab('thumbnail');
             }
         },
 
