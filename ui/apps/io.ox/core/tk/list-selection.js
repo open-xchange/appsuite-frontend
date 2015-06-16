@@ -499,7 +499,6 @@ define('io.ox/core/tk/list-selection', [
 
         onSwipeDelete: function (e) {
             e.preventDefault();
-
             var node = $(this.currentSelection).closest(SELECTABLE),
                 cid = node.attr('data-cid'),
                 cellsBelow = node.nextAll(),
@@ -525,7 +524,7 @@ define('io.ox/core/tk/list-selection', [
                         self.currentSelection.swipeCell.remove();
                         self.currentSelection.swipeCell = null;
                         $(self.view).removeClass('unfolded');
-                        self.currentSelection.unfolded = false;
+                        self.currentSelection.unfolded = self.unfold = false;
                     }
                 });
             } else {
@@ -535,7 +534,7 @@ define('io.ox/core/tk/list-selection', [
                 self.currentSelection.swipeCell.remove();
                 self.currentSelection.swipeCell = null;
                 $(self.view).removeClass('unfolded');
-                self.currentSelection.unfolded = false;
+                self.currentSelection.unfolded = self.unfold = false;
             }
         },
 
@@ -548,19 +547,22 @@ define('io.ox/core/tk/list-selection', [
             this.view.trigger('selection:more', [cid], $(this.currentSelection.btnMore));
             // wait for popup to open, rest cell afterwards
             _.delay(function () {
-                self.resetSwipeCell.call(self.currentSelection);
+                self.resetSwipeCell.call(self.currentSelection, self);
             }, 250);
         },
 
-        resetSwipeCell: function (a) {
+        isAnyCellUnfolded: function () {
+            return !!this.unfold;
+        },
+
+        resetSwipeCell: function (selection, a) {
             var self = this;
             try {
-                this.startX = 0;
-                this.startY = 0;
-                this.unfold = false;
-                this.target = null;
-                this.t0 = 0;
-                this.otherUnfolded = false;
+                selection.startX = 0;
+                selection.startY = 0;
+                selection.unfold = false;
+                selection.target = null;
+                selection.otherUnfolded = false;
                 $(self).velocity({
                     'translateX': [0, a]
                 }, {
@@ -595,7 +597,7 @@ define('io.ox/core/tk/list-selection', [
             // check if other nodes than the current one are unfolded
             // if so, close other nodes and stop event propagation
             if (!this.unfolded && this.otherUnfolded) {
-                e.data.resetSwipeCell.call(e.data.currentSelection, -LOCKDISTANCE);
+                e.data.resetSwipeCell.call(e.data.currentSelection, e.data, -LOCKDISTANCE);
             }
         },
 
@@ -674,7 +676,7 @@ define('io.ox/core/tk/list-selection', [
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
-                e.data.resetSwipeCell.call(e.data.currentSelection, this.distanceX === 0 ? -LOCKDISTANCE : this.distanceX);
+                e.data.resetSwipeCell.call(e.data.currentSelection, e.data, this.distanceX === 0 ? -LOCKDISTANCE : this.distanceX);
                 return false; // don't do a select after this
             }
 
@@ -747,7 +749,7 @@ define('io.ox/core/tk/list-selection', [
                                     self.swipeCell.remove();
                                     self.swipeCell = null;
                                     $(self).removeClass('unfolded');
-                                    self.unfolded = false;
+                                    self.unfolded = self.unfold = false;
                                 }
                             });
                         } else {
@@ -759,12 +761,12 @@ define('io.ox/core/tk/list-selection', [
                             self.swipeCell.remove();
                             self.swipeCell = null;
                             $(self).removeClass('unfolded');
-                            self.unfolded = false;
+                            self.unfolded = self.unfold = false;
                         }
                     }
                 });
             } else if (this.distanceX) {
-                e.data.resetSwipeCell.call(this, Math.abs(this.distanceX));
+                e.data.resetSwipeCell.call(this, e.data, Math.abs(this.distanceX));
                 return false;
             }
         },
