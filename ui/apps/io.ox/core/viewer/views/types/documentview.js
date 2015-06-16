@@ -69,6 +69,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
             this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onBeforeClose);
             this.listenTo(this.viewerEvents, 'viewer:document:scrolltopage', this.onScrollToPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:next', this.onNextPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:previous', this.onPreviousPage);
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // defaults
@@ -165,13 +167,35 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         onScrollToPage: function (pageNumber) {
             if (this.isVisible() && _.isNumber(pageNumber) && pageNumber > 0 && pageNumber <= this.pages.length) {
-                //console.warn('DocumentView.onScrollToPage()', pageNumber);
                 var targetPageNode = this.documentContainer.find('.document-page[data-page=' + pageNumber + ']');
                 if (targetPageNode.length !== 0) {
                     var targetScrollTop = targetPageNode[0].offsetTop - this.PAGE_SIDE_MARGIN;
-                    this.documentContainer.scrollTop(targetScrollTop);
+                    this.$el.scrollTop(targetScrollTop);
+                    this.viewerEvents.trigger('viewer:document:pagechange', pageNumber);
                 }
             }
+        },
+
+        /**
+         * Next page handler:
+         * - scrolls to the next page
+         *
+         * @param {Number} pageNumber
+         */
+        onNextPage: function () {
+            var nextPage = this.getDominantPage() + 1;
+            this.onScrollToPage(nextPage);
+        },
+
+        /**
+         * Previous page handler:
+         * - scrolls to the previous page
+         *
+         * @param {Number} pageNumber
+         */
+        onPreviousPage: function () {
+            var previousPage = this.getDominantPage() - 1;
+            this.onScrollToPage(previousPage);
         },
 
         /**
@@ -253,9 +277,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 self = this;
             visiblePages.forEach(function (index) {
                 var pageBounds = self.pages[index - 1].getBoundingClientRect(),
-                    screenMiddle = self.documentContainer.innerHeight() / 2;
-                if ((pageBounds.top + tolerance <= screenMiddle) &&
-                    (pageBounds.bottom - tolerance >= screenMiddle)) {
+                    slideMiddle = self.$el.innerHeight() / 2;
+                if ((pageBounds.top + tolerance <= slideMiddle) &&
+                    (pageBounds.bottom - tolerance >= slideMiddle)) {
                     dominantPageIndex = index;
                 }
             });
@@ -377,7 +401,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.pdfView.setRenderCallbacks(renderCallbacks);
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
-                this.documentContainer.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
+                this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
                 // set scale/zoom and scroll position, with stored or default values
                 var zoomLevel = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
                 this.setZoomLevel(zoomLevel);

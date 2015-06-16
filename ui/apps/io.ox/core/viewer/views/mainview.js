@@ -147,6 +147,14 @@ define('io.ox/core/viewer/views/mainview', [
                     this.displayerView.swiper.slideNext();
                     this.displayerView.focusActiveSlide();
                     break;
+                case 33: // page up
+                    event.preventDefault();
+                    this.viewerEvents.trigger('viewer:document:previous');
+                    break;
+                case 34: // page down
+                    event.preventDefault();
+                    this.viewerEvents.trigger('viewer:document:next');
+                    break;
             }
         },
 
@@ -195,7 +203,6 @@ define('io.ox/core/viewer/views/mainview', [
          * - Hides viewer DOM first and then do cleanup.
          */
         closeViewer: function () {
-            console.warn('MainView.closeViewer()');
             this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.opened);

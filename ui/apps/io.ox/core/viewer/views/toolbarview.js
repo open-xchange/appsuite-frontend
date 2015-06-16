@@ -371,6 +371,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.on('dispose', this.disposeView.bind(this));
         },
 
+        /**
+         * Page change handler:
+         * - updates page number in the page input control
+         *
+         * @param pageNumber
+         * @param pageTotal
+         */
         onPageChange: function (pageNumber, pageTotal) {
             var pageInput = this.$('.viewer-toolbar-page'),
                 pageTotalDisplay = this.$('.viewer-toolbar-page-total');
@@ -529,12 +536,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             }
             function onPrevPage() {
-                var currentPage = parseInt(pageInput.val());
-                self.viewerEvents.trigger('viewer:document:scrolltopage', currentPage - 1 );
+                self.viewerEvents.trigger('viewer:document:previous');
             }
             function onNextPage() {
-                var currentPage = parseInt(pageInput.val());
-                self.viewerEvents.trigger('viewer:document:scrolltopage', currentPage + 1 );
+                self.viewerEvents.trigger('viewer:document:next');
             }
             function onInputKeydown(event) {
                 event.stopPropagation();
