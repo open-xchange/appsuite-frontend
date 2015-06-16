@@ -506,7 +506,7 @@ msgstr ""
 #: apps/io.ox/tasks/actions/delete.js:28
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/common-extensions.js:93
-#: apps/io.ox/tasks/edit/main.js:178
+#: apps/io.ox/tasks/edit/main.js:181
 #: apps/io.ox/tasks/main.js:196
 #: apps/io.ox/tasks/main.js:210
 #: apps/plugins/administration/groups/settings/edit.js:145
@@ -950,7 +950,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js:254
 #: apps/io.ox/editor/main.js:344
 #: module:io.ox/editor
-#: apps/io.ox/tasks/edit/main.js:174
+#: apps/io.ox/tasks/edit/main.js:177
 #: module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
 msgstr ""
@@ -964,7 +964,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js:257
 #: apps/io.ox/editor/main.js:347
 #: module:io.ox/editor
-#: apps/io.ox/tasks/edit/main.js:177
+#: apps/io.ox/tasks/edit/main.js:180
 #: module:io.ox/tasks
 msgctxt "dialog"
 msgid "Discard changes"
@@ -1595,7 +1595,7 @@ msgstr ""
 #: apps/io.ox/contacts/main.js:362
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:369
-#: apps/io.ox/core/folder/view.js:290
+#: apps/io.ox/core/folder/view.js:287
 #: module:io.ox/core
 #: apps/io.ox/files/main.js:147
 #: module:io.ox/files
@@ -4064,22 +4064,22 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:253
+#: apps/io.ox/core/folder/api.js:279
 #: module:io.ox/core
 msgid "All my appointments"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:366
+#: apps/io.ox/core/folder/api.js:392
 #: module:io.ox/core
 msgid "Accessing global address book is not permitted"
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:670
+#: apps/io.ox/core/folder/api.js:696
 #: module:io.ox/core
 msgid "Could not save settings. There have to be at least one user with administration rights."
 msgstr ""
 
-#: apps/io.ox/core/folder/api.js:730
+#: apps/io.ox/core/folder/api.js:756
 #: module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js:171
 #: module:io.ox/core/sub
@@ -4250,19 +4250,19 @@ msgstr ""
 msgid "Add to favorites"
 msgstr ""
 
-#: apps/io.ox/core/folder/node.js:458
+#: apps/io.ox/core/folder/node.js:454
 #: module:io.ox/core
 msgid "Total: %1$d"
 msgstr ""
 
-#: apps/io.ox/core/folder/node.js:459
+#: apps/io.ox/core/folder/node.js:455
 #: module:io.ox/core
 msgid "Unread: %1$d"
 msgstr ""
 
-#: apps/io.ox/core/folder/node.js:474
+#: apps/io.ox/core/folder/node.js:470
 #: module:io.ox/core
-#: apps/io.ox/core/folder/node.js:481
+#: apps/io.ox/core/folder/node.js:477
 msgid "Folder-specific actions"
 msgstr ""
 
@@ -5865,7 +5865,7 @@ msgstr ""
 msgid "Send as mail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:447
+#: apps/io.ox/core/viewer/views/toolbarview.js:445
 #: module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
@@ -7329,12 +7329,12 @@ msgstr ""
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1091
+#: apps/io.ox/mail/api.js:1090
 #: module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1367
+#: apps/io.ox/mail/api.js:1366
 #: module:io.ox/mail
 msgid "New Mail"
 msgstr ""
@@ -7706,7 +7706,7 @@ msgstr ""
 
 #: apps/io.ox/mail/detail/links.js:73
 #: module:io.ox/mail
-#: apps/io.ox/tasks/edit/main.js:211
+#: apps/io.ox/tasks/edit/main.js:214
 #: module:io.ox/tasks
 msgid "Task"
 msgstr ""
@@ -8959,7 +8959,7 @@ msgstr ""
 
 #: apps/io.ox/tasks/edit/main.js:27
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/edit/main.js:228
+#: apps/io.ox/tasks/edit/main.js:231
 #: apps/io.ox/tasks/edit/view-template.js:47
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:81
@@ -8969,7 +8969,7 @@ msgstr ""
 msgid "Edit task"
 msgstr ""
 
-#: apps/io.ox/tasks/edit/main.js:146
+#: apps/io.ox/tasks/edit/main.js:149
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:42
 #: module:io.ox/tasks/edit

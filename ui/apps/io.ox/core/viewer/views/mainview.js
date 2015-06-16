@@ -61,8 +61,8 @@ define('io.ox/core/viewer/views/mainview', [
             this.listenTo(this.viewerEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // bind toggle side bar handler
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
-            // TODO this is not valid anymore if we want to open couple viewer apps in parallel
-            if (!ox.debug) {
+            // close viewer when other app is start or resumed, except in standalone mode
+            if (!this.standalone) {
                 this.listenTo(ox, 'app:start app:resume', this.closeViewer);
             }
             // handle DOM events
@@ -195,6 +195,7 @@ define('io.ox/core/viewer/views/mainview', [
          * - Hides viewer DOM first and then do cleanup.
          */
         closeViewer: function () {
+            console.warn('MainView.closeViewer()');
             this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.opened);

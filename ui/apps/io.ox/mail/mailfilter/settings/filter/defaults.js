@@ -72,6 +72,19 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
                 'comparison': 'over',
                 'id': 'size',
                 'size': ''
+            },
+            'body': {
+                'id': 'body',
+                'comparison': 'contains',
+                'extensionskey': 'text',
+                'extensionsvalue': null,
+                'values': ['']
+            },
+            'currentdate': {
+                'id': 'currentdate',
+                'comparison': 'ge',
+                'datepart': 'date',
+                'datevalue': []
             }
         },
         actions: {

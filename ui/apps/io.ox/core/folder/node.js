@@ -30,7 +30,7 @@ define('io.ox/core/folder/node', [
         className: 'folder selectable',
 
         // indentation in px per level
-        indentation: 30,
+        indentation: _.device('smartphone') ? 10 : 30,
 
         events: {
             'click .folder-options':  'onOptions',
@@ -420,12 +420,8 @@ define('io.ox/core/folder/node', [
         getCounter: function () {
             var subtotal = 0;
             //show number of unread subfolder items only when folder is closed
-            if (!this.options.open && this.options.subfolders) {
-                if (this.isVirtual) {
-                    subtotal =  api.calculateSubtotal(this.model);
-                } else if (this.model.get('subtotal')) {
-                    subtotal = this.model.get('subtotal');
-                }
+            if (!this.options.open && this.options.subfolders && this.model.get('subtotal')) {
+                subtotal = this.model.get('subtotal');
             }
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },

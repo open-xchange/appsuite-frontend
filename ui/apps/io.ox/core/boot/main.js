@@ -79,6 +79,10 @@ define('io.ox/core/boot/main', [
                     util.debug('Load default language and theme DONE.');
                     form();
                 });
+            })
+            .fail(function (error) {
+                util.debug('Error while loading config from server', error);
+                ox.trigger('server:down', error);
             });
         },
 
