@@ -370,7 +370,6 @@ define('io.ox/mail/common-extensions', [
                 };
 
             return function (baton) {
-
                 if (baton.attachments.length === 0) return $.when();
 
                 var $el = this,
