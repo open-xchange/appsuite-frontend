@@ -27,16 +27,20 @@ define('io.ox/presenter/views/presentationview', [
     /**
      * Creates the HTML mark-up for a slide navigation button.
      *
-     * @param {String} [type='left'|'right']
+     * @param {String} type='left'|'right'
      *  the button type to create, could be 'left' or 'right'.
+     *
+     * @param {String} id
+     *  the CSS id for the button.
      *
      * @returns {jQuery}
      *  the button node.
      */
-    function createNavigationButton (type) {
+    function createNavigationButton (type, id) {
         var button = $('<a href="#" class="swiper-button-control" tabindex="1" role="button" aria-controls="presenter-carousel">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
+        button.attr('id', id);
         button.addClass((type === 'left') ? 'swiper-button-prev  left' : 'swiper-button-next right');
         button.attr((type === 'left') ? { title: gt('Previous'), 'aria-label': gt('Previous') } : { title: gt('Next'), 'aria-label': gt('Next') });
         icon.addClass((type === 'left') ? 'fa-angle-left' : 'fa-angle-right');
@@ -317,11 +321,13 @@ define('io.ox/presenter/views/presentationview', [
                this.pdfDocumentLoadError.call(this, pageCount);
                return;
            }
-           var pdfDocument = this.pdfDocument;
+           var pdfDocument = this.pdfDocument,
+               swiperNextButtonId = _.uniqueId('presenter-button-next-'),
+               swiperPrevButtonId = _.uniqueId('presenter-button-prev-');
 
            var swiperParameter = {
-               nextButton: '.swiper-button-next',
-               prevButton: '.swiper-button-prev',
+               nextButton: '#' + swiperNextButtonId,
+               prevButton: '#' + swiperPrevButtonId,
                loop: false,
                loopedSlides: 0,
                followFinger: false,
@@ -341,8 +347,8 @@ define('io.ox/presenter/views/presentationview', [
            // add navigation buttons
            if (pageCount > 1) {
                this.carouselRoot.append(
-                   createNavigationButton('left'),
-                   createNavigationButton('right')
+                   createNavigationButton('left', swiperPrevButtonId),
+                   createNavigationButton('right', swiperNextButtonId)
                );
            }
 
