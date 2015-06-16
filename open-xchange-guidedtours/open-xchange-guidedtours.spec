@@ -50,6 +50,8 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 %changelog
 * Wed Jun 10 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-06-08 (2540)
+* Tue Jun 09 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-06-08 (2539)
 * Tue May 19 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-05-26 (2521)
 * Fri May 15 2015 Marcus Klein <marcus.klein@open-xchange.com>

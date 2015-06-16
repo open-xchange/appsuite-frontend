@@ -265,6 +265,8 @@ define('io.ox/core/tk/vgrid',
                 var grid = e.data.grid, checked = $(this).prop('checked');
                 if (checked) {
                     grid.selection.selectAll();
+                    // Bugfix 38498
+                    _.defer(function () { container.focus(); });
                     updateSelectAll(grid.selection.get());
                 } else {
                     grid.selection.clear();
