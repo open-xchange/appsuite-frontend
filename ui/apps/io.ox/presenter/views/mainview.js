@@ -11,8 +11,9 @@
  */
 define('io.ox/presenter/views/mainview', [
     'io.ox/backbone/disposable',
-    'io.ox/presenter/views/presentationview'
-], function (DisposableView, PresentationView) {
+    'io.ox/presenter/views/presentationview',
+    'io.ox/presenter/views/sidebarview'
+], function (DisposableView, PresentationView, SidebarView) {
 
     'use strict';
 
@@ -38,12 +39,15 @@ define('io.ox/presenter/views/mainview', [
             this.presenterEvents = _.extend({}, Backbone.Events);
             // create child view(s)
             this.presentationView = new PresentationView({ model: this.model, presenterEvents: this.presenterEvents });
+            this.sidebarView = new SidebarView({ model: this.model, presenterEvents: this.presenterEvents });
 
             // handle DOM events
             $(window).on('resize.presenter', this.onWindowResize.bind(this));
 
             // clean stuff on dispose event from core/commons.js
             this.on('dispose', this.disposeView.bind(this));
+
+            this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
         },
 
         /**
@@ -52,10 +56,17 @@ define('io.ox/presenter/views/mainview', [
          * @returns {MainView}
          */
         render: function () {
+            var state = true;   // TODO: set according to user role (presenter, listener)
+
             // append toolbar view
             this.$el.append(
+                this.sidebarView.render().el,
                 this.presentationView.render().el
             );
+
+            // set initial sidebar state
+            this.sidebarView.toggleSidebar(state);
+
             return this;
         },
 
@@ -114,13 +125,19 @@ define('io.ox/presenter/views/mainview', [
             }
         },
 
+        // handle sidebar toggle
+        onSideBarToggled: function (/*state*/) {
+            this.onWindowResize();
+        },
+
         // recalculate view dimensions after e.g. window resize events
         onWindowResize: function () {
             console.info('Presenter - mainview - onWindowResize()');
-            /*
-            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
+
+            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0;
+
             this.presentationView.$el.css({ width: window.innerWidth - rightOffset });
-            */
+
             this.presenterEvents.trigger('presenter:resize');
         },
 
@@ -132,8 +149,10 @@ define('io.ox/presenter/views/mainview', [
 
             $(window).off('resize.presenter');
             this.presentationView.remove();
+            this.sidebarView.remove();
             this.model.off().stopListening();
             this.presentationView = null;
+            this.sidebarView = null;
         }
     });
     return MainView;

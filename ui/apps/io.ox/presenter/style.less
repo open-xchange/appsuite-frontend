@@ -18,7 +18,11 @@
         left: 0;
     }
 
-    .presenter-presentation-view {
+    .presenter-presentation {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
         outline: none;
 
         .swiper-slide {
@@ -68,6 +72,25 @@
             }
         }
     }
+    
+    
+    .presenter-sidebar {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 400px;
+        outline: none;
+        z-index: 2;     // hide captions when sidebar is 100% width
+        padding: 16px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        &.opened {
+            display: block;
+        }
+    }
+    
 
  }
  

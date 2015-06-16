@@ -53,7 +53,7 @@ define('io.ox/presenter/views/presentationview', [
      */
     var PresentationView = DisposableView.extend({
 
-        className: 'presenter-presentation-view',
+        className: 'presenter-presentation',
 
         attributes: { tabindex: -1, role: 'main' },
 
@@ -203,7 +203,7 @@ define('io.ox/presenter/views/presentationview', [
         /**
          * Switches Swiper to the slide with the given index.
          *
-         * @param {Object} index
+         * @param {Number} index
          *  the index of the slide to be shown.
          */
         showSlide: function (index) {
