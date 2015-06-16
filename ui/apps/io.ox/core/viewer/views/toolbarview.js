@@ -367,8 +367,20 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.render);
             // show current page on the navigation page box
             this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
+            // listen to sidebar toggle for document navigation positioning
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        /**
+         * Toggle position offset when sidebar is opened/closed.
+         *
+         * @param {Boolean} state
+         *  toggle state of the viewer sidebar.
+         */
+        onSideBarToggled: function (state) {
+            this.$('.viewer-toolbar-navigation').toggleClass('sidebar-offset', state);
         },
 
         /**
@@ -500,7 +512,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
             // render page navigation only in standalone mode and with document files.
-            if (this.standalone && (this.model.isOffice() || this.model.isPDF())) {
+            if (this.standalone && (this.model.isOffice() || this.model.isPDF()) && !_.device('smartphone')) {
                 this.renderPageNavigation();
             }
             // workaround for correct TAB traversal order:

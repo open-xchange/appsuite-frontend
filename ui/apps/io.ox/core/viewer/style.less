@@ -393,11 +393,14 @@
         .viewer-toolbar-navigation {
             position: absolute;
             top: 0;
-            left: ~"calc(50% - 320px)";
+            left: ~"calc(50% - 80px)";
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: row;
+            &.sidebar-offset {
+                left: ~"calc(50% - 280px)";
+            }
         }
 
         @viewer-toolbar-link-disabled-color: #CCCCCC;
@@ -652,6 +655,7 @@
             width: 100%;
             margin-bottom: 20px;
             padding: 0;
+            .user-select(none);
             li {
                 display: inline-block;
                 width: 50%;
