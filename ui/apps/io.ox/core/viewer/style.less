@@ -651,6 +651,7 @@
 
 
         .viewer-sidebar-tabs {
+            display: none;
             list-style: none;
             width: 100%;
             margin-bottom: 20px;
@@ -684,11 +685,13 @@
             min-height: 200px;
             overflow: hidden;
             &.thumbnail-pane {
-                display: none;
                 &.io-ox-busy::before {
                     top: 100px;
                     color: @viewer-busy-color;
                 }
+            }
+            &.detail-pane {
+                display: none;
             }
         }
 

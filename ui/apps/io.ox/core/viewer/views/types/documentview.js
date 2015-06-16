@@ -411,17 +411,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 }
                 // select/highlight the corresponding thumbnail according to displayed document page
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
-                    .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount)
-                    .trigger('viewer:sidebar:renderthumbnails');
+                    .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount);
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
-            }
-
-            /**
-             * Actions which always have to be done after pdf document loading process
-             */
-            function pdfDocumentLoadFinished() {
-                this.$el.removeClass('io-ox-busy');
             }
 
             /**
@@ -446,10 +438,10 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.$el.addClass('io-ox-busy');
 
             // wait for PDF document to finish loading
-            $.when(this.pdfDocument.getLoadPromise())
-                .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError.bind(this))
-                .always(pdfDocumentLoadFinished.bind(this));
-
+            $.when(this.pdfDocument.getLoadPromise()).then(
+                pdfDocumentLoadSuccess.bind(this),
+                pdfDocumentLoadError.bind(this)
+            );
             return this;
         },
 

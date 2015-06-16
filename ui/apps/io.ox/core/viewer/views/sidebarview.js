@@ -66,30 +66,26 @@ define('io.ox/core/viewer/views/sidebarview', [
         initTabNavigation: function () {
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="selected tablink" data-show="detail">').text(gt('Detail')),
+                detailTabLink = $('<a class="tablink" data-show="detail">').text(gt('Detail')),
                 detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
                 detailPane = $('<div class="viewer-sidebar-pane detail-pane">'),
-                thumbnailTabLink = $('<a class="tablink"  data-show="thumbnail">').text(gt('Thumbnail')),
+                thumbnailTabLink = $('<a class="tablink selected"  data-show="thumbnail">').text(gt('Thumbnail')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
                 thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane">');
-            if (this.standalone) {
-                tabsList.append(detailTab, thumbnailTab);
-                this.$el.append(tabsList);
-                tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
-            }
-            this.$el.append(detailPane, thumbnailPane);
+            tabsList.append(thumbnailTab, detailTab);
+            this.$el.append(tabsList);
+            tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
+            this.$el.append(thumbnailPane, detailPane);
         },
 
         onScrollHandler: function (event) {
-            //console.warn('Sidebar.onScrollHandler()');
             this.viewerEvents.trigger('viewer:sidebar:scroll', event);
         },
 
         onTabClicked: function (event) {
-            //console.warn('SidebarView.onTabActivated()', event);
             var target = $(event.target),
                 action = target.attr('data-show'),
-                actionHandler = this.onDetailActivated,
+                actionHandler = this.activateDetailView,
                 paneClass = '.detail-pane';
             event.preventDefault();
             this.$('.tablink').removeClass('selected');
@@ -97,11 +93,11 @@ define('io.ox/core/viewer/views/sidebarview', [
             target.addClass('selected');
             switch (action) {
                 case 'detail':
-                    actionHandler = this.onDetailActivated;
+                    actionHandler = this.activateDetailView;
                     paneClass = '.detail-pane';
                     break;
                 case 'thumbnail':
-                    actionHandler = this.onThumbnailActivated;
+                    actionHandler = this.activateThumbnailView;
                     paneClass = '.thumbnail-pane';
                     break;
                 default: break;
@@ -110,11 +106,13 @@ define('io.ox/core/viewer/views/sidebarview', [
             actionHandler.call(this);
         },
 
-        onDetailActivated: function () {
-            //console.warn('SidebarView.onDetailActivated()');
+        activateDetailView: function () {
+            this.$('.viewer-sidebar-pane').hide();
+            this.$('.detail-pane').show();
+            this.renderSections();
         },
 
-        onThumbnailActivated: function () {
+        activateThumbnailView: function () {
             // create thumbnails view
             if (this.$('.document-thumbnail').length === 0) {
                 var thumbnailView = new ThumbnailView({
@@ -158,8 +156,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            var detailPane = this.$('.detail-pane'),
-                navigationTabs = this.$('.viewer-sidebar-tabs');
+            var detailPane = this.$('.detail-pane');
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -170,11 +167,6 @@ define('io.ox/core/viewer/views/sidebarview', [
             // render sections only if side bar is open
             if (!this.model || !this.opened) {
                 return;
-            }
-            if (this.model.isOffice() || this.model.isPDF()) {
-                navigationTabs.show();
-            } else {
-                navigationTabs.hide();
             }
             // load file details
             this.loadFileDetails();
@@ -213,6 +205,13 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             // initially set model
             this.model = model;
+            // show tab navigation in office standalone mode
+            if (this.standalone && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
+                this.$('.viewer-sidebar-tabs').show();
+                this.activateThumbnailView();
+            } else {
+                this.activateDetailView();
+            }
             return this;
         },
 
