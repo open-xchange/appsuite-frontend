@@ -34,7 +34,7 @@ define('io.ox/core/folder/node', [
 
         events: {
             'click .folder-options':  'onOptions',
-            'click .folder-arrow':    'onToggle',
+            'click .folder-arrow':    'onArrowClick',
             'dblclick .folder-label': 'onToggle',
             'mousedown .folder-arrow':'onArrowMousedown',
             'keydown':                'onKeydown'
