@@ -87,7 +87,7 @@ define('io.ox/search/api',
 
     function getColumns (options) {
         var module = options.params.module,
-            data = columns[module],
+            data = _.extend({}, columns[module], options.params.columns || {}),
             obj = {
                 params: {
                     columns: apiFactory.extendColumns(data.extendColumns, module, data.columns)
