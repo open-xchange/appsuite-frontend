@@ -839,7 +839,7 @@ define('io.ox/files/api', [
 
     api.versions = {
         /**
-         * Upload a new version for a file
+         * Upload new version for a file
          * @param {object} file options
          *     - options.file - a File object (as in Blob)
          *     - options.filename - an optional filename (overrides the name value of options.file)

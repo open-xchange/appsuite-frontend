@@ -170,7 +170,7 @@ define('io.ox/core/viewer/views/mainview', [
 
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
-            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
+            var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
                 activeSlide = this.displayerView.getActiveSlideNode(),
                 activeSlideIndex = activeSlide.index(),
@@ -205,7 +205,7 @@ define('io.ox/core/viewer/views/mainview', [
         closeViewer: function () {
             this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
-            Settings.setSidebarOpenState(this.sidebarView.opened);
+            Settings.setSidebarOpenState(this.sidebarView.open);
             if (!this.standalone) {
                 this.$el.parent().find('.simple-window').show();
             }

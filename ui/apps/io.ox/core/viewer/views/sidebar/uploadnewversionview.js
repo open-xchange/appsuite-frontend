@@ -93,7 +93,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                 this.$el.append(
                     Attachments.fileUploadWidget({
                         multi: false,
-                        buttontext: gt('Upload a new version')
+                        buttontext: gt('Upload new version')
                     })
                 );
             }
