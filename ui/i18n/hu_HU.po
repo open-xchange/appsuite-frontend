@@ -45,7 +45,7 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d hét"
 msgstr[1] "%1$d hét"
 
-#: apps/io.ox/core/attachments/view.js:117 module:io.ox/core
+#: apps/io.ox/core/attachments/view.js:120 module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d melléklet"
@@ -518,7 +518,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:533 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "A tértivevény elküldve"
 
@@ -637,7 +637,7 @@ msgstr "Fiók frissítve"
 #: apps/io.ox/files/mobile-toolbar-actions.js:88
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/mail/detail/view.js:91 apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:764
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:841
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
@@ -675,7 +675,7 @@ msgstr "Leírás szerkesztése"
 msgid "Add account"
 msgstr "Fiók hozzáadása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:778
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:855
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Művelet hozzáadása"
@@ -695,7 +695,7 @@ msgstr "Almappa hozzáadása"
 msgid "Add attachments"
 msgstr "Mellékletek csatolása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:773
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:850
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Feltétel hozzáadása"
@@ -1007,7 +1007,7 @@ msgstr "Belső hiba történt"
 msgid "Anniversary"
 msgstr "Évforduló"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
 #: module:io.ox/settings/settings
 msgid "Any recipient"
 msgstr "Bármely címzett"
@@ -1035,13 +1035,13 @@ msgstr "Alkalmazások"
 msgid "Apply role"
 msgstr "Szerep alkalmazása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:809
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:886
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:813
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:890
 msgid "Apply rule if all conditions are met"
 msgstr "Szabály alkalmazása, ha minden feltétel teljesül"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:809
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:886
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
@@ -1280,7 +1280,7 @@ msgstr "Vissza a találkozóhoz"
 msgid "Basic settings"
 msgstr "Alapbeállítások"
 
-#: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:284 module:io.ox/mail
 msgid "Bcc"
 msgstr "Titkos másolat"
 
@@ -1301,7 +1301,7 @@ msgid "Black"
 msgstr "Fekete"
 
 #: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:95
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:105
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
 msgid "Blue"
@@ -1347,7 +1347,7 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js:56 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:200
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:53
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings
 msgid "CC"
 msgstr "Másolat"
@@ -1396,7 +1396,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/calendar/week/perspective.js:162
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
-#: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:731
+#: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:732
 #: apps/io.ox/core/desktop.js:1624 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:108
@@ -1801,7 +1801,7 @@ msgstr "Új levél írása"
 msgid "Compose new mail"
 msgstr "Új levél szerkesztése"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:763
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:840
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Feltételek"
@@ -1865,10 +1865,17 @@ msgstr "A névjegyek átmásolásra kerültek"
 msgid "Contacts have been moved"
 msgstr "A névjegyek áthelyezésre kerültek"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:40
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:41
 #: module:io.ox/settings/settings
 msgid "Contains"
 msgstr "Tartalmazza"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:64
+#: module:io.ox/settings/settings
+#, fuzzy
+#| msgid "Contact"
+msgid "Content"
+msgstr "Névjegy"
 
 #: apps/io.ox/core/main.js:1374 module:io.ox/core
 msgid "Continue"
@@ -1901,7 +1908,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Másolás"
 
-#: apps/io.ox/mail/common-extensions.js:263 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:273 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -2072,6 +2079,13 @@ msgstr "Fájlok létrehozása"
 #: apps/io.ox/tasks/edit/view-template.js:691 module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Pénznem"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:65
+#: module:io.ox/settings/settings
+#, fuzzy
+#| msgid "Current zoom factor"
+msgid "Current Date"
+msgstr "Jelenlegi nagyítás arány"
 
 #: apps/io.ox/core/main.js:369 module:io.ox/core
 msgid "Currently refreshing"
@@ -2349,7 +2363,7 @@ msgstr "Widget letiltása"
 #: apps/io.ox/contacts/edit/view-form.js:237
 #: apps/io.ox/core/settings/user.js:42
 #: apps/io.ox/mail/compose/extensions.js:80 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:67
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:73
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
 #: module:io.ox/core
@@ -2745,7 +2759,7 @@ msgstr "EB"
 #: apps/io.ox/calendar/main.js:243 apps/io.ox/calendar/main.js:314
 #: apps/io.ox/calendar/toolbar.js:64 apps/io.ox/contacts/actions.js:422
 #: module:io.ox/contacts apps/io.ox/contacts/main.js:365
-#: apps/io.ox/contacts/main.js:371 apps/io.ox/contacts/main.js:731
+#: apps/io.ox/contacts/main.js:371 apps/io.ox/contacts/main.js:732
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:499
 #: module:io.ox/files apps/io.ox/files/actions.js:509
@@ -3005,7 +3019,7 @@ msgstr "Írja be ide a dokumentum címét"
 msgid "Entrepreneur"
 msgstr "Vállalkozó"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:55
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:62
 #: module:io.ox/settings/settings
 msgid "Envelope"
 msgstr "Boríték"
@@ -3156,7 +3170,7 @@ msgstr "Külső felhasználó"
 msgid "External contact"
 msgstr "Külső névjegy"
 
-#: apps/io.ox/mail/common-extensions.js:480 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:489 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
@@ -3391,7 +3405,7 @@ msgstr "Utónév"
 msgid "First name Last name"
 msgstr "Utónév vezetéknév"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:73
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings
 msgid "Flag mail with"
 msgstr "Levél megjelölése:"
@@ -3439,8 +3453,8 @@ msgstr ""
 "A(z) „%1$s” nevű mappa elrejtésre kerül. Engedélyezze a „Rejtett fájlok és "
 "mappák megjelenítése” beállítást ezen mappa ismételt eléréséhez."
 
-#: apps/io.ox/core/folder/node.js:470 module:io.ox/core
-#: apps/io.ox/core/folder/node.js:477
+#: apps/io.ox/core/folder/node.js:472 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:479
 msgid "Folder-specific actions"
 msgstr "Mappaspecifikus műveletek"
 
@@ -3602,14 +3616,14 @@ msgid "Good morning, %s"
 msgstr "Jó reggelt, %s"
 
 #: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:108
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Szürke"
 
 #: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:93
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:103
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
 msgid "Green"
@@ -3642,7 +3656,7 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML és sima szöveg"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:54
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:61
 #: module:io.ox/settings/settings
 msgid "Header"
 msgstr "Fejléc"
@@ -4006,22 +4020,22 @@ msgstr "Meghívás találkozóra"
 msgid "Invite to new appointment"
 msgstr "Meghívás új találkozóra"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:30
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:31
 #: module:io.ox/settings/settings
 msgid "Is bigger than"
 msgstr "Nagyobb, mint"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:41
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:42
 #: module:io.ox/settings/settings
 msgid "Is exactly"
 msgstr "Pontosan"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:31
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:32
 #: module:io.ox/settings/settings
 msgid "Is smaller than"
 msgstr "Kisebb, mint"
 
-#: apps/io.ox/contacts/main.js:809 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:810 module:io.ox/contacts
 msgid "Item List"
 msgstr "Elemlista"
 
@@ -4085,7 +4099,7 @@ msgstr "Widget letiltása"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:66
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
 #: module:io.ox/settings/settings
 msgid "Keep"
 msgstr "Megtartás"
@@ -4189,14 +4203,14 @@ msgid "Life"
 msgstr "Élet"
 
 #: apps/io.ox/core/tk/flag-picker.js:99 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:94
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:104
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Világoskék"
 
 #: apps/io.ox/core/tk/flag-picker.js:96 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:92
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:102
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
 msgid "Light green"
@@ -4392,7 +4406,7 @@ msgstr "Levélforrás"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "A levél nem lett importálva, csak a .eml fájlok támogatottak."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings
 msgid "Mailing list"
 msgstr "Levelezőlista"
@@ -4496,7 +4510,7 @@ msgstr "Megjelölés elvégzetlenként"
 msgid "Mark as unread"
 msgstr "Megjelölés olvasatlannak"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:81
 #: module:io.ox/settings/settings
 msgid "Mark mail as"
 msgstr "Levél megjelölése"
@@ -4515,7 +4529,7 @@ msgstr "Megjelölés olvasottként"
 msgid "Mark unread"
 msgstr "Megjelölés olvasottként"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:42
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:43
 #: module:io.ox/settings/settings
 msgid "Matches"
 msgstr "Megegyezik"
@@ -4652,7 +4666,7 @@ msgstr "Összes üzenet megnyitása/bezárása"
 msgid "Move folder"
 msgstr "Mappa mozgatása"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:69
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
 #: module:io.ox/settings/settings
 msgid "Move to folder"
 msgstr "Mozgatás mappába"
@@ -4703,7 +4717,7 @@ msgstr "Saját feladatok"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:75 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:458
 #: apps/io.ox/files/view-options.js:44 module:io.ox/files
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:589
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:666
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Név"
@@ -4974,7 +4988,7 @@ msgstr "Nincs cím."
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:350
 #: module:io.ox/tasks/edit
 msgid "None"
@@ -5252,7 +5266,7 @@ msgid "Options"
 msgstr "Beállítások"
 
 #: apps/io.ox/core/tk/flag-picker.js:97 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:100
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
 msgid "Orange"
@@ -5456,7 +5470,7 @@ msgid "Pick a time here"
 msgstr "Válasszon itt időpontot"
 
 #: apps/io.ox/core/tk/flag-picker.js:98 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:97
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:107
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
 msgid "Pink"
@@ -5862,7 +5876,7 @@ msgid "Purchase confirmation"
 msgstr "Vásárlás jóváhagyása"
 
 #: apps/io.ox/core/tk/flag-picker.js:95 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:96
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:106
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
 msgid "Purple"
@@ -5986,13 +6000,13 @@ msgid "Recurring tasks need a valid start date."
 msgstr "Az ismétlődő feladatokhoz érvényes kezdő dátum szükséges."
 
 #: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:99
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Vörös"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
 #: module:io.ox/settings/settings
 msgid "Redirect to"
 msgstr "Átirányítás ide: "
@@ -6015,7 +6029,7 @@ msgstr "Frissítési időköz"
 msgid "Refresh rate in minutes"
 msgstr "Frissítés gyakorisága percben"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:44
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:45
 #: module:io.ox/settings/settings
 msgid "Regex"
 msgstr "Regex"
@@ -6024,7 +6038,7 @@ msgstr "Regex"
 msgid "Reject changes"
 msgstr "Változások elvetése"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
 #: module:io.ox/settings/settings
 msgid "Reject with reason"
 msgstr "Elutasítás oka"
@@ -6094,7 +6108,7 @@ msgstr "%1$s eltávolítás"
 #: apps/io.ox/backbone/mini-views/attachments.js:88
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/backbone/mini-views/attachments.js:90
-#: apps/io.ox/core/attachments/view.js:336 module:io.ox/core
+#: apps/io.ox/core/attachments/view.js:339 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:89
 #: apps/io.ox/core/tk/attachmentsUtil.js:229
 msgid "Remove attachment"
@@ -6243,7 +6257,7 @@ msgstr ""
 msgid "Room number"
 msgstr "Szobaszám"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:792
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:869
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Szabály neve"
@@ -6443,7 +6457,7 @@ msgid "Send"
 msgstr "Küldés"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:563 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:572 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Tértivevény küldése"
 
@@ -6490,7 +6504,7 @@ msgstr "Új levél küldése"
 msgid "Send vacation notice during this time only"
 msgstr "Szabadságértesítő küldése csak ezen idő alatt"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:55
 #: module:io.ox/settings/settings
 msgid "Sender/From"
 msgstr "Küldő/Feladó"
@@ -6692,7 +6706,7 @@ msgstr "Rejtett fájlok és mappák megjelenítése"
 msgid "Show icons"
 msgstr "Ikonok megjelenítése"
 
-#: apps/io.ox/mail/common-extensions.js:479 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:488 module:io.ox/mail
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
@@ -6797,7 +6811,7 @@ msgstr "Bejelentkezve mint %1$s"
 msgid "Size"
 msgstr "Méret"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:63
 #: module:io.ox/settings/settings
 msgid "Size (bytes)"
 msgstr "Méret (bájt)"
@@ -6976,7 +6990,7 @@ msgstr "Diák"
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:304
 #: apps/io.ox/mail/compose/extensions.js:308
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:57
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
@@ -7057,7 +7071,7 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings
 msgid "Tag mail with"
 msgstr "Levél címkézése:"
@@ -7305,7 +7319,7 @@ msgstr ""
 msgid "The changes have been rejected"
 msgstr "A változtatások elutasítva"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:471
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:489
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "A \" \" karakter nem engedélyezett."
@@ -7440,7 +7454,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:566 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:575 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "A feladó értesítést szeretne kapni arról, hogy Ön elolvasta ezt az e-mailt"
@@ -7745,13 +7759,13 @@ msgstr "A levélnek nincs tartalma"
 msgid "This message has been truncated due to size limitations."
 msgstr "A levél a méretkorlát miatt le lett vágva."
 
-#: apps/io.ox/mail/common-extensions.js:429 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is read, press to mark it as unread."
 msgid "This message is read, press this button to mark it as unread."
 msgstr "Ez egy olvasott levél, kattintson hogy olvasatlan legyen."
 
-#: apps/io.ox/mail/common-extensions.js:428 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:437 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is unread, press to mark it as read."
 msgid "This message is unread, press this button to mark it as read."
@@ -7761,7 +7775,7 @@ msgstr "Ez egy olvasatlan levél, kattintson ahhoz hogy olvasott legyen."
 msgid "This note will not be printed"
 msgstr "Ez a megjegyzés nem kerül nyomtatásra"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:124
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:134
 #: module:io.ox/settings/settings
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
@@ -7811,9 +7825,9 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Megszólítás"
 
-#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:262 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:59
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
 msgid "To"
@@ -7886,7 +7900,7 @@ msgstr "Top 10 címzett"
 msgid "Total cost"
 msgstr "Fizetendő"
 
-#: apps/io.ox/core/folder/node.js:454 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:456 module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Összesen: %1$d"
 
@@ -8003,7 +8017,7 @@ msgstr "Új feliratkozás"
 msgid "Unread"
 msgstr "Olvasatlan"
 
-#: apps/io.ox/core/folder/node.js:455 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:457 module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Olvasatlan: %1$d"
 
@@ -8237,7 +8251,7 @@ msgstr "Várakozás"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: apps/io.ox/mail/common-extensions.js:506 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:515 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
 
@@ -8363,7 +8377,7 @@ msgid "Years"
 msgstr "Év"
 
 #: apps/io.ox/core/tk/flag-picker.js:100 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:101
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr "Sárga"
@@ -8804,7 +8818,7 @@ msgid "and"
 msgstr "és"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:289 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:299 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "és %1$d további"
 
@@ -8867,6 +8881,11 @@ msgstr "Sötétvörös"
 msgid "date range"
 msgstr "dátumtartomány"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:636
+#: module:io.ox/settings/settings
+msgid "datepicker"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:615
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:683
@@ -8898,7 +8917,7 @@ msgstr "minden elem törlése"
 msgid "delete only own objects"
 msgstr "csak saját elemek törlése"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:35
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:36
 #: module:io.ox/settings/settings
 msgid "deleted"
 msgstr "törölve"
@@ -8934,6 +8953,13 @@ msgstr "befejeződik"
 #: module:io.ox/calendar/edit/main
 msgid "ends after a certain number of appointments"
 msgstr "adott számú találkozó után fejeződik be"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
+#: module:io.ox/settings/settings
+#, fuzzy
+#| msgid "Ends on"
+msgid "ends on"
+msgstr "Befejeződik"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:716
 #: module:io.ox/calendar/edit/main
@@ -9067,6 +9093,13 @@ msgstr "egy órán belül"
 msgid "in one week"
 msgstr "egy héten belül"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
+#: module:io.ox/settings/settings
+#, fuzzy
+#| msgid "Ends on"
+msgid "is on"
+msgstr "Befejeződik"
+
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:594
@@ -9196,7 +9229,7 @@ msgstr "eltávolítás"
 msgid "second"
 msgstr "második"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:36
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:37
 #: module:io.ox/settings/settings
 msgid "seen"
 msgstr "olvasott"
@@ -9210,6 +9243,13 @@ msgstr "formátum kiválasztása"
 #, fuzzy
 msgid "six months"
 msgstr "Hónap"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
+#: module:io.ox/settings/settings
+#, fuzzy
+#| msgid "Starts on"
+msgid "starts on"
+msgstr "Kezdődik"
 
 #: apps/io.ox/core/tk/reminder-util.js:87 module:io.ox/core
 msgid "status "
@@ -9827,9 +9867,6 @@ msgstr "yyyy"
 
 #~ msgid "Current page and total page count"
 #~ msgstr "Jelenlegi oldal és teljes oldalszám"
-
-#~ msgid "Current zoom factor"
-#~ msgstr "Jelenlegi nagyítás arány"
 
 #~ msgid "Customizing"
 #~ msgstr "Testreszabás"
