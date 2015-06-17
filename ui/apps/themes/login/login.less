@@ -42,21 +42,6 @@ html, body {
     line-height: 20px;
 }
 
-.css-table {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-.css-table-row {
-    display: table-row;
-}
-
-.css-table-cell {
-    display: table-cell;
-    vertical-align: middle;
-}
-
 .unselectable {
     .user-select(none);
 }
@@ -86,14 +71,50 @@ html, body {
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
 }
 
-#io-ox-login-screen, #io-ox-login-screen-decorator {
+#io-ox-login-screen {
+
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     z-index: 65102;
-    background-color: white;
+    background-color: #fff;
+    color: #fff;
+
+    .no-margin {
+        margin: 0;
+    }
+
+    &.relogin {
+        right: auto;
+        left: 50%;
+        width: 800px;
+        margin-left: -400px;
+        -webkit-box-shadow: 0 0 70px 5px #000;
+        -moz-box-shadow: 0 0 70px 5px #000;
+        box-shadow: 0 0 70px 5px #000;
+    }
+
+    .io-ox-busy {
+        position: relative;
+        &:before {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            /* icon-refresh */
+            font-size: 20px;
+            font-family: 'FontAwesome';
+            content: '\f021';
+            color: rgba(0, 0, 0, 0.30);
+            /* icon-spin */
+            -moz-animation: fa-spin 1.5s infinite linear;
+            -o-animation: fa-spin 1.5s infinite linear;
+            -webkit-animation: fa-spin 1.5s infinite linear;
+            animation: fa-spin 1.5s infinite linear;
+        }
+    }
 }
 
 #login-button {
@@ -109,60 +130,35 @@ html, body {
     z-index: 0;
 }
 
-#io-ox-login-screen-decorator {
-    background-color: black;
-    z-index: 65101;
-    opacity: 0.25;
-}
-
-#io-ox-login-screen {
-    .no-margin { margin: 0; }
-    a:not(#io-ox-login-password-button) {
-        color: #ABD7FF;
-        &:hover, &:focus { color: #fff; }
-    }
-    &.relogin {
-        right: auto;
-        left: 50%;
-        width: 800px;
-        margin-left: -400px;
-        -webkit-box-shadow: 0 0 70px 5px #000;
-        -moz-box-shadow: 0 0 70px 5px #000;
-        box-shadow: 0 0 70px 5px #000;
-    }
-}
-
 .wallpaper {
     #gradient.radial(#294F83, #162C4A);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#294F83', endColorstr='#162C4A', GradientType=0);
 }
 
-#io-ox-login-form-background { display: none; }
-
 #io-ox-login-form {
-    input:focus {
-        box-shadow: 0 0 15px 2px white;
-        outline: 0;
+    input.form-control {
+        height: 38px;
+        &:focus {
+            box-shadow: 0 0 15px 2px white;
+            outline: 0;
+        }
     }
 }
 
 #io-ox-login-container-scrollpane {
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
+    height: 100%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
 
 #io-ox-login-container {
     position: relative;
-    color: white;
-    height: 100%;
-    width: 100%;
-    max-width: 680px;
-    z-index: 2;
-    margin: 0 auto 0 auto;
-    padding: 0 30px 0 30px;
-    box-sizing: border-box;
+    max-width: 400px;
+    top: 50%;
+    transform: translateY(-50%);
+    overflow: auto;
 
     .alert {
         padding: 15px;
@@ -176,31 +172,18 @@ html, body {
     }
 
     h1 {
-        font-family: @light-font-family;
         font-weight: 100;
-        line-height: 1.15em;
-        color: #fff;
-
+        margin: 25px 0;
         small { color: #6FBBEC; }
     }
 }
 
 #io-ox-login-header {
-    h1 {
-        margin: 0;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-    };
-    height: 45%;
-    text-align: right;
     cursor: default;
 }
 
-#io-ox-login-header-prefix { color: #6cbafc; }
-
-#io-ox-login-form-container {
-    height: 40%;
+#io-ox-login-header-prefix {
+    color: #6cbafc;
 }
 
 #io-ox-login-username:invalid:focus {
@@ -208,8 +191,14 @@ html, body {
     border: 1px solid #CCC;
 }
 
-#io-ox-login-store {
-    margin-top: 0;
+#io-ox-login-store, #io-ox-forgot-password {
+    margin-top: -5px;
+    margin-bottom: 20px;
+}
+
+#io-ox-forgot-password {
+    text-align: right;
+    a { color: #fff; }
 }
 
 #login-box-content td {
@@ -237,46 +226,51 @@ html, body {
 }
 
 #io-ox-login-footer {
-    .footer-wrapper {
-        position: absolute;
-        bottom: 0;
-    }
-    height: 15%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 1em 0;
+    text-align: center;
 }
 
 #io-ox-languages {
-    select { margin-top: 0.6em; }
-    ul {
-        display: inline;
-        padding: 0 0 0 9px;
-        li {
-            display: inline-block;
-            a {
-                white-space: nowrap;
-                &:after {
-                    content: "•";
-                    padding: 0 7px;
-                    color: fade(@link-color, 30%);
-                }
+
+    margin-right: 5px;
+
+    .dropup, .dropdown {
+        display: inline-block;
+        a[data-toggle="dropdown"] {
+            color: #ABD7FF;
+        }
+        ul a {
+            &:focus,&:hover {
+                background-color: #ABD7FF
             }
-            &:last-child a:after {
-                content: "";
-            }
+        }
+        .dropdown-menu.multi {
+            -webkit-column-count: 2;
+            -moz-column-count: 2;
+            column-count: 2;
+        }
+    }
+
+    .lang-label {
+        font-weight: normal;
+        &:after {
+            content: ':';
+            margin-right: 5px;
         }
     }
 }
 
 #io-ox-copyright {
     color: #87B7E4;
-    text-align: right;
     font-weight: 300;
-    margin-bottom: 1em;
     font-size: 12px;
     cursor: default;
-    float: left;
     /* mobile stuff */
     @media (max-width: 480px), (max-device-width: 480px) {
-        text-align: left;
         font-size: 10px;
     }
 }
@@ -291,8 +285,17 @@ html, body {
 
 @media (max-width: 767px) {
     #io-ox-login-header {
-        height: 15%;
         h1 { font-size: 14pt; }
+    }
+    #io-ox-login-container {
+        top: 0;
+        transform: none;
+    }
+    #io-ox-login-footer span {
+        display: block;
+    }
+    #io-ox-forgot-password {
+        text-align: left;
     }
 }
 
@@ -349,32 +352,6 @@ html, body {
   100%  { transform: rotate(359deg);        }
 }
 
-#io-ox-login-screen {
-    .io-ox-busy {
-        position: relative;
-        &:before {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin: -10px 0 0 -10px;
-            /* icon-refresh */
-            font-size: 20px;
-            font-family: 'FontAwesome';
-            content: '\f021';
-            color: rgba(0, 0, 0, 0.30);
-            /* icon-spin */
-            -moz-animation: fa-spin 1.5s infinite linear;
-            -o-animation: fa-spin 1.5s infinite linear;
-            -webkit-animation: fa-spin 1.5s infinite linear;
-            animation: fa-spin 1.5s infinite linear;
-        }
-    }
-}
-
-.row:before, .row:after {
-    content: " ";
-    display: table;
-}
 .btn-primary {
     background-color: #3d7dbb;
     border-color: #1f6da1;

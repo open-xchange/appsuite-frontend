@@ -98,65 +98,77 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
             selectedLanguage = id;
         },
 
-        onChangeLanguage: function (e) {
-            e.preventDefault();
-            this.changeByUser(e.data.id);
-        },
-
         render: function () {
 
-            var sc = ox.serverConfig, lang = sc.languages,
-                node, id = '', i = 0, maxLang = 30;
+            var lang = ox.serverConfig.languages,
+                node = $('#io-ox-languages');
 
             // show languages
             if (!_.isEmpty(lang)) {
 
                 util.debug('Render languages', lang);
 
-                node = $('#io-ox-language-list');
-
-                var langCount = _.size(lang),
+                var self = this,
+                    maxLang = 30,
                     defaultLanguage = _.getCookie('language') || this.getBrowserLanguage(),
                     // Display native select box for languages if there are up to 'maxLang' languages
                     langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
                         return lang[a] <= lang[b] ? -1 : +1;
                     });
 
-                if (langCount < maxLang && !_.url.hash('language-select') && _.device('!smartphone')) {
-                    for (id in langSorted) {
-                        i++;
-                        node.append(
-                            $('<li>').append(
-                                $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '" lang="' + langSorted[id] + '">')
-                                    .on('click', { id: langSorted[id] }, $.proxy(this.onChangeLanguage, this))
-                                    .text(lang[langSorted[id]])
-                            )
-                        );
-                        if (i < langCount && langCount < maxLang) {
-                            // node.append($('<span class="language-delimiter">').text('\u00A0\u00A0\u2022\u00A0 '));
-                        }
-                    }
-                } else {
-                    $('#io-ox-language-list').append(
-                        $('<select>')
-                        .on('change', function () {
-                            exports.changeByUser($(this).val());
-                        })
-                        .append(
-                            _(langSorted).map(function (value, id) {
-                                return $('<option>')
-                                    .attr({
-                                        'aria-label': lang[langSorted[id]],
-                                        'value': langSorted[id]
-                                    })
-                                    .text(lang[langSorted[id]]);
-                            })
+                if (_.size(lang) < maxLang && !_.url.hash('language-select') && _.device('!smartphone')) {
+                    var toggle, list;
+
+                    node.append(
+                        $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
+                        $('<div class="dropup">').append(
+                            toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
+                                $('<span class="toggle-text">').text(lang[defaultLanguage]),
+                                $('<span class="caret">')
+                            ),
+                            list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" aria-labeledby="io-ox-languages-label">')
                         )
-                        .val(defaultLanguage)
+                    );
+
+                    // add to column layout
+                    if (_.size(lang) > 15) list.addClass('multi');
+
+                    list.append(
+                        _(langSorted).map(function (value) {
+                            return $('<li role="presentation">').append(
+                                $('<a role="menuitem" href="#" aria-label="' + lang[value] + '" lang="' + value + '">')
+                                    .on('click',  function () {
+                                        self.changeByUser(value);
+                                        toggle.find('span.toggle-text').text(lang[value]);
+                                    })
+                                    .text(lang[value])
+                            );
+                        })
+                    );
+                    // init dropdown
+                    toggle.dropdown();
+                } else {
+                    node.append(
+                        $('<label for="language-select" class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
+                        $('<select id="language-select">')
+                            .on('change', function () {
+                                exports.changeByUser($(this).val());
+                            })
+                            .append(
+                                _(langSorted).map(function (value) {
+                                    return $('<option>')
+                                        .attr({
+                                            'aria-label': lang[value],
+                                            'value': value
+                                        })
+                                        .text(lang[value]);
+                                })
+                            )
+                            .val(defaultLanguage)
                     );
                 }
             } else {
-                $('#io-ox-languages').remove();
+                node.remove();
             }
         }
     };
