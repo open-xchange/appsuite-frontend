@@ -1040,7 +1040,7 @@ define('io.ox/contacts/api', [
                     return _(words).every(function (word) {
                         return _(item.fulltext).some(function (str) {
                             // server also uses startsWith() / not contains()
-                            return str.indexOf(word) === 0;
+                            return str.indexOf(word) === 0 || str.indexOf(query) === 0;
                         });
                     });
                 });
