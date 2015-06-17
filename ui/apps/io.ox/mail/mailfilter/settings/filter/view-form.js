@@ -142,7 +142,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         toggleSaveButton = function (footer, pane) {
-            if (pane.find('.warning').length === 0) {
+            if (pane.find('input.warning').length === 0) {
                 footer.find('[data-action="save"]').prop('disabled', false);
             } else {
                 footer.find('[data-action="save"]').prop('disabled', true);
