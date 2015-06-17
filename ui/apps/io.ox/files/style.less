@@ -32,7 +32,7 @@
 
     &.column-layout .list-item {
         line-height: 16px;
-        padding: 4px 16px 4px 16px;
+        padding: 4px 16px 4px 42px;
         border-bottom: 0;
         &:not(.selected):nth-child(odd),  {
             background-color: #f5f5f5;
@@ -45,11 +45,16 @@
         }
     }
 
+    &.column-layout.hide-checkboxes .list-item {
+        padding-left: 16px;
+    }
+
     &.column-layout .list-item-content {
         display: table;
         width: 100%;
         table-layout: fixed;
     }
+
     .list-item-column {
         display: table-cell;
         vertical-align: middle;
@@ -70,6 +75,11 @@
     }
 
     &.column-layout {
+
+        .list-item .list-item-checkmark .fa-checkmark {
+            top: 3px;
+        }
+
         .filename {
             .ellipsis();
         }
@@ -280,13 +290,14 @@
             right: 0;
             left: auto;
             .fa-checkmark {
-                color: #eee;
+                color: #fff;
                 text-shadow: 0 0 3px #000;
+                &:before { content: '\f0c8'; } // empty square
             }
         }
 
         .file-type-folder .list-item-checkmark .fa-checkmark {
-            color: #555;
+            color: #ccc;
             text-shadow: none;
         }
 
