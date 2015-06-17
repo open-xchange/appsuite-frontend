@@ -19,14 +19,11 @@ define('io.ox/mail/toolbar', [
     'io.ox/mail/api',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
-    'io.ox/core/tk/upload',
-    'io.ox/core/dropzone',
-    'io.ox/core/notifications',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
+], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, gt) {
 
     'use strict';
 

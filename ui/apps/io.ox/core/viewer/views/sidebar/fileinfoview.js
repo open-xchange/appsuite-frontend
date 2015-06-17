@@ -14,8 +14,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/core/util',
+    'io.ox/core/capabilities',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FolderAPI, gt) {
+], function (PanelBaseView, Ext, FolderAPI, util, capabilities, gt) {
 
     'use strict';
 
@@ -26,9 +28,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         index: 100,
         id: 'fileinfo',
         draw: function (baton) {
-            if (!baton.model) {
-                return;
-            }
+
+            if (!baton.model) return;
+
             var panelBody,
                 model = baton.model,
                 fileName = model.get('filename') || '-',
@@ -36,37 +38,52 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
                 modified = model.get('last_modified'),
                 isToday = moment().isSame(moment(modified), 'day'),
-                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
+                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
+                link = util.getDeepLink('io.ox/files', model.toJSON()),
+                dl = $('<dl>');
 
-            panelBody = this.find('.sidebar-panel-body').empty().append(
-                $('<dl>').append(
-                    // filename
-                    $('<dt>').text(gt('Filename')),
-                    $('<dd class="file-name">').text(fileName),
-                    // size
-                    $('<dt>').text(gt('Size')),
-                    $('<dd class="size">').text(sizeString),
-                    // modified
-                    $('<dt>').text(gt('Modified')),
-                    $('<dd class="modified">').text(dateString),
-                    // path
-                    $('<dt>').text(gt('Saved in')),
-                    $('<dd class="saved-in">').text('\xa0').busy()
-                )
+            dl.append(
+                // filename
+                $('<dt>').text(gt('Filename')),
+                $('<dd class="file-name">').text(fileName),
+                // size
+                $('<dt>').text(gt('Size')),
+                $('<dd class="size">').text(sizeString),
+                // modified
+                $('<dt>').text(gt('Modified')),
+                $('<dd class="modified">').text(dateString),
+                // path
+                $('<dt>').text(gt('Saved in')),
+                $('<dd class="saved-in">').text('\xa0').busy()
             );
 
-            FolderAPI.path(model.get('folder_id'))
-            .done(function (list) {
-                var path = _.chain(list)
-                    .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
-                    .map(function (folder) { return gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30)); })
-                    .value().join(' / ');
+            if (!capabilities.has('alone')) {
+                dl.append(
+                    // deep link
+                    $('<dt>').text(gt('Link')),
+                    $('<dd class="link">').append(
+                        $('<a href="#" target="_blank" style="word-break: break-all">')
+                        .attr('href', link)
+                        .text(link)
+                    )
+                );
+            }
 
-                panelBody.find('dl>dd.saved-in').text(path).idle();
-            })
-            .fail(function () {
-                panelBody.find('dl>dd.saved-in').text('-').idle();
-            });
+            panelBody = this.find('.sidebar-panel-body').empty().append(dl);
+
+            FolderAPI.path(model.get('folder_id')).then(
+                function success(list) {
+                    var path = _.chain(list)
+                        .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
+                        .map(function (folder) { return gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30)); })
+                        .value().join(' / ');
+
+                    panelBody.find('dl>dd.saved-in').text(path).idle();
+                },
+                function fail() {
+                    panelBody.find('dl>dd.saved-in').text('-').idle();
+                }
+            );
         }
     });
 
@@ -80,7 +97,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         initialize: function () {
             this.setPanelHeader(gt('General info'));
-            this.togglePanel(true);
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));
@@ -98,9 +114,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            if (this.model) {
-                this.model = null;
-            }
+            if (this.model) this.model = null;
         }
 
     });

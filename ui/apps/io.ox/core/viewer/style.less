@@ -45,7 +45,7 @@
     @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.7);
     @viewer-displayer-document-shadowcolor: rgba(255, 255, 255, 0.2);
     @viewer-control-color: @viewer-toolbar-color;
-    @viewer-sidebar-bgcolor: #1a1a1a;
+    @viewer-sidebar-bgcolor: rgba(0, 0, 0, 0.40);
     @viewer-sidebar-border-color: #000000;
     @viewer-sidebar-active-bgcolor: #333333;
     @viewer-sidebar-label-text-color: #999999;
@@ -137,8 +137,10 @@
 
 .sidebar-panel {
 
+    margin-bottom: 16px;
+
     .sidebar-panel-heading {
-        border-bottom: 1px solid #555;
+
         position: relative;
         padding: 12px 0 5px 0;
 
@@ -164,7 +166,7 @@
 
     .sidebar-panel-body {
 
-        padding: 20px 0;
+        padding: 12px 0 5px 0;
 
         &.panel-collapsed {
             display: none;
@@ -202,6 +204,7 @@
         .versiontable {
 
             white-space: nowrap;
+            margin-bottom: 0;
 
             td {
                 padding: 0;
@@ -211,7 +214,7 @@
 
             .version-content {
 
-                padding: 0 0 8px 8px;
+                padding: 0 0 8px 0;
 
                 .last_modified {
                     float: right;
@@ -237,6 +240,10 @@
                 cursor: default;
             }
         }
+    }
+
+    &.viewer-fileinfo {
+        margin-bottom: 0;
     }
 }
 
@@ -596,8 +603,8 @@
         }
 
         .sidebar-panel-heading {
+
             color: @viewer-sidebar-label-text-color;
-            border-bottom: 1px solid #555;
 
             .panel-toggle-btn {
                 color: @viewer-control-color;

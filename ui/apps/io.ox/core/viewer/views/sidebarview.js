@@ -114,7 +114,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             // render sections
             this.$el.append(
-                new FileInfoView({ model: this.model }).render().el,
+                new FileInfoView({ model: this.model, fixed: true }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el
