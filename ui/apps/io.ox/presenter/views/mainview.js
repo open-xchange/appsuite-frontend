@@ -32,6 +32,9 @@ define('io.ox/presenter/views/mainview', [
             'keydown': 'onKeydown'
         },
 
+        // the full screen state of the main view, off by default.
+        fullscreen: false,
+
         initialize: function (options) {
             _.extend(this, options);
 
@@ -70,7 +73,9 @@ define('io.ox/presenter/views/mainview', [
             return this;
         },
 
-        // handler for keyboard events on the viewer
+        /**
+         * Handle OX Presenter keyboard events
+         */
         onKeydown: function (event) {
             //event.stopPropagation();
 
@@ -114,6 +119,7 @@ define('io.ox/presenter/views/mainview', [
                     this.presentationView.swiper.slideNext();
                     //this.presentationView.focusActiveSlide();
                     break;
+                // TODO: clarify which keyboard events to support
                 case 107: // plus key
                     event.stopPropagation();
                     this.presentationView.changeZoomLevel('increase');
@@ -122,15 +128,24 @@ define('io.ox/presenter/views/mainview', [
                     event.stopPropagation();
                     this.presentationView.changeZoomLevel('decrease');
                     break;
+                case 70: // F key
+                    event.stopPropagation();
+                    this.toggleFullscreen();
+                    break;
             }
         },
 
-        // handle sidebar toggle
+        /**
+         * Handle side-bar toggle
+         */
         onSideBarToggled: function (/*state*/) {
             this.onWindowResize();
         },
 
-        // recalculate view dimensions after e.g. window resize events
+        /**
+         * Handle browser window resize.
+         * Recalculate view dimensions after e.g. window resize events
+         */
         onWindowResize: function () {
             console.info('Presenter - mainview - onWindowResize()');
 
@@ -139,6 +154,60 @@ define('io.ox/presenter/views/mainview', [
             this.presentationView.$el.css({ width: window.innerWidth - rightOffset });
 
             this.presenterEvents.trigger('presenter:resize');
+        },
+
+        /**
+         * Toggles full screen mode of the main view depending on the given state.
+         *  A state of 'true' starts full screen mode, 'false' exits the full screen mode and
+         *  'undefined' toggles the full screen state.
+         *
+         * You can only call this from a user-initiated event (click, key, or touch event),
+         * otherwise the browser will deny the request.
+         */
+        toggleFullscreen: function (state) {
+            if (BigScreen.enabled) {
+
+                if (_.isUndefined(state)) {
+                    BigScreen.toggle(
+                        this.el,
+                        this.onEnterFullscreen.bind(this),
+                        this.onEnterFullscreen.bind(this),
+                        this.onErrorFullscreen.bind(this)
+                    );
+                } else if (state) {
+                    BigScreen.request(
+                        this.el,
+                        this.onEnterFullscreen.bind(this),
+                        this.onEnterFullscreen.bind(this),
+                        this.onErrorFullscreen.bind(this)
+                    );
+                } else {
+                    BigScreen.exit();
+                }
+            }
+        },
+
+        /**
+         * Handle main view entering full screen mode
+         */
+        onEnterFullscreen: function () {
+            console.info('Presenter - mainview - onEnterFullscreen()');
+            this.fullscreen = true;
+        },
+
+        /**
+         * Handle main view leaving full screen mode
+         */
+        onExitFullscreen: function () {
+            console.info('Presenter - mainview - onExitFullscreen()');
+            this.fullscreen = false;
+        },
+
+        /**
+         * Handle main view full screen toggle errors
+         */
+        onErrorFullscreen: function (foo) {
+            console.info('Presenter - mainview - onErrorFullscreen()', foo);
         },
 
         /**
