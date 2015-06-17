@@ -29,12 +29,10 @@ define('io.ox/files/actions/showlink', [
                 // content
                 this.getContentNode().addClass('user-select-text max-height-200').append(
 
+                    // loop over all files
                     _(list).map(function (file) {
 
-                        var url = ox.abs + ox.root +
-                            '/#!&app=io.ox/files' +
-                            '&folder=' + encodeURIComponent(file.folder_id) +
-                            '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
+                        var url = util.getDeepLink('io.ox/files', file);
 
                         return $('<p>').append(
                             $('<div>').text(file.filename || file.title || ''),

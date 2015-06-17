@@ -25,27 +25,47 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
     var PanelBaseView = DisposableView.extend({
 
         // overwrite constructor to keep initialize intact
-        constructor: function () {
+        constructor: function (options) {
+
             var panelId = _.uniqueId('panel-');
+
             // we only need the DOM element at this point
             this._ensureElement();
+            this.$el.addClass('sidebar-panel');
 
-            this.$el.addClass('sidebar-panel').append(
-                // header
-                $('<div class="sidebar-panel-heading" role="tab" aria-expanded="false">').append(
-                    // title
-                    $('<h3>', { 'class': 'sidebar-panel-title' }).text('\u00a0'),
-                    // button
-                    $('<a href="#" class="panel-toggle-btn btn" role="button" tabindex="1" aria-expanded="false">', { 'title': gt('Toggle panel'), 'aria-controls': panelId }).append(
-                        $('<span class="sr-only">').text(gt('Toggle panel')),
-                        $('<i class="fa fa-chevron-right toggle-icon" aria-hidden="true">')
-                    )
-                ),
-                // body
-                $('<div class="sidebar-panel-body panel-collapsed" role="tabpanel" aria-label="" aria-hidden="true">', { id: panelId })
-            );
+            // ensure we have options
+            options = _.extend({ fixed: false }, options);
 
-            this.$el.on('click', '.sidebar-panel-heading', this.onTogglePanel.bind(this));
+            if (options.fixed) {
+                // static variant
+                this.$el.append(
+                    // header
+                    $('<div class="sidebar-panel-heading">').append(
+                        // title
+                        $('<h3 class="sidebar-panel-title">').text('\u00a0')
+                    ),
+                    // body
+                    $('<div class="sidebar-panel-body">')
+                );
+            } else {
+                // dynamic variant
+                this.$el.append(
+                    // header
+                    $('<div class="sidebar-panel-heading" role="tab" aria-expanded="false">').append(
+                        // title
+                        $('<h3 class="sidebar-panel-title">').text('\u00a0'),
+                        // button
+                        $('<a href="#" class="panel-toggle-btn btn" role="button" tabindex="1" aria-expanded="false">', { 'title': gt('Toggle panel'), 'aria-controls': panelId }).append(
+                            $('<span class="sr-only">').text(gt('Toggle panel')),
+                            $('<i class="fa fa-chevron-right toggle-icon" aria-hidden="true">')
+                        )
+                    ),
+                    // body
+                    $('<div class="sidebar-panel-body panel-collapsed" role="tabpanel" aria-label="" aria-hidden="true">', { id: panelId })
+                );
+
+                this.$el.on('click', '.sidebar-panel-heading', this.onTogglePanel.bind(this));
+            }
 
             // call parent constructor that also calls initialize
             DisposableView.prototype.constructor.apply(this, arguments);

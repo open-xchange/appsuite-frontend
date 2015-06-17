@@ -19,7 +19,8 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
     var ThumbnailView = DisposableView.extend({
 
         events: {
-            'click .document-thumbnail-link': 'onThumbnailClicked'
+            'click .document-thumbnail-link': 'onThumbnailClicked',
+            'keydown .document-thumbnail-link': 'onThumbnailKeydown'
         },
 
         initialize: function (options) {
@@ -71,7 +72,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * @returns {jQuery} thumbnailLink
          */
         createThumbnailNode: function (pageNumber) {
-            var thumbnailLink = $('<a class="document-thumbnail-link">'),
+            var thumbnailLink = $('<a class="document-thumbnail-link" tabindex="1">'),
                 thumbnail = $('<div class="document-thumbnail">'),
                 thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
                 thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
@@ -145,6 +146,23 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 clickedPageNumber = clickedThumbnail.data('page');
             this.selectThumbnail(clickedPageNumber);
             this.viewerEvents.trigger('viewer:document:scrolltopage', clickedPageNumber);
+        },
+
+        /**
+         * Thumbnail keydown handler.
+         * - selects a thumbnail with ENTER or SPACE key.
+         * @param {jQuery.Event} event
+         */
+        onThumbnailKeydown: function (event) {
+            event.stopPropagation();
+            switch (event.which || event.keyCode) {
+                case 13: // enter
+                    this.onThumbnailClicked(event);
+                    break;
+                case 32: // space
+                    this.onThumbnailClicked(event);
+                    break;
+            }
         },
 
         /**

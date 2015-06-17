@@ -1,3 +1,16 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
+ */
+
 define('io.ox/files/upload/dropzone', [
     'io.ox/core/extensions',
     'io.ox/core/dropzone',
@@ -10,10 +23,12 @@ define('io.ox/files/upload/dropzone', [
         id: 'files-dropzone',
         index: 1000000000000,
         setup: function (app) {
-            if (_.device('!desktop')) return;
+
+            // desktop only
+            if (!_.device('desktop')) return;
 
             var zone = new dropzone.Inplace({
-                caption: gt('Drop files here for import')
+                caption: gt('Drop files here to upload')
             });
 
             zone.on({
@@ -25,7 +40,7 @@ define('io.ox/files/upload/dropzone', [
                 }
             });
 
-            app.getWindowNode().append(
+            app.getWindowNode().find('.list-view-control').append(
                 zone.render().$el.addClass('abs')
             );
         }

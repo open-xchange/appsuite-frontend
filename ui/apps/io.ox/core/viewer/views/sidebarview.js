@@ -49,6 +49,10 @@ define('io.ox/core/viewer/views/sidebarview', [
         // the visible state of the side bar, hidden per default.
         open: false,
 
+        events: {
+            'keydown .tablink': 'onTabKeydown'
+        },
+
         initialize: function (options) {
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
@@ -70,10 +74,10 @@ define('io.ox/core/viewer/views/sidebarview', [
         initTabNavigation: function () {
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="tablink" data-tab-id="detail">').text(gt('Detail')),
+                detailTabLink = $('<a class="tablink" data-tab-id="detail" tabindex="1">').text(gt('Detail')),
                 detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
                 detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">'),
-                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail">').text(gt('Thumbnail')),
+                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail" tabindex="1">').text(gt('Thumbnail')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
                 thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
             tabsList.append(thumbnailTab, detailTab);
@@ -97,6 +101,22 @@ define('io.ox/core/viewer/views/sidebarview', [
         onTabClicked: function (event) {
             var clickedTabId = $(event.target).attr('data-tab-id');
             this.activateTab(clickedTabId);
+        },
+
+        /**
+         * Sidebar tab keydown handler.
+         * @param {jQuery.Event} event
+         */
+        onTabKeydown: function (event) {
+            event.stopPropagation();
+            switch (event.which || event.keyCode) {
+                case 13: // enter
+                    this.onTabClicked(event);
+                    break;
+                case 32: // space
+                    this.onTabClicked(event);
+                    break;
+            }
         },
 
         /**
@@ -142,7 +162,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          *  A state of 'true' opens the panel, 'false' closes the panel and
          *  'undefined' toggles the side bar.
          *
-         * @param {Boolean} [state].
+         * @param {Boolean} [state]
          *  The panel state.
          */
         toggleSidebar: function (state) {
@@ -193,7 +213,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             // render sections
             detailPane.append(
-                new FileInfoView({ model: this.model }).render().el,
+                new FileInfoView({ model: this.model, fixed: true }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el
