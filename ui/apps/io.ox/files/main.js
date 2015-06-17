@@ -511,6 +511,31 @@ define('io.ox/files/main', [
             });
         },
 
+        //open on pressing enter
+        'selection-enter': function (app) {
+            if (_.device('smartphone')) {
+                return;
+            }
+
+            // folders
+            app.listView.$el.on('keydown', '.file-type-folder', function (e) {
+                if (e.which === 13) {
+                    var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    app.folder.set(obj.id);
+                }
+            });
+
+            // files
+            app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
+                if (e.which === 13) {
+                    ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
+                        var viewer = new Viewer();
+                        viewer.launch({ selection: _.cid(app.listView.selection.get()[0]), files: app.listView.collection.models });
+                    });
+                }
+            });
+        },
+
         /*
          * Respond to API events that need a reload
          */
