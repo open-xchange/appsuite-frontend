@@ -53,11 +53,21 @@ define('io.ox/mail/common-extensions', [
         },
 
         picture: function (baton) {
-            var data = baton.data, from = account.is('sent|drafts', data.folder_id) ? data.to : data.from;
+
+            // show picture of sender or first recipient
+            // special cases:
+            // - show picture of first recipient in "Sent items" and "Drafts"
+            // - exception: always show sender in threaded messages
+
+            var data = baton.data,
+                size = api.threads.size(data),
+                single = size <= 1,
+                addresses = single && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
+
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: data.picture || (from && from[0] && from[0][1]) },
+                    { email: data.picture || (addresses && addresses[0] && addresses[0][1]) },
                     { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );
@@ -360,7 +370,6 @@ define('io.ox/mail/common-extensions', [
                 };
 
             return function (baton) {
-
                 if (baton.attachments.length === 0) return $.when();
 
                 var $el = this,

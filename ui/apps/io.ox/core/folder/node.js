@@ -34,7 +34,7 @@ define('io.ox/core/folder/node', [
 
         events: {
             'click .folder-options':  'onOptions',
-            'click .folder-arrow':    'onToggle',
+            'click .folder-arrow':    'onArrowClick',
             'dblclick .folder-label': 'onToggle',
             'mousedown .folder-arrow':'onArrowMousedown',
             'keydown':                'onKeydown'
@@ -155,6 +155,8 @@ define('io.ox/core/folder/node', [
         },
 
         toggle: function (state) {
+            // for whatever reason, this.options might be nulled (see bug 37483)
+            if (this.options === null) return;
             this.options.open = state;
             this.onChangeSubFolders();
             this.options.tree.trigger(state ? 'open' : 'close', this.folder);

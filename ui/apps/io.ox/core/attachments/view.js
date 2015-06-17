@@ -50,6 +50,9 @@ define('io.ox/core/attachments/view', [
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
 
+            // Previewmode on smartpfone as default
+            if (_.device('smartphone')) this.$el.addClass('show-preview');
+
             this.$header = $('<header role="heading">');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
@@ -99,13 +102,13 @@ define('io.ox/core/attachments/view', [
         renderHeader: function () {
 
             this.$header.append(
+                $('<a href="#" class="pull-right toggle-mode">').append('<i class="fa">'),
                 $('<a href="#" class="toggle-details" tabindex="1">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
-                $('<span class="links">'),
-                $('<a href="#" class="pull-right toggle-mode">').append('<i class="fa">')
+                $('<span class="links">')
             );
 
             this.renderSummary();

@@ -46,8 +46,8 @@ define([
                 { test: 'false', comparison: [] },
                 { test: 'true', comparison: [] },
                 { test: 'not', comparison: [] },
-                { test: 'size', comparison: ['over', 'under'] },
-                { test: 'header', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'size', comparison: ['under'] },
+                { test: 'header', comparison: ['is', 'contains', 'matches'] },
                 { test: 'allof', comparison: [] },
                 { test: 'anyof', comparison: [] },
                 { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] },
@@ -121,6 +121,8 @@ define([
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')')).to.have.length(1);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Content') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Current Date') + ')')).to.have.length(1);
 
             // actions
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')')).to.have.length(1);
@@ -310,6 +312,43 @@ define([
 
             expect($popup.find('li li a[data-value="over"]')).to.have.length(1);
             expect($popup.find('li li a[data-value="under"]')).to.have.length(1);
+
+            expect($popup.find('li a[data-action="remove-test"]')).to.have.length(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view')).to.have.length(0);
+
+        });
+
+        it('should draw the "Content" condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Content') + ')').click();
+
+            expect($popup.find('li.filter-settings-view')).to.have.length(1);
+            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
+
+            expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="is"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="matches"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="regex"]')).to.have.length(1);
+
+            expect($popup.find('li a[data-action="remove-test"]')).to.have.length(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view')).to.have.length(0);
+
+        });
+
+        it('should draw the "Current Date" condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Current Date') + ')').click();
+
+            expect($popup.find('li.filter-settings-view')).to.have.length(1);
+            expect($popup.find('li input.datepicker-day-field ')).to.have.length(1);
+            expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
+
+            expect($popup.find('li li a[data-value="ge"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="le"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="is"]')).to.have.length(1);
 
             expect($popup.find('li a[data-action="remove-test"]')).to.have.length(1);
 
@@ -630,7 +669,7 @@ define([
 
         });
 
-        it('should save the "Size (bytes)"" condition', function (done) {
+        it('should save the "Size (bytes)" condition', function (done) {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('10').trigger('change');
             $popup.find('li li a[data-value="over"]').click();
@@ -644,6 +683,25 @@ define([
                 }
             }).then(function () {
                 model.get('test').should.be.deep.equal({ comparison: 'over', id: 'size', size: '10' });
+                done();
+            });
+
+        });
+
+        it('should save the "Content" condition', function (done) {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Content') + ')').click();
+            $popup.find('input[data-action="change-text-test"]').val('test').trigger('change');
+            $popup.find('li li a[data-value="is"]').click();
+
+            $popup.find('[data-action="save"]').click();
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }).then(function () {
+                model.get('test').should.be.deep.equal({ comparison: 'is', id: 'body', values: ['test'], extensionskey: 'text', extensionsvalue: null });
                 done();
             });
 
@@ -895,6 +953,28 @@ define([
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')')).to.have.length(0);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')')).to.have.length(0);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')')).to.have.length(0);
+
+        });
+
+        it('should fill the dropdowns with the limited conditions', function () {
+
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
+
+            expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="is"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="matches"]')).to.have.length(1);
+            expect($popup.find('li li a[data-value="regex"]')).to.have.length(0);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view')).to.have.length(0);
+
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
+
+            expect($popup.find('li li a[data-value="over"]')).to.have.length(0);
+            expect($popup.find('li li a[data-value="under"]')).to.have.length(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view')).to.have.length(0);
 
         });
 
