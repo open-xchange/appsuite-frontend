@@ -218,11 +218,10 @@
     // APPLY TO STANDARD DROPDOWN ELEMENTS
     // ===================================
 
-    $(document).one('core-main-loaded', function () {//don't add event listeners while still in login or ox.idle does not exist(causes js errors on mobile devices)
-        $(document).on('click.bs.dropdown.data-api', clearMenus)
-            .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
-            .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
-            .on('keydown.bs.dropdown.data-api', toggle + ', [role="menu"], [role="listbox"]', Dropdown.prototype.keydown)
-    });
+    $(document)
+        .on('click.bs.dropdown.data-api', clearMenus)
+        .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+        .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+        .on('keydown.bs.dropdown.data-api', toggle + ', [role="menu"], [role="listbox"]', Dropdown.prototype.keydown)
 
 }(jQuery);

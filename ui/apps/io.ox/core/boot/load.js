@@ -80,9 +80,6 @@ define('io.ox/core/boot/load', [
 
         loadCore.then(
             function success() {
-                // trigger load event so custom dropdown can add event listeners
-                // (loading to early causes js errors on mobile devices during login)
-                $(document).trigger('core-main-loaded');
                 util.debug('DONE!');
                 ox.trigger('boot:done');
             },
