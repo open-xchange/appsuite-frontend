@@ -474,7 +474,7 @@ define('io.ox/files/legacy_api', [
     };
 
     /**
-     * upload a new version of a file
+     * upload new version of a file
      * @param  {object} options
      *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
      *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
@@ -533,7 +533,7 @@ define('io.ox/files/legacy_api', [
     };
 
     /**
-     * upload a new version of a file (IE Version)
+     * upload new version of a file (IE Version)
      * @param  {object} options
      *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
      *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.

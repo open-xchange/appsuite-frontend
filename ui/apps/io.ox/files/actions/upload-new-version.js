@@ -60,7 +60,7 @@ define('io.ox/files/actions/upload-new-version', [
 
         new Dialogs.ModalDialog({ async: true })
             .header(
-                $('<h4>').text(gt('Upload a new version'))
+                $('<h4>').text(gt('Upload new version'))
             )
             .append(
                 $input,

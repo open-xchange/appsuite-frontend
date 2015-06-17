@@ -119,16 +119,16 @@
     display: none;
     overflow-y: auto;
     overflow-x: hidden;
-    &.opened {
+
+    &.open {
         display: block;
     }
 
     .viewer-uploadnewversion > .form-group {
-        text-align: center;
         margin-top: 5px;
-
-        > span {
-            width: 75%;
+        & > .btn-default {
+            background-color: transparent;
+            width: 100%;
         }
     }
 }
@@ -365,8 +365,8 @@
         }
     }
 
-    // show active sidebar button in toolbar when sidebar is opened
-    .viewer-sidebar.opened ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
+    // show active sidebar button in toolbar when sidebar is open
+    .viewer-sidebar.open ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
         color: @viewer-toolbar-color;
         background-color: @viewer-toolbar-focus-bgcolor;
     }
@@ -558,7 +558,7 @@
         border-left: 1px solid @viewer-sidebar-border-color;
         outline: none;
         z-index: 2;     // hide captions when sidebar is 100% width
-        &.opened {
+        &.open {
             display: block;
         }
         &.smartphone {

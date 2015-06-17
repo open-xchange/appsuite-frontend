@@ -152,7 +152,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
                 },
                 'download': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
                     label: gt('Download'),
                     section: 'export',
@@ -182,7 +182,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'uploadnewversion': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Upload a new version'),
+                    label: gt('Upload new version'),
                     section: 'import',
                     ref: 'io.ox/files/actions/upload-new-version'
                 },
@@ -483,11 +483,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             // workaround for correct TAB traversal order:
             // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
             _.defer(function () {
-                if (self.disposed) {
-                    return;
-                }
-                self.$el.find('.dropdown').after(
-                    self.$el.find('.viewer-toolbar-close').parent()
+                if (self.disposed) return;
+                self.$('.dropdown').after(
+                    self.$('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
                 );
             });
             return this;
