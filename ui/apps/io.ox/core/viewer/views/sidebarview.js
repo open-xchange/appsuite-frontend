@@ -64,70 +64,76 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.initTabNavigation();
         },
 
+        /**
+         * Create and draw sidebar tabs.
+         */
         initTabNavigation: function () {
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="tablink" data-show="detail">').text(gt('Detail')),
+                detailTabLink = $('<a class="tablink" data-tab-id="detail">').text(gt('Detail')),
                 detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
-                detailPane = $('<div class="viewer-sidebar-pane detail-pane">'),
-                thumbnailTabLink = $('<a class="tablink selected"  data-show="thumbnail">').text(gt('Thumbnail')),
+                detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">'),
+                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail">').text(gt('Thumbnail')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
-                thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane">');
+                thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
             tabsList.append(thumbnailTab, detailTab);
             this.$el.append(tabsList);
             tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
             this.$el.append(thumbnailPane, detailPane);
         },
 
+        /**
+         * Sidebar scroll handler.
+         * @param {jQuery.Event} event
+         */
         onScrollHandler: function (event) {
             this.viewerEvents.trigger('viewer:sidebar:scroll', event);
         },
 
+        /**
+         * Sidebar tab click handler.
+         * @param {jQuery.Event} event
+         */
         onTabClicked: function (event) {
-            var target = $(event.target),
-                action = target.attr('data-show'),
-                actionHandler = this.activateDetailView,
-                paneClass = '.detail-pane';
-            event.preventDefault();
-            this.$('.tablink').removeClass('selected');
-            this.$('.viewer-sidebar-pane').hide();
-            target.addClass('selected');
-            switch (action) {
+            var clickedTabId = $(event.target).attr('data-tab-id');
+            this.activateTab(clickedTabId);
+        },
+
+        /**
+         * Activates a sidebar tab and render its contents.
+         *
+         * @param {String} tabId
+         * tab id string to be activated. Supported: 'thumbnail' and 'detail'.
+         */
+        activateTab: function (tabId) {
+            var tabs = this.$('.tablink'),
+                panes = this.$('.viewer-sidebar-pane'),
+                activatedTab = tabs.filter('[data-tab-id="' + tabId + '"]'),
+                activatedPane = panes.filter('[data-tab-id="' + tabId + '"]');
+            tabs.removeClass('selected');
+            panes.hide();
+            activatedTab.addClass('selected');
+            activatedPane.show();
+            // render the tab contents
+            switch (tabId) {
                 case 'detail':
-                    actionHandler = this.activateDetailView;
-                    paneClass = '.detail-pane';
+                    this.renderSections();
                     break;
                 case 'thumbnail':
-                    actionHandler = this.activateThumbnailView;
-                    paneClass = '.thumbnail-pane';
+                    if (this.$('.document-thumbnail').length === 0) {
+                        var thumbnailView = new ThumbnailView({
+                            el: this.$('.thumbnail-pane'),
+                            model: this.model,
+                            viewerEvents: this.viewerEvents
+                        });
+                        thumbnailView.render();
+                    }
                     break;
                 default: break;
             }
-            this.$(paneClass).show();
-            actionHandler.call(this);
-        },
-
-        activateDetailView: function () {
-            this.$('.viewer-sidebar-pane').hide();
-            this.$('.detail-pane').show();
-            this.renderSections();
-            if (this.standalone) {
-                ViewerSettings.setSidebarActiveTab('detail');
-            }
-        },
-
-        activateThumbnailView: function () {
-            // create thumbnails view
-            if (this.$('.document-thumbnail').length === 0) {
-                var thumbnailView = new ThumbnailView({
-                    el: this.$('.thumbnail-pane'),
-                    model: this.model,
-                    viewerEvents: this.viewerEvents
-                });
-                thumbnailView.render();
-            }
-            if (this.standalone) {
-                ViewerSettings.setSidebarActiveTab('thumbnail');
+            // save last activated tab in office standalone mode
+            if (this.standalone && (this.model.isOffice() || this.model.isPDF())) {
+                ViewerSettings.setSidebarActiveTab(tabId);
             }
         },
 
@@ -215,9 +221,10 @@ define('io.ox/core/viewer/views/sidebarview', [
             // show tab navigation in office standalone mode
             if (this.standalone && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
                 this.$('.viewer-sidebar-tabs').show();
-                this.activateThumbnailView();
+                var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
+                this.activateTab(lastActivatedThumbnail);
             } else {
-                this.activateDetailView();
+                this.activateTab('detail');
             }
             return this;
         },
