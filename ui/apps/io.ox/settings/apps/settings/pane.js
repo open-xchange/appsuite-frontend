@@ -80,7 +80,7 @@ define('io.ox/settings/apps/settings/pane', [
                         $('<span>').text(gt('Permissions:')),
                         _(model.get('scopes')).values().join(' ')
                     ),
-                    $('<div class="date pull-left">').append(
+                    $('<div class="date">').append(
                         $('<span>').text(gt('Approved:')),
                         moment(model.get('date'), 'x').format('l')
                     )
