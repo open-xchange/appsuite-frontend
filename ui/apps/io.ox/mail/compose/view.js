@@ -1155,8 +1155,10 @@ define('io.ox/mail/compose/view', [
             });
 
             this.$el.append(
-                this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
-                this.contentEditable,
+                $('<div class="mail-compose-contenteditable-fields">').append(
+                    this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
+                    this.contentEditable
+                ),
                 this.textarea
             );
 
