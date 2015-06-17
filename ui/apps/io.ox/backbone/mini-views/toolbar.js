@@ -34,11 +34,11 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         render: function () {
             this.$el.attr({
                 role: 'navigation',
-                title: gt('Inline menu %1$s', this.options.title || '')
+                'aria-label': gt('Inline menu %1$s', this.options.title || '')
             }).append(
                 this.$list = $('<ul>').attr({
                     role: 'toolbar',
-                    title: gt('Actions')
+                    'aria-label': gt('Actions')
                 }).addClass('classic-toolbar')
             );
             return this;
