@@ -100,10 +100,15 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
                     if (isFolder(item)) {
 
+                        // use fresh data from multiple() request
+                        if (item.own_rights === undefined) item = hash[item.id];
+
                         folders = true;
                         props['create:folder'] = props['create:folder'] && api.can('create:folder', item);
                         props['rename:folder'] = props['rename:folder'] && api.can('rename:folder', item);
                         props['delete:folder'] = props['delete:folder'] && api.can('delete:folder', item);
+                        // we unify delete; otherwise the action checks are too complicated
+                        props['delete'] = props['delete'] && api.can('delete:folder', item);
 
                     } else if ((folder = hash[getFolderId(item)])) {
                         // get properties
@@ -125,13 +130,13 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                 }
 
                 if (!folders) {
-                    'create:folder rename:folder delete:folder'.split(' ').forEach(function (id) {
+                    'create:folder rename:folder'.split(' ').forEach(function (id) {
                         props[id] = false;
                     });
                 }
 
                 if (!items) {
-                    'create read modify delete'.split(' ').forEach(function (id) {
+                    'create read modify'.split(' ').forEach(function (id) {
                         props[id] = false;
                     });
                 }

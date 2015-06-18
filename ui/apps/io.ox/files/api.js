@@ -632,6 +632,11 @@ define('io.ox/files/api', [
                     collection.expired = true;
                 });
             }
+        },
+        // sync with folder API
+        'before:remove before:move': function (data) {
+            var collection = pool.get('detail'), cid = _.cid(data);
+            collection.remove(collection.get(cid));
         }
     });
 
@@ -675,7 +680,10 @@ define('io.ox/files/api', [
     function move(list, targetFolderId) {
         http.pause();
         _(list).map(function (item) {
-            return api.update(item, { folder_id: targetFolderId });
+            // move files and folders
+            return item.folder_id === 'folder' ?
+                folderAPI.move(item.id, targetFolderId) :
+                api.update(item, { folder_id: targetFolderId });
         });
         return http.resume();
     }
