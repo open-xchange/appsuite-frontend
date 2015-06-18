@@ -64,7 +64,7 @@ define('io.ox/presenter/main', [
 
                     app.setTitle(title);
 
-                    FilesAPI.one('delete:' + _.ecid(data), function () {
+                    FilesAPI.once('delete:' + _.ecid(data), function () {
                         app.quit();
                     });
                 });
