@@ -49,8 +49,8 @@
     @viewer-sidebar-border-color: #000000;
     @viewer-sidebar-active-bgcolor: #333333;
     @viewer-sidebar-label-text-color: #999999;
-    @viewer-sidebar-uploadnewversion-bgcolor: #444444;
-    @viewer-sidebar-uploadnewversion-bordercolor: #555555;
+    @viewer-sidebar-uploadnewversion-bgcolor: #333;
+    @viewer-sidebar-uploadnewversion-bordercolor: #444;
     @viewer-sidebar-uploadnewversion-hovercolor: #777777;
     @viewer-sidebar-versions-text-color: #CCCCCC;
     @viewer-sidebar-versions-comment-color: lightgrey;
@@ -145,10 +145,10 @@
         padding: 12px 0 5px 0;
 
         .panel-toggle-btn {
+            color: inherit;
             position: absolute;
-            top: 0;
+            top: 10px;
             right: 0;
-            width: 40px;
         }
 
         h3 {
@@ -581,7 +581,7 @@
             }
         }
 
-        .viewer-uploadnewversion > .form-group > span {
+        .viewer-uploadnewversion > .form-group > .btn-default {
             color: @viewer-text-color;
             background-color: @viewer-sidebar-uploadnewversion-bgcolor;
             border-color: @viewer-sidebar-uploadnewversion-bordercolor;
@@ -667,8 +667,12 @@
 .io-ox-viewer {
 
     &.viewer-dark-theme {
+
         .viewer-dark-colors();
         .viewer-styles();
+
+        a:link, a:visited { color: lighten(@link-color, 20%); }
+        a:hover, a:focus { color: @link-color; }
     }
 
     &.viewer-light-theme {
