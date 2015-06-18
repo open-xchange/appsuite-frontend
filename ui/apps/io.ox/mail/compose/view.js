@@ -157,8 +157,8 @@ define('io.ox/mail/compose/view', [
             if (_.device('smartphone')) return;
             this.data('view')
                 .header(gt('Editor'))
-                .option('editorMode', 'text', gt('Plain Text'))
-                .option('editorMode', 'html', gt('HTML'));
+                .option('editorMode', 'text', gt('Plain Text'), gt('Editor'))
+                .option('editorMode', 'html', gt('HTML'), gt('Editor'));
         }
     });
 
@@ -168,9 +168,9 @@ define('io.ox/mail/compose/view', [
         draw: function () {
             this.data('view')
                 .header(gt('Priority'))
-                .option('priority', 0, gt('High'))
-                .option('priority', 3, gt('Normal'))
-                .option('priority', 5, gt('Low'));
+                .option('priority', 0, gt('High'), gt('Priority'))
+                .option('priority', 3, gt('Normal'), gt('Priority'))
+                .option('priority', 5, gt('Low'), gt('Priority'));
         }
     });
 
@@ -180,8 +180,8 @@ define('io.ox/mail/compose/view', [
         draw: function () {
             this.data('view')
                 .header(gt('Options'))
-                .option('vcard', 1, gt('Attach Vcard'))
-                .option('disp_notification_to', true, gt('Request read receipt'));
+                .option('vcard', 1, gt('Attach Vcard'), gt('Options'))
+                .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
         }
     });
 
@@ -437,6 +437,10 @@ define('io.ox/mail/compose/view', [
 
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
+            // A11y: focus mailbody on enter in subject field
+            if (e.which && e.which === 13) {
+                this.editor.focus();
+            }
             this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
         },
 

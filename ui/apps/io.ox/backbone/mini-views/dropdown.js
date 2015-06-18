@@ -74,7 +74,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return this;
         },
 
-        option: function (name, value, text) {
+        option: function (name, value, text, header) {
             var link;
             this.append(
                 link = $('<a href="#">')
@@ -84,7 +84,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     'data-name': name,
                     'draggable': false,
                     'data-value': this.stringify(value),
-                    'data-toggle': _.isBoolean(value)
+                    'data-toggle': _.isBoolean(value),
+                    'aria-label': [header, text].join(' ')
                 })
                 // store original value
                 .data('value', value)
