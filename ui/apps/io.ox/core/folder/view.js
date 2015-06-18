@@ -235,7 +235,11 @@ define('io.ox/core/folder/view', [
                 if ($(e.target).is('.folder-arrow, .fa')) return;
                 // edit mode?
                 if (app.props.get('mobileFolderSelectMode') === true) {
-                    return tree.$dropdown.find('.dropdown-toggle').click();
+                    // ignore selection of non-labels in mobile edit mode
+                    if ($(e.target).parent().hasClass('folder-label')) {
+                        tree.$dropdown.find('.dropdown-toggle').click();
+                    }
+                    return;
                 }
                 // otherwise
                 // default 'listView'
