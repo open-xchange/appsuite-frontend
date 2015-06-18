@@ -16,15 +16,13 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/folder/api',
     'io.ox/core/util',
     'io.ox/core/capabilities',
+    'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FolderAPI, util, capabilities, gt) {
+], function (PanelBaseView, Ext, FolderAPI, util, capabilities, BreadcrumbView, gt) {
 
     'use strict';
 
-    var DRIVE_ROOT_FOLDER = '9',
-        POINT = 'io.ox/core/viewer/sidebar/fileinfo';
-
-    Ext.point(POINT).extend({
+    Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
         id: 'fileinfo',
         draw: function (baton) {
@@ -54,7 +52,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dd class="modified">').text(dateString),
                 // path
                 $('<dt>').text(gt('Saved in')),
-                $('<dd class="saved-in">').text('\xa0').busy()
+                $('<dd class="saved-in">')
             );
 
             if (!capabilities.has('alone')) {
@@ -71,18 +69,17 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             panelBody = this.find('.sidebar-panel-body').empty().append(dl);
 
-            FolderAPI.path(model.get('folder_id')).then(
-                function success(list) {
-                    var path = _.chain(list)
-                        .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
-                        .map(function (folder) { return gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30)); })
-                        .value().join(' / ');
+            var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
 
-                    panelBody.find('dl>dd.saved-in').text(path).idle();
-                },
-                function fail() {
-                    panelBody.find('dl>dd.saved-in').text('-').idle();
-                }
+            breadcrumb.handler = function (id) {
+                // launch files and set/change folder
+                ox.launch('io.ox/files/main', { folder: id }).done(function () {
+                    this.folder.set(id);
+                });
+            };
+
+            panelBody.find('dl > dd.saved-in').append(
+                breadcrumb.render().$el
             );
         }
     });

@@ -131,6 +131,14 @@
             width: 100%;
         }
     }
+
+    .breadcrumb-view {
+        margin: 0;
+    }
+
+    .breadcrumb-tail {
+        font-weight: normal;
+    }
 }
 
 /* OX Viewer Sidebar section panel generic styles */
@@ -673,6 +681,10 @@
 
         a:link, a:visited { color: lighten(@link-color, 20%); }
         a:hover, a:focus { color: @link-color; }
+
+        .breadcrumb-tail {
+            color: white;
+        }
     }
 
     &.viewer-light-theme {
