@@ -109,6 +109,9 @@ define('io.ox/files/listview', [
             id: 'col3',
             index: 300,
             draw: function (baton) {
+                if (_.device('smartphone')) {
+                    return;
+                }
                 var column = $('<div class="list-item-column column-3 gray">');
                 extensions.smartdate.call(column, baton);
                 this.append(column);
@@ -118,6 +121,9 @@ define('io.ox/files/listview', [
             id: 'col4',
             index: 500,
             draw: function (baton) {
+                if (_.device('smartphone')) {
+                    return;
+                }
                 var column = $('<div class="list-item-column column-4 gray">');
                 extensions.size.call(column, baton);
                 this.append(column);
