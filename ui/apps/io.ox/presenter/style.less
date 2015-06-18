@@ -9,9 +9,23 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
  .io-ox-presenter {
+     background-color: #F8F8F8;
+
+     .swiper-container, .swiper-wrapper, .swiper-slide {
+         height: 100%;
+     }
+
+     .swiper-slide {
+         display: flex;
+         align-items: center;
+         .pdf-page {
+             box-shadow: 0 0 8px rgba(0,0,0,0.2);
+         }
+     }
 
     .fullwidth {
         width: 100%;
@@ -26,7 +40,7 @@
         outline: none;
 
         .swiper-slide {
-            overflow: scroll;
+            overflow: auto;
         }
 
         .swiper-button-control {
@@ -72,8 +86,8 @@
             }
         }
     }
-    
-    
+
+
     .presenter-sidebar {
         display: none;
         position: absolute;
@@ -90,7 +104,6 @@
             display: block;
         }
     }
-    
+
 
  }
- 

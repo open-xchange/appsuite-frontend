@@ -59,16 +59,16 @@ define('io.ox/presenter/views/mainview', [
          * @returns {MainView}
          */
         render: function () {
-            var state = true;   // TODO: set according to user role (presenter, listener)
+            //var state = true;   // TODO: set according to user role (presenter, listener)
 
             // append toolbar view
             this.$el.append(
-                this.sidebarView.render().el,
+                //this.sidebarView.render().el,
                 this.presentationView.render().el
             );
 
             // set initial sidebar state
-            this.sidebarView.toggleSidebar(state);
+            //this.sidebarView.toggleSidebar(state);
 
             return this;
         },
