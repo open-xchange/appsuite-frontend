@@ -5,6 +5,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
+  "license": "CC-BY-NC-SA-2.5",
   "optionalDependencies": {
     "assemble": "^0.4.42",
     "grunt": "^0.4.5",
