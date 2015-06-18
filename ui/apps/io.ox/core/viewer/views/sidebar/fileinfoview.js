@@ -96,7 +96,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         className: 'viewer-fileinfo',
 
         initialize: function () {
-            this.setPanelHeader(gt('General info'));
+            this.setPanelHeader(gt('File details'));
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));

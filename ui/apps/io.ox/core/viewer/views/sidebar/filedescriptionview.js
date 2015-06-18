@@ -26,16 +26,22 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         index: 10,
         id: 'description-text',
         draw: function (baton) {
+
             var panelBody = this.find('.sidebar-panel-body'),
-                description = baton.data,
-                labelString;
+                description = baton.data;
 
             panelBody.empty();
+
             if (_.isString(description)) {
-                labelString = (description.length > 0) ? description : gt('Add a description');
-                panelBody.append(
-                    $('<div>', { tabindex: 1, title: gt('Description text'), 'aria-label': gt('Description text') }).addClass('description' + ((description.length === 0) ? ' description-empty' : '')).text(labelString)
-                );
+                if (description.length > 0) {
+                    panelBody.append(
+                        $('<div class="description">', { title: gt('Description text') }).text(description)
+                    );
+                } else {
+                    panelBody.append(
+                        $('<a href="#" class="description" role="button" tabindex="1">').text(gt('Add a description'))
+                    );
+                }
             }
         }
     });
@@ -54,11 +60,15 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             'keyup .description': 'onKeyUp'
         },
 
-        onEdit: function (event) {
-            if (_.device('smartphone || tablet') || event.type === 'dblclick') {
-                event.preventDefault();
-                this.editDescription();
-            }
+        onEdit: function (e) {
+
+            var touchDevice = _.device('smartphone || tablet'),
+                empty = !this.model.get('description'),
+                doubleClick = e.type === 'dblclick';
+
+            e.preventDefault();
+
+            if (touchDevice || empty || doubleClick) this.editDescription();
         },
 
         onKeyUp: function (event) {
@@ -104,9 +114,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            if (this.model) {
-                this.model = null;
-            }
+            if (this.model) this.model = null;
         }
     });
 
