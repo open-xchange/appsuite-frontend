@@ -714,7 +714,11 @@ define('io.ox/core/folder/api', [
         // prepare move
         var model = pool.getModel(id),
             folderId = model.get('folder_id');
+
         removeFromAllCollections(model);
+
+        // trigger event
+        api.trigger('before:move', model.toJSON(), target);
 
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
@@ -809,7 +813,7 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id), data = model.toJSON();
 
         // trigger event
-        api.trigger('remove:prepare', data);
+        api.trigger('before:remove', data);
 
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);

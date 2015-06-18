@@ -219,7 +219,8 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return (e.collection.has('some', 'delete') || e.collection.has('some', 'delete:folder', 'folders')) && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            return e.collection.has('some', 'delete') && util.hasStatus('!lockedByOthers', e);
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/files/actions/delete']).done(function (action) {
@@ -334,10 +335,13 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/' + type, {
             id: type,
             requires:  function (e) {
-                return e.collection.has('some', 'items') &&
-                        (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                        (type === 'move' ? e.collection.has('delete') &&
-                        util.hasStatus('!lockedByOthers', e) : e.collection.has('read'));
+                if (!e.collection.has('some')) return false;
+                if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+                if (util.hasStatus('lockedByOthers', e)) return false;
+                // copy
+                if (type === 'copy') return e.collection.has('some', 'items', 'read');
+                // move
+                return e.collection.has('delete');
             },
             multiple: function (list, baton) {
                 ox.load(['io.ox/files/actions/move-copy']).done(function (action) {
