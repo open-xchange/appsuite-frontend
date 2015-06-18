@@ -51,7 +51,7 @@
 
     a.folderselect {
         padding-top: 5px;
-        float: left;
+        display: inline-block;
     }
 
     legend {
@@ -69,7 +69,7 @@
     li.filter-settings-view {
         position: relative;
         background-color: #f5f5f5;
-        padding: 8px 75px 8px 13px;
+        padding: 8px 70px 8px 13px;
         margin: 0 0 7px 0;
         text-align: left;
 
@@ -107,6 +107,22 @@
 
         }
 
+        .dateinput {
+
+            .input-group {
+                display: block;
+            }
+
+            .datepicker-day-field {
+                width: 100%;
+            }
+
+        }
+
+        .action.value, .control-label {
+            text-align: right;
+        }
+
     }
 
     li.filter-settings-view.warning {
@@ -121,6 +137,8 @@
         cursor: pointer;
         border-radius: @border-radius-base;
         display: inline-block;
+        position: relative;
+        top: 4px;
     }
 
     .flag-dropdown ul {
