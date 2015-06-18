@@ -36,8 +36,10 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.collection = null;
         this.loading = false;
 
-        function apply(loader, type, params, data) {
-            var collection = loader.collection;
+        function apply(collection, type, params, loader, data) {
+
+            // don't use loader.collection to avoid cross-collection issues (see bug 38286)
+
             if (type === 'paginate' && collection.length > 0) {
                 // check if first fetched item matches last existing item
                 // use case: reload on new messages; race-conditions with external clients
@@ -57,13 +59,15 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 var method = methods[type];
                 collection[method](data, { parse: true });
             });
-            var isComplete = (type === 'load' && data.length < loader.LIMIT) || (type === 'paginate' && data.length <= 1);
-            if (isComplete) collection.trigger('complete');
+
+            // track completeness
+            collection.complete = (type === 'load' && data.length < loader.LIMIT) || (type === 'paginate' && data.length <= 1);
+            if (collection.complete) collection.trigger('complete');
             collection.trigger(type);
         }
 
-        function fail(loader, type, e) {
-            loader.collection.trigger(type + ':fail', e);
+        function fail(collection, type, e) {
+            collection.trigger(type + ':fail', e);
         }
 
         function process(params, type) {
@@ -72,8 +76,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // trigger proper event
             this.collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = _.lfo(apply, this, type, params),
-                cb_fail = _.lfo(fail, this, type),
+            var cb_apply = _.lfo(apply, this.collection, type, params, this),
+                cb_fail = _.lfo(fail, this.collection, type),
                 self = this;
             // fetch data
             return this.fetch(params)
@@ -90,16 +94,16 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         this.load = function (params) {
 
-            var collection, limit = this.LIMIT;
+            var collection;
 
             params = this.getQueryParams(params || {});
-            params.limit = '0,' + limit;
+            params.limit = '0,' + this.LIMIT;
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
             if (collection.length > 0 && !collection.expired) {
                 _.defer(function () {
-                    collection.trigger(collection.length < limit ? 'reset load cache complete' : 'reset load cache');
+                    collection.trigger(collection.complete ? 'reset load cache complete' : 'reset load cache');
                 });
                 return collection;
             }

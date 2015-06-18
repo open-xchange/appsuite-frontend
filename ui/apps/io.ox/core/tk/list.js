@@ -64,6 +64,9 @@ define('io.ox/core/tk/list', [
         },
 
         onItemBlur: function () {
+            if (this.mousedown) {
+                return;
+            }
             this.$el.attr('tabindex', 1);
             this.$el.removeClass('has-focus');
         },
@@ -378,14 +381,14 @@ define('io.ox/core/tk/list', [
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
             // preserve: don't remove selected items (e.g. for unseen messages)
-            // noSwipe: prevents swipe event handling (swipe to delete etc)
+            // swipe: enables swipe handling (swipe to delete etc)
             this.options = _.extend({
                 pagination: true,
                 draggable: false,
                 preserve: false,
                 selection: true,
                 scrollable: true,
-                noSwipe: false
+                swipe: false
             }, options);
 
             var events = {};
@@ -454,10 +457,14 @@ define('io.ox/core/tk/list', [
             // helper to detect scrolling in action, only used by mobiles
             if (_.device('smartphone')) {
                 var self = this,
-                    timer;
+                    timer,
+                    scrollPos = 0;
                 this.selection.isScrolling = false;
                 this.$el.scroll(function () {
-                    self.selection.isScrolling = true;
+                    if (self.$el.scrollTop() !== scrollPos) {
+                        self.selection.isScrolling = true;
+                        scrollPos = self.$el.scrollTop();
+                    }
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(function () {
                         self.selection.isScrolling = false;
@@ -633,6 +640,8 @@ define('io.ox/core/tk/list', [
 
         addBusyIndicator: function () {
             var indicator = this.getBusyIndicator();
+            // ensure the indicator is the last element in the list
+            if (indicator.index() < this.$el.children().length) indicator.appendTo(this.$el);
             return indicator.length ? indicator : this.busyIndicator.clone().appendTo(this.$el);
         },
 

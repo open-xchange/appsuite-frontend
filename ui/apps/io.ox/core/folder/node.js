@@ -30,11 +30,11 @@ define('io.ox/core/folder/node', [
         className: 'folder selectable',
 
         // indentation in px per level
-        indentation: 30,
+        indentation: _.device('smartphone') ? 10 : 30,
 
         events: {
             'click .folder-options':  'onOptions',
-            'click .folder-arrow':    'onToggle',
+            'click .folder-arrow':    'onArrowClick',
             'dblclick .folder-label': 'onToggle',
             'mousedown .folder-arrow':'onArrowMousedown',
             'keydown':                'onKeydown'
@@ -155,6 +155,8 @@ define('io.ox/core/folder/node', [
         },
 
         toggle: function (state) {
+            // for whatever reason, this.options might be nulled (see bug 37483)
+            if (this.options === null) return;
             this.options.open = state;
             this.onChangeSubFolders();
             this.options.tree.trigger(state ? 'open' : 'close', this.folder);
@@ -420,12 +422,8 @@ define('io.ox/core/folder/node', [
         getCounter: function () {
             var subtotal = 0;
             //show number of unread subfolder items only when folder is closed
-            if (!this.options.open && this.options.subfolders) {
-                if (this.isVirtual) {
-                    subtotal =  api.calculateSubtotal(this.model);
-                } else if (this.model.get('subtotal')) {
-                    subtotal = this.model.get('subtotal');
-                }
+            if (!this.options.open && this.options.subfolders && this.model.get('subtotal')) {
+                subtotal = this.model.get('subtotal');
             }
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },

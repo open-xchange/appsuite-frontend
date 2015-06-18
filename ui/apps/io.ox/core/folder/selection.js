@@ -83,6 +83,9 @@ define('io.ox/core/folder/selection', [], function () {
             // avoid double selections
             if (e.isDefaultPrevented()) return; else e.preventDefault();
 
+            // only select in mobile edit mode when clicking on the label
+            if (this.view.app && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).parent().hasClass('folder-label')) return;
+
             if (e.type === 'contextmenu') e.stopPropagation();
 
             var items = this.getItems(),

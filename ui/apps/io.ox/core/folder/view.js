@@ -229,16 +229,17 @@ define('io.ox/core/folder/view', [
         var id = app.folder.get();
 
         if (_.device('smartphone')) {
-            // respond to tab event for better responsiveness
-            // does not work reliable on iOS, use click instead
-            // Safari removes the 300ms click delay, so it's fine to use
-            // click on iOS
-            tree.$el.on(_.device('ios') ? 'click' : 'tap', '.folder:not(.virtual)', _.debounce(function (e) {
+            // due to needed support for older androids we use click here
+            tree.$el.on('click', '.folder:not(.virtual)', _.debounce(function (e) {
                 // use default behavior for arrow and virtual folders
                 if ($(e.target).is('.folder-arrow, .fa')) return;
                 // edit mode?
                 if (app.props.get('mobileFolderSelectMode') === true) {
-                    return tree.$dropdown.find('.dropdown-toggle').click();
+                    // ignore selection of non-labels in mobile edit mode
+                    if ($(e.target).parent().hasClass('folder-label')) {
+                        tree.$dropdown.find('.dropdown-toggle').click();
+                    }
+                    return;
                 }
                 // otherwise
                 // default 'listView'

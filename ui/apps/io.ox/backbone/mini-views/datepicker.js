@@ -134,7 +134,8 @@ define('io.ox/backbone/mini-views/datepicker', [
             if (this.mobileMode) {
                 require(['io.ox/core/tk/mobiscroll'], function (mobileSettings) {
 
-                    self.mobileSettings = mobileSettings;
+                    //don't overwrite default settings (see Bug 38847)
+                    self.mobileSettings = _.copy(mobileSettings);
 
                     if (self.options.clearButton) {
                         self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
@@ -144,7 +145,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                     }
 
                     // initialize mobiscroll plugin
-                    self.nodes.dayField.mobiscroll(mobileSettings);
+                    self.nodes.dayField.mobiscroll(self.mobileSettings);
                     self.nodes.dayField.on('change', _.bind(self.updateModel, self));
 
                     def.resolve();

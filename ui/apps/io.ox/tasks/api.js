@@ -338,12 +338,26 @@ define('io.ox/tasks/api', [
             useFolder = task.folder_id,
             move = false;
 
+        //delete temp attributes
         delete task.tempAttachmentIndicator;
+        delete task.timezone;
 
         //repair broken folder attribute
         if (task.folder) {
             useFolder = task.folder_id = task.folder;
             delete task.folder;
+        }
+
+        // recurrence attribute key present but undefined means it must be removed so set to null
+        // this is different from calendar implementation, where recurrence attributes that are not in the request are set to null automatically by the backend
+        if ( _(task).has('days') && task.days === undefined) {
+            task.days = null;
+        }
+        if ( _(task).has('day_in_month ') && task.day_in_month  === undefined) {
+            task.day_in_month = null;
+        }
+        if ( _(task).has('month') && task.month === undefined) {
+            task.month = null;
         }
 
         //folder is only used by move operation, because here we need 2 folder attributes

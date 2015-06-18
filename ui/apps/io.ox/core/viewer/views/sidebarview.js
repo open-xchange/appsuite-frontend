@@ -45,7 +45,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         className: 'viewer-sidebar',
 
         // the visible state of the side bar, hidden per default.
-        opened: false,
+        open: false,
 
         initialize: function (options) {
             _.extend(this, {
@@ -69,9 +69,9 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         toggleSidebar: function (state) {
             // determine current state if undefined
-            this.opened = _.isUndefined(state) ? !this.opened : Boolean(state);
-            this.$el.toggleClass('opened', this.opened);
-            this.viewerEvents.trigger('viewer:sidebar:change:state', this.opened);
+            this.open = _.isUndefined(state) ? !this.open : Boolean(state);
+            this.$el.toggleClass('open', this.open);
+            this.viewerEvents.trigger('viewer:sidebar:change:state', this.open);
             this.renderSections();
         },
 
@@ -99,9 +99,8 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.zone = null;
             }
             // render sections only if side bar is open
-            if (!this.model || !this.opened) {
-                return;
-            }
+            if (!this.model || !this.open) return;
+
             // load file details
             this.loadFileDetails();
             // add dropzone for drive files
@@ -117,8 +116,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.$el.append(
                 new FileInfoView({ model: this.model }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
-                new UploadNewVersionView({ model: this.model }).render().el,
-                new FileVersionsView({ model: this.model }).render().el
+                new FileVersionsView({ model: this.model }).render().el,
+                new UploadNewVersionView({ model: this.model }).render().el
             );
         },
 

@@ -73,44 +73,22 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
     }
 
     function screenreaderMessage(message) {
+        // this is for cross browser yells
+        // please don't touch and see:
+        // http://www.paciellogroup.com/blog/2012/06/html5-accessibility-chops-aria-rolealert-browser-support/
+        var textCon = $('#sr-alert-text').removeAttr('role').attr('role', 'alert'),
+            textNode = $.txt(message);
 
-        var alert = $('.io-ox-alert');
+        // cleanup text nodes
+        textCon
+            .contents()
+            .filter(function () {
+                return this.nodeType == 3; //Node.TEXT_NODE
+            }).remove();
 
-        function show (text) {
-            var duration = durations.screenreader || 5000,
-                node = $.find('.io-ox-alert-screenreader'),
-                alertmessage;
-            if (!node.length) {
-                node = $('<div tabindex="-1" class="io-ox-alert-screenreader sr-only">');
-                $('#io-ox-core').append(node);
-            }
+        $('#io-ox-alert-screenreader').css('clip', 'auto');
 
-            // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
-            _.defer(function () {
-                $(node).append(
-                    alertmessage = $('<div role="alert" aria-live="polite">').append(
-                        $('<span>').text(text)
-                    )
-                );
-            });
-            setTimeout(function () {
-                //remove message
-                alertmessage.remove();
-                //if the container is empty remove it too
-                if (!$(node).children.length) {
-                    $(node).remove();
-                }
-            }, duration);
-        }
-
-        //if an alert message exists we wait until it disappears
-        if (alert.length) {
-            alert.one('notification:removed', function () {
-                show(message);
-            });
-        } else {
-            show(message);
-        }
+        textCon.append(textNode).hide().css('display', 'inline');
     }
 
     function yell(type, message, focus) {

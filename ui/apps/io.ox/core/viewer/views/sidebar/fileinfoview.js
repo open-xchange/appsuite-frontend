@@ -99,7 +99,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
          */
         disposeView: function () {
             if (this.model) {
-                this.model.off().stopListening();
                 this.model = null;
             }
         }

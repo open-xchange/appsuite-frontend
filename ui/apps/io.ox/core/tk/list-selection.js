@@ -12,7 +12,8 @@
  */
 
 define('io.ox/core/tk/list-selection', [
-    'settings!io.ox/core'
+    'settings!io.ox/core',
+    'static/3rd.party/velocity/velocity.min.js'
 ], function (settings) {
 
     'use strict';
@@ -31,23 +32,24 @@ define('io.ox/core/tk/list-selection', [
         UNFOLD_TIME =       100,
         UNFOLD_TIME_FULL =   50,
         RESET_CELL_TIME =   100,
-        CELL_HEIGHT = '-68px',
+        CELL_HEIGHT = '-68px', // todo: calculate this
         cell;
-
-    if (_.device('smartphone')) {
-        require(['static/3rd.party/velocity/velocity.min.js']);
-    }
 
     function Selection(view) {
 
         this.view = view;
         this.behavior = behavior;
         this.view.$el
-            // normal click/keybard navigation
+            .on('mousedown', $.proxy(this.onMousedown, this))
+            .on('mouseup', $.proxy(this.onMouseup, this))
+            // normal click/keyboard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
             .on(isTouch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if focus is outside
             .on('focus', $.proxy(function () {
+                if (this.view.mousedown) {
+                    return;
+                }
                 var items = this.getItems(),
                     first = items.filter('[tabindex="1"]'),
                     index = items.index(first),
@@ -68,7 +70,7 @@ define('io.ox/core/tk/list-selection', [
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (!this.view.options.noSwipe) {
+        if (this.view.options.swipe) {
             if (isTouch && _.device('android || ios') && _.device('smartphone')) {
                 this.view.$el
                     .on('touchstart', SELECTABLE, this, this.onTouchStart)
@@ -461,6 +463,13 @@ define('io.ox/core/tk/list-selection', [
             }
         },
 
+        onMousedown: function () {
+            this.view.mousedown = true;
+        },
+        onMouseup: function () {
+            this.view.mousedown = false;
+        },
+
         onClick: function (e) {
             if (e.type === 'tap') {
                 // prevent ghostclicks
@@ -490,7 +499,6 @@ define('io.ox/core/tk/list-selection', [
 
         onSwipeDelete: function (e) {
             e.preventDefault();
-
             var node = $(this.currentSelection).closest(SELECTABLE),
                 cid = node.attr('data-cid'),
                 cellsBelow = node.nextAll(),
@@ -516,7 +524,7 @@ define('io.ox/core/tk/list-selection', [
                         self.currentSelection.swipeCell.remove();
                         self.currentSelection.swipeCell = null;
                         $(self.view).removeClass('unfolded');
-                        self.currentSelection.unfolded = false;
+                        self.currentSelection.unfolded = self.unfold = false;
                     }
                 });
             } else {
@@ -526,7 +534,7 @@ define('io.ox/core/tk/list-selection', [
                 self.currentSelection.swipeCell.remove();
                 self.currentSelection.swipeCell = null;
                 $(self.view).removeClass('unfolded');
-                self.currentSelection.unfolded = false;
+                self.currentSelection.unfolded = self.unfold = false;
             }
         },
 
@@ -539,19 +547,22 @@ define('io.ox/core/tk/list-selection', [
             this.view.trigger('selection:more', [cid], $(this.currentSelection.btnMore));
             // wait for popup to open, rest cell afterwards
             _.delay(function () {
-                self.resetSwipeCell.call(self.currentSelection);
+                self.resetSwipeCell.call(self.currentSelection, self);
             }, 250);
         },
 
-        resetSwipeCell: function (a) {
+        isAnyCellUnfolded: function () {
+            return !!this.unfold;
+        },
+
+        resetSwipeCell: function (selection, a) {
             var self = this;
             try {
-                this.startX = 0;
-                this.startY = 0;
-                this.unfold = false;
-                this.target = null;
-                this.t0 = 0;
-                this.otherUnfolded = false;
+                selection.startX = 0;
+                selection.startY = 0;
+                selection.unfold = false;
+                selection.target = null;
+                selection.otherUnfolded = false;
                 $(self).velocity({
                     'translateX': [0, a]
                 }, {
@@ -586,19 +597,23 @@ define('io.ox/core/tk/list-selection', [
             // check if other nodes than the current one are unfolded
             // if so, close other nodes and stop event propagation
             if (!this.unfolded && this.otherUnfolded) {
-                e.data.resetSwipeCell.call(e.data.currentSelection, -LOCKDISTANCE);
+                e.data.resetSwipeCell.call(e.data.currentSelection, e.data, -LOCKDISTANCE);
             }
-
         },
 
         onTouchMove: function (e) {
-
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX;
+            // return early on multitouch
+            if (e.originalEvent.touches.length > 1) return;
+
             this.distanceX = (this.startX - currentX) * -1; // invert value
             this.scrolling = false;
 
-            if (currentX > this.startX && !this.unfolded ) return; // left to right is not allowed at the start
+            // try to swipe right at the start
+            if (currentX > this.startX && !this.unfolded && this.distanceX <= THRESHOLD_X) {
+                return; // left to right is not allowed at the start
+            }
 
             if (e.data.isScrolling) {
                 this.scrolling = true;
@@ -627,37 +642,23 @@ define('io.ox/core/tk/list-selection', [
                     this.target.before(this.swipeCell);
                 }
                 // translate the moved cell
-                if (this.distanceX < 0) {
+                if ((this.distanceX + THRESHOLD_X <= 0) || (this.unfolded && this.distanceX <= 0)) {
+
+                    var translation = this.unfolded ? this.distanceX : this.distanceX + THRESHOLD_X;
                     this.target.css({
-                        '-webkit-transform': 'translate3d(' + (this.distanceX + THRESHOLD_X) + 'px,0,0)',
-                        'transform': 'translate3d(' + (this.distanceX + THRESHOLD_X) + 'px,0,0)'
+                        '-webkit-transform': 'translate3d(' + translation + 'px,0,0)',
+                        'transform': 'translate3d(' + translation + 'px,0,0)'
                     });
                 }
                 // if delete threshold is reached, enlarge delete button over whole cell
                 if (Math.abs(this.distanceX) >= THRESHOLD_REMOVE && !this.expandDelete) {
                     this.expandDelete = true;
                     this.btnMore.hide();
-                    // disabled due to
-                    // performance issues
-                    /*this.btnDelete.velocity({
-                        width: ['100%', EASING]
-                    }, {
-                        duration: 100,
-                        mobileHA: true
-                    });*/
                     this.btnDelete.css('width', '100%');
 
                 } else if (this.expandDelete && Math.abs(this.distanceX) <= THRESHOLD_REMOVE) {
                     // remove style
                     this.expandDelete = false;
-                    // disabled due to
-                    // performance issues
-                    /*this.btnDelete.velocity({
-                        width: ['95px', EASING]
-                    }, {
-                        duration: 100,
-                        mobileHA: true
-                    })*/
                     this.btnDelete.css('width', '95px');
                     this.btnMore.show();
                 }
@@ -675,7 +676,7 @@ define('io.ox/core/tk/list-selection', [
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
-                e.data.resetSwipeCell.call(e.data.currentSelection, this.distanceX === 0 ? -LOCKDISTANCE : this.distanceX);
+                e.data.resetSwipeCell.call(e.data.currentSelection, e.data, this.distanceX === 0 ? -LOCKDISTANCE : this.distanceX);
                 return false; // don't do a select after this
             }
 
@@ -717,7 +718,8 @@ define('io.ox/core/tk/list-selection', [
                         this.removeAttr('style');
                         // reset velocitie's transfrom cache manually
                         _(this).each(function (listItem) {
-                            $(listItem).data('velocity').transformCache = {};
+                            var vel = $(listItem).data('velocity');
+                            if (vel) vel.transformCache = {};
                         });
                         theView.off('remove-mobile', resetStyle);
                     };
@@ -747,7 +749,7 @@ define('io.ox/core/tk/list-selection', [
                                     self.swipeCell.remove();
                                     self.swipeCell = null;
                                     $(self).removeClass('unfolded');
-                                    self.unfolded = false;
+                                    self.unfolded = self.unfold = false;
                                 }
                             });
                         } else {
@@ -759,12 +761,12 @@ define('io.ox/core/tk/list-selection', [
                             self.swipeCell.remove();
                             self.swipeCell = null;
                             $(self).removeClass('unfolded');
-                            self.unfolded = false;
+                            self.unfolded = self.unfold = false;
                         }
                     }
                 });
             } else if (this.distanceX) {
-                e.data.resetSwipeCell.call(this, Math.abs(this.distanceX));
+                e.data.resetSwipeCell.call(this, e.data, Math.abs(this.distanceX));
                 return false;
             }
         },

@@ -50,7 +50,7 @@ define('io.ox/files/detail/main', [
                         app.setTitle(model.get('filename') || model.get('title'));
                     });
 
-                    api.one('delete:' + _.ecid(data), function () {
+                    api.once('delete:' + _.ecid(data), function () {
                         app.quit();
                     });
                 });

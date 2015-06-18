@@ -118,20 +118,20 @@ define('io.ox/core/viewer/views/types/videoview',  [
          */
         unload: function () {
             // never unload slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                return this;
-            }
-            var video = this.$el.find('video');
-            if (video.length > 0) {
-                this.$el.find('.viewer-displayer-video').addClass('player-hidden');
-                video[0].pause();
-                // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
-                // https://code.google.com/p/chromium/issues/detail?id=234779
-                video.removeAttr('src');
-                video[0].load();
-            }
-
+            if (this.$el.hasClass('swiper-slide-duplicate')) return this;
+            this.disposeElement();
             return this;
+        },
+
+        // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
+        // https://code.google.com/p/chromium/issues/detail?id=234779
+        disposeElement: function () {
+            var element = this.$el.find('video');
+            if (element.length === 0) return;
+            this.$el.find('.viewer-displayer-video').addClass('player-hidden');
+            element[0].pause();
+            element.removeAttr('src');
+            element[0].load();
         },
 
         /**
@@ -140,6 +140,7 @@ define('io.ox/core/viewer/views/types/videoview',  [
         disposeView: function () {
             // remove event listeners from video element
             this.$el.find('video').off();
+            this.disposeElement();
         }
 
     });

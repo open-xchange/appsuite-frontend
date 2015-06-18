@@ -578,6 +578,10 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Wed Jun 10 2015 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2015-06-08 (2540)
+* Tue Jun 09 2015 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2015-06-08 (2539)
 * Tue May 19 2015 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2015-05-26 (2521)
 * Fri May 15 2015 Markus Wagner <markus.wagner@open-xchange.com>

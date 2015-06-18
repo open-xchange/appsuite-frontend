@@ -253,7 +253,7 @@ define('io.ox/files/main', [
                 'filter': 'none',
                 'layout': layout,
                 'folderEditMode': false,
-                'details': app.settings.get('showDetails', false)
+                'details': _.device('smartphone') ? false : app.settings.get('showDetails', true)
             });
             // initial setup
             var folder = app.folder.get();
@@ -361,7 +361,7 @@ define('io.ox/files/main', [
         'selection:change': function () {
             if (_.device('!touch')) {
                 app.listView.on('selection:change', function () {
-                    if (app.listView.selection.isEmpty() && sidebarView.opened) {
+                    if (app.listView.selection.isEmpty() && sidebarView.open) {
                         sidebarView.$el.empty();
                         app.getWindow().nodes.main.append(
                             sidebarView.$el.addClass('rightside').append(
@@ -370,7 +370,7 @@ define('io.ox/files/main', [
                                 )
                             )
                         );
-                    } else if (sidebarView.opened) {
+                    } else if (sidebarView.open) {
                         var fileModel = app.listView.collection.get(app.listView.selection.get()[0]);
                         sidebarView.render(fileModel);
                         sidebarView.renderSections();
@@ -403,9 +403,7 @@ define('io.ox/files/main', [
 
             $(window).on('resize', function () {
 
-                var list = app.listView, width, layout, gridWidth, column, mainWidth;
-
-                mainWidth = app.getWindow().nodes.main.outerWidth();
+                var list = app.listView, width, layout, gridWidth, column;
 
                 // skip recalcucation if invisible
                 if (!list.$el.is(':visible')) return;
@@ -421,11 +419,6 @@ define('io.ox/files/main', [
                 // update class name
                 list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
-
-                if (mainWidth > 0 && sidebarView.opened) {
-                    list.$el.closest('.leftside').css('width', mainWidth - 320 + 'px');
-                    sidebarView.$el.css('left', mainWidth - 320 + 'px');
-                }
             });
 
             $(window).trigger('resize');
@@ -437,20 +430,16 @@ define('io.ox/files/main', [
         'change:layout': function (app) {
 
             app.applyLayout = function () {
+
                 var layout = app.props.get('layout'),
-                    details = app.props.get('details', false),
-                    mainWidth = app.getWindow().nodes.main.outerWidth(),
-                    list = app.listView;
+                    details = app.props.get('details');
 
-                if (mainWidth > 0 && sidebarView.opened) {
-                    list.$el.closest('.leftside').css('width', mainWidth - 320 + 'px');
-                    sidebarView.$el.css('left', mainWidth - 320 + 'px');
-                }
-
-                if (details) {
-                    sidebarView.opened = true;
-                    sidebarView.$el.toggleClass('opened', sidebarView.opened);
-                    app.listControl.$el.parent().toggleClass('leftside border-right', sidebarView.opened);
+                if (details && _.device('!touch')) {
+                    sidebarView.open = true;
+                    sidebarView.$el
+                        .toggleClass('open', true)
+                        .parent().toggleClass('has-rightside', true);
+                    app.listControl.$el.parent().toggleClass('leftside border-right', sidebarView.open);
                     app.listView.trigger('selection:change');
                 }
 
@@ -506,19 +495,44 @@ define('io.ox/files/main', [
 
             var ev = _.device('touch') ? 'tap' : 'dblclick';
 
-            app.listView.$el.on(ev, '.file-type-folder', function (e) {
-                var obj = _.cid($(e.currentTarget).attr('data-cid'));
+            app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
+                var obj = _.cid($(e.currentTarget).parent().attr('data-cid'));
                 app.folder.set(obj.id);
             });
 
-            app.listView.$el.on(ev, '.list-item:not(.file-type-folder)', function (e) {
-                var cid = $(e.currentTarget).attr('data-cid'),
+            app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
+                var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app });
                 ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
                     var viewer = new Viewer();
                     viewer.launch( { selection: baton.data, files: baton.collection.models });
                 });
+            });
+        },
+
+        //open on pressing enter
+        'selection-enter': function (app) {
+            if (_.device('smartphone')) {
+                return;
+            }
+
+            // folders
+            app.listView.$el.on('keydown', '.file-type-folder', function (e) {
+                if (e.which === 13) {
+                    var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    app.folder.set(obj.id);
+                }
+            });
+
+            // files
+            app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
+                if (e.which === 13) {
+                    ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
+                        var viewer = new Viewer();
+                        viewer.launch({ selection: _.cid(app.listView.selection.get()[0]), files: app.listView.collection.models });
+                    });
+                }
             });
         },
 
@@ -544,7 +558,7 @@ define('io.ox/files/main', [
                         app.listView.reload();
                     }
                 }, 100);
-            api.on('copy', function (e, list, targetFolder) {
+            api.on('copy', function (list, targetFolder) {
                 var appfolder = app.folder.get();
                 if (appfolder === targetFolder) {
                     myFolder = true;
@@ -597,14 +611,23 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
-            app.props.on('change:details', function (model, value) {
-                sidebarView.opened = value;
-                sidebarView.$el.toggleClass('opened', sidebarView.opened);
-                app.listControl.$el.parent().toggleClass('leftside border-right', sidebarView.opened);
+            function toggle(state) {
+                sidebarView.open = state;
+                sidebarView.$el
+                    .toggleClass('open', state)
+                    .parent().toggleClass('has-rightside', state);
+                app.listControl.$el.parent().toggleClass('leftside border-right', state);
                 app.applyLayout();
                 app.listView.trigger('selection:change');
+                // trigger generic resize event so that other components can respond to it
+                $(document).trigger('resize');
+            }
+
+            app.props.on('change:details', function (model, value) {
+                toggle(value);
             });
 
+            toggle(app.props.get('details'));
         },
 
         /*
@@ -762,7 +785,7 @@ define('io.ox/files/main', [
 
         // respond to search results
         'find': function (app) {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || !app.get('find')) return;
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);

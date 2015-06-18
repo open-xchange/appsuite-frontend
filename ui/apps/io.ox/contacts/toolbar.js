@@ -42,7 +42,7 @@ define('io.ox/contacts/toolbar', [
             ref: 'io.ox/contacts/dropdown/new',
             customize: function (baton) {
 
-                this.append('<i class="fa fa-caret-down">');
+                this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                 this.after(
                     links.DropdownLinks({ ref: 'io.ox/contacts/links/toolbar/default', wrap: false }, baton)

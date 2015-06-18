@@ -60,6 +60,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel', 'some')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -77,6 +79,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel', 'some')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -95,10 +99,17 @@ define('io.ox/mail/actions', [
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
-            var data = baton.isThread ? baton.first() : baton.data;
-            if (baton.data.length > 0) {
-                data = baton.data.map(function (o) { return _.pick(o, 'id', 'folder_id'); });
+
+            var data;
+            // Only first mail of thread is selected on multiselection, as most commonly users don't want to forward whole threads
+            if (baton.selection && baton.selection.length > 1) {
+                data = baton.selection.map(function (o) {
+                    return _.cid(o.replace(/^thread./, ''));
+                });
+            } else {
+                data = baton.first();
             }
+
             ox.registry.call('mail-compose', 'forward', data);
         }
     });
@@ -108,6 +119,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -135,6 +148,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             // must be at least one message and top-level
             if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail

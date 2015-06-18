@@ -69,8 +69,8 @@ define('io.ox/settings/apps/settings/pane', [
             return $('<li class="widget-settings-view">').attr('data-id', client.id).append(
                 $('<img>').attr('src', client.icon),
                 $('<div class="selectable deletable-item">').append(
+                    $('<div class="widget-title">').text(client.name),
                     $('<div>').append(
-                        $('<span class="widget-title">').text(client.name),
                         $('<a target="_blank">')
                             .attr('href', client.website)
                             .text(client.website)
@@ -80,7 +80,7 @@ define('io.ox/settings/apps/settings/pane', [
                         $('<span>').text(gt('Permissions:')),
                         _(model.get('scopes')).values().join(' ')
                     ),
-                    $('<div class="date pull-left">').append(
+                    $('<div class="date">').append(
                         $('<span>').text(gt('Approved:')),
                         moment(model.get('date'), 'x').format('l')
                     )
@@ -149,9 +149,9 @@ define('io.ox/settings/apps/settings/pane', [
 
             function drawHint() {
                 if (collection.length > 0) {
-                    $hint.text(gt('These are the applications which can access your account.'));
+                    $hint.text(gt('The following external applications/services can access your data:'));
                 } else {
-                    $hint.text(gt('There are no applications which can access your account.'));
+                    $hint.text(gt('There are no external applications/services which can access your account.'));
                 }
             }
 

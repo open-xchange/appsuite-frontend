@@ -15,9 +15,10 @@ define('io.ox/files/listview', [
     'io.ox/core/tk/list',
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
+    'io.ox/files/api',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ext, extensions) {
+], function (ListView, ext, extensions, filesAPI) {
 
     'use strict';
 
@@ -65,6 +66,9 @@ define('io.ox/files/listview', [
             index: 100,
             draw: function (baton) {
                 var layout = (baton.app && baton.app.props.get('layout')) || 'list';
+                if (!baton.model) {
+                    baton.model = new filesAPI.Model(baton.data);
+                }
                 ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
             }
         }
@@ -105,6 +109,9 @@ define('io.ox/files/listview', [
             id: 'col3',
             index: 300,
             draw: function (baton) {
+                if (_.device('smartphone')) {
+                    return;
+                }
                 var column = $('<div class="list-item-column column-3 gray">');
                 extensions.smartdate.call(column, baton);
                 this.append(column);
@@ -114,6 +121,9 @@ define('io.ox/files/listview', [
             id: 'col4',
             index: 500,
             draw: function (baton) {
+                if (_.device('smartphone')) {
+                    return;
+                }
                 var column = $('<div class="list-item-column column-4 gray">');
                 extensions.size.call(column, baton);
                 this.append(column);

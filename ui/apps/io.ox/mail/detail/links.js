@@ -18,7 +18,7 @@ define('io.ox/mail/detail/links', [
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, coreUtil, emoji, ext, settings, gt) {
+], function (api, util, emoji, ext, settings, gt) {
     'use strict';
 
     // fix hosts (still need a configurable list on the backend)
@@ -135,15 +135,11 @@ define('io.ox/mail/detail/links', [
         if (matches === null || matches.length === 0) return node;
         var prefix = matches[1], url = matches[2], suffix = matches[4];
 
-        // fix punctuation marks
-        url = url.replace(/([.,;!?]+)$/, function (all, marks) {
-            suffix = marks + suffix;
-            return '';
-        });
+        // fix punctuation marks and brackets
+        var fix = util.fixUrlSuffix(url, suffix);
+        var link = $('<a href="#" target="_blank">').attr('href', fix.url).text(fix.url);
 
-        var link = $('<a href="#" target="_blank">').attr('href', url).text(url);
-
-        return { node: node, prefix: prefix, replacement: link, suffix: suffix };
+        return { node: node, prefix: prefix, replacement: link, suffix: fix.suffix };
     }
 
     //
@@ -243,10 +239,10 @@ define('io.ox/mail/detail/links', [
         'long-character-sequences': {
             test: function (node) {
                 var text = node.nodeValue;
-                return text.length >= 30 && /\S{30}/.test(text);
+                return text.length >= 30 && /\S{30}/.test(text) && $(node).closest('a').length === 0;
             },
             process: function (node) {
-                return { node: node, replacement: $.parseHTML(coreUtil.breakableHTML(node.nodeValue)) };
+                return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };
             }
         }
     };

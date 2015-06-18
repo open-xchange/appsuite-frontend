@@ -341,7 +341,8 @@ define('io.ox/calendar/edit/recurrence-view', [
             }
 
             function drawState() {
-                if (_.isFunction(options.initial) && self[attribute] <= options.model.get('start_date')) {
+                var startAttribute = options.model.get('start_time') || options.model.get('start_date');
+                if (_.isFunction(options.initial) && self[attribute] <= startAttribute) {
                     self[attribute] = options.initial();
                 }
                 var value = renderDate();
@@ -736,7 +737,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         model: self.model,
                         initial: function () {
                             //tasks may not have a start date at this point
-                            return moment(self.model.get('start_date') || _.now()).add(4, 'weeks').valueOf();
+                            return moment(self.model.get('start_time') || self.model.get('start_date') || _.now()).add(4, 'weeks').valueOf();
                         }
                     }).on('change:ending', this.endingChanged, this).on('change', this.updateModel, this),
                     after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
@@ -792,7 +793,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     self.listenTo(self.model, 'change:' + attr, self.updateView);
                 });
 
-                this.listenTo(this.model, 'change:start_date', self.updateSuggestions);
+                this.listenTo(this.model, 'change:start_date change:start_time', self.updateSuggestions);
 
                 this.updateView();
                 this.updateSuggestions();
@@ -1121,12 +1122,14 @@ define('io.ox/calendar/edit/recurrence-view', [
                 }
             },
             updateSuggestions: function () {
-                if (!this.model.get('start_date')) {
+
+                var startAttribute = this.model.get('start_time') || this.model.get('start_date');
+                if (!startAttribute) {
                     return;
                 }
                 var self = this,
 
-                    startDate = moment.utc(this.model.get('start_date')).local(true),
+                    startDate = moment.utc(startAttribute).local(true),
                     dayBits = 1 << startDate.day(),
                     dayInMonth = startDate.date(),
                     month = startDate.month(),

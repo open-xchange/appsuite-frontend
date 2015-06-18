@@ -18,12 +18,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/mail/mailfilter/settings/filter/form-elements',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views',
-    'io.ox/core/folder/picker'
-], function (notifications, gt, ext, elements, DEFAULTS, mini, picker) {
+    'io.ox/core/folder/picker',
+    'io.ox/backbone/mini-views/datepicker'
+], function (notifications, gt, ext, elements, DEFAULTS, mini, picker, DatePicker) {
 
     'use strict';
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
+        testCapabilities = {},
 
         sizeValues = {
             'over': gt('Is bigger than'),
@@ -43,6 +45,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'regex': gt('Regex')
         },
 
+        timeValues = {
+            'ge': gt('starts on'),
+            'le': gt('ends on'),
+            'is': gt('is on')
+        },
+
         headerTranslation = {
             'From': gt('Sender/From'),
             'any': gt('Any recipient'),
@@ -52,7 +60,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'Cc': gt('CC'),
             'cleanHeader': gt('Header'),
             'envelope': gt('Envelope'),
-            'size': gt('Size (bytes)')
+            'size': gt('Size (bytes)'),
+            'body': gt('Content'),
+            'currentdate': gt('Current Date')
+        },
+
+        conditionsMapping = {
+            'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
+            'envelope': ['envelope'],
+            'size': ['size'],
+            'body': ['body']
         },
 
         actionsTranslations = {
@@ -110,7 +127,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         setFocus = function (el, type) {
-            $(el).find('[data-' + type + '-id]').last().find('[tabindex="1"]').first().focus();
+            var listelement = $(el).find('[data-' + type + '-id]').last();
+            if (type === 'test') listelement.find('input[tabindex="1"]').first().focus();
+
+            if (type === 'action') listelement.find('[tabindex="1"]').first().focus();
         },
 
         renderWarningForEmptyTests = function (node) {
@@ -125,11 +145,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         toggleSaveButton = function (footer, pane) {
-            if (pane.find('.warning').length === 0) {
+            if (pane.find('input.warning').length === 0) {
                 footer.find('[data-action="save"]').prop('disabled', false);
             } else {
                 footer.find('[data-action="save"]').prop('disabled', true);
             }
+        },
+
+        filterValues = function (testType, possibleValues) {
+            var availableValues = {};
+            _.each(possibleValues, function (value, key) {
+                if (_.indexOf(testCapabilities[testType], key) !== -1) availableValues[key] = value;
+            });
+            return availableValues;
         },
 
         FilterDetailView = Backbone.View.extend({
@@ -137,6 +165,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             className: 'io-ox-mailfilter-edit',
 
             initialize: function (opt) {
+
+                _.each(opt.config.tests, function (value) {
+                    testCapabilities[value.test] = value.comparison;
+                });
+
                 var unsupported = [];
                 _.each(actionCapabilities, function (val, key) {
                     var index = _.indexOf(opt.config.actioncommands, val);
@@ -145,6 +178,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     }
                 });
                 actionsTranslations = _.omit(actionsTranslations, unsupported);
+
+                _.each(conditionsMapping, function (list, conditionGroup) {
+                    if (!_.has(testCapabilities, conditionGroup)) {
+                        _.each(conditionsMapping[conditionGroup], function (condition) {
+                            delete headerTranslation[condition] ;
+                        });
+                    }
+                });
+
                 this.listView = opt.listView;
             },
 
@@ -152,6 +194,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/view').invoke('draw', this.$el.empty(), baton);
+                toggleSaveButton(this.dialog.getFooter(), this.$el);
                 return this;
 
             },
@@ -195,7 +238,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 this.model.set('test', testArray);
                 this.render();
-                toggleSaveButton(this.dialog.getFooter(), this.$el);
             },
 
             onRemoveAction: function (e) {
@@ -336,11 +378,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     list = link.closest('li'),
                     label =  list.find('label.sr-only'),
                     testTitle = list.find('.list-title').text(),
-                    type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
 
                     testArray =  this.model.get('test'),
-                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
+                    translatedValue;
+
+                switch (list.attr('data-type')) {
+                    case 'size':
+                        translatedValue = sizeValues[value];
+                        break;
+                    case 'values':
+                        translatedValue = containsValues[value];
+                        break;
+                    case 'currentdate':
+                        translatedValue = timeValues[value];
+                }
 
                 label.text(testTitle + ' ' + value);
                 link.text(translatedValue);
@@ -380,13 +432,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
                     testArray =  this.model.get('test');
-
                 if (checkForMultipleTests(this.el).length > 1) {
                     testArray.tests[testID][type] = type === 'size' ? value : [value];
                 } else {
                     testArray[type] = type === 'size' ? value : [value];
                 }
-
                 this.model.set('test', testArray);
 
             },
@@ -521,22 +571,85 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 if (test.id === 'size') {
                     listTests.append(
                         $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'size', 'data-test-id': num }).append(
-                            elements.drawDeleteButton('test'),
-                            $('<div>').addClass('col-md-6 singleline').append(
+                            $('<div>').addClass('col-md-4 singleline').append(
                                 $('<span>').addClass('list-title').text(headerTranslation[test.id])
                             ),
-                            $('<div>').addClass('col-md-6').append(
+                            $('<div>').addClass('col-md-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-6').append(
-                                        elements.drawOptions(test.comparison, sizeValues)
+                                    $('<div>').addClass('col-md-4').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, sizeValues))
                                     ),
-                                    $('<div class="col-md-6">').append(
+                                    $('<div class="col-md-8">').append(
                                         elements.drawInputfieldTest(test.comparison, test.size)
                                     )
                                 )
-                            )
+                            ),
+                            elements.drawDeleteButton('test')
                         )
                     );
+                } else if (test.id === 'body') {
+                    listTests.append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'values', 'data-test-id': num }).append(
+                            $('<div>').addClass('col-md-4 singleline').append(
+                                $('<span>').addClass('list-title').text(headerTranslation[test.id])
+                            ),
+                            $('<div>').addClass('col-md-8').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-md-4').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
+                                    ),
+                                    $('<div class="col-md-8">').append(
+                                        elements.drawInputfieldTest(test.comparison, test.values[0])
+                                    )
+                                )
+                            ),
+                            elements.drawDeleteButton('test')
+                        )
+                    );
+                } else if (test.id === 'currentdate') {
+                    var TimeModel = Backbone.Model.extend({
+                        }),
+                        model = new TimeModel();
+
+                    model.set('datevalue', test.datevalue);
+
+                    model.on('change:datevalue', function () {
+                        test.datevalue = [model.get('datevalue')];
+                        if (test.datevalue[0] === null) {
+                            listTests.find('[data-test-id="' + num + '"] input').addClass('warning');
+                        } else {
+                            listTests.find('[data-test-id="' + num + '"] input').removeClass('warning');
+                        }
+
+                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
+                    });
+
+                    listTests.append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'currentdate', 'data-test-id': num }).append(
+                            $('<div>').addClass('col-md-4 singleline').append(
+                                $('<span>').addClass('list-title').text(headerTranslation[test.id])
+                            ),
+                            $('<div>').addClass('col-md-8').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-md-4').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, timeValues))
+                                    ),
+                                    $('<div class="col-md-8">').append(
+                                        new DatePicker({
+                                            model: model,
+                                            display: 'DATE',
+                                            attribute: 'datevalue',
+                                            label: gt('datepicker')
+                                        }).render().$el
+                                    )
+                                )
+                            ),
+                            elements.drawDeleteButton('test')
+                        )
+                    );
+                    listTests.find('fieldset legend').addClass('sr-only');
+                    if (test.datevalue.length === 0) listTests.find('[data-test-id="' + num + '"] input').addClass('warning');
+
                 } else if (test.id === 'header') {
                     var name;
                     if (test.headers[3]) {
@@ -551,42 +664,42 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         name = headerTranslation.cleanHeader;
                         listTests.append(
                             $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num, 'data-type': 'values', 'data-type-second': 'headers' }).append(
-                                elements.drawDeleteButton('test'),
-                                $('<div>').addClass('col-md-6 doubleline').append(
+                                $('<div>').addClass('col-md-4 doubleline').append(
                                     $('<span>').addClass('list-title').text(name)
                                 ),
-                                $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('col-md-8').append(
                                     $('<div>').addClass('row').append(
                                         elements.drawInputfieldTestSecond(test.headers[0], gt('Name'))
                                     ),
                                     $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-md-3').append(
-                                            elements.drawOptions(test.comparison, containsValues)
+                                        $('<div>').addClass('col-md-4').append(
+                                            elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
                                         ),
-                                        $('<div class="col-md-9">').append(
+                                        $('<div class="col-md-8">').append(
                                             elements.drawInputfieldTest(name + ' ' + test.comparison, test.values[0])
                                         )
                                     )
-                                )
+                                ),
+                                elements.drawDeleteButton('test')
                             )
                         );
                     } else {
                         listTests.append(
                             $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num, 'data-type': 'values' }).append(
-                                elements.drawDeleteButton('test'),
-                                $('<div>').addClass('col-md-6 singleline').append(
+                                $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(name)
                                 ),
-                                $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('col-md-8').append(
                                     $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-md-3').append(
-                                            elements.drawOptions(test.comparison, containsValues)
+                                        $('<div>').addClass('col-md-4').append(
+                                            elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
                                         ),
-                                        $('<div class="col-md-9">').append(
+                                        $('<div class="col-md-8">').append(
                                             elements.drawInputfieldTest(name + ' ' + test.comparison, test.values[0])
                                         )
                                     )
-                                )
+                                ),
+                                elements.drawDeleteButton('test')
                             )
                         );
                     }
@@ -595,20 +708,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     listTests.append(
                         $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'values', 'data-test-id': num }).append(
-                            elements.drawDeleteButton('test'),
-                            $('<div>').addClass('col-md-6 singleline').append(
+                            $('<div>').addClass('col-md-4 singleline').append(
                                 $('<span>').addClass('list-title').text(headerTranslation[test.id])
                             ),
-                            $('<div>').addClass(' col-md-6').append(
+                            $('<div>').addClass(' col-md-8').append(
                                 $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-md-3').append(
-                                        elements.drawOptions(test.comparison, containsValues)
+                                    $('<div>').addClass('col-md-4').append(
+                                        elements.drawOptions(test.comparison, filterValues(test.id, containsValues))
                                     ),
-                                    $('<div class="col-md-9">').append(
+                                    $('<div class="col-md-8">').append(
                                         elements.drawInputfieldTest(headerTranslation[test.id] + ' ' + test.comparison, test.values[0])
                                     )
                                 )
-                            )
+                            ),
+                            elements.drawDeleteButton('test')
                         )
                     );
                 }
@@ -620,99 +733,99 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (action.id === 'redirect') {
                         listActions.append(
                             $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'to' }).append(
-                                elements.drawDeleteButton('action'),
-                                $('<div>').addClass('col-md-6 singleline').append(
+                                $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
-                                $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('col-md-8').append(
                                     $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-md-12').append(
+                                        $('<div>').addClass('col-md-8 col-md-offset-4').append(
                                             elements.drawInputfieldAction(actionsTranslations[action.id], action.to)
                                         )
                                     )
-                                )
+                                ),
+                                elements.drawDeleteButton('action')
                             )
                         );
                     } else if (action.id === 'move') {
                         listActions.append(
                             $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'into' }).append(
-                                elements.drawDeleteButton('action'),
                                 $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
                                 $('<div>').addClass(' col-md-8').append(
                                     $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-md-4').append(
+                                        $('<div>').addClass('col-md-4 rightalign').append(
                                             elements.drawFolderSelect()
                                         ),
                                         $('<div class="col-md-8">').append(
                                             elements.drawDisabledInputfield(actionsTranslations[action.id], prepareFolderForDisplay(action.into))
                                         )
                                     )
-                                )
+                                ),
+                                elements.drawDeleteButton('action')
                             )
                         );
                     } else if (action.id === 'reject') {
                         listActions.append(
                             $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'text' }).append(
-                                elements.drawDeleteButton('action'),
-                                $('<div>').addClass('col-md-6 singleline').append(
+                                $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
-                                $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('col-md-8').append(
                                     $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-md-12').append(
+                                        $('<div>').addClass('col-md-8 col-md-offset-4').append(
                                             elements.drawInputfieldAction(actionsTranslations[action.id], action.text)
                                         )
                                     )
-                                )
+                                ),
+                                elements.drawDeleteButton('action')
                         ));
                     } else if (action.id === 'addflags') {
                         if (/delete|seen/.test(action.flags[0])) {
                             listActions.append(
                                 $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'text' }).append(
-                                    elements.drawDeleteButton('action'),
-                                    $('<div>').addClass('col-md-6 singleline').append(
+                                    $('<div>').addClass('col-md-4 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.markmail)
                                     ),
 
-                                    $('<div>').addClass('col-md-6').append(
+                                    $('<div>').addClass('col-md-8').append(
                                         $('<div>').addClass('row').append(
                                             $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(
                                                 elements.drawOptionsActions(action.flags[0], flagValues, 'mark-as')
                                             )
                                         )
-                                    )
+                                    ),
+                                    elements.drawDeleteButton('action')
                                 )
                             );
                         } else if (/^\$cl/.test(action.flags[0])) {
                             listActions.append($('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'text' }).append(
-                                elements.drawDeleteButton('action'),
-                                $('<div>').addClass('col-md-6 singleline').append(
+                                $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations.flag)
                                 ),
-                                $('<div>').addClass('col-md-6').append(
+                                $('<div>').addClass('col-md-8').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(
                                             elements.drawColorDropdown(action.flags[0], COLORS, COLORFLAGS)
                                         )
                                     )
-                                )
+                                ),
+                                elements.drawDeleteButton('action')
                             ));
                         } else {
                             listActions.append(
                                 $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'flags' }).append(
-                                    elements.drawDeleteButton('action'),
-                                    $('<div>').addClass('col-md-6 singleline').append(
+                                    $('<div>').addClass('col-md-4 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.tag)
                                     ),
-                                    $('<div>').addClass('col-md-6').append(
+                                    $('<div>').addClass('col-md-8').append(
                                         $('<div>').addClass('row').append(
-                                            $('<div>').addClass('col-md-12').append(
+                                            $('<div>').addClass('col-md-8 col-md-offset-4').append(
                                                 elements.drawInputfieldAction(actionsTranslations.tag, action.flags[0].replace(/^\$+/, ''))
                                             )
                                         )
-                                    )
+                                    ),
+                                    elements.drawDeleteButton('action')
                                 )
                             );
                         }
@@ -720,10 +833,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         var classSet = action.id === 'discard' ? 'filter-settings-view warning' : 'filter-settings-view';
                         listActions.append(
                             $('<li>').addClass(classSet + ' row').attr('data-action-id', num).append(
-                                elements.drawDeleteButton('action'),
-                                $('<div>').addClass('col-md-6 singleline').append(
+                                $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
-                                )
+                                ),
+                                elements.drawDeleteButton('action')
                             )
                         );
                     }
@@ -743,7 +856,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
-                    toggle: 'dropup'
+                    toggle: 'dropdown'
                 }),
                 headlineActions, listActions,
                 elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {

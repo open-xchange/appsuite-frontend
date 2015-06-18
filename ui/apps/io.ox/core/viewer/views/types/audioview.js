@@ -36,9 +36,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
          *  the AudioView instance.
          */
         render: function () {
-            var audio,
-                cover,
-                mimeType = this.model.getMimeType() || '',
+
+            var mimeType = this.model.getMimeType() || '',
                 audioUrl = this.getPreviewUrl() || '',
                 coverUrl = FilesAPI.getUrl(this.model.toJSON(), 'cover', { width: 280, height: 280 });
 
@@ -49,26 +48,28 @@ define('io.ox/core/viewer/views/types/audioview',  [
             this.$el.find('audio').off();
             this.$el.empty().append(
                 $('<div class="viewer-displayer-item viewer-displayer-audio player-hidden">').append(
-                    cover = $('<img class="cover">'),
-                    audio = $('<audio controls="true">').append(
-                        $('<div>').text(gt('Your browser does not support the audio format of this file.'))
-                    )
+                    // cover
+                    $('<img class="cover">')
+                        .one('error', function () {
+                            // we don't know if the cover url is valid or not until we load it from the server
+                            $(this).remove();
+                        })
+                        .attr('data-src', _.unescapeHTML(coverUrl)),
+                    // audio element
+                    $('<audio controls="true">')
+                        // set preload (and do a dance); see https://code.google.com/p/chromium/issues/detail?id=234779
+                        .attr('preload', _.device('chrome') ? 'none' : 'auto')
+                        .append(
+                            $('<div>').text(gt('Your browser does not support the audio format of this file.'))
+                        )
+                        // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
+                        .on({
+                            'loadeddata': this.onLoadedData.bind(this),
+                            'error': this.onError.bind(this)
+                        })
+                        .attr({ 'data-src': _.unescapeHTML(audioUrl), 'type': mimeType })
                 )
             );
-
-            // we don't know if the cover url is valid or not until we load it from the server
-            cover.one('error', function () {
-                cover.remove();
-            });
-
-            // register play handler, use 'loadeddata' because 'canplay' is not always triggered on Firefox
-            audio.on({
-                'loadeddata': this.onLoadedData.bind(this),
-                'error': this.onError.bind(this)
-            });
-
-            audio.attr({ 'data-src': _.unescapeHTML(audioUrl), 'type': mimeType });
-            cover.attr('data-src', _.unescapeHTML(coverUrl));
 
             return this;
         },
@@ -132,20 +133,20 @@ define('io.ox/core/viewer/views/types/audioview',  [
          */
         unload: function () {
             // never unload slide duplicates
-            if (this.$el.hasClass('swiper-slide-duplicate')) {
-                return this;
-            }
-            var audio = this.$el.find('audio');
-            if (audio.length > 0) {
-                this.$el.find('.viewer-displayer-audio').addClass('player-hidden');
-                audio[0].pause();
-                // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
-                // https://code.google.com/p/chromium/issues/detail?id=234779
-                audio.removeAttr('src');
-                audio[0].load();
-            }
-
+            if (this.$el.hasClass('swiper-slide-duplicate')) return this;
+            this.disposeElement();
             return this;
+        },
+
+        // work around for Chrome bug #234779, HTML5 video request stay pending (forever)
+        // https://code.google.com/p/chromium/issues/detail?id=234779
+        disposeElement: function () {
+            var element = this.$el.find('audio');
+            if (element.length === 0) return;
+            this.$el.find('.viewer-displayer-audio').addClass('player-hidden');
+            element[0].pause();
+            element.removeAttr('src');
+            element[0].load();
         },
 
         /**
@@ -153,8 +154,8 @@ define('io.ox/core/viewer/views/types/audioview',  [
          */
         disposeView: function () {
             // remove event listeners from audio element and cover image
-            this.$el.find('audio').off();
-            this.$el.find('img.cover').off();
+            this.$el.find('audio, img.cover').off();
+            this.disposeElement();
         }
 
     });

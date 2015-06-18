@@ -61,8 +61,8 @@ define('io.ox/core/viewer/views/mainview', [
             this.listenTo(this.viewerEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // bind toggle side bar handler
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
-            // TODO this is not valid anymore if we want to open couple viewer apps in parallel
-            if (!ox.debug) {
+            // close viewer when other app is start or resumed, except in standalone mode
+            if (!this.standalone) {
                 this.listenTo(ox, 'app:start app:resume', this.closeViewer);
             }
             // handle DOM events
@@ -162,7 +162,7 @@ define('io.ox/core/viewer/views/mainview', [
 
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
-            var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0,
+            var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
                 activeSlide = this.displayerView.getActiveSlideNode(),
                 activeSlideIndex = activeSlide.index(),
@@ -195,9 +195,10 @@ define('io.ox/core/viewer/views/mainview', [
          * - Hides viewer DOM first and then do cleanup.
          */
         closeViewer: function () {
+            console.warn('MainView.closeViewer()');
             this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
-            Settings.setSidebarOpenState(this.sidebarView.opened);
+            Settings.setSidebarOpenState(this.sidebarView.open);
             if (!this.standalone) {
                 this.$el.parent().find('.simple-window').show();
             }
@@ -209,9 +210,6 @@ define('io.ox/core/viewer/views/mainview', [
             this.toolbarView.remove();
             this.displayerView.remove();
             this.sidebarView.remove();
-            this.collection.off().stopListening().each(function (model) {
-                model.off().stopListening();
-            });
             this.collection = null;
             this.toolbarView = null;
             this.displayerView = null;

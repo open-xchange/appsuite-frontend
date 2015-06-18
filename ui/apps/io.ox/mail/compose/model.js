@@ -206,6 +206,11 @@ define('io.ox/mail/compose/model', [
             mail.attachments = mail.attachments.filter(function (attachment) {
                 return attachment.get('group') !== 'localFile';
             });
+            _(mail.attachments).each(function (attachment) {
+                if (attachment.get('content')) {
+                    attachment.set('content', attachment.get('content').replace(/<img[^>]*src=\\?"data:[^>]*>/gi, ''));
+                }
+            });
             return {
                 description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
                 point: mail

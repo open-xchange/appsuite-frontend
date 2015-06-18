@@ -31,12 +31,9 @@ define('plugins/portal/files/register', [
             return api.get({ folder: props.folder_id, id: props.id }).then(
                 function success(data) {
                     baton.data = data;
-                    api.on('remove', function (event, elements) {
-                        var filename = baton.data.filename;
-                        if (_(elements).any(function (element) { return element.filename === filename; })) {
-                            var widgetCol = portalWidgets.getCollection();
-                            widgetCol.remove(baton.model);
-                        }
+                    api.on('remove:file:' + _.ecid(data), function () {
+                        var widgetCol = portalWidgets.getCollection();
+                        widgetCol.remove(baton.model);
                     });
                 },
                 function fail(e) {
