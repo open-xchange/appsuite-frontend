@@ -42,6 +42,25 @@ html, body {
     line-height: 20px;
 }
 
+// ensure proper alignment (during development)
+// or use the bookmarklet from http://keyes.ie/things/baseliner/
+html.baseline {
+    #background-loader {
+        display: block !important;
+        background-color: transparent;
+        background-image: url(/apps/themes/default/baseline_8_cyan.png);
+        opacity: 0.50;
+    }
+    &.red #background-loader {
+        background-image: url(/apps/themes/default/baseline_8_red.png);
+        opacity: 0.30;
+    }
+    &.gray #background-loader {
+        background-image: url(/apps/themes/default/baseline_8_gray.png);
+        opacity: 0.80;
+    }
+}
+
 .unselectable {
     .user-select(none);
 }
@@ -136,10 +155,13 @@ html, body {
 }
 
 #io-ox-login-form {
+    .form-group {
+        margin-bottom: 8px;
+    }
     input.form-control {
-        height: 38px;
+        height: 40px;
         &:focus {
-            box-shadow: 0 0 15px 2px white;
+            box-shadow: 0 0 8px 2px rgba(157, 207, 255, 1);
             outline: 0;
         }
     }
@@ -172,9 +194,11 @@ html, body {
     }
 
     h1 {
+        font-size: 40px;
         font-weight: 100;
-        margin: 25px 0;
-        small { color: #6FBBEC; }
+        margin: 16px 0 14px 0;
+        line-height: 48px;
+        padding-top: 2px;
     }
 }
 
@@ -192,13 +216,13 @@ html, body {
 }
 
 #io-ox-login-store, #io-ox-forgot-password {
-    margin-top: -5px;
+    margin-top: 8px;
     margin-bottom: 20px;
 }
 
 #io-ox-forgot-password {
     text-align: right;
-    a { color: #fff; }
+    a { color: #87B7E4; }
 }
 
 #login-box-content td {
@@ -236,7 +260,7 @@ html, body {
 
 #io-ox-languages {
 
-    margin-right: 5px;
+    margin-right: 32px;
 
     .dropup, .dropdown {
         display: inline-block;
@@ -267,7 +291,6 @@ html, body {
 #io-ox-copyright {
     color: #87B7E4;
     font-weight: 300;
-    font-size: 12px;
     cursor: default;
     /* mobile stuff */
     @media (max-width: 480px), (max-device-width: 480px) {
