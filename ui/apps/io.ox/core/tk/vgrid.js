@@ -410,7 +410,8 @@ define('io.ox/core/tk/vgrid', [
         }
 
         // add label class
-        template.node.addClass('selectable');
+        this.multiselectId = _.uniqueId('multi-selection-message-');
+        template.node.addClass('selectable').attr('aria-describedby', this.multiselectId);
         label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
 
         // fix mobile safari bug (all content other than position=static is cut off)

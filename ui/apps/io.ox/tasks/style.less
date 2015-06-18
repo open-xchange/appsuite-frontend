@@ -22,7 +22,6 @@
         color: #777;
         margin-left: 0.5em;
         font-weight: 300;
-        display: inline-block;
         float: right;
 
         html.high-contrast & {
@@ -55,6 +54,9 @@
 
     .title {
         font-weight: 500;
+        display: inline-block;
+        white-space: nowrap;
+        width: 135px;
     }
 
     .private-flag {
@@ -79,6 +81,24 @@
         width: 100px;
         height: 13px;
         margin: 0 1em 0 0;
+    }
+}
+
+@media (min-width: 1300px) {
+    .vgrid-cell.tasks .title {
+        width: 205px;
+    }
+}
+
+@media (min-width: 1500px) {
+    .vgrid-cell.tasks .title {
+        width: 255px;
+    }
+}
+
+@media (min-width: 1700px) {
+    .vgrid-cell.tasks .title {
+        width: 305px;
     }
 }
 

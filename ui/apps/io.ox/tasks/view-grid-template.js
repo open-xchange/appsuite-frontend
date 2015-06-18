@@ -27,9 +27,9 @@ define('io.ox/tasks/view-grid-template', [
                 var title, status, end_time, user, progress, private_flag;
                 this.addClass('tasks').append(
                     $('<div class="first-row">').append(
+                        title = $('<div>').addClass('title'),
                         end_time = $('<span>').addClass('end_date'),
-                        private_flag = $('<i class="fa fa-lock private-flag">').hide(),
-                        title = $('<div>').addClass('title')
+                        private_flag = $('<i class="fa fa-lock private-flag">').hide()
                     ),
                     $('<div class="second-row">').append(
                         status = $('<span>').addClass('status'),
@@ -49,8 +49,7 @@ define('io.ox/tasks/view-grid-template', [
                     data = util.interpretTask(task, { noOverdue: grid.prop('sort') !== 'urgency' });
                 }
 
-                var a11yLabel = '';
-                fields.title.text(a11yLabel = _.noI18n(data.title));
+                fields.title.text(_.noI18n(data.title));
                 fields.end_time.text(_.noI18n(data.end_time));
                 //important. with addClass old classes aren't removed correctly
                 fields.status.attr('class', 'status ' + data.badge)
@@ -67,8 +66,7 @@ define('io.ox/tasks/view-grid-template', [
                     fields.progress.hide();
                 }
                 this.attr({
-                    'data-index': index,
-                    'aria-label': a11yLabel
+                    'data-index': index
                 });
             }
         },

@@ -48,7 +48,7 @@ define('io.ox/core/commons', [
                 index: 100,
                 draw: function (baton) {
                     this.append(
-                        $('<div class="summary">').html(
+                        $('<div class="summary" id="' + baton.grid.multiselectId + '">').html(
                             gt('<b>%1$d</b> elements selected', baton.selection.length)
                         )
                     );
@@ -92,14 +92,14 @@ define('io.ox/core/commons', [
             };
         }()),
 
-        simpleMultiSelection: function (node, selection) {
+        simpleMultiSelection: function (node, selection, grid) {
             var length = selection.length;
 
             if (length <= 1) return;
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
-                    $('<div>').text(
+                    $('<div id="' + grid.multiselectId + '">').text(
                         gt.format(
                             gt.ngettext('%1$d item selected', '%1$d items selected', length), length
                         )
@@ -198,7 +198,7 @@ define('io.ox/core/commons', [
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
                         if (simple) {
-                            commons.simpleMultiSelection(node, this.unique(this.unfold()));
+                            commons.simpleMultiSelection(node, this.unique(this.unfold()), grid);
                         } else {
                             //grid is needed to apply busy animations correctly
                             commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);
