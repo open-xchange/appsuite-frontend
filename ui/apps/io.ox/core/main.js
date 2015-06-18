@@ -180,6 +180,7 @@ define('io.ox/core/main', [
     //
     function showIndicator(text) {
         $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200);
+        notifications.yell('screenreader', text);
     }
 
     function hideIndicator() {
