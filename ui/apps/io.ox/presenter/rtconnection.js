@@ -442,9 +442,9 @@ define('io.ox/presenter/rtconnection', [
          *
          * @returns {jQuery.Promise}
          */
-        this.updateSlide = function (action, userData) {
-            RTConnection.log('RTConnection.updateUserData called', userData);
-            return send(action, 'state', userData);
+        this.updateSlide = function (slideInfo) {
+            RTConnection.log('RTConnection.updateSlide called', slideInfo);
+            return send('updateslide', 'slideInfo', slideInfo);
         };
 
         /**

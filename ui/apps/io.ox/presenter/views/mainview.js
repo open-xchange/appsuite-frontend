@@ -12,8 +12,9 @@
 define('io.ox/presenter/views/mainview', [
     'io.ox/backbone/disposable',
     'io.ox/presenter/views/presentationview',
-    'io.ox/presenter/views/sidebarview'
-], function (DisposableView, PresentationView, SidebarView) {
+    'io.ox/presenter/views/sidebarview',
+    'io.ox/presenter/rtconnection'
+], function (DisposableView, PresentationView, SidebarView, RTConnection) {
 
     'use strict';
 
@@ -36,12 +37,24 @@ define('io.ox/presenter/views/mainview', [
         fullscreen: false,
 
         initialize: function (options) {
+
             _.extend(this, options);
+
+            // init RT connection
+            this.rtConnection = new RTConnection(this.model.toJSON());
+            this.rtConnectPromise = this.rtConnection.connect();
+            function rtConnectSuccess(response) {
+                console.warn('ConnectSuccess()', response);
+            }
+            function rtConnectError(response) {
+                console.warn('ConnectError', response);
+            }
+            this.rtConnectPromise.then(rtConnectSuccess, rtConnectError);
 
             // create the event dispatcher
             this.presenterEvents = _.extend({}, Backbone.Events);
             // create child view(s)
-            this.presentationView = new PresentationView({ model: this.model, presenterEvents: this.presenterEvents });
+            this.presentationView = new PresentationView({ model: this.model, presenterEvents: this.presenterEvents, rtConnection: this.rtConnection });
             this.sidebarView = new SidebarView({ model: this.model, presenterEvents: this.presenterEvents });
 
             // handle DOM events
@@ -51,6 +64,8 @@ define('io.ox/presenter/views/mainview', [
             this.on('dispose', this.disposeView.bind(this));
 
             this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
+
+
         },
 
         /**
@@ -222,6 +237,14 @@ define('io.ox/presenter/views/mainview', [
             this.model.off().stopListening();
             this.presentationView = null;
             this.sidebarView = null;
+
+            // TODO handle rtConnection destroy
+
+            //this.rtConnection.closeDocument().always(function (response) {
+            //    console.warn('closeDpocument()', response);
+            //    this.rtConnection.destroy();
+            //}.bind(this));
+
         }
     });
     return MainView;

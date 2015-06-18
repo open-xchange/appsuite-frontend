@@ -166,8 +166,9 @@ define('io.ox/presenter/views/presentationview', [
          * @param {Object} swiper
          *  the Swiper instance
          */
-        onSlideChangeStart: function (/*swiper*/) {
+        onSlideChangeStart: function (swiper) {
             console.info('Presenter - onSlideChangeStart');
+            this.rtConnection.updateSlide({ activeSlide: swiper.activeIndex });
         },
 
         /**
