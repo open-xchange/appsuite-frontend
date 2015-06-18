@@ -558,7 +558,7 @@ define('io.ox/files/main', [
                         app.listView.reload();
                     }
                 }, 100);
-            api.on('copy', function (e, list, targetFolder) {
+            api.on('copy', function (list, targetFolder) {
                 var appfolder = app.folder.get();
                 if (appfolder === targetFolder) {
                     myFolder = true;
