@@ -38,6 +38,9 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
 
+                //add multiselection message
+                this.parent().attr('aria-describedby', 'mail-multi-selection-message');
+
                 // fix missing threadSize (aparently only used by tests)
                 fixThreadSize(baton.data);
 
