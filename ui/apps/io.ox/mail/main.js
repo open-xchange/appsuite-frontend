@@ -606,7 +606,7 @@ define('io.ox/mail/main', [
                 app.threadView.empty();
                 app.right.find('.multi-selection-message div').text(
                     gt('No message selected')
-                );
+                ).attr('id', 'mail-multi-selection-message');
             };
         },
 
@@ -620,7 +620,7 @@ define('io.ox/mail/main', [
                 list = api.resolve(list, app.props.get('thread'));
                 app.right.find('.multi-selection-message div').text(
                     gt('%1$d messages selected', list.length)
-                );
+                ).attr('id', 'mail-multi-selection-message');
             };
         },
 
@@ -703,7 +703,7 @@ define('io.ox/mail/main', [
                     app.showMail(list[0]);
                     return;
                 } else if (app.props.get('layout') === 'list' && type === 'one') {
-                    //don't call show mail (an in visible detailview would be drawn which marks it as read)
+                    //don't call show mail (an invisible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
                     return;
                 }
@@ -727,9 +727,11 @@ define('io.ox/mail/main', [
 
             app.listView.on({
                 'selection:empty': function () {
+                    app.right.find('.multi-selection-message div').attr('id', null);
                     react('empty');
                 },
                 'selection:one': function (list) {
+                    app.right.find('.multi-selection-message div').attr('id', null);
                     var type = 'one';
                     if ( app.listView.selection.getBehavior() === 'alternative' ) {
                         type = 'multiple';
@@ -737,9 +739,13 @@ define('io.ox/mail/main', [
                     react(type, list);
                 },
                 'selection:multiple': function (list) {
-                    react('multiple', list);
+                    app.right.find('.multi-selection-message div').attr('id', null);
+                    // no debounce for showMultiple or screenreaders read old number of selected messages
+                    resetRight('selection-multiple');
+                    app.showMultiple(list);
                 },
                 'selection:action': function (list) {
+                    app.right.find('.multi-selection-message div').attr('id', null);
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) react('action', list);
                 }
