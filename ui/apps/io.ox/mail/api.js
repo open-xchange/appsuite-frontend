@@ -998,6 +998,9 @@ define('io.ox/mail/api', [
                 api.trigger('send', { data: data, files: files, form: form });
                 ox.trigger('mail:send:stop', data, files);
             })
+            .fail(function () {
+                ox.trigger('mail:send:fail');
+            })
             .then(function (text) {
                 // wait a moment, then update mail index
                 setTimeout(function () {
