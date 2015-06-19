@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This script updates all timestamps in the HTML files of OX App Suite.
 #
