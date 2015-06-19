@@ -67,7 +67,7 @@ define('io.ox/core/settings/downloads/pane', [
                         .append(
                             $('<h2>').text(gt('Connector for Microsoft Outlook®')),
                             $('<p>').text(
-                                gt('Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
+                                gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
                         )
                     ),
                     $('<section>')
@@ -75,7 +75,7 @@ define('io.ox/core/settings/downloads/pane', [
                         .append(
                             $('<h2>').text(gt('Notifier')),
                             $('<p>').text(
-                                gt('Informs about the current status of E-Mails and appointments without having to display the user interface or another Windows® client.')
+                                gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
                         )
                     )
                 );
