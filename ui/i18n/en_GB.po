@@ -1020,7 +1020,7 @@ msgstr "Append vCard"
 msgid "Application Toolbar"
 msgstr "Application Tool bar"
 
-#: apps/io.ox/mail/main.js:1175 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1181 module:io.ox/mail
 #: apps/io.ox/settings/main.js:523 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Application may not work as expected until this problem is solved."
@@ -1428,7 +1428,7 @@ msgstr "Calendar view"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:632
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1081
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1087
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -2764,7 +2764,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1085
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1091
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3925,8 +3925,12 @@ msgid "Info"
 msgstr "Info"
 
 #: apps/io.ox/core/settings/downloads/pane.js:78 module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Informs about the current status of E-Mails and appointments without "
+#| "having to display the user interface or another Windows® client."
 msgid ""
-"Informs about the current status of E-Mails and appointments without having "
+"Informs about the current status of Emails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
 "Informs about the current status of E-Mail messages and appointments without "
@@ -5835,6 +5839,7 @@ msgstr "Progress"
 
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js:193 module:io.ox/tasks
+#: apps/io.ox/tasks/view-grid-template.js:83
 #, c-format
 msgid "Progress %1$s %"
 msgstr "Progress %1$s %"
@@ -7049,8 +7054,12 @@ msgid "Symbols"
 msgstr "Symbols"
 
 #: apps/io.ox/core/settings/downloads/pane.js:70 module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with "
+#| "Public, Shared and System Folders to Microsoft Outlook® clients."
 msgid ""
-"Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
+"Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
 "Synchronisation of E-Mail messages, Calendar, Contacts and Tasks, along with "
@@ -9060,6 +9069,12 @@ msgstr ""
 msgid "has attachments"
 msgstr "has attachments"
 
+#: apps/io.ox/tasks/view-grid-template.js:38 module:io.ox/tasks
+#, fuzzy
+#| msgid "Participants"
+msgid "has participants"
+msgstr "Participants"
+
 #: apps/io.ox/core/import/import.js:60 module:io.ox/core
 msgid "iCal"
 msgstr "iCal"
@@ -9188,6 +9203,12 @@ msgstr "Orange"
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "pink"
 msgstr ""
+
+#: apps/io.ox/tasks/view-grid-template.js:33 module:io.ox/tasks
+#, fuzzy
+#| msgid "Private"
+msgid "private"
+msgstr "Private"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156 module:io.ox/mail
 msgid "process subsequent rules"
