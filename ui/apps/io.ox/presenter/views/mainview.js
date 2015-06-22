@@ -5,15 +5,17 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/presenter/views/mainview', [
     'io.ox/backbone/disposable',
     'io.ox/presenter/views/presentationview',
-    'io.ox/presenter/views/sidebarview'
-], function (DisposableView, PresentationView, SidebarView) {
+    'io.ox/presenter/views/sidebarview',
+    'io.ox/presenter/views/toolbarview'
+], function (DisposableView, PresentationView, SidebarView, ToolbarView) {
 
     'use strict';
 
@@ -42,8 +44,10 @@ define('io.ox/presenter/views/mainview', [
             // create the event dispatcher
             this.presenterEvents = _.extend({}, Backbone.Events);
             // create child view(s)
-            this.presentationView = new PresentationView({ model: this.model, presenterEvents: this.presenterEvents, app: this.app });
-            this.sidebarView = new SidebarView({ model: this.model, presenterEvents: this.presenterEvents });
+            var childViewParams = { model: this.model, presenterEvents: this.presenterEvents, app: this.app };
+            this.presentationView = new PresentationView(childViewParams);
+            this.sidebarView = new SidebarView(childViewParams);
+            this.toolbarView = new ToolbarView(childViewParams);
 
             // handle DOM events
             $(window).on('resize.presenter', this.onWindowResize.bind(this));
@@ -65,6 +69,7 @@ define('io.ox/presenter/views/mainview', [
             // append toolbar view
             this.$el.append(
                 //this.sidebarView.render().el,
+                this.toolbarView.render().el,
                 this.presentationView.render().el
             );
 
@@ -215,7 +220,7 @@ define('io.ox/presenter/views/mainview', [
          * Destructor function of the PresentationView.
          */
         disposeView: function () {
-            console.log('Presenter - dispose MainView');
+            console.info('Presenter - dispose MainView');
 
             $(window).off('resize.presenter');
             this.presentationView.remove();
@@ -223,13 +228,6 @@ define('io.ox/presenter/views/mainview', [
             this.model.off().stopListening();
             this.presentationView = null;
             this.sidebarView = null;
-
-            // TODO handle rtConnection destroy
-
-            //this.rtConnection.closeDocument().always(function (response) {
-            //    console.warn('closeDpocument()', response);
-            //    this.rtConnection.destroy();
-            //}.bind(this));
 
         }
     });

@@ -12,6 +12,22 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
+@presenter-toolbar-height: 40px;
+@presenter-toolbar-filename-width: 400px;
+@presenter-toolbar-filename-width-smartphone-portrait: 130px;
+@presenter-toolbar-filename-width-smartphone-landscape: 320px;
+@presenter-toolbar-link-width: 48px;
+@presenter-toolbar-link-width-smartphone: 50px;
+@presenter-toolbar-bgcolor: #ffffff;
+@presenter-toolbar-color: #3c73aa;
+@presenter-toolbar-border-color: #DDDDDD;
+@presenter-toolbar-hover-color: #284d71;
+@presenter-toolbar-hover-bgcolor: #EEEEEE;
+@presenter-toolbar-focus-color: #FFFFFF;
+@presenter-toolbar-focus-bgcolor: #DDDDDD;
+@presenter-toolbar-active-color: #284d71;
+@presenter-toolbar-active-bgcolor: #AAAAAA;
+
  .io-ox-presenter {
      background-color: #F8F8F8;
 
@@ -24,6 +40,58 @@
          align-items: center;
          .pdf-page {
              box-shadow: 0 0 8px rgba(0,0,0,0.2);
+         }
+     }
+
+     .presenter-toolbar {
+         position: absolute;
+         top: 0;
+         width: 100%;
+         height: @presenter-toolbar-height;
+         line-height: @presenter-toolbar-height;
+         background: @presenter-toolbar-bgcolor;
+         list-style: none;
+         padding-left: 0;
+         text-align: right;
+         z-index: 2;
+         border-bottom: 1px solid @presenter-toolbar-border-color;
+         i.fa {
+             font-size: 14px;
+         }
+         > li {
+             display: inline-block;
+             height: @presenter-toolbar-height;
+             text-align: center;
+             > a {
+                 display: inline-block;
+                 height: @presenter-toolbar-height;
+                 min-width: @presenter-toolbar-link-width;
+                 padding: 0 16px;
+                 outline: none;
+                 text-align: center;
+                 text-decoration: none;
+                 color: @presenter-toolbar-color;
+                 border-bottom: 1px solid @presenter-toolbar-border-color;
+                 &:hover {
+                     color: @presenter-toolbar-hover-color;
+                     background-color: @presenter-toolbar-hover-bgcolor;
+                 }
+                 &:focus,
+                 &:active {
+                     color: @presenter-toolbar-focus-color;
+                     background-color: @presenter-toolbar-focus-bgcolor;
+                 }
+             }
+             > a.active {
+                 color: @presenter-toolbar-active-color;
+                 background-color: @presenter-toolbar-active-bgcolor;
+             }
+             &.dropdown.open {
+                 background-color: @presenter-toolbar-active-bgcolor;
+             }
+             .dropdown-menu {
+                 margin: 0;
+             }
          }
      }
 
@@ -82,7 +150,6 @@
         }
     }
 
-
     .presenter-sidebar {
         display: none;
         position: absolute;
@@ -99,6 +166,5 @@
             display: block;
         }
     }
-
 
  }
