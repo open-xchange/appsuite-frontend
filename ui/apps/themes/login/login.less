@@ -190,12 +190,17 @@ html.baseline {
     position: relative;
     max-width: 400px;
     top: 50%;
-    transform: translateY(-50%);
-    overflow: auto;
+    .translate(0; -50%);
 
     .alert {
+
         padding: 15px;
         .border-radius(4px);
+
+        body.down & {
+            position: relative;
+            top: 40%;
+        }
 
         &.alert-info {
             color: #fff;
@@ -250,6 +255,7 @@ html.baseline {
 }
 
 #io-ox-login-feedback {
+    position: absolute;
     margin-top: 13px;
     margin-bottom: 13px;
     min-height: 3em; /* for busy animation */
@@ -303,10 +309,6 @@ html.baseline {
     color: #87B7E4;
     font-weight: 300;
     cursor: default;
-    /* mobile stuff */
-    @media (max-width: 480px), (max-device-width: 480px) {
-        font-size: 10px;
-    }
 }
 
 .io-ox-ui-disabled {
@@ -317,7 +319,9 @@ html.baseline {
     opacity: .3;
 }
 
-@media (max-width: 767px) {
+/* mobile stuff */
+
+@media (max-width: @screen-xs-max) {
     #io-ox-login-header {
         h1 { font-size: 14pt; }
     }
@@ -325,41 +329,17 @@ html.baseline {
         top: 0;
         transform: none;
     }
-    #io-ox-login-footer span {
+    #io-ox-languages {
+        margin-right: 0;
+    }
+    #io-ox-login-footer > span {
         display: block;
     }
     #io-ox-forgot-password {
         text-align: left;
     }
-}
-
-/* mobile stuff */
-@media (max-width: 480px), (max-device-width: 480px) {
-
-    /* 100% divs on relogin page*/
-    .relogin #io-ox-login-form [class*="span"] {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    /* responsive re-login screen */
-    #io-ox-login-screen.relogin {
-        left: 5px;
-        right: 5px;
-        margin-left: 0;
-        width: auto;
-    }
-    /* absolute layout for alert box */
-    body.down #io-ox-login-container .alert {
-        font-size: 16px;
-        position: absolute;
-        top: 40%;
-        width: initial;
-        margin-top: 0;
-    }
-
-    #io-ox-login-container .alert a {
-        font-weight: bold;
+    #io-ox-copyright {
+        font-size: 10px;
     }
 }
 
@@ -389,9 +369,4 @@ html.baseline {
 .btn-primary {
     background-color: #3d7dbb;
     border-color: #1f6da1;
-}
-
-body.down #io-ox-login-container .alert {
-    position: relative;
-    top: 40%;
 }
