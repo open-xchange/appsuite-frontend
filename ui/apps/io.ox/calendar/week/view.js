@@ -930,7 +930,7 @@ define('io.ox/calendar/week/view', [
             // something new?
             if (this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef) {
                 if (this.options.todayClass && this.columns > 1) {
-                    var weekViewContainer = $('.week-view-container');
+                    var weekViewContainer = $('.week-view-container', this.$el);
                     weekViewContainer.find('.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
                     weekViewContainer.find('.day[date="' + today.diff(this.startDate, 'day') + '"]', this.$el).addClass(this.options.todayClass);
                 }
@@ -938,7 +938,7 @@ define('io.ox/calendar/week/view', [
             }
 
             if (this.options.todayClass) {
-                $('.week-view-container').find('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
+                $('.week-view-container .day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
             }
 
             this.dayLabelRef = today.valueOf();
@@ -962,7 +962,7 @@ define('io.ox/calendar/week/view', [
                 // mark today
                 if (util.isToday(tmpDate)) {
 
-                    var todayContainer = $('.week-view-container').find('.day[date="' + d + '"]', this.pane);
+                    var todayContainer = $('.week-container .day[date="' + d + '"]', this.pane);
 
                     if (this.columns > 1) {
                         todayContainer.addClass(this.options.todayClass);
