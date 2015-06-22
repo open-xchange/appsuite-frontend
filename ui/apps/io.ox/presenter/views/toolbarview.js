@@ -126,7 +126,6 @@ define('io.ox/presenter/views/toolbarview', [
         ref: TOOLBAR_LINKS_ID
     }));
 
-
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
     new Action(TOOLBAR_ACTION_DROPDOWN_ID, {
@@ -176,7 +175,6 @@ define('io.ox/presenter/views/toolbarview', [
             //baton.context.onZoomOut();
         }
     });
-
 
     // define the Backbone view
     var ToolbarView = DisposableView.extend({
