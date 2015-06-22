@@ -94,7 +94,7 @@ define('io.ox/core/tk/typeahead', [
                     var node;
                     this.append(
                         node = $('<div class="contact-image lazyload">')
-                            .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
+                            .css('background-image', 'url(' + contactAPI.getFallbackImage() + ')')
                     );
                     // apply picture halo lazy load
                     contactAPI.pictureHalo(

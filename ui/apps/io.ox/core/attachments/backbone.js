@@ -13,8 +13,9 @@
 
 define('io.ox/core/attachments/backbone', [
     'io.ox/core/folder/title',
-    'io.ox/core/capabilities'
-], function (shortTitle, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/contacts/api'
+], function (shortTitle, capabilities, api) {
 
     'use strict';
 
@@ -179,7 +180,7 @@ define('io.ox/core/attachments/backbone', [
                 var def = new UploadSimulator().upload(this.fileObj);
                 var model = this;
                 def.then(function uploadDone() {
-                    var url = 'appsuite/v=7.6.0.20140716.154321/apps/themes/default/dummypicture.png';
+                    var url = api.getFallbackImage();
                     var meta = _.clone(model.get('meta'));
                     meta.previewUrl = meta.previewUrl || url;
                     model.set('meta', meta);

@@ -15,9 +15,10 @@ define('io.ox/linkedIn/view-detail', [
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/core/http',
+    'io.ox/contacts/api',
     'gettext!io.ox/portal',
     'less!io.ox/linkedIn/style'
-], function (ext, dialogs, http, gt) {
+], function (ext, dialogs, http, api, gt) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/linkedIn/view-detail', [
 
         $pictureNode.append(
             $('<img>', {
-                src: data.pictureUrl || (ox.base + '/apps/themes/default/dummypicture.png'),
+                src: data.pictureUrl || api.getFallbackImage(),
                 alt: data.firstName + ' ' + data.lastName
             })
             .css({ margin: '0 5px 0 0' })
@@ -174,7 +175,7 @@ define('io.ox/linkedIn/view-detail', [
                     if (relation.person && relation.person.pictureUrl) {
                         imageUrl = relation.person.pictureUrl;
                     } else {
-                        imageUrl = ox.base + '/apps/themes/default/dummypicture.png';
+                        imageUrl = api.getFallbackImage();
                     }
                     $('<img>')
                         .addClass('linkedin-profile-picture')
