@@ -60,6 +60,8 @@ define('io.ox/presenter/views/presentationview', [
         initialize: function (options) {
             _.extend(this, options);
 
+            // the RT connection
+            this.rtConnection = this.app.rtConnection;
             // the name of the document converter server module.
             this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels

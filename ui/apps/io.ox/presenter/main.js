@@ -15,9 +15,10 @@
 define('io.ox/presenter/main', [
     'io.ox/files/api',
     'io.ox/core/page-controller',
+    'io.ox/presenter/rtconnection',
     'io.ox/presenter/views/mainview',
     'less!io.ox/presenter/style'
-], function (FilesAPI, PageController, MainView) {
+], function (FilesAPI, PageController, RTConnection, MainView) {
 
     'use strict';
 
@@ -48,10 +49,23 @@ define('io.ox/presenter/main', [
 
                     var title = data.filename || data.title,
                         fileModel = FilesAPI.pool.get('detail').get(_.cid(data)),
-                        page = app.pages.getPage('presentationView'),
-                        view = new MainView({ model: fileModel });
+                        page = app.pages.getPage('presentationView');
 
-                    page.append(view.render().$el);
+                    // RT connect success handler
+                    function rtConnectSuccess(response) {
+                        console.info('ConnectSuccess()', response);
+                        var view = new MainView({ model: fileModel, app: app });
+                        page.append(view.render().$el);
+                    }
+
+                    // RT connect error handler
+                    function rtConnectError(response) {
+                        console.warn('ConnectError', response);
+                    }
+
+                    // init RT connection
+                    app.rtConnection = new RTConnection(fileModel.toJSON());
+                    app.rtConnection.connect().then(rtConnectSuccess, rtConnectError);
 
                     app.setTitle(title);
 
@@ -70,6 +84,16 @@ define('io.ox/presenter/main', [
 
                 if (id && folder_id) {
                     app.setState({ id: id, folder: folder_id });
+                }
+            });
+        },
+
+        'on-app-quit': function (app) {
+            app.on('quit', function () {
+                if (app.rtConnection) {
+                    // dispose RT connection instance
+                    app.rtConnection.dispose();
+                    app.rtConnection = null;
                 }
             });
         }
