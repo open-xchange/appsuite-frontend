@@ -210,6 +210,16 @@ define('io.ox/find/main', [
                             }
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
+
+                        // invalidate collection state when thread setting changes
+                        var onChangeThread = function () {
+                            if (parent.listView.loader.mode === 'search') {
+                                defaultLoader.collection.expired = true;
+                            } else {
+                                collectionLoader.collection.expired = true;
+                            }
+                        };
+
                         var register = function () {
                                 var view = app.view.model,
                                     // remember original setCollection
@@ -224,6 +234,9 @@ define('io.ox/find/main', [
                                     view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
                                     return setCollection.apply(this, arguments);
                                 };
+                                // register listener to expire collection when thread setting is changed
+                                parent.props.off('change:thread', onChangeThread);
+                                parent.props.on('change:thread', onChangeThread);
                             };
 
                         // events
