@@ -9,6 +9,7 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
 define('io.ox/presenter/main', [
@@ -25,26 +26,16 @@ define('io.ox/presenter/main', [
     ox.ui.App.mediator(NAME, {
 
         'pages-desktop': function (app) {
-            if (_.device('smartphone')) return;
 
             // add page controller
             app.pages = new PageController(app);
 
-            app.getWindow().nodes.main.addClass('io-ox-presenter');
-
-            // create 2 pages
-            /*
-            app.pages.addPage({
-                name: 'listView',
-                container: app.getWindow().nodes.main,
-                classes: 'leftside border-right'
-            });
-            */
             app.pages.addPage({
                 name: 'presentationView',
-                container: app.getWindow().nodes.main,
-                classes: 'rightside fullwidth'
+                container: app.getWindow().nodes.main
             });
+
+            app.pages.setCurrentPage('presentationView');
         },
 
         'start-presentation': function (app) {
