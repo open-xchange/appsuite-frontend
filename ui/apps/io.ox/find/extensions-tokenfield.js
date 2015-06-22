@@ -37,7 +37,7 @@ define('io.ox/find/extensions-tokenfield', [
 
                 if (!facet.hasPersons()) return;
 
-                var defaultimage = api.getFallbackPicture(),
+                var defaultimage = api.getFallbackImage(),
                     image = baton.data.value.getImageUrl();
                 // remove default indent
                 this.removeClass('indent');
