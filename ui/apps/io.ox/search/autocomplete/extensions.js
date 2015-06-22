@@ -13,10 +13,12 @@
 
 define('io.ox/search/autocomplete/extensions',[
     'io.ox/core/extensions',
+    'io.ox/contacts/api',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'less!io.ox/search/style'
-], function (ext, settings, gt) {
+], function (ext, api, settings, gt) {
+
     'use strict';
 
     var POINT = 'io.ox/search/autocomplete';
@@ -252,7 +254,7 @@ define('io.ox/search/autocomplete/extensions',[
             //disabled
             if (!this.is('.contacts, .contact, .participant, .task_participants')) return;
 
-            var image = ox.base + '/apps/themes/default/dummypicture.png';
+            var image = api.getFallbackImage();
 
             // remove default indent
             this.removeClass('indent');
