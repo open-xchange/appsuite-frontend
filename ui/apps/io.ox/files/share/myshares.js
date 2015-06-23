@@ -16,9 +16,10 @@ define('io.ox/files/share/myshares', [
     'io.ox/backbone/disposable',
     'io.ox/files/share/model',
     'io.ox/files/share/api',
+    'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, sModel, api, gt) {
+], function (ext, DisposableView, sModel, api, BreadcrumbView, gt) {
 
     'use strict';
 
@@ -63,10 +64,20 @@ define('io.ox/files/share/myshares', [
         id: 'info',
         index: INDEX += 100,
         draw: function (baton) {
+            var breadcrumb = new BreadcrumbView({ folder: baton.view.model.get('target').folder, exclude: ['9'], notail: true });
+
+            breadcrumb.handler = function (id) {
+                // launch files and set/change folder
+                ox.launch('io.ox/files/main', { folder: id }).done(function () {
+                    this.folder.set(id);
+                });
+            };
+
             this.append(
                 $('<div class="info">').append(
                     $('<div class="filename">').text('Filename/Foldername'),
-                    $('<div class="url">').text(baton.view.model.get('share_url'))
+                    $('<div class="url">').text(baton.view.model.get('share_url')),
+                    breadcrumb.render().$el
                 )
             );
         }
