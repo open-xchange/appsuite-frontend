@@ -73,9 +73,8 @@ define('io.ox/presenter/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/zoomout',
                 label: gt('Zoom out'),
                 customize: function () {
-                    this.addClass('viewer-toolbar-zoomout').attr({
+                    this.addClass('presenter-toolbar-zoomout').attr({
                         tabindex: '1',
-                        title: gt('Zoom out'),
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -87,9 +86,8 @@ define('io.ox/presenter/views/toolbarview', [
                 label: gt('Zoom in'),
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
-                    this.addClass('viewer-toolbar-zoomin').attr({
+                    this.addClass('presenter-toolbar-zoomin').attr({
                         tabindex: '1',
-                        title: gt('Zoom in'),
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -97,14 +95,14 @@ define('io.ox/presenter/views/toolbarview', [
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
-                icon: 'fa fa-info-circle',
-                label: gt('View details'),
+                icon: 'fa fa-users',
+                label: gt('View participants'),
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
-                    this.addClass('viewer-toolbar-togglesidebar')
+                    this.addClass('presenter-toolbar-togglesidebar')
                         .attr({
                             tabindex: '1',
-                            'aria-label': gt('View details')
+                            'aria-label': gt('View participants')
                         });
                 }
             }
@@ -193,21 +191,21 @@ define('io.ox/presenter/views/toolbarview', [
          * Toggles the visibility of the sidebar.
          */
         onToggleSidebar: function () {
-            this.presenterEvents.trigger('viewer:toggle:sidebar');
+            this.presenterEvents.trigger('presenter:toggle:sidebar');
         },
 
         /**
          * Publishes zoom-in event to the MainView event aggregator.
          */
         onZoomIn: function () {
-            this.presenterEvents.trigger('viewer:zoomin');
+            this.presenterEvents.trigger('presenter:zoomin');
         },
 
         /**
          * Publishes zoom-out event to the MainView event aggregator.
          */
         onZoomOut: function () {
-            this.presenterEvents.trigger('viewer:zoomout');
+            this.presenterEvents.trigger('presenter:zoomout');
         },
 
         /**

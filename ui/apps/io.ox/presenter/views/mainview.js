@@ -55,6 +55,8 @@ define('io.ox/presenter/views/mainview', [
             // clean stuff on dispose event from core/commons.js
             this.on('dispose', this.disposeView.bind(this));
 
+            // listen to sidebar toggle events
+            this.listenTo(this.presenterEvents, 'presenter:toggle:sidebar', this.onToggleSidebar);
             this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
         },
 
@@ -64,17 +66,17 @@ define('io.ox/presenter/views/mainview', [
          * @returns {MainView}
          */
         render: function () {
-            //var state = true;   // TODO: set according to user role (presenter, listener)
+            var state = false;   // TODO: set according to user role (presenter, listener)
 
             // append toolbar view
             this.$el.append(
-                //this.sidebarView.render().el,
                 this.toolbarView.render().el,
+                this.sidebarView.render().el,
                 this.presentationView.render().el
             );
 
             // set initial sidebar state
-            //this.sidebarView.toggleSidebar(state);
+            this.sidebarView.toggleSidebar(state);
 
             return this;
         },
@@ -141,10 +143,17 @@ define('io.ox/presenter/views/mainview', [
             }
         },
 
+        // toggle sidebar after the sidebar button is clicked
+        onToggleSidebar: function () {
+            //console.info('Presenter.mainView.onToggleSidebar()');
+            this.sidebarView.toggleSidebar();
+        },
+
         /**
          * Handle side-bar toggle
          */
         onSideBarToggled: function (/*state*/) {
+            //console.info('Presenter.mainView.onSidebarToggled()');
             this.onWindowResize();
         },
 
@@ -153,7 +162,7 @@ define('io.ox/presenter/views/mainview', [
          * Recalculate view dimensions after e.g. window resize events
          */
         onWindowResize: function () {
-            console.info('Presenter - mainview - onWindowResize()');
+            //console.info('Presenter - mainview - onWindowResize()');
 
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0;
 
@@ -197,7 +206,7 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view entering full screen mode
          */
         onEnterFullscreen: function () {
-            console.info('Presenter - mainview - onEnterFullscreen()');
+            //console.info('Presenter - mainview - onEnterFullscreen()');
             this.fullscreen = true;
         },
 
@@ -205,7 +214,7 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view leaving full screen mode
          */
         onExitFullscreen: function () {
-            console.info('Presenter - mainview - onExitFullscreen()');
+            //console.info('Presenter - mainview - onExitFullscreen()');
             this.fullscreen = false;
         },
 
@@ -220,7 +229,7 @@ define('io.ox/presenter/views/mainview', [
          * Destructor function of the PresentationView.
          */
         disposeView: function () {
-            console.info('Presenter - dispose MainView');
+            //console.info('Presenter - dispose MainView');
 
             $(window).off('resize.presenter');
             this.presentationView.remove();

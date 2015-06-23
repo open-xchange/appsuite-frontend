@@ -150,18 +150,23 @@
         }
     }
 
+    @presenter-sidebar-bgcolor: #f5f5f5;
+    @presenter-sidebar-border-color: #DDDDDD;
+    @presenter-sidebar-width: 320px;
     .presenter-sidebar {
         display: none;
         position: absolute;
-        top: 0;
+        top: 40px;
         right: 0;
         bottom: 0;
-        width: 400px;
+        width: @presenter-sidebar-width;
         outline: none;
         z-index: 2;     // hide captions when sidebar is 100% width
         padding: 16px;
         overflow-y: auto;
         overflow-x: hidden;
+        background-color: @presenter-sidebar-bgcolor;
+        border-left: 1px solid @presenter-sidebar-border-color;
         &.opened {
             display: block;
         }

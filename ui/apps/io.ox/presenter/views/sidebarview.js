@@ -34,8 +34,7 @@ define('io.ox/presenter/views/sidebarview', [
             _.extend(this, options);
 
             this.on('dispose', this.disposeView.bind(this));
-            // listen to slide change
-            //this.listenTo(this.presenterEvents, 'presenter:slide:change', this.renderSections);
+
         },
 
         /**
@@ -69,7 +68,7 @@ define('io.ox/presenter/views/sidebarview', [
 
             // render sections
             this.$el.append(
-                $('<div>').text('Hello World')
+                $('<div>').text('Participants')
                 // new FooBar({ model: this.model }).render().el
             );
         },
