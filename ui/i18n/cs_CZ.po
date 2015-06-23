@@ -1631,7 +1631,7 @@ msgstr "Vyčistit"
 msgid "Clear"
 msgstr "Vyprázdnit"
 
-#: apps/io.ox/search/autocomplete/extensions.js:196 module:io.ox/core
+#: apps/io.ox/search/autocomplete/extensions.js:198 module:io.ox/core
 msgid "Clear field"
 msgstr "Vyprázdnit pole"
 
@@ -1698,8 +1698,8 @@ msgstr "Klikněte, chcete-li to zkusit později znovu."
 msgid "Click to try again."
 msgstr "Klikněte, chcete-li to zkusit znovu."
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js:161 module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js:165
+#: apps/io.ox/contacts/widgets/pictureUpload.js:162 module:io.ox/contacts
+#: apps/io.ox/contacts/widgets/pictureUpload.js:166
 msgid "Click to upload image"
 msgstr "Kliknutím nahrajete obrázek"
 
@@ -4931,7 +4931,7 @@ msgid "No items found"
 msgstr "Nepodařilo se nalézt žádné položky"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:337 module:io.ox/find
+#: apps/io.ox/find/main.js:350 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Nenalezeny žádné položky. Upravte, prosím, používaná kritéria."
 
@@ -5142,7 +5142,7 @@ msgstr "V pracovních dnech"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:340 module:io.ox/find
+#: apps/io.ox/find/main.js:353 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Nalezena jedna položka."
@@ -5179,7 +5179,7 @@ msgstr "Otevřít v prohlížeči"
 msgid "Open in browser tab"
 msgstr "Otevřít v prohlížeči"
 
-#: apps/io.ox/linkedIn/view-detail.js:66 module:io.ox/portal
+#: apps/io.ox/linkedIn/view-detail.js:67 module:io.ox/portal
 msgid "Open on LinkedIn"
 msgstr "Otevřít na LinkedIn"
 
@@ -6391,8 +6391,8 @@ msgstr "Plánování"
 #: apps/io.ox/core/main.js:767 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:45 module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:119
-#: apps/io.ox/search/autocomplete/extensions.js:169
-#: apps/io.ox/search/autocomplete/extensions.js:212
+#: apps/io.ox/search/autocomplete/extensions.js:171
+#: apps/io.ox/search/autocomplete/extensions.js:214
 #: apps/io.ox/search/main.js:199 module:io.ox/search
 #: apps/io.ox/search/main.js:260 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
@@ -8781,14 +8781,14 @@ msgstr ""
 "speciální znaky jako %1$s"
 
 #. %1$s maximum filesize
-#: apps/io.ox/contacts/widgets/pictureUpload.js:65 module:io.ox/contacts
+#: apps/io.ox/contacts/widgets/pictureUpload.js:66 module:io.ox/contacts
 #, fuzzy
 msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 msgstr ""
 "Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená velikost "
 "souboru %2$s"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js:58 module:io.ox/contacts
+#: apps/io.ox/contacts/widgets/pictureUpload.js:59 module:io.ox/contacts
 msgid "Your selected picture will be displayed after saving"
 msgstr "Vybraný obrázek bude zobrazen po uložení"
 
