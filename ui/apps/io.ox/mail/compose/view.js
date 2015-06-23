@@ -452,6 +452,8 @@ define('io.ox/mail/compose/view', [
         },
 
         saveDraft: function () {
+            var win = this.app.getWindow();
+            win.busy();
             // get mail
             var self = this,
                 mail = this.model.getMail(),
@@ -508,6 +510,8 @@ define('io.ox/mail/compose/view', [
                 self.model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
                 return result;
+            }).always(function () {
+                win.idle();
             });
         },
 
