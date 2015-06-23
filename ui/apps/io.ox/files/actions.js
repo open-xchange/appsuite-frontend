@@ -102,7 +102,6 @@ define('io.ox/files/actions', [
                 );
             },
             action: function (baton) {
-                debugger;
                 ox.launch('io.ox/editor/main').done(function () {
                     this.create({ folder: baton.app.folder.get() });
                 });
