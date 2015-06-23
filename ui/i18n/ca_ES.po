@@ -1699,7 +1699,7 @@ msgstr "Neteja"
 msgid "Clear"
 msgstr "esborra"
 
-#: apps/io.ox/search/autocomplete/extensions.js:196 module:io.ox/core
+#: apps/io.ox/search/autocomplete/extensions.js:198 module:io.ox/core
 msgid "Clear field"
 msgstr "Neteja el camp"
 
@@ -1769,8 +1769,8 @@ msgstr "Premeu per a provar-ho més tard."
 msgid "Click to try again."
 msgstr "Premeu per a provar-ho de nou."
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js:161 module:io.ox/contacts
-#: apps/io.ox/contacts/widgets/pictureUpload.js:165
+#: apps/io.ox/contacts/widgets/pictureUpload.js:162 module:io.ox/contacts
+#: apps/io.ox/contacts/widgets/pictureUpload.js:166
 msgid "Click to upload image"
 msgstr "Premeu per a puja una imatge"
 
@@ -5120,7 +5120,7 @@ msgid "No items found"
 msgstr "No s'han torbat els elements"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:337 module:io.ox/find
+#: apps/io.ox/find/main.js:350 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr ""
 
@@ -5333,7 +5333,7 @@ msgstr "Els dies feiners"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:340 module:io.ox/find
+#: apps/io.ox/find/main.js:353 module:io.ox/find
 #, fuzzy
 #| msgid "No items found"
 msgid "One item was found."
@@ -5372,7 +5372,7 @@ msgstr "Obre al navegador"
 msgid "Open in browser tab"
 msgstr "Obre al navegador"
 
-#: apps/io.ox/linkedIn/view-detail.js:66 module:io.ox/portal
+#: apps/io.ox/linkedIn/view-detail.js:67 module:io.ox/portal
 msgid "Open on LinkedIn"
 msgstr "Obre a LinkedIn"
 
@@ -6617,8 +6617,8 @@ msgstr "Planificació"
 #: apps/io.ox/core/main.js:767 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:45 module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:119
-#: apps/io.ox/search/autocomplete/extensions.js:169
-#: apps/io.ox/search/autocomplete/extensions.js:212
+#: apps/io.ox/search/autocomplete/extensions.js:171
+#: apps/io.ox/search/autocomplete/extensions.js:214
 #: apps/io.ox/search/main.js:199 module:io.ox/search
 #: apps/io.ox/search/main.js:260 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
@@ -9077,7 +9077,7 @@ msgstr ""
 "especials com %1$s"
 
 #. %1$s maximum filesize
-#: apps/io.ox/contacts/widgets/pictureUpload.js:65 module:io.ox/contacts
+#: apps/io.ox/contacts/widgets/pictureUpload.js:66 module:io.ox/contacts
 #, fuzzy
 #| msgid ""
 #| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -9087,7 +9087,7 @@ msgstr ""
 "El fitxer \"%1$s\" no s'ha pogut carregar perquè supera la mida màxima de "
 "fitxer de %2$s"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js:58 module:io.ox/contacts
+#: apps/io.ox/contacts/widgets/pictureUpload.js:59 module:io.ox/contacts
 msgid "Your selected picture will be displayed after saving"
 msgstr "La imatge seleccionada es mostrarà després de desar"
 
