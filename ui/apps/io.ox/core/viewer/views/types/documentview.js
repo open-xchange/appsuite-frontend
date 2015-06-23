@@ -95,8 +95,8 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         onTap: function (event, tapCount) {
             if (tapCount === 2) {
-                var zoomAction = this.doubleTapZoomed ? 'viewer:zoomout' : 'viewer:zoomin';
-                this.viewerEvents.trigger(zoomAction);
+                var zoomFactor = this.doubleTapZoomed ? this.getFitScreenZoomFactor() : 100;
+                this.setZoomLevel(zoomFactor);
                 this.doubleTapZoomed = !this.doubleTapZoomed;
             }
         },
@@ -117,7 +117,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          * The current center position between the two fingers
          */
         onPinch: (function () {
-            //console.warn('onPinch()');
             var startDistance,
                 moveDelta,
                 transformScale,
@@ -128,7 +127,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             return function pinchHandler(phase, event, distance, midPoint) {
                 switch (phase) {
                     case 'start':
-                        //console.warn('START ==> ' + distance + ' ', JSON.stringify(midPoint));
                         startDistance = distance;
                         break;
                     case 'move':
@@ -136,22 +134,18 @@ define('io.ox/core/viewer/views/types/documentview', [
                         transformScale = distance / startDistance;
                         transformOriginX = midPoint.x + this.$el.scrollLeft();
                         transformOriginY = midPoint.y + this.$el.scrollTop();
-                        //console.warn('MOVE ==> ' + moveDelta + ' ' + transformScale + ' pinchpoint:' + JSON.stringify(midPoint));
                         this.documentContainer.css({
                             'transform-origin': transformOriginX + 'px ' + transformOriginY + 'px',
                             'transform': 'scale(' + transformScale + ')'
                         });
                         break;
                     case 'end':
-                        //console.warn('END ==> scale:' + transformScale + ' currentzoom:' + this.currentZoomFactor);
                         zoomFactor = transformScale * this.currentZoomFactor;
                         zoomFactor = Util.minMax(zoomFactor, this.getMinZoomFactor(), this.getMaxZoomFactor());
                         this.setZoomLevel(zoomFactor);
-                        this.$el.scrollLeft(transformOriginX);
                         this.documentContainer.removeAttr('style');
                         break;
                     case 'cancel':
-                        //console.warn('CANCEL ==>');
                         this.documentContainer.removeAttr('style');
                         break;
                     default:
@@ -412,6 +406,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // select/highlight the corresponding thumbnail according to displayed document page
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
                     .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount);
+                this.$el.removeClass('io-ox-busy');
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
@@ -471,6 +466,17 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         getDefaultZoomFactor: function () {
             return this.getDefaultScale() * 100;
+        },
+
+        /**
+         * Calculates the 'fit to page' zoom factor of this document.
+         * @returns {Number} zoom factor
+         */
+        getFitScreenZoomFactor: function () {
+            var betweenPageOffset = 80,
+                slideHeight = this.$el.height() - betweenPageOffset,
+                originalPageHeight = this.pdfDocument.getOriginalPageSize().height;
+            return slideHeight / originalPageHeight * 100;
         },
 
         /**

@@ -417,6 +417,9 @@
             &.sidebar-offset {
                 left: ~"calc(50% - 280px)";
             }
+            @media (max-width: 1024px) {
+                left: 0;
+            }
         }
 
         @viewer-toolbar-link-disabled-color: #CCCCCC;
@@ -537,8 +540,6 @@
         }
 
         .document-container {
-            //overflow: auto;
-            align-self: flex-start;
             .document-page {
                 margin: 40px auto;
                 width: 450px;
