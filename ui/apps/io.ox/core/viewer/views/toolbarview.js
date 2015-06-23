@@ -365,8 +365,39 @@ define('io.ox/core/viewer/views/toolbarview', [
             _.extend(this, options);
             // rerender on slide change
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.render);
+            // show current page on the navigation page box
+            this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
+            // listen to sidebar toggle for document navigation positioning
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        /**
+         * Toggle position offset when sidebar is opened/closed.
+         *
+         * @param {Boolean} state
+         *  toggle state of the viewer sidebar.
+         */
+        onSideBarToggled: function (state) {
+            this.$('.viewer-toolbar-navigation').toggleClass('sidebar-offset', state);
+        },
+
+        /**
+         * Page change handler:
+         * - updates page number in the page input control
+         *
+         * @param pageNumber
+         * @param pageTotal
+         */
+        onPageChange: function (pageNumber, pageTotal) {
+            var pageInput = this.$('.viewer-toolbar-page'),
+                pageTotalDisplay = this.$('.viewer-toolbar-page-total');
+            pageInput.val(pageNumber).attr('data-page-number', pageNumber).trigger('change', { preventPageScroll: true });
+            if (pageTotal) {
+                pageTotalDisplay.text(gt('of %1$d', pageTotal));
+                pageInput.attr('data-page-total', pageTotal);
+            }
         },
 
         /**
@@ -480,6 +511,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_LINKS_ID + '/' + appName
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
+            // render page navigation only in standalone mode and with document files.
+            if (this.standalone && (this.model.isOffice() || this.model.isPDF()) && !_.device('smartphone')) {
+                this.renderPageNavigation();
+            }
             // workaround for correct TAB traversal order:
             // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
             _.defer(function () {
@@ -489,6 +524,66 @@ define('io.ox/core/viewer/views/toolbarview', [
                 );
             });
             return this;
+        },
+
+        renderPageNavigation: function () {
+            var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+                    .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
+                    .append($('<i class="fa fa-arrow-up">')),
+                next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+                    .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
+                    .append($('<i class="fa fa-arrow-down">')),
+                pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
+                pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
+                totalPage = $('<div class="viewer-toolbar-page-total">'),
+                group = $('<li class="viewer-toolbar-navigation" role="presentation">'),
+                self = this;
+            function setButtonState(nodes, state) {
+                if (state) {
+                    $(nodes).removeClass('disabled').removeAttr('aria-disabled');
+                } else {
+                    $(nodes).addClass('disabled').attr('aria-disabled', true);
+                }
+            }
+            function onPrevPage() {
+                self.viewerEvents.trigger('viewer:document:previous');
+            }
+            function onNextPage() {
+                self.viewerEvents.trigger('viewer:document:next');
+            }
+            function onInputKeydown(event) {
+                event.stopPropagation();
+                var keyCode = event.which;
+                if (keyCode === 13 || keyCode === 27) {
+                    self.$el.parent().focus();
+                }
+            }
+            function onInputChange(event, options) {
+                var options = _.extend({ preventPageScroll: false }, options),
+                    newValue = parseInt($(this).val()),
+                    oldValue = parseInt($(this).attr('data-page-number')),
+                    pageTotal = parseInt($(this).attr('data-page-total'));
+                if (isNaN(newValue) || newValue > pageTotal || newValue <= 0 ) {
+                    $(this).val(oldValue);
+                    return;
+                }
+                setButtonState([prev[0], next[0]], true);
+                if (newValue === 1) {
+                    setButtonState(prev, false);
+                }
+                if (newValue === pageTotal) {
+                    setButtonState(next, false);
+                }
+                $(this).attr('data-page-number', newValue);
+                if (!options.preventPageScroll) {
+                    self.viewerEvents.trigger('viewer:document:scrolltopage', newValue);
+                }
+            }
+            group.append(prev, next, pageInputWrapper, totalPage);
+            pageInput.on('keydown', onInputKeydown).on('change', onInputChange);
+            prev.on('click', onPrevPage);
+            next.on('click', onNextPage);
+            this.$el.prepend(group);
         },
 
         /**

@@ -12,12 +12,13 @@
 define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/views/types/baseview',
+    'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, PDFDocument, PDFView, Util, gt) {
+], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, Util, gt) {
 
     'use strict';
 
@@ -40,8 +41,6 @@ define('io.ox/core/viewer/views/types/documentview', [
 
         initialize: function (options) {
             _.extend(this, options);
-            //The name of the document converter server module.
-            this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = _.device('desktop') ? 30 : 15;
             // magic module id to source map
@@ -69,12 +68,128 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
             this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onBeforeClose);
+            this.listenTo(this.viewerEvents, 'viewer:document:scrolltopage', this.onScrollToPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:next', this.onNextPage);
+            this.listenTo(this.viewerEvents, 'viewer:document:previous', this.onPreviousPage);
             // create a debounced version of zoom function
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
             // defaults
             this.currentDominantPageIndex = 1;
             this.numberOfPages = 1;
             this.disposed = null;
+            // disable display flex styles, for pinch to zoom
+            this.$el.addClass('swiper-slide-document');
+            // wheter double tap zoom is already triggered
+            this.doubleTapZoomed = false;
+        },
+
+        /**
+         * Tap event handler.
+         * - zooms documents a step in and out in case of a double tap.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery event object.
+         *
+         * @param {Number} taps
+         *  The count of taps, indicating a single or double tap.
+         */
+        onTap: function (event, tapCount) {
+            if (tapCount === 2) {
+                var zoomFactor = this.doubleTapZoomed ? this.getFitScreenZoomFactor() : 100;
+                this.setZoomLevel(zoomFactor);
+                this.doubleTapZoomed = !this.doubleTapZoomed;
+            }
+        },
+
+        /**
+         * Handles pinch events.
+         *
+         * @param {String} phase
+         * The current pinch phase ('start', 'move', 'end' or 'cancel')
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery tracking event.
+         *
+         * @param {Number} distance
+         * The current distance in px between the two fingers
+         *
+         * @param {Point} midPoint
+         * The current center position between the two fingers
+         */
+        onPinch: (function () {
+            var startDistance,
+                moveDelta,
+                transformScale,
+                zoomFactor,
+                transformOriginX,
+                transformOriginY;
+
+            return function pinchHandler(phase, event, distance, midPoint) {
+                switch (phase) {
+                    case 'start':
+                        startDistance = distance;
+                        break;
+                    case 'move':
+                        moveDelta = distance - startDistance;
+                        transformScale = distance / startDistance;
+                        transformOriginX = midPoint.x + this.$el.scrollLeft();
+                        transformOriginY = midPoint.y + this.$el.scrollTop();
+                        this.documentContainer.css({
+                            'transform-origin': transformOriginX + 'px ' + transformOriginY + 'px',
+                            'transform': 'scale(' + transformScale + ')'
+                        });
+                        break;
+                    case 'end':
+                        zoomFactor = transformScale * this.currentZoomFactor;
+                        zoomFactor = Util.minMax(zoomFactor, this.getMinZoomFactor(), this.getMaxZoomFactor());
+                        this.setZoomLevel(zoomFactor);
+                        this.documentContainer.removeAttr('style');
+                        break;
+                    case 'cancel':
+                        this.documentContainer.removeAttr('style');
+                        break;
+                    default:
+                        break;
+                }
+            };
+        })(),
+
+        /**
+         * Scroll-to-page handler:
+         * - scrolls to the desired page number.
+         * @param {Number} pageNumber
+         */
+        onScrollToPage: function (pageNumber) {
+            if (this.isVisible() && _.isNumber(pageNumber) && pageNumber > 0 && pageNumber <= this.pages.length) {
+                var targetPageNode = this.documentContainer.find('.document-page[data-page=' + pageNumber + ']');
+                if (targetPageNode.length !== 0) {
+                    var targetScrollTop = targetPageNode[0].offsetTop - this.PAGE_SIDE_MARGIN;
+                    this.$el.scrollTop(targetScrollTop);
+                    this.viewerEvents.trigger('viewer:document:pagechange', pageNumber);
+                }
+            }
+        },
+
+        /**
+         * Next page handler:
+         * - scrolls to the next page
+         *
+         * @param {Number} pageNumber
+         */
+        onNextPage: function () {
+            var nextPage = this.getDominantPage() + 1;
+            this.onScrollToPage(nextPage);
+        },
+
+        /**
+         * Previous page handler:
+         * - scrolls to the previous page
+         *
+         * @param {Number} pageNumber
+         */
+        onPreviousPage: function () {
+            var previousPage = this.getDominantPage() - 1;
+            this.onScrollToPage(previousPage);
         },
 
         /**
@@ -84,7 +199,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         onBeforeClose: function () {
             if (this.isVisible()) {
                 var fileId = this.model.get('id'),
-                    fileScrollPosition = this.documentContainer.scrollTop();
+                    fileScrollPosition = this.$el.scrollTop();
                 this.setInitialScrollPosition(fileId, fileScrollPosition);
             }
         },
@@ -93,6 +208,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  Scroll event handler:
          *  -shows the current page in the caption on scroll.
          *  -blends in navigation controls.
+         *  -selects the corresponding thumbnail in the thumbnail pane.
          */
         onScrollHandler: function () {
             var currentDominantPageIndex = this.currentDominantPageIndex,
@@ -106,21 +222,26 @@ define('io.ox/core/viewer/views/types/documentview', [
                 //#. Example result: "Page 5 of 10"
                 //#. %1$d is the current page index
                 //#. %2$d is the total number of pages
-                this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages));
+                this.viewerEvents.trigger('viewer:blendcaption', gt('Page %1$d of %2$d', this.currentDominantPageIndex, this.numberOfPages))
+                    .trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
+                    .trigger('viewer:document:pagechange', this.currentDominantPageIndex);
             }
             this.viewerEvents.trigger('viewer:blendnavigation');
         },
 
         /**
-         * Creates and renders an Image slide.
+         * Creates and renders an document slide.
          *
          * @returns {DocumentView}
          *  the DocumentView instance.
          */
         render: function () {
             this.documentContainer = $('<div class="document-container io-ox-core-pdf">');
-            //this.documentThumbnail = $('<div class="document-thumbnail">');
-            this.$el.empty().append(this.documentThumbnail, this.documentContainer);
+            this.documentContainer.enableTouch({
+                tapHandler: this.onTap.bind(this),
+                pinchHandler: this.onPinch.bind(this)
+            });
+            this.$el.empty().append(this.documentContainer);
             return this;
         },
 
@@ -150,13 +271,13 @@ define('io.ox/core/viewer/views/types/documentview', [
                 self = this;
             visiblePages.forEach(function (index) {
                 var pageBounds = self.pages[index - 1].getBoundingClientRect(),
-                    screenMiddle = self.documentContainer.innerHeight() / 2;
-                if ((pageBounds.top + tolerance <= screenMiddle) &&
-                    (pageBounds.bottom - tolerance >= screenMiddle)) {
+                    slideMiddle = self.$el.innerHeight() / 2;
+                if ((pageBounds.top + tolerance <= slideMiddle) &&
+                    (pageBounds.bottom - tolerance >= slideMiddle)) {
                     dominantPageIndex = index;
                 }
             });
-            return dominantPageIndex;
+            return dominantPageIndex || visiblePages[0];
         },
 
         /**
@@ -198,9 +319,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var documentContainer = this.documentContainer,
-                //documentThumbnail = this.documentThumbnail,
                 convertParams = this.getConvertParams(this.model.get('source')),
-                documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
+                documentUrl = Util.getConverterUrl(convertParams);
 
             /**
              * Returns the pageNode with the given pageNumber.
@@ -250,18 +370,17 @@ define('io.ox/core/viewer/views/types/documentview', [
                     pdfDocumentLoadError.call(this, pageCount);
                     return;
                 }
+                //console.warn('DocumentView.pdfDocumentLoadSuccess()', convertData);
                 var pdfDocument = this.pdfDocument,
                     self = this;
-                // create the PDF view after successful loading;
-                // the initial zoom factor is already set to 1.0
+                // create the PDF view after successful loading
                 this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
                 // draw page nodes and apply css sizes
                 _.times(pageCount, function (index) {
                     var documentPage = $('<div class="document-page">'),
-                        //documentPageThumbnail = $('<div class="document-page-thumbnail">'),
                         pageSize = self.pdfView.getRealPageSize(index + 1);
+                    documentPage.attr('data-page', index + 1);
                     documentContainer.append(documentPage.attr(pageSize).css(pageSize));
-                    //documentThumbnail.append(documentPageThumbnail);
                 });
                 // save values to the view instance, for performance
                 this.numberOfPages = pageCount;
@@ -276,34 +395,30 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.pdfView.setRenderCallbacks(renderCallbacks);
                 // disable slide swiping per default on documents
                 this.$el.addClass('swiper-no-swiping');
-                this.documentContainer.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
-                // set scale/zoom, with stored values or default, according to device's viewport width
+                this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 500));
+                // set scale/zoom and scroll position, with stored or default values
                 var zoomLevel = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
                 this.setZoomLevel(zoomLevel);
-                // set scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id'));
                 if (lastScrollPosition) {
-                    this.$el.find('.document-container').scrollTop(lastScrollPosition);
+                    this.$el.scrollTop(lastScrollPosition);
                 }
+                // select/highlight the corresponding thumbnail according to displayed document page
+                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
+                    .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount);
+                this.$el.removeClass('io-ox-busy');
                 // resolve the document load Deferred: thsi document view is fully loaded.
                 this.documentLoad.resolve();
             }
 
             /**
-             * Actions which always have to be done after pdf document loading process
-             */
-            function pdfDocumentLoadFinished() {
-                documentContainer.idle();
-            }
-
-            /**
              * Error handler for the PDF loading process.
              */
-            function pdfDocumentLoadError(pageCount) {
-                console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', pageCount.cause);
-                var notificationText = PDF_ERROR_NOTIFICATIONS[pageCount.cause || 'default'],
+            function pdfDocumentLoadError(response) {
+                console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', response.cause);
+                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause || 'default'],
                     notificationIconClass;
-                if (pageCount.cause === 'passwordProtected') {
+                if (response.cause === 'passwordProtected') {
                     notificationIconClass = 'fa-lock';
                 }
                 this.displayNotification(notificationText, notificationIconClass);
@@ -311,15 +426,17 @@ define('io.ox/core/viewer/views/types/documentview', [
                 this.documentLoad.reject();
             }
 
+            // create a pdf document object with the document PDF url
             this.pdfDocument = new PDFDocument(documentUrl);
+
             // display loading animation
-            documentContainer.busy();
+            this.$el.addClass('io-ox-busy');
 
             // wait for PDF document to finish loading
-            $.when(this.pdfDocument.getLoadPromise())
-                .then(pdfDocumentLoadSuccess.bind(this), pdfDocumentLoadError.bind(this))
-                .always(pdfDocumentLoadFinished.bind(this));
-
+            $.when(this.pdfDocument.getLoadPromise()).then(
+                pdfDocumentLoadSuccess.bind(this),
+                pdfDocumentLoadError.bind(this)
+            );
             return this;
         },
 
@@ -349,6 +466,17 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         getDefaultZoomFactor: function () {
             return this.getDefaultScale() * 100;
+        },
+
+        /**
+         * Calculates the 'fit to page' zoom factor of this document.
+         * @returns {Number} zoom factor
+         */
+        getFitScreenZoomFactor: function () {
+            var betweenPageOffset = 80,
+                slideHeight = this.$el.height() - betweenPageOffset,
+                originalPageHeight = this.pdfDocument.getOriginalPageSize().height;
+            return slideHeight / originalPageHeight * 100;
         },
 
         /**
@@ -412,14 +540,16 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var pdfView = this.pdfView,
-                documentTopPosition = this.documentContainer.scrollTop();
+                documentTopPosition = this.$el.scrollTop(),
+                documentLeftPosition = this.$el.scrollLeft();
             _.each(this.pages, function (page, pageIndex) {
                 pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
             });
             // adjust document scroll position according to new zoom
-            this.documentContainer.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
+            this.$el.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
+            this.$el.scrollLeft(documentLeftPosition * zoomLevel / this.currentZoomFactor);
             // save new zoom level to view
             this.currentZoomFactor = zoomLevel;
             this.setInitialZoomLevel(this.model.get('id'), zoomLevel);
@@ -527,6 +657,9 @@ define('io.ox/core/viewer/views/types/documentview', [
         disposeView: function () {
             this.unload(true);
             this.$el.off();
+            if (this.thumbnailsView) {
+                this.thumbnailsView.disposeView();
+            }
         }
 
     });

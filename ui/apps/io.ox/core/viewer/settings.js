@@ -34,6 +34,22 @@ define('io.ox/core/viewer/settings', [
             if (_.device('desktop')) {
                 CoreViewerSettings.set('viewer/sidebarOpenState', state).save();
             }
+        },
+
+        /**
+         * Returns the last active sidebar navigation tab
+         */
+        getSidebarActiveTab: function () {
+            return CoreViewerSettings.get('viewer/sidebarActiveTab', 'thumbnail');
+        },
+
+        /**
+         * Saves the active sidebar tab.
+         * @param {String} tabId
+         *  id string of the navigation tab: 'thumbnail' or 'detail'
+         */
+        setSidebarActiveTab: function (tabId) {
+            CoreViewerSettings.set('viewer/sidebarActiveTab', tabId).save();
         }
 
     };
