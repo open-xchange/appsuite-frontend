@@ -222,10 +222,10 @@ define('io.ox/search/main', [
             'button:app': function () {
                 app.view.repaint('apps');
                 app.idle();
-            },
-            'button:clear': function () {
-                app.view.$('.search-field').val('');
-            }
+            }//,
+            // 'button:clear': function () {
+            //     app.view.$('.search-field').val('');
+            // }
         });
 
         // mediator: model

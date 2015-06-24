@@ -16,11 +16,10 @@ define('io.ox/search/autocomplete/extensions',[
     'io.ox/contacts/api',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
-    'io.ox/core/tk/autocomplete'
+    'io.ox/core/tk/tokenfield',
     'less!io.ox/search/style',
     'less!io.ox/find/style'
-], function (ext, api, settings, gt) {
-
+], function (ext, settings, gt, Tokenfield) {
     'use strict';
 
     var POINT = 'io.ox/search/autocomplete';
@@ -29,9 +28,11 @@ define('io.ox/search/autocomplete/extensions',[
         id: 'default',
         index: 1000000000000,
         flow: function (baton) {
-            baton.data.deferred.done(function (value) {
+            baton.data.deferred.done(function () {
+                var value = baton.data.token.model.get('value'),
+                    option;
                 // exclusive: define used option (type2 default is index 0 of options)
-                var option = _.find(value.options, function (item) {
+                option = _.find(value.options, function (item) {
                     return item.id === value.id;
                 });
 
@@ -43,121 +44,124 @@ define('io.ox/search/autocomplete/extensions',[
     var extensions = {
 
         searchfieldLogic: function (baton) {
-            var ref = this.find('.search-field'),
-                app = baton.app,
-                model = baton.model,
+            var model = baton.model,
                 view = baton.app.view,
-                container = baton.$.container;
-            // input group and dropdown
-            ref.autocomplete({
-                api: app.apiproxy,
-                minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
-                mode: 'search',
-                delay: 100,
-                parentSelector: container  ? '.query' : '.io-ox-search',
-                container: container,
-                cbshow: function () {
-                    // reset autocomplete tk styles (currently only mobile)
-                    ext.point(POINT + '/style-container').invoke('draw', this, baton);
+                field;
 
-                },
-                // TODO: would be nice to move to control
-                source: function (val) {
-                    // show dropdown immediately (busy by autocomplete tk)
-                    ref.open();
-                    return app.apiproxy.search(val);
-                },
+            var tokenview = new Tokenfield({
+                extPoint: POINT,
+                id: 'search-field-mobile',
+                placeholder: gt('Search, Juuuunge') + '...',
+                className: 'search-field',
+                delayedautoselect: true,
+                dnd: false,
+                // tokenfield options
+                hint: false,
+                allowEditing: false,
+                createTokensOnBlur: false,
+                // typeahead options
+                maxResults: 20,
+                minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
+                autoselect: true,
+                source: baton.app.apiproxy.search,
                 reduce: function (data) {
-                    // only show not 'advanced'
-                    data.list = _.filter(data.list, function (facet) {
-                        return !_.contains(facet.flags, 'advanced');
-                    });
-                    return data;
+                    return data.list;
                 },
-                draw: function (value) {
-                    baton.data = value;
+                suggestion: function (tokendata) {
+                    var node = $('<div class="autocomplete-item">'),
+                        model = tokendata.model;
+
+                    baton = ext.Baton.ensure({
+                        data: model.get('value')
+                    });
+
                     var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                     // use special draw handler
                     if (individual.list().length) {
                         // special
-                        individual.invoke('draw', this, baton);
+                        individual.invoke('draw', node, baton);
                     } else {
                         // default
-                        ext.point(POINT + '/item').invoke('draw', this, baton);
+                        ext.point(POINT + '/item').invoke('draw', node, baton);
                     }
+                    return node;
                 },
-                stringify: function () {
-                    // keep input value when item selected
-                    return ref.val();
-                },
-                click: function (e) {
+                harmonize: function (data) {
+                    var list = [];
 
-                    // apply selected filter
-                    var node = $(e.target).closest('.autocomplete-item'),
-                        value = node.data(),
-                        baton = ext.Baton.ensure({
-                            deferred: $.Deferred().resolve(value),
-                            model: model,
-                            view: view
+                    // workaround to handle it like io.ox/find
+                    var ValueModel = Backbone.Model.extend({
+                        getDisplayName: function () {
+                            var value = this.get('value');
+                            return (value.item && value.item.name ? value.item.name : value.name || '\u00A0' );
+                        }
+                    });
+
+                    _.each(data, function (facet) {
+                        // workaround to handle it like io.ox/find
+                        facet.hasPersons = function () {
+                            return ['contacts', 'contact', 'participant', 'task_participants'].indexOf(this.id) > -1;
+                        };
+
+                        _.each(facet.values || [ facet ], function (data) {
+                            var value = $.extend({}, data, { facet: facet.id }),
+                                valueModel = new ValueModel({
+                                    facet: facet,
+                                    value: value,
+                                    // workaround to handle it like io.ox/find
+                                    data: {
+                                        value: facet.item
+                                    }
+                                });
+                            // hint: basically this data isn't relevant cause tokens
+                            //       are hidden in favor of custom facets
+                            list.push({
+                                label: valueModel.getDisplayName(),
+                                value: value.id,
+                                model: valueModel
+                            });
                         });
-
-                    // empty input field
-                    if (!(model.getOptions().switches || {}).keepinput)
-                        ref.val('');
+                    });
+                    return list;
+                },
+                click: function (e, data) {
+                    // apply selected filter
+                    var baton = ext.Baton.ensure({
+                            deferred: $.Deferred().resolve(),
+                            view: view,
+                            model: model,
+                            token: {
+                                label: data.label,
+                                value: data.value,
+                                model: data.model
+                            }
+                        });
 
                     ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }
-            })
-            .on('focus focus:custom click', function (e, opt) {
-
-                //search mode: not when enterin input with tab key
-                if (ref.data('byclick')) {
-                    ref.removeData('byclick');
-                    app.view.trigger('focus', model.getApp());
-                }
-                // hint: 'click' supports click on already focused
-                // keep dropdown closed on focus event
-                opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0 });
-
-                // simulate tab keyup event
-                ref.trigger({
-                    type: 'keyup',
-                    which: 9
-                }, opt);
-
-            })
-            .on('mousedown', function () {
-                if (!ref.is(':focus'))
-                    ref.data('byclick', true);
-
-            })
-            .on('keyup', function (e, options) {
-                var opt = _.extend({}, (e.data || {}), options || {}),
-                    // keys pressed
-                    down = e.which === 40 && !ref.isOpen(),
-                    tab = e.which === 9;
-
-                // adjust original event instead of throwing a new one
-                // cause handler (fnKeyUp) is debounced and we might set some options
-                if (_.isUndefined(opt.isRetry) && (down || tab)) {
-                    e.data = _.extend({}, e.data || {}, opt, { isRetry: true });
-                }
             });
 
+            // use/show tokenfield
+            this.find('.search-field').replaceWith(tokenview.$el);
+            tokenview.render();
+            field = tokenview.input;
+
+            // clear action
             this.find('.btn-clear')
                 .on('click', function () {
-                    view.trigger('button:clear');
+                    field.parent().find('.token-input').val('');
+                    field.typeahead('close');
                 });
 
             this.find('.btn-search')
                 .on('click', function () {
                     // open autocomplete dropdown
-                    ref.trigger('click');
+                    field.trigger('click');
                     // trigger ENTER keypress
                     var keydown = $.Event('keydown');
                     keydown.which = 13;
-                    ref.trigger(keydown);
+                    field.trigger(keydown);
                     // prevent, propagation
                     return false;
                 });
