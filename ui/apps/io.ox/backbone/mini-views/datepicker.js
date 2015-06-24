@@ -131,6 +131,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                 )
             );
 
+            this.updateView();
+
             if (this.mobileMode) {
                 require(['io.ox/core/tk/mobiscroll'], function (mobileSettings) {
 
@@ -205,7 +207,11 @@ define('io.ox/backbone/mini-views/datepicker', [
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
-                this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
+                if (this.nodes.dayField.datepicker) {
+                    this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
+                } else {
+                    this.nodes.dayField.val(this.getDateStr(timestamp));
+                }
                 this.nodes.timezoneField.text(gt.noI18n(timestamp.zoneAbbr()));
             } else {
                 this.nodes.dayField.val(this.getDateStr(timestamp));
