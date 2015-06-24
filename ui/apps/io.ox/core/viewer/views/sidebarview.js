@@ -80,7 +80,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail" tabindex="1">').text(gt('Thumbnail')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
                 thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
-            tabsList.append(thumbnailTab, detailTab);
+            tabsList.append(thumbnailTab, detailTab).hide();
             this.$el.append(tabsList);
             tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
             this.$el.append(thumbnailPane, detailPane);
@@ -209,7 +209,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 });
                 // drop handler
                 this.zone.on('drop', this.onNewVersionDropped.bind(this));
-                this.$el.append(this.zone.render().$el.addClass('abs'));
+                detailPane.append(this.zone.render().$el.addClass('abs'));
             }
             // render sections
             detailPane.append(

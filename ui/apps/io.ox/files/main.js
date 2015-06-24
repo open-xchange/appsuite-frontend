@@ -362,14 +362,13 @@ define('io.ox/files/main', [
             if (_.device('!touch')) {
                 app.listView.on('selection:change', function () {
                     if (app.listView.selection.isEmpty() && sidebarView.open) {
-                        sidebarView.$el.empty();
-                        app.getWindow().nodes.main.append(
-                            sidebarView.$el.addClass('rightside').append(
-                                $('<div class="io-ox-center">').append(
-                                    $('<div class="summary empty">').text(gt('No elements selected'))
-                                )
+                        sidebarView.$el.addClass('rightside');
+                        sidebarView.$('.detail-pane').empty().append(
+                            $('<div class="io-ox-center">').append(
+                                $('<div class="summary empty">').text(gt('No elements selected'))
                             )
                         );
+                        app.getWindow().nodes.main.append(sidebarView.$el);
                     } else if (sidebarView.open) {
                         var fileModel = app.listView.collection.get(app.listView.selection.get()[0]);
                         sidebarView.render(fileModel);
@@ -378,7 +377,7 @@ define('io.ox/files/main', [
                         app.getWindow().nodes.main.append(
                             sidebarView.$el.addClass('rightside scrollpane')
                         );
-                        sidebarView.$el.children().wrapAll('<div class="wrapper">');
+                        sidebarView.$('.detail-pane').children().wrapAll('<div class="wrapper">');
                         sidebarView.$el.find('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
                     }
                 });
