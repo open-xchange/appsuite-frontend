@@ -47,64 +47,6 @@ define('io.ox/search/apiproxy',[
         });
 
         POINT.extend({
-            id: 'custom-facet-daterange',
-            index: 200,
-            customize: function (baton) {
-                if (_.device('smartphone')) return;
-                if (baton.args[0].params.module !== 'mail') return;
-
-                // for mail only
-                _.each(baton.data, function (facet) {
-                    // hack to add custom timespan value
-                    if (facet.id === 'date') {
-
-                        // new id
-                        facet.id = facet.id + '.custom';
-                        var tmp = _.copy(facet.values[0]);
-
-                        delete tmp.filter;
-                        tmp.facet = facet.id;
-                        tmp.name = gt('date range');
-                        tmp.id = 'daterange';
-                        tmp.point = 'daterange';
-                        tmp.options = [];
-
-                        delete facet.options;
-                        facet.values = [tmp];
-                    }
-                });
-            }
-        });
-
-        POINT.extend({
-            id: 'only-once',
-            index: 300,
-            customize: function (baton) {
-
-                if (_.device('smartphone')) return;
-
-                var whitelist = {
-                        style: ['simple'],
-                        id: ['contacts', 'contact', 'participant', 'task_participants']
-                    };
-
-                // flag  facet
-                _.each(baton.data, function (facet) {
-                    var style = _.contains(whitelist.style, facet.style),
-                        id = _.contains(whitelist.id, facet.id),
-                        advanced = !(style || id);
-
-                    // flag when not in whitelist
-                    if (advanced) {
-                        facet.flags.push('advanced');
-                    } else if (style) {
-                        facet.flags.push('highlander');
-                    }
-                });
-            }
-        });
-
-        POINT.extend({
             id: 'folder',
             index: 350,
             customize: function (baton) {

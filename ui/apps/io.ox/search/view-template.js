@@ -32,30 +32,64 @@ define('io.ox/search/view-template', [
     // input field
     point.extend({
         id: 'query',
-        index: 200,
+        index: 100,
         row: '0',
         draw: function (baton) {
-            var row,
-                mobile = this.find('.mobile-dropdown');
+            var mobile = this.find('.mobile-dropdown'), cell;
 
             //add mobile container
             baton.$.container = mobile.length ? mobile : undefined;
 
             $('<div class="row query">').append(
-                row = $('<div class="col-xs-12">')
+                //$('<label class="maillabel col-xs-2">').text(gt('Search') + ':'),
+                //
+                $('<div class="col-xs-1 recipient-actions">').append(
+
+                    // search icon
+                    $('<a href="#">')
+                    .attr({
+                        'tabindex': '1',
+                        'class': 'btn-search maillabel col-xs-2'
+                    })
+                    .append(
+                        $('<span class="fa fa-search"></i>')
+                    )
+                    .on('click', function (e) {
+                        console.log('%c' + '!!!', 'color: white; background-color: red');
+                        e.preventDefault();
+                        var e = $.Event('keydown');
+                        e.which = 13;
+                    }),
+                    // clear icon/button
+                    $('<a href="#">')
+                    .attr({
+                        'tabindex': '1',
+                        'class': 'btn-clear',
+                        'aria-label': gt('Clear field'),
+                        'role': 'button'
+                    }).append(
+                        $('<i class="fa fa-times"></i>')
+                    )
+                    .on('click', function (e) {
+                        console.log('%c' + '!!!', 'color: white; background-color: blue');
+                        e.preventDefault();
+                    })
+                ),
+                cell = $('<div class="col-xs-11">')
             ).appendTo(this);
 
-            ext.point('io.ox/search/autocomplete/searchfield-mobile').invoke('draw', row, baton);
+            ext.point('io.ox/search/autocomplete/searchfield').invoke('draw', cell, baton);
+            ext.point('io.ox/search/autocomplete/tokenfield').invoke('draw', cell, baton);
         }
     });
 
     // dropdown button
     point.extend({
         id: 'apps',
-        index: 100,
+        index: 200,
         row: '0',
         draw: function (baton) {
-            var cell = $('<div class="btn-group col-xs-12">'),
+            var cell = $('<div class="btn-group col-xs-12 dropdown">'),
                 row = $('<div class="row applications">').append(cell),
                 id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
@@ -93,7 +127,7 @@ define('io.ox/search/view-template', [
 
             // create button and append dropdown menue
             cell.append(
-                $('<a href="#" type="button" class="btn btn-primary dropdown-toggle">')
+                $('<a href="#" type="button" class="dropdown-toggle pull-left">')
                     .attr({
                         'data-toggle': 'dropdown',
                         'role': 'menuitemcheckbox'
@@ -117,7 +151,7 @@ define('io.ox/search/view-template', [
                     .removeClass('fa-none')
                     .addClass('fa-check');
                 // add name
-                cell.find('.name').text(titles[id]);
+                cell.find('.name').text(gt('in') + ' ' + titles[id]);
             }
 
             // delegate handler

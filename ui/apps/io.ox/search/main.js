@@ -75,7 +75,6 @@ define('io.ox/search/main', [
                 custom: true,
                 hidden: true,
                 flags: [
-                    _.device('smartphone') ? '' : 'advanced',
                     'conflicts:folder_type'
                 ],
                 values: [{
@@ -193,7 +192,7 @@ define('io.ox/search/main', [
         var opt = $.extend({}, options || {}),
             current = ox.ui.App.getCurrentApp();
 
-        win.nodes.main.addClass('io-ox-search f6-target').attr({
+        win.nodes.main.addClass('container io-ox-search f6-target empty').attr({
             'tabindex': '1',
             'role': 'main',
             'aria-label': gt('Search')

@@ -24,34 +24,32 @@ define('io.ox/search/autocomplete/extensions',[
 
     var POINT = 'io.ox/search/autocomplete';
 
-    ext.point(POINT + '/handler/click').extend({
-        id: 'default',
-        index: 1000000000000,
-        flow: function (baton) {
-            baton.data.deferred.done(function () {
-                var value = baton.data.token.model.get('value'),
-                    option;
-                // exclusive: define used option (type2 default is index 0 of options)
-                option = _.find(value.options, function (item) {
-                    return item.id === value.id;
-                });
+    return {
 
-                baton.data.model.add(value.facet, value.id, (option || {}).id);
-            });
-        }
-    });
+        searchfield: function () {
+            if (!_.device('smartphone')) return;
 
-    var extensions = {
+            // input group and dropdown
+            this.append(
+                $('<input type="text">')
+                .attr({
+                    class: 'form-control search-field',
+                    role: 'search',
+                    tabindex: 1
+                })
+            );
+        },
 
-        searchfieldLogic: function (baton) {
+        tokenfield: function (baton) {
             var model = baton.model,
                 view = baton.app.view,
+                row = this.parent(),
                 field;
 
             var tokenview = new Tokenfield({
                 extPoint: POINT,
                 id: 'search-field-mobile',
-                placeholder: gt('Search, Juuuunge') + '...',
+                placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
                 dnd: false,
@@ -74,7 +72,7 @@ define('io.ox/search/autocomplete/extensions',[
                     baton = ext.Baton.ensure({
                         data: model.get('value')
                     });
-
+                    node.addClass(baton.data.facet);
                     var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                     // use special draw handler
@@ -145,17 +143,31 @@ define('io.ox/search/autocomplete/extensions',[
             // use/show tokenfield
             this.find('.search-field').replaceWith(tokenview.$el);
             tokenview.render();
-            field = tokenview.input;
+            field = tokenview.input.attr('autofocus', true);
+
+            // toggle search/clear icon visiblity
+            field.on({
+                'change input': function (e) {
+                    var node = $(e.target),
+                        container = node.closest('.io-ox-search');
+                    if (!node.val())
+                        container.addClass('empty');
+                    else
+                        container.removeClass('empty');
+                }
+            });
 
             // clear action
-            this.find('.btn-clear')
+            row.find('.btn-clear')
                 .on('click', function () {
+                    console.log('%c' + '???', 'color: white; background-color: blue');
                     field.parent().find('.token-input').val('');
                     field.typeahead('close');
                 });
 
-            this.find('.btn-search')
+            row.find('.btn-search')
                 .on('click', function () {
+                    console.log('%c' + '???', 'color: white; background-color: red');
                     // open autocomplete dropdown
                     field.trigger('click');
                     // trigger ENTER keypress
@@ -169,71 +181,6 @@ define('io.ox/search/autocomplete/extensions',[
             return this;
         },
 
-        searchfieldMobile: function (baton) {
-
-            if (!_.device('smartphone')) return;
-
-            var group,
-                label = gt('Search'),
-                id = 'search-search-field';
-
-            // input group and dropdown
-            this.append(
-                group = $('<div class="input-group">')
-                    .append(
-                        $('<input type="text">')
-                        .attr({
-                            class: 'form-control search-field',
-                            role: 'search',
-                            tabindex: 1,
-                            id: id,
-                            placeholder: label + ' ...'
-                        }),
-                        $('<label class="sr-only">')
-                            .attr('for', id)
-                            .text(label)
-                    )
-            );
-
-            // buttons
-            group.append(
-                $('<a href="#">')
-                    .attr({
-                        'tabindex': '1',
-                        'class': 'btn-clear',
-                        'aria-label': gt('Clear field'),
-                        'role': 'button'
-                    }).append(
-                        $('<i class="fa fa-times"></i>')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                    })
-            );
-            group.append(
-                $('<span class="input-group-btn">').append(
-                    // submit
-                    $('<button type="button">')
-                    .attr({
-                        'tabindex': '1',
-                        'class': 'btn btn-default btn-search',
-                        'aria-label': gt('Search')
-                    })
-                    .append(
-                        $('<i class="fa fa-search"></i>')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        var e = $.Event('keydown');
-                        e.which = 13;
-                    })
-                )
-            );
-
-            // add search logic (autocomplet etc.)
-            extensions.searchfieldLogic.call(this, baton);
-        },
-
         styleContainer: function (baton) {
             var value = 'width: 100%;';
             //custom dropdown container?
@@ -241,18 +188,6 @@ define('io.ox/search/autocomplete/extensions',[
                 // reset calculated style from autocomplete tk
                 baton.$.container.attr('style', value);
             }
-        },
-
-        item: function (baton) {
-            this.addClass(baton.data.facet);
-            // contact picture
-            ext.point(POINT + '/image').invoke('draw', this, baton);
-            // display name
-            ext.point(POINT + '/name').invoke('draw', this, baton);
-            // email address
-            ext.point(POINT + '/detail').invoke('draw', this, baton);
-            // aria lebel
-            ext.point(POINT + '/a11y').invoke('draw', this, baton);
         },
 
         image: function (baton) {
@@ -313,9 +248,19 @@ define('io.ox/search/autocomplete/extensions',[
                 'aria-label': text,
                 'tabIndex': 1
             });
+        },
+
+        select: function (baton) {
+            baton.data.deferred.done(function () {
+                var value = baton.data.token.model.get('value'),
+                    option;
+                // exclusive: define used option (type2 default is index 0 of options)
+                option = _.find(value.options, function (item) {
+                    return item.id === value.id;
+                });
+
+                baton.data.model.add(value.facet, value.id, (option || {}).id);
+            });
         }
-
     };
-
-    return extensions;
 });

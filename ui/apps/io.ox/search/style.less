@@ -149,30 +149,109 @@
         display: inline-block;
     }
     // block buttons on mobile
-    .io-ox-search.window-content .facet {
-        width: 100%;
-        .facet-container {
-            text-align: left;
+    .io-ox-search.window-content  {
+        padding-top: 8px;
+        .facet {
             width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            .facet-container {
+                text-align: left;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
 
-            .remove {
-                position: relative;
-                padding-left: 10px;
+                .remove {
+                    position: relative;
+                    padding-left: 10px;
+                }
             }
         }
     }
 
-    // hide tokens
-    .tokenfield.search-field {
-        .token {
-            display: none;
-        }
-    }
 
     // kepp button on top while searchfield grows
     .row.query {
+          border-bottom: 1px solid #ccc;
+          padding-bottom: 5px;
+
+        .recipient-actions {
+
+            position: relative;
+            top: 0;
+            right: 0;
+            margin-top: 3   px;
+
+            a {
+                margin-right: 3px;
+                padding: 2px;
+                color: @label-default-bg;
+                text-decoration: none;
+            }
+
+            @media (max-width: 767px) {
+                padding-right: 10px;
+            }
+        }
+
+        margin-bottom: 7px;
+
+
+        &[data-extension-id=to],&[data-extension-id=cc],&[data-extension-id=bcc] {
+            .col-xs-11 {
+                width: 90%;
+                margin-right: -5px;
+            }
+        }
+        .maillabel {
+            padding-top: 3px;
+            &.col-xs-1 {
+                width: 10%;
+            }
+        }
+
+        .token-input {
+            &::-webkit-input-placeholder {
+                color: #aaa;
+                font-weight: normal;
+            }
+            &:-moz-placeholder {
+                color: #aaa;
+                font-weight: normal;
+            }
+            &::-moz-placeholder {
+                color: #aaa;
+                font-weight: normal;
+            }
+            &:-ms-input-placeholder {
+                color: #aaa;
+                font-weight: normal;
+            }
+        }
+
+        .twitter-typeahead {
+            // This should be removed when autocomplete is rendered inplace
+            display:block !important;
+        }
+
+        .tokenfield.search-field.form-control {
+            border: none;
+            //border-bottom: 1px solid #aaa;
+            border-radius: 0;
+            box-shadow: none;
+            &.focus, &:focus {
+                //border-color: #66afe9;
+            }
+            .token {
+                // hide tokens
+                display: none;
+            }
+        }
+
+        .tokenfield.form-control.to { padding-right: 20px; }
+
+        .recipient-actions a { outline: 0; }
+
+
+
         .input-group-btn {
               vertical-align: top;
         }
@@ -193,7 +272,6 @@
     }
     // scrollable
     .window-content {
-        padding: 14px;
         overflow: auto;
     }
 }
@@ -201,10 +279,26 @@
 // SEARCH APP STYLES
 .io-ox-search {
 
+    &.empty {
+        .btn-search {
+            display: block;
+        }
+        .btn-clear {
+            display: none;
+        }
+    }
+    &:not(.empty) {
+        .btn-search {
+            display: none;
+        }
+        .btn-clear {
+            display: block;
+        }
+    }
     &.window-content {
 
         .row {
-            margin-bottom: 14px;
+            //margin-bottom: 14px;
             max-width: 500px;
 
         }
@@ -215,6 +309,8 @@
 
         // section: applications
         .applications {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
             margin-bottom: 6px;
             .caret {
                 margin-left: 6px;
@@ -228,6 +324,11 @@
                     }
                 }
             }
+        }
+
+        .facets {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
         }
 
         // section: info

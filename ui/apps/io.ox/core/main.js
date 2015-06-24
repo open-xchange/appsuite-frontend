@@ -784,7 +784,6 @@ define('io.ox/core/main', [
                                 });
                             },  gt('Search'))
                         .attr('id', 'io-ox-search-topbar-icon')
-                        .addClass('io-ox-search')
                     );
                 }
             }
