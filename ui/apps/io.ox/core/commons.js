@@ -791,9 +791,10 @@ define('io.ox/core/commons', [
 
             // checks if folder permissions etc. have changed, and triggers redraw.
             // Important to update inline links
-            checkFolder = function (e, folder) {
-                if (folder === e.data.folder.toString() && api) {
-                    api.trigger('update:' + e.data.cid);
+            checkFolder = function (folder) {
+                var data = this;
+                if (folder === data.folder.toString() && api) {
+                    api.trigger('update:' + data.cid);
                 }
             };
 
@@ -805,7 +806,7 @@ define('io.ox/core/commons', [
             api.on('delete update', redraw);
         } else {
             // single item
-            folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
+            folderAPI.on('update', checkFolder, { cid: cid, folder: data.folder_id });
             api.on('delete:' + ecid, remove);
             api.on('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
             api.on('move:' + ecid, move);
