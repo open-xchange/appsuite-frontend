@@ -288,7 +288,7 @@ define('io.ox/presenter/views/presentationview', [
          *  The array of 1-based page numbers to be rendered
          */
         beginPageRendering: function (pageNumbers) {
-            console.log('Presenter - Begin PDF rendering: ' + pageNumbers);
+            console.info('Presenter - Begin PDF rendering: ' + pageNumbers);
         },
 
         /**
@@ -298,7 +298,7 @@ define('io.ox/presenter/views/presentationview', [
          *  The array of 1-based page numbers that have been rendered
          */
         endPageRendering: function (pageNumbers) {
-            console.log('Presenter - End PDF rendering: ' + pageNumbers);
+            console.info('Presenter - End PDF rendering: ' + pageNumbers);
         },
 
         /**
@@ -384,8 +384,7 @@ define('io.ox/presenter/views/presentationview', [
            };
            this.pdfView.setRenderCallbacks(renderCallbacks);
            // set scale/zoom according to device's viewport width
-           var zoomLevel = this.getDefaultZoomFactor();
-           this.setZoomLevel(zoomLevel);
+           this.setZoomLevel(this.getFitScreenZoomFactor());
            // focus first active slide initially
            this.focusActiveSlide();
            // resolve the document load Deferred: this document view is fully loaded.
@@ -424,12 +423,20 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
-         * Returns default zoom factor of this document, after it's initially displayed
-         * in the viewport.
+         * Calculates the 'fit to page' zoom factor of this document.
          * @returns {Number} zoom factor
          */
-        getDefaultZoomFactor: function () {
-            return this.getDefaultScale() * 100;
+        getFitScreenZoomFactor: function () {
+            var offset = 40,
+                slideHeight = this.$el.height(),
+                slideWidth = this.$el.width(),
+                originalPageSize = this.pdfDocument.getOriginalPageSize(),
+                fitWidthZoomFactor = (slideWidth - offset) / originalPageSize.width * 100,
+                fitHeightZoomFactor = (slideHeight - offset) / originalPageSize.height * 100;
+            if (slideWidth >= originalPageSize.width && slideHeight >= originalPageSize.height) {
+                return 100;
+            }
+            return Math.min(fitWidthZoomFactor, fitHeightZoomFactor);
         },
 
         /**
@@ -577,10 +584,10 @@ define('io.ox/presenter/views/presentationview', [
          */
         onResize: function () {
             this.documentLoad.done(function () {
-                var defaultZoomFactor = this.getDefaultZoomFactor();
-                this.setZoomLevelDebounced(defaultZoomFactor);
+                var fitScreenZoomFactor = this.getFitScreenZoomFactor();
+                this.setZoomLevelDebounced(fitScreenZoomFactor);
 
-                console.info('Presenter - onResize()', 'defaultZoomFactor', defaultZoomFactor);
+                console.info('Presenter - onResize()', 'defaultZoomFactor', fitScreenZoomFactor);
 
                 if (this.swiper) {
                     this.swiper.onResize();
@@ -595,7 +602,7 @@ define('io.ox/presenter/views/presentationview', [
          * Destructor function of the PresentationView.
          */
         disposeView: function () {
-            console.log('Presenter - dispose PresentationView');
+            console.info('Presenter - dispose PresentationView');
 
             // destroy the swiper instance
             if (this.swiper) {
