@@ -16,7 +16,9 @@ define('io.ox/search/autocomplete/extensions',[
     'io.ox/contacts/api',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
-    'less!io.ox/search/style'
+    'io.ox/core/tk/autocomplete'
+    'less!io.ox/search/style',
+    'less!io.ox/find/style'
 ], function (ext, api, settings, gt) {
 
     'use strict';

@@ -17,8 +17,7 @@ define('io.ox/search/view-template', [
     'io.ox/core/api/apps',
     'settings!io.ox/core',
     'io.ox/search/autocomplete/view',
-    'io.ox/search/facets/view',
-    'io.ox/core/tk/autocomplete'
+    'io.ox/search/facets/view'
 ], function (gt, ext, appAPI, settings) {
 
     'use strict';
