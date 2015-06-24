@@ -97,7 +97,10 @@ html.baseline {
     right: 0;
     bottom: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 65300;
+    background-color: #fff;
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
 }
 
@@ -144,6 +147,10 @@ html.baseline {
             -webkit-animation: fa-spin 1.5s infinite linear;
             animation: fa-spin 1.5s infinite linear;
         }
+    }
+
+    .help-block {
+        color: #fff;
     }
 }
 
@@ -335,11 +342,21 @@ html.baseline {
     #io-ox-login-footer > span {
         display: block;
     }
+    #io-ox-login-store, #io-ox-forgot-password {
+        margin-top: 4px;
+        margin-bottom: 10px;
+    }
+    #skip-button {
+        margin-top: 8px;
+    }
     #io-ox-forgot-password {
         text-align: left;
     }
     #io-ox-copyright {
         font-size: 10px;
+    }
+    #io-ox-login-form input.form-control {
+        height: inherit;
     }
 }
 

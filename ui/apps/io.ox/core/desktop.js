@@ -1689,31 +1689,6 @@ define('io.ox/core/desktop', [
         };
     }());
 
-    ox.busy = function (block) {
-        // init screen blocker
-        $('#background-loader')[block ? 'busy' : 'idle']()
-            .show()
-            .addClass('secure' + (block ? ' block' : ''));
-    };
-
-    ox.idle = function () {
-        $('#background-loader')
-            .removeClass('secure block')
-            .hide()
-            .idle()
-            .empty();
-    };
-    // only disable, don't show night-rider
-    ox.disable = function () {
-        $('#background-loader')
-            .addClass('busy block secure')
-            .on('touchmove', function (e) {
-                e.preventDefault();
-                return false;
-            })
-            .show();
-    };
-
     // simple launch
     ox.launch = function (id, data) {
         var def = $.Deferred();

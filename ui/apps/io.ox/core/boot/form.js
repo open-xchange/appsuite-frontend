@@ -54,8 +54,8 @@ define('io.ox/core/boot/form', [
 
             // add skip button
             if (util.isPasswordOptional()) {
-                $('#login-button').after(
-                    $('<input class="btn btn-primary">').attr({
+                $('#io-ox-skip-button-container').append(
+                    $('<input class="btn btn-primary form-control">').attr({
                         type: 'submit',
                         value: gt('Skip'),
                         name: 'skip',

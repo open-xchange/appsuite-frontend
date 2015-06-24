@@ -96,6 +96,32 @@ define('io.ox/core/boot/util', [], function () {
 
     ox.on('relogin:required', ox.relogin);
 
+    ox.busy = function (block) {
+        // init screen blocker
+        $('#background-loader')[block ? 'busy' : 'idle']()
+            .show()
+            .addClass('secure' + (block ? ' block' : ''));
+    };
+
+    ox.idle = function () {
+        $('#background-loader')
+            .removeClass('secure block')
+            .hide()
+            .idle()
+            .empty();
+    };
+
+    // only disable, don't show night-rider
+    ox.disable = function () {
+        $('#background-loader')
+            .addClass('busy block secure')
+            .on('touchmove', function (e) {
+                e.preventDefault();
+                return false;
+            })
+            .show();
+    };
+
     //
     // Debug?
     //
