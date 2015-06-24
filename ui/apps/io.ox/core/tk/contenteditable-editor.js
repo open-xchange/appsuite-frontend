@@ -333,6 +333,17 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 ed.setContent(text);
             });
             ed.setContent(text);
+
+            // Remove all position: absolute and white-space: nowrap inline styles
+            // This is a fix for the infamous EUROPCAR mail bugs
+            // Don't change this if you don't know what you are doing
+            if (/position:(\s+)?absolute/i.test(str)) {
+                $(ed.getBody()).find('[style*=absolute]').css('position', 'static');
+            }
+            if (/white-space:(\s+)?nowrap/i.test(str)) {
+                $(ed.getBody()).find('[style*=nowrap]').css('white-space', 'normal');
+            }
+
         },
 
         clear = function () {
