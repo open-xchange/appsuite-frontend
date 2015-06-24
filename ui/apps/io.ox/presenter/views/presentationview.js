@@ -583,6 +583,9 @@ define('io.ox/presenter/views/presentationview', [
          * - calculates and sets a new initial zoom factor
          */
         onResize: function () {
+            if (ox.ui.App.getCurrentApp().getName() !== 'io.ox/presenter') {
+                return;
+            }
             this.documentLoad.done(function () {
                 var fitScreenZoomFactor = this.getFitScreenZoomFactor();
                 this.setZoomLevelDebounced(fitScreenZoomFactor);
