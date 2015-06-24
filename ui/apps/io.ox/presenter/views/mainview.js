@@ -58,6 +58,8 @@ define('io.ox/presenter/views/mainview', [
             // listen to sidebar toggle events
             this.listenTo(this.presenterEvents, 'presenter:toggle:sidebar', this.onToggleSidebar);
             this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
+
+            this.listenTo(this.app.rtModel, 'change', function (model) { console.info('Presenter - MainView - RTModel - change', model); });
         },
 
         /**

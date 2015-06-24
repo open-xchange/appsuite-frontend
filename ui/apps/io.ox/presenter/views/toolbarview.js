@@ -135,6 +135,7 @@ define('io.ox/presenter/views/toolbarview', [
         id: 'start',
         action: function (baton) {
             console.info('start action:', baton);
+            baton.context.app.rtConnection.startPresentation();
             //baton.context.onToggleSidebar();
         }
     });

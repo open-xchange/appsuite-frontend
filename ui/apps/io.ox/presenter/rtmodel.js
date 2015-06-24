@@ -21,14 +21,20 @@ define('io.ox/presenter/rtmodel', [
 
         defaults: function () {
             return {
-                slide: 0,
-                presenter: null,
-                listeners: []
+                presenterId: '',
+                presenterName: '',
+                activeUsers: [],
+                activeSlide: 0,
+                paused: false
             };
         },
 
         initialize: function () {
             console.info('Presenter - RTModel.initialize()');
+
+            this.on('change', function (model) {
+                console.log('Presenter - RTModel - change', model);
+            });
         }
 
     });

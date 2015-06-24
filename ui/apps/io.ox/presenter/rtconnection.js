@@ -431,20 +431,77 @@ define('io.ox/presenter/rtconnection', [
         };
 
         /**
-         * Sends user data update to the server. This user update data will
+         * Sends slide data update to the server. This slide update data will
          * broadcasted to all collaborating clients.
          *
-         * @param {String} action
-         *  Action name string to be handled by the server.
-         *
-         * @param {Object} userData
-         *  An object containing relevant additional user data on the document.
+         * @param {Object} slideInfo
+         *  An object containing relevant slide data.
          *
          * @returns {jQuery.Promise}
          */
         this.updateSlide = function (slideInfo) {
             RTConnection.log('RTConnection.updateSlide called', slideInfo);
             return send('updateslide', 'slideInfo', slideInfo);
+        };
+
+        /**
+         * Start the presentation as presenter.
+         *
+         * @returns {jQuery.Promise}
+         */
+        this.startPresentation = function () {
+            RTConnection.log('RTConnection.startPresentation called');
+            return send('startpresentation');
+        };
+
+        /**
+         * Pause the presentation as presenter.
+         *
+         * @returns {jQuery.Promise}
+         */
+        this.pausePresentation = function () {
+            RTConnection.log('RTConnection.pausePresentation called');
+            return send('pausepresentation');
+        };
+
+        /**
+         * Continue the previously paused presentation as presenter.
+         *
+         * @returns {jQuery.Promise}
+         */
+        this.continuePresentation = function () {
+            RTConnection.log('RTConnection.continuePresentation called');
+            return send('continuepresentation');
+        };
+
+        /**
+         * End the presentation as presenter.
+         *
+         * @returns {jQuery.Promise}
+         */
+        this.endPresentation = function () {
+            RTConnection.log('RTConnection.endPresentation called');
+            return send('endpresentation');
+        };
+
+        /**
+         * Join the presentation as participant / listener.
+         *
+         * @returns {jQuery.Promise}
+         */
+        this.joinPresentation = function () {
+            RTConnection.log('RTConnection.joinPresentation called');
+            return send('joinpresentation');
+        };
+
+        /**
+         * Leave the presentation as participant / listener.
+         *
+         * @returns {jQuery.Promise}
+         */
+        this.leavePresentation = function () {
+            RTConnection.log('RTConnection.leavePresentation called');
+            return send('leavepresentation');
         };
 
         /**

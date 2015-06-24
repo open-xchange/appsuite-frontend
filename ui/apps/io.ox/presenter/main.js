@@ -16,9 +16,10 @@ define('io.ox/presenter/main', [
     'io.ox/files/api',
     'io.ox/core/page-controller',
     'io.ox/presenter/rtconnection',
+    'io.ox/presenter/rtmodel',
     'io.ox/presenter/views/mainview',
     'less!io.ox/presenter/style'
-], function (FilesAPI, PageController, RTConnection, MainView) {
+], function (FilesAPI, PageController, RTConnection, RTModel, MainView) {
 
     'use strict';
 
@@ -63,9 +64,17 @@ define('io.ox/presenter/main', [
                         console.warn('ConnectError', response);
                     }
 
+                    // Handler update events of the RT connection
+                    function rtUpdateHandler (event, data) {
+                        console.info('Presenter - rtUpdateHandler()', event, data);
+                        app.rtModel.set(data);
+                    }
+
                     // init RT connection
+                    app.rtModel = new RTModel();
                     app.rtConnection = new RTConnection(fileModel.toJSON());
                     app.rtConnection.connect().then(rtConnectSuccess, rtConnectError);
+                    app.rtConnection.on({ 'update': rtUpdateHandler });
 
                     app.setTitle(title);
 
