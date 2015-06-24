@@ -147,8 +147,8 @@ msgstr[1] "%1$d minutos"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:471
+#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:449
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s de %2$s"
@@ -2321,6 +2321,10 @@ msgstr "A descrição foi copiada"
 msgid "Description text"
 msgstr "Descrição"
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:77 module:io.ox/core/viewer
+msgid "Detail"
+msgstr "Detalhe"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js:281 module:io.ox/files
 msgid "Details"
@@ -2701,13 +2705,13 @@ msgid ""
 msgstr ""
 "Solte aqui para enviar uma <b class=\"dndignore\">nova versão</b> de \"%1$s\""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:208 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Enviar nova versão"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:174 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:281 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4847,7 +4851,7 @@ msgstr "Lembretes de tarefa"
 msgid "New task reminders"
 msgstr "Lembretes de tarefa"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:111 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4860,6 +4864,12 @@ msgstr "Próximo dia"
 #: apps/io.ox/calendar/week/view.js:805 module:io.ox/calendar
 msgid "Next Week"
 msgstr "Próxima semana"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:534 module:io.ox/core
+#, fuzzy
+#| msgid "Next Day"
+msgid "Next page"
+msgstr "Próximo dia"
 
 #: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
@@ -5314,7 +5324,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:109 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:225 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Página %1$d de %2$d"
 
@@ -5740,7 +5750,7 @@ msgstr "Pressione [enter] para abrir"
 msgid "Preview"
 msgstr "Visualização"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:110 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Anterior"
@@ -5758,6 +5768,12 @@ msgstr "Semana anterior"
 #| msgid "Previous"
 msgid "Previous month"
 msgstr "Anterior"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:531 module:io.ox/core
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous page"
+msgstr "Dia anterior"
 
 #: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
@@ -6848,7 +6864,7 @@ msgstr "Desculpe, não foi possível conectar a %s agora."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Desculpe, não existem dados disponíveis para você em %s."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:25 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "Desculpe, não existem dados disponíveis para você em %s."
@@ -7633,7 +7649,7 @@ msgstr "Este contato é privado e não pode ser compartilhado"
 msgid "This distribution list has been added to the portal"
 msgstr "Esta lista de distribuição foi adicionada ao portal"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid ""
 "This document is password protected and cannot be displayed. Please open it "
 "with your local PDF viewer."
@@ -7792,6 +7808,10 @@ msgstr ""
 #: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "Linha"
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:80 module:io.ox/core/viewer
+msgid "Thumbnail"
+msgstr ""
 
 #: apps/io.ox/files/toolbar.js:219 module:io.ox/files
 msgid "Tiles"
@@ -8143,7 +8163,7 @@ msgstr "Nome de usuário"
 msgid "Use fixed-width font for text mails"
 msgstr "Usar fonte de largura fixa para e-mails de texto"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:112 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8242,7 +8262,7 @@ msgstr "Ocultar detalhes"
 msgid "View source"
 msgstr "Exibir fonte"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:445 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:476 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Barra de ferramentas do editor"
@@ -9174,6 +9194,12 @@ msgstr "sem permissões de edição"
 #: apps/io.ox/core/permissions/permissions.js:147 module:io.ox/core
 msgid "no read permissions"
 msgstr "sem permissões de leitura"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
+#, fuzzy
+#| msgid "CW %1$d"
+msgid "of %1$d"
+msgstr "CW %1$d"
 
 #: apps/io.ox/files/share/view.js:194 module:io.ox/files
 #, fuzzy
@@ -10491,9 +10517,6 @@ msgstr "aaaa"
 
 #~ msgid "Detach file"
 #~ msgstr "Desanexar arquivo"
-
-#~ msgid "Detail"
-#~ msgstr "Detalhe"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "Informações detalhadas para publicação"

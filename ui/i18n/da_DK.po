@@ -146,8 +146,8 @@ msgstr[1] "%1$d minutter"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:471
+#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:449
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s af %2$s"
@@ -2325,6 +2325,12 @@ msgstr "Beskrivelsen blev kopieret"
 msgid "Description text"
 msgstr "Beskrivelse"
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:77 module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Details"
+msgid "Detail"
+msgstr "Detaljer"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js:281 module:io.ox/files
 msgid "Details"
@@ -2703,13 +2709,13 @@ msgid ""
 msgstr ""
 "Slip her for at overføre en <b class=\"dndignore\">ny version</b> af \"%1$s\""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:208 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Overfør en ny version"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:174 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:281 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4845,7 +4851,7 @@ msgstr "Opgavepåmindelser"
 msgid "New task reminders"
 msgstr "Opgavepåmindelser"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:111 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4858,6 +4864,12 @@ msgstr "Næste dag"
 #: apps/io.ox/calendar/week/view.js:805 module:io.ox/calendar
 msgid "Next Week"
 msgstr "Næste uge"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:534 module:io.ox/core
+#, fuzzy
+#| msgid "Next Day"
+msgid "Next page"
+msgstr "Næste dag"
 
 #: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
@@ -5310,7 +5322,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:109 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:225 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Side %1$d af %2$d"
 
@@ -5735,7 +5747,7 @@ msgstr "Tast [enter] for at åbne"
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:110 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Foregående"
@@ -5753,6 +5765,12 @@ msgstr "Foregående uge"
 #| msgid "Previous"
 msgid "Previous month"
 msgstr "Foregående"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:531 module:io.ox/core
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous page"
+msgstr "Foregående dag"
 
 #: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
@@ -6844,7 +6862,7 @@ msgstr "Beklager.  Kunne ikke forbinde til %s lige nu."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Beklage.  Der er ingen data til dig på %s."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:25 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "Beklage.  Der er ingen data til dig på %s."
@@ -7617,7 +7635,7 @@ msgstr "Denne kontakt er privat og kan ikke deles"
 msgid "This distribution list has been added to the portal"
 msgstr "Denne distributionsliste er blevet tilføjet portalen"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid ""
 "This document is password protected and cannot be displayed. Please open it "
 "with your local PDF viewer."
@@ -7773,6 +7791,10 @@ msgstr ""
 #: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "Tråd"
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:80 module:io.ox/core/viewer
+msgid "Thumbnail"
+msgstr ""
 
 #: apps/io.ox/files/toolbar.js:219 module:io.ox/files
 msgid "Tiles"
@@ -8126,7 +8148,7 @@ msgstr "Brugernavn"
 msgid "Use fixed-width font for text mails"
 msgstr "Brug fast-bredde skrifttype for e-mails"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:112 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8224,7 +8246,7 @@ msgstr "Skjul detaljer"
 msgid "View source"
 msgstr "Vis kilde"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:445 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:476 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -9151,6 +9173,12 @@ msgstr "ingen ændringstilladelse"
 #: apps/io.ox/core/permissions/permissions.js:147 module:io.ox/core
 msgid "no read permissions"
 msgstr "ingen læsetilladelser"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
+#, fuzzy
+#| msgid "CW %1$d"
+msgid "of %1$d"
+msgstr "Uge %1$d"
 
 #: apps/io.ox/files/share/view.js:194 module:io.ox/files
 #, fuzzy

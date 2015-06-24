@@ -160,8 +160,8 @@ msgstr[2] "%1$d minut"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:471
+#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:449
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s z %2$s"
@@ -2334,6 +2334,10 @@ msgstr "Popis byl zkopírován"
 msgid "Description text"
 msgstr "Popis"
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:77 module:io.ox/core/viewer
+msgid "Detail"
+msgstr "Detail"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js:281 module:io.ox/files
 msgid "Details"
@@ -2710,13 +2714,13 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nové verze</b> „%1$s“"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:208 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Nahrát novou verzi"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:174 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:281 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4848,7 +4852,7 @@ msgstr "Upomínky na úkoly"
 msgid "New task reminders"
 msgstr "Upomínky na úkoly"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:111 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4861,6 +4865,12 @@ msgstr "Další den"
 #: apps/io.ox/calendar/week/view.js:805 module:io.ox/calendar
 msgid "Next Week"
 msgstr "Příští týden"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:534 module:io.ox/core
+#, fuzzy
+#| msgid "Next Day"
+msgid "Next page"
+msgstr "Další den"
 
 #: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
@@ -5318,7 +5328,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:109 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:225 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "Strana %1$d z %2$d"
 
@@ -5743,7 +5753,7 @@ msgstr "Stiskněte [Enter] pro otevření"
 msgid "Preview"
 msgstr "Náhled"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:110 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Předchozí"
@@ -5761,6 +5771,12 @@ msgstr "Minulý týden"
 #| msgid "Previous"
 msgid "Previous month"
 msgstr "Předchozí"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:531 module:io.ox/core
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous page"
+msgstr "Předchozí den"
 
 #: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
@@ -6854,7 +6870,7 @@ msgstr "Je nám líto, v tuto chvíli se nepodařilo k %s připojit."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Je nám líto, na %s pro vás nejsou k dispozici žádná data."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:25 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "Je nám líto, na %s pro vás nejsou k dispozici žádná data."
@@ -7629,7 +7645,7 @@ msgstr "Tento kontakt je soukromý a nelze sdílet"
 msgid "This distribution list has been added to the portal"
 msgstr "Distribuční seznam byl přidán do portálu"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid ""
 "This document is password protected and cannot be displayed. Please open it "
 "with your local PDF viewer."
@@ -7794,6 +7810,10 @@ msgstr ""
 #: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "Vlákno"
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:80 module:io.ox/core/viewer
+msgid "Thumbnail"
+msgstr ""
 
 #: apps/io.ox/files/toolbar.js:219 module:io.ox/files
 msgid "Tiles"
@@ -8140,7 +8160,7 @@ msgstr "Uživatelské jméno"
 msgid "Use fixed-width font for text mails"
 msgstr "Pro textové e-maily používat písmo s pevnou šířkou"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:112 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8237,7 +8257,7 @@ msgstr "Skrýt detaily"
 msgid "View source"
 msgstr "Zobrazit zdroj"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:445 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:476 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Nástrojová lišta editoru"
@@ -9171,6 +9191,12 @@ msgstr "není oprávnění k úpravám"
 #: apps/io.ox/core/permissions/permissions.js:147 module:io.ox/core
 msgid "no read permissions"
 msgstr "není oprávnění ke čtení"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
+#, fuzzy
+#| msgid "CW %1$d"
+msgid "of %1$d"
+msgstr "CW %1$d"
 
 #: apps/io.ox/files/share/view.js:194 module:io.ox/files
 #, fuzzy
@@ -12362,9 +12388,6 @@ msgstr "rrrr"
 
 #~ msgid "Detach file"
 #~ msgstr "Odebrat soubor"
-
-#~ msgid "Detail"
-#~ msgstr "Detail"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "Podrobné informace o publikaci"

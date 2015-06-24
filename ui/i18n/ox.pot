@@ -5605,14 +5605,14 @@ msgstr ""
 msgid "Get free upgrade"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:132
+#: apps/io.ox/core/viewer/views/displayerview.js:110
 #: module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53
 #: module:io.ox/core/wizard
 msgid "Previous"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:133
+#: apps/io.ox/core/viewer/views/displayerview.js:111
 #: module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47
 #: module:io.ox/core/wizard
@@ -5621,7 +5621,7 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/displayerview.js:134
+#: apps/io.ox/core/viewer/views/displayerview.js:112
 #: module:io.ox/core
 msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
@@ -5630,9 +5630,9 @@ msgstr ""
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:158
+#: apps/io.ox/core/viewer/views/displayerview.js:136
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:471
+#: apps/io.ox/core/viewer/views/displayerview.js:449
 msgid "%1$d of %2$d"
 msgstr ""
 
@@ -5732,12 +5732,22 @@ msgstr ""
 msgid "Upload new version"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109
+#: apps/io.ox/core/viewer/views/sidebarview.js:77
+#: module:io.ox/core/viewer
+msgid "Detail"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:80
+#: module:io.ox/core/viewer
+msgid "Thumbnail"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:208
 #: module:io.ox/core/viewer
 msgid "Drop new version here"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:174
+#: apps/io.ox/core/viewer/views/sidebarview.js:281
 #: module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
@@ -5825,9 +5835,24 @@ msgstr ""
 msgid "Send as mail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:445
+#: apps/io.ox/core/viewer/views/toolbarview.js:398
+#: module:io.ox/core
+msgid "of %1$d"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:476
 #: module:io.ox/core
 msgid "Viewer Toolbar"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:531
+#: module:io.ox/core
+msgid "Previous page"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:534
+#: module:io.ox/core
+msgid "Next page"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/audioview.js:63
@@ -5841,12 +5866,12 @@ msgstr ""
 msgid "There is no preview for this file type"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:25
+#: apps/io.ox/core/viewer/views/types/documentview.js:26
 #: module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26
+#: apps/io.ox/core/viewer/views/types/documentview.js:27
 #: module:io.ox/core
 msgid "This document is password protected and cannot be displayed. Please open it with your local PDF viewer."
 msgstr ""
@@ -5855,7 +5880,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:109
+#: apps/io.ox/core/viewer/views/types/documentview.js:225
 #: module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr ""

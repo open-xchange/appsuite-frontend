@@ -146,8 +146,8 @@ msgstr[1] "%1$d 分鐘"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:471
+#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:449
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%2$s 的 %1$s"
@@ -2294,6 +2294,10 @@ msgstr "已複製描述"
 msgid "Description text"
 msgstr "描述"
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:77 module:io.ox/core/viewer
+msgid "Detail"
+msgstr "詳細資訊"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js:281 module:io.ox/files
 msgid "Details"
@@ -2668,13 +2672,13 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "放到此處以上傳 <b class='dndignore'>新版本的</b>「%1$s」"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:208 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "上載新版本"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:174 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:281 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4789,7 +4793,7 @@ msgstr "任務提醒"
 msgid "New task reminders"
 msgstr "任務提醒"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:111 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4802,6 +4806,12 @@ msgstr "下一天"
 #: apps/io.ox/calendar/week/view.js:805 module:io.ox/calendar
 msgid "Next Week"
 msgstr "下週"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:534 module:io.ox/core
+#, fuzzy
+#| msgid "Next Day"
+msgid "Next page"
+msgstr "下一天"
 
 #: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
@@ -5251,7 +5261,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:109 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:225 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "第 %1$d 頁，共 %2$d 頁"
 
@@ -5670,7 +5680,7 @@ msgstr "按 [Enter] 以開啟"
 msgid "Preview"
 msgstr "預覽"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:110 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "上一個"
@@ -5688,6 +5698,12 @@ msgstr "上週"
 #| msgid "Previous"
 msgid "Previous month"
 msgstr "上一個"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:531 module:io.ox/core
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous page"
+msgstr "前一天"
 
 #: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
@@ -6773,7 +6789,7 @@ msgstr "抱歉，目前無法連線至 %s。"
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 上目前沒有可提供給您的資料。"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:25 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "抱歉，%s 上目前沒有可提供給您的資料。"
@@ -7522,7 +7538,7 @@ msgstr "此聯絡人是私人聯絡人，無法分享"
 msgid "This distribution list has been added to the portal"
 msgstr "此通訊組清單已被加入到入口畫面"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid ""
 "This document is password protected and cannot be displayed. Please open it "
 "with your local PDF viewer."
@@ -7672,6 +7688,10 @@ msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
 #: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "討論串"
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:80 module:io.ox/core/viewer
+msgid "Thumbnail"
+msgstr ""
 
 #: apps/io.ox/files/toolbar.js:219 module:io.ox/files
 msgid "Tiles"
@@ -8016,7 +8036,7 @@ msgstr "用戶名"
 msgid "Use fixed-width font for text mails"
 msgstr "針對純文字郵件使用固定寬度字體顯示"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:112 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8110,7 +8130,7 @@ msgstr "隱藏詳情"
 msgid "View source"
 msgstr "檢視原始碼"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:445 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:476 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "編輯器工具欄"
@@ -9022,6 +9042,12 @@ msgstr "無編輯權限"
 #: apps/io.ox/core/permissions/permissions.js:147 module:io.ox/core
 msgid "no read permissions"
 msgstr "無閱讀權限"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
+#, fuzzy
+#| msgid "CW %1$d"
+msgid "of %1$d"
+msgstr "第 %1$d 週"
 
 #: apps/io.ox/files/share/view.js:194 module:io.ox/files
 #, fuzzy
@@ -10517,9 +10543,6 @@ msgstr "年"
 
 #~ msgid "Detach file"
 #~ msgstr "分離文件"
-
-#~ msgid "Detail"
-#~ msgstr "詳細資訊"
 
 #~ msgid "Detail Information for Publication"
 #~ msgstr "發佈的詳細資訊"

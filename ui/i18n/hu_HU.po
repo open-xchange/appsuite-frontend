@@ -146,8 +146,8 @@ msgstr[1] "%1$d perc"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#: apps/io.ox/core/viewer/views/displayerview.js:158 module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js:471
+#: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:449
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s / %2$s"
@@ -2319,6 +2319,12 @@ msgstr "A leírás átmásolva"
 msgid "Description text"
 msgstr "Leírás"
 
+#: apps/io.ox/core/viewer/views/sidebarview.js:77 module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Details"
+msgid "Detail"
+msgstr "Részletek"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js:281 module:io.ox/files
 msgid "Details"
@@ -2704,13 +2710,13 @@ msgid ""
 msgstr ""
 "Húzza ide a(z) „%1$s” feltöltendő <b class='dndignore'>új verzióját</b>"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:109 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:208 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
 msgid "Drop new version here"
 msgstr "Új verzió feltöltése"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:174 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:281 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -4846,7 +4852,7 @@ msgstr "Feladatemlékeztetők"
 msgid "New task reminders"
 msgstr "Feladatemlékeztetők"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:133 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:111 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
@@ -4859,6 +4865,12 @@ msgstr "Következő nap"
 #: apps/io.ox/calendar/week/view.js:805 module:io.ox/calendar
 msgid "Next Week"
 msgstr "Következő hét"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:534 module:io.ox/core
+#, fuzzy
+#| msgid "Next Day"
+msgid "Next page"
+msgstr "Következő nap"
 
 #: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
@@ -5313,7 +5325,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:109 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:225 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%1$d/%2$d oldal"
 
@@ -5739,7 +5751,7 @@ msgstr "Nyomja meg az [enter]-t a megnyitáshoz:"
 msgid "Preview"
 msgstr "Előnézet"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:132 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:110 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Előző"
@@ -5757,6 +5769,12 @@ msgstr "Előző hét"
 #| msgid "Previous"
 msgid "Previous month"
 msgstr "Előző"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:531 module:io.ox/core
+#, fuzzy
+#| msgid "Previous Day"
+msgid "Previous page"
+msgstr "Előző nap"
 
 #: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
@@ -6850,7 +6868,7 @@ msgstr "Elnézést, most nem lehet kapcsolódni ehhez: %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:25 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
 #, fuzzy
 msgid "Sorry, there is no preview available for this file."
 msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
@@ -7625,7 +7643,7 @@ msgstr "Ez a névjegy személyes és nem osztható meg"
 msgid "This distribution list has been added to the portal"
 msgstr "Ez a disztribúciós lista hozzáadva a portálhoz"
 
-#: apps/io.ox/core/viewer/views/types/documentview.js:26 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:27 module:io.ox/core
 msgid ""
 "This document is password protected and cannot be displayed. Please open it "
 "with your local PDF viewer."
@@ -7782,6 +7800,10 @@ msgstr ""
 #: apps/io.ox/mail/main.js:163 module:io.ox/mail
 msgid "Thread"
 msgstr "Szál"
+
+#: apps/io.ox/core/viewer/views/sidebarview.js:80 module:io.ox/core/viewer
+msgid "Thumbnail"
+msgstr ""
 
 #: apps/io.ox/files/toolbar.js:219 module:io.ox/files
 msgid "Tiles"
@@ -8130,7 +8152,7 @@ msgstr "Felhasználónév"
 msgid "Use fixed-width font for text mails"
 msgstr "Rögzített szélességű betűkészlet szöveges levelekhez"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:134 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:112 module:io.ox/core
 #, fuzzy
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -8228,7 +8250,7 @@ msgstr "Részletek elrejtése"
 msgid "View source"
 msgstr "Forrás megtekintése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:445 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:476 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -9156,6 +9178,12 @@ msgstr "nincs szerkesztési jogosultság"
 #: apps/io.ox/core/permissions/permissions.js:147 module:io.ox/core
 msgid "no read permissions"
 msgstr "nincs olvasási jogosultság"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:398 module:io.ox/core
+#, fuzzy
+#| msgid "CW %1$d"
+msgid "of %1$d"
+msgstr "%1$d. hét"
 
 #: apps/io.ox/files/share/view.js:194 module:io.ox/files
 #, fuzzy
