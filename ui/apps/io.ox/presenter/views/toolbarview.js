@@ -163,15 +163,13 @@ define('io.ox/presenter/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         id: 'zoomin',
         action: function (baton) {
-            console.info('zoomin action:', baton);
-            //baton.context.onZoomIn();
+            baton.context.onZoomIn();
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         id: 'zoomout',
         action: function (baton) {
-            console.info('zoomout action:', baton);
-            //baton.context.onZoomOut();
+            baton.context.onZoomOut();
         }
     });
 

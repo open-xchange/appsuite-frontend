@@ -99,6 +99,9 @@ define('io.ox/presenter/views/presentationview', [
             this.startIndex = 0;
             // register resize handler
             this.listenTo(this.presenterEvents, 'presenter:resize', this.onResize);
+            // bind zoom events
+            this.listenTo(this.presenterEvents, 'presenter:zoomin', this.onZoomIn);
+            this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
         },
 
         /**
