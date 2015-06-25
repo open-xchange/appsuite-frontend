@@ -183,7 +183,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         onOpen: function () {
             this.$('.sidebar-panel-heading').busy();
-            FilesAPI.versions.load(this.model.toJSON(), { cache: false })
+            FilesAPI.versions.load(this.model.toJSON())
             .fail(function (err) {
                 console.error('FilesAPI.versions.load()', 'error', err);
             });
