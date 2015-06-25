@@ -362,8 +362,10 @@ define('io.ox/core/folder/extensions', [
 
                 ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
 
+                this.append(placeholder);
+
                 // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
-                api.flat({ module: module }).done(function () {
+                api.flat({ module: module }).always(function () {
                     privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
 
                     // open private folder whenever a folder is added to it
@@ -396,8 +398,6 @@ define('io.ox/core/folder/extensions', [
                         .render().$el.addClass('section')
                     );
                 });
-
-                this.append(placeholder);
             }
         };
 
