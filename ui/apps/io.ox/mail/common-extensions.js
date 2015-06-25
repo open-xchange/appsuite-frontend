@@ -281,7 +281,7 @@ define('io.ox/mail/common-extensions', [
                     container.append(
                         // BCC
                         $('<span class="io-ox-label">').append(
-                            $.txt(gt('Bcc')),
+                            $.txt(gt('Blind copy')),
                             _.noI18n('\u00A0\u00A0')
                         ),
                         util.serializeList(data, 'bcc'),
