@@ -49,7 +49,10 @@ define('io.ox/core/notifications/badgeview', [
             this.nodes.badge.toggleClass('empty', count === 0);
             this.$el.attr('aria-label', a11y + ' ' + a11yState);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
-            yell('screenreader', a11y);
+            // don't alert if there is no notification or the number did not change
+            if (count !== 0 && this.model.previous('count') !== count) {
+                yell('screenreader', a11y);
+            }
         },
         onToggle: function (open) {
             var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
