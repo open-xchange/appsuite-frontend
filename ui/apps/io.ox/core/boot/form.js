@@ -44,6 +44,35 @@ define('io.ox/core/boot/form', [
 
             if (util.isAnonymous()) {
                 $('#io-ox-login-username').hide();
+                $('#io-ox-forgot-password').remove();
+            }
+
+            // status
+            if (_.url.hash('status')) {
+                switch (_.url.hash('status')) {
+                    // if the share token could not resolved to a share
+                    case 'not_found':
+                        break;
+                    // if the guest user has not set a password yet
+                    case 'ask_password':
+                        break;
+                    // if the guest user has to set a password now
+                    case 'require_password':
+                        $('#io-ox-login-password').attr({
+                            'data-i18n': gt('New password'),
+                            placeholder: gt('New password')
+                        });
+                        $('#io-ox-forgot-password').remove();
+                        break;
+                    // if the guest user requested to reset his password
+                    case 'reset_password':
+                        break;
+                    //  if the guest user has to enter his credentials
+                    case 'login':
+                        break;
+                    default:
+                        break;
+                }
             }
 
             // message
