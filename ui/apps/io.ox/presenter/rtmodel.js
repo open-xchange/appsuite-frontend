@@ -100,6 +100,16 @@ define('io.ox/presenter/rtmodel', [
          */
         isPresenter: function (user) {
             return (user && user.userId && user.userId === this.get('presenterId'));
+        },
+
+        /**
+         * Returns true if the presentation is paused.
+         *
+         * @returns {Boolean}
+         *  Whether the presentation is paused.
+         */
+        isPaused: function () {
+            return this.get('paused');
         }
 
     });

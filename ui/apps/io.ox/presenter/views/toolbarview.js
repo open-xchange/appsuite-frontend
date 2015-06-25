@@ -50,6 +50,37 @@ define('io.ox/presenter/views/toolbarview', [
                     this.parent().addClass('pull-left');
                 }
             },
+            'end': {
+                prio: 'hi',
+                mobile: 'hi',
+                //icon: 'fa fa-play',
+                label: gt('End Presentation'),
+                ref: TOOLBAR_ACTION_ID + '/end',
+                customize: function () {
+                    this.addClass('presenter-toolbar-end')
+                        .attr({
+                            tabindex: '1',
+                            'aria-label': gt('End Presentation')
+                        });
+                    this.parent().addClass('pull-left');
+                }
+            },
+            'pause': {
+                prio: 'hi',
+                mobile: 'hi',
+                //icon: 'fa fa-pause',
+                label: gt('Pause presentation'),
+                ref: TOOLBAR_ACTION_ID + '/pause',
+                customize: function () {
+                    this.addClass('presenter-toolbar-pause')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Pause Presentation'),
+                            'aria-label': gt('Pause Presentation')
+                        });
+                    this.parent().addClass('pull-left');
+                }
+            },
             'continue': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -133,21 +164,49 @@ define('io.ox/presenter/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/start', {
         id: 'start',
+        requires: function (e) {
+            var rtModel = e.baton.context && e.baton.context.app.rtModel;
+            return (rtModel && !rtModel.hasPresenter());
+        },
         action: function (baton) {
             console.info('start action:', baton);
             baton.context.app.rtConnection.startPresentation();
-            //baton.context.onToggleSidebar();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/end', {
+        id: 'end',
+        requires: function (e) {
+            var rtModel = e.baton.context && e.baton.context.app.rtModel;
+            return (rtModel && rtModel.hasPresenter());
+        },
+        action: function (baton) {
+            console.info('end action:', baton);
+            baton.context.app.rtConnection.endPresentation();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/pause', {
+        id: 'pause',
+        requires: function (e) {
+            var rtModel = e.baton.context && e.baton.context.app.rtModel;
+            return (rtModel && !rtModel.isPaused() && rtModel.hasPresenter());
+        },
+        action: function (baton) {
+            console.info('pause action:', baton);
+            baton.context.app.rtConnection.pausePresentation();
         }
     });
 
     new Action(TOOLBAR_ACTION_ID + '/continue', {
         id: 'continue',
-        requires: function () {
-            return false;
+        requires: function (e) {
+            var rtModel = e.baton.context && e.baton.context.app.rtModel;
+            return (rtModel && rtModel.isPaused() && rtModel.hasPresenter());
         },
         action: function (baton) {
             console.info('continue action:', baton);
-            //baton.context.onToggleSidebar();
+            baton.context.app.rtConnection.continuePresentation();
         }
     });
 
@@ -184,6 +243,11 @@ define('io.ox/presenter/views/toolbarview', [
             _.extend(this, options);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+
+            this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.render);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.render);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.render);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.render);
         },
 
         /**
