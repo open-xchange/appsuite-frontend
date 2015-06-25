@@ -48,8 +48,12 @@ define('io.ox/core/boot/form', [
 
             // message
             if (_.url.hash('message')) {
-                var type = _.url.hash('message_type') || 'info';
-                util.feedback(type.toLowerCase(), _.url.hash('message'));
+                var type = (_.url.hash('message_type') || 'info').toLowerCase();
+                if (type === 'info') {
+                    $('#io-ox-login-help').text(_.url.hash('message'));
+                } else {
+                    util.feedback(type, _.url.hash('message'));
+                }
             }
 
             // add skip button

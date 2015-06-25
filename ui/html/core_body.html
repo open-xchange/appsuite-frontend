@@ -55,6 +55,7 @@
             <div id="io-ox-login-form-container">
                 {{!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials --}}
                 <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
+                    <p id="io-ox-login-help" class="help-block"></p>
                     <input type="hidden" name="location" value="">{{!-- used by redirect servlet --}}
                     <div class="row username">
                         <div class="form-group col-xs-12">
@@ -79,14 +80,14 @@
                                 Stay signed in
                             </label>
                         </div>
-                        <div class="col-sm-6 col-xs-12 radio" id="io-ox-forgot-password">
+                        <div class="col-sm-6 col-xs-12 radio text-right" id="io-ox-forgot-password">
                             <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
                             <input type="submit" name="signin"
-                                id="login-button" class="btn btn-primary form-control"
+                                id="io-ox-login-button" class="btn btn-primary form-control"
                                 value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
                         </div>
                         <div class="col-sm-6 col-xs-12" id="io-ox-skip-button-container">
@@ -98,10 +99,10 @@
                     </div>
                 </form>
 
-                {{!-- forget password dialog --}}
+                {{!-- forget password dialog (sharing) --}}
                 <form action="/appsuite/api/share/reset/password" method="post" id="io-ox-password-forget-form" style="display:none;" novalidate>
-                    <h1>Forget your password?</h1>
-                    <p class="help-block">Enter your email and we'll send you a new password</p>
+                    <h3 id="io-ox-login-subtitle" data-i18n="Forgot your password?"></h3>
+                    <p class="help-block" data-i18n="Enter your email address and follow the instructions"></p>
                     <input type="hidden" name="share" value="">
                     <div class="row email">
                         <div class="form-group col-xs-12">
@@ -112,13 +113,13 @@
                         </div>
                     </div>
                     <div class="row button">
-                        <div class="col-md-6 col-xs-12" id="io-ox-backtosignin">
-                            <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
-                        </div>
                         <div class="form-group col-md-6 col-xs-12">
                             <input type="submit" name="resetpassword"
-                                id="resetpassword-button" class="btn btn-primary pull-right"
+                                id="resetpassword-button" class="btn btn-primary form-control"
                                 value="Reset my password" data-i18n="Reset my password" data-i18n-attr="value,aria-label">
+                        </div>
+                        <div class="col-md-6 col-xs-12 text-right" id="io-ox-backtosignin">
+                            <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
                         </div>
                     </div>
                 </form>

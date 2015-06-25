@@ -110,10 +110,9 @@ define('io.ox/core/boot/login/standard', [
         } else if (error && error.code === 'LGI-0011') {
             //password expired
             util.feedback('error', function () {
-                return [$.txt(util.gt('Your password is expired. Please change your password to continue.')),
-                        $('<br>'),
+                return [$('<p>').text(util.gt('Your password is expired. Please change your password to continue.')),
                         // don't use a button here or it will trigger a submit event
-                        $('<a target="_blank" role="button" id="io-ox-login-password-button" class="btn btn-primary btn">')
+                        $('<a target="_blank" role="button" class="btn btn-primary btn">')
                             .text(util.gt('Change password'))
                             // error_params[0] should contain a url to password change manager or sth.
                             .attr( 'href', error.error_params[0] )];

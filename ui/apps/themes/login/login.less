@@ -154,10 +154,6 @@ html.baseline {
     }
 }
 
-#login-button {
-    font-weight: bold;
-}
-
 #io-ox-login-background {
     position: absolute;
     bottom: 0;
@@ -165,24 +161,19 @@ html.baseline {
     top: 0;
     left: 0;
     z-index: 0;
+    &.wallpaper {
+        #gradient.radial(#294F83, #162C4A);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#294F83', endColorstr='#162C4A', GradientType=0);
+    }
 }
 
-.wallpaper {
-    #gradient.radial(#294F83, #162C4A);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#294F83', endColorstr='#162C4A', GradientType=0);
-}
-
-#io-ox-login-form {
-    .form-group {
-        margin-bottom: 8px;
-    }
-    input.form-control {
-        height: 40px;
-        &:focus {
-            box-shadow: 0 0 8px 2px rgba(157, 207, 255, 1);
-            outline: 0;
-        }
-    }
+#io-ox-login-blocker {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: black;
+    opacity: 0.01;
+    filter: alpha(opacity=1);
+    z-index: 65000;
 }
 
 #io-ox-login-container-scrollpane {
@@ -199,8 +190,27 @@ html.baseline {
     top: 50%;
     .translate(0; -50%);
 
-    .alert {
+    a { color: #87B7E4; }
 
+    .form-group {
+        margin-bottom: 8px;
+    }
+
+    input.form-control {
+        height: 40px;
+        &:focus {
+            box-shadow: 0 0 8px 2px rgba(157, 207, 255, 1);
+            outline: 0;
+        }
+    }
+
+    .btn-primary {
+        background-color: #3d7dbb;
+        border-color: #1f6da1;
+        font-weight: bold;
+    }
+
+    .alert {
         padding: 15px;
         .border-radius(4px);
 
@@ -219,7 +229,7 @@ html.baseline {
     h1 {
         font-size: 40px;
         font-weight: 100;
-        margin: 16px 0 14px 0;
+        margin: 16px 0 22px 0;
         line-height: 48px;
         padding-top: 2px;
     }
@@ -233,32 +243,9 @@ html.baseline {
     color: #6cbafc;
 }
 
-#io-ox-login-username:invalid:focus {
-    color: #555;
-    border: 1px solid #CCC;
-}
-
 #io-ox-login-store, #io-ox-forgot-password {
     margin-top: 8px;
     margin-bottom: 20px;
-}
-
-#io-ox-forgot-password {
-    text-align: right;
-    a { color: #87B7E4; }
-}
-
-#login-box-content td {
-    padding: 0 15px 8px 0;
-}
-
-#io-ox-login-blocker {
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    background-color: black;
-    opacity: 0.01;
-    filter: alpha(opacity=1);
-    z-index: 65000;
 }
 
 #io-ox-login-feedback {
@@ -268,9 +255,8 @@ html.baseline {
     min-height: 3em; /* for busy animation */
 }
 
-#io-ox-login-password-button {
-    font-weight: 700;
-    margin-top: 7px;
+#io-ox-backtosignin {
+    margin-top: 10px;
 }
 
 #io-ox-login-footer {
@@ -313,48 +299,48 @@ html.baseline {
 }
 
 #io-ox-copyright {
-    color: #87B7E4;
     font-weight: 300;
     cursor: default;
-}
-
-.io-ox-ui-disabled {
-    cursor: default !important;
-    pointer-events: none;
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=30)";
-    filter: alpha(opacity=30);
-    opacity: .3;
 }
 
 /* mobile stuff */
 
 @media (max-width: @screen-xs-max) {
+
     #io-ox-login-header {
         h1 { font-size: 14pt; }
     }
+
     #io-ox-login-container {
         top: 0;
         transform: none;
     }
+
     #io-ox-languages {
         margin-right: 0;
     }
+
     #io-ox-login-footer > span {
         display: block;
     }
+
     #io-ox-login-store, #io-ox-forgot-password {
         margin-top: 4px;
         margin-bottom: 10px;
     }
+
     #skip-button {
         margin-top: 8px;
     }
-    #io-ox-forgot-password {
+
+    #io-ox-forgot-password, #io-ox-backtosignin {
         text-align: left;
     }
+
     #io-ox-copyright {
         font-size: 10px;
     }
+
     #io-ox-login-form input.form-control {
         height: inherit;
     }
@@ -381,9 +367,4 @@ html.baseline {
 @keyframes fa-spin {
   0%    { transform: rotate(0deg);          }
   100%  { transform: rotate(359deg);        }
-}
-
-.btn-primary {
-    background-color: #3d7dbb;
-    border-color: #1f6da1;
 }
