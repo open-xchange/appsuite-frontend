@@ -1512,18 +1512,10 @@ define('io.ox/core/main', [
                         // TODO: all pretty hard-wired here; looks for better solution
                         // special case: open viewer too?
                         var hash = _.url.hash();
-                        if (hash.app === 'io.ox/files' && hash.id !== undefined && hash.folder !== undefined) {
+                        if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                // get all for this folder so the viewer can switch correctly between files (see Bug 38579)
-                                api.getAll(hash.folder).done(function (data) {
-                                    var selection,
-                                        id = hash.folder + '/' + hash.id;
-                                    _(data).each(function (file) {
-                                        if (id === file.id) {
-                                            selection = file;
-                                        }
-                                    });
-                                    new Viewer().launch({ files: data, selection: selection });
+                                api.get(hash).done(function (data) {
+                                    new Viewer().launch({ files: [data] });
                                 });
                             });
                         }
