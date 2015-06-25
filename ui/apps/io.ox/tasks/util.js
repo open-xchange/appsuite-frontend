@@ -166,6 +166,28 @@ define('io.ox/tasks/util', [
                 return ( task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3 );
             },
 
+            getSmartEnddate: function (data) {
+                var m = data.full_time ? moment.utc(data.end_time).local(true) : moment(data.end_time),
+                    startOfDay = moment().startOf('day');
+                // past?
+                if (m.isBefore(startOfDay)) {
+                    if (m.isAfter(startOfDay.subtract(1, 'day'))) {
+                        return gt('Yesterday') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    } else {
+                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+                    }
+                } else {
+                    // future
+                    if (m.isBefore(startOfDay.add(1,'days'))) {
+                        return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    } else if (m.isBefore(startOfDay.add(1, 'day'))) {
+                        return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    } else {
+                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+                    }
+                }
+            },
+
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, options) {
@@ -217,10 +239,10 @@ define('io.ox/tasks/util', [
                 }
 
                 // convert UTC timestamps to local time
-                task.end_time = formatTime(task.end_time, task.full_time ? 'l' : 'l LT');
-                task.start_time = formatTime(task.start_time, task.full_time ? 'l' : 'l LT');
-                task.alarm = formatTime(task.alarm, 'l LT');
-                task.date_completed = formatTime(task.date_completed, 'l LT');
+                task.end_time = formatTime(task.end_time, task.full_time ? 'l' : 'l, LT');
+                task.start_time = formatTime(task.start_time, task.full_time ? 'l' : 'l, LT');
+                task.alarm = formatTime(task.alarm, 'l, LT');
+                task.date_completed = formatTime(task.date_completed, 'l, LT');
 
                 return task;
             },

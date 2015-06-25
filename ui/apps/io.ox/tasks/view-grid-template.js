@@ -25,11 +25,12 @@ define('io.ox/tasks/view-grid-template', [
         // main grid template
         main: {
             build: function () {
-                var title, status, end_time, user, progress, private_flag, userMessage, progressMessage, private_flagMessage;
+                var title, status, end_time, user, progress, private_flag, userMessage, progressMessage, private_flagMessage, end_timeMessage;
                 this.addClass('tasks').append(
                     $('<div class="first-row">').append(
                         title = $('<div>').addClass('title'),
-                        end_time = $('<span>').addClass('end_date'),
+                        end_timeMessage = $('<span class="sr-only">'),
+                        end_time = $('<span aria-hidden="true">').addClass('end_date'),
                         private_flagMessage = $('<span class="sr-only">').text(gt('private')).hide(),
                         private_flag = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide()
                     ),
@@ -43,10 +44,11 @@ define('io.ox/tasks/view-grid-template', [
                 );
 
                 return { title: title, private_flag: private_flag, end_time: end_time, status: status, user: user, progress: progress,
-                         userMessage: userMessage, progressMessage: progressMessage, private_flagMessage: private_flagMessage };
+                         userMessage: userMessage, progressMessage: progressMessage, private_flagMessage: private_flagMessage, end_timeMessage: end_timeMessage };
             },
 
             set: function (task, fields, index, prev, grid) {
+
                 var data = task;
                 if (!data.badge && data.badge !== '') {
                     // check for empty string also to avoid double processing (see bug 36610)
@@ -56,6 +58,7 @@ define('io.ox/tasks/view-grid-template', [
 
                 fields.title.text(_.noI18n(data.title));
                 fields.end_time.text(_.noI18n(data.end_time));
+                fields.end_timeMessage.text( !task.end_time ? '' : util.getSmartEnddate(task));
                 //important. with addClass old classes aren't removed correctly
                 fields.status.attr('class', 'status ' + data.badge)
                     .text(data.status || _.noI18n('\u00A0'));
