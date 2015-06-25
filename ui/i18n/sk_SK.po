@@ -296,7 +296,7 @@ msgstr "%1$s zmenil(a) svoj stav:"
 
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/upload/main.js:226 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:301 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:304 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 #, fuzzy
 msgid "%1$s completed"
@@ -501,8 +501,8 @@ msgstr[2] "%1$d položiek"
 msgid "1 minute"
 msgstr "1 minúta"
 
-#: apps/io.ox/core/settings/pane.js:240 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:311 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:243 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:314 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minút"
@@ -513,8 +513,8 @@ msgstr "10 minút"
 msgid "100%"
 msgstr "100 %"
 
-#: apps/io.ox/core/settings/pane.js:241 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:312
+#: apps/io.ox/core/settings/pane.js:244 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:315
 msgid "15 minutes"
 msgstr "15 minút"
 
@@ -522,13 +522,13 @@ msgstr "15 minút"
 msgid "3 minutes"
 msgstr "3 minúty"
 
-#: apps/io.ox/core/settings/pane.js:242 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:313
+#: apps/io.ox/core/settings/pane.js:245 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316
 msgid "30 minutes"
 msgstr "30 minút"
 
-#: apps/io.ox/core/settings/pane.js:239 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:310 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:242 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:313 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minút"
@@ -1090,7 +1090,7 @@ msgid "Appointment invitations"
 msgstr "Pozvánky na schôdzky"
 
 #: apps/io.ox/calendar/month/perspective.js:455 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:383
+#: apps/io.ox/calendar/week/perspective.js:389
 msgid "Appointment list"
 msgstr "Zoznam schôdzok"
 
@@ -1224,12 +1224,12 @@ msgstr "Automatické preposielanie"
 msgid "Auto-save email drafts"
 msgstr "Automaticky ukladať rozpísané správy"
 
-#: apps/io.ox/core/settings/pane.js:363 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:366 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Automatické otvorenie oblasti oznámení"
 
 #: apps/io.ox/core/main.js:510 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:326
+#: apps/io.ox/core/settings/pane.js:329
 msgid "Automatic sign out"
 msgstr "Automatické odhlásenie"
 
@@ -1434,8 +1434,8 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:718
-#: apps/io.ox/files/main.js:769 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:717
+#: apps/io.ox/files/main.js:768 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1722,7 +1722,7 @@ msgid "Close"
 msgstr "Zatvoriť"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:751 module:io.ox/files
+#: apps/io.ox/files/main.js:750 module:io.ox/files
 #: apps/io.ox/files/view-options.js:213 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2176,7 +2176,7 @@ msgstr "Zamietnuť"
 msgid "Declined"
 msgstr "Zamietnuté"
 
-#: apps/io.ox/core/settings/pane.js:182 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:185 module:io.ox/core
 msgid "Default Theme"
 msgstr "Predvolená téma"
 
@@ -2184,7 +2184,7 @@ msgstr "Predvolená téma"
 msgid "Default address"
 msgstr "Predvolená adresa"
 
-#: apps/io.ox/core/settings/pane.js:289 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:292 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Predvolená aplikácia po prihlásení"
 
@@ -2344,7 +2344,7 @@ msgid "Detail"
 msgstr "Podrobnosti"
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
-#: apps/io.ox/files/upload/main.js:281 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:284 module:io.ox/files
 msgid "Details"
 msgstr "Podrobnosti"
 
@@ -2774,7 +2774,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:502
 #: module:io.ox/files apps/io.ox/files/actions.js:512
 #: apps/io.ox/files/main.js:150 apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:721 apps/io.ox/files/main.js:769
+#: apps/io.ox/files/main.js:720 apps/io.ox/files/main.js:768
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3774,7 +3774,7 @@ msgstr "Kliknutím zatvoríte toto oznámenie"
 msgid "High"
 msgstr "Vysoká"
 
-#: apps/io.ox/core/settings/pane.js:221 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:224 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Téma vzhľadu s vysokým kontrastom"
 
@@ -4124,7 +4124,7 @@ msgstr "Ponechať"
 msgid "Keep a copy of the message"
 msgstr "Ponechať kópiu správy"
 
-#: apps/io.ox/core/settings/pane.js:135 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:138 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:92 module:plugins/portal
 msgid "Language"
 msgstr "Jazyk"
@@ -4928,7 +4928,7 @@ msgstr ""
 "internetu a skúste to znova."
 
 #: apps/io.ox/core/commons.js:212 module:io.ox/core
-#: apps/io.ox/files/main.js:369 module:io.ox/files
+#: apps/io.ox/files/main.js:368 module:io.ox/files
 msgid "No elements selected"
 msgstr "Žiadne prvky neboli vybrané"
 
@@ -5007,7 +5007,7 @@ msgid "No title."
 msgstr "Bez názvu."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:277 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:280 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
@@ -5128,7 +5128,7 @@ msgstr "Predmety"
 msgid "October"
 msgstr "Október"
 
-#: apps/io.ox/core/settings/pane.js:309 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:312 module:io.ox/core
 msgid "Off"
 msgstr "Vypnuté"
 
@@ -5566,7 +5566,7 @@ msgstr "Prosím, zadajte URL kanálu"
 msgid "Please enter a search query"
 msgstr "Prosím, zadajte hľadaný text."
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:221 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:227 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6055,7 +6055,7 @@ msgstr "Redukovať na zhrnutie"
 msgid "Refresh"
 msgstr "Obnoviť"
 
-#: apps/io.ox/core/settings/pane.js:255 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:258 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Interval obnovenia"
 
@@ -6252,7 +6252,7 @@ msgstr "Výsledky"
 msgid "Retired"
 msgstr "V dôchodku"
 
-#: apps/io.ox/core/commons.js:841 module:io.ox/core
+#: apps/io.ox/core/commons.js:842 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:375 module:io.ox/mail
 msgid "Retry"
 msgstr "Skúsiť znova"
@@ -6713,7 +6713,7 @@ msgstr "Zobraziť konflikty"
 msgid "Show declined appointments"
 msgstr "Zobraziť zamietnuté schôdzky"
 
-#: apps/io.ox/core/settings/pane.js:399 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:402 module:io.ox/core
 #, fuzzy
 msgid "Show desktop notifications"
 msgstr "Žiadne oznámenia"
@@ -7580,7 +7580,7 @@ msgstr[2] ""
 msgid "The user has administrative rights"
 msgstr "Používateľ má práva správcu"
 
-#: apps/io.ox/core/settings/pane.js:196 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:199 module:io.ox/core
 msgid "Theme"
 msgstr "Téma vzhľadu"
 
@@ -7843,7 +7843,7 @@ msgstr "Čas"
 msgid "Time scale in minutes"
 msgstr "Časová mierka v minútach"
 
-#: apps/io.ox/core/settings/pane.js:161 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:164 module:io.ox/core
 msgid "Time zone"
 msgstr "Časové pásmo"
 
@@ -9354,7 +9354,7 @@ msgstr "dnes ráno"
 msgid "three months"
 msgstr "každý mesiac"
 
-#: apps/io.ox/files/main.js:382 module:io.ox/files
+#: apps/io.ox/files/main.js:381 module:io.ox/files
 msgid "thumbnail"
 msgstr ""
 

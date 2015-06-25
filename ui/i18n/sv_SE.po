@@ -280,7 +280,7 @@ msgstr "%1$s ändrade sin status:"
 
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/upload/main.js:226 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:301 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:304 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 #, fuzzy
 msgid "%1$s completed"
@@ -476,8 +476,8 @@ msgstr[1] "%1$d objekt"
 msgid "1 minute"
 msgstr "1 minut"
 
-#: apps/io.ox/core/settings/pane.js:240 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:311 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:243 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:314 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minuter"
@@ -488,8 +488,8 @@ msgstr "10 minuter"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/core/settings/pane.js:241 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:312
+#: apps/io.ox/core/settings/pane.js:244 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:315
 msgid "15 minutes"
 msgstr "15 minuter"
 
@@ -497,13 +497,13 @@ msgstr "15 minuter"
 msgid "3 minutes"
 msgstr "3 minuter"
 
-#: apps/io.ox/core/settings/pane.js:242 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:313
+#: apps/io.ox/core/settings/pane.js:245 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316
 msgid "30 minutes"
 msgstr "30 minuter"
 
-#: apps/io.ox/core/settings/pane.js:239 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:310 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:242 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:313 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minuter"
@@ -1066,7 +1066,7 @@ msgid "Appointment invitations"
 msgstr "Inbjudningar till möten"
 
 #: apps/io.ox/calendar/month/perspective.js:455 module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js:383
+#: apps/io.ox/calendar/week/perspective.js:389
 msgid "Appointment list"
 msgstr "Möten"
 
@@ -1199,12 +1199,12 @@ msgstr "Vidarebefordra automatiskt"
 msgid "Auto-save email drafts"
 msgstr "Autospara e-postutkast"
 
-#: apps/io.ox/core/settings/pane.js:363 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:366 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Öppna notifieringsområdet automatiskt"
 
 #: apps/io.ox/core/main.js:510 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:326
+#: apps/io.ox/core/settings/pane.js:329
 msgid "Automatic sign out"
 msgstr "Automatisk utloggning"
 
@@ -1408,8 +1408,8 @@ msgstr "Kalendervy"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:718
-#: apps/io.ox/files/main.js:769 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:717
+#: apps/io.ox/files/main.js:768 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1696,7 +1696,7 @@ msgid "Close"
 msgstr "Stäng"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:751 module:io.ox/files
+#: apps/io.ox/files/main.js:750 module:io.ox/files
 #: apps/io.ox/files/view-options.js:213 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2152,7 +2152,7 @@ msgstr "Neka"
 msgid "Declined"
 msgstr "Nekad"
 
-#: apps/io.ox/core/settings/pane.js:182 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:185 module:io.ox/core
 msgid "Default Theme"
 msgstr "Förvalt tema"
 
@@ -2160,7 +2160,7 @@ msgstr "Förvalt tema"
 msgid "Default address"
 msgstr "Standardadress"
 
-#: apps/io.ox/core/settings/pane.js:289 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:292 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Förvalt program efter inloggning"
 
@@ -2321,7 +2321,7 @@ msgid "Detail"
 msgstr "Detaljer"
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
-#: apps/io.ox/files/upload/main.js:281 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:284 module:io.ox/files
 msgid "Details"
 msgstr "Detaljer"
 
@@ -2744,7 +2744,7 @@ msgstr "Eb"
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:502
 #: module:io.ox/files apps/io.ox/files/actions.js:512
 #: apps/io.ox/files/main.js:150 apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:721 apps/io.ox/files/main.js:769
+#: apps/io.ox/files/main.js:720 apps/io.ox/files/main.js:768
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3741,7 +3741,7 @@ msgstr "Klicka för att stänga den här notifieringen"
 msgid "High"
 msgstr "Hög"
 
-#: apps/io.ox/core/settings/pane.js:221 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:224 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Tema med hög kontrast"
 
@@ -4091,7 +4091,7 @@ msgstr "Behåll"
 msgid "Keep a copy of the message"
 msgstr "Behåll kopia av meddelandet"
 
-#: apps/io.ox/core/settings/pane.js:135 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:138 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:92 module:plugins/portal
 msgid "Language"
 msgstr "Språk"
@@ -4893,7 +4893,7 @@ msgstr ""
 "igen."
 
 #: apps/io.ox/core/commons.js:212 module:io.ox/core
-#: apps/io.ox/files/main.js:369 module:io.ox/files
+#: apps/io.ox/files/main.js:368 module:io.ox/files
 msgid "No elements selected"
 msgstr "Inga element valda"
 
@@ -4972,7 +4972,7 @@ msgid "No title."
 msgstr "Ingen titel."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:277 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:280 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:436 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:90 module:io.ox/mail
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
@@ -5088,7 +5088,7 @@ msgstr "Objekt"
 msgid "October"
 msgstr "Oktober"
 
-#: apps/io.ox/core/settings/pane.js:309 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:312 module:io.ox/core
 msgid "Off"
 msgstr "Av"
 
@@ -5524,7 +5524,7 @@ msgstr "Ange flödes-URL."
 msgid "Please enter a search query"
 msgstr "Skriv söktermer"
 
-#: apps/io.ox/backbone/mini-views/datepicker.js:221 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/datepicker.js:227 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
@@ -6015,7 +6015,7 @@ msgstr "Reducera till sammanfattning i komponent"
 msgid "Refresh"
 msgstr "Uppdatera"
 
-#: apps/io.ox/core/settings/pane.js:255 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:258 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Uppdateringsintervall"
 
@@ -6212,7 +6212,7 @@ msgstr "Resultat"
 msgid "Retired"
 msgstr "Pensionerad"
 
-#: apps/io.ox/core/commons.js:841 module:io.ox/core
+#: apps/io.ox/core/commons.js:842 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:375 module:io.ox/mail
 msgid "Retry"
 msgstr "Försök igen"
@@ -6670,7 +6670,7 @@ msgstr "Visa konflikter"
 msgid "Show declined appointments"
 msgstr "Visa nekade möten"
 
-#: apps/io.ox/core/settings/pane.js:399 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:402 module:io.ox/core
 #, fuzzy
 msgid "Show desktop notifications"
 msgstr "Inga notifieringar"
@@ -7533,7 +7533,7 @@ msgstr[1] ""
 msgid "The user has administrative rights"
 msgstr "Användaren har administratörsrättigheter"
 
-#: apps/io.ox/core/settings/pane.js:196 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:199 module:io.ox/core
 msgid "Theme"
 msgstr "Tema"
 
@@ -7795,7 +7795,7 @@ msgstr "Tid"
 msgid "Time scale in minutes"
 msgstr "Tidsskala i minuter"
 
-#: apps/io.ox/core/settings/pane.js:161 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:164 module:io.ox/core
 msgid "Time zone"
 msgstr "Tidszon"
 
@@ -9306,7 +9306,7 @@ msgstr "imorse"
 msgid "three months"
 msgstr "varje månad"
 
-#: apps/io.ox/files/main.js:382 module:io.ox/files
+#: apps/io.ox/files/main.js:381 module:io.ox/files
 msgid "thumbnail"
 msgstr ""
 
