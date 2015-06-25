@@ -151,7 +151,8 @@ define('io.ox/calendar/util', [
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
                 } else {
-                    if (a11y) {
+
+                    if (a11y && data.full_time) {
                         //#. date intervals for screenreaders
                         //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
                         //#. %1$s is the start date
