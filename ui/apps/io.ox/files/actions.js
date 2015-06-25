@@ -124,6 +124,20 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/download-folder', {
+        requires: function (e) {
+            // no file-system, no download
+            if (_.device('ios')) return false;
+            // single folders only
+            return e.collection.has('one', 'folders');
+        },
+        action: function (baton) {
+            require(['io.ox/files/api'], function (api) {
+                api.zip(baton.data.id);
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/downloadversion', {
         requires: function (e) {
             // no file-system, no download
@@ -138,6 +152,21 @@ define('io.ox/files/actions', [
                 _(list).each(function (o) {
                     download.file(o);
                 });
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/permissions', {
+        requires: function (e) {
+            if (!capabilities.has('gab')) return false;
+            if (capabilities.has('alone')) return false;
+            if (_.device('smartphone')) return false;
+            // single folders only
+            return e.collection.has('one', 'folders');
+        },
+        action: function (baton) {
+            require(['io.ox/core/permissions/permissions'], function (permissions) {
+                permissions.show(baton.data.id);
             });
         }
     });

@@ -356,6 +356,9 @@
                 color: @viewer-toolbar-active-color;
                 background-color: @viewer-toolbar-active-bgcolor;
             }
+            &.dropdown {
+                margin-right: @viewer-toolbar-link-width;
+            }
             &.dropdown.open {
                 background-color: @viewer-toolbar-active-bgcolor;
             }
@@ -467,7 +470,6 @@
     // show active sidebar button in toolbar when sidebar is open
     .viewer-sidebar.open ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
         color: @viewer-toolbar-color;
-        background-color: @viewer-toolbar-focus-bgcolor;
     }
 
     .viewer-displayer {

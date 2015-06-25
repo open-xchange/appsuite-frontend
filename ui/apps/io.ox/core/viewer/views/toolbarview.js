@@ -154,6 +154,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'download': {
                     prio: 'hi',
                     mobile: 'lo',
+                    icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
                     ref: 'io.ox/files/actions/download'
@@ -166,9 +167,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 //    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 //},
                 'share': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
                     label: gt('Share'),
+                    icon: 'fa fa-user-plus',
                     section: 'export',
                     ref: 'io.ox/files/icons/share'
                 },
