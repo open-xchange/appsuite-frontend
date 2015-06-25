@@ -66,8 +66,8 @@ define('io.ox/presenter/main', [
 
                     // Handler update events of the RT connection
                     function rtUpdateHandler (event, data) {
-                        console.info('Presenter - rtUpdateHandler()', event, data);
-                        app.rtModel.set(data);
+                        console.info('Presenter - rtUpdateHandler()', data);
+                        app.rtModel.set(app.rtModel.parse(data));
                     }
 
                     // init RT connection
@@ -101,6 +101,7 @@ define('io.ox/presenter/main', [
             app.on('quit', function () {
                 if (app.rtConnection) {
                     // dispose RT connection instance
+                    app.rtConnection.off();
                     app.rtConnection.dispose();
                     app.rtConnection = null;
                 }

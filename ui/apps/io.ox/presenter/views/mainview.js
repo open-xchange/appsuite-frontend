@@ -59,7 +59,9 @@ define('io.ox/presenter/views/mainview', [
             this.listenTo(this.presenterEvents, 'presenter:toggle:sidebar', this.onToggleSidebar);
             this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
 
-            this.listenTo(this.app.rtModel, 'change', function (model) { console.info('Presenter - MainView - RTModel - change', model); });
+            // listen to RTModel updates
+            //this.listenTo(this.app.rtModel, 'change:presenterId change:activeSlide change:paused change:participants', this.onRTModelUpdate);
+            this.listenTo(this.app.rtModel, 'change', this.onRTModelUpdate);
         },
 
         /**
@@ -81,6 +83,49 @@ define('io.ox/presenter/views/mainview', [
             this.sidebarView.toggleSidebar(state);
 
             return this;
+        },
+
+        /**
+         * Handles real-time model data changes that are triggered by
+         * real-time update messages.
+         *
+         * @param {RTModel} rtModel
+         *  The real-time model instance.
+         */
+        onRTModelUpdate: function (rtModel) {
+            console.info('Presenter - MainView - onRTUpdatertData - RTModel - change', rtModel);
+
+            var currentPresenterId, previousPresenterId;
+
+            if (rtModel.hasChanged('activeSlide')) {
+                this.presenterEvents.trigger('presenter:slide:change', rtModel.get('activeSlide'));
+            }
+            if (rtModel.hasChanged('participants')) {
+                this.presenterEvents.trigger('presenter:participants:change', rtModel.get('participants'));
+            }
+            if (rtModel.hasChanged('presenterId')) {
+                // compare current with previous presenter id
+                currentPresenterId = rtModel.get('presenterId');
+                previousPresenterId = rtModel.previous('presenterId');
+
+                if (!_.isEmpty(currentPresenterId) && _.isEmpty(previousPresenterId)) {
+                    this.presenterEvents.trigger('presenter:presentation:start', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
+
+                } else if (_.isEmpty(currentPresenterId) && !_.isEmpty(previousPresenterId)) {
+                    this.presenterEvents.trigger('presenter:presentation:end', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
+
+                } else {
+                    //
+                    // TODO: check if this case is really needed / possible
+                    //
+                    this.presenterEvents.trigger('presenter:presenter:changed', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
+                }
+            }
+            if (rtModel.hasChanged('paused')) {
+                // compare current with previous presentation pause state
+                var eventType = (rtModel.get('paused') && !rtModel.previous('paused')) ? 'presenter:presentation:pause' : 'presenter:presentation:continue';
+                this.presenterEvents.trigger(eventType);
+            }
         },
 
         /**
