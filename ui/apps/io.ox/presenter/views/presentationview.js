@@ -102,6 +102,8 @@ define('io.ox/presenter/views/presentationview', [
             // bind zoom events
             this.listenTo(this.presenterEvents, 'presenter:zoomin', this.onZoomIn);
             this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
+            // register slide change handler
+            this.listenTo(this.presenterEvents, 'presenter:slide:change', this.showSlide);
         },
 
         /**
