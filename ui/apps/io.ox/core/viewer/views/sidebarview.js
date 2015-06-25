@@ -54,14 +54,21 @@ define('io.ox/core/viewer/views/sidebarview', [
         },
 
         initialize: function (options) {
+
+            options = options || {};
+
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
-                standalone: options.standalone
+                standalone: options.standalone,
+                options: options
             });
+
             this.model = null;
             this.zone = null;
+
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
+
             // bind scroll handler
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
             this.on('dispose', this.disposeView.bind(this));
@@ -213,7 +220,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             // render sections
             detailPane.append(
-                new FileInfoView({ model: this.model, fixed: true }).render().el,
+                new FileInfoView({ model: this.model, fixed: true, closable: this.options.closable }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el
@@ -253,12 +260,10 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and the number of versions.
          */
         loadFileDetails: function () {
-            if (!this.model) {
-                return;
-            }
 
-            FilesAPI.get(this.model.toJSON())
-            .done(function (file) {
+            if (!this.model) return;
+
+            FilesAPI.get(this.model.toJSON()).done(function (file) {
                 // after loading the file details we set at least an empty string as description.
                 // in order to distinguish between 'the file details have been loaded but the file has no description'
                 // and 'the file details have not been loaded yet so we don't know if it has a description'.
@@ -276,6 +281,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          *  An array of File objects.
          */
         onNewVersionDropped: function (files) {
+
             // check for single item drop
             if (!_.isArray(files) || files.length !== 1) {
                 notify({ error: gt('Drop only a single file as new version.') });

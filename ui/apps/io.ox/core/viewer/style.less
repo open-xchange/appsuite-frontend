@@ -171,6 +171,11 @@
 
     margin-bottom: 16px;
 
+    .close {
+        position: relative;
+        top: -5px;
+    }
+
     .sidebar-panel-heading {
 
         position: relative;
@@ -220,6 +225,7 @@
             width: 33%;
             font-weight: normal;
             cursor: default;
+            clear: both;
         }
 
         dd {
@@ -835,8 +841,10 @@
         .viewer-dark-colors();
         .viewer-styles();
 
-        a:link, a:visited { color: lighten(@link-color, 20%); }
-        a:hover, a:focus { color: @link-color; }
+        .viewer-sidebar {
+            a:link, a:visited { color: lighten(@link-color, 20%); }
+            a:hover, a:focus { color: @link-color; }
+        }
 
         .breadcrumb-tail {
             color: white;

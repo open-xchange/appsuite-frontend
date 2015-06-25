@@ -43,7 +43,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({});
+        sidebarView = new Sidebarview({ closable: true });
 
     app.mediator({
 
@@ -627,6 +627,10 @@ define('io.ox/files/main', [
             });
 
             toggle(app.props.get('details'));
+
+            sidebarView.$el.on('click', '.viewer-fileinfo .close', function () {
+                app.props.set('details', false);
+            });
         },
 
         /*

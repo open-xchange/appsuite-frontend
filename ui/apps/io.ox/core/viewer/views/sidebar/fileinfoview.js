@@ -50,8 +50,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 // modified
                 $('<dt>').text(gt('Modified')),
                 $('<dd class="modified">').text(dateString),
-                // path
-                $('<dt>').text(gt('Saved in')),
+                // path; using "Folder" instead of "Save in" because that one
+                // might get quite long, e.g. "Gespeichert unter"
+                $('<dt>').text(gt('Folder')),
                 $('<dd class="saved-in">')
             );
 
@@ -92,7 +93,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         className: 'viewer-fileinfo',
 
-        initialize: function () {
+        initialize: function (options) {
+            options = options || {};
+            this.closable = !!options.closable;
             this.setPanelHeader(gt('File details'));
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
@@ -100,10 +103,21 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         },
 
         render: function () {
-            if (this.model) {
-                var baton = Ext.Baton({ model: this.model, data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData') });
-                Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
+
+            if (!this.model) return;
+
+            var data = this.model.isFile() ? this.model.toJSON() : this.model.get('origData'),
+                baton = Ext.Baton({ model: this.model, data: data });
+            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
+
+            if (this.closable) {
+                this.$('.sidebar-panel-heading').prepend(
+                    $('<button type="button" class="close pull-right" tabindex="1">')
+                    .attr('aria-label', gt('Close'))
+                    .append('<span aria-hidden="true">&times;</span></button>')
+                );
             }
+
             return this;
         },
 
