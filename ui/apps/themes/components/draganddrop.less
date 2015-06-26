@@ -42,15 +42,17 @@
 .inplace-dropzone {
 
     margin: 7px;
-    border: 2px dashed #aaa;
+    border: 2px dashed #ccc;
     background-color: #fff;
 
     position: relative;
     &.abs { position: absolute; z-index: 2; }
 
     .dropzone-caption, .dropzone-dragover {
-        color: #767676;
+        color: #333;
+        font-weight: bold;
         text-align: center;
+        padding: 0 24px;
         top: 50%;
         width: 100%;
         margin-top: -10px;
@@ -61,10 +63,10 @@
     }
 
     .dropzone-dragover {
-        color: #ddd;
+        color: #777;
         font-size: 60px;
         line-height: 80px;
-        margin-top: -40px;
+        margin-top: -60px;
         display: none;
     }
 
@@ -75,8 +77,8 @@
     }
 
     &.dragover {
-        border-color: #ccc;
-        .dropzone-caption { display: none; }
+        border-color: #777;
+        .dropzone-caption { color: #aaa; margin-top: 20px; }
         .dropzone-dragover { display: block; }
     }
 }

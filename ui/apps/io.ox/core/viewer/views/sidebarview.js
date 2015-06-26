@@ -212,7 +212,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             // add dropzone for drive files
             if (this.model.isFile()) {
                 this.zone = new Dropzone.Inplace({
-                    caption: gt('Drop new version here')
+                    //#. %1$s is the filename of the current file
+                    caption: gt('Drop new version of "%1$s" here', this.model.get('filename'))
                 });
                 // drop handler
                 this.zone.on('drop', this.onNewVersionDropped.bind(this));
