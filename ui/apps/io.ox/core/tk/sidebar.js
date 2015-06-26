@@ -27,7 +27,7 @@ define('io.ox/core/tk/sidebar', [], function () {
         //
         add: function (options) {
 
-            options = _.extend({ side: 'right' }, options);
+            options = _.extend({ side: 'right', visible: true }, options);
 
             // ensure DOM element
             options.$el = options.$el || $('<div>');
@@ -39,7 +39,27 @@ define('io.ox/core/tk/sidebar', [], function () {
             $('#io-ox-windowmanager').wrap('<div class="abs generic-sidebar-container"><div class="abs generic-sidebar-wrapper"></div></div>');
 
             // add sidebar
-            $('.generic-sidebar-container:last').addClass('has-' + options.side).append(options.$el);
+            var container = $('.generic-sidebar-container:last')
+                .on({ maximize: maximize, minimize: minimize, toggle: toggle })
+                .addClass('has-' + options.side + (options.visible ? ' visible' : ''))
+                .append(options.$el);
+
+            // respond to app:start/resume to minimize
+            ox.on('app:start app:resume', function () {
+                container.trigger('minimize');
+            });
         }
     };
+
+    function maximize() {
+        $(this).addClass('visible maximize');
+    }
+
+    function minimize() {
+        $(this).removeClass('maximize');
+    }
+
+    function toggle() {
+        $(this).toggleClass('visible');
+    }
 });

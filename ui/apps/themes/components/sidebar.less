@@ -15,27 +15,45 @@
 
     @default-width: 240px;
 
-    &.has-left > .generic-sidebar-wrapper {
+    &.visible.has-left > .generic-sidebar-wrapper {
         left: @default-width;
     }
 
-    &.has-right > .generic-sidebar-wrapper {
+    &.visible.has-right > .generic-sidebar-wrapper {
         right: @default-width;
     }
 
-    &.has-left > .generic-sidebar {
+    &.visible.has-left > .generic-sidebar {
         left: 0;
         right: auto;
     }
 
-    &.has-right > .generic-sidebar {
+    &.visible.has-right > .generic-sidebar {
         right: 0;
         left: auto;
     }
 
+    .generic-sidebar-wrapper {
+        z-index: 1;
+    }
+
     .generic-sidebar {
-        width: @default-width;
+        display: none;
         background-color: #f5f5f5;
+        z-index: 0;
+    }
+
+    &.visible > .generic-sidebar {
+        display: block;
+        width: @default-width;
+    }
+
+    &.visible.maximize > .generic-sidebar {
+        left: 0;
+        right: 0;
+        width: auto;
+        z-index: 2;
+        border: 0;
     }
 }
 
