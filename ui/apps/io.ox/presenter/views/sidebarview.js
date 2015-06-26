@@ -5,13 +5,15 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/presenter/views/sidebarview', [
-    'io.ox/backbone/disposable'
-], function (DisposableView) {
+    'io.ox/backbone/disposable',
+    'io.ox/presenter/views/sidebar/participantsview'
+], function (DisposableView, ParticipantsView) {
 
     'use strict';
 
@@ -34,6 +36,11 @@ define('io.ox/presenter/views/sidebarview', [
             _.extend(this, options);
 
             this.on('dispose', this.disposeView.bind(this));
+
+            this.participantsDummy = [
+                'Phillip Lahm', 'Michael Ballack', 'Karl-Heinz Rummenigge', 'Jürgen Klinsmann',
+                'Lothar Matthäus', 'Uwe Seeler', 'Franz Beckenbauer', 'Oliver Kahn'
+            ];
 
         },
 
@@ -62,15 +69,14 @@ define('io.ox/presenter/views/sidebarview', [
             this.$el.empty();
 
             // render sections only if side bar is open
-            if (!this.model || !this.opened) {
+            if (!this.opened) {
                 return;
             }
 
+            var participantsView = new ParticipantsView({ participants: this.participantsDummy });
+
             // render sections
-            this.$el.append(
-                $('<div>').text('Participants')
-                // new FooBar({ model: this.model }).render().el
-            );
+            this.$el.append(participantsView.render().el);
         },
 
         /**

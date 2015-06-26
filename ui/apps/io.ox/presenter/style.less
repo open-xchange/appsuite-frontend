@@ -162,14 +162,67 @@
         width: @presenter-sidebar-width;
         outline: none;
         z-index: 2;     // hide captions when sidebar is 100% width
-        padding: 16px;
+        padding: 15px;
         overflow-y: auto;
         overflow-x: hidden;
         background-color: @presenter-sidebar-bgcolor;
         border-left: 1px solid @presenter-sidebar-border-color;
+
         &.opened {
             display: block;
         }
+
+        .sidebar-section-heading {
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-section-headline {
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        @presenter-sidebar-participant-bgcolor: #eaeaea;
+        .participants-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .participant {
+            display: table;
+            table-layout: fixed;
+            margin-bottom: 2px;
+            padding: 10px;
+            background-color: @presenter-sidebar-participant-bgcolor;
+            > div {
+                display: table-cell;
+                height: 40px;
+            }
+        }
+
+        .participant-picture-col {
+            padding-right: 10px;
+        }
+
+        .picture {
+            width: 40px;
+            height: 40px;
+            background-size: cover;
+            border-radius: 50%;
+        }
+
+        @presenter-sidebar-participant-color: #333;
+        .participant-name-col {
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .name {
+            color: @presenter-sidebar-participant-color;
+            cursor: pointer;
+        }
+
+
     }
 
  }
