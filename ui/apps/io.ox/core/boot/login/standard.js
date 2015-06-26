@@ -64,32 +64,28 @@ define('io.ox/core/boot/login/standard', [
         );
     };
 
-    function login(name, password) {
+    function login(name, password, skip) {
+        var options = {
+            name: name,
+            password: password,
+            store: $('#io-ox-login-store-box').prop('checked'),
+            // temporary language for error messages
+            language: language.getCurrentLanguage(),
+            // permanent language change!?
+            forceLanguage: language.getSelectedLanguage()
+        };
+
         if (util.isSharing()) {
-            return session.login({
+            _.extend(options, {
                 action: _.url.hash('login_type'),
-                name: name,
-                password: password,
-                store: $('#io-ox-login-store-box').prop('checked'),
-                // temporary language for error messages
-                language: language.getCurrentLanguage(),
-                // permanent language change!?
-                forceLanguage: language.getSelectedLanguage(),
                 // share-specific data
                 share: _.url.hash('share'),
-                target: _.url.hash('target')
-            });
-        } else {
-            return session.login({
-                name: name,
-                password: password,
-                store: $('#io-ox-login-store-box').prop('checked'),
-                // temporary language for error messages
-                language: language.getCurrentLanguage(),
-                // permanent language change!?
-                forceLanguage: language.getSelectedLanguage()
+                target: _.url.hash('target'),
+                skipButton: skip
             });
         }
+
+        return session.login(options);
     }
 
     function restore() {

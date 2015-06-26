@@ -26,7 +26,7 @@ define('io.ox/core/boot/form', [
 
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt;
+        var sc = ox.serverConfig, gt = util.gt, skip = false;
 
         util.debug('Show form ...');
 
@@ -92,8 +92,10 @@ define('io.ox/core/boot/form', [
                         type: 'submit',
                         value: gt('Skip'),
                         name: 'skip',
-                        id: 'skip-button',
+                        id: 'io-ox-skip-button',
                         'data-i18n': 'Skip'
+                    }).click(function () {
+                        skip = true;
                     })
                 );
             }
@@ -181,7 +183,12 @@ define('io.ox/core/boot/form', [
             $('#background-loader').fadeOut(util.DURATION, function () {
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
-                $('#io-ox-login-form').on('submit', login);
+                $('#io-ox-login-form').on('submit', function (e) {
+                    e.data = e.data || {};
+                    _.extend(e.data, { skip: skip });
+                    skip = false;
+                    login(e);
+                });
                 $('#io-ox-login-username').prop('disabled', false);
                 // focus password or username
                 $(util.isGuest() ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
