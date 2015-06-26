@@ -87,7 +87,6 @@ define('io.ox/search/autocomplete/extensions',[
                 },
                 harmonize: function (data) {
                     var list = [];
-
                     // workaround to handle it like io.ox/find
                     var ValueModel = Backbone.Model.extend({
                         getDisplayName: function () {
@@ -145,36 +144,50 @@ define('io.ox/search/autocomplete/extensions',[
             tokenview.render();
             field = tokenview.input.attr('autofocus', true);
 
+            var updateState = function (e) {
+                var node = $('.token-input.tt-input'),
+                    container = node.closest('.io-ox-search');
+                // no chars entered, no tokens
+                if (!node.val()) {
+                    container.addClass('empty');
+                    $('.tokenfield > .twitter-typeahead').show();
+                    return;
+                }
+                // token exists
+                if (e.type === 'tokenfield:createdtoken') {
+                    $('.tokenfield > .twitter-typeahead').hide();
+                }
+                // at least some chars are entered
+                container.removeClass('empty');
+            };
+
             // toggle search/clear icon visiblity
             field.on({
-                'change input': function (e) {
-                    var node = $(e.target),
-                        container = node.closest('.io-ox-search');
-                    if (!node.val())
-                        container.addClass('empty');
-                    else
-                        container.removeClass('empty');
-                }
+                'change input': updateState
+            });
+            tokenview.$el.on('tokenfield:createdtoken tokenfield:removedtoken', updateState);
+            tokenview.$el.on('tokenfield:removedtoken', function (e) {
+                var tokenmodel = e.attrs.model,
+                    data = tokenmodel.get('facet')._compact || tokenmodel.get('value');
+                model.remove(data.facet, data.value || data.id);
             });
 
             // clear action
             row.find('.btn-clear')
-                .on('click', function () {
-                    console.log('%c' + '???', 'color: white; background-color: blue');
+                .on('click', function (e) {
+                    e.preventDefault();
                     field.parent().find('.token-input').val('');
+                    // close dropdown
                     field.typeahead('close');
+                    // empty tokenfield
+                    tokenview.$el.tokenfield('setTokens', [], false, false);
+                    updateState();
                 });
 
             row.find('.btn-search')
-                .on('click', function () {
-                    console.log('%c' + '???', 'color: white; background-color: red');
-                    // open autocomplete dropdown
-                    field.trigger('click');
-                    // trigger ENTER keypress
-                    var keydown = $.Event('keydown');
-                    keydown.which = 13;
-                    field.trigger(keydown);
-                    // prevent, propagation
+                .on('click', function (e) {
+                    e.preventDefault();
+                    $('.token-input.tt-input').focus();
                     return false;
                 });
 

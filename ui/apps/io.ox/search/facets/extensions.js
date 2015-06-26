@@ -86,6 +86,15 @@ define('io.ox/search/facets/extensions', [
 
                     value = facet.values[item.value];
 
+                    // for folder
+                    var special = ext.point('io.ox/search/facets/item2/' + value.facet);
+                    if (special.list().length > 0) {
+                        var node = baton.$container.find('.row.applications');
+                        // additional actions per id/type
+                        special.invoke('draw', node, baton, value, facet);
+                        return;
+                    }
+
                     // create facet node
                     node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                         // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
@@ -419,150 +428,165 @@ define('io.ox/search/facets/extensions', [
 
         },
 
-        timeFacet: function (baton, value, facet) {
+        folderFacet2: function (baton, value, facet) {
             var self = this,
-                VALUE = 'daterange',
-                isUpdate = !!baton.model.get('pool')['date.custom'],
-                data, from, to, group, current, container,
-                facetcontainer = $('<fieldset class="facet-container btn">');
-
-            this.find('.facet-container').replaceWith(facetcontainer);
-
-            // add styles
-            self.addClass('timefacet');
-
-            // add vs update
-            facet = baton.model.get('pool')['date.custom'] || facet;
-
-            // predefined values
-            data = value.options && value.options[0] ? value.options[0] : {};
-            from = data.from ? (moment(data.from)).format('l') : undefined;
-            to = data.to ? (moment(data.to)).format('l') : undefined;
-            current = data.id || undefined;
-            // data from inputs
-            function getData () {
-                var nodes = group.find('input'),
-                    range = [],
-                    WILDCARD = '*';
-                // construct facet custom value
-                _.each(nodes, function (node) {
-                    node = $(node);
-                    var value = node.val(),
-                        type = node.attr('name');
-
-                    if (value !== '') {
-                        // standard date format
-                        value = moment(value, 'l');
-                        // use 23:59:59 for end date
-                        value = type === 'start' ? value : value.endOf('day');
-                    } else {
-                        // use wildcard
-                        value = value !== '' ? value : WILDCARD;
-                    }
-
-                    // get date parts
-                    range.push({
-                        value: value.format ? value.valueOf() : value
+                button = $('<div class="btn-group col-xs-6 dropdown">'),
+                current = value.custom,
+                option, link, action,
+                menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
+                    .attr({
+                        'data-facet': 'folder',
+                        'data-value': 'custom'
                     });
-                });
-                return {
-                    id: '[' + range[0].value + ' TO ' + range[1].value + ']',
-                    from: range[0].value.replace ? null : range[0].value,
-                    to: range[1].value.replace ? null : range[1].value
-                };
-            }
-            // datepicker range automatically corrects dates so whe delay a little bit
-            var lazyApply = _.debounce(apply, 200);
 
-            // change handler
-            function apply () {
-                var data = getData();
+            button.appendTo(self);
+            button.append(
+                $('<a href="#" type="button" class="dropdown-toggle pull-right" data-toggle="dropdown" role="menuitemcheckbox" aria-haspopup="true" aria-expanded="false">').append(
+                    $('<span class="name">'),
+                    $('<span class="toggle-options">').append(
+                        action = $('<i class="fa fa-caret-down action">')
+                    ).attr({
+                        'tabindex': '1',
+                        'aria-label': gt('Toggle options')
+                    })
+                )
+            );
 
-                // update model only on real change
-                if (current !== data.id) {
-                    // update vs add
-                    var tmp = facet.values[VALUE] || facet.values[0];
-                    // set value custom property
-                    tmp.custom = data.id;
-                    // set option
-                    tmp.options = [data];
+            // ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
+            // ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
 
-                    // remeber current state
-                    current = data.id;
+            button.attr({
+                'data-toggle': 'dropdown'
+            });
 
-                    // update vs app
-                    if (!isUpdate) {
-                        baton.model.add(facet.id, 'daterange', data.id);
-                    } else {
-                        baton.model.update(facet.id, VALUE, { option: data.id, value: VALUE });
-                    }
-                    baton.model.trigger('query', baton.model.getApp());
+            // tooltip
+            util.addTooltip(action, gt('Change folder'));
+
+            // disable dropdown until menu is added (mobiles custom dropdown)
+            if (phone) { button.addClass('disabled'); }
+
+            // add 'all folders'
+            var link;
+            if (!baton.model.isMandatory('folder')) {
+                menu.prepend(
+                    $('<li role="presentation">').append(
+                        link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">').append(
+                            $('<i class="fa fa-fw ">'),
+                            $('<span>').text(gt('All folders'))
+                        )
+                        .attr('data-custom', 'custom')
+                        .attr('title', gt('All folders'))
+                    )
+                );
+                // is active
+                if (!value.custom || value.custom === 'custom') {
+                    // set display name
+                    button.find('.name')
+                        .text(gt('All folders'));
+                    // set fa-check icon
+                    link.find('i')
+                        .addClass('fa-check');
+                    link.attr('aria-checked', true);
                 }
             }
 
-            // used to handle overlow when datepicker is shown
-            $('body>.datepicker-container').remove();
-            $('body').append(
-                container = $('<div class="datepicker-container">').hide()
-            );
+            // add fodlers
+            util.getFolders(baton.model)
+                .then(function (accounts) {
 
-            var getBlock = function (label, name, value) {
-                var guid = _.uniqueId('form-control-label-');
-                return [
-                    $('<label class="sr-only">').attr('for', guid).text(label),
-                    $('<input type="text" class="input-sm form-control" />')
-                        .attr({
-                            'name': name,
-                            'id': guid,
-                            'placeholder': label,
-                            'tabIndex': 1,
-                            'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
-                        })
-                        .val(value)
-                        .on('change', lazyApply)
-                ];
-            };
+                    // handle each account
+                    _.each(accounts, function (account, key) {
 
-            // input group
-            facetcontainer
-                .append(
-                    $('<div>')
-                        .addClass('type')
-                        .text(facet.name),
-                    group = $('<div class="input-daterange input-group" id="datepicker">')
-                                .append(
-                                    getBlock(gt('Starts on'), 'start', from),
-                                    $('<span class="input-group-addon">').text('-'),
-                                    getBlock(gt('Ends on'), 'start', to)
+                        // reduce list for non primary accounts
+                        if (key !== '0') {
+                            account.list  = account.list.slice(0, 2);
+                        }
+
+                        // sort by type
+                        account.list.sort(function (a, b) {
+                            return SORT[a.type] - SORT[b.type];
+                        });
+
+                        // account name as dropdown header
+                        if (Object.keys(accounts).length > 1) {
+                            menu.append(
+                                $('<li class="dropdown-header">').append(account.name)
+                            );
+                        }
+                        // add option
+                        _.each(account.list, function (folder) {
+
+                            // ignore any virtual folders
+                            if (/^virtual/.test(folder.id)) return;
+
+                            menu.append(
+                                option = $('<li>').append(
+                                    $('<a href="#" role="menuitemcheckbox" class="option" tabindex="-1">')
+                                        .append(
+                                            $('<i class="fa fa-fw fa-none">'),
+                                            $('<span>').text(folder.title)
+                                        )
+                                        .attr({
+                                            'data-custom': folder.id,
+                                            'title': folder.title,
+                                            tabIndex: '-1'
+                                        })
                                 )
-                                .datepicker({
-                                    parentEl: container,
-                                    //orientation: 'top left auto',
-                                    clearBtn: false
-                                })
-                                .on('show', function (e) {
-                                    // position container (workaround)
-                                    var offset = $(e.target).offset();
-                                    container.show();
+                            );
+                            if (current === folder.id) {
+                                option.find('a').attr('aria-checked', true);
+                                option.find('.fa').removeClass('fa-none').addClass('fa-check');
+                            }
+                        });
 
-                                    // use samt offset
-                                    container.offset(offset);
+                        // add divider
+                        menu.append(
+                            $('<li class="divider">')
+                        );
+                    });
+                    // add option to open dialog
+                    menu.append(
+                        $('<li>').append(
+                             $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
+                                .append(
+                                    $('<i class="fa fa-fw fa-none">'),
+                                    $('<span>').text(gt('More') + ' ...')
+                                )
+                                .attr('data-action', 'dialog')
+                        )
+                    );
+                }).then(function () {
+                    // add to dom
+                    button.append(menu);
 
-                                    // appply child style
-                                    container.find('.datepicker').css({
-                                        top: $(e.target).outerHeight(),
-                                        left: 0
-                                    });
-                                })
-                );
+                    // custom remove handler for folders
+                    function remove (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        (facet.values.custom || facet.values[0]).custom = 'custom';
+                        baton.model.update(facet.id, 'custom', { custom: 'custom' });
+                    }
+
+                    if (value.custom && value.custom !== 'custom')
+                        // use custom click handler
+                        ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, remove);
+
+                    // enable dropdown again
+                    if (phone) { button.removeClass('disabled'); }
+
+                    // apply a11y
+                    button.dropdown();
+                });
         },
 
-        folderFacet: function (baton, value, facet) {
+        folderFacet: $.noop(),
+
+        folderFacetx: function (baton, value, facet) {
             var self = this,
                 button = this.find('.facet-container'),
                 current = value.custom,
                 option, link, action,
-                menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
+                menu = $('<ul class="facet dropdown dropdown-menu facet-dropdown">')
                     .attr({
                         'data-facet': 'folder',
                         'data-value': 'custom'
@@ -597,17 +621,17 @@ define('io.ox/search/facets/extensions', [
                     $('<li role="presentation">').append(
                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">').append(
                             $('<i class="fa fa-fw ">'),
-                            $('<span>').text(gt('All folders'))
+                            $('<span>').text(gt('1All folders'))
                         )
                         .attr('data-custom', 'custom')
-                        .attr('title', gt('All folders'))
+                        .attr('title', gt('2All folders'))
                     )
                 );
                 // is active
                 if (!value.custom || value.custom === 'custom') {
                     // set display name
                     this.find('.name')
-                        .text(gt('All folders'));
+                        .text(gt('3All folders'));
                     // set fa-check icon
                     link.find('i')
                         .addClass('fa-check');

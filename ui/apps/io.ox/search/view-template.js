@@ -53,13 +53,7 @@ define('io.ox/search/view-template', [
                     })
                     .append(
                         $('<span class="fa fa-search"></i>')
-                    )
-                    .on('click', function (e) {
-                        console.log('%c' + '!!!', 'color: white; background-color: red');
-                        e.preventDefault();
-                        var e = $.Event('keydown');
-                        e.which = 13;
-                    }),
+                    ),
                     // clear icon/button
                     $('<a href="#">')
                     .attr({
@@ -70,10 +64,6 @@ define('io.ox/search/view-template', [
                     }).append(
                         $('<i class="fa fa-times"></i>')
                     )
-                    .on('click', function (e) {
-                        console.log('%c' + '!!!', 'color: white; background-color: blue');
-                        e.preventDefault();
-                    })
                 ),
                 cell = $('<div class="col-xs-11">')
             ).appendTo(this);
@@ -89,7 +79,7 @@ define('io.ox/search/view-template', [
         index: 200,
         row: '0',
         draw: function (baton) {
-            var cell = $('<div class="btn-group col-xs-12 dropdown">'),
+            var cell = $('<div class="apps btn-group col-xs-6 dropdown">'),
                 row = $('<div class="row applications">').append(cell),
                 id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
@@ -183,7 +173,6 @@ define('io.ox/search/view-template', [
             row = $('<div class="row facets">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled search-facets">')
             );
-
             ext.point('io.ox/search/facets/facets').invoke('draw', cell, baton);
 
             elem = this.find('.row.facets');

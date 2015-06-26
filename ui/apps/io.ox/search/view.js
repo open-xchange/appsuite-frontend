@@ -30,6 +30,7 @@ define('io.ox/search/view', [
                 var self = this,
                     node = node || self.$el;
 
+                self.baton.$container = node;
                 // create new toolbar on bottom
                 ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
 
