@@ -13,13 +13,13 @@
 
 .generic-sidebar-container {
 
-    @default-width: 240px;
+    @default-width: 320px;
 
-    &.visible.has-left > .generic-sidebar-wrapper {
+    &.visible.has-left > .generic-sidebar-content {
         left: @default-width;
     }
 
-    &.visible.has-right > .generic-sidebar-wrapper {
+    &.visible.has-right > .generic-sidebar-content {
         right: @default-width;
     }
 
@@ -33,7 +33,7 @@
         left: auto;
     }
 
-    .generic-sidebar-wrapper {
+    .generic-sidebar-content {
         z-index: 1;
     }
 
@@ -76,11 +76,11 @@
 
         @default-width: 320px;
 
-        &.has-left > .generic-sidebar-wrapper {
+        &.has-left > .generic-sidebar-content {
             left: @default-width;
         }
 
-        &.has-right > .generic-sidebar-wrapper {
+        &.has-right > .generic-sidebar-content {
             right: @default-width;
         }
 
