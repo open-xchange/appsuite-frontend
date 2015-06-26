@@ -44,7 +44,7 @@ define('io.ox/core/boot/login/standard', [
             return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
-        login(username, password).then(
+        login(username, password, e.data.skip).then(
             function success(data) {
                 // don't respond to submit any more
                 form.off('submit');
