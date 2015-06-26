@@ -50,7 +50,7 @@ define('io.ox/files/actions/delete', [
 
         // delete folders
         _(folders).each(function (folder) {
-            folderAPI.remove(folder.id);
+            folderAPI.remove(folder.get('id'));
         });
     }
 
