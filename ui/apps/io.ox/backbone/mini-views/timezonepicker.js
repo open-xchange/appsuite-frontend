@@ -32,8 +32,9 @@ define('io.ox/backbone/mini-views/timezonepicker', [
         var available = settingOptions.get('availableTimeZones', {}),
             now = moment();
 
-        return _(moment.tz._zones)
+        return _(moment.tz.names())
             .chain()
+            .map(moment.tz.zone)
             .filter(function (tz) {
                 tz.displayName = getDisplayName(tz.name);
                 return !!available[tz.name];
