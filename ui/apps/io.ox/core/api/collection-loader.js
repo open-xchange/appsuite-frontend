@@ -155,7 +155,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
     _.extend(CollectionLoader.prototype, {
 
-        LIMIT: 30,
+        // highly emotional and debatable default
+        LIMIT: 50,
 
         cid: function (obj) {
             return _(obj || {}).chain()
