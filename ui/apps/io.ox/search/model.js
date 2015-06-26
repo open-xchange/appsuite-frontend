@@ -452,12 +452,20 @@ define('io.ox/search/model', [
             reset: function (options) {
                 var opt = options || {};
                 items.empty();
+
+                var tmppool = { folder: this.get('pool').folder },
+                    tmplist = _.filter(this.get('poollist'), function (data) {
+                        return data.facet === 'folder';
+                    });
+
+                tmppool.folder.values.custom.id = 'custom';
+                tmplist[0].value = 'custom';
                 this.set({
                     query: '',
                     autocomplete: [],
                     active: [],
-                    pool: {},
-                    poollist: [],
+                    pool: tmppool,
+                    poollist: tmplist,
                     pooldisabled: {},
                     start: 0
                 },

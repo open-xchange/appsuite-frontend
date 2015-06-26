@@ -172,17 +172,34 @@ define('io.ox/search/autocomplete/extensions',[
                 model.remove(data.facet, data.value || data.id);
             });
 
+            var empty = function (e) {
+                if (e) e.preventDefault();
+                field.parent().find('.token-input').val('');
+                // close dropdown
+                field.typeahead('close');
+
+                // empty tokenfield
+                var tokens = tokenview.$el.tokenfield('getTokens');
+                _.each(tokens, function (token) {
+                    tokenview.$el.trigger(
+                        $.Event('tokenfield:removetoken', { attrs: token })
+                    );
+                });
+                // params: add, triggerChange
+                tokenview.$el.tokenfield('setTokens', [], false, false);
+                _.each(tokens, function (token) {
+                    tokenview.$el.trigger(
+                        $.Event('tokenfield:removedtoken', { attrs: token })
+                    );
+                });
+                updateState();
+            };
+
+            baton.model.on('reset', empty);
+
             // clear action
             row.find('.btn-clear')
-                .on('click', function (e) {
-                    e.preventDefault();
-                    field.parent().find('.token-input').val('');
-                    // close dropdown
-                    field.typeahead('close');
-                    // empty tokenfield
-                    tokenview.$el.tokenfield('setTokens', [], false, false);
-                    updateState();
-                });
+                .on('click', empty);
 
             row.find('.btn-search')
                 .on('click', function (e) {

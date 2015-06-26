@@ -29,19 +29,12 @@ define('io.ox/search/apiproxy',[
         var POINT = ext.point('io.ox/search/api/autocomplete');
 
         POINT.extend({
-            id: 'exclusive',
+            id: 'filter',
             index: 100,
             customize: function (baton) {
-                _.each(baton.data, function (facet) {
-                    // handle 'exclusive' facets (use options as values also)
-                    if (facet.style === 'exclusive' && !facet.values) {
-                        facet.values = [];
-                        _.each(facet.options, function (option) {
-                            var value = _.extend({}, option, { options: facet.options });
-                            delete value.filter;
-                            facet.values.push(value);
-                        });
-                    }
+                baton.data = _.filter(baton.data, function (facet) {
+                    debugger;
+                    return facet.style === 'simple' || $.inArray(facet.id, ['contacts', 'contact', 'participant', 'task_participants'] > -1);
                 });
             }
         });

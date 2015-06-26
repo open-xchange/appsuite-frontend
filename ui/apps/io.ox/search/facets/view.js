@@ -46,15 +46,6 @@ define('io.ox/search/facets/view', [
     });
 
     /**
-     * special: folder facet is hardcoded by front end
-     */
-    ext.point(POINT + '/item2/folder').extend({
-        id: 'folder-facet',
-        index: INDEX += 100,
-        draw: extensions.folderFacet2
-    });
-
-    /**
      * presentation of facet type
      * @example: e.g. folder, time, contact
      */

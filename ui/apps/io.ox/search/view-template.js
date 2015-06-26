@@ -79,7 +79,7 @@ define('io.ox/search/view-template', [
         index: 200,
         row: '0',
         draw: function (baton) {
-            var cell = $('<div class="apps btn-group col-xs-6 dropdown">'),
+            var cell = $('<div class="apps col-xs-6 dropdown">'),
                 row = $('<div class="row applications">').append(cell),
                 id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
@@ -160,27 +160,7 @@ define('io.ox/search/view-template', [
             } else {
                 this.append(row);
             }
-        }
-    });
-
-    point.extend({
-        id: 'facets',
-        index: 250,
-        row: '0',
-        draw: function (baton) {
-            var row, cell, elem;
-
-            row = $('<div class="row facets">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled search-facets">')
-            );
-            ext.point('io.ox/search/facets/facets').invoke('draw', cell, baton);
-
-            elem = this.find('.row.facets');
-            if (elem.length) {
-                elem.replaceWith(row);
-            } else {
-                this.append(row);
-            }
+            ext.point('io.ox/search/facets/facets').invoke('draw', row, baton);
         }
     });
 
