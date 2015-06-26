@@ -1075,15 +1075,8 @@ define('io.ox/mail/main',
                                         'extra': 1
                                     }, { silent: true });
 
-                                    var self = this,
-                                        defaultParams = api.collectionLoader.getQueryParams(params),
-                                        params = {
-                                            sort: app.props.get('sort'),
-                                            order: app.props.get('order'),
-                                            // reuse columns of default collection loader
-                                            columns: defaultParams.columns
-                                        };
-
+                                    var self = this;
+                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
                                     return search.apiproxy.query(true, params).then(function (response) {
                                         response = response || {};
                                         var list = response.results || [],
