@@ -87,14 +87,14 @@ msgstr ""
 msgid "Please enter a valid date"
 msgstr ""
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:75
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:76
 #: module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:669
 #: module:io.ox/calendar
 msgid "Standard timezone"
 msgstr ""
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:76
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:77
 #: module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:673
 #: module:io.ox/calendar
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:77
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:78
 #: module:io.ox/core
 msgid "All timezones"
 msgstr ""
@@ -223,10 +223,10 @@ msgstr ""
 #: apps/io.ox/files/actions.js:531
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:541
-#: apps/io.ox/files/main.js:150
-#: apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:724
-#: apps/io.ox/files/main.js:772
+#: apps/io.ox/files/main.js:151
+#: apps/io.ox/files/main.js:157
+#: apps/io.ox/files/main.js:728
+#: apps/io.ox/files/main.js:776
 #: apps/io.ox/files/toolbar.js:73
 #: apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
@@ -472,8 +472,8 @@ msgstr ""
 #: apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
 #: apps/io.ox/files/actions/versions-delete.js:26
-#: apps/io.ox/files/main.js:721
-#: apps/io.ox/files/main.js:772
+#: apps/io.ox/files/main.js:725
+#: apps/io.ox/files/main.js:776
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45
@@ -1564,9 +1564,9 @@ msgstr ""
 #: apps/io.ox/contacts/main.js:369
 #: apps/io.ox/core/folder/view.js:291
 #: module:io.ox/core
-#: apps/io.ox/files/main.js:147
+#: apps/io.ox/files/main.js:148
 #: module:io.ox/files
-#: apps/io.ox/files/main.js:154
+#: apps/io.ox/files/main.js:155
 #: apps/io.ox/mail/main.js:144
 #: module:io.ox/mail
 #: apps/io.ox/mail/main.js:151
@@ -3541,7 +3541,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:212
 #: module:io.ox/core
-#: apps/io.ox/files/main.js:368
+#: apps/io.ox/files/main.js:372
 #: module:io.ox/files
 msgid "No elements selected"
 msgstr ""
@@ -3572,7 +3572,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:711
 #: module:io.ox/core
-#: apps/io.ox/files/main.js:754
+#: apps/io.ox/files/main.js:758
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js:213
 #: apps/io.ox/mail/view-options.js:158
@@ -5750,12 +5750,13 @@ msgstr ""
 msgid "Thumbnail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:215
+#. %1$s is the filename of the current file
+#: apps/io.ox/core/viewer/views/sidebarview.js:216
 #: module:io.ox/core/viewer
-msgid "Drop new version here"
+msgid "Drop new version of \"%1$s\" here"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:287
+#: apps/io.ox/core/viewer/views/sidebarview.js:288
 #: module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
@@ -6391,7 +6392,7 @@ msgstr ""
 msgid "Please specify these missing variables: "
 msgstr ""
 
-#: apps/io.ox/files/main.js:381
+#: apps/io.ox/files/main.js:380
 #: module:io.ox/files
 msgid "thumbnail"
 msgstr ""

@@ -953,7 +953,7 @@ msgstr "所有超过 %1$d 天的消息将会移到归档文件夹"
 msgid "All my appointments"
 msgstr "所有约会"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:77 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:78 module:io.ox/core
 #, fuzzy
 msgid "All timezones"
 msgstr "您的时区"
@@ -1397,8 +1397,8 @@ msgstr "日历视图"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:44
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:721
-#: apps/io.ox/files/main.js:772 apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:725
+#: apps/io.ox/files/main.js:776 apps/io.ox/keychain/secretRecoveryDialog.js:39
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1684,7 +1684,7 @@ msgid "Close"
 msgstr "关闭"
 
 #: apps/io.ox/core/commons.js:711 module:io.ox/core
-#: apps/io.ox/files/main.js:754 module:io.ox/files
+#: apps/io.ox/files/main.js:758 module:io.ox/files
 #: apps/io.ox/files/view-options.js:213 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2677,13 +2677,14 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "拖到这里以上载 \"%1$s\" 的一个 <b class=\"dndignore\">新版本</b>"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:215 module:io.ox/core/viewer
+#. %1$s is the filename of the current file
+#: apps/io.ox/core/viewer/views/sidebarview.js:216 module:io.ox/core/viewer
 #, fuzzy
 #| msgid "Upload new version"
-msgid "Drop new version here"
+msgid "Drop new version of \"%1$s\" here"
 msgstr "上载新版本"
 
-#: apps/io.ox/core/viewer/views/sidebarview.js:287 module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/sidebarview.js:288 module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
 msgstr ""
 
@@ -2725,8 +2726,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:531
 #: module:io.ox/files apps/io.ox/files/actions.js:541
-#: apps/io.ox/files/main.js:150 apps/io.ox/files/main.js:156
-#: apps/io.ox/files/main.js:724 apps/io.ox/files/main.js:772
+#: apps/io.ox/files/main.js:151 apps/io.ox/files/main.js:157
+#: apps/io.ox/files/main.js:728 apps/io.ox/files/main.js:776
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
@@ -3236,7 +3237,7 @@ msgstr "您的时区"
 msgid "Favorited"
 msgstr "已加最爱"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:76 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:77 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:673 module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js:69
 msgid "Favorites"
@@ -3425,8 +3426,8 @@ msgstr "文件夹指定动作"
 #: apps/io.ox/calendar/main.js:214 apps/io.ox/calendar/main.js:221
 #: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:369 apps/io.ox/core/folder/view.js:291
-#: module:io.ox/core apps/io.ox/files/main.js:147 module:io.ox/files
-#: apps/io.ox/files/main.js:154 apps/io.ox/mail/main.js:144 module:io.ox/mail
+#: module:io.ox/core apps/io.ox/files/main.js:148 module:io.ox/files
+#: apps/io.ox/files/main.js:155 apps/io.ox/mail/main.js:144 module:io.ox/mail
 #: apps/io.ox/mail/main.js:151 apps/io.ox/tasks/main.js:148 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:155
 msgid "Folders"
@@ -4856,7 +4857,7 @@ msgid ""
 msgstr "连接失败。请检查您的 Internet 设置重试。"
 
 #: apps/io.ox/core/commons.js:212 module:io.ox/core
-#: apps/io.ox/files/main.js:368 module:io.ox/files
+#: apps/io.ox/files/main.js:372 module:io.ox/files
 msgid "No elements selected"
 msgstr "没有选定的元素"
 
@@ -6849,7 +6850,7 @@ msgstr ""
 msgid "Standard folders"
 msgstr "常规文件夹"
 
-#: apps/io.ox/backbone/mini-views/timezonepicker.js:75 module:io.ox/core
+#: apps/io.ox/backbone/mini-views/timezonepicker.js:76 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:669 module:io.ox/calendar
 #, fuzzy
 msgid "Standard timezone"
@@ -9189,7 +9190,7 @@ msgstr "今早"
 msgid "three months"
 msgstr "每月"
 
-#: apps/io.ox/files/main.js:381 module:io.ox/files
+#: apps/io.ox/files/main.js:380 module:io.ox/files
 msgid "thumbnail"
 msgstr ""
 
