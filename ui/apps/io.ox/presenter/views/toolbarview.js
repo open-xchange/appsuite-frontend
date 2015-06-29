@@ -212,8 +212,12 @@ define('io.ox/presenter/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/end', {
         id: 'end',
         requires: function (e) {
-            var rtModel = e.baton.context && e.baton.context.app.rtModel;
-            return (rtModel && rtModel.hasPresenter());
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (rtModel && rtModel.isPresenter(userId));
         },
         action: function (baton) {
             console.info('end action:', baton);
@@ -224,8 +228,12 @@ define('io.ox/presenter/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/pause', {
         id: 'pause',
         requires: function (e) {
-            var rtModel = e.baton.context && e.baton.context.app.rtModel;
-            return (rtModel && !rtModel.isPaused() && rtModel.hasPresenter());
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (rtModel && !rtModel.isPaused() && rtModel.isPresenter(userId));
         },
         action: function (baton) {
             console.info('pause action:', baton);
@@ -236,8 +244,12 @@ define('io.ox/presenter/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/continue', {
         id: 'continue',
         requires: function (e) {
-            var rtModel = e.baton.context && e.baton.context.app.rtModel;
-            return (rtModel && rtModel.isPaused() && rtModel.hasPresenter());
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (rtModel && rtModel.isPaused() && rtModel.isPresenter(userId));
         },
         action: function (baton) {
             console.info('continue action:', baton);
@@ -269,7 +281,7 @@ define('io.ox/presenter/views/toolbarview', [
             var rtModel = e.baton.context.app.rtModel,
                 userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return (rtModel && rtModel.hasJoined(userId));
+            return (rtModel && rtModel.hasJoined(userId) && !rtModel.isPresenter(userId));
         },
         action: function (baton) {
             console.info('leave action:', baton);
@@ -315,6 +327,7 @@ define('io.ox/presenter/views/toolbarview', [
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.render);
             this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.render);
             this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.render);
+            this.listenTo(this.presenterEvents, 'presenter:participants:change', this.render);
         },
 
         /**

@@ -90,16 +90,16 @@ define('io.ox/presenter/rtmodel', [
         },
 
         /**
-         * Returns true if the passed user is the presenter
+         * Returns true if the passed user id belongs to the presenter.
          *
-         * @param {Object} user
-         *  A participants or activeUsers object.
+         * @param {String} userId
+         *  The user id to check.
          *
          * @returns {Boolean}
          *  Whether the user is the presenter.
          */
-        isPresenter: function (user) {
-            return (user && user.userId && user.userId === this.get('presenterId'));
+        isPresenter: function (userId) {
+            return (userId === this.get('presenterId'));
         },
 
         /**

@@ -103,7 +103,7 @@ define('io.ox/presenter/views/presentationview', [
             this.listenTo(this.presenterEvents, 'presenter:zoomin', this.onZoomIn);
             this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
             // register slide change handler
-            this.listenTo(this.presenterEvents, 'presenter:slide:change', this.showSlide);
+            this.listenTo(this.presenterEvents, 'presenter:slide:change', this.onRemoteSlideChange);
         },
 
         /**
@@ -176,6 +176,21 @@ define('io.ox/presenter/views/presentationview', [
         onSlideChangeStart: function (swiper) {
             console.info('Presenter - onSlideChangeStart');
             this.rtConnection.updateSlide({ activeSlide: swiper.activeIndex });
+        },
+
+        /**
+         * Handles remote slide changes invoked by the real-time framework.
+         *
+         * @param {Number} index
+         *  the index of the slide to be shown.
+         */
+        onRemoteSlideChange: function (index) {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (rtModel.hasJoined(userId)) {
+                this.showSlide(index);
+            }
         },
 
         /**
