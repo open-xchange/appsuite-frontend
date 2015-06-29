@@ -23,6 +23,7 @@ define('io.ox/presenter/views/sidebar/participantsview', [
             _.extend(this, options);
 
             this.on('dispose', this.disposeView.bind(this));
+            this.listenTo(this.presenterEvents, 'presenter:participants:change', this.render);
         },
 
         render: function () {
@@ -33,14 +34,16 @@ define('io.ox/presenter/views/sidebar/participantsview', [
                 sectionBody = $('<div class="sidebar-section-body">'),
                 participantsList = $('<ul class="participants-list">');
 
-            _.each(this.participants, function (participant) {
+            var participants = this.app.rtModel.get('participants');
+
+            _.each(participants, function (participant) {
                 var userbadgeView = new UserbadgeView({ participant: participant });
                 participantsList.append(userbadgeView.render().el);
             });
 
             sectionHeading.append(headline);
             sectionBody.append(participantsList);
-            this.$el.append(sectionHeading, sectionBody);
+            this.$el.empty().append(sectionHeading, sectionBody);
 
             return this;
         },

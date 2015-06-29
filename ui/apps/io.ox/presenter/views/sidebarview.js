@@ -36,12 +36,6 @@ define('io.ox/presenter/views/sidebarview', [
             _.extend(this, options);
 
             this.on('dispose', this.disposeView.bind(this));
-
-            this.participantsDummy = [
-                'Phillip Lahm', 'Michael Ballack', 'Karl-Heinz Rummenigge', 'Jürgen Klinsmann',
-                'Lothar Matthäus', 'Uwe Seeler', 'Franz Beckenbauer', 'Oliver Kahn'
-            ];
-
         },
 
         /**
@@ -73,7 +67,9 @@ define('io.ox/presenter/views/sidebarview', [
                 return;
             }
 
-            var participantsView = new ParticipantsView({ participants: this.participantsDummy });
+            var childViewParams = { model: this.model, presenterEvents: this.presenterEvents, app: this.app };
+
+            var participantsView = new ParticipantsView(childViewParams);
 
             // render sections
             this.$el.append(participantsView.render().el);

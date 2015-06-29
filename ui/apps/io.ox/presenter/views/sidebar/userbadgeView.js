@@ -25,8 +25,6 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
             // TODO use real participant model
             _.extend(this, options);
 
-            this.userId = 20;
-
             this.defaultPictureSize = 40;
             this.pictureSize = _.device('retina') ? this.defaultPictureSize * 2 : this.defaultPictureSize;
 
@@ -39,12 +37,12 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
             var pictureColumn = $('<div class="participant-picture-col">'),
                 picture = $('<div class="picture">'),
                 nameColumn = $('<div class="participant-name-col">'),
-                name = $('<a class="name halo-link">').text(this.participant);
+                name = $('<a class="name halo-link">').text(this.participant.userDisplayName);
 
             ContactsAPI.pictureHalo(
                 picture,
                 {
-                    internal_userid: this.userId
+                    internal_userid: this.participant.id
                 },
                 {
                     width: this.pictureSize,
