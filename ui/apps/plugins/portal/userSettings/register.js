@@ -17,10 +17,16 @@ define('plugins/portal/userSettings/register', [
     'io.ox/core/main',
     'gettext!io.ox/core',
     'settings!io.ox/core',
+    'io.ox/core/capabilities',
     'less!plugins/portal/userSettings/style'
-], function (ext, main, gt, settings) {
+], function (ext, main, gt, settings, capabilities) {
 
     'use strict';
+
+    var internalUserEdit = settings.get('user/internalUserEdit', true),
+        passwordEdit = capabilities.has('edit_password');
+
+    if (!internalUserEdit && !passwordEdit) return false;
 
     function keyClickFilter(e) {
         if (e.which === 13 || e.type === 'click') {
@@ -235,24 +241,24 @@ define('plugins/portal/userSettings/register', [
 
         preview: function () {
             var content;
-            this.append(
-                content = $('<div class="content">').append(
-                    // user data
-                    $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
-                    .on('click keypress', { fn: changeUserData }, keyClickFilter)
+            if (internalUserEdit) {
+                this.append(
+                    content = $('<div class="content">').append(
+                        // user data
+                        $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
+                        .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
-                )
-            );
+                    )
+                );
+            }
             // password
-            //check for capability
-            require(['io.ox/core/capabilities'], function (capabilities) {
-                if (capabilities.has('edit_password')) {
-                    content.append(
-                        $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
-                        .on('click keypress', { fn: changePassword }, keyClickFilter)
-                    );
-                }
-            });
+            // check for capability
+            if (passwordEdit) {
+                content.append(
+                    $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
+                    .on('click keypress', { fn: changePassword }, keyClickFilter)
+                );
+            }
         }
     });
 

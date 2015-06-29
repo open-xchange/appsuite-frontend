@@ -18,8 +18,9 @@ define('io.ox/core/settings/user', [
     'io.ox/contacts/edit/view-form',
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
+    'io.ox/core/yell',
     'gettext!io.ox/contacts'
-], function (ext, api, contactModel, ViewForm, dialogs, util, gt) {
+], function (ext, api, contactModel, ViewForm, dialogs, util, yell, gt) {
 
     'use strict';
 
@@ -105,7 +106,7 @@ define('io.ox/core/settings/user', [
 
             dialog.on('save', function () {
                 if (usermodel._valid) {
-                    usermodel.save();
+                    usermodel.save().fail(yell);
                     dialog.close();
                 } else {
                     dialog.idle();
