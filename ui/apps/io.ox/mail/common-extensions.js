@@ -137,6 +137,8 @@ define('io.ox/mail/common-extensions', [
         },
 
         threadSize: function (baton) {
+            // find only supports flat view
+            if (baton.app.listView.loader.mode === 'search') return;
 
             // only consider thread-size if app is in thread-mode
             if (baton.options.threaded !== true && (!baton.app || baton.app.props.get('thread') === false)) return;
