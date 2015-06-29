@@ -219,7 +219,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Delete'),
                     section: 'delete',
-                    ref: 'io.ox/files/actions/delete'
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/delete'
                 }
             },
             mail: {
@@ -301,6 +301,16 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         id: 'print',
         action: function () {}
+    });
+    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/delete', {
+        id: 'delete',
+        requires: function (e) {
+            return !e.baton.context.standalone;
+        },
+        action: function (baton) {
+            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
+            ActionsPattern.invoke('io.ox/files/actions/delete', null, actionBaton);
+        }
     });
     new Action(TOOLBAR_ACTION_ID + '/rename', {
         id: 'rename',
