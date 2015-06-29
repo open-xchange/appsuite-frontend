@@ -571,11 +571,16 @@ define('io.ox/mail/main',
         'show-mail': function (app) {
             if (_.device('smartphone')) return;
             app.showMail = function (cid) {
-                app.threadView.show(cid, app.props.get('thread'));
+                var threaded = app.props.get('thread');
+                // ignore threads when search result is shown
+                if (threaded && capabilities.has('search') && app.listView.loader.mode === 'search') {
+                    threaded = false;
+                }
+                app.threadView.show(cid, threaded);
             };
         },
 
-           /*
+        /*
          * Define basic function to show an email
          */
         'show-mail-mobile': function (app) {
