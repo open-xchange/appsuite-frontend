@@ -58,8 +58,7 @@ define('io.ox/presenter/rtconnection', [
      *  clients, and state information for the application (read-only, name and
      *  identifier of the current editor, etc.).
      *
-     * @extends TriggerObject
-     * @extends TimerMixin
+     * @extends Events
      *
      * @param {Object} [initOptions]
      *  Optional parameters:
@@ -552,6 +551,17 @@ define('io.ox/presenter/rtconnection', [
          */
         this.getUuid = function () {
             return rtGroup.getUuid();
+        };
+
+        /**
+         * Retrieves the universal unique real-time id from the real-time framework,
+         * with the following format: ox:// <ox user id> + @ + <context id> + / + <Uuid>
+         *
+         * @returns {String}
+         *  The universal unique real-time id of this client.
+         */
+        this.getRTUuid = function () {
+            return 'ox://' + ox.user_id + '@' + ox.context_id + '/' + this.getUuid();
         };
 
         // initialization -----------------------------------------------------

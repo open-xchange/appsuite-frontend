@@ -110,6 +110,35 @@ define('io.ox/presenter/rtmodel', [
          */
         isPaused: function () {
             return this.get('paused');
+        },
+
+        /**
+         * Returns the real-time user object for the provided user id.
+         *
+         * activeUsers participants
+         * An array of objects representing a
+         *
+         * @param {String} userId
+         *  The user id to look for.
+         */
+        getUser: function (userId) {
+            return _.find(this.get('activeUsers'), function (user) {
+                return (userId === user.userId);
+            }, this);
+        },
+
+        /**
+         * Returns true if the provided user has joined the presentation as participant.
+         *
+         * @param {String} userId
+         *  The user id to look for.
+         *
+         * @returns {Boolean}
+         *  Whether the user has joined the presentation.
+         */
+        hasJoined: function (userId) {
+            var user = this.getUser(userId);
+            return (user && user.joined);
         }
 
     });

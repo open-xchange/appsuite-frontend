@@ -97,6 +97,40 @@ define('io.ox/presenter/views/toolbarview', [
                     this.parent().addClass('pull-left');
                 }
             },
+
+            'join': {
+                prio: 'hi',
+                mobile: 'hi',
+                //icon: 'fa fa-pause',
+                label: gt('Join presentation'),
+                ref: TOOLBAR_ACTION_ID + '/join',
+                customize: function () {
+                    this.addClass('presenter-toolbar-join')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Join Presentation'),
+                            'aria-label': gt('Join Presentation')
+                        });
+                    this.parent().addClass('pull-left');
+                }
+            },
+            'leave': {
+                prio: 'hi',
+                mobile: 'hi',
+                //icon: 'fa fa-pause',
+                label: gt('Leave presentation'),
+                ref: TOOLBAR_ACTION_ID + '/leave',
+                customize: function () {
+                    this.addClass('presenter-toolbar-leave')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Leave Presentation'),
+                            'aria-label': gt('Leave Presentation')
+                        });
+                    this.parent().addClass('pull-left');
+                }
+            },
+
             'zoomout': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -207,6 +241,38 @@ define('io.ox/presenter/views/toolbarview', [
         action: function (baton) {
             console.info('continue action:', baton);
             baton.context.app.rtConnection.continuePresentation();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/join', {
+        id: 'join',
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (rtModel && rtModel.hasPresenter() && !rtModel.hasJoined(userId));
+        },
+        action: function (baton) {
+            console.info('join action:', baton);
+            baton.context.app.rtConnection.joinPresentation();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/leave', {
+        id: 'leave',
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (rtModel && rtModel.hasJoined(userId));
+        },
+        action: function (baton) {
+            console.info('leave action:', baton);
+            baton.context.app.rtConnection.leavePresentation();
         }
     });
 
