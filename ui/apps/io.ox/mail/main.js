@@ -1098,15 +1098,6 @@ define('io.ox/mail/main',
                                 }
                             });
 
-                        // invalidate collection state when thread setting changes
-                        var onChangeThread = function () {
-                            if (app.listView.loader.mode === 'search') {
-                                api.collectionLoader.collection.expired = true;
-                            } else {
-                                collectionLoader.collection.expired = true;
-                            }
-                        };
-
                         var register = function () {
                             var view = win.facetedsearch.view,
                                 // remember original setCollection
@@ -1118,9 +1109,6 @@ define('io.ox/mail/main',
                                 view.listenTo(collection, 'add reset remove', view.trigger.bind(view, 'query:resultready', collection));
                                 return setCollection.apply(this, arguments);
                             };
-                            // register listener to expire collection when thread setting is changed
-                            app.props.off('change:thread', onChangeThread);
-                            app.props.on('change:thread', onChangeThread);
                         };
                         // events
                         win.facetedsearch.ready
