@@ -328,9 +328,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
     new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
-        requires: function (e) {
-            return !e.baton.context.standalone;
-        },
         action: function () {}
     });
     // define actions for the zoom function
@@ -456,7 +453,11 @@ define('io.ox/core/viewer/views/toolbarview', [
         onClose: function (event) {
             event.preventDefault();
             event.stopPropagation();
-            this.viewerEvents.trigger('viewer:close');
+            if (this.standalone) {
+                this.app.quit();
+            } else {
+                this.viewerEvents.trigger('viewer:close');
+            }
         },
 
         /**

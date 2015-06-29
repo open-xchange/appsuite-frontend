@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
