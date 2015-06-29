@@ -446,11 +446,14 @@ define('io.ox/presenter/rtconnection', [
         /**
          * Start the presentation as presenter.
          *
+         * @param {Object} slideInfo
+         *  An object containing relevant data for the initial slide.
+         *
          * @returns {jQuery.Promise}
          */
-        this.startPresentation = function () {
+        this.startPresentation = function (slideInfo) {
             RTConnection.log('RTConnection.startPresentation called');
-            return send('startpresentation');
+            return send('startpresentation', 'slideInfo', slideInfo);
         };
 
         /**

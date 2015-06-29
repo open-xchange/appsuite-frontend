@@ -203,8 +203,9 @@ define('io.ox/presenter/views/toolbarview', [
             return (rtModel && !rtModel.hasPresenter());
         },
         action: function (baton) {
-            console.info('start action:', baton);
-            baton.context.app.rtConnection.startPresentation();
+            var slideId = baton.context && baton.context.app.mainView.presentationView.getActiveSlideIndex();
+            console.info('start action:', baton, 'slide', slideId);
+            baton.context.app.rtConnection.startPresentation({ activeSlide: slideId });
         }
     });
 
