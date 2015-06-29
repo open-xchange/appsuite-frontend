@@ -65,8 +65,10 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.on('dispose', this.disposeView.bind(this));
             // bind resize, zoom and close handler
             this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
-            this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
-            this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
+            this.listenTo(this.viewerEvents, 'viewer:zoom:in', _.bind(this.changeZoomLevel, this, 'increase'));
+            this.listenTo(this.viewerEvents, 'viewer:zoom:out', _.bind(this.changeZoomLevel, this, 'decrease'));
+            this.listenTo(this.viewerEvents, 'viewer:zoom:fitwidth', _.bind(this.changeZoomLevel, this, 'fitwidth'));
+            this.listenTo(this.viewerEvents, 'viewer:zoom:fitheight', _.bind(this.changeZoomLevel, this, 'fitheight'));
             this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onBeforeClose);
             this.listenTo(this.viewerEvents, 'viewer:document:scrolltopage', this.onScrollToPage);
             this.listenTo(this.viewerEvents, 'viewer:document:next', this.onNextPage);
@@ -95,8 +97,11 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         onTap: function (event, tapCount) {
             if (tapCount === 2) {
-                var zoomFactor = this.doubleTapZoomed ? this.getFitScreenZoomFactor() : 100;
-                this.setZoomLevel(zoomFactor);
+                if (this.doubleTapZoomed) {
+                    this.changeZoomLevel('fitheight');
+                } else {
+                    this.changeZoomLevel('original');
+                }
                 this.doubleTapZoomed = !this.doubleTapZoomed;
             }
         },
@@ -469,63 +474,78 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
-         * Calculates the 'fit to page' zoom factor of this document.
-         * @returns {Number} zoom factor
+         * Calculates the 'fit to width' or 'fit to height' zoom factor of this document.
+         *
+         * @params {String} mode
+         *  the desired mode, supported: 'fitwidth' or 'fitheight'
+         *
+         * @returns {Number} zoom factor = 100
          */
-        getFitScreenZoomFactor: function () {
-            var betweenPageOffset = 80,
-                slideHeight = this.$el.height() - betweenPageOffset,
-                originalPageHeight = this.pdfDocument.getOriginalPageSize().height;
-            return slideHeight / originalPageHeight * 100;
-        },
-
-        /**
-         * Zooms in of a document.
-         */
-        onZoomIn: function () {
-            if (this.isVisible()) {
-                this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'increase'));
-                this.viewerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
+        getModeZoomFactor: function (mode) {
+            var offset = 40,
+                slideWidth = this.$el.width(),
+                slideHeight = this.$el.height(),
+                originalPageSize = this.pdfDocument.getOriginalPageSize(),
+                fitWidthZoomFactor = (slideWidth - offset) / originalPageSize.width * 100,
+                fitHeightZoomFactor = (slideHeight - offset) / originalPageSize.height * 100,
+                modeZoomFactor = 100;
+            if (slideWidth >= originalPageSize.width && slideHeight >= originalPageSize.height) {
+                return modeZoomFactor;
             }
-        },
-
-        /**
-         * Zooms out of the document.
-         */
-        onZoomOut: function () {
-            if (this.isVisible()) {
-                this.pdfDocument.getLoadPromise().done(this.changeZoomLevel.bind(this, 'decrease'));
-                this.viewerEvents.trigger('viewer:blendcaption', this.currentZoomFactor + ' %');
+            switch (mode) {
+                case 'fitwidth':
+                    modeZoomFactor = fitWidthZoomFactor;
+                    break;
+                case 'fitheight':
+                    modeZoomFactor = Math.min(fitWidthZoomFactor, fitHeightZoomFactor);
+                    break;
+                default:
+                    break;
             }
+            return Math.round(modeZoomFactor);
         },
 
         /**
          *  Changes the zoom level of a document.
          *
          * @param {String} action
-         *  Supported values: 'increase' or 'decrease'.
+         *  Supported values: 'increase', 'decrease', 'fitheight','fitwidth' and 'original'.
          */
         changeZoomLevel: function (action) {
-            var currentZoomFactor = this.currentZoomFactor,
-                nextZoomFactor;
-            // search for next bigger/smaller zoom factor in the avaliable zoom factors
-            switch (action) {
-                case 'increase':
-                    nextZoomFactor = _.find(this.ZOOM_FACTORS, function (factor) {
-                        return factor > currentZoomFactor;
-                    }) || this.getMaxZoomFactor();
-                    break;
-                case 'decrease':
-                    var lastIndex = _.findLastIndex(this.ZOOM_FACTORS, function (factor) {
-                        return factor < currentZoomFactor;
-                    });
-                    nextZoomFactor = this.ZOOM_FACTORS[lastIndex] || this.getMinZoomFactor();
-                    break;
-                default:
-                    return;
+            if (this.isVisible()) {
+                this.pdfDocument.getLoadPromise().done(function () {
+                    var currentZoomFactor = this.currentZoomFactor,
+                        nextZoomFactor;
+                    // search for next bigger/smaller zoom factor in the avaliable zoom factors
+                    switch (action) {
+                        case 'increase':
+                            nextZoomFactor = _.find(this.ZOOM_FACTORS, function (factor) {
+                                    return factor > currentZoomFactor;
+                                }) || this.getMaxZoomFactor();
+                            break;
+                        case 'decrease':
+                            var lastIndex = _.findLastIndex(this.ZOOM_FACTORS, function (factor) {
+                                return factor < currentZoomFactor;
+                            });
+                            nextZoomFactor = this.ZOOM_FACTORS[lastIndex] || this.getMinZoomFactor();
+                            break;
+                        case 'fitwidth':
+                            nextZoomFactor = this.getModeZoomFactor('fitwidth');
+                            break;
+                        case 'fitheight':
+                            nextZoomFactor = this.getModeZoomFactor('fitheight');
+                            break;
+                        case 'original':
+                            nextZoomFactor = 100;
+                            break;
+                        default:
+                            return;
+                    }
+                    // apply zoom level
+                    this.setZoomLevel(nextZoomFactor);
+                    this.viewerEvents.trigger('viewer:blendcaption', nextZoomFactor + ' %');
+                }.bind(this));
             }
-            // apply zoom level
-            this.setZoomLevel(nextZoomFactor);
         },
 
         /**

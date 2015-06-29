@@ -89,6 +89,32 @@ define('io.ox/core/viewer/views/toolbarview', [
                     });
                 }
             },
+            'zoomfitwidth': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Fit to screen width'),
+                ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
+                customize: function () {
+                    this.addClass('viewer-toolbar-fitwidth').attr({
+                        tabindex: '1',
+                        title: gt('Fit to screen width'),
+                        'aria-label': gt('Fit to screen width')
+                    });
+                }
+            },
+            'zoomfitheight': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Fit to screen height'),
+                ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
+                customize: function () {
+                    this.addClass('viewer-toolbar-fitheight').attr({
+                        tabindex: '1',
+                        title: gt('Fit to screen height'),
+                        'aria-label': gt('Fit to screen height')
+                    });
+                }
+            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -329,6 +355,28 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
+    new Action(TOOLBAR_ACTION_ID + '/zoomfitwidth', {
+        id: 'zoomfitwidth',
+        requires: function (e) {
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
+        },
+        action: function (baton) {
+            baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/zoomfitheight', {
+        id: 'zoomfitheight',
+        requires: function (e) {
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
+        },
+        action: function (baton) {
+            baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
+        }
+    });
+
     new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
         id: 'sendasmail',
         requires: function (e) {
@@ -435,14 +483,14 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Publishes zoom-in event to the MainView event aggregator.
          */
         onZoomIn: function () {
-            this.viewerEvents.trigger('viewer:zoomin');
+            this.viewerEvents.trigger('viewer:zoom:in');
         },
 
         /**
          * Publishes zoom-out event to the MainView event aggregator.
          */
         onZoomOut: function () {
-            this.viewerEvents.trigger('viewer:zoomout');
+            this.viewerEvents.trigger('viewer:zoom:out');
         },
 
         /**

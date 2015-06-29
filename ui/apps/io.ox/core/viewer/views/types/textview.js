@@ -21,8 +21,8 @@ define('io.ox/core/viewer/views/types/textview', [
 
         initialize: function (options) {
             _.extend(this, options);
-            this.listenTo(this.viewerEvents, 'viewer:zoomin', this.onZoomIn);
-            this.listenTo(this.viewerEvents, 'viewer:zoomout', this.onZoomOut);
+            this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
+            this.listenTo(this.viewerEvents, 'viewer:zoom:out', this.onZoomOut);
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
         },
 
