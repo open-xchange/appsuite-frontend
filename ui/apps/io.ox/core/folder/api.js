@@ -169,6 +169,13 @@ define('io.ox/core/folder/api', [
             this.id = id;
             this.fetched = false;
             this.on('remove', this.onRemove, this);
+
+            // sort shared and hidden folders by title
+            if (this.id === 'flat/calendar/shared' || this.id === 'flat/calendar/hidden') {
+                this.comparator = function (model) {
+                    return model.get('title').toLowerCase();
+                };
+            }
         },
         comparator: function (model) {
             return model.get('index/' + this.id) || 0;

@@ -264,13 +264,19 @@ define('io.ox/core/folder/node', [
             this.onSort = _.debounce(function () {
                 // check
                 if (!this.$) return;
-                // re-append to apply sorting
-                var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
-                    // don't use data() here
-                    var index = $(node).attr('data-index');
-                    return parseInt(index, 10);
+
+                var hash = {},
+                    self = this;
+
+                // recycle existing nodes
+                this.$.subfolders.children().each(function () {
+                    hash[$(this).attr('data-id')] = $(this);
                 });
-                this.$.subfolders.append(nodes);
+
+                // reinsert nodes according to order in collection
+                this.collection.each(function (model) {
+                    self.$.subfolders.append(hash[model.id]);
+                });
             }, 10);
 
             this.repaint = _.throttle(function () {
