@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5.11. Working with versions</title>
+<title>9.4.11. Working with versions</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. Managing Files">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.5.10. Locking or unlocking files">
-<link rel="next" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. Editing multiple files at one time">
+<link rel="home" href="index.html" title="User Guide">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. Managing Files">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. Locking or unlocking files">
+<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.5. Searching for files">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,13 +19,13 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.lock.html">Prev</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.manage.multiple.html">Next</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.search.html">Next</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -33,8 +33,8 @@
 <h2 class="sr-only">Managing Files</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.5.11. Working with versions</h3></div></div></div>
-<a class="indexterm" name="id-1.10.11.15.2"></a><a class="indexterm" name="id-1.10.11.15.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.4.11. Working with versions</h3></div></div></div>
+<a class="indexterm" name="id-1.10.10.15.2"></a><a class="indexterm" name="id-1.10.10.15.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.versions"></a><p>There are the following options for working with versions: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="How to open or save a certain version:">opening or saving the current version</a></p></li>
@@ -48,41 +48,82 @@
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title"><b>How to open or save the current version:</b></p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>Click on a file in the detail view. In order to open the version, click on <span class="guibutton"><strong>Open</strong></span> in the popup. In order to save the version, click on <span class="guibutton"><strong>Download</strong></span> in the popup.</p></li></ul></div>
-<div class="taskrelated">
-          <p><span class="phrase"><strong>Tip:</strong></span> If there is a document preview displayed you can also save the current version by dragging the preview to the desktop and dropping it there.</p>
-        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Select a file in the display area. Click the <span class="guibutton"><strong>Download</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.download"></a><img src="../../images/appsuite_user_icon_download.png"></span> in the toolbar.</p></li>
+<li class="step"><p>Complete the steps for opening or downloading.</p></li>
+</ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.add"></a><p class="title"><b>How to upload a new version:</b></p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Click on a file in the detail view. In the pop-up, click on <span class="guibutton"><strong>Upload new version</strong></span>. Select a file.</p></li>
+<li class="step">
+<p>Select a file in the display area. If no details are displayed, click on <span class="guibutton"><strong>View</strong></span> in the toolbar. Enable <span class="guibutton"><strong>File Details</strong></span>.</p>
+<p>You can also use one of the following options to open a file in the <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-click on a file in the display area.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Select a file in the display area. Click the <span class="guibutton"><strong>View</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>  in the toolbar.</p></li>
+</ul></div>
+<p>If the sidebar is not displayed, click the <span class="guibutton"><strong>View Details</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.add.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step"><p>Click on <span class="guibutton"><strong>Upload new version</strong></span>. Select a file.</p></li>
 <li class="step"><p>Enter a version comment.</p></li>
 <li class="step"><p>Click on <span class="guibutton"><strong>Upload</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Tip:</strong></span> You can also upload a new version by dragging a file from your desktop to the file's display area and drop it in the lower part.</p>
+          <p><span class="phrase"><strong>Tip:</strong></span> You can also upload a new version by dragging a file from a file browser or from the desktop to the viewer's sidebar and dropping it there.</p>
         </div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.open"></a><p class="title"><b>How to open or save a certain version:</b></p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Click on a file in the detail view. In the popup, click on <span class="guibutton"><strong>Show version history</strong></span>. Click on a version's name. A menu opens.</p></li>
-<li class="step"><p>In order to open the version, click on the <span class="guibutton"><strong>Open</strong></span> menu entry. In order to save the version, click on the <span class="guibutton"><strong>Download</strong></span> menu entry.</p></li>
+<li class="step">
+<p>Select a file in the display area. If no details are displayed, click on <span class="guibutton"><strong>View</strong></span> in the toolbar. Enable <span class="guibutton"><strong>File Details</strong></span>.</p>
+<p>You can also use one of the following options to open a file in the <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-click on a file in the display area.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Select a file in the display area. Click the <span class="guibutton"><strong>View</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>  in the toolbar.</p></li>
+</ul></div>
+<p>If the sidebar is not displayed, click the <span class="guibutton"><strong>View Details</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step">
+<p>Click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>  next to <span class="guilabel"><strong>Versions</strong></span>. The list of versions is displayed.</p>
+<p>Click on a version. Click the <span class="guibutton"><strong>Download</strong></span> menu item.</p>
+</li>
+<li class="step"><p>Complete the steps for opening or downloading.</p></li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.current"></a><p class="title"><b>How to set a certain file version as the current version:</b></p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Click on a file in the detail view. In the popup, click on <span class="guibutton"><strong>Show version history</strong></span>. Click on a version's name. A menu opens.</p></li>
-<li class="step"><p>Click on the <span class="guibutton"><strong>Make this the current version</strong></span> menu entry .</p></li>
+<li class="step">
+<p>Select a file in the display area. If no details are displayed, click on <span class="guibutton"><strong>View</strong></span> in the toolbar. Enable <span class="guibutton"><strong>File Details</strong></span>.</p>
+<p>You can also use one of the following options to open a file in the <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-click on a file in the display area.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Select a file in the display area. Click the <span class="guibutton"><strong>View</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span>  in the toolbar.</p></li>
+</ul></div>
+<p>If the sidebar is not displayed, click the <span class="guibutton"><strong>View Details</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step">
+<p>Click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>  next to <span class="guilabel"><strong>Versions</strong></span>. The list of versions is displayed.</p>
+<p>Click on a version. Click on the <span class="guibutton"><strong>Make this the current version</strong></span> menu entry .</p>
+</li>
 </ol></div>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title"><b>How to delete a certain version:</b></p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Click on a file in the detail view. In the popup, click on <span class="guibutton"><strong>Show version history</strong></span>. Click on a version's name. A menu opens.</p></li>
-<li class="step"><p>Click on <span class="guibutton"><strong>Delete version</strong></span> in the menu.</p></li>
+<li class="step">
+<p>Select a file in the display area. If no details are displayed, click on <span class="guibutton"><strong>View</strong></span> in the toolbar. Enable <span class="guibutton"><strong>File Details</strong></span>.</p>
+<p>You can also use one of the following options to open a file in the <span class="guilabel"><strong>Viewer</strong></span>:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Double-click on a file in the display area.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Select a file in the display area. Click the <span class="guibutton"><strong>View</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer.png"></span> in the toolbar.</p></li>
+</ul></div>
+<p>If the sidebar is not displayed, click the <span class="guibutton"><strong>View Details</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.viewdetails"></a><img src="../../images/appsuite_user_icon_viewer_details.png"></span> .</p>
+</li>
+<li class="step"><p>Click the icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>  next to <span class="guilabel"><strong>Versions</strong></span>. The list of versions is displayed.</p></li>
+<li class="step"><p>Click on a version. Click on <span class="guibutton"><strong>Delete version</strong></span> in the menu.</p></li>
 </ol></div>
 </div>
 </div>

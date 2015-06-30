@@ -233,6 +233,8 @@
 <p>Anklicken des Datums öffnet einen Minikalender, mit dem Sie zu einem anderen Datum navigieren können.</p>
 <p>Zwischen Datum und Kalenderblatt wird ein Bereich zum <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">Anlegen</a> von
               ganztägigen Terminen angezeigt.</p>
+<p>Links vom Kalenderblatt wird oberhalb der Zeiten die Zeitzone angezeigt. Um eine weitere Spalte mit Zeiten in einer
+            anderen Zeitzone hinzu zu fügen, klicken Sie auf die Zeitzone.</p>
 <p>Die rote Linie im Kalenderblatt zeigt die aktuelle Uhrzeit.</p>
 </li>
 <li class="listitem"><p>Die Ansichten <span class="guilabel"><strong>Arbeitswoche</strong></span>, <span class="guilabel"><strong>Woche</strong></span>, <span class="guilabel"><strong>Monat</strong></span> zeigen
@@ -248,7 +250,7 @@
 <a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title"><b>Verwandte Themen</b></p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Termine anzeigen">Termine anzeigen</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.3. Wie werden Termine dargestellt?">Wie werden Termine dargestellt?</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Termine anlegen">Termine anlegen</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Termine verwalten">Termine verwalten</a></span>
+              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Termine anzeigen">Termine anzeigen</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. Wie werden Termine dargestellt?">Wie werden Termine dargestellt?</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Termine anlegen">Termine anlegen</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Termine verwalten">Termine verwalten</a></span>
             </p></li>
 <li class="listitem" style="list-style-type: none"><p>Übergeordnetes Thema:
               <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Die Kalender Bestandteile">Die
@@ -379,7 +381,7 @@
                     <span class="guilabel"><strong>Kürzlicher E-Mail-Austausch</strong></span> angezeigt.</p></li>
 <li class="listitem"><p>Wenn Sie bevorstehende Termine mit dieser Person haben, werden diese unter 
                     <span class="guilabel"><strong>Gemeinsame Termine</strong></span> angezeigt.</p></li>
-<li class="listitem"><p>Informationen zu dieser Person aus sozialen Netzwerken wie Xing oder LinkedIn. Sie können mit Hilfe der
+<li class="listitem"><p>Informationen zu dieser Person aus sozialen Netzwerken. Sie können mit Hilfe der
                       angezeigten Schaltflächen die Profilseiten dieser Person aufrufen.</p></li>
 </ul>
 </div>
@@ -430,7 +432,7 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p><b>Ansicht zum Erstellen oder Bearbeiten </b><a class="indexterm" name="id-1.8.8.11.2"></a><a class="indexterm" name="id-1.8.8.11.3"></a>Wenn Sie einen neuen Termin anlegen oder einen vorhandenen Termin bearbeiten, werden die folgenden Elemente
+<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p><b>Ansicht zum Erstellen oder Bearbeiten </b>Wenn Sie einen neuen Termin anlegen oder einen vorhandenen Termin bearbeiten, werden die folgenden Elemente
         auf einer neuen Seite angezeigt.
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -444,29 +446,14 @@
               stattfinden soll.</p></li>
 <li class="listitem">
 <p>Eingabefelder <span class="guibutton"><strong>Beginnt am</strong></span> und <span class="guibutton"><strong>Endet am</strong></span>. Bestimmt den 
-              Beginn und das Ende des Termins. Hineinklicken öffnet einen Auswahldialog zur Datumswahl. Anklicken der
-              Zeitzonen-Schaltflächen neben der Uhrzeit öffnet das Dialogfenster <span class="guilabel"><strong>Zeitzone ändern</strong></span>.
+              Beginn und das Ende des Termins. Hineinklicken öffnet einen Auswahldialog zur Datumswahl. 
+              
             </p>
-<p>
-              Wenn sich der Termin in einer anderen Zeitzone befinden soll, klicken Sie neben der Uhrzeit für den Beginn
-              oder das Ende auf eine Zeitzonen-Schaltfläche. Das Dialogfenster <span class="guilabel"><strong>Zeitzone ändern</strong></span> wird 
-              geöffnet. Sie haben die folgenden Möglichkeiten:
-              </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Ändern der Einstellung von <span class="guibutton"><strong>Start date timezone</strong></span> ändert die Zeitzone der 
-                  Startzeit und der Endzeit. Das Kontrollfeld 
-                    <span class="guibutton"><strong>Convert the entered start and end dates to match the modified timezones</strong></span>
-                  bestimmt, ob die eingegebenen Zeiten in die geänderte Zeitzone umgerechnet werden, sobald Sie das
-                  Dialogfenster beenden.</p></li>
-<li class="listitem"><p>Ändern der Einstellung von <span class="guibutton"><strong>End date timezone</strong></span> ändert nur die Zeitzone der 
-                    Endzeit. Wenn Sie für Startzeit und Endzeit unterschiedliche Zeitzonen wählen, werden die Zeiten für 
-                    Terminbeginn und Terminende in der Zeitzone des Terminbeginns gespeichert, sobald Sie das
-                    Dialogfenster beenden.</p></li>
-<li class="listitem"><p>In den Kalender-Einstellungen können Sie häufig benötigte Zeitzonen 
-                    <a class="link" href="ox.appsuite.user.sect.calendar.settings.html#ox.appsuite.user.reference.calendar.settings.timezones" title="Favorite timezones">als Favoriten festlegen</a>.</p></li>
-</ul></div>
-<p>
-            </p>
+<p>Wenn das Kontrollfeld <span class="guibutton"><strong>Ganztägig</strong></span> ausgeschaltet ist, können Sie Uhrzeiten für den Beginn 
+              und das Ende festlegen.</p>
+<p>Anklicken der Zeitzonen-Schaltflächen neben der Uhrzeit zeigt die Uhrzeit in verschiedenen Zeitzonen. 
+              In den Kalender-Einstellungen können Sie häufig benötigte Zeitzonen 
+              <a class="link" href="ox.appsuite.user.sect.calendar.settings.html#ox.appsuite.user.reference.calendar.settings.timezones" title="Zeitzonen-Favoriten">als Favoriten festlegen</a>.</p>
 </li>
 <li class="listitem"><p>Kontrollfeld <span class="guibutton"><strong>Ganztägig</strong></span>. Aktivieren Sie dieses Kontrollfeld, wenn der Termin ganze 
               Tage dauern soll.</p></li>
