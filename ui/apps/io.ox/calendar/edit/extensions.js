@@ -458,7 +458,7 @@ define('io.ox/calendar/edit/extensions', [
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
-        rowClass: 'collapsed',
+        rowClass: 'collapsed form-spacer',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getParticipants(),
