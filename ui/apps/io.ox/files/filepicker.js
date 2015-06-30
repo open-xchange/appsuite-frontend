@@ -173,6 +173,7 @@ define('io.ox/files/filepicker', [
             width: options.width,
             async: true,
             abs: false,
+            folder: options.folder || undefined,
 
             done: function (id, dialog) {
                 def.resolve(
