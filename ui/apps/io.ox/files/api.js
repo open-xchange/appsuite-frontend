@@ -656,14 +656,14 @@ define('io.ox/files/api', [
         });
     }
 
-    api.remove = function (ids) {
+    api.remove = function (ids, hardDelete) {
 
         prepareRemove(ids);
 
         return http.wait(
             http.PUT({
                 module: 'files',
-                params: { action: 'delete', timestamp: _.then() },
+                params: { action: 'delete', timestamp: _.then(), hardDelete: Boolean(hardDelete) },
                 data: http.simplify(ids),
                 appendColumns: false
             })
