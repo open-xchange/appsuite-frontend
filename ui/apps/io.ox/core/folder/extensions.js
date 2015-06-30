@@ -17,12 +17,13 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/account',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'io.ox/contacts/util',
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
     'io.ox/core/folder/folder-color',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt, color) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color) {
 
     'use strict';
 
@@ -463,19 +464,23 @@ define('io.ox/core/folder/extensions', [
                 index: 100,
                 draw: function (baton) {
 
-                    var model = baton.view.model, data = model.toJSON();
+                    var self = this, model = baton.view.model, data = model.toJSON();
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
-                    this.find('.owner').remove();
+                    // used asynchronous but should resolve immediatly because the users are already cached
+                    userAPI.getList(data.created_by).done(function (user) {
+                        var name = contactUtil.getFullName(_(user).first());
 
-                    var name = data['com.openexchange.folderstorage.displayName'],
-                        //#. %1$s is the folder owner
-                        title = gt.format(gt.pgettext('owner', 'Shared by: %1$s'), name);
+                        if (name !== data.title) {
+                            $('.folder-label', self).text(
+                                //#. %1$s is the folder owner
+                                //#. %1$s is the folder title
+                                gt('%1$s: %2$s', name, data.title)
+                            );
+                        }
+                    });
 
-                    this.addClass('shared').find('.folder-node').append(
-                        $('<div class="owner">').text(title)
-                    );
                     baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }
             },

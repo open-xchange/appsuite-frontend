@@ -19,11 +19,13 @@ define('io.ox/core/folder/api', [
     'io.ox/core/folder/title',
     'io.ox/core/folder/bitmask',
     'io.ox/core/api/account',
+    'io.ox/core/api/user',
     'io.ox/core/capabilities',
+    'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, capabilities, contactUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -46,6 +48,35 @@ define('io.ox/core/folder/api', [
     function injectIndex(id, item, index) {
         item['index/' + id] = index;
         return item;
+    }
+
+    function renameDefaultCalendarFolders(items) {
+        var renameItems = [].concat(items).filter(function (item) {
+                // only for calendar
+                if (item.module !== 'calendar') return false;
+                // rename default calendar
+                if (item.id === String(settings.get('folder/calendar'))) return true;
+                // this is hopefully a shared default folder
+                return util.is('shared', item) && item.title === gt('Calendar');
+            }),
+            ids = _(renameItems)
+                .chain()
+                .pluck('created_by')
+                .compact()
+                .uniq()
+                .value();
+
+        if (ids.length === 0) return $.when(items);
+
+        return userAPI.getList(ids).then(function (list) {
+            var hash = _.object(ids, list);
+
+            _(renameItems).each(function (item) {
+                item.title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
+            });
+
+            return items;
+        });
     }
 
     function onChangeModelId(model) {
@@ -405,6 +436,9 @@ define('io.ox/core/folder/api', [
             }
         })
         .then(function (data) {
+            return renameDefaultCalendarFolders(data);
+        })
+        .then(function (data) {
             // update/add model
             var model = pool.addModel(data);
             // propagate changes via api events
@@ -451,9 +485,11 @@ define('io.ox/core/folder/api', [
         // use rampup data?
         if (rampup[id] && !options.all) {
             var array = processListResponse(id, rampup[id]);
-            pool.addCollection(id, array);
             delete rampup[id];
-            return $.when(array);
+            return renameDefaultCalendarFolders(array).then(function (list) {
+                pool.addCollection(id, list);
+                return list;
+            });
         }
 
         // flat?
@@ -481,6 +517,7 @@ define('io.ox/core/folder/api', [
             },
             appendColumns: true
         })
+        .then(renameDefaultCalendarFolders)
         .then(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(collectionId, array);
@@ -606,27 +643,48 @@ define('io.ox/core/folder/api', [
             }
         })
         .then(function (data) {
+            var list = [],
+                sections = _(data)
+                .chain()
+                .map(function (section, id) {
+                    var obj = _(section)
+                        .chain()
+                        .map(makeObject)
+                        .filter(function (folder) {
+                            // read access?
+                            if (!util.can('read', folder)) return false;
+                            // otherwise
+                            return true;
+                        })
+                        .value();
+
+                    list.push(obj);
+                    return [id, obj];
+                })
+                .object()
+                .value();
+
+            return renameDefaultCalendarFolders(_(list).flatten()).then(function () {
+                return sections;
+            });
+        })
+        .then(function (data) {
             var sections = {},
                 hidden = [],
                 sharing = [],
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
+
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
-                var array = _(section)
-                    .chain()
-                    .map(makeObject)
-                    .filter(function (folder) {
-                        // read access?
-                        if (!util.can('read', folder)) return false;
+                var array = _(section).filter(function (folder) {
                         // store section / easier than type=1,2,3
                         if (hash[folder.id]) { hidden.push(folder); return false; }
                         // sharing?
                         if (util.is('shared-by-me', folder)) sharing.push(folder);
                         // otherwise
                         return true;
-                    })
-                    .value();
+                    });
                 // inject 'All my appointments' for calender/private
                 if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool

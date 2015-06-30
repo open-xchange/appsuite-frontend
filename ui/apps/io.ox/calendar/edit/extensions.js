@@ -25,8 +25,10 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/capabilities',
+    'io.ox/core/folder/picker',
+    'io.ox/core/folder/api',
     'settings!io.ox/calendar'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, settings) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings) {
 
     'use strict';
 
@@ -57,9 +59,12 @@ define('io.ox/calendar/edit/extensions', [
         index: 100,
         id: 'save',
         draw: function (baton) {
+            var oldFolder = baton.model.get('folder_id');
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
+                    var save = _.bind(baton.app.onSave, baton.app),
+                        folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
@@ -67,22 +72,18 @@ define('io.ox/calendar/edit/extensions', [
                     }
                     // cleanup temp timezone data without change events
                     baton.model.unset('endTimezone', { silent: true });
-                    baton.model.save().then(_.bind(baton.app.onSave, baton.app));
+
+                    if (oldFolder !== folder && baton.mode === 'edit') {
+                        baton.model.set({ 'folder_id': oldFolder }, { silent: true });
+                        baton.model.save().done(function () {
+                            api.move(baton.model.toJSON(), folder).done(save);
+                        });
+                    } else {
+                        baton.model.save().done(save);
+                    }
                 })
             );
 
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 200,
-        id: 'discard',
-        draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
-                .on('click', function () {
-                    baton.app.quit();
-                })
-            );
         }
     });
 
@@ -95,6 +96,69 @@ define('io.ox/calendar/edit/extensions', [
                 .on('click', function () {
                     baton.app.quit();
                 })
+            );
+        }
+    });
+
+    var CalendarSelectionView = mini.AbstractView.extend({
+        tagName: 'div',
+        className: 'header-right',
+        events: {
+            'click a': 'onSelect'
+        },
+        setup: function () {
+            this.listenTo(this.model, 'change:folder_id', this.render);
+        },
+        onSelect: function () {
+            var self = this;
+
+            picker({
+                button: 'Select',
+                filter: function (id, model) {
+                    return model.id !== 'virtual/all-my-appointments';
+                },
+                flat: true,
+                indent: false,
+                module: 'calendar',
+                persistent: 'folderpopup',
+                root: '1',
+                settings: settings,
+                title: gt('Select folder'),
+                folder: this.model.get('folder_id'),
+
+                done: function (id) {
+                    self.model.set('folder_id', id);
+                },
+
+                disable: function (data, options) {
+                    var create = folderAPI.can('create', data);
+                    return !create || (options && /^virtual/.test(options.folder));
+                }
+            });
+        },
+        render: function () {
+            var link = $('<a href="#">'),
+                folderId = this.model.get('folder_id');
+
+            folderAPI.get(folderId).done(function (folder) {
+                link.text(folder.title);
+            });
+
+            this.$el.empty().append(
+                $('<span>').text(gt('Calendar:')),
+                link
+            );
+
+            return this;
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 1000,
+        id: 'folder-selection',
+        draw: function (baton) {
+            this.append(
+                new CalendarSelectionView({ model: baton.model }).render().$el
             );
         }
     });
