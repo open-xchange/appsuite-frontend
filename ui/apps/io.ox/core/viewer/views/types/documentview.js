@@ -83,6 +83,14 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.$el.addClass('swiper-slide-document');
             // wheter double tap zoom is already triggered
             this.doubleTapZoomed = false;
+            // resume/suspend rendering if user switched to other apps
+            this.listenTo(ox, 'app:resume app:init', function (app) {
+                if (app.getName() === 'io.ox/files/detail') {
+                    this.pdfView.resumeRendering();
+                } else {
+                    this.pdfView.suspendRendering();
+                }
+            });
         },
 
         /**
