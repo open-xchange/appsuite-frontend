@@ -174,6 +174,7 @@ define('io.ox/files/filepicker', [
             async: true,
             abs: false,
             folder: options.folder || undefined,
+            hideTrashfolder: options.hideTrashfolder || undefined,
 
             done: function (id, dialog) {
                 def.resolve(
