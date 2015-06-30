@@ -130,7 +130,7 @@ msgstr[1] "%1$d tag"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d üzenet a beszélgetésben"
 
-#: apps/io.ox/mail/main.js:622 module:io.ox/mail
+#: apps/io.ox/mail/main.js:627 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d üzenet kijelölve"
 
@@ -161,7 +161,7 @@ msgstr[0] "%1$d kiválasztva"
 msgstr[1] "%1$d kiválasztva"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:640 module:io.ox/mail
+#: apps/io.ox/mail/main.js:645 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d kiválasztva"
 
@@ -518,7 +518,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:544 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "A tértivevény elküldve"
 
@@ -1014,7 +1014,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:1181 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1186 module:io.ox/mail
 #: apps/io.ox/settings/main.js:523 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1290,7 +1290,7 @@ msgstr "Születésnapok"
 msgid "Black"
 msgstr "Fekete"
 
-#: apps/io.ox/mail/common-extensions.js:284 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:286 module:io.ox/mail
 #, fuzzy
 #| msgid "in copy"
 msgid "Blind copy"
@@ -1426,7 +1426,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:632
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1087
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1092
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1449,7 +1449,7 @@ msgstr "Naptár nézet"
 #: apps/plugins/portal/tumblr/register.js:260
 #: apps/plugins/portal/twitter/util.js:122
 #: apps/plugins/portal/twitter/util.js:412
-#: apps/plugins/portal/userSettings/register.js:141
+#: apps/plugins/portal/userSettings/register.js:147
 #: apps/plugins/portal/xing/register.js:111
 msgid "Cancel"
 msgstr "Mégsem"
@@ -1521,11 +1521,11 @@ msgid "Change folder"
 msgstr "Mappaváltás"
 
 #: apps/io.ox/core/settings/pane.js:115 module:io.ox/core
-#: apps/plugins/portal/userSettings/register.js:97
+#: apps/plugins/portal/userSettings/register.js:103
 msgid "Change password"
 msgstr "Jelszó megváltoztatása"
 
-#: apps/plugins/portal/userSettings/register.js:140 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:146 module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Jelszó megváltoztatása és kilépés"
 
@@ -1686,8 +1686,8 @@ msgstr "Kattintson a képfeltöltéshez"
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:130
-#: apps/io.ox/core/viewer/views/toolbarview.js:131
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:156
+#: apps/io.ox/core/viewer/views/toolbarview.js:157
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:48 module:io.ox/files
@@ -1901,7 +1901,7 @@ msgstr ""
 msgid "Copy"
 msgstr "Másolás"
 
-#: apps/io.ox/mail/common-extensions.js:273 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:275 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -1979,8 +1979,8 @@ msgstr "Az a feladat nem tölthető be."
 msgid "Couldn't load your auto forward."
 msgstr "Az automatikus továbbítása nem tölthető be."
 
-#: apps/io.ox/core/settings/user.js:95 module:io.ox/contacts
-#: apps/plugins/portal/userSettings/register.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/user.js:96 module:io.ox/contacts
+#: apps/plugins/portal/userSettings/register.js:59 module:io.ox/core
 msgid "Couldn't load your contact data."
 msgstr "A névjegyadatai nem tölthetők be."
 
@@ -2207,7 +2207,7 @@ msgstr "Elhalasztott"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:189 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:194
+#: apps/io.ox/core/viewer/views/toolbarview.js:220
 #: apps/io.ox/files/actions.js:559 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2360,11 +2360,11 @@ msgstr "Widget letiltása"
 #: apps/io.ox/calendar/edit/extensions.js:94
 #: apps/io.ox/contacts/distrib/create-dist-view.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:237
-#: apps/io.ox/core/settings/user.js:42
+#: apps/io.ox/core/settings/user.js:43
 #: apps/io.ox/mail/compose/extensions.js:80 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:73
-#: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
+#: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:51
 #: module:io.ox/core
 msgid "Discard"
 msgstr "Eldobás"
@@ -2610,9 +2610,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "Egész napos találkozóért kattintson duplán erre a sorra"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:158
-#: apps/io.ox/core/viewer/views/toolbarview.js:209
-#: apps/io.ox/core/viewer/views/toolbarview.js:236
+#: apps/io.ox/core/viewer/views/toolbarview.js:184
+#: apps/io.ox/core/viewer/views/toolbarview.js:235
+#: apps/io.ox/core/viewer/views/toolbarview.js:262
 #: apps/io.ox/files/actions.js:550 module:io.ox/files
 #: apps/io.ox/files/actions.js:681 apps/io.ox/files/toolbar.js:109
 #: apps/io.ox/files/toolbar.js:116 apps/io.ox/mail/actions.js:724
@@ -2768,7 +2768,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1091
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1096
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -2807,7 +2807,7 @@ msgstr "Találkozó szerkesztése"
 msgid "Edit contact"
 msgstr "Névjegy szerkesztése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:150 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:176 module:io.ox/core
 #: apps/io.ox/files/actions.js:620 module:io.ox/files
 msgid "Edit description"
 msgstr "Leírás szerkesztése"
@@ -3169,7 +3169,7 @@ msgstr "Külső felhasználó"
 msgid "External contact"
 msgstr "Külső névjegy"
 
-#: apps/io.ox/mail/common-extensions.js:489 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:491 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
@@ -3410,6 +3410,20 @@ msgstr "Utónév"
 #: apps/io.ox/contacts/settings/pane.js:75 module:io.ox/contacts
 msgid "First name Last name"
 msgstr "Utónév vezetéknév"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:108 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:113
+#: apps/io.ox/core/viewer/views/toolbarview.js:114
+#, fuzzy
+#| msgid "Fit to screen width"
+msgid "Fit to screen height"
+msgstr "Szélességhez igazítás"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:95 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:100
+#: apps/io.ox/core/viewer/views/toolbarview.js:101
+msgid "Fit to screen width"
+msgstr "Szélességhez igazítás"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings
@@ -3815,7 +3829,7 @@ msgstr "IP-telefon"
 msgid "Icons"
 msgstr "Ikonok"
 
-#: apps/plugins/portal/userSettings/register.js:133 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:139 module:io.ox/core
 msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
@@ -4583,7 +4597,7 @@ msgid "Minimize"
 msgstr "Minimalizálás"
 
 #. %1$s is the minimum password length
-#: apps/plugins/portal/userSettings/register.js:110 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:116 module:io.ox/core
 #, c-format
 msgid "Minimum password length is %1$d."
 msgstr "A jelszó minimális hossza: %1$d."
@@ -4697,7 +4711,7 @@ msgstr "Új naptár"
 
 #: apps/io.ox/core/main.js:816 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
-#: apps/plugins/portal/userSettings/register.js:241
+#: apps/plugins/portal/userSettings/register.js:248
 msgid "My contact data"
 msgstr "A névjegyadataim"
 
@@ -4709,7 +4723,7 @@ msgstr "Saját mappák"
 msgid "My latest files"
 msgstr "Legutóbbi fájlok"
 
-#: apps/plugins/portal/userSettings/register.js:251 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:258 module:io.ox/core
 msgid "My password"
 msgstr "A jelszavam"
 
@@ -4819,7 +4833,7 @@ msgstr "Lejárt határidejű feladatok"
 msgid "New overdue tasks"
 msgstr "Lejárt határidejű feladatok"
 
-#: apps/plugins/portal/userSettings/register.js:125 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:131 module:io.ox/core
 msgid "New password"
 msgstr "Új jelszó"
 
@@ -4873,7 +4887,7 @@ msgstr "Következő nap"
 msgid "Next Week"
 msgstr "Következő hét"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:536 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:595 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -4933,7 +4947,7 @@ msgid "No items found"
 msgstr "Nem találhatók elemek"
 
 #. 'no results' message for screenreaders with additional hint to adjust active filters
-#: apps/io.ox/find/main.js:350 module:io.ox/find
+#: apps/io.ox/find/main.js:337 module:io.ox/find
 msgid "No items were found. Please adjust currently used facets."
 msgstr "Egyetlen elem sem található. Módosítsa a jelenleg használt lapot."
 
@@ -4945,7 +4959,7 @@ msgstr "Nincs elveszett kérés"
 msgid "No mails in your inbox"
 msgstr "Nincsenek levelek Beérkezett üzenetek mappában"
 
-#: apps/io.ox/mail/main.js:608 module:io.ox/mail
+#: apps/io.ox/mail/main.js:613 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nincs kiválasztott üzenet"
 
@@ -5142,7 +5156,7 @@ msgstr "Munkanapokon"
 
 #. result count for screenreaders
 #. %1$s number of items found by search feature
-#: apps/io.ox/find/main.js:353 module:io.ox/find
+#: apps/io.ox/find/main.js:340 module:io.ox/find
 msgid "One item was found."
 msgid_plural "%1$s items were found."
 msgstr[0] "Egy elem található."
@@ -5172,8 +5186,8 @@ msgstr "Mappanézet megnyitása"
 msgid "Open in browser"
 msgstr "Megnyitás böngészőben"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:203 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:230
+#: apps/io.ox/core/viewer/views/toolbarview.js:229 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:256
 #, fuzzy
 msgid "Open in browser tab"
 msgstr "Megnyitás böngészőben"
@@ -5332,7 +5346,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:225 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:230 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "%1$d/%2$d oldal"
 
@@ -5355,7 +5369,7 @@ msgstr "Jelszó"
 
 #. %1$s is the minimum password length
 #. %2$s is the maximum password length
-#: apps/plugins/portal/userSettings/register.js:106 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:112 module:io.ox/core
 #, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "A jelszó hosszának %1$d és %2$d karakter között kell lennie."
@@ -5370,35 +5384,35 @@ msgstr "Jelszó visszaállítása"
 msgid "Password required"
 msgstr "Jelszó visszaállítása"
 
-#: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:96 module:io.ox/core
 msgid "Password strength: Good"
 msgstr "Jelszó erőssége: jó"
 
-#: apps/plugins/portal/userSettings/register.js:93 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:99 module:io.ox/core
 msgid "Password strength: Legendary!"
 msgstr "Jelszó erőssége: legendás"
 
-#: apps/plugins/portal/userSettings/register.js:91 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:97 module:io.ox/core
 msgid "Password strength: Strong"
 msgstr "Jelszó erőssége: erős"
 
-#: apps/plugins/portal/userSettings/register.js:86 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
 msgid "Password strength: Too short"
 msgstr "Jelszó erőssége: túl rövid"
 
-#: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:98 module:io.ox/core
 msgid "Password strength: Very strong"
 msgstr "Jelszó erőssége: nagyon erős"
 
-#: apps/plugins/portal/userSettings/register.js:88 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:94 module:io.ox/core
 msgid "Password strength: Very weak"
 msgstr "Jelszó erőssége: nagyon gyenge"
 
-#: apps/plugins/portal/userSettings/register.js:89 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:95 module:io.ox/core
 msgid "Password strength: Weak"
 msgstr "Jelszó erőssége: gyenge"
 
-#: apps/plugins/portal/userSettings/register.js:87 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:93 module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Jelszó erőssége: nem megfelelő hosszúságú"
 
@@ -5673,14 +5687,14 @@ msgstr "Frissítse böngészőjét."
 msgid "Plus"
 msgstr "Plusz"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:109 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:135 module:io.ox/core
 #, fuzzy
 #| msgid "Zoom out"
 msgid "Pop out"
 msgstr "Kicsinyítés"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:116 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:117
+#: apps/io.ox/core/viewer/views/toolbarview.js:142 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:143
 msgid "Pop out standalone viewer"
 msgstr ""
 
@@ -5778,7 +5792,7 @@ msgstr "Előző hét"
 msgid "Previous month"
 msgstr "Előző"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:533 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:592 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -6158,7 +6172,7 @@ msgstr "Tag eltávolítása"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:143
+#: apps/io.ox/core/viewer/views/toolbarview.js:169
 #: apps/io.ox/files/actions.js:610 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6173,7 +6187,7 @@ msgstr "Mappa átnevezése"
 msgid "Repeat"
 msgstr "Ismétlés"
 
-#: apps/plugins/portal/userSettings/register.js:127 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:133 module:io.ox/core
 msgid "Repeat new password"
 msgstr "Új jelszó ismét"
 
@@ -6295,7 +6309,7 @@ msgstr "Értékesítési mennyiség"
 #: apps/io.ox/core/folder/actions/imap-subscription.js:49 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:371
 #: apps/io.ox/core/permissions/permissions.js:405
-#: apps/io.ox/core/settings/user.js:41 apps/io.ox/editor/main.js:134
+#: apps/io.ox/core/settings/user.js:42 apps/io.ox/editor/main.js:134
 #: module:io.ox/editor apps/io.ox/editor/main.js:156
 #: apps/io.ox/files/actions/edit-description.js:35 module:io.ox/files
 #: apps/io.ox/files/filepicker.js:35 apps/io.ox/mail/accounts/settings.js:44
@@ -6314,7 +6328,7 @@ msgstr "Értékesítési mennyiség"
 #: apps/plugins/portal/mail/register.js:204
 #: apps/plugins/portal/rss/register.js:153 module:io.ox/portal
 #: apps/plugins/portal/tumblr/register.js:259
-#: apps/plugins/portal/userSettings/register.js:44
+#: apps/plugins/portal/userSettings/register.js:50
 msgid "Save"
 msgstr "Mentés"
 
@@ -6337,8 +6351,8 @@ msgid "Save attachment"
 msgstr "Melléklet mentése"
 
 #: apps/io.ox/core/pim/actions.js:84 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:215
-#: apps/io.ox/core/viewer/views/toolbarview.js:242
+#: apps/io.ox/core/viewer/views/toolbarview.js:241
+#: apps/io.ox/core/viewer/views/toolbarview.js:268
 #: apps/io.ox/mail/actions.js:732 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "Mentés a Drive-ra"
@@ -6466,7 +6480,7 @@ msgid "Send"
 msgstr "Küldés"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:572 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:574 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Tértivevény küldése"
 
@@ -6475,7 +6489,7 @@ msgstr "Tértivevény küldése"
 msgid "Send as internal link"
 msgstr "Küldés belső hivatkozásként"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:222 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:248 module:io.ox/core
 msgid "Send as mail"
 msgstr "Küldés e-mailként"
 
@@ -6485,7 +6499,7 @@ msgstr "Küldés e-mailként"
 msgid "Send as vCard"
 msgstr "Küldés vCard-ként"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:180 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:206 module:io.ox/core
 #: apps/io.ox/files/actions.js:570 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:132
 msgid "Send by mail"
@@ -6585,7 +6599,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Beállítások"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:172 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:80 apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -6659,7 +6673,7 @@ msgid "Show advanced filters"
 msgstr "Speciális szűrők megjelenítése"
 
 #: apps/io.ox/contacts/edit/view-form.js:260 module:io.ox/contacts
-#: apps/io.ox/core/settings/user.js:56
+#: apps/io.ox/core/settings/user.js:57
 #, fuzzy
 msgid "Show all fields"
 msgstr "Az összes elem megjelenítése"
@@ -6715,7 +6729,7 @@ msgstr "Rejtett fájlok és mappák megjelenítése"
 msgid "Show icons"
 msgstr "Ikonok megjelenítése"
 
-#: apps/io.ox/mail/common-extensions.js:488 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:490 module:io.ox/mail
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
@@ -7456,7 +7470,7 @@ msgstr ""
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:575 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:577 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "A feladó értesítést szeretne kapni arról, hogy Ön elolvasta ezt az e-mailt"
@@ -7539,7 +7553,7 @@ msgid_plural "The tasks could not be deleted."
 msgstr[0] "A feladat nem törölhető."
 msgstr[1] "A feladatok nem törölhetők."
 
-#: apps/plugins/portal/userSettings/register.js:168 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:174 module:io.ox/core
 msgid "The two newly entered passwords do not match."
 msgstr "A megadott két jelszó nem egyezik."
 
@@ -7763,13 +7777,13 @@ msgstr "A levélnek nincs tartalma"
 msgid "This message has been truncated due to size limitations."
 msgstr "A levél a méretkorlát miatt le lett vágva."
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:440 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is read, press to mark it as unread."
 msgid "This message is read, press this button to mark it as unread."
 msgstr "Ez egy olvasott levél, kattintson hogy olvasatlan legyen."
 
-#: apps/io.ox/mail/common-extensions.js:437 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:439 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is unread, press to mark it as read."
 msgid "This message is unread, press this button to mark it as read."
@@ -7833,7 +7847,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Megszólítás"
 
-#: apps/io.ox/mail/common-extensions.js:262 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:264 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:59
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:549
@@ -8091,7 +8105,7 @@ msgid "Upload local file"
 msgstr "Fájl feltöltése"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:96
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:187
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:213
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:63
 #: module:io.ox/files
 #, fuzzy
@@ -8181,8 +8195,8 @@ msgstr ""
 "Az idő módosításához használja a fel/le nyilakat. Bezárni az Esc gomb "
 "megnyomásával lehet."
 
-#: apps/plugins/portal/userSettings/register.js:234 module:io.ox/core
-#: apps/plugins/portal/userSettings/register.js:260
+#: apps/plugins/portal/userSettings/register.js:240 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:266
 msgid "User data"
 msgstr "Felhasználói adatok"
 
@@ -8243,8 +8257,8 @@ msgstr "Nézet"
 msgid "View attachment"
 msgstr "Melléklet mentése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:101 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:102
+#: apps/io.ox/core/viewer/views/toolbarview.js:127 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:128
 #, fuzzy
 msgid "View details"
 msgstr "Részletek elrejtése"
@@ -8255,7 +8269,7 @@ msgstr "Részletek elrejtése"
 msgid "View source"
 msgstr "Forrás megtekintése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:478 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:537 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -8269,7 +8283,7 @@ msgstr "Várakozás"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: apps/io.ox/mail/common-extensions.js:515 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
 
@@ -8720,7 +8734,7 @@ msgstr ""
 "jelenleg az elérhető %2$s lemezhelyből ennyit használ: %1$s. Szabad hely: "
 "%3$s."
 
-#: apps/plugins/portal/userSettings/register.js:123 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:129 module:io.ox/core
 msgid "Your current password"
 msgstr "A jelenlegi jelszava"
 
@@ -8756,7 +8770,7 @@ msgid "Your password"
 msgstr "Az Ön jelszava"
 
 #. %1$s are some example characters
-#: apps/plugins/portal/userSettings/register.js:101 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:107 module:io.ox/core
 #, c-format
 msgid ""
 "Your password is more secure if it also contains capital letters, numbers, "
@@ -8835,7 +8849,7 @@ msgid "and"
 msgstr "és"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:299 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:301 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "és %1$d további"
 
@@ -9184,7 +9198,7 @@ msgstr "nincs szerkesztési jogosultság"
 msgid "no read permissions"
 msgstr "nincs olvasási jogosultság"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:400 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:455 module:io.ox/core
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -10239,9 +10253,6 @@ msgstr "yyyy"
 
 #~ msgid "Fit to screen size"
 #~ msgstr "Képernyőhöz igazítás"
-
-#~ msgid "Fit to screen width"
-#~ msgstr "Szélességhez igazítás"
 
 #~ msgid "Float Left"
 #~ msgstr "Lebegő balra"
