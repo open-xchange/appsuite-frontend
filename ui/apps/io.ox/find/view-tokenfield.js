@@ -236,6 +236,11 @@ define('io.ox/find/view-tokenfield', [
         register: function () {
             function preventOnCancel (e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
+                // wait until model is created
+                if (!e.attrs.model) {
+                    e.preventDefault();
+                    return false;
+                }
             }
 
             //retrigger events on view
