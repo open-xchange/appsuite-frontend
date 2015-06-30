@@ -1976,20 +1976,10 @@ define('io.ox/mail/api',
         return !util.isDeleted(item);
     }
 
-    function getThreadList (obj) {
-        // thread references returned within object
-        if (obj.thread) return obj.thread;
-        // may thread references already available in pool
-        var current = api.threads.get(_.cid(obj)) || {};
-        if (current && current.length > 1) return current;
-        // no thread references at all
-        return [ obj ];
-    }
-
     api.processThreadMessage = function (obj) {
 
         // get thread
-        var thread = getThreadList(obj), list;
+        var thread = obj.thread || [obj], list;
 
         // remove deleted mails
         thread = _(list = thread).filter(filterDeleted);
