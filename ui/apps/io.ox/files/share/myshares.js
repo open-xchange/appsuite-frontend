@@ -11,15 +11,16 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/files/share/myshares', [
+ define('io.ox/files/share/myshares', [
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/files/share/model',
     'io.ox/files/share/api',
     'io.ox/core/folder/breadcrumb',
+    'io.ox/backbone/mini-views/dropdown',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, sModel, api, BreadcrumbView, gt) {
+], function (ext, DisposableView, sModel, api, BreadcrumbView, Dropdown, gt) {
 
     'use strict';
 
@@ -33,9 +34,15 @@ define('io.ox/files/share/myshares', [
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
+            var dropdown = new Dropdown({ model: baton.model, label: gt('Sort by') })
+                .option('sort', 'nameUp', gt('Name up'))
+                .option('sort', 'nameDown', gt('Name down'))
+                .option('sort', 'dateUp', gt('Date up'))
+                .option('sort', 'dateDown', gt('Date down'));
             this.append(
                 $('<fieldset>').append(
                     $('<legend>').text(gt('My shares')),
+                    dropdown.render().$el,
                     baton.view.$ul
                 )
             );
@@ -77,8 +84,8 @@ define('io.ox/files/share/myshares', [
             this.append(
                 $('<div class="info">').append(
                     $('<div class="filename">').text(model.isFolder() ? 'Foldername' : 'Filename'),
-                    $('<div class="url">').text(model.get('share_url')),
-                    breadcrumb.render().$el
+                    breadcrumb.render().$el,
+                    $('<div class="url">').text(model.get('share_url'))
                 )
             );
         }
@@ -208,16 +215,19 @@ define('io.ox/files/share/myshares', [
             this.options = _.extend({ module: 'files' }, options);
 
             this.baton = ext.Baton({
-                view: this
+                view: this,
+                model: new Backbone.Model()
             });
 
             this.$ul = $('<ul class="list-unstyled">');
 
             this.collection = new sModel.Shares();
 
-            this.listenTo(this.collection, 'reset', this.updateShares);
+            this.listenTo(this.collection, 'reset sort', this.updateShares);
 
             this.listenTo(ox, 'refresh^', this.getShares);
+
+            this.listenTo(this.baton.model, 'change:sort', this.sortBy);
 
         },
 
@@ -237,6 +247,33 @@ define('io.ox/files/share/myshares', [
             return api.all().then(function (data) {
                 self.collection.reset(data);
             });
+        },
+
+        sortBy: function (model, by) {
+            switch (by) {
+                case 'dateUp':
+                    this.collection.comparator = function (share) {
+                        return share.get('created');
+                    };
+                    break;
+                case 'dateDown':
+                    this.collection.comparator = function (share) {
+                        return -share.get('created');
+                    };
+                    break;
+                case 'nameUp':
+                    this.collection.comparator = function (share) {
+                        return share.get('created');
+                    };
+                    break;
+                case 'nameDown':
+                    this.collection.comparator = function (share) {
+                        return -share.get('created');
+                    };
+                    break;
+                default:
+            }
+            this.collection.sort();
         },
 
         updateShares: function () {

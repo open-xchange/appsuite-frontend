@@ -346,6 +346,7 @@ define('io.ox/files/main', [
                         app.myshares.$el.show().siblings().hide();
                     } else {
                         app.myshares = new MySharesView();
+                        window.testview = app.myshares;
                         app.getWindow().nodes.body.prepend(app.myshares.render().$el);
                         app.myshares.$el.siblings().hide();
                     }

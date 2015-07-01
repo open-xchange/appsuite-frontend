@@ -221,6 +221,10 @@ define('io.ox/files/share/model', [
 
     var Shares = Backbone.Collection.extend({
 
+        comparator: function (share) {
+            return share.get('created');
+        },
+
         model: Share
 
     });
