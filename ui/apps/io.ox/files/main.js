@@ -798,6 +798,12 @@ define('io.ox/files/main', [
                     api.pool.add('detail', response.results);
                 }
             });
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.elements';
+            };
         }
     });
 

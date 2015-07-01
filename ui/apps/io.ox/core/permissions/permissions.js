@@ -357,7 +357,7 @@ define('io.ox/core/permissions/permissions', [
                         isFolderAdmin = false;
                     }
 
-                    var options = { top: 60, width: 800, center: false, maximize: true, async: true };
+                    var options = { top: 60, width: 800, center: false, maximize: true, async: true, help: 'ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles' };
                     if (_.device('!desktop')) {
                         options = { top: '40px', center: false, async: true };
                     }

@@ -52,7 +52,7 @@ define('io.ox/core/sub/subscriptions', [
         render: function (app) {
             var self = this,
 
-            popup = new dialogs.ModalDialog({ async: true })
+            popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.concept.pubsub.subscribe' })
                 .addPrimaryButton('subscribe', gt('Subscribe'))
                 .addButton('cancel', gt('Cancel'));
 

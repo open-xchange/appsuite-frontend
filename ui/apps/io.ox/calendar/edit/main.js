@@ -353,6 +353,10 @@ define('io.ox/calendar/edit/main', [
                     mode: _.isUndefined(point.id) ? 'create' : 'edit'
                 });
                 return $.when();
+            },
+
+            getContextualHelp: function () {
+                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create';
             }
         });
 

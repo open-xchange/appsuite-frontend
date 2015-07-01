@@ -564,6 +564,10 @@ define('io.ox/portal/main', [
         app.refresh();
     });
 
+    app.getContextualHelp = function () {
+        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.reference.portal.elements';
+    };
+
     // launcher
     app.setLauncher(function () {
 

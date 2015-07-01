@@ -233,6 +233,10 @@ define('io.ox/tasks/edit/main', [
             return $.when();
         };
 
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.create';
+        };
+
         return app;
     }
 

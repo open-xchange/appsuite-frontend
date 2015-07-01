@@ -167,7 +167,9 @@ define('io.ox/core/import/import', [
             //get folder and process
             folderAPI.get(id).done(function () {
 
-                new dialogs.ModalDialog()
+                new dialogs.ModalDialog({
+                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html#ox.appsuite.user.sect.datainterchange.import.contactscsv'
+                })
                 .build(function () {
 
                     this.getHeader().append(

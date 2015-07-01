@@ -19,6 +19,7 @@ define('io.ox/core/main', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/help',
     // defines jQuery plugin
     'io.ox/core/commons',
     'io.ox/core/upsell',
@@ -30,7 +31,7 @@ define('io.ox/core/main', [
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/backbone/disposable'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -782,6 +783,35 @@ define('io.ox/core/main', [
                         return $.when();
                     }, gt('Refresh'))
                     .attr('id', 'io-ox-refresh-icon')
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'help',
+            index: 300,
+            draw: function () {
+                this.append(
+                    addLauncher('right', new HelpView({
+                        iconClass: 'launcher-icon',
+                        tabindex: '-1',
+                        href: function () {
+                            var currentApp = ox.ui.App.getCurrentApp(),
+                                currentType = currentApp && currentApp.getName(),
+                                manifest = _.defaults(
+                                    ox.manifests.apps[currentType] || {},
+                                    ox.manifests.apps[currentType + '/main'] || {},
+                                    {
+                                        help: {
+                                            base: 'help',
+                                            target: 'index.html'
+                                        }
+                                    }
+                                ).help;
+
+                            return currentApp.getContextualHelp ? currentApp.getContextualHelp() : manifest.target;
+                        }
+                    }).render().$el)
                 );
             }
         });

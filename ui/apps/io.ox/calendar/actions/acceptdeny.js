@@ -59,7 +59,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                     );
                 }
 
-                return new dialogs.ModalDialog()
+                return new dialogs.ModalDialog({
+                        help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
+                    })
                     .build(function () {
                         if (!series && o.recurrence_position) {
                             data = api.removeRecurrenceInformation(data);

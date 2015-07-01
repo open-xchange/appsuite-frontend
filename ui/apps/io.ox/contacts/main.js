@@ -787,8 +787,13 @@ define('io.ox/contacts/main', [
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
-        }
+        },
 
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.elements';
+            };
+        }
     });
 
     // launcher

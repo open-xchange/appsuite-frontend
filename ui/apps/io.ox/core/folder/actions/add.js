@@ -66,7 +66,8 @@ define('io.ox/core/folder/actions/add', [
         new dialogs.ModalDialog({
             async: true,
             width: 400,
-            enter: 'add'
+            enter: 'add',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create'
         })
         .header(
             $('<h4>').text(getTitle(folder, opt.module))
