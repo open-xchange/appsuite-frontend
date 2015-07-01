@@ -208,6 +208,14 @@ define('io.ox/files/share/model', [
             return !this.get('target').item;
         },
 
+        getDisplayName: function () {
+            if (this.get('display_name')) {
+                return this.get('display_name');
+            } else {
+                return this.isFolder() ? 'Foldername' : 'Filename';
+            }
+        },
+
         sync: function (action, model) {
             switch (action) {
                 case 'delete':

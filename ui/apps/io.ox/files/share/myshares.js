@@ -34,15 +34,22 @@
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
-            var dropdown = new Dropdown({ model: baton.model, label: gt('Sort by') })
-                .option('sort', 'nameUp', gt('Name up'))
-                .option('sort', 'nameDown', gt('Name down'))
-                .option('sort', 'dateUp', gt('Date up'))
-                .option('sort', 'dateDown', gt('Date down'));
+            var dropdown = new Dropdown({
+                //#. Sort options drop-down
+                label: gt.pgettext('dropdown', 'Sort by'),
+                model: baton.model,
+                caret: true
+            })
+            .option('sort', 'name', gt('Name'))
+            .option('sort', 'date', gt('Date'))
+            .divider()
+            .option('order', 'asc', gt('Ascending'))
+            .option('order', 'desc', gt('Descending'));
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(gt('My shares')),
-                    dropdown.render().$el,
+                    $('<legend>').text(gt('My shares')).append(
+                        dropdown.render().$el.addClass('sort')
+                    ),
                     baton.view.$ul
                 )
             );
@@ -83,7 +90,7 @@
 
             this.append(
                 $('<div class="info">').append(
-                    $('<div class="filename">').text(model.isFolder() ? 'Foldername' : 'Filename'),
+                    $('<div class="displayname">').text(model.getDisplayName()),
                     breadcrumb.render().$el,
                     $('<div class="url">').text(model.get('share_url'))
                 )
@@ -216,7 +223,10 @@
 
             this.baton = ext.Baton({
                 view: this,
-                model: new Backbone.Model()
+                model: new Backbone.Model({
+                    sort: 'name',
+                    order: 'asc'
+                })
             });
 
             this.$ul = $('<ul class="list-unstyled">');
@@ -227,7 +237,7 @@
 
             this.listenTo(ox, 'refresh^', this.getShares);
 
-            this.listenTo(this.baton.model, 'change:sort', this.sortBy);
+            this.listenTo(this.baton.model, 'change:sort change:order', this.sortBy);
 
         },
 
@@ -249,26 +259,18 @@
             });
         },
 
-        sortBy: function (model, by) {
-            switch (by) {
-                case 'dateUp':
-                    this.collection.comparator = function (share) {
-                        return share.get('created');
+        sortBy: function (model) {
+            var desc = model.get('order') === 'desc';
+            switch (model.get('sort')) {
+                case 'date':
+                    this.collection.comparator = function (shareA) {
+                        return desc ? shareA.get('created') : -shareA.get('created');
                     };
                     break;
-                case 'dateDown':
-                    this.collection.comparator = function (share) {
-                        return -share.get('created');
-                    };
-                    break;
-                case 'nameUp':
-                    this.collection.comparator = function (share) {
-                        return share.get('created');
-                    };
-                    break;
-                case 'nameDown':
-                    this.collection.comparator = function (share) {
-                        return -share.get('created');
+                case 'name':
+                    this.collection.comparator = function (shareA, shareB) {
+                        var ret = shareA.getDisplayName().toLowerCase() < shareB.getDisplayName().toLowerCase();
+                        return desc ? ret : -ret;
                     };
                     break;
                 default:
