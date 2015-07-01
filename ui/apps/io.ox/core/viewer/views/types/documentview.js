@@ -555,7 +555,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                     }
                     // apply zoom level
                     this.setZoomLevel(nextZoomFactor);
-                    this.viewerEvents.trigger('viewer:blendcaption', nextZoomFactor + ' %');
                 }.bind(this));
             }
         },
@@ -585,6 +584,8 @@ define('io.ox/core/viewer/views/types/documentview', [
             // save new zoom level to view
             this.currentZoomFactor = zoomLevel;
             this.setInitialZoomLevel(this.model.get('id'), zoomLevel);
+            // blend zoom caption
+            this.viewerEvents.trigger('viewer:blendcaption', Math.round(zoomLevel) + ' %');
         },
 
         /**
