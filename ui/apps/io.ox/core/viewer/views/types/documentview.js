@@ -85,6 +85,9 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.doubleTapZoomed = false;
             // resume/suspend rendering if user switched to other apps
             this.listenTo(ox, 'app:resume app:init', function (app) {
+                if (!this.pdfView) {
+                    return;
+                }
                 if (app.getName() === 'io.ox/files/detail') {
                     this.pdfView.resumeRendering();
                 } else {
