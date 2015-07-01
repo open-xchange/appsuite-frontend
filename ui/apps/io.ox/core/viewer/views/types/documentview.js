@@ -421,6 +421,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 }
                 // select/highlight the corresponding thumbnail according to displayed document page
                 this.viewerEvents.trigger('viewer:document:selectthumbnail', this.getDominantPage())
+                    .trigger('viewer:document:loaded')
                     .trigger('viewer:document:pagechange', this.getDominantPage(), pageCount);
                 this.$el.removeClass('io-ox-busy');
                 // resolve the document load Deferred: thsi document view is fully loaded.

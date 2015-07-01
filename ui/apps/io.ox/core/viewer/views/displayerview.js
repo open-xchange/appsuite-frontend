@@ -84,7 +84,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiperParameter = {
                     nextButton: '.swiper-button-next',
                     prevButton: '.swiper-button-prev',
-                    loop: true,
+                    loop: !this.standalone,
                     loopedSlides: 0,
                     followFinger: false,
                     simulateTouch: false,

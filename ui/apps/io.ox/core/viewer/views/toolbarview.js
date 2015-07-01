@@ -423,11 +423,22 @@ define('io.ox/core/viewer/views/toolbarview', [
             // rerender on slide change
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.render);
             // show current page on the navigation page box
+            this.listenTo(this.viewerEvents, 'viewer:document:loaded', this.onDocumentLoaded);
             this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
             // listen to sidebar toggle for document navigation positioning
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        /**
+         * Document load success handler.
+         * - renders the page navigation in the toolbar.
+         */
+        onDocumentLoaded: function () {
+            if (this.standalone &&  !_.device('smartphone')) {
+                this.renderPageNavigation();
+            }
         },
 
         /**
@@ -535,6 +546,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             // draw toolbar
             var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                 isDriveFile = model.isFile(),
                 baton = Ext.Baton({
                     context: this,
@@ -555,7 +567,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.model, 'change', this.onModelChange);
             // set device type
             Util.setDeviceClass(this.$el);
-            toolbar.empty();
+            toolbar.empty().append(pageNavigation);
             // enable only the link set for the current app
             _.each(toolbarPoint.keys(), function (id) {
                 if (id === appName) {
@@ -572,10 +584,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_LINKS_ID + '/' + appName
             }));
             toolbarPoint.invoke('draw', toolbar, baton);
-            // render page navigation only in standalone mode and with document files.
-            if (this.standalone && (this.model.isOffice() || this.model.isPDF()) && !_.device('smartphone')) {
-                this.renderPageNavigation();
-            }
             // workaround for correct TAB traversal order:
             // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
             _.defer(function () {
@@ -587,6 +595,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             return this;
         },
 
+        /**
+         * Renders the document page navigation controls.
+         */
         renderPageNavigation: function () {
             var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
@@ -640,10 +651,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                     self.viewerEvents.trigger('viewer:document:scrolltopage', newValue);
                 }
             }
-            group.append(prev, next, pageInputWrapper, totalPage);
             pageInput.on('keydown', onInputKeydown).on('change', onInputChange);
             prev.on('click', onPrevPage);
             next.on('click', onNextPage);
+            group.append(prev, next, pageInputWrapper, totalPage)
+                .toggleClass('sidebar-offset', Settings.getSidebarOpenState());
             this.$el.prepend(group);
         },
 
