@@ -103,6 +103,17 @@ define('io.ox/presenter/rtmodel', [
         },
 
         /**
+         * Returns true if the provided user can start the presentation.
+         * Which means the presentation must not be running and the user must not be joined.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canStart: function (userId) {
+            return (!this.hasPresenter() && !this.isJoined(userId));
+        },
+
+        /**
          * Returns true if the presentation is paused.
          *
          * @returns {Boolean}
@@ -110,6 +121,28 @@ define('io.ox/presenter/rtmodel', [
          */
         isPaused: function () {
             return this.get('paused');
+        },
+
+        /**
+         * Returns true if the provided user can pause the presentation.
+         * Which means the user must be the presenter and the presentation must be running.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canPause: function (userId) {
+            return (!this.isPaused() && this.isPresenter(userId));
+        },
+
+        /**
+         * Returns true if the provided user can continue the presentation.
+         * Which means the user must be the presenter and the presentation must be paused.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canContinue: function (userId) {
+            return (this.isPaused() && this.isPresenter(userId));
         },
 
         /**
@@ -136,9 +169,31 @@ define('io.ox/presenter/rtmodel', [
          * @returns {Boolean}
          *  Whether the user has joined the presentation.
          */
-        hasJoined: function (userId) {
+        isJoined: function (userId) {
             var user = this.getUser(userId);
             return (user && user.joined);
+        },
+
+        /**
+         * Returns true if the provided user can join the presentation.
+         * Which means the presentation must be running and the user must not be joined.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canJoin: function (userId) {
+            return (this.hasPresenter() && !this.isJoined(userId));
+        },
+
+        /**
+         * Returns true if the provided user can leave the presentation.
+         * Which means the user must be joined and must not be the presenter.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canLeave: function (userId) {
+            return (this.isJoined(userId) && !this.isPresenter(userId));
         }
 
     });

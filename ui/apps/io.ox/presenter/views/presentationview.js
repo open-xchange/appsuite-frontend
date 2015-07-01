@@ -188,7 +188,7 @@ define('io.ox/presenter/views/presentationview', [
             var rtModel = this.app.rtModel,
                 userId = this.app.rtConnection.getRTUuid();
 
-            if (rtModel.hasJoined(userId)) {
+            if (rtModel.isJoined(userId)) {
                 this.showSlide(index);
             }
         },
