@@ -170,6 +170,10 @@ define('io.ox/core/viewer/views/mainview', [
 
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
+            // filter random resize events that are coming from other parts of appsuite.
+            if (ox.ui.App.getCurrentApp().getName() !== 'io.ox/files/detail') {
+                return;
+            }
             var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
                 activeSlide = this.displayerView.getActiveSlideNode(),
