@@ -64,7 +64,8 @@ define('io.ox/files/share/myshares', [
         id: 'info',
         index: INDEX += 100,
         draw: function (baton) {
-            var breadcrumb = new BreadcrumbView({ folder: baton.view.model.get('target').folder, exclude: ['9'], notail: true });
+            var model = baton.view.model,
+                breadcrumb = new BreadcrumbView({ folder: model.get('target').folder, exclude: ['9'], notail: true });
 
             breadcrumb.handler = function (id) {
                 // launch files and set/change folder
@@ -75,8 +76,8 @@ define('io.ox/files/share/myshares', [
 
             this.append(
                 $('<div class="info">').append(
-                    $('<div class="filename">').text('Filename/Foldername'),
-                    $('<div class="url">').text(baton.view.model.get('share_url')),
+                    $('<div class="filename">').text(model.isFolder() ? 'Foldername' : 'Filename'),
+                    $('<div class="url">').text(model.get('share_url')),
                     breadcrumb.render().$el
                 )
             );
@@ -108,11 +109,17 @@ define('io.ox/files/share/myshares', [
         draw: function () {
             this.append(
                 $('<div class="actions">').append(
+                    $('<a href="#" class="toggleUrl">').append(
+                        $('<span class="sr-only">').text(gt('show link')),
+                        $('<i class="fa fa-external-link" aria-hidden="true">')
+                    ),
                     $('<a href="#" class="edit">').append(
-                        $('<i class="fa fa-gear">')
+                        $('<span class="sr-only">').text(gt('edit share')),
+                        $('<i class="fa fa-gear" aria-hidden="true">')
                     ),
                     $('<a href="#" class="remove">').append(
-                        $('<i class="fa fa-trash">')
+                        $('<span class="sr-only">').text(gt('remove share')),
+                        $('<i class="fa fa-trash" aria-hidden="true">')
                     )
                 )
             );
@@ -129,6 +136,7 @@ define('io.ox/files/share/myshares', [
         className: 'share-view',
 
         events: {
+            'click .actions .toggleUrl': 'toggleUrl',
             'click .actions .remove': 'onRemove',
             'click .actions .edit': 'onEdit',
             'keydown': 'fnKey'
@@ -177,6 +185,11 @@ define('io.ox/files/share/myshares', [
         onEdit: function (e) {
             e.preventDefault();
             console.log('edit', this.model);
+        },
+
+        toggleUrl: function (e) {
+            e.preventDefault();
+            this.$el.find('.url').toggle();
         }
 
     });

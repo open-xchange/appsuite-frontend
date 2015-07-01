@@ -205,7 +205,7 @@ define('io.ox/files/share/model', [
         },
 
         isFolder: function () {
-            return true;
+            return !this.get('target').item;
         },
 
         sync: function (action, model) {
