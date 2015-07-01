@@ -515,7 +515,7 @@ define('io.ox/contacts/main', [
             };
 
             app.showContact = showContact;
-            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
+            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api);
         },
 
         'show-contact-mobile': function (app) {
@@ -558,7 +558,7 @@ define('io.ox/contacts/main', [
             };
 
             app.showContact = showContact;
-            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
+            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api);
         },
         /*
          * Always change pages on tap, don't wait for data to load

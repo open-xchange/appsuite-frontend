@@ -34,64 +34,6 @@ define('io.ox/core/commons', [
             };
         },
 
-        /**
-         * Handle multi-selection
-         */
-        multiSelection: (function () {
-
-            var points = {},
-                options = {};
-
-            ext.point('io.ox/links/multi-selection')
-            .extend({
-                id: 'summary',
-                index: 100,
-                draw: function (baton) {
-                    this.append(
-                        $('<div class="summary" id="' + baton.grid.multiselectId + '">').html(
-                            gt('<b>%1$d</b> elements selected', baton.selection.length)
-                        )
-                    );
-                }
-            })
-            .extend({
-                id: 'links',
-                index: 200,
-                draw: function (baton) {
-                    // inline links
-                    var node = $('<div>'), id = baton.id, opt = baton.opt || {};
-                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', dropdown: opt.dropdown })))
-                        // needs grid to add busy animations without using global selectors
-                        .draw.call(node, { data: baton.selection, grid: baton.grid });
-                    this.append(
-                        node.children().first()
-                    );
-                }
-            });
-
-            return function (id, node, selection, api, grid, opt) {
-                opt = _.extend({}, options, opt || {});
-
-                if (selection.length > 1) {
-                    // draw
-                    var baton = ext.Baton({ id: id, grid: grid, selection: selection, opt: opt });
-                    node.idle().empty().append(function () {
-                        var container, box;
-                        container = (api ? $.createViewContainer(selection, api) : $('<div>'))
-                        .on('redraw', function () {
-                            ext.point('io.ox/links/multi-selection').invoke('draw', box.empty(), baton);
-                        })
-                        .addClass('io-ox-multi-selection')
-                        .append(
-                            box = $('<div class="box">')
-                        );
-                        ext.point('io.ox/links/multi-selection').invoke('draw', box, baton);
-                        return container.center();
-                    });
-                }
-            };
-        }()),
-
         simpleMultiSelection: function (node, selection, grid) {
             var length = selection.length;
 
@@ -99,9 +41,11 @@ define('io.ox/core/commons', [
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
-                    $('<div id="' + grid.multiselectId + '">').text(
+                    $('<div id="' + grid.multiselectId + '">').append(
                         gt.format(
-                            gt.ngettext('%1$d item selected', '%1$d items selected', length), length
+                            //#. number of selected item
+                            //#. %1$s is the number surrounded by a tag
+                            gt.ngettext('%1$s item selected', '%1$s items selected', length), $('<span class="number">').text(length).prop('outerHTML')
                         )
                     )
                 )
@@ -164,7 +108,7 @@ define('io.ox/core/commons', [
             };
         }()),
 
-        wireGridAndSelectionChange: function (grid, id, draw, node, api, simple) {
+        wireGridAndSelectionChange: function (grid, id, draw, node, api) {
             var last = '', label;
             grid.selection.on('change', function (e, selection) {
 
@@ -197,12 +141,7 @@ define('io.ox/core/commons', [
                         // multi selection
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
-                        if (simple) {
-                            commons.simpleMultiSelection(node, this.unique(this.unfold()), grid);
-                        } else {
-                            //grid is needed to apply busy animations correctly
-                            commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);
-                        }
+                        commons.simpleMultiSelection(node, this.unique(this.unfold()), grid);
                     } else {
                         // empty
                         if (draw.cancel) draw.cancel();

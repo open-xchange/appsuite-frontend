@@ -363,7 +363,7 @@ define('io.ox/tasks/main', [
                 );
             };
 
-            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api, true);
+            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api);
 
         },
         /*
