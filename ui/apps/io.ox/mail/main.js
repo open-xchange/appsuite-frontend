@@ -370,11 +370,14 @@ define('io.ox/mail/main',
                 var model = app.listView.model;
                 // resolve from-to
                 if (value === 'from-to') value = account.is('sent|drafts', model.get('folder')) ? 604 : 603;
-                // set proper order first
-                model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
-                app.props.set('order', model.get('order'));
-                // turn off conversation mode for any sort order but date (610)
-                if (value !== 610) app.props.set('thread', false);
+                // do not accidentally overwrite other attributes on folderchange
+                if (!app.changingFolders) {
+                    // set proper order first
+                    model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                    app.props.set('order', model.get('order'));
+                    // turn off conversation mode for any sort order but date (610)
+                    if (value !== 610) app.props.set('thread', false);
+                }
                 // now change sort columns
                 model.set('sort', value);
             });
@@ -429,7 +432,10 @@ define('io.ox/mail/main',
          */
         'restore-view-options': function (app) {
             var data = app.getViewOptions(app.folder.get());
+            // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
+            app.changingFolders = true;
             app.props.set(data);
+            app.changingFolders = false;
         },
 
         /*
@@ -535,6 +541,9 @@ define('io.ox/mail/main',
 
                 if (app.props.get('mobileFolderSelectMode')) return;
 
+                // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
+                app.changingFolders = true;
+
                 var options = app.getViewOptions(id),
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
                     showFrom = account.is('sent|drafts', id);
@@ -548,6 +557,7 @@ define('io.ox/mail/main',
                 } else {
                     fromTo.text(gt('From'));
                 }
+                app.changingFolders = false;
             });
         },
 
