@@ -757,7 +757,8 @@ define('io.ox/core/folder/api', [
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
-                if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
+                if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
+                    pool.getCollection(model.get('folder_id')).sort();
                     return newId;
                 });
             },
