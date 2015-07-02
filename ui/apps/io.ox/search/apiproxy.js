@@ -33,8 +33,7 @@ define('io.ox/search/apiproxy',[
             index: 100,
             customize: function (baton) {
                 baton.data = _.filter(baton.data, function (facet) {
-                    debugger;
-                    return facet.style === 'simple' || $.inArray(facet.id, ['contacts', 'contact', 'participant', 'task_participants'] > -1);
+                    return facet.style === 'simple' || ['contacts', 'contact', 'participant', 'task_participants'].indexOf(facet.id) > -1;
                 });
             }
         });
