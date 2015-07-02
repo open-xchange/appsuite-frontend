@@ -410,6 +410,13 @@ define('io.ox/mail/main', [
             });
         },
 
+        'isThreaded': function (app) {
+            app.isThreaded = function () {
+                if (app.listView.loader.mode === 'search') return false;
+                return app.props.get('thread');
+            };
+        },
+
         /*
          * Store view options
          */
@@ -582,12 +589,7 @@ define('io.ox/mail/main', [
         'show-mail': function (app) {
             if (_.device('smartphone')) return;
             app.showMail = function (cid) {
-                var threaded = app.props.get('thread');
-                // ignore threads when search result is shown
-                if (threaded && capabilities.has('search') && app.listView.loader.mode === 'search') {
-                    threaded = false;
-                }
-                app.threadView.show(cid, threaded);
+                app.threadView.show(cid, app.isThreaded());
             };
         },
 
@@ -1150,7 +1152,7 @@ define('io.ox/mail/main', [
 
             var find = app.get('find'),
                 each = function (obj) {
-                    api.processThreadMessage(obj);
+                    api.pool.add('detail', obj);
                 };
 
             find.on('collectionLoader:created', function (loader) {
