@@ -19,7 +19,7 @@ define('io.ox/search/autocomplete/extensions',[
     'io.ox/core/tk/tokenfield',
     'less!io.ox/search/style',
     'less!io.ox/find/style'
-], function (ext, settings, gt, Tokenfield) {
+], function (ext, api, settings, gt, Tokenfield) {
     'use strict';
 
     var POINT = 'io.ox/search/autocomplete';
