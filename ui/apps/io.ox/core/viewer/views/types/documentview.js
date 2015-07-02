@@ -23,7 +23,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     'use strict';
 
     var PDF_ERROR_NOTIFICATIONS = {
-        default: gt('Sorry, there is no preview available for this file.'),
+        general: gt('Sorry, there is no preview available for this file.'),
         passwordProtected: gt('This document is password protected and cannot be displayed. Please open it with your local PDF viewer.')
     };
 
@@ -433,7 +433,7 @@ define('io.ox/core/viewer/views/types/documentview', [
              */
             function pdfDocumentLoadError(response) {
                 console.warn('Core.Viewer.DocumentView.show(): failed loading PDF document. Cause: ', response.cause);
-                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause || 'default'],
+                var notificationText = PDF_ERROR_NOTIFICATIONS[response.cause] || PDF_ERROR_NOTIFICATIONS.general,
                     notificationIconClass;
                 if (response.cause === 'passwordProtected') {
                     notificationIconClass = 'fa-lock';
