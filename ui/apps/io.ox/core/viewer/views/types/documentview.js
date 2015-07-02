@@ -572,15 +572,22 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
             var pdfView = this.pdfView,
                 documentTopPosition = this.$el.scrollTop(),
-                documentLeftPosition = this.$el.scrollLeft();
+                documentLeftPosition = this.$el.scrollLeft(),
+                pageMarginHeight = 40,
+                pageMarginCount = this.getDominantPage() - 1,
+                pageMarginTotal = pageMarginHeight * pageMarginCount,
+                pagesHeightBeforeZoom = documentTopPosition - pageMarginTotal;
             _.each(this.pages, function (page, pageIndex) {
                 pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
                 var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
                 $(page).css(realPageSize);
             });
             // adjust document scroll position according to new zoom
-            this.$el.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
-            this.$el.scrollLeft(documentLeftPosition * zoomLevel / this.currentZoomFactor);
+            var pagesHeightAfterZoom = pagesHeightBeforeZoom * zoomLevel / this.currentZoomFactor,
+                scrollTopAfterZoom = pagesHeightAfterZoom + pageMarginTotal,
+                scrollLeftAfterZoom = documentLeftPosition * zoomLevel / this.currentZoomFactor;
+            this.$el.scrollTop(scrollTopAfterZoom);
+            this.$el.scrollLeft(scrollLeftAfterZoom);
             // save new zoom level to view
             this.currentZoomFactor = zoomLevel;
             this.setInitialZoomLevel(this.model.get('id'), zoomLevel);
