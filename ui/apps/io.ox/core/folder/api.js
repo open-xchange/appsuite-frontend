@@ -76,7 +76,7 @@ define('io.ox/core/folder/api', [
                     item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
                 } else {
                     //#. %1$s is the folder owner
-                    //#. %1$s is the folder title
+                    //#. %2$s is the folder title
                     item.display_title = gt('%1$s: %2$s', contactUtil.getFullName(hash[item.created_by]), item.title);
                 }
             });
