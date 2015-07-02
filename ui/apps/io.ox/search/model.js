@@ -458,7 +458,11 @@ define('io.ox/search/model', [
                         return data.facet === 'folder';
                     });
 
+                // reset current folder when switching apps
                 tmppool.folder.values.custom.id = 'custom';
+                tmppool.folder.values.custom.custom = undefined;
+                tmppool.folder.values.custom.name = undefined;
+
                 tmplist[0].value = 'custom';
                 this.set({
                     query: '',
