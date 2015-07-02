@@ -166,12 +166,12 @@ define('io.ox/presenter/views/mainview', [
                     break;
                 case 37: // left arrow
                     event.stopPropagation();
-                    this.presentationView.swiper.slidePrev();
+                    this.presentationView.showPreviousSlide();
                     //this.presentationView.focusActiveSlide();
                     break;
                 case 39: // right arrow
                     event.stopPropagation();
-                    this.presentationView.swiper.slideNext();
+                    this.presentationView.showNextSlide();
                     //this.presentationView.focusActiveSlide();
                     break;
                 // TODO: clarify which keyboard events to support

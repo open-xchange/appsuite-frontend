@@ -30,17 +30,13 @@ define('io.ox/presenter/views/presentationview', [
      * @param {String} type='left'|'right'
      *  the button type to create, could be 'left' or 'right'.
      *
-     * @param {String} id
-     *  the CSS id for the button.
-     *
      * @returns {jQuery}
      *  the button node.
      */
-    function createNavigationButton (type, id) {
+    function createNavigationButton (type) {
         var button = $('<a href="#" class="swiper-button-control" tabindex="1" role="button" aria-controls="presenter-carousel">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
-        button.attr('id', id);
         button.addClass((type === 'left') ? 'swiper-button-prev  left' : 'swiper-button-next right');
         button.attr((type === 'left') ? { title: gt('Previous'), 'aria-label': gt('Previous') } : { title: gt('Next'), 'aria-label': gt('Next') });
         icon.addClass((type === 'left') ? 'fa-angle-left' : 'fa-angle-right');
@@ -56,6 +52,11 @@ define('io.ox/presenter/views/presentationview', [
         className: 'presenter-presentation',
 
         attributes: { tabindex: -1, role: 'main' },
+
+        events: {
+            'click .swiper-button-next': 'showNextSlide',
+            'click .swiper-button-prev': 'showPreviousSlide'
+        },
 
         initialize: function (options) {
             _.extend(this, options);
@@ -104,6 +105,11 @@ define('io.ox/presenter/views/presentationview', [
             this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
             // register slide change handler
             this.listenTo(this.presenterEvents, 'presenter:slide:change', this.onRemoteSlideChange);
+            // register participants change handler
+            this.listenTo(this.presenterEvents, 'presenter:participants:change', this.onParticipantsChange);
+            // register presentation pause /continue handler
+            this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onPresentationPause);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onPresentationContinue);
         },
 
         /**
@@ -194,6 +200,33 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
+         * Handles remote participants changes invoked by the real-time framework.
+         *
+         * @param {Array} participants
+         *  An array of the participants.
+         */
+        onParticipantsChange: function (participants) {
+            console.info('Presenter - participants - change', participants);
+            this.updateNavigationArrows();
+        },
+
+        /**
+         * Handles presentation pause invoked by the real-time framework.
+         */
+        onPresentationPause: function () {
+            console.info('Presenter - presentation - pause');
+            this.updateNavigationArrows();
+        },
+
+        /**
+         * Handles presentation continue invoked by the real-time framework.
+         */
+        onPresentationContinue: function () {
+            console.info('Presenter - presentation - continue');
+            this.updateNavigationArrows();
+        },
+
+        /**
          * Returns the active Swiper slide jQuery node.
          *
          * @returns {jQuery}
@@ -232,6 +265,54 @@ define('io.ox/presenter/views/presentationview', [
         showSlide: function (index) {
             if (this.swiper && _.isNumber(index) && (index !== this.currentSlideIndex) ) {
                 this.swiper.slideTo(index);
+            }
+        },
+
+        /**
+         * Switches Swiper to the next slide,
+         * but only if the user is presenter or has not joined the presentation.
+         */
+        showNextSlide: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
+                this.swiper.slideNext();
+            }
+        },
+
+        /**
+         * Switches Swiper to the previous slide,
+         * but only if the user is presenter or has not joined the presentation.
+         */
+        showPreviousSlide: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
+                this.swiper.slidePrev();
+            }
+        },
+
+        /**
+         * Updates the navigation arrow buttons visible state according to the RTModel data.
+         *  Show the buttons in the following cases:
+         *  - the presentation has not been started
+         *  - the current user is a participant and has not (yet) joined the presentation
+         *  - the current user is the presenter and the presentation is paused
+         */
+        updateNavigationArrows: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid(),
+                navigationArrows = this.$el.find('.swiper-button-control');
+
+            // TODO: currently the buttons are shown for the presenter in every case, this need to be changed when the next-slide-thumbnail is implemented.
+            //if (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused())) {
+
+            if (!rtModel.isJoined(userId) || rtModel.isPresenter(userId)) {
+                navigationArrows.show();
+            } else {
+                navigationArrows.hide();
             }
         },
 
@@ -344,13 +425,8 @@ define('io.ox/presenter/views/presentationview', [
                this.pdfDocumentLoadError.call(this, pageCount);
                return;
            }
-           var pdfDocument = this.pdfDocument,
-               swiperNextButtonId = _.uniqueId('presenter-button-next-'),
-               swiperPrevButtonId = _.uniqueId('presenter-button-prev-');
-
+           var pdfDocument = this.pdfDocument;
            var swiperParameter = {
-               nextButton: '#' + swiperNextButtonId,
-               prevButton: '#' + swiperPrevButtonId,
                loop: false,
                loopedSlides: 0,
                followFinger: false,
@@ -370,8 +446,8 @@ define('io.ox/presenter/views/presentationview', [
            // add navigation buttons
            if (pageCount > 1) {
                this.carouselRoot.append(
-                   createNavigationButton('left', swiperPrevButtonId),
-                   createNavigationButton('right', swiperNextButtonId)
+                   createNavigationButton('left'),
+                   createNavigationButton('right')
                );
            }
 
