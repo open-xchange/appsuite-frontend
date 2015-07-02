@@ -95,9 +95,12 @@ define('io.ox/presenter/views/mainview', [
         onRTModelUpdate: function (rtModel) {
             console.info('Presenter - MainView - onRTUpdatertData - RTModel - change', rtModel);
 
-            var currentPresenterId, previousPresenterId;
+            var currentPresenterId,
+                previousPresenterId,
+                localSlideId = this.presentationView.getActiveSlideIndex(),
+                remoteSlideId = rtModel.get('activeSlide');
 
-            if (rtModel.hasChanged('activeSlide')) {
+            if (rtModel.hasChanged('activeSlide') || (localSlideId !== remoteSlideId)) {
                 this.presenterEvents.trigger('presenter:slide:change', rtModel.get('activeSlide'));
             }
             if (rtModel.hasChanged('participants')) {
