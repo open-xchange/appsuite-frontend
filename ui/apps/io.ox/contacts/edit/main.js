@@ -298,6 +298,10 @@ define('io.ox/contacts/edit/main', [
             return $.when();
         };
 
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.create';
+        };
+
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',
             customizeModel: function (contact) {

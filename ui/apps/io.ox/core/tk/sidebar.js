@@ -23,23 +23,51 @@ define('io.ox/core/tk/sidebar', [], function () {
         //
         // options:
         // side: 'left' or 'right'
-        // $el: A DOM element to append
+        // sidebar: [optional] A DOM element to append as sidebar
+        // target: [optional] The outer DOM element (defaults to #io-ox-windowmanager)
+        // visible: true/false Sets the initial state
         //
         add: function (options) {
 
-            options = _.extend({ side: 'right' }, options);
+            options = _.extend({ side: 'right', visible: true }, options);
 
             // ensure DOM element
-            options.$el = options.$el || $('<div>');
+            options.sidebar = options.sidebar || $('<div>');
 
             // ensure proper css classes
-            options.$el.addClass('abs generic-sidebar border-' + (options.side === 'left' ? 'right' : 'left'));
+            options.sidebar.addClass('abs generic-sidebar scrollpane border-' + (options.side === 'left' ? 'right' : 'left'));
 
-            // wrap window manager to introduce container element
-            $('#io-ox-windowmanager').wrap('<div class="abs generic-sidebar-container"><div class="abs generic-sidebar-wrapper"></div></div>');
+            // replace target node (default is indow manager) by sidebar container
+            var container = $('<div class="abs generic-sidebar-container"><div class="abs generic-sidebar-content"></div></div>');
+            var target = options.target || $('#io-ox-windowmanager');
+            container.insertBefore(target);
+            container.find('.generic-sidebar-content').append(target);
 
             // add sidebar
-            $('.generic-sidebar-container:last').addClass('has-' + options.side).append(options.$el);
+            container
+                .on({ 'maximize-sidebar': maximize, 'minimize-sidebar': minimize, 'toggle-sidebar': toggle })
+                .addClass('has-' + options.side + (options.visible ? ' visible' : ''))
+                .append(options.sidebar);
+
+            // respond to app:start/resume to minimize
+            ox.on('app:start app:resume', function () {
+                container.trigger('minimize-sidebar');
+            });
+
+            // for easy debugging
+            window.sidebar = container;
         }
     };
+
+    function maximize() {
+        $(this).addClass('visible maximize');
+    }
+
+    function minimize() {
+        $(this).removeClass('maximize');
+    }
+
+    function toggle(e, state) {
+        $(this).toggleClass('visible', state);
+    }
 });

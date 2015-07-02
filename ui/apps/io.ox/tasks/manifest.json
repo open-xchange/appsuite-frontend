@@ -7,9 +7,5 @@
     "requires": "tasks",
     "refreshable": true,
     "index": 900,
-    "advancedMode": true,
-    "help": {
-        "base": "help",
-        "target": "ox.appsuite.user.chap.tasks.html"
-    }
+    "advancedMode": true
 }

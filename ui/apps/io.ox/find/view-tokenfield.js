@@ -124,6 +124,7 @@ define('io.ox/find/view-tokenfield', [
                 hint: false,
                 allowEditing: false,
                 createTokensOnBlur: false,
+                customDefaultModel: true,
                 // typeahead options
                 maxResults: 20,
                 minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
@@ -186,12 +187,14 @@ define('io.ox/find/view-tokenfield', [
 
                     return node;
                 },
-                harmonize: function (value) {
-                    return {
-                        label: value.getDisplayName(),
-                        value: value.isPerson() ? value.getNameDetail() || value.getDisplayName() : value.getDisplayName(),
-                        model: value
-                    };
+                harmonize: function (data) {
+                    return _(data).map(function (value) {
+                        return {
+                            label: value.getDisplayName(),
+                            value: value.isPerson() ? value.getNameDetail() || value.getDisplayName() : value.getDisplayName(),
+                            model: value
+                        };
+                    });
                 },
                 click: function (e, data) {
                     // apply selected filter

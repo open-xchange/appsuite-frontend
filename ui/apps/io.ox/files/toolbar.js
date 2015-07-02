@@ -76,6 +76,7 @@ define('io.ox/files/toolbar', [
             'share': {
                 prio: 'hi',
                 mobile: 'lo',
+                icon: 'fa fa-user-plus',
                 label: gt('Share'),
                 title: gt('Share selected files'),
                 ref: 'io.ox/files/icons/share'
@@ -107,6 +108,13 @@ define('io.ox/files/toolbar', [
                 icon: 'fa fa-download',
                 label: gt('Download'),
                 ref: 'io.ox/files/actions/download'
+            },
+            'download-folder': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-download',
+                label: gt('Download'),
+                ref: 'io.ox/files/actions/download-folder'
             },
             'delete': {
                 prio: 'hi',
@@ -172,6 +180,13 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 label: gt('Unlock'),
                 ref: 'io.ox/files/actions/unlock',
+                section: 'file-op'
+            },
+            'permissions': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Permissions'),
+                ref: 'io.ox/files/actions/permissions',
                 section: 'file-op'
             }
         };

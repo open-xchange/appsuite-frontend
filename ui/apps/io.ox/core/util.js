@@ -203,7 +203,16 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return function (val) {
                 return validate($.trim(val));
             };
-        }())
+        }()),
+
+        // return deep link for a given file
+        getDeepLink: function (app, data) {
+
+            var folder = encodeURIComponent(data.folder_id),
+                id = encodeURIComponent(data.id);
+
+            return ox.abs + ox.root + '/#!&app=' + app + '&folder=' + folder + '&id=' + id;
+        }
     };
 
     return that;

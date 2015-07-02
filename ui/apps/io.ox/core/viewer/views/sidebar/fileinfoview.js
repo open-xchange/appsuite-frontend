@@ -14,21 +14,21 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/core/util',
+    'io.ox/core/capabilities',
+    'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FolderAPI, gt) {
+], function (PanelBaseView, Ext, FolderAPI, util, capabilities, BreadcrumbView, gt) {
 
     'use strict';
 
-    var DRIVE_ROOT_FOLDER = '9',
-        POINT = 'io.ox/core/viewer/sidebar/fileinfo';
-
-    Ext.point(POINT).extend({
+    Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
         id: 'fileinfo',
         draw: function (baton) {
-            if (!baton.model) {
-                return;
-            }
+
+            if (!baton.model) return;
+
             var panelBody,
                 model = baton.model,
                 fileName = model.get('filename') || '-',
@@ -36,37 +36,52 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
                 modified = model.get('last_modified'),
                 isToday = moment().isSame(moment(modified), 'day'),
-                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
+                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
+                link = util.getDeepLink('io.ox/files', model.toJSON()),
+                dl = $('<dl>');
 
-            panelBody = this.find('.sidebar-panel-body').empty().append(
-                $('<dl>').append(
-                    // filename
-                    $('<dt>').text(gt('Filename')),
-                    $('<dd class="file-name">').text(fileName),
-                    // size
-                    $('<dt>').text(gt('Size')),
-                    $('<dd class="size">').text(sizeString),
-                    // modified
-                    $('<dt>').text(gt('Modified')),
-                    $('<dd class="modified">').text(dateString),
-                    // path
-                    $('<dt>').text(gt('Saved in')),
-                    $('<dd class="saved-in">').text('\xa0').busy()
-                )
+            dl.append(
+                // filename
+                $('<dt>').text(gt('Filename')),
+                $('<dd class="file-name">').text(fileName),
+                // size
+                $('<dt>').text(gt('Size')),
+                $('<dd class="size">').text(sizeString),
+                // modified
+                $('<dt>').text(gt('Modified')),
+                $('<dd class="modified">').text(dateString),
+                // path; using "Folder" instead of "Save in" because that one
+                // might get quite long, e.g. "Gespeichert unter"
+                $('<dt>').text(gt('Folder')),
+                $('<dd class="saved-in">')
             );
 
-            FolderAPI.path(model.get('folder_id'))
-            .done(function (list) {
-                var path = _.chain(list)
-                    .filter(function (folder) { return (folder.id !== DRIVE_ROOT_FOLDER); })
-                    .map(function (folder) { return gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30)); })
-                    .value().join(' / ');
+            if (!capabilities.has('alone')) {
+                dl.append(
+                    // deep link
+                    $('<dt>').text(gt('Link')),
+                    $('<dd class="link">').append(
+                        $('<a href="#" target="_blank" style="word-break: break-all">')
+                        .attr('href', link)
+                        .text(link)
+                    )
+                );
+            }
 
-                panelBody.find('dl>dd.saved-in').text(path).idle();
-            })
-            .fail(function () {
-                panelBody.find('dl>dd.saved-in').text('-').idle();
-            });
+            panelBody = this.find('.sidebar-panel-body').empty().append(dl);
+
+            var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
+
+            breadcrumb.handler = function (id) {
+                // launch files and set/change folder
+                ox.launch('io.ox/files/main', { folder: id }).done(function () {
+                    this.folder.set(id);
+                });
+            };
+
+            panelBody.find('dl > dd.saved-in').append(
+                breadcrumb.render().$el
+            );
         }
     });
 
@@ -78,19 +93,31 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         className: 'viewer-fileinfo',
 
-        initialize: function () {
-            this.setPanelHeader(gt('General info'));
-            this.togglePanel(true);
+        initialize: function (options) {
+            options = options || {};
+            this.closable = !!options.closable;
+            this.setPanelHeader(gt('File details'));
             // attach event handlers
             this.listenTo(this.model, 'change:filename change:file_size change:last_modified change:folder_id', this.render);
             this.on('dispose', this.disposeView.bind(this));
         },
 
         render: function () {
-            if (this.model) {
-                var baton = Ext.Baton({ model: this.model, data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData') });
-                Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
+
+            if (!this.model) return;
+
+            var data = this.model.isFile() ? this.model.toJSON() : this.model.get('origData'),
+                baton = Ext.Baton({ model: this.model, data: data });
+            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
+
+            if (this.closable) {
+                this.$('.sidebar-panel-heading').prepend(
+                    $('<button type="button" class="close pull-right" tabindex="1">')
+                    .attr('aria-label', gt('Close'))
+                    .append('<span aria-hidden="true">&times;</span></button>')
+                );
             }
+
             return this;
         },
 
@@ -98,9 +125,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
          * Destructor function of this view.
          */
         disposeView: function () {
-            if (this.model) {
-                this.model = null;
-            }
+            if (this.model) this.model = null;
         }
 
     });

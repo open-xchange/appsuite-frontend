@@ -43,15 +43,27 @@
 <a name="ox.appsuite.user.concept.sharing.produce"></a><p>Sie haben die folgenden Möglichkeiten: 
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Eine Datei oder mehrere Dateien zum Lesen oder Bearbeiten 
-              <a class="link" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.sharing.produce.files" title="So geben Sie Dateien zum Lesen oder Bearbeiten frei:">freigeben</a></p></li>
-<li class="listitem"><p>.. und das.</p></li>
+<li class="listitem"><p>Ein Objekt oder mehrere Objekte wie Dateien oder Ordner zum Lesen oder Bearbeiten 
+              <a class="link" href="ox.appsuite.user.sect.files.sharing.produce.html#ox.appsuite.user.task.sharing.produce.files" title="So geben Sie Objekte zum Lesen oder Bearbeiten frei:">freigeben</a></p></li>
+<li class="listitem">
+<p>Interne Benutzer oder externe Partner mit Hilfe einer E-Mail zu der Freigabe einladen. </p>
+<p>Für externe Partner, die kein Groupware Konto besitzen, wird automatisch ein Gastkonto angelegt. 
+              Die Einladungs-E-Mail enthält ein vorgegebenes Kennwort und Hinweise für den Zugriff auf das Gastkonto. 
+              Nach der erstmaligen Anmeldung auf dem Gastkonto muss der externe Partner das vorgegebene Kennwort ändern.</p>
+<p><span class="phrase"><strong>Hinweis:</strong></span> Die Einladung-E-Mail wird ausschließlich im HTML-Format gesendet.</p>
+</li>
+<li class="listitem">
+<p>Alternativ können Sie für die Freigabe einen Link generieren lassen. Diesen Link können Sie 
+              per E-Mail versenden oder in sozialen Netzwerken veröffentlichen.</p>
+<p><span class="phrase"><strong>Vorsicht:</strong></span> Jeder, der diesen Link besitzt, kann
+              ohne Passwort auf die Freigabe zugreifen.</p>
+</li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.sharing.produce.files"></a><p class="title"><b>So geben Sie Dateien zum Lesen oder Bearbeiten frei:</b></p>
+<a name="ox.appsuite.user.task.sharing.produce.files"></a><p class="title"><b>So geben Sie Objekte zum Lesen oder Bearbeiten frei:</b></p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
 <p>In der App 
@@ -60,10 +72,14 @@
               
               
               wählen Sie einen Ordner.</p>
-<p>Wählen Sie im Anzeigebereich eine Datei oder mehrere Dateien.</p>
+<p>Wählen Sie im Anzeigebereich ein Objekt oder mehrere Objekte.</p>
 </li>
-<li class="step"><p>Klicken Sie in der Werkzeugleiste auf <span class="guibutton"><strong>Teilen</strong></span>. Das Fenster 
-              <span class="guilabel"><strong>Freigeben</strong></span> öffnet sich</p></li>
+<li class="step">
+<p>Klicken Sie in der Werkzeugleiste auf <span class="guibutton"><strong>Teilen</strong></span>. Das Fenster 
+              <span class="guilabel"><strong>Freigeben</strong></span> öffnet sich.</p>
+<p>Alternativ verwenden Sie im <span class="guilabel"><strong>Viewer</strong></span> das Symbol <span class="guibutton"><strong>Aktionen</strong></span>
+              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.produce.files.viewer"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span> .</p>
+</li>
 <li class="step">
 <p>Um zu bestimmen, für wen Sie die Daten freigeben wollen, verwenden Sie eine dieser Methoden:
               </p>
@@ -71,8 +87,12 @@
 <li class="listitem" style="list-style-type: none"><p>Um andere Benutzer oder externe Partner mit Hilfe ihrer E-Mail-Adresse einzuladen, wählen Sie
                     <span class="guibutton"><strong>Andere einladen</strong></span>. Geben Sie die E-Mail-Adressen der Benutzer oder der externen 
                     Partner ein. Optional geben Sie eine Nachricht für die Empfänger ein.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um einen Link zu erhalten, den Sie zum Beispiel per E-Mail, Messenger oder in sozialen Netzwerken weitergeben 
-                    können, wählen Sie <span class="guibutton"><strong>Get a link</strong></span>.</p></li>
+<li class="listitem" style="list-style-type: none">
+<p>Um einen Link zu erhalten, den Sie zum Beispiel per E-Mail, Messenger oder in sozialen Netzwerken 
+                    weitergeben können, wählen Sie <span class="guibutton"><strong>Einen Link abrufen</strong></span>.</p>
+<p><span class="phrase"><strong>Vorsicht:</strong></span> Jeder, der diesen Link besitzt, kann
+                    ohne Passwort auf die Freigabe zugreifen.</p>
+</li>
 </ul></div>
 <p>
             </p>
@@ -83,12 +103,10 @@
               folgenden Optionen.
               </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Wenn die Empfänger der Freigabe die Daten auch bearbeiten sollen, aktivieren Sie 
-                    <span class="guibutton"><strong>Empfänger können bearbeiten</strong></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Wenn Sie den Zugriff mit Hilfe eines Passworts schützen wollen, aktivieren Sie
-                    <span class="guibutton"><strong>Passwort erforderlich</strong></span>. Geben Sie ein Passwort ein. Merken Sie sich das Passwort.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Wenn die Freigabe nach einer bestimmten Zeit erlöschen soll, aktivieren Sie  
                     <span class="guibutton"><strong>Läuft ab in</strong></span>. Wählen Sie einen Zeitraum.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Wenn die Empfänger der Freigabe die Daten auch bearbeiten sollen, aktivieren Sie 
+                    <span class="guibutton"><strong>Empfänger können bearbeiten</strong></span>.</p></li>
 </ul></div>
 <p>
             </p>

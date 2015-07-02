@@ -515,7 +515,7 @@ define('io.ox/contacts/main', [
             };
 
             app.showContact = showContact;
-            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
+            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api);
         },
 
         'show-contact-mobile': function (app) {
@@ -558,7 +558,7 @@ define('io.ox/contacts/main', [
             };
 
             app.showContact = showContact;
-            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
+            commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api);
         },
         /*
          * Always change pages on tap, don't wait for data to load
@@ -787,8 +787,13 @@ define('io.ox/contacts/main', [
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
-        }
+        },
 
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.elements';
+            };
+        }
     });
 
     // launcher

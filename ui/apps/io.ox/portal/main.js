@@ -411,7 +411,7 @@ define('io.ox/portal/main', [
     }
 
     function reduceBool(memo, bool) {
-        return memo && bool;
+        return memo || bool;
     }
 
     function runAction(e) {
@@ -500,7 +500,7 @@ define('io.ox/portal/main', [
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
-                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, false).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
@@ -563,6 +563,10 @@ define('io.ox/portal/main', [
     ox.on('refresh^', function () {
         app.refresh();
     });
+
+    app.getContextualHelp = function () {
+        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.reference.portal.elements';
+    };
 
     // launcher
     app.setLauncher(function () {

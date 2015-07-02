@@ -12,12 +12,34 @@
  */
 
 define('io.ox/participants/add', [
+    'io.ox/core/extensions',
     'io.ox/participants/model',
     'io.ox/participants/views',
-    'io.ox/core/tk/typeahead'
-], function (pModel, pViews, Typeahead) {
+    'io.ox/core/tk/typeahead',
+    'gettext!io.ox/participants/views'
+], function (ext, pModel, pViews, Typeahead, gt) {
 
     'use strict';
+
+    // TODO:
+    // - exceptions for global address book
+
+    /*
+     * extension point for autocomplete item
+     */
+    ext.point('io.ox/participants/add/autoCompleteItem').extend({
+        id: 'view',
+        index: 100,
+        draw: function (participant) {
+            var pview = new pViews.ParticipantEntryView({
+                    model: participant,
+                    closeButton: false,
+                    halo: false,
+                    field: true
+                });
+            this.append(pview.render().$el);
+        }
+    });
 
     var AddParticipantView = Backbone.View.extend({
 
@@ -30,21 +52,28 @@ define('io.ox/participants/add', [
         typeahead: null,
 
         options: {
-            label: '',
-            apiOptions: {
-                contacts: true,
-                users: true,
-                groups: true,
-                resources: true
-            },
-            harmonize: function (data) {
-                var model = new pModel.Participant(data.data);
-                return {
-                    value: model.getTarget(),
-                    label: model.getDisplayName(),
-                    model: model
-                };
+            placeholder: gt('Add participant/resource'),
+            label: gt('Add participant/resource'),
+            extPoint: 'io.ox/participants/add',
+            blacklist: false
+        },
+
+        initialize: function (o) {
+            this.options = $.extend({}, this.options, o || {});
+            if (this.options.blacklist) {
+                this.options.blacklist = this.options.blacklist.split(',');
             }
+            this.options.click = _.bind(this.addParticipant, this);
+            this.options.harmonize = _.bind(function (data) {
+                data = _(data).map(function (m) {
+                    return new pModel.Participant(m);
+                });
+                // remove duplicate entries from typeahead dropdown
+                var col = this.collection;
+                return _(data).filter(function (model) {
+                    return !col.get(model);
+                });
+            }, this);
         },
 
         keyDown: function (e) {
@@ -52,23 +81,27 @@ define('io.ox/participants/add', [
             if (e.which === 13) {
                 var val = this.typeahead.$el.typeahead('val');
                 if (!_.isEmpty(val)) {
-                    this.addParticipant(e, { model: { email1: val, id: Math.random() } });
+                    this.addParticipant(e, { email1: val, field: 'email1', type: 5 }, val );
                 }
             }
         },
 
-        addParticipant: function (e, data) {
-            if (this.collection) {
-                this.collection.addUniquely(data.model);
-            }
-            // clean typeahad input
-            this.typeahead.$el.typeahead('val', '');
+        setFocus: function () {
+            if (this.typeahead) this.typeahead.$el.focus();
         },
 
-        initialize: function (o) {
-            this.options = $.extend({}, this.options, o || {});
+        addParticipant: function (e, model, value) {
+            // check blacklist
+            var inBlackList = this.options.blacklist && this.options.blacklist.indexOf(value) > -1;
 
-            this.options.click = _.bind(this.addParticipant, this);
+            if (inBlackList) {
+                require('io.ox/core/yell')('warning', gt('This email address cannot be used'));
+            } else {
+                this.collection.add(model);
+            }
+
+            // clean typeahad input
+            if (value) this.typeahead.$el.typeahead('val', '');
         },
 
         render: function () {

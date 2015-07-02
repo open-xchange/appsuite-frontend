@@ -371,11 +371,14 @@ define('io.ox/mail/main', [
                 var model = app.listView.model;
                 // resolve from-to
                 if (value === 'from-to') value = account.is('sent|drafts', model.get('folder')) ? 604 : 603;
-                // set proper order first
-                model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
-                app.props.set('order', model.get('order'));
-                // turn off conversation mode for any sort order but date (610)
-                if (value !== 610) app.props.set('thread', false);
+                // do not accidentally overwrite other attributes on folderchange
+                if (!app.changingFolders) {
+                    // set proper order first
+                    model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                    app.props.set('order', model.get('order'));
+                    // turn off conversation mode for any sort order but date (610)
+                    if (value !== 610) app.props.set('thread', false);
+                }
                 // now change sort columns
                 model.set('sort', value);
             });
@@ -407,6 +410,13 @@ define('io.ox/mail/main', [
             });
         },
 
+        'isThreaded': function (app) {
+            app.isThreaded = function () {
+                if (app.listView.loader.mode === 'search') return false;
+                return app.props.get('thread');
+            };
+        },
+
         /*
          * Store view options
          */
@@ -431,7 +441,10 @@ define('io.ox/mail/main', [
          */
         'restore-view-options': function (app) {
             var data = app.getViewOptions(app.folder.get());
+            // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
+            app.changingFolders = true;
             app.props.set(data);
+            app.changingFolders = false;
         },
 
         /*
@@ -537,6 +550,9 @@ define('io.ox/mail/main', [
 
                 if (app.props.get('mobileFolderSelectMode')) return;
 
+                // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
+                app.changingFolders = true;
+
                 var options = app.getViewOptions(id),
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
                     showFrom = account.is('sent|drafts', id);
@@ -550,6 +566,7 @@ define('io.ox/mail/main', [
                 } else {
                     fromTo.text(gt('From'));
                 }
+                app.changingFolders = false;
             });
         },
 
@@ -572,7 +589,7 @@ define('io.ox/mail/main', [
         'show-mail': function (app) {
             if (_.device('smartphone')) return;
             app.showMail = function (cid) {
-                app.threadView.show(cid, app.props.get('thread'));
+                app.threadView.show(cid, app.isThreaded());
             };
         },
 
@@ -604,9 +621,9 @@ define('io.ox/mail/main', [
         'show-empty': function (app) {
             app.showEmpty = function () {
                 app.threadView.empty();
-                app.right.find('.multi-selection-message div').text(
+                app.right.find('.multi-selection-message div').empty().append(
                     gt('No message selected')
-                );
+                ).attr('id', 'mail-multi-selection-message');
             };
         },
 
@@ -618,9 +635,9 @@ define('io.ox/mail/main', [
             app.showMultiple = function (list) {
                 app.threadView.empty();
                 list = api.resolve(list, app.props.get('thread'));
-                app.right.find('.multi-selection-message div').text(
-                    gt('%1$d messages selected', list.length)
-                );
+                app.right.find('.multi-selection-message div').empty().append(
+                    gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
+                ).attr('id', 'mail-multi-selection-message');
             };
         },
 
@@ -703,7 +720,7 @@ define('io.ox/mail/main', [
                     app.showMail(list[0]);
                     return;
                 } else if (app.props.get('layout') === 'list' && type === 'one') {
-                    //don't call show mail (an in visible detailview would be drawn which marks it as read)
+                    //don't call show mail (an invisible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
                     return;
                 }
@@ -727,9 +744,11 @@ define('io.ox/mail/main', [
 
             app.listView.on({
                 'selection:empty': function () {
+                    app.right.find('.multi-selection-message div').attr('id', null);
                     react('empty');
                 },
                 'selection:one': function (list) {
+                    app.right.find('.multi-selection-message div').attr('id', null);
                     var type = 'one';
                     if ( app.listView.selection.getBehavior() === 'alternative' ) {
                         type = 'multiple';
@@ -737,9 +756,13 @@ define('io.ox/mail/main', [
                     react(type, list);
                 },
                 'selection:multiple': function (list) {
-                    react('multiple', list);
+                    app.right.find('.multi-selection-message div').attr('id', null);
+                    // no debounce for showMultiple or screenreaders read old number of selected messages
+                    resetRight('selection-multiple');
+                    app.showMultiple(list);
                 },
                 'selection:action': function (list) {
+                    app.right.find('.multi-selection-message div').attr('id', null);
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) react('action', list);
                 }
@@ -1129,7 +1152,7 @@ define('io.ox/mail/main', [
 
             var find = app.get('find'),
                 each = function (obj) {
-                    api.processThreadMessage(obj);
+                    api.pool.add('detail', obj);
                 };
 
             find.on('collectionLoader:created', function (loader) {
@@ -1144,6 +1167,12 @@ define('io.ox/mail/main', [
                     app.listView.removePullToRefreshIndicator();
                 });
             });
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.elements';
+            };
         }
 
     });

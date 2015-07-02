@@ -26,8 +26,7 @@ define('io.ox/core/folder/favorites', [
         // register collection
         var id = 'virtual/favorites/' + module,
             model = api.pool.getModel(id),
-            collection = api.pool.getCollection(id),
-            favorites = settings.get('favorites/' + module, []);
+            collection = api.pool.getCollection(id);
 
         function store(ids) {
             settings.set('favorites/' + module, ids).save();
@@ -39,7 +38,7 @@ define('io.ox/core/folder/favorites', [
 
         // define virtual folder
         api.virtual.add(id, function () {
-            return api.multiple(favorites).then(function (response) {
+            return api.multiple(settings.get('favorites/' + module, [])).then(function (response) {
                 // compact() removes non-existent entries
                 var list = _(response).compact();
                 _(list).each(api.injectIndex.bind(api, id));

@@ -559,6 +559,12 @@ define('io.ox/calendar/main', [
         'all-my-appointments': function (app) {
 
             app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-my-appointments');
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.elements';
+            };
         }
 
     });

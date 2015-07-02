@@ -29,17 +29,18 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.label = options.label;
             this.exclude = options.exclude;
 
+            // last item is a normal item (not a unclickable tail node)
+            this.notail = options.notail;
+
             if (options.app) {
                 this.app = options.app;
                 this.handler = function (id) { this.app.folder.set(id); };
                 this.folder = this.app.folder.get();
                 this.find = this.app.get('find');
                 this.listenTo(this.app, 'folder:change', this.onChangeFolder);
-
                 if (this.find && this.find.isActive()) {
                     // use item's folder id
                     this.folder = options.folder;
-                    // last item is a normal item (not a unclickable tail node)
                     this.notail = true;
                     this.handler = function (id) {
                         var folder = this.app.folder;
@@ -57,6 +58,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
         render: function () {
             if (this.folder === undefined) return this;
+            this.$el.text('\xa0');
             api.path(this.folder).done(this.renderPath.bind(this));
             return this;
         },

@@ -97,8 +97,12 @@ define('io.ox/core/tk/list', [
             // show indicator
             this.addBusyIndicator();
             // really refresh?
-            if (tail > 1) return;
-            // load more
+            // two competing concepts:
+            // a) the user wants to see the end of the list; some users feel better; more orientation. Less load on server.
+            // b) powers users hate to wait; never want to see the end of the list. More load on server.
+            // Uncommented next line with 7.8.0:
+            // if (tail > 1) return;
+            // immediately load more
             this.processPaginate();
 
         }, 50),

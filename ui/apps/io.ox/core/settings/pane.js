@@ -128,6 +128,9 @@ define('io.ox/core/settings/pane', [
         className: 'form-group',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
+            this.listenTo(this.baton.model, 'change:language', function (model, language) {
+                _.setCookie('language', language);
+            });
             this.$el.append(
                 $('<label>').attr({
                     class: 'control-label col-sm-4',

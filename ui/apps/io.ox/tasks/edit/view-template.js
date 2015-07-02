@@ -17,16 +17,16 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
-    'io.ox/calendar/util',
     'io.ox/tasks/edit/util',
     'io.ox/calendar/edit/recurrence-view',
+    'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/tk/attachments',
     'io.ox/tasks/api',
     'io.ox/core/extensions',
     'io.ox/tasks/util',
     'settings!io.ox/tasks'
-], function (gt, views, notifications, mini, DatePicker, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
+], function (gt, views, notifications, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
@@ -388,20 +388,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '8' });
 
-    // participants label
-    point.extend({
-        id: 'participants_legend',
-        index: 1500,
-        className: 'col-md-12 collapsed',
-        render: function () {
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('Participants')).addClass('find-free-time')
-                )
-            );
-        }
-    }, { row: '9' });
-
     point.basicExtend({
         id: 'participants_list',
         index: 1600,
@@ -410,9 +396,8 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
-                    baton: baton,
-                    className: 'participantsrow col-xs-12 collapsed'
-                }).render().$el
+                    baton: baton
+                }).render().$el.addClass('collapsed')
             );
         }
     });
@@ -421,81 +406,21 @@ define('io.ox/tasks/edit/view-template', [
         id: 'add_participant',
         index: 1700,
         row: '11',
-        draw: function (options) {
-            var node = $('<div class="col-sm-6 collapsed">').appendTo(this),
-                guid = _.uniqueId('form-control-label-');
-            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
-
-                var collection = options.model.getParticipants();
-
-                node.append(
-                    $('<input class="add-participant task-participant-input-field form-control">').attr({
-                        type: 'text',
-                        placeholder: gt('Add participant/resource'),
-                        id: guid,
-                        tabindex: 1
-                    }),
-                    $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid)
-                );
-
-                var autocomplete = new AddParticipantsView({ el: node });
-                autocomplete.render({
-                    parentSelector: '.io-ox-tasks-edit',
-                    //adding resources throws a backend error
-                    resources: false
-                });
-
-                //add recipents to baton-data-node; used to filter sugestions list in view
-                autocomplete.on('update', function () {
-                    var baton = { list: [] };
-                    collection.any(function (item) {
-                        //participant vs. organizer
-                        var email = item.get('email1') || item.get('email2');
-                        if (email !== null)
-                            baton.list.push({ email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type') });
-                    });
-                    $.data(node, 'baton', baton);
-                });
-
-                autocomplete.on('select', function (data) {
-                    var alreadyParticipant = false, obj,
-                    userId;
-                    alreadyParticipant = collection.any(function (item) {
-                        if (data.type === 5) {
-                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
-                        } else if (data.type === 1) {
-                            return item.get('id') ===  data.internal_userid;
-                        } else {
-                            return (item.id === data.id && item.get('type') === data.type);
-                        }
-                    });
-                    if (!alreadyParticipant) {
-                        if (data.type !== 5) {
-
-                            if (data.mark_as_distributionlist) {
-                                _.each(data.distribution_list, function (val) {
-                                    if (val.folder_id === 6) {
-                                        calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
-                                            userId = id;
-                                            obj = { id: userId, type: 1 };
-                                            collection.add(obj);
-                                        });
-                                    } else {
-                                        obj = { type: 5, mail: val.mail, display_name: val.display_name };
-                                        collection.add(obj);
-                                    }
-                                });
-                            } else {
-                                collection.add(data);
-                            }
-
-                        } else {
-                            obj = { type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || '' };
-                            collection.add(obj);
-                        }
-                    }
-                });
+        draw: function (baton) {
+            var view = new AddParticipant({
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true,
+                    resources: true,
+                    distributionlists: true
+                },
+                collection: baton.model.getParticipants()
             });
+            this.append(
+                view.$el
+            );
+            view.render().$el.addClass('col-xs-12 collapsed');
         }
     });
 

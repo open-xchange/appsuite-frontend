@@ -19,11 +19,13 @@ define('io.ox/core/folder/api', [
     'io.ox/core/folder/title',
     'io.ox/core/folder/bitmask',
     'io.ox/core/api/account',
+    'io.ox/core/api/user',
     'io.ox/core/capabilities',
+    'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, capabilities, settings, mailSettings, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, capabilities, contactUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -46,6 +48,41 @@ define('io.ox/core/folder/api', [
     function injectIndex(id, item, index) {
         item['index/' + id] = index;
         return item;
+    }
+
+    function renameDefaultCalendarFolders(items) {
+        var renameItems = [].concat(items).filter(function (item) {
+                // only for calendar
+                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
+                // rename default calendar
+                if (item.id === String(settings.get('folder/calendar'))) return true;
+                // any shared folder
+                return util.is('shared', item);
+            }),
+            ids = _(renameItems)
+                .chain()
+                .pluck('created_by')
+                .compact()
+                .uniq()
+                .value();
+
+        if (ids.length === 0) return $.when(items);
+
+        return userAPI.getList(ids).then(function (list) {
+            var hash = _.object(ids, list);
+
+            _(renameItems).each(function (item) {
+                if (item.id === String(settings.get('folder/calendar')) || item.title === gt('Calendar')) {
+                    item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
+                } else {
+                    //#. %1$s is the folder owner
+                    //#. %2$s is the folder title
+                    item.display_title = gt('%1$s: %2$s', contactUtil.getFullName(hash[item.created_by]), item.title);
+                }
+            });
+
+            return items;
+        });
     }
 
     function onChangeModelId(model) {
@@ -138,6 +175,13 @@ define('io.ox/core/folder/api', [
             this.id = id;
             this.fetched = false;
             this.on('remove', this.onRemove, this);
+
+            // sort shared and hidden folders by title
+            if (/^flat\/(contacts|calendar|tasks)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks)\/hidden$/.test(this.id)) {
+                this.comparator = function (model) {
+                    return (model.get('display_title') || model.get('title')).toLowerCase();
+                };
+            }
         },
         comparator: function (model) {
             return model.get('index/' + this.id) || 0;
@@ -295,11 +339,12 @@ define('io.ox/core/folder/api', [
 
             var model = arg, data = model.toJSON(), id = data.id;
 
-            if (model.changed.total) {
+            // use exact comparison here or changes to 0 are ignored
+            if (model.changed.total !== undefined && model.changed.total !== null) {
                 api.trigger('update:total', id, data);
                 api.trigger('update:total:' + id, data);
             }
-            if (model.changed.unread) {
+            if (model.changed.unread !== undefined && model.changed.unread !== null) {
                 api.trigger('update:unread', id, data);
                 api.trigger('update:unread:' + id, data);
             }
@@ -405,6 +450,9 @@ define('io.ox/core/folder/api', [
             }
         })
         .then(function (data) {
+            return renameDefaultCalendarFolders(data);
+        })
+        .then(function (data) {
             // update/add model
             var model = pool.addModel(data);
             // propagate changes via api events
@@ -451,9 +499,11 @@ define('io.ox/core/folder/api', [
         // use rampup data?
         if (rampup[id] && !options.all) {
             var array = processListResponse(id, rampup[id]);
-            pool.addCollection(id, array);
             delete rampup[id];
-            return $.when(array);
+            return renameDefaultCalendarFolders(array).then(function (list) {
+                pool.addCollection(id, list);
+                return list;
+            });
         }
 
         // flat?
@@ -481,6 +531,7 @@ define('io.ox/core/folder/api', [
             },
             appendColumns: true
         })
+        .then(renameDefaultCalendarFolders)
         .then(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(collectionId, array);
@@ -606,27 +657,48 @@ define('io.ox/core/folder/api', [
             }
         })
         .then(function (data) {
+            var list = [],
+                sections = _(data)
+                .chain()
+                .map(function (section, id) {
+                    var obj = _(section)
+                        .chain()
+                        .map(makeObject)
+                        .filter(function (folder) {
+                            // read access?
+                            if (!util.can('read', folder)) return false;
+                            // otherwise
+                            return true;
+                        })
+                        .value();
+
+                    list.push(obj);
+                    return [id, obj];
+                })
+                .object()
+                .value();
+
+            return renameDefaultCalendarFolders(_(list).flatten()).then(function () {
+                return sections;
+            });
+        })
+        .then(function (data) {
             var sections = {},
                 hidden = [],
                 sharing = [],
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
+
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
-                var array = _(section)
-                    .chain()
-                    .map(makeObject)
-                    .filter(function (folder) {
-                        // read access?
-                        if (!util.can('read', folder)) return false;
+                var array = _(section).filter(function (folder) {
                         // store section / easier than type=1,2,3
                         if (hash[folder.id]) { hidden.push(folder); return false; }
                         // sharing?
                         if (util.is('shared-by-me', folder)) sharing.push(folder);
                         // otherwise
                         return true;
-                    })
-                    .value();
+                    });
                 // inject 'All my appointments' for calender/private
                 if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool
@@ -685,7 +757,8 @@ define('io.ox/core/folder/api', [
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
-                if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
+                if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
+                    pool.getCollection(model.get('folder_id')).sort();
                     return newId;
                 });
             },
@@ -714,7 +787,11 @@ define('io.ox/core/folder/api', [
         // prepare move
         var model = pool.getModel(id),
             folderId = model.get('folder_id');
+
         removeFromAllCollections(model);
+
+        // trigger event
+        api.trigger('before:move', model.toJSON(), target);
 
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
@@ -809,7 +886,7 @@ define('io.ox/core/folder/api', [
         var model = pool.getModel(id), data = model.toJSON();
 
         // trigger event
-        api.trigger('remove:prepare', data);
+        api.trigger('before:remove', data);
 
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);

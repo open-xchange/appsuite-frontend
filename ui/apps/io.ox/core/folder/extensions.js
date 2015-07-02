@@ -17,12 +17,13 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/account',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'io.ox/contacts/util',
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
     'io.ox/core/folder/folder-color',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt, color) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color) {
 
     'use strict';
 
@@ -357,41 +358,47 @@ define('io.ox/core/folder/extensions', [
                     model_id = 'flat/' + module,
                     defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
                     privateFolders,
-                    publicFolders;
+                    publicFolders,
+                    placeholder = $('<div>');
 
                 ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
 
-                privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
+                this.append(placeholder);
 
-                // open private folder whenever a folder is added to it
-                api.pool.getCollection('flat/' + module + '/private').on('add', function () {
-                    privateFolders.toggle(true);
+                // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
+                api.flat({ module: module }).always(function () {
+                    privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
+
+                    // open private folder whenever a folder is added to it
+                    api.pool.getCollection('flat/' + module + '/private').on('add', function () {
+                        privateFolders.toggle(true);
+                    });
+
+                    // open public folder whenever a folder is added to it
+                    api.pool.getCollection('flat/' + module + '/public').on('add', function () {
+                        privateFolders.toggle(true);
+                    });
+
+                    publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: getTitle(module, 'public') }));
+
+                    placeholder.replaceWith(
+                        // private folders
+                        privateFolders.render().$el.addClass('section'),
+                        // links
+                        links,
+                        // public folders
+                        publicFolders.render().$el.addClass('section'),
+                        // shared with me
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: getTitle(module, 'shared') }))
+                        .render().$el.addClass('section'),
+                        // // shared by me
+                        // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
+                        // .render().$el.addClass('section'),
+                        // hidden folders
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: getTitle(module, 'hidden') }))
+                        .render().$el.addClass('section')
+                    );
                 });
-
-                // open public folder whenever a folder is added to it
-                api.pool.getCollection('flat/' + module + '/public').on('add', function () {
-                    privateFolders.toggle(true);
-                });
-
-                publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: getTitle(module, 'public') }));
-
-                this.append(
-                    // private folders
-                    privateFolders.render().$el.addClass('section'),
-                    // links
-                    links,
-                    // public folders
-                    publicFolders.render().$el.addClass('section'),
-                    // shared with me
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: getTitle(module, 'shared') }))
-                    .render().$el.addClass('section'),
-                    // // shared by me
-                    // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
-                    // .render().$el.addClass('section'),
-                    // hidden folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: getTitle(module, 'hidden') }))
-                    .render().$el.addClass('section')
-                );
             }
         };
 
@@ -461,15 +468,6 @@ define('io.ox/core/folder/extensions', [
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
-                    this.find('.owner').remove();
-
-                    var name = data['com.openexchange.folderstorage.displayName'],
-                        //#. %1$s is the folder owner
-                        title = gt.format(gt.pgettext('owner', 'Shared by: %1$s'), name);
-
-                    this.addClass('shared').find('.folder-node').append(
-                        $('<div class="owner">').text(title)
-                    );
                     baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }
             },

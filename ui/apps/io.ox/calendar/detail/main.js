@@ -81,6 +81,10 @@ define('io.ox/calendar/detail/main', [
             }
 
             // deep-link
+            if (options.folder && options.id) {
+                app.setState({ folder: options.folder, id: options.id });
+            }
+
             obj = app.getState();
 
             if (obj.folder && obj.id) {

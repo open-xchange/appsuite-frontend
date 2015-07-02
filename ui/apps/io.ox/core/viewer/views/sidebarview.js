@@ -15,12 +15,14 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/dropzone',
+    'io.ox/core/viewer/settings',
+    'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview',
     'io.ox/core/viewer/views/sidebar/fileversionsview',
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, Util, FilesAPI, Dropzone, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
+], function (DisposableView, Util, FilesAPI, Dropzone, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, gt) {
 
     'use strict';
 
@@ -47,16 +49,119 @@ define('io.ox/core/viewer/views/sidebarview', [
         // the visible state of the side bar, hidden per default.
         open: false,
 
+        events: {
+            'keydown .tablink': 'onTabKeydown'
+        },
+
         initialize: function (options) {
+
+            options = options || {};
+
             _.extend(this, {
-                viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events)
+                viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
+                standalone: options.standalone,
+                options: options
             });
+
             this.model = null;
             this.zone = null;
+
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
 
+            // bind scroll handler
+            this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
             this.on('dispose', this.disposeView.bind(this));
+            this.initTabNavigation();
+        },
+
+        /**
+         * Create and draw sidebar tabs.
+         */
+        initTabNavigation: function () {
+            // build tab navigation and its panes
+            var tabsList = $('<ul class="viewer-sidebar-tabs">'),
+                detailTabLink = $('<a class="tablink" data-tab-id="detail" tabindex="1">').text(gt('Detail')),
+                detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
+                detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">'),
+                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail" tabindex="1">').text(gt('Thumbnail')),
+                thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
+                thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
+            tabsList.append(thumbnailTab, detailTab).hide();
+            this.$el.append(tabsList);
+            tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
+            this.$el.append(thumbnailPane, detailPane);
+        },
+
+        /**
+         * Sidebar scroll handler.
+         * @param {jQuery.Event} event
+         */
+        onScrollHandler: function (event) {
+            this.viewerEvents.trigger('viewer:sidebar:scroll', event);
+        },
+
+        /**
+         * Sidebar tab click handler.
+         * @param {jQuery.Event} event
+         */
+        onTabClicked: function (event) {
+            var clickedTabId = $(event.target).attr('data-tab-id');
+            this.activateTab(clickedTabId);
+        },
+
+        /**
+         * Sidebar tab keydown handler.
+         * @param {jQuery.Event} event
+         */
+        onTabKeydown: function (event) {
+            event.stopPropagation();
+            switch (event.which || event.keyCode) {
+                case 13: // enter
+                    this.onTabClicked(event);
+                    break;
+                case 32: // space
+                    this.onTabClicked(event);
+                    break;
+            }
+        },
+
+        /**
+         * Activates a sidebar tab and render its contents.
+         *
+         * @param {String} tabId
+         * tab id string to be activated. Supported: 'thumbnail' and 'detail'.
+         */
+        activateTab: function (tabId) {
+            var tabs = this.$('.tablink'),
+                panes = this.$('.viewer-sidebar-pane'),
+                activatedTab = tabs.filter('[data-tab-id="' + tabId + '"]'),
+                activatedPane = panes.filter('[data-tab-id="' + tabId + '"]');
+            tabs.removeClass('selected');
+            panes.hide();
+            activatedTab.addClass('selected');
+            activatedPane.show();
+            // render the tab contents
+            switch (tabId) {
+                case 'detail':
+                    this.renderSections();
+                    break;
+                case 'thumbnail':
+                    if (this.$('.document-thumbnail').length === 0) {
+                        var thumbnailView = new ThumbnailView({
+                            el: this.$('.thumbnail-pane'),
+                            model: this.model,
+                            viewerEvents: this.viewerEvents
+                        });
+                        thumbnailView.render();
+                    }
+                    break;
+                default: break;
+            }
+            // save last activated tab in office standalone mode
+            if (this.standalone && (this.model.isOffice() || this.model.isPDF())) {
+                ViewerSettings.setSidebarActiveTab(tabId);
+            }
         },
 
         /**
@@ -64,7 +169,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          *  A state of 'true' opens the panel, 'false' closes the panel and
          *  'undefined' toggles the side bar.
          *
-         * @param {Boolean} [state].
+         * @param {Boolean} [state]
          *  The panel state.
          */
         toggleSidebar: function (state) {
@@ -91,8 +196,9 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
+            var detailPane = this.$('.detail-pane');
             // remove previous sections
-            this.$el.empty();
+            detailPane.empty();
             // remove dropzone handler
             if (this.zone) {
                 this.zone.off();
@@ -106,15 +212,16 @@ define('io.ox/core/viewer/views/sidebarview', [
             // add dropzone for drive files
             if (this.model.isFile()) {
                 this.zone = new Dropzone.Inplace({
-                    caption: gt('Drop new version here')
+                    //#. %1$s is the filename of the current file
+                    caption: gt('Drop new version of "%1$s" here', this.model.get('filename'))
                 });
                 // drop handler
                 this.zone.on('drop', this.onNewVersionDropped.bind(this));
-                this.$el.append(this.zone.render().$el.addClass('abs'));
+                detailPane.append(this.zone.render().$el.addClass('abs'));
             }
             // render sections
-            this.$el.append(
-                new FileInfoView({ model: this.model }).render().el,
+            detailPane.append(
+                new FileInfoView({ model: this.model, fixed: true, closable: this.options.closable }).render().el,
                 new FileDescriptionView({ model: this.model }).render().el,
                 new FileVersionsView({ model: this.model }).render().el,
                 new UploadNewVersionView({ model: this.model }).render().el
@@ -138,6 +245,14 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             // initially set model
             this.model = model;
+            // show tab navigation in office standalone mode
+            if (this.standalone && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
+                this.$('.viewer-sidebar-tabs').show();
+                var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
+                this.activateTab(lastActivatedThumbnail);
+            } else {
+                this.activateTab('detail');
+            }
             return this;
         },
 
@@ -146,12 +261,10 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and the number of versions.
          */
         loadFileDetails: function () {
-            if (!this.model) {
-                return;
-            }
 
-            FilesAPI.get(this.model.toJSON(), { cache: false })
-            .done(function (file) {
+            if (!this.model) return;
+
+            FilesAPI.get(this.model.toJSON()).done(function (file) {
                 // after loading the file details we set at least an empty string as description.
                 // in order to distinguish between 'the file details have been loaded but the file has no description'
                 // and 'the file details have not been loaded yet so we don't know if it has a description'.
@@ -169,6 +282,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          *  An array of File objects.
          */
         onNewVersionDropped: function (files) {
+
             // check for single item drop
             if (!_.isArray(files) || files.length !== 1) {
                 notify({ error: gt('Drop only a single file as new version.') });

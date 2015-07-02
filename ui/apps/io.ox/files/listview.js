@@ -47,12 +47,21 @@ define('io.ox/files/listview', [
     //
 
     ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
-        index: 200,
+        index: 50,
         id: 'thumbnail',
         draw: function (baton) {
-            var column = $('<div class="sidebar-panel-thumbnail" role="tabpanel">');
-            extensions.thumbnail.call(column, baton);
-            this.append(column);
+            var body = this.find('.sidebar-panel-body');
+            _.defer(function () {
+                // only append in files app
+                if (body.closest('.viewer-sidebar.rightside').length) {
+                    var oldColumn = body.closest('.viewer-sidebar.rightside').find('.sidebar-panel-thumbnail'),
+                        column =  oldColumn.length ? oldColumn : $('<div class="sidebar-panel-thumbnail" role="tabpanel">');
+                    column.empty();
+                    extensions.thumbnail.call(column, baton);
+                    body.before(column);
+                }
+                body = null;
+            });
         }
     });
 

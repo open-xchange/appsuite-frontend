@@ -58,6 +58,8 @@ define('io.ox/calendar/list/view-grid-template', [
                 var self = this,
                     a11yLabel = '',
                     tmpStr = '',
+                    startDate,
+                    endDate,
                     timeSplits = util.getStartAndEndTime(data);
 
                 // clear classes of time to prevent adding multiple classes on reuse
@@ -90,6 +92,8 @@ define('io.ox/calendar/list/view-grid-template', [
                     $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
                 ).addClass('custom_shown_as ' + util.getShownAsClass(data));
 
+                a11yLabel += ', ' + util.getShownAs(data);
+
                 fields.date.empty().text(util.getDateInterval(data));
 
                 if (!data.full_time && (util.getDurationInDays(data) > 0)) {
@@ -98,11 +102,24 @@ define('io.ox/calendar/list/view-grid-template', [
                     fields.date.hide();
                 }
 
-                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
+                if (data.full_time) {
+                    startDate = moment.utc(data.start_date).local(true);
+                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                } else {
+                    startDate = moment(data.start_date);
+                    endDate = moment(data.end_date);
+                }
+
+                if (startDate.isSame(endDate, 'day')) {
+                    tmpStr = gt.noI18n(util.getEvenSmarterDate(data));
+                } else {
+                    tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
+                }
 
                 a11yLabel += ', ' + tmpStr;
 
-                tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
+                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
+
                 a11yLabel += ', ' + tmpStr;
 
                 if (data.private_flag === true) {

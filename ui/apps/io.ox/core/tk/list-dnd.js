@@ -89,7 +89,8 @@ define('io.ox/core/tk/list-dnd', [
             // avoid handling bubbling events
             if (e.isDefaultPrevented()) return; else e.preventDefault();
 
-            var arrow = $(this).find('.folder-arrow');
+            // use first here or we get the arrows of the subfolder nodes as well
+            var arrow = $(this).find('.folder-arrow:first');
 
             // css hover doesn't work!
             $(this).addClass('dnd-over');

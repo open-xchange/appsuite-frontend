@@ -78,7 +78,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '521': 'employee_type',
             '522': 'room_number',
             '523': 'street_business',
-            '524': 'internal_userid',
+            '524': 'internal_userid', // user_id
             '525': 'postal_code_business',
             '526': 'city_business',
             '527': 'state_business',

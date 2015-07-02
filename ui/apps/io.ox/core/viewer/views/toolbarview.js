@@ -89,6 +89,32 @@ define('io.ox/core/viewer/views/toolbarview', [
                     });
                 }
             },
+            'zoomfitwidth': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Fit to screen width'),
+                ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
+                customize: function () {
+                    this.addClass('viewer-toolbar-fitwidth').attr({
+                        tabindex: '1',
+                        title: gt('Fit to screen width'),
+                        'aria-label': gt('Fit to screen width')
+                    });
+                }
+            },
+            'zoomfitheight': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Fit to screen height'),
+                ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
+                customize: function () {
+                    this.addClass('viewer-toolbar-fitheight').attr({
+                        tabindex: '1',
+                        title: gt('Fit to screen height'),
+                        'aria-label': gt('Fit to screen height')
+                    });
+                }
+            },
             'launchpresenter': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -169,6 +195,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'download': {
                     prio: 'hi',
                     mobile: 'lo',
+                    icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
                     ref: 'io.ox/files/actions/download'
@@ -181,9 +208,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                 //    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 //},
                 'share': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
                     label: gt('Share'),
+                    icon: 'fa fa-user-plus',
                     section: 'export',
                     ref: 'io.ox/files/icons/share'
                 },
@@ -206,7 +234,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Delete'),
                     section: 'delete',
-                    ref: 'io.ox/files/actions/delete'
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/delete'
                 }
             },
             mail: {
@@ -289,6 +317,16 @@ define('io.ox/core/viewer/views/toolbarview', [
         id: 'print',
         action: function () {}
     });
+    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/delete', {
+        id: 'delete',
+        requires: function (e) {
+            return !e.baton.context.standalone;
+        },
+        action: function (baton) {
+            var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
+            ActionsPattern.invoke('io.ox/files/actions/delete', null, actionBaton);
+        }
+    });
     new Action(TOOLBAR_ACTION_ID + '/rename', {
         id: 'rename',
         requires: function (e) {
@@ -327,9 +365,6 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
-        requires: function (e) {
-            return !e.baton.context.standalone;
-        },
         action: function () {}
     });
     // define actions for the zoom function
@@ -351,6 +386,28 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             baton.context.onZoomOut();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/zoomfitwidth', {
+        id: 'zoomfitwidth',
+        requires: function (e) {
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
+        },
+        action: function (baton) {
+            baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/zoomfitheight', {
+        id: 'zoomfitheight',
+        requires: function (e) {
+            var model = e.baton.model;
+            return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
+        },
+        action: function (baton) {
+            baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
 
@@ -392,8 +449,50 @@ define('io.ox/core/viewer/views/toolbarview', [
             _.extend(this, options);
             // rerender on slide change
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.render);
+            // show current page on the navigation page box
+            this.listenTo(this.viewerEvents, 'viewer:document:loaded', this.onDocumentLoaded);
+            this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
+            // listen to sidebar toggle for document navigation positioning
+            this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        /**
+         * Document load success handler.
+         * - renders the page navigation in the toolbar.
+         */
+        onDocumentLoaded: function () {
+            if (this.standalone &&  !_.device('smartphone')) {
+                this.renderPageNavigation();
+            }
+        },
+
+        /**
+         * Toggle position offset when sidebar is opened/closed.
+         *
+         * @param {Boolean} state
+         *  toggle state of the viewer sidebar.
+         */
+        onSideBarToggled: function (state) {
+            this.$('.viewer-toolbar-navigation').toggleClass('sidebar-offset', state);
+        },
+
+        /**
+         * Page change handler:
+         * - updates page number in the page input control
+         *
+         * @param pageNumber
+         * @param pageTotal
+         */
+        onPageChange: function (pageNumber, pageTotal) {
+            var pageInput = this.$('.viewer-toolbar-page'),
+                pageTotalDisplay = this.$('.viewer-toolbar-page-total');
+            pageInput.val(pageNumber).attr('data-page-number', pageNumber).trigger('change', { preventPageScroll: true });
+            if (pageTotal) {
+                pageTotalDisplay.text(gt('of %1$d', pageTotal));
+                pageInput.attr('data-page-total', pageTotal);
+            }
         },
 
         /**
@@ -402,7 +501,11 @@ define('io.ox/core/viewer/views/toolbarview', [
         onClose: function (event) {
             event.preventDefault();
             event.stopPropagation();
-            this.viewerEvents.trigger('viewer:close');
+            if (this.standalone) {
+                this.app.quit();
+            } else {
+                this.viewerEvents.trigger('viewer:close');
+            }
         },
 
         /**
@@ -429,14 +532,14 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Publishes zoom-in event to the MainView event aggregator.
          */
         onZoomIn: function () {
-            this.viewerEvents.trigger('viewer:zoomin');
+            this.viewerEvents.trigger('viewer:zoom:in');
         },
 
         /**
          * Publishes zoom-out event to the MainView event aggregator.
          */
         onZoomOut: function () {
-            this.viewerEvents.trigger('viewer:zoomout');
+            this.viewerEvents.trigger('viewer:zoom:out');
         },
 
         /**
@@ -470,6 +573,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             // draw toolbar
             var origData = model.get('origData'),
                 toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                 isDriveFile = model.isFile(),
                 baton = Ext.Baton({
                     context: this,
@@ -490,7 +594,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.model, 'change', this.onModelChange);
             // set device type
             Util.setDeviceClass(this.$el);
-            toolbar.empty();
+            toolbar.empty().append(pageNavigation);
             // enable only the link set for the current app
             _.each(toolbarPoint.keys(), function (id) {
                 if (id === appName) {
@@ -516,6 +620,70 @@ define('io.ox/core/viewer/views/toolbarview', [
                 );
             });
             return this;
+        },
+
+        /**
+         * Renders the document page navigation controls.
+         */
+        renderPageNavigation: function () {
+            var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+                    .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
+                    .append($('<i class="fa fa-arrow-up">')),
+                next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+                    .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
+                    .append($('<i class="fa fa-arrow-down">')),
+                pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
+                pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
+                totalPage = $('<div class="viewer-toolbar-page-total">'),
+                group = $('<li class="viewer-toolbar-navigation" role="presentation">'),
+                self = this;
+            function setButtonState(nodes, state) {
+                if (state) {
+                    $(nodes).removeClass('disabled').removeAttr('aria-disabled');
+                } else {
+                    $(nodes).addClass('disabled').attr('aria-disabled', true);
+                }
+            }
+            function onPrevPage() {
+                self.viewerEvents.trigger('viewer:document:previous');
+            }
+            function onNextPage() {
+                self.viewerEvents.trigger('viewer:document:next');
+            }
+            function onInputKeydown(event) {
+                event.stopPropagation();
+                var keyCode = event.which;
+                if (keyCode === 13 || keyCode === 27) {
+                    self.$el.parent().focus();
+                }
+            }
+            function onInputChange(event, options) {
+                var options = _.extend({ preventPageScroll: false }, options),
+                    newValue = parseInt($(this).val()),
+                    oldValue = parseInt($(this).attr('data-page-number')),
+                    pageTotal = parseInt($(this).attr('data-page-total'));
+                if (isNaN(newValue) || newValue > pageTotal || newValue <= 0 ) {
+                    $(this).val(oldValue);
+                    return;
+                }
+                setButtonState([prev[0], next[0]], true);
+                if (newValue === 1) {
+                    setButtonState(prev, false);
+                }
+                if (newValue === pageTotal) {
+                    setButtonState(next, false);
+                }
+                $(this).attr('data-page-number', newValue);
+                if (!options.preventPageScroll) {
+                    self.viewerEvents.trigger('viewer:document:scrolltopage', newValue);
+                }
+            }
+            pageInput.on('keydown', onInputKeydown).on('change', onInputChange);
+            prev.on('click', onPrevPage);
+            next.on('click', onNextPage);
+            group.append(prev, next, pageInputWrapper, totalPage)
+                .toggleClass('sidebar-offset', Settings.getSidebarOpenState());
+            this.$el.prepend(group);
         },
 
         /**

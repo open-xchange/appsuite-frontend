@@ -162,62 +162,47 @@ define('io.ox/calendar/model', [
                 }
                 var self = this,
                     resetListUpdate = false,
-                    changeParticipantsUpdate = false,
-                    participants = this._participants = new pModel.Participants(this.get('participants'));
+                    changeParticipantsUpdate = false;
 
-                participants.invoke('fetch');
+                this._participants = new pModel.Participants(this.get('participants'), { silent: false });
 
-                function resetList() {
+                this._participants.on('add remove reset', function () {
                     if (changeParticipantsUpdate) {
                         return;
                     }
                     resetListUpdate = true;
-                    self.set('participants', participants.getAPIData(), { validate: true });
+                    self.set('participants', this.getAPIData(), { validate: true });
                     resetListUpdate = false;
-                }
-
-                participants.on('add remove reset', resetList);
+                });
 
                 this.on('change:participants', function () {
                     if (resetListUpdate) {
                         return;
                     }
                     changeParticipantsUpdate = true;
-                    participants.reset(self.get('participants'));
-                    participants.invoke('fetch');
+                    self._participants.reset(self.get('participants'));
                     changeParticipantsUpdate = false;
                 });
-
-                return participants;
+                return this._participants;
             },
 
             setDefaultParticipants: function (options) {
                 var self = this;
-                return folderAPI.get(self.get('folder_id')).done(function (folder) {
-                    var userID = ox.user_id;
+                if (this.get('participants').length > 0) return $.when();
+                return folderAPI.get(this.get('folder_id')).then(function (folder) {
                     if (folderAPI.is('private', folder)) {
                         if (options.create) {
-                            // it's a private folder for the current user, add him by default
-                            // as participant
-                            self.getParticipants().addUniquely({ id: userID, type: 1 });
-
-                            // use a new, custom and unused property in his model to specify that he can't be removed
-                            self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                        } else {
-                            if (self.get('organizerId') === userID) {
-                                self.getParticipants().get(userID).set('ui_removable', false, { validate: true });
-                            }
+                            // if private folder, current user will be the organizer
+                            self.set('organizerId', ox.user_id);
+                            self.getParticipants().add({ id: ox.user_id, type: 1 });
                         }
                     } else if (folderAPI.is('public', folder)) {
-                        if (options.create) {
-                            // if public folder, current user will be added
-                            self.getParticipants().addUniquely({ id: userID, type: 1 });
-                        }
+                        // if public folder, current user will be added
+                        if (options.create) self.getParticipants().add({ id: ox.user_id, type: 1 });
                     } else if (folderAPI.is('shared', folder)) {
                         // in a shared folder the owner (created_by) will be added by default
-                        self.getParticipants().addUniquely({ id: folder.created_by, type: 1 });
+                        self.getParticipants().add({ id: folder.created_by, type: 1 });
                     }
-
                 });
             }
         },

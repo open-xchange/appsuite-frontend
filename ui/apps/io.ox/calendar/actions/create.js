@@ -53,7 +53,7 @@ define('io.ox/calendar/actions/create', [
                 openEditDialog(params);
             })
             .on('invite', function () {
-                params.participants = [{ id: ox.user_id, type: 1 }, { id: user.id, type: 1 }];
+                params.participants = [{ id: user.id, type: 1 }];
                 params.folder_id = settings.get('folders/calendar');
                 openEditDialog(params);
             })

@@ -64,7 +64,7 @@ define('io.ox/mail/api', [
             },
             list: {
                 action: 'list',
-                columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {
@@ -1505,7 +1505,7 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
                     sort: '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
@@ -1516,7 +1516,7 @@ define('io.ox/mail/api', [
                 return {
                     action: 'all',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     timezone: 'utc'
@@ -1529,10 +1529,20 @@ define('io.ox/mail/api', [
         return !util.isDeleted(item);
     }
 
+    function getThreadList (obj) {
+        // thread references returned within object
+        if (obj.thread) return obj.thread;
+        // may thread references already available in pool
+        var current = api.threads.get(_.cid(obj)) || {};
+        if (current && current.length > 1) return current;
+        // no thread references at all
+        return [ obj ];
+    }
+
     api.processThreadMessage = function (obj) {
 
         // get thread
-        var thread = obj.thread || [obj], list;
+        var thread = getThreadList(obj), list;
 
         // remove deleted mails
         thread = _(list = thread).filter(filterDeleted);

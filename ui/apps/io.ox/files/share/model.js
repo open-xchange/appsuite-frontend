@@ -127,7 +127,7 @@ define('io.ox/files/share/model', [
                                 recipientData.contact_folder = recipientModel.get('folder_id');
                                 recipientData.contact_id = recipientModel.get('id');
                             }
-                            recipientData.email_address = recipientModel.getEmail();
+                            recipientData.email_address = recipientModel.get('token').value;
                             break;
 
                     }

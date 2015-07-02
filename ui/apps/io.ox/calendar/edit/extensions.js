@@ -22,10 +22,13 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/tk/attachments',
     'io.ox/calendar/edit/recurrence-view',
     'io.ox/calendar/api',
+    'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/capabilities',
+    'io.ox/core/folder/picker',
+    'io.ox/core/folder/api',
     'settings!io.ox/calendar'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities, settings) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings) {
 
     'use strict';
 
@@ -56,9 +59,12 @@ define('io.ox/calendar/edit/extensions', [
         index: 100,
         id: 'save',
         draw: function (baton) {
+            var oldFolder = baton.model.get('folder_id');
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
+                    var save = _.bind(baton.app.onSave, baton.app),
+                        folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
@@ -66,22 +72,18 @@ define('io.ox/calendar/edit/extensions', [
                     }
                     // cleanup temp timezone data without change events
                     baton.model.unset('endTimezone', { silent: true });
-                    baton.model.save().then(_.bind(baton.app.onSave, baton.app));
+
+                    if (oldFolder !== folder && baton.mode === 'edit') {
+                        baton.model.set({ 'folder_id': oldFolder }, { silent: true });
+                        baton.model.save().done(function () {
+                            api.move(baton.model.toJSON(), folder).done(save);
+                        });
+                    } else {
+                        baton.model.save().done(save);
+                    }
                 })
             );
 
-        }
-    });
-
-    ext.point('io.ox/calendar/edit/section/buttons').extend({
-        index: 200,
-        id: 'discard',
-        draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
-                .on('click', function () {
-                    baton.app.quit();
-                })
-            );
         }
     });
 
@@ -94,6 +96,69 @@ define('io.ox/calendar/edit/extensions', [
                 .on('click', function () {
                     baton.app.quit();
                 })
+            );
+        }
+    });
+
+    var CalendarSelectionView = mini.AbstractView.extend({
+        tagName: 'div',
+        className: 'header-right',
+        events: {
+            'click a': 'onSelect'
+        },
+        setup: function () {
+            this.listenTo(this.model, 'change:folder_id', this.render);
+        },
+        onSelect: function () {
+            var self = this;
+
+            picker({
+                button: 'Select',
+                filter: function (id, model) {
+                    return model.id !== 'virtual/all-my-appointments';
+                },
+                flat: true,
+                indent: false,
+                module: 'calendar',
+                persistent: 'folderpopup',
+                root: '1',
+                settings: settings,
+                title: gt('Select folder'),
+                folder: this.model.get('folder_id'),
+
+                done: function (id) {
+                    self.model.set('folder_id', id);
+                },
+
+                disable: function (data, options) {
+                    var create = folderAPI.can('create', data);
+                    return !create || (options && /^virtual/.test(options.folder));
+                }
+            });
+        },
+        render: function () {
+            var link = $('<a href="#">'),
+                folderId = this.model.get('folder_id');
+
+            folderAPI.get(folderId).done(function (folder) {
+                link.text(folder.title);
+            });
+
+            this.$el.empty().append(
+                $('<span>').text(gt('Calendar:')),
+                link
+            );
+
+            return this;
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 1000,
+        id: 'folder-selection',
+        draw: function (baton) {
+            this.append(
+                new CalendarSelectionView({ model: baton.model }).render().$el
             );
         }
     });
@@ -389,132 +454,40 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed'
     });
 
-    // participants label
-    point.extend({
-        id: 'participants_legend',
-        index: 1300,
-        className: 'col-md-12',
-        render: function () {
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('Participants'))
-                )
-            );
-        }
-    }, {
-        rowClass: 'collapsed form-spacer'
-    });
-
-    // participants
+    // participants container
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
-        rowClass: 'collapsed',
+        rowClass: 'collapsed form-spacer',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getParticipants(),
-                baton: baton,
-                sortBy: 'organizer'
+                baton: baton
             }).render().$el);
         }
     });
 
-    // add participants
+    // add participants view
     point.basicExtend({
         id: 'add-participant',
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var pNode,
-                guid = _.uniqueId('form-control-label-');
-            this.append(
-                pNode = $('<div class="col-md-6">').append(
-                    $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                    $('<input class="add-participant form-control">').attr({
-                        type: 'text',
-                        tabindex: 1,
-                        id: guid,
-                        placeholder: gt('Add participant/resource')
-                    })
-                )
-            );
-
-            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
-
-                var collection = baton.model.getParticipants(),
-                    blackList = baton.parentView.blackList,
-                    autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
-
-                if (blackList) {
-                    collection.each(function (item) {
-                        if (item && blackList[item.getEmail()]) {
-                            collection.remove(item);
-                        }
-                    });
-                    collection.on('change', function (item) {
-                        if (item && blackList[item.getEmail()]) {
-                            collection.remove(item);
-                        }
-                    });
-                }
-                autocomplete.render();
-
-                //add recipents to baton-data-node; used to filter sugestions list in view
-                autocomplete.on('update', function () {
-                    var baton = { list: [] };
-                    collection.each(function (item) {
-                        //participant vs. organizer
-                        var email = item.get('email1') || item.get('email2');
-                        if (email !== null)
-                            baton.list.push({ email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type') });
-                    });
-                    $.data(pNode, 'baton', baton);
-                });
-
-                autocomplete.on('select', function (data) {
-                    var alreadyParticipant = false, obj,
-                    userId;
-                    alreadyParticipant = collection.any(function (item) {
-                        if (data.type === 5) {
-                            return item.getEmail() === (data.mail || data.email1) && item.get('type') === data.type;
-                        } else if (data.type === 1) {
-                            return item.get('id') ===  data.internal_userid;
-                        } else {
-                            return (item.id === data.id && item.get('type') === data.type);
-                        }
-                    });
-
-                    if (!alreadyParticipant) {
-                        if (blackList && blackList[contactUtil.getMail(data)]) {
-                            require('io.ox/core/yell')('warning', gt('This email address cannot be used for appointments'));
-                        } else {
-                            if (data.type !== 5) {
-
-                                if (data.mark_as_distributionlist) {
-                                    _.each(data.distribution_list, function (val) {
-                                        if (val.folder_id === 6) {
-                                            calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
-                                                userId = id;
-                                                obj = { id: userId, type: 1 };
-                                                collection.add(obj);
-                                            });
-                                        } else {
-                                            obj = { type: 5, mail: val.mail, display_name: val.display_name };
-                                            collection.add(obj);
-                                        }
-                                    });
-                                } else {
-                                    collection.add(data);
-                                }
-
-                            } else {
-                                obj = { type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || '' };
-                                collection.add(obj);
-                            }
-                        }
-                    }
-                });
+            var typeahead = new AddParticipant({
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true,
+                    resources: true,
+                    distributionlists: true
+                },
+                collection: baton.model.getParticipants(),
+                blacklist: settings.get('participantBlacklist') || false
             });
+            this.append(
+                typeahead.$el
+            );
+            typeahead.render().$el.addClass('col-md-6');
         }
     });
 

@@ -16,7 +16,7 @@ define('io.ox/calendar/freebusy/controller', [
     'io.ox/calendar/week/view',
     'io.ox/calendar/freebusy/templates',
     'io.ox/core/folder/api',
-    'io.ox/calendar/edit/view-addparticipants',
+    'io.ox/participants/add',
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/core/api/user',
@@ -28,7 +28,7 @@ define('io.ox/calendar/freebusy/controller', [
     'settings!io.ox/core',
     'less!io.ox/calendar/week/style',
     'less!io.ox/calendar/freebusy/style'
-], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
+], function (dialogs, WeekView, templates, folderAPI, AddParticipant, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
 
     'use strict';
 
@@ -107,7 +107,7 @@ define('io.ox/calendar/freebusy/controller', [
                     resolveParticipants(participant);
                 });
                 // auto focus
-                this.autoCompleteControls.find('.add-participant').focus();
+                this.autocomplete.setFocus();
                 // scroll to proper time (resets cell height, too; deferred not to block UI)
                 _.defer(function () {
                     self.getCalendarView().setScrollPos();
@@ -126,7 +126,7 @@ define('io.ox/calendar/freebusy/controller', [
                     var tempParticipant = { id: model.get('id'), type: model.get('type') };
                     if (model.get('type') === 5) {
                         // External participants need more data for an appointment
-                        tempParticipant.id = tempParticipant.mail = model.getEmail();
+                        tempParticipant.id = tempParticipant.mail = model.getTarget();
                         tempParticipant.display_name = model.getDisplayName();
                         tempParticipant.image1_url = model.get('image1_url');
                     }
@@ -311,7 +311,7 @@ define('io.ox/calendar/freebusy/controller', [
             this.getCalendarViewInstance('workweek');
 
             // participants collection
-            this.participants = new participantsModel.Participants([]);
+            this.participants = new pModel.Participants([]);
             this.participantsView = templates.getParticipantsView();
 
             function customize() {
@@ -322,8 +322,12 @@ define('io.ox/calendar/freebusy/controller', [
 
             function drawParticipant(model) {
                 self.participantsView.append(
-                    new participantsView.ParticipantEntryView({ model: model, halo: true, customize: customize })
-                        .render(customize).$el
+                    new pView.ParticipantEntryView({
+                        model: model,
+                        halo: true,
+                        closeButton: true,
+                        customize: customize
+                    }).render().$el
                 );
             }
 
@@ -382,23 +386,6 @@ define('io.ox/calendar/freebusy/controller', [
                     self.refreshChangedParticipants();
                 });
 
-            // construct auto-complete
-            this.autoCompleteControls = templates.getAutoCompleteControls();
-
-            // get instance of AddParticipantsView
-            this.autocomplete = new AddParticipantsView({ el: this.autoCompleteControls })
-                .render({
-                    autoselect: true,
-                    contacts: true,
-                    distributionlists: true,
-                    groups: true,
-                    parentSelector: 'body',
-                    placement: 'bottom',
-                    resources: true
-                });
-
-            this.autocomplete.on('select', resolveParticipants);
-
             this.changeMode = function (mode) {
                 if (currentMode !== mode) {
                     this.getCalendarViewInstance(mode);
@@ -421,9 +408,21 @@ define('io.ox/calendar/freebusy/controller', [
 
             var drop;
 
+            this.autocomplete = new AddParticipant({
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true,
+                    resources: true,
+                    distributionlists: true,
+                    split: false
+                },
+                collection: this.participants
+            });
+
             this.$el.append(
                 templates.getHeadline(standalone),
-                this.autoCompleteControls,
+                this.autocomplete.$el,
                 templates.getParticipantsScrollpane().append(this.participantsView),
                 !standalone ? templates.getBackControl() : templates.getQuitControl(),
                 templates.getControls().append(
@@ -432,6 +431,7 @@ define('io.ox/calendar/freebusy/controller', [
                 )
             )
             .on('click', '.close-control a', clickButton);
+            this.autocomplete.render().$el.addClass('abs autocomplete-controls');
             drop.find('a.dropdown-toggle').dropdown();
         },
 

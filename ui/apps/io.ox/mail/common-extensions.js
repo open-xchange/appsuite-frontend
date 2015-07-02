@@ -137,8 +137,8 @@ define('io.ox/mail/common-extensions', [
         },
 
         threadSize: function (baton) {
-
             // only consider thread-size if app is in thread-mode
+            if (!baton.app.isThreaded()) return;
             if (baton.options.threaded !== true && (!baton.app || baton.app.props.get('thread') === false)) return;
 
             var size = api.threads.size(baton.data);
@@ -281,7 +281,7 @@ define('io.ox/mail/common-extensions', [
                     container.append(
                         // BCC
                         $('<span class="io-ox-label">').append(
-                            $.txt(gt('Bcc')),
+                            $.txt(gt('Blind copy')),
                             _.noI18n('\u00A0\u00A0')
                         ),
                         util.serializeList(data, 'bcc'),

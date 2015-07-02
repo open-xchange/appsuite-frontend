@@ -12,7 +12,7 @@
 
 .participantsrow {
     margin-bottom: 20px;
-    margin-top: 10px;
+    legend { margin-bottom: 10px; }
 }
 
 .participant-wrapper {
@@ -98,16 +98,16 @@
         .picture(54px, 54px); /* 54px allows 3 lines with 18px line-height */
 
         &.contact-image, &.external-user-image {
-            background-image: url('apps/themes/default/dummypicture.png');
+            background-image: url(@fallback-image-contact);
         }
 
         &.group-image {
-            background-image: url('apps/themes/default/dummypicture_group.png');
+            background-image: url(@fallback-image-group);
             background-position: 0 -4px;
         }
 
         &.resource-image {
-            background-image: url('apps/themes/default/dummypicture_resource.png');
+            background-image: url(@fallback-image-resource);
         }
     }
 }

@@ -45,18 +45,30 @@
     @viewer-displayer-caption-bgcolor: rgba(0, 0, 0, 0.7);
     @viewer-displayer-document-shadowcolor: rgba(255, 255, 255, 0.2);
     @viewer-control-color: @viewer-toolbar-color;
-    @viewer-sidebar-bgcolor: #1a1a1a;
+    @viewer-sidebar-bgcolor: rgba(0, 0, 0, 0.40);
     @viewer-sidebar-border-color: #000000;
     @viewer-sidebar-active-bgcolor: #333333;
     @viewer-sidebar-label-text-color: #999999;
-    @viewer-sidebar-uploadnewversion-bgcolor: #444444;
-    @viewer-sidebar-uploadnewversion-bordercolor: #555555;
+    @viewer-sidebar-uploadnewversion-bgcolor: #333;
+    @viewer-sidebar-uploadnewversion-bordercolor: #444;
     @viewer-sidebar-uploadnewversion-hovercolor: #777777;
     @viewer-sidebar-versions-text-color: #CCCCCC;
     @viewer-sidebar-versions-comment-color: lightgrey;
     @viewer-sidebar-versions-dropdown-color: #FFFFFF;
     @viewer-sidebar-versions-dropdown-active-bgcolor: #444444;
     @viewer-sidebar-description-outline-color: #444444;
+    @viewer-sidebar-tab-color: #ffffff;
+    @viewer-sidebar-tab-bordercolor: #555555;
+    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
+    @viewer-sidebar-tab-hovercolor: rgba(255,255,255,0.2);
+    @document-thumbnail-link-focus-color: #777777;
+    @document-thumbnail-link-hover-color: #444444;
+    @document-thumbnail-link-selected-color: #777777;
+    @document-thumbnail-bgcolor: #FFFFFF;
+    @document-thumbnail-border-color: #e0e0e0;
+    @document-thumbnail-number-color: #999999;
+    @document-thumbnail-number-hover-color: #FFFFFF;
 }
 
 .viewer-light-colors () {
@@ -95,6 +107,18 @@
     @viewer-sidebar-versions-dropdown-color: #222222;
     @viewer-sidebar-versions-dropdown-active-bgcolor: transparent;
     @viewer-sidebar-description-outline-color: #777777;
+    @viewer-sidebar-tab-color: #333333;
+    @viewer-sidebar-tab-bordercolor: rgba(0,0,0,0.2);
+    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bgcolor: rgba(0,0,0,0.1);
+    @viewer-sidebar-tab-hovercolor: rgba(0,0,0,0.2);
+    @document-thumbnail-link-focus-color: rgba(0,0,0,0.1);
+    @document-thumbnail-link-hover-color: rgba(0,0,0,0.05);
+    @document-thumbnail-link-selected-color: rgba(0,0,0,0.15);
+    @document-thumbnail-bgcolor: #FFFFFF;
+    @document-thumbnail-border-color: #e0e0e0;
+    @document-thumbnail-number-color: #333333;
+    @document-thumbnail-number-hover-color: #333333;
 }
 
 
@@ -131,22 +155,37 @@
             width: 100%;
         }
     }
+
+    .breadcrumb-view {
+        margin: 0;
+    }
+
+    .breadcrumb-tail {
+        font-weight: normal;
+    }
 }
 
 /* OX Viewer Sidebar section panel generic styles */
 
 .sidebar-panel {
 
+    margin-bottom: 16px;
+
+    .close {
+        position: relative;
+        top: -5px;
+    }
+
     .sidebar-panel-heading {
-        border-bottom: 1px solid #555;
+
         position: relative;
         padding: 12px 0 5px 0;
 
         .panel-toggle-btn {
+            color: inherit;
             position: absolute;
-            top: 0;
+            top: 10px;
             right: 0;
-            width: 40px;
         }
 
         h3 {
@@ -164,7 +203,7 @@
 
     .sidebar-panel-body {
 
-        padding: 20px 0;
+        padding: 12px 0 5px 0;
 
         &.panel-collapsed {
             display: none;
@@ -186,6 +225,7 @@
             width: 33%;
             font-weight: normal;
             cursor: default;
+            clear: both;
         }
 
         dd {
@@ -202,6 +242,7 @@
         .versiontable {
 
             white-space: nowrap;
+            margin-bottom: 0;
 
             td {
                 padding: 0;
@@ -211,7 +252,7 @@
 
             .version-content {
 
-                padding: 0 0 8px 8px;
+                padding: 0 0 8px 0;
 
                 .last_modified {
                     float: right;
@@ -237,6 +278,10 @@
                 cursor: default;
             }
         }
+    }
+
+    &.viewer-fileinfo {
+        margin-bottom: 0;
     }
 }
 
@@ -279,6 +324,7 @@
         text-align: right;
         z-index: 2;
         border-bottom: 1px solid @viewer-toolbar-border-color;
+        .user-select(none);
         i.fa {
             font-size: 14px;
         }
@@ -295,6 +341,7 @@
                 text-align: center;
                 text-decoration: none;
                 color: @viewer-toolbar-color;
+                border-bottom: 1px solid @viewer-toolbar-border-color;
                 &:hover {
                     color: @viewer-toolbar-hover-color;
                     background-color: @viewer-toolbar-hover-bgcolor;
@@ -308,6 +355,9 @@
             > a.active {
                 color: @viewer-toolbar-active-color;
                 background-color: @viewer-toolbar-active-bgcolor;
+            }
+            &.dropdown {
+                margin-right: @viewer-toolbar-link-width;
             }
             &.dropdown.open {
                 background-color: @viewer-toolbar-active-bgcolor;
@@ -364,12 +414,62 @@
                 width: @viewer-toolbar-filename-width-smartphone-landscape;
             }
         }
+
+        .viewer-toolbar-navigation {
+            position: absolute;
+            top: 0;
+            left: ~"calc(50% - 80px)";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            &.sidebar-offset {
+                left: ~"calc(50% - 280px)";
+            }
+            @media (max-width: 1024px) {
+                left: 0;
+            }
+        }
+
+        @viewer-toolbar-link-disabled-color: #CCCCCC;
+        .viewer-toolbar-navigation-button {
+            cursor: pointer;
+            &.disabled {
+                color: @viewer-toolbar-link-disabled-color;
+                cursor: auto;
+                @viewer-toolbar-disabled-hover: #FFFFFF;
+                &:hover, &:focus, &:active {
+                    background: @viewer-toolbar-disabled-hover;
+                }
+            }
+        }
+
+        @viewer-toolbar-page-bordercolor: #e0e0e0;
+        .viewer-toolbar-page-wrapper {
+            display: inline-block;
+            border: 1px solid @viewer-toolbar-page-bordercolor;
+            height: 30px;
+            margin: 5px 10px;
+        }
+        .viewer-toolbar-page {
+            display: block;
+            height: 28px;
+            line-height: 28px;
+            width: 40px;
+            padding: 5px;
+            text-align: right;
+            -webkit-appearance:none;
+            border: 0;
+        }
+        .viewer-toolbar-page-total {
+            color: @link-color;
+            display: inline-block;
+        }
     }
 
     // show active sidebar button in toolbar when sidebar is open
     .viewer-sidebar.open ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
         color: @viewer-toolbar-color;
-        background-color: @viewer-toolbar-focus-bgcolor;
     }
 
     .viewer-displayer {
@@ -402,9 +502,14 @@
                 -webkit-align-items: center;
                 align-items: center;
                 outline: none;
+                .user-select(none);
+                &.swiper-slide-document {
+                    display: block;
+                    height: 100%;
+                }
             }
             .io-ox-busy::before {
-                color: rgba(255, 255, 255, 0.3);
+                color: @viewer-busy-color;
             }
         }
 
@@ -443,26 +548,7 @@
             }
         }
 
-        .document-thumbnail {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 120px;
-            height: 100%;
-            background: rgba(255,255,255,0.2);
-            overflow: auto;
-            .document-page-thumbnail {
-                width: 80px;
-                height: 120px;
-                margin: 30px auto;
-                background: #ffffff;
-            }
-        }
-
         .document-container {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
             .document-page {
                 margin: 40px auto;
                 width: 450px;
@@ -535,7 +621,13 @@
         }
 
         .viewer-displayer-notification {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -50px;
             height: 100px;
+            width: 100%;
+            padding: 0 40px;
             text-align: center;
             color: @viewer-toolbar-color;
             i {
@@ -574,13 +666,101 @@
             }
         }
 
-        .viewer-uploadnewversion > .form-group > span {
+        .viewer-uploadnewversion > .form-group > .btn-default {
             color: @viewer-text-color;
             background-color: @viewer-sidebar-uploadnewversion-bgcolor;
             border-color: @viewer-sidebar-uploadnewversion-bordercolor;
             &:active, &:hover {
                 border-color: @viewer-sidebar-uploadnewversion-hovercolor;
             }
+        }
+
+
+        .viewer-sidebar-tabs {
+            display: none;
+            list-style: none;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 0;
+            .user-select(none);
+            li {
+                display: inline-block;
+                width: 50%;
+            }
+            a {
+                display: block;
+                font-weight: bold;
+                color: @viewer-sidebar-tab-color;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+                cursor: pointer;
+                text-decoration: none;
+                border-bottom: 2px solid @viewer-sidebar-tab-bordercolor;
+                &.selected {
+                    border-bottom: 2px solid @viewer-sidebar-activetab-bordercolor;
+                    background-color: @viewer-sidebar-activetab-bgcolor;
+                }
+                &:hover {
+                    background-color: @viewer-sidebar-tab-hovercolor;
+                }
+            }
+        }
+
+        .viewer-sidebar-pane {
+            overflow: hidden;
+            &.thumbnail-pane {
+                &.io-ox-busy::before {
+                    top: 100px;
+                    color: @viewer-busy-color;
+                }
+            }
+            &.detail-pane {
+                display: none;
+            }
+        }
+
+        .document-thumbnail-link {
+            display: inline-block;
+            width: 120px;
+            padding: 10px 10px 0px 10px;
+            margin: 5px 15px;
+            cursor: pointer;
+            &:hover {
+                background: @document-thumbnail-link-hover-color;
+                text-decoration: none;
+                .page-number {
+                    color: @document-thumbnail-number-hover-color;
+                }
+            }
+            &:active, &:focus {
+                background: @document-thumbnail-link-focus-color;
+            }
+            &.selected {
+                background: @document-thumbnail-link-selected-color;
+                .page-number {
+                    color: @document-thumbnail-number-hover-color;
+                }
+            }
+        }
+
+        .document-thumbnail {
+            width: 100px;
+            height: 132px;
+            margin: 0 auto;
+            background: @document-thumbnail-bgcolor;
+            border: 1px solid @document-thumbnail-border-color;
+            overflow: hidden;
+            .thumbnail-image {
+                width: 100%;
+            }
+        }
+
+        .page-number {
+            color: @document-thumbnail-number-color;
+            text-align:center;
+            margin-top: 5px;
+            font-weight: bold;
         }
     }
 
@@ -596,8 +776,8 @@
         }
 
         .sidebar-panel-heading {
+
             color: @viewer-sidebar-label-text-color;
-            border-bottom: 1px solid #555;
 
             .panel-toggle-btn {
                 color: @viewer-control-color;
@@ -660,8 +840,18 @@
 .io-ox-viewer {
 
     &.viewer-dark-theme {
+
         .viewer-dark-colors();
         .viewer-styles();
+
+        .viewer-sidebar {
+            a:link, a:visited { color: lighten(@link-color, 20%); }
+            a:hover, a:focus { color: @link-color; }
+        }
+
+        .breadcrumb-tail {
+            color: white;
+        }
     }
 
     &.viewer-light-theme {

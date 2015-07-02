@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
@@ -147,6 +147,14 @@ define('io.ox/core/viewer/views/mainview', [
                     this.displayerView.swiper.slideNext();
                     this.displayerView.focusActiveSlide();
                     break;
+                case 33: // page up
+                    event.preventDefault();
+                    this.viewerEvents.trigger('viewer:document:previous');
+                    break;
+                case 34: // page down
+                    event.preventDefault();
+                    this.viewerEvents.trigger('viewer:document:next');
+                    break;
             }
         },
 
@@ -162,6 +170,10 @@ define('io.ox/core/viewer/views/mainview', [
 
         // recalculate view dimensions after e.g. window resize events
         refreshViewSizes: function () {
+            // filter random resize events that are coming from other parts of appsuite while switching apps.
+            if (!this.$el.is(':visible')) {
+                return;
+            }
             var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0,
                 displayerEl = this.displayerView.$el,
                 activeSlide = this.displayerView.getActiveSlideNode(),
@@ -195,7 +207,6 @@ define('io.ox/core/viewer/views/mainview', [
          * - Hides viewer DOM first and then do cleanup.
          */
         closeViewer: function () {
-            console.warn('MainView.closeViewer()');
             this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.open);

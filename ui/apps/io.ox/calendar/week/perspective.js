@@ -357,10 +357,16 @@ define('io.ox/calendar/week/perspective', [
             var cid = _.url.hash('id'), e;
             if (cid) {
                 cid = cid.split(',',1)[0];
-                e = $.Event('click', { target: this.main });
-                //marker to make the view open in the correct week
-                this.setNewStart = true;
-                this.showAppointment(e, _.cid(cid), { arrow: false });
+
+                if (_.device('smartphone')) {
+                    ox.launch('io.ox/calendar/detail/main', { cid: cid });
+                } else {
+                    e = $.Event('click', { target: this.main });
+
+                    //marker to make the view open in the correct week
+                    this.setNewStart = true;
+                    this.showAppointment(e, _.cid(cid), { arrow: false });
+                }
             }
         },
 

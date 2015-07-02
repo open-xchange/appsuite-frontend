@@ -27,6 +27,7 @@ define('io.ox/files/main', [
     'io.ox/core/page-controller',
     'io.ox/core/capabilities',
     'io.ox/files/api',
+    'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -35,7 +36,7 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/upload/dropzone'
-], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api, Sidebarview) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
 
     'use strict';
 
@@ -43,7 +44,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({});
+        sidebarView = new Sidebarview({ closable: true });
 
     app.mediator({
 
@@ -277,15 +278,13 @@ define('io.ox/files/main', [
             app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
             var node = _.device('smartphone') ? app.pages.getPage('main') : app.getWindow().nodes.main;
             node.append(
-                $('<div class="container">').append(
-                    app.listControl.render().$el
-                    //#. items list (e.g. mails)
-                    .attr('aria-label', gt('Item list'))
-                    .find('.toolbar')
-                    //#. toolbar with 'select all' and 'sort by'
-                    .attr('aria-label', gt('Item list options'))
-                    .end()
-                )
+                app.listControl.render().$el
+                //#. items list (e.g. mails)
+                .attr('aria-label', gt('Item list'))
+                .find('.toolbar')
+                //#. toolbar with 'select all' and 'sort by'
+                .attr('aria-label', gt('Item list options'))
+                .end()
             );
         },
 
@@ -359,30 +358,28 @@ define('io.ox/files/main', [
         },
 
         'selection:change': function () {
-            if (_.device('!touch')) {
-                app.listView.on('selection:change', function () {
-                    if (app.listView.selection.isEmpty() && sidebarView.open) {
-                        sidebarView.$el.empty();
-                        app.getWindow().nodes.main.append(
-                            sidebarView.$el.addClass('rightside').append(
-                                $('<div class="io-ox-center">').append(
-                                    $('<div class="summary empty">').text(gt('No elements selected'))
-                                )
-                            )
-                        );
-                    } else if (sidebarView.open) {
-                        var fileModel = app.listView.collection.get(app.listView.selection.get()[0]);
-                        sidebarView.render(fileModel);
-                        sidebarView.renderSections();
-                        sidebarView.$el.find('img').trigger('appear.lazyload');
-                        app.getWindow().nodes.main.append(
-                            sidebarView.$el.addClass('rightside scrollpane')
-                        );
-                        sidebarView.$el.children().wrapAll('<div class="wrapper">');
-                        sidebarView.$el.find('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
-                    }
-                });
-            }
+
+            if (_.device('touch')) return;
+
+            app.listView.on('selection:change', function () {
+
+                // do nothing if closed
+                if (!sidebarView.open) return;
+
+                if (app.listView.selection.isEmpty()) {
+                    sidebarView.$('.detail-pane').empty().append(
+                        $('<div class="io-ox-center">').append(
+                            $('<div class="summary empty">').text(gt('No elements selected'))
+                        )
+                    );
+                } else {
+                    var fileModel = app.listView.collection.get(app.listView.selection.get()[0]);
+                    sidebarView.render(fileModel);
+                    sidebarView.renderSections();
+                    sidebarView.$('img').trigger('appear.lazyload');
+                    sidebarView.$('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
+                }
+            });
         },
 
         /*
@@ -436,10 +433,7 @@ define('io.ox/files/main', [
 
                 if (details && _.device('!touch')) {
                     sidebarView.open = true;
-                    sidebarView.$el
-                        .toggleClass('open', true)
-                        .parent().toggleClass('has-rightside', true);
-                    app.listControl.$el.parent().toggleClass('leftside border-right', sidebarView.open);
+                    sidebarView.$el.toggleClass('open', true);
                     app.listView.trigger('selection:change');
                 }
 
@@ -607,16 +601,25 @@ define('io.ox/files/main', [
             app.listView.toggleCheckboxes(app.props.get('checkboxes'));
         },
 
+        'detail-sidebar': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            sidebar.add({
+                side: 'right',
+                sidebar: sidebarView.$el.css('padding', '0 16px'),
+                target: app.listControl.$el,
+                visible: app.props.get('details')
+            });
+        },
+
         'change:details': function (app) {
 
             if (_.device('smartphone')) return;
 
             function toggle(state) {
                 sidebarView.open = state;
-                sidebarView.$el
-                    .toggleClass('open', state)
-                    .parent().toggleClass('has-rightside', state);
-                app.listControl.$el.parent().toggleClass('leftside border-right', state);
+                sidebarView.$el.trigger('toggle-sidebar', state).toggleClass('open', state);
                 app.applyLayout();
                 app.listView.trigger('selection:change');
                 // trigger generic resize event so that other components can respond to it
@@ -628,6 +631,10 @@ define('io.ox/files/main', [
             });
 
             toggle(app.props.get('details'));
+
+            sidebarView.$el.on('click', '.viewer-fileinfo .close', function () {
+                app.props.set('details', false);
+            });
         },
 
         /*
@@ -791,6 +798,12 @@ define('io.ox/files/main', [
                     api.pool.add('detail', response.results);
                 }
             });
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.elements';
+            };
         }
     });
 

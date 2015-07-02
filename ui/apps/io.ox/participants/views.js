@@ -13,7 +13,7 @@
 define('io.ox/participants/views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
-    'gettext!io.ox/calendar/edit/main',
+    'gettext!io.ox/participants/views',
     'less!io.ox/participants/style'
 ], function (api, util, gt) {
 
@@ -23,73 +23,63 @@ define('io.ox/participants/views', [
 
         tagName: 'div',
 
+        className: 'participant-wrapper',
+
+        IMG_CSS: 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' '),
+
         events: {
             'click .remove': 'onRemove',
             'keydown': 'fnKey'
         },
 
+        options: {
+            halo: false,
+            closeButton: false,
+            field: false,
+            customize: $.noop
+        },
+
+        nodes: {},
+
         initialize: function (options) {
-            this.options = options;
+            this.options = $.extend({}, this.options, options || {});
+            this.listenTo(this.model, 'change', function (model) {
+                if (model && model.changed) {
+                    this.$el.empty();
+                    this.render();
+                }
+            });
+            this.listenTo(this.model, 'remove', function () {
+                this.remove();
+            });
         },
 
         render: function () {
-            var self = this;
-
-            // we set the class this way because some controller pass an existing node
-            this.$el.addClass('participant-wrapper')
-                .attr({
-                    'data-cid': this.model.cid
-                });
-
-            this.nodes = {
-                $img: $('<div>'),
-                $text: $('<div class="participant-name">'),
-                $mail: this.options.halo ? $('<a>') : $('<span>'),
-                $extra: $('<a>'),
-                $removeButton: $('<a href="#" class="remove" role="button" tabindex="1">').append(
+            this.$el.append(
+                this.nodes.$img = $('<div>'),
+                this.nodes.$text = $('<div class="participant-name">'),
+                $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
+                $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
+                $('<a href="#" class="remove" role="button" tabindex="1">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
                     )
                 )
-            };
+            ).attr({ 'data-cid': this.model.cid }).toggleClass('removable', this.options.closeButton);
 
+            this.setCustomImage();
             this.setDisplayName();
             this.setTypeStyle();
-            this.setOrganizer();
-            this.setCustomImage();
-
-            if (this.options.closeButton !== false && this.model.get('ui_removable') !== false) {
-                this.$el.addClass('removable');
-            }
-
-            this.model.on('change', function (model) {
-                if (model && model.changed) {
-                    self.$el.empty();
-                    self.render();
-                }
-            });
-
-            this.$el.append(
-                this.nodes.$img,
-                this.nodes.$text,
-                $('<div class="participant-email">').append(this.nodes.$mail),
-                $('<div class="extra-decorator">').append(this.nodes.$extra),
-                this.nodes.$removeButton
-            );
-
-            if (this.options.customize) {
-                this.options.customize.call(this);
-            }
-
+            this.options.customize.call(this);
             return this;
         },
 
         setDisplayName: function () {
-            var name = this.model.getDisplayName();
-            //display name: 'email only' participant
-            name = name === '...' && this.model.getEmail() !== '' ? this.model.getEmail().split('@')[0] : name;
-            util.renderPersonalName({ $el: this.nodes.$text, name: name }, this.model.toJSON());
+            util.renderPersonalName({
+                $el: this.nodes.$text,
+                name: this.model.getDisplayName()
+            }, this.model.toJSON());
         },
 
         setCustomImage: function () {
@@ -101,77 +91,37 @@ define('io.ox/participants/views', [
                 data,
                 { width: 54, height: 54 }
             );
-        },
-
-        setOrganizer: function () {
-
-            if (!this.options.baton) return;
-
-            var organizerId = this.options.baton.model.get('organizerId');
-
-            if (this.model.get('id') === organizerId) {
-                this.$el.addClass('three-rows');
-                this.nodes.$extra.text(gt('Organizer'));
-            }
+            this.nodes.$img.addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
         },
 
         setRows: function (mail, extra) {
-            mail = mail || '';
+            extra = extra || this.model.getTypeString() || '';
             this.nodes.$mail.text(gt.noI18n(mail));
-            this.nodes.$extra.text(extra || '');
+            this.nodes.$extra.text(gt.noI18n(extra));
             if (mail && extra) {
                 this.$el.addClass('three-rows');
             }
         },
 
-        setImageClass: (function () {
-
-            var types = 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' ');
-
-            return function (type) {
-                type = parseInt(type, 10);
-                this.nodes.$img.attr('class', 'participant-image ' + (types[type] || ''));
-            };
-
-        }()),
-
         setTypeStyle: function  () {
 
-            var type = this.model.get('type'), mail, data;
+            var mail = this.model.getTarget(),
+                extra = null;
 
-            this.setImageClass(type);
+            if (mail && this.options.field && this.model.getFieldString()) {
+                mail += ' (' + this.model.getFieldString() + ')';
+            }
 
-            switch (type) {
+            switch (this.model.get('type')) {
             case 1:
-                mail = this.model.get('field') ? this.model.get(this.model.get('field')) : this.model.getEmail();
-                this.setRows(mail, this.model.get('external') ? gt('External contact') : '');
-                if (this.options.halo) {
-                    this.nodes.$mail
-                        .attr({ href: '#', tabindex: '1' })
-                        .data({ email1: mail })
-                        .addClass('halo-link');
-                }
-                break;
-            case 2:
-                this.setRows('', gt('Group'));
-                break;
-            case 3:
-                this.setRows('', gt('Resource'));
-                if (this.options.halo) {
-                    data = this.model.toJSON();
-                    data.callbacks = this.options.callbacks || {};
-                    this.nodes.$extra
-                        .attr({ href: '#', tabindex: '1' })
-                        .data(data)
-                        .addClass('pointer halo-resource-link');
-                }
-                break;
-            case 4:
-                this.setRows('', gt('Resource group'));
-                break;
             case 5:
-                mail = this.model.getEmail();
-                this.setRows(mail, gt('External contact'));
+                // set organizer
+                if (this.options.baton && this.model.get('id') === this.options.baton.model.get('organizerId')) {
+                    extra = gt('Organizer');
+                    // don't remove organizer
+                    this.$el.removeClass('removable');
+                }
+
                 if (mail && this.options.halo) {
                     this.nodes.$mail
                         .attr({ href: '#', tabindex: '1' })
@@ -179,74 +129,106 @@ define('io.ox/participants/views', [
                         .addClass('halo-link');
                 }
                 break;
-            case 6:
-                this.setRows('', gt('Distribution list'));
+            case 3:
+                if (this.options.halo) {
+                    var data = this.model.toJSON();
+                    data.callbacks = {};
+                    if (this.options.baton && this.options.baton.callbacks) {
+                        data.callbacks = this.options.baton.callbacks;
+                    }
+                    var link = $('<a>')
+                        .attr({ href: '#', tabindex: '1' })
+                        .data(data)
+                        .addClass('halo-resource-link');
+                    this.nodes.$extra.replaceWith(link);
+                    this.nodes.$extra = link;
+                }
                 break;
             }
+
+            this.setRows(mail, extra);
         },
 
         fnKey: function (e) {
-            // DEL
-            if (e.which === 46) this.onRemove(e);
+            // del or backspace
+            if (e.which === 46 || e.which === 8) this.onRemove(e);
         },
 
         onRemove: function (e) {
-
             e.preventDefault();
-
-            var removable = $(e.target).closest('.participant-wrapper.removable');
-            if (removable.length) {
-                // remove from collection by cid
-                var cid = removable.attr('data-cid');
-                this.model.collection.remove(this.model.collection.get(cid));
-            }
+            // remove from collection
+            this.model.collection.remove(this.model);
         }
     });
 
     var UserContainer = Backbone.View.extend({
+
         tagName: 'div',
+
         className: 'participantsrow col-xs-12',
+
         initialize: function (options) {
-            _.extend({ halo: true }, options);
-            options.collection.on('add remove reset', _.bind(this.updateContainer, this));
             this.options = options;
+            this.listenTo(this.collection, 'add', function (model) {
+                this.renderEmptyLabel();
+                this.renderParticipant(model);
+            });
+            this.listenTo(this.collection, 'remove', function () {
+                this.renderEmptyLabel();
+            });
+            this.listenTo(this.collection, 'reset', function () {
+                this.$ul.empty();
+                this.renderAll();
+            });
+            this.$empty = $('<li>').text(gt('This list has no contacts yet'));
         },
+
         render: function () {
-            var self = this,
-                counter = 1;
-            this.nodes = {};
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(this.options.label || gt('Participants')),
+                    this.$ul = $('<ul class="list-unstyled">')
+                )
+            );
+            return this.renderAll();
+        },
+
+        renderParticipant: function (participant) {
+            var self = this;
+            var view = new ParticipantEntryView({
+                tagName: 'li',
+                model: participant,
+                baton: self.options.baton,
+                halo: true,
+                closeButton: true
+            }).render().$el.addClass('col-xs-12 col-sm-6');
 
             // bring organizer up
-            this.collection.each(function (participant) {
-                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    // 0 is reserved for the organizer
-                    self.nodes[0] = self.createParticipantNode(participant);
-                } else {
-                    self.nodes[counter] = self.createParticipantNode(participant);
-                    counter++;
-                }
+            if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                self.$ul.prepend(view);
+            } else {
+                self.$ul.append(view);
+            }
+        },
+
+        renderAll: function () {
+            var self = this;
+            this.renderEmptyLabel();
+            this.collection.each(function (model) {
+                self.renderParticipant(model);
             });
-            var row = $('<div class="row">');
-            _(this.nodes).chain().values().each(function (node) {
-                row.append(node);
-            });
-            self.$el.append(row).toggleClass('empty', this.collection.length === 0);
             return this;
         },
-        createParticipantNode: function (participant) {
-            return new ParticipantEntryView({
-                model: participant,
-                baton: this.options.baton,
-                className: 'col-xs-12 col-sm-' + (this.options.singlerow ? 12 : 6),
-                halo: this.options.halo,
-                callbacks: this.options.baton.callbacks || {}
-            }).render().$el;
-        },
-        updateContainer: function () {
-            this.nodes = {};
-            this.$el.empty();
-            this.render();
+
+        renderEmptyLabel: function () {
+            if (this.collection.length === 0) {
+                this.$ul.append(this.$empty);
+            } else {
+                this.$empty.remove();
+            }
+            return this.$ul.toggleClass('empty', this.collection.length === 0);
         }
+
     });
 
     return {

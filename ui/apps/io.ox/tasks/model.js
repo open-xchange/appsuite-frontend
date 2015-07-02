@@ -47,32 +47,27 @@ define('io.ox/tasks/model', [
                     }
                     var self = this,
                         resetListUpdate = false,
-                        changeParticipantsUpdate = false,
-                        participants = this._participants = new pModel.Participants(this.get('participants'));
-                    participants.invoke('fetch');
+                        changeParticipantsUpdate = false;
+                    this._participants = new pModel.Participants(this.get('participants'), { silent: false });
 
-                    function resetList() {
+                    this._participants.on('add remove reset', function () {
                         if (changeParticipantsUpdate) {
                             return;
                         }
                         resetListUpdate = true;
-                        self.set('participants', participants.getAPIData());
+                        self.set('participants', this.getAPIData(), { validate: true });
                         resetListUpdate = false;
-                    }
-
-                    participants.on('add remove reset', resetList);
+                    });
 
                     this.on('change:participants', function () {
                         if (resetListUpdate) {
                             return;
                         }
                         changeParticipantsUpdate = true;
-                        participants.reset(self.get('participants'));
-                        participants.invoke('fetch');
+                        self._participants.reset(self.get('participants'));
                         changeParticipantsUpdate = false;
                     });
-
-                    return participants;
+                    return this._participants;
                 },
                 // special functions for datepicker
                 getDate: function (attr) {

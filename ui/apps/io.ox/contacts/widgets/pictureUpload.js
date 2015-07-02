@@ -12,10 +12,11 @@
  */
 define('io.ox/contacts/widgets/pictureUpload', [
     'io.ox/core/notifications',
+    'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'less!io.ox/contacts/widgets/widgets'
-], function (notifications, gt, settings) {
+], function (notifications, api, gt, settings) {
 
     'use strict';
 
@@ -93,11 +94,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                         //no memory leaks
                         $(this).remove();
                         //image is cached now so no loading time for this
-                        self.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
+                        self.imgCon.css('background-image', 'url(' + (url || api.getFallbackImage()) + ')');
                         callback();
                     });
                 } else {
-                    this.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
+                    this.imgCon.css('background-image', 'url(' + (url || api.getFallbackImage()) + ')');
                 }
             },
 

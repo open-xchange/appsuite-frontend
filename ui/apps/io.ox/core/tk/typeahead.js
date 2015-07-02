@@ -15,11 +15,10 @@
 define('io.ox/core/tk/typeahead', [
     'io.ox/core/extensions',
     'io.ox/core/api/autocomplete',
-    'io.ox/contacts/api',
     'settings!io.ox/contacts',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
-], function (ext, AutocompleteAPI, contactAPI, settings) {
+], function (ext, AutocompleteAPI, settings) {
 
     'use strict';
 
@@ -39,30 +38,28 @@ define('io.ox/core/tk/typeahead', [
         className: 'form-control',
 
         options: {
-            apiOptions: {},
+            apiOptions: {
+                contacts: false,
+                users: false,
+                groups: false,
+                resources: false,
+                distributionlists: false
+            },
+            source: function (query) {
+                return this.api.search(query);
+            },
             click: $.noop,
-            blur: $.noop,
             tabindex: 1,
-            // The minimum character length needed before suggestions start getting rendered
-            minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
             autoselect: true,
-            // Highlight found query characters in bold
-            highlight: true,
             // Typeahead will not show a hint
             hint: true,
-            // Get data
-            source: function (query) {
-                return this.api.search(query);
-            },
             // Filter items
             reduce: _.identity,
             // harmonize returned data from 'source'
             harmonize: _.identity,
-            // lazyload selector
-            lazyload: null,
             // call typeahead function in render method
             init: true,
             extPoint: 'io.ox/core/tk/typeahead'
@@ -85,53 +82,13 @@ define('io.ox/core/tk/typeahead', [
             o = this.options = $.extend({}, this.options, o || {});
 
             /*
-             * extension point for contact picture
+             * extension point for autocomplete item
              */
             ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'contactPicture',
+                id: 'view',
                 index: 100,
-                draw: function (participant) {
-                    var node;
-                    this.append(
-                        node = $('<div class="contact-image lazyload">')
-                            .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-                    );
-                    // apply picture halo lazy load
-                    contactAPI.pictureHalo(
-                        node,
-                        participant.toJSON(),
-                        { width: 42, height: 42 }
-                    );
-                }
-            });
-
-            /*
-             * extension point for display name
-             */
-            ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'displayName',
-                index: 200,
-                draw: function (participant) {
-                    this.append(
-                        $('<div class="recipient-name">').text(participant.getDisplayName())
-                    );
-                }
-            });
-
-            // /*
-            //  * extension point for halo link
-            //  */
-            ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'emailAddress',
-                index: 300,
-                draw: function (participant) {
-                    this.append(
-                        $('<div class="ellipsis email">').append(
-                            $.txt(participant.getTarget() + ' '),
-                            participant.getFieldName() !== '' ?
-                                $('<span style="color: #888;">').text('(' + participant.getFieldName() + ')') : participant.getTypeString()
-                        )
-                    );
+                draw: function (data) {
+                    this.text(data);
                 }
             });
 
@@ -139,8 +96,10 @@ define('io.ox/core/tk/typeahead', [
 
             this.typeaheadOptions = [{
                 autoselect: o.autoselect,
-                minLength: o.minLength,
-                highlight: o.highlight,
+                // The minimum character length needed before suggestions start getting rendered
+                minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
+                // Highlight found query characters in bold
+                highlight: true,
                 hint: o.hint
             }, {
                 source: function (query, callback) {
@@ -149,15 +108,14 @@ define('io.ox/core/tk/typeahead', [
                         .then(customEvent.bind(self, 'processing'))
                         .then(o.reduce)
                         .then(function (data) {
+                            // max results
                             if (o.maxResults) {
-                                return data.slice(0, o.maxResults);
+                                data = data.slice(0, o.maxResults);
                             }
-                            return data;
+                            // order
+                            return o.placement === 'top' ? data.reverse() : data;
                         })
-                        .then(function (data) {
-                            data = o.placement === 'top' ? data.reverse() : data;
-                            return _(data).map(o.harmonize);
-                        })
+                        .then(o.harmonize)
                         .then(customEvent.bind(self, 'finished'))
                         .then(customEvent.bind(self, 'idle'))
                         .then(callback);
@@ -182,13 +140,12 @@ define('io.ox/core/tk/typeahead', [
                 templates: {
                     suggestion: o.suggestion || function (result) {
                         var node = $('<div class="autocomplete-item">');
-                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result.model);
+                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result);
                         return node;
                     },
                     header: function (data) {
                         // workaround: add a hidden info node that stores query
-                        return $('<span class="info hidden">')
-                                .attr('data-query', data.query);
+                        return $('<span class="info hidden">').attr('data-query', data.query);
                     }
                 }
             }];
@@ -212,8 +169,8 @@ define('io.ox/core/tk/typeahead', [
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item);
                     self.$el.trigger('select', item);
+                    self.$el.typeahead('val', '');
                 },
-                'blur': o.blur,
                 'typeahead:cursorchanged': function () {
                     // useful for debugging
                 }

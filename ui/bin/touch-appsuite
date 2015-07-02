@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This script updates all timestamps in the HTML files of OX App Suite.
 #
@@ -8,6 +8,36 @@
 #
 # Copyright (C) Open-Xchange Inc., 2013
 # Mail: info@open-xchange.com
+
+NOW=$(date -u +%Y%m%d.%H%M%S)
+
+usage(){
+    cat <<EOF
+
+    Command usage: $(basename ${0}) [option]
+
+    -h|--help            : displays this usage message
+    --timestamp=<value>  : default: e.g. ${NOW}
+
+    This tool creates timestamps on OX App Suite frontend Javascript-Code
+    for browser cache invalidation.
+EOF
+}
+
+for argument in "${@}"; do
+    case ${argument} in
+        -h|--help)
+            usage 1
+        ;;
+        --timestamp=*)
+            NOW=${argument##--timestamp=}
+        ;;
+        *)
+            echo "${0}: Error, unknown argument: ${argument}"
+            usage 1
+        ;;
+    esac
+done
 
 ## cd ##
 
@@ -19,8 +49,6 @@ fi
 VERSION=$(sed -n \
     '/v=/{s/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p;q}' \
     core)
-
-NOW=$(date -u +%Y%m%d.%H%M%S)
 
 for f in core signin boot.js; do
     sed -i "s/${VERSION}"'\.[0-9]\{8\}\.[0-9]\{6\}/'"${VERSION}.${NOW}/g" "$f"

@@ -241,8 +241,7 @@ define('io.ox/mail/compose/extensions', [
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20,
-                        allowAutoselectWithoutModel: true
+                        maxResults: 20
                     });
 
                 var node = $('<div class="col-xs-11">').append(
@@ -265,7 +264,7 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
-                // bind mial-model to collection
+                // bind mail-model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
                     if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {

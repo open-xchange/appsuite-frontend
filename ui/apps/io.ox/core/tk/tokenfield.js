@@ -16,12 +16,13 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/core/extensions',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
+    'io.ox/participants/views',
     'io.ox/contacts/api',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, contactAPI) {
+], function (ext, Typeahead, pModel, pViews, contactAPI) {
 
     'use strict';
 
@@ -82,12 +83,14 @@ define('io.ox/core/tk/tokenfield', [
             options = _.extend({}, {
                 // defines tokendata
                 harmonize: function (data) {
-                    var model = new pModel.Participant(data.data);
-                    return {
-                        value: model.getTarget(),
-                        label: model.getDisplayName(),
-                        model: model
-                    };
+                    return _(data).map(function (m) {
+                        var model = new pModel.Participant(m);
+                        return {
+                            value: model.getTarget({ fallback: true }),
+                            label: model.getDisplayName(),
+                            model: model
+                        };
+                    });
                 },
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,
@@ -98,6 +101,8 @@ define('io.ox/core/tk/tokenfield', [
                 dnd: true,
                 // dont't call init function in typeahead view
                 init: false,
+                // activate to prevent creation of an participant model in tokenfield:create handler
+                customDefaultModel: false,
                 extPoint: 'io.ox/core/tk/tokenfield',
                 leftAligned: false
             }, options);
@@ -120,11 +125,27 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
+            ext.point(options.extPoint + '/autoCompleteItem').extend({
+                id: 'view',
+                index: 100,
+                draw: function (data) {
+                    var pview = new pViews.ParticipantEntryView({
+                            model: data.model,
+                            closeButton: false,
+                            halo: false
+                        });
+                    this.append(pview.render().$el);
+                }
+            });
+
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
+            var Participants = Backbone.Collection.extend({
+                model: pModel.Participant
+            });
 
             // initialize collection
-            this.collection = options.collection || new pModel.Participants();
+            this.collection = options.collection || new Participants();
 
             // update comparator function
             this.collection.comparator = function (model) {
@@ -180,8 +201,8 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     if (self.redrawLock) return;
-                    // preventDefault to supress creating incomplete token only if options.allowAutoselectWithoutModel is false
-                    if (self.options.autoselect && !e.attrs.model && !self.options.allowAutoselectWithoutModel) {
+                    // prevent creation of default model
+                    if (self.options.customDefaultModel && !e.attrs.model) {
                         e.preventDefault();
                         return false;
                     }
@@ -237,7 +258,7 @@ define('io.ox/core/tk/tokenfield', [
                                 value: m.mail
                             }, { silent: true });
                         });
-                        self.collection.addUniquely(models);
+                        self.collection.add(models);
                         self.redrawTokens();
                         // clean input
                         self.input.data('ttTypeahead').input.$input.val('');
@@ -251,7 +272,7 @@ define('io.ox/core/tk/tokenfield', [
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
                     // add model to the collection and save cid to the token
-                    self.collection.addUniquely(e.attrs.model);
+                    self.collection.add(e.attrs.model);
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
@@ -360,7 +381,7 @@ define('io.ox/core/tk/tokenfield', [
                     },
                     receive: function (e, ui) {
                         var tokenData = ui.item.data();
-                        self.collection.addUniquely(tokenData.attrs.model);
+                        self.collection.add(tokenData.attrs.model);
                         self.resort.call(self);
                     },
                     remove: function (e, ui) {

@@ -14,8 +14,9 @@
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
+    'io.ox/backbone/mini-views/help',
     'less!io.ox/core/tk/dialog'
-], function (Events, ext) {
+], function (Events, ext, HelpView) {
 
     'use strict';
 
@@ -232,6 +233,13 @@ define('io.ox/core/tk/dialogs', [
 
         if (o.addClass) {
             nodes.popup.addClass(o.addClass);
+        }
+
+        if (o.help) {
+            nodes.header.append(new HelpView({
+                href: o.help,
+                tabindex: '-1'
+            }).render().$el);
         }
         // add event hub
         Events.extend(this);

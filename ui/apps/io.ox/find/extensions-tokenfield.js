@@ -11,9 +11,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/extensions-tokenfield',[
-    'io.ox/core/extensions'
-], function (ext) {
+define('io.ox/find/extensions-tokenfield', [
+    'io.ox/core/extensions',
+    'io.ox/contacts/api'
+], function (ext, api) {
 
     'use strict';
 
@@ -36,7 +37,7 @@ define('io.ox/find/extensions-tokenfield',[
 
                 if (!facet.hasPersons()) return;
 
-                var defaultimage = ox.base + '/apps/themes/default/dummypicture.png',
+                var defaultimage = api.getFallbackImage(),
                     image = baton.data.value.getImageUrl();
                 // remove default indent
                 this.removeClass('indent');

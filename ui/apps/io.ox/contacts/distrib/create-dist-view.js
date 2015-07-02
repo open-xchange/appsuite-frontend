@@ -16,12 +16,11 @@ define('io.ox/contacts/distrib/create-dist-view', [
     'io.ox/backbone/views',
     'io.ox/backbone/mini-views',
     'gettext!io.ox/contacts',
-    'io.ox/contacts/api',
-    'io.ox/contacts/util',
     'io.ox/core/extensions',
-    'io.ox/calendar/edit/view-addparticipants',
-    'io.ox/core/notifications'
-], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
+    'io.ox/participants/add',
+    'io.ox/participants/views',
+    'io.ox/participants/model'
+], function (views, mini, gt, ext, AddParticipant, pViews, pModel) {
 
     'use strict';
 
@@ -79,215 +78,64 @@ define('io.ox/contacts/distrib/create-dist-view', [
         }
     });
 
+    // member container
     point.extend({
-        id: 'add-members',
+        id: 'participants_list',
         index: 300,
         className: 'row',
-
-        init: function () {
-            this.listenTo(this.model, 'change:distribution_list', this.onDistributionListChange);
-        },
-
         render: function () {
             var self = this;
-
-            var guid = _.uniqueId('form-control-label-'),
-                pNode = $('<div class="col-xs-12 col-md-6">').append(
-                    $('<label class="sr-only">').text(gt('Add contact')).attr('for', guid),
-                    $('<input class="add-participant form-control">').attr({
-                        type: 'text',
-                        tabindex: 1,
-                        'placeholder': gt('Add contact') + ' ...',
-                        id: guid
-                    })
-                ),
-
-            autocomplete = new AddParticipantsView({ el: pNode });
-
-            autocomplete.render({
-                autoselect: true,
-                parentSelector: '.create-distributionlist',
-                placement: 'bottom',
-                contacts: true,
-                resources: false,
-                distributionlists: false,
-                users: false,
-                groups: false,
-                keepId: true
+            // define collection
+            this.baton.member = new Backbone.Collection(this.baton.model.get('distribution_list'), {
+                model: pModel.Participant
             });
 
-            autocomplete.on('select', function (data) {
-
-                // overwrite display_name
-                data.display_name = util.getMailFullName(data);
-
-                var mailValue = data.field ? data[data.field] : data.mail,
-                    newMember = self.copyContact(self.$el, data.id ? data : data.display_name, mailValue);
-
-                if (newMember && self.isUnique(newMember)) {
-                    var tmpList = _.clone(self.model.get('distribution_list') || []);
-                    tmpList.push(newMember);
-                    self.model.set('distribution_list', tmpList, { validate: true });
-                }
-
-            });
-
-            this.$el.append(
-                $('<legend>').addClass('sectiontitle col-md-12').text(gt('Contacts')),
-                this.itemList = $('<div>').addClass('item-list participantsrow col-md-12'),
-                pNode
-            );
-
-            if (_.isEmpty(this.model.get('distribution_list'))) {
-                self.drawEmptyItem(self.$el.find('.item-list'));
-            } else {
-                _(this.model.get('distribution_list')).each(function (member) {
-                    self.$el.find('.item-list').append(
-                        self.drawListedItem(member)
-                    );
-                });
-            }
-
-            // draw empty item again
-            this.listenTo(this.model, 'change:distribution_list', function () {
-                if (self.model.get('distribution_list').length === 0)
-                    self.drawEmptyItem(self.$el.find('.item-list'));
-            });
-        },
-
-        /**
-         * check for uniqueness (emailadress, name-only entries) and displays error message
-         *
-         * @param {object} newMember contains with properties email and display_name
-         * @return { boolean }
-         */
-        isUnique: function (newMember) {
-
-            var self = this,
-                unique = true,
-                currentMembers = self.model.get('distribution_list');
-
-            _(currentMembers).each(function (val) {
-                var matchingEmail = newMember.mail === val.mail && val.mail !== '',
-                    matchingPlaceholder = newMember.mail === val.mail && val.mail === '' && val.display_name === newMember.display_name;
-
-                if (matchingEmail || matchingPlaceholder) {
-                    // custom error message
-                    var message;
-                    if (matchingEmail) {
-                        //#. uniqueness of distribution listmembers
-                        //#. %1$s is the duplicate mail address
-                        message = gt.format(gt('The email address %1$s is already in the list'),  newMember.mail);
-                    } else if (matchingPlaceholder) {
-                        //#. uniqueness of distribution listmembers
-                        //#. %1$s is the duplicate display name of the person
-                        message = gt.format(gt('The person %1$s is already in the list'), newMember.display_name);
+            this.listenTo(this.baton.member, 'add remove reset', function (ctx, col) {
+                var all = col.map(function (m) {
+                    if (_.isNumber(m.getContactID())) {
+                        return {
+                            id: m.getContactID(),
+                            folder_id: m.get('folder_id'),
+                            display_name: m.getDisplayName(),
+                            mail: m.getTarget(),
+                            mail_field: m.getFieldNumber()
+                        };
+                    } else {
+                        return {
+                            display_name: m.getDisplayName(),
+                            mail: m.getTarget(),
+                            mail_field: 0
+                        };
                     }
-
-                    notifications.yell('info', message);
-
-                    //abort each-loop
-                    unique = false;
-                    return unique;
-                }
-            });
-
-            return unique;
-        },
-
-        drawEmptyItem: function (node) {
-            node.append(
-                $('<div>').addClass('participant-wrapper')
-                .attr({ 'data-mail': 'empty' })
-                .text(gt('This list has no contacts yet'))
-            );
-        },
-
-        copyContact: function (options, contact, selectedMail) {
-
-            var newMember;
-
-            if (_.isString(contact)) {
-                newMember = {
-                    display_name: contact,
-                    mail: selectedMail,
-                    mail_field: 0
-                };
-
-            } else {
-
-                var mailNr = (util.calcMailField(contact, selectedMail));
-
-                newMember = {
-                    id: contact.id,
-                    folder_id: contact.folder_id,
-                    display_name: contact.display_name,
-                    mail: selectedMail,
-                    mail_field: mailNr
-                };
-            }
-
-            return newMember;
-        },
-
-        onDistributionListChange: function (model, list) {
-            var self = this;
-            this.$el.find('.item-list').empty();
-            _(list).each(function (member) {
-                self.$el.find('.item-list').append(
-                    self.drawListedItem(member)
-                );
-            });
-        },
-
-        drawListedItem: function (o) {
-
-            var self = this;
-
-            // get proper data for picture halo but ignore client-side ids (0.99988765533211)
-            var halo = $.extend({}, o);
-            if (/^0\./.test(halo.id)) delete halo.id;
-
-            return $('<div class="participant-wrapper removable col-xs-12 col-md-6">')
-                .attr('data-mail', o.display_name + '_' + o.mail)
-                .append(
-                    // contact picture
-                    api.pictureHalo(
-                        $('<div class="participant-image">'),
-                        halo,
-                        { width: 48, height: 48 }
-                    ),
-                    // name
-                    $('<div class="participant-name">').text(o.display_name),
-                    // mail address
-                    $('<div class="participant-mail">').append(
-                        $('<a href="#" class="halo-link" tabindex="1">')
-                            .data({ email1: o.mail })
-                            .text(o.mail)
-                    ),
-                    // remove icon
-                    $('<a href="#" class="remove" role="button" aria-label="' + gt('Remove contact') + '" tabindex="1">').append(
-                        $('<div class="icon">').append(
-                            $('<i class="fa fa-trash-o">')
-                        )
-                    )
-                    .on('click', { mail: o.mail, name: o.display_name }, function (e) {
-                        e.preventDefault();
-                        self.model.set('distribution_list', _(self.model.get('distribution_list')).filter(function (val) {
-                            return val.mail !== e.data.mail || val.display_name !== e.data.name;
-                        }));
-                    })
-                );
-        },
-
-        fnClickPerson: function (e) {
-            if (e.data && e.data.email1 !== '') {
-                ext.point('io.ox/core/person:action').each(function (ext) {
-                    _.call(ext.action, e.data, e);
                 });
-            }
-        }
+                self.baton.model.set('distribution_list', all);
+            });
 
+            this.$el.append(new pViews.UserContainer({
+                collection: this.baton.member,
+                baton: this.baton
+            }).render().$el);
+        }
+    });
+
+    // add member view
+    point.extend({
+        id: 'add-participant',
+        index: 400,
+        render: function () {
+            var view = new AddParticipant({
+                apiOptions: {
+                    contacts: true
+                },
+                placeholder: gt('Add contact') + ' \u2026',
+                label: gt('Add contact'),
+                collection: this.baton.member
+            });
+            this.$el.append(
+                view.$el
+            );
+            view.render();
+        }
     });
 
     point.extend({
@@ -298,10 +146,6 @@ define('io.ox/contacts/distrib/create-dist-view', [
         }
     });
 
-    ext.point('io.ox/contacts/model/validation/distribution_list').extend({
-        id: 'check_for_duplicates',
-        validate: $.noop
-    });
-
     return ContactCreateDistView;
+
 });

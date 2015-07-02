@@ -212,6 +212,10 @@ define('io.ox/contacts/api', [
             }
         },
         pipe: {
+            get: function (data) {
+                if (data.user_id) data.internal_userid = data.user_id;
+                return convertResponseToGregorian(data);
+            },
             all: function (response) {
                 // japanese sorting
                 if (ox.language === 'ja_JP') {
@@ -238,7 +242,6 @@ define('io.ox/contacts/api', [
                 api.trigger('list:ready');
                 return data;
             },
-            get: convertResponseToGregorian,
             search: convertResponseToGregorian,
             advancedsearch: convertResponseToGregorian
         }
@@ -612,6 +615,13 @@ define('io.ox/contacts/api', [
         });
     };
 
+    // returns URL to fallback image for contacts
+    // type: contact / group / resource
+    // a simple helper to unify this across the entire UI
+    api.getFallbackImage = function (type) {
+        return ox.base + '/apps/themes/' + ox.theme + '/fallback-image-' + (type || 'contact') + '.png';
+    };
+
     /**
      * show default image or assigned image (in case it's available)
      * @param  {jquery} node    placeholder node that gets background-image OR null
@@ -625,7 +635,7 @@ define('io.ox/contacts/api', [
         // local hash to recognize URLs that have been fetched already
         var cachesURLs = {},
             uniq = ox.t0,
-            fallback = ox.base + '/apps/themes/default/dummypicture.png';
+            fallback = api.getFallbackImage();
 
         // update uniq on picture change
         api.on('update:image', function () {
@@ -667,6 +677,7 @@ define('io.ox/contacts/api', [
         }
 
         return function (node, data, options) {
+
             var params,
                 url,
                 opt = _.extend({
@@ -697,11 +708,11 @@ define('io.ox/contacts/api', [
             // duck checks
             if (api.looksLikeResource(data)) {
 
-                url = ox.base + '/apps/themes/default/dummypicture_resource.png';
+                url = api.getFallbackImage('resource');
 
             } else if (api.looksLikeGroup(data) || api.looksLikeDistributionList(data)) {
 
-                url = ox.base + '/apps/themes/default/dummypicture_group.png';
+                url = api.getFallbackImage('group');
 
             } else if (_.isString(data.image1_url) && data.image1_url !== '') {
 
@@ -718,10 +729,8 @@ define('io.ox/contacts/api', [
             }
 
             // already done?
-            if (url && !opt.urlOnly) {
-                return load(node, url, opt);
-            } else if (opt.urlOnly && url) {
-                return url;
+            if (url) {
+                return opt.urlOnly ? url : load(node, url, opt);
             }
 
             // preference; internal_userid must not be undefined, null, or zero
@@ -764,16 +773,10 @@ define('io.ox/contacts/api', [
                 return opt.urlOnly ? cachesURLs[url] : node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
 
-            if (!opt.urlOnly) {
-                load(node, url, opt);
-
-                // remove data
-                data = null;
-
-                return node;
-            } else {
-                data = null;
-                return url;
+            try {
+                return opt.urlOnly ? url : load(node, url, opt);
+            } finally {
+                data = node = opt = params = null;
             }
         };
 

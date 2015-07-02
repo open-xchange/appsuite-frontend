@@ -636,6 +636,11 @@ define('io.ox/files/api', [
                     collection.expired = true;
                 });
             }
+        },
+        // sync with folder API
+        'before:remove before:move': function (data) {
+            var collection = pool.get('detail'), cid = _.cid(data);
+            collection.remove(collection.get(cid));
         }
     });
 
@@ -655,14 +660,14 @@ define('io.ox/files/api', [
         });
     }
 
-    api.remove = function (ids) {
+    api.remove = function (ids, hardDelete) {
 
         prepareRemove(ids);
 
         return http.wait(
             http.PUT({
                 module: 'files',
-                params: { action: 'delete', timestamp: _.then() },
+                params: { action: 'delete', timestamp: _.then(), hardDelete: Boolean(hardDelete) },
                 data: http.simplify(ids),
                 appendColumns: false
             })
@@ -679,7 +684,10 @@ define('io.ox/files/api', [
     function move(list, targetFolderId) {
         http.pause();
         _(list).map(function (item) {
-            return api.update(item, { folder_id: targetFolderId });
+            // move files and folders
+            return item.folder_id === 'folder' ?
+                folderAPI.move(item.id, targetFolderId) :
+                api.update(item, { folder_id: targetFolderId });
         });
         return http.resume();
     }

@@ -262,7 +262,10 @@ define('io.ox/files/upload/main', [
             })
             .on('stop', function () {
                 mainView.removeClass('toolbar-bottom-visible');
-                $el.remove();
+                // if something went wrong before the start (filesize to big etc.) there is no $el
+                if ($el) {
+                    $el.remove();
+                }
             });
     }
 

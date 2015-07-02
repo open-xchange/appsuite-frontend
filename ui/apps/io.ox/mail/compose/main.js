@@ -51,6 +51,10 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             return compose(point.mode)(point);
         };
 
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.create';
+        };
+
         function compose(type) {
 
             return function (obj) {

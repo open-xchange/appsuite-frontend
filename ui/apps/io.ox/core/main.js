@@ -19,6 +19,7 @@ define('io.ox/core/main', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/help',
     // defines jQuery plugin
     'io.ox/core/commons',
     'io.ox/core/upsell',
@@ -30,7 +31,7 @@ define('io.ox/core/main', [
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/backbone/disposable'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -656,6 +657,23 @@ define('io.ox/core/main', [
             }
         }
 
+        function getHelp() {
+            var currentApp = ox.ui.App.getCurrentApp(),
+                currentType = currentApp && currentApp.getName(),
+                manifest = _.defaults(
+                    ox.manifests.apps[currentType] || {},
+                    ox.manifests.apps[currentType + '/main'] || {},
+                    {
+                        help: {
+                            base: 'help',
+                            target: 'index.html'
+                        }
+                    }
+                ).help;
+
+            return currentApp && currentApp.getContextualHelp ? currentApp.getContextualHelp() : manifest.target;
+        }
+
         ox.ui.apps.on('add', function (model) {
 
             if (model.get('title') === undefined) return;
@@ -786,6 +804,20 @@ define('io.ox/core/main', [
             }
         });
 
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'help',
+            index: 300,
+            draw: function () {
+                this.append(
+                    addLauncher('right', new HelpView({
+                        iconClass: 'launcher-icon',
+                        tabindex: '-1',
+                        href: getHelp
+                    }).render().$el)
+                );
+            }
+        });
+
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'settings',
             index: 100,
@@ -834,24 +866,11 @@ define('io.ox/core/main', [
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li role="presentation">', { 'class': 'io-ox-specificHelp' }).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="-1">').text(gt('Help'))
-                        .on('click', function (e) {
-                            var currentApp = ox.ui.App.getCurrentApp(),
-                                currentType = currentApp && currentApp.getName(),
-                                manifest = _.defaults(
-                                    ox.manifests.apps[currentType] || {},
-                                    ox.manifests.apps[currentType + '/main'] || {},
-                                    {
-                                        help: {
-                                            base: 'help',
-                                            target: 'index.html'
-                                        }
-                                    }).help;
-
-                            e.preventDefault();
-
-                            window.open(manifest.base + '/l10n/' + ox.language + '/' + manifest.target);
-                        })
+                        new HelpView({
+                            tabindex: '-1',
+                            content: gt('Help'),
+                            href: getHelp
+                        }).render().$el
                     )
                 );
             }
@@ -1512,18 +1531,10 @@ define('io.ox/core/main', [
                         // TODO: all pretty hard-wired here; looks for better solution
                         // special case: open viewer too?
                         var hash = _.url.hash();
-                        if (hash.app === 'io.ox/files' && hash.id !== undefined && hash.folder !== undefined) {
+                        if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                // get all for this folder so the viewer can switch correctly between files (see Bug 38579)
-                                api.getAll(hash.folder).done(function (data) {
-                                    var selection,
-                                        id = hash.folder + '/' + hash.id;
-                                    _(data).each(function (file) {
-                                        if (id === file.id) {
-                                            selection = file;
-                                        }
-                                    });
-                                    new Viewer().launch({ files: data, selection: selection });
+                                api.get(hash).done(function (data) {
+                                    new Viewer().launch({ files: [data] });
                                 });
                             });
                         }

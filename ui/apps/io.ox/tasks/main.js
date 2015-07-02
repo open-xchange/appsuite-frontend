@@ -1,4 +1,4 @@
-/**
+    /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -363,7 +363,7 @@ define('io.ox/tasks/main', [
                 );
             };
 
-            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api, true);
+            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api);
 
         },
         /*
@@ -568,6 +568,12 @@ define('io.ox/tasks/main', [
                 }
             });
 
+        },
+
+        'contextual-help': function (app) {
+            app.getContextualHelp = function () {
+                return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.elements';
+            };
         }
     });
 
