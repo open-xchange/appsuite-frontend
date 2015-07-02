@@ -206,11 +206,12 @@ define('io.ox/core/folder/api',
 
             var model = arg, data = model.toJSON(), id = data.id;
 
-            if (model.changed.total) {
+            // use exact comparison here or changes to 0 are ignored
+            if (model.changed.total !== undefined && model.changed.total !== null) {
                 api.trigger('update:total', id, data);
                 api.trigger('update:total:' + id, data);
             }
-            if (model.changed.unread) {
+            if (model.changed.unread !== undefined && model.changed.unread !== null) {
                 api.trigger('update:unread', id, data);
                 api.trigger('update:unread:' + id, data);
             }
