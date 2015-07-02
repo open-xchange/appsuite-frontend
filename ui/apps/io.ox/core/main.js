@@ -1149,18 +1149,20 @@ define('io.ox/core/main', [
         if (location.hash === '') location.hash = '#!!';
 
         var autoLaunchArray = function () {
-
             var autoStart = [];
 
             if (settings.get('autoStart') === 'none') {
                 autoStart = [];
             } else {
-                autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) {
-                    return !_.isUndefined(o) && !_.isNull(o);
-                });
-                if (_.isEmpty(autoStart)) {
-                    autoStart.push('io.ox/mail');
-                }
+                var favoritePaths = _(appAPI.getFavorites()).pluck('path');
+
+                autoStart = _([].concat(settings.get('autoStart'), 'io.ox/mail', favoritePaths))
+                    .chain()
+                    .filter(function (o) {
+                        return !_.isUndefined(o) && !_.isNull(o) && favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
+                    })
+                    .first(1)
+                    .value();
             }
 
             return autoStart;

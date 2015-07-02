@@ -175,6 +175,7 @@ define('io.ox/contacts/edit/view-form', [
                     return this;
                 },
                 init: function (o) {
+                    if (isMyContactData) return;
                     // see Bug 36592
                     if (o && o.model.get('folder_id')) {
                         folderApi.get(o.model.get('folder_id')).done(function (folderData) {

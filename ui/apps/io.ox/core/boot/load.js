@@ -17,8 +17,9 @@ define('io.ox/core/boot/load', [
     'io.ox/core/http',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'io.ox/core/capabilities',
     'io.ox/core/moment'
-], function (themes, util, http, coreSettings, mailSettings) {
+], function (themes, util, http, coreSettings, mailSettings, capabilities) {
 
     'use strict';
 
@@ -96,7 +97,7 @@ define('io.ox/core/boot/load', [
 
         // greedy prefetch for mail app
         // need to get this request out as soon as possible
-        if (coreSettings.get('autoStart') === 'io.ox/mail/main') {
+        if (coreSettings.get('autoStart') === 'io.ox/mail/main' && capabilities.has('webmail')) {
             var folder = 'default0/INBOX',
                 thread = mailSettings.get(['viewOptions', folder, 'thread'], true),
                 action = thread ? 'threadedAll' : 'all',

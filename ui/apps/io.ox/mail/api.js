@@ -25,8 +25,9 @@ define('io.ox/mail/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/core/capabilities'
+], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -1225,7 +1226,8 @@ define('io.ox/mail/api', [
      * @return { promise }
      */
     api.refresh = function () {
-        if (!ox.online) return;
+        // do not react on events when user has no mail (e.g. drive only)
+        if (!ox.online || !capabilities.has('webmail')) return;
         return api.checkInbox().always(function () {
             api.trigger('refresh.all');
         });
