@@ -122,7 +122,7 @@ define('io.ox/presenter/views/presentationview', [
 
             // TODO: move to document converter utils
             var convertParams = this.getConvertParams(this.model.get('source')),
-                documentUrl = Util.getServerModuleUrl(this.CONVERTER_MODULE_NAME, convertParams);
+                documentUrl = Util.getConverterUrl(convertParams);
 
             var carouselRoot = $('<div id="presenter-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper document-container io-ox-core-pdf">'),
