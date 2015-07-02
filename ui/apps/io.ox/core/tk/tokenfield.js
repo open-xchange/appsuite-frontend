@@ -101,6 +101,8 @@ define('io.ox/core/tk/tokenfield', [
                 dnd: true,
                 // dont't call init function in typeahead view
                 init: false,
+                // activate to prevent creation of an participant model in tokenfield:create handler
+                customDefaultModel: false,
                 extPoint: 'io.ox/core/tk/tokenfield',
                 leftAligned: false
             }, options);
@@ -199,11 +201,11 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     if (self.redrawLock) return;
-                    // ??? preventDefault to supress creating incomplete token only if options.allowAutoselectWithoutModel is false
-                    // if (self.options.autoselect && !e.attrs.model && !self.options.allowAutoselectWithoutModel) {
-                    //     e.preventDefault();
-                    //     return false;
-                    // }
+                    // prevent creation of default model
+                    if (self.options.customDefaultModel && !e.attrs.model) {
+                        e.preventDefault();
+                        return false;
+                    }
 
                     // edit
                     var inputData = self.getInput().data();

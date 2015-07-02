@@ -124,6 +124,7 @@ define('io.ox/find/view-tokenfield', [
                 hint: false,
                 allowEditing: false,
                 createTokensOnBlur: false,
+                customDefaultModel: true,
                 // typeahead options
                 maxResults: 20,
                 minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
@@ -236,11 +237,6 @@ define('io.ox/find/view-tokenfield', [
         register: function () {
             function preventOnCancel (e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
-                // wait until model is created
-                if (!e.attrs.model) {
-                    e.preventDefault();
-                    return false;
-                }
             }
 
             //retrigger events on view
