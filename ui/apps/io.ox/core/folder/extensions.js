@@ -464,22 +464,9 @@ define('io.ox/core/folder/extensions', [
                 index: 100,
                 draw: function (baton) {
 
-                    var self = this, model = baton.view.model, data = model.toJSON();
+                    var model = baton.view.model, data = model.toJSON();
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
-
-                    // used asynchronous but should resolve immediatly because the users are already cached
-                    userAPI.getList(data.created_by).done(function (user) {
-                        var name = contactUtil.getFullName(_(user).first());
-
-                        if (name !== data.title) {
-                            $('.folder-label', self).text(
-                                //#. %1$s is the folder owner
-                                //#. %1$s is the folder title
-                                gt('%1$s: %2$s', name, data.title)
-                            );
-                        }
-                    });
 
                     baton.view.options.a11yDescription.push(gt('Shared by other users'));
                 }

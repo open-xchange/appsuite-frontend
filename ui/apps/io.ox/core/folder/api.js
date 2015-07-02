@@ -53,11 +53,11 @@ define('io.ox/core/folder/api', [
     function renameDefaultCalendarFolders(items) {
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (item.module !== 'calendar') return false;
+                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(settings.get('folder/calendar'))) return true;
-                // this is hopefully a shared default folder
-                return util.is('shared', item) && item.title === gt('Calendar');
+                // any shared folder
+                return util.is('shared', item);
             }),
             ids = _(renameItems)
                 .chain()
@@ -72,7 +72,13 @@ define('io.ox/core/folder/api', [
             var hash = _.object(ids, list);
 
             _(renameItems).each(function (item) {
-                item.title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
+                if (item.id === String(settings.get('folder/calendar')) || item.title === gt('Calendar')) {
+                    item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
+                } else {
+                    //#. %1$s is the folder owner
+                    //#. %1$s is the folder title
+                    item.display_title = gt('%1$s: %2$s', contactUtil.getFullName(hash[item.created_by]), item.title);
+                }
             });
 
             return items;
@@ -171,9 +177,9 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
 
             // sort shared and hidden folders by title
-            if (this.id === 'flat/calendar/shared' || this.id === 'flat/calendar/hidden') {
+            if (/^flat\/(contacts|calendar|tasks)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks)\/hidden$/.test(this.id)) {
                 this.comparator = function (model) {
-                    return model.get('title').toLowerCase();
+                    return (model.get('display_title') || model.get('title')).toLowerCase();
                 };
             }
         },

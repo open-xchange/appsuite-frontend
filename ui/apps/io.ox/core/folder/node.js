@@ -140,11 +140,6 @@ define('io.ox/core/folder/node', [
                 this.onChangeId(model);
             }
 
-            if (model.changed[this.getIndexAttribute()] !== undefined) {
-                this.renderAttributes();
-                if (this.options.parent.onSort) this.options.parent.onSort();
-            }
-
             if (model.changed.subfolders) {
                 // close if no more subfolders
                 if (!model.changed.subfolders) this.open = false;
@@ -265,8 +260,7 @@ define('io.ox/core/folder/node', [
                 // check
                 if (!this.$) return;
 
-                var hash = {},
-                    self = this;
+                var hash = {};
 
                 // recycle existing nodes
                 this.$.subfolders.children().each(function () {
@@ -274,9 +268,11 @@ define('io.ox/core/folder/node', [
                 });
 
                 // reinsert nodes according to order in collection
-                this.collection.each(function (model) {
-                    self.$.subfolders.append(hash[model.id]);
-                });
+                this.$.subfolders.append(
+                    this.collection.map(function (model) {
+                        return hash[model.id];
+                    })
+                );
             }, 10);
 
             this.repaint = _.throttle(function () {
@@ -360,7 +356,6 @@ define('io.ox/core/folder/node', [
                     'aria-level': o.level + 1,
                     'aria-selected': false,
                     'data-id': this.folder,
-                    'data-index': this.getIndex(),
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id,
                     'role': 'treeitem',
@@ -441,7 +436,7 @@ define('io.ox/core/folder/node', [
         },
 
         getTitle: function () {
-            return this.options.title || this.model.get('title') || '';
+            return this.model.get('display_title') || this.options.title || this.model.get('title') || '';
         },
 
         renderTitle: function () {
@@ -490,22 +485,9 @@ define('io.ox/core/folder/node', [
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.getIndex(),
                 'data-model': this.options.model_id,
                 'data-contextmenu-id': this.options.contextmenu_id
             });
-        },
-
-        getIndexAttribute: function () {
-            var parent = this.options.parent;
-            if (!parent || !parent.collection) return undefined;
-            return 'index/' + parent.collection.id;
-        },
-
-        getIndex: function () {
-            var attribute = this.getIndexAttribute();
-            if (attribute === undefined) return 0;
-            return this.model.get(attribute) || 0;
         },
 
         isEmpty: function () {
