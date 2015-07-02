@@ -657,6 +657,23 @@ define('io.ox/core/main', [
             }
         }
 
+        function getHelp() {
+            var currentApp = ox.ui.App.getCurrentApp(),
+                currentType = currentApp && currentApp.getName(),
+                manifest = _.defaults(
+                    ox.manifests.apps[currentType] || {},
+                    ox.manifests.apps[currentType + '/main'] || {},
+                    {
+                        help: {
+                            base: 'help',
+                            target: 'index.html'
+                        }
+                    }
+                ).help;
+
+            return currentApp && currentApp.getContextualHelp ? currentApp.getContextualHelp() : manifest.target;
+        }
+
         ox.ui.apps.on('add', function (model) {
 
             if (model.get('title') === undefined) return;
@@ -795,22 +812,7 @@ define('io.ox/core/main', [
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
                         tabindex: '-1',
-                        href: function () {
-                            var currentApp = ox.ui.App.getCurrentApp(),
-                                currentType = currentApp && currentApp.getName(),
-                                manifest = _.defaults(
-                                    ox.manifests.apps[currentType] || {},
-                                    ox.manifests.apps[currentType + '/main'] || {},
-                                    {
-                                        help: {
-                                            base: 'help',
-                                            target: 'index.html'
-                                        }
-                                    }
-                                ).help;
-
-                            return currentApp.getContextualHelp ? currentApp.getContextualHelp() : manifest.target;
-                        }
+                        href: getHelp
                     }).render().$el)
                 );
             }
@@ -864,24 +866,11 @@ define('io.ox/core/main', [
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li role="presentation">', { 'class': 'io-ox-specificHelp' }).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="-1">').text(gt('Help'))
-                        .on('click', function (e) {
-                            var currentApp = ox.ui.App.getCurrentApp(),
-                                currentType = currentApp && currentApp.getName(),
-                                manifest = _.defaults(
-                                    ox.manifests.apps[currentType] || {},
-                                    ox.manifests.apps[currentType + '/main'] || {},
-                                    {
-                                        help: {
-                                            base: 'help',
-                                            target: 'index.html'
-                                        }
-                                    }).help;
-
-                            e.preventDefault();
-
-                            window.open(manifest.base + '/l10n/' + ox.language + '/' + manifest.target);
-                        })
+                        new HelpView({
+                            tabindex: '-1',
+                            content: gt('Help'),
+                            href: getHelp
+                        }).render().$el
                     )
                 );
             }

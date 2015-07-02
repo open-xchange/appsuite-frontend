@@ -24,6 +24,7 @@ define('io.ox/backbone/mini-views/help', [], function () {
     //  href            {string or function} The target id of the help site or a function, which should return the help site
     //  iconClass       {string} These classes are added to the i-tag
     //  tabindex        {string} The tabindex of the link
+    //  content         {object or string} The object to display. If unset, the help icon will be displayed
 
     var HelpView = Backbone.View.extend({
 
@@ -47,13 +48,18 @@ define('io.ox/backbone/mini-views/help', [], function () {
         initialize: function (options) {
             this.options = _.extend({
                 href: 'index.html',
-                tabindex: '1'
+                tabindex: '1',
+                content: $('<i class="fa fa-question-circle">')
             }, options);
+
+            if (!_.isString(this.options.content)) {
+                this.options.content.addClass(this.options.iconClass);
+            }
         },
 
         render: function () {
             this.$el.append(
-                $('<i class="fa fa-question-circle">').addClass(this.options.iconClass)
+                this.options.content
             ).attr({
                 target: '_blank',
                 href: '',
