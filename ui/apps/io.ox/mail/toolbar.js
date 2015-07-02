@@ -17,6 +17,7 @@ define('io.ox/mail/toolbar',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/tk/flag-picker',
      'io.ox/mail/api',
+     'io.ox/core/folder/api',
      'io.ox/backbone/mini-views/dropdown',
      'io.ox/backbone/mini-views/toolbar',
      'io.ox/core/tk/upload',
@@ -26,7 +27,7 @@ define('io.ox/mail/toolbar',
      'io.ox/mail/actions',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
+    ], function (ext, links, actions, flagPicker, api, folderApi, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
 
     'use strict';
 
@@ -293,6 +294,12 @@ define('io.ox/mail/toolbar',
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {
                 app.updateToolbar(app.listView.selection.get());
+            });
+            // update on total change of current folder
+            folderApi.on('update:total', function (e, id) {
+                if (id === app.folder.get()) {
+                    app.updateToolbar(app.listView.selection.get());
+                }
             });
         }
     });
