@@ -97,7 +97,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             var params = {
                     action: 'convertdocument',
                     convert_action: 'getpage',
-                    target_format: 'jpg',
+                    target_format: 'png',
                     target_width: 200,
                     target_zoom: 1,
                     job_id: convertData.jobID,
