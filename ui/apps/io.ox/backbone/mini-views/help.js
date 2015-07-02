@@ -36,13 +36,15 @@ define('io.ox/backbone/mini-views/help', [], function () {
             'click': 'onClick'
         },
 
-        onClick: function () {
+        onClick: function (e) {
             var href = this.options.href;
 
             // if target is dynamic, execute as function
             if (_.isFunction(href)) href = this.options.href();
 
             window.open('help/l10n/' + ox.language + '/' + href);
+
+            e.preventDefault();
         },
 
         initialize: function (options) {
