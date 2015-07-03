@@ -1094,6 +1094,7 @@ define('io.ox/core/main', [
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
 
                 $(window).resize(tabManager);
+                ox.on('recalculate-topbarsize', tabManager);
             }
         });
 

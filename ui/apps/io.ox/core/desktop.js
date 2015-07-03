@@ -69,9 +69,14 @@ define('io.ox/core/desktop', [
                 }
                 this.get('topbarNode').find('a.apptitle').append(this.badge);
             }
+            var oldText = this.badge.text();
+
             this.badge.text(text);
             if (options.arialabel) {
                 this.badge.attr('aria-label', options.arialabel);
+            }
+            if (oldText !== text) {
+                ox.trigger('recalculate-topbarsize');
             }
             if (!text) {
                 this.badge.hide();
