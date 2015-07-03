@@ -41,7 +41,6 @@ function (ext, caps) {
         }
     });
 
-
     var def = null;
 
     ext.point('io.ox/realtime/transport').each(function (transport) {
