@@ -34,18 +34,18 @@ define('io.ox/realtime/groups', [
                 clearInterval(heartbeat);
                 heartbeat = null;
             } else if (error.data && error.data.code === 1010) {
-                self.trigger("error:disposed");
+                self.trigger('error:disposed');
                 clearInterval(heartbeat);
                 heartbeat = null;
                 destroyed = true;
             } else if (error.data && error.data.code === 1012) {
-                self.trigger("error:joinFailed", error);
+                self.trigger('error:joinFailed', error);
                 clearInterval(heartbeat);
                 heartbeat = null;
             } else if (error.data && error.data.code === 1013) {
-                self.trigger("error:leaveFailed", error);
+                self.trigger('error:leaveFailed', error);
             } else if (error.data && error.data.code === 1011) {
-                self.trigger("error:stanzaProcessingFailed", error);
+                self.trigger('error:stanzaProcessingFailed', error);
             }
             self.trigger('error', error);
         });
