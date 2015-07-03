@@ -207,7 +207,7 @@ define('io.ox/search/main', [
         // mediator: view
         app.view.on({
             'query:start': function () {
-                app.view.repaint('facets');
+                app.view.repaint('apps');
                 app.busy();
             },
             'query:stop': function () {
@@ -239,7 +239,7 @@ define('io.ox/search/main', [
                 app.apiproxy.query();
             },
             'reset': function () {
-                app.view.repaint('facets info items apps');
+                app.view.repaint('info items apps');
             }
         });
 

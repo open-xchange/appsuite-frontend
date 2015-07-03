@@ -143,7 +143,7 @@ define('io.ox/search/facets/extensions', [
             button.append(
                 action = $('<a href="#" type="button" class="dropdown-toggle pull-right disabled" data-toggle="dropdown" role="menuitemcheckbox" aria-haspopup="true" aria-expanded="false">').append(
                     $('<span class="name">')
-                        .text(gt('All folders')),
+                        .text(value.name || gt('All folders')),
                     $('<span class="caret">')
                 )
             );
@@ -173,7 +173,6 @@ define('io.ox/search/facets/extensions', [
                 }
             }
 
-            console.log('%c' + 'start', 'color: white; background-color: grey');
             // add fodlers
             util.getFolders(baton.model)
                 .then(function (accounts) {
@@ -242,7 +241,6 @@ define('io.ox/search/facets/extensions', [
                 }).then(function () {
                     // add to dom
                     button.append(menu);
-                    console.log('%c' + 'end', 'color: white; background-color: grey');
 
                     // enable dropdown again
                     action.removeClass('disabled');
