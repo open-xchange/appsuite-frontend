@@ -132,6 +132,9 @@ define('io.ox/presenter/views/presentationview', [
             carouselRoot.append(carouselInner);
             this.$el.append(carouselRoot, caption);
 
+            // create pause overlay
+            this.renderPauseOverlay();
+
             this.carouselRoot = carouselRoot;
             this.documentContainer = carouselInner;
             // create pdf document
@@ -145,6 +148,29 @@ define('io.ox/presenter/views/presentationview', [
             .always(this.pdfDocumentLoadFinished.bind(this));
 
             return this;
+        },
+
+        /**
+         * Creates the presentation pause overlay.
+         */
+        renderPauseOverlay: function () {
+            var overlay = $('<div class="pause-overlay">'),
+                infoBox = $('<div class="pause-infobox">'),
+                pauseNotification = $('<span class="pause-message">').text(gt('Presentation is paused.')),
+                leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
+                    .attr({
+                        'title': gt('Leave presentation'),
+                        'aria-label': gt('Leave presentation')
+                    })
+                    .text(gt('Leave'));
+            function onPauseLeave() {
+                this.togglePauseOverlay();
+                this.app.rtConnection.leavePresentation();
+            }
+            leaveButton.on('click', onPauseLeave.bind(this));
+            infoBox.append(pauseNotification, leaveButton);
+            overlay.append(infoBox);
+            this.$el.append(overlay);
         },
 
         /**
@@ -216,6 +242,7 @@ define('io.ox/presenter/views/presentationview', [
         onPresentationPause: function () {
             console.info('Presenter - presentation - pause');
             this.updateNavigationArrows();
+            this.togglePauseOverlay();
         },
 
         /**
@@ -224,6 +251,18 @@ define('io.ox/presenter/views/presentationview', [
         onPresentationContinue: function () {
             console.info('Presenter - presentation - continue');
             this.updateNavigationArrows();
+            this.togglePauseOverlay();
+        },
+
+        /**
+         * Toggles the visibility of the pause overlay for presentation participants.
+         */
+        togglePauseOverlay: function () {
+            var userId = this.app.rtConnection.getRTUuid(),
+                rtModel = this.app.rtModel;
+            if (!rtModel.isPresenter(userId) && rtModel.isJoined(userId)) {
+                this.$('.pause-overlay').toggle();
+            }
         },
 
         /**

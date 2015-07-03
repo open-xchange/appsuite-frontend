@@ -234,14 +234,14 @@ define('io.ox/presenter/views/mainview', [
 
                 if (_.isUndefined(state)) {
                     BigScreen.toggle(
-                        this.el,
+                        this.presentationView.el,
                         this.onEnterFullscreen.bind(this),
                         this.onEnterFullscreen.bind(this),
                         this.onErrorFullscreen.bind(this)
                     );
                 } else if (state) {
                     BigScreen.request(
-                        this.el,
+                        this.presentationView.el,
                         this.onEnterFullscreen.bind(this),
                         this.onEnterFullscreen.bind(this),
                         this.onErrorFullscreen.bind(this)
