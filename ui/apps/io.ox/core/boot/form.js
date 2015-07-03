@@ -66,6 +66,24 @@ define('io.ox/core/boot/form', [
                         break;
                     // if the guest user requested to reset his password
                     case 'reset_password':
+                        $('#io-ox-login-form').attr({
+                            action: '/appsuite/api/share/reset/password',
+                            method: 'post'
+                        }).append(
+                            $('<input type="hidden" name="share">').val(_.url.hash('share')),
+                            $('<input type="hidden" name="confirm">').val(_.url.hash('confirm'))
+                        );
+                        // remove unused fields
+                        $('#io-ox-forgot-password, #io-ox-login-username').remove();
+                        // i18n
+                        $('#io-ox-login-password').attr({
+                            'data-i18n': gt('New password'),
+                            placeholder: gt('New password')
+                        });
+                        $('#io-ox-login-button').attr({
+                            'data-i18n': gt('Set password'),
+                            placeholder: gt('Set password')
+                        });
                         break;
                     //  if the guest user has to enter his credentials
                     case 'login':
