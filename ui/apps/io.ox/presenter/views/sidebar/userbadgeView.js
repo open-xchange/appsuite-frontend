@@ -21,8 +21,6 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
         className: 'participant',
 
         initialize: function (options) {
-            //console.warn('UserbadgeView.initialize()');
-            // TODO use real participant model
             _.extend(this, options);
 
             this.defaultPictureSize = 40;
@@ -32,12 +30,14 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
         },
 
         render: function () {
-            //console.warn('UserbadgeView.render()');
 
             var pictureColumn = $('<div class="participant-picture-col">'),
                 picture = $('<div class="picture">'),
                 nameColumn = $('<div class="participant-name-col">'),
-                name = $('<a class="name halo-link">').text(this.participant.userDisplayName);
+                name = $('<a class="name halo-link">').text(this.participant.userDisplayName),
+                roleColumn = $('<div class="participant-role-col">'),
+                presenterId = this.app.rtModel.get('presenterId'),
+                presenterIcon = $('<i class="fa fa-desktop">').attr('title', gt('Presenter'));
 
             ContactsAPI.pictureHalo(
                 picture,
@@ -53,7 +53,11 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
 
             pictureColumn.append(picture);
             nameColumn.append(name);
-            this.$el.append(pictureColumn, nameColumn);
+            if (this.participant.userId === presenterId) {
+                roleColumn.append(presenterIcon);
+            }
+
+            this.$el.append(pictureColumn, nameColumn, roleColumn);
 
             return this;
         },

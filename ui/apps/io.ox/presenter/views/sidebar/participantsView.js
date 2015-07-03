@@ -37,9 +37,9 @@ define('io.ox/presenter/views/sidebar/participantsview', [
             var participants = this.app.rtModel.get('participants');
 
             _.each(participants, function (participant) {
-                var userbadgeView = new UserbadgeView({ participant: participant });
+                var userbadgeView = new UserbadgeView({ participant: participant, app: this.app });
                 participantsList.append(userbadgeView.render().el);
-            });
+            }.bind(this));
 
             sectionHeading.append(headline);
             sectionBody.append(participantsList);
