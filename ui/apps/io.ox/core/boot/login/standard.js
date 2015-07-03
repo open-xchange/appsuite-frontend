@@ -44,7 +44,7 @@ define('io.ox/core/boot/login/standard', [
             return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
-        login(username, password, e.data.skip).then(
+        login(username, password).then(
             function success(data) {
                 // don't respond to submit any more
                 form.off('submit');
@@ -64,7 +64,7 @@ define('io.ox/core/boot/login/standard', [
         );
     };
 
-    function login(name, password, skip) {
+    function login(name, password) {
         var options = {
             name: name,
             password: password,
@@ -80,8 +80,7 @@ define('io.ox/core/boot/login/standard', [
                 action: _.url.hash('login_type'),
                 // share-specific data
                 share: _.url.hash('share'),
-                target: _.url.hash('target'),
-                skipButton: skip
+                target: _.url.hash('target')
             });
         }
 

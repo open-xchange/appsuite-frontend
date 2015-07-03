@@ -159,7 +159,7 @@ define('io.ox/core/session', [
                         rampup: true,
                         rampupFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target', 'skipButton')
+                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target')
                 );
 
                 return (

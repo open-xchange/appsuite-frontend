@@ -26,7 +26,7 @@ define('io.ox/core/boot/form', [
 
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt, skip = false;
+        var sc = ox.serverConfig, gt = util.gt;
 
         util.debug('Show form ...');
 
@@ -83,21 +83,6 @@ define('io.ox/core/boot/form', [
                 } else {
                     util.feedback(type, _.url.hash('message'));
                 }
-            }
-
-            // add skip button
-            if (util.isPasswordOptional()) {
-                $('#io-ox-skip-button-container').append(
-                    $('<input class="btn btn-primary form-control">').attr({
-                        type: 'submit',
-                        value: gt('Skip'),
-                        name: 'skip',
-                        id: 'io-ox-skip-button',
-                        'data-i18n': 'Skip'
-                    }).click(function () {
-                        skip = true;
-                    })
-                );
             }
 
             $('#io-ox-forgot-password, #io-ox-backtosignin').find('a').click(function (e) {
@@ -183,12 +168,7 @@ define('io.ox/core/boot/form', [
             $('#background-loader').fadeOut(util.DURATION, function () {
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
-                $('#io-ox-login-form').on('submit', function (e) {
-                    e.data = e.data || {};
-                    _.extend(e.data, { skip: skip });
-                    skip = false;
-                    login(e);
-                });
+                $('#io-ox-login-form').on('submit', login);
                 $('#io-ox-login-username').prop('disabled', false);
                 // focus password or username
                 $(util.isGuest() ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
