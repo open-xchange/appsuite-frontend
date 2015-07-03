@@ -17,8 +17,9 @@ define('io.ox/core/notifications', [
     'io.ox/core/extensions',
     'io.ox/core/notifications/badgeview',
     'io.ox/core/yell',
+    'io.ox/core/desktopNotifications',
     'gettext!io.ox/core'
-], function (ext, badgeview, yell, gt) {
+], function (ext, badgeview, yell, desktopNotifications, gt) {
 
     'use strict';
 
@@ -90,7 +91,7 @@ define('io.ox/core/notifications', [
 
             this.model.set('markedForRedraw', {});
 
-            self.$el.find('.no-news-message,.notification-area-header').remove();
+            self.$el.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();
             _(markedForRedraw).each(function (value, id) {
                 if (value) {
                     subviews[id].render(self.$el);
@@ -112,8 +113,34 @@ define('io.ox/core/notifications', [
                         )
                     );
             }
+            // add show desktopNotifications info
+            self.drawNotificationInfo();
 
             return self;
+        },
+        drawNotificationInfo: function () {
+            // only show if there was no decision yet
+            if (desktopNotifications.getPermissionStatus() === 'default') {
+                var self = this,
+                    textNode = $('<div>').text(gt('Would you like to enable desktop notifications?')),
+                    laterButton = $('<button class="later-button btn btn-danger">').text(gt('later')).on('click', function (e) {
+                        e.stopPropagation();
+                        cleanup();
+                    }),
+                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Enable / Disable')).on('click', function (e) {
+                        e.stopPropagation();
+                        desktopNotifications.requestPermission();
+                        cleanup();
+                    }),
+                    cleanup = function () {
+                        textNode.text(gt('You can manage desktop notifications at any time, by vitising your settings'));
+                        laterButton.remove();
+                        enableButton.remove();
+                        self.hideNotificationInfo = true;
+                    };
+
+                this.$el.prepend($('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, laterButton ));
+            }
         },
 
         //opens a Sidepopup using the given renderer using the provided data
@@ -264,6 +291,10 @@ define('io.ox/core/notifications', [
             }
 
             badgeview.$el.focus();
+            if (this.hideNotificationInfo) {
+                this.$el.find('.desktop-notification-info').remove();
+                this.hideNotificationInfo = false;
+            }
             this.model.set('status', 'closed');
             this.trigger('hide');
         },
@@ -313,6 +344,7 @@ define('io.ox/core/notifications', [
 
             //add initial no notifications message
             self.$el.prepend($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
+            self.drawNotificationInfo();
 
             // load and invoke plugins with delay
             setTimeout(function () {
