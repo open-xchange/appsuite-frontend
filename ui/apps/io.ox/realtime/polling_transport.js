@@ -601,6 +601,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
     };
 
     api.query = function (options) {
+        var def = $.Deferred();
         if (options.trace || traceAll) {
             delete options.trace;
             options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
@@ -612,7 +613,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             console.log('Transmitting query, so setting transmitting to true');
         }
 
-        return http.PUT({
+        http.PUT({
             module: 'rt',
             params: {
                 action: 'query',
@@ -621,7 +622,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             timeout: TIMEOUT,
             data: options,
             silent: true
-        }).pipe(function (resp) {
+        }).done(function (resp) {
             transmitting = false;
             if (api.debug) {
                 console.log('Query completed, setting transmitting to false');
@@ -632,7 +633,12 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             setTimeout(function () {
                 handleResponse({ stanzas: stanzas });
             }, 0);
-            return handleResponse(resp);
+            if (resp.error) {
+                handleError(resp.error);
+                def.reject(resp);
+            } else {
+                def.resolve(handleResponse(resp));
+            }
         }).fail(function (resp) {
             handleError(resp);
             // Send a dummy message to consume the sequence number
@@ -641,7 +647,10 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
                 seq: options.seq,
                 element: 'message'
             });
+            def.reject(resp);
         });
+
+        return def;
     };
 
     api.send = function (options) {
