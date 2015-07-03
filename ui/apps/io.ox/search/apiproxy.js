@@ -39,6 +39,20 @@ define('io.ox/search/apiproxy',[
         });
 
         POINT.extend({
+            id: 'contact-all-option',
+            index: 100,
+            customize: function (baton) {
+                baton.data = _.each(baton.data, function (facet) {
+                    if (['contacts', 'contact', 'participant', 'task_participants'].indexOf(facet.id) < 0) return;
+                    // use 'all' option als default (in contrast to 'from' or 'to')
+                    _.each(facet.values, function (value) {
+                        value.options.reverse();
+                    });
+                });
+            }
+        });
+
+        POINT.extend({
             id: 'folder',
             index: 350,
             customize: function (baton) {
