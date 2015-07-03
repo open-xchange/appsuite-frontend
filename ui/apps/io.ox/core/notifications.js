@@ -18,8 +18,9 @@ define('io.ox/core/notifications', [
     'io.ox/core/notifications/badgeview',
     'io.ox/core/yell',
     'io.ox/core/desktopNotifications',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, badgeview, yell, desktopNotifications, gt) {
+], function (ext, badgeview, yell, desktopNotifications, settings, gt) {
 
     'use strict';
 
@@ -129,7 +130,13 @@ define('io.ox/core/notifications', [
                     }),
                     enableButton = $('<button class="enable-button btn btn-success">').text(gt('Enable / Disable')).on('click', function (e) {
                         e.stopPropagation();
-                        desktopNotifications.requestPermission();
+                        desktopNotifications.requestPermission(function (result) {
+                            if (result === 'granted') {
+                                settings.set('showDesktopNotifications', true).save();
+                            } else if (result === 'denied') {
+                                settings.set('showDesktopNotifications', false).save();
+                            }
+                        });
                         cleanup();
                     }),
                     cleanup = function () {
