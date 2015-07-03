@@ -26,7 +26,7 @@ define('io.ox/core/boot/form', [
 
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt;
+        var sc = ox.serverConfig, gt = util.gt, bindLogin = true;
 
         util.debug('Show form ...');
 
@@ -84,6 +84,7 @@ define('io.ox/core/boot/form', [
                             'data-i18n': gt('Set password'),
                             placeholder: gt('Set password')
                         });
+                        bindLogin = false;
                         break;
                     //  if the guest user has to enter his credentials
                     case 'login':
@@ -186,7 +187,7 @@ define('io.ox/core/boot/form', [
             $('#background-loader').fadeOut(util.DURATION, function () {
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
-                $('#io-ox-login-form').on('submit', login);
+                if (bindLogin) $('#io-ox-login-form').on('submit', login);
                 $('#io-ox-login-username').prop('disabled', false);
                 // focus password or username
                 $(util.isGuest() ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
