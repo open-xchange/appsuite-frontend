@@ -807,6 +807,8 @@ define('io.ox/core/main', [
             id: 'help',
             index: 300,
             draw: function () {
+                if (_.device('smartphone')) return;
+
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
