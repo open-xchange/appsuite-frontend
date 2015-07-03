@@ -11,8 +11,9 @@
  */
 define('io.ox/presenter/views/sidebar/userbadgeview', [
     'io.ox/backbone/disposable',
-    'io.ox/contacts/api'
-], function (DisposableView, ContactsAPI) {
+    'io.ox/contacts/api',
+    'gettext!io.ox/presenter'
+], function (DisposableView, ContactsAPI, gt) {
 
     var userbadgeView = DisposableView.extend({
 
