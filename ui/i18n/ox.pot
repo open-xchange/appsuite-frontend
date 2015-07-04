@@ -65,7 +65,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:115
 #: module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:519
 msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
 msgstr ""
 
@@ -441,7 +440,7 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258
 #: apps/io.ox/contacts/main.js:732
-#: apps/io.ox/core/desktop.js:1624
+#: apps/io.ox/core/desktop.js:1629
 #: module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
@@ -452,7 +451,7 @@ msgstr ""
 #: apps/io.ox/core/folder/picker.js:97
 #: apps/io.ox/core/import/import.js:185
 #: apps/io.ox/core/main.js:514
-#: apps/io.ox/core/main.js:1395
+#: apps/io.ox/core/main.js:1397
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405
 #: apps/io.ox/core/print.js:113
@@ -762,15 +761,11 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:219
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:534
-#: module:io.ox/core
 msgid "Starts on"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js:241
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:536
-#: module:io.ox/core
 msgid "Ends on"
 msgstr ""
 
@@ -1347,7 +1342,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:104
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/core/main.js:871
+#: apps/io.ox/core/main.js:872
 #: module:io.ox/core
 #: apps/io.ox/help/center.js:103
 #: module:io.ox/help
@@ -3725,22 +3720,22 @@ msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/core/desktop.js:151
+#: apps/io.ox/core/desktop.js:156
 #: module:io.ox/core
 msgid "Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:284
+#: apps/io.ox/core/desktop.js:289
 #: module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:734
+#: apps/io.ox/core/desktop.js:739
 #: module:io.ox/core
 msgid "There are unsaved changes."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1046
+#: apps/io.ox/core/desktop.js:1051
 #: module:io.ox/core
 msgid "Application Toolbar"
 msgstr ""
@@ -3748,54 +3743,53 @@ msgstr ""
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1132
+#: apps/io.ox/core/desktop.js:1137
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1301
+#: apps/io.ox/core/desktop.js:1306
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1418
+#: apps/io.ox/core/desktop.js:1423
 #: module:io.ox/core
 msgid "Main window"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1481
+#: apps/io.ox/core/desktop.js:1486
 #: module:io.ox/core
 #: apps/io.ox/core/main.js:785
 #: apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:45
 #: module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:119
-#: apps/io.ox/search/autocomplete/extensions.js:171
-#: apps/io.ox/search/autocomplete/extensions.js:214
-#: apps/io.ox/search/main.js:199
+#: apps/io.ox/search/autocomplete/extensions.js:52
+#: apps/io.ox/search/main.js:198
 #: module:io.ox/search
-#: apps/io.ox/search/main.js:260
+#: apps/io.ox/search/main.js:259
 #: apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1519
+#: apps/io.ox/core/desktop.js:1524
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1520
+#: apps/io.ox/core/desktop.js:1525
 msgid "Start search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1532
+#: apps/io.ox/core/desktop.js:1537
 #: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1533
+#: apps/io.ox/core/desktop.js:1538
 msgid "Cancel search"
 msgstr ""
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1553
+#: apps/io.ox/core/desktop.js:1558
 #: module:io.ox/core
 msgid "Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1724
+#: apps/io.ox/core/desktop.js:1729
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
@@ -3842,7 +3836,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:377
 #: apps/io.ox/find/extensions-api.js:197
-#: apps/io.ox/search/facets/extensions.js:678
+#: apps/io.ox/search/facets/extensions.js:236
 msgid "More"
 msgstr ""
 
@@ -4400,7 +4394,7 @@ msgstr ""
 
 #: apps/io.ox/core/main.js:354
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:801
+#: apps/io.ox/core/main.js:800
 #: apps/io.ox/core/sub/settings/pane.js:163
 #: module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:164
@@ -4436,102 +4430,122 @@ msgstr ""
 msgid "close for %1$s"
 msgstr ""
 
-#: apps/io.ox/core/main.js:827
+#: apps/io.ox/core/main.js:828
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:965
+#: apps/io.ox/core/main.js:966
 #: apps/io.ox/settings/main.js:130
 #: apps/io.ox/settings/main.js:451
 msgid "Settings"
 msgstr ""
 
-#: apps/io.ox/core/main.js:848
+#: apps/io.ox/core/main.js:849
 #: module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
 #: apps/plugins/portal/userSettings/register.js:248
 msgid "My contact data"
 msgstr ""
 
-#: apps/io.ox/core/main.js:898
+#: apps/io.ox/core/main.js:899
 #: module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:901
+#: apps/io.ox/core/main.js:902
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:906
 msgid "Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:923
+#: apps/io.ox/core/main.js:924
 #: module:io.ox/core
 msgid "About"
 msgstr ""
 
-#: apps/io.ox/core/main.js:944
+#: apps/io.ox/core/main.js:945
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:983
-#: apps/io.ox/core/main.js:985
-#: apps/io.ox/core/main.js:1121
+#: apps/io.ox/core/main.js:984
+#: apps/io.ox/core/main.js:986
+#: apps/io.ox/core/main.js:1123
 msgid "Sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1011
+#: apps/io.ox/core/main.js:1012
 #: module:io.ox/core
 msgid "Your Applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1118
+#: apps/io.ox/core/main.js:1120
 #: module:io.ox/core
 msgid "Signed in as:"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1140
+#: apps/io.ox/core/main.js:1142
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1141
+#: apps/io.ox/core/main.js:1143
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1388
+#: apps/io.ox/core/main.js:1390
 #: module:io.ox/core
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1390
+#: apps/io.ox/core/main.js:1392
 #: module:io.ox/core
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1396
+#: apps/io.ox/core/main.js:1398
 #: module:io.ox/core
 msgid "Continue"
 msgstr ""
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1632
+#: apps/io.ox/core/main.js:1634
 #: module:io.ox/core
 msgid "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files and folders\" to access this folder again."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:101
+#: apps/io.ox/core/notifications.js:103
 #: module:io.ox/core
-#: apps/io.ox/core/notifications.js:315
+#: apps/io.ox/core/notifications.js:353
 msgid "No notifications"
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:106
+#: apps/io.ox/core/notifications.js:108
 #: module:io.ox/core
 msgid "Notifications"
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:110
+#: apps/io.ox/core/notifications.js:112
 #: module:io.ox/core
 msgid "Hide all notifications"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:126
+#: module:io.ox/core
+msgid "Would you like to enable desktop notifications?"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:127
+#: module:io.ox/core
+msgid "later"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:131
+#: module:io.ox/core
+msgid "Enable / Disable"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:143
+#: module:io.ox/core
+msgid "You can manage desktop notifications at any time, by vitising your settings"
 msgstr ""
 
 #. %1$d number of notifications
@@ -6662,8 +6676,6 @@ msgstr ""
 
 #: apps/io.ox/files/util.js:257
 #: module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:351
-#: module:io.ox/core
 msgid "Adjust"
 msgstr ""
 
@@ -6688,8 +6700,6 @@ msgstr ""
 #: apps/io.ox/find/extensions-api.js:343
 #: module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
-#: apps/io.ox/search/facets/extensions.js:280
-#: apps/io.ox/search/facets/extensions.js:368
 msgid "All"
 msgstr ""
 
@@ -8742,63 +8752,11 @@ msgstr ""
 msgid "Click to open."
 msgstr ""
 
-#: apps/io.ox/search/apiproxy.js:67
+#: apps/io.ox/search/facets/extensions.js:146
 #: module:io.ox/core
-msgid "date range"
-msgstr ""
-
-#: apps/io.ox/search/autocomplete/extensions.js:198
-#: module:io.ox/core
-msgid "Clear field"
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:58
-#: module:io.ox/core
-msgid "Hide advanced filters"
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:59
-#: module:io.ox/core
-msgid "Show advanced filters"
-msgstr ""
-
-#. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183
-#: module:io.ox/core
-msgid "Advanced facets block was closed."
-msgstr ""
-
-#. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183
-#: module:io.ox/core
-msgid "Advanced facets block was opened."
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:319
-#: module:io.ox/core
-msgid "Remove facet"
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:327
-#: module:io.ox/core
-msgid "Remove"
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:346
-#: module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:583
-msgid "Toggle options"
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:588
-#: module:io.ox/core
-msgid "Change folder"
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js:600
-#: module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:603
-#: apps/io.ox/search/facets/extensions.js:610
+#: apps/io.ox/search/facets/extensions.js:158
+#: apps/io.ox/search/facets/extensions.js:161
+#: apps/io.ox/search/facets/extensions.js:168
 msgid "All folders"
 msgstr ""
 
@@ -8812,7 +8770,17 @@ msgstr ""
 msgid "The selected folder is virtual and can not be searched. Please select another folder."
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:184
+#: apps/io.ox/search/view-template.js:62
+#: module:io.ox/core
+msgid "Clear field"
+msgstr ""
+
+#: apps/io.ox/search/view-template.js:144
+#: module:io.ox/core
+msgid "in"
+msgstr ""
+
+#: apps/io.ox/search/view-template.js:186
 #: module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""

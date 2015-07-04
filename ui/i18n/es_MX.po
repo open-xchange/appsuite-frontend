@@ -208,8 +208,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1132 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1301
+#: apps/io.ox/core/desktop.js:1137 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1306
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -543,7 +543,7 @@ msgstr ""
 msgid "A severe error occurred!"
 msgstr "¡Se ha producido un error grave!"
 
-#: apps/io.ox/core/main.js:923 module:io.ox/core
+#: apps/io.ox/core/main.js:924 module:io.ox/core
 msgid "About"
 msgstr "Acerca de"
 
@@ -889,7 +889,6 @@ msgid "Address Other"
 msgstr "Otra dirección"
 
 #: apps/io.ox/files/util.js:257 module:io.ox/files
-#: apps/io.ox/search/facets/extensions.js:351 module:io.ox/core
 msgid "Adjust"
 msgstr "Ajustar"
 
@@ -901,16 +900,6 @@ msgstr "Ajustar fecha de comienzo"
 msgid "Administrator"
 msgstr "Administrador"
 
-#. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
-msgid "Advanced facets block was closed."
-msgstr "El bloque de filtros de búsqueda avanzados se cerró."
-
-#. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
-#: apps/io.ox/search/facets/extensions.js:183 module:io.ox/core
-msgid "Advanced facets block was opened."
-msgstr "El bloque de filtros de búsqueda avanzados se abrió."
-
 #: apps/io.ox/files/share/view.js:172 module:io.ox/files
 #, fuzzy
 msgid "Advanced options"
@@ -919,8 +908,6 @@ msgstr "Ajustes avanzados"
 #: apps/io.ox/files/view-options.js:111 module:io.ox/files
 #: apps/io.ox/find/extensions-api.js:343 module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js:152
-#: apps/io.ox/search/facets/extensions.js:280
-#: apps/io.ox/search/facets/extensions.js:368
 msgid "All"
 msgstr "Todos"
 
@@ -951,9 +938,10 @@ msgstr "Todo el día"
 msgid "All files"
 msgstr "Todas las carpetas"
 
-#: apps/io.ox/search/facets/extensions.js:600 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:603
-#: apps/io.ox/search/facets/extensions.js:610
+#: apps/io.ox/search/facets/extensions.js:146 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:158
+#: apps/io.ox/search/facets/extensions.js:161
+#: apps/io.ox/search/facets/extensions.js:168
 msgid "All folders"
 msgstr "Todas las carpetas"
 
@@ -1019,7 +1007,7 @@ msgstr "Cualquier destinatario"
 msgid "Append vCard"
 msgstr "Añadir vCard"
 
-#: apps/io.ox/core/desktop.js:1046 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1051 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Barra de herramientas de la aplicación"
 
@@ -1409,7 +1397,7 @@ msgstr "Calendario"
 #: apps/io.ox/contacts/actions/delete.js:38 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:203
 #: apps/io.ox/contacts/edit/main.js:258 apps/io.ox/contacts/main.js:732
-#: apps/io.ox/core/desktop.js:1624 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1629 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:109
 #: apps/io.ox/core/folder/actions/archive.js:44
@@ -1417,7 +1405,7 @@ msgstr "Calendario"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:97 apps/io.ox/core/import/import.js:185
-#: apps/io.ox/core/main.js:514 apps/io.ox/core/main.js:1395
+#: apps/io.ox/core/main.js:514 apps/io.ox/core/main.js:1397
 #: apps/io.ox/core/permissions/permissions.js:372
 #: apps/io.ox/core/permissions/permissions.js:405 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:57
@@ -1470,8 +1458,8 @@ msgstr "Calendario"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: apps/io.ox/core/desktop.js:1532 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1533
+#: apps/io.ox/core/desktop.js:1537 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1538
 msgid "Cancel search"
 msgstr "Cancelar búsqueda"
 
@@ -1531,10 +1519,6 @@ msgstr "Cambiar estado de confirmación"
 #: apps/io.ox/tasks/toolbar.js:62 module:io.ox/mail
 msgid "Change due date"
 msgstr "Cambiar fecha de vencimiento"
-
-#: apps/io.ox/search/facets/extensions.js:588 module:io.ox/core
-msgid "Change folder"
-msgstr "Cambiar carpeta"
 
 #: apps/io.ox/core/settings/pane.js:115 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:103
@@ -1624,7 +1608,7 @@ msgstr "Limpiar"
 msgid "Clear"
 msgstr "Borrar"
 
-#: apps/io.ox/search/autocomplete/extensions.js:198 module:io.ox/core
+#: apps/io.ox/search/view-template.js:62 module:io.ox/core
 msgid "Clear field"
 msgstr "Borrar campo"
 
@@ -1882,7 +1866,7 @@ msgstr "Contiene"
 msgid "Content"
 msgstr "Contenido"
 
-#: apps/io.ox/core/main.js:1396 module:io.ox/core
+#: apps/io.ox/core/main.js:1398 module:io.ox/core
 msgid "Continue"
 msgstr "Continuar"
 
@@ -1933,7 +1917,7 @@ msgstr "Los costes deben estar entre -%1$d y %1$d."
 msgid "Costs must only have two decimal places."
 msgstr "Los costes han de tener sólo 2 decimales."
 
-#: apps/io.ox/core/desktop.js:284 module:io.ox/core
+#: apps/io.ox/core/desktop.js:289 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "No se pudo obtener una carpeta predeterminada para esta aplicación."
 
@@ -2992,6 +2976,12 @@ msgstr "Vaciando carpeta... Esto puede tardar unos segundos."
 msgid "Enable"
 msgstr "Activar"
 
+#: apps/io.ox/core/notifications.js:131 module:io.ox/core
+#, fuzzy
+#| msgid "Enable visual effects"
+msgid "Enable / Disable"
+msgstr "Activar efectos visuales"
+
 #: apps/io.ox/mail/autoforward/settings/model.js:96 module:io.ox/mail
 msgid "Enabled"
 msgstr "Activado"
@@ -3015,7 +3005,6 @@ msgid "End of working time"
 msgstr "Fin de jornada laboral"
 
 #: apps/io.ox/calendar/edit/extensions.js:241 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:536 module:io.ox/core
 msgid "Ends on"
 msgstr "Termina el"
 
@@ -3141,7 +3130,7 @@ msgstr "Fechas exactas"
 msgid "Executive"
 msgstr "Ejecutivo"
 
-#: apps/io.ox/core/main.js:898 module:io.ox/core
+#: apps/io.ox/core/main.js:899 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Salir del modo de pantalla completa"
 
@@ -3219,7 +3208,7 @@ msgstr "Facebook ha informado de un error:"
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr "Falló la adición. Puede que el adjunto VCard no sea válido."
 
-#: apps/io.ox/core/desktop.js:151 module:io.ox/core
+#: apps/io.ox/core/desktop.js:156 module:io.ox/core
 msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
@@ -3253,7 +3242,7 @@ msgstr "Error al guardar la lista de distribución."
 msgid "Failed to sign in"
 msgstr "Falló el inicio de sesión"
 
-#: apps/io.ox/core/desktop.js:1724 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1729 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3486,7 +3475,7 @@ msgid "Folder view"
 msgstr "Vista de carpeta"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1632 module:io.ox/core
+#: apps/io.ox/core/main.js:1634 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3588,7 +3577,7 @@ msgstr "Trabajador independiente"
 msgid "From"
 msgstr "De"
 
-#: apps/io.ox/core/main.js:901 module:io.ox/core apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:902 module:io.ox/core apps/io.ox/core/main.js:906
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
@@ -3705,7 +3694,7 @@ msgid "Hello World"
 msgstr "Hola Mundo"
 
 #: apps/io.ox/calendar/freebusy/templates.js:104
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:871
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:872
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Ayuda"
@@ -3729,10 +3718,6 @@ msgstr "Imprimir tareas"
 msgid "Hide"
 msgstr "Ocultar"
 
-#: apps/io.ox/search/facets/extensions.js:58 module:io.ox/core
-msgid "Hide advanced filters"
-msgstr "Ocultar filtros avanzados"
-
 #: apps/plugins/notifications/calendar/register.js:255
 #: module:plugins/notifications
 msgid "Hide all appointment invitations."
@@ -3743,7 +3728,7 @@ msgstr "Ocultar todas las invitaciones a citas."
 msgid "Hide all appointment reminders."
 msgstr "Ocultar todos los recordatorios de citas."
 
-#: apps/io.ox/core/notifications.js:110 module:io.ox/core
+#: apps/io.ox/core/notifications.js:112 module:io.ox/core
 #, fuzzy
 msgid "Hide all notifications"
 msgstr "Ocultar todas las invitaciones a tareas."
@@ -4467,7 +4452,7 @@ msgstr "Correos por hora (%)"
 msgid "Mails per week-day (%)"
 msgstr "Correos por día de la semana (%)"
 
-#: apps/io.ox/core/desktop.js:1418 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1423 module:io.ox/core
 msgid "Main window"
 msgstr "Ventana principal"
 
@@ -4670,11 +4655,11 @@ msgstr "Meses"
 #: apps/io.ox/core/extPatterns/links.js:364 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:377
 #: apps/io.ox/find/extensions-api.js:197
-#: apps/io.ox/search/facets/extensions.js:678
+#: apps/io.ox/search/facets/extensions.js:236
 msgid "More"
 msgstr "Más"
 
-#: apps/io.ox/search/view-template.js:184 module:io.ox/core
+#: apps/io.ox/search/view-template.js:186 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Se encontraron más elementos que los %1$s que se muestran actualmente"
 
@@ -4729,7 +4714,7 @@ msgstr "Añadir a libreta de direcciones"
 msgid "My calendars"
 msgstr "Nuevo calendario"
 
-#: apps/io.ox/core/main.js:848 module:io.ox/core
+#: apps/io.ox/core/main.js:849 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:87
 #: apps/plugins/portal/userSettings/register.js:248
 msgid "My contact data"
@@ -4985,8 +4970,8 @@ msgstr "No hay correos en su bandeja de entrada"
 msgid "No message selected"
 msgstr "No hay mensajes seleccionados"
 
-#: apps/io.ox/core/notifications.js:101 module:io.ox/core
-#: apps/io.ox/core/notifications.js:315
+#: apps/io.ox/core/notifications.js:103 module:io.ox/core
+#: apps/io.ox/core/notifications.js:353
 msgid "No notifications"
 msgstr "No hay notificaciones"
 
@@ -5103,7 +5088,7 @@ msgstr ""
 msgid "Nothing in your newsfeed."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:106 module:io.ox/core
+#: apps/io.ox/core/notifications.js:108 module:io.ox/core
 msgid "Notifications"
 msgstr "Notificaciones"
 
@@ -5699,7 +5684,7 @@ msgstr ""
 "Por favor, seleccione cuál de los siguientes datos se pueden usar para crear "
 "su cuenta de %s:"
 
-#: apps/io.ox/core/main.js:1141 module:io.ox/core
+#: apps/io.ox/core/main.js:1143 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Por favor, inicie de nuevo la sesión para continuar"
@@ -6079,7 +6064,7 @@ msgstr "Redirigir a"
 msgid "Reduce to widget summary"
 msgstr "Reducir a resumen de widgets"
 
-#: apps/io.ox/core/main.js:354 module:io.ox/core apps/io.ox/core/main.js:801
+#: apps/io.ox/core/main.js:354 module:io.ox/core apps/io.ox/core/main.js:800
 #: apps/io.ox/core/sub/settings/pane.js:163 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:164
 msgid "Refresh"
@@ -6160,10 +6145,6 @@ msgstr "Fecha de recordatorio %1$s"
 msgid "Reminder has been created"
 msgstr "El recordatorio se ha creado"
 
-#: apps/io.ox/search/facets/extensions.js:327 module:io.ox/core
-msgid "Remove"
-msgstr "Eliminar"
-
 #. %1$s is the user name of the group member
 #: apps/plugins/administration/groups/settings/members.js:83 module:io.ox/core
 msgid "Remove %1$s"
@@ -6185,10 +6166,6 @@ msgstr "Eliminar contacto"
 #: apps/io.ox/mail/accounts/view-form.js:471 module:io.ox/settings
 msgid "Remove copy from server after retrieving a message"
 msgstr "Borrar copia del servidor tras recuperar un mensaje"
-
-#: apps/io.ox/search/facets/extensions.js:319 module:io.ox/core
-msgid "Remove facet"
-msgstr "Borrar filtro de búsqueda"
 
 #: apps/io.ox/core/folder/favorites.js:141 module:io.ox/core
 msgid "Remove from favorites"
@@ -6270,7 +6247,7 @@ msgstr "Nombre del recurso"
 msgid "Resources"
 msgstr "Recursos"
 
-#: apps/io.ox/core/main.js:1388 module:io.ox/core
+#: apps/io.ox/core/main.js:1390 module:io.ox/core
 msgid "Restore applications"
 msgstr "Restaurar las aplicaciones"
 
@@ -6428,14 +6405,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planificación"
 
-#: apps/io.ox/core/desktop.js:1481 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1486 module:io.ox/core
 #: apps/io.ox/core/main.js:785 apps/io.ox/find/extensions-facets.js:30
 #: apps/io.ox/find/main.js:45 module:io.ox/find
 #: apps/io.ox/find/view-tokenfield.js:119
-#: apps/io.ox/search/autocomplete/extensions.js:171
-#: apps/io.ox/search/autocomplete/extensions.js:214
-#: apps/io.ox/search/main.js:199 module:io.ox/search
-#: apps/io.ox/search/main.js:260 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/autocomplete/extensions.js:52
+#: apps/io.ox/search/main.js:198 module:io.ox/search
+#: apps/io.ox/search/main.js:259 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Buscar"
@@ -6451,7 +6427,7 @@ msgid "Search results"
 msgstr "Buscar aquí"
 
 #. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js:1553 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1558 module:io.ox/core
 msgid ""
 "Search results page lists all active facets to allow them to be easly "
 "adjustable/removable. Below theses common facets additonal advanced facets "
@@ -6619,7 +6595,7 @@ msgstr "Versión del servidor"
 msgid "Set color"
 msgstr "Asignar color"
 
-#: apps/io.ox/core/main.js:827 module:io.ox/core apps/io.ox/core/main.js:965
+#: apps/io.ox/core/main.js:828 module:io.ox/core apps/io.ox/core/main.js:966
 #: apps/io.ox/settings/main.js:130 apps/io.ox/settings/main.js:451
 msgid "Settings"
 msgstr "Configuración"
@@ -6690,10 +6666,6 @@ msgstr "Cesta de la compra"
 #: apps/io.ox/core/folder/contextmenu.js:521 module:io.ox/core
 msgid "Show"
 msgstr "Mostrar"
-
-#: apps/io.ox/search/facets/extensions.js:59 module:io.ox/core
-msgid "Show advanced filters"
-msgstr "Mostrar filtros avanzados"
 
 #: apps/io.ox/contacts/edit/view-form.js:261 module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js:57
@@ -6818,8 +6790,8 @@ msgstr "Mostrado como"
 msgid "Sign in"
 msgstr "Conectarse"
 
-#: apps/io.ox/core/main.js:944 module:io.ox/core apps/io.ox/core/main.js:983
-#: apps/io.ox/core/main.js:985 apps/io.ox/core/main.js:1121
+#: apps/io.ox/core/main.js:945 module:io.ox/core apps/io.ox/core/main.js:984
+#: apps/io.ox/core/main.js:986 apps/io.ox/core/main.js:1123
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
@@ -6846,7 +6818,7 @@ msgstr "Firmas"
 msgid "Signed in as %1$s"
 msgstr "Conectado como %1$s"
 
-#: apps/io.ox/core/main.js:1118 module:io.ox/core
+#: apps/io.ox/core/main.js:1120 module:io.ox/core
 #, fuzzy
 msgid "Signed in as:"
 msgstr "Conectado como %1$s"
@@ -6990,8 +6962,8 @@ msgstr "Fecha de comienzo"
 msgid "Start of working time"
 msgstr "Comienzo de jornada laboral"
 
-#: apps/io.ox/core/desktop.js:1519 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1520
+#: apps/io.ox/core/desktop.js:1524 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1525
 msgid "Start search"
 msgstr "Comenzar búsqueda"
 
@@ -7001,7 +6973,6 @@ msgid "Start typing to search for user names"
 msgstr "Comience a escribir para buscar nombres de usuario"
 
 #: apps/io.ox/calendar/edit/extensions.js:219 module:io.ox/calendar/edit/main
-#: apps/io.ox/search/facets/extensions.js:534 module:io.ox/core
 msgid "Starts on"
 msgstr "Comienza el"
 
@@ -7447,7 +7418,7 @@ msgstr "La carpeta se ha limpiado."
 msgid "The folder has been emptied."
 msgstr "La carpeta se ha vaciado."
 
-#: apps/io.ox/core/main.js:1390 module:io.ox/core
+#: apps/io.ox/core/main.js:1392 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7610,7 +7581,7 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:734 module:io.ox/core
+#: apps/io.ox/core/desktop.js:739 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Hay cambios sin guardar."
 
@@ -7913,11 +7884,6 @@ msgstr "Hoy"
 msgid "Toggle checkboxes"
 msgstr "Cambiar casillas de verificación"
 
-#: apps/io.ox/search/facets/extensions.js:346 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:583
-msgid "Toggle options"
-msgstr "Cambiar opciones"
-
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
@@ -8177,7 +8143,6 @@ msgstr "Usar conexión SSL"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:115 module:io.ox/core
 #: apps/io.ox/calendar/week/view.js:115 module:io.ox/calendar
-#: apps/io.ox/search/facets/extensions.js:519
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -8411,6 +8376,11 @@ msgstr "Semana laboral"
 msgid "Workweek View"
 msgstr "Vista de semana laboral"
 
+#: apps/io.ox/core/notifications.js:126 module:io.ox/core
+#, fuzzy
+msgid "Would you like to enable desktop notifications?"
+msgstr "No hay notificaciones"
+
 #: apps/plugins/halo/xing/register.js:30 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:44
 #: apps/plugins/portal/xing/register.js:47 apps/plugins/xing/main.js:26
@@ -8539,6 +8509,11 @@ msgstr ""
 #: apps/io.ox/mail/settings/signatures/register.js:258 module:io.ox/mail
 msgid ""
 "You can import existing signatures from the previous product generation."
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:143 module:io.ox/core
+msgid ""
+"You can manage desktop notifications at any time, by vitising your settings"
 msgstr ""
 
 #: apps/io.ox/editor/main.js:166 module:io.ox/editor
@@ -8723,7 +8698,7 @@ msgstr "Ocultar todos los recordatorios de tareas."
 msgid "Your %s newsfeed"
 msgstr "Su fuente de noticias %s"
 
-#: apps/io.ox/core/main.js:1011 module:io.ox/core
+#: apps/io.ox/core/main.js:1012 module:io.ox/core
 msgid "Your Applications"
 msgstr "Sus aplicaciones"
 
@@ -8831,7 +8806,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "La foto seleccionada se mostrará después de ser guardada"
 
-#: apps/io.ox/core/main.js:1140 module:io.ox/core
+#: apps/io.ox/core/main.js:1142 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "La sesión ha expirado"
@@ -8949,10 +8924,6 @@ msgstr "Azul oscuro"
 #, fuzzy
 msgid "dark green"
 msgstr "Rojo oscuro"
-
-#: apps/io.ox/search/apiproxy.js:67 module:io.ox/core
-msgid "date range"
-msgstr "intervalo de fechas"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:642
 #: module:io.ox/settings/settings
@@ -9144,6 +9115,10 @@ msgstr "Participantes"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/search/view-template.js:144 module:io.ox/core
+msgid "in"
+msgstr "en"
+
 #: apps/plugins/notifications/calendar/register.js:149
 #: module:plugins/notifications
 msgctxt "in"
@@ -9189,6 +9164,12 @@ msgstr "último"
 #: apps/io.ox/tasks/util.js:24 module:io.ox/tasks
 msgid "late in the evening"
 msgstr "de madrugada"
+
+#: apps/io.ox/core/notifications.js:127 module:io.ox/core
+#, fuzzy
+#| msgid "Updater"
+msgid "later"
+msgstr "Actualizador"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 #, fuzzy
@@ -10218,6 +10199,12 @@ msgstr "yyyy"
 
 #~ msgid "Advanced Facets"
 #~ msgstr "Filtros de búsqueda avanzados"
+
+#~ msgid "Advanced facets block was closed."
+#~ msgstr "El bloque de filtros de búsqueda avanzados se cerró."
+
+#~ msgid "Advanced facets block was opened."
+#~ msgstr "El bloque de filtros de búsqueda avanzados se abrió."
 
 #~ msgid "Afghanistan"
 #~ msgstr "Afganistán"
@@ -11894,6 +11881,9 @@ msgstr "yyyy"
 #~ msgid "Change exceptions: %1$s"
 #~ msgstr "Excepciones de modificación: %1$s"
 
+#~ msgid "Change folder"
+#~ msgstr "Cambiar carpeta"
+
 #~ msgid "Change not accepted for: %1$s"
 #~ msgstr "Cambios no aceptados para: %1$s"
 
@@ -12785,9 +12775,6 @@ msgstr "yyyy"
 #~ msgid "Enable start page hovers"
 #~ msgstr "Activar elementos emergentes de la página principal"
 
-#~ msgid "Enable visual effects"
-#~ msgstr "Activar efectos visuales"
-
 #~ msgid "Enabled for all mail folders"
 #~ msgstr "Activado para todas las carpetas de correo"
 
@@ -13499,6 +13486,9 @@ msgstr "yyyy"
 
 #~ msgid "Hide QR code"
 #~ msgstr "Ocultar código QR"
+
+#~ msgid "Hide advanced filters"
+#~ msgstr "Ocultar filtros avanzados"
 
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Ocultar todas las notificaciones de nuevos correos."
@@ -15383,8 +15373,14 @@ msgstr "yyyy"
 #~ msgid "Reminder:"
 #~ msgstr "Recordatorio:"
 
+#~ msgid "Remove"
+#~ msgstr "Eliminar"
+
 #~ msgid "Remove %1$s from the appointment."
 #~ msgstr "Elimine a %1$s de la cita."
+
+#~ msgid "Remove facet"
+#~ msgstr "Borrar filtro de búsqueda"
 
 #~ msgid "Remove from recipient list"
 #~ msgstr "Borrar de la lista de destinatarios"
@@ -15793,6 +15789,9 @@ msgstr "yyyy"
 
 #~ msgid "Show QR code"
 #~ msgstr "Mostrar código QR"
+
+#~ msgid "Show advanced filters"
+#~ msgstr "Mostrar filtros avanzados"
 
 #~ msgid "Show all %1$d messages in inbox"
 #~ msgstr "Mostrar todos los mensajes %1$d en la bandeja de entrada"
@@ -17341,6 +17340,9 @@ msgstr "yyyy"
 #~ msgid "Toggle folder"
 #~ msgstr "Cambiar carpeta"
 
+#~ msgid "Toggle options"
+#~ msgstr "Cambiar opciones"
+
 #~ msgid "Toggle search"
 #~ msgstr "Cambiar búsqueda"
 
@@ -18273,6 +18275,9 @@ msgstr "yyyy"
 #~ msgid "d.MM.yy"
 #~ msgstr "d.MM.aa"
 
+#~ msgid "date range"
+#~ msgstr "intervalo de fechas"
+
 #~ msgid "day every"
 #~ msgstr "día cada"
 
@@ -18326,9 +18331,6 @@ msgstr "yyyy"
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
-
-#~ msgid "in"
-#~ msgstr "en"
 
 #~ msgid "in blind copy"
 #~ msgstr "en copia oculta"
