@@ -1021,7 +1021,8 @@ define('io.ox/mail/main', [
             // they already see emails in full screen
             if (_.device('smartphone')) return;
             app.listView.on('selection:doubleclick', function (list) {
-                ox.launch('io.ox/mail/detail/main', { cid: list[0] });
+                if (app.isThreaded()) list = _(api.threads.get(list[0])).pluck('cid');
+                ox.launch('io.ox/mail/detail/main', { cid: _(list).first() });
             });
         },
 
