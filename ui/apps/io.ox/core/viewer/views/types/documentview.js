@@ -501,9 +501,6 @@ define('io.ox/core/viewer/views/types/documentview', [
                 fitWidthZoomFactor = (slideWidth - offset) / originalPageSize.width * 100,
                 fitHeightZoomFactor = (slideHeight - offset) / originalPageSize.height * 100,
                 modeZoomFactor = 100;
-            if (slideWidth >= originalPageSize.width && slideHeight >= originalPageSize.height) {
-                return modeZoomFactor;
-            }
             switch (mode) {
                 case 'fitwidth':
                     modeZoomFactor = fitWidthZoomFactor;
