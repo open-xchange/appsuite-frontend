@@ -335,7 +335,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return;
             }
             var documentContainer = this.documentContainer,
-                convertParams = this.getConvertParams(this.model.get('source')),
+                convertParams = Util.getConvertParams(this.model),
                 documentUrl = Util.getConverterUrl(convertParams);
 
             /**
@@ -607,48 +607,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         getMinZoomFactor: function () {
             return _.first(this.ZOOM_FACTORS);
-        },
-
-        /**
-         *  Build necessary params for the document conversion to PDF.
-         *  Also adds proprietary properties of Mail and PIM attachment objects.
-         *
-         *  @param {String} source
-         *   the source of the file model.
-         */
-        getConvertParams: function (source) {
-            var originalModel = this.model.get('origData'),
-                defaultParams = {
-                    action: 'getdocument',
-                    filename: encodeURIComponent(this.model.get('filename')),
-                    id: encodeURIComponent(this.model.get('id')),
-                    folder_id: encodeURIComponent(this.model.get('folder_id')),
-                    documentformat: 'pdf',
-                    priority: 'instant',
-                    mimetype: encodeURIComponent(this.model.get('file_mimetype')),
-                    nocache: _.uniqueId() // needed to trick the browser
-                },
-                paramExtension;
-            switch (source) {
-                case 'mail':
-                    paramExtension = {
-                        id: originalModel.mail.id,
-                        source: 'mail',
-                        attached: this.model.get('id')
-                    };
-                    break;
-                case 'pim':
-                    var moduleId = this.model.get('module');
-                    paramExtension = {
-                        source: this.MODULE_SOURCE_MAP[moduleId],
-                        attached: originalModel.attached,
-                        module: moduleId
-                    };
-                    break;
-                default:
-                    return defaultParams;
-            }
-            return _.extend(defaultParams, paramExtension);
         },
 
         /**
