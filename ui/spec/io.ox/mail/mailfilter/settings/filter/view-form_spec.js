@@ -57,7 +57,7 @@ define([
         }},
         model;
 
-    describe.only('Mailfilter detailview', function () {
+    describe('Mailfilter detailview', function () {
 
         var $container = $('<div id="testNode">'),
             addButton,
