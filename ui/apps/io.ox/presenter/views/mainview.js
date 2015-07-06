@@ -12,10 +12,14 @@
  */
 define('io.ox/presenter/views/mainview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/notifications',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
     'io.ox/presenter/views/presentationview',
     'io.ox/presenter/views/sidebarview',
-    'io.ox/presenter/views/toolbarview'
-], function (DisposableView, PresentationView, SidebarView, ToolbarView) {
+    'io.ox/presenter/views/toolbarview',
+    'gettext!io.ox/presenter'
+], function (DisposableView, Notifications, Ext, ActionsPattern, PresentationView, SidebarView, ToolbarView, gt) {
 
     'use strict';
 
@@ -113,9 +117,11 @@ define('io.ox/presenter/views/mainview', [
 
                 if (!_.isEmpty(currentPresenterId) && _.isEmpty(previousPresenterId)) {
                     this.presenterEvents.trigger('presenter:presentation:start', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
+                    this.notifyPresentationStart();
 
                 } else if (_.isEmpty(currentPresenterId) && !_.isEmpty(previousPresenterId)) {
                     this.presenterEvents.trigger('presenter:presentation:end', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
+                    this.notifyPresentationEnd();
 
                 } else {
                     //
@@ -219,6 +225,127 @@ define('io.ox/presenter/views/mainview', [
             this.presentationView.$el.css({ width: window.innerWidth - rightOffset });
 
             this.presenterEvents.trigger('presenter:resize');
+        },
+
+        /**
+         * Shows an alert banner.
+         *
+         * @param {Object} yellOptions
+         *  The settings for the alert banner:
+         *  @param {String} [yellOptions.type='info']
+         *      The type of the alert banner. Supported types are 'success',
+         *      'info', 'warning', and 'error'.
+         *  @param {String} [yellOptions.headline]
+         *      An optional headline shown above the message text.
+         *  @param {String} yellOptions.message
+         *      The message text shown in the alert banner.
+         *  @param {Number} [yellOptions.duration]
+         *      The time to show the alert banner, in milliseconds; or -1 to
+         *      show a permanent alert.
+         *  @param {Object} [yellOptions.action]
+         *      An arbitrary action button that will be shown below the
+         *      message text, with the following properties:
+         *      @param {String} yellOptions.action.label
+         *          The display text for the button.
+         *      @param {String} yellOptions.action.ref
+         *          The action reference id.
+         *      @param {Baton} [yellOptions.action.baton=null]
+         *          The baton to hand over to the action.
+         */
+        showNotification: function (yellOptions) {
+            var // the notification DOM element
+                yellNode = null;
+
+            function onNotificationAppear () {
+                // add action button to the message
+                var // the button label
+                    label = yellOptions.action.label,
+                    // the action ref the button invokes
+                    ref = yellOptions.action.ref,
+                    // the baton to hand over to the action
+                    baton = yellOptions.action.baton || null,
+                    // the message node as target for additional contents
+                    messageNode = yellNode.find('.message'),
+                    // the button node to add to the message
+                    button = $('<a role="button" class="presenter-notification-btn" tabindex="1">').attr('title', label).text(label);
+
+                button.on('click', function () {
+                    ActionsPattern.invoke(ref, null, baton);
+                    Notifications.yell.close();
+                });
+
+                messageNode.append($('<div>').append(button));
+            }
+
+            // add default options
+            yellOptions = _.extend({ type: 'info' }, yellOptions);
+            // create and show the notification DOM node
+            yellNode = Notifications.yell(yellOptions);
+            // register event handlers
+
+            if (_.isObject(yellOptions.action)) {
+                yellNode.one('notification:appear', onNotificationAppear);
+            }
+        },
+
+        /**
+         * Shows a notification for the participants when the presenter starts the presentation.
+         */
+        notifyPresentationStart: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (rtModel.isPresenter(userId) || rtModel.isJoined(userId)) { return; }
+
+            var baton = Ext.Baton({ context: this, model: this.model, data: this.model.toJSON() });
+            var yellOptions = {
+                //#. headline of a presentation start alert
+                headline: gt('Presentation start'),
+                //#. message text of of a presentation start alert
+                //#. %1$d is the presenter name
+                message: gt('%1$s has started the presentation.', this.app.rtModel.get('presenterName')),
+                duration: -1,
+                focus: true,
+                action: {
+                    label: gt('Join Presentation'),
+                    ref: 'io.ox/presenter/actions/toolbar/join',
+                    baton: baton
+                }
+            };
+
+            this.showNotification(yellOptions);
+        },
+
+        /**
+         * Shows a notification to all participants when the presenter ends the presentation.
+         */
+        notifyPresentationEnd: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid(),
+                presenterId,
+                presenterName;
+
+            if (_.isEmpty(rtModel.get('presenterId'))) {
+                // the presenter has already been reset, look for previous data
+                presenterId = rtModel.previous('presenterId');
+                presenterName = rtModel.previous('presenterName');
+
+            } else {
+                // use current presenter
+                presenterId = rtModel.get('presenterId');
+                presenterName = rtModel.get('presenterName');
+            }
+
+            if (userId === presenterId) { return; }
+
+            this.showNotification({
+                //#. headline of a presentation end alert
+                headline: gt('Presentation end'),
+                //#. message text of a presentation end alert
+                //#. %1$d is the presenter name
+                message: gt('%1$s has ended the presentation.', presenterName),
+                duration: 6000
+            });
         },
 
         /**
