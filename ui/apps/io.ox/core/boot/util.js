@@ -77,7 +77,11 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         isSharing: function () {
-            return this.isGuest() || this.isAnonymous();
+            return this.isGuest() || this.isAnonymous() || this.hasError();
+        },
+
+        hasError: function () {
+            return _.url.hash('status') && _.url.hash('message') && _.url.hash('message_type');
         },
 
         isPasswordOptional: function () {

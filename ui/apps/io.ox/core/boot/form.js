@@ -35,10 +35,9 @@ define('io.ox/core/boot/form', [
             // prefill or hide username input in guest mode
             if (util.isGuest()) {
                 var loginName = _.url.hash('login_name');
-                if (_.isEmpty(loginName)) {
-                    $('#io-ox-login-username').hide();
-                } else {
-                    $('#io-ox-login-username, #io-ox-login-restoremail').val(loginName).prop('readonly', true);
+                $('#io-ox-login-username').hide();
+                if (!_.isEmpty(loginName)) {
+                    $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
                 }
             }
 
@@ -50,9 +49,6 @@ define('io.ox/core/boot/form', [
             // status
             if (_.url.hash('status')) {
                 switch (_.url.hash('status')) {
-                    // if the share token could not resolved to a share
-                    case 'not_found':
-                        break;
                     // if the guest user has not set a password yet
                     case 'ask_password':
                         break;
@@ -63,6 +59,14 @@ define('io.ox/core/boot/form', [
                             placeholder: gt('New password')
                         });
                         $('#io-ox-forgot-password').remove();
+                        break;
+                    // if the share token could not resolved to a share
+                    case 'not_found':
+                    case 'reset_password_info':
+                        // remove inputs
+                        $('#io-ox-login-form div.row')
+                            .filter('.username, .password, .options, .buttons')
+                            .remove();
                         break;
                     // if the guest user requested to reset his password
                     case 'reset_password':
@@ -94,16 +98,6 @@ define('io.ox/core/boot/form', [
                 }
             }
 
-            // message
-            if (_.url.hash('message')) {
-                var type = (_.url.hash('message_type') || 'info').toLowerCase();
-                if (type === 'info') {
-                    $('#io-ox-login-help').text(_.url.hash('message'));
-                } else {
-                    util.feedback(type, _.url.hash('message'));
-                }
-            }
-
             $('#io-ox-forgot-password, #io-ox-backtosignin').find('a').click(function (e) {
                 e.preventDefault();
                 $('#io-ox-password-forget-form, #io-ox-login-form').toggle();
@@ -122,6 +116,16 @@ define('io.ox/core/boot/form', [
                 $('#io-ox-login-store').toggleClass('col-sm-6 col-sm-12');
             } else {
                 $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
+            }
+        }
+
+        // message
+        if (_.url.hash('message')) {
+            var type = (_.url.hash('message_type') || 'info').toLowerCase();
+            if (type === 'info') {
+                $('#io-ox-login-help').text(_.url.hash('message'));
+            } else {
+                util.feedback(type, _.url.hash('message'));
             }
         }
 

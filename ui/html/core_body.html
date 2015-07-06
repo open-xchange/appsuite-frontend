@@ -55,8 +55,12 @@
             <div id="io-ox-login-form-container">
                 {{!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials --}}
                 <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
-                    <p id="io-ox-login-help" class="help-block"></p>
                     <input type="hidden" name="location" value="">{{!-- used by redirect servlet --}}
+                    <div class="row help">
+                        <div class="col-xs-12">
+                            <p id="io-ox-login-help" class="help-block"></p>
+                        </div>
+                    </div>
                     <div class="row username">
                         <div class="form-group col-xs-12">
                             <label for="io-ox-login-username" class="sr-only" data-i18n="User name">User name</label>
@@ -73,7 +77,7 @@
                                 placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row options">
                         <div class="col-sm-6 col-xs-12 checkbox" id="io-ox-login-store">
                             <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
                                 <input type="checkbox" id="io-ox-login-store-box" checked="checked" name="store" value="1">
@@ -84,7 +88,7 @@
                             <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row buttons">
                         <div class="col-sm-6 col-xs-12">
                             <input type="submit" name="signin"
                                 id="io-ox-login-button" class="btn btn-primary form-control"
@@ -92,7 +96,7 @@
                         </div>
                     </div>
                     {{!-- Feedback area --}}
-                    <div class="row">
+                    <div class="row feedback">
                         <div class="col-xs-12" id="io-ox-login-feedback"></div>
                     </div>
                 </form>

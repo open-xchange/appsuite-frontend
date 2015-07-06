@@ -12,8 +12,10 @@
  */
 
 define('io.ox/files/share/model', [
-    'io.ox/files/share/api'
-], function (api) {
+    'io.ox/files/share/api',
+    'io.ox/core/folder/api',
+    'io.ox/files/api'
+], function (api, folderAPI, filesAPI) {
 
     'use strict';
 
@@ -213,6 +215,15 @@ define('io.ox/files/share/model', [
                 return this.get('display_name');
             } else {
                 return this.isFolder() ? 'Foldername' : 'Filename';
+            }
+        },
+
+        getObject: function () {
+            var target = this.get('target');
+            if (this.isFolder()) {
+                return folderAPI.get(target.folder);
+            } else {
+                return filesAPI.get({ id: target.item, folder: target.folder });
             }
         },
 
