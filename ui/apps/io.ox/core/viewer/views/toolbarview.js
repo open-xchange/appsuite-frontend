@@ -110,8 +110,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-fitheight').attr({
                         tabindex: '1',
-                        title: gt('Fit to screen height'),
-                        'aria-label': gt('Fit to screen height')
+                        title: gt('Fit to screen size'),
+                        'aria-label': gt('Fit to screen size')
                     });
                 }
             },
