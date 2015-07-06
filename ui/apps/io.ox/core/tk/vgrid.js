@@ -254,7 +254,7 @@ define('io.ox/core/tk/vgrid', [
                 obj['aria-label'] = options.containerLabel;
                 return obj;
             },
-            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            container = $('<div class="vgrid-scrollpane-container f6-target" role="listbox">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar

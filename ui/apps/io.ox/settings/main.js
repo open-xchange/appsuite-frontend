@@ -131,7 +131,6 @@ define('io.ox/settings/main', [
         });
 
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
-            'tabindex': 1,
             //needed or mac voice over reads the whole settings pane when an input element is focused
             'role': 'main'
         }).scrollable();
