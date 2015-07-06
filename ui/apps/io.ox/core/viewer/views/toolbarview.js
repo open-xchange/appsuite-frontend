@@ -185,13 +185,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: 'io.ox/files/actions/download'
                 },
-                //'print': {
-                //    prio: 'lo',
-                //    mobile: 'lo',
-                //    label: gt('Print'),
-                //    section: 'export',
-                //    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
-                //},
+                'print': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Print'),
+                    section: 'export',
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
+                },
                 'share': {
                     prio: 'hi',
                     mobile: 'lo',
@@ -298,10 +298,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
         }
     });
-    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
-        id: 'print',
-        action: function () {}
-    });
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/delete', {
         id: 'delete',
         requires: function (e) {
@@ -310,6 +306,18 @@ define('io.ox/core/viewer/views/toolbarview', [
         action: function (baton) {
             var actionBaton = Ext.Baton({ data: baton.model.toJSON() });
             ActionsPattern.invoke('io.ox/files/actions/delete', null, actionBaton);
+        }
+    });
+    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
+        id: 'print',
+        requires: function (e) {
+            var model = e.baton.model;
+            return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
+        },
+        action: function (baton) {
+            var convertParams = Util.getConvertParams(baton.context.model),
+                documentPDFUrl = Util.getConverterUrl(convertParams);
+            window.open(documentPDFUrl, '_blank');
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/rename', {
