@@ -444,8 +444,8 @@ define('io.ox/core/tk/dialogs', [
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    //not window here, or we might overlap ads or sth
-                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;
+                    // not window here, or we might overlap ads or sth
+                    var height = $('#io-ox-core').height() - (2 * o.top) - nodes.header.outerHeight() - nodes.footer.outerHeight();
                     nodes.body.css({
                         'height': height,
                         'max-height': height

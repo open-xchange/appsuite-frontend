@@ -33,7 +33,6 @@ define('io.ox/core/settings/user', [
 
             var dialog = new dialogs.ModalDialog({
                 top: 20,
-                substract: 100,
                 width: 910,
                 center: false,
                 maximize: true,
