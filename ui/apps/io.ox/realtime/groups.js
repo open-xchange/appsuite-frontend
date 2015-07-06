@@ -37,7 +37,6 @@ define('io.ox/realtime/groups', [
                 self.trigger('error:disposed');
                 clearInterval(heartbeat);
                 heartbeat = null;
-                destroyed = true;
             } else if (error.data && error.data.code === 1012) {
                 self.trigger('error:joinFailed', error);
                 clearInterval(heartbeat);
