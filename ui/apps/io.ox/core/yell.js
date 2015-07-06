@@ -179,7 +179,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                 node.trigger('notification:appear').addClass('appear');
                 if (o.focus) node.attr('tabindex', 1).focus();
 
-            }, _.device('touch') ? 300 : 0);
+            }, _.device('touch') ? 300 : 2); // _.defer uses setTimeout(..., 1) internally so use at least 2ms
 
             return node;
         }
