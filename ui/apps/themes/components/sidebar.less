@@ -76,15 +76,15 @@
 
         @default-width: 320px;
 
-        &.has-left > .generic-sidebar-content {
+        &.visible.has-left > .generic-sidebar-content {
             left: @default-width;
         }
 
-        &.has-right > .generic-sidebar-content {
+        &.visible.has-right > .generic-sidebar-content {
             right: @default-width;
         }
 
-        .generic-sidebar {
+        &.visible > .generic-sidebar {
             width: @default-width;
         }
     }
