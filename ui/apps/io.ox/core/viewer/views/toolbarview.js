@@ -105,7 +105,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'zoomfitheight': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Fit to screen height'),
+                label: gt('Fit to screen size'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
                     this.addClass('viewer-toolbar-fitheight').attr({
