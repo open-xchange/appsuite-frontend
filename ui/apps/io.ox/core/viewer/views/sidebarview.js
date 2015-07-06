@@ -81,10 +81,10 @@ define('io.ox/core/viewer/views/sidebarview', [
         initTabNavigation: function () {
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="tablink" data-tab-id="detail" tabindex="1">').text(gt('Detail')),
+                detailTabLink = $('<a class="tablink" data-tab-id="detail" tabindex="1">').text(gt('Details')),
                 detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
                 detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">'),
-                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail" tabindex="1">').text(gt('Thumbnail')),
+                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail" tabindex="1">').text(gt('Thumbnails')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
                 thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
             tabsList.append(thumbnailTab, detailTab).hide();
