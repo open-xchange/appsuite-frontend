@@ -439,7 +439,7 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                if (capabilities.has('infostore') && _.device('!smartphone')) {
+                if (capabilities.has('infostore')) {
                     var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
                         fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
                             .on('change', addLocalFile.bind(this, baton.model))
