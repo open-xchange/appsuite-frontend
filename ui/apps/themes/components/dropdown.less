@@ -182,11 +182,13 @@ ul.dropdown-menu li a.disabled {
             }
         }
 
-        @marginSmall  : 2px;
+        @marginSmall  : 0px;
         @marginLarge  : 5px;
         @extraPadding : 5px;
+        @border-radius: 4px;
 
         .divider {
+            display: none;
             margin: 0;
             height: @marginLarge - 2 * @marginSmall; // because the siblings still have margins
             visibility: hidden;
@@ -198,12 +200,14 @@ ul.dropdown-menu li a.disabled {
 
         .dropdown-header {
             max-width: 100%;
-            background: transparent;
-            color: #fff;
-            margin-top: 5px;
-            margin-bottom: 5px;
+            /* background: rgba(255, 255, 255, 0.5); */
+            color: @link-color;
+            padding: 5px;
+            /* margin-bottom: 5px; */
             font-size: 16px;
             font-weight: 300;
+            line-height: 30px;
+            text-transform: uppercase;
         }
 
         li {
@@ -224,11 +228,22 @@ ul.dropdown-menu li a.disabled {
                 line-height: inherit;
                 width: 30px;
             }
+            border-bottom: 1px solid #ddd;
         }
 
-        // close
         li:first-child {
-            margin-bottom: @marginLarge;
+            border-top-left-radius: @border-radius;
+            border-top-right-radius: @border-radius;
+        }
+
+        li:nth-last-child(2) {
+            border-bottom-left-radius: @border-radius;
+            border-bottom-right-radius: @border-radius;
+        }
+        // close
+        li:last-child {
+            margin-top: @marginLarge;
+            border-radius: @border-radius;
         }
 
         // no clue why but there are empty <li> in system drop-down, for example

@@ -1145,6 +1145,15 @@ define('io.ox/core/main', [
             }
         });
 
+        ext.point('io.ox/core/mobile').extend({
+            id: 'i18n',
+            draw: function () {
+                // pass the translated string to the dropdown handler
+                // which has no access to gt functions
+                $(document).trigger('dropdown:translate', gt('Close'));
+            }
+        });
+
         // add some senseless characters
         // a) to avoid unwanted scrolling
         // b) to recognize deep links
@@ -1502,6 +1511,7 @@ define('io.ox/core/main', [
                     // draw top bar now
                     ext.point('io.ox/core/banner').invoke('draw');
                     ext.point('io.ox/core/topbar').invoke('draw');
+                    ext.point('io.ox/core/mobile').invoke('draw');
 
                     // help here
                     if (!ext.point('io.ox/core/topbar').isEnabled('default')) {
