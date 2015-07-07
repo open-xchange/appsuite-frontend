@@ -50,9 +50,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                     var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
-                        .attr('title', gt('File name'))
-                        .append(fileIcon, filenameLabel)
-                        .parent().addClass('pull-left');
+                        .attr('title', gt('File name'));
+                    if (!baton.context.standalone) {
+                        this.append(fileIcon);
+                    }
+                    this.append(filenameLabel).parent().addClass('pull-left');
                     if (baton.model.isFile()) {
                         this.attr({
                             title: gt('Double click to rename'),
@@ -322,8 +324,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
     new Action(TOOLBAR_ACTION_ID + '/rename', {
         id: 'rename',
-        requires: function (e) {
-            return !e.baton.context.standalone;
+        requires: function () {
+            return true;
         }
     });
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
@@ -437,6 +439,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
+            // give toolbar a standalone class if its in one
+            this.$el.toggleClass('standalone', this.standalone);
         },
 
         /**
@@ -643,9 +647,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     newValue = parseInt($(this).val()),
                     oldValue = parseInt($(this).attr('data-page-number')),
                     pageTotal = parseInt($(this).attr('data-page-total'));
-                if (isNaN(newValue) || newValue > pageTotal || newValue <= 0 ) {
+                if (isNaN(newValue) || newValue <= 0 ) {
                     $(this).val(oldValue);
                     return;
+                }
+                if (newValue > pageTotal) {
+                    $(this).val(pageTotal);
+                    newValue = pageTotal;
                 }
                 setButtonState([prev[0], next[0]], true);
                 if (newValue === 1) {
