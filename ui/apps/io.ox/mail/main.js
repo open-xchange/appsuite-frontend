@@ -683,16 +683,16 @@ define('io.ox/mail/main', [
 
                     if (app.listView.selection.get().length === 1 && !app.props.get('checkboxes')) {
                         // check for thread
-                        var cid = app.props.get('thread') ? list[0].substr(7) : list[0],
+                        var cid = list[0],
                             isThread = this.collection.get(cid).get('threadSize') > 1;
 
                         if (isDraftFolder) {
-                            ox.registry.call('mail-compose', 'edit', _.cid(list[0]));
+                            ox.registry.call('mail-compose', 'edit', _.cid(cid));
                         } else if (isThread) {
-                            app.showThreadOverview(list[0]);
+                            app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
                         } else {
-                            app.showMail(list[0]);
+                            app.showMail(cid);
                             app.pages.changePage('detailView');
                         }
                     }
