@@ -607,7 +607,9 @@ define('io.ox/core/main', [
                 node.addClass('placeholder');
                 if (!upsell.has(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
-                        $('<i class="fa fa-lock">')
+                        _(settings.get('upsell/defaultIcon', 'fa-lock').split(/ /)).map(function (icon) {
+                            return $('<i class="fa">').addClass(icon);
+                        })
                     );
                 }
             } else {
