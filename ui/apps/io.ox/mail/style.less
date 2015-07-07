@@ -1513,11 +1513,24 @@ h4.mail-attachment-preview {
         padding: 0;
         & > h1 {
             font-size: @phone-font-size + 2;
+            .summary {
+                font-size: @phone-font-size - 2;
+            }
         }
         .thread-view {
             header {
                 border-bottom: 1px solid #ccc;
             }
+        }
+        .from, .recipients, .date {
+            font-size: @phone-font-size;
+            line-height: @phone-line-height;
+        }
+        .from .person-link.person-from {
+            font-weight: 500;
+        }
+        .mail-detail:not(.expanded) .recipients {
+            height: auto;
         }
     }
 
