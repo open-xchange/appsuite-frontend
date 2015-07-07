@@ -62,6 +62,9 @@ define('io.ox/core/tk/list',
         },
 
         onItemBlur: function () {
+            if (this.mousedown) {
+                return;
+            }
             this.$el.attr('tabindex', 1);
             this.$el.removeClass('has-focus');
         },
