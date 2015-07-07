@@ -501,7 +501,7 @@
                 selector: '#css'
             };
             lessFiles.push(file);
-            if (theme) {
+            if (ox.theme) {
                 insertLess(file).then(load, load.error);
             } else {
                 load();
