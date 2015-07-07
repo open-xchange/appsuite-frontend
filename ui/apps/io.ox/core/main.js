@@ -919,6 +919,28 @@ define('io.ox/core/main', [
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'change-user-password',
+            index: 175,
+            draw: function () {
+
+                if (capabilities.has('edit_password') === false) return;
+
+                this.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">')
+                        .text(gt('Change password'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['plugins/portal/userSettings/register'], function (userSettings) {
+                            userSettings.changePassword();
+                        });
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'app-specific-help',
             index: 200,
             draw: function () {
