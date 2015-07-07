@@ -670,7 +670,7 @@ msgstr "Účet bol aktualizovaný"
 #: apps/io.ox/files/mobile-toolbar-actions.js:88
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/mail/detail/view.js:91 apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:848
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:949
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
@@ -708,7 +708,7 @@ msgstr "Upraviť popis"
 msgid "Add account"
 msgstr "Pridať účet"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:862
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:963
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Pridať operáciu"
@@ -728,7 +728,7 @@ msgstr "Pridať podpriečinok"
 msgid "Add attachments"
 msgstr "Pridať prílohy"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:857
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:958
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Pridať podmienku"
@@ -1020,7 +1020,7 @@ msgstr "Vyskytla sa vnútorná chyba"
 msgid "Anniversary"
 msgstr "Výročie"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:55
 #: module:io.ox/settings/settings
 msgid "Any recipient"
 msgstr "Ľubovoľný príjemca"
@@ -1033,7 +1033,7 @@ msgstr "Pripojiť vCard"
 msgid "Application Toolbar"
 msgstr "Panel nástrojov aplikácie"
 
-#: apps/io.ox/mail/main.js:1204 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1205 module:io.ox/mail
 #: apps/io.ox/settings/main.js:523 module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -1047,13 +1047,13 @@ msgstr "Aplikácie"
 msgid "Apply role"
 msgstr "Aplikovať rolu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:893
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:994
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:897
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:998
 msgid "Apply rule if all conditions are met"
 msgstr "Použiť pravidlo, ak sú splnené všetky podmienky"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:893
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:994
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená."
@@ -1315,7 +1315,7 @@ msgid "Blind copy"
 msgstr "v kópii"
 
 #: apps/io.ox/core/tk/flag-picker.js:92 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:105
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:104
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:153
 #: module:io.ox/portal
 msgid "Blue"
@@ -1361,7 +1361,7 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js:56 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:200
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:59
 #: module:io.ox/settings/settings
 msgid "CC"
 msgstr "Kópia"
@@ -1451,7 +1451,7 @@ msgstr "Kalendár"
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:632
 #: apps/io.ox/mail/mailfilter/settings/filter.js:103
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1104
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1105
 #: apps/io.ox/mail/settings/signatures/register.js:180
 #: apps/io.ox/mail/settings/signatures/register.js:285
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1818,7 +1818,7 @@ msgstr "Napísať nový e-mail"
 msgid "Compose new mail"
 msgstr "Napísať novú správu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:847
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:948
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Podmienky"
@@ -1878,12 +1878,12 @@ msgstr "Kontakty boli skopírované"
 msgid "Contacts have been moved"
 msgstr "Kontakty boli presunuté"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:41
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:40
 #: module:io.ox/settings/settings
 msgid "Contains"
 msgstr "Obsahuje"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:64
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:63
 #: module:io.ox/settings/settings
 msgid "Content"
 msgstr "Obsah"
@@ -2091,7 +2091,7 @@ msgstr "Vytváranie súborov"
 msgid "Currency"
 msgstr "Mena"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:65
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:64
 #: module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Current week"
@@ -2383,7 +2383,7 @@ msgstr "Vypnúť miniaplikáciu"
 #: apps/io.ox/contacts/edit/view-form.js:238
 #: apps/io.ox/core/settings/user.js:43
 #: apps/io.ox/mail/compose/extensions.js:80 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:73
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:51
 #: module:io.ox/core
@@ -2786,7 +2786,7 @@ msgstr "EB"
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:504
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/main.js:147 apps/io.ox/mail/main.js:153
-#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1108
+#: apps/io.ox/mail/main.js:260 apps/io.ox/mail/main.js:1109
 #: apps/io.ox/mail/settings/signatures/register.js:361
 #: apps/io.ox/mail/settings/signatures/register.js:363
 #: apps/io.ox/portal/settings/pane.js:288 module:io.ox/portal
@@ -3042,7 +3042,7 @@ msgstr "Sem zadajte názov dokumentu"
 msgid "Entrepreneur"
 msgstr "Podnikateľ"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:62
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:61
 #: module:io.ox/settings/settings
 msgid "Envelope"
 msgstr "Obálka"
@@ -3441,10 +3441,8 @@ msgstr "Krstné meno Priezvisko"
 #: apps/io.ox/core/viewer/views/toolbarview.js:108 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:113
 #: apps/io.ox/core/viewer/views/toolbarview.js:114
-#, fuzzy
-#| msgid "Fit to screen width"
-msgid "Fit to screen height"
-msgstr "Prispôsobiť šírke obrazovky"
+msgid "Fit to screen size"
+msgstr "Prispôsobiť veľkosti obrazovky"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:95 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:100
@@ -3452,7 +3450,7 @@ msgstr "Prispôsobiť šírke obrazovky"
 msgid "Fit to screen width"
 msgstr "Prispôsobiť šírke obrazovky"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings
 msgid "Flag mail with"
 msgstr "Označiť poštu ako"
@@ -3659,14 +3657,14 @@ msgid "Good morning, %s"
 msgstr "Dobré ráno, %s"
 
 #: apps/io.ox/core/tk/flag-picker.js:94 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:108
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:107
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:147
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Šedá"
 
 #: apps/io.ox/core/tk/flag-picker.js:93 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:103
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:102
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:151
 #: module:io.ox/portal
 msgid "Green"
@@ -3698,7 +3696,7 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML a čistý text"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:61
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings
 msgid "Header"
 msgstr "Hlavička"
@@ -4061,17 +4059,17 @@ msgstr "Pozvať na schôdzku"
 msgid "Invite to new appointment"
 msgstr "Pozvať na novú schôdzku"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:31
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:30
 #: module:io.ox/settings/settings
 msgid "Is bigger than"
 msgstr "Je väčší ako"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:42
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:41
 #: module:io.ox/settings/settings
 msgid "Is exactly"
 msgstr "Je presne"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:32
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:31
 #: module:io.ox/settings/settings
 msgid "Is smaller than"
 msgstr "Je menší ako"
@@ -4140,7 +4138,7 @@ msgstr "Stačí vypnúť miniaplikáciu"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
 #: module:io.ox/settings/settings
 msgid "Keep"
 msgstr "Ponechať"
@@ -4246,14 +4244,14 @@ msgid "Life"
 msgstr "Život"
 
 #: apps/io.ox/core/tk/flag-picker.js:99 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:104
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:103
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:152
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Svetlomodrá"
 
 #: apps/io.ox/core/tk/flag-picker.js:96 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:102
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:101
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:150
 #: module:io.ox/portal
 msgid "Light green"
@@ -4450,7 +4448,7 @@ msgstr "Zdroj pošty"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Pošta sa neimportovala. Sú podporované iba súbory .eml."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:57
 #: module:io.ox/settings/settings
 msgid "Mailing list"
 msgstr "Poštová konferencia"
@@ -4554,7 +4552,7 @@ msgstr "Označiť ako vrátené"
 msgid "Mark as unread"
 msgstr "Označiť ako neprečítané"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:81
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
 #: module:io.ox/settings/settings
 msgid "Mark mail as"
 msgstr "Označiť správu ako"
@@ -4573,7 +4571,7 @@ msgstr "Označiť ako prečítané"
 msgid "Mark unread"
 msgstr "Označiť ako neprečítané"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:43
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:42
 #: module:io.ox/settings/settings
 msgid "Matches"
 msgstr "Zodpovedá"
@@ -4710,7 +4708,7 @@ msgstr "Otvoriť/zatvoriť všetky správy"
 msgid "Move folder"
 msgstr "Presunúť priečinok"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
 #: module:io.ox/settings/settings
 msgid "Move to folder"
 msgstr "Presunúť do priečinka"
@@ -4761,7 +4759,7 @@ msgstr "Moje úlohy"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:74 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:457
 #: apps/io.ox/files/view-options.js:44 module:io.ox/files
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:672
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:504
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Meno"
@@ -4911,7 +4909,7 @@ msgstr "Ďalší deň"
 msgid "Next Week"
 msgstr "Nasledujúci týždeň"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:606 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:614 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5038,7 +5036,7 @@ msgstr "Bez názvu."
 #: apps/io.ox/files/view-options.js:113 module:io.ox/files
 #: apps/io.ox/files/view-options.js:124
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:97
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:350
 #: module:io.ox/tasks/edit
 msgid "None"
@@ -5320,7 +5318,7 @@ msgid "Options"
 msgstr "Možnosti"
 
 #: apps/io.ox/core/tk/flag-picker.js:97 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:100
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:99
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:149
 #: module:io.ox/portal
 msgid "Orange"
@@ -5524,7 +5522,7 @@ msgid "Pick a time here"
 msgstr "Tu vyberte čas"
 
 #: apps/io.ox/core/tk/flag-picker.js:98 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:107
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:106
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:155
 #: module:io.ox/portal
 msgid "Pink"
@@ -5595,6 +5593,8 @@ msgstr "Prosím, zadajte hľadaný text."
 #: apps/io.ox/backbone/mini-views/datepicker.js:227 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:581
+#: module:io.ox/settings/settings
 msgid "Please enter a valid date"
 msgstr "Prosím, zadajte platný dátum"
 
@@ -5818,7 +5818,7 @@ msgstr "Predošlý týždeň"
 msgid "Previous month"
 msgstr "Predošlé"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:603 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:611 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -5844,7 +5844,8 @@ msgstr "Primárny účet"
 #: apps/io.ox/calendar/toolbar.js:88 apps/io.ox/calendar/toolbar.js:176
 #: apps/io.ox/contacts/actions.js:404 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
-#: module:io.ox/core apps/io.ox/mail/actions.js:640 module:io.ox/mail
+#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:191
+#: apps/io.ox/mail/actions.js:640 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:150 apps/io.ox/tasks/actions.js:337
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
 msgid "Print"
@@ -5879,7 +5880,7 @@ msgstr "Súkromné"
 msgid "Private address"
 msgstr "Súkromná adresa"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:152
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1037
 #: module:io.ox/settings/settings
 msgid "Process subsequent rules"
 msgstr "Pokračovať v spracovaní ďalších pravidiel"
@@ -5936,7 +5937,7 @@ msgid "Purchase confirmation"
 msgstr "Potvrdenie objednávky"
 
 #: apps/io.ox/core/tk/flag-picker.js:95 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:106
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:105
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:154
 #: module:io.ox/portal
 msgid "Purple"
@@ -6060,13 +6061,13 @@ msgid "Recurring tasks need a valid start date."
 msgstr "Opakujúce sa úlohy musia mať platný dátum začiatku."
 
 #: apps/io.ox/core/tk/flag-picker.js:91 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:99
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:98
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:148
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Červená"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
 #: module:io.ox/settings/settings
 msgid "Redirect to"
 msgstr "Presmerovať na"
@@ -6089,7 +6090,7 @@ msgstr "Interval obnovenia"
 msgid "Refresh rate in minutes"
 msgstr "Interval obnovenia v minútach"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:45
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:44
 #: module:io.ox/settings/settings
 msgid "Regex"
 msgstr "reg. výraz"
@@ -6098,7 +6099,7 @@ msgstr "reg. výraz"
 msgid "Reject changes"
 msgstr "Odmietnuť zmeny"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
 #: module:io.ox/settings/settings
 msgid "Reject with reason"
 msgstr "Odmietnuť s udaním dôvodu"
@@ -6306,7 +6307,7 @@ msgstr ""
 msgid "Room number"
 msgstr "Číslo izby"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:876
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:977
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Názov pravidla"
@@ -6483,7 +6484,7 @@ msgstr "Vybrať priečinok"
 
 #: apps/io.ox/calendar/edit/extensions.js:126 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:58
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:794
 #: module:io.ox/settings/settings
 msgid "Select folder"
 msgstr "Vybrať priečinok"
@@ -6544,7 +6545,7 @@ msgstr "Poslať nový email"
 msgid "Send vacation notice during this time only"
 msgstr "Posielať oznámenie o dovolenke len v tomto čase"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:55
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:54
 #: module:io.ox/settings/settings
 msgid "Sender/From"
 msgstr "Odosielateľ/Od"
@@ -6842,7 +6843,7 @@ msgstr "Prihlásený ako %1$s"
 msgid "Size"
 msgstr "Veľkosť"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:63
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:62
 #: module:io.ox/settings/settings
 msgid "Size (bytes)"
 msgstr "Veľkosť (bajtov)"
@@ -7021,7 +7022,7 @@ msgstr "Študent"
 #: apps/io.ox/mail/actions/reminder.js:47 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:303
 #: apps/io.ox/mail/compose/extensions.js:307
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:57
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
@@ -7106,7 +7107,7 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:81
 #: module:io.ox/settings/settings
 msgid "Tag mail with"
 msgstr "Označovať poštu ako"
@@ -7354,11 +7355,6 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
 msgid "The changes have been rejected"
 msgstr "Zmeny boli zamietnuté"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
-#: module:io.ox/settings/settings
-msgid "The character \" \" is not allowed."
-msgstr "Znak „  nie je povolený."
 
 #: apps/plugins/portal/xing/actions.js:101 module:plugins/portal
 msgid "The comment has been deleted successfully"
@@ -7803,7 +7799,7 @@ msgstr "Tento email je neprečítaný, stlačením ho označíte ako prečítan�
 msgid "This note will not be printed"
 msgstr "Táto poznámka sa nevypíše"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:137
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:136
 #: module:io.ox/settings/settings
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
@@ -7859,7 +7855,7 @@ msgstr "Nadpis"
 
 #: apps/io.ox/mail/common-extensions.js:263 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:59
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:565
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
 msgid "To"
@@ -8271,7 +8267,7 @@ msgstr "Skryť podrobnosti"
 msgid "View source"
 msgstr "Zobraziť zdroj"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:548 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:556 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Panel nástrojov editora"
@@ -8418,7 +8414,7 @@ msgid "Years"
 msgstr "Roky"
 
 #: apps/io.ox/core/tk/flag-picker.js:100 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:101
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:100
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr "Žltá"
@@ -8927,7 +8923,7 @@ msgstr "Tmavomodrá"
 msgid "dark green"
 msgstr "Tmavomodrá"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:642
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:605
 #: module:io.ox/settings/settings
 msgid "datepicker"
 msgstr ""
@@ -8963,7 +8959,7 @@ msgstr "mazať všetky objekty"
 msgid "delete only own objects"
 msgstr "mazať iba vlastné objekty"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:36
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:35
 #: module:io.ox/settings/settings
 msgid "deleted"
 msgstr "zmazané"
@@ -9000,7 +8996,7 @@ msgstr "končí"
 msgid "ends after a certain number of appointments"
 msgstr "končí po istom počte schôdzok"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Ends on"
@@ -9153,7 +9149,7 @@ msgstr "o hodinu"
 msgid "in one week"
 msgstr "o týždeň"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
 #: module:io.ox/settings/settings
 msgid "is on"
 msgstr "dňa"
@@ -9225,7 +9221,7 @@ msgstr "bez oprávnení na upravovanie"
 msgid "no read permissions"
 msgstr "bez oprávnení na čítanie"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:466 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:474 module:io.ox/core
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9305,7 +9301,7 @@ msgstr "Odstrániť"
 msgid "second"
 msgstr "druhý"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:37
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:36
 #: module:io.ox/settings/settings
 msgid "seen"
 msgstr "videné"
@@ -9320,7 +9316,7 @@ msgstr "vyberte formát"
 msgid "six months"
 msgstr "mesiac"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
 #: module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Starts on"
@@ -11385,8 +11381,10 @@ msgstr "RRRR"
 #~ msgid "First name:"
 #~ msgstr "Krstné meno:"
 
-#~ msgid "Fit to screen size"
-#~ msgstr "Prispôsobiť veľkosti obrazovky"
+#, fuzzy
+#~| msgid "Fit to screen width"
+#~ msgid "Fit to screen height"
+#~ msgstr "Prispôsobiť šírke obrazovky"
 
 #~ msgid "Flag"
 #~ msgstr "Značka"
@@ -14023,6 +14021,9 @@ msgstr "RRRR"
 
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "Zobrazenia kalendára zobrazujú hárok kalendára so schôdzkami."
+
+#~ msgid "The character \" \" is not allowed."
+#~ msgstr "Znak „  nie je povolený."
 
 #~ msgid ""
 #~ "The configuration could not be saved, because of the following error:"
