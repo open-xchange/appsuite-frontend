@@ -42,7 +42,7 @@ define('io.ox/core/viewer/views/types/documentview', [
         initialize: function (options) {
             _.extend(this, options);
             // amount of page side margins in pixels
-            this.PAGE_SIDE_MARGIN = _.device('desktop') ? 30 : 15;
+            this.PAGE_SIDE_MARGIN = _.device('desktop') ? 20 : 10;
             // magic module id to source map
             this.MODULE_SOURCE_MAP = {
                 1: 'calendar',
@@ -406,7 +406,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                     getVisiblePageNumbers: this.getPagesToRender.bind(this),
                     getPageNode: getPageNode,
                     beginRendering: beginPageRendering,
-                    endRendering: endPageRendering
+                    endRendering: endPageRendering.bind(this)
                 };
                 this.pdfView.setRenderCallbacks(renderCallbacks);
                 // disable slide swiping per default on documents
@@ -575,9 +575,12 @@ define('io.ox/core/viewer/views/types/documentview', [
                 pageMarginTotal = pageMarginHeight * pageMarginCount,
                 pagesHeightBeforeZoom = documentTopPosition - pageMarginTotal;
             _.each(this.pages, function (page, pageIndex) {
+                var pdfPage = $(page).children();
                 pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
-                var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
-                $(page).css(realPageSize);
+                $(page).css({
+                    width: pdfPage.width(),
+                    height: pdfPage.height()
+                });
             });
             // adjust document scroll position according to new zoom
             var pagesHeightAfterZoom = pagesHeightBeforeZoom * zoomLevel / this.currentZoomFactor,

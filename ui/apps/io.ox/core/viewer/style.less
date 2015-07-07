@@ -722,10 +722,12 @@
 
         .document-thumbnail-link {
             display: inline-block;
-            width: 120px;
-            padding: 10px 10px 0px 10px;
-            margin: 5px 15px;
+            width: 150px;
+            height: 180px;
+            padding: 10px 0 0 0;
+            margin: 0 5px 5px 0;
             cursor: pointer;
+            vertical-align: top;
             &:hover {
                 background: @document-thumbnail-link-hover-color;
                 text-decoration: none;
@@ -746,13 +748,17 @@
 
         .document-thumbnail {
             width: 100px;
-            height: 132px;
+            height: 140px;
             margin: 0 auto;
             background: @document-thumbnail-bgcolor;
             border: 1px solid @document-thumbnail-border-color;
             overflow: hidden;
             .thumbnail-image {
                 width: 100%;
+            }
+            &.landscape {
+                width: 140px;
+                height: 100px;
             }
         }
 
