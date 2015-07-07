@@ -354,6 +354,15 @@
             margin: 0 0 0 8px;
             float: right;
         }
+
+        // disable/reset some properties
+        .breadcrumb-view {
+            margin: 0;
+            i {
+                float: none;
+                line-height: 14px;
+            }
+        }
     }
 
     &.visible-selection.has-focus .list-item.selected i {
@@ -408,7 +417,7 @@
         .border-radius(@border-radius-small);
     }
 
-    .account-name {
+    .account-name, .original-folder {
         .box();
     }
 
@@ -421,7 +430,7 @@
     }
 
     &.visible-selection.has-focus .selected {
-        .thread-size, .account-name { color: #fff; }
+        .thread-size, .account-name, .original-folder { color: #fff; }
     }
 
     .thread-item {

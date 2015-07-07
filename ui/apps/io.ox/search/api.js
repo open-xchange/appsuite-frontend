@@ -62,7 +62,7 @@ define('io.ox/search/api', [
         }),
         columns = {
             mail: {
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655',
                 extendColumns: 'io.ox/mail/api/list'
             },
             files: {
