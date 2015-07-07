@@ -725,7 +725,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
                         } else if (/move_/g.test(this.id)) {
                             this.$el.val(prepareFolderForDisplay(this.model.get('into')));
-                            // prepareFolderForDisplay(action.into)
                         } else {
                             this.$el.val($.trim(this.model.get(this.name)));
                         }
