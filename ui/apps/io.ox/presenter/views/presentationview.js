@@ -234,6 +234,7 @@ define('io.ox/presenter/views/presentationview', [
         onParticipantsChange: function (participants) {
             console.info('Presenter - participants - change', participants);
             this.updateNavigationArrows();
+            this.togglePauseOverlay();
         },
 
         /**
@@ -260,8 +261,13 @@ define('io.ox/presenter/views/presentationview', [
         togglePauseOverlay: function () {
             var userId = this.app.rtConnection.getRTUuid(),
                 rtModel = this.app.rtModel;
-            if (!rtModel.isPresenter(userId) && rtModel.isJoined(userId)) {
-                this.$('.pause-overlay').toggle();
+            // presenter never gets the pause overlay
+            if (rtModel.isPresenter(userId)) { return; }
+            // to see the pause overlay the participant needs to be joined and the presentation needs to be paused
+            if (rtModel.isJoined(userId) && rtModel.isPaused()) {
+                this.$('.pause-overlay').show();
+            } else {
+                this.$('.pause-overlay').hide();
             }
         },
 
