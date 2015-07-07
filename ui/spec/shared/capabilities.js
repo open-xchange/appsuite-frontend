@@ -28,12 +28,12 @@ define('spec/shared/capabilities', [
                 var def = $.Deferred(),
                     capabilities = requirejs('io.ox/core/capabilities');
 
-                //remove existing stubs
-                capabilities.has.restore && capabilities.has.restore();
-                //create stub
-                sinon.stub(capabilities, 'has', function (arg) {
-                    return data.length && _.contains(data, arg);
+                // overwrite server capabilities and reload capabilities
+                ox.serverConfig.capabilities = _(data).map(function (cap) {
+                    return { id: cap };
                 });
+                capabilities.reset();
+
                 //reload consuming modules
                 ox.testUtils.modules.reload('io.ox/core/capabilities')
                     .then(function () {
@@ -66,9 +66,7 @@ define('spec/shared/capabilities', [
                             data.concat(list)
                         );
                     } else {
-                        data = _.filter(data, function (cap) {
-                            return _.where(list, cap).length === 0;
-                        });
+                        data = _(data).difference(list);
                     }
 
                     //set
