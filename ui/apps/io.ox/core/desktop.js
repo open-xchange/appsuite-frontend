@@ -23,7 +23,8 @@ define('io.ox/core/desktop', [
     'io.ox/core/folder/api',
     'io.ox/find/main',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/core/sessionrestore' //just load the class, no direct use
 ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreConfig, gt) {
 
     'use strict';
@@ -69,9 +70,14 @@ define('io.ox/core/desktop', [
                 }
                 this.get('topbarNode').find('a.apptitle').append(this.badge);
             }
+            var oldText = this.badge.text();
+
             this.badge.text(text);
             if (options.arialabel) {
                 this.badge.attr('aria-label', options.arialabel);
+            }
+            if (oldText !== text) {
+                ox.trigger('recalculate-topbarsize');
             }
             if (!text) {
                 this.badge.hide();

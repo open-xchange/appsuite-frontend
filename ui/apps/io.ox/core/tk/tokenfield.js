@@ -335,7 +335,7 @@ define('io.ox/core/tk/tokenfield', [
                 options: this.options
             });
 
-            // calculate postion for typeahead dropdown
+            // calculate postion for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
                 this.tt = this.input.data('ttTypeahead');
                 this.tt.dropdown._show = function () {

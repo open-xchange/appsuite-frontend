@@ -16,45 +16,49 @@
  * Use this only, if the 'rt' capability is present.
  */
 
-define('io.ox/realtime/events', [
-    'io.ox/realtime/rt',
-    'io.ox/core/http'
-], function (rt, http) {
-
+define('io.ox/realtime/events',
+    [
+        'io.ox/realtime/rt',
+        'io.ox/realtime/tab_id',
+        'io.ox/core/http'
+    ],
+function (rt, tabId, http) {
     'use strict';
 
     var internal = {
         backend: {
-            on: function (eventName, selector, resource) {
+            on: function (eventName, selector) {
                 return http.GET({
                     module: 'events',
                     params: {
                         action: 'on',
                         event: eventName,
                         selector: selector,
-                        resource: resource
+                        resource: tabId,
+                        protocol: rt.protocol
                     }
                 });
             },
-            off: function (eventName, resource) {
+            off: function (eventName) {
                 return http.GET({
                     module: 'events',
                     params: {
                         action: 'off',
                         event: eventName,
-                        resource: resource
+                        resource: tabId,
+                        protocol: rt.protocol
                     }
                 });
             },
             all: function () {
-                return http.GET({ module: 'events', params: { action: 'all' }});
+                return http.GET({ module: 'events', params: { action: 'all', resource: tabId, protocol: rt.protocol } });
             },
             events: function () {
                 if (internal.backend.cachedEvents) {
                     return internal.backend.cachedEvents;
                 }
 
-                internal.backend.cachedEvents = http.GET({ module: 'events', params: { action: 'events' }});
+                internal.backend.cachedEvents = http.GET({ module: 'events', params: { action: 'events' } });
                 return internal.backend.cachedEvents;
             }
         }
@@ -86,7 +90,7 @@ define('io.ox/realtime/events', [
                         });
                     });
 
-                    internal.backend.on(eventName, selector, rt.resource);
+                    internal.backend.on(eventName, selector);
                     events[eventName] = {
                         selector: selector,
                         callbacks: [cb]
@@ -109,7 +113,7 @@ define('io.ox/realtime/events', [
             if (_.isEmptry(registration.callbacks)) {
                 delete events[eventName];
                 delete selectors[registration.selector];
-                internal.backend.off(eventName, rt.resource);
+                internal.backend.off(eventName);
             }
         },
 
@@ -125,7 +129,7 @@ define('io.ox/realtime/events', [
     rt.on('reset', function () {
         _(events).chain().keys().each(function (eventName) {
             var entry = events[eventName];
-            internal.backend.on(eventName, entry.selector, rt.resource);
+            internal.backend.on(eventName, entry.selector);
         });
     });
 

@@ -242,6 +242,39 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         }
     });
 
+    var DropdownLinkView = AbstractView.extend({
+        tagName: 'div',
+        className: 'action value',
+        events: { 'click [data-action="change-value"]': 'onClick' },
+        onClick: function (e) {
+            e.preventDefault();
+            this.model.set(this.name, $(e.target).attr('data-value'));
+        },
+        setup: function () {
+            this.listenTo(this.model, 'change:' + this.name, this.update);
+        },
+        update: function () {
+            this.$el.find('.dropdown-toggle').text(this.options.values[this.model.get(this.name)]);
+        },
+        render: function () {
+            this.$el.append(
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(this.options.values[this.model.get(this.name)]),
+                $('<ul class="dropdown-menu" role="menu">').append(
+                    _(this.options.values).map(function (name, value) {
+                        return $('<li>').append(
+                            $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value, 'tabindex': '1' }).append(
+                                $.txt(name)
+                            )
+                        );
+                    })
+                )
+            );
+
+            this.update();
+            return this;
+        }
+    });
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -251,6 +284,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         RadioView: RadioView,
         SelectView: SelectView,
         ErrorView: ErrorView,
-        FormView: FormView
+        FormView: FormView,
+        DropdownLinkView: DropdownLinkView
     };
 });

@@ -27,14 +27,12 @@ define('io.ox/search/view', [
                 this.baton.$ = this.$el;
             },
             render: function (node) {
-
                 var self = this,
                     node = node || self.$el;
 
-                if (_.device('smartphone')) {
-                    // create new toolbar on bottom
-                    ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
-                }
+                self.baton.$container = node;
+                // create new toolbar on bottom
+                ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
 
                 //invoke extensions defined by io.ox/search/view-template
                 ext.point('io.ox/search/view').invoke('draw', node, self.baton);

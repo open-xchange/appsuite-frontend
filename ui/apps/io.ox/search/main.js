@@ -75,7 +75,6 @@ define('io.ox/search/main', [
                 custom: true,
                 hidden: true,
                 flags: [
-                    _.device('smartphone') ? '' : 'advanced',
                     'conflicts:folder_type'
                 ],
                 values: [{
@@ -193,7 +192,7 @@ define('io.ox/search/main', [
         var opt = $.extend({}, options || {}),
             current = ox.ui.App.getCurrentApp();
 
-        win.nodes.main.addClass('io-ox-search f6-target').attr({
+        win.nodes.main.addClass('container io-ox-search f6-target empty').attr({
             'tabindex': '1',
             'role': 'main',
             'aria-label': gt('Search')
@@ -208,7 +207,7 @@ define('io.ox/search/main', [
         // mediator: view
         app.view.on({
             'query:start': function () {
-                app.view.repaint('facets');
+                app.view.repaint('apps');
                 app.busy();
             },
             'query:stop': function () {
@@ -222,10 +221,10 @@ define('io.ox/search/main', [
             'button:app': function () {
                 app.view.repaint('apps');
                 app.idle();
-            },
-            'button:clear': function () {
-                app.view.$('.search-field').val('');
-            }
+            }//,
+            // 'button:clear': function () {
+            //     app.view.$('.search-field').val('');
+            // }
         });
 
         // mediator: model
@@ -240,7 +239,7 @@ define('io.ox/search/main', [
                 app.apiproxy.query();
             },
             'reset': function () {
-                app.view.repaint('facets info items apps');
+                app.view.repaint('info items apps');
             }
         });
 

@@ -24,6 +24,7 @@ define([
         node,
         header,
         model,
+        capabilities,
         setup = _.memoize(
             function () {
                 //launch app
@@ -36,15 +37,16 @@ define([
                 });
 
                 return def;
-            }),
-        capabilities = caputil
-            .preset('common')
-            .init('io.ox/tasks/edit/main', edit)
-            .apply();
+            });
 
     describe('Tasks edit view', function () {
         beforeEach(function () {
             //set capabilities
+            capabilities = caputil
+                .preset('common')
+                .init('io.ox/tasks/edit/main', edit)
+                .apply();
+
             return capabilities.then(function () {
                 return setup();
             });

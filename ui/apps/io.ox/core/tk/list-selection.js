@@ -22,6 +22,7 @@ define('io.ox/core/tk/list-selection', [
         SWIPEDELETE = '.swipe-button.delete',
         SWIPEMORE = '.swipe-button.more',
         isTouch = _.device('touch'),
+        isLegacyWebview = _.device('android') && _.browser.android < '4.4',
         behavior = settings.get('selectionMode', 'normal'),
         // mobile stuff
         THRESHOLD_X =        20, // touchmove threshold for mobiles in PX
@@ -71,7 +72,7 @@ define('io.ox/core/tk/list-selection', [
             .on('contextmenu', function (e) { e.preventDefault(); });
 
         if (this.view.options.swipe) {
-            if (isTouch && _.device('android || ios') && _.device('smartphone')) {
+            if (isTouch && _.device('android || ios') && _.device('smartphone') && !isLegacyWebview) {
                 this.view.$el
                     .on('touchstart', SELECTABLE, this, this.onTouchStart)
                     .on('touchmove', SELECTABLE, this, this.onTouchMove)

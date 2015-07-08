@@ -279,6 +279,8 @@ define('io.ox/core/settings/pane', [
             });
             options.push({ label: gt('None'), value: 'none' });
 
+            if (options.length <= 2) return;
+
             point.extend({
                 id: 'autoStart',
                 index: 500,

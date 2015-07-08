@@ -746,7 +746,7 @@ define('io.ox/core/commons', [
         } else {
             // single item
             folderAPI.on('update', checkFolder, { cid: cid, folder: data.folder_id });
-            api.on('delete:' + ecid, remove);
+            api.on('delete:' + ecid + (shortecid ? ' delete:' + shortecid : ''), remove);
             api.on('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
             api.on('move:' + ecid, move);
         }

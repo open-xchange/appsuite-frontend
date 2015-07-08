@@ -784,7 +784,6 @@ define('io.ox/core/main', [
                                 });
                             },  gt('Search'))
                         .attr('id', 'io-ox-search-topbar-icon')
-                        .addClass('io-ox-search')
                     );
                 }
             }
@@ -808,6 +807,8 @@ define('io.ox/core/main', [
             id: 'help',
             index: 300,
             draw: function () {
+                if (_.device('smartphone')) return;
+
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
@@ -1095,6 +1096,7 @@ define('io.ox/core/main', [
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
 
                 $(window).resize(tabManager);
+                ox.on('recalculate-topbarsize', tabManager);
             }
         });
 
@@ -1143,24 +1145,35 @@ define('io.ox/core/main', [
             }
         });
 
+        ext.point('io.ox/core/mobile').extend({
+            id: 'i18n',
+            draw: function () {
+                // pass the translated string to the dropdown handler
+                // which has no access to gt functions
+                $(document).trigger('dropdown:translate', gt('Close'));
+            }
+        });
+
         // add some senseless characters
         // a) to avoid unwanted scrolling
         // b) to recognize deep links
         if (location.hash === '') location.hash = '#!!';
 
         var autoLaunchArray = function () {
-
             var autoStart = [];
 
             if (settings.get('autoStart') === 'none') {
                 autoStart = [];
             } else {
-                autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) {
-                    return !_.isUndefined(o) && !_.isNull(o);
-                });
-                if (_.isEmpty(autoStart)) {
-                    autoStart.push('io.ox/mail');
-                }
+                var favoritePaths = _(appAPI.getFavorites()).pluck('path');
+
+                autoStart = _([].concat(settings.get('autoStart'), 'io.ox/mail', favoritePaths))
+                    .chain()
+                    .filter(function (o) {
+                        return !_.isUndefined(o) && !_.isNull(o) && favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
+                    })
+                    .first(1)
+                    .value();
             }
 
             return autoStart;
@@ -1498,6 +1511,7 @@ define('io.ox/core/main', [
                     // draw top bar now
                     ext.point('io.ox/core/banner').invoke('draw');
                     ext.point('io.ox/core/topbar').invoke('draw');
+                    ext.point('io.ox/core/mobile').invoke('draw');
 
                     // help here
                     if (!ext.point('io.ox/core/topbar').isEnabled('default')) {

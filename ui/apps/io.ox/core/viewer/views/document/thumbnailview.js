@@ -76,7 +76,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 thumbnail = $('<div class="document-thumbnail">'),
                 thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
                 thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
-            thumbnail.append(thumbnailImage).busy();
+            thumbnail.append(thumbnailImage).addClass('io-ox-busy');
             this.thumbnailImages.push(thumbnailImage);
             thumbnailLink.append(thumbnail, thumbnailPageNumber).attr({
                 'role': 'button',
@@ -130,7 +130,13 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             var image = new Image();
             image.className = className;
             image.onload = function () {
-                $(image.parentNode).idle();
+                var ratio = this.width / this.height,
+                    defaultWidth = this.width > this.height ? 140 : 100;
+                $(this.parentNode).css({
+                    width: defaultWidth,
+                    height: defaultWidth / ratio
+                });
+                $(image.parentNode).removeClass('io-ox-busy');
             };
             return image;
         },
@@ -154,12 +160,13 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * @param {jQuery.Event} event
          */
         onThumbnailKeydown: function (event) {
-            event.stopPropagation();
             switch (event.which || event.keyCode) {
                 case 13: // enter
+                    event.stopPropagation();
                     this.onThumbnailClicked(event);
                     break;
                 case 32: // space
+                    event.stopPropagation();
                     this.onThumbnailClicked(event);
                     break;
             }

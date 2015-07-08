@@ -16,216 +16,200 @@ define('io.ox/search/autocomplete/extensions',[
     'io.ox/contacts/api',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
-    'less!io.ox/search/style'
-], function (ext, api, settings, gt) {
-
+    'io.ox/core/tk/tokenfield',
+    'less!io.ox/search/style',
+    'less!io.ox/find/style'
+], function (ext, api, settings, gt, Tokenfield) {
     'use strict';
 
     var POINT = 'io.ox/search/autocomplete';
 
-    ext.point(POINT + '/handler/click').extend({
-        id: 'default',
-        index: 1000000000000,
-        flow: function (baton) {
-            baton.data.deferred.done(function (value) {
-                // exclusive: define used option (type2 default is index 0 of options)
-                var option = _.find(value.options, function (item) {
-                    return item.id === value.id;
-                });
+    return {
 
-                baton.data.model.add(value.facet, value.id, (option || {}).id);
-            });
-        }
-    });
+        searchfield: function () {
+            if (!_.device('smartphone')) return;
 
-    var extensions = {
-
-        searchfieldLogic: function (baton) {
-            var ref = this.find('.search-field'),
-                app = baton.app,
-                model = baton.model,
-                view = baton.app.view,
-                container = baton.$.container;
             // input group and dropdown
-            ref.autocomplete({
-                api: app.apiproxy,
-                minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
-                mode: 'search',
-                delay: 100,
-                parentSelector: container  ? '.query' : '.io-ox-search',
-                container: container,
-                cbshow: function () {
-                    // reset autocomplete tk styles (currently only mobile)
-                    ext.point(POINT + '/style-container').invoke('draw', this, baton);
+            this.append(
+                $('<input type="text">')
+                .attr({
+                    class: 'form-control search-field',
+                    role: 'search',
+                    tabindex: 1
+                })
+            );
+        },
 
-                },
-                // TODO: would be nice to move to control
-                source: function (val) {
-                    // show dropdown immediately (busy by autocomplete tk)
-                    ref.open();
-                    return app.apiproxy.search(val);
-                },
+        tokenfield: function (baton) {
+            var model = baton.model,
+                view = baton.app.view,
+                row = this.parent(),
+                field;
+
+            var tokenview = new Tokenfield({
+                extPoint: POINT,
+                id: 'search-field-mobile',
+                placeholder: gt('Search') + '...',
+                className: 'search-field',
+                delayedautoselect: true,
+                dnd: false,
+                // tokenfield options
+                hint: false,
+                allowEditing: false,
+                createTokensOnBlur: false,
+                customDefaultModel: true,
+                // typeahead options
+                maxResults: 20,
+                minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
+                autoselect: true,
+                source: baton.app.apiproxy.search,
                 reduce: function (data) {
-                    // only show not 'advanced'
-                    data.list = _.filter(data.list, function (facet) {
-                        return !_.contains(facet.flags, 'advanced');
-                    });
-                    return data;
+                    return data.list;
                 },
-                draw: function (value) {
-                    baton.data = value;
+                suggestion: function (tokendata) {
+                    var node = $('<div class="autocomplete-item">'),
+                        model = tokendata.model;
+
+                    baton = ext.Baton.ensure({
+                        data: model.get('value')
+                    });
+                    node.addClass(baton.data.facet);
                     var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                     // use special draw handler
                     if (individual.list().length) {
                         // special
-                        individual.invoke('draw', this, baton);
+                        individual.invoke('draw', node, baton);
                     } else {
                         // default
-                        ext.point(POINT + '/item').invoke('draw', this, baton);
+                        ext.point(POINT + '/item').invoke('draw', node, baton);
                     }
+                    return node;
                 },
-                stringify: function () {
-                    // keep input value when item selected
-                    return ref.val();
-                },
-                click: function (e) {
+                harmonize: function (data) {
+                    var list = [];
+                    // workaround to handle it like io.ox/find
+                    var ValueModel = Backbone.Model.extend({
+                        getDisplayName: function () {
+                            var value = this.get('value');
+                            return (value.item && value.item.name ? value.item.name : value.name || '\u00A0' );
+                        }
+                    });
 
-                    // apply selected filter
-                    var node = $(e.target).closest('.autocomplete-item'),
-                        value = node.data(),
-                        baton = ext.Baton.ensure({
-                            deferred: $.Deferred().resolve(value),
-                            model: model,
-                            view: view
+                    _.each(data, function (facet) {
+                        // workaround to handle it like io.ox/find
+                        facet.hasPersons = function () {
+                            return ['contacts', 'contact', 'participant', 'task_participants'].indexOf(this.id) > -1;
+                        };
+
+                        _.each(facet.values || [ facet ], function (data) {
+                            var value = $.extend({}, data, { facet: facet.id }),
+                                valueModel = new ValueModel({
+                                    facet: facet,
+                                    value: value,
+                                    // workaround to handle it like io.ox/find
+                                    data: {
+                                        value: facet.item
+                                    }
+                                });
+                            // hint: basically this data isn't relevant cause tokens
+                            //       are hidden in favor of custom facets
+                            list.push({
+                                label: valueModel.getDisplayName(),
+                                value: value.id,
+                                model: valueModel
+                            });
                         });
-
-                    // empty input field
-                    if (!(model.getOptions().switches || {}).keepinput)
-                        ref.val('');
+                    });
+                    return list;
+                },
+                click: function (e, data) {
+                    // apply selected filter
+                    var baton = ext.Baton.ensure({
+                            deferred: $.Deferred().resolve(),
+                            view: view,
+                            model: model,
+                            token: {
+                                label: data.label,
+                                value: data.value,
+                                model: data.model
+                            }
+                        });
 
                     ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }
-            })
-            .on('focus focus:custom click', function (e, opt) {
-
-                //search mode: not when enterin input with tab key
-                if (ref.data('byclick')) {
-                    ref.removeData('byclick');
-                    app.view.trigger('focus', model.getApp());
-                }
-                // hint: 'click' supports click on already focused
-                // keep dropdown closed on focus event
-                opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0 });
-
-                // simulate tab keyup event
-                ref.trigger({
-                    type: 'keyup',
-                    which: 9
-                }, opt);
-
-            })
-            .on('mousedown', function () {
-                if (!ref.is(':focus'))
-                    ref.data('byclick', true);
-
-            })
-            .on('keyup', function (e, options) {
-                var opt = _.extend({}, (e.data || {}), options || {}),
-                    // keys pressed
-                    down = e.which === 40 && !ref.isOpen(),
-                    tab = e.which === 9;
-
-                // adjust original event instead of throwing a new one
-                // cause handler (fnKeyUp) is debounced and we might set some options
-                if (_.isUndefined(opt.isRetry) && (down || tab)) {
-                    e.data = _.extend({}, e.data || {}, opt, { isRetry: true });
-                }
             });
 
-            this.find('.btn-clear')
-                .on('click', function () {
-                    view.trigger('button:clear');
-                });
+            // use/show tokenfield
+            this.find('.search-field').replaceWith(tokenview.$el);
+            tokenview.render();
+            field = tokenview.input.attr('autofocus', true);
 
-            this.find('.btn-search')
-                .on('click', function () {
-                    // open autocomplete dropdown
-                    ref.trigger('click');
-                    // trigger ENTER keypress
-                    var keydown = $.Event('keydown');
-                    keydown.which = 13;
-                    ref.trigger(keydown);
-                    // prevent, propagation
+            var updateState = function (e) {
+                var node = $('.token-input.tt-input'),
+                    container = node.closest('.io-ox-search');
+                // no chars entered, no tokens
+                if (!node.val()) {
+                    container.addClass('empty');
+                    $('.tokenfield > .twitter-typeahead').show();
+                    return;
+                }
+                // token exists
+                if (e.type === 'tokenfield:createdtoken') {
+                    $('.tokenfield > .twitter-typeahead').hide();
+                }
+                // at least some chars are entered
+                container.removeClass('empty');
+            };
+
+            // toggle search/clear icon visiblity
+            field.on({
+                'change input': updateState
+            });
+            tokenview.$el.on('tokenfield:createdtoken tokenfield:removedtoken', updateState);
+            tokenview.$el.on('tokenfield:removedtoken', function (e) {
+                var tokenmodel = e.attrs.model,
+                    data = tokenmodel.get('facet')._compact || tokenmodel.get('value');
+                model.remove(data.facet, data.value || data.id);
+            });
+
+            var empty = function (e) {
+                if (e) e.preventDefault();
+                field.parent().find('.token-input').val('');
+                // close dropdown
+                field.typeahead('close');
+
+                // empty tokenfield
+                var tokens = tokenview.$el.tokenfield('getTokens');
+                _.each(tokens, function (token) {
+                    tokenview.$el.trigger(
+                        $.Event('tokenfield:removetoken', { attrs: token })
+                    );
+                });
+                // params: add, triggerChange
+                tokenview.$el.tokenfield('setTokens', [], false, false);
+                _.each(tokens, function (token) {
+                    tokenview.$el.trigger(
+                        $.Event('tokenfield:removedtoken', { attrs: token })
+                    );
+                });
+                updateState();
+            };
+
+            baton.model.on('reset', empty);
+
+            // clear action
+            row.find('.btn-clear')
+                .on('click', empty);
+
+            row.find('.btn-search')
+                .on('click', function (e) {
+                    e.preventDefault();
+                    $('.token-input.tt-input').focus();
                     return false;
                 });
 
             return this;
-        },
-
-        searchfieldMobile: function (baton) {
-
-            if (!_.device('smartphone')) return;
-
-            var group,
-                label = gt('Search'),
-                id = 'search-search-field';
-
-            // input group and dropdown
-            this.append(
-                group = $('<div class="input-group">')
-                    .append(
-                        $('<input type="text">')
-                        .attr({
-                            class: 'form-control search-field',
-                            role: 'search',
-                            tabindex: 1,
-                            id: id,
-                            placeholder: label + ' ...'
-                        }),
-                        $('<label class="sr-only">')
-                            .attr('for', id)
-                            .text(label)
-                    )
-            );
-
-            // buttons
-            group.append(
-                $('<a href="#">')
-                    .attr({
-                        'tabindex': '1',
-                        'class': 'btn-clear',
-                        'aria-label': gt('Clear field'),
-                        'role': 'button'
-                    }).append(
-                        $('<i class="fa fa-times"></i>')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                    })
-            );
-            group.append(
-                $('<span class="input-group-btn">').append(
-                    // submit
-                    $('<button type="button">')
-                    .attr({
-                        'tabindex': '1',
-                        'class': 'btn btn-default btn-search',
-                        'aria-label': gt('Search')
-                    })
-                    .append(
-                        $('<i class="fa fa-search"></i>')
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        var e = $.Event('keydown');
-                        e.which = 13;
-                    })
-                )
-            );
-
-            // add search logic (autocomplet etc.)
-            extensions.searchfieldLogic.call(this, baton);
         },
 
         styleContainer: function (baton) {
@@ -235,18 +219,6 @@ define('io.ox/search/autocomplete/extensions',[
                 // reset calculated style from autocomplete tk
                 baton.$.container.attr('style', value);
             }
-        },
-
-        item: function (baton) {
-            this.addClass(baton.data.facet);
-            // contact picture
-            ext.point(POINT + '/image').invoke('draw', this, baton);
-            // display name
-            ext.point(POINT + '/name').invoke('draw', this, baton);
-            // email address
-            ext.point(POINT + '/detail').invoke('draw', this, baton);
-            // aria lebel
-            ext.point(POINT + '/a11y').invoke('draw', this, baton);
         },
 
         image: function (baton) {
@@ -307,9 +279,19 @@ define('io.ox/search/autocomplete/extensions',[
                 'aria-label': text,
                 'tabIndex': 1
             });
+        },
+
+        select: function (baton) {
+            baton.data.deferred.done(function () {
+                var value = baton.data.token.model.get('value'),
+                    option;
+                // exclusive: define used option (type2 default is index 0 of options)
+                option = _.find(value.options, function (item) {
+                    return item.id === value.id;
+                });
+
+                baton.data.model.add(value.facet, value.id, (option || {}).id);
+            });
         }
-
     };
-
-    return extensions;
 });

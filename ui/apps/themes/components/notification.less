@@ -77,6 +77,24 @@
             min-height: 20px;
         }
 
+        .desktop-notification-info {
+            padding: 5px 14px 10px 14px;
+            background-color: rgba(0, 0, 0, 0.05);
+            .enable-button {
+                float: right;
+                margin-left: 5px;
+            }
+            .later-button {
+                float: right;
+            }
+            &.clickable {
+                cursor: pointer;
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.08);
+                }
+            }
+        }
+
         .notification-area-title {
             font-family: "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
             font-weight: 300;

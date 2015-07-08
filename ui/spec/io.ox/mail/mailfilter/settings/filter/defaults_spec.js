@@ -74,7 +74,7 @@ define(['io.ox/mail/mailfilter/settings/filter/defaults'], function (defaults) {
 
         it('should provide defaults for test size', function () {
             defaults.tests.should.have.a.property('size');
-            defaults.tests.size.should.be.deep.equal({ 'comparison': 'over', 'id': 'size', 'size': '' });
+            defaults.tests.size.should.be.deep.equal({ 'comparison': 'over', 'id': 'size', 'size': 0 });
         });
 
         //actions

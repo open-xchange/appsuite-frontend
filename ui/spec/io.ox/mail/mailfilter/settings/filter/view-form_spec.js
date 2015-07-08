@@ -112,49 +112,59 @@ define([
 
         it('should fill the dropdowns with all available conditions and actions', function () {
             // conditions
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Content') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Current Date') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Sender/From') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Any recipient') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Subject') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mailing list') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('To') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('CC') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Header') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Envelope') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Size (bytes)') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Content') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Current Date') + ')')).to.have.length(1);
 
             // actions
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Keep') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Discard') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Redirect to') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Move to folder') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Reject with reason') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mark mail as') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Tag mail with') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Flag mail with') + ')')).to.have.length(1);
 
         });
 
-        it('should draw the "Sender/From" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
+        // conditions
+        it('should draw the "Sender/From" condition', function (done) {
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Sender/From') + ')').click();
 
             expect($popup.find('.alert.alert-info'), 'remove alert info element if a condition is displayed').to.have.length(0);
 
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Sender/From') + ')')).to.have.length(1);
+
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
-            expect($popup.find('li input[data-action="change-text-test"]').hasClass('warning'), 'set warnig class if field is empty').to.be.true;
+            expect($popup.find('.row').hasClass('has-error'), 'set warnig class if field is empty').to.be.true;
             expect($popup.find('button[data-action="save"]:disabled'), 'disable save button if field is empty').to.have.length(1);
-            $popup.find('li input[data-action="change-text-test"]').val('test').keyup();
 
-            expect($popup.find('li input[data-action="change-text-test"]').hasClass('warning'), 'remove warnig class if field is filled').to.be.false;
-            expect($popup.find('button[data-action="save"]:disabled'), 'reenable save button if field is filled').to.have.length(0);
-            $popup.find('li input[data-action="change-text-test"]').val('').keyup();
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('test').change();
+                expect($popup.find('.row').hasClass('has-error'), 'remove warnig class if field is filled').to.be.false;
+                expect($popup.find('button[data-action="save"]:disabled'), 'reenable save button if field is filled').to.have.length(0);
+                done();
+            }, 1);
 
-            expect($popup.find('li input[data-action="change-text-test"]').hasClass('warning'), 'set warnig class if field value has been cleared').to.be.true;
-            expect($popup.find('button[data-action="save"]:disabled'), 'disable save button if field value has been cleared').to.have.length(1);
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('').change();
+                expect($popup.find('.row').hasClass('has-error').hasClass('has-error'), 'set warnig class if field value has been cleared').to.be.true;
+                expect($popup.find('button[data-action="save"]:disabled'), 'disable save button if field value has been cleared').to.have.length(1);
+                done();
+            }, 1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
             expect($popup.find('li li a[data-value="is"]')).to.have.length(1);
@@ -165,14 +175,18 @@ define([
 
             $popup.find('li a[data-action="remove-test"]').click();
             expect($popup.find('li.filter-settings-view')).to.have.length(0);
+            expect($popup.find('.alert.alert-info'), 'alert for empty conditions').to.have.length(1);
 
         });
 
         it('should draw the "Any recipient" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Any recipient') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Any recipient') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -188,10 +202,13 @@ define([
         });
 
         it('should draw the "Subject" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Subject') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Subject') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -207,10 +224,13 @@ define([
         });
 
         it('should draw the "Mailing list" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mailing list') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Mailing list') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -226,10 +246,13 @@ define([
         });
 
         it('should draw the "To" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('To') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('To') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -245,10 +268,13 @@ define([
         });
 
         it('should draw the "CC" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('CC') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('CC') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -264,11 +290,14 @@ define([
         });
 
         it('should draw the "Header" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Header') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Header') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test-second"]')).to.have.length(1);
+            expect($popup.find('li input[name="headers"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
 
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
@@ -285,10 +314,13 @@ define([
         });
 
         it('should draw the "Envelope" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Envelope') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Envelope') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -304,10 +336,13 @@ define([
         });
 
         it('should draw the "Size (bytes)" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Size (bytes)') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Size (bytes)') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="size"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="over"]')).to.have.length(1);
@@ -321,10 +356,13 @@ define([
         });
 
         it('should draw the "Content" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Content') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Content') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Content') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-test"]')).to.have.length(1);
+            expect($popup.find('li input[name="values"]')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
@@ -340,7 +378,10 @@ define([
         });
 
         it('should draw the "Current Date" condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Current Date') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Current Date') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Current Date') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
             expect($popup.find('li input.datepicker-day-field ')).to.have.length(1);
@@ -357,8 +398,12 @@ define([
 
         });
 
+        // actions
         it('should draw the "Keep" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Keep') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Keep') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
 
@@ -370,7 +415,10 @@ define([
         });
 
         it('should draw the "Discard" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Discard') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Discard') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
             expect($popup.find('li.filter-settings-view').hasClass('warning')).to.be.true;
@@ -383,10 +431,13 @@ define([
         });
 
         it('should draw the "Redirect to" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Redirect to') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Redirect to') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-action"]')).to.have.length(1);
+            expect($popup.find('li input[name="to"]')).to.have.length(1);
 
             expect($popup.find('li a[data-action="remove-action"]')).to.have.length(1);
 
@@ -396,7 +447,10 @@ define([
         });
 
         it('should draw the "Move to folder" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Move to folder') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Move to folder') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
             expect($popup.find('li a.folderselect')).to.have.length(1);
@@ -410,10 +464,13 @@ define([
         });
 
         it('should draw the "Reject with reason" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Reject with reason') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Reject with reason') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-action"]')).to.have.length(1);
+            expect($popup.find('li input[name="text"]')).to.have.length(1);
 
             expect($popup.find('li a[data-action="remove-action"]')).to.have.length(1);
 
@@ -423,12 +480,15 @@ define([
         });
 
         it('should draw the "Mark mail as" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mark mail as') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Mark mail as') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
             expect($popup.find('li a.dropdown-toggle')).to.have.length(1);
 
-            expect($popup.find('li li a[data-action="change-value-actions"]')).to.have.length(2);
+            expect($popup.find('li li a[data-action="change-value"]')).to.have.length(2);
 
             expect($popup.find('li a[data-action="remove-action"]')).to.have.length(1);
 
@@ -438,10 +498,13 @@ define([
         });
 
         it('should draw the "Tag mail with" action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Tag mail with') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Tag mail with') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
-            expect($popup.find('li input[data-action="change-text-action"]')).to.have.length(1);
+            expect($popup.find('li input[name="flags"]')).to.have.length(1);
 
             expect($popup.find('li a[data-action="remove-action"]')).to.have.length(1);
 
@@ -451,7 +514,10 @@ define([
         });
 
         it('should draw the "Flag mail" with action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Flag mail with') + ')').click();
+
+            expect($popup.find('li.filter-settings-view .list-title')).to.have.length(1);
+            expect($popup.find('li.filter-settings-view .list-title:contains(' + gt('Flag mail with') + ')')).to.have.length(1);
 
             expect($popup.find('li.filter-settings-view')).to.have.length(1);
             expect($popup.find('li div.flag-dropdown')).to.have.length(1);
@@ -492,414 +558,489 @@ define([
 
         it('should save the "Sender/From" condition', function (done) {
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Sender/From') + ')').click();
 
-            $popup.find('[data-action="save"]').click();
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('sender').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['From'], id: 'header', values: ['sender'] });
-                done();
-            });
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['From'], id: 'header', values: ['sender'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Any recipient" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Any recipient') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To', 'Cc'], id: 'header', values: ['sender'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('sender').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To', 'Cc'], id: 'header', values: ['sender'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Subject" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('subject').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Subject') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Subject'], id: 'header', values: ['subject'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('subject').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Subject'], id: 'header', values: ['subject'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Mailing list" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('Listname').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mailing list') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({
-                    comparison: 'matches',
-                    headers: ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
-                    id: 'header',
-                    values: ['Listname']
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('Listname').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({
+                        comparison: 'matches',
+                        headers: ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
+                        id: 'header',
+                        values: ['Listname']
+                    });
+                    done();
                 });
-                done();
-            });
+
+            }, 1);
 
         });
 
         it('should save the "To" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('to value').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('To') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'header', values: ['to value'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('to value').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'header', values: ['to value'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "CC" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('CC value').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('CC') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['CC value'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('CC value').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['CC value'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Header" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('header value').trigger('change');
-            $popup.find('input[data-action="change-text-test-second"]').val('name value').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Header') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['name value'], id: 'header', values: ['header value'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="headers"]').val('name value').change();
+                $popup.find('li input[name="values"]').val('header value').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['name value'], id: 'header', values: ['header value'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Header" with header Cc', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('header value').trigger('change');
-            $popup.find('input[data-action="change-text-test-second"]').val('Cc').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Header') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['header value'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="headers"]').val('Cc').change();
+                $popup.find('li input[name="values"]').val('header value').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['header value'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Envelope" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('envelope value').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Envelope') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'envelope', values: ['envelope value'] });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('envelope value').change();
+                $popup.find('li li a[data-value="matches"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'envelope', values: ['envelope value'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Size (bytes)" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('10').trigger('change');
-            $popup.find('li li a[data-value="over"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Size (bytes)') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'over', id: 'size', size: '10' });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="size"]').val('10').change();
+                $popup.find('li li a[data-value="over"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'over', id: 'size', size: 10 });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Content" condition', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Content') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('test').trigger('change');
-            $popup.find('li li a[data-value="is"]').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Content') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'is', id: 'body', values: ['test'], extensionskey: 'text', extensionsvalue: null });
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="values"]').val('test').change();
+                $popup.find('li li a[data-value="is"]').click();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('test').should.be.deep.equal({ comparison: 'is', id: 'body', values: ['test'], extensionskey: 'text', extensionsvalue: null });
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Keep" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Keep') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ id: 'keep' }]);
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ id: 'keep' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Discard" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').click();
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Discard') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ id: 'discard' }]);
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ id: 'discard' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Redirect to" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').click();
-            $popup.find('input[data-action="change-text-action"]').val('tester@open-xchange.com').trigger('change');
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Redirect to') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ id: 'redirect', to: 'tester@open-xchange.com' }]);
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="to"]').val('tester@open-xchange.com').trigger('change');
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ id: 'redirect', to: 'tester@open-xchange.com' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the Move to folder action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') +')').click();
-            $popup.find('input[data-action="change-text-action"]').val('INBOX').trigger('change');
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Move to folder') +')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ id: 'move', into: 'INBOX' }]);
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="into"]').val('INBOX').change();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ id: 'move', into: 'INBOX' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Reject with reason" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').click();
-            $popup.find('input[data-action="change-text-action"]').val('reason').trigger('change');
 
-            $popup.find('[data-action="save"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Reject with reason') + ')').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ id: 'reject', text: 'reason' }]);
-                done();
-            });
+            setTimeout(function () {
+                $popup.find('li input[name="text"]').val('reason').change();
+                $popup.find('[data-action="save"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ id: 'reject', text: 'reason' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Mark mail as" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').click();
-            $popup.find('a:contains(' + gt('deleted') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mark mail as') + ')').click();
 
-            $popup.find('[data-action="save"]').click();
+            setTimeout(function () {
+                $popup.find('a:contains(' + gt('deleted') + ')').click();
+                $popup.find('[data-action="save"]').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ flags: ['\\deleted'], id: 'addflags' }]);
-                done();
-            });
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ flags: ['\\deleted'], id: 'addflags' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Tag mail with" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
-            $popup.find('input[data-action="change-text-action"]').val('tag').trigger('change');
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Tag mail with') + ')').click();
 
-            $popup.find('[data-action="save"]').click();
+            setTimeout(function () {
+                $popup.find('li input[name="flags"]').val('tag').change();
+                $popup.find('[data-action="save"]').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ flags: ['$tag'], id: 'addflags' }]);
-                done();
-            });
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ flags: ['$tag'], id: 'addflags' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should save the "Flag mail with" action', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
-            $popup.find('a[data-action="change-color"] span.flag-example.flag_1').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Flag mail with') + ')').click();
 
-            $popup.find('[data-action="save"]').click();
+            setTimeout(function () {
+                $popup.find('a[data-action="change-color"] span.flag-example.flag_1').click();
+                $popup.find('[data-action="save"]').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ flags: ['$cl_1'], id: 'addflags' }]);
-                done();
-            });
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ flags: ['$cl_1'], id: 'addflags' }]);
+                    done();
+                });
+
+            }, 1);
 
         });
 
         it('should create a rule with some conditions and actions', function (done) {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
-            $popup.find('li[data-test-id="1"] input[data-action="change-text-test"]').val('10').trigger('change');
-            $popup.find('li[data-test-id="1"] li a[data-value="over"]').click();
+            setTimeout(function () {
+                $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Sender/From') + ')').click();
+                $popup.find('li[data-test-id="0"] input[name="values"]').val('sender').change();
+                $popup.find('li[data-test-id="0"] a[data-value="matches"]').click();
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
-            $popup.find('input[data-action="change-text-action"]').val('tag').trigger('change');
+                $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Size (bytes)') + ')').click();
+                $popup.find('li[data-test-id="1"] input[name="size"]').val('10').change();
+                $popup.find('li[data-test-id="1"] li a[data-value="over"]').click();
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
-            $popup.find('li[data-action-id="1"] a[data-action="change-color"] span.flag-example.flag_1').click();
+                $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Tag mail with') + ')').click();
+                $popup.find('li[data-action-id="0"] input[name="flags"]').val('tag').change();
 
-            $popup.find('[data-action="save"]').click();
+                $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Flag mail with') + ')').click();
+                $popup.find('li[data-action-id="1"] a[data-action="change-color"] span.flag-example.flag_1').click();
 
-            waitsFor(function () {
-                if (collection.length === 1) {
-                    model = collection.findWhere({ id: 1 });
-                    return true;
-                }
-            }).then(function () {
-                model.get('actioncmds').should.be.deep.equal([{ flags: ['$tag'], id: 'addflags' }, { flags: ['$cl_1'], id: 'addflags' }]);
-                model.get('test').should.be.deep.equal({ id: 'allof', tests: [
-                    {
-                        comparison: 'matches',
-                        headers: ['From'],
-                        id: 'header',
-                        values: ['sender']
-                    }, {
-                        comparison: 'over',
-                        id: 'size',
-                        size: '10'
-                    }]
+                $popup.find('[data-action="save"]').click();
+                waitsFor(function () {
+                    if (collection.length === 1) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    model.get('actioncmds').should.be.deep.equal([{ flags: ['$tag'], id: 'addflags' }, { flags: ['$cl_1'], id: 'addflags' }]);
+                    model.get('test').should.be.deep.equal({ id: 'allof', tests: [
+                        {
+                            comparison: 'matches',
+                            headers: ['From'],
+                            id: 'header',
+                            values: ['sender']
+                        }, {
+                            comparison: 'over',
+                            id: 'size',
+                            size: 10
+                        }]
+                    });
+                    done();
                 });
-                done();
-            });
+
+            }, 1);
 
         });
 
         it('should draw the "Apply rule if ..." dropdown', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
-            $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
-            $popup.find('li li a[data-value="matches"]').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Sender/From') + ')').click();
+            $popup.find('li[data-test-id="0"] input[name="values"]').val('sender').trigger('change');
+            $popup.find('li[data-test-id="0"] li a[data-value="matches"]').click();
 
             expect($popup.find('a[data-value="allof"]')).to.have.length(0);
             expect($popup.find('a[data-value="anyof"]')).to.have.length(0);
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
-            $popup.find('li[data-test-id="1"] input[data-action="change-text-test"]').val('10').trigger('change');
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Size (bytes)') + ')').click();
+            $popup.find('li[data-test-id="1"] input[name="size"]').val('10').trigger('change');
             $popup.find('li[data-test-id="1"] li a[data-value="over"]').click();
 
             expect($popup.find('a[data-value="allof"]')).to.have.length(1);
@@ -945,20 +1086,20 @@ define([
 
         it('should fill the dropdowns with the limited actions', function () {
             // actions
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')')).to.have.length(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')')).to.have.length(0);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')')).to.have.length(0);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')')).to.have.length(0);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Keep') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Discard') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Redirect to') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Move to folder') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Reject with reason') + ')')).to.have.length(1);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Mark mail as') + ')')).to.have.length(0);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Tag mail with') + ')')).to.have.length(0);
+            expect($popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Flag mail with') + ')')).to.have.length(0);
 
         });
 
         it('should fill the dropdowns with the limited conditions', function () {
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Header') + ')').click();
 
             expect($popup.find('li li a[data-value="contains"]')).to.have.length(1);
             expect($popup.find('li li a[data-value="is"]')).to.have.length(1);
@@ -968,7 +1109,7 @@ define([
             $popup.find('li a[data-action="remove-test"]').click();
             expect($popup.find('li.filter-settings-view')).to.have.length(0);
 
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Size (bytes)') + ')').click();
 
             expect($popup.find('li li a[data-value="over"]')).to.have.length(0);
             expect($popup.find('li li a[data-value="under"]')).to.have.length(1);

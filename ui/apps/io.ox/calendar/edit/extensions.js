@@ -141,7 +141,7 @@ define('io.ox/calendar/edit/extensions', [
                 folderId = this.model.get('folder_id');
 
             folderAPI.get(folderId).done(function (folder) {
-                link.text(folder.title);
+                link.text(folder.display_title || folder.title);
             });
 
             this.$el.empty().append(

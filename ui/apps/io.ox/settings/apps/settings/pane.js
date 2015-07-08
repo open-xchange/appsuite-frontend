@@ -17,10 +17,15 @@ define('io.ox/settings/apps/settings/pane', [
     'io.ox/core/http',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
+    'io.ox/core/capabilities',
     'less!io.ox/settings/apps/settings/style'
-], function (ext, gt, http, dialogs, notifications) {
+], function (ext, gt, http, dialogs, notifications, capabilities) {
 
     'use strict';
+
+    if (!capabilities.has('oauth-grants')) {
+        return;
+    }
 
     ext.point('io.ox/settings/pane/external').extend({
         id: 'external/apps',

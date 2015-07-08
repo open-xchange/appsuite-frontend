@@ -38,24 +38,14 @@ define('io.ox/core/capabilities', function () {
 
         has: function () {
 
-            var list = _(_(arguments).flatten()).map(function (def) {
-                if (!def) {
-                    return '';
-                }
-                return def.split(/\s*[, ]\s*/);
+            // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
+            var condition = _(arguments).flatten().join(' && ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2');
+            condition = condition.replace(/[a-z_:-]+/ig, function (match) {
+                match = match.toLowerCase();
+                return api.isDisabled(match) ? false : (match in capabilities);
             });
 
-            list = _(list).flatten();
-
-            return _(list).all(function (id) {
-                var inverse = false, result;
-                if (id[0] === '!') {
-                    id = id.substr(1);
-                    inverse = true;
-                }
-                result = api.isDisabled(id) ? false : (id in capabilities);
-                return inverse ? !result : result;
-            });
+            return new Function('return !!(' + condition + ')')();
         },
 
         reset: function () {

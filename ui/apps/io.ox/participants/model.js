@@ -208,7 +208,7 @@ define('io.ox/participants/model', [
                     break;
                 case this.TYPE_EXTERNAL_USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
-                    if (this.get('id')) {
+                    if (this.get('id') && this.get('folder_id')) {
                         return contactAPI.get(this.pick('id', 'folder_id')).then(setModel);
                     } else {
                         return contactAPI.getByEmailaddress(this.getEmail()).then(setModel);

@@ -1,0 +1,12 @@
+Source: open-xchange-appsuite-saml
+Section: non-free/web
+Priority: optional
+Maintainer: Francisco Laguna <francisco.laguna@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), cdbs (>= 0.4.53), ant-optional (>= 1.7.0), default-jdk, nodejs (>= 0.10.0), npm
+Standards-Version: 3.9.2
+
+Package: open-xchange-appsuite-saml
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest
+Description: SAML login
+

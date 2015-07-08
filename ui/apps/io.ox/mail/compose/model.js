@@ -171,7 +171,8 @@ define('io.ox/mail/compose/model', [
             if (this.get('mode') === 'edit') {
                 this.set('defaultSignatureId', '', { silent: true });
             }
-            if (_.device('!smartphone')) return [];
+
+            if (_.device('!smartphone') || this.get('mode') === 'edit') return [];
 
             if (settings.get('mobileSignatureType') === 'custom') {
                 this.set('defaultSignatureId', '0', { silent: true });

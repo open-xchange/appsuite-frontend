@@ -254,6 +254,48 @@ define('io.ox/core/viewer/util', [
     };
 
     /**
+     *  Build necessary params for the document conversion to PDF.
+     *  Also adds proprietary properties of Mail and PIM attachment objects.
+     *
+     *  @param {String} source
+     *   the source of the file model.
+     */
+    Util.getConvertParams = function (model) {
+        var originalModel = model.get('origData'),
+            defaultParams = {
+                action: 'getdocument',
+                filename: encodeURIComponent(model.get('filename')),
+                id: encodeURIComponent(model.get('id')),
+                folder_id: encodeURIComponent(model.get('folder_id')),
+                documentformat: 'pdf',
+                priority: 'instant',
+                mimetype: encodeURIComponent(model.get('file_mimetype')),
+                nocache: _.uniqueId() // needed to trick the browser
+            },
+            paramExtension;
+        switch (model.get('source')) {
+            case 'mail':
+                paramExtension = {
+                    id: originalModel.mail.id,
+                    source: 'mail',
+                    attached: model.get('id')
+                };
+                break;
+            case 'pim':
+                var moduleId = model.get('module');
+                paramExtension = {
+                    source: this.MODULE_SOURCE_MAP[moduleId],
+                    attached: originalModel.attached,
+                    module: moduleId
+                };
+                break;
+            default:
+                return defaultParams;
+        }
+        return _.extend(defaultParams, paramExtension);
+    };
+
+    /**
      * Detect visible nodes from given nodes array.
      *
      * @returns {Array} visibleNodes

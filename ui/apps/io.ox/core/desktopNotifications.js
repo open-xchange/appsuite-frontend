@@ -88,8 +88,7 @@ define('io.ox/core/desktopNotifications', [
             }
         },
 
-        /*shows desktop notifications if supported
-        automatically asks for permission
+        /*shows desktop notifications if supported and user permission was granted
         supports 4 types of parameter configurations for maximum compatibility:
 
         messageObject e.g. {title: 'abc', body: 'hey', icon: ...}
@@ -123,14 +122,16 @@ define('io.ox/core/desktopNotifications', [
 
             if (permission === 'granted') {
                 draw(message);
-            } else if (permission === 'default') {
+            }
+            // code is used to automatically ask for permission, was removed in US 97886096
+            /* else if (permission === 'default') {
                 //default means we haven't asked yet
                 this.requestPermission(function (result) {
                     if (result === 'granted') {
                         draw(message);
                     }
                 });
-            }
+            }*/
         }
     };
 
