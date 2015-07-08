@@ -128,7 +128,7 @@ define('io.ox/core/notifications', [
                         e.stopPropagation();
                         cleanup();
                     }),
-                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Enable / Disable')).on('click', function (e) {
+                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Enable')).on('click', function (e) {
                         e.stopPropagation();
                         desktopNotifications.requestPermission(function (result) {
                             if (result === 'granted') {
@@ -140,13 +140,21 @@ define('io.ox/core/notifications', [
                         cleanup();
                     }),
                     cleanup = function () {
-                        textNode.text(gt('You can manage desktop notifications at any time, by vitising your settings'));
+                        textNode.text(gt('You can manage desktop notifications at any time, by vitising your settings'))
+                            .on('click', function () {
+                                var options = { id: 'io.ox/core' };
+                                ox.launch('io.ox/settings/main', options).done(function () {
+                                    this.setSettingsPane(options);
+                                });
+                            });
+                        containerNode.addClass('clickable');
                         laterButton.remove();
                         enableButton.remove();
                         self.hideNotificationInfo = true;
-                    };
+                    },
+                    containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, laterButton );
 
-                this.$el.prepend($('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, laterButton ));
+                this.$el.prepend(containerNode);
             }
         },
 
