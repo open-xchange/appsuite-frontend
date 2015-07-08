@@ -169,8 +169,14 @@ define('io.ox/calendar/month/perspective',
                         var retList = [];
                         if (list.length > 0) {
                             for (var j = 0; j < list.length; j++) {
-                                var mod = list[j];
-                                if ((mod.start_date > start && mod.start_date < end) || (mod.end_date > start && mod.end_date < end) || (mod.start_date < start && mod.end_date > end)) {
+                                var mod = list[j],
+                                    tmpStart = mod.start_date,
+                                    tmpEnd = mod.end_date;
+                                if (mod.full_time) {
+                                    tmpStart = date.Local.utc(tmpStart);
+                                    tmpEnd = date.Local.utc(tmpEnd);
+                                }
+                                if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
                                     var m = new Backbone.Model(mod);
                                     m.id = _.cid(mod);
                                     retList.push(m);
