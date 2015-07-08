@@ -204,7 +204,7 @@ define('io.ox/core/boot/form', [
                 if (bindLogin) $('#io-ox-login-form').on('submit', login);
                 $('#io-ox-login-username').prop('disabled', false);
                 // focus password or username
-                $(util.isGuest() ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
+                $($('#io-ox-login-username').is(':hidden') ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
             });
         });
     };

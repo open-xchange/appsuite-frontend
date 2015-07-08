@@ -68,8 +68,8 @@ define('io.ox/core/boot/util', [], function () {
             _.url.redirect((hash ? path + glue + hash : path));
         },
 
-        isGuest: function () {
-            return _.url.hash('login_type') === 'guest';
+        isAnonymous: function () {
+            return _.url.hash('login_type') === 'anonymous';
         }
 
     };

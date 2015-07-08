@@ -40,7 +40,7 @@ define('io.ox/core/boot/login/standard', [
         if ($.trim(username).length === 0 && !util.isAnonymous()) {
             return fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
         }
-        if ($.trim(password).length === 0 && !util.isPasswordOptional()) {
+        if ($.trim(password).length === 0) {
             return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
@@ -75,7 +75,7 @@ define('io.ox/core/boot/login/standard', [
             forceLanguage: language.getSelectedLanguage()
         };
 
-        if (util.isSharing()) {
+        if (_.url.hash('login_type') && _.url.hash('share') && _.url.hash('target')) {
             _.extend(options, {
                 action: _.url.hash('login_type'),
                 // share-specific data
