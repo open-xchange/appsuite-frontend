@@ -1071,3 +1071,4 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     return FilterDetailView;
 
 });
+
