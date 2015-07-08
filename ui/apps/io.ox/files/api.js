@@ -117,15 +117,19 @@ define('io.ox/files/api', [
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|vnd.ms-word|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
+            return /^application\/(msword|vnd.ms-word|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
         },
 
-        isPDF: function (type) {
-            return /^application\/pdf$/.test(type || this.getMimeType());
+        isPDF: function (type) {
+            return /^application\/pdf$/.test(type || this.getMimeType());
         },
 
-        isText: function (type) {
-            return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
+        isText: function (type) {
+            return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
+        },
+
+        isPresentation: function (type) {
+            return /^application\/vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation)/.test(type || this.getMimeType());
         },
 
         isEncrypted: function () {

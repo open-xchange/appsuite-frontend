@@ -1,0 +1,272 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
+ * @author Edy Haryono <edy.haryono@open-xchange.com>
+ */
+
+@presenter-toolbar-height: 40px;
+@presenter-toolbar-filename-width: 400px;
+@presenter-toolbar-filename-width-smartphone-portrait: 130px;
+@presenter-toolbar-filename-width-smartphone-landscape: 320px;
+@presenter-toolbar-link-width: 48px;
+@presenter-toolbar-link-width-smartphone: 50px;
+@presenter-toolbar-bgcolor: #ffffff;
+@presenter-toolbar-color: #3c73aa;
+@presenter-toolbar-border-color: #DDDDDD;
+@presenter-toolbar-hover-color: #284d71;
+@presenter-toolbar-hover-bgcolor: #EEEEEE;
+@presenter-toolbar-focus-color: #FFFFFF;
+@presenter-toolbar-focus-bgcolor: #DDDDDD;
+@presenter-toolbar-active-color: #284d71;
+@presenter-toolbar-active-bgcolor: #AAAAAA;
+
+ .io-ox-alert {
+     .presenter-notification-btn {
+         color: green;
+         font-size: 15pt;
+     }
+ }
+
+ .io-ox-presenter {
+     background-color: #F8F8F8;
+
+     .swiper-container, .swiper-wrapper, .swiper-slide {
+         height: 100%;
+     }
+
+     .swiper-slide {
+         display: flex;
+         align-items: center;
+         .pdf-page {
+             box-shadow: 0 0 8px rgba(0,0,0,0.2);
+         }
+     }
+
+     .presenter-toolbar {
+         position: absolute;
+         top: 0;
+         width: 100%;
+         height: @presenter-toolbar-height;
+         line-height: @presenter-toolbar-height;
+         background: @presenter-toolbar-bgcolor;
+         list-style: none;
+         padding-left: 0;
+         text-align: right;
+         z-index: 2;
+         border-bottom: 1px solid @presenter-toolbar-border-color;
+         i.fa {
+             font-size: 14px;
+         }
+         > li {
+             display: inline-block;
+             height: @presenter-toolbar-height;
+             text-align: center;
+             > a {
+                 display: inline-block;
+                 height: @presenter-toolbar-height;
+                 min-width: @presenter-toolbar-link-width;
+                 padding: 0 16px;
+                 outline: none;
+                 text-align: center;
+                 text-decoration: none;
+                 color: @presenter-toolbar-color;
+                 border-bottom: 1px solid @presenter-toolbar-border-color;
+                 &:hover {
+                     color: @presenter-toolbar-hover-color;
+                     background-color: @presenter-toolbar-hover-bgcolor;
+                 }
+                 &:focus,
+                 &:active {
+                     color: @presenter-toolbar-focus-color;
+                     background-color: @presenter-toolbar-focus-bgcolor;
+                 }
+             }
+             > a.active {
+                 color: @presenter-toolbar-active-color;
+                 background-color: @presenter-toolbar-active-bgcolor;
+             }
+             &.dropdown.open {
+                 background-color: @presenter-toolbar-active-bgcolor;
+             }
+             .dropdown-menu {
+                 margin: 0;
+             }
+         }
+     }
+
+    .presenter-presentation {
+        position: absolute;
+        top: 40px;
+        bottom: 0;
+        width: 100%;
+        outline: none;
+
+        .swiper-slide {
+            overflow: auto;
+        }
+
+        .swiper-button-control {
+            //display: none;
+            //margin-top: -50px;
+            color: rgb(60, 115, 170);
+            background: rgba(211, 211, 211, 0.3);
+            //outline: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 2px;
+            text-align: center;
+            i {
+                line-height: 50px;
+                font-size: 3rem;
+            }
+            &:hover, &:focus {
+                color: rgb(40, 77, 113);
+                background: rgba(211, 211, 211, 0.6);
+            }
+        }
+
+        .presentation-caption {
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            text-align: center;
+            display: none;
+            pointer-events: none;
+            .caption-content {
+                display: inline-block;
+                min-height: 24px;
+                line-height: 24px;
+                padding: 0 15px;
+                color: #FFFFFF;
+                background: rgba(0, 0, 0, 0.3);
+                .border-radius(4px);
+            }
+            &.smartphone {
+                bottom: 6px;
+            }
+        }
+
+        @presenter-overlay-bgcolor: rgba(0, 0, 0, 0.8);
+        .pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: @presenter-overlay-bgcolor;
+            z-index: 1;
+            display: none;
+            .pause-infobox {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                padding: 20px;
+                text-align: center;
+            }
+            .pause-message {
+                color: #999999;
+                margin-right: 1em;
+            }
+            .pause-leave {
+                background-color: #555;
+                color: #ccc;
+                border-color: #777;
+            }
+        }
+    }
+
+    @presenter-sidebar-bgcolor: #f5f5f5;
+    @presenter-sidebar-border-color: #DDDDDD;
+    @presenter-sidebar-width: 320px;
+    .presenter-sidebar {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        bottom: 0;
+        width: @presenter-sidebar-width;
+        outline: none;
+        z-index: 2;     // hide captions when sidebar is 100% width
+        padding: 15px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: @presenter-sidebar-bgcolor;
+        border-left: 1px solid @presenter-sidebar-border-color;
+
+        &.opened {
+            display: block;
+        }
+
+        .sidebar-section-heading {
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-section-headline {
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        @presenter-sidebar-participant-bgcolor: #eaeaea;
+        .participants-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .participant {
+            display: table;
+            table-layout: fixed;
+            margin-bottom: 2px;
+            padding: 10px;
+            background-color: @presenter-sidebar-participant-bgcolor;
+            > div {
+                display: table-cell;
+                height: 40px;
+                vertical-align: middle;
+            }
+        }
+
+        .participant-picture-col {
+            padding-right: 10px;
+        }
+
+        .picture {
+            width: 40px;
+            height: 40px;
+            background-size: cover;
+            border-radius: 50%;
+        }
+
+        @presenter-sidebar-participant-color: #333;
+        .participant-name-col {
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .name {
+            color: @presenter-sidebar-participant-color;
+            cursor: pointer;
+        }
+
+        .participant-role-col {
+            i {
+                font-size: 24px;
+                color: #333;
+                margin-top: 5px;
+            }
+        }
+
+
+    }
+
+ }

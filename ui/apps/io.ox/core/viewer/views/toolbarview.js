@@ -117,6 +117,21 @@ define('io.ox/core/viewer/views/toolbarview', [
                     });
                 }
             },
+            'launchpresenter': {
+                prio: 'hi',
+                mobile: 'lo',
+                label: gt('Start presentation'),
+                icon: 'fa  fa-line-chart',
+                ref: TOOLBAR_ACTION_ID + '/launchpresenter',
+                customize: function () {
+                    this.addClass('viewer-toolbar-launchpresenter')
+                    .attr({
+                        tabindex: '1',
+                        title: gt('Start presentation'),
+                        'aria-label': gt('Start presentation')
+                    });
+                }
+            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -346,6 +361,18 @@ define('io.ox/core/viewer/views/toolbarview', [
             ox.launch('io.ox/files/detail/main', fileModel);
         }
     });
+
+    new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
+        id: 'launchpresenter',
+        requires: function (e) {
+            return e.baton.model.isPresentation();
+        },
+        action: function (baton) {
+            var fileModel = baton.model;
+            ox.launch('io.ox/presenter/main', fileModel);
+        }
+    });
+
     new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
         action: function () {}
