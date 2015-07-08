@@ -38,10 +38,10 @@ define('io.ox/core/boot/login/standard', [
 
         // user name and password shouldn't be empty
         if ($.trim(username).length === 0 && !util.isAnonymous()) {
-            return fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
+            return util.fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
         }
         if ($.trim(password).length === 0) {
-            return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
+            return util.fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
         login(username, password).then(
@@ -57,10 +57,10 @@ define('io.ox/core/boot/login/standard', [
                     _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder });
                 }
                 // success
-                restore();
+                util.restore();
                 ox.trigger('login:success', data);
             },
-            fail
+            util.fail
         );
     };
 
@@ -85,43 +85,6 @@ define('io.ox/core/boot/login/standard', [
         }
 
         return session.login(options);
-    }
-
-    function restore() {
-        // stop being busy
-        $('#io-ox-login-form').css('opacity', '');
-        $('#io-ox-login-blocker').hide();
-        $('#io-ox-login-feedback').idle();
-    }
-
-    function fail(error, focus) {
-        // fail
-        $('#io-ox-login-feedback').idle();
-        // visual response (shake sucks on touch devices)
-        $('#io-ox-login-form').css('opacity', '');
-        // show error
-        if (error && error.error === '0 general') {
-            util.feedback('error', 'No connection to server. Please check your internet connection and retry.');
-        } else if (error && error.code === 'LGI-0011') {
-            //password expired
-            util.feedback('error', function () {
-                return [$('<p>').text(util.gt('Your password is expired. Please change your password to continue.')),
-                        // don't use a button here or it will trigger a submit event
-                        $('<a target="_blank" role="button" class="btn btn-primary btn">')
-                            .text(util.gt('Change password'))
-                            // error_params[0] should contain a url to password change manager or sth.
-                            .attr( 'href', error.error_params[0] )];
-            });
-        } else {
-            util.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
-        }
-        // restore form
-        restore();
-        // reset focus
-        var id = (_.isString(focus) && focus) || (util.isAnonymous() && 'password') || 'username';
-        $('#io-ox-login-' + id).focus().select();
-        // event
-        ox.trigger('login:fail', error);
     }
 
     // post form into iframe to store username and password

@@ -40,13 +40,27 @@ define('io.ox/core/boot/form', [
         function resetPassword() {
             $('#io-ox-login-form').attr({
                 action: '/appsuite/api/share/reset/password',
-                method: 'post'
+                method: 'post',
+                target: '_self'
             }).append(
                 $('<input type="hidden" name="share">').val(_.url.hash('share')),
                 $('<input type="hidden" name="confirm">').val(_.url.hash('confirm'))
-            );
+            ).submit(function (e) {
+                var pass1 = $.trim($('#io-ox-login-password').val()),
+                    pass2 = $.trim($('#io-ox-retype-password').val());
+                if (pass1.length === 0 || pass2.length === 0) {
+                    e.preventDefault();
+                    return util.fail({ error: util.gt('Please enter your new password.'), code: 'UI-0003' }, 'password');
+                }
+                if (pass1 !== pass2) {
+                    e.preventDefault();
+                    return util.fail({ error: util.gt('Please enter the same password.'), code: 'UI-0004' }, 'password');
+                }
+            });
             // remove unused fields
             $('#io-ox-forgot-password, #io-ox-login-username').remove();
+            // show retype
+            $('#io-ox-login-form div.row.password-retype').show();
             // i18n
             $('#io-ox-login-password').attr({
                 'data-i18n': gt('New password'),

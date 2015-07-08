@@ -70,6 +70,43 @@ define('io.ox/core/boot/util', [], function () {
 
         isAnonymous: function () {
             return _.url.hash('login_type') === 'anonymous';
+        },
+
+        fail: function (error, focus) {
+            // fail
+            $('#io-ox-login-feedback').idle();
+            // visual response (shake sucks on touch devices)
+            $('#io-ox-login-form').css('opacity', '');
+            // show error
+            if (error && error.error === '0 general') {
+                this.feedback('error', 'No connection to server. Please check your internet connection and retry.');
+            } else if (error && error.code === 'LGI-0011') {
+                //password expired
+                this.feedback('error', function () {
+                    return [$('<p>').text(this.gt('Your password is expired. Please change your password to continue.')),
+                            // don't use a button here or it will trigger a submit event
+                            $('<a target="_blank" role="button" class="btn btn-primary btn">')
+                                .text(this.gt('Change password'))
+                                // error_params[0] should contain a url to password change manager or sth.
+                                .attr( 'href', error.error_params[0] )];
+                });
+            } else {
+                this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
+            }
+            // restore form
+            this.restore();
+            // reset focus
+            var id = (_.isString(focus) && focus) || (this.isAnonymous() && 'password') || 'username';
+            $('#io-ox-login-' + id).focus().select();
+            // event
+            ox.trigger('login:fail', error);
+        },
+
+        restore: function () {
+            // stop being busy
+            $('#io-ox-login-form').css('opacity', '');
+            $('#io-ox-login-blocker').hide();
+            $('#io-ox-login-feedback').idle();
         }
 
     };
