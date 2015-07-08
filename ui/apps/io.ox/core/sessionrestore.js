@@ -13,14 +13,14 @@
 
 define('io.ox/core/sessionrestore', [
     'io.ox/core/extensions',
-    'settings!io.ox/office'
+    'settings!io.ox/core'
 ], function (ext, settings) {
 
     // private static methods ----------------------------------------------------
 
     function isActive() {
         try {
-            return Boolean(settings.get('autorestore'));
+            return Boolean(settings.get('autorestoredocuments'));
         } catch (e) {
             if (ox.debug) {
                 console.error(e);
