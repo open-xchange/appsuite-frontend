@@ -30,87 +30,58 @@ define('io.ox/core/boot/form', [
 
         util.debug('Show form ...');
 
-        // sharing
-        if (util.isSharing()) {
-            // prefill or hide username input in guest mode
-            if (util.isGuest()) {
-                var loginName = _.url.hash('login_name');
-                $('#io-ox-login-username').hide();
-                if (!_.isEmpty(loginName)) {
-                    $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
-                }
-            }
+        function displayMessageOnly() {
+            // remove all other inputs
+            $('#io-ox-login-form div.row')
+                .filter('.username, .password, .options, .buttons')
+                .remove();
+        }
 
-            if (util.isAnonymous()) {
-                $('#io-ox-login-username').hide();
-                $('#io-ox-forgot-password').remove();
-            }
+        function resetPassword() {
+            $('#io-ox-login-form').attr({
+                action: '/appsuite/api/share/reset/password',
+                method: 'post'
+            }).append(
+                $('<input type="hidden" name="share">').val(_.url.hash('share')),
+                $('<input type="hidden" name="confirm">').val(_.url.hash('confirm'))
+            );
+            // remove unused fields
+            $('#io-ox-forgot-password, #io-ox-login-username').remove();
+            // i18n
+            $('#io-ox-login-password').attr({
+                'data-i18n': gt('New password'),
+                placeholder: gt('New password')
+            });
+            $('#io-ox-login-button').attr({
+                'data-i18n': gt('Set password'),
+                placeholder: gt('Set password')
+            });
+            bindLogin = false;
+        }
 
-            // status
-            if (_.url.hash('status')) {
-                switch (_.url.hash('status')) {
-                    // if the guest user has not set a password yet
-                    case 'ask_password':
-                        break;
-                    // if the guest user has to set a password now
-                    case 'require_password':
-                        $('#io-ox-login-password').attr({
-                            'data-i18n': gt('New password'),
-                            placeholder: gt('New password')
-                        });
-                        $('#io-ox-forgot-password').remove();
-                        break;
-                    // if the share token could not resolved to a share
-                    case 'not_found':
-                    case 'reset_password_info':
-                        // remove inputs
-                        $('#io-ox-login-form div.row')
-                            .filter('.username, .password, .options, .buttons')
-                            .remove();
-                        break;
-                    // if the guest user requested to reset his password
-                    case 'reset_password':
-                        $('#io-ox-login-form').attr({
-                            action: '/appsuite/api/share/reset/password',
-                            method: 'post'
-                        }).append(
-                            $('<input type="hidden" name="share">').val(_.url.hash('share')),
-                            $('<input type="hidden" name="confirm">').val(_.url.hash('confirm'))
-                        );
-                        // remove unused fields
-                        $('#io-ox-forgot-password, #io-ox-login-username').remove();
-                        // i18n
-                        $('#io-ox-login-password').attr({
-                            'data-i18n': gt('New password'),
-                            placeholder: gt('New password')
-                        });
-                        $('#io-ox-login-button').attr({
-                            'data-i18n': gt('Set password'),
-                            placeholder: gt('Set password')
-                        });
-                        bindLogin = false;
-                        break;
-                    //  if the guest user has to enter his credentials
-                    case 'login':
-                        break;
-                    default:
-                        break;
-                }
+        function guestLogin() {
+            var loginName = _.url.hash('login_name');
+            $('#io-ox-login-username').hide();
+            if (!_.isEmpty(loginName)) {
+                $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
             }
-
             $('#io-ox-forgot-password, #io-ox-backtosignin').find('a').click(function (e) {
                 e.preventDefault();
                 $('#io-ox-password-forget-form, #io-ox-login-form').toggle();
             });
+        }
 
-            $('#io-ox-password-forget-form').submit(function () {
-                $(this).find('input[name="share"]').val(_.url.hash('share'));
-            });
-        } else {
-            // hide forgot password?
-            var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
+        function anonymousLogin() {
+            $('#io-ox-login-username').hide();
+            $('#io-ox-forgot-password').remove();
+        }
+
+        function defaultLogin() {
+            // remove form for sharing
             $('#io-ox-password-forget-form').remove();
-            if (!forgotPassword || util.isSharing()) {
+
+            var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
+            if (!forgotPassword) {
                 // either not configured or guest user
                 $('#io-ox-forgot-password').remove();
                 $('#io-ox-login-store').toggleClass('col-sm-6 col-sm-12');
@@ -119,7 +90,46 @@ define('io.ox/core/boot/form', [
             }
         }
 
-        // message
+        switch (_.url.hash('login_type')) {
+
+            // show guest login
+            case 'guest':
+                guestLogin();
+                break;
+
+            // show anonymous login
+            case 'anonymous':
+                anonymousLogin();
+                break;
+
+            // no login_type
+            default:
+                switch (_.url.hash('messageType')) {
+                    case 'INFO':
+                        switch (_.url.hash('status')) {
+                            case 'not_found':
+                            case 'reset_password_info':
+                                displayMessageOnly();
+                                break;
+
+                            case 'reset_password':
+                                resetPassword();
+                                break;
+                        }
+                        break;
+
+                    case 'ERROR':
+                        displayMessageOnly();
+                        break;
+
+                    default:
+                        defaultLogin();
+                        break;
+                }
+                break;
+        }
+
+        // handle message params
         if (_.url.hash('message')) {
             var type = (_.url.hash('message_type') || 'info').toLowerCase();
             if (type === 'info') {

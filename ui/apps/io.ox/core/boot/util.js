@@ -70,22 +70,6 @@ define('io.ox/core/boot/util', [], function () {
 
         isGuest: function () {
             return _.url.hash('login_type') === 'guest';
-        },
-
-        isAnonymous: function () {
-            return _.url.hash('login_type') === 'anonymous';
-        },
-
-        isSharing: function () {
-            return this.isGuest() || this.isAnonymous() || this.hasError();
-        },
-
-        hasError: function () {
-            return _.url.hash('status') && _.url.hash('message') && _.url.hash('message_type');
-        },
-
-        isPasswordOptional: function () {
-            return this.isSharing() && _.url.hash('status') === 'ask_password';
         }
 
     };
