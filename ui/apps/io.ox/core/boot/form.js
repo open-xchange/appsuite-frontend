@@ -58,7 +58,9 @@ define('io.ox/core/boot/form', [
                 }
             });
             // remove unused fields
-            $('#io-ox-forgot-password, #io-ox-login-username').remove();
+            $('#io-ox-login-form div.row')
+                .filter('.username, .options')
+                .remove();
             // show retype
             $('#io-ox-login-form div.row.password-retype').show();
             // i18n
