@@ -874,7 +874,7 @@ define('io.ox/mail/compose/view', [
             if (input.hasClass('hidden') || isString) {
                 input.removeClass('hidden');
                 button.addClass('active').attr('aria-checked', true);
-            } else if (this.model.get(type).length === 0) {
+            } else if (!this.model.has(type) || _.isEmpty(this.model.get(type))) {
                 //We don't want to close it automatically! Bug: 35730
                 this.model.set(type, []);
                 input.addClass('hidden');
