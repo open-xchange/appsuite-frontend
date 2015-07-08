@@ -56,7 +56,11 @@
         font-weight: 500;
         display: inline-block;
         white-space: nowrap;
-        width: 125px;
+        width: 115px;
+
+        &.not-fulltime {
+            width: 75px;
+        }
     }
 
     .private-flag {
@@ -87,18 +91,27 @@
 @media (min-width: 1300px) {
     .vgrid-cell.tasks .title {
         width: 195px;
+        &.not-fulltime {
+            width: 155px;
+        }
     }
 }
 
 @media (min-width: 1500px) {
     .vgrid-cell.tasks .title {
         width: 245px;
+        &.not-fulltime {
+            width: 195px;
+        }
     }
 }
 
 @media (min-width: 1700px) {
     .vgrid-cell.tasks .title {
         width: 295px;
+        &.not-fulltime {
+            width: 245px;
+        }
     }
 }
 
