@@ -225,7 +225,7 @@ define('io.ox/mail/common-extensions', [
         // add orignal folder as label to search result items
         folder: function (baton) {
             // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !(baton.app.get('find') && baton.app.get('find').isActive())) return;
+            if (!baton.data.original_folder_id || !(baton.app && baton.app.get('find') && baton.app.get('find').isActive())) return;
             // add container
             var node;
             this.append(
