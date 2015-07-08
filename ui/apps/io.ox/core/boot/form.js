@@ -69,6 +69,9 @@ define('io.ox/core/boot/form', [
                 e.preventDefault();
                 $('#io-ox-password-forget-form, #io-ox-login-form').toggle();
             });
+            $('#io-ox-password-forget-form').append(
+                $('<input type="hidden" name="share">').val(_.url.hash('share'))
+            );
         }
 
         function anonymousLogin() {
@@ -104,10 +107,9 @@ define('io.ox/core/boot/form', [
 
             // no login_type
             default:
-                switch (_.url.hash('messageType')) {
+                switch (_.url.hash('message_type')) {
                     case 'INFO':
                         switch (_.url.hash('status')) {
-                            case 'not_found':
                             case 'reset_password_info':
                                 displayMessageOnly();
                                 break;
