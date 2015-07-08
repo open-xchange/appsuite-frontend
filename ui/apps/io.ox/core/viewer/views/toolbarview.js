@@ -97,11 +97,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen width'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    this.addClass('viewer-toolbar-fitwidth').attr({
-                        tabindex: '1',
-                        title: gt('Fit to screen width'),
-                        'aria-label': gt('Fit to screen width')
-                    });
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    this.prepend(checkIcon)
+                        .addClass('viewer-toolbar-fitwidth')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Fit to screen width'),
+                            'aria-label': gt('Fit to screen width')
+                        });
                 }
             },
             'zoomfitheight': {
@@ -110,11 +113,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen size'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    this.addClass('viewer-toolbar-fitheight').attr({
-                        tabindex: '1',
-                        title: gt('Fit to screen size'),
-                        'aria-label': gt('Fit to screen size')
-                    });
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    this.prepend(checkIcon)
+                        .addClass('viewer-toolbar-fitheight').attr({
+                            tabindex: '1',
+                            title: gt('Fit to screen size'),
+                            'aria-label': gt('Fit to screen size')
+                        });
                 }
             },
             'launchpresenter': {
@@ -385,6 +390,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomIn();
         }
     });
@@ -395,6 +401,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomOut();
         }
     });
@@ -406,6 +413,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').hide();
+            $(this).find('.fitzoom-check').css({ display: 'inline-block' });
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
         }
     });
@@ -417,6 +426,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').hide();
+            $(this).find('.fitzoom-check').css({ display: 'inline-block' });
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
@@ -513,11 +524,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         onClose: function (event) {
             event.preventDefault();
             event.stopPropagation();
-            if (this.standalone) {
-                this.app.quit();
-            } else {
-                this.viewerEvents.trigger('viewer:close');
-            }
+            this.viewerEvents.trigger('viewer:close');
         },
 
         /**
