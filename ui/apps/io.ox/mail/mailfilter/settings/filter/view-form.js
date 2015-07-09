@@ -483,11 +483,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
                     },
                     onKeyup: function () {
-                        if ($.trim(this.$el.val()) === '') {
-                            this.model.trigger('invalid:' +  this.name);
+                        var state;
+                        if (this.name === 'size') {
+                            state = _.isNaN(parseInt(this.$el.val(), 10)) ? 'invalid:' : 'valid:';
                         } else {
-                            this.model.trigger('valid:' +  this.name);
+                            state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
                         }
+                        this.model.trigger(state +  this.name);
                         toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                     }
                 });
@@ -730,13 +732,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         }
                     },
                     onKeyup: function () {
-                        if ($.trim(this.$el.val()) === '') {
-                            this.model.trigger('invalid:' +  this.name);
-                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                        } else {
-                            this.model.trigger('valid:' +  this.name);
-                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                        }
+                        var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+                        this.model.trigger(state +  this.name);
+                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                     }
                 }),
                     Dropdown = mini.DropdownLinkView.extend({
