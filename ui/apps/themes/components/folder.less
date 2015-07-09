@@ -331,6 +331,10 @@
             .folder-label, .folder-counter, .folder-options {
                 font-size: @mobile-label-size;
             }
+            .folder-label > div {
+                max-width: 160px;
+                .ellipsis();
+            }
         }
     }
 }

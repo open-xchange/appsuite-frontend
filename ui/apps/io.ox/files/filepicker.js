@@ -22,8 +22,10 @@ define('io.ox/files/filepicker', [
     'gettext!io.ox/files',
     'io.ox/core/tk/upload',
     'io.ox/core/notifications',
-    'io.ox/core/folder/api'
-], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt, upload, notifications, folderAPI) {
+    'io.ox/core/folder/api',
+    'io.ox/core/page-controller',
+    'io.ox/core/toolbars-mobile'
+], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt, upload, notifications, folderAPI, PageController, Bars) {
 
     'use strict';
 
@@ -46,7 +48,41 @@ define('io.ox/files/filepicker', [
         var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
             $uploadButton,
             def = $.Deferred(),
-            self = this;
+            self = this,
+            toolbar = $('<div class="mobile-toolbar">'),
+            navbar = $('<div class="mobile-navbar">'),
+            pcContainer = $('<div class="picker-pc-container">'),
+            pages = new PageController({ appname: 'filepicker', toolbar: toolbar, navbar: navbar, container: pcContainer }),
+            containerHeight = $(window).height() - 200,
+            hub = _.extend({}, Backbone.Events),
+            currentFolder;
+
+        pages.addPage({
+            name: 'folderTree',
+            navbar: new Bars.NavbarView({
+                title: gt('Folders'),
+                extension: 'io.ox/mail/mobile/navbar' //save to use as this is very generic
+            }),
+            startPage: true
+        });
+
+        pages.addPage({
+            name: 'fileList',
+            navbar: new Bars.NavbarView({
+                title: gt('Files'),
+                extension: 'io.ox/mail/mobile/navbar'
+            })
+        });
+
+        pages.setBackbuttonRules({
+            'fileList': 'folderTree'
+        });
+
+        pages.getNavbar('fileList').setLeft(gt('Folders'));
+
+        pages.getNavbar('fileList').on('leftAction', function () {
+            pages.goBack();
+        });
 
         Selection.extend(this, filesPane, { markable: true });
 
@@ -66,13 +102,23 @@ define('io.ox/files/filepicker', [
 
         function onFolderChange(id) {
 
+            if (currentFolder === id) {
+                hub.trigger('folder:changed');
+                return;
+            }
             if (options.uploadButton) {
                 folderAPI.get(id).done(function (folder) {
                     $('[data-action="alternative"]', filesPane.closest('.add-infostore-file'))
                     .attr('disabled', !folderAPI.can('create', folder));
                 });
             }
-
+            if (_.device('smartphone')) {
+                folderAPI.get(id).done(function (folder) {
+                    pages.getNavbar('fileList').setTitle(folder.title);
+                }).fail(function () {
+                    pages.getNavbar('fileList').setTitle(gt('Files'));
+                });
+            }
             filesPane.empty();
             filesAPI.getAll(id, { cache: false }).done(function (files) {
                 filesPane.append(
@@ -100,6 +146,8 @@ define('io.ox/files/filepicker', [
                 self.selection.clear();
                 self.selection.init(files);
                 self.selection.selectFirst();
+                currentFolder = id;
+                hub.trigger('folder:changed');
             });
         }
 
@@ -164,7 +212,7 @@ define('io.ox/files/filepicker', [
             addClass: 'zero-padding add-infostore-file',
             button: options.primaryButtonText,
             alternativeButton: options.uploadButton ? gt('Upload local file') : undefined,
-            height: 350,
+            height: _.device('smartphone') ? containerHeight : 350,
             module: 'infostore',
             persistent: 'folderpopup/filepicker',
             root: '9',
@@ -195,15 +243,35 @@ define('io.ox/files/filepicker', [
                         .hide()
                         .on('change', { dialog: dialog, tree: tree }, fileUploadHandler);
                 }
+                // standard handling for desktop only
+                if (_.device('!smartphone')) {
+                    dialog.getContentNode().append(filesPane);
+                    filesPane.on('dblclick', '.file', function () {
+                        var file = $('input', this).data('file');
+                        if (!file) return;
+                        def.resolve([file]);
+                        dialog.close();
+                    });
+                } else {
+                    // some re-sorting of nodes for mobile
+                    // we have to use the pagecontroller pages instead of the classic
+                    // splitview on desktop
+                    var container = dialog.getBody().parent();
+                    pages.getPage('fileList').append(filesPane);
+                    pages.getPage('folderTree').append(dialog.getBody());
 
-                dialog.getContentNode().append(filesPane);
+                    pcContainer.css('height', containerHeight + 'px');
+                    pcContainer.append(navbar, toolbar);
+                    pcContainer.insertAfter('.clearfix', container);
 
-                filesPane.on('dblclick', '.file', function () {
-                    var file = $('input', this).data('file');
-                    if (!file) return;
-                    def.resolve([file]);
-                    dialog.close();
-                });
+                    pages.getPage('folderTree').on('click', '.folder.selectable', function () {
+                        onFolderChange(tree.selection.get());
+                    });
+
+                    hub.on('folder:changed', function () {
+                        pages.changePage('fileList');
+                    });
+                }
 
                 tree.on('change', onFolderChange);
             },

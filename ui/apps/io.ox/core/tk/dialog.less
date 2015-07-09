@@ -17,12 +17,59 @@
 }
 
 .add-infostore-file {
+    .picker-pc-container {
+        position: relative;
+        height: 350px;
+
+        .io-ox-fileselection {
+             li.file {
+                font-size: @font-size-touch;
+                outline: none;
+                line-height: 40px;
+                padding: 2px 7px;
+
+                .user-select(none);
+
+                label {
+                    margin-top:     10px;
+                    margin-left:    2px;
+                    margin-right:   5px;
+                    float: left;
+                }
+
+                .checkbox-inline {
+                    font-size: 16px;
+                }
+
+                .name {
+                    .ellipsis();
+                }
+
+                &.selected, &.selected:hover {
+                    background-color: @foldertree-selected-background;
+                    * {
+                        color: @foldertree-selected-label-color;
+                    }
+                }
+
+                &:focus {
+                    background-color: @foldertree-selected-focus-background;
+                    * {
+                        color: @foldertree-focused-label-color;
+                    }
+                }
+            }
+
+            &.singleselect li.file .name {
+                padding-left: 0.5em;
+            }
+        }
+    }
 
     .modal-body {
 
         padding: 0;
         overflow: hidden;
-
         &>div, &>ul {
             display: inline-block;
             width: 50%;
@@ -31,7 +78,11 @@
             overflow: auto;
             margin: 0;
         }
-
+        @media all and (max-width: 480px), all and (max-device-width: 480px) {
+            &>div, &>ul {
+                width: 100%;
+            }
+        }
         .folder-tree {
             border-right: 1px solid #ddd;
         }
