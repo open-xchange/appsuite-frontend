@@ -9,20 +9,20 @@
         <% _.each(data, function(element) { %>
             <section class="item mail">
                 <header>
-                    <b class="date pull-left"><%= element.from %></b>
-                    <span class="date pull-right"><%= element.date %></span>
+                    <b class="date pull-left"><%- element.from %></b>
+                    <span class="date pull-right"><%- element.date %></span>
                     <div class="clear"></div>
-                    <h1><%= element.subject %></h1>
+                    <h1><%- element.subject %></h1>
                     <div class="to-and-cc">
-                        <label><%= i18n.to %></label> <%= element.to %>&nbsp;&nbsp;
-                        <% if (element.cc !== '') { %><label><%= i18n.copy %></label> <%= element.cc %><% } %>
+                        <label><%- i18n.to %></label> <%- element.to %>&nbsp;&nbsp;
+                        <% if (element.cc !== '') { %><label><%- i18n.copy %></label> <%- element.cc %><% } %>
                     </div>
                 </header>
                 <pre class="content"><%= element.content %></pre>
                 <% if (element.attachments.length > 0) { %>
                     <ul class="content">
                         <% _.each(element.attachments, function(a) { %>
-                            <li><%= a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
+                            <li><%- a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
                         <% }); %>
                     </ul>
                 <% } %>
@@ -34,20 +34,20 @@
         <% _.each(data, function(element) { %>
             <section class="item">
                 <header>
-                    <b class="date pull-left"><%= element.from %></b>
-                    <span class="date pull-right"><%= element.date %></span>
+                    <b class="date pull-left"><%- element.from %></b>
+                    <span class="date pull-right"><%- element.date %></span>
                     <div class="clear"></div>
-                    <h1><%= element.subject %></h1>
+                    <h1><%- element.subject %></h1>
                     <div class="to-and-cc">
-                        <label><%= i18n.to %></label> <%= element.to %>&nbsp;&nbsp;
-                        <% if (element.cc !== '') { %><label><%= i18n.copy %></label> <%= element.cc %><% } %>
+                        <label><%- i18n.to %></label> <%- element.to %>&nbsp;&nbsp;
+                        <% if (element.cc !== '') { %><label><%- i18n.copy %></label> <%- element.cc %><% } %>
                     </div>
                 </header>
                 <pre class="content"><%= element.content %></pre>
                 <% if (element.attachments.length > 0) { %>
                     <ul class="content">
                         <% _.each(element.attachments, function(a) { %>
-                            <li><%= a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
+                            <li><%- a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
                         <% }); %>
                     </ul>
                 <% } %>
@@ -57,29 +57,29 @@
 
         <script type="text/template" class="phonelist">
         <% if (filtered > 0) { %>
-            <div class="note"><%= i18n.filtered(filtered) %>. <i><%= i18n.notPrinted %>.</i></div>
+            <div class="note"><%- i18n.filtered(filtered) %>. <i><%- i18n.notPrinted %>.</i></div>
         <% } %>
             <div class="phonelist">
-                <h1><%= i18n.phonelist %></h1>
+                <h1><%- i18n.phonelist %></h1>
                 <table border="0">
                     <thead>
                         <tr>
-                            <th><%= i18n.name %></th>
-                            <th><%= i18n.phone %></th>
-                            <th><%= i18n.cellphone %></th>
+                            <th><%- i18n.name %></th>
+                            <th><%- i18n.phone %></th>
+                            <th><%- i18n.cellphone %></th>
                         </tr>
                     </thead>
                 <% _.each(data, function(element) { %>
                     <tbody class="no-break">
                         <% if (length >= 30 && element.thumbIndex(element.original.last_name)) { %>
                         <tr>
-                            <td colspan="3" class="thumb-index"><%= element.thumbIndex.get() %></td>
+                            <td colspan="3" class="thumb-index"><%- element.thumbIndex.get() %></td>
                         </tr>
                         <% } %>
                         <tr>
-                            <td><b><%= element.name %></b><br><%= element.where %></td>
-                            <td><%= element.phone1 || '-' %><br><%= element.phone2 %></td>
-                            <td><%= element.cellphone1 || '-' %><br><%= element.cellphone2 %></td>
+                            <td><b><%- element.name %></b><br><%- element.where %></td>
+                            <td><%- element.phone1 || '-' %><br><%- element.phone2 %></td>
+                            <td><%- element.cellphone1 || '-' %><br><%- element.cellphone2 %></td>
                         </tr>
                         <tr>
                             <td colspan="3" class="spacer">&nbsp;</td>
@@ -95,28 +95,28 @@
                 <table border="0">
                     <thead>
                         <tr>
-                            <th><%= i18n.name %></th>
-                            <th><%= i18n.cellphone %></th>
-                            <th><%= i18n.phone %></th>
-                            <th><%= i18n.email %></th>
+                            <th><%- i18n.name %></th>
+                            <th><%- i18n.cellphone %></th>
+                            <th><%- i18n.phone %></th>
+                            <th><%- i18n.email %></th>
                         </tr>
                     </thead>
                 <% _.each(data, function(element) { %>
                     <tbody class="no-break">
                         <% if (length >= 30 && element.thumbIndex(element.original.last_name)) { %>
                         <tr>
-                            <td colspan="4" class="thumb-index"><%= element.thumbIndex.get() %></td>
+                            <td colspan="4" class="thumb-index"><%- element.thumbIndex.get() %></td>
                         </tr>
                         <% } %>
                         <tr>
-                            <td><b><%= element.name %></b><br><%= element.where %></td>
-                            <td><%= element.cellphone1 || '-' %><br><%= element.cellphone2 %></td>
-                            <td><%= element.phone1 || '-' %><br><%= element.phone2 %></td>
+                            <td><b><%- element.name %></b><br><%- element.where %></td>
+                            <td><%- element.cellphone1 || '-' %><br><%- element.cellphone2 %></td>
+                            <td><%- element.phone1 || '-' %><br><%- element.phone2 %></td>
                             <% if (element.isDistributionList === false) { %>
-                            <td><%= element.email1 %><% if (element.email2 !== '') { %><br><%= element.email2 %> <% } %><% if (element.email3 !== '') { %><br><%= element.email3 %> <% } %>
+                            <td><%- element.email1 %><% if (element.email2 !== '') { %><br><%- element.email2 %> <% } %><% if (element.email3 !== '') { %><br><%- element.email3 %> <% } %>
                             <% } %>
                             <% if (element.isDistributionList === true) { %>
-                            <td><%= element.distributionList %></td>
+                            <td><%- element.distributionList %></td>
                             <% } %>
                         </tr>
                         <tr>
@@ -132,25 +132,25 @@
         <% _.each(data, function(element) { %>
             <section class="item">
                 <header>
-                    <span class="date pull-left"><%= element.date %></span>
-                    <span class="time pull-right"><%= element.time %></span>
+                    <span class="date pull-left"><%- element.date %></span>
+                    <span class="time pull-right"><%- element.time %></span>
                     <div class="clear"></div>
-                    <h1><%= element.subject %></h1>
-                    <p class="location"><%= element.location %></p>
+                    <h1><%- element.subject %></h1>
+                    <p class="location"><%- element.location %></p>
                 </header>
-                <% if (element.content !== '') { %><pre class="content"><%= element.content %></pre><% } %>
+                <% if (element.content !== '') { %><pre class="content"><%- element.content %></pre><% } %>
                 <p class="participants top-border">
                 <% if (element.hasAccepted) { %>
-                    <label><%= i18n.accepted %>:</label> <span class="accepted"><%= element.strings.accepted %></span>&nbsp;&nbsp;
+                    <label><%- i18n.accepted %>:</label> <span class="accepted"><%= element.strings.accepted %></span>&nbsp;&nbsp;
                 <% } %>
                 <% if (element.hasTentative) { %>
-                    <label><%= i18n.tentative %>:</label> <span class="tentative"><%= element.strings.tentative %></span>&nbsp;&nbsp;
+                    <label><%- i18n.tentative %>:</label> <span class="tentative"><%= element.strings.tentative %></span>&nbsp;&nbsp;
                 <% } %>
                 <% if (element.hasUnconfirmed) { %>
-                    <label><%= i18n.unconfirmed %>:</label> <span class="unconfirmed"><%= element.strings.unconfirmed %></span>&nbsp;&nbsp;
+                    <label><%- i18n.unconfirmed %>:</label> <span class="unconfirmed"><%= element.strings.unconfirmed %></span>&nbsp;&nbsp;
                 <% } %>
                 <% if (element.hasDeclined) { %>
-                    <label><%= i18n.declined %>:</label> <span class="declined"><%= element.strings.declined %></span>
+                    <label><%- i18n.declined %>:</label> <span class="declined"><%= element.strings.declined %></span>
                 <% } %>
                 </p>
             </section>
@@ -161,32 +161,32 @@
         <% _.each(data, function(element) { %>
             <section class="item">
                 <header>
-                    <% if (element.start) { %><span class="date pull-left"><label><%= i18n.start %>:</label> <%= element.start %></span><% } %>
-                    <% if (element.due) { %><span class="time pull-right"><label><%= i18n.due %>:</label> <%= element.due %></span><% } %>
+                    <% if (element.start) { %><span class="date pull-left"><label><%- i18n.start %>:</label> <%- element.start %></span><% } %>
+                    <% if (element.due) { %><span class="time pull-right"><label><%- i18n.due %>:</label> <%- element.due %></span><% } %>
                     <div class="clear"></div>
-                    <h1><%= element.subject %></h1>
+                    <h1><%- element.subject %></h1>
                     <p class="state"><%= element.state %></p>
-                    <% if (element.content !== '') { %><pre class="content"><%= element.content %></pre><% } %>
+                    <% if (element.content !== '') { %><pre class="content"><%- element.content %></pre><% } %>
                 </header>
                 <div class="details">
-                    <% if (element.recurrence) { %><div class="recurrence"><label><%= i18n.recurrence %> </label><%= element.recurrence %></div><% } %>
-                    <% if (element.alarm) { %><div class="alarm-date"><label><%= i18n.alarm %>: </label><%= element.alarm %></div><% } %>
-                    <% if (element.priority) { %><div class="priority"><label><%= i18n.priority %>: </label><%= element.priority %></div><% } %>
-                    <% if (element.target_duration) { %><div class="target_duration"><label><%= i18n.target_duration %>: </label><%= element.target_duration %></div><% } %>
-                    <% if (element.actual_duration) { %><div class="actual_duration"><label><%= i18n.actual_duration %>: </label><%= element.actual_duration %></div><% } %>
-                    <% if (element.target_duration) { %><div class="target_costs"><label><%= i18n.target_costs %>: </label><%= element.target_costs %><% if (element.currency) { %><%= element.currency %><% } %></div><% } %>
-                    <% if (element.target_duration) { %><div class="actual_costs"><label><%= i18n.actual_costs %>: </label><%= element.actual_costs %><% if (element.currency) { %><%= element.currency %><% } %></div><% } %>
-                    <% if (element.trip_meter) { %><div class="trip_meter"><label><%= i18n.trip_meter %>: </label><%= element.trip_meter %></div><% } %>
-                    <% if (element.billing_information) { %><div class="billing_information"><label><%= i18n.billing_information %>: </label><%= element.billing_information %></div><% } %>
-                    <% if (element.companies) { %><div class="companies"><label><%= i18n.companies %>: </label><%= element.companies %></div><% } %>
-                    <% if (element.date_completed) { %><div class="date:completed"><label><%= i18n.date_completed %>: </label><%= element.date_completed %></div><% } %>
+                    <% if (element.recurrence) { %><div class="recurrence"><label><%- i18n.recurrence %> </label><%- element.recurrence %></div><% } %>
+                    <% if (element.alarm) { %><div class="alarm-date"><label><%- i18n.alarm %>: </label><%- element.alarm %></div><% } %>
+                    <% if (element.priority) { %><div class="priority"><label><%- i18n.priority %>: </label><%- element.priority %></div><% } %>
+                    <% if (element.target_duration) { %><div class="target_duration"><label><%- i18n.target_duration %>: </label><%- element.target_duration %></div><% } %>
+                    <% if (element.actual_duration) { %><div class="actual_duration"><label><%- i18n.actual_duration %>: </label><%- element.actual_duration %></div><% } %>
+                    <% if (element.target_duration) { %><div class="target_costs"><label><%- i18n.target_costs %>: </label><%- element.target_costs %><% if (element.currency) { %><%- element.currency %><% } %></div><% } %>
+                    <% if (element.target_duration) { %><div class="actual_costs"><label><%- i18n.actual_costs %>: </label><%- element.actual_costs %><% if (element.currency) { %><%- element.currency %><% } %></div><% } %>
+                    <% if (element.trip_meter) { %><div class="trip_meter"><label><%- i18n.trip_meter %>: </label><%- element.trip_meter %></div><% } %>
+                    <% if (element.billing_information) { %><div class="billing_information"><label><%- i18n.billing_information %>: </label><%- element.billing_information %></div><% } %>
+                    <% if (element.companies) { %><div class="companies"><label><%- i18n.companies %>: </label><%- element.companies %></div><% } %>
+                    <% if (element.date_completed) { %><div class="date_completed"><label><%- i18n.date_completed %>: </label><%- element.date_completed %></div><% } %>
                 </div>
                 <% if (element.numParticipants > 0) { %>
                 <p class="participants top-border">
-                    <% if (element.hasAccepted) { %><label><%= i18n.accepted %>:</label> <span class="accepted"><%= element.strings.accepted %></span>&nbsp;&nbsp;<% } %>
-                    <% if (element.hasTentative) { %><label><%= i18n.tentative %>:</label> <span class="tentative"><%= element.strings.tentative %></span>&nbsp;&nbsp;<% } %>
-                    <% if (element.hasUnconfirmed) { %><label><%= i18n.unconfirmed %>:</label> <span class="unconfirmed"><%= element.strings.unconfirmed %></span>&nbsp;&nbsp;<% } %>
-                    <% if (element.hasDeclined) { %><label><%= i18n.declined %>:</label> <span class="declined"><%= element.strings.declined %></span><% } %>
+                    <% if (element.hasAccepted) { %><label><%- i18n.accepted %>:</label> <span class="accepted"><%= element.strings.accepted %></span>&nbsp;&nbsp;<% } %>
+                    <% if (element.hasTentative) { %><label><%- i18n.tentative %>:</label> <span class="tentative"><%= element.strings.tentative %></span>&nbsp;&nbsp;<% } %>
+                    <% if (element.hasUnconfirmed) { %><label><%- i18n.unconfirmed %>:</label> <span class="unconfirmed"><%= element.strings.unconfirmed %></span>&nbsp;&nbsp;<% } %>
+                    <% if (element.hasDeclined) { %><label><%- i18n.declined %>:</label> <span class="declined"><%= element.strings.declined %></span><% } %>
                 </p>
                 <% } %>
             </section>
