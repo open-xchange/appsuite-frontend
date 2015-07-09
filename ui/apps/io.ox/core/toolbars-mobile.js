@@ -61,12 +61,14 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
             this.baton = opt.baton;// || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
             this.hiddenElements = [];
+            this.rendered = false;
+
         },
 
         render: function () {
 
             this.$el.empty();
-
+            this.rendered = true;
             ext.point(this.extension).invoke('draw', this, {
                 left: this.left,
                 right: this.right,
