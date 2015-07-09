@@ -660,9 +660,15 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         onResize: function () {
             this.documentLoad.done(function () {
-                if (this.isVisible && !this.fitScreenZoomed && !this.fitWidthZoomed) {
-                    var defaultZoomFactor = this.getDefaultZoomFactor();
-                    this.setZoomLevelDebounced(defaultZoomFactor);
+                if (this.isVisible) {
+                    var zoomFactor = this.getDefaultZoomFactor();
+                    if (this.fitWidthZoomed) {
+                        zoomFactor = this.getModeZoomFactor('fitwidth');
+                    }
+                    if (this.fitScreenZoomed) {
+                        zoomFactor = this.getModeZoomFactor('fitheight');
+                    }
+                    this.setZoomLevelDebounced(zoomFactor);
                 }
             }.bind(this));
         },
