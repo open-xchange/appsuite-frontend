@@ -20,6 +20,64 @@ define([
     'use strict';
 
     var resultWithoutFilter = { data: [] },
+        resultWithSomeFilters = { data: [
+            {
+                id: 1,
+                position: 0,
+                rulename: 'testrule 1',
+                active: false,
+                flags: [],
+                test: { id: 'size', comparison: 'over', size: 101 },
+                actioncmds: [{ id: 'stop' }]
+            },
+            {
+                id: 2,
+                position: 1,
+                rulename: 'testrule 2',
+                active: false,
+                flags: [],
+                test: {
+                    id: 'allof',
+                    tests: [
+                        {
+                            id: 'header',
+                            comparison: 'contains',
+                            headers: ['From'],
+                            values: ['sender']
+                        },
+                        {
+                            id: 'body',
+                            comparison: 'contains',
+                            extensionskey: 'text',
+                            extensionsvalue: null,
+                            values: ['contend']
+                        },
+                        {
+                            id: 'header',
+                            comparison: 'contains',
+                            headers: ['Subject'],
+                            values: ['subject']
+                        }
+                    ]
+                },
+                actioncmds: [
+                    {
+                        id: 'addflags',
+                        flags: ['$cl_1']
+                    },
+                    {
+                        id: 'addflags',
+                        flags: ['$tag']
+                    },
+                    {
+                        id: 'addflags',
+                        flags: ['\\deleted']
+                    }
+                ]
+            }
+        ]
+    },
+
         resultAfterSave = { data: 1 },
         resultConfig = { timestamp: 1378223251586, data: {
             tests: [
@@ -57,7 +115,7 @@ define([
         }},
         model;
 
-    describe('Mailfilter detailview', function () {
+    describe('Mailfilter detailview without filters', function () {
 
         var $container = $('<div id="testNode">'),
             addButton,
@@ -1049,7 +1107,7 @@ define([
 
     });
 
-    describe('Mailfilter detailview', function () {
+    describe('Mailfilter detailview without filters and limited configuration', function () {
 
         var $container = $('<div id="testNode">'),
             addButton,
@@ -1116,6 +1174,67 @@ define([
 
             $popup.find('li a[data-action="remove-test"]').click();
             expect($popup.find('li.filter-settings-view')).to.have.length(0);
+
+        });
+
+    });
+
+    describe('Mailfilter detailview with filters', function () {
+
+        var $container = $('<div id="testNode">'),
+            addButton,
+            collection,
+            $popup;
+
+        beforeEach(function (done) {
+            this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithSomeFilters));
+            });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultAfterSave));
+            });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=config/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultConfig));
+            });
+
+            filters.editMailfilter($container.empty()).done(function (filtercollection) {
+                collection = filtercollection;
+                $container.find('li[data-id="2"] a[data-action="edit"]').click();
+                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+                done();
+            });
+            $('body', document).append($container);
+        });
+
+        afterEach(function () {
+            $('#testNode').remove();
+            $popup.remove();
+        });
+
+        it('should draw all conditions and actions', function () {
+            expect($popup.find('.tests li.filter-settings-view')).to.have.length(3);
+            expect($popup.find('.actions li.filter-settings-view')).to.have.length(3);
+        });
+
+        it('should reset the model if the popup is closed with cancel', function (done) {
+
+            setTimeout(function () {
+                $popup.find('li[data-test-id="0"] input[name="values"]').val('testsender').change();
+                $popup.find('[data-action="cancel"]').click();
+
+                waitsFor(function () {
+                    if (collection.length === 2) {
+                        model = collection.findWhere({ id: 1 });
+                        return true;
+                    }
+                }).then(function () {
+                    collection.get('2').attributes.test.tests[0].should.be.deep.equal({ comparison: 'contains', headers: ['From'], id: 'header', values: ['sender'] });
+                    done();
+                });
+
+            }, 1);
 
         });
 
