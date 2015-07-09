@@ -681,9 +681,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     newValue = parseInt($(this).val()),
                     oldValue = parseInt($(this).attr('data-page-number')),
                     pageTotal = parseInt($(this).attr('data-page-total'));
-                if (isNaN(newValue) || newValue <= 0 ) {
+                if (isNaN(newValue)) {
                     $(this).val(oldValue);
                     return;
+                }
+                if (newValue <= 0 ) {
+                    $(this).val(1);
+                    newValue = 1;
                 }
                 if (newValue > pageTotal) {
                     $(this).val(pageTotal);
