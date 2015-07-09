@@ -328,9 +328,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 current = $(document.activeElement),
                 index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
 
-            if (index < 0) return;
-            // scroll to very bottom if at end of list (to keep a11y support)
-            if (index >= items.length) return this.view.$el.scrollTop(0xFFFFFF);
+            // out of bounds?
+            index = this.outOfBounds(index, items);
+            if (index === false) return;
 
             // prevent default to avoid unwanted scrolling
             e.preventDefault();
@@ -346,6 +346,19 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 this.triggerChange(items);
             } else {
                 this.selectEvents(items);
+            }
+        },
+
+        // defines behaviour when index out of bounds should be selected by arrow keys
+        outOfBounds: function (index, items) {
+            if (index < 0) {
+                return false;
+            } else if (index >= items.length) {
+                // scroll to very bottom if at end of list (to keep a11y support)
+                this.view.$el.scrollTop(0xFFFFFF);
+                return false;
+            } else {
+                return index;
             }
         },
 
@@ -487,6 +500,19 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else {
                 //use standard method
                 prototype.onKeydown.call(this, e);
+            }
+        },
+
+        outOfBounds: function (index, items) {
+            if (index < 0) {
+                return 0;
+            } else if (index >= items.length) {
+                index = items.length - 1;
+                // scroll to very bottom if at end of list (to keep a11y support)
+                this.view.$el.scrollTop(0xFFFFFF);
+                return index;
+            } else {
+                return index;
             }
         },
 
