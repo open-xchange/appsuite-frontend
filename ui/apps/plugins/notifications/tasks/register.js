@@ -262,6 +262,8 @@ define('plugins/notifications/tasks/register', [
                         };
                     view.responsiveRemove(model);
                     api.confirm(o).done(function () {
+                        // remove model from hidden collection or new invitations when the appointment changes will not be displayed
+                        view.hiddenCollection.remove(model);
                         //update detailview
                         api.trigger('update:' + _.ecid(o));
                     }).fail(function () {

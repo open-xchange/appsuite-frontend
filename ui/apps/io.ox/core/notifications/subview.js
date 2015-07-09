@@ -272,6 +272,9 @@ define('io.ox/core/notifications/subview', [
         //removes a notification from view and puts it in the hidden collection
         //does not redraw the whole view or fire requests
         //if there is 0 items left to display, hides the view
+
+        // BE SURE TO REMOVE IT FROM THE HIDDEN COLLECTION WHEN THE REQUEST IS DONE OR IT CANNOT BE READDED
+        // hidden items are considered as items the user does not want to see or should not see
         responsiveRemove: function (model) {
             //should work with models and objects with attributes
             var data = model.attributes || model,
@@ -290,6 +293,7 @@ define('io.ox/core/notifications/subview', [
                 this.trigger('responsive-remove');
             }
         },
+        // puts models from the hiddenCollection back into the main collection
         unHide: function (model) {
             var id = model.id || model.get('id'),
                 obj = this.hiddenCollection.get(id);
