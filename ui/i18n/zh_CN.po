@@ -13,6 +13,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
+#. text of a presentation zoom level caption
+#. Example result: "100 %"
+#. %1$d is the zoom level
+#: apps/io.ox/presenter/views/presentationview.js:623 module:io.ox/presenter
+#, fuzzy
+#| msgid "%1$d %2$s"
+msgid "%1$d %"
+msgstr "%1$d %2$s"
+
 #. File size
 #. %1$d is the number
 #. %2$s is the unit (B, KB, MB etc.)
@@ -139,8 +148,10 @@ msgstr[1] "%1$d 分钟"
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
+#. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:136 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:449
+#: apps/io.ox/presenter/views/presentationview.js:199 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%2$s 的 %1$s"
@@ -281,9 +292,25 @@ msgstr "完成日期"
 msgid "%1$s has a new contact:"
 msgstr "%1$s 有一个新联系人："
 
+#. message text of a presentation end alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
+#, fuzzy
+#| msgid "%1$s changed their status:"
+msgid "%1$s has ended the presentation."
+msgstr "%1$s 更改了他们的状态："
+
 #: apps/plugins/portal/xing/activities.js:150 module:plugins/portal
 msgid "%1$s has new contacts:"
 msgstr "%1$s 有新联系人："
+
+#. message text of of a presentation start alert
+#. %1$d is the presenter name
+#: apps/io.ox/presenter/views/mainview.js:306 module:io.ox/presenter
+#, fuzzy
+#| msgid "%1$s changed their status:"
+msgid "%1$s has started the presentation."
+msgstr "%1$s 更改了他们的状态："
 
 #: apps/plugins/portal/linkedIn/register.js:152 module:plugins/portal
 msgid "%1$s is a new contact"
@@ -524,7 +551,7 @@ msgid ""
 msgstr ""
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:543 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:564 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "已发送一个送达回执"
 
@@ -1271,7 +1298,7 @@ msgstr "生日"
 msgid "Black"
 msgstr "黑色"
 
-#: apps/io.ox/mail/common-extensions.js:285 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:306 module:io.ox/mail
 #, fuzzy
 #| msgid "in copy"
 msgid "Blind copy"
@@ -1665,8 +1692,8 @@ msgstr "点击上载图像"
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/main.js:1153 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:158
-#: apps/io.ox/core/viewer/views/toolbarview.js:159
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:178
+#: apps/io.ox/core/viewer/views/toolbarview.js:179
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:159 module:io.ox/editor
 #: apps/io.ox/files/actions/showlink.js:48 module:io.ox/files
@@ -1851,6 +1878,17 @@ msgstr "内容"
 msgid "Continue"
 msgstr "继续"
 
+#: apps/io.ox/presenter/views/toolbarview.js:94 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:95
+#, fuzzy
+msgid "Continue Presentation"
+msgstr "目的地"
+
+#: apps/io.ox/presenter/views/toolbarview.js:88 module:io.ox/core
+#, fuzzy
+msgid "Continue presentation"
+msgstr "目的地"
+
 #: apps/io.ox/mail/view-options.js:59 module:io.ox/mail
 msgid "Conversations"
 msgstr "交谈"
@@ -1878,7 +1916,7 @@ msgstr ""
 msgid "Copy"
 msgstr "复制"
 
-#: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:295 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -1918,7 +1956,6 @@ msgstr "加载数据失败"
 msgid "Could not load new Tweets."
 msgstr "读取新推失败。"
 
-#: apps/io.ox/core/tk/autocomplete.js:372 module:io.ox/mail
 #: apps/io.ox/core/tk/vgrid.js:871 module:io.ox/core
 msgid "Could not load this list"
 msgstr "不能加载此列表"
@@ -2188,7 +2225,7 @@ msgstr "延迟"
 #: apps/io.ox/core/folder/contextmenu.js:279
 #: apps/io.ox/core/sub/settings/pane.js:189 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:191
-#: apps/io.ox/core/viewer/views/toolbarview.js:222
+#: apps/io.ox/core/viewer/views/toolbarview.js:242
 #: apps/io.ox/files/actions.js:559 module:io.ox/files
 #: apps/io.ox/files/actions/delete.js:67
 #: apps/io.ox/files/actions/versions-delete.js:25
@@ -2573,9 +2610,9 @@ msgid "Doubleclick in this row for whole day appointment"
 msgstr "在此行里双击以查看全天约会"
 
 #: apps/io.ox/core/pim/actions.js:83 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:186
-#: apps/io.ox/core/viewer/views/toolbarview.js:237
-#: apps/io.ox/core/viewer/views/toolbarview.js:264
+#: apps/io.ox/core/viewer/views/toolbarview.js:206
+#: apps/io.ox/core/viewer/views/toolbarview.js:257
+#: apps/io.ox/core/viewer/views/toolbarview.js:284
 #: apps/io.ox/files/actions.js:550 module:io.ox/files
 #: apps/io.ox/files/actions.js:681 apps/io.ox/files/toolbar.js:109
 #: apps/io.ox/files/toolbar.js:116 apps/io.ox/mail/actions.js:724
@@ -2770,7 +2807,7 @@ msgstr "编辑约会"
 msgid "Edit contact"
 msgstr "编辑联系人"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:198 module:io.ox/core
 #: apps/io.ox/files/actions.js:620 module:io.ox/files
 msgid "Edit description"
 msgstr "编辑描述"
@@ -2931,6 +2968,7 @@ msgstr "找到空的名称和描述。"
 msgid "Emptying folder... This may take a few seconds."
 msgstr "清空文件夹... 可能需时片刻。"
 
+#: apps/io.ox/core/notifications.js:131 module:io.ox/core
 #: apps/io.ox/core/sub/settings/pane.js:183 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:184
 #: apps/io.ox/mail/mailfilter/settings/filter.js:140 module:io.ox/mail
@@ -2938,12 +2976,6 @@ msgstr "清空文件夹... 可能需时片刻。"
 #: apps/io.ox/portal/settings/pane.js:310 module:io.ox/portal
 msgid "Enable"
 msgstr "启用"
-
-#: apps/io.ox/core/notifications.js:131 module:io.ox/core
-#, fuzzy
-#| msgid "Enable visual effects"
-msgid "Enable / Disable"
-msgstr "启用视觉效果"
 
 #: apps/io.ox/mail/autoforward/settings/model.js:96 module:io.ox/mail
 msgid "Enabled"
@@ -2956,6 +2988,12 @@ msgstr "为以下地址启用"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
 msgid "End"
 msgstr "结束"
+
+#: apps/io.ox/presenter/views/toolbarview.js:57 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:63
+#, fuzzy
+msgid "End Presentation"
+msgstr "目的地"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js:64
 #: module:io.ox/calendar/edit/main
@@ -3135,7 +3173,7 @@ msgstr "外部用户"
 msgid "External contact"
 msgstr "外部联系人"
 
-#: apps/io.ox/mail/common-extensions.js:490 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:511 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "为保护您的隐私，从外部链接的图像的预加载已被阻止！"
@@ -3372,15 +3410,15 @@ msgstr "名字"
 msgid "First name Last name"
 msgstr "名字 姓氏"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:110 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:115
-#: apps/io.ox/core/viewer/views/toolbarview.js:116
+#: apps/io.ox/core/viewer/views/toolbarview.js:113 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:120
+#: apps/io.ox/core/viewer/views/toolbarview.js:121
 msgid "Fit to screen size"
 msgstr "调整成屏幕大小"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:97 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:102
-#: apps/io.ox/core/viewer/views/toolbarview.js:103
+#: apps/io.ox/core/viewer/views/toolbarview.js:105
+#: apps/io.ox/core/viewer/views/toolbarview.js:106
 msgid "Fit to screen width"
 msgstr "调整成屏幕宽度"
 
@@ -4038,6 +4076,18 @@ msgstr "工作"
 msgid "Job description"
 msgstr "职业描述"
 
+#: apps/io.ox/presenter/views/mainview.js:310 module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js:111 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:112
+#, fuzzy
+msgid "Join Presentation"
+msgstr "目的地"
+
+#: apps/io.ox/presenter/views/toolbarview.js:105 module:io.ox/core
+#, fuzzy
+msgid "Join presentation"
+msgstr "目的地"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:653
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:699
@@ -4147,6 +4197,23 @@ msgstr "布局"
 #: apps/io.ox/core/import/import.js:153 module:io.ox/core
 msgid "Learn more"
 msgstr "了解更多"
+
+#: apps/io.ox/presenter/views/presentationview.js:165 module:io.ox/presenter
+msgid "Leave"
+msgstr ""
+
+#: apps/io.ox/presenter/views/toolbarview.js:127 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:128
+#, fuzzy
+msgid "Leave Presentation"
+msgstr "目的地"
+
+#: apps/io.ox/presenter/views/presentationview.js:162 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:163
+#: apps/io.ox/presenter/views/toolbarview.js:121 module:io.ox/core
+#, fuzzy
+msgid "Leave presentation"
+msgstr "目的地"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4818,6 +4885,7 @@ msgstr "任务提醒"
 
 #: apps/io.ox/core/viewer/views/displayerview.js:111 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
+#: apps/io.ox/presenter/views/presentationview.js:41 module:io.ox/presenter
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
 msgstr "下一个"
@@ -4830,7 +4898,7 @@ msgstr "下一天"
 msgid "Next Week"
 msgstr "下周"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:618 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -4905,7 +4973,7 @@ msgid "No message selected"
 msgstr "没有选定消息"
 
 #: apps/io.ox/core/notifications.js:103 module:io.ox/core
-#: apps/io.ox/core/notifications.js:353
+#: apps/io.ox/core/notifications.js:361
 msgid "No notifications"
 msgstr "没有通知"
 
@@ -5123,8 +5191,8 @@ msgstr "打开文件夹视图"
 msgid "Open in browser"
 msgstr "在浏览器打开"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:231 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:258
+#: apps/io.ox/core/viewer/views/toolbarview.js:251 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:278
 #, fuzzy
 msgid "Open in browser tab"
 msgstr "在浏览器打开"
@@ -5283,7 +5351,7 @@ msgstr ""
 #. Example result: "Page 5 of 10"
 #. %1$d is the current page index
 #. %2$d is the total number of pages
-#: apps/io.ox/core/viewer/views/types/documentview.js:241 module:io.ox/core
+#: apps/io.ox/core/viewer/views/types/documentview.js:244 module:io.ox/core
 msgid "Page %1$d of %2$d"
 msgstr "第 %1$d 页（共 %2$d 页）"
 
@@ -5352,6 +5420,17 @@ msgstr "密码强度：弱"
 #: apps/plugins/portal/userSettings/register.js:93 module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "密码强度：错误长度"
+
+#: apps/io.ox/presenter/views/toolbarview.js:78 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:79
+#, fuzzy
+msgid "Pause Presentation"
+msgstr "目的地"
+
+#: apps/io.ox/presenter/views/toolbarview.js:72 module:io.ox/core
+#, fuzzy
+msgid "Pause presentation"
+msgstr "目的地"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:106 module:io.ox/mail/emoji
@@ -5619,14 +5698,14 @@ msgstr "请更新您的浏览器。"
 msgid "Plus"
 msgstr "额外"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:137 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:157 module:io.ox/core
 #, fuzzy
 #| msgid "Zoom out"
 msgid "Pop out"
 msgstr "缩小"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:144 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:145
+#: apps/io.ox/core/viewer/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:165
 msgid "Pop out standalone viewer"
 msgstr ""
 
@@ -5657,10 +5736,39 @@ msgstr "发送一个状态更新"
 msgid "Postcode"
 msgstr "邮寄编号"
 
+#. headline of a presentation end alert
+#: apps/io.ox/presenter/views/mainview.js:343 module:io.ox/presenter
+#, fuzzy
+msgid "Presentation end"
+msgstr "目的地"
+
+#: apps/io.ox/presenter/views/presentationview.js:159 module:io.ox/presenter
+#, fuzzy
+msgid "Presentation is paused."
+msgstr "目的地"
+
+#. headline of a presentation start alert
+#: apps/io.ox/presenter/views/mainview.js:303 module:io.ox/presenter
+#, fuzzy
+msgid "Presentation start"
+msgstr "目的地"
+
 #: apps/io.ox/files/view-options.js:120 module:io.ox/files
 #, fuzzy
 msgid "Presentations"
 msgstr "目的地"
+
+#: apps/io.ox/presenter/views/sidebar/userbadgeView.js:41
+#: module:io.ox/presenter
+#, fuzzy
+#| msgid "Center"
+msgid "Presenter"
+msgstr "中间"
+
+#: apps/io.ox/presenter/views/toolbarview.js:370 module:io.ox/core
+#, fuzzy
+msgid "Presenter Toolbar"
+msgstr "编辑器工具栏"
 
 #: apps/plugins/portal/birthdays/register.js:61 module:plugins/portal
 msgid "Press [enter] to jump to complete list of Birthdays."
@@ -5707,6 +5815,7 @@ msgstr "概览"
 
 #: apps/io.ox/core/viewer/views/displayerview.js:110 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
+#: apps/io.ox/presenter/views/presentationview.js:41 module:io.ox/presenter
 msgid "Previous"
 msgstr "前一个"
 
@@ -5724,7 +5833,7 @@ msgstr "上周"
 msgid "Previous month"
 msgstr "前一个"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:615 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:649 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -5750,7 +5859,7 @@ msgstr "主要户口"
 #: apps/io.ox/calendar/toolbar.js:88 apps/io.ox/calendar/toolbar.js:176
 #: apps/io.ox/contacts/actions.js:404 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:102 apps/io.ox/core/print.js:108
-#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:193
+#: module:io.ox/core apps/io.ox/core/viewer/views/toolbarview.js:213
 #: apps/io.ox/mail/actions.js:640 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:150 apps/io.ox/tasks/actions.js:337
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:101
@@ -5802,7 +5911,7 @@ msgstr "进度 %"
 
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js:193 module:io.ox/tasks
-#: apps/io.ox/tasks/view-grid-template.js:86
+#: apps/io.ox/tasks/view-grid-template.js:89
 #, c-format
 msgid "Progress %1$s %"
 msgstr "进度 %1$s %"
@@ -6093,7 +6202,7 @@ msgstr "移除成员"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:254
-#: apps/io.ox/core/viewer/views/toolbarview.js:171
+#: apps/io.ox/core/viewer/views/toolbarview.js:191
 #: apps/io.ox/files/actions.js:610 module:io.ox/files
 #: apps/io.ox/files/actions/rename.js:68 apps/io.ox/files/actions/rename.js:73
 msgid "Rename"
@@ -6176,7 +6285,6 @@ msgid "Retired"
 msgstr "退休"
 
 #: apps/io.ox/core/commons.js:781 module:io.ox/core
-#: apps/io.ox/core/tk/autocomplete.js:375 module:io.ox/mail
 msgid "Retry"
 msgstr "回复"
 
@@ -6272,8 +6380,8 @@ msgid "Save attachment"
 msgstr "保存附件"
 
 #: apps/io.ox/core/pim/actions.js:84 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:243
-#: apps/io.ox/core/viewer/views/toolbarview.js:270
+#: apps/io.ox/core/viewer/views/toolbarview.js:263
+#: apps/io.ox/core/viewer/views/toolbarview.js:290
 #: apps/io.ox/mail/actions.js:732 module:io.ox/mail
 msgid "Save to Drive"
 msgstr "保存到 Drive"
@@ -6399,7 +6507,7 @@ msgid "Send"
 msgstr "发送"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:573 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:594 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "发送一个送达回执"
 
@@ -6408,7 +6516,7 @@ msgstr "发送一个送达回执"
 msgid "Send as internal link"
 msgstr "作为内部链接发送"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:250 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:270 module:io.ox/core
 msgid "Send as mail"
 msgstr "以邮件方式发送"
 
@@ -6418,7 +6526,7 @@ msgstr "以邮件方式发送"
 msgid "Send as vCard"
 msgstr "以 vCard 发送"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:208 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:228 module:io.ox/core
 #: apps/io.ox/files/actions.js:570 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:132
 msgid "Send by mail"
@@ -6518,7 +6626,7 @@ msgctxt "app"
 msgid "Settings"
 msgstr "设定"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:200 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:220 module:io.ox/core
 #: apps/io.ox/files/actions/share.js:43 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:80 apps/plugins/portal/xing/actions.js:209
 #: module:plugins/portal
@@ -6637,7 +6745,7 @@ msgstr "显示隐藏文件和文件夹"
 msgid "Show icons"
 msgstr "显示图标"
 
-#: apps/io.ox/mail/common-extensions.js:489 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:510 module:io.ox/mail
 msgid "Show images"
 msgstr "显示图像"
 
@@ -6858,6 +6966,12 @@ msgstr "常规文件夹"
 msgid "Start"
 msgstr "开始于"
 
+#: apps/io.ox/presenter/views/toolbarview.js:42 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:48
+#, fuzzy
+msgid "Start Presentation"
+msgstr "目的地"
+
 #: apps/io.ox/tasks/edit/view-template.js:164 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:116 module:io.ox/tasks
 msgid "Start date"
@@ -6872,6 +6986,13 @@ msgstr "起始日期"
 #: apps/io.ox/calendar/settings/pane.js:98 module:io.ox/calendar
 msgid "Start of working time"
 msgstr "工作时间开始"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js:128 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:135
+#: apps/io.ox/core/viewer/views/toolbarview.js:136
+#, fuzzy
+msgid "Start presentation"
+msgstr "目的地"
 
 #: apps/io.ox/core/desktop.js:1525 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1526
@@ -7137,7 +7258,7 @@ msgstr "户口必须命名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功删除活动"
 
-#: apps/io.ox/files/api.js:356 module:io.ox/files
+#: apps/io.ox/files/api.js:360 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已到达允许额度。"
@@ -7331,7 +7452,7 @@ msgstr "通知区域关闭"
 msgid "The notification area is open"
 msgstr "通知区域开放"
 
-#: apps/io.ox/files/api.js:351 module:io.ox/files
+#: apps/io.ox/files/api.js:355 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
@@ -7353,7 +7474,7 @@ msgstr "选择的文件夹为虚拟和不能被搜寻的。请选择别的文件
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:576 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:597 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "此发送人想在您阅读此电子邮件时获得一个通知"
 
@@ -7568,7 +7689,7 @@ msgstr "此特性不可用。您必须先升级您的户口才能使用。"
 msgid "This field has to be filled"
 msgstr "此栏必填"
 
-#: apps/io.ox/files/api.js:361 module:io.ox/files
+#: apps/io.ox/files/api.js:365 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "无法上载此文件。"
@@ -7649,13 +7770,13 @@ msgstr "此邮件没有内容"
 msgid "This message has been truncated due to size limitations."
 msgstr "此消息已因体积限制而被截短。"
 
-#: apps/io.ox/mail/common-extensions.js:439 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is read, press to mark it as unread."
 msgid "This message is read, press this button to mark it as unread."
 msgstr "此电子邮件已读，单击以标记成未读。"
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:459 module:io.ox/mail
 #, fuzzy
 #| msgid "This E-mail is unread, press to mark it as read."
 msgid "This message is unread, press this button to mark it as read."
@@ -7715,7 +7836,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "标题"
 
-#: apps/io.ox/mail/common-extensions.js:263 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:284 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:55
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:565
@@ -7965,7 +8086,7 @@ msgid "Upload local file"
 msgstr "上载一个文件"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js:96
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:215
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:235
 #: module:io.ox/core apps/io.ox/files/actions/upload-new-version.js:63
 #: module:io.ox/files
 #, fuzzy
@@ -8109,11 +8230,18 @@ msgstr "视图"
 msgid "View attachment"
 msgstr "保存附件"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:129 module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js:130
+#: apps/io.ox/core/viewer/views/toolbarview.js:149 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:150
 #, fuzzy
 msgid "View details"
 msgstr "隐藏详情"
+
+#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:170
+#, fuzzy
+#| msgid "Participants"
+msgid "View participants"
+msgstr "参与者"
 
 #. source in terms of source code
 #: apps/io.ox/mail/actions.js:661 module:io.ox/mail
@@ -8121,7 +8249,7 @@ msgstr "隐藏详情"
 msgid "View source"
 msgstr "检视来源"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:560 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:594 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "编辑器工具栏"
@@ -8136,7 +8264,7 @@ msgstr "等待中"
 msgid "Warning"
 msgstr "警告"
 
-#: apps/io.ox/mail/common-extensions.js:516 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:537 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：该邮件可能存在邮件欺诈！"
 
@@ -8666,12 +8794,16 @@ msgstr "ZB"
 #: apps/io.ox/core/viewer/views/toolbarview.js:84 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:89
 #: apps/io.ox/core/viewer/views/toolbarview.js:90
+#: apps/io.ox/presenter/views/toolbarview.js:151
+#: apps/io.ox/presenter/views/toolbarview.js:156
 msgid "Zoom in"
 msgstr "放大"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:71 module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js:75
 #: apps/io.ox/core/viewer/views/toolbarview.js:76
+#: apps/io.ox/presenter/views/toolbarview.js:139
+#: apps/io.ox/presenter/views/toolbarview.js:143
 msgid "Zoom out"
 msgstr "缩小"
 
@@ -8694,7 +8826,7 @@ msgid "and"
 msgstr "与"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:300 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:321 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "和 %1$d 位收件人"
 
@@ -9051,7 +9183,7 @@ msgstr "没有编辑权限"
 msgid "no read permissions"
 msgstr "无读取权限"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:478 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:516 module:io.ox/core
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -10090,9 +10222,6 @@ msgstr "年"
 #~ msgid "Cell phone:"
 #~ msgstr "移动电话:"
 
-#~ msgid "Center"
-#~ msgstr "中间"
-
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "置中，无文字自动换行"
 
@@ -10848,6 +10977,11 @@ msgstr "年"
 
 #~ msgid "Employee ID:"
 #~ msgstr "员工 ID："
+
+#, fuzzy
+#~| msgid "Enable visual effects"
+#~ msgid "Enable / Disable"
+#~ msgstr "启用视觉效果"
 
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "启用日历悬停窗口"
