@@ -529,7 +529,7 @@ define('io.ox/core/pdf/pdfview', [
                         canvasNode.empty();
 
                         pageNode.attr(pageSize).css(pageSize);
-                        pageNode.parent().css(pageSize);
+                        pageNode.parent('.document-page').css(pageSize);
                         canvasWrapperNode.attr(pageSize).css(pageSize);
                         canvasNode.attr(scaledSize).css(pageSize);
 
