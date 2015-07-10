@@ -97,7 +97,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen width'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">'),
+                        sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
+                    this.before(sectionLabel);
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
@@ -413,8 +415,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
-            $(this).find('.fitzoom-check').css({ display: 'inline-block' });
+            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
+            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
         }
     });
@@ -426,8 +428,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
-            $(this).find('.fitzoom-check').css({ display: 'inline-block' });
+            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
+            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
