@@ -25,8 +25,8 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             self = this,
             // mimic an app object instead of real reference
             app = {
-                navbar: o.navbar,
-                toolbar: o.toolbar,
+                navbar: o.navbar || $(),
+                toolbar: o.toolbar || $(),
                 options: {
                     name: o.appname
                 }

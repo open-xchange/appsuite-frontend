@@ -147,7 +147,7 @@ define('io.ox/calendar/main', [
             if (_.device('smartphone')) return;
             var c = app.getWindow().nodes.main;
 
-            app.pages = new PageController(app);
+            app.pages = new PageController({ appname: app.options.name });
 
             // create 3 pages with toolbars and navbars
             app.pages.addPage({
