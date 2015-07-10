@@ -97,7 +97,6 @@ define('io.ox/core/sessionrestore', [
     // initialization -----------------------------------------------------
 
     if (isActive()) {
-
         var lastStates = getAllData();
 
         _.defer(function () {
@@ -109,15 +108,22 @@ define('io.ox/core/sessionrestore', [
 
                 var allModules = _.uniq(_.pluck(lastStates, 'module'));
                 require(allModules).done(function () {
+                    var promises = [];
                     _.each(lastStates, function (state) {
-                        //console.warn('launch', state);
                         if (state.module) {
-                            ox.launch(state.module, state);
+                            promises.push(ox.launch(state.module, state));
                         }
+                    });
+                    $.when.apply($, promises).done(function () {
+                        //workaround for wrong 'active-app' in top bar
+                        var currentWindow = ox.ui.App.getCurrentWindow();
+                        currentWindow.hide();
+                        currentWindow.show();
                     });
                 });
             });
         });
+
     }
 
     // exports ================================================================
