@@ -187,7 +187,10 @@ define('io.ox/core/folder/util', [
             // please use parantheses properly OR OR AND or OR AND AND?
         case 'create':
             // can create objects?
-            return perm(rights, 0) > 1;
+            // only folder creation is allowed in system folders
+            // even if permission bit is 4 "create objects and subfolders" because ther is no bit for only create subfolders, see Bug 39598
+            // don't use the isSystem variable because it is also true for standard folders
+            return (perm(rights, 0) > 1 && !is('system', data));
         case 'write':
             // can write objects
             return perm(rights, 14) > compareValue;
