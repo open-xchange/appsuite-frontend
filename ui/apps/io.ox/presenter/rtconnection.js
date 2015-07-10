@@ -527,16 +527,16 @@ define('io.ox/presenter/rtconnection', [
         };
 
         /**
-         * Close the document at the connected RT object
+         * Leave the connected real-time group.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  closing document status of the request.
          */
-        this.closeDocument = function () {
+        this.close = function () {
             var leaveOptions = { expectSignOffMessage: true };
 
-            RTConnection.log('RTConnection.closeDocument called');
+            RTConnection.log('RTConnection.close called');
             return handleResponse(rtGroup.leave(leaveOptions), 20000);
         };
 
