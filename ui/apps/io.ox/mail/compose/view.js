@@ -924,14 +924,19 @@ define('io.ox/mail/compose/view', [
             this.textarea.prop('disabled', true).busy();
 
             if (this.editor) {
-                var content = this.editor.getPlainText();
+                var content = this.editor.getPlainText(),
+                    self = this;
                 this.editor.clear();
                 this.editor.handleHide();
-                // toggle editor
-                this.model.setMailContentType(this.model.get('editorMode'));
 
                 // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
-                return !this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content);
+                var loaded = (!this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content));
+
+                return loaded.done(function () {
+                    //update the content type of the mail
+                    //FIXME: may be, do this somewhere else? in the model?
+                    self.model.setMailContentType(self.editor.content_type);
+                });
 
             } else {
                 // initial editor
