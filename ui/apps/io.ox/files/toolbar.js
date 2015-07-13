@@ -78,8 +78,34 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
                 label: gt('Share'),
+                drawDisabled: true,
                 title: gt('Share selected files'),
-                ref: 'io.ox/files/icons/share'
+                ref: 'io.ox/files/dropdown/share',
+                customize: function (baton) {
+                    var self = this;
+                    this.append('<i class="fa fa-caret-down">');
+
+                    this.after(
+                        links.DropdownLinks({
+                            ref: 'io.ox/files/links/toolbar/share',
+                            wrap: false,
+                            //function to call when dropdown is empty
+                            emptyCallback: function () {
+                                self.addClass('disabled')
+                                    .attr({ 'aria-disabled': true })
+                                    .removeAttr('href');
+                            }
+                        }, baton)
+                    );
+
+                    this.addClass('dropdown-toggle').attr({
+                        'aria-haspopup': 'true',
+                        'data-toggle': 'dropdown',
+                        'role': 'button'
+                    }).dropdown();
+
+                    this.parent().addClass('dropdown');
+                }
             },
             'mediaplayer-audio': {
                 prio: 'hi',
@@ -194,6 +220,11 @@ define('io.ox/files/toolbar', [
     // local dummy action
 
     new actions.Action('io.ox/files/dropdown/new', {
+        requires: function () { return true; },
+        action: $.noop
+    });
+
+    new actions.Action('io.ox/files/dropdown/share', {
         requires: function () { return true; },
         action: $.noop
     });

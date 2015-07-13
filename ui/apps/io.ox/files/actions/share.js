@@ -20,7 +20,7 @@ define('io.ox/files/actions/share', [
 
     'use strict';
 
-    return function (baton) {
+    function share(baton, type) {
         if (!baton || !baton.models) return;
 
         var header = '',
@@ -50,5 +50,16 @@ define('io.ox/files/actions/share', [
                 this.close();
             })
             .show();
+
+        view.model.set('type', type);
+    }
+
+    return {
+        invite: function (baton) {
+            share(baton, 'invite');
+        },
+        link: function (baton) {
+            share(baton, 'link');
+        }
     };
 });

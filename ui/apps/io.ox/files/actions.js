@@ -388,12 +388,24 @@ define('io.ox/files/actions', [
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
     // folder based actions
-    new Action('io.ox/files/icons/share', {
+    new Action('io.ox/files/actions/invite', {
         capabilities: 'publication',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some');
+        },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                action(baton);
+                action.invite(baton);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/getalink', {
+        capabilities: 'publication',
+        requires: 'one',
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                action.link(baton);
             });
         }
     });
@@ -509,6 +521,21 @@ define('io.ox/files/actions', [
         id: 'add-folder',
         label: gt('Add new folder'),
         ref: 'io.ox/files/actions/add-folder'
+    });
+
+    // share dropdown
+    new links.ActionLink('io.ox/files/links/toolbar/share', {
+        index: 100,
+        id: 'invite',
+        label: gt('Invite people'),
+        ref: 'io.ox/files/actions/invite'
+    });
+
+    new links.ActionLink('io.ox/files/links/toolbar/share', {
+        index: 200,
+        id: 'getalink',
+        label: gt('Get a link'),
+        ref: 'io.ox/files/actions/getalink'
     });
 
     // INLINE (used in detail view / portal)
