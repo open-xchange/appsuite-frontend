@@ -117,8 +117,10 @@ define('io.ox/core/sessionrestore', [
                     $.when.apply($, promises).done(function () {
                         //workaround for wrong 'active-app' in top bar
                         var currentWindow = ox.ui.App.getCurrentWindow();
-                        currentWindow.hide();
-                        currentWindow.show();
+                        if (currentWindow) {
+                            currentWindow.hide();
+                            currentWindow.show();
+                        }
                     });
                 });
             });
