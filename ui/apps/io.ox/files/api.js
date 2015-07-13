@@ -794,6 +794,11 @@ define('io.ox/files/api', [
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
+        var params = _.extend({
+            action: options.action,
+            filename: options.filename,
+            timestamp: _.now()
+        }, options.params);
 
         var formData = new FormData();
 
@@ -808,11 +813,7 @@ define('io.ox/files/api', [
 
         return http.UPLOAD({
             module: options.module,
-            params: {
-                action: options.action,
-                filename: options.filename,
-                timestamp: _.now()
-            },
+            params: params,
             data: formData,
             fixPost: true
         })
