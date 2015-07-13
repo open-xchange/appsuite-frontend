@@ -363,14 +363,14 @@ define('io.ox/presenter/views/mainview', [
                     BigScreen.toggle(
                         this.presentationView.el,
                         this.onEnterFullscreen.bind(this),
-                        this.onEnterFullscreen.bind(this),
+                        this.onExitFullscreen.bind(this),
                         this.onErrorFullscreen.bind(this)
                     );
                 } else if (state) {
                     BigScreen.request(
                         this.presentationView.el,
                         this.onEnterFullscreen.bind(this),
-                        this.onEnterFullscreen.bind(this),
+                        this.onExitFullscreen.bind(this),
                         this.onErrorFullscreen.bind(this)
                     );
                 } else {
@@ -392,7 +392,13 @@ define('io.ox/presenter/views/mainview', [
          */
         onExitFullscreen: function () {
             //console.info('Presenter - mainview - onExitFullscreen()');
+            var userId = this.app.rtConnection.getRTUuid();
+
             this.fullscreen = false;
+
+            if (this.app.rtModel.canLeave(userId)) {
+                this.app.rtConnection.leavePresentation();
+            }
         },
 
         /**

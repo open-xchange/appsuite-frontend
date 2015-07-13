@@ -157,6 +157,20 @@ define('io.ox/presenter/views/toolbarview', [
                     });
                 }
             },
+            'fullscreen': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-arrows-alt',
+                label: gt('Toggle fullscreen'),
+                ref: TOOLBAR_ACTION_ID + '/fullscreen',
+
+                customize: function () {
+                    this.addClass('presenter-toolbar-fullscreen').attr({
+                        tabindex: '1',
+                        'aria-label': gt('Toggle fullscreen')
+                    });
+                }
+            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -273,7 +287,9 @@ define('io.ox/presenter/views/toolbarview', [
         },
         action: function (baton) {
             console.info('join action:', baton);
-            baton.context.app.rtConnection.joinPresentation();
+            var app = baton.context.app;
+            app.rtConnection.joinPresentation();
+            app.mainView.toggleFullscreen(true);
         }
     });
 
@@ -290,6 +306,22 @@ define('io.ox/presenter/views/toolbarview', [
         action: function (baton) {
             console.info('leave action:', baton);
             baton.context.app.rtConnection.leavePresentation();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/fullscreen', {
+        id: 'fullscreen',
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return (rtModel.isPresenter(userId) || rtModel.isJoined(userId));
+        },
+        action: function (baton) {
+            console.info('fullscreen action:', baton);
+            baton.context.app.mainView.toggleFullscreen();
         }
     });
 
