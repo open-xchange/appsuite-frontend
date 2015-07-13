@@ -885,10 +885,9 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-            var self = this,
-                editorSrc = 'io.ox/core/tk/' + (this.model.get('editorMode') === 'text' ? 'text-editor' : 'contenteditable-editor');
+            var self = this;
 
-            return require([editorSrc]).then(function (Editor) {
+            return ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
                 return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
                     .done(function () {
                         self.editor = self.editorHash[self.model.get('editorMode')];
