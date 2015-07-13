@@ -34,33 +34,6 @@ define('io.ox/files/share/wizard', [
         };
 
     /*
-     * extension point share type
-     */
-    ext.point(POINT + '/fields').extend({
-        id: 'type-dropdown',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var typeTranslations = {
-                invite: gt('Invite people'),
-                link: gt('Get a link')
-            };
-
-            var dropdown = new Dropdown({ model: baton.model, label: typeTranslations[baton.model.get('type')], caret: true })
-                .option('type', 'invite', typeTranslations.invite)
-                .option('type', 'link', typeTranslations.link)
-                .listenTo(baton.model, 'change:type', function (model, type) {
-                    this.$el.find('.dropdown-label').text(typeTranslations[type]);
-                });
-
-            this.append(
-                $('<div class="form-group">').append(
-                    dropdown.render().$el
-                )
-            );
-        }
-    });
-
-    /*
      * extension point descriptive text
      */
     ext.point(POINT + '/fields').extend({
