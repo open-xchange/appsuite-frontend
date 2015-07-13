@@ -389,7 +389,7 @@ define('io.ox/files/actions', [
 
     // folder based actions
     new Action('io.ox/files/actions/invite', {
-        capabilities: 'publication',
+        capabilities: 'publication && invite_guests',
         requires: function (e) {
             return e.collection.has('some');
         },
@@ -401,7 +401,7 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/actions/getalink', {
-        capabilities: 'publication',
+        capabilities: 'publication && share_links',
         requires: 'one',
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
