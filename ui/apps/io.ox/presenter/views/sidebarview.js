@@ -12,8 +12,9 @@
  */
 define('io.ox/presenter/views/sidebarview', [
     'io.ox/backbone/disposable',
-    'io.ox/presenter/views/sidebar/participantsview'
-], function (DisposableView, ParticipantsView) {
+    'io.ox/presenter/views/sidebar/participantsview',
+    'io.ox/presenter/views/sidebar/slidepeekview'
+], function (DisposableView, ParticipantsView, SlidePeekView) {
 
     'use strict';
 
@@ -35,7 +36,34 @@ define('io.ox/presenter/views/sidebarview', [
         initialize: function (options) {
             _.extend(this, options);
 
+            this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
+            this.listenTo(this.presenterEvents, 'presenter:local:slide:change', this.renderSections);
+
             this.on('dispose', this.disposeView.bind(this));
+        },
+
+        /**
+         * Presentation start handler.
+         * - renders the next slide peek view for the presenter.
+         */
+        onPresentationStart: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+            if (!rtModel.isPresenter(userId)) {
+                return;
+            }
+            this.$el.addClass('presenting');
+            this.toggleSidebar(true);
+        },
+
+        /**
+         * Presentation end handler.
+         * - closes the next slide peek for the presenter.
+         */
+        onPresentationEnd: function () {
+            this.$el.removeClass('presenting');
+            this.toggleSidebar(false);
         },
 
         /**
@@ -67,12 +95,18 @@ define('io.ox/presenter/views/sidebarview', [
                 return;
             }
 
-            var childViewParams = { model: this.model, presenterEvents: this.presenterEvents, app: this.app };
+            var sectionViewParams = { model: this.model, presenterEvents: this.presenterEvents, app: this.app },
+                rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
 
-            var participantsView = new ParticipantsView(childViewParams);
-
-            // render sections
-            this.$el.append(participantsView.render().el);
+            // show next slide peek if the current user is currently presenting, otherwise show the presentation participants
+            if (rtModel.isPresenter(userId)) {
+                var slidepeekView = new SlidePeekView(sectionViewParams);
+                this.$el.append(slidepeekView.render().el);
+            } else {
+                var participantsView = new ParticipantsView(sectionViewParams);
+                this.$el.append(participantsView.render().el);
+            }
         },
 
         /**

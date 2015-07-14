@@ -295,6 +295,12 @@ define('io.ox/presenter/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         id: 'togglesidebar',
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+            return !rtModel.isPresenter(userId);
+        },
         action: function (baton) {
             console.info('togglesidebar action', baton);
             baton.context.onToggleSidebar();
