@@ -319,8 +319,8 @@ msgid "%1$s changed their status:"
 msgstr "%1$s ha canviat el seu estat:"
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/upload/main.js:226 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:304 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:227 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:309 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 #, fuzzy
 #| msgid "Date completed"
@@ -2472,7 +2472,7 @@ msgstr "Descripció"
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebarview.js:84 module:io.ox/core/viewer
-#: apps/io.ox/files/upload/main.js:284 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:289 module:io.ox/files
 msgid "Details"
 msgstr "Detalls"
 
@@ -6058,7 +6058,7 @@ msgstr "Convits a tasques"
 msgid "Presenter"
 msgstr "Convits a tasques"
 
-#: apps/io.ox/presenter/views/toolbarview.js:370 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:402 module:io.ox/core
 #, fuzzy
 #| msgid "New Mail from %1$s %2$s. Press [enter] to open"
 msgid "Presenter Toolbar"
@@ -6431,7 +6431,7 @@ msgid "Reload statistics"
 msgstr "Recarrega les estadístiques"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/upload/main.js:231 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:232 module:io.ox/files
 #, fuzzy
 #| msgid "Reminder date %1$s"
 msgid "Remaining time: %1$s"
@@ -8260,6 +8260,13 @@ msgstr "Avui"
 msgid "Toggle checkboxes"
 msgstr "Canvia les caselles de verificació"
 
+#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:170
+#, fuzzy
+#| msgid "Fullscreen"
+msgid "Toggle fullscreen"
+msgstr "Pantalla completa"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
@@ -8506,7 +8513,7 @@ msgid "Upload progress"
 msgstr "En progrés"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/upload/main.js:260 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:265 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
 msgid "Uploading %1$s"
@@ -8652,8 +8659,8 @@ msgstr "Desa l'adjunt"
 msgid "View details"
 msgstr "Amaga els detalls"
 
-#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:170
+#: apps/io.ox/presenter/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:184
 #, fuzzy
 #| msgid "Participants"
 msgid "View participants"

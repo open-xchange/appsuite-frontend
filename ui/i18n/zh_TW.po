@@ -280,8 +280,8 @@ msgid "%1$s changed their status:"
 msgstr "%1$s 已更改狀態:"
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/upload/main.js:226 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:304 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:227 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:309 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 #, fuzzy
 msgid "%1$s completed"
@@ -2340,7 +2340,7 @@ msgstr "描述"
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebarview.js:84 module:io.ox/core/viewer
-#: apps/io.ox/files/upload/main.js:284 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:289 module:io.ox/files
 msgid "Details"
 msgstr "詳細資訊"
 
@@ -5769,7 +5769,7 @@ msgstr "目的地"
 msgid "Presenter"
 msgstr "置中"
 
-#: apps/io.ox/presenter/views/toolbarview.js:370 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:402 module:io.ox/core
 #, fuzzy
 msgid "Presenter Toolbar"
 msgstr "編輯器工具欄"
@@ -6130,7 +6130,7 @@ msgid "Reload statistics"
 msgstr "重新載入統計資訊"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/upload/main.js:231 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:232 module:io.ox/files
 #, fuzzy
 msgid "Remaining time: %1$s"
 msgstr "提醒日期 %1$s"
@@ -7870,6 +7870,13 @@ msgstr "今天"
 msgid "Toggle checkboxes"
 msgstr "切換選取盒"
 
+#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:170
+#, fuzzy
+#| msgid "Fullscreen"
+msgid "Toggle fullscreen"
+msgstr "全螢幕"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
@@ -8105,7 +8112,7 @@ msgid "Upload progress"
 msgstr "進行中"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/upload/main.js:260 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:265 module:io.ox/files
 #, fuzzy
 msgid "Uploading %1$s"
 msgstr "上載中..."
@@ -8241,8 +8248,8 @@ msgstr "儲存附件"
 msgid "View details"
 msgstr "隱藏詳情"
 
-#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:170
+#: apps/io.ox/presenter/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:184
 #, fuzzy
 #| msgid "Participants"
 msgid "View participants"

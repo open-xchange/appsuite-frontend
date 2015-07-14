@@ -285,8 +285,8 @@ msgid "%1$s changed their status:"
 msgstr "%1$s hanno cambiato il loro stato:"
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/upload/main.js:226 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:304 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:227 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:309 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 #, fuzzy
 msgid "%1$s completed"
@@ -2367,7 +2367,7 @@ msgstr "Descrizione"
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebarview.js:84 module:io.ox/core/viewer
-#: apps/io.ox/files/upload/main.js:284 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:289 module:io.ox/files
 msgid "Details"
 msgstr "Dettagli"
 
@@ -5844,7 +5844,7 @@ msgstr "Destinazione"
 msgid "Presenter"
 msgstr "Centrato"
 
-#: apps/io.ox/presenter/views/toolbarview.js:370 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:402 module:io.ox/core
 #, fuzzy
 msgid "Presenter Toolbar"
 msgstr "Barra degli strumenti dell'editor"
@@ -6209,7 +6209,7 @@ msgid "Reload statistics"
 msgstr "Ricarica statistiche"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/upload/main.js:231 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:232 module:io.ox/files
 #, fuzzy
 msgid "Remaining time: %1$s"
 msgstr "Promemoria %1$s"
@@ -8007,6 +8007,13 @@ msgstr "Oggi"
 msgid "Toggle checkboxes"
 msgstr "Caselle di selezione"
 
+#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:170
+#, fuzzy
+#| msgid "Fullscreen"
+msgid "Toggle fullscreen"
+msgstr "Schermo intero"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
@@ -8244,7 +8251,7 @@ msgid "Upload progress"
 msgstr "In corso"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/upload/main.js:260 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:265 module:io.ox/files
 #, fuzzy
 msgid "Uploading %1$s"
 msgstr "Caricamento in corso..."
@@ -8387,8 +8394,8 @@ msgstr "Salva allegato"
 msgid "View details"
 msgstr "Nascondi i dettagli"
 
-#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:170
+#: apps/io.ox/presenter/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:184
 #, fuzzy
 #| msgid "Participants"
 msgid "View participants"

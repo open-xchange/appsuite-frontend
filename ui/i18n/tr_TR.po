@@ -259,8 +259,8 @@ msgid "%1$s changed their status:"
 msgstr ""
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/upload/main.js:226 module:io.ox/files
-#: apps/io.ox/files/upload/main.js:304 apps/io.ox/files/upload/view.js:53
+#: apps/io.ox/files/upload/main.js:227 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:309 apps/io.ox/files/upload/view.js:53
 #: apps/io.ox/files/upload/view.js:97
 msgid "%1$s completed"
 msgstr ""
@@ -2268,7 +2268,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebarview.js:84 module:io.ox/core/viewer
-#: apps/io.ox/files/upload/main.js:284 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:289 module:io.ox/files
 msgid "Details"
 msgstr ""
 
@@ -5583,7 +5583,7 @@ msgstr ""
 msgid "Presenter"
 msgstr ""
 
-#: apps/io.ox/presenter/views/toolbarview.js:370 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:402 module:io.ox/core
 msgid "Presenter Toolbar"
 msgstr ""
 
@@ -5929,7 +5929,7 @@ msgid "Reload statistics"
 msgstr ""
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/upload/main.js:231 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:232 module:io.ox/files
 msgid "Remaining time: %1$s"
 msgstr ""
 
@@ -7580,6 +7580,11 @@ msgstr ""
 msgid "Toggle checkboxes"
 msgstr ""
 
+#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:170
+msgid "Toggle fullscreen"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:58
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js:59
@@ -7804,7 +7809,7 @@ msgid "Upload progress"
 msgstr ""
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/upload/main.js:260 module:io.ox/files
+#: apps/io.ox/files/upload/main.js:265 module:io.ox/files
 msgid "Uploading %1$s"
 msgstr ""
 
@@ -7933,8 +7938,8 @@ msgstr ""
 msgid "View details"
 msgstr ""
 
-#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:170
+#: apps/io.ox/presenter/views/toolbarview.js:178 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:184
 msgid "View participants"
 msgstr ""
 
