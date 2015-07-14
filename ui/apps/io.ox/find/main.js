@@ -315,6 +315,29 @@ define('io.ox/find/main', [
                     }, 10)
             });
 
+            // TODO: move to ext point
+            app.listenTo(manager, {
+                'change:list-of-actives': _.debounce(function (state, value, model) {
+                    if (app.model.manager.isFolderOnly());
+                    require(['io.ox/metrics/main'], function (metrics) {
+                        // toolbar actions
+                        metrics.trackEvent({
+                            category: 'search usage',
+                            action: app.get('parent').get('id'),
+                            name: 'facet: ' + model.get('facet').get('id').split(':')[0]
+                        });
+                    });
+                }, 10)
+            });
+            app.on({
+                'find:autocomplete:start': _.debounce(function (query) {
+                    debugger;
+                    require(['io.ox/metrics/main'], function (metrics) {
+                        // toolbar actions
+                        metrics.trackSearch(query);
+                    });
+                }, 1000)
+            });
             /**
              * find:cancel  reset, collapse search field and move focus
              */

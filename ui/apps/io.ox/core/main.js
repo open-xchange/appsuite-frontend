@@ -1236,6 +1236,22 @@ define('io.ox/core/main', [
             }
         });
 
+        ext.point('io.ox/core/banner').extend({
+            id: 'metrics',
+            draw: function () {
+                require(['io.ox/metrics/main'], function (metrics) {
+                    metrics.watch({
+                            node: $('#io-ox-banner'),
+                            selector: '.banner-title',
+                            type: 'click'
+                        }, {
+                            category: 'unfulfilled expectations',
+                            action: 'functional logo banner'
+                        });
+                });
+            }
+        });
+
         // add some senseless characters
         // a) to avoid unwanted scrolling
         // b) to recognize deep links

@@ -53,7 +53,7 @@ define('io.ox/find/manager/value-collection', [
                 // trigger custom event
                 // hint: use 'option' as fallback cause change:option may was triggered manually
                 self.trigger('change:list-of-actives', mapping[attr || 'option'], model.id);
-                self.facet.trigger('change:list-of-actives', mapping[attr || 'option'], model.id);
+                self.facet.trigger('change:list-of-actives', mapping[attr || 'option'], model.id, model);
             });
 
             // custom value models

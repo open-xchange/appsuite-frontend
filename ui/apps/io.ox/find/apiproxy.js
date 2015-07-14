@@ -116,7 +116,7 @@ define('io.ox/find/apiproxy',[
                         });
                         return data;
                     }
-
+                    app.trigger('find:autocomplete:start', query);
                     return autocomplete(standard)
                             .then(updateModel, notifications.yell);
                 },

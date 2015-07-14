@@ -153,6 +153,62 @@ define('io.ox/portal/main', [
         }
     });
 
+    // widget container
+    ext.point('io.ox/portal/sections').extend({
+        id: 'metrics',
+        index: 300,
+        draw: function () {
+            var self = this;
+            // TODO: check for metric capability
+            require(['io.ox/metrics/main'], function (metrics) {
+                // click on add widget button
+                metrics.watch({
+                        node: self,
+                        selector: '.dropdown-toggle',
+                        type: 'mousedown'
+                    }, {
+                        category: 'widgets usage',
+                        action: 'add widget',
+                        name: 'open dropdown'
+                    });
+
+                // track click on concrete dropdown entry to add a widget
+                self.delegate('.io-ox-portal-settings-dropdown', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        category: 'widgets usage',
+                        action: 'add widget',
+                        name: $(e.target).attr('data-type')
+                    });
+                });
+                // track click on concrete widget
+                self.delegate('ol.widgets > .widget', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        category: 'widgets usage',
+                        action: 'use widget',
+                        name: $(e.target).closest('.widget').attr('data-widget-type')
+                    });
+                });
+                // track removing of concret widget
+                self.delegate('ol.widgets .disable-widget', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        category: 'widgets usage',
+                        action: 'remove widget',
+                        name: $(e.target).closest('.widget').attr('data-widget-type')
+                    });
+                });
+                // track reordering of widgets
+                widgets.getCollection().on('order-changed', function (module) {
+                    metrics.trackEvent({
+                        category: 'widgets usage',
+                        action: 'reorder widget',
+                        name: module
+                    });
+                });
+
+            });
+        }
+    });
+
     // widget scaffold
 
     ext.point('io.ox/portal/widget-scaffold').extend({
@@ -673,6 +729,7 @@ define('io.ox/portal/main', [
                         // default 'intersect' by 50%
                         tolerance: 'pointer',
                         update: function () {
+                            widgets.getCollection().trigger('order-changed', 'portal');
                             widgets.save(appBaton.$.widgets);
                         }
                     });

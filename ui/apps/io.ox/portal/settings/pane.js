@@ -356,6 +356,7 @@ define('io.ox/portal/settings/pane', [
                 },
                 scroll: true,
                 update: function () {
+                    widgets.getCollection().trigger('order-changed', 'settings');
                     widgets.save(list);
                 }
             });

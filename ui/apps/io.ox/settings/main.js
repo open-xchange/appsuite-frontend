@@ -414,6 +414,26 @@ define('io.ox/settings/main', [
             });
         });
 
+        ext.point('io.ox/metrics').extend({
+            id: 'io.ox/mail/settings',
+            setup: function () {
+                var self = this;
+                require(['io.ox/metrics/main'], function (metrics) {
+                    metrics.watch({
+                            node: self,
+                            selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
+                            type: 'click'
+
+                        }, {
+                            category: 'A/B testing',
+                            action: 'preferred add mail account button',
+                            name: 'mail-settings'
+                        });
+                });
+            }
+        });
+        ext.point('io.ox/metrics').invoke('setup', app.getWindow().nodes.outer, ext.Baton({ app: app }));
+
         ext.point('io.ox/settings/pane').extend({
             id: 'general',
             index: 100,

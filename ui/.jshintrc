@@ -27,6 +27,7 @@
 
     // Custom Globals
     "globals": {
+        "_paq": false,
         "$": false,
         "ox": false,
         "_": false,
