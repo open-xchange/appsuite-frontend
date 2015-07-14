@@ -22,8 +22,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/mail/api',
     'gettext!io.ox/core',
     'io.ox/core/folder/folder-color',
+    'io.ox/backbone/mini-views/upsell',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView) {
 
     'use strict';
 
@@ -160,6 +161,15 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        synchronizeAccount: function () {
+            this.append(new UpsellView({
+                id: 'folderview/mail',
+                className: 'links',
+                requires: 'active_sync',
+                title: gt('Synchronize with your tablet or smartphone')
+            }).render().$el);
+        },
+
         otherFolders: function (tree) {
             this.append(
                 new TreeNodeView({
@@ -241,6 +251,11 @@ define('io.ox/core/folder/extensions', [
             id: 'add-account',
             index: INDEX += 100,
             draw: extensions.addRemoteAccount
+        },
+        {
+            id: 'upsell-mail',
+            index: INDEX += 100,
+            draw: extensions.synchronizeAccount
         }
     );
 
@@ -433,6 +448,40 @@ define('io.ox/core/folder/extensions', [
                 }
             }
         );
+
+        //
+        // Upsell
+        //
+
+        ext.point('io.ox/core/foldertree/contacts/links').extend({
+            index: 300,
+            id: 'upsell-contacts',
+            draw: function (baton) {
+
+                if (baton.context !== 'app') return;
+
+                this.append(new UpsellView({
+                    id: 'folderview/contacts',
+                    requires: 'carddav',
+                    title: gt('Synchronize with your tablet or smartphone')
+                }).render().$el);
+            }
+        });
+
+        ext.point('io.ox/core/foldertree/calendar/links').extend({
+            index: 300,
+            id: 'upsell-calendar',
+            draw: function (baton) {
+
+                if (baton.context !== 'app') return;
+
+                this.append(new UpsellView({
+                    id: 'folderview/calendar',
+                    requires: 'caldav',
+                    title: gt('Synchronize with your tablet or smartphone')
+                }).render().$el);
+            }
+        });
 
         //
         // Shared folders
