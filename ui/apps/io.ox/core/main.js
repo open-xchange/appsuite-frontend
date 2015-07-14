@@ -845,6 +845,41 @@ define('io.ox/core/main', [
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'upsell',
+            index: 50,
+            draw: function () {
+                var view;
+                this.append(
+                    view = new UpsellView({
+                        tagName: 'li',
+                        id: 'topbar-dropdown',
+                        requires: 'active_sync || caldav || carddav',
+                        title: 'Upgrade your account',
+                        customize: function () {
+                            this.$el.attr({
+                                'role': 'presentation'
+                            });
+                            $('a', this.$el).append(
+                                _(this.icon.split(/ /)).map(function (icon, index) {
+                                    return $('<i class="fa">').addClass(icon).css({
+                                        'margin-left': index === 0 ? '1em' : 0,
+                                        'width': 'auto'
+                                    });
+                                })
+                            );
+                        }
+                    }).render().$el
+                );
+
+                if (!view.hasClass('hidden')) {
+                    this.append(
+                        $('<li class="divider" aria-hidden="true" role="presentation">')
+                    );
+                }
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'settings',
             index: 100,
             draw: function () {
