@@ -150,15 +150,30 @@ define('io.ox/mail/compose/view', [
         draw: extensions.optionsmenu
     });
 
+    ext.point(POINT + '/editors').extend({
+        id: 'plain-text',
+        lable: gt('Plain Text'),
+        mode: 'text'
+    });
+
+    ext.point(POINT + '/editors').extend({
+        id: 'tinymce',
+        lable: gt('HTML'),
+        mode: 'html'
+    });
+
     ext.point(POINT + '/menuoptions').extend({
         id: 'editor',
         index: 100,
         draw: function () {
             if (_.device('smartphone')) return;
-            this.data('view')
-                .header(gt('Editor'))
-                .option('editorMode', 'text', gt('Plain Text'), gt('Editor'))
-                .option('editorMode', 'html', gt('HTML'), gt('Editor'));
+            var menu = this.data('view')
+                .header(gt('Editor'));
+
+            ext.point(POINT + '/editors').each(function (point) {
+                if (!point.mode && !point.lable) return;
+                menu.option('editorMode', point.mode, point.lable, gt('Editor'));
+            });
         }
     });
 
@@ -885,10 +900,9 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-            var self = this,
-                editorSrc = 'io.ox/core/tk/' + (this.model.get('editorMode') === 'text' ? 'text-editor' : 'contenteditable-editor');
+            var self = this;
 
-            return require([editorSrc]).then(function (Editor) {
+            return ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
                 return (self.editorHash[self.model.get('editorMode')] = new Editor(self.model.get('editorMode') === 'text' ? self.textarea : self.contentEditable))
                     .done(function () {
                         self.editor = self.editorHash[self.model.get('editorMode')];
@@ -924,14 +938,19 @@ define('io.ox/mail/compose/view', [
             this.textarea.prop('disabled', true).busy();
 
             if (this.editor) {
-                var content = this.editor.getPlainText();
+                var content = this.editor.getPlainText(),
+                    self = this;
                 this.editor.clear();
                 this.editor.handleHide();
-                // toggle editor
-                this.model.setMailContentType(this.model.get('editorMode'));
 
                 // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
-                return !this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content);
+                var loaded = (!this.editorHash[this.model.get('editorMode')] ? this.loadEditor(content) : this.reuseEditor(content));
+
+                return loaded.done(function () {
+                    //update the content type of the mail
+                    //FIXME: may be, do this somewhere else? in the model?
+                    self.model.setMailContentType(self.editor.content_type);
+                });
 
             } else {
                 // initial editor

@@ -383,6 +383,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             return trimEnd(content);
         };
 
+        this.content_type = 'text/html';
+
         // publish internal 'done'
         this.done = function (fn) {
             return $.when(initialized, rendered).done(fn);
