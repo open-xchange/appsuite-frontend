@@ -23,6 +23,7 @@ define('io.ox/core/main', [
     // defines jQuery plugin
     'io.ox/core/commons',
     'io.ox/core/upsell',
+    'io.ox/backbone/mini-views/upsell',
     'io.ox/core/capabilities',
     'io.ox/core/ping',
     'io.ox/core/folder/api',
@@ -31,7 +32,7 @@ define('io.ox/core/main', [
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/backbone/disposable'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -751,6 +752,28 @@ define('io.ox/core/main', [
             addUserContent(model, node);
             launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
             tabManager();
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'upsell',
+            index: 50,
+            draw: function () {
+                if (_.device('smartphone')) return;
+
+                this.append(new UpsellView({
+                    tagName: 'li',
+                    className: 'launcher',
+                    id: 'secondary-launcher',
+                    requires: 'active_sync || caldav || carddav',
+                    customize: function () {
+                        $('a', this.$el).append(
+                            _(this.icon.split(/ /)).map(function (icon) {
+                                return $('<i class="fa">').addClass(icon + ' launcher-icon');
+                            })
+                        );
+                    }
+                }).render().$el);
+            }
         });
 
         ext.point('io.ox/core/topbar/right').extend({
