@@ -150,15 +150,30 @@ define('io.ox/mail/compose/view', [
         draw: extensions.optionsmenu
     });
 
+    ext.point(POINT + '/editors').extend({
+        id: 'plain-text',
+        lable: gt('Plain Text'),
+        mode: 'text'
+    });
+
+    ext.point(POINT + '/editors').extend({
+        id: 'tinymce',
+        lable: gt('HTML'),
+        mode: 'html'
+    });
+
     ext.point(POINT + '/menuoptions').extend({
         id: 'editor',
         index: 100,
         draw: function () {
             if (_.device('smartphone')) return;
-            this.data('view')
-                .header(gt('Editor'))
-                .option('editorMode', 'text', gt('Plain Text'), gt('Editor'))
-                .option('editorMode', 'html', gt('HTML'), gt('Editor'));
+            var menu = this.data('view')
+                .header(gt('Editor'));
+
+            ext.point(POINT + '/editors').each(function (point) {
+                if (!point.mode && !point.lable) return;
+                menu.option('editorMode', point.mode, point.lable, gt('Editor'));
+            });
         }
     });
 
