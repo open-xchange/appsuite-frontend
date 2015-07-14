@@ -111,6 +111,7 @@
 
         .swiper-slide {
             overflow: auto;
+            outline: none;
         }
 
         .swiper-button-control {
@@ -207,6 +208,10 @@
             display: block;
         }
 
+        .presenter-sidebar-section {
+            width: 100%;
+        }
+
         .sidebar-section-heading {
             border-bottom: 1px solid #aaa;
             margin-bottom: 15px;
@@ -264,6 +269,35 @@
                 color: #333;
                 margin-top: 5px;
             }
+        }
+
+        .slidepeek {
+            position: relative;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 30px;
+            .slidepeek-image {
+                width: 100%;
+                display: none;
+            }
+            &.end {
+                width: 320px;
+                height: 160px;
+                background-color: #777;
+                color: #fff;
+            }
+        }
+
+        &.presenting {
+            width: 35%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border:0;
+            background-color: #f8f8f8;
+
         }
 
 

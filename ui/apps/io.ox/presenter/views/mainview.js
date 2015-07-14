@@ -105,7 +105,7 @@ define('io.ox/presenter/views/mainview', [
                 remoteSlideId = rtModel.get('activeSlide');
 
             if (rtModel.hasChanged('activeSlide') || (localSlideId !== remoteSlideId)) {
-                this.presenterEvents.trigger('presenter:slide:change', rtModel.get('activeSlide'));
+                this.presenterEvents.trigger('presenter:remote:slide:change', rtModel.get('activeSlide'));
             }
             if (rtModel.hasChanged('participants')) {
                 this.presenterEvents.trigger('presenter:participants:change', rtModel.get('participants'));
@@ -176,12 +176,12 @@ define('io.ox/presenter/views/mainview', [
                 case 37: // left arrow
                     event.stopPropagation();
                     this.presentationView.showPreviousSlide();
-                    //this.presentationView.focusActiveSlide();
+                    this.presentationView.focusActiveSlide();
                     break;
                 case 39: // right arrow
                     event.stopPropagation();
                     this.presentationView.showNextSlide();
-                    //this.presentationView.focusActiveSlide();
+                    this.presentationView.focusActiveSlide();
                     break;
                 // TODO: clarify which keyboard events to support
                 case 107: // plus key
