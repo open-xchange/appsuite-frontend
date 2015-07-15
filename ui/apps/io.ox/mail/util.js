@@ -312,7 +312,7 @@ define('io.ox/mail/util', [
                 display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
             }
 
-            if (options.displayMailAddress && display_name && email) {
+            if (options.showMailAddress && display_name && email) {
                 display_name += ' <' + email + '>';
             }
 
