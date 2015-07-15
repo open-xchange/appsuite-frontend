@@ -133,7 +133,7 @@ define('io.ox/core/folder/actions/add', [
         if (/^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders')) {
             // only address book, calendar, and tasks do have a "public folder" section
             api.get('2').done(function (public_folder) {
-                opt.supportsPublicFolders = api.can('create', public_folder);
+                opt.supportsPublicFolders = api.can('create:folder', public_folder);
                 open(folder, opt);
             });
         } else {
