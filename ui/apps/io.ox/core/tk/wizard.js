@@ -554,6 +554,10 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
             return this.collection.get(id);
         },
 
+        list: function (type) {
+            return type === undefined ? this.collection : this.collection.where({ type: type });
+        },
+
         run: function (id) {
             var model = this.get(id);
             if (model) model.get('run')();
