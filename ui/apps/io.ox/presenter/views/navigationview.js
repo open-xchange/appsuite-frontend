@@ -251,7 +251,7 @@ define('io.ox/presenter/views/navigationview', [
                     data: this.model.toJSON()
                 });
             // render navigation links
-            navigation.empty().hide();
+            navigation.empty();
             // the navigation panel is displayed for the presenter only and if the presentation is not paused.
             if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
                 navigationPoint.invoke('draw', navigation, baton);
