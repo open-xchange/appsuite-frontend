@@ -1,0 +1,93 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.wizard-step {
+
+    font-size: 14px;
+    background-color: white;
+    outline: 0;
+    z-index: 1000;
+
+    position: absolute;
+
+    // default width
+    width: 400px;
+
+    .box-shadow(0 10px 50px 0px rgba(0, 0, 0, 0.5));
+
+    &.center {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    &.middle {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    &.center.middle {
+        transform: translate3d(-50%, -50%, 0);
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 24px 16px 0 16px;
+        margin: 0;
+        &:empty { display: none; }
+    }
+
+    .close {
+        position: relative;
+        width: 40px;
+        height: 48px;
+        line-height: 48px;
+        top: 8px;
+        right: 8px;
+        outline: 0;
+        &:focus {
+            color: #333;
+            background-color: #ccc;
+        }
+    }
+
+    .content {
+        padding: 24px 16px;
+    }
+
+    .footer {
+        padding: 0 16px 16px 16px;
+        font-weight: bold;
+        text-align: right;
+        &:empty { display: none; }
+        .btn {
+            margin-left: 8px;
+        }
+    }
+}
+
+.wizard-overlay {
+    background-color: rgba(0, 0, 0, 0.20);
+    z-index: 998;
+}
+
+.wizard-backdrop {
+    background-color: rgba(0, 0, 0, 0.20);
+    z-index: 998;
+}
+
+.wizard-spotlight {
+    background-color: rgba(255, 255, 255, 0.01);
+    box-shadow: 0 10px 50px 0px rgba(0, 0, 0, 0.40);
+    z-index: 999;
+}
