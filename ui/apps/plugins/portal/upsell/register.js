@@ -13,35 +13,68 @@
 
 define('plugins/portal/upsell/register', [
     'io.ox/core/extensions',
-    'gettext!plugins/portal'
-], function (ext, gt) {
+    'gettext!plugins/portal',
+    'io.ox/core/upsell',
+    'settings!io.ox/core'
+], function (ext, gt, upsell, settings) {
 
     'use strict';
 
-    var title = gt('Upgrade to premium');
+    var id = 'portal-widget',
+        options = _.extend({
+            title: gt('Upgrade your account'),
+            requires: 'active_sync || caldav || carddav',
+            removable: false,
+            icon: settings.get('upsell/defaultIcon', 'fa-lock')
+        }, settings.get('features/upsell/' + id), settings.get('features/upsell/' + id + '/i18n/' + ox.language));
+
+    function trigger(e) {
+        // do not trigger when clicked on close
+        if ($(e.target).closest('.disable-widget').length > 0) return;
+
+        upsell.trigger({
+            type: 'custom',
+            id: id,
+            missing: upsell.missing(options.requires)
+        });
+    }
 
     ext.point('io.ox/portal/widget/upsell').extend({
 
-        title: title,
+        title: options.title,
 
         preview: function () {
+            if (options.imageURL) {
+                this.addClass('photo-stream').append(
+                    $('<div class="content" tabindex="1" role="button">')
+                        .css('backgroundImage', 'url(' + options.imageURL + ')')
+                );
+            } else {
+                this.append(
+                    $('<div class="content centered" style="cursor: pointer; padding-top: 3em;">').append(
+                        $('<h2>').append(
+                            $.txt(options.title + ' '),
+                            _(options.icon.split(/ /)).map(function (icon) {
+                                return $('<i class="fa">').addClass(icon);
+                            })
+                        )
+                    )
+                );
+            }
 
-            this.addClass('hide-title').append(
-                $('<div class="content centered" style="cursor: pointer; padding-top: 3em;">').append(
-                    $('<h2>').append(
-                        $.txt(title + ' '),
-                        $('<i class="fa fa-star">')
-                    ),
-                    $('<div>').text(gt('Click here for free trial.'))
-                )
-                .on('click', function () {
-                    ox.trigger('upsell:upgrade', {
-                        type: 'widget',
-                        id: 'io.ox/portal/widget/upsell',
-                        missing: ''
-                    });
-                })
-            );
+            this.on('click', trigger);
+
+            if (!options.removable) {
+                $('.disable-widget', this).remove();
+            }
         }
+    });
+
+    ext.point('io.ox/portal/widget/upsell/settings').extend({
+        title: gt('Upgrade your account'),
+        type: 'upsell',
+        editable: false,
+        color: 'gray',
+        inverse: true
     });
 });

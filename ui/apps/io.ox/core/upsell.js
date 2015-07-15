@@ -170,17 +170,11 @@ define('io.ox/core/upsell', [
             c.calendar = c.infostore = c.tasks = c.active_sync = c['active_sync || caldav || carddav'] = false;
             c.publication = c.subscription = false;
             settings.set('features/upsell/secondary-launcher', { icon: 'fa-star fa-star fa-star' });
+            settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });
             settings.set('features/upsell/folderview/mail/i18n/en_US', { title: 'Custom english title for synchronizing mails.' });
             console.debug('Disabled inline actions regarding calendar, tasks, and files; enabled upsell instead');
             if (!debugCustomWizard) {
                 that.useDefaults();
-                require(['io.ox/portal/widgets'], function (widgets) {
-                    if (!widgets.containsType('upsell')) {
-                        widgets.addPlugin('plugins/portal/upsell/register');
-                        widgets.add('upsell', { color: 'gray', inverse: true });
-                        console.debug('Added upsell widget to portal');
-                    }
-                });
             }
         },
 
@@ -198,6 +192,25 @@ define('io.ox/core/upsell', [
         }
 
     }());
+
+    // add or remove upsell widget to portal
+    require(['io.ox/portal/widgets'], function (widgets) {
+        var options = _.extend({
+                enabled: true,
+                requires: 'active_sync || caldav || carddav'
+            }, settings.get('features/upsell/portal-widget')),
+            hasWidget = widgets.containsType('upsell'),
+            showWidget = options.enabled && !that.has(options.requires) && that.enabled(options.requires);
+
+        if (hasWidget !== showWidget) {
+            if (hasWidget) {
+                widgets.remove('upsell_0');
+            } else {
+                widgets.addPlugin('plugins/portal/upsell/register');
+                widgets.add('upsell');
+            }
+        }
+    });
 
     return that;
 
