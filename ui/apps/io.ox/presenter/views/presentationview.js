@@ -15,12 +15,13 @@ define('io.ox/presenter/views/presentationview', [
     'io.ox/backbone/disposable',
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
+    'io.ox/presenter/views/navigationview',
     // TODO: move code to document converter utils
     'io.ox/presenter/util',
     'gettext!io.ox/presenter',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (DisposableView, PDFDocument, PDFView, Util, gt) {
+], function (DisposableView, PDFDocument, PDFView, NavigationView, Util, gt) {
 
     'use strict';
 
@@ -98,6 +99,8 @@ define('io.ox/presenter/views/presentationview', [
             // the index of the slide to start the presentation with
             // TODO: check if needed here
             this.startIndex = 0;
+            // the slide navigation view
+            this.navigationView = new NavigationView(options);
             // register resize handler
             this.listenTo(this.presenterEvents, 'presenter:resize', this.onResize);
             // bind zoom events
@@ -130,7 +133,11 @@ define('io.ox/presenter/views/presentationview', [
 
             // append carousel to view
             carouselRoot.append(carouselInner);
-            this.$el.append(carouselRoot, caption);
+            this.$el.append(
+                carouselRoot,
+                caption,
+                this.navigationView.render().el
+            );
 
             // create pause overlay
             this.renderPauseOverlay();
@@ -223,7 +230,7 @@ define('io.ox/presenter/views/presentationview', [
                 userId = this.app.rtConnection.getRTUuid();
 
             if (rtModel.isJoined(userId)) {
-                this.showSlide(index);
+                this.internalShowSlide(index);
             }
         },
 
@@ -304,24 +311,57 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
+         * Returns the slide count.
+         *
+         * @returns {Number}
+         *  the slide count.
+         */
+        getSlideCount: function () {
+            return this.numberOfSlides || 0;
+        },
+
+        /**
          * Switches Swiper to the slide with the given index.
          *
          * @param {Number} index
          *  the index of the slide to be shown.
          */
-        showSlide: function (index) {
+        internalShowSlide: function (index) {
             if (this.swiper && _.isNumber(index) && (index !== this.currentSlideIndex) ) {
                 this.swiper.slideTo(index);
             }
         },
 
         /**
-         * Switches Swiper to the next slide,
+         * Switches Swiper to the slide with the given index,
          * but only if the user is presenter or has not joined the presentation.
+         *
+         * @param {Number} index
+         *  the index of the slide to be shown.
          */
-        showNextSlide: function () {
+        showSlide: function (index) {
             var rtModel = this.app.rtModel,
                 userId = this.app.rtConnection.getRTUuid();
+
+            if (!rtModel.isJoined(userId) || rtModel.isPresenter(userId)) {
+                this.internalShowSlide(index);
+            }
+        },
+
+        /**
+         * Switches Swiper to the next slide,
+         * but only if the user is presenter or has not joined the presentation.
+         *
+         * @param {jQuery.Event} [event]
+         *  the optional event.
+         */
+        showNextSlide: function (event) {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (event) {
+                event.preventDefault();
+            }
 
             if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
                 this.swiper.slideNext();
@@ -331,10 +371,17 @@ define('io.ox/presenter/views/presentationview', [
         /**
          * Switches Swiper to the previous slide,
          * but only if the user is presenter or has not joined the presentation.
+         *
+         * @param {jQuery.Event} [event]
+         *  the optional event.
          */
-        showPreviousSlide: function () {
+        showPreviousSlide: function (event) {
             var rtModel = this.app.rtModel,
                 userId = this.app.rtConnection.getRTUuid();
+
+            if (event) {
+                event.preventDefault();
+            }
 
             if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
                 this.swiper.slidePrev();
@@ -379,6 +426,26 @@ define('io.ox/presenter/views/presentationview', [
             this.captionTimeoutId = window.setTimeout(function () {
                 slideCaption.fadeOut();
             }, (duration || 3000));
+        },
+
+        /**
+         * Show navigation panel,
+         * but only if the current user is the presenter and the presentation is no paused.
+         */
+        showNavigation: function () {
+            var userId = this.app.rtConnection.getRTUuid(),
+                rtModel = this.app.rtModel;
+
+            if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
+                this.navigationView.$el.show();
+            }
+        },
+
+        /**
+         * Hide navigation panel
+         */
+        hideNavigation: function () {
+            this.navigationView.$el.fadeOut(1000);
         },
 
         /**
@@ -511,6 +578,8 @@ define('io.ox/presenter/views/presentationview', [
            // initiate swiper
            this.swiper = new window.Swiper(this.carouselRoot[0], swiperParameter);
            this.pages = this.$el.find('.document-page');
+           // trigger initial slide change event
+           this.presenterEvents.trigger('presenter:local:slide:change', this.startIndex);
 
            // set callbacks at this.pdfView to start rendering
            var renderCallbacks = {

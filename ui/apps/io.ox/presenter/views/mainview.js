@@ -52,6 +52,8 @@ define('io.ox/presenter/views/mainview', [
             this.presentationView = new PresentationView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
             this.toolbarView = new ToolbarView(childViewParams);
+            // remember the sidebar open state for fullscreen
+            this.sidebarBeforeFullscreen = null;
 
             // handle DOM events
             $(window).on('resize.presenter', this.onWindowResize.bind(this));
@@ -62,6 +64,8 @@ define('io.ox/presenter/views/mainview', [
             // listen to sidebar toggle events
             this.listenTo(this.presenterEvents, 'presenter:toggle:sidebar', this.onToggleSidebar);
             this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
+            // show navigation panel on user activity
+            this.$el.on('mousemove', _.throttle(this.onMouseMove.bind(this), 500));
 
             // listen to RTModel updates
             //this.listenTo(this.app.rtModel, 'change:presenterId change:activeSlide change:paused change:participants', this.onRTModelUpdate);
@@ -198,6 +202,40 @@ define('io.ox/presenter/views/mainview', [
                     break;
             }
         },
+
+        /**
+         * Handles mouse move events.
+         * Show navigation panel if mouse location is in the lower part of the window.
+         */
+        onMouseMove: (function () {
+            var x = 0, y = 0;
+            return function (event) {
+                if (!this.$el) { return; }
+
+                var //max bottom postion relative to the document
+                    // since height of the main view will be null in full screen mode, we need to take height and offset from the presentation view
+                    maxY = this.presentationView.$el.height() + this.presentationView.$el.offset().top,
+                    // the lower 10% or the last 40 pixel of the window
+                    showY = Math.min((maxY * 0.90), (maxY - 40));
+
+                // for Chrome's bug: it fires mousemove events without mouse movements
+                if (event && event.type === 'mousemove') {
+                    if (event.clientX === x && event.clientY === y) {
+                        return;
+                    }
+                    x = event.clientX;
+                    y = event.clientY;
+                }
+
+                // show navigation panel when mouse is inside the lower 10% or the last 40 pixel of the window
+                console.info('ON MOUSE MOVE', event.type, 'x:', x, 'y:', y, (y > showY) ? 'SHOW' : 'HIDE', showY);
+                if (y > showY) {
+                    this.presentationView.showNavigation();
+                } else {
+                    this.presentationView.hideNavigation();
+                }
+            };
+        })(),
 
         // toggle sidebar after the sidebar button is clicked
         onToggleSidebar: function () {
@@ -385,6 +423,8 @@ define('io.ox/presenter/views/mainview', [
         onEnterFullscreen: function () {
             //console.info('Presenter - mainview - onEnterFullscreen()');
             this.fullscreen = true;
+            this.sidebarBeforeFullscreen = this.sidebarView.opened;
+            this.sidebarView.toggleSidebar(false);
         },
 
         /**
@@ -395,6 +435,7 @@ define('io.ox/presenter/views/mainview', [
             var userId = this.app.rtConnection.getRTUuid();
 
             this.fullscreen = false;
+            this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);
 
             if (this.app.rtModel.canLeave(userId)) {
                 this.app.rtConnection.leavePresentation();
@@ -406,6 +447,30 @@ define('io.ox/presenter/views/mainview', [
          */
         onErrorFullscreen: function (foo) {
             console.info('Presenter - mainview - onErrorFullscreen()', foo);
+        },
+
+        /**
+         * Show the slide with the given index, but only if the user is presenter or has not joined the presentation.
+         *
+         * @param {Number} index
+         *  the index of the slide to be shown.
+         */
+        showSlide: function (index) {
+            this.presentationView.showSlide(index);
+        },
+
+        /**
+         * Show the next slide, but only if the user is presenter or has not joined the presentation.
+         */
+        showNextSlide: function () {
+            this.presentationView.showNextSlide();
+        },
+
+        /**
+         * Show the previous slide, but only if the user is presenter or has not joined the presentation.
+         */
+        showPreviousSlide: function () {
+            this.presentationView.showPreviousSlide();
         },
 
         /**
