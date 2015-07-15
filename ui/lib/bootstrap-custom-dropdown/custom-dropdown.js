@@ -60,18 +60,22 @@
         if (phone) {
             var $ul = $parent.find('ul');
             if ($ul.length > 0) {
-                $parent.data('menu', $ul);
-                if ($ul.children().length == 0) {
+                // menu was not re-attched before
+                if ($ul.children().length === 0) {
                     // dropdown is filled during runtime, we have to wait till it's all
                     // drawn and append the closer afterwards
                     setTimeout(function () {
-                        $ul.append(getCloseElement());
+                        // special handling for foldertree dropdowns as these are built manually
+                        // at runtime
+                        if (f !== 'foldertree') $ul.append(getCloseElement());
                         $('body').append($ul.addClass('custom-dropdown'));
-                    }, 300);
+                    }, 50);
                 } else {
-                    $ul.append(getCloseElement());
+                    if (f !== 'foldertree') $ul.append(getCloseElement());
                     $('body').append($ul.addClass('custom-dropdown'));
                 }
+                // save it for later re-use
+                $parent.data('menu', $ul);
             } else {
                 // ensure the close button is the last,
                 // may be not the case if a menu point is added after menu was
@@ -79,8 +83,15 @@
                 var menu = $parent.data('menu');
                 if (!menu.find('[data-action="close-menu"]').parent().is(':last-child')) {
                     menu.find('[data-action="close-menu"]').parent().appendTo(menu);
+                } else if (!menu.find('[data-action="close-menu"]')) {
+                    // for programmatic invoked menu we have to append a new closer as menus may be cleared
+                    setTimeout(function () {
+                        menu.append(getCloseElement());
+                    }, 50);
                 }
             }
+            //remove dividers
+            $parent.data('menu').find('.divider').remove();
         }
 
         clearMenus()
