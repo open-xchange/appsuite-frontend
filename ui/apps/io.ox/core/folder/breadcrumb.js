@@ -33,11 +33,15 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.notail = options.notail;
 
             if (options.app) {
+                var self = this;
                 this.app = options.app;
                 this.handler = function (id) { this.app.folder.set(id); };
                 this.folder = this.app.folder.get();
                 this.find = this.app.get('find');
                 this.listenTo(this.app, 'folder:change', this.onChangeFolder);
+                // do not use listen to here, does not work with dom events, see http://stackoverflow.com/questions/14460855/
+                $(document).on('resize', this.computeWidth.bind(self));
+                $(window).on('resize', this.computeWidth.bind(self));
                 if (this.find && this.find.isActive()) {
                     // use item's folder id
                     this.folder = options.folder;
@@ -49,6 +53,11 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                     };
                 }
             }
+        },
+
+        close: function () {
+            $(document).off('resize', this.computeWidth);
+            $(window).off('resize', this.computeWidth);
         },
 
         onChangeFolder: function (id) {
@@ -83,7 +92,18 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 // path
                 _(path).map(this.renderLink, this)
             );
+
+            // just scroll to max
+            this.computeWidth();
+            this.$el.scrollLeft($(window).width());
         },
+
+        computeWidth: _.debounce( function () {
+            if (this.$el.parent() && this.$el.is(':visible')) {
+                var width = Math.max( this.$el.parent().width() - 250, 150);
+                this.$el.css('max-width', width + 'px');
+            }
+        }, 300),
 
         renderLink: function (data, index, all) {
 

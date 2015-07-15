@@ -12,9 +12,15 @@
  */
 
 .breadcrumb-view {
-    margin: 8px 0;
+    overflow: scroll;
+    white-space: nowrap;
     .user-select-text();
     .toolbar & { margin: 0; }
+}
+
+.generic-toolbar .breadcrumb-view&.toolbar-item {
+    margin: 0 16px;
+    padding: 0;
 }
 
 .breadcrumb-label, .breadcrumb-item, .breadcrumb-ellipsis, .breadcrumb-divider, .breadcrumb-tail {
@@ -35,4 +41,8 @@
     width: 8px;
     text-align: center;
     &:before { content: "\f105"; } // fa-angle-right
+}
+
+.breadcrumb-link, .breadcrumb-divider {
+    display: inline-block;
 }
