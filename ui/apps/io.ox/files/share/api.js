@@ -72,16 +72,65 @@ define('io.ox/files/share/api', [
         },
 
         /**
-         * get all shares
+         * get all shares by share/management API
          * @return { deferred } an array with share data
          */
-        all: function (module) {
+        allShares: function (module) {
             return http.GET({
                 module: 'share/management',
                 params: {
                     action: 'all',
                     timezone: 'UTC',
                     module: module
+                }
+            });
+        },
+
+        /**
+         * get all shares by folder and files API
+         * @return { deferred } an array with share data
+         */
+        all: function () {
+            return $.when(
+                this.allFolderShares(),
+                this.allFileShares()
+            ).then(function (folder, files) {
+                return [].concat(folder[0], files[0]);
+            });
+        },
+
+        /**
+         * get all shares by folder API
+         * @return { deferred } an array with share data
+         */
+        allFolderShares: function () {
+            return http.GET({
+                module: 'folders',
+                params: {
+                    action: 'shares',
+                    'content_type': 'infostore',
+                    tree: 0,
+                    all: 0,
+                    altNames: true,
+                    columns: '1,2,5,300,301,305,306,3060'
+                }
+            });
+        },
+
+        /**
+         * get all shares by files API
+         * @return { deferred } an array with share data
+         */
+        allFileShares: function () {
+            return http.GET({
+                module: 'files',
+                params: {
+                    action: 'shares',
+                    'content_type': 'infostore',
+                    tree: 0,
+                    all: 0,
+                    altNames: true,
+                    columns: '1,2,5,20,title,108,7010'
                 }
             });
         },
@@ -122,16 +171,16 @@ define('io.ox/files/share/api', [
 
         /**
          * delete a link
-         * @param  { string }   token
+         * @param  { object } o target data
          * @return { deferred } empty data and timestamp
          */
-        destroy: function (token) {
-            return http.GET({
+        deleteLink: function (o) {
+            return http.PUT({
                 module: 'share/management',
                 params: {
-                    action: 'deleteLink',
-                    token: token
-                }
+                    action: 'deleteLink'
+                },
+                data: o
             });
         }
     };

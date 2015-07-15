@@ -27,7 +27,7 @@ define('io.ox/files/actions/share', [
             count = baton.models.length,
             first = baton.models[0],
             filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
-            view = new ShareWizard({ files: baton.models });
+            view = new ShareWizard({ files: baton.models, type: type });
 
         // build header
         if (first.isFile()) {
@@ -40,7 +40,7 @@ define('io.ox/files/actions/share', [
         new dialogs.ModalDialog({ width: 600, async: true })
             .header($('<h4>').text(header))
             .append(view.render().$el)
-            .addPrimaryButton('share', gt('Share'), 'share')
+            .addPrimaryButton('share', type === 'invite' ? gt('Invite') : gt('Done'), 'share')
             .addButton('cancel', gt('Cancel'), 'cancel')
             .on('share', function () {
                 view.share().then(this.close, this.idle);
@@ -50,8 +50,6 @@ define('io.ox/files/actions/share', [
                 this.close();
             })
             .show();
-
-        view.model.set('type', type);
     }
 
     return {

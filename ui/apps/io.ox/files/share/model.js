@@ -14,14 +14,13 @@
 define('io.ox/files/share/model', [
     'io.ox/files/share/api',
     'io.ox/core/folder/api',
-    'io.ox/files/api'
-], function (api, folderAPI, filesAPI) {
+    'io.ox/files/api',
+    'io.ox/core/yell'
+], function (api, folderAPI, filesAPI, yell) {
 
     'use strict';
 
     var WizardShare = Backbone.Model.extend({
-
-        idAttribute: 'token',
 
         TYPES: {
             INVITE: 'invite',
@@ -39,12 +38,16 @@ define('io.ox/files/share/model', [
                 password: '',
                 temporary: false,
                 expires: 2,
-                link: ''
+                url: ''
             };
         },
 
         initialize: function (option) {
             this.set('files', option.files);
+            this.set('type', option.type);
+            if (option.type === this.TYPES.INVITE) {
+                this.set('edit', true);
+            }
         },
 
         getExpiryDate: function () {
@@ -72,9 +75,8 @@ define('io.ox/files/share/model', [
             // default invite data
             var self = this,
                 bitMask = this.get('edit') ? 33026 : 257,
-                data = {
-                    targets: []
-                };
+                targets = [],
+                data = {};
 
             // collect target data
             _(this.get('files')).each(function (item) {
@@ -91,7 +93,7 @@ define('io.ox/files/share/model', [
                 if (self.get('temporary')) {
                     target.expiry_date = self.getExpiryDate();
                 }
-                data.targets.push(target);
+                targets.push(target);
             });
 
             // secial data for invite request
@@ -99,6 +101,7 @@ define('io.ox/files/share/model', [
 
                 // set message data
                 data.message = this.get('message', '');
+                data.targets = targets;
 
                 // collect recipients data
                 data.recipients = [];
@@ -140,14 +143,14 @@ define('io.ox/files/share/model', [
 
             // secial data for getlink request
             if (this.get('type') === this.TYPES.LINK) {
+                data = targets[0];
+
                 if (this.get('secured')) {
                     data.password = this.get('password');
                 }
 
-                data.bits = bitMask;
-
                 // create or update ?
-                if (!this.has('token')) {
+                if (!this.has('url')) {
                     return data;
                 } else {
                     data.token = this.get('token');
@@ -169,21 +172,22 @@ define('io.ox/files/share/model', [
             switch (action) {
                 case 'create':
                     return api.create(this.toJSON()).then(function (data, timestamp) {
-                        self.set('link', data.url);
-                        self.set('token', data.token);
-                        self.set({
-                            link: data.url,
-                            token: data.token,
-                            lastModified: timestamp
-                        });
+                        if (data.is_new && data.is_new === true) {
+                            delete data.is_new;
+                            data.id = _.uniqueId();
+                        }
+                        self.set(_.extend(data, { lastModified: timestamp }));
                         return data.url;
-                    });
+                    }).fail(yell);
                 case 'invite':
-                    return api.invite(model.toJSON());
+                    return api.invite(model.toJSON()).fail(yell);
                 case 'update':
-                    return api.update(model.toJSON(), model.get('lastModified'));
+                    return api.update(model.toJSON(), model.get('lastModified')).fail(yell);
                 case 'delete':
-                    return api.destroy(model.get('token'));
+                    if (this.get('type') === this.TYPES.LINK) {
+                        return api.deleteLink(model.toJSON()).fail(yell);
+                    }
+                    break;
             }
         },
 
@@ -207,15 +211,33 @@ define('io.ox/files/share/model', [
         },
 
         isFolder: function () {
-            return !this.get('target').item;
+            return !this.has('folder_id');
+        },
+
+        isAdmin: function () {
+            if (this.isFolder()) {
+                return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
+            } else {
+                return true;
+            }
         },
 
         getDisplayName: function () {
-            if (this.get('display_name')) {
-                return this.get('display_name');
+            if (this.get('title')) {
+                return this.get('title');
             } else {
                 return this.isFolder() ? 'Foldername' : 'Filename';
             }
+        },
+
+        getFolderID: function () {
+            return this.isFolder() ? this.get('id') : this.get('folder_id');
+        },
+
+        getPermissions: function () {
+            return this.get('com.openexchange.share.extendedPermissions') ||
+                this.get('object_permissions') ||
+                this.get('permissions');
         },
 
         getObject: function () {

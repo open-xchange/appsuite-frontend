@@ -45,6 +45,7 @@
             .divider()
             .option('order', 'asc', gt('Ascending'))
             .option('order', 'desc', gt('Descending'));
+            dropdown.$ul.addClass('pull-right');
             this.append(
                 $('<fieldset>').append(
                     $('<legend>').text(gt('My shares')).append(
@@ -79,7 +80,7 @@
         index: INDEX += 100,
         draw: function (baton) {
             var model = baton.view.model,
-                breadcrumb = new BreadcrumbView({ folder: model.get('target').folder, exclude: ['9'], notail: true });
+                breadcrumb = new BreadcrumbView({ folder: model.getFolderID(), exclude: ['9'], notail: true });
 
             breadcrumb.handler = function (id) {
                 // launch files and set/change folder
@@ -99,13 +100,13 @@
     });
 
     /*
-     * extension point share date
+     * extension point  date
      */
     ext.point(POINT + '/share').extend({
         id: 'date',
         index: INDEX += 100,
         draw: function (baton) {
-            var created = moment(baton.view.model.get('created'));
+            var created = moment(baton.view.model.get('last_modified'));
             this.append(
                 $('<time class="date">')
                     .attr('datetime', created.toISOString())
@@ -143,7 +144,7 @@
     /*
      * simple share view
      */
-    var SharesView = DisposableView.extend({
+    var SimpleShareView = DisposableView.extend({
 
         tagName: 'li',
 
@@ -198,7 +199,10 @@
 
         onEdit: function (e) {
             e.preventDefault();
-            console.log('edit', this.model);
+            var self = this;
+            return require(['io.ox/files/share/permissions'], function (permissions) {
+                permissions.show(self.model);
+            });
         },
 
         toggleUrl: function (e) {
@@ -283,7 +287,7 @@
             this.$ul.empty();
             this.collection.each(function (share) {
                 self.$ul.append(
-                    new SharesView({
+                    new SimpleShareView({
                         model: share
                     }).render().$el
                 );

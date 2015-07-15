@@ -30,7 +30,7 @@ define('io.ox/files/share/wizard', [
         POINT = 'io.ox/files/share/wizard',
         trans = {
             invite: gt('Invite people via email. Every recipient will get an individual link to access the shared files.'),
-            link: gt('Create a link to copy and paste in an email, instant messenger or social network. Please note that anyone who gets the link can access the share.')
+            link: gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.')
         };
 
     /*
@@ -41,7 +41,7 @@ define('io.ox/files/share/wizard', [
         index: INDEX += 100,
         draw: function (baton) {
             this.append(
-                baton.nodes.default.description = $('<span>').addClass('help-block').text(trans[baton.model.get('type', 'invite')])
+                $('<span>').addClass('help-block').text(trans[baton.model.get('type', 'invite')])
             );
         }
     });
@@ -53,15 +53,24 @@ define('io.ox/files/share/wizard', [
         id: 'link',
         index: INDEX += 100,
         draw: function (baton) {
-            var link = baton.model.get('link', '');
+            // only available for type link
+            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
+
+            var linkNode,
+                link = baton.model.get('url', ''),
+                formID = _.uniqueId('form-control-label-');
             this.append(
-                baton.nodes.link.link = $('<div>').addClass('form-group').append(
-                    $('<a class="sharelink">').attr({ href: link, tabindex: 1, target: '_blank' }).text(link)
-                ).hide()
+                linkNode = $('<div class="form-group">').append(
+                    $('<label>').attr({ for: formID }).text(),
+                    $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' }).val(link)
+                )
             );
-            baton.model.on('change:link', function (model, val) {
-                baton.nodes.link.link.find('a').text(val).attr('href', val);
+            baton.view.listenTo(baton.model, 'change:url', function (model, val) {
+                linkNode.find('input').val(val).focus().select();
             });
+            if (link === '' ) {
+                baton.view.share({ silent: true, validate: false });
+            }
         }
     });
 
@@ -88,7 +97,7 @@ define('io.ox/files/share/wizard', [
             });
 
             this.append(
-                baton.nodes.invite.autocomplete = $('<div class="form-group">').append(
+                $('<div class="form-group">').append(
                     $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
                     tokenfieldView.$el
                 )
@@ -112,7 +121,7 @@ define('io.ox/files/share/wizard', [
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-');
             this.append(
-                baton.nodes.invite.message = $('<div>').addClass('form-group').append(
+                $('<div>').addClass('form-group').append(
                     $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid }),
                     new miniViews.TextView({
                         name: 'message',
@@ -135,22 +144,9 @@ define('io.ox/files/share/wizard', [
         id: 'defaultOptions',
         index: INDEX += 100,
         draw: function (baton) {
-            var optionGroup = $('<div>').addClass('shareoptions').hide(),
-                icon = $('<i>').addClass('fa fa-caret-right fa-fw');
+            var optionGroup = $('<div>').addClass('shareoptions');
             ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
-            this.append(
-                $('<div class="form-group">').append(
-                    $('<a href="#" tabindex=1>').append(
-                        icon,
-                        $('<span>').text(gt('Advanced options'))
-                    ).click(function (e) {
-                        e.preventDefault();
-                        optionGroup.toggle();
-                        icon.toggleClass('fa-caret-right fa-caret-down');
-                    })
-                ),
-                optionGroup
-            );
+            this.append(optionGroup);
         }
     });
 
@@ -161,6 +157,8 @@ define('io.ox/files/share/wizard', [
         id: 'temporary',
         index: INDEX += 100,
         draw: function (baton) {
+            // only available for type link
+            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
 
             //#. options for terminal element of a sentence starts with "Expires in"
             var typeTranslations = {
@@ -205,6 +203,8 @@ define('io.ox/files/share/wizard', [
         id: 'write-permissions',
         index: INDEX += 100,
         draw: function (baton) {
+            // only available for type invite
+            if (baton.model.get('type') !== baton.model.TYPES.INVITE) return;
             this.append(
                 $('<div>').addClass('form-group editgroup').append(
                     $('<div>').addClass('checkbox').append(
@@ -242,7 +242,12 @@ define('io.ox/files/share/wizard', [
                     )
                 )
             );
-            baton.model.on('change:secured', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:password', function (model, val) {
+                if (val && !model.get('secured')) {
+                    model.set('secured', true);
+                }
+            });
+            baton.view.listenTo(baton.model, 'change:secured', function (model, val) {
                 passInput.prop('disabled', !val);
                 if (val) {
                     passInput.focus();
@@ -261,35 +266,12 @@ define('io.ox/files/share/wizard', [
         className: 'share-wizard',
 
         initialize: function (options) {
-            var self = this;
-            this.model = new sModel.WizardShare({ files: options.files });
+
+            this.model = new sModel.WizardShare({ files: options.files, type: options.type });
+
             this.baton = ext.Baton({
                 model: this.model,
-                view: this,
-                nodes: {
-                    invite: {},
-                    link: {},
-                    default: {}
-                }
-            });
-
-            this.listenTo(this.model, 'change:type', function (model, val) {
-                // css
-                this.$el.toggleClass('invite link', val);
-                // toggle autocomplete and message input
-                _(self.baton.nodes.invite).each(function (el) {
-                    el.toggle(val === 'invite');
-                });
-                _(self.baton.nodes.link).each(function (el) {
-                    el.toggle(val === 'link');
-                });
-
-                self.baton.nodes.default.description.text(trans[val]);
-
-                // generate link if empty
-                if (val === 'link' && model.get('link') === '' ) {
-                    this.share({ silent: true, validate: false });
-                }
+                view: this
             });
 
             this.listenTo(this.model, 'invalid', function (model, error) {
@@ -302,7 +284,7 @@ define('io.ox/files/share/wizard', [
 
             this.$el.attr({
                 role: 'form'
-            }).addClass('invite');
+            }).addClass(this.model.get('type'));
 
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
@@ -318,6 +300,7 @@ define('io.ox/files/share/wizard', [
             var def = $.Deferred();
             return $.when(this.model.save(null, { validate: opt.validate })).then(function (res) {
                 if (res) {
+                    if (res.error)
                     if (!opt.silent) yell('success', gt('Done'));
                     def.resolve(res);
                 } else {
