@@ -97,11 +97,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen width'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    this.addClass('viewer-toolbar-fitwidth').attr({
-                        tabindex: '1',
-                        title: gt('Fit to screen width'),
-                        'aria-label': gt('Fit to screen width')
-                    });
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">'),
+                        sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
+                    this.before(sectionLabel);
+                    this.prepend(checkIcon)
+                        .addClass('viewer-toolbar-fitwidth')
+                        .attr({
+                            tabindex: '1',
+                            title: gt('Fit to screen width'),
+                            'aria-label': gt('Fit to screen width')
+                        });
                 }
             },
             'zoomfitheight': {
@@ -110,11 +115,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen size'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    this.addClass('viewer-toolbar-fitheight').attr({
-                        tabindex: '1',
-                        title: gt('Fit to screen size'),
-                        'aria-label': gt('Fit to screen size')
-                    });
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    this.prepend(checkIcon)
+                        .addClass('viewer-toolbar-fitheight').attr({
+                            tabindex: '1',
+                            title: gt('Fit to screen size'),
+                            'aria-label': gt('Fit to screen size')
+                        });
                 }
             },
             'launchpresenter': {
@@ -385,6 +392,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomIn();
         }
     });
@@ -395,6 +403,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomOut();
         }
     });
@@ -406,6 +415,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
+            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
         }
     });
@@ -417,6 +428,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
+            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
+            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
@@ -513,11 +526,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         onClose: function (event) {
             event.preventDefault();
             event.stopPropagation();
-            if (this.standalone) {
-                this.app.quit();
-            } else {
-                this.viewerEvents.trigger('viewer:close');
-            }
+            this.viewerEvents.trigger('viewer:close');
         },
 
         /**
@@ -674,9 +683,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     newValue = parseInt($(this).val()),
                     oldValue = parseInt($(this).attr('data-page-number')),
                     pageTotal = parseInt($(this).attr('data-page-total'));
-                if (isNaN(newValue) || newValue <= 0 ) {
+                if (isNaN(newValue)) {
                     $(this).val(oldValue);
                     return;
+                }
+                if (newValue <= 0 ) {
+                    $(this).val(1);
+                    newValue = 1;
                 }
                 if (newValue > pageTotal) {
                     $(this).val(pageTotal);

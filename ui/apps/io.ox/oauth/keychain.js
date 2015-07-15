@@ -121,7 +121,7 @@ define.async('io.ox/oauth/keychain', [
                     //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug 37891)
                     getAll().done(function (services, accounts) {
                         var account;
-                        for (var i = 0; i < accounts.length; i++) {
+                        for (var i = 0; i < accounts[0].length; i++) {
                             if (accounts[0][i].id === id) {
                                 account = accounts[0][i];
                                 break;

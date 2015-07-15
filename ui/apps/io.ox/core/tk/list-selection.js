@@ -392,9 +392,8 @@ define('io.ox/core/tk/list-selection', [
             if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
 
             // out of bounds?
-            if (index < 0) return;
-            // scroll to very bottom if at end of list (to keep a11y support)
-            if (index >= items.length) return this.view.$el.scrollTop(0xFFFFFF);
+            index = this.outOfBounds(index, items);
+            if (index === false) return;
 
             // prevent default to avoid unwanted scrolling
             e.preventDefault();
@@ -410,6 +409,19 @@ define('io.ox/core/tk/list-selection', [
                 this.triggerChange(items);
             } else {
                 this.selectEvents(items);
+            }
+        },
+
+        // defines behaviour when index out of bounds should be selected by arrow keys
+        outOfBounds: function (index, items) {
+            if (index < 0) {
+                return false;
+            } else if (index >= items.length) {
+                // scroll to very bottom if at end of list (to keep a11y support)
+                this.view.$el.scrollTop(0xFFFFFF);
+                return false;
+            } else {
+                return index;
             }
         },
 
@@ -829,6 +841,19 @@ define('io.ox/core/tk/list-selection', [
             } else {
                 //use standard method
                 prototype.onKeydown.call(this, e);
+            }
+        },
+
+        outOfBounds: function (index, items) {
+            if (index < 0) {
+                return 0;
+            } else if (index >= items.length) {
+                index = items.length - 1;
+                // scroll to very bottom if at end of list (to keep a11y support)
+                this.view.$el.scrollTop(0xFFFFFF);
+                return index;
+            } else {
+                return index;
             }
         },
 

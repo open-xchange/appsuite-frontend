@@ -542,14 +542,11 @@ define('io.ox/calendar/util', [
         },
 
         getNote: function (data) {
-
             var text = $.trim(gt.noI18n(data.note) || '')
                 .replace(/\n{3,}/g, '\n\n')
-                .replace(/</g, '&lt;')
-                //use br to keep linebreaks when pasting (see 38714)
-                .replace(/\n/g, '<br>');
-
-            return util.urlify(text);
+                .replace(/</g, '&lt;');
+            //use br to keep linebreaks when pasting (see 38714)
+            return util.urlify(text).replace(/\n/g, '<br>');
         },
 
         getConfirmations: function (data) {

@@ -55,6 +55,9 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.ZOOM_FACTORS = _.device('!desktop') ? [25, 35, 50, 75, 100] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
             // current zoom factor, defaults at 100%
             this.currentZoomFactor = 100;
+            // defaults for fit zooms
+            this.fitWidthZoomed = false;
+            this.fitScreenZoomed = false;
             // the PDFView instance
             this.pdfView = null;
             // the PDFDocument instance
@@ -531,21 +534,28 @@ define('io.ox/core/viewer/views/types/documentview', [
                             nextZoomFactor = _.find(this.ZOOM_FACTORS, function (factor) {
                                     return factor > currentZoomFactor;
                                 }) || this.getMaxZoomFactor();
+                            this.resetFitZoom();
                             break;
                         case 'decrease':
                             var lastIndex = _.findLastIndex(this.ZOOM_FACTORS, function (factor) {
                                 return factor < currentZoomFactor;
                             });
                             nextZoomFactor = this.ZOOM_FACTORS[lastIndex] || this.getMinZoomFactor();
+                            this.resetFitZoom();
                             break;
                         case 'fitwidth':
+                            this.fitScreenZoomed = false;
+                            this.fitWidthZoomed = true;
                             nextZoomFactor = this.getModeZoomFactor('fitwidth');
                             break;
                         case 'fitheight':
+                            this.fitWidthZoomed = false;
+                            this.fitScreenZoomed = true;
                             nextZoomFactor = this.getModeZoomFactor('fitheight');
                             break;
                         case 'original':
                             nextZoomFactor = 100;
+                            this.resetFitZoom();
                             break;
                         default:
                             return;
@@ -554,6 +564,14 @@ define('io.ox/core/viewer/views/types/documentview', [
                     this.setZoomLevel(nextZoomFactor);
                 }.bind(this));
             }
+        },
+
+        /**
+         * Resets fit to height/screen size zoom state.
+         */
+        resetFitZoom: function () {
+            this.fitScreenZoomed = false;
+            this.fitWidthZoomed = false;
         },
 
         /**
@@ -643,8 +661,14 @@ define('io.ox/core/viewer/views/types/documentview', [
         onResize: function () {
             this.documentLoad.done(function () {
                 if (this.isVisible) {
-                    var defaultZoomFactor = this.getDefaultZoomFactor();
-                    this.setZoomLevelDebounced(defaultZoomFactor);
+                    var zoomFactor = this.getDefaultZoomFactor();
+                    if (this.fitWidthZoomed) {
+                        zoomFactor = this.getModeZoomFactor('fitwidth');
+                    }
+                    if (this.fitScreenZoomed) {
+                        zoomFactor = this.getModeZoomFactor('fitheight');
+                    }
+                    this.setZoomLevelDebounced(zoomFactor);
                 }
             }.bind(this));
         },

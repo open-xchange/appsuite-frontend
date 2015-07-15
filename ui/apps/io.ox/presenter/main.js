@@ -86,6 +86,18 @@ define('io.ox/presenter/main', [
             };
         },
 
+        'dispose-rt-connection': function (app) {
+            // dispose RT connection instance
+            app.disposeRTConnection = function () {
+                if (app.rtConnection) {
+                    app.rtConnection.close();
+                    app.rtConnection.off();
+                    app.rtConnection.dispose();
+                    app.rtConnection = null;
+                }
+            };
+        },
+
         'on-app-window-show': function (app) {
             app.getWindow().on('show', function () {
                 var id = app.file && app.file.id,
@@ -97,14 +109,15 @@ define('io.ox/presenter/main', [
             });
         },
 
+        'on-window-unload': function (app) {
+            $(window).on('unload', function () {
+                app.disposeRTConnection();
+            });
+        },
+
         'on-app-quit': function (app) {
             app.on('quit', function () {
-                if (app.rtConnection) {
-                    // dispose RT connection instance
-                    app.rtConnection.off();
-                    app.rtConnection.dispose();
-                    app.rtConnection = null;
-                }
+                app.disposeRTConnection();
             });
         }
 

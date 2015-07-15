@@ -400,6 +400,11 @@
     }
 
     .launcher a.notifications-icon {
+
+        display: block;
+        width: 50px;
+        height: 40px;
+
         &.no-notifications {
             i {
                 color: rgba(255, 255, 255, 0.3);
@@ -408,13 +413,19 @@
                 display: none;
             }
         }
+
+        i {
+            vertical-align: top;
+            top: 0px;
+        }
+
         .badge {
 
             position: relative;
-            top: 3px;
-            left: 42px;
-            float: left;
+            top: -7px;
+            left: -11px;
             z-index: 1;
+            vertical-align: top;
 
             color: @notification-icon-color;
             background-color: @notification-icon-background;
@@ -501,18 +512,21 @@ html.ios8-standalone-ipad-fix {
     #io-ox-topbar {
 
         .launcher a.notifications-icon {
+
             padding: 12px 5px;
+            width: auto;
+            min-width: 40px;
+            text-align: center;
 
             &.no-notifications {
                 .badge {
-                    display: initial;
+                    display: inline-block;
                 }
             }
 
             .badge {
                 top: initial;
                 left: initial;
-                float: none;
             }
         }
         .launchers-secondary {

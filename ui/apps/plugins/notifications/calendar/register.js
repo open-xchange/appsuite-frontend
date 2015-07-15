@@ -68,7 +68,10 @@ define('plugins/notifications/calendar/register', [
                             calAPI.checkConflicts(appointmentData).done(function (conflicts) {
                                 if (conflicts.length === 0) {
                                     view.responsiveRemove(model);
-                                    calAPI.confirm(o).fail(function () {
+                                    calAPI.confirm(o).done(function () {
+                                        // remove model from hidden collection or new invitations when the appointment changes will not be displayed
+                                        view.hiddenCollection.remove(model);
+                                    }).fail(function () {
                                         view.unHide(model);
                                     });
                                 } else {
@@ -87,7 +90,10 @@ define('plugins/notifications/calendar/register', [
                                                 }
                                                 if (action === 'ignore') {
                                                     view.responsiveRemove(model);
-                                                    calAPI.confirm(o).fail(function () {
+                                                    calAPI.confirm(o).done(function () {
+                                                        // remove model from hidden collection or new invitations when the appointment changes will not be displayed
+                                                        view.hiddenCollection.remove(model);
+                                                    }).fail(function () {
                                                         view.unHide(model);
                                                     });
                                                 }

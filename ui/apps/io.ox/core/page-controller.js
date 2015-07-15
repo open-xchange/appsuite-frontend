@@ -25,8 +25,8 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             self = this,
             // mimic an app object instead of real reference
             app = {
-                navbar: o.navbar,
-                toolbar: o.toolbar,
+                navbar: o.navbar || $(),
+                toolbar: o.toolbar || $(),
                 options: {
                     name: o.appname
                 }
@@ -280,13 +280,16 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
 
         var showNavbar = function (page) {
             var bar = pages[page].navbar, last = pages[lastPage];
-
+            if (last && last.navbar) last.navbar.toggle(false);
             if (bar) {
-
-                //app.navbar.find('.toolbar-content').detach();
+                if (!bar.rendered) bar.render();
                 app.navbar.append(bar.$el);
+                app.navbar.toggle(true);
                 bar.toggle(true);
-                if (last) last.navbar.toggle(false);
+            } else {
+                // hide navbar from previous page to get "fullscreen" page
+                app.navbar.hide();
+                pages[page].$el.addClass('fullscreen'); // remove padding
             }
         };
 

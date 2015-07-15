@@ -80,9 +80,17 @@ define('io.ox/search/util', [
 
             http.pause();
 
+            // add folder id of active folder facet
+            var folderFacet = model.get('pool').folder;
+            if (folderFacet && folderFacet.values.custom.custom) {
+                mapping[folderFacet.values.custom.custom] = 'current';
+            }
+
             // standard folders for mail
             if (module === 'mail') {
-                _.each(folderAPI.getStandardMailFolders(), function (id) {
+                // TMP: show only folders of primary account
+                _(accountAPI.getStandardFolders()).each(function (id) {
+                    if (!/^default0/.test(id)) return;
                     mapping[id] = 'standard';
                 });
                 req.push(accountAPI.all());
@@ -117,6 +125,8 @@ define('io.ox/search/util', [
                     if (_.isArray(args[0])) {
                         var list = args.shift();
                         _.each(list, function (account) {
+                            // TMP: show only folders of primary account
+                            if (!accountAPI.isPrimary(account.sent_fullname)) return;
                             accounts[account.id] = account;
                         });
                     }

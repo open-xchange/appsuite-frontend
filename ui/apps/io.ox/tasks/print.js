@@ -49,7 +49,7 @@ define('io.ox/tasks/print', [
     }
 
     function process(data) {
-        return calendarPrint.load(data).pipe(function (unified) {
+        return calendarPrint.load(data).then(function (unified) {
             return _.extend(unified, {
                 original: data,
                 subject: data.title,

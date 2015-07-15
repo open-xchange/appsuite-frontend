@@ -13,14 +13,14 @@
 
 define('io.ox/core/sessionrestore', [
     'io.ox/core/extensions',
-    'settings!io.ox/office'
+    'settings!io.ox/core'
 ], function (ext, settings) {
 
     // private static methods ----------------------------------------------------
 
     function isActive() {
         try {
-            return Boolean(settings.get('autorestore'));
+            return Boolean(settings.get('autorestoredocuments'));
         } catch (e) {
             if (ox.debug) {
                 console.error(e);
@@ -97,7 +97,6 @@ define('io.ox/core/sessionrestore', [
     // initialization -----------------------------------------------------
 
     if (isActive()) {
-
         var lastStates = getAllData();
 
         _.defer(function () {
@@ -109,15 +108,24 @@ define('io.ox/core/sessionrestore', [
 
                 var allModules = _.uniq(_.pluck(lastStates, 'module'));
                 require(allModules).done(function () {
+                    var promises = [];
                     _.each(lastStates, function (state) {
-                        //console.warn('launch', state);
                         if (state.module) {
-                            ox.launch(state.module, state);
+                            promises.push(ox.launch(state.module, state));
+                        }
+                    });
+                    $.when.apply($, promises).done(function () {
+                        //workaround for wrong 'active-app' in top bar
+                        var currentWindow = ox.ui.App.getCurrentWindow();
+                        if (currentWindow) {
+                            currentWindow.hide();
+                            currentWindow.show();
                         }
                     });
                 });
             });
         });
+
     }
 
     // exports ================================================================

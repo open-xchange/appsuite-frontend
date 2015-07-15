@@ -72,6 +72,8 @@ define('io.ox/core/tk/text-editor', function () {
                 return trim(val.call(textarea));
             };
 
+        this.content_type = 'text/plain';
+
         this.getMode = function () {
             return 'text';
         };

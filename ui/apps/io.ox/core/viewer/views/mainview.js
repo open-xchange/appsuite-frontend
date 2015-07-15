@@ -136,7 +136,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
                     if ( !isDropdownMenuItem && !isDropdownToggler ) {
-                        this.remove();
+                        this.closeViewer();
                     }
                     break;
                 case 37: // left arrow
@@ -210,11 +210,13 @@ define('io.ox/core/viewer/views/mainview', [
             this.viewerEvents.trigger('viewer:beforeclose');
             // save sidebar state
             Settings.setSidebarOpenState(this.sidebarView.open);
+            this.$el.hide();
             if (!this.standalone) {
                 this.$el.parent().find('.simple-window').show();
+                this.remove();
+            } else {
+                this.app.quit();
             }
-            this.$el.hide();
-            this.remove();
         },
 
         disposeView: function () {

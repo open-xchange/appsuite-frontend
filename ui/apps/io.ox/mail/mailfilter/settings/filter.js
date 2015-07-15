@@ -74,19 +74,21 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         myView = new FilterDetailView({ model: data, listView: evt.data.listView, config: config });
 
+        if (myView.model.get('test').tests) {
+            var conditionsCopy = myView.model.get('test');
+
+            conditionsCopy.tests = filterCondition(conditionsCopy.tests, { id: 'true' });
+
+            if (conditionsCopy.tests.length === 1) {
+                var includedTest = _.copy(conditionsCopy.tests[0]);
+                conditionsCopy = includedTest;
+            }
+            myView.model.set('test', conditionsCopy);
+        }
+
         testArray = _.copy(myView.model.get('test'), true);
         actionArray = _.copy(myView.model.get('actioncmds'), true);
         rulename = _.copy(myView.model.get('rulename'), true);
-
-        if (testArray.tests) {
-            testArray.tests = filterCondition(testArray.tests, { id: 'true' });
-
-            if (testArray.tests.length === 1) {
-                var includedTest = _.copy(testArray.tests[0]);
-                testArray = includedTest;
-            }
-            myView.model.set('test', testArray);
-        }
 
         myView.dialog = new dialogs.ModalDialog({
             top: 60,

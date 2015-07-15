@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     grunt.config.merge({
         assemble: {
             options: {
-                version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
+                version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.HHMMss'),
                 revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
                 enable_debug: '<%= String(local.debug) %>',
                 base: 'v=<%= assemble.options.version %>',

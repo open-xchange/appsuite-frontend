@@ -125,8 +125,6 @@ define('io.ox/mail/api', [
                 return response;
             },
             get: function (data, options) {
-                // check integrated unread counter
-                folderAPI.setUnseenCounter(data.folder_id, data.unread);
                 // inject view (text/html/noimg). need this to generate proper cache keys.
                 // data might be plain string, e.g. for mail source
                 if (_.isObject(data)) {

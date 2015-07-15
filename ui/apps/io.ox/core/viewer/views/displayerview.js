@@ -106,6 +106,9 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
             }
 
+            // save model to view
+            this.model = model;
+
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button', 'aria-label': gt('Previous') });
             nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button', 'aria-label': gt('Next') });
@@ -149,7 +152,8 @@ define('io.ox/core/viewer/views/displayerview', [
          * Creates the corresponding type view for duplicate slides of the swiper plugin and render them.
          */
         handleDuplicatesSlides: function () {
-            var self = this;
+            var self = this,
+                model = this.model;
             this.$el.find('.swiper-slide-duplicate').each(function (index, element) {
                 var slideNode = $(element),
                     slideIndex = slideNode.data('swiper-slide-index'),
@@ -161,7 +165,11 @@ define('io.ox/core/viewer/views/displayerview', [
                             return;
                         }
                         var view = new ModelType({ model: slideModel, collection: self.collection, el: element, viewerEvents: self.viewerEvents });
-                        view.render().prefetch().show();
+                        view.render().prefetch();
+                        // don't load duplicate slides that calls document converter
+                        if (!model.isOffice() && !model.isPDF()) {
+                            view.show();
+                        }
                         self.slideDuplicateViews.push(view);
                     },
                     function () {
@@ -283,8 +291,14 @@ define('io.ox/core/viewer/views/displayerview', [
                 }
             });
 
-            // show active slide
-            this.slideViews[slideToLoad].show();
+            // show correct real or duplicate view instance
+            var activeIndex = this.swiper.activeIndex;
+            if (!this.standalone && (activeIndex === 0) || (activeIndex === (slidesCount + 1))) {
+                var duplicateIndex = (activeIndex === 0) ? 0 : 1;
+                this.slideDuplicateViews[duplicateIndex].show();
+            } else {
+                this.slideViews[slideToLoad].show();
+            }
 
             // remove listener from previous and attach to current model
             if (previousModel) {

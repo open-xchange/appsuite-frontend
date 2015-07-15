@@ -17,7 +17,7 @@ define('io.ox/files/upload/main', [
     'io.ox/core/notifications',
     'io.ox/core/tk/upload',
     'gettext!io.ox/files'
-], function (api, ext, notifications, upload, gt) {
+], function (filesAPI, ext, notifications, upload, gt) {
 
     'use strict';
 
@@ -78,7 +78,8 @@ define('io.ox/files/upload/main', [
         startTime, // time stamp, when the first file started uploading
         uploadCollection = new UploadCollection(),
         $el, bottomToolbar, mainView, win, //some dom nodes needed for the view
-        self = this;
+        self = this,
+        api = filesAPI;
 
         this.update = upload.createQueue({
             start: function () {
@@ -245,6 +246,10 @@ define('io.ox/files/upload/main', [
             win = node;
             bottomToolbar = node.find('.toolbar.bottom');
             mainView = node.find('.list-view-control');
+        };
+
+        this.setAPI = function (alternativeAPI) {
+            api = alternativeAPI;
         };
 
         this.create = upload.createQueue(this)

@@ -432,7 +432,7 @@ define('io.ox/core/folder/node', [
         renderCounter: function () {
             var value = this.getCounter();
             this.$.selectable.toggleClass('show-counter', value > 0);
-            this.$.counter.text(value);
+            this.$.counter.text(value > 99 ? '99+' : value);
         },
 
         getTitle: function () {
