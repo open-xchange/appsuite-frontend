@@ -16,7 +16,7 @@ define('io.ox/presenter/views/presentationview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     // TODO: move code to document converter utils
-    'io.ox/core/viewer/util',
+    'io.ox/presenter/util',
     'gettext!io.ox/presenter',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
@@ -90,7 +90,7 @@ define('io.ox/presenter/views/presentationview', [
             // the pdf document container
             this.documentContainer = null;
             // create a debounced version of zoom function
-            this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 1000);
+            this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 500);
             // the index of the current slide, defaults to the first slide
             this.currentSlideIndex = 0;
             // the slide count, defaults to 1
@@ -104,7 +104,7 @@ define('io.ox/presenter/views/presentationview', [
             this.listenTo(this.presenterEvents, 'presenter:zoomin', this.onZoomIn);
             this.listenTo(this.presenterEvents, 'presenter:zoomout', this.onZoomOut);
             // register slide change handler
-            this.listenTo(this.presenterEvents, 'presenter:slide:change', this.onRemoteSlideChange);
+            this.listenTo(this.presenterEvents, 'presenter:remote:slide:change', this.onRemoteSlideChange);
             // register participants change handler
             this.listenTo(this.presenterEvents, 'presenter:participants:change', this.onParticipantsChange);
             // register presentation pause /continue handler
@@ -121,7 +121,7 @@ define('io.ox/presenter/views/presentationview', [
             console.info('Presenter - render()');
 
             // TODO: move to document converter utils
-            var convertParams = this.getConvertParams(this.model.get('source')),
+            var convertParams = Util.getConvertParams(this.model),
                 documentUrl = Util.getConverterUrl(convertParams);
 
             var carouselRoot = $('<div id="presenter-carousel" class="swiper-container" role="listbox">'),
@@ -197,6 +197,8 @@ define('io.ox/presenter/views/presentationview', [
             //#. %1$d is the slide index of the current
             //#. %2$d is the total slide count
             this.showCaption(gt('%1$d of %2$d', activeSlideIndex + 1, this.numberOfSlides));
+
+            this.presenterEvents.trigger('presenter:local:slide:change', activeSlideIndex);
         },
 
         /**
@@ -351,10 +353,7 @@ define('io.ox/presenter/views/presentationview', [
                 userId = this.app.rtConnection.getRTUuid(),
                 navigationArrows = this.$el.find('.swiper-button-control');
 
-            // TODO: currently the buttons are shown for the presenter in every case, this need to be changed when the next-slide-thumbnail is implemented.
-            //if (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused())) {
-
-            if (!rtModel.isJoined(userId) || rtModel.isPresenter(userId)) {
+            if (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused())) {
                 navigationArrows.show();
             } else {
                 navigationArrows.hide();
@@ -565,15 +564,12 @@ define('io.ox/presenter/views/presentationview', [
          * @returns {Number} zoom factor
          */
         getFitScreenZoomFactor: function () {
-            var offset = 40,
+            var offset = 80,
                 slideHeight = this.$el.height(),
                 slideWidth = this.$el.width(),
                 originalPageSize = this.pdfDocument.getOriginalPageSize(),
                 fitWidthZoomFactor = (slideWidth - offset) / originalPageSize.width * 100,
                 fitHeightZoomFactor = (slideHeight - offset) / originalPageSize.height * 100;
-            if (slideWidth >= originalPageSize.width && slideHeight >= originalPageSize.height) {
-                return 100;
-            }
             return Math.min(fitWidthZoomFactor, fitHeightZoomFactor);
         },
 
@@ -664,56 +660,6 @@ define('io.ox/presenter/views/presentationview', [
          */
         getMinZoomFactor: function () {
             return _.first(this.ZOOM_FACTORS);
-        },
-
-        /**
-         *  TODO: move to document converter utils
-         *
-         *  Build necessary params for the document conversion to PDF.
-         *  Also adds proprietary properties of Mail and PIM attachment objects.
-         *
-         *  @param {String} source
-         *   the source of the file model.
-         */
-        getConvertParams: function (source) {
-            var MODULE_SOURCE_MAP = {
-                1: 'calendar',
-                4: 'tasks',
-                7: 'contacts'
-            };
-
-            var originalModel = this.model.get('origData'),
-                defaultParams = {
-                    action: 'getdocument',
-                    filename: encodeURIComponent(this.model.get('filename')),
-                    id: encodeURIComponent(this.model.get('id')),
-                    folder_id: encodeURIComponent(this.model.get('folder_id')),
-                    documentformat: 'pdf',
-                    priority: 'instant',
-                    mimetype: encodeURIComponent(this.model.get('file_mimetype')),
-                    nocache: _.uniqueId() // needed to trick the browser
-                },
-                paramExtension;
-            switch (source) {
-                case 'mail':
-                    paramExtension = {
-                        id: originalModel.mail.id,
-                        source: 'mail',
-                        attached: this.model.get('id')
-                    };
-                    break;
-                case 'pim':
-                    var moduleId = this.model.get('module');
-                    paramExtension = {
-                        source: MODULE_SOURCE_MAP[moduleId],
-                        attached: originalModel.attached,
-                        module: moduleId
-                    };
-                    break;
-                default:
-                    return defaultParams;
-            }
-            return _.extend(defaultParams, paramExtension);
         },
 
         /**
