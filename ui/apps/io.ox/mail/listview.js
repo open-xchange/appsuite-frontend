@@ -328,7 +328,7 @@ define('io.ox/mail/listview', [
 
         reprocessThread: function (model) {
             // only used when in thread mode
-            if (!this.app.isThreaded()) return;
+            if ( !(this.app && this.app.isThreaded()) ) return;
 
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
@@ -369,7 +369,7 @@ define('io.ox/mail/listview', [
             data.picture = address && address[0] && address[0][1];
 
             // not threaded?
-            if (!this.app.isThreaded()) return data;
+            if (!(this.app && this.app.isThreaded())) return data;
 
             // get unseen flag for entire thread
             var unseen = _(thread).reduce(function (memo, obj) {
