@@ -71,7 +71,7 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
             'size': {
                 'comparison': 'over',
                 'id': 'size',
-                'size': 0
+                'size': ''
             },
             'body': {
                 'id': 'body',

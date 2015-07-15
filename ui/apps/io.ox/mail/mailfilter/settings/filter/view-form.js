@@ -281,7 +281,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
 
                 if (testsPart.tests) {
-                    // testsPart.tests = loopAndRemove(testsPart.tests);
                     if (testsPart.tests.length === 0) {
                         this.model.set('test', { id: 'true' });
                     } else {
@@ -317,7 +316,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 e.preventDefault();
                 var node = $(e.target),
                     data = node.data(),
-                    valueType = data.test ? 'test' : 'action';
+                    valueType = data.test ? 'test' : 'action',
+                    self = this;
                 if (data.target) {
                     var arrayOfTests = this.model.get('test');
                     arrayOfTests.id = data.value;
@@ -347,7 +347,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
                 this.render();
 
-                setFocus(this.el, valueType);
+                setTimeout(function () {
+                    setFocus(self.el, valueType);
+                }, 100);
+
             },
 
             setModel: function (type, model, num) {
@@ -442,7 +445,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 var ConditionModel = Backbone.Model.extend({
                         validate: function (attrs) {
                             if (_.has(attrs, 'size')) {
-                                if (_.isNaN(attrs.size)) {
+                                if (_.isNaN(attrs.size) || attrs.size === '') {
                                     this.trigger('invalid:size');
                                     return 'error';
                                 } else {
@@ -479,7 +482,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 var Input = mini.InputView.extend({
                     events: { 'change': 'onChange', 'keyup': 'onKeyup' },
                     onChange: function () {
-                        if (this.name === 'size') this.model.set(this.name, parseInt(this.$el.val(), 10));
+                        if (this.name === 'size') {
+                            var sizeValue = _.isNaN(parseInt(this.$el.val(), 10)) ? '' : parseInt(this.$el.val(), 10);
+                            this.model.set(this.name, sizeValue);
+                            this.update();
+                        }
                         if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
                     },
                     onKeyup: function () {
@@ -489,7 +496,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         } else {
                             state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
                         }
-                        this.model.trigger(state +  this.name);
+                        this.model.trigger(state + this.name);
                         toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                     }
                 });
@@ -610,8 +617,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 ),
                                 drawDeleteButton('test')
                             )
-                        );
-                        conditionList.find('fieldset legend').addClass('sr-only');
+                        ).find('legend').addClass('sr-only');
                         if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
                         break;
                     case 'header':

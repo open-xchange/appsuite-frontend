@@ -244,7 +244,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var DropdownLinkView = AbstractView.extend({
         tagName: 'div',
-        className: 'action value',
+        className: 'dropdownlink',
         events: { 'click [data-action="change-value"]': 'onClick' },
         onClick: function (e) {
             e.preventDefault();
