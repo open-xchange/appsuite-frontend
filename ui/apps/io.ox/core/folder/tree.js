@@ -17,9 +17,10 @@ define('io.ox/core/folder/tree', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'settings!io.ox/core',
+    'gettext!io.ox/core/folder/tree',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Selection, api, ext, settings) {
+], function (DisposableView, Selection, api, ext, settings, gt) {
 
     'use strict';
 
@@ -216,17 +217,15 @@ define('io.ox/core/folder/tree', [
             // get folder data and redraw
             api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
+                ext.point(point).invoke('draw', ul, baton);
                 if (_.device('smartphone')) {
                     ul.append(
-                        $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" aria-haspopup="true">').append(
-                                $('<i class="fa fa-chevron-down" aria-hidden="true">'),
-                                $('<span class="sr-only">')
-                            )
+                        $('<li>').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
                         )
                     );
                 }
-                ext.point(point).invoke('draw', ul, baton);
+                if (_.device('smartphone')) ul.find('.divider').remove();
                 // remove unwanted dividers
                 ul.find('.divider').each(function () {
                     var node = $(this), next = node.next();
