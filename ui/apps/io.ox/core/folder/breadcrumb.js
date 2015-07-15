@@ -99,7 +99,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
         },
 
         computeWidth: _.debounce( function () {
-            if (this.$el.parent() && this.$el.is(':visible')) {
+            if (this.$el && this.$el.parent() && this.$el.is(':visible')) {
                 var width = Math.max( this.$el.parent().width() - 250, 150);
                 this.$el.css('max-width', width + 'px');
             }
