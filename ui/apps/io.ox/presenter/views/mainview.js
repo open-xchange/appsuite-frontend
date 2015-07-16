@@ -105,7 +105,7 @@ define('io.ox/presenter/views/mainview', [
 
             var currentPresenterId,
                 previousPresenterId,
-                localSlideId = this.presentationView.getActiveSlideIndex(),
+                localSlideId = this.getActiveSlideIndex(),
                 remoteSlideId = rtModel.get('activeSlide');
 
             if (rtModel.hasChanged('activeSlide') || (localSlideId !== remoteSlideId)) {
@@ -346,7 +346,7 @@ define('io.ox/presenter/views/mainview', [
                 focus: true,
                 action: {
                     label: gt('Join Presentation'),
-                    ref: 'io.ox/presenter/actions/toolbar/join',
+                    ref: 'io.ox/presenter/actions/join',
                     baton: baton
                 }
             };
@@ -447,6 +447,26 @@ define('io.ox/presenter/views/mainview', [
          */
         onErrorFullscreen: function (foo) {
             console.info('Presenter - mainview - onErrorFullscreen()', foo);
+        },
+
+        /**
+         * Returns the active slide index.
+         *
+         * @returns {Number}
+         *  the active slide index.
+         */
+        getActiveSlideIndex: function () {
+            return this.presentationView.getActiveSlideIndex();
+        },
+
+        /**
+         * Returns the slide count.
+         *
+         * @returns {Number}
+         *  the slide count.
+         */
+        getSlideCount: function () {
+            return this.presentationView.getSlideCount();
         },
 
         /**

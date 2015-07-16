@@ -15,7 +15,8 @@ define('io.ox/presenter/views/navigationview', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/backbone/mini-views/dropdown',
-    'gettext!io.ox/core'
+    'gettext!io.ox/presenter',
+    'io.ox/presenter/actions'
 ], function (DisposableView, Ext, LinksPattern, ActionsPattern, Dropdown, gt) {
 
     /**
@@ -27,11 +28,8 @@ define('io.ox/presenter/views/navigationview', [
     // define constants
     var NAVIGATION_ID = 'io.ox/presenter/navigation',
         NAVIGATION_LINKS_ID = NAVIGATION_ID + '/links',
-
-        NAVIGATION_ACTION_ID = 'io.ox/presenter/actions/navigation',
-        NAVIGATION_DROPDOWN_ID = NAVIGATION_ACTION_ID + '/dropdown',
-
-        TOOLBAR_ACTION_ID = 'io.ox/presenter/actions/toolbar';
+        NAVIGATION_DROPDOWN_ID = 'io.ox/presenter/actions/navigation/dropdown',
+        PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
 
     /**
      * Creates the HTML mark-up for a slide navigation button.
@@ -60,7 +58,7 @@ define('io.ox/presenter/views/navigationview', [
                 mobile: 'lo',
                 //icon: 'fa fa-pause',
                 label: gt('Pause presentation'),
-                ref: NAVIGATION_ACTION_ID + '/pause',
+                ref: PRESENTER_ACTION_ID + '/pause',
                 customize: function () {
                     this.addClass('presenter-toolbar-pause')
                         .attr({
@@ -68,7 +66,6 @@ define('io.ox/presenter/views/navigationview', [
                             title: gt('Pause Presentation'),
                             'aria-label': gt('Pause Presentation')
                         });
-                    //this.parent().addClass('pull-left');
                 }
             },
             'continue': {
@@ -76,7 +73,7 @@ define('io.ox/presenter/views/navigationview', [
                 mobile: 'lo',
                 //icon: 'fa fa-pause',
                 label: gt('Continue presentation'),
-                ref: NAVIGATION_ACTION_ID + '/continue',
+                ref: PRESENTER_ACTION_ID + '/continue',
                 customize: function () {
                     this.addClass('presenter-toolbar-continue')
                         .attr({
@@ -84,7 +81,6 @@ define('io.ox/presenter/views/navigationview', [
                             title: gt('Continue Presentation'),
                             'aria-label': gt('Continue Presentation')
                         });
-                    //this.parent().addClass('pull-left');
                 }
             },
             'fullscreen': {
@@ -92,7 +88,7 @@ define('io.ox/presenter/views/navigationview', [
                 mobile: 'lo',
                 icon: 'fa fa-arrows-alt',
                 label: gt('Toggle fullscreen'),
-                ref: TOOLBAR_ACTION_ID + '/fullscreen',
+                ref: PRESENTER_ACTION_ID + '/fullscreen',
 
                 customize: function () {
                     this.addClass('presenter-toolbar-fullscreen').attr({
@@ -186,38 +182,6 @@ define('io.ox/presenter/views/navigationview', [
         action: $.noop
     });
 
-    new Action(NAVIGATION_ACTION_ID + '/pause', {
-        id: 'pause',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canPause(userId));
-        },
-        action: function (baton) {
-            console.info('pause action:', baton);
-            baton.context.app.rtConnection.pausePresentation();
-        }
-    });
-
-    new Action(NAVIGATION_ACTION_ID + '/continue', {
-        id: 'continue',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canContinue(userId));
-        },
-        action: function (baton) {
-            console.info('continue action:', baton);
-            baton.context.app.rtConnection.continuePresentation();
-        }
-    });
-
     // define the Backbone view
     var NavigationView = DisposableView.extend({
 
@@ -282,8 +246,8 @@ define('io.ox/presenter/views/navigationview', [
                 slideCountDisplay = $('<div class="presenter-navigation-slide-total">'),
                 group = $('<li class="presenter-navigation-slide-group" role="presentation">'),
                 // slide data
-                slideNumber = this.app.mainView.presentationView.getActiveSlideIndex() + 1,
-                slideCount = this.app.mainView.presentationView.getSlideCount(),
+                slideNumber = this.app.mainView.getActiveSlideIndex() + 1,
+                slideCount = this.app.mainView.getSlideCount(),
                 self = this;
 
             function setButtonState(nodes, state) {

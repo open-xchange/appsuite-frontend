@@ -24,7 +24,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             _.extend(this, options);
 
             this.slidePeekLoadDef = Util.createAbortableDeferred($.noop);
-            this.activeSlideIndex = this.app.mainView.presentationView.getActiveSlideIndex();
+            this.activeSlideIndex = this.app.mainView.getActiveSlideIndex();
 
             this.on('dispose', this.disposeView.bind(this));
         },

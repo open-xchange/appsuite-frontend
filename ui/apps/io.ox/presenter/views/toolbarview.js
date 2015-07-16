@@ -15,7 +15,8 @@ define('io.ox/presenter/views/toolbarview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
-    'gettext!io.ox/core'
+    'gettext!io.ox/presenter',
+    'io.ox/presenter/actions'
 ], function (DisposableView, Ext, LinksPattern, ActionsPattern, gt) {
 
     /**
@@ -28,8 +29,8 @@ define('io.ox/presenter/views/toolbarview', [
     // define constants
     var TOOLBAR_ID = 'io.ox/presenter/toolbar',
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
-        TOOLBAR_ACTION_ID = 'io.ox/presenter/actions/toolbar',
-        TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown';
+        TOOLBAR_ACTION_DROPDOWN_ID = 'io.ox/presenter/actions/toolbar/dropdown',
+        PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
 
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point(TOOLBAR_ID),
@@ -40,7 +41,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //icon: 'fa fa-play',
                 label: gt('Start Presentation'),
-                ref: TOOLBAR_ACTION_ID + '/start',
+                ref: PRESENTER_ACTION_ID + '/start',
                 customize: function () {
                     this.addClass('presenter-toolbar-start')
                         .attr({
@@ -55,7 +56,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //icon: 'fa fa-play',
                 label: gt('End Presentation'),
-                ref: TOOLBAR_ACTION_ID + '/end',
+                ref: PRESENTER_ACTION_ID + '/end',
                 customize: function () {
                     this.addClass('presenter-toolbar-end')
                         .attr({
@@ -70,7 +71,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //icon: 'fa fa-pause',
                 label: gt('Pause presentation'),
-                ref: TOOLBAR_ACTION_ID + '/pause',
+                ref: PRESENTER_ACTION_ID + '/pause',
                 customize: function () {
                     this.addClass('presenter-toolbar-pause')
                         .attr({
@@ -86,7 +87,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //icon: 'fa fa-pause',
                 label: gt('Continue presentation'),
-                ref: TOOLBAR_ACTION_ID + '/continue',
+                ref: PRESENTER_ACTION_ID + '/continue',
                 customize: function () {
                     this.addClass('presenter-toolbar-continue')
                         .attr({
@@ -103,7 +104,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //icon: 'fa fa-pause',
                 label: gt('Join presentation'),
-                ref: TOOLBAR_ACTION_ID + '/join',
+                ref: PRESENTER_ACTION_ID + '/join',
                 customize: function () {
                     this.addClass('presenter-toolbar-join')
                         .attr({
@@ -119,7 +120,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 //icon: 'fa fa-pause',
                 label: gt('Leave presentation'),
-                ref: TOOLBAR_ACTION_ID + '/leave',
+                ref: PRESENTER_ACTION_ID + '/leave',
                 customize: function () {
                     this.addClass('presenter-toolbar-leave')
                         .attr({
@@ -135,7 +136,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-search-minus',
-                ref: TOOLBAR_ACTION_ID + '/zoomout',
+                ref: PRESENTER_ACTION_ID + '/zoomout',
                 label: gt('Zoom out'),
                 customize: function () {
                     this.addClass('presenter-toolbar-zoomout').attr({
@@ -149,7 +150,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'lo',
                 icon: 'fa fa-search-plus',
                 label: gt('Zoom in'),
-                ref: TOOLBAR_ACTION_ID + '/zoomin',
+                ref: PRESENTER_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('presenter-toolbar-zoomin').attr({
                         tabindex: '1',
@@ -162,7 +163,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'lo',
                 icon: 'fa fa-arrows-alt',
                 label: gt('Toggle fullscreen'),
-                ref: TOOLBAR_ACTION_ID + '/fullscreen',
+                ref: PRESENTER_ACTION_ID + '/fullscreen',
 
                 customize: function () {
                     this.addClass('presenter-toolbar-fullscreen').attr({
@@ -176,7 +177,7 @@ define('io.ox/presenter/views/toolbarview', [
                 mobile: 'hi',
                 icon: 'fa fa-users',
                 label: gt('View participants'),
-                ref: TOOLBAR_ACTION_ID + '/togglesidebar',
+                ref: PRESENTER_ACTION_ID + '/togglesidebar',
                 customize: function () {
                     this.addClass('presenter-toolbar-togglesidebar')
                         .attr({
@@ -208,149 +209,6 @@ define('io.ox/presenter/views/toolbarview', [
     new Action(TOOLBAR_ACTION_DROPDOWN_ID, {
         requires: function () { return true; },
         action: $.noop
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/start', {
-        id: 'start',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canStart(userId));
-        },
-        action: function (baton) {
-            var slideId = baton.context.app.mainView.presentationView.getActiveSlideIndex();
-            console.info('start action:', baton, 'slide', slideId);
-            baton.context.app.rtConnection.startPresentation({ activeSlide: slideId });
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/end', {
-        id: 'end',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.isPresenter(userId));
-        },
-        action: function (baton) {
-            console.info('end action:', baton);
-            baton.context.app.rtConnection.endPresentation();
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/pause', {
-        id: 'pause',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canPause(userId));
-        },
-        action: function (baton) {
-            console.info('pause action:', baton);
-            baton.context.app.rtConnection.pausePresentation();
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/continue', {
-        id: 'continue',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canContinue(userId));
-        },
-        action: function (baton) {
-            console.info('continue action:', baton);
-            baton.context.app.rtConnection.continuePresentation();
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/join', {
-        id: 'join',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canJoin(userId));
-        },
-        action: function (baton) {
-            console.info('join action:', baton);
-            var app = baton.context.app;
-            app.rtConnection.joinPresentation();
-            app.mainView.toggleFullscreen(true);
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/leave', {
-        id: 'leave',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.canLeave(userId));
-        },
-        action: function (baton) {
-            console.info('leave action:', baton);
-            baton.context.app.rtConnection.leavePresentation();
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/fullscreen', {
-        id: 'fullscreen',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-
-            return (rtModel.isPresenter(userId) || rtModel.isJoined(userId));
-        },
-        action: function (baton) {
-            console.info('fullscreen action:', baton);
-            baton.context.app.mainView.toggleFullscreen();
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
-        id: 'togglesidebar',
-        requires: function (e) {
-            if (!e.baton.context) { return false; }
-            var rtModel = e.baton.context.app.rtModel,
-                userId = e.baton.context.app.rtConnection.getRTUuid();
-            return !rtModel.isPresenter(userId);
-        },
-        action: function (baton) {
-            console.info('togglesidebar action', baton);
-            baton.context.onToggleSidebar();
-        }
-    });
-
-    // define actions for the zoom function
-    new Action(TOOLBAR_ACTION_ID + '/zoomin', {
-        id: 'zoomin',
-        action: function (baton) {
-            baton.context.onZoomIn();
-        }
-    });
-    new Action(TOOLBAR_ACTION_ID + '/zoomout', {
-        id: 'zoomout',
-        action: function (baton) {
-            baton.context.onZoomOut();
-        }
     });
 
     // define the Backbone view
