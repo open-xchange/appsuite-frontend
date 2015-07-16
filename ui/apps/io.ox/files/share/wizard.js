@@ -91,7 +91,8 @@ define('io.ox/files/share/wizard', [
                 apiOptions: {
                     contacts: true,
                     users: true,
-                    groups: true
+                    // only availiable for invite autocomplete
+                    groups: baton.model.get('type') === 'invite'
                 },
                 leftAligned: true
             });
