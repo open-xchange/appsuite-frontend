@@ -35,7 +35,7 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
             var pictureColumn = $('<div class="participant-picture-col">'),
                 picture = $('<div class="picture">'),
                 nameColumn = $('<div class="participant-name-col">'),
-                name = $('<a class="name halo-link">').text(this.participant.userDisplayName),
+                name = $('<a class="name halo-link">').text(this.participant.userDisplayName).data({ internal_userid: this.participant.id }),
                 roleColumn = $('<div class="participant-role-col">'),
                 presenterId = this.app.rtModel.get('presenterId'),
                 presenterIcon = $('<i class="fa fa-desktop">').attr('title', gt('Presenter'));

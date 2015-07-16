@@ -141,6 +141,10 @@ define('io.ox/presenter/views/navigationview', [
             if (!baton.context) { return; }
             //if (_.device('smartphone')) return;
 
+            function quoteId (id) {
+                return id.replace( /(:|@|\/|\.|\[|\]|,)/g, '\\$1' );
+            }
+
             var dropdown,
                 participantsJoined = false,
                 rtModel = baton.context.app.rtModel,
@@ -159,6 +163,10 @@ define('io.ox/presenter/views/navigationview', [
                     participantsJoined = true;
                     dropdown.link(user.userId, user.userDisplayName, null);
                 }
+                // add halo link data
+                var link = dropdown.$ul.find('a[data-name=' + quoteId(user.userId) + ']');
+                link.addClass('halo-link').data({ internal_userid: user.id });
+
             }, this);
 
             if (!participantsJoined) {
