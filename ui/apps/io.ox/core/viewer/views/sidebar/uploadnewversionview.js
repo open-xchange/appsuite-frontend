@@ -93,7 +93,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                 var self = this;
                 // check if the user has permission to upload new versions
                 folderApi.get(this.model.get('folder_id')).done(function (folderData) {
-                    if (folderApi.can('create', folderData)) {
+                    if (folderApi.can('write', folderData)) {
                         // add file upload widget
                         self.$el.append(
                             Attachments.fileUploadWidget({
