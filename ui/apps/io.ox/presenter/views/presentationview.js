@@ -113,6 +113,8 @@ define('io.ox/presenter/views/presentationview', [
             // register presentation pause /continue handler
             this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onPresentationPause);
             this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onPresentationContinue);
+
+            this.listenTo(this.presenterEvents, 'presenter:showslide', this.showSlide);
         },
 
         /**

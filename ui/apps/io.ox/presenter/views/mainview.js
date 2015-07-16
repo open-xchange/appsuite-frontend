@@ -18,8 +18,9 @@ define('io.ox/presenter/views/mainview', [
     'io.ox/presenter/views/presentationview',
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',
+    'io.ox/presenter/views/thumbnailview',
     'gettext!io.ox/presenter'
-], function (DisposableView, Notifications, Ext, ActionsPattern, PresentationView, SidebarView, ToolbarView, gt) {
+], function (DisposableView, Notifications, Ext, ActionsPattern, PresentationView, SidebarView, ToolbarView, ThumbnailView, gt) {
 
     'use strict';
 
@@ -52,6 +53,7 @@ define('io.ox/presenter/views/mainview', [
             this.presentationView = new PresentationView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
             this.toolbarView = new ToolbarView(childViewParams);
+            this.thumbnailView = new ThumbnailView(childViewParams);
             // remember the sidebar open state for fullscreen
             this.sidebarBeforeFullscreen = null;
 
@@ -85,6 +87,7 @@ define('io.ox/presenter/views/mainview', [
                 this.toolbarView.render().el,
                 this.sidebarView.render().el,
                 this.presentationView.render().el
+                //this.thumbnailView.render().el
             );
 
             // set initial sidebar state
@@ -261,6 +264,8 @@ define('io.ox/presenter/views/mainview', [
             var rightOffset = this.sidebarView.opened ? this.sidebarView.$el.outerWidth() : 0;
 
             this.presentationView.$el.css({ width: window.innerWidth - rightOffset });
+
+            this.thumbnailView.$el.css({ width: window.innerWidth - rightOffset });
 
             this.presenterEvents.trigger('presenter:resize');
         },
