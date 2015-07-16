@@ -923,7 +923,7 @@ define('io.ox/core/main', [
             index: 175,
             draw: function () {
 
-                if (capabilities.has('edit_password') === false) return;
+                if (!capabilities.has('edit_password && guest')) return;
 
                 this.append(
                     $('<li role="presentation">').append(
