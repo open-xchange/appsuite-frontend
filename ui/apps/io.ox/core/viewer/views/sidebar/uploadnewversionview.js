@@ -13,10 +13,11 @@
 define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/backbone/disposable',
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/attachments',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, Dialogs, Attachments, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, Attachments, gt) {
 
     'use strict';
 
@@ -89,13 +90,19 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
         render: function () {
             if (this.model && this.model.isFile()) {
-                // add file upload widget
-                this.$el.append(
-                    Attachments.fileUploadWidget({
-                        multi: false,
-                        buttontext: gt('Upload new version')
-                    })
-                );
+                var self = this;
+                // check if the user has permission to upload new versions
+                folderApi.get(this.model.get('folder_id')).done(function (folderData) {
+                    if (folderApi.can('create', folderData)) {
+                        // add file upload widget
+                        self.$el.append(
+                            Attachments.fileUploadWidget({
+                                multi: false,
+                                buttontext: gt('Upload new version')
+                            })
+                        );
+                    }
+                });
             }
             return this;
         },
