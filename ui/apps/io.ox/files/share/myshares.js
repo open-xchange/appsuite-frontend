@@ -92,8 +92,7 @@
             this.append(
                 $('<div class="info">').append(
                     $('<div class="displayname">').text(model.getDisplayName()),
-                    breadcrumb.render().$el,
-                    $('<div class="url">').text(model.get('share_url'))
+                    breadcrumb.render().$el
                 )
             );
         }
@@ -121,20 +120,14 @@
     ext.point(POINT + '/share').extend({
         id: 'actions',
         index: INDEX += 100,
-        draw: function () {
+        draw: function (baton) {
+            var permissionCount = baton.view.model.getPermissions().length - 1;
             this.append(
                 $('<div class="actions">').append(
-                    $('<a href="#" class="toggleUrl">').append(
-                        $('<span class="sr-only">').text(gt('show link')),
-                        $('<i class="fa fa-external-link" aria-hidden="true">')
-                    ),
+                    $('<span class="badge">').text(permissionCount),
                     $('<a href="#" class="edit">').append(
                         $('<span class="sr-only">').text(gt('edit share')),
                         $('<i class="fa fa-gear" aria-hidden="true">')
-                    ),
-                    $('<a href="#" class="remove">').append(
-                        $('<span class="sr-only">').text(gt('remove share')),
-                        $('<i class="fa fa-trash" aria-hidden="true">')
                     )
                 )
             );
@@ -151,8 +144,6 @@
         className: 'share-view',
 
         events: {
-            'click .actions .toggleUrl': 'toggleUrl',
-            'click .actions .remove': 'onRemove',
             'click .actions .edit': 'onEdit',
             'keydown': 'fnKey'
         },
@@ -192,22 +183,12 @@
             if (e.which === 46 || e.which === 8) this.onRemove(e);
         },
 
-        onRemove: function (e) {
-            e.preventDefault();
-            this.model.destroy();
-        },
-
         onEdit: function (e) {
             e.preventDefault();
             var self = this;
             return require(['io.ox/files/share/permissions'], function (permissions) {
                 permissions.show(self.model);
             });
-        },
-
-        toggleUrl: function (e) {
-            e.preventDefault();
-            this.$el.find('.url').toggle();
         }
 
     });
