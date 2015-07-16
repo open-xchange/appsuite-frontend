@@ -48,7 +48,7 @@
                     });
     };
 
-    Dropdown.prototype.toggle = function (e) {
+    Dropdown.prototype.toggle = function (e, f) {
         var $this = $(this)
         if ($this.is('.disabled, :disabled')) return
 
