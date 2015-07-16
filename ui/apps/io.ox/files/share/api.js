@@ -182,6 +182,21 @@ define('io.ox/files/share/api', [
                 },
                 data: o
             });
+        },
+
+        /**
+         * send invitation related to a link target
+         * @param  { object } o target data
+         * @return { deferred } empty data and timestamp
+         */
+        sendLink: function (o) {
+            return http.PUT({
+                module: 'share/management',
+                params: {
+                    action: 'sendLink'
+                },
+                data: o
+            });
         }
     };
 
