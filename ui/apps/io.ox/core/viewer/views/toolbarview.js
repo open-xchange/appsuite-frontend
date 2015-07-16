@@ -292,9 +292,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                     label: gt('Save to Drive'),
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
+            },
+            guard: {
             }
         };
-
     // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
     _.each(linksMap, function (appMeta, appName) {
         var index = 0,

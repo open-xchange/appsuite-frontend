@@ -71,6 +71,11 @@ define('io.ox/files/api', [
                     source: 'pim'
                 };
 
+            } else if (_.isString(attributes.guardUrl)) {
+                // Guard
+                normalizedAttrs = attributes;
+                normalizedAttrs.source = 'guard';
+
             } else {
                 // drive
                 normalizedAttrs = attributes;
@@ -133,6 +138,7 @@ define('io.ox/files/api', [
         },
 
         isEncrypted: function () {
+            if (this.get('source') === 'guard') return (true);
             // check if file has "guard" file extension
             return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
         },

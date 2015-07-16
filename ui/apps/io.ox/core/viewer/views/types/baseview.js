@@ -81,6 +81,9 @@ define('io.ox/core/viewer/views/types/baseview', [
 
             } else if (this.model.isPIMAttachment()) {
                 return AttachmentAPI.getUrl(this.model.get('origData'), 'view');
+
+            } else if (this.model.isEncrypted()) {
+                return (this.model.get('guardUrl'));
             }
             return null;
         },
