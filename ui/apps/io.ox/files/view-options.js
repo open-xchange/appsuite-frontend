@@ -159,7 +159,8 @@ define('io.ox/files/view-options', [
                 return;
             }
 
-            var view = new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item'),
+            // leave 250px for the other buttons
+            var view = new BreadcrumbView({ app: baton.app, rightWidth: 250 }).render().$el.addClass('toolbar-item'),
                 results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
 
             this.append(view, results);

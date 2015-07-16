@@ -24,10 +24,10 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
         },
 
         initialize: function (options) {
-
             this.folder = options.folder;
             this.label = options.label;
             this.exclude = options.exclude;
+            this.rightWidth = options.rightWidth || 0;
 
             // last item is a normal item (not a unclickable tail node)
             this.notail = options.notail;
@@ -100,7 +100,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
         computeWidth: _.debounce( function () {
             if (this.$el && this.$el.parent() && this.$el.is(':visible')) {
-                var width = Math.max( this.$el.parent().width() - 250, 150);
+                var width = Math.max( this.$el.parent().width() - this.rightWidth, 150);
                 this.$el.css('max-width', width + 'px');
             }
         }, 300),
