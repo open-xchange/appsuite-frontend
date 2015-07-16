@@ -66,7 +66,9 @@ define('io.ox/presenter/actions', [
         },
         action: function (baton) {
             console.info('pause action:', baton);
-            baton.context.app.rtConnection.pausePresentation();
+            var app = baton.context.app;
+            app.rtConnection.pausePresentation();
+            app.mainView.toggleFullscreen(false);
         }
     });
 
