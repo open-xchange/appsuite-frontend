@@ -57,20 +57,25 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             );
 
             if (!capabilities.has('alone')) {
-                dl.append(
-                    // deep link
-                    $('<dt>').text(gt('Link')),
-                    $('<dd class="link">').append(
-                        $('<a href="#" target="_blank" style="word-break: break-all">')
-                        .attr('href', link)
-                        .text(link)
-                    )
-                );
+                FolderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
+                    // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
+                    if (FolderAPI.is('infostore', folderData)) {
+                        dl.append(
+                            // deep link
+                            $('<dt>').text(gt('Link')),
+                            $('<dd class="link">').append(
+                                $('<a href="#" target="_blank" style="word-break: break-all">')
+                                .attr('href', link)
+                                .text(link)
+                            )
+                        );
+                    }
+                });
             }
 
             panelBody = this.find('.sidebar-panel-body').empty().append(dl);
 
-            var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
+            var breadcrumb = new BreadcrumbView({ folder: model.get('folder_id'), exclude: ['9'], notail: true });
 
             breadcrumb.handler = function (id) {
                 // launch files and set/change folder
