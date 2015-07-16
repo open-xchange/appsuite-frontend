@@ -149,11 +149,18 @@ define('io.ox/files/share/model', [
                     data.password = this.get('password');
                 }
 
+                // collect recipients data
+                data.recipients = [];
+                _(this.get('recipients')).each(function (recipientModel) {
+                    data.recipients.push([recipientModel.getDisplayName(), recipientModel.getTarget()]);
+                });
+
+                data.message = this.get('message', '');
+
                 // create or update ?
                 if (!this.has('url')) {
                     return data;
                 } else {
-                    data.token = this.get('token');
                     if (this.get('temporary')) {
                         data.expiry_date = this.getExpiryDate();
                     }
@@ -182,7 +189,12 @@ define('io.ox/files/share/model', [
                 case 'invite':
                     return api.invite(model.toJSON()).fail(yell);
                 case 'update':
-                    return api.update(model.toJSON(), model.get('lastModified')).fail(yell);
+                    var apiCalls = [];
+                    apiCalls.push(api.update(model.toJSON(), model.get('lastModified')).fail(yell));
+                    if (model.has('recipients') && model.get('recipients').length > 0) {
+                        apiCalls.push(api.sendLink(model.toJSON()).fail(yell));
+                    }
+                    return $.when.apply($, apiCalls);
                 case 'delete':
                     if (this.get('type') === this.TYPES.LINK) {
                         return api.deleteLink(model.toJSON()).fail(yell);
