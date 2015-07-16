@@ -540,7 +540,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Array} removedFiles
          *  an array consisting of objects representing file models.
          */
-        onFileRemoved: function (event, removedFiles) {
+        onFileRemoved: function (removedFiles) {
             if (!_.isArray(removedFiles) || removedFiles.length < 1) {
                 return;
             }
@@ -553,8 +553,12 @@ define('io.ox/core/viewer/views/displayerview', [
             // reset the invalidated local loaded slides array
             this.loadedSlides = [];
             // reset document zoom level and scroll positions
-            this.removeInitialZoomLevel(removedFileModel.get('id'));
-            this.removeInitialScrollPosition(removedFileModel.get('id'));
+            if (this.removeInitialZoomLevel) {
+                this.removeInitialZoomLevel(removedFileModel.get('id'));
+            }
+            if (this.removeInitialScrollPosition) {
+                this.removeInitialScrollPosition(removedFileModel.get('id'));
+            }
             // remove corresponding view type of the file
             this.slideViews.splice(removedFileModelIndex, 1);
             // remove slide from the swiper plugin
