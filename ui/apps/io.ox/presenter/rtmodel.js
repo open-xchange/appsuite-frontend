@@ -50,7 +50,7 @@ define('io.ox/presenter/rtmodel', [
         defaults: function () {
             return {
                 // rtConnection attributes
-                presenterId: '',
+                presenterId: null,
                 presenterName: '',
                 activeUsers: [],
                 activeSlide: 0,
@@ -60,6 +60,16 @@ define('io.ox/presenter/rtmodel', [
             };
         },
 
+        /**
+         * Parses the data of an update message send by the real-time framework,
+         * filters the users list for the ones who joined the presentation and for the presenter.
+         *
+         * @param {Object} data
+         *  the real-time message data.
+         *
+         * @return {Object}
+         *  the real-time message data supplemented by the participants list.
+         */
         parse: function (data) {
             var result = _.copy(data, true);
 
@@ -71,7 +81,7 @@ define('io.ox/presenter/rtmodel', [
         },
 
         initialize: function () {
-            console.info('Presenter - RTModel.initialize()');
+            //console.info('Presenter - RTModel.initialize()');
 
             this.on('change', function (model) {
                 console.log('Presenter - RTModel - change', model);
@@ -110,7 +120,8 @@ define('io.ox/presenter/rtmodel', [
          *  The user id to check.
          */
         canStart: function (userId) {
-            return (!this.hasPresenter() && !this.isJoined(userId));
+            var presenterId = this.get('presenterId');
+            return (_.isString(presenterId) && _.isEmpty(presenterId) && !this.isJoined(userId));
         },
 
         /**
