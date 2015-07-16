@@ -83,7 +83,7 @@ msgstr ""
 #: apps/io.ox/backbone/validation.js:71
 #: module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:583
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:590
 #: module:io.ox/settings/settings
 msgid "Please enter a valid date"
 msgstr ""
@@ -129,7 +129,7 @@ msgstr ""
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:946
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:952
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
@@ -730,7 +730,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:74
 #: module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:791
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings/settings
 msgid "Select folder"
 msgstr ""
@@ -1597,6 +1597,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/commons.js:603
 #: module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:242
 #: apps/io.ox/mail/main.js:159
 #: module:io.ox/mail
 #: apps/io.ox/mail/main.js:164
@@ -2539,7 +2540,7 @@ msgstr ""
 #: apps/io.ox/contacts/view-detail.js:457
 #: apps/io.ox/files/view-options.js:44
 #: module:io.ox/files
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:506
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:513
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr ""
@@ -3367,8 +3368,11 @@ msgstr ""
 #: apps/io.ox/core/about/about.js:66
 #: module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
+#: apps/io.ox/core/folder/tree.js:224
+#: module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1213
 #: apps/io.ox/core/permissions/permissions.js:492
+#: apps/io.ox/core/tk/wizard.js:279
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/toolbarview.js:180
@@ -5635,6 +5639,43 @@ msgstr ""
 msgid "Could not load this list"
 msgstr ""
 
+#. Task: Done like in "Mark as done"
+#: apps/io.ox/core/tk/wizard.js:243
+#: module:io.ox/core
+#: apps/io.ox/core/wizard/registry.js:50
+#: module:io.ox/core/wizard
+#: apps/io.ox/core/yell.js:189
+#: apps/io.ox/files/share/view.js:348
+#: module:io.ox/files
+#: apps/io.ox/tasks/edit/view-template.js:272
+#: module:io.ox/tasks/edit
+#: apps/io.ox/tasks/print.js:31
+#: module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js:70
+#: module:io.ox/mail
+#: apps/io.ox/tasks/util.js:212
+#: apps/plugins/notifications/tasks/register.js:74
+#: module:plugins/notifications
+msgid "Done"
+msgstr ""
+
+#: apps/io.ox/core/tk/wizard.js:306
+#: module:io.ox/core
+msgid "Start tour"
+msgstr ""
+
+#: apps/io.ox/core/tk/wizard.js:306
+#: module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:114
+#: apps/io.ox/core/wizard/registry.js:47
+#: module:io.ox/core/wizard
+#: apps/io.ox/presenter/views/presentationview.js:42
+#: module:io.ox/presenter
+#: apps/io.ox/wizards/upsell.js:80
+#: module:io.ox/wizards
+msgid "Next"
+msgstr ""
+
 #: apps/io.ox/core/upsell.js:28
 #: module:io.ox/core
 msgid "Upgrade required"
@@ -5659,20 +5700,9 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53
 #: module:io.ox/core/wizard
-#: apps/io.ox/presenter/views/presentationview.js:41
+#: apps/io.ox/presenter/views/presentationview.js:42
 #: module:io.ox/presenter
 msgid "Previous"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/displayerview.js:114
-#: module:io.ox/core
-#: apps/io.ox/core/wizard/registry.js:47
-#: module:io.ox/core/wizard
-#: apps/io.ox/presenter/views/presentationview.js:41
-#: module:io.ox/presenter
-#: apps/io.ox/wizards/upsell.js:80
-#: module:io.ox/wizards
-msgid "Next"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/displayerview.js:115
@@ -5688,7 +5718,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/displayerview.js:139
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:199
+#: apps/io.ox/presenter/views/presentationview.js:206
 #: module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr ""
@@ -5915,6 +5945,7 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js:518
 #: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:324
 msgid "of %1$d"
 msgstr ""
 
@@ -5972,25 +6003,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/types/videoview.js:78
 msgid "Your browser does not support the video format of this file."
-msgstr ""
-
-#. Task: Done like in "Mark as done"
-#: apps/io.ox/core/wizard/registry.js:50
-#: module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:189
-#: module:io.ox/core
-#: apps/io.ox/files/share/view.js:348
-#: module:io.ox/files
-#: apps/io.ox/tasks/edit/view-template.js:272
-#: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:31
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/toolbar.js:70
-#: module:io.ox/mail
-#: apps/io.ox/tasks/util.js:212
-#: apps/plugins/notifications/tasks/register.js:74
-#: module:plugins/notifications
-msgid "Done"
 msgstr ""
 
 #: apps/io.ox/core/yell.js:23
@@ -8000,43 +8012,43 @@ msgstr ""
 msgid "This rule applies to all messages. Please add a condition to restrict this rule to specific messages."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:607
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:614
 #: module:io.ox/settings/settings
 msgid "datepicker"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:945
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:951
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:960
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:966
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:974
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:991
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:995
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
 msgid "Apply rule if all conditions are met"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:991
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1034
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1040
 #: module:io.ox/settings/settings
 msgid "Process subsequent rules"
 msgstr ""
@@ -8567,6 +8579,9 @@ msgstr ""
 #: apps/io.ox/participants/detail.js:177
 #: module:io.ox/participants/views
 #: apps/io.ox/participants/views.js:189
+#: apps/io.ox/presenter/views/navigationview.js:151
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:155
 msgid "Participants"
 msgstr ""
 
@@ -8769,19 +8784,19 @@ msgid "Could not save settings."
 msgstr ""
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:303
+#: apps/io.ox/presenter/views/mainview.js:341
 #: module:io.ox/presenter
 msgid "Presentation start"
 msgstr ""
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:306
+#: apps/io.ox/presenter/views/mainview.js:344
 #: module:io.ox/presenter
 msgid "%1$s has started the presentation."
 msgstr ""
 
-#: apps/io.ox/presenter/views/mainview.js:310
+#: apps/io.ox/presenter/views/mainview.js:348
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:111
 #: module:io.ox/core
@@ -8790,32 +8805,97 @@ msgid "Join Presentation"
 msgstr ""
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:343
+#: apps/io.ox/presenter/views/mainview.js:381
 #: module:io.ox/presenter
 msgid "Presentation end"
 msgstr ""
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:346
+#: apps/io.ox/presenter/views/mainview.js:384
 #: module:io.ox/presenter
 msgid "%1$s has ended the presentation."
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js:159
+#: apps/io.ox/presenter/views/navigationview.js:49
+#: module:io.ox/core
+msgid "Next slide"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:49
+#: module:io.ox/core
+msgid "Previous slide"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:62
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:72
+msgid "Pause presentation"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:68
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:69
+#: apps/io.ox/presenter/views/toolbarview.js:78
+#: apps/io.ox/presenter/views/toolbarview.js:79
+msgid "Pause Presentation"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:78
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:88
+msgid "Continue presentation"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:84
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:85
+#: apps/io.ox/presenter/views/toolbarview.js:94
+#: apps/io.ox/presenter/views/toolbarview.js:95
+msgid "Continue Presentation"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:94
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:100
+#: apps/io.ox/presenter/views/navigationview.js:101
+#: apps/io.ox/presenter/views/toolbarview.js:164
+#: apps/io.ox/presenter/views/toolbarview.js:170
+msgid "Toggle fullscreen"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:148
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:165
+msgid "none"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:152
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/sidebar/userbadgeview.js:41
+#: module:io.ox/presenter
+msgid "Presenter"
+msgstr ""
+
+#: apps/io.ox/presenter/views/navigationview.js:243
+#: module:io.ox/core
+msgid "Presenter Navigation"
+msgstr ""
+
+#: apps/io.ox/presenter/views/presentationview.js:166
 #: module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js:162
+#: apps/io.ox/presenter/views/presentationview.js:169
 #: module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:163
+#: apps/io.ox/presenter/views/presentationview.js:170
 #: apps/io.ox/presenter/views/toolbarview.js:121
 #: module:io.ox/core
 msgid "Leave presentation"
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js:165
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: module:io.ox/presenter
 msgid "Leave"
 msgstr ""
@@ -8823,14 +8903,14 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:623
+#: apps/io.ox/presenter/views/presentationview.js:688
 #: module:io.ox/presenter
 msgid "%1$d %"
 msgstr ""
 
-#: apps/io.ox/presenter/views/sidebar/userbadgeview.js:41
+#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:88
 #: module:io.ox/presenter
-msgid "Presenter"
+msgid "End of Slides"
 msgstr ""
 
 #: apps/io.ox/presenter/views/toolbarview.js:42
@@ -8845,28 +8925,6 @@ msgstr ""
 msgid "End Presentation"
 msgstr ""
 
-#: apps/io.ox/presenter/views/toolbarview.js:72
-#: module:io.ox/core
-msgid "Pause presentation"
-msgstr ""
-
-#: apps/io.ox/presenter/views/toolbarview.js:78
-#: module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:79
-msgid "Pause Presentation"
-msgstr ""
-
-#: apps/io.ox/presenter/views/toolbarview.js:88
-#: module:io.ox/core
-msgid "Continue presentation"
-msgstr ""
-
-#: apps/io.ox/presenter/views/toolbarview.js:94
-#: module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:95
-msgid "Continue Presentation"
-msgstr ""
-
 #: apps/io.ox/presenter/views/toolbarview.js:105
 #: module:io.ox/core
 msgid "Join presentation"
@@ -8878,19 +8936,13 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr ""
 
-#: apps/io.ox/presenter/views/toolbarview.js:164
-#: module:io.ox/core
-#: apps/io.ox/presenter/views/toolbarview.js:170
-msgid "Toggle fullscreen"
-msgstr ""
-
 #: apps/io.ox/presenter/views/toolbarview.js:178
 #: module:io.ox/core
 #: apps/io.ox/presenter/views/toolbarview.js:184
 msgid "View participants"
 msgstr ""
 
-#: apps/io.ox/presenter/views/toolbarview.js:402
+#: apps/io.ox/presenter/views/toolbarview.js:408
 #: module:io.ox/core
 msgid "Presenter Toolbar"
 msgstr ""

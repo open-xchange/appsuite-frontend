@@ -19,7 +19,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:623 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -167,7 +167,7 @@ msgstr[2] "%1$d minút"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:199 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s z %2$s"
@@ -312,7 +312,7 @@ msgstr "%1$s má nový kontakt:"
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has ended the presentation."
@@ -324,7 +324,7 @@ msgstr "%1$s má nové kontakty:"
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:306 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has started the presentation."
@@ -697,7 +697,7 @@ msgstr "Účet bol aktualizovaný"
 #: apps/io.ox/files/mobile-toolbar-actions.js:88
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/mail/detail/view.js:91 apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:946
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:952
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
@@ -735,7 +735,7 @@ msgstr "Upraviť popis"
 msgid "Add account"
 msgstr "Pridať účet"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:960
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:966
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Pridať operáciu"
@@ -755,7 +755,7 @@ msgstr "Pridať podpriečinok"
 msgid "Add attachments"
 msgstr "Pridať prílohy"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:955
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Pridať podmienku"
@@ -1074,13 +1074,13 @@ msgstr "Aplikácie"
 msgid "Apply role"
 msgstr "Aplikovať rolu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:991
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:995
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
 msgid "Apply rule if all conditions are met"
 msgstr "Použiť pravidlo, ak sú splnené všetky podmienky"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:991
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená."
@@ -1303,7 +1303,8 @@ msgstr "Skrytá kópia"
 #: apps/io.ox/calendar/main.js:208 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:229 apps/io.ox/contacts/main.js:377
 #: module:io.ox/contacts apps/io.ox/core/commons.js:603 module:io.ox/core
-#: apps/io.ox/mail/main.js:159 module:io.ox/mail apps/io.ox/mail/main.js:164
+#: apps/io.ox/core/tk/wizard.js:242 apps/io.ox/mail/main.js:159
+#: module:io.ox/mail apps/io.ox/mail/main.js:164
 #: apps/io.ox/mail/threadview.js:40 apps/io.ox/tasks/main.js:164
 #: module:io.ox/tasks
 msgid "Back"
@@ -1731,7 +1732,9 @@ msgstr "Kliknite nahráte obrázok"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
 #: apps/io.ox/core/folder/actions/properties.js:71
+#: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1213 apps/io.ox/core/permissions/permissions.js:492
+#: apps/io.ox/core/tk/wizard.js:279
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
@@ -1845,7 +1848,7 @@ msgstr "Napísať nový e-mail"
 msgid "Compose new mail"
 msgstr "Napísať novú správu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:945
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:951
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Podmienky"
@@ -1919,13 +1922,16 @@ msgstr "Obsah"
 msgid "Continue"
 msgstr "Pokračovať"
 
-#: apps/io.ox/presenter/views/toolbarview.js:94 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:84 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:85
+#: apps/io.ox/presenter/views/toolbarview.js:94
 #: apps/io.ox/presenter/views/toolbarview.js:95
 #, fuzzy
 msgid "Continue Presentation"
 msgstr "Cieľ"
 
-#: apps/io.ox/presenter/views/toolbarview.js:88 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:78 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:88
 #, fuzzy
 msgid "Continue presentation"
 msgstr "Cieľ"
@@ -2640,11 +2646,11 @@ msgid "Documents"
 msgstr "Dokumenty"
 
 #. Task: Done like in "Mark as done"
+#: apps/io.ox/core/tk/wizard.js:243 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:189 module:io.ox/core
-#: apps/io.ox/files/share/view.js:348 module:io.ox/files
-#: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js:31 module:io.ox/tasks
+#: apps/io.ox/core/yell.js:189 apps/io.ox/files/share/view.js:348
+#: module:io.ox/files apps/io.ox/tasks/edit/view-template.js:272
+#: module:io.ox/tasks/edit apps/io.ox/tasks/print.js:31 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:70 module:io.ox/mail
 #: apps/io.ox/tasks/util.js:212
 #: apps/plugins/notifications/tasks/register.js:74
@@ -3052,6 +3058,11 @@ msgstr "Cieľ"
 #, fuzzy
 msgid "End date timezone"
 msgstr "dátum konca "
+
+#: apps/io.ox/presenter/views/sidebar/slidepeekview.js:88
+#: module:io.ox/presenter
+msgid "End of Slides"
+msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js:106 module:io.ox/calendar
 msgid "End of working time"
@@ -4155,7 +4166,7 @@ msgstr "Práca"
 msgid "Job description"
 msgstr "Popis práce"
 
-#: apps/io.ox/presenter/views/mainview.js:310 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:111 module:io.ox/core
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #, fuzzy
@@ -4279,7 +4290,7 @@ msgstr "Rozloženie"
 msgid "Learn more"
 msgstr "Zistite viac"
 
-#: apps/io.ox/presenter/views/presentationview.js:165 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4289,8 +4300,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "Cieľ"
 
-#: apps/io.ox/presenter/views/presentationview.js:162 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:163
+#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:170
 #: apps/io.ox/presenter/views/toolbarview.js:121 module:io.ox/core
 #, fuzzy
 msgid "Leave presentation"
@@ -4828,7 +4839,7 @@ msgstr "Moje úlohy"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:74 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:457
 #: apps/io.ox/files/view-options.js:44 module:io.ox/files
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:506
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:513
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Meno"
@@ -4964,9 +4975,10 @@ msgstr "Pripomenutia úloh"
 msgid "New task reminders"
 msgstr "Pripomenutia úloh"
 
-#: apps/io.ox/core/viewer/views/displayerview.js:114 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:306 module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js:114
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
-#: apps/io.ox/presenter/views/presentationview.js:41 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:42 module:io.ox/presenter
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
 msgstr "Ďalší"
@@ -4984,6 +4996,12 @@ msgstr "Nasledujúci týždeň"
 #| msgid "Next Day"
 msgid "Next page"
 msgstr "Ďalší deň"
+
+#: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/core
+#, fuzzy
+#| msgid "Next step"
+msgid "Next slide"
+msgstr "Ďalší krok"
 
 #: apps/io.ox/contacts/model.js:204 module:io.ox/contacts
 msgid "Nickname"
@@ -5451,6 +5469,8 @@ msgstr "Pager"
 
 #: apps/io.ox/participants/detail.js:177 module:io.ox/participants/views
 #: apps/io.ox/participants/views.js:189
+#: apps/io.ox/presenter/views/navigationview.js:151 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:155
 msgid "Participants"
 msgstr "Účastníci"
 
@@ -5511,13 +5531,16 @@ msgstr "Sila hesla: slabé"
 msgid "Password strength: Wrong length"
 msgstr "Sila hesla: nesprávna dĺžka"
 
-#: apps/io.ox/presenter/views/toolbarview.js:78 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:68 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:69
+#: apps/io.ox/presenter/views/toolbarview.js:78
 #: apps/io.ox/presenter/views/toolbarview.js:79
 #, fuzzy
 msgid "Pause Presentation"
 msgstr "Cieľ"
 
-#: apps/io.ox/presenter/views/toolbarview.js:72 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:62 module:io.ox/core
+#: apps/io.ox/presenter/views/toolbarview.js:72
 #, fuzzy
 msgid "Pause presentation"
 msgstr "Cieľ"
@@ -5674,7 +5697,7 @@ msgstr "Prosím, zadajte hľadaný text."
 #: apps/io.ox/backbone/mini-views/datepicker.js:227 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:583
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:590
 #: module:io.ox/settings/settings
 msgid "Please enter a valid date"
 msgstr "Prosím, zadajte platný dátum"
@@ -5833,18 +5856,18 @@ msgid "Postcode"
 msgstr "PSČ"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:343 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation end"
 msgstr "Cieľ"
 
-#: apps/io.ox/presenter/views/presentationview.js:159 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation is paused."
 msgstr "Cieľ"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:303 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation start"
 msgstr "Cieľ"
@@ -5854,6 +5877,7 @@ msgstr "Cieľ"
 msgid "Presentations"
 msgstr "Cieľ"
 
+#: apps/io.ox/presenter/views/navigationview.js:152 module:io.ox/core
 #: apps/io.ox/presenter/views/sidebar/userbadgeview.js:41
 #: module:io.ox/presenter
 #, fuzzy
@@ -5861,7 +5885,12 @@ msgstr "Cieľ"
 msgid "Presenter"
 msgstr "Na stred"
 
-#: apps/io.ox/presenter/views/toolbarview.js:402 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:243 module:io.ox/core
+#, fuzzy
+msgid "Presenter Navigation"
+msgstr "Cieľ"
+
+#: apps/io.ox/presenter/views/toolbarview.js:408 module:io.ox/core
 #, fuzzy
 msgid "Presenter Toolbar"
 msgstr "Panel nástrojov editora"
@@ -5911,7 +5940,7 @@ msgstr "Náhľad"
 
 #: apps/io.ox/core/viewer/views/displayerview.js:113 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:53 module:io.ox/core/wizard
-#: apps/io.ox/presenter/views/presentationview.js:41 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:42 module:io.ox/presenter
 msgid "Previous"
 msgstr "Predošlé"
 
@@ -5934,6 +5963,12 @@ msgstr "Predošlé"
 #| msgid "Previous Day"
 msgid "Previous page"
 msgstr "Predošlý deň"
+
+#: apps/io.ox/presenter/views/navigationview.js:49 module:io.ox/core
+#, fuzzy
+#| msgid "Previous Week"
+msgid "Previous slide"
+msgstr "Predošlý týždeň"
 
 #: apps/io.ox/find/date/patterns.js:196 module:io.ox/find
 #, fuzzy
@@ -5991,7 +6026,7 @@ msgstr "Súkromné"
 msgid "Private address"
 msgstr "Súkromná adresa"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1034
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1040
 #: module:io.ox/settings/settings
 msgid "Process subsequent rules"
 msgstr "Pokračovať v spracovaní ďalších pravidiel"
@@ -6417,7 +6452,7 @@ msgstr ""
 msgid "Room number"
 msgstr "Číslo izby"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:974
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Názov pravidla"
@@ -6594,7 +6629,7 @@ msgstr "Vybrať priečinok"
 
 #: apps/io.ox/calendar/edit/extensions.js:126 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:791
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
 #: module:io.ox/settings/settings
 msgid "Select folder"
 msgstr "Vybrať priečinok"
@@ -7103,6 +7138,12 @@ msgstr "Cieľ"
 #: apps/io.ox/core/desktop.js:1526
 msgid "Start search"
 msgstr "Spustiť vyhľadávanie"
+
+#: apps/io.ox/core/tk/wizard.js:306 module:io.ox/core
+#, fuzzy
+#| msgid "Starts on"
+msgid "Start tour"
+msgstr "začína"
 
 #: apps/io.ox/core/permissions/permissions.js:479 module:io.ox/core
 #: apps/plugins/administration/groups/settings/edit.js:85
@@ -8015,7 +8056,10 @@ msgstr "Dnes"
 msgid "Toggle checkboxes"
 msgstr "Zmeniť označenie políčok"
 
-#: apps/io.ox/presenter/views/toolbarview.js:164 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:94 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:100
+#: apps/io.ox/presenter/views/navigationview.js:101
+#: apps/io.ox/presenter/views/toolbarview.js:164
 #: apps/io.ox/presenter/views/toolbarview.js:170
 #, fuzzy
 #| msgid "Fullscreen"
@@ -9078,7 +9122,7 @@ msgstr "Tmavomodrá"
 msgid "dark green"
 msgstr "Tmavomodrá"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:607
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:614
 #: module:io.ox/settings/settings
 msgid "datepicker"
 msgstr ""
@@ -9376,7 +9420,13 @@ msgstr "bez oprávnení na upravovanie"
 msgid "no read permissions"
 msgstr "bez oprávnení na čítanie"
 
+#: apps/io.ox/presenter/views/navigationview.js:148 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:165
+msgid "none"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:324
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -12593,9 +12643,6 @@ msgstr "RRRR"
 
 #~ msgid "Next birthdays"
 #~ msgstr "Najbližšie narodeniny"
-
-#~ msgid "Next step"
-#~ msgstr "Ďalší krok"
 
 #~ msgid "Nicaragua"
 #~ msgstr "Nikaragua"
