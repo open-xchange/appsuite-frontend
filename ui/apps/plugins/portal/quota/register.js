@@ -15,10 +15,10 @@ define('plugins/portal/quota/register', [
     'io.ox/core/extensions',
     'gettext!plugins/portal',
     'io.ox/core/api/quota',
-    'io.ox/core/strings',
     'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views/quota',
     'less!plugins/portal/quota/style'
-], function (ext, gt, api, strings, capabilities) {
+], function (ext, gt, api, capabilities, QuotaView) {
 
     'use strict';
 
@@ -33,21 +33,24 @@ define('plugins/portal/quota/register', [
                 quota: quota.file.quota,
                 usage: quota.file.use,
                 name: 'memory-file',
-                i18nName: gt('File quota')
+                title: gt('File quota')
             });
         }
         fields.push({
             quota: quota.mail.quota,
             usage: quota.mail.use,
             name: 'memory-mail',
-            i18nName: gt('Mail quota')
+            title: gt('Mail quota')
         });
 
         fields.push({
             quota: quota.mail.countquota,
             usage: quota.mail.countuse,
             name: 'mailcount',
-            i18nName: gt('Mail count quota')
+            title: gt('Mail count quota'),
+            sizeFunction: function (name) {
+                return name;
+            }
         });
 
         return _(fields).select(function (q) {
@@ -57,99 +60,17 @@ define('plugins/portal/quota/register', [
     },
 
     drawTile = function (quota) {
-        var contentFields = $('<ul>').addClass('content no-pointer list-unstyled');
-
-        this.append(contentFields);
-        _.each(availableQuota(quota), function (q) {
-            addQuotaArea(contentFields, q);
-        });
-    },
-
-    /**
-     * Create a progress bar showing the relation of two values represonted by
-     * @param usage and @param size. It’s assumed, that usage is always the smaller
-     * value and size the larger one.
-     *
-     * @return a progressbar element
-     */
-    buildbar = (function () {
-
-        function getWidth(usage, size) {
-            if (!size) return 100;
-            if (!usage) return 0;
-            if (usage >= size) return 100;
-            return Math.round(usage / size * 100);
-        }
-
-        return function (usage, size) {
-
-            var width = getWidth(usage, size);
-
-            return $('<div class="progress-bar">')
-                .css('width', width + '%')
-                .addClass(width < 90 ? 'default' : 'bar-danger');
-        };
-    }()),
-
-    /**
-     * Add a quota section with a given (internal) @param quota.name and a
-     * user visible @param quota.i18nName to the element @param el
-     *
-     * @param el - the element, that is the parent
-     * @param quota - object of the form:
-     * {
-     *  name: name of the quota element (same as for addQuotaArea)
-     *  i18nName: translated name to show to the user
-     *  quota: value of the quota
-     *  usage: actual usage of the quota
-     *  widget: the widget to add the quota fields to
-     * }
-     * @return - a div element containing some fields for data
-     */
-    addQuotaArea = function (el, quota) {
-
-        var label = $('<span>').addClass('pull-right gray quota-' + quota.name),
-            bar = $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar');
-
-        el.append(
-            $('<li class="paragraph">').append(
-                label,
-                $('<span>').text(quota.i18nName),
-                bar
+        this.append(
+            $('<ul class="content no-pointer list-unstyled">').append(
+                _(availableQuota(quota)).map(function (q) {
+                    return new QuotaView(_.extend({
+                            tagName: 'li',
+                            className: 'paragraph'
+                        }, q)
+                    ).render().$el;
+                })
             )
         );
-
-        if (quota.quota <= 0) {
-            label.text(gt('unlimited'));
-            bar.remove();
-        } else {
-            if (quota.name === 'mailcount') {
-                //mailcount must not be shown in bytes
-                label.text(
-                    quota.usage < quota.quota ?
-                        //#. %1$s is the number of mails in use
-                        //#. %2$s is the max number of mails
-                        //#, c-format
-                        gt('%1$s of %2$s', quota.usage, quota.quota) :
-                        //#. Quota maxed out; 100%
-                        gt('100%')
-                );
-            } else {
-                label.text(
-                    quota.usage < quota.quota ?
-                        //#. %1$s is the storagespace in use
-                        //#. %2$s is the max storagespace
-                        //#, c-format
-                        gt('%1$s of %2$s', strings.fileSize(quota.usage, 2), strings.fileSize(quota.quota, 2)) :
-                        //#. Quota maxed out; 100%
-                        gt('100%')
-                );
-            }
-
-            bar.addClass('progress progress-striped').append(
-                buildbar(quota.usage, quota.quota)
-            );
-        }
     },
 
     load = function () {
