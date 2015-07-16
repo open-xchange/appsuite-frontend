@@ -89,6 +89,8 @@ define('io.ox/core/upsell', [
         missing: function (condition) {
             if (!condition) return '';
 
+            condition = [].concat(condition).join(' ');
+
             return _(condition.match(/!?[a-z_:-]+/ig))
                 .filter(function (c) {
                     return !that.has(c);
