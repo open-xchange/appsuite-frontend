@@ -228,7 +228,7 @@ define('io.ox/presenter/views/mainview', [
                 }
 
                 // show navigation panel when mouse is inside the lower 10% or the last 40 pixel of the window
-                console.info('ON MOUSE MOVE', event.type, 'x:', x, 'y:', y, (y > showY) ? 'SHOW' : 'HIDE', showY);
+                //console.info('ON MOUSE MOVE', event.type, 'x:', x, 'y:', y, (y > showY) ? 'SHOW' : 'HIDE', showY);
                 if (y > showY) {
                     this.presentationView.showNavigation();
                 } else {

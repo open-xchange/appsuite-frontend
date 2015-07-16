@@ -210,7 +210,6 @@ define('io.ox/presenter/views/navigationview', [
          *  this view object itself.
          */
         render: function () {
-            //console.info('NavigationView.render()');
             // draw navigation
             var navigation = this.$el.attr({ role: 'menu', 'aria-label': gt('Presenter Navigation') }),
                 userId = this.app.rtConnection.getRTUuid(),
@@ -228,7 +227,6 @@ define('io.ox/presenter/views/navigationview', [
             if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
                 navigationPoint.invoke('draw', navigation, baton);
             }
-            //navigationPoint.invoke('draw', navigation, baton);
             return this;
         },
 
