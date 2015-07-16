@@ -42,7 +42,7 @@ define('io.ox/files/share/api', [
          * @param  { object } o
          * @return { deferred } returns related token
          */
-        create: function (o) {
+        getLink: function (o) {
             return http.PUT({
                 module: 'share/management',
                 params: {
@@ -58,7 +58,7 @@ define('io.ox/files/share/api', [
          * @param  { object } o
          * @return { deferred } empty data and timestamp
          */
-        update: function (o, timestamp) {
+        updateLink: function (o, timestamp) {
             timestamp = timestamp || _.now();
             return http.PUT({
                 module: 'share/management',

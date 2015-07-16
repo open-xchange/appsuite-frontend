@@ -175,10 +175,11 @@ define('io.ox/files/share/model', [
             if (this.get('type') === this.TYPES.INVITE) {
                 action = 'invite';
             }
-
             switch (action) {
-                case 'create':
-                    return api.create(this.toJSON()).then(function (data, timestamp) {
+                case 'invite':
+                    return api.invite(model.toJSON()).fail(yell);
+                case 'read':
+                    return api.getLink(this.toJSON()).then(function (data, timestamp) {
                         if (data.is_new && data.is_new === true) {
                             delete data.is_new;
                             data.id = _.uniqueId();
@@ -186,12 +187,11 @@ define('io.ox/files/share/model', [
                         self.set(_.extend(data, { lastModified: timestamp }));
                         return data.url;
                     }).fail(yell);
-                case 'invite':
-                    return api.invite(model.toJSON()).fail(yell);
+                case 'create':
                 case 'update':
                     var apiCalls = [];
-                    apiCalls.push(api.update(model.toJSON(), model.get('lastModified')).fail(yell));
-                    if (model.has('recipients') && model.get('recipients').length > 0) {
+                    apiCalls.push(api.updateLink(model.toJSON(), model.get('lastModified')).fail(yell));
+                    if (this.get('type') === this.TYPES.LINK && model.has('recipients') && model.get('recipients').length > 0) {
                         apiCalls.push(api.sendLink(model.toJSON()).fail(yell));
                     }
                     return $.when.apply($, apiCalls);

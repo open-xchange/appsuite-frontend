@@ -69,7 +69,7 @@ define('io.ox/files/share/wizard', [
                 linkNode.find('input').val(val).focus().select();
             });
             if (link === '' ) {
-                baton.view.share({ silent: true, validate: false });
+                baton.model.fetch();
             }
         }
     });
@@ -293,16 +293,11 @@ define('io.ox/files/share/wizard', [
             return this;
         },
 
-        share: function (opt) {
-            opt = _.extend({
-                silent: false,
-                validate: true
-            }, opt);
+        share: function () {
             var def = $.Deferred();
-            return $.when(this.model.save(null, { validate: opt.validate })).then(function (res) {
+            return $.when(this.model.save()).then(function (res) {
                 if (res) {
-                    if (res.error)
-                    if (!opt.silent) yell('success', gt('Done'));
+                    yell('success', gt('Done'));
                     def.resolve(res);
                 } else {
                     def.reject();
