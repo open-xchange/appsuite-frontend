@@ -161,7 +161,6 @@ define('io.ox/mail/common-extensions', [
 
         pgp: {
             encrypted: function (baton) {
-                console.log(baton.data.content_type);
                 //simple check for encrypted mail
                 if (!/^multipart\/encrypted/.test(baton.data.content_type)) return;
 
