@@ -55,6 +55,7 @@ define('io.ox/presenter/main', [
                     // RT connect success handler
                     function rtConnectSuccess(response) {
                         console.info('ConnectSuccess()', response);
+                        app.rtModel.set(app.rtModel.parse(response));
                         app.mainView = new MainView({ model: fileModel, app: app });
                         page.append(app.mainView.render().$el);
                     }
