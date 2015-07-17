@@ -218,6 +218,9 @@ define('io.ox/files/mobile-toolbar-actions', [
             });
 
             app.listView.on('selection:change', function (selection) {
+                if (!selection) {
+                    selection = app.listView.selection.get();
+                }
                 if (selection.length === 0) {
                     app.pages.toggleSecondaryToolbar('main', false);
                 } else {
