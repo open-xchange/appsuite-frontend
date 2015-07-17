@@ -86,8 +86,8 @@ define('io.ox/presenter/views/mainview', [
             this.$el.append(
                 this.toolbarView.render().el,
                 this.sidebarView.render().el,
-                this.presentationView.render().el
-                //this.thumbnailView.render().el
+                this.presentationView.render().el,
+                this.thumbnailView.render().el
             );
 
             // set initial sidebar state

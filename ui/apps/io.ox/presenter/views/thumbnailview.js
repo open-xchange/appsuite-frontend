@@ -192,8 +192,8 @@ define('io.ox/presenter/views/thumbnailview', [
          */
         onPresentationStart: function () {
             var presentationView = this.app.mainView.presentationView;
-            presentationView.$el.removeClass('thumbnails-opened').hide();
-            presentationView.onResize();
+            this.$el.hide();
+            presentationView.$el.removeClass('thumbnails-opened').onResize();
         },
 
         /**
@@ -202,8 +202,8 @@ define('io.ox/presenter/views/thumbnailview', [
          */
         onPresentationEnd: function () {
             var presentationView = this.app.mainView.presentationView;
-            presentationView.$el.addClass('thumbnails-opened').show();
-            presentationView.onResize();
+            this.$el.show();
+            presentationView.$el.addClass('thumbnails-opened').show().onResize();
         },
 
         /**
@@ -217,18 +217,18 @@ define('io.ox/presenter/views/thumbnailview', [
                 thumbnail.addClass('selected').attr('aria-selected', true);
                 thumbnail.siblings().removeClass('selected').attr('aria-selected', false);
                 // scroll if the selected thumbnail is not wholly visible
-                //var thumbnailRect = thumbnail[0].getBoundingClientRect(),
-                //    thumbnailPane = this.$el,
-                //    thumbnailRightEdge = thumbnail.offset().left + thumbnail.width(),
-                //    thumbnailLeftEdge = thumbnail.offset().left,
-                //    marginOffset = 10,
-                //    thumbnailPaneOffset = 40;
-                //if (thumbnailRightEdge > (thumbnailPane.scrollLeft() + window.innerWidth - thumbnailPaneOffset)) {
-                //    thumbnailPane.scrollLeft(thumbnailRect.right - window.innerWidth + thumbnailPane.scrollLeft() + marginOffset);
-                //}
-                //if (thumbnailRect.left < 0) {
-                //    thumbnailPane.scrollLeft(thumbnailPane.scrollLeft() + thumbnailRect.left + marginOffset);
-                //}
+                var thumbnailPane = this.$el,
+                    thumbnailPaneScrollLeft = thumbnailPane.scrollLeft(),
+                    thumbnailRightEdge = thumbnailPaneScrollLeft + thumbnail.offset().left + thumbnail.width(),
+                    thumbnailPaneRightEdge = thumbnailPane.scrollLeft() + window.innerWidth,
+                    thumbnailLeftEdge = thumbnail.offset().left,
+                    marginOffset = 10;
+                if (thumbnailRightEdge > thumbnailPaneRightEdge) {
+                    thumbnailPane.scrollLeft(thumbnailPaneScrollLeft + thumbnailRightEdge - thumbnailPaneRightEdge + marginOffset);
+                }
+                if (thumbnailLeftEdge < 0) {
+                    thumbnailPane.scrollLeft(thumbnailPaneScrollLeft + thumbnailLeftEdge - marginOffset);
+                }
             }
         },
 
