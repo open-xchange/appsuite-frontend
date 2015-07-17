@@ -35,7 +35,8 @@
     "moment": "2.10.3",
     "moment-timezone": "0.4.0",
     "moment-interval": "https://github.com/Open-Xchange-Frontend/moment-interval.git",
-    "swiper": "3.0.6"
+    "swiper": "3.0.6",
+    "pdfjs-dist": "1.1.303"
   },
   "resolutions": {
     "bootstrap": "3.3.4"

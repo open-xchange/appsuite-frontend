@@ -267,6 +267,17 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            pdfjs: {
+                files: [
+                    {
+                        src: [
+                            'bower_components/pdfjs-dist/build/pdf.combined.js'
+                        ],
+                        dest: 'build/apps/3rd.party/pdfjs/pdf.combined.js',
+                        nonull: true
+                    }
+                ]
+            },
             compose: {
                 options: {
                     banner: 'define("io.ox/mail/compose/bundle", [], function () {\n\n' +

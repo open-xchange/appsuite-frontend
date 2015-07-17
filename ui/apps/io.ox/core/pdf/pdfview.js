@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/pdf/pdfview', [
-    '3rd.party/pdf/pdftextlayerbuilder',
+    'io.ox/core/pdf/pdftextlayerbuilder',
     'less!io.ox/core/pdf/pdfstyle'
 ], function (PDFTextLayerBuilder) {
 
