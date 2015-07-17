@@ -42,6 +42,7 @@
             })
             .option('sort', 'name', gt('Name'))
             .option('sort', 'date', gt('Date'))
+            .option('sort', 'type', gt('Type'))
             .divider()
             .option('order', 'asc', gt('Ascending'))
             .option('order', 'desc', gt('Descending'));
@@ -273,6 +274,12 @@
                     this.collection.comparator = function (shareA, shareB) {
                         var ret = (shareA.getDisplayName().toLowerCase() > shareB.getDisplayName().toLowerCase()) ? 1 : -1;
                         return desc ? -ret : ret;
+                    };
+                    break;
+                case 'type':
+                    this.collection.comparator = function (shareA) {
+                        var ret = shareA.isFolder() ? 1 : -1;
+                        return desc ? ret : -ret;
                     };
                     break;
                 default:
