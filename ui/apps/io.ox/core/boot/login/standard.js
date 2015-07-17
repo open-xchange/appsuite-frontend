@@ -60,7 +60,9 @@ define('io.ox/core/boot/login/standard', [
                 util.restore();
                 ox.trigger('login:success', data);
             },
-            util.fail
+            function (err) {
+                util.fail(err);
+            }
         );
     };
 
