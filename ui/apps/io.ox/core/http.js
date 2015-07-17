@@ -51,7 +51,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '651': 'flag_seen',
             '652': 'account_name',
             '654': 'original_folder_id',
-            '655': 'original_id'
+            '655': 'original_id',
+            '656': 'content_type'
         },
         'contacts': {
             '500': 'display_name',
