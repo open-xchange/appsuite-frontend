@@ -89,7 +89,7 @@ define('io.ox/core/main', [
                 function logout() {
                     session.logout().always(function () {
                         // get logout locations
-                        var location = settings.get('customLocations/logout'),
+                        var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
                             fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
                             logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
                         // Substitute some variables
