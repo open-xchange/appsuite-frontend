@@ -193,7 +193,8 @@ define('io.ox/presenter/views/thumbnailview', [
         onPresentationStart: function () {
             var presentationView = this.app.mainView.presentationView;
             this.$el.hide();
-            presentationView.$el.removeClass('thumbnails-opened').onResize();
+            presentationView.$el.removeClass('thumbnails-opened');
+            presentationView.onResize();
         },
 
         /**
@@ -203,7 +204,8 @@ define('io.ox/presenter/views/thumbnailview', [
         onPresentationEnd: function () {
             var presentationView = this.app.mainView.presentationView;
             this.$el.show();
-            presentationView.$el.addClass('thumbnails-opened').show().onResize();
+            presentationView.$el.addClass('thumbnails-opened');
+            presentationView.onResize();
         },
 
         /**
