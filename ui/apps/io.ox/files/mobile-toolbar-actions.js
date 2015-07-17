@@ -25,7 +25,7 @@ define('io.ox/files/mobile-toolbar-actions', [
     var Action = links.Action,
         pointMainView = ext.point('io.ox/files/mobile/toolbar/main'),
         pointMainViewActions = ext.point('io.ox/files/mobile/toolbar/actions'),
-        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/fluid/multiselect'),
+        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/main/multiselect'),
         meta = {
             'create': {
                 prio: 'hi',
@@ -140,7 +140,16 @@ define('io.ox/files/mobile-toolbar-actions', [
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
         var self = this,
-            ids = this.getIds ? this.getIds() : [];
+            ids = this.listView.collection.models;
+
+        // transform strings to objects with id/folder
+        list = _(list).map(function (item) {
+            if (typeof item === 'string') {
+                return _.cid(item);
+            } else {
+                return item;
+            }
+        });
 
         // get full data, needed for require checks for example
         api.getList(list).done(function (data) {
@@ -208,20 +217,17 @@ define('io.ox/files/mobile-toolbar-actions', [
                 });
             });
 
-            app.on('selection:change', function () {
-                if (!app.props.get('showCheckboxes')) return;
-                app.updateToolbar(app.selection.get());
+            app.listView.on('selection:change', function (selection) {
+                if (selection.length === 0) {
+                    app.pages.toggleSecondaryToolbar('main', false);
+                } else {
+                    app.pages.toggleSecondaryToolbar('main', true);
+                }
+                app.updateToolbar(selection);
             });
 
             app.pages.getPage('main').on('pageshow', function () {
                 app.pages.getToolbar('main').setBaton(new ext.Baton({ app: app }));
-            });
-
-            // enable standard toolbar after checkbox dismiss
-            app.props.on('change:showCheckboxes', function (data) {
-                if (!data.attributes.showCheckboxes) {
-                    app.pages.getToolbar('main').setBaton(new ext.Baton({ app: app }));
-                }
             });
         }
     });
