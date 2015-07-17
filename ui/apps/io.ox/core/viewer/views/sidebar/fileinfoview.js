@@ -115,7 +115,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 baton = Ext.Baton({ model: this.model, data: data });
             Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
 
-            if (this.closable) {
+            // only draw if needed
+            if (this.closable && this.$('.sidebar-panel-heading .close').length === 0) {
                 this.$('.sidebar-panel-heading').prepend(
                     $('<button type="button" class="close pull-right" tabindex="1">')
                     .attr('aria-label', gt('Close'))
