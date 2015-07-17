@@ -41,7 +41,7 @@ define('io.ox/presenter/views/navigationview', [
      *  the button node.
      */
     function createNavigationButton (type) {
-        var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem">'),
+        var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem" aria-disabled="false">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
         button.attr((type === 'next') ? { title: gt('Next slide'), 'aria-label': gt('Next slide') } : { title: gt('Previous slide'), 'aria-label': gt('Previous slide') });
@@ -125,7 +125,7 @@ define('io.ox/presenter/views/navigationview', [
         id: 'slide-navigation',
         index: 100,
         draw: function (baton) {
-            baton.context.renderPageNavigation();
+            baton.context.renderSlideNavigation();
         }
     });
 
@@ -233,28 +233,21 @@ define('io.ox/presenter/views/navigationview', [
         /**
          * Renders the slide navigation controls.
          */
-        renderPageNavigation: function () {
+        renderSlideNavigation: function () {
             var // navigation buttons
                 prev = createNavigationButton('prev'),
                 next = createNavigationButton('next'),
                 // slide input field
                 slideInput = $('<input type="text" class="presenter-navigation-slide" tabindex="1" role="textbox">'),
                 slideInputWrapper = $('<div class="presenter-navigation-slide-wrapper">').append(slideInput),
-                // slide count
+                // slide count display
                 slideCountDisplay = $('<div class="presenter-navigation-slide-total">'),
                 group = $('<li class="presenter-navigation-slide-group" role="presentation">'),
-                // slide data
+                // slide number and count
                 slideNumber = this.app.mainView.getActiveSlideIndex() + 1,
                 slideCount = this.app.mainView.getSlideCount(),
                 self = this;
 
-            function setButtonState(nodes, state) {
-                if (state) {
-                    $(nodes).removeClass('disabled').removeAttr('aria-disabled');
-                } else {
-                    $(nodes).addClass('disabled').attr('aria-disabled', true);
-                }
-            }
             function onPrevSlide (event) {
                 event.preventDefault();
                 self.app.mainView.showPreviousSlide();
@@ -271,36 +264,33 @@ define('io.ox/presenter/views/navigationview', [
                 }
             }
             function onInputChange() {
-                var newValue = parseInt($(this).val()),
-                    oldValue = parseInt($(this).attr('data-page-number'));
+                var newValue = parseInt($(this).val());
 
                 if (isNaN(newValue)) {
-                    $(this).val(oldValue);
+                    $(this).val(slideNumber);
                     return;
-                }
-                if (newValue <= 0 ) {
+
+                } else if (newValue <= 0 ) {
                     $(this).val(1);
                     newValue = 1;
-                }
-                if (newValue > slideCount) {
+
+                } else if (newValue > slideCount) {
                     $(this).val(slideCount);
                     newValue = slideCount;
                 }
 
-                setButtonState([prev[0], next[0]], true);
-                if (newValue === 1) {
-                    setButtonState(prev, false);
-                }
-                if (newValue === slideCount) {
-                    setButtonState(next, false);
-                }
-                $(this).attr('data-page-number', newValue);
                 self.app.mainView.showSlide(newValue - 1);
             }
 
-            // updates slide number in the slide input control
-            slideInput.val(slideNumber).attr('data-page-number', slideNumber).trigger('change');
+            // set slide number in the slide input control
+            slideInput.val(slideNumber);
             slideCountDisplay.text(gt('of %1$d', slideCount));
+            if (slideNumber === 1) {
+                prev.addClass('disabled').attr('aria-disabled', true);
+            }
+            if (slideNumber === slideCount) {
+                next.addClass('disabled').attr('aria-disabled', true);
+            }
 
             slideInput.on('keydown', onInputKeydown).on('change', onInputChange);
             prev.on('click', onPrevSlide);
