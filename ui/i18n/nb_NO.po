@@ -15,7 +15,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:690 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -159,7 +159,7 @@ msgstr[1] "%1$d Minutter"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:208 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s of %2$s"
 msgid "%1$d of %2$d"
@@ -306,7 +306,7 @@ msgstr "%1$s har en ny kontakt:"
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:389 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has ended the presentation."
@@ -318,7 +318,7 @@ msgstr "%1$s har nye kontakter:"
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:349 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has started the presentation."
@@ -1721,7 +1721,7 @@ msgstr "Klikk for å laste opp bilde"
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1235 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -3404,7 +3404,7 @@ msgstr "Fil"
 msgid "File Details"
 msgstr "Fildetaljer"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer apps/io.ox/files/toolbar.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "File Details"
@@ -4176,7 +4176,7 @@ msgstr "Yrke"
 msgid "Job description"
 msgstr "Arbeidsbeskrivelse"
 
-#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:353 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
 #, fuzzy
@@ -4297,7 +4297,7 @@ msgstr "Utforming"
 msgid "Learn more"
 msgstr "Lær mer"
 
-#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:174 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4308,8 +4308,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "Oppgaveinvitasjoner"
 
-#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:171 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 #, fuzzy
 #| msgid "Task invitations"
@@ -4359,7 +4359,7 @@ msgstr "Likte en link: %s"
 msgid "Liked comment"
 msgstr "Likte kommentar"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 #, fuzzy
@@ -5026,7 +5026,7 @@ msgstr "Neste dag"
 msgid "Next Week"
 msgstr "Neste uke"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5901,20 +5901,20 @@ msgid "Postcode"
 msgstr "Postnummer"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:386 module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Presentation end"
 msgstr "Oppgaveinvitasjoner"
 
-#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:168 module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Presentation is paused."
 msgstr "Oppgaveinvitasjoner"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Presentation start"
@@ -5933,7 +5933,7 @@ msgstr "Oppgaveinvitasjoner"
 msgid "Presenter"
 msgstr "Oppgaveinvitasjoner"
 
-#: apps/io.ox/presenter/views/navigationview.js:215 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 #| msgid "Task invitations"
 msgid "Presenter Navigation"
@@ -6008,7 +6008,7 @@ msgstr "Forrige uke"
 msgid "Previous month"
 msgstr "Forrige"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -7482,7 +7482,7 @@ msgstr "Kontoen må være navngitt"
 msgid "The activity has been deleted successfully"
 msgstr "Aktiviteten har blitt slettet"
 
-#: apps/io.ox/files/api.js:360 module:io.ox/files
+#: apps/io.ox/files/api.js:366 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Kvoten er oppbrukt."
@@ -7693,7 +7693,7 @@ msgstr "Ved nye varsler, unntatt epost"
 msgid "The notification area is open"
 msgstr "Ingen varsler"
 
-#: apps/io.ox/files/api.js:355 module:io.ox/files
+#: apps/io.ox/files/api.js:361 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Det medfølgende filnavnet overstiger den tillatte lengden."
@@ -7945,7 +7945,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Dette feltet må fylles ut"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:371 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Denne filen kan ikke lastes opp."
@@ -8543,7 +8543,7 @@ msgstr "Deltakere"
 msgid "View source"
 msgstr "Vis kilde"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:597 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -9299,7 +9299,7 @@ msgstr "rediger alle objekter"
 msgid "edit own objects"
 msgstr "rediger egne objekter"
 
-#: apps/io.ox/files/share/myshares.js:132 module:io.ox/files
+#: apps/io.ox/files/share/myshares.js:129 module:io.ox/files
 #, fuzzy
 #| msgid "Edit signature"
 msgid "edit share"
@@ -9553,8 +9553,8 @@ msgstr "ingen leserettigheter"
 msgid "none"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296 module:io.ox/presenter
+#: apps/io.ox/core/viewer/views/toolbarview.js:519 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:294 module:io.ox/presenter
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9627,12 +9627,6 @@ msgstr "fjern"
 msgid "remove permission"
 msgstr "Mappetillatelser"
 
-#: apps/io.ox/files/share/myshares.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "remove"
-msgid "remove share"
-msgstr "fjern"
-
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:600
@@ -9651,12 +9645,6 @@ msgstr "sett"
 #: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "velg format"
-
-#: apps/io.ox/files/share/myshares.js:128 module:io.ox/files
-#, fuzzy
-#| msgid "Show list"
-msgid "show link"
-msgstr "Vis liste"
 
 #: apps/io.ox/files/share/wizard.js:170 module:io.ox/files
 msgid "six months"
@@ -10139,8 +10127,18 @@ msgstr "yyyy"
 #~ msgid "next Wednesday"
 #~ msgstr "neste onsdag"
 
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "remove share"
+#~ msgstr "fjern"
+
 #~ msgid "show image"
 #~ msgstr "vis bilde"
+
+#, fuzzy
+#~| msgid "Show list"
+#~ msgid "show link"
+#~ msgstr "Vis liste"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "undermapper av %s"

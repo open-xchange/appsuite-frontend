@@ -17,7 +17,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:690 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -152,7 +152,7 @@ msgstr[1] "%1$d perc"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:208 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s / %2$s"
@@ -295,7 +295,7 @@ msgstr "%1$s új kapcsolattal rendelkezik:"
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:389 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has ended the presentation."
@@ -307,7 +307,7 @@ msgstr "%1$s új kapcsolatokkal rendelkezik:"
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:349 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has started the presentation."
@@ -1712,7 +1712,7 @@ msgstr "Kattintson a képfeltöltéshez"
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1235 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -3380,7 +3380,7 @@ msgstr "Fájl"
 msgid "File Details"
 msgstr "Fájlrészletek"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer apps/io.ox/files/toolbar.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "File Details"
@@ -4146,7 +4146,7 @@ msgstr "Munka"
 msgid "Job description"
 msgstr "Munkaköri leírás"
 
-#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:353 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
 #, fuzzy
@@ -4268,7 +4268,7 @@ msgstr "Elrendezés"
 msgid "Learn more"
 msgstr "További információ"
 
-#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:174 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4278,8 +4278,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "Feladatmeghívók"
 
-#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:171 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 #, fuzzy
 msgid "Leave presentation"
@@ -4328,7 +4328,7 @@ msgstr "Kedvelt egy hivatkozást: %s"
 msgid "Liked comment"
 msgstr "Kedvelt megjegyzés"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 msgid "Link"
@@ -4975,7 +4975,7 @@ msgstr "Következő nap"
 msgid "Next Week"
 msgstr "Következő hét"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5847,18 +5847,18 @@ msgid "Postcode"
 msgstr "Irányítószám"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:386 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation end"
 msgstr "Feladatmeghívók"
 
-#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:168 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation is paused."
 msgstr "Feladatmeghívók"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation start"
 msgstr "Feladatmeghívók"
@@ -5875,7 +5875,7 @@ msgstr "Feladatmeghívók"
 msgid "Presenter"
 msgstr "Középre"
 
-#: apps/io.ox/presenter/views/navigationview.js:215 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 msgid "Presenter Navigation"
 msgstr "Feladatmeghívók"
@@ -5949,7 +5949,7 @@ msgstr "Előző hét"
 msgid "Previous month"
 msgstr "Előző"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -7403,7 +7403,7 @@ msgstr "A felhasználó fiókot el kell nevezni"
 msgid "The activity has been deleted successfully"
 msgstr "A tevékenység sikeresen törölve"
 
-#: apps/io.ox/files/api.js:360 module:io.ox/files
+#: apps/io.ox/files/api.js:366 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Az engedélyezett kvóta elérve."
@@ -7611,7 +7611,7 @@ msgstr "Az értesítési terület zárva"
 msgid "The notification area is open"
 msgstr "Az értesítési terület nyitva"
 
-#: apps/io.ox/files/api.js:355 module:io.ox/files
+#: apps/io.ox/files/api.js:361 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "A megadott fájlnév hossza meghaladja az engedélyezett méretet."
@@ -7859,7 +7859,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Ezt a mezőt ki kell tölteni"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:371 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "A fájlt nem sikerült feltölteni."
@@ -8449,7 +8449,7 @@ msgstr "Résztvevők"
 msgid "View source"
 msgstr "Forrás megtekintése"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:597 module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
@@ -9180,7 +9180,7 @@ msgstr "minden elem szerkesztése"
 msgid "edit own objects"
 msgstr "saját elemek szerkesztése"
 
-#: apps/io.ox/files/share/myshares.js:132 module:io.ox/files
+#: apps/io.ox/files/share/myshares.js:129 module:io.ox/files
 #, fuzzy
 #| msgid "Edit signature"
 msgid "edit share"
@@ -9436,8 +9436,8 @@ msgstr "nincs olvasási jogosultság"
 msgid "none"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296 module:io.ox/presenter
+#: apps/io.ox/core/viewer/views/toolbarview.js:519 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:294 module:io.ox/presenter
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9517,12 +9517,6 @@ msgstr "eltávolítás"
 msgid "remove permission"
 msgstr "Mappa jogosultságai"
 
-#: apps/io.ox/files/share/myshares.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "remove"
-msgid "remove share"
-msgstr "eltávolítás"
-
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:600
@@ -9541,12 +9535,6 @@ msgstr "olvasott"
 #: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "formátum kiválasztása"
-
-#: apps/io.ox/files/share/myshares.js:128 module:io.ox/files
-#, fuzzy
-#| msgid "show all"
-msgid "show link"
-msgstr "Mindent mutat"
 
 #: apps/io.ox/files/share/wizard.js:170 module:io.ox/files
 #, fuzzy
@@ -12224,11 +12212,21 @@ msgstr "yyyy"
 #~ msgid "open"
 #~ msgstr "megnyitás"
 
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "remove share"
+#~ msgstr "eltávolítás"
+
 #~ msgid "september"
 #~ msgstr "szeptember"
 
 #~ msgid "show image"
 #~ msgstr "kép megjelenítése"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show link"
+#~ msgstr "Mindent mutat"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s almappája"

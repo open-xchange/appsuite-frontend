@@ -16,7 +16,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:690 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -151,7 +151,7 @@ msgstr[1] "%1$d 分钟"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:208 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%2$s 的 %1$s"
@@ -294,7 +294,7 @@ msgstr "%1$s 有一个新联系人："
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:389 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has ended the presentation."
@@ -306,7 +306,7 @@ msgstr "%1$s 有新联系人："
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:349 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has started the presentation."
@@ -1691,7 +1691,7 @@ msgstr "点击上载图像"
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1235 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -3336,7 +3336,7 @@ msgstr "档案"
 msgid "File Details"
 msgstr "文件详情"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer apps/io.ox/files/toolbar.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "File Details"
@@ -4090,7 +4090,7 @@ msgstr "工作"
 msgid "Job description"
 msgstr "职业描述"
 
-#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:353 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
 #, fuzzy
@@ -4212,7 +4212,7 @@ msgstr "布局"
 msgid "Learn more"
 msgstr "了解更多"
 
-#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:174 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4222,8 +4222,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "目的地"
 
-#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:171 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 #, fuzzy
 msgid "Leave presentation"
@@ -4272,7 +4272,7 @@ msgstr "赞一个链接：%s"
 msgid "Liked comment"
 msgstr "已赞回帖"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 msgid "Link"
@@ -4919,7 +4919,7 @@ msgstr "下一天"
 msgid "Next Week"
 msgstr "下周"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5778,18 +5778,18 @@ msgid "Postcode"
 msgstr "邮寄编号"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:386 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation end"
 msgstr "目的地"
 
-#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:168 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation is paused."
 msgstr "目的地"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation start"
 msgstr "目的地"
@@ -5806,7 +5806,7 @@ msgstr "目的地"
 msgid "Presenter"
 msgstr "中间"
 
-#: apps/io.ox/presenter/views/navigationview.js:215 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 msgid "Presenter Navigation"
 msgstr "目的地"
@@ -5879,7 +5879,7 @@ msgstr "上周"
 msgid "Previous month"
 msgstr "前一个"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -7323,7 +7323,7 @@ msgstr "户口必须命名"
 msgid "The activity has been deleted successfully"
 msgstr "已成功删除活动"
 
-#: apps/io.ox/files/api.js:360 module:io.ox/files
+#: apps/io.ox/files/api.js:366 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "已到达允许额度。"
@@ -7517,7 +7517,7 @@ msgstr "通知区域关闭"
 msgid "The notification area is open"
 msgstr "通知区域开放"
 
-#: apps/io.ox/files/api.js:355 module:io.ox/files
+#: apps/io.ox/files/api.js:361 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
@@ -7755,7 +7755,7 @@ msgstr "此特性不可用。您必须先升级您的户口才能使用。"
 msgid "This field has to be filled"
 msgstr "此栏必填"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:371 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "无法上载此文件。"
@@ -8329,7 +8329,7 @@ msgstr "参与者"
 msgid "View source"
 msgstr "检视来源"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:597 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "编辑器工具栏"
@@ -9043,7 +9043,7 @@ msgstr "编辑所有对象"
 msgid "edit own objects"
 msgstr "编辑拥有的对象"
 
-#: apps/io.ox/files/share/myshares.js:132 module:io.ox/files
+#: apps/io.ox/files/share/myshares.js:129 module:io.ox/files
 #, fuzzy
 #| msgid "Edit signature"
 msgid "edit share"
@@ -9299,8 +9299,8 @@ msgstr "无读取权限"
 msgid "none"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296 module:io.ox/presenter
+#: apps/io.ox/core/viewer/views/toolbarview.js:519 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:294 module:io.ox/presenter
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9380,12 +9380,6 @@ msgstr "移除"
 msgid "remove permission"
 msgstr "文件夹权限"
 
-#: apps/io.ox/files/share/myshares.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "remove"
-msgid "remove share"
-msgstr "移除"
-
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:600
@@ -9404,12 +9398,6 @@ msgstr "看到"
 #: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "选择格式"
-
-#: apps/io.ox/files/share/myshares.js:128 module:io.ox/files
-#, fuzzy
-#| msgid "show all"
-msgid "show link"
-msgstr "显示全部"
 
 #: apps/io.ox/files/share/wizard.js:170 module:io.ox/files
 #, fuzzy
@@ -13060,11 +13048,21 @@ msgstr "年"
 #~ msgid "open"
 #~ msgstr "打开"
 
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "remove share"
+#~ msgstr "移除"
+
 #~ msgid "september"
 #~ msgstr "九月"
 
 #~ msgid "show image"
 #~ msgstr "显示图像"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show link"
+#~ msgstr "显示全部"
 
 #~ msgid "subfolders of %s"
 #~ msgstr "%s 的子文件夹"

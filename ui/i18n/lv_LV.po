@@ -16,7 +16,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:690 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -164,7 +164,7 @@ msgstr[2] "%1$d minūtes"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:208 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s no %2$s"
@@ -309,7 +309,7 @@ msgstr "%1$s ir jauns kontakts:"
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:389 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has ended the presentation."
@@ -321,7 +321,7 @@ msgstr "%1$s ir jauni kontakti:"
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:349 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has started the presentation."
@@ -1732,7 +1732,7 @@ msgstr "Noklikšķiniet, lai ielādētu attēlu"
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1235 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -3401,7 +3401,7 @@ msgstr "Fails"
 msgid "File Details"
 msgstr "Faila detaļas"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer apps/io.ox/files/toolbar.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "File Details"
@@ -4168,7 +4168,7 @@ msgstr "Darbs"
 msgid "Job description"
 msgstr "Darba apsraksts"
 
-#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:353 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
 #, fuzzy
@@ -4290,7 +4290,7 @@ msgstr "Izvietojums"
 msgid "Learn more"
 msgstr "Uzzināt vairāk"
 
-#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:174 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4300,8 +4300,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "Saņēmējs"
 
-#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:171 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 #, fuzzy
 msgid "Leave presentation"
@@ -4350,7 +4350,7 @@ msgstr "Patika saite: %1$s"
 msgid "Liked comment"
 msgstr "Patīk komentārs"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 msgid "Link"
@@ -4997,7 +4997,7 @@ msgstr "Nākošā diena"
 msgid "Next Week"
 msgstr "Nākošā nedēļa"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5873,18 +5873,18 @@ msgid "Postcode"
 msgstr "Pasta kods"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:386 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation end"
 msgstr "Saņēmējs"
 
-#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:168 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation is paused."
 msgstr "Saņēmējs"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation start"
 msgstr "Saņēmējs"
@@ -5901,7 +5901,7 @@ msgstr "Saņēmējs"
 msgid "Presenter"
 msgstr "Centrēts"
 
-#: apps/io.ox/presenter/views/navigationview.js:215 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 msgid "Presenter Navigation"
 msgstr "Saņēmējs"
@@ -5974,7 +5974,7 @@ msgstr "Iepriekšējā nedēļa"
 msgid "Previous month"
 msgstr "Iepriekšējais"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -7434,7 +7434,7 @@ msgstr "Kontam ir jānorāda vārds"
 msgid "The activity has been deleted successfully"
 msgstr "Darbība ir veiksmīgi izdzēsta"
 
-#: apps/io.ox/files/api.js:360 module:io.ox/files
+#: apps/io.ox/files/api.js:366 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Sasniegta pieejamā kvota."
@@ -7643,7 +7643,7 @@ msgstr "Paziņojumu apgabals ir slēgts"
 msgid "The notification area is open"
 msgstr "Paziņojumu apgabals ir atvērts"
 
-#: apps/io.ox/files/api.js:355 module:io.ox/files
+#: apps/io.ox/files/api.js:361 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Norādītā faila vārda garums pārsniedz pieļaujamo limitu."
@@ -7899,7 +7899,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Šis lauks ir oligāti jāaizpilda"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:371 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Šo failu nevar augšupielādēt."
@@ -8487,7 +8487,7 @@ msgstr "Dalībnieki"
 msgid "View source"
 msgstr "Skatīt avotu"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:597 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Redaktora rīkjosla"
@@ -9227,7 +9227,7 @@ msgstr "rediģēt visus objektus"
 msgid "edit own objects"
 msgstr "rediģēt paša objektus"
 
-#: apps/io.ox/files/share/myshares.js:132 module:io.ox/files
+#: apps/io.ox/files/share/myshares.js:129 module:io.ox/files
 #, fuzzy
 #| msgid "Edit signature"
 msgid "edit share"
@@ -9483,8 +9483,8 @@ msgstr "nav lasīšanas tiesību"
 msgid "none"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296 module:io.ox/presenter
+#: apps/io.ox/core/viewer/views/toolbarview.js:519 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:294 module:io.ox/presenter
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9564,12 +9564,6 @@ msgstr "noņemt"
 msgid "remove permission"
 msgstr "Mapes tiesības"
 
-#: apps/io.ox/files/share/myshares.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "remove"
-msgid "remove share"
-msgstr "noņemt"
-
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:600
@@ -9588,12 +9582,6 @@ msgstr "redzēts"
 #: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "izvēlēties formātu"
-
-#: apps/io.ox/files/share/myshares.js:128 module:io.ox/files
-#, fuzzy
-#| msgid "show all"
-msgid "show link"
-msgstr "rādīt visu"
 
 #: apps/io.ox/files/share/wizard.js:170 module:io.ox/files
 #, fuzzy
@@ -15624,6 +15612,11 @@ msgstr "yyyy"
 #~ msgid "predefined"
 #~ msgstr "pre-definēts"
 
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "remove share"
+#~ msgstr "noņemt"
+
 #~ msgid "route planner"
 #~ msgstr "maršruta plānotājs"
 
@@ -15635,6 +15628,11 @@ msgstr "yyyy"
 
 #~ msgid "show image"
 #~ msgstr "Rādīt attēlu"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show link"
+#~ msgstr "rādīt visu"
 
 #~ msgid ""
 #~ "street\n"

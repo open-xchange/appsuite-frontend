@@ -17,7 +17,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:690 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -165,7 +165,7 @@ msgstr[2] "%1$d minut"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:208 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s z %2$s"
@@ -310,7 +310,7 @@ msgstr "%1$s má nový kontakt:"
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:389 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s has %2$s the invitation:"
 msgid "%1$s has ended the presentation."
@@ -322,7 +322,7 @@ msgstr "%1$s má nové kontakty:"
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:349 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s has %2$s the invitation:"
 msgid "%1$s has started the presentation."
@@ -1727,7 +1727,7 @@ msgstr "Kliknutím nahrajete obrázek"
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1235 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -3380,7 +3380,7 @@ msgstr "Soubor"
 msgid "File Details"
 msgstr "Podrobnosti o souboru"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer apps/io.ox/files/toolbar.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "File Details"
@@ -4146,7 +4146,7 @@ msgstr "Práce"
 msgid "Job description"
 msgstr "Popis práce"
 
-#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:353 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
 #, fuzzy
@@ -4268,7 +4268,7 @@ msgstr "Rozložení"
 msgid "Learn more"
 msgstr "Dozvědět se více"
 
-#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:174 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4278,8 +4278,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "Cíl"
 
-#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:171 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 #, fuzzy
 msgid "Leave presentation"
@@ -4328,7 +4328,7 @@ msgstr "Líbil se vám odkaz: %s"
 msgid "Liked comment"
 msgstr "Komentář se vám líbí"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 msgid "Link"
@@ -4975,7 +4975,7 @@ msgstr "Další den"
 msgid "Next Week"
 msgstr "Příští týden"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5849,18 +5849,18 @@ msgid "Postcode"
 msgstr "PSČ"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:386 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation end"
 msgstr "Cíl"
 
-#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:168 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation is paused."
 msgstr "Cíl"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation start"
 msgstr "Cíl"
@@ -5877,7 +5877,7 @@ msgstr "Cíl"
 msgid "Presenter"
 msgstr "Na střed"
 
-#: apps/io.ox/presenter/views/navigationview.js:215 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 msgid "Presenter Navigation"
 msgstr "Cíl"
@@ -5950,7 +5950,7 @@ msgstr "Minulý týden"
 msgid "Previous month"
 msgstr "Předchozí"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -7408,7 +7408,7 @@ msgstr "Účty musí být pojmenován"
 msgid "The activity has been deleted successfully"
 msgstr "Aktivita byla úspěšně smazána"
 
-#: apps/io.ox/files/api.js:360 module:io.ox/files
+#: apps/io.ox/files/api.js:366 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "Bylo dosaženo povoleného limitu."
@@ -7612,7 +7612,7 @@ msgstr "Oznamovací oblast je zavřená"
 msgid "The notification area is open"
 msgstr "Oznamovací oblast je otevřená"
 
-#: apps/io.ox/files/api.js:355 module:io.ox/files
+#: apps/io.ox/files/api.js:361 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Zadaný název souboru překračuje povolenou délku."
@@ -7863,7 +7863,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Toto pole musí být vyplněno"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:371 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Soubor se nepodařilo nahrát"
@@ -8457,7 +8457,7 @@ msgstr "Účastníci"
 msgid "View source"
 msgstr "Zobrazit zdroj"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:597 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Nástrojová lišta editoru"
@@ -9192,7 +9192,7 @@ msgstr "upravovat všechny objekty"
 msgid "edit own objects"
 msgstr "upravovat vlastní objekty"
 
-#: apps/io.ox/files/share/myshares.js:132 module:io.ox/files
+#: apps/io.ox/files/share/myshares.js:129 module:io.ox/files
 #, fuzzy
 #| msgid "Edit signature"
 msgid "edit share"
@@ -9448,8 +9448,8 @@ msgstr "není oprávnění ke čtení"
 msgid "none"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296 module:io.ox/presenter
+#: apps/io.ox/core/viewer/views/toolbarview.js:519 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:294 module:io.ox/presenter
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9529,12 +9529,6 @@ msgstr "odstranit"
 msgid "remove permission"
 msgstr "Oprávnění složky"
 
-#: apps/io.ox/files/share/myshares.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "remove"
-msgid "remove share"
-msgstr "odstranit"
-
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:600
@@ -9553,12 +9547,6 @@ msgstr "prohlédnuto"
 #: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "vybrat formát"
-
-#: apps/io.ox/files/share/myshares.js:128 module:io.ox/files
-#, fuzzy
-#| msgid "show all"
-msgid "show link"
-msgstr "zobrazit vše"
 
 #: apps/io.ox/files/share/wizard.js:170 module:io.ox/files
 #, fuzzy
@@ -18616,6 +18604,11 @@ msgstr "rrrr"
 #~ msgid "predefined"
 #~ msgstr "přednastavený"
 
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "remove share"
+#~ msgstr "odstranit"
+
 #~ msgid "reserved"
 #~ msgstr "rezervované"
 
@@ -18630,6 +18623,11 @@ msgstr "rrrr"
 
 #~ msgid "show image"
 #~ msgstr "zobrazit obrázek"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show link"
+#~ msgstr "zobrazit vše"
 
 #~ msgid "st"
 #~ msgstr "."

@@ -18,7 +18,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:690 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$d %2$s"
 msgid "%1$d %"
@@ -166,7 +166,7 @@ msgstr[2] "%1$d de minute"
 #. text of a presentation slide caption
 #: apps/io.ox/core/viewer/views/displayerview.js:139 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:208 module:io.ox/presenter
 #, fuzzy
 msgid "%1$d of %2$d"
 msgstr "%1$s, proprietar %2$s"
@@ -311,7 +311,7 @@ msgstr "%1$s are un contact nou:"
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:389 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has ended the presentation."
@@ -323,7 +323,7 @@ msgstr "%1$s are contacte noi:"
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:349 module:io.ox/presenter
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s has started the presentation."
@@ -1737,7 +1737,7 @@ msgstr "Apăsați aici pentru a încărca imaginea"
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1235 apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
 #: apps/io.ox/core/wizard/registry.js:60 module:io.ox/core/wizard
@@ -3404,7 +3404,7 @@ msgstr "Fișier"
 msgid "File Details"
 msgstr "Detalii fișier"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer apps/io.ox/files/toolbar.js:271 module:io.ox/files
 #, fuzzy
 #| msgid "File Details"
@@ -4170,7 +4170,7 @@ msgstr "Profesional"
 msgid "Job description"
 msgstr "Descrierea postului"
 
-#: apps/io.ox/presenter/views/mainview.js:348 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:353 module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
 #, fuzzy
@@ -4294,7 +4294,7 @@ msgstr "Aspect"
 msgid "Learn more"
 msgstr "Mai multe informații"
 
-#: apps/io.ox/presenter/views/presentationview.js:172 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:174 module:io.ox/presenter
 msgid "Leave"
 msgstr ""
 
@@ -4304,8 +4304,8 @@ msgstr ""
 msgid "Leave Presentation"
 msgstr "Destinație"
 
-#: apps/io.ox/presenter/views/presentationview.js:169 module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:171 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 #, fuzzy
 msgid "Leave presentation"
@@ -4354,7 +4354,7 @@ msgstr "Legătură apreciată: %s"
 msgid "Liked comment"
 msgstr "Comentariu apreciat"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 msgid "Link"
@@ -5001,7 +5001,7 @@ msgstr "Ziua următoare"
 msgid "Next Week"
 msgstr "Săptămâna următoare"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:655 module:io.ox/core
 #, fuzzy
 #| msgid "Next Day"
 msgid "Next page"
@@ -5876,18 +5876,18 @@ msgid "Postcode"
 msgstr "Cod poștal"
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:386 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation end"
 msgstr "Destinație"
 
-#: apps/io.ox/presenter/views/presentationview.js:166 module:io.ox/presenter
+#: apps/io.ox/presenter/views/presentationview.js:168 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation is paused."
 msgstr "Destinație"
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341 module:io.ox/presenter
+#: apps/io.ox/presenter/views/mainview.js:346 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation start"
 msgstr "Destinație"
@@ -5904,7 +5904,7 @@ msgstr "Destinație"
 msgid "Presenter"
 msgstr "Centru"
 
-#: apps/io.ox/presenter/views/navigationview.js:215 module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 msgid "Presenter Navigation"
 msgstr "Destinație"
@@ -5977,7 +5977,7 @@ msgstr "Săptămâna trecută"
 msgid "Previous month"
 msgstr "Precedent"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:652 module:io.ox/core
 #, fuzzy
 #| msgid "Previous Day"
 msgid "Previous page"
@@ -7439,7 +7439,7 @@ msgstr "Contul trebuie să fie numit"
 msgid "The activity has been deleted successfully"
 msgstr "Activitatea a fost ștearsă"
 
-#: apps/io.ox/files/api.js:360 module:io.ox/files
+#: apps/io.ox/files/api.js:366 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr "S-a atins limita permisă."
@@ -7646,7 +7646,7 @@ msgstr "Zona de notificare este închisă"
 msgid "The notification area is open"
 msgstr "Zona de notificare este deschisă"
 
-#: apps/io.ox/files/api.js:355 module:io.ox/files
+#: apps/io.ox/files/api.js:361 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr "Numele fișierului depășește lungimea permisă."
@@ -7900,7 +7900,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Acest câmp trebuie să fie completat"
 
-#: apps/io.ox/files/api.js:365 module:io.ox/files
+#: apps/io.ox/files/api.js:371 module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
 msgstr "Nu s-a putut încărca fișierul."
@@ -8497,7 +8497,7 @@ msgstr "Participanți"
 msgid "View source"
 msgstr "Afișează sursa"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596 module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js:597 module:io.ox/core
 #, fuzzy
 msgid "Viewer Toolbar"
 msgstr "Bară de unelte editor"
@@ -9236,7 +9236,7 @@ msgstr "editează toate obiectele"
 msgid "edit own objects"
 msgstr "editează obiectele personale"
 
-#: apps/io.ox/files/share/myshares.js:132 module:io.ox/files
+#: apps/io.ox/files/share/myshares.js:129 module:io.ox/files
 #, fuzzy
 #| msgid "Edit signature"
 msgid "edit share"
@@ -9492,8 +9492,8 @@ msgstr "fără permisiune de citire"
 msgid "none"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518 module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296 module:io.ox/presenter
+#: apps/io.ox/core/viewer/views/toolbarview.js:519 module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js:294 module:io.ox/presenter
 #, fuzzy
 #| msgid "CW %1$d"
 msgid "of %1$d"
@@ -9573,12 +9573,6 @@ msgstr "elimină"
 msgid "remove permission"
 msgstr "Permisiuni dosar"
 
-#: apps/io.ox/files/share/myshares.js:136 module:io.ox/files
-#, fuzzy
-#| msgid "remove"
-msgid "remove share"
-msgstr "elimină"
-
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:600
@@ -9597,12 +9591,6 @@ msgstr "vizualizat"
 #: apps/io.ox/core/import/import.js:38
 msgid "select format"
 msgstr "selectează formatul"
-
-#: apps/io.ox/files/share/myshares.js:128 module:io.ox/files
-#, fuzzy
-#| msgid "show all"
-msgid "show link"
-msgstr "afișează tot"
 
 #: apps/io.ox/files/share/wizard.js:170 module:io.ox/files
 #, fuzzy
@@ -15684,6 +15672,11 @@ msgstr "aaaa"
 #~ msgid "predefined"
 #~ msgstr "implicit"
 
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "remove share"
+#~ msgstr "elimină"
+
 #~ msgid "reserved"
 #~ msgstr "rezervat"
 
@@ -15698,6 +15691,11 @@ msgstr "aaaa"
 
 #~ msgid "show image"
 #~ msgstr "afișează imaginea"
+
+#, fuzzy
+#~| msgid "show all"
+#~ msgid "show link"
+#~ msgstr "afișează tot"
 
 #~ msgid ""
 #~ "street\n"

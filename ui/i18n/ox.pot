@@ -3383,7 +3383,7 @@ msgstr ""
 #: apps/io.ox/core/main.js:1235
 #: apps/io.ox/core/permissions/permissions.js:492
 #: apps/io.ox/core/tk/wizard.js:279
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:116
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:121
 #: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
@@ -5759,7 +5759,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/displayerview.js:139
 #: module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:463
-#: apps/io.ox/presenter/views/presentationview.js:206
+#: apps/io.ox/presenter/views/presentationview.js:208
 #: module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr ""
@@ -5788,14 +5788,14 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:62
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:65
 #: module:io.ox/core/viewer
 #: apps/io.ox/mail/detail/links.js:105
 #: module:io.ox/mail
 msgid "Link"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:99
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:104
 #: module:io.ox/core/viewer
 #: apps/io.ox/files/toolbar.js:271
 #: module:io.ox/files
@@ -5985,24 +5985,24 @@ msgstr ""
 msgid "Send as mail"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:518
+#: apps/io.ox/core/viewer/views/toolbarview.js:519
 #: module:io.ox/core
-#: apps/io.ox/presenter/views/navigationview.js:296
+#: apps/io.ox/presenter/views/navigationview.js:294
 #: module:io.ox/presenter
 msgid "of %1$d"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:596
+#: apps/io.ox/core/viewer/views/toolbarview.js:597
 #: module:io.ox/core
 msgid "Viewer Toolbar"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:651
+#: apps/io.ox/core/viewer/views/toolbarview.js:652
 #: module:io.ox/core
 msgid "Previous page"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js:654
+#: apps/io.ox/core/viewer/views/toolbarview.js:655
 #: module:io.ox/core
 msgid "Next page"
 msgstr ""
@@ -6402,19 +6402,19 @@ msgctxt "One file only"
 msgid "Do you really want to delete this file?"
 msgstr ""
 
-#: apps/io.ox/files/api.js:355
+#: apps/io.ox/files/api.js:361
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:347
 msgid "The provided filename exceeds the allowed length."
 msgstr ""
 
-#: apps/io.ox/files/api.js:360
+#: apps/io.ox/files/api.js:366
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:352
 msgid "The allowed quota is reached."
 msgstr ""
 
-#: apps/io.ox/files/api.js:365
+#: apps/io.ox/files/api.js:371
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js:357
 msgid "This file could not be uploaded."
@@ -6577,19 +6577,9 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr ""
 
-#: apps/io.ox/files/share/myshares.js:128
-#: module:io.ox/files
-msgid "show link"
-msgstr ""
-
-#: apps/io.ox/files/share/myshares.js:132
+#: apps/io.ox/files/share/myshares.js:129
 #: module:io.ox/files
 msgid "edit share"
-msgstr ""
-
-#: apps/io.ox/files/share/myshares.js:136
-#: module:io.ox/files
-msgid "remove share"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js:393
@@ -8854,19 +8844,19 @@ msgid "Could not save settings."
 msgstr ""
 
 #. headline of a presentation start alert
-#: apps/io.ox/presenter/views/mainview.js:341
+#: apps/io.ox/presenter/views/mainview.js:346
 #: module:io.ox/presenter
 msgid "Presentation start"
 msgstr ""
 
 #. message text of of a presentation start alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:344
+#: apps/io.ox/presenter/views/mainview.js:349
 #: module:io.ox/presenter
 msgid "%1$s has started the presentation."
 msgstr ""
 
-#: apps/io.ox/presenter/views/mainview.js:348
+#: apps/io.ox/presenter/views/mainview.js:353
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js:112
 #: apps/io.ox/presenter/views/toolbarview.js:113
@@ -8874,14 +8864,14 @@ msgid "Join Presentation"
 msgstr ""
 
 #. headline of a presentation end alert
-#: apps/io.ox/presenter/views/mainview.js:381
+#: apps/io.ox/presenter/views/mainview.js:386
 #: module:io.ox/presenter
 msgid "Presentation end"
 msgstr ""
 
 #. message text of a presentation end alert
 #. %1$d is the presenter name
-#: apps/io.ox/presenter/views/mainview.js:384
+#: apps/io.ox/presenter/views/mainview.js:389
 #: module:io.ox/presenter
 msgid "%1$s has ended the presentation."
 msgstr ""
@@ -8945,24 +8935,24 @@ msgstr ""
 msgid "Presenter"
 msgstr ""
 
-#: apps/io.ox/presenter/views/navigationview.js:215
+#: apps/io.ox/presenter/views/navigationview.js:214
 #: module:io.ox/presenter
 msgid "Presenter Navigation"
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js:166
+#: apps/io.ox/presenter/views/presentationview.js:168
 #: module:io.ox/presenter
 msgid "Presentation is paused."
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js:169
+#: apps/io.ox/presenter/views/presentationview.js:171
 #: module:io.ox/presenter
-#: apps/io.ox/presenter/views/presentationview.js:170
+#: apps/io.ox/presenter/views/presentationview.js:172
 #: apps/io.ox/presenter/views/toolbarview.js:122
 msgid "Leave presentation"
 msgstr ""
 
-#: apps/io.ox/presenter/views/presentationview.js:172
+#: apps/io.ox/presenter/views/presentationview.js:174
 #: module:io.ox/presenter
 msgid "Leave"
 msgstr ""
@@ -8970,7 +8960,7 @@ msgstr ""
 #. text of a presentation zoom level caption
 #. Example result: "100 %"
 #. %1$d is the zoom level
-#: apps/io.ox/presenter/views/presentationview.js:688
+#: apps/io.ox/presenter/views/presentationview.js:690
 #: module:io.ox/presenter
 msgid "%1$d %"
 msgstr ""
