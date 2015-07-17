@@ -107,3 +107,122 @@
     }
 
 }
+
+.share-permissions-dialog {
+
+    .modal-header {
+        .btn {
+            float: right;
+            &.btn-primary { margin-left: 13px; }
+        }
+        *zoom: 1;
+        &:before,
+        &:after {
+          display: table;
+          content: "";
+          line-height: 0;
+        }
+        &:after { clear: both; }
+
+        .autocomplete-controls {
+            width: 402px;
+            float: left;
+        }
+    }
+
+    .modal-footer {
+
+        .cascade {
+            display: table;
+            position: relative;
+            float: left;
+            margin-top: 5px;
+            margin-bottom: 0;
+            margin-left: 10px;
+        }
+
+    }
+
+    .modal-body {
+        .share-options {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            margin-top: 25px;
+        }
+    }
+
+    .permission {
+        margin: 0 0 13px 0;
+
+        .contact-picture {
+            display: inline-block;
+            .picture(64px, 64px);
+        }
+
+        .contact-picture.group {
+            i { font-size: 64px; line-height: 64px; color: #eee; }
+        }
+
+        .readwrite, .readonly { margin-right: 45px; }
+
+        .readonly {
+            a {
+                cursor: default;
+                color: #888;
+            }
+            i {
+                font-style:normal;
+                color: #333;
+            }
+        }
+
+        .entity {
+            padding-left: 64px + 13;
+            position: relative;
+            a { white-space: nowrap; }
+        }
+
+        .name {
+            font-weight: bold;
+            margin-right: 0.5em;
+        }
+
+        .owner {
+            margin-right: 0.5em;
+            color: darken(@red, 20%);
+        }
+
+        // .close { padding: 21px 0; }
+
+        a[data-action="remove"] {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 45px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: @trash-icon-hover-background;
+
+                i {
+                    color: @trash-icon-hover-color;
+                }
+            }
+
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -7px 0 0 -6px;
+                color: #aaa;
+            }
+        }
+
+    }
+}
+
+.touch .permissions-dialog .modal-body {
+    height: auto;
+    min-height: 200px;
+}

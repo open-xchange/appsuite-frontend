@@ -14,7 +14,8 @@
  define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
+    'io.ox/backbone/mini-views',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
     'io.ox/core/api/user',
@@ -26,8 +27,8 @@
     'io.ox/participants/model',
     'io.ox/participants/views',
     'gettext!io.ox/core',
-    'less!io.ox/core/permissions/style'
-], function (ext, DisposableView, notifications, BreadcrumbView, folderAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+    'less!io.ox/files/share/style'
+], function (ext, DisposableView, yell, miniViews, BreadcrumbView, folderAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
 
     'use strict';
 
@@ -136,7 +137,6 @@
             removeEntity: function (e) {
                 e.preventDefault();
                 this.collection.remove(this.model);
-                this.remove();
             },
 
             updateDropdown: function (e) {
@@ -391,7 +391,7 @@
             if (baton.admin && entity !== ox.user_id) {
                 node.append(
                     $('<a href="# "data-action="remove" title="' + gt('remove permission') + '" tabindex="1">')
-                        .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
+                        .append($('<i class="fa fa-times" aria-hidden="true">'))
                 );
             }
 
@@ -401,8 +401,6 @@
 
     return {
         show: function (objModel) {
-            var permissionsView = new PermissionsView({ model: objModel });
-
             // // Check if ACLs enabled and only do that for mail component,
             // // every other component will have ACL capabilities (stored in DB)
             // if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
@@ -423,18 +421,21 @@
                 });
             }
 
-            var dialog = new dialogs.ModalDialog(options);
+            var dialog = new dialogs.ModalDialog(options),
+                dialogModel = new Backbone.Model({ cascadePermissions: false, message: '' }),
+                permissionsView = new PermissionsView({ model: objModel });
+
+            dialog.getPopup().addClass('share-permissions-dialog');
 
             dialog.getHeader().append(
-                $('<h4>').text(gt('Permissions for')),
-                new BreadcrumbView({ folder: objModel.getFolderID() }).render().$el
+                $('<h4>').text(gt('Permissions for "%1$s"', objModel.getDisplayName())),
+                new BreadcrumbView({ folder: objModel.getFolderID(), notail: true }).render().$el
             );
 
+            // add permissions view
             dialog.getContentNode().append(
                 permissionsView.render().$el
-            ).addClass('scrollpane');
-
-            dialog.getPopup().addClass('permissions-dialog');
+            );
 
             if (objModel.isAdmin()) {
                 // add action buttons
@@ -482,7 +483,7 @@
                                 group: member.get('type') === 2
                             };
                             if (!_.isNumber(obj.entity)) {
-                                notifications.yell(
+                                yell(
                                     'error',
                                     //#. permissions dialog
                                     //#. error message when selected user or group can not be used
@@ -495,25 +496,36 @@
                         },
                         extPoint: POINT
                     }),
-                    cascadePermissionsFlag = false,
-                    guid = _.uniqueId('input');
+                    guid = _.uniqueId('form-control-label-');
 
-                dialog.getFooter()[_.device('desktop') ? 'prepend' : 'append'](
-                    $('<div class="autocomplete-controls">').append(
-                        $('<div class="form-group">').append(
-                            $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
-                            typeaheadView.$el.attr({ id: guid })
+                dialog.getContentNode().append(
+                    $('<div class="share-options">').append(
+                        $('<div class="autocomplete-controls">').append(
+                            $('<div class="form-group">').append(
+                                $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                                typeaheadView.$el.attr({ id: guid })
+                            )
+                        ),
+                        $('<div>').addClass('form-group').append(
+                            $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                            new miniViews.TextView({
+                                name: 'message',
+                                model: dialogModel
+                            }).render().$el.attr({
+                                id: guid,
+                                rows: 3,
+                                //#. placeholder text in share dialog
+                                placeholder: gt('Message (optional)')
+                            })
                         )
-                    ),
-                    $('<div>').addClass('checkbox control-group cascade').append(
-                        $('<label>').text(gt('Apply to all subfolders')).prepend(function () {
-                            return $('<input type="checkbox" tabindex="1">')
-                                .on('change', function () {
-                                    cascadePermissionsFlag = $(this).prop('checked');
-                                })
-                                .prop('checked', cascadePermissionsFlag);
+                    )
+                );
 
-                        })
+                dialog.getFooter().append(
+                    $('<div>').addClass('form-group cascade').append(
+                        $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
+                            new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogModel }).render().$el
+                        )
                     )
                 );
 
@@ -536,7 +548,7 @@
                 // );
             })
             .on('cancel', function () {
-                permissionsView.collection.off();
+                // close action
             })
             .show();
         }
