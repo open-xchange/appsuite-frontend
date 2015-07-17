@@ -3740,7 +3740,7 @@
     "jshint": {
       "version": "2.5.0",
       "from": "../../../../../var/folders/qp/wqyv9yv157n7qtm3tstfqbr80000gn/T/npm-67080-43a5cc9f/git-cache-8459e59d7830/0ffee4a9ae1480198aff523ef2a84a4802201956",
-      "resolved": "git+https://github.com/Open-Xchange-Frontend/jshint#0ffee4a9ae1480198aff523ef2a84a4802201956",
+      "resolved": "git://github.com/Open-Xchange-Frontend/jshint#0ffee4a9ae1480198aff523ef2a84a4802201956",
       "dependencies": {
         "shelljs": {
           "version": "0.1.4",
@@ -3905,7 +3905,7 @@
     "shared-grunt-config": {
       "version": "0.6.6",
       "from": "../../../../../var/folders/qp/wqyv9yv157n7qtm3tstfqbr80000gn/T/npm-67080-43a5cc9f/git-cache-bf3332809a0e/a35030081d8d6d4da2a4d0d4a51b2980f0156728",
-      "resolved": "git+https://github.com/Open-Xchange-Frontend/shared-grunt-config#a35030081d8d6d4da2a4d0d4a51b2980f0156728",
+      "resolved": "git://github.com/Open-Xchange-Frontend/shared-grunt-config#a35030081d8d6d4da2a4d0d4a51b2980f0156728",
       "dependencies": {
         "appserver": {
           "version": "0.5.0",
