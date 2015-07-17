@@ -102,6 +102,21 @@
      * extension point  date
      */
     ext.point(POINT + '/share').extend({
+        id: 'badge',
+        index: INDEX += 100,
+        draw: function (baton) {
+            this.append(
+                $('<div class="counter">').append(
+                    $('<span class="badge">').text(baton.view.model.getPermissions().length)
+                )
+            );
+        }
+    });
+
+    /*
+     * extension point  date
+     */
+    ext.point(POINT + '/share').extend({
         id: 'date',
         index: INDEX += 100,
         draw: function (baton) {
@@ -120,11 +135,9 @@
     ext.point(POINT + '/share').extend({
         id: 'actions',
         index: INDEX += 100,
-        draw: function (baton) {
-            var permissionCount = baton.view.model.getPermissions().length - 1;
+        draw: function () {
             this.append(
                 $('<div class="actions">').append(
-                    $('<span class="badge">').text(permissionCount),
                     $('<a href="#" class="edit">').append(
                         $('<span class="sr-only">').text(gt('edit share')),
                         $('<i class="fa fa-gear" aria-hidden="true">')
@@ -228,10 +241,14 @@
 
         render: function () {
 
+            var self = this;
+
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
 
-            this.getShares();
+            this.getShares().then(function () {
+                self.sortBy(self.baton.model);
+            });
 
             return this;
 
@@ -254,8 +271,8 @@
                     break;
                 case 'name':
                     this.collection.comparator = function (shareA, shareB) {
-                        var ret = shareA.getDisplayName().toLowerCase() < shareB.getDisplayName().toLowerCase();
-                        return desc ? ret : -ret;
+                        var ret = (shareA.getDisplayName().toLowerCase() > shareB.getDisplayName().toLowerCase()) ? 1 : -1;
+                        return desc ? -ret : ret;
                     };
                     break;
                 default:
