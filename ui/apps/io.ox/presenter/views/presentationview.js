@@ -255,6 +255,7 @@ define('io.ox/presenter/views/presentationview', [
             console.info('Presenter - presentation - pause');
             this.updateNavigationArrows();
             this.togglePauseOverlay();
+            this.hideNavigation(0);
         },
 
         /**
@@ -445,9 +446,12 @@ define('io.ox/presenter/views/presentationview', [
 
         /**
          * Hide navigation panel
+         *
+         * @param {[Number = 1000]} duration
+         *  the duration of the fade out animation in milliseconds. Defaults to 1000 ms.
          */
-        hideNavigation: function () {
-            this.navigationView.$el.fadeOut(1000);
+        hideNavigation: function (duration) {
+            this.navigationView.$el.fadeOut(duration || 1000);
         },
 
         /**
