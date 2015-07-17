@@ -565,7 +565,7 @@ define('io.ox/portal/main', [
     });
 
     app.getContextualHelp = function () {
-        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.reference.portal.elements';
+        return 'ox.appsuite.user.sect.portal.gui.html#ox.appsuite.user.sect.portal.gui';
     };
 
     // launcher

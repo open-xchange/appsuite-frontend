@@ -852,7 +852,7 @@ define('io.ox/files/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.elements';
+                return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.sect.files.gui';
             };
         }
     });

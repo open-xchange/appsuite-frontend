@@ -563,7 +563,7 @@ define('io.ox/calendar/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.elements';
+                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
             };
         }
 
