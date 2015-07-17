@@ -30,7 +30,4 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
 
     grunt.registerTask('refresh', 'force an update and reload the broweser', ['force_update', 'send_livereload']);
-
-    //FIXME: if bower executable is not in path, we can not use grunt-check-dependencies
-    grunt.registerTask('bower:install', 'use repair task to install bower components', ['repair:bower_install']);
 };
