@@ -274,10 +274,19 @@ define('io.ox/presenter/views/navigationview', [
                 var newValue = parseInt($(this).val()),
                     oldValue = parseInt($(this).attr('data-page-number'));
 
-                if (isNaN(newValue) || newValue > slideCount || newValue <= 0 ) {
+                if (isNaN(newValue)) {
                     $(this).val(oldValue);
                     return;
                 }
+                if (newValue <= 0 ) {
+                    $(this).val(1);
+                    newValue = 1;
+                }
+                if (newValue > slideCount) {
+                    $(this).val(slideCount);
+                    newValue = slideCount;
+                }
+
                 setButtonState([prev[0], next[0]], true);
                 if (newValue === 1) {
                     setButtonState(prev, false);
