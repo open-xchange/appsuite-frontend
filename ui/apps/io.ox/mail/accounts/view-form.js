@@ -608,6 +608,8 @@ define.async('io.ox/mail/accounts/view-form', [
                             )
                         ),
                         // unified inbox
+                        capabilities.has('!multiple_mail_accounts') ?
+                        $() :
                         group(
                             checkbox(
                                 gt('Use unified mail for this account'),
