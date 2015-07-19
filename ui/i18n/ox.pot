@@ -11036,6 +11036,11 @@ msgstr ""
 msgid "Welcome to %s"
 msgstr ""
 
+#: apps/plugins/wizards/mandatory/main.js:32
+#: module:io.ox/wizards/firstStart
+msgid "Before you can continue using the product, you have to enter some basic information. It will take less than a minute."
+msgstr ""
+
 #: apps/plugins/wizards/mandatory/main.js:122
 #: module:io.ox/wizards/firstStart
 msgid "Your timezone"

@@ -29,7 +29,7 @@ define('plugins/wizards/mandatory/main', [
         title: gt.format(gt('Welcome to %s'), ox.serverConfig.productName),
         draw: function (baton) {
             this.append(
-                'Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'
+                gt('Before you can continue using the product, you have to enter some basic information. It will take less than a minute.')
             );
             baton.buttons.enableNext();
         }
