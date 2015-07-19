@@ -68,7 +68,6 @@ define('io.ox/metrics/main', [
     point.invoke('trackVisit', metrics);
 
     // global listener (ox-events)
-    debugger;
     ext.point('io.ox/metrics/extensions').invoke('register', metrics);
 
     /**

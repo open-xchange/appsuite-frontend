@@ -17,7 +17,6 @@ define('io.ox/metrics/extensions', [
 
     var point = ext.point('io.ox/metrics/extensions');
 
-    debugger;
     point.extend({
         id: 'upsell',
         register: function () {
@@ -36,10 +35,8 @@ define('io.ox/metrics/extensions', [
     point.extend({
         id: 'app',
         register: function () {
-            debugger;
             var metrics = this;
             ox.on('app:start app:resume', function (app) {
-                debugger;
                 metrics.trackPage({
                     name: app.get('name'),
                     id: app.get('id'),
