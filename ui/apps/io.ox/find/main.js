@@ -353,18 +353,16 @@ define('io.ox/find/main', [
             /**
              * find:query:result  inform user about number of returned hits
              */
-            app.on('find:query:result', function (response) {
-                // screenreader
-                var n = response.results.length,
-                    //#. 'no results' message for screenreaders with additional hint to adjust active filters
-                    empty = gt('No items were found. Please adjust currently used facets.'),
-                    //#. result count for screenreaders
-                    //#. %1$s number of items found by search feature
-                    some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
-                //TODO: notifications
-                //notifications.yell('screenreader', n ? some : empty);
-                console.log(n ? some : empty);
-            });
+            // app.on('find:query:result', function (response) {
+            //     // screenreader
+            //     var n = response.results.length,
+            //         //#. 'no results' message for screenreaders with additional hint to adjust active filters
+            //         empty = gt('No items were found. Please adjust currently used facets.'),
+            //         //#. result count for screenreaders
+            //         //#. %1$s number of items found by search feature
+            //         some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
+            //     notifications.yell('screenreader', n ? some : empty);
+            // });
         }
 
         // DEBUG: states
