@@ -156,6 +156,14 @@ define('io.ox/presenter/actions', [
 
     new Action(PRESENTER_ACTION_ID + '/zoomin', {
         id: 'zoomin',
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return !rtModel.isPresenter(userId);
+        },
         action: function (baton) {
             baton.context.app.mainView.presenterEvents.trigger('presenter:zoomin');
         }
@@ -163,6 +171,14 @@ define('io.ox/presenter/actions', [
 
     new Action(PRESENTER_ACTION_ID + '/zoomout', {
         id: 'zoomout',
+        requires: function (e) {
+            if (!e.baton.context) { return false; }
+
+            var rtModel = e.baton.context.app.rtModel,
+                userId = e.baton.context.app.rtConnection.getRTUuid();
+
+            return !rtModel.isPresenter(userId);
+        },
         action: function (baton) {
             baton.context.app.mainView.presenterEvents.trigger('presenter:zoomout');
         }
