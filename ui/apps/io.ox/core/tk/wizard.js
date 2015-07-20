@@ -13,7 +13,8 @@
 
 define('io.ox/core/tk/wizard', [
     'io.ox/backbone/disposable',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'static/3rd.party/velocity/velocity.min.js'
 ], function (DisposableView, gt) {
 
     'use strict';
@@ -107,20 +108,7 @@ define('io.ox/core/tk/wizard', [
             $('.wizard-step:visible').focus();
         });
 
-        // add page controller on smartphones
-        if (_.device('smartphone')) {
-
-            this.container = container.clone();
-            this.container.find('.wizard-title').text(this.options.title || gt('Welcome'));
-
-            this.container.on('click', '[data-action]', { parent: this }, function (e) {
-                e.preventDefault();
-                var action = $(this).attr('data-action');
-                e.data.parent.trigger('step:' + action);
-            });
-
-            initializeTouch.call(this);
-        }
+        if (_.device('smartphone')) initalizeSmartphoneSupport.call(this);
     }
 
     _.extend(Wizard.prototype, {
@@ -196,7 +184,7 @@ define('io.ox/core/tk/wizard', [
                 _(this.steps).invoke('show');
                 this.container.appendTo('body');
                 this.withCurrentStep(function (step) {
-                    step.renderButtons();
+                    step.renderNavBar();
                 });
                 this.trigger('start');
             } else {
@@ -343,45 +331,61 @@ define('io.ox/core/tk/wizard', [
 
             var o = this.options, footer = this.$('.footer').empty();
 
-            if (_.device('smartphone')) {
-                this.parent.container.find('.wizard-back, .wizard-next').empty();
-            }
-
             if (o.back && this.parent.hasBack()) {
                 // show "Back" button
-                if (_.device('smartphone')) {
-                    this.addLink(this.parent.container.find('.wizard-back').empty(), { action: 'back', label: o.labelBack });
-                } else {
-                    this.addButton(footer, { action: 'back', className: 'btn-default', label: o.labelBack });
-                }
+                this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
             }
 
             if (o.next && this.parent.hasNext()) {
                 // show "Start" or Next" button
-                // determine this button label at run-time
-                // not during initialize() as the wizard is not yet complete
-                if (o.labelNext === undefined) {
-                    o.labelNext = this.isFirst() ? gt('Start tour') : gt('Next');
-                }
-                if (_.device('smartphone')) {
-                    this.addLink(this.parent.container.find('.wizard-next').empty(), { action: 'next', label: o.labelNext });
-                } else {
-                    this.addButton(footer, { action: 'next', className: 'btn-primary', label: o.labelNext });
-                }
-
+                this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
             } else if (this.isLast()) {
                 // show "Done" button
-                if (_.device('smartphone')) {
-                    this.addLink(this.parent.container.find('.wizard-next').empty(), { action: 'done', label: o.labelDone });
-                } else {
-                    this.addButton(footer, { action: 'done', className: 'btn-primary done', label: o.labelDone });
-                }
+                this.addButton(footer, { action: 'done', className: 'btn-primary', label: this.getLabelDone() });
+            }
+        },
+
+        // different solution for smartphones
+        renderNavBar: function () {
+
+            var o = this.options,
+                back = this.parent.container.find('.wizard-back').empty(),
+                next = this.parent.container.find('.wizard-next').empty();
+
+            if (o.back && this.parent.hasBack()) {
+                // show "Back" button
+                this.addLink(back, { action: 'back', label: this.getLabelBack() });
+            }
+
+            if (o.next && this.parent.hasNext()) {
+                // show "Start" or Next" button
+                this.addLink(next, { action: 'next', label: this.getLabelNext() });
+            } else if (this.isLast()) {
+                // show "Done" button
+                this.addLink(next, { action: 'done', label: this.getLabelDone() });
             }
         },
 
         // internal; just add a button
         addButton: addControl('<button class="btn" tabindex="1">'),
+
+        // internal; just add a link
         addLink: addControl('<a href="#" role="button" tabindex="1">'),
+
+        getLabelNext: function () {
+            // determine this button label at run-time
+            // not during initialize() as the wizard is not yet complete
+            if (this.options.labelNext === undefined) return this.isFirst() ? gt('Start tour') : gt('Next');
+            return this.options.labelNext;
+        },
+
+        getLabelBack: function () {
+            return this.options.labelBack;
+        },
+
+        getLabelDone: function () {
+            return this.options.labelDone;
+        },
 
         // define that this step is mandatory
         // removes the '.close' icon; escape key no longer works
@@ -647,38 +651,40 @@ define('io.ox/core/tk/wizard', [
     };
 
     //
-    // Touch move behavior
+    // Special handling for smartphones
     //
 
-    function initializeTouch() {
+    function initalizeSmartphoneSupport() {
 
-        var self = this, offset = 0, pageX = 0, x, width, minX, maxX;
+        this.container = container.clone();
+        this.container.find('.wizard-title').text(this.options.title || gt('Welcome'));
 
-        // override shift
+        this.container.on('tap', '[data-action]', { parent: this }, function (e) {
+            e.preventDefault();
+            var action = $(this).attr('data-action');
+            e.data.parent.trigger('step:' + action);
+        });
+
+        // override shift for animation support
         this.shift = function (num) {
 
             this.setCurrentStep(this.currentStep + num);
 
             this.withCurrentStep(function (step) {
-                step.renderButtons();
+                step.renderNavBar();
             });
 
             var node = this.container.find('.wizard-pages'),
                 current = node.position().left / width * 100,
-                pct = this.currentStep * 100;
+                pct = 0 - this.currentStep * 100;
 
-            node.next()
-                .stop()
-                .css({ left: current + '%' })
-                .animate({ left: -pct + '%' }, {
-                    step: function (now) {
-                        node.css('transform', 'translateX(' + now + '%)');
-                    },
-                    duration: 100
-                }, 'linear');
+            node.stop().velocity({ translateX: [pct + '%', current + '%'] }, 500, [150, 15]);
 
             return this;
         };
+
+        // touch/swipe support
+        var self = this, offset = 0, pageX = 0, x, moved, width, minX, maxX;
 
         this.container.find('.wizard-pages').on({
 
@@ -687,6 +693,7 @@ define('io.ox/core/tk/wizard', [
                 var touches = e.originalEvent.targetTouches;
                 if (touches.length !== 1) return;
                 pageX = touches[0].pageX;
+                moved = false;
 
                 // get current window width to calculate percentages
                 width = $(window).width();
@@ -698,13 +705,23 @@ define('io.ox/core/tk/wizard', [
             touchmove: function (e) {
                 var touches = e.originalEvent.targetTouches;
                 if (touches.length !== 1) return;
+                e.preventDefault();
                 x = touches[0].pageX - pageX;
+                if (!moved) {
+                    if (Math.abs(x) < 20) return;
+                    moved = true;
+                    // reset pageX to avoid bumps
+                    pageX = touches[0].pageX;
+                    x = 0;
+                    return;
+                }
                 x = Math.min(x, maxX);
                 x = Math.max(x, minX);
                 $(this).css('transform', 'translateX(' + ((offset + x) / width * 100) + '%)');
             },
 
             touchend: function () {
+                if (!moved) return;
                 var pct = x / width * 100;
                 self.shift(pct < 0 ? (pct > -50 ? 0 : +1) : (pct < +50 ? 0 : -1));
             }
