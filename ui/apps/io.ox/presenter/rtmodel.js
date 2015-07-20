@@ -50,7 +50,7 @@ define('io.ox/presenter/rtmodel', [
         defaults: function () {
             return {
                 // rtConnection attributes
-                presenterId: null,
+                presenterId: '',
                 presenterName: '',
                 activeUsers: [],
                 activeSlide: 0,

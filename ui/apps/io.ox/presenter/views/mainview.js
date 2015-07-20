@@ -66,6 +66,10 @@ define('io.ox/presenter/views/mainview', [
             // listen to sidebar toggle events
             this.listenTo(this.presenterEvents, 'presenter:toggle:sidebar', this.onToggleSidebar);
             this.listenTo(this.presenterEvents, 'presenter:sidebar:change:state', this.onSideBarToggled);
+            // listen to presentation start, end events
+            this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
+
             // show navigation panel on user activity
             this.$el.on('mousemove', _.throttle(this.onMouseMove.bind(this), 500));
 
@@ -124,17 +128,9 @@ define('io.ox/presenter/views/mainview', [
 
                 if (!_.isEmpty(currentPresenterId) && _.isEmpty(previousPresenterId)) {
                     this.presenterEvents.trigger('presenter:presentation:start', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
-                    this.notifyPresentationStart();
 
                 } else if (_.isEmpty(currentPresenterId) && !_.isEmpty(previousPresenterId)) {
-                    this.presenterEvents.trigger('presenter:presentation:end', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
-                    this.notifyPresentationEnd();
-
-                } else {
-                    //
-                    // TODO: check if this case is really needed / possible
-                    //
-                    this.presenterEvents.trigger('presenter:presenter:changed', { presenterId: currentPresenterId, presenterName: rtModel.get('presenterName') });
+                    this.presenterEvents.trigger('presenter:presentation:end', { presenterId: previousPresenterId, presenterName: rtModel.previous('presenterName') });
                 }
             }
             if (rtModel.hasChanged('paused')) {
@@ -142,6 +138,36 @@ define('io.ox/presenter/views/mainview', [
                 var eventType = (rtModel.get('paused') && !rtModel.previous('paused')) ? 'presenter:presentation:pause' : 'presenter:presentation:continue';
                 this.presenterEvents.trigger(eventType);
             }
+        },
+
+        /**
+         * Handles remote presentation start invoked by the real-time framework.
+         */
+        onPresentationStart: function () {
+            this.notifyPresentationStart();
+        },
+
+        /**
+         * Handles remote presentation end invoked by the real-time framework.
+         *  Note: since the event is not a key, click or touch event,
+         *  leaving full screen may not work on all browsers.
+         *
+         * @param {Object} formerPresenter
+         *  @param {String} presenter.presenterId
+         *   the user id of the former presenter
+         *  @param {String} presenter.presenterName
+         *   the display name of the former presenter
+         */
+        onPresentationEnd: function (formerPresenter) {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            // leave full screen mode for all participants.
+            if (!rtModel.hasPresenter() && (userId !== formerPresenter.presenterId)) {
+                this.toggleFullscreen(false);
+            }
+            // show presentation end notification to all participants.
+            this.notifyPresentationEnd();
         },
 
         /**
