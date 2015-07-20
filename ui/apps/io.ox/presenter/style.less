@@ -44,6 +44,18 @@
 @presenter-navigation-active-bgcolor: #AAAAAA;
 @presenter-navigation-slide-bordercolor: #e0e0e0;
 
+.flex-center() {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
  .io-ox-alert {
      .presenter-notification-btn {
          color: green;
@@ -59,8 +71,7 @@
      }
 
      .swiper-slide {
-         display: flex;
-         align-items: center;
+         .flex-center();
          .pdf-page {
              box-shadow: 0 0 8px rgba(0,0,0,0.2);
          }
@@ -407,9 +418,7 @@
 
         &.presenting {
             width: 35%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            .flex-center();
             border:0;
             background-color: #f8f8f8;
         }
@@ -445,9 +454,10 @@
              text-align: center;
              vertical-align: top;
              .wrapper {
-                 display: flex;
-                 align-items: center;
-                 justify-content: center;
+                 .flex-center();
+                 -webkit-flex-direction: column;
+                 -moz-flex-direction: column;
+                 -ms-flex-direction: column;
                  flex-direction: column;
                  height: 100%;
              }
