@@ -329,14 +329,6 @@ define('io.ox/find/main', [
                     });
                 }, 10)
             });
-            app.on({
-                'find:autocomplete:start': _.debounce(function (query) {
-                    require(['io.ox/metrics/main'], function (metrics) {
-                        // toolbar actions
-                        metrics.trackSearch(query);
-                    });
-                }, 1000)
-            });
             /**
              * find:cancel  reset, collapse search field and move focus
              */
