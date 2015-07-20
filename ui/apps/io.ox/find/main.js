@@ -331,7 +331,6 @@ define('io.ox/find/main', [
             });
             app.on({
                 'find:autocomplete:start': _.debounce(function (query) {
-                    debugger;
                     require(['io.ox/metrics/main'], function (metrics) {
                         // toolbar actions
                         metrics.trackSearch(query);
