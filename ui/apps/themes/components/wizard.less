@@ -151,19 +151,13 @@
 }
 
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
-    .wizard-navbar {
-        z-index: 2;
-    }
-    .wizard-pages {
-        top: 0;
-        z-index: 1;
-    }
     .wizard-step {
         font-size: 16px;
-        top: 50%;
+        top: 0;
         left: 0;
-        transform: translate3d(0, -50%, 0);
+        transform: translate3d(0, 0, 0);
         width: 100%;
+        padding-top: 40px;
         text-align: center;
         overflow: hidden;
         box-shadow: none;
