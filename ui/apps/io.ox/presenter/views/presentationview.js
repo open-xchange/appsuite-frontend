@@ -25,6 +25,32 @@ define('io.ox/presenter/views/presentationview', [
 
     'use strict';
 
+    var SWIPER_PARAMS_DEFAULT = {
+        loop: false,
+        loopedSlides: 0,
+        followFinger: false,
+        simulateTouch: false,
+        noSwiping: true,
+        speed: 0,
+        runCallbacksOnInit: false
+    };
+
+    var SWIPER_PARAMS_SWIPING_ENABLED = {
+        followFinger: true,
+        simulateTouch: true,
+        onlyExternal: false,
+        speed: 300,
+        spaceBetween: 100
+    };
+
+    var SWIPER_PARAMS_SWIPING_DISABLED = {
+        followFinger: false,
+        simulateTouch: false,
+        onlyExternal: true,
+        speed: 0,
+        spaceBetween: 0
+    };
+
     /**
      * Creates the HTML mark-up for a slide navigation button.
      *
@@ -245,6 +271,7 @@ define('io.ox/presenter/views/presentationview', [
         onParticipantsChange: function (participants) {
             console.info('Presenter - participants - change', participants);
             this.updateNavigationArrows();
+            this.updateSwiperParams();
             this.togglePauseOverlay();
         },
 
@@ -254,6 +281,7 @@ define('io.ox/presenter/views/presentationview', [
         onPresentationPause: function () {
             console.info('Presenter - presentation - pause');
             this.updateNavigationArrows();
+            this.updateSwiperParams();
             this.togglePauseOverlay();
             this.hideNavigation(0);
         },
@@ -264,6 +292,7 @@ define('io.ox/presenter/views/presentationview', [
         onPresentationContinue: function () {
             console.info('Presenter - presentation - continue');
             this.updateNavigationArrows();
+            this.updateSwiperParams();
             this.togglePauseOverlay();
         },
 
@@ -330,7 +359,7 @@ define('io.ox/presenter/views/presentationview', [
          *  the index of the slide to be shown.
          */
         internalShowSlide: function (index) {
-            if (this.swiper && _.isNumber(index) && (index !== this.currentSlideIndex) ) {
+            if (this.swiper && _.isNumber(index)) {
                 this.swiper.slideTo(index);
             }
         },
@@ -407,6 +436,28 @@ define('io.ox/presenter/views/presentationview', [
                 navigationArrows.show();
             } else {
                 navigationArrows.hide();
+            }
+        },
+
+        /**
+         * Updates the Swiper parameters according to the RTModel data.
+         *  Swiping is enabled if:
+         *  - the presentation has not yet been started
+         *  - the current user is a participant and has not (yet) joined the presentation
+         *  - the current user is the presenter
+         */
+        updateSwiperParams: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (!this.swiper || _.device('!smartphone && !tablet')) { return; }
+
+            if (!rtModel.isJoined(userId) || rtModel.isPresenter(userId)) {
+                // enable touch and swiping for mobile devices
+                this.swiper.params = _.extend(this.swiper.params, SWIPER_PARAMS_SWIPING_ENABLED);
+            } else {
+                // disable touch and swiping for mobile devices
+                this.swiper.params = _.extend(this.swiper.params, SWIPER_PARAMS_SWIPING_DISABLED);
             }
         },
 
@@ -542,23 +593,22 @@ define('io.ox/presenter/views/presentationview', [
                this.pdfDocumentLoadError.call(this, pageCount);
                return;
            }
-           var pdfDocument = this.pdfDocument;
+
+           // configure Swiper
            var swiperParameter = {
-               loop: false,
-               loopedSlides: 0,
-               followFinger: false,
-               simulateTouch: false,
-               noSwiping: true,
-               speed: 0,
                initialSlide: this.startIndex,
-               runCallbacksOnInit: false,
                onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
                onSlideChangeStart: this.onSlideChangeStart.bind(this)
            };
+           swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_DEFAULT);
+           // enable touch and swiping for mobile devices
+           if (_.device('smartphone || tablet')) {
+               swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_SWIPING_ENABLED);
+           }
 
            this.numberOfSlides = pageCount;
            // create the PDF view after successful loading;
-           this.pdfView = new PDFView(pdfDocument, { textOverlay: true });
+           this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
 
            // add navigation buttons
            if (pageCount > 1) {
@@ -755,7 +805,7 @@ define('io.ox/presenter/views/presentationview', [
                     this.swiper.onResize();
                     // workaround for a possible bug from swiper plugin that happens sporadically:
                     // After an on resize call, the plugin 'resets' the active slide to the beginning.
-                    this.swiper.slideTo(this.currentSlideIndex);
+                    //this.swiper.slideTo(this.currentSlideIndex);
                 }
             }.bind(this));
         },

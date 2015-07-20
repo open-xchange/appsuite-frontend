@@ -101,8 +101,8 @@ define('io.ox/presenter/actions', [
         action: function (baton) {
             console.info('join action:', baton);
             var app = baton.context.app;
-            app.rtConnection.joinPresentation();
             app.mainView.toggleFullscreen(true);
+            app.rtConnection.joinPresentation();
         }
     });
 

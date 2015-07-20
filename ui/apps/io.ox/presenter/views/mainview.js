@@ -116,7 +116,7 @@ define('io.ox/presenter/views/mainview', [
                 remoteSlideId = rtModel.get('activeSlide');
 
             if (rtModel.hasChanged('activeSlide') || (localSlideId !== remoteSlideId)) {
-                this.presenterEvents.trigger('presenter:remote:slide:change', rtModel.get('activeSlide'));
+                this.presenterEvents.trigger('presenter:remote:slide:change', remoteSlideId);
             }
             if (rtModel.hasChanged('participants')) {
                 this.presenterEvents.trigger('presenter:participants:change', rtModel.get('participants'));
