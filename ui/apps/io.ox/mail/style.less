@@ -421,6 +421,17 @@
         .box();
     }
 
+    .original-folder {
+        // do not overlap subject/attachmet icon
+        max-width: 50%;
+        .breadcrumb-link {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+        }
+    }
+
     .thread-size {
         .box();
         min-width: 24px;

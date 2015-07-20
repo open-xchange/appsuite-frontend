@@ -252,13 +252,21 @@ define('io.ox/mail/common-extensions', [
             );
             // add breadcrumb
             require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
-                node.append(
-                    new BreadcrumbView({
+                var view = new BreadcrumbView({
                         folder: baton.data.original_folder_id,
                         app: baton.app,
-                        exclude: [ 'default0', folderAPI.getDefaultFolder('mail') ]
-                    }).render().$el
-                );
+                        exclude: [ 'default0' ]
+                    }), renderPathOrig;
+                // not need for this here
+                view.computeWidth = $.noop;
+                // show only folder paths tail
+                renderPathOrig = view.renderPath;
+                view.renderPath = function (path) {
+                    return renderPathOrig.call(this, [].concat(_.last(path)) );
+                };
+
+                // append to dom
+                node.append( view.render().$el );
             });
         },
 
