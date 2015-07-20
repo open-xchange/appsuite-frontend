@@ -36,6 +36,10 @@ define('io.ox/presenter/views/thumbnailview', [
             this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
             this.listenTo(this.presenterEvents, 'presenter:local:slide:change', this.renderSections);
+
+            this.listenTo(this.presenterEvents, 'presenter:fullscreen:enter', this.onEnterFullScreen);
+            this.listenTo(this.presenterEvents, 'presenter:fullscreen:exit', this.onExitFullScreen);
+
             // dispose view on global dispose
             this.on('dispose', this.disposeView.bind(this));
             this.thumbnailLoadDef = Util.createAbortableDeferred($.noop);
@@ -191,10 +195,12 @@ define('io.ox/presenter/views/thumbnailview', [
          * - hides this view and resizes presentation view accordingly.
          */
         onPresentationStart: function () {
-            var presentationView = this.app.mainView.presentationView;
-            this.$el.hide();
-            presentationView.$el.removeClass('thumbnails-opened');
-            presentationView.onResize();
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (rtModel.isPresenter(userId)) {
+                this.toggleVisibility(false);
+            }
         },
 
         /**
@@ -202,10 +208,43 @@ define('io.ox/presenter/views/thumbnailview', [
          * - shows this view and resizes presentation view accordingly.
          */
         onPresentationEnd: function () {
+            this.toggleVisibility(true);
+        },
+
+        /**
+         * Toggles the visibility of the thumbnail view.
+         *
+         * @param {Boolean} visibility
+         */
+        toggleVisibility: function (visibility) {
+            if (typeof visibility !== 'boolean') {
+                return;
+            }
             var presentationView = this.app.mainView.presentationView;
-            this.$el.show();
-            presentationView.$el.addClass('thumbnails-opened');
+            this.$el.toggle(visibility);
+            presentationView.$el.toggleClass('thumbnails-opened', visibility);
             presentationView.onResize();
+        },
+
+        /**
+         * Enter fullscreen handler.
+         * - hides this thumbnail view
+         */
+        onEnterFullScreen: function () {
+            this.toggleVisibility(false);
+        },
+
+        /**
+         * Exit fullscreen handler.
+         * - shows this thumbnail view
+         */
+        onExitFullScreen: function () {
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+
+            if (!rtModel.isPresenter(userId)) {
+                this.toggleVisibility(true);
+            }
         },
 
         /**

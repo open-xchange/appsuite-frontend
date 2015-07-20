@@ -456,6 +456,7 @@ define('io.ox/presenter/views/mainview', [
             this.fullscreen = true;
             this.sidebarBeforeFullscreen = this.sidebarView.opened;
             this.sidebarView.toggleSidebar(false);
+            this.presenterEvents.trigger('presenter:fullscreen:enter');
         },
 
         /**
@@ -471,6 +472,8 @@ define('io.ox/presenter/views/mainview', [
             if (this.app.rtModel.canLeave(userId)) {
                 this.app.rtConnection.leavePresentation();
             }
+
+            this.presenterEvents.trigger('presenter:fullscreen:exit');
         },
 
         /**
