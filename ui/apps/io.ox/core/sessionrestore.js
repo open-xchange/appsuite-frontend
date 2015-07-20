@@ -12,21 +12,13 @@
  */
 
 define('io.ox/core/sessionrestore', [
-    'io.ox/core/extensions',
-    'settings!io.ox/core'
-], function (ext, settings) {
+    'io.ox/core/extensions'
+], function (ext) {
 
     // private static methods ----------------------------------------------------
 
     function isActive() {
-        try {
-            return Boolean(settings.get('autorestoredocuments'));
-        } catch (e) {
-            if (ox.debug) {
-                console.error(e);
-            }
-            return false;
-        }
+        return true;
     }
 
     function getAllData() {
