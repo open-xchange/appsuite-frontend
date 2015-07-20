@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core'], function (DisposableView, gt) {
+define('io.ox/core/tk/wizard', [
+    'io.ox/backbone/disposable',
+    'gettext!io.ox/core'
+], function (DisposableView, gt) {
 
     'use strict';
 
@@ -28,6 +31,19 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
     ];
 
     var backdrop = $('<div class="wizard-backdrop abs">');
+
+    // special node for fullscreen wizards on smartphone
+    var container = $(
+        '<div class="wizard-container abs">' +
+        '  <div class="wizard-navbar">' +
+        '    <div class="wizard-back"></div>' +
+        '    <div class="wizard-title"></div>' +
+        '    <div class="wizard-next"></div>' +
+        '  </div>' +
+        '  <div class="wizard-pages"></div>' +
+        '  <div class="wizard-animation"></div>' +
+        '</div>'
+    );
 
     function getBounds(elem) {
         var o = elem.offset();
@@ -48,12 +64,25 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
         };
     }
 
+    function addControl(html) {
+        return function (node, options) {
+            node.append(
+                $(html)
+                    .attr('data-action', options.action)
+                    .addClass(options.className)
+                    .text(options.label || '\u0A00')
+            );
+            return this;
+        };
+    }
+
     //
     // Wizard/Tour
     //
 
-    function Wizard() {
+    function Wizard(options) {
 
+        this.options = options || {};
         this.currentStep = 0;
         this.steps = [];
 
@@ -77,6 +106,21 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
         $(document).on('click', '.wizard-overlay, .wizard-backdrop', function () {
             $('.wizard-step:visible').focus();
         });
+
+        // add page controller on smartphones
+        if (_.device('smartphone')) {
+
+            this.container = container.clone();
+            this.container.find('.wizard-title').text(this.options.title || gt('Welcome'));
+
+            this.container.on('click', '[data-action]', { parent: this }, function (e) {
+                e.preventDefault();
+                var action = $(this).attr('data-action');
+                e.data.parent.trigger('step:' + action);
+            });
+
+            initializeTouch.call(this);
+        }
     }
 
     _.extend(Wizard.prototype, {
@@ -97,15 +141,21 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
             return this;
         },
 
+        setCurrentStep: function (n) {
+            if (this.currentStep === n) return;
+            if (n < 0 || n >= this.steps.length) return;
+            this.currentStep = n;
+            this.trigger('change:step');
+        },
+
         shift: function (num) {
             this.withCurrentStep(function (step) {
                 step.hide();
             });
-            this.currentStep = this.currentStep + num;
+            this.setCurrentStep(this.currentStep + num);
             this.withCurrentStep(function (step) {
                 step.show();
             });
-            return this;
         },
 
         next: function () {
@@ -134,17 +184,32 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
             _(this.steps).each(function (step) {
                 step.dispose();
             });
+            if (_.device('smartphone')) this.container.remove().empty();
             this.trigger('stop');
             return this;
         },
 
         start: function () {
-            this.currentStep = 0;
-            this.withCurrentStep(function (step) {
+
+            if (_.device('smartphone')) {
                 this.trigger('before:start');
-                step.show();
+                _(this.steps).invoke('show');
+                this.container.appendTo('body');
+                this.withCurrentStep(function (step) {
+                    step.renderButtons();
+                });
                 this.trigger('start');
-            });
+            } else {
+                this.withCurrentStep(function (step) {
+                    this.trigger('before:start');
+                    step.show();
+                    this.trigger('start');
+                });
+            }
+
+            // for debugging
+            window.wizard = this;
+
             return this;
         },
 
@@ -176,29 +241,15 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
         className: 'wizard-step center middle',
 
         events: {
-            'click .close': 'onClose',
-            'click .btn.back': 'onBack',
-            'click .btn.next': 'onNext',
-            'click .btn.done': 'onDone',
+            'click [data-action]': 'onAction',
             'keydown': 'onKeyDown',
             'keyup': 'onKeyUp'
         },
 
-        onClose: function (e) {
+        onAction: function (e) {
             e.preventDefault();
-            this.trigger('close');
-        },
-
-        onBack: function () {
-            this.trigger('back');
-        },
-
-        onNext: function () {
-            this.trigger('next');
-        },
-
-        onDone: function () {
-            this.trigger('done');
+            var action = $(e.currentTarget).attr('data-action');
+            this.trigger(action);
         },
 
         onKeyDown: function (e) {
@@ -248,9 +299,9 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
                 this.parent.trigger('step:' + type);
             });
 
-            this.once('before:show', function () {
-                this.renderButtons();
-            });
+            // navbar needs an update for every change
+            // only once for normal popups
+            if (!_.device('smartphone')) this.once('before:show', this.renderButtons);
 
             this.render();
         },
@@ -290,12 +341,19 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
         // not with inital render() because we don't all steps at this point
         renderButtons: function () {
 
-            var o = this.options;
-            this.$('.footer').empty();
+            var o = this.options, footer = this.$('.footer').empty();
+
+            if (_.device('smartphone')) {
+                this.parent.container.find('.wizard-back, .wizard-next').empty();
+            }
 
             if (o.back && this.parent.hasBack()) {
                 // show "Back" button
-                this.addButton({ className: 'btn-default back', label: o.labelBack });
+                if (_.device('smartphone')) {
+                    this.addLink(this.parent.container.find('.wizard-back').empty(), { action: 'back', label: o.labelBack });
+                } else {
+                    this.addButton(footer, { action: 'back', className: 'btn-default', label: o.labelBack });
+                }
             }
 
             if (o.next && this.parent.hasNext()) {
@@ -305,21 +363,25 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
                 if (o.labelNext === undefined) {
                     o.labelNext = this.isFirst() ? gt('Start tour') : gt('Next');
                 }
-                this.addButton({ className: 'btn-primary next', label: o.labelNext });
+                if (_.device('smartphone')) {
+                    this.addLink(this.parent.container.find('.wizard-next').empty(), { action: 'next', label: o.labelNext });
+                } else {
+                    this.addButton(footer, { action: 'next', className: 'btn-primary', label: o.labelNext });
+                }
 
             } else if (this.isLast()) {
                 // show "Done" button
-                this.addButton({ className: 'btn-primary done', label: o.labelDone });
+                if (_.device('smartphone')) {
+                    this.addLink(this.parent.container.find('.wizard-next').empty(), { action: 'done', label: o.labelDone });
+                } else {
+                    this.addButton(footer, { action: 'done', className: 'btn-primary done', label: o.labelDone });
+                }
             }
         },
 
         // internal; just add a button
-        addButton: function (options) {
-            this.$('.footer').append(
-                $('<button class="btn" tabindex="1">').addClass(options.className).text(options.label || '\u0A00')
-            );
-            return this;
-        },
+        addButton: addControl('<button class="btn" tabindex="1">'),
+        addLink: addControl('<a href="#" role="button" tabindex="1">'),
 
         // define that this step is mandatory
         // removes the '.close' icon; escape key no longer works
@@ -348,6 +410,11 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
         // returns true if the current step is the last one
         isLast: function () {
             return this.parent.currentStep === this.parent.steps.length - 1;
+        },
+
+        // get current index of this step
+        indexOf: function () {
+            return _(this.parent.steps).indexOf(this);
         },
 
         // show this step
@@ -413,7 +480,20 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
                 this.trigger('show');
             }
 
+            // no alignment, no spotlight, nothing to wait for
+            function handleSmartphone() {
+                this.trigger('before:show');
+                this.$el
+                    .css('left', this.indexOf() * 100 + '%')
+                    .removeClass('center middle')
+                    .appendTo(this.parent.container.find('.wizard-pages'));
+                this.trigger('show');
+                return this;
+            }
+
             return function () {
+
+                if (_.device('smartphone')) return handleSmartphone.call(this);
 
                 this.parent.toggleBackdrop(true);
 
@@ -429,9 +509,11 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
         // hide this step
         hide: function () {
             this.trigger('before:hide');
-            if (this.focusWatcher) clearInterval(this.focusWatcher);
-            $(window).off('resize.wizard.spotlight');
-            this.$el.detach();
+            if (!_.device('smartphone')) {
+                if (this.focusWatcher) clearInterval(this.focusWatcher);
+                $(window).off('resize.wizard.spotlight');
+                this.$el.detach();
+            }
             this.trigger('hide');
             return this;
         },
@@ -499,10 +581,10 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
                 var elem = $(selector + ':visible');
                 if (!elem.length) return;
 
-                var bounds = getBounds(elem), popupWidth = this.$el.width(), popupHeight = this.$el.height();
-
                 // remove default class and reset all inline positions
                 this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
+
+                var bounds = getBounds(elem), popupWidth = this.$el.width(), popupHeight = this.$el.height();
 
                 if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
                     // enough room to appear on the right side
@@ -563,6 +645,71 @@ define('io.ox/core/tk/wizard', ['io.ox/backbone/disposable', 'gettext!io.ox/core
             if (model) model.get('run')();
         }
     };
+
+    //
+    // Touch move behavior
+    //
+
+    function initializeTouch() {
+
+        var self = this, offset = 0, pageX = 0, x, width, minX, maxX;
+
+        // override shift
+        this.shift = function (num) {
+
+            this.setCurrentStep(this.currentStep + num);
+
+            this.withCurrentStep(function (step) {
+                step.renderButtons();
+            });
+
+            var node = this.container.find('.wizard-pages'),
+                current = node.position().left / width * 100,
+                pct = this.currentStep * 100;
+
+            node.next()
+                .stop()
+                .css({ left: current + '%' })
+                .animate({ left: -pct + '%' }, {
+                    step: function (now) {
+                        node.css('transform', 'translateX(' + now + '%)');
+                    },
+                    duration: 100
+                }, 'linear');
+
+            return this;
+        };
+
+        this.container.find('.wizard-pages').on({
+
+            touchstart: function (e) {
+
+                var touches = e.originalEvent.targetTouches;
+                if (touches.length !== 1) return;
+                pageX = touches[0].pageX;
+
+                // get current window width to calculate percentages
+                width = $(window).width();
+                offset = $(this).position().left;
+                maxX = self.hasBack() ? +width : +width / 3;
+                minX = self.hasNext() ? -width : -width / 3;
+            },
+
+            touchmove: function (e) {
+                var touches = e.originalEvent.targetTouches;
+                if (touches.length !== 1) return;
+                x = touches[0].pageX - pageX;
+                x = Math.min(x, maxX);
+                x = Math.max(x, minX);
+                $(this).css('transform', 'translateX(' + ((offset + x) / width * 100) + '%)');
+            },
+
+            touchend: function () {
+                var pct = x / width * 100;
+                self.shift(pct < 0 ? (pct > -50 ? 0 : +1) : (pct < +50 ? 0 : -1));
+            }
+        });
+    }
 
     return Wizard;
 
