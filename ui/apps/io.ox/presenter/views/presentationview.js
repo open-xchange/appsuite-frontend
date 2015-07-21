@@ -583,75 +583,75 @@ define('io.ox/presenter/views/presentationview', [
          *  or an error object.
          */
         pdfDocumentLoadSuccess: function (pageCount) {
-           // do nothing and quit if a document is already disposed.
-           console.info('Presenter - pdfDocumentLoadSuccess()', 'page-count:', pageCount);
-           if (!this.pdfDocument) {
-               return;
-           }
-           // forward 'resolved' errors to error handler
-           if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
-               this.pdfDocumentLoadError.call(this, pageCount);
-               return;
-           }
+            // do nothing and quit if a document is already disposed.
+            console.info('Presenter - pdfDocumentLoadSuccess()', 'page-count:', pageCount);
+            if (!this.pdfDocument) {
+                return;
+            }
+            // forward 'resolved' errors to error handler
+            if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
+                this.pdfDocumentLoadError.call(this, pageCount);
+                return;
+            }
 
-           // configure Swiper
-           var swiperParameter = {
-               initialSlide: this.startIndex,
-               onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
-               onSlideChangeStart: this.onSlideChangeStart.bind(this)
-           };
-           swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_DEFAULT);
-           // enable touch and swiping for mobile devices
-           if (_.device('smartphone || tablet')) {
-               swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_SWIPING_ENABLED);
-           }
+            // configure Swiper
+            var swiperParameter = {
+                initialSlide: this.startIndex,
+                onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
+                onSlideChangeStart: this.onSlideChangeStart.bind(this)
+            };
+            swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_DEFAULT);
+            // enable touch and swiping for mobile devices
+            if (_.device('smartphone || tablet')) {
+                swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_SWIPING_ENABLED);
+            }
 
-           this.numberOfSlides = pageCount;
-           // create the PDF view after successful loading;
-           this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
+            this.numberOfSlides = pageCount;
+            // create the PDF view after successful loading;
+            this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
 
-           // add navigation buttons
-           if (pageCount > 1) {
-               this.carouselRoot.append(
-                   createNavigationButton('left'),
-                   createNavigationButton('right')
-               );
-           }
+            // add navigation buttons
+            if (pageCount > 1) {
+                this.carouselRoot.append(
+                    createNavigationButton('left'),
+                    createNavigationButton('right')
+                );
+            }
 
-           // draw page nodes and apply css sizes
-           _.times(pageCount, function (index) {
-               var swiperSlide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                   documentPage = $('<div class="document-page">'),
-                   pageSize = this.pdfView.getRealPageSize(index + 1);
+            // draw page nodes and apply css sizes
+            _.times(pageCount, function (index) {
+                var swiperSlide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
+                    documentPage = $('<div class="document-page">'),
+                    pageSize = this.pdfView.getRealPageSize(index + 1);
 
-               this.documentContainer.append(
+                this.documentContainer.append(
                    swiperSlide.append(
                        documentPage.css(pageSize)
                    )
-               );
-           }, this);
+                );
+            }, this);
 
-           // initiate swiper
-           this.swiper = new window.Swiper(this.carouselRoot[0], swiperParameter);
-           this.pages = this.$el.find('.document-page');
-           // trigger initial slide change event
-           this.presenterEvents.trigger('presenter:local:slide:change', this.startIndex);
+            // initiate swiper
+            this.swiper = new window.Swiper(this.carouselRoot[0], swiperParameter);
+            this.pages = this.$el.find('.document-page');
+            // trigger initial slide change event
+            this.presenterEvents.trigger('presenter:local:slide:change', this.startIndex);
 
-           // set callbacks at this.pdfView to start rendering
-           var renderCallbacks = {
-               getVisiblePageNumbers: this.getPagesToRender.bind(this),
-               getPageNode: this.getPageNode.bind(this),
-               beginRendering: this.beginPageRendering.bind(this),
-               endRendering: this.endPageRendering.bind(this)
-           };
-           this.pdfView.setRenderCallbacks(renderCallbacks);
-           // set scale/zoom according to device's viewport width
-           this.setZoomLevel(this.getFitScreenZoomFactor());
-           // focus first active slide initially
-           this.focusActiveSlide();
-           // resolve the document load Deferred: this document view is fully loaded.
-           this.documentLoad.resolve();
-       },
+            // set callbacks at this.pdfView to start rendering
+            var renderCallbacks = {
+                getVisiblePageNumbers: this.getPagesToRender.bind(this),
+                getPageNode: this.getPageNode.bind(this),
+                beginRendering: this.beginPageRendering.bind(this),
+                endRendering: this.endPageRendering.bind(this)
+            };
+            this.pdfView.setRenderCallbacks(renderCallbacks);
+            // set scale/zoom according to device's viewport width
+            this.setZoomLevel(this.getFitScreenZoomFactor());
+            // focus first active slide initially
+            this.focusActiveSlide();
+            // resolve the document load Deferred: this document view is fully loaded.
+            this.documentLoad.resolve();
+        },
 
         /**
          * Error handler for the PDF loading process.
