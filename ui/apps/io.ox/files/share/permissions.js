@@ -125,7 +125,7 @@
             events: {
                 'click a.bit': 'updateDropdown',
                 'click a.role': 'applyRole',
-                'click a[data-action="remove"]': 'removeEntity'
+                'click a[data-action="remove"]': 'removePermission'
             },
 
             render: function () {
@@ -134,9 +134,9 @@
                 return this;
             },
 
-            removeEntity: function (e) {
+            removePermission: function (e) {
                 e.preventDefault();
-                this.collection.remove(this.model);
+                this.model.collection.remove(this.model);
             },
 
             updateDropdown: function (e) {
@@ -161,10 +161,9 @@
             updateRole: function () {
                 var node = this.$el.find('.preset > a').text(gt('Apply role')),
                     bits = this.model.get('bits');
-                _(presets).find(function (obj) {
+                _(presets).each(function (obj) {
                     if (obj.bits === bits) {
                         node.text(obj.label);
-                        return true;
                     }
                 });
             },
@@ -274,21 +273,15 @@
                 var self = this;
                 this.$el.empty();
                 this.collection.each(function (model) {
-                    new PermissionView({
-                        model: model,
-                        collection: self.collection,
-                        owner: self.getOwner(),
-                        admin: self.model.isAdmin()
-                    }).render().$el.appendTo(self.$el);
+                    self.addPermissions(model);
                 });
                 return this;
             },
 
-            addPermissions:  function (model, collection) {
+            addPermissions:  function (model) {
                 var self = this;
                 new PermissionView({
                     model: model,
-                    collection: collection,
                     owner: this.getOwner(),
                     admin: self.model.isAdmin()
                 }).render().$el.appendTo(this.$el);
@@ -367,6 +360,7 @@
                     )
                 )
             );
+
             options = $('<div>').append(
                 // folder rights
                 gt('Folder permissions'), $.txt(_.noI18n(': ')),
