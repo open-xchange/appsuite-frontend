@@ -155,7 +155,9 @@ define('io.ox/files/share/model', [
                     data.recipients.push([recipientModel.getDisplayName(), recipientModel.getTarget()]);
                 });
 
-                data.message = this.get('message', '');
+                if (this.get('message')) {
+                    data.message = this.get('message', '');
+                }
 
                 // create or update ?
                 if (!this.has('url')) {
@@ -189,12 +191,14 @@ define('io.ox/files/share/model', [
                     }).fail(yell);
                 case 'create':
                 case 'update':
-                    var apiCalls = [];
-                    apiCalls.push(api.updateLink(model.toJSON(), model.get('lastModified')).fail(yell));
-                    if (this.get('type') === this.TYPES.LINK && model.has('recipients') && model.get('recipients').length > 0) {
-                        apiCalls.push(api.sendLink(model.toJSON()).fail(yell));
-                    }
-                    return $.when.apply($, apiCalls);
+                    var self = this;
+                    return api.updateLink(model.toJSON(), model.get('lastModified')).then(function () {
+                        if (self.get('type') === self.TYPES.LINK && model.has('recipients') && model.get('recipients').length > 0) {
+                            return api.sendLink(model.toJSON()).fail(yell);
+                        } else {
+                            return $.when();
+                        }
+                    }, yell);
                 case 'delete':
                     if (this.get('type') === this.TYPES.LINK) {
                         return api.deleteLink(model.toJSON()).fail(yell);
