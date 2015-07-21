@@ -23,8 +23,7 @@ define('io.ox/core/desktop', [
     'io.ox/core/folder/api',
     'io.ox/find/main',
     'settings!io.ox/core',
-    'gettext!io.ox/core',
-    'io.ox/core/sessionrestore' //just load the class, no direct use
+    'gettext!io.ox/core'
 ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreConfig, gt) {
 
     'use strict';
