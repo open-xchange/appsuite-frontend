@@ -13,12 +13,10 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    'static/3rd.party/pdfjs/pdf.combined'
-], function (PDFView) {
+    '3rd.party/pdfjs/pdf.combined'
+], function (PDFView, PDFJS) {
 
     'use strict';
-
-    var PDFJS = window.PDFJS;
 
     // class PDFDocument =======================================================
 

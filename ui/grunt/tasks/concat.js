@@ -268,6 +268,10 @@ module.exports = function (grunt) {
                 ]
             },
             pdfjs: {
+                options: {
+                    banner: 'define("3rd.party/pdfjs/pdf.combined", function () {\n\n',
+                    footer: 'return PDFJS;\n});\n'
+                },
                 files: [
                     {
                         src: [
