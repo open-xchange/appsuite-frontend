@@ -15,7 +15,7 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
 
     'use strict';
 
-    describe.only('The Wizard.', function () {
+    describe('The Wizard.', function () {
 
         beforeEach(function () {
             this.wizard = new Wizard();
