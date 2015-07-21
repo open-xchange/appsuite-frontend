@@ -4,7 +4,7 @@
  * law. Any use of the work other than as authorized under this license
  * or copyright law is prohibited.
  *
- * http://creativecommons.org/licrequirejsenses/by-nc-sa/2.5/
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
  * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
@@ -56,7 +56,7 @@ define('io.ox/core/pdf/pdfdocument', [
          *
          * Disable range requests with Chrome on small devices
          */
-        if (false/*_.browser.Chrome /*&& _.device('smartphone')*/ && PDFJS.disableRange) {
+        if (true/*_.browser.Chrome /*&& _.device('smartphone')*/ && PDFJS.disableRange) {
             PDFJS.disableRange = true;
         }
 
