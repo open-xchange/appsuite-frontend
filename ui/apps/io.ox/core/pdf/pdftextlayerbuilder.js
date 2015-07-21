@@ -15,9 +15,11 @@
  */
 
 define('io.ox/core/pdf/pdftextlayerbuilder', [
-    '3rd.party/pdfjs/pdf.combined'
-], function (PDFJS) {
+    'static/3rd.party/pdfjs/pdf.combined'
+], function () {
     'use strict';
+
+    var PDFJS = window.PDFJS;
 
     /*
      * var CSS_UNITS = 96.0 / 72.0; var DEFAULT_SCALE = 'auto'; var

@@ -13,7 +13,7 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    '3rd.party/pdfjs/pdf.combined'
+    'static/3rd.party/pdfjs/pdf.combined'
 ], function (PDFView) {
 
     'use strict';
