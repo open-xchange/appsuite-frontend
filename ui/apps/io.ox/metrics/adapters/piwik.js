@@ -18,7 +18,7 @@ define('io.ox/metrics/adapters/piwik', [
 
     'use strict';
 
-    if (!settings.get('tracking/piwik/enabled', true)) return;
+    if (!settings.get('tracking/piwik/enabled', false)) return;
 
     var point =  ext.point('io.ox/metrics/adapter'),
         url = settings.get('tracking/piwik/url', 'https://metrics.open-xchange.com/piwik/');

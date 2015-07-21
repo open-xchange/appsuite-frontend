@@ -23,7 +23,7 @@ define('io.ox/metrics/main', [
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        enabled = settings.get('tracking/enabled', true) && point.list().length > 0,
+        enabled = settings.get('tracking/enabled', false) && point.list().length > 0,
         userhash = util.md5(ox.user),
         metrics;
 
