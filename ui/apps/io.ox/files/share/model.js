@@ -154,6 +154,9 @@ define('io.ox/files/share/model', [
                 _(this.get('recipients')).each(function (recipientModel) {
                     data.recipients.push([recipientModel.getDisplayName(), recipientModel.getTarget()]);
                 });
+                if (data.recipients.length === 0) {
+                    delete data.recipients;
+                }
 
                 if (this.get('message')) {
                     data.message = this.get('message', '');
@@ -183,6 +186,7 @@ define('io.ox/files/share/model', [
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
                         if (data.is_new && data.is_new === true) {
+                            // if existing link add unique ID to simulate existing Backbone model
                             delete data.is_new;
                             data.id = _.uniqueId();
                         }
@@ -192,12 +196,11 @@ define('io.ox/files/share/model', [
                 case 'create':
                 case 'update':
                     var self = this;
-                    return api.updateLink(model.toJSON(), model.get('lastModified')).then(function () {
+                    return api.updateLink(model.toJSON(), model.get('lastModified')).then(function (res) {
                         if (self.get('type') === self.TYPES.LINK && model.has('recipients') && model.get('recipients').length > 0) {
-                            return api.sendLink(model.toJSON()).fail(yell);
-                        } else {
-                            return $.when();
+                            api.sendLink(model.toJSON()).fail(yell);
                         }
+                        return $.Deferred().resolve(res);
                     }, yell);
                 case 'delete':
                     if (this.get('type') === this.TYPES.LINK) {
