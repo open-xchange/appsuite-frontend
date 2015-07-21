@@ -97,11 +97,21 @@
 
         // Simple Permission
         Permission = Backbone.Model.extend({
+
             idAttribute: 'entity',
+
             defaults: {
                 group: false,
                 bits: 0
+            },
+
+            initialize: function () {
+                // if extended permissions
+                if (this.has('type') && this.get('type') === 'group') {
+                    this.set('group', true);
+                }
             }
+
         }),
 
         // Permission Collection
@@ -114,7 +124,7 @@
 
             initialize: function (options) {
 
-                this.options = options;
+                this.item = options.itemModel;
 
                 this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'remove', this.remove);
@@ -129,7 +139,7 @@
             },
 
             render: function () {
-                var baton = ext.Baton({ model: this.model, view: this, admin: this.options.admin });
+                var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/detail').invoke('draw', this.$el.empty(), baton);
                 return this;
             },
@@ -197,7 +207,7 @@
             },
 
             addRoles: function () {
-                if (!this.options.admin) return $();
+                if (!this.item.isAdmin()) return $();
                 var self = this;
                 return $('<span class="dropdown preset">').append(
                     $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
@@ -244,7 +254,7 @@
                 this.collection = new Permissions();
 
                 this.listenTo(this.collection, 'reset', this.resetPermissions);
-                this.listenTo(this.collection, 'add', this.addPermissions);
+                this.listenTo(this.collection, 'add', this.addPermissionView);
             },
 
             render: function () {
@@ -272,26 +282,20 @@
             resetPermissions: function () {
                 var self = this;
                 this.$el.empty();
-                this.collection.each(function (model) {
-                    self.addPermissions(model);
+                this.collection.each(function (PermissionModel) {
+                    self.addPermissionView(PermissionModel);
                 });
                 return this;
             },
 
-            addPermissions:  function (model) {
+            addPermissionView:  function (PermissionModel) {
                 var self = this;
-                new PermissionView({
-                    model: model,
-                    owner: this.getOwner(),
-                    admin: self.model.isAdmin()
-                }).render().$el.appendTo(this.$el);
-                return this;
-            },
-
-            getOwner: function () {
-                // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
-                // shared folder only have admins, no owner, because it's not possible to determine the right one
-                return this.model.get('created_by') || (folderAPI.is('insideDefaultfolder', this.options) ? ox.user_id : null);
+                return this.$el.append(
+                    new PermissionView({
+                        model: PermissionModel,
+                        itemModel: self.model
+                    }).render().$el
+                );
             }
 
         });
@@ -304,17 +308,42 @@
             var self = this,
                 entity = baton.model.get('entity');
 
-            if (baton.model.get('group')) {
-                groupAPI.getName(entity).done(function (name) {
-                    baton.name = name;
-                    ext.point(POINT + '/entity').invoke('draw', self, baton);
-                });
+            if (baton.view.item.isExtendedPermission()) {
+
+                switch (baton.model.get('type')) {
+                    case 'user':
+                        baton.user = baton.model.get('contact');
+                        baton.name = baton.model.get('display_name');
+                        break;
+                    case 'group':
+                        baton.name = baton.model.get('display_name');
+                        break;
+                    case 'guest':
+                        baton.name = gt('Guest') + ': ' + baton.model.get('contact').email1;
+                        baton.user = baton.model.get('contact');
+                        break;
+                    case 'anonymous':
+                        baton.name = gt('Link');
+                        break;
+                    default:
+                        break;
+                }
+
+                ext.point(POINT + '/entity').invoke('draw', self, baton);
             } else {
-                userAPI.get({ id: String(entity) }).done(function (user) {
-                    baton.name = contactsUtil.getFullName(user) || contactsUtil.getMail(user);
-                    baton.user = user;
-                    ext.point(POINT + '/entity').invoke('draw', self, baton);
-                });
+                // get missing data
+                if (baton.model.get('group')) {
+                    groupAPI.getName(entity).done(function (name) {
+                        baton.name = name;
+                        ext.point(POINT + '/entity').invoke('draw', self, baton);
+                    });
+                } else {
+                    userAPI.get({ id: String(entity) }).done(function (user) {
+                        baton.name = contactsUtil.getFullName(user) || contactsUtil.getMail(user);
+                        baton.user = user;
+                        ext.point(POINT + '/entity').invoke('draw', self, baton);
+                    });
+                }
             }
         }
     });
@@ -334,7 +363,7 @@
             } else {
                 this.append(
                     $('<div class="pull-left contact-picture group">').append(
-                        $('<i class="fa fa-group">')
+                        $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'user') + '">')
                     )
                 );
             }
@@ -354,7 +383,7 @@
                 $('<div class="entity">').append(
                     node = $('<div>').append(
                         $('<span class="name">').text(_.noI18n(baton.name)),
-                        entity === view.options.owner ? $('<span class="owner">').text(gt('Owner')) : $(),
+                        entity === view.item.getOwner() ? $('<span class="owner">').text(gt('Owner')) : $(),
                         // quick change
                         view.addRoles()
                     )
@@ -373,7 +402,8 @@
                 // admin
                 gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
                     view.addDropdown('admin'), $.txt(_.noI18n('. ')));
-            if (baton.admin) {
+
+            if (view.item.isAdmin()) {
                 options.addClass('readwrite');
             } else {
                 options.addClass('readonly');
@@ -382,10 +412,10 @@
             }
 
             node.append(options);
-            if (baton.admin && entity !== ox.user_id) {
+            if (view.item.isAdmin() && entity !== ox.user_id) {
                 node.append(
                     $('<a href="# "data-action="remove" title="' + gt('remove permission') + '" tabindex="1">')
-                        .append($('<i class="fa fa-times" aria-hidden="true">'))
+                        .append($('<i class="fa fa-trash" aria-hidden="true">'))
                 );
             }
 
@@ -492,7 +522,7 @@
                     }),
                     guid = _.uniqueId('form-control-label-');
 
-                dialog.getContentNode().append(
+                dialog.getFooter().prepend(
                     $('<div class="share-options">').append(
                         $('<div class="autocomplete-controls">').append(
                             $('<div class="form-group">').append(
@@ -512,10 +542,7 @@
                                 placeholder: gt('Message (optional)')
                             })
                         )
-                    )
-                );
-
-                dialog.getFooter().append(
+                    ),
                     $('<div>').addClass('form-group cascade').append(
                         $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
                             new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogModel }).render().$el

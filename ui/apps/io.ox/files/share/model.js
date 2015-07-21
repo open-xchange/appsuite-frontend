@@ -221,12 +221,13 @@ define('io.ox/files/share/model', [
 
     });
 
+    // wrapping model for infostore files and folders in sharing context
     var Share = Backbone.Model.extend({
 
         idAttribute: 'token',
 
-        initialize: function (option) {
-            this.set('files', option.files);
+        initialize: function () {
+
         },
 
         isFolder: function () {
@@ -241,12 +242,18 @@ define('io.ox/files/share/model', [
             }
         },
 
+        isExtendedPermission: function () {
+            return this.has('com.openexchange.share.extended' + (this.isFolder() ? 'Permissions' : 'ObjectPermissions'));
+        },
+
+        getOwner: function () {
+            // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
+            // shared folder only have admins, no owner, because it's not possible to determine the right one
+            return this.get('created_by') || (folderAPI.is('insideDefaultfolder', this.attributes) ? ox.user_id : null);
+        },
+
         getDisplayName: function () {
-            if (this.get('title')) {
-                return this.get('title');
-            } else {
-                return this.isFolder() ? 'Foldername' : 'Filename';
-            }
+            return this.get('title');
         },
 
         getFolderID: function () {
@@ -254,17 +261,10 @@ define('io.ox/files/share/model', [
         },
 
         getPermissions: function () {
-            return this.get('com.openexchange.share.extendedPermissions') ||
-                this.get('object_permissions') ||
-                this.get('permissions');
-        },
-
-        getObject: function () {
-            var target = this.get('target');
             if (this.isFolder()) {
-                return folderAPI.get(target.folder);
+                return this.get('com.openexchange.share.extendedPermissions') || this.get('permissions');
             } else {
-                return filesAPI.get({ id: target.item, folder: target.folder });
+                return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
             }
         },
 
@@ -280,10 +280,6 @@ define('io.ox/files/share/model', [
     });
 
     var Shares = Backbone.Collection.extend({
-
-        comparator: function (share) {
-            return share.get('created');
-        },
 
         model: Share
 
