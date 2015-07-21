@@ -86,6 +86,7 @@ define('io.ox/core/tk/wizard', [
         this.options = options || {};
         this.currentStep = 0;
         this.steps = [];
+        this.closed = false;
 
         // add event hub
         _.extend(this, Backbone.Events);
@@ -104,7 +105,7 @@ define('io.ox/core/tk/wizard', [
         });
 
         // focus trap
-        $(document).on('click', '.wizard-overlay, .wizard-backdrop', function () {
+        $(document).on('click.wizard', '.wizard-overlay, .wizard-backdrop', function () {
             $('.wizard-step:visible').focus();
         });
 
@@ -165,6 +166,8 @@ define('io.ox/core/tk/wizard', [
         },
 
         close: function () {
+            // don't close twice
+            if (this.closed) return;
             this.trigger('before:stop');
             this.withCurrentStep(function (step) {
                 step.hide();
@@ -173,7 +176,14 @@ define('io.ox/core/tk/wizard', [
                 step.dispose();
             });
             if (_.device('smartphone')) this.container.remove().empty();
+            // unregister / clean up
+            this.off();
+            $(document).off('click.wizard');
+            this.steps = [];
+            this.container = null;
+            // done
             this.trigger('stop');
+            this.closed = true;
             return this;
         },
 
