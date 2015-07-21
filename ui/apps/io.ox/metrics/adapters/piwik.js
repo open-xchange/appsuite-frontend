@@ -21,7 +21,7 @@ define('io.ox/metrics/adapters/piwik', [
     if (!settings.get('tracking/piwik/enabled', true)) return;
 
     var point =  ext.point('io.ox/metrics/adapter'),
-        url = settings.get('tracking/piwik/url', 'http://metrics.open-xchange.com/piwik/');
+        url = settings.get('tracking/piwik/url', 'https://metrics.open-xchange.com/piwik/');
 
     // piwik uses global var to allow pushing before tracker is fully loaded
     window._paq = window._paq || [];
