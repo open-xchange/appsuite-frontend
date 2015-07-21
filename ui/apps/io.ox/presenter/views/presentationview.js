@@ -544,7 +544,8 @@ define('io.ox/presenter/views/presentationview', [
          *  The jquery page node for the requested page number.
          */
         getPageNode: function (pageNumber) {
-            return (_.isNumber(pageNumber) && (pageNumber >= 1) && this.documentContainer) ? this.documentContainer.children().eq(pageNumber - 1) : null;
+            return (_.isNumber(pageNumber) && (pageNumber >= 1) && this.documentContainer) ?
+                this.documentContainer.children().eq(pageNumber - 1).find('.document-page') : null;
         },
 
         /**
@@ -649,6 +650,8 @@ define('io.ox/presenter/views/presentationview', [
             this.setZoomLevel(this.getFitScreenZoomFactor());
             // focus first active slide initially
             this.focusActiveSlide();
+            // bind slide click handler
+            this.pages.on('mousedown mouseup', this.onSlideClick.bind(this));
             // resolve the document load Deferred: this document view is fully loaded.
             this.documentLoad.resolve();
         },
@@ -809,6 +812,30 @@ define('io.ox/presenter/views/presentationview', [
                 }
             }.bind(this));
         },
+
+        /**
+         * Presentation slide click handler.
+         * - detects if a user is doing a text selection or a click
+         * - show next slide on clicks.
+         */
+        onSlideClick: (function () {
+
+            var x, y;
+
+            return function (event) {
+                switch (event.type) {
+                    case 'mousedown':
+                        x = event.clientX;
+                        y = event.clientY;
+                        break;
+                    case 'mouseup':
+                        if (event.clientX === x && event.clientY === y) {
+                            this.showNextSlide();
+                        }
+                        break;
+                }
+            };
+        })(),
 
         /**
          * Destructor function of the PresentationView.
