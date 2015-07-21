@@ -174,7 +174,9 @@ define('io.ox/presenter/views/mainview', [
          * Handle OX Presenter keyboard events
          */
         onKeydown: function (event) {
-            //event.stopPropagation();
+            event.stopPropagation();
+
+            var self = this;
 
             // TODO: check if we need to handle TAB traversal ourselves.
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
@@ -196,38 +198,71 @@ define('io.ox/presenter/views/mainview', [
                 tabableActions.eq(nextElementIndex).focus();
             }
 
+            function togglePause () {
+                var app = self.app,
+                    userId = app.rtConnection.getRTUuid();
+                if (app.rtModel.canPause(userId)) {
+                    app.rtConnection.pausePresentation();
+                    app.mainView.toggleFullscreen(false);
+                } else if (app.rtModel.canContinue(userId)) {
+                    app.rtConnection.continuePresentation();
+                }
+            }
+
             console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
 
             switch (event.which || event.keyCode) {
                 case 9: // TAB key
                     // TODO: check if we need to handle TAB traversal ourselves.
                     if (false /*activate for manual tab traversal*/) {
-                        event.stopPropagation();
                         tabHandler(event);
                     }
                     break;
-                case 37: // left arrow
-                    event.stopPropagation();
+                case 37: // left arrow : show previous slide
                     this.presentationView.showPreviousSlide();
-                    this.presentationView.focusActiveSlide();
                     break;
-                case 39: // right arrow
-                    event.stopPropagation();
+                case 39: // right arrow : show next slide
                     this.presentationView.showNextSlide();
-                    this.presentationView.focusActiveSlide();
                     break;
-                // TODO: clarify which keyboard events to support
-                case 107: // plus key
-                    event.stopPropagation();
-                    this.presentationView.changeZoomLevel('increase');
+                case 38: // up arrow : show previous slide
+                    this.presentationView.showPreviousSlide();
                     break;
-                case 109: // minus key
-                    event.stopPropagation();
-                    this.presentationView.changeZoomLevel('decrease');
+                case 40: // down arrow : show next slide
+                    this.presentationView.showNextSlide();
                     break;
-                case 70: // F key
-                    event.stopPropagation();
-                    this.toggleFullscreen();
+                case 33: // page up : show previous slide
+                    this.presentationView.showPreviousSlide();
+                    break;
+                case 34: // page down : show next slide
+                    this.presentationView.showNextSlide();
+                    break;
+                case 8: // ctrl + shift + backspace : ends presentation. backspace: show previous slide,
+                    if (event.shiftKey && (event.ctrlKey || event.metaKey)) {
+                        this.app.rtConnection.endPresentation();
+                    } else {
+                        this.presentationView.showPreviousSlide();
+                    }
+                    break;
+                case 13: // ctrl + shift + enter :  starts presentation
+                    if (event.shiftKey && (event.ctrlKey || event.metaKey)) {
+                        var slideId = this.app.mainView.getActiveSlideIndex();
+                        this.app.rtConnection.startPresentation({ activeSlide: slideId });
+                    } else { // enter: show next slide
+                        this.presentationView.showNextSlide();
+                    }
+                    break;
+                case 36: // home : show first slide
+                    this.presentationView.showSlide(0);
+                    break;
+                case 35: // end : show last slide
+                    var slideCount = this.getSlideCount();
+                    this.presentationView.showSlide(slideCount - 1);
+                    break;
+                case 190: // period : pause / continue presentation
+                    togglePause();
+                    break;
+                case 188: // comma : pause / continue presentation
+                    togglePause();
                     break;
             }
         },
@@ -518,6 +553,7 @@ define('io.ox/presenter/views/mainview', [
          */
         showNextSlide: function () {
             this.presentationView.showNextSlide();
+            this.presentationView.focusActiveSlide();
         },
 
         /**
@@ -525,6 +561,7 @@ define('io.ox/presenter/views/mainview', [
          */
         showPreviousSlide: function () {
             this.presentationView.showPreviousSlide();
+            this.presentationView.focusActiveSlide();
         },
 
         /**
