@@ -116,7 +116,7 @@ module.exports = function (grunt) {
                         expand: true,
                         src: ['**/*', '!pdf.combined.js'],
                         cwd: 'bower_components/pdfjs-dist',
-                        dest: 'build/static/3rd.party/pdfjs'
+                        dest: 'build/apps/3rd.party/pdfjs'
                     }
                 ]
             }
