@@ -23,7 +23,8 @@ define('io.ox/metrics/main', [
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        enabled = settings.get('tracking/enabled', false) && point.list().length > 0,
+        // don't run metrics in test environment
+        enabled = !_.device('karma') && settings.get('tracking/enabled', true),
         userhash = util.md5(ox.user),
         metrics;
 
