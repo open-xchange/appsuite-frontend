@@ -219,10 +219,36 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'share': {
                     prio: 'hi',
                     mobile: 'lo',
-                    label: gt('Share'),
                     icon: 'fa fa-user-plus',
-                    section: 'export',
-                    ref: 'io.ox/files/icons/share'
+                    label: gt('Share'),
+                    drawDisabled: true,
+                    title: gt('Share selected files'),
+                    ref: 'io.ox/files/dropdown/share',
+                    customize: function (baton) {
+                        var self = this;
+                        this.append('<i class="fa fa-caret-down">');
+
+                        this.after(
+                            LinksPattern.DropdownLinks({
+                                ref: 'io.ox/files/links/toolbar/share',
+                                wrap: false,
+                                //function to call when dropdown is empty
+                                emptyCallback: function () {
+                                    self.addClass('disabled')
+                                        .attr({ 'aria-disabled': true })
+                                        .removeAttr('href');
+                                }
+                            }, baton)
+                        );
+
+                        this.addClass('dropdown-toggle').attr({
+                            'aria-haspopup': 'true',
+                            'data-toggle': 'dropdown',
+                            'role': 'button'
+                        }).dropdown();
+
+                        this.parent().addClass('dropdown');
+                    }
                 },
                 'sendbymail': {
                     prio: 'lo',
