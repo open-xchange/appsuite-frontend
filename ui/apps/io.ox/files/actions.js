@@ -391,7 +391,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
-            return e.collection.has('some');
+            return e.collection.has('one');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
