@@ -237,14 +237,14 @@ define('io.ox/presenter/views/mainview', [
                     this.presentationView.showNextSlide();
                     break;
                 case 8: // ctrl + shift + backspace : ends presentation. backspace: show previous slide,
-                    if (event.shiftKey && (event.ctrlKey || event.metaKey)) {
+                    if (event.ctrlKey && event.shiftKey) {
                         this.app.rtConnection.endPresentation();
                     } else {
                         this.presentationView.showPreviousSlide();
                     }
                     break;
                 case 13: // ctrl + shift + enter :  starts presentation
-                    if (event.shiftKey && (event.ctrlKey || event.metaKey)) {
+                    if (event.ctrlKey && event.shiftKey) {
                         var slideId = this.app.mainView.getActiveSlideIndex();
                         this.app.rtConnection.startPresentation({ activeSlide: slideId });
                     } else { // enter: show next slide
