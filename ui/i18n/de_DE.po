@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-07-17 12:08+0100\n"
+"PO-Revision-Date: 2015-07-22 13:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -5692,17 +5692,19 @@ msgstr "Präsentationen"
 
 #: apps/io.ox/presenter/views/navigationview.js:152 module:io.ox/presenter
 #: apps/io.ox/presenter/views/sidebar/userbadgeview.js:41
+#, fuzzy
 msgid "Presenter"
-msgstr "Präsentator"
+msgstr "Presenter"
 
 #: apps/io.ox/presenter/views/navigationview.js:214 module:io.ox/presenter
 #, fuzzy
 msgid "Presenter Navigation"
-msgstr "Präsentator-Navigation"
+msgstr "Presenter-Navigation"
 
 #: apps/io.ox/presenter/views/toolbarview.js:266 module:io.ox/presenter
+#, fuzzy
 msgid "Presenter Toolbar"
-msgstr "Präsentator-Werkzeugleiste"
+msgstr "Presenter-Werkzeugleiste"
 
 #: apps/plugins/portal/birthdays/register.js:61 module:plugins/portal
 msgid "Press [enter] to jump to complete list of Birthdays."
