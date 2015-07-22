@@ -74,7 +74,6 @@ define('io.ox/files/share/model', [
 
             // default invite data
             var self = this,
-                bitMask = this.get('edit') ? 33026 : 257,
                 targets = [],
                 data = {};
 
@@ -107,7 +106,7 @@ define('io.ox/files/share/model', [
                 data.recipients = [];
                 _(this.get('recipients')).each(function (recipientModel) {
                     var recipientData = {
-                        bits: bitMask
+                        bits: 33026
                     };
 
                     if (self.get('secured')) {
@@ -145,8 +144,10 @@ define('io.ox/files/share/model', [
             if (this.get('type') === this.TYPES.LINK) {
                 data = targets[0];
 
-                if (this.get('secured')) {
+                if (this.get('secured') && this.get('password') !== '') {
                     data.password = this.get('password');
+                } else {
+                    data.password = null;
                 }
 
                 // collect recipients data
@@ -158,8 +159,8 @@ define('io.ox/files/share/model', [
                     delete data.recipients;
                 }
 
-                if (this.get('message')) {
-                    data.message = this.get('message', '');
+                if (this.get('message') && this.get('message') !== '') {
+                    data.message = this.get('message');
                 }
 
                 // create or update ?
@@ -167,7 +168,9 @@ define('io.ox/files/share/model', [
                     return data;
                 } else {
                     if (this.get('temporary')) {
-                        data.expiry_date = this.getExpiryDate();
+                        data.expiry_date = this.get('expiry_date');
+                    } else {
+                        data.expiry_date = null;
                     }
                     return data;
                 }

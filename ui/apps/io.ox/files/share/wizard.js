@@ -171,18 +171,22 @@ define('io.ox/files/share/wizard', [
                 5: gt('one year')
             };
 
-            var dropdown = new Dropdown({ tagName: 'span', model: baton.model, label: typeTranslations[baton.model.get('expires')], caret: true })
-                .listenTo(baton.model, 'change:expires', function (model, expires) {
-                    this.$el.find('.dropdown-label').text(typeTranslations[expires]);
-                });
+            // create dropdown
+            var dropdown = new Dropdown({ tagName: 'span', model: baton.model, label: typeTranslations[baton.model.get('expires')], caret: true });
 
+            // set dropdown link
+            if (baton.model.get('expiry_date')) {
+                dropdown.$el.find('.dropdown-label').text(new moment(baton.model.get('expiry_date')).format('L'));
+            }
+
+            // add dropdown options
             _(typeTranslations).each(function (val, key) {
                 dropdown.option('expires', parseInt(key, 10), val);
             });
 
             this.append(
                 $('<div>').addClass('form-group expiresgroup').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Expires in')).prepend(
+                    $('<label>').addClass('checkbox-inline').text(gt('Expires on')).prepend(
                         new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
                     ),
                     $.txt(' '),
@@ -190,8 +194,16 @@ define('io.ox/files/share/wizard', [
                 )
             );
 
-            baton.model.on('change:expires', function (model) {
+            baton.model.on('change:expiry_date', function (model, val) {
+                dropdown.$el.find('.dropdown-label').text(new moment(val).format('L'));
                 model.set('temporary', true);
+            });
+
+            baton.model.on('change:expires', function (model) {
+                model.set({
+                    'temporary': true,
+                    'expiry_date': model.getExpiryDate()
+                });
             });
 
         }
