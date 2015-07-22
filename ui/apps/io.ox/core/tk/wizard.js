@@ -240,7 +240,10 @@ define('io.ox/core/tk/wizard', [
             if (!elem.length) return;
             var bounds = getBounds(elem);
             options = _.extend({ top: 0, left: 0 }, options);
-            hotspot.css({ top: bounds.top - 4 + options.top, left: bounds.left - 4 + options.left });
+            hotspot.css({
+                top: bounds.top - 4 + options.top,
+                left: (bounds.left || (bounds.width / 2 >> 0)) - 4 + options.left
+            });
             $('body').append(hotspot);
         }
     });
