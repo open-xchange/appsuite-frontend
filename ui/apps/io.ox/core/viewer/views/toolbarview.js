@@ -663,7 +663,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
             _.defer(function () {
                 if (self.disposed) return;
-                self.$('.dropdown').after(
+                // using .dropdown would also select other dropdowns, like the sharing dropdown
+                self.$el.find('[data-action="more"]').parent().after(
                     self.$('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
                 );
             });
