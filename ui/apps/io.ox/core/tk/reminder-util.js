@@ -38,7 +38,7 @@ define('io.ox/core/tk/reminder-util', [
             var toggle;
             node.append(
                 $('<div>').addClass('dropdown').css({ 'float': 'left' }).append(
-                    toggle = $('<a role="menuitem" tabindex="1" data-action="reminderbutton">')
+                    toggle = $('<a role="menuitem" tabindex="1" data-action="remind-again">')
                     .attr({
                         'data-toggle': 'dropdown',
                         'aria-haspopup': 'true'
