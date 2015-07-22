@@ -66,7 +66,7 @@ define('io.ox/core/notifications/subview', [
                             $('<button type="button" class="btn btn-link clear-single-button fa fa-times">')
                                 .attr({
                                     tabindex: 1,
-                                    'data-action': 'clearSingle',
+                                    'data-action': 'clear-single',
                                     'aria-label': gt ('Hide this notification')
                                 }).on('click', function () {
                                         view.hide(requestedModel);
