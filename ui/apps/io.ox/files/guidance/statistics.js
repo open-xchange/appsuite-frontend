@@ -400,7 +400,7 @@ define('io.ox/files/guidance/statistics', [
                     node.idle().empty();
 
                     //remove the reload button
-                    $('a[data-action=guidance_files_reload]').remove();
+                    $('a[data-action=guidance-files-reload]').remove();
                 }
             },
             function fail() {

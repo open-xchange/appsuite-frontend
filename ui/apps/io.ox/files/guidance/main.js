@@ -28,7 +28,7 @@ define('io.ox/files/guidance/main', [
 
         // DEBUGGING: this is only for testing, due to unlimited disc space.
         // quota.quota = 1000000000000;
-        // ext.point('io.ox/files/guidance').enable('guidance_files_reload');
+        // ext.point('io.ox/files/guidance').enable('guidance-files-reload');
 
         folderAPI.get(folderID).done(function (folderObj) {
             folder = folderObj;
@@ -182,7 +182,7 @@ define('io.ox/files/guidance/main', [
     });
 
     ext.point('io.ox/files/guidance').extend(new links.Link({
-        id: 'guidance_files_reload',
+        id: 'guidance-files-reload',
         index: INDEX += 100,
         prio: 'hi',
         label: gt('Reload statistics'),
