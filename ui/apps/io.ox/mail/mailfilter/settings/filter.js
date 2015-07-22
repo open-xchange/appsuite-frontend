@@ -251,7 +251,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         });
 
                         self.model.on('ChangeProcessSub', function (status) {
-                            var target = self.$el.find('[data-action="toogleProcessSub"] i');
+                            var target = self.$el.find('[data-action="toggle-process-subsequent"] i');
                             if (status) {
                                 target.removeClass('fa-ban').addClass('fa-arrow-down');
                             } else {
@@ -266,7 +266,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         'click [data-action="toggle"]': 'onToggle',
                         'click [data-action="delete"]': 'onDelete',
                         'click [data-action="edit"]': 'onEdit',
-                        'click [data-action="toogleProcessSub"]': 'onToggleProcessSub',
+                        'click [data-action="toggle-process-subsequent"]': 'onToggleProcessSub',
                         'click [data-action="edit-vacation"]': 'onEditVacation',
                         'click [data-action="edit-autoforward"]': 'onEditAutoforward',
                         'keydown .drag-handle': 'dragViaKeyboard'
@@ -303,7 +303,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         //yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
-                                var target = $(e.target).closest('.widget-controls').find('[data-action="toogleProcessSub"] i');
+                                var target = $(e.target).closest('.widget-controls').find('[data-action="toggle-process-subsequent"] i');
                                 if (containsStop(actioncmds)) {
                                     target.removeClass('fa-arrow-down').addClass('fa-ban');
                                 } else {

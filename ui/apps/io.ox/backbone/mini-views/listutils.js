@@ -96,7 +96,7 @@ var appendIconText = function (target, text, type, activeColor) {
             title: label,
             href: '#',
             role: 'button',
-            'data-action': 'toogleProcessSub',
+            'data-action': 'toggle-process-subsequent',
             tabindex: 1,
             'aria-label': title + ', ' + label
         });
