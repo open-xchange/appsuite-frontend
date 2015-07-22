@@ -84,25 +84,40 @@ define('io.ox/core/pdf/pdfview', [
             if (textWrapperNode) {
                 var pageChildren = textWrapperNode.children(),
                     last = null,
-                    childrenCount = pageChildren.length,
-                    offset = '2em';
+                    sortedChildren = pageChildren.get(),
+                    childrenCount = sortedChildren.length,
+                    //top right bottom left
+                    margin = '-500px -2em 0 -10em',
+                    padding = '+500px +2em 0 +10em',
+                    origin = '10em 0 0';
 
-                pageChildren.each(function () {
-                    if (this.innerHTML.length === 1) {
+                sortedChildren.sort(function (a, b) {
+                    var aV = PDFView.convertCssLength(a.style.top, 'px', 1);
+                    var bV = PDFView.convertCssLength(b.style.top, 'px', 1);
+                    var diff = aV - bV;
+                    if (Math.round(diff) === 0) {
+                        aV = PDFView.convertCssLength(a.style.left, 'px', 1);
+                        bV = PDFView.convertCssLength(b.style.left, 'px', 1);
+                        diff = aV - bV;
+                    }
+                    return diff;
+                });
+
+                _.each(sortedChildren, function (child) {
+
+                    if (child.innerHTML.length === 1) {
                         // workaround for infinte height selections
-                        PDFView.setCssAttributeWithPrefixes(this, 'transform', 'scaleX(1)');
+                        child.style.transform = 'scaleX(1)';
                     }
 
                     if (last) {
 
-                        var jqThis = $(this),
-                            jqLast = $(last),
-                            myTop = PDFView.convertCssLength(jqThis.css('top'), 'px', 1),
-                            myLeft = PDFView.convertCssLength(jqThis.css('left'), 'px', 1),
-                            lastTop = PDFView.convertCssLength(jqLast.css('top'), 'px', 1),
-                            lastLeft = PDFView.convertCssLength(jqLast.css('left'), 'px', 1),
-                            letter = PDFView.convertCssLength(jqLast.css('font-size'), 'px', 1),
-                            sameLine = Math.abs((myTop + jqThis.offsetHeight) - (lastTop + last.offsetHeight)),
+                        var myTop = PDFView.convertCssLength(child.style.top, 'px', 1),
+                            myLeft = PDFView.convertCssLength(child.style.left, 'px', 1),
+                            lastTop = PDFView.convertCssLength(last.style.top, 'px', 1),
+                            lastLeft = PDFView.convertCssLength(last.style.left, 'px', 1),
+                            letter = PDFView.convertCssLength(last.style['font-size'], 'px', 1),
+                            sameLine = Math.abs((myTop + child.offsetHeight) - (lastTop + last.offsetHeight)),
                             signDist = Math.abs(myLeft - (lastLeft + last.offsetWidth)),
                             addit = '';
 
@@ -119,19 +134,19 @@ define('io.ox/core/pdf/pdfview', [
                         last.innerHTML = last.innerHTML + addit;
                     }
 
-                    last = this;
+                    last = child;
                 });
 
                 //much bigger element for a smooth forward selection!
-                pageChildren.each(function (index) {
+                _.each(sortedChildren, function (child, index) {
                     // Non IPAD case
                     if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
-                        this.style.margin = '-' + offset + ' -' + offset + ' 0 -' + offset;
-                        this.style.padding = offset + ' ' + offset + ' 0 ' + offset;
-                        PDFView.setCssAttributeWithPrefixes(this, 'transform-origin', offset + ' 0 0');
+                        child.style.margin = margin;
+                        child.style.padding = padding;
+                        child.style.transformOrigin = origin;
                     }
 
-                    this.style.zIndex = childrenCount - index;
+                    child.style.zIndex = childrenCount - index;
                 });
 
                 textWrapperNode.append('<div style="bottom: 0; right: 0; padding: 200% 0 0 100%; cursor: default;">&#8203;</div>');
@@ -554,8 +569,10 @@ define('io.ox/core/pdf/pdfview', [
                             return (pdfTextBuilder ?
                                     pdfjsPage.getTextContent().then( function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
-                                        pdfTextBuilder.render(TEXT_LAYER_RENDER_DELAY);
-                                        prepareTextLayerForTextSelection(textWrapperNode);
+                                        setTimeout(function () {
+                                            pdfTextBuilder.render();
+                                            prepareTextLayerForTextSelection(textWrapperNode);
+                                        }, TEXT_LAYER_RENDER_DELAY);
                                         return def.resolve();
                                     }) : def.resolve());
                         });
@@ -603,26 +620,6 @@ define('io.ox/core/pdf/pdfview', [
         value = Math.round((precision < 1) ? (value * Math.round(1 / precision)) : (value / precision));
         return (precision < 1) ? (value / Math.round(1 / precision)) : (value * precision);
     };
-
-    // ---------------------------------------------------------------------
-
-    PDFView.setCssAttributeWithPrefixes = (function () {
-
-        var // the prefix for the current browser
-            prefix = _.browser.WebKit ? '-webkit-' : _.browser.Firefox ? '-moz-' : _.browser.IE ? '-ms-' : '';
-
-        return function (node, name, value) {
-            var object = {};
-
-            object[name] = value;
-
-            if (prefix) {
-                object[prefix + name] = value;
-            }
-
-            $(node).css(object);
-        };
-    }());
 
     // ---------------------------------------------------------------------
 
