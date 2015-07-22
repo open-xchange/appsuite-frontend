@@ -46,6 +46,9 @@ define('io.ox/core/tk/wizard', [
         '</div>'
     );
 
+    // hotspot
+    var hotspot = $('<div class="wizard-hotspot">');
+
     function getBounds(elem) {
         var o = elem.offset();
         o.width = elem.outerWidth();
@@ -102,6 +105,7 @@ define('io.ox/core/tk/wizard', [
         this.on('step:hide', function () {
             _(overlays).invoke('detach');
             backdrop.detach();
+            hotspot.detach();
         });
 
         // focus trap
@@ -225,8 +229,19 @@ define('io.ox/core/tk/wizard', [
             $('body').append(overlays);
         },
 
-        toggleBackdrop: function (state) {
+        toggleBackdrop: function (state, color) {
+            backdrop.css('backgroundColor', color || null);
             $('body').append(backdrop.toggle(!!state));
+        },
+
+        hotspot: function (selector, options) {
+            if (!selector) return;
+            var elem = $(selector + ':visible');
+            if (!elem.length) return;
+            var bounds = getBounds(elem);
+            options = _.extend({ top: 0, left: 0 }, options);
+            hotspot.css({ top: bounds.top - 4 + options.top, left: bounds.left - 4 + options.left });
+            $('body').append(hotspot);
         }
     });
 
@@ -470,7 +485,16 @@ define('io.ox/core/tk/wizard', [
                     }.bind(this), 50));
                 } else {
                     // toggle backdrop
-                    this.parent.toggleBackdrop(this.options.modal);
+                    this.parent.toggleBackdrop(this.options.modal, this.options.backdropColor);
+                }
+
+                // show hotspot
+                if (this.options.hotspot) {
+                    this.parent.hotspot(this.options.hotspot, this.options.hotspotOptions);
+                    // respond to window resize
+                    $(window).on('resize.wizard.hotspot', _.debounce(function () {
+                        this.parent.hotspot(this.options.hotspot, this.options.hotspotOptions);
+                    }.bind(this), 50));
                 }
 
                 // scroll?
@@ -523,7 +547,7 @@ define('io.ox/core/tk/wizard', [
             this.trigger('before:hide');
             if (!_.device('smartphone')) {
                 if (this.focusWatcher) clearInterval(this.focusWatcher);
-                $(window).off('resize.wizard.spotlight');
+                $(window).off('resize.wizard.spotlight resize.wizard.hotspot');
                 this.$el.detach();
             }
             this.trigger('hide');
@@ -536,10 +560,10 @@ define('io.ox/core/tk/wizard', [
             return this;
         },
 
-        // point at given element
+        // refer to given element; affects alignment
         // defined by selector (string or DOM element)
-        pointAt: function (selector) {
-            this.options.pointAt = selector;
+        referTo: function (selector) {
+            this.options.referTo = selector;
             return this;
         },
 
@@ -550,9 +574,23 @@ define('io.ox/core/tk/wizard', [
             return this;
         },
 
+        // show hotspot
+        hotspot: function (selector, options) {
+            this.options.hotspot = selector;
+            this.options.hotspotOptions = options;
+            this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
+            return this;
+        },
+
         // show backdrop
         modal: function (state) {
             this.options.modal = !!state;
+            return this;
+        },
+
+        // set backdrop color
+        backdrop: function (color) {
+            this.options.backdropColor = color;
             return this;
         },
 
@@ -586,7 +624,7 @@ define('io.ox/core/tk/wizard', [
             return function (selector) {
 
                 // if nothing is defined the step is centered
-                selector = selector || this.options.pointAt || this.options.spotlight;
+                selector = selector || this.options.referTo || this.options.spotlight;
                 if (!selector) return;
 
                 // align automatically

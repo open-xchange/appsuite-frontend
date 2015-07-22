@@ -77,19 +77,19 @@
 }
 
 .wizard-overlay {
-    background-color: rgba(0, 0, 0, 0.20);
-    z-index: 998;
+    background-color: @wizard-backdrop-color;
+    z-index: 997;
 }
 
 .wizard-backdrop {
-    background-color: rgba(0, 0, 0, 0.20);
-    z-index: 998;
+    background-color: @wizard-backdrop-color;
+    z-index: 997;
 }
 
 .wizard-spotlight {
     background-color: rgba(255, 255, 255, 0.01);
     box-shadow: 0 10px 50px 0px rgba(0, 0, 0, 0.40);
-    z-index: 999;
+    z-index: 998;
 }
 
 .wizard-container {
@@ -148,6 +148,68 @@
 
 .wizard-animation {
     display: none;
+}
+
+.wizard-hotspot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    z-index: 999;
+    background-color: @wizard-hotspot-color;
+    .border-radius(50%);
+}
+
+.wizard-hotspot:before {
+    content: '';
+    position: absolute;
+    background-color: @wizard-pulse-color;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1px solid @wizard-pulse-border-color;
+    -webkit-animation: hotspot-pulsar 2.0s infinite ease-out;
+    animation: hotspot-pulsar 2.0s infinite ease-out;
+    top: -56px;
+    left: -56px;
+    z-index: -1;
+}
+
+.wizard-hotspot:after {
+    content: '';
+    position: absolute;
+    background-color: @wizard-pulse-color;
+    width: 120px;
+    height: 120px;
+    top: -56px;
+    left: -56px;
+    border-radius: 50%;
+    border: 1px solid @wizard-pulse-border-color;
+    -webkit-animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+    animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+}
+
+@-webkit-keyframes hotspot-pulsar {
+    0%   { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
+
+@keyframes hotspot-pulsar {
+    0%   { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
+
+@-webkit-keyframes hotspot-pulsar-inner {
+    0%   { opacity: 0.00; transform: scale(0.1); }
+    24%, 90% { opacity: 0.00 }
+    25%  { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
+
+@keyframes hotspot-pulsar-inner {
+    0%   { opacity: 0.00; transform: scale(0.1); }
+    24%, 90% { opacity: 0.00 }
+    25%  { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
 }
 
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
