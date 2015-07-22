@@ -278,6 +278,11 @@ define('io.ox/presenter/views/mainview', [
                 case 188: // comma : pause / continue presentation
                     togglePause();
                     break;
+                case 70: // ctrl + shift + f : go into fullscreen for presenters
+                    if (event.ctrlKey && event.shiftKey && rtModel.isPresenter(userId)) {
+                        this.toggleFullscreen();
+                    }
+                    break;
             }
         },
 
