@@ -111,7 +111,7 @@ define('io.ox/presenter/views/presentationview', [
             // predefined zoom factors.
             // Limit zoom factor on iOS because of canvas size restrictions.
             // https://github.com/mozilla/pdf.js/issues/2439
-            this.ZOOM_FACTORS = _.device('iOS') ? [25, 35, 50, 75, 100] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400, 600, 800];
+            this.ZOOM_FACTORS = _.device('!desktop') ? [25, 35, 50, 75, 100, 125] : [25, 35, 50, 75, 100, 125, 150, 200, 300, 400];
             // current zoom factor, defaults to 100%
             this.currentZoomFactor = 100;
             // the pdf document container
@@ -177,6 +177,14 @@ define('io.ox/presenter/views/presentationview', [
             // display loading animation
             this.documentContainer.busy();
 
+            // enable touch events
+            if (this.documentContainer.enableTouch) {
+                this.documentContainer.enableTouch({
+                    tapHandler: this.onTap.bind(this),
+                    pinchHandler: this.onPinch.bind(this)
+                });
+            }
+
             // wait for PDF document to finish loading
             $.when(this.pdfDocument.getLoadPromise())
             .then(this.pdfDocumentLoadSuccess.bind(this), this.pdfDocumentLoadError.bind(this))
@@ -207,6 +215,95 @@ define('io.ox/presenter/views/presentationview', [
             overlay.append(infoBox);
             this.$el.append(overlay);
         },
+
+        /**
+         * Tap event handler.
+         * - switches to the next slide.
+         * - zooms the presentation slides to fit on screen in case of a double tap.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery event object.
+         *
+         * @param {Number} taps
+         *  The count of taps, indicating a single or double tap.
+         */
+        onTap: function (event, tapCount) {
+            if (tapCount === 1) {
+                this.showNextSlide();
+
+            } else if (tapCount === 2) {
+                this.setZoomLevel(this.getFitScreenZoomFactor());
+            }
+        },
+
+        /**
+         * Handles pinch events.
+         *
+         * @param {String} phase
+         * The current pinch phase ('start', 'move', 'end' or 'cancel')
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery tracking event.
+         *
+         * @param {Number} distance
+         * The current distance in px between the two fingers
+         *
+         * @param {Point} midPoint
+         * The current center position between the two fingers
+         */
+        onPinch: (function () {
+            var startDistance = 0,
+                transformScale = 0,
+                zoomFactor;
+
+            return function pinchHandler(phase, event, distance /*, midPoint*/) {
+
+                var documentPages = this.documentContainer.find('.document-page'),
+                    rtModel = this.app.rtModel,
+                    userId = this.rtConnection.getRTUuid();
+
+                // no zoom for the presenter
+                if (rtModel.isPresenter(userId)) {
+                    return;
+                }
+
+                switch (phase) {
+                    case 'start':
+                        startDistance = distance;
+                        break;
+
+                    case 'move':
+                        transformScale = distance / startDistance;
+                        //transformOriginX = midPoint.x;
+                        //transformOriginY = midPoint.y;
+                        documentPages.css({
+                            //'transform-origin': transformOriginX + 'px ' + transformOriginY + 'px',
+                            'transform': 'scale(' + transformScale + ')'
+                        });
+                        break;
+
+                    case 'end':
+                        zoomFactor = transformScale * this.currentZoomFactor;
+                        zoomFactor = Util.minMax(zoomFactor, this.getMinZoomFactor(), this.getMaxZoomFactor());
+                        documentPages.css({
+                            //'transform-origin': '50% 50% 0',
+                            'transform': 'scale(1)'
+                        });
+                        this.setZoomLevel(zoomFactor);
+                        break;
+
+                    case 'cancel':
+                        documentPages.css({
+                            //'transform-origin': '50% 50% 0',
+                            'transform': 'scale(1)'
+                        });
+                        break;
+
+                    default:
+                        break;
+                }
+            };
+        })(),
 
         /**
          * Handles Swiper slide change end events
@@ -651,7 +748,9 @@ define('io.ox/presenter/views/presentationview', [
             // focus first active slide initially
             this.focusActiveSlide();
             // bind slide click handler
-            this.pages.on('mousedown mouseup', this.onSlideClick.bind(this));
+            if (_.device('desktop')) {
+                this.pages.on('mousedown mouseup', this.onSlideClick.bind(this));
+            }
             // resolve the document load Deferred: this document view is fully loaded.
             this.documentLoad.resolve();
         },
@@ -741,11 +840,6 @@ define('io.ox/presenter/views/presentationview', [
                     return;
             }
 
-            //#. text of a presentation zoom level caption
-            //#. Example result: "100 %"
-            //#. %1$d is the zoom level
-            this.showCaption(gt('%1$d %', nextZoomFactor));
-
             // apply zoom level
             this.setZoomLevel(nextZoomFactor);
         },
@@ -774,6 +868,11 @@ define('io.ox/presenter/views/presentationview', [
             this.documentContainer.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
             // save new zoom level to view
             this.currentZoomFactor = zoomLevel;
+
+            //#. text of a presentation zoom level caption
+            //#. Example result: "100 %"
+            //#. %1$d is the zoom level
+            this.showCaption(gt('%1$d %', Math.round(zoomLevel)));
         },
 
         /**
@@ -842,6 +941,11 @@ define('io.ox/presenter/views/presentationview', [
          */
         disposeView: function () {
             console.info('Presenter - dispose PresentationView');
+
+            // remove touch events
+            if (this.documentContainer.disableTouch) {
+                this.documentContainer.disableTouch();
+            }
 
             // destroy the swiper instance
             if (this.swiper) {

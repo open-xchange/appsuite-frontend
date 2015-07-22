@@ -19,7 +19,8 @@ define('io.ox/presenter/views/mainview', [
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',
     'io.ox/presenter/views/thumbnailview',
-    'gettext!io.ox/presenter'
+    'gettext!io.ox/presenter',
+    'io.ox/core/tk/nodetouch'
 ], function (DisposableView, Notifications, Ext, ActionsPattern, PresentationView, SidebarView, ToolbarView, ThumbnailView, gt) {
 
     'use strict';

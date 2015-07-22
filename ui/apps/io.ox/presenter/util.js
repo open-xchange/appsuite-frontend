@@ -209,6 +209,26 @@ define('io.ox/presenter/util', [
         });
     };
 
+    /**
+     * Restricts the passed value to the specified numeric range.
+     *
+     * @param {Number} value
+     *  The value to be restricted to the given range.
+     *
+     * @param {Number} min
+     *  The lower border of the range.
+     *
+     * @param {Number} max
+     *  The upper border of the range.
+     *
+     * @returns {Number}
+     *  The passed value, if inside the given range, otherwise either the lower
+     *  or upper border.
+     */
+    Util.minMax = function (value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    };
+
     return Util;
 
 });
