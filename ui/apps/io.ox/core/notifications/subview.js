@@ -124,7 +124,7 @@ define('io.ox/core/notifications/subview', [
                 baton.view.model.get('showHideAllButton') ? $('<button type="button" class="btn btn-link clear-button fa fa-times">')
                         .attr({
                             tabindex: 1,
-                            'data-action': 'clearAll',
+                            'data-action': 'clear-all',
                             'aria-label': baton.view.model.attributes.hideAllLabel
                         })
                     : ''
@@ -170,7 +170,7 @@ define('io.ox/core/notifications/subview', [
         events: {
             'click .item': 'onClick',
             'keydown .item': 'onClick',
-            'click [data-action="clearAll"]': 'hideAll'
+            'click [data-action="clear-all"]': 'hideAll'
         },
         initialize: function (options) {
             var self = this,
