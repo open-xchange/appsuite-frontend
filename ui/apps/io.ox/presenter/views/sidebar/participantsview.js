@@ -11,8 +11,9 @@
  */
 define('io.ox/presenter/views/sidebar/participantsview', [
     'io.ox/backbone/disposable',
-    'io.ox/presenter/views/sidebar/userbadgeview'
-], function (DisposableView, UserbadgeView) {
+    'io.ox/presenter/views/sidebar/userbadgeview',
+    'gettext!io.ox/presenter'
+], function (DisposableView, UserbadgeView, gt) {
 
     var participantsView = DisposableView.extend({
 
@@ -40,6 +41,11 @@ define('io.ox/presenter/views/sidebar/participantsview', [
                 var userbadgeView = new UserbadgeView({ participant: participant, app: this.app });
                 participantsList.append(userbadgeView.render().el);
             }.bind(this));
+
+            if (participants.length === 0) {
+                var notification = $('<li>').text(gt('There are currently no participants.'));
+                participantsList.append(notification);
+            }
 
             sectionHeading.append(headline);
             sectionBody.append(participantsList);
