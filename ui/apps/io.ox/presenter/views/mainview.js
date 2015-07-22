@@ -177,7 +177,9 @@ define('io.ox/presenter/views/mainview', [
         onKeydown: function (event) {
             event.stopPropagation();
 
-            var self = this;
+            var self = this,
+                rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
 
             // TODO: check if we need to handle TAB traversal ourselves.
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
@@ -237,18 +239,28 @@ define('io.ox/presenter/views/mainview', [
                 case 34: // page down : show next slide
                     this.presentationView.showNextSlide();
                     break;
-                case 8: // ctrl + shift + backspace : ends presentation. backspace: show previous slide,
-                    if (event.ctrlKey && event.shiftKey) {
-                        this.app.rtConnection.endPresentation();
+                case 8: // ctrl + backspace : ends or leaves the presentation. backspace: show previous slide
+                    if (event.ctrlKey) {
+                        if (rtModel.canLeave(userId)) {
+                            this.app.rtConnection.leavePresentation();
+                        }
+                        if (rtModel.isPresenter(userId)) {
+                            this.app.rtConnection.endPresentation();
+                        }
                     } else {
                         event.preventDefault();
                         this.presentationView.showPreviousSlide();
                     }
                     break;
-                case 13: // ctrl + shift + enter :  starts presentation
-                    if (event.ctrlKey && event.shiftKey) {
-                        var slideId = this.app.mainView.getActiveSlideIndex();
-                        this.app.rtConnection.startPresentation({ activeSlide: slideId });
+                case 13: // ctrl + enter :  starts or joins a presentation.
+                    if (event.ctrlKey) {
+                        if (rtModel.canStart(userId)) {
+                            var slideId = this.app.mainView.getActiveSlideIndex();
+                            this.app.rtConnection.startPresentation({ activeSlide: slideId });
+                        }
+                        if (rtModel.canJoin(userId)) {
+                            this.app.rtConnection.joinPresentation();
+                        }
                     } else { // enter: show next slide
                         this.presentationView.showNextSlide();
                     }
