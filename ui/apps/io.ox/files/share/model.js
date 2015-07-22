@@ -204,7 +204,7 @@ define('io.ox/files/share/model', [
                     }, yell);
                 case 'delete':
                     if (this.get('type') === this.TYPES.LINK) {
-                        return api.deleteLink(model.toJSON()).fail(yell);
+                        return api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                     }
                     break;
             }
