@@ -125,7 +125,8 @@ define('io.ox/presenter/actions', [
     new Action(PRESENTER_ACTION_ID + '/fullscreen', {
         id: 'fullscreen',
         requires: function (e) {
-            if (!e.baton.context) { return false; }
+            // iOS doesn't support full-screen
+            if (!e.baton.context || _.device('iOS')) { return false; }
 
             var rtModel = e.baton.context.app.rtModel,
                 userId = e.baton.context.app.rtConnection.getRTUuid();
