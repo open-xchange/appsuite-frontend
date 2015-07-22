@@ -161,47 +161,44 @@ define('io.ox/portal/main', [
             var self = this;
             // TODO: check for metric capability
             require(['io.ox/metrics/main'], function (metrics) {
-                // click on add widget button
-                metrics.watch({
-                        node: self,
-                        selector: '.dropdown-toggle',
-                        type: 'mousedown'
-                    }, {
-                        category: 'widgets usage',
-                        action: 'add widget',
-                        name: 'open dropdown'
-                    });
-
                 // track click on concrete dropdown entry to add a widget
                 self.delegate('.io-ox-portal-settings-dropdown', 'mousedown', function (e) {
                     metrics.trackEvent({
-                        category: 'widgets usage',
-                        action: 'add widget',
-                        name: $(e.target).attr('data-type')
+                        app: 'portal',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'add',
+                        detail: $(e.target).attr('data-type')
                     });
                 });
                 // track click on concrete widget
                 self.delegate('ol.widgets > .widget', 'mousedown', function (e) {
                     metrics.trackEvent({
-                        category: 'widgets usage',
-                        action: 'use widget',
-                        name: $(e.target).closest('.widget').attr('data-widget-type')
+                        app: 'portal',
+                        target: 'widgets',
+                        type: 'click',
+                        action: 'show-detail',
+                        detail: $(e.target).closest('.widget').attr('data-widget-type')
                     });
                 });
                 // track removing of concret widget
                 self.delegate('ol.widgets .disable-widget', 'mousedown', function (e) {
                     metrics.trackEvent({
-                        category: 'widgets usage',
-                        action: 'remove widget',
-                        name: $(e.target).closest('.widget').attr('data-widget-type')
+                        app: 'portal',
+                        target: 'widget',
+                        type: 'click',
+                        action: 'disable',
+                        detail: $(e.target).closest('.widget').attr('data-widget-type')
                     });
                 });
                 // track reordering of widgets
-                widgets.getCollection().on('order-changed', function (module) {
+                widgets.getCollection().on('order-changed', function (type) {
                     metrics.trackEvent({
-                        category: 'widgets usage',
-                        action: 'reorder widget',
-                        name: module
+                        app: 'portal',
+                        target: 'widget',
+                        type: 'click',
+                        action: 'change-order',
+                        detail: type
                     });
                 });
 

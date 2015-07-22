@@ -320,11 +320,14 @@ define('io.ox/find/main', [
                 'change:list-of-actives': _.debounce(function (state, value, model) {
                     if (app.model.manager.isFolderOnly());
                     require(['io.ox/metrics/main'], function (metrics) {
+                        var apptitle = _.last(app.get('parent').get('id').split('/')),
+                            facet = model.get('facet').get('id').split(':')[0];
                         // toolbar actions
                         metrics.trackEvent({
-                            category: 'search usage',
-                            action: app.get('parent').get('id'),
-                            name: 'facet: ' + model.get('facet').get('id').split(':')[0]
+                            category: apptitle,
+                            action: apptitle + '/search/facet/' + facet,
+                            name: 'search',
+                            value: facet
                         });
                     });
                 }, 10)

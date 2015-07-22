@@ -23,37 +23,46 @@ define('io.ox/metrics/main', [
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        // don't run metrics in test environment
-        enabled = !_.device('karma') && !ox.debug && settings.get('tracking/enabled', false),
-        userhash = util.md5(ox.user),
+        enabled =  !_.device('karma') && !ox.debug && settings.get('tracking/enabled', false),
+        // TODO: salt?
+        userhash = getUserHash(),
         metrics;
 
-    // enabled?
-    if (!enabled) {
-        return {
-            trackEvent: $.noop,
-            trackPage: $.noop,
-            trackVariable: $.noop,
-            getUserHash: $.noop,
-            watch: $.noop
-        };
+    function getUserHash () {
+        var userhash = _.getCookie('metrics-userhash');
+        if (!userhash) {
+            var salt = (Math.random() + 1).toString(36).substring(2),
+                userhash = util.md5(salt + ox.user + ox.user_id);
+            _.setCookie('metrics-userhash', userhash);
+        }
+        return userhash;
     }
 
-    function createBaton (data) {
-        var baton = ext.Baton.ensure({ data: data.data || data });
-        if (!data.data) return baton;
-        return _.extend(baton, { event: data } );
+    // add generated id to baton (based on baton.data)
+    function qualify (baton) {
+        var data = baton.data,
+            id = _.compact([data.app, data.target, data.action, data.detail]).join('/');
+        if (!id) return baton;
+        baton.id = id;
+        return baton;
+    }
+
+    function createBaton (obj) {
+        // obj can be data or event with data property
+        var isEvent = !!obj.preventDefault,
+            baton = ext.Baton.ensure(isEvent ? { data: obj.data, event: obj } : { data: obj });
+        return qualify(baton);
     }
 
     metrics = {
         trackEvent: function (data) {
-            ext.point('io.ox/metrics/adapter').invoke('trackEvent', metrics, createBaton(data));
+            point.invoke('trackEvent', metrics, createBaton(data));
         },
         trackPage: function (data) {
-            ext.point('io.ox/metrics/adapter').invoke('trackPage', metrics, createBaton(data));
+            point.invoke('trackPage', metrics, createBaton(data));
         },
         trackVariable: function (data) {
-            ext.point('io.ox/metrics/adapter').invoke('trackVariable', metrics, createBaton(data));
+            point.invoke('trackVariable', metrics, createBaton(data));
         },
         // register listener
         watch: function (options, data) {
@@ -65,6 +74,14 @@ define('io.ox/metrics/main', [
         }
     };
 
+    // replace existing functions with no-ops when metrics is disabled
+    if (!enabled) {
+        // avoid undefined functions by change original metrics object
+        _.each(metrics, function (func, key) { metrics[key] = $.noop; });
+        return metrics;
+    }
+
+    // called once
     point.invoke('setup', metrics);
     point.invoke('trackVisit', metrics);
 
@@ -72,10 +89,22 @@ define('io.ox/metrics/main', [
     ext.point('io.ox/metrics/extensions').invoke('register', metrics);
 
     /**
-     * category: category, app
-     * action: topic, question, target
-     * name: name (optional) 'default'
-     * value: value (optional) 'true'
+     * HINT: use hyphen instead if space
+     *
+     * id: _.compact([app, target, action, detail]).join('/')
+     * cid:
+     *
+     * app: mail (or core)
+     * target: toolbar/button
+     * type: click (or drag, swipe)
+     * action: delete (basic type of action)
+     * detail: 3 mails (or 1 mail)
+     *
+     *
+     * category: app-title (f.e. mail)
+     * action: id (summarize information)
+     * name: action preformed (add, remove, etc)
+     * value: optional detail about action performed ()
      */
 
     return metrics;

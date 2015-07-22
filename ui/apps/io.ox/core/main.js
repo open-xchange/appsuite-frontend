@@ -1245,8 +1245,20 @@ define('io.ox/core/main', [
                             selector: '.banner-title',
                             type: 'click'
                         }, {
-                            category: 'unfulfilled expectations',
-                            action: 'functional logo banner'
+                            app: 'core',
+                            target: 'banner/title',
+                            type: 'click',
+                            action: 'noop'
+                        });
+                    metrics.watch({
+                            node: $('#io-ox-banner'),
+                            selector: '.banner-logo',
+                            type: 'click'
+                        }, {
+                            app: 'core',
+                            target: 'banner/logo',
+                            type: 'click',
+                            action: 'noop'
                         });
                 });
             }

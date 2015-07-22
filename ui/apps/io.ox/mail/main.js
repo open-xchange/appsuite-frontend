@@ -1192,40 +1192,46 @@ define('io.ox/mail/main', [
                             type: 'click'
 
                         }, {
-                            category: 'A/B testing',
-                            action: 'preferred add mail account button',
-                            name: 'mail'
+                            app: 'mail',
+                            target: 'folder/account',
+                            type: 'click',
+                            action: 'add'
                         });
                         // detail view actions
                         app.getWindow().nodes.main.delegate('.detail-view-header', 'mousedown', function (e) {
                             metrics.trackEvent({
-                                category: 'mail usage',
-                                action: 'use view action',
-                                name: $(e.currentTarget).attr('data-action')
+                                app: 'mail',
+                                target: 'detail/toolbar/action',
+                                type: 'click',
+                                action: $(e.currentTarget).attr('data-action')
                             });
                         });
                         // toolbar actions
                         toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
                             metrics.trackEvent({
-                                category: 'mail usage',
-                                action: 'use toolbar action',
-                                name: $(e.currentTarget).attr('data-action')
+                                app: 'mail',
+                                target: 'toolbar/action',
+                                type: 'click',
+                                action: $(e.currentTarget).attr('data-action')
                             });
                         });
                         // folder tree action
                         sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
                             metrics.trackEvent({
-                                category: 'mail usage',
-                                action: 'folder action',
-                                name: $(e.currentTarget).attr('data-action')
+                                app: 'mail',
+                                target: 'folders/context-menu/action',
+                                type: 'click',
+                                action: $(e.currentTarget).attr('data-action')
                             });
                         });
                         // check for clicks in folder trew
                         app.on('folder:change', function (folder) {
                             metrics.trackEvent({
-                                category: 'mail usage',
-                                action: 'change folder',
-                                name: account.isPrimary(folder) ? 'primary' : 'external'
+                                app: 'mail',
+                                target: 'folders/folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: account.isPrimary(folder) ? 'primary' : 'external'
                             });
                         });
                     });

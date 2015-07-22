@@ -425,9 +425,10 @@ define('io.ox/settings/main', [
                             type: 'click'
 
                         }, {
-                            category: 'A/B testing',
-                            action: 'preferred add mail account button',
-                            name: 'mail-settings'
+                            app: 'mail',
+                            target: 'settings/account',
+                            type: 'click',
+                            action: 'add'
                         });
                 });
             }

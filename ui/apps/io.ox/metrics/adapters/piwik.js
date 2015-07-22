@@ -20,7 +20,7 @@ define('io.ox/metrics/adapters/piwik', [
 
     if (!settings.get('tracking/piwik/enabled', false)) return;
 
-    var point =  ext.point('io.ox/metrics/adapter'),
+    var point = ext.point('io.ox/metrics/adapter'),
         url = settings.get('tracking/piwik/url', 'https://metrics.open-xchange.com/piwik/');
 
     // piwik uses global var to allow pushing before tracker is fully loaded
@@ -44,7 +44,7 @@ define('io.ox/metrics/adapters/piwik', [
         trackEvent: function (baton) {
             var data = baton.data;
             //_paq.push(['setUserId', this.getUserHash() ]);
-            _paq.push(['trackEvent', data.category, data.action, data.name, data.value]);
+            _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail]);
         },
         trackPage: function (baton) {
             //_paq.push(['setUserId', this.getUserHash() ]);
