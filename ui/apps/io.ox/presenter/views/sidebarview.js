@@ -38,6 +38,8 @@ define('io.ox/presenter/views/sidebarview', [
 
             this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onPresentationPause);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onPresentationContinue);
             this.listenTo(this.presenterEvents, 'presenter:local:slide:change', this.renderSections);
 
             this.on('dispose', this.disposeView.bind(this));
@@ -64,6 +66,34 @@ define('io.ox/presenter/views/sidebarview', [
         onPresentationEnd: function () {
             this.$el.removeClass('presenting');
             this.toggleSidebar(false);
+        },
+
+        /**
+         * Handles presentation pause invoked by the real-time framework.
+         */
+        onPresentationPause: function () {
+            console.info('Presenter - sidebarview - pause');
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+            if (!rtModel.isPresenter(userId)) {
+                return;
+            }
+            this.$el.removeClass('presenting');
+            this.toggleSidebar(true);
+        },
+
+        /**
+         * Handles presentation continue invoked by the real-time framework.
+         */
+        onPresentationContinue: function () {
+            console.info('Presenter - sidebarview - continue');
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+            if (!rtModel.isPresenter(userId)) {
+                return;
+            }
+            this.$el.addClass('presenting');
+            this.toggleSidebar(true);
         },
 
         /**
@@ -100,7 +130,7 @@ define('io.ox/presenter/views/sidebarview', [
                 userId = this.app.rtConnection.getRTUuid();
 
             // show next slide peek if the current user is currently presenting, otherwise show the presentation participants
-            if (rtModel.isPresenter(userId)) {
+            if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
                 var slidepeekView = new SlidePeekView(sectionViewParams);
                 this.$el.append(slidepeekView.render().el);
             } else {

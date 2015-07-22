@@ -146,7 +146,7 @@ define('io.ox/presenter/actions', [
             var rtModel = e.baton.context.app.rtModel,
                 userId = e.baton.context.app.rtConnection.getRTUuid();
 
-            return !rtModel.isPresenter(userId);
+            return !rtModel.isPresenter(userId) || rtModel.isPaused();
         },
         action: function (baton) {
             console.info('togglesidebar action', baton);

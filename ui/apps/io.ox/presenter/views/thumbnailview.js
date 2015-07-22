@@ -35,6 +35,8 @@ define('io.ox/presenter/views/thumbnailview', [
 
             this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onPresentationPause);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onPresentationContinue);
             this.listenTo(this.presenterEvents, 'presenter:local:slide:change', this.renderSections);
 
             this.listenTo(this.presenterEvents, 'presenter:fullscreen:enter', this.onEnterFullScreen);
@@ -209,6 +211,27 @@ define('io.ox/presenter/views/thumbnailview', [
          */
         onPresentationEnd: function () {
             this.toggleVisibility(true);
+        },
+
+        /**
+         * Handles presentation pause invoked by the real-time framework.
+         */
+        onPresentationPause: function () {
+            console.info('Presenter - thumbnailview - pause');
+            var rtModel = this.app.rtModel,
+                userId = this.app.rtConnection.getRTUuid();
+            if (!rtModel.isPresenter(userId)) {
+                return;
+            }
+            this.toggleVisibility(true);
+        },
+
+        /**
+         * Handles presentation continue invoked by the real-time framework.
+         */
+        onPresentationContinue: function () {
+            console.info('Presenter - thumbnailview - continue');
+            this.toggleVisibility(false);
         },
 
         /**
