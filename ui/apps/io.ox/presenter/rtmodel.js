@@ -205,6 +205,17 @@ define('io.ox/presenter/rtmodel', [
          */
         canLeave: function (userId) {
             return (this.isJoined(userId) && !this.isPresenter(userId));
+        },
+
+        /**
+         * Returns true if the thumb-nail view can be displayed for the provided user.
+         * Which means the user must not be joined, or must be the presenter with the presentation paused.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canShowThumbnails: function (userId) {
+            return (!this.isJoined(userId) || (this.isPresenter(userId) && this.isPaused()));
         }
 
     });
