@@ -139,28 +139,15 @@ define('io.ox/files/mobile-toolbar-actions', [
 
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
-        var self = this,
-            ids = this.listView.collection.models;
+        var cids = list, models = api.resolve(cids, false), data, baton;
 
-        // transform strings to objects with id/folder
-        list = _(list).map(function (item) {
-            if (typeof item === 'string') {
-                return _.cid(item);
-            } else {
-                return item;
-            }
-        });
-
-        // get full data, needed for require checks for example
-        api.getList(list).done(function (data) {
-            // extract single object if length === 1
-            data = data.length === 1 ? data[0] : data;
-            // draw toolbar
-            var baton = ext.Baton({ data: data, app: self, allIds: ids });
-            // handle updated baton to pageController
-            self.pages.getSecondaryToolbar('main').setBaton(baton);
-        });
-
+        list = _(models).invoke('toJSON');
+        // extract single object if length === 1
+        data = list.length === 1 ? list[0] : list;
+        // draw toolbar
+        baton = ext.Baton({ data: data, app: this, collection: this.listView.collection, allIds: [] });
+        // handle updated baton to pageController
+        this.pages.getSecondaryToolbar('main').setBaton(baton);
     }, 10);
 
     // some mediator extensions

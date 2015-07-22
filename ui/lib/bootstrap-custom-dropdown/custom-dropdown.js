@@ -65,10 +65,15 @@
                     // dropdown is filled during runtime, we have to wait till it's all
                     // drawn and append the closer afterwards
                     setTimeout(function () {
+                        var isVisible = $ul.is(':visible');
                         // special handling for foldertree dropdowns as these are built manually
                         // at runtime
                         if (f !== 'foldertree') $ul.append(getCloseElement());
                         $('body').append($ul.addClass('custom-dropdown'));
+                        // the dropdown has display:none after moving to body, so reapply correct visibility status
+                        if (isVisible) {
+                            $ul.show();
+                        }
                     }, 50);
                 } else {
                     if (f !== 'foldertree') $ul.append(getCloseElement());
@@ -94,8 +99,7 @@
             $parent.data('menu').find('.divider').remove();
         }
 
-        clearMenus()
-
+        clearMenus();
         if (!isActive) {
             if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
                 // if mobile we use a backdrop because click events don't delegate

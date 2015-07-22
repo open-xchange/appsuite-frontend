@@ -538,7 +538,7 @@ define('io.ox/files/actions', [
         ref: 'io.ox/files/actions/getalink'
     });
 
-    // INLINE (used in detail view / portal)
+    // INLINE (only used by mobile toolbar atm)
     var index = 100;
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
@@ -546,8 +546,8 @@ define('io.ox/files/actions', [
         index: index += 100,
         prio: 'hi',
         mobile: 'hi',
-        label: gt('Open'),
-        ref: 'io.ox/files/actions/open'
+        label: gt('View'),
+        ref: 'io.ox/files/actions/viewer'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
@@ -576,6 +576,14 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id:'download-folder',
+        prio: 'hi',
+        mobile: 'lo',
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download-folder'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
