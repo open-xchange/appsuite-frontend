@@ -289,6 +289,15 @@ define('io.ox/core/viewer/util', [
                     module: moduleId
                 };
                 break;
+            case 'guard':
+                paramExtension = {
+                    source: 'guard',
+                    fileURL: encodeURIComponent(model.get('guardUrl')),
+                    mimetype: (model.get('meta').OrigMime === undefined ?
+                        encodeURIComponent(model.get('file_mimetype')) :
+                        encodeURIComponent(model.get('meta').OrigMime))
+                };
+                break;
             default:
                 return defaultParams;
         }
