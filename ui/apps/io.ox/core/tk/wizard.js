@@ -339,41 +339,30 @@ define('io.ox/core/tk/wizard', [
         // not with inital render() because we don't all steps at this point
         renderButtons: function () {
 
-            var o = this.options, footer = this.$('.footer').empty();
+            var dir = this.getDirections(),
+                footer = this.$('.footer').empty();
 
-            if (o.back && this.parent.hasBack()) {
-                // show "Back" button
-                this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
-            }
-
-            if (o.next && this.parent.hasNext()) {
-                // show "Start" or Next" button
-                this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
-            } else if (this.isLast()) {
-                // show "Done" button
-                this.addButton(footer, { action: 'done', className: 'btn-primary', label: this.getLabelDone() });
-            }
+            // show "Back" button
+            if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
+            // show "Start" or Next" button
+            if (dir.next) this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
+            // show "Done" button
+            if (dir.done) this.addButton(footer, { action: 'done', className: 'btn-primary', label: this.getLabelDone() });
         },
 
         // different solution for smartphones
         renderNavBar: function () {
 
-            var o = this.options,
+            var dir = this.getDirections(),
                 back = this.parent.container.find('.wizard-back').empty(),
                 next = this.parent.container.find('.wizard-next').empty();
 
-            if (o.back && this.parent.hasBack()) {
-                // show "Back" button
-                this.addLink(back, { action: 'back', label: this.getLabelBack() });
-            }
-
-            if (o.next && this.parent.hasNext()) {
-                // show "Start" or Next" button
-                this.addLink(next, { action: 'next', label: this.getLabelNext() });
-            } else if (this.isLast()) {
-                // show "Done" button
-                this.addLink(next, { action: 'done', label: this.getLabelDone() });
-            }
+            // show "Back" button
+            if (dir.back) this.addLink(back, { action: 'back', label: this.getLabelBack() });
+            // show "Start" or Next" button
+            if (dir.next) this.addLink(next, { action: 'next', label: this.getLabelNext() });
+            // show "Done" button
+            if (dir.done) this.addLink(next, { action: 'done', label: this.getLabelDone() });
         },
 
         // internal; just add a button
@@ -395,6 +384,15 @@ define('io.ox/core/tk/wizard', [
 
         getLabelDone: function () {
             return this.options.labelDone;
+        },
+
+        // get description which buttons are available (back, next, done)
+        getDirections: function () {
+            return {
+                back: this.options.back && this.parent.hasBack(),
+                next: this.options.next && this.parent.hasNext(),
+                done: this.isLast()
+            };
         },
 
         // define that this step is mandatory
