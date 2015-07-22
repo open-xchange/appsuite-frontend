@@ -240,6 +240,7 @@ define('io.ox/presenter/views/mainview', [
                     if (event.ctrlKey && event.shiftKey) {
                         this.app.rtConnection.endPresentation();
                     } else {
+                        event.preventDefault();
                         this.presentationView.showPreviousSlide();
                     }
                     break;
