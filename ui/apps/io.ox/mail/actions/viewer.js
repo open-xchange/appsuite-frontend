@@ -17,6 +17,6 @@ define('io.ox/mail/actions/viewer', [
 
     return function (baton) {
         var viewer = new Viewer();
-        viewer.launch({ files: baton });
+        viewer.launch(baton);
     };
 });

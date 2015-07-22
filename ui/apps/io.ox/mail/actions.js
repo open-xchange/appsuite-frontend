@@ -321,9 +321,13 @@ define('io.ox/mail/actions', [
         id: 'viewer',
         // TODO capabilites check, files filter?
         requires: 'some',
-        multiple: function (attachmentList) {
+        multiple: function (attachmentList, baton) {
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
-                action(attachmentList);
+                var options = { files: attachmentList };
+                if ( baton.startItem ) {
+                    options.selection = baton.startItem;
+                }
+                action(options);
             });
         }
     });
