@@ -174,11 +174,13 @@ define('io.ox/files/share/api', [
          * @param  { object } o target data
          * @return { deferred } empty data and timestamp
          */
-        deleteLink: function (o) {
+        deleteLink: function (o, timestamp) {
             return http.PUT({
                 module: 'share/management',
                 params: {
-                    action: 'deleteLink'
+                    action: 'deleteLink',
+                    timezone: 'UTC',
+                    timestamp: timestamp
                 },
                 data: o
             });
