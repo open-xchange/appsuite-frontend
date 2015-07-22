@@ -323,7 +323,7 @@ define('io.ox/core/tk/wizard', [
             })
             .append(
                 $('<div class="header">').append(
-                    $('<button class="close pull-right" tabindex="1">').append(
+                    $('<button class="close pull-right" tabindex="1" data-action="close">').append(
                         $('<span aria-hidden="true">&times;</span>'),
                         $('<span class="sr-only">').text(gt('Close'))
                     ),
