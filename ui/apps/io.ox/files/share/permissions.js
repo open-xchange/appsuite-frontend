@@ -486,6 +486,26 @@
                 });
 
                 var typeaheadView = new Typeahead({
+                        events: {
+                            'keydown': function (e) {
+                                // enter
+                                if (e.which === 13) {
+                                    var val = this.$el.typeahead('val');
+                                    if (!_.isEmpty(val)) {
+                                        permissionsView.collection.add(new Permission({
+                                            type: 'guest',
+                                            bits: 4227332, // Author
+                                            contact: {
+                                                email1: val
+                                            },
+                                            display_name: val
+                                        }));
+                                        // clear input
+                                        this.$el.typeahead('val', '');
+                                    }
+                                }
+                            }
+                        },
                         apiOptions: {
                             users: true,
                             groups: true,
