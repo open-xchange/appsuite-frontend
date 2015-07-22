@@ -182,7 +182,7 @@
                 var selected = folderAPI.Bitmask(this.model.get('bits')).get(permission),
                     menu, ul;
 
-                if (this.preventAdminPermissions(permission)) {
+                if (permission === 'admin' && this.preventAdminPermissions()) {
                     return $('<i>').text(menus[permission][selected]);
                 }
                 menu = $('<span class="dropdown">').append(
@@ -213,7 +213,7 @@
                     $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
                     $('<ul class="dropdown-menu" role="menu">').append(
                         _(presets).map(function (obj) {
-                            if (self.preventAdminPermissions('admin') && obj.bits === 272662788) return;
+                            if (self.preventAdminPermissions() && obj.bits === 272662788) return;
                             return $('<li>').append(
                                 $('<a>', { href: '#', 'data-value': obj.bits, role: 'menuitem' }).addClass('role').text(obj.label)
                             );
@@ -222,22 +222,24 @@
                 );
             },
 
-            preventAdminPermissions: function (permission, baton) {
-                if (permission === 'admin') {
-                    console.log(baton);
-                    return false;
-                    //     if (
-                    //         // no admin choice for default folders (see Bug 27704)
-                    //         (String(folderAPI.getDefaultFolder(baton.folder.module)) === baton.folder.id) ||
-                    //         // See Bug 27704
-                    //         (baton.folder.type === 5) ||
-                    //         (baton.folder.type === 2 && this.model.id === 0) ||
-                    //         // Private contacts and calendar folders can't have other users with admin permissions
-                    //         (baton.folder.type === 1 && (baton.folder.module === 'contacts' || baton.folder.module === 'calendar'))
-                    //     ) {
-                    //         return true;
-                    //     }
+            preventAdminPermissions: function () {
+                // this check is for folders only
+                if (!this.item.isFolder()) return false;
+
+                var type = this.item.get('type'),
+                    module = this.item.get('module');
+
+                if (
+                    // no admin choice for default and system folders (see Bug 27704)
+                    (String(folderAPI.getDefaultFolder(module)) === this.item.get('id')) || (type === 5) ||
+                    // Public folder and permission enity 0
+                    (type === 2 && this.model.id === 0) ||
+                    // Private contacts and calendar folders can't have other users with admin permissions
+                    (type === 1 && (module === 'contacts' || module === 'calendar'))
+                ) {
+                    return true;
                 }
+                return false;
             }
 
         }),

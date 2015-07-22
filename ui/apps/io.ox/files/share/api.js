@@ -112,7 +112,7 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,300,301,305,306,3060'
+                    columns: '1,2,5,300,301,302,305,306,3060'
                 }
             });
         },
