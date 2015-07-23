@@ -202,13 +202,17 @@ define('io.ox/core/import/import', [
                                     return item && item.error;
                                 })
                                 .compact()
-                                .value();
+                                .value(),
+                                defaultMessage = module === 'contacts' ?
+                                    //#. Error message if contact import failed
+                                    gt('There was no contact data to import') :
+                                    //#. Error message if calender import failed
+                                    gt('There was no appointment data to import');
                             notifications.yell({
                                 type: 'error',
                                 message: list.length ?
                                     list.join('\n\n') :
-                                    //#. Error message if calender import failed
-                                    gt('There was no appointment data to import'),
+                                    defaultMessage,
                                 duration: -1
                             });
                             popup.idle();
