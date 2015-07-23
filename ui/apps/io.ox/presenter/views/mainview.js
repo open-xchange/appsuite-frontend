@@ -481,7 +481,7 @@ define('io.ox/presenter/views/mainview', [
          * otherwise the browser will deny the request.
          */
         toggleFullscreen: function (state) {
-            if (BigScreen.enabled) {
+            if (BigScreen.enabled && _.device('!iOS')) {
 
                 if (_.isUndefined(state)) {
                     BigScreen.toggle(
