@@ -16,7 +16,7 @@ define('io.ox/metrics/main', [
     'settings!io.ox/core',
     'io.ox/metrics/util',
     'io.ox/metrics/extensions',
-    'io.ox/metrics/adapters/piwik',
+    'io.ox/metrics/adapters/default',
     'io.ox/metrics/adapters/console'
 ], function (ext, settings, util) {
 

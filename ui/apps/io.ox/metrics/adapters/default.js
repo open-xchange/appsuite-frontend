@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/metrics/adapters/piwik', [
+define('io.ox/metrics/adapters/default', [
     'settings!io.ox/core',
     'io.ox/core/extensions'
 ], function (settings, ext) {
