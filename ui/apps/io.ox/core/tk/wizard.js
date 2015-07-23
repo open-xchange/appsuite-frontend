@@ -46,9 +46,6 @@ define('io.ox/core/tk/wizard', [
         '</div>'
     );
 
-    // hotspot
-    var hotspot = $('<div class="wizard-hotspot">');
-
     function getBounds(elem) {
         var o = elem.offset();
         o.width = elem.outerWidth();
@@ -105,7 +102,7 @@ define('io.ox/core/tk/wizard', [
         this.on('step:hide', function () {
             _(overlays).invoke('detach');
             backdrop.detach();
-            hotspot.detach();
+            $('.wizard-hotspot').remove();
         });
 
         // focus trap
@@ -234,17 +231,23 @@ define('io.ox/core/tk/wizard', [
             $('body').append(backdrop.toggle(!!state));
         },
 
-        hotspot: function (selector, options) {
+        addHotspot: function (selector, options) {
             if (!selector) return;
-            var elem = $(selector + ':visible');
-            if (!elem.length) return;
+            options = _.extend({ top: 0, left: 0, tooltip: '', selector: selector }, options);
+            // get a fresh node
+            var hotspot = $('<div class="wizard-hotspot">').data('options', options);
+            if (options.tooltip) hotspot.tooltip({ placement: 'auto top', title: options.tooltip });
+            $('body').append(this.positionHotspot(hotspot, options));
+        },
+
+        positionHotspot: function (hotspot, options) {
+            var elem = $(options.selector + ':visible');
+            if (!elem.length) return elem;
             var bounds = getBounds(elem);
-            options = _.extend({ top: 0, left: 0 }, options);
-            hotspot.css({
+            return hotspot.css({
                 top: bounds.top - 4 + options.top,
                 left: (bounds.left || (bounds.width / 2 >> 0)) - 4 + options.left
             });
-            $('body').append(hotspot);
         }
     });
 
@@ -468,6 +471,21 @@ define('io.ox/core/tk/wizard', [
                 }
             }
 
+            function addHotspots() {
+                _(this.options.hotspot).each(function (hotspot) {
+                    if (_.isString(hotspot)) hotspot = [hotspot, {}];
+                    this.parent.addHotspot(hotspot[0], hotspot[1] || {});
+                }, this);
+            }
+
+            function repositionHotspots() {
+                var parent = this.parent;
+                $('.wizard-hotspot').each(function () {
+                    var node = $(this), options = node.data('options');
+                    parent.positionHotspot(node, options);
+                });
+            }
+
             function cont() {
 
                 this.trigger('before:show');
@@ -493,11 +511,8 @@ define('io.ox/core/tk/wizard', [
 
                 // show hotspot
                 if (this.options.hotspot) {
-                    this.parent.hotspot(this.options.hotspot, this.options.hotspotOptions);
-                    // respond to window resize
-                    $(window).on('resize.wizard.hotspot', _.debounce(function () {
-                        this.parent.hotspot(this.options.hotspot, this.options.hotspotOptions);
-                    }.bind(this), 50));
+                    addHotspots.call(this);
+                    $(window).on('resize.wizard.hotspot', _.debounce(repositionHotspots.bind(this), 50));
                 }
 
                 // scroll?
@@ -579,8 +594,7 @@ define('io.ox/core/tk/wizard', [
 
         // show hotspot
         hotspot: function (selector, options) {
-            this.options.hotspot = selector;
-            this.options.hotspotOptions = options;
+            this.options.hotspot = _.isArray(selector) ? selector : [selector, options];
             this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
             return this;
         },
