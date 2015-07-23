@@ -54,7 +54,7 @@ define('io.ox/tasks/toolbar', [
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/edit'
         },
-        'changeDueDate': {
+        'change-due-date': {
             prio: 'hi',
             mobile: 'lo',
             //#. Task: "Due" like in "Change due date"

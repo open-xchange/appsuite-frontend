@@ -177,7 +177,7 @@ define('io.ox/tasks/actions', [
     });
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'changeDueDate',
+        id: 'change-due-date',
         index: 200,
         prio: 'hi',
         mobile: 'lo',

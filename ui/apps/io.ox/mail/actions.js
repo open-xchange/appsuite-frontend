@@ -224,8 +224,8 @@ define('io.ox/mail/actions', [
     generate('move', gt('Move'), { multiple: gt('Mails have been moved'), single: gt('Mail has been moved') });
     generate('copy', gt('Copy'), { multiple: gt('Mails have been copied'), single: gt('Mail has been copied') });
 
-    new Action('io.ox/mail/actions/markunread', {
-        id: 'markunread',
+    new Action('io.ox/mail/actions/mark-unread', {
+        id: 'mark-unread',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
@@ -241,8 +241,8 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/actions/markread', {
-        id: 'markread',
+    new Action('io.ox/mail/actions/mark-read', {
+        id: 'mark-read',
         requires: function (e) {
             // must be top-level
             if (!e.collection.has('toplevel')) return;
@@ -400,7 +400,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/save', {
-        id: 'saveEML',
+        id: 'save-as-eml',
         requires: function (e) {
             // ios cannot handle EML download
             return _.device('!ios') && e.collection.has('some', 'read');
@@ -524,13 +524,13 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         mobile: 'hi',
-        id: 'markunread',
+        id: 'mark-unread',
         label:
             //#. Translation should be as short a possible
             //#. Instead of "Mark as unread" it's just "Mark unread"
             //#. German, for example, should be just "Ungelesen"
             gt('Mark unread'),
-        ref: 'io.ox/mail/actions/markunread',
+        ref: 'io.ox/mail/actions/mark-unread',
         section: 'flags'
     }));
 
@@ -538,13 +538,13 @@ define('io.ox/mail/actions', [
         index: INDEX + 1,
         prio: 'hi',
         mobile: 'hi',
-        id: 'markread',
+        id: 'mark-read',
         label:
             //#. Translation should be as short a possible
             //#. Instead of "Mark as read" it's just "Mark read"
             //#. German, for example, should be just "Gelesen"
             gt('Mark read'),
-        ref: 'io.ox/mail/actions/markread',
+        ref: 'io.ox/mail/actions/mark-read',
         section: 'flags'
     }));
 
@@ -650,7 +650,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'lo',
         mobile: 'none',
-        id: 'saveEML',
+        id: 'save-as-eml',
         label: gt('Save as file'),
         ref: 'io.ox/mail/actions/save',
         section: 'export'

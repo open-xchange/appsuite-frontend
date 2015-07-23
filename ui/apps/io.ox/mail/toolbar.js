@@ -116,18 +116,18 @@ define('io.ox/mail/toolbar', [
         //
         // --- LO ----
         //
-        'markread': {
+        'mark-read': {
             prio: 'lo',
             mobile: 'lo',
             label: gt('Mark as read'),
-            ref: 'io.ox/mail/actions/markread',
+            ref: 'io.ox/mail/actions/mark-read',
             section: 'flags'
         },
-        'markunread': {
+        'mark-unread': {
             prio: 'lo',
             mobile: 'lo',
             label: gt('Mark as unread'),
-            ref: 'io.ox/mail/actions/markunread',
+            ref: 'io.ox/mail/actions/mark-unread',
             section: 'flags'
         },
         'move': {
@@ -151,7 +151,7 @@ define('io.ox/mail/toolbar', [
             ref: 'io.ox/mail/actions/print',
             section: 'export'
         },
-        'saveEML': {
+        'save-as-eml': {
             prio: 'lo',
             mobile: 'lo',
             label: gt('Save as file'),
