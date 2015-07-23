@@ -86,8 +86,13 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             var peekPageNumber = this.activeSlideIndex + 2;
             if (peekPageNumber > convertData.pageCount) {
                 //#. info text on the next slide preview, which means the presenting user reached the last slide.
-                var endNotification = $('<div class="end-notification">').text(gt('End of Slides'));
-                this.$('.slidepeek').empty().addClass('end').css(this.app.slidePeekSize).append(endNotification);
+                var endNotification = $('<div class="end-notification">').text(gt('End of Slides')),
+                    slidePeek = this.$('.slidepeek');
+                slidePeek.empty().addClass('end').append(endNotification);
+                // apply slide size to slide peek if available
+                if (this.app.slideSize) {
+                    slidePeek.css(this.app.slideSize);
+                }
                 return;
             }
 
@@ -97,7 +102,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             slidePeekImage.attr('src', thumbnailUrl)
                 .on('load', function () {
                     $(this).show();
-                    self.app.slidePeekSize = {
+                    self.app.slideSize = {
                         width: $(this).width(),
                         height: $(this).height()
                     };
