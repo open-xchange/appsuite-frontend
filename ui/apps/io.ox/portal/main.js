@@ -172,7 +172,7 @@ define('io.ox/portal/main', [
                     });
                 });
                 // track click on concrete widget
-                self.delegate('ol.widgets > .widget', 'mousedown', function (e) {
+                self.delegate('ol.widgets > .widget .content', 'mousedown', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'widgets',
