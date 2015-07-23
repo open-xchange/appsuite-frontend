@@ -85,6 +85,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             // set peek page number to the request param
             var peekPageNumber = this.activeSlideIndex + 2;
             if (peekPageNumber > convertData.pageCount) {
+                //#. info text on the next slide preview, which means the presenting user reached the last slide.
                 var endNotification = $('<div class="end-notification">').text(gt('End of Slides'));
                 this.$('.slidepeek').empty().addClass('end').css(this.app.slidePeekSize).append(endNotification);
                 return;

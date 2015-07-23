@@ -38,6 +38,7 @@ define('io.ox/presenter/views/sidebar/userbadgeview', [
                 name = $('<a class="name halo-link">').text(this.participant.userDisplayName).data({ internal_userid: this.participant.id }),
                 roleColumn = $('<div class="participant-role-col">'),
                 presenterId = this.app.rtModel.get('presenterId'),
+                //#. tooltip for the icon that identifies the presenting user
                 presenterIcon = $('<i class="fa fa-desktop">').attr('title', gt('Presenter'));
 
             ContactsAPI.pictureHalo(

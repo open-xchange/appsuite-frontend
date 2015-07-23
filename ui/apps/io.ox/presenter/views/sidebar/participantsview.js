@@ -43,6 +43,7 @@ define('io.ox/presenter/views/sidebar/participantsview', [
             }.bind(this));
 
             if (participants.length === 0) {
+                //#. info text in the participants list.
                 var notification = $('<li>').text(gt('There are currently no participants.'));
                 participantsList.append(notification);
             }

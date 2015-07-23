@@ -65,7 +65,16 @@ define('io.ox/presenter/views/presentationview', [
             icon = $('<i class="fa" aria-hidden="true">');
 
         button.addClass((type === 'left') ? 'swiper-button-prev  left' : 'swiper-button-next right');
-        button.attr((type === 'left') ? { title: gt('Previous'), 'aria-label': gt('Previous') } : { title: gt('Next'), 'aria-label': gt('Next') });
+        button.attr((type === 'left') ? {
+            //#. button tooltip for 'go to previous presentation slide' action
+            title: gt('Previous slide'),
+            'aria-label': gt('Previous slide')
+        } :
+        {
+            //#. button tooltip for 'go to next presentation slide' action
+            title: gt('Next slide'),
+            'aria-label': gt('Next slide')
+        });
         icon.addClass((type === 'left') ? 'fa-angle-left' : 'fa-angle-right');
 
         return button.append(icon);
@@ -97,7 +106,6 @@ define('io.ox/presenter/views/presentationview', [
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
-            this.captionTimeoutId = null;
             // the swiper carousel root node
             this.carouselRoot = null;
             // instance of the swiper plugin
@@ -199,12 +207,17 @@ define('io.ox/presenter/views/presentationview', [
         renderPauseOverlay: function () {
             var overlay = $('<div class="pause-overlay">'),
                 infoBox = $('<div class="pause-infobox">'),
-                pauseNotification = $('<span class="pause-message">').text(gt('Presentation is paused.')),
+                pauseNotification = $('<span class="pause-message">').text(
+                    //#. Info text that says the presentation is paused.
+                    gt('Presentation is paused.')
+                ),
                 leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
                     .attr({
+                        //#. tooltip for the leave presentation button
                         'title': gt('Leave presentation'),
                         'aria-label': gt('Leave presentation')
                     })
+                    //#. label for the leave presentation button
                     .text(gt('Leave'));
             function onPauseLeave() {
                 this.togglePauseOverlay();

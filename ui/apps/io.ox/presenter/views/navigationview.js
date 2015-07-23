@@ -44,7 +44,15 @@ define('io.ox/presenter/views/navigationview', [
         var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem" aria-disabled="false">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
-        button.attr((type === 'next') ? { title: gt('Next slide'), 'aria-label': gt('Next slide') } : { title: gt('Previous slide'), 'aria-label': gt('Previous slide') });
+        button.attr((type === 'next') ? {
+            //#. button tooltip for 'go to next presentation slide' action
+            title: gt('Next slide'),
+            'aria-label': gt('Next slide')
+        } : {
+            //#. button tooltip for 'go to previous presentation slide' action
+            title: gt('Previous slide'),
+            'aria-label': gt('Previous slide')
+        });
         icon.addClass((type === 'next') ? 'fa-arrow-down' : 'fa-arrow-up');
         return button.append(icon);
     }
@@ -56,30 +64,32 @@ define('io.ox/presenter/views/navigationview', [
             'pause': {
                 prio: 'hi',
                 mobile: 'lo',
-                //icon: 'fa fa-pause',
+                //#. button label for pausing the presentation
                 label: gt('Pause presentation'),
                 ref: PRESENTER_ACTION_ID + '/pause',
                 customize: function () {
                     this.addClass('presenter-toolbar-pause')
                         .attr({
                             tabindex: '1',
-                            title: gt('Pause Presentation'),
-                            'aria-label': gt('Pause Presentation')
+                            //#. button tooltip for pausing the presentation
+                            title: gt('Pause presentation'),
+                            'aria-label': gt('Pause presentation')
                         });
                 }
             },
             'continue': {
                 prio: 'hi',
                 mobile: 'lo',
-                //icon: 'fa fa-pause',
+                //#. button label for continuing the presentation
                 label: gt('Continue presentation'),
                 ref: PRESENTER_ACTION_ID + '/continue',
                 customize: function () {
                     this.addClass('presenter-toolbar-continue')
                         .attr({
                             tabindex: '1',
-                            title: gt('Continue Presentation'),
-                            'aria-label': gt('Continue Presentation')
+                            //#. button tooltip for continuing the presentation
+                            title: gt('Continue presentation'),
+                            'aria-label': gt('Continue presentation')
                         });
                 }
             },
@@ -87,12 +97,14 @@ define('io.ox/presenter/views/navigationview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-arrows-alt',
+                //#. button label for toggling fullscreen mode
                 label: gt('Toggle fullscreen'),
                 ref: PRESENTER_ACTION_ID + '/fullscreen',
 
                 customize: function () {
                     this.addClass('presenter-toolbar-fullscreen').attr({
                         tabindex: '1',
+                        //#. button label for toggling fullscreen mode
                         title: gt('Toggle fullscreen'),
                         'aria-label': gt('Toggle fullscreen')
                     });
@@ -145,13 +157,27 @@ define('io.ox/presenter/views/navigationview', [
                 participantsJoined = false,
                 rtModel = baton.context.app.rtModel,
                 presenterId = rtModel.get('presenterId') || 'none',
-                presenterName = rtModel.get('presenterName') || gt('none'),
+                presenterName = rtModel.get('presenterName') ||
+                    //#. text of an user list that shows the names of presenting user and participants.
+                    //#. the text to display as presenter name if no user is presenting yet.
+                    gt('none'),
                 participants = rtModel.get('participants');
 
-            dropdown = new Dropdown({ model: baton.context.app.rtModel, label: gt('Participants'), tagName: 'li', caret: true })
+            dropdown = new Dropdown({
+                model: baton.context.app.rtModel,
+                //#. text of an user list that shows the names of presenting user and participants.
+                //#. the dropdown button label for the participants dropdown.
+                label: gt('Participants'),
+                tagName: 'li',
+                caret: true
+            })
+                //#. text of an user list that shows the names of presenting user and participants.
+                //#. the presenter section label.
                 .header(gt('Presenter'))
                 .link(presenterId, presenterName, null)
                 .divider()
+                //#. text of an user list that shows the names of presenting user and participants.
+                //#. the participants section label.
                 .header(gt('Participants'));
 
             _.each(participants, function (user) {
@@ -166,6 +192,8 @@ define('io.ox/presenter/views/navigationview', [
             }, this);
 
             if (!participantsJoined) {
+                //#. text of an user list that shows the names of presenting user and participants.
+                //#. the text to display as participants names if no users are listening yet.
                 dropdown.link('none', gt('none'), null);
             }
 
@@ -211,7 +239,8 @@ define('io.ox/presenter/views/navigationview', [
          */
         render: function () {
             // draw navigation
-            var navigation = this.$el.attr({ role: 'menu', 'aria-label': gt('Presenter Navigation') }),
+            //#. aria label for the presenter navigation bar, for screen reader only.
+            var navigation = this.$el.attr({ role: 'menu', 'aria-label': gt('Presenter navigation bar') }),
                 userId = this.app.rtConnection.getRTUuid(),
                 rtModel = this.app.rtModel,
                 baton = Ext.Baton({
@@ -284,6 +313,9 @@ define('io.ox/presenter/views/navigationview', [
 
             // set slide number in the slide input control
             slideInput.val(slideNumber);
+            //#. text of a presentation slide count display
+            //#. Example result: "of 10"
+            //#. %1$d is the total slide count
             slideCountDisplay.text(gt('of %1$d', slideCount));
             if (slideNumber === 1) {
                 prev.addClass('disabled').attr('aria-disabled', true);

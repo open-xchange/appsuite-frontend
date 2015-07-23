@@ -430,6 +430,7 @@ define('io.ox/presenter/views/mainview', [
                 duration: -1,
                 focus: true,
                 action: {
+                    //#. link button to join the currently running presentation
                     label: gt('Join Presentation'),
                     ref: 'io.ox/presenter/actions/join',
                     baton: baton
