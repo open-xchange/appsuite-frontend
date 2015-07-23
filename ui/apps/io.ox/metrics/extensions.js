@@ -23,9 +23,9 @@ define('io.ox/metrics/extensions', [
             var metrics = this;
             ox.on('upsell:upgrade', function (data) {
                 metrics.trackEvent({
-                    category: 'upsell',
-                    action: data.type,
-                    name: data.id,
+                    app: 'core',
+                    target: 'upsell/' + data.type,
+                    action: data.id,
                     value: data.missing
                 });
             });
