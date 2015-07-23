@@ -15,8 +15,6 @@ define('io.ox/metrics/util', function () {
 
     'use strict';
 
-    var md5;
-
     // TODO: bower
     // https://github.com/wbond/md5-js
     /*!
@@ -30,6 +28,7 @@ define('io.ox/metrics/util', function () {
      * Released under the BSD license
      * http://www.opensource.org/licenses/bsd-license
      */
+    var md5;
     (function () {
 
         var add32;
@@ -201,9 +200,30 @@ define('io.ox/metrics/util', function () {
         }
     })();
 
-    return {
-        md5: md5
+    // https://developer.mozilla.org/de/docs/Web/API/navigator/doNotTrack
+    function doNotTrack () {
+        return [
+            navigator.doNotTrack,
+            navigator.msDoNotTrack,
+            window.doNotTrack
+        ].indexOf('1') > -1;
+    }
 
+    // hash of userdata + salt
+    function getUserHash () {
+        var userhash = _.getCookie('metrics-userhash');
+        if (!userhash) {
+            var salt = (Math.random() + 1).toString(36).substring(2),
+                userhash = md5(salt + ox.user + ox.user_id);
+            _.setCookie('metrics-userhash', userhash);
+        }
+        return userhash;
+    }
+
+    return {
+        md5: md5,
+        doNotTrack: doNotTrack,
+        getUserHash: getUserHash
     };
 
 });

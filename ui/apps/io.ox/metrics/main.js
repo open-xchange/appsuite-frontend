@@ -23,19 +23,20 @@ define('io.ox/metrics/main', [
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        enabled =  !_.device('karma') && !ox.debug && settings.get('tracking/enabled', false),
         // TODO: salt?
-        userhash = getUserHash(),
+        userhash = util.getUserHash(),
         metrics;
 
-    function getUserHash () {
-        var userhash = _.getCookie('metrics-userhash');
-        if (!userhash) {
-            var salt = (Math.random() + 1).toString(36).substring(2),
-                userhash = util.md5(salt + ox.user + ox.user_id);
-            _.setCookie('metrics-userhash', userhash);
-        }
-        return userhash;
+    function isEnabled () {
+        // disable when doNotTrack is enabled
+        if (util.doNotTrack()) return false;
+        // disable for tests
+        if (_.device('karma')) return false;
+        // disable durin development
+        if (ox.debug) return false;
+        // disable when global setting is set
+        if (settings.get('tracking/enabled', false)) return false;
+        return true;
     }
 
     // add generated id to baton (based on baton.data)
@@ -75,7 +76,7 @@ define('io.ox/metrics/main', [
     };
 
     // replace existing functions with no-ops when metrics is disabled
-    if (!enabled) {
+    if (!isEnabled()) {
         // avoid undefined functions by change original metrics object
         _.each(metrics, function (func, key) { metrics[key] = $.noop; });
         return metrics;
