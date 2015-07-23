@@ -152,6 +152,20 @@ define('io.ox/files/toolbar', [
             //
             // --- LO ----
             //
+            'edit-description': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Rename'),
+                ref: 'io.ox/files/actions/rename',
+                section: 'edit'
+            },
+            'rename': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Edit description'),
+                ref: 'io.ox/files/actions/edit-description',
+                section: 'edit'
+            },
             'send': {
                 prio: 'lo',
                 mobile: 'lo',
