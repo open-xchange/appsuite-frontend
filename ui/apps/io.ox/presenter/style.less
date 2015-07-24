@@ -44,6 +44,28 @@
 @presenter-navigation-active-bgcolor: #AAAAAA;
 @presenter-navigation-slide-bordercolor: #e0e0e0;
 
+@presenter-sidebar-bgcolor: #f5f5f5;
+@presenter-sidebar-border-color: #DDDDDD;
+@presenter-sidebar-width: 320px;
+@presenter-sidebar-participant-color: #333;
+@presenter-sidebar-participant-bgcolor: #eaeaea;
+@presenter-sidebar-slidepeek-bgcolor: #444;
+@presenter-sidebar-slidepeek-color: #fff;
+@presenter-sidebar-presenting-bgcolor: #f8f8f8;
+
+@presenter-thumbnail-link-focus-color: rgba(0,0,0,0.1);
+@presenter-thumbnail-link-hover-color: rgba(0,0,0,0.05);
+@presenter-thumbnail-link-selected-color: rgba(0,0,0,0.15);
+@presenter-thumbnail-bgcolor: #FFFFFF;
+@presenter-thumbnail-border-color: #e0e0e0;
+@presenter-thumbnail-number-color: #333333;
+@presenter-thumbnail-number-hover-color: #333333;
+@presenter-thumbnail-pane-height: 140px;
+@presenter-thumbnail-pane-bgcolor: #fff;
+@presenter-thumbnail-width: 140px;
+
+@presenter-overlay-bgcolor: rgba(0, 0, 0, 0.8);
+
 .flex-center() {
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -279,7 +301,6 @@
             }
         }
 
-        @presenter-overlay-bgcolor: rgba(0, 0, 0, 0.8);
         .pause-overlay {
             position: absolute;
             top: 0;
@@ -312,9 +333,6 @@
         }
     }
 
-    @presenter-sidebar-bgcolor: #f5f5f5;
-    @presenter-sidebar-border-color: #DDDDDD;
-    @presenter-sidebar-width: 320px;
     .presenter-sidebar {
         display: none;
         position: absolute;
@@ -348,7 +366,6 @@
             font-weight: bold;
         }
 
-        @presenter-sidebar-participant-bgcolor: #eaeaea;
         .participants-list {
             list-style: none;
             padding: 0;
@@ -378,7 +395,6 @@
             border-radius: 50%;
         }
 
-        @presenter-sidebar-participant-color: #333;
         .participant-name-col {
             width: 100%;
             vertical-align: middle;
@@ -412,8 +428,8 @@
                 margin: 0 auto;
                 width: 400px;
                 height: 300px;
-                background-color: #444;
-                color: #fff;
+                background-color: @presenter-sidebar-participant-bgcolor;
+                color: @presenter-sidebar-slidepeek-color;
             }
         }
 
@@ -421,7 +437,7 @@
             width: 35%;
             .flex-center();
             border:0;
-            background-color: #f8f8f8;
+            background-color: @presenter-sidebar-presenting-bgcolor;
         }
 
     }
@@ -431,8 +447,8 @@
          bottom: 0;
          left: 0;
          width: 100%;
-         height: 140px;
-         background-color: #fff;
+         height: @presenter-thumbnail-pane-height;
+         background-color: @presenter-thumbnail-pane-bgcolor;
          border-top: 1px solid #dddddd;
          padding: 0 40px;
          overflow-x: auto;
@@ -440,16 +456,9 @@
          white-space: nowrap;
          text-align: center;
 
-         @thumbnail-link-focus-color: rgba(0,0,0,0.1);
-         @thumbnail-link-hover-color: rgba(0,0,0,0.05);
-         @thumbnail-link-selected-color: rgba(0,0,0,0.15);
-         @thumbnail-bgcolor: #FFFFFF;
-         @thumbnail-border-color: #e0e0e0;
-         @thumbnail-number-color: #333333;
-         @thumbnail-number-hover-color: #333333;
          .presenter-thumbnail-link {
              display: inline-block;
-             width: 140px;
+             width: @presenter-thumbnail-width;
              height: 100%;
              margin: 0 2px;
              text-align: center;
@@ -463,19 +472,19 @@
                  height: 100%;
              }
              &:hover {
-                 background: @thumbnail-link-hover-color;
+                 background: @presenter-thumbnail-link-hover-color;
                  text-decoration: none;
                  .page-number {
-                     color: @thumbnail-number-hover-color;
+                     color: @presenter-thumbnail-number-hover-color;
                  }
              }
              &:active, &:focus {
-                 background: @thumbnail-link-focus-color;
+                 background: @presenter-thumbnail-link-focus-color;
              }
              &.selected {
-                 background: @thumbnail-link-selected-color;
+                 background: @presenter-thumbnail-link-selected-color;
                  .page-number {
-                     color: @thumbnail-number-hover-color;
+                     color: @presenter-thumbnail-number-hover-color;
                  }
              }
          }
