@@ -370,7 +370,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             'module': 'module',
             'formDescription': 'formDescription'
         }
-    };
+    },
+    // extended permissions
+    idMappingExcludes = ['3060', '7010'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -479,7 +481,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // flatten this array
         var tmp = [], column = '';
         for (column in ids) {
-            tmp.push(column);
+            if ( idMappingExcludes.indexOf(column) === -1 )
+                tmp.push(column);
         }
         tmp.sort(function (a, b) {
             return a - b;
