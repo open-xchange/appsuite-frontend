@@ -117,7 +117,7 @@
             // entity  Number  (ignored for type “anonymous” or “guest”) User ID of the user or group to which this permission applies.
             // group   Boolean (ignored for type “anonymous” or “guest”) true if entity refers to a group, false if it refers to a user.
             // type    String  (required if no internal “entity” defined) The recipient type, i.e. one of “guest”, “anonymous”
-            // mail_address   String  (for type “guest”) The e-mail address of the recipient
+            // email_address   String  (for type “guest”) The e-mail address of the recipient
             // display_name    String  (for type “guest”, optional) The display name of the recipient
             // contact_id  String  (for type “guest”, optional) The object identifier of the corresponding contact entry if the recipient was chosen from the address book
             // contact_folder  String  (for type “guest”, required if “contact_id” is set) The folder identifier of the corresponding contact entry if the recipient was chosen from the address book
@@ -134,7 +134,7 @@
                         case 'guest':
                             data.type = this.get('type');
                             var contact = this.get('contact');
-                            data.mail_address = contact.email1;
+                            data.email_address = contact.email1;
                             if (this.has('display_name')) {
                                 data.display_name = this.get('display_name');
                             }
@@ -492,7 +492,26 @@
             }
 
             var dialog = new dialogs.ModalDialog(options),
-                dialogModel = new Backbone.Model({ cascadePermissions: false, message: '' }),
+                DialogConfigModel = Backbone.Model.extend({
+                    defaults: {
+                        cascadePermissions: false,
+                        message: null,
+                        transport: 'mail'
+                    },
+                    toJSON: function () {
+                        var data = {
+                            cascadePermissions: this.get('cascadePermissions')
+                        };
+                        if (this.get('message') && $.trim(this.get('message')) !== '' ) {
+                            data.notification = {
+                                message: this.get('message'),
+                                transport: this.get('transport')
+                            };
+                        }
+                        return data;
+                    }
+                }),
+                dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel });
 
             dialog.getPopup().addClass('share-permissions-dialog');
@@ -573,7 +592,7 @@
                     dialog.getFooter().prepend(
                         $('<div>').addClass('form-group cascade').append(
                             $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogModel }).render().$el
+                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
                             )
                         )
                     );
@@ -604,10 +623,10 @@
                             })
                         ),
                         $('<div>').addClass('form-group').append(
-                            $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                            $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
                             new miniViews.TextView({
                                 name: 'message',
-                                model: dialogModel
+                                model: dialogConfig
                             }).render().$el.attr({
                                 id: guid,
                                 rows: 3,
@@ -627,7 +646,7 @@
             dialog.on('save', function () {
                 var def;
                 if (objModel.isFolder()) {
-                    def = folderAPI.update(objModel.get('id'), { permissions: permissionsView.collection.toJSON() }, dialogModel.toJSON());
+                    def = folderAPI.update(objModel.get('id'), { permissions: permissionsView.collection.toJSON() }, dialogConfig.toJSON());
                 } else {
                     def = filesAPI.update({ id: objModel.get('id') }, { object_permissions: permissionsView.collection.toJSON() });
                 }

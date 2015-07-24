@@ -731,6 +731,13 @@ define('io.ox/core/folder/api', [
         options = _.extend({ silent: false }, options);
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
+        // build data object
+        var data = { folder: changes };
+
+        if (options.notification && !_.isEmpty(options.notification)) {
+            data.notification = options.notification;
+        }
+
         return http.PUT({
             module: 'folders',
             params: {
@@ -740,7 +747,7 @@ define('io.ox/core/folder/api', [
                 tree: tree(id),
                 cascadePermissions: options.cascadePermissions
             },
-            data: changes,
+            data: data,
             appendColumns: false
         })
         .done(function () {
