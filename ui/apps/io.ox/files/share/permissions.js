@@ -18,6 +18,7 @@
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
+    'io.ox/files/api',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/contacts/api',
@@ -28,7 +29,7 @@
     'io.ox/participants/views',
     'gettext!io.ox/core',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, BreadcrumbView, folderAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+], function (ext, DisposableView, yell, miniViews, BreadcrumbView, folderAPI, filesAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
 
     'use strict';
 
@@ -110,6 +111,45 @@
                 if (this.has('type') && this.get('type') === 'group') {
                     this.set('group', true);
                 }
+            },
+
+            // bits    Number  A number as described in Permission flags.
+            // entity  Number  (ignored for type “anonymous” or “guest”) User ID of the user or group to which this permission applies.
+            // group   Boolean (ignored for type “anonymous” or “guest”) true if entity refers to a group, false if it refers to a user.
+            // type    String  (required if no internal “entity” defined) The recipient type, i.e. one of “guest”, “anonymous”
+            // mail_address   String  (for type “guest”) The e-mail address of the recipient
+            // display_name    String  (for type “guest”, optional) The display name of the recipient
+            // contact_id  String  (for type “guest”, optional) The object identifier of the corresponding contact entry if the recipient was chosen from the address book
+            // contact_folder  String  (for type “guest”, required if “contact_id” is set) The folder identifier of the corresponding contact entry if the recipient was chosen from the address book
+            toJSON: function () {
+                var data = {
+                    bits: this.get('bits')
+                };
+
+                if (this.has('entity')) {
+                    data.entity = this.get('entity');
+                    data.group = this.get('type') === 'group';
+                } else {
+                    switch (this.get('type')) {
+                        case 'guest':
+                            data.type = this.get('type');
+                            var contact = this.get('contact');
+                            data.mail_address = contact.email1;
+                            if (this.has('display_name')) {
+                                data.display_name = this.get('display_name');
+                            }
+                            if (contact && contact.id && contact.folder_id) {
+                                data.contact_id = contact.id;
+                                data.contact_folder = contact.folder_id;
+                            }
+                            break;
+                        case 'anonymous':
+                            data.type = this.get('type');
+                            break;
+                    }
+                }
+
+                return data;
             }
 
         }),
@@ -262,22 +302,26 @@
             render: function () {
                 var self = this;
 
-                this.$el.busy();
-                // preload user data
-                var ids = _.chain(this.model.getPermissions())
-                    .filter(function (obj) { return !obj.group; })
-                    .pluck('entity')
-                    .value();
+                if (this.model.isExtendedPermission()) {
+                    this.collection.reset(this.model.getPermissions());
+                } else {
+                    this.$el.busy();
+                    // preload user data
+                    var ids = _.chain(this.model.getPermissions())
+                        .filter(function (obj) { return !obj.group; })
+                        .pluck('entity')
+                        .value();
 
-                // load user data after opening the dialog
-                userAPI.getList(ids, true, { allColumns: true }).then(function () {
-                    // stop being busy
-                    self.$el.idle();
-                    // draw users
-                    self.collection.reset(self.model.getPermissions());
-                    // select first tabstop
-                    self.$el.find('[tabindex="1"]:first').focus();
-                });
+                    // load user data after opening the dialog
+                    userAPI.getList(ids, true, { allColumns: true }).then(function () {
+                        // stop being busy
+                        self.$el.idle();
+                        // draw users
+                        self.collection.reset(self.model.getPermissions());
+                        // select first tabstop
+                        self.$el.find('[tabindex="1"]:first').focus();
+                    });
+                }
                 return this;
             },
 
@@ -486,32 +530,12 @@
                 });
 
                 var typeaheadView = new Typeahead({
-                        events: {
-                            'keydown': function (e) {
-                                // enter
-                                if (e.which === 13) {
-                                    var val = this.$el.typeahead('val');
-                                    if (!_.isEmpty(val)) {
-                                        permissionsView.collection.add(new Permission({
-                                            type: 'guest',
-                                            bits: 4227332, // Author
-                                            contact: {
-                                                email1: val
-                                            },
-                                            display_name: val
-                                        }));
-                                        // clear input
-                                        this.$el.typeahead('val', '');
-                                    }
-                                }
-                            }
-                        },
                         apiOptions: {
+                            contacts: true,
                             users: true,
-                            groups: true,
-                            split: false
+                            groups: true
                         },
-                        placeholder: gt('Add user/group'),
+                        placeholder: gt('Add new guest'),
                         harmonize: function (data) {
                             data = _(data).map(function (m) {
                                 return new pModel.Participant(m);
@@ -522,27 +546,38 @@
                             });
                         },
                         click: function (e, member) {
+                            // build extended permission object
                             var obj = {
-                                entity: member.get('id'),
-                                // default is 'view folder' plus 'read all'
-                                bits: 257,
-                                group: member.get('type') === 2
+                                bits: objModel.isFolder() ? 4227332 : 2, // Author
+                                group: member.get('type') === 2,
+                                type: member.get('type') === 2 ? 'group' : 'user'
                             };
-                            if (!_.isNumber(obj.entity)) {
-                                yell(
-                                    'error',
-                                    //#. permissions dialog
-                                    //#. error message when selected user or group can not be used
-                                    gt('This is not a valid user or group.')
-                                );
-                            } else {
-                                // duplicate check
-                                permissionsView.collection.add(new Permission(obj));
+                            if (member.get('type') === 2 || member.get('type') === 1) {
+                                obj.entity = member.get('id');
                             }
+                            obj.contact = member.toJSON();
+                            obj.display_name = member.getDisplayName();
+                            if (member.get('type') === 5) {
+                                obj.type = 'guest';
+                                obj.contact_id = member.get('id');
+                                obj.folder_id = member.get('folder_id');
+                            }
+
+                            permissionsView.collection.add(new Permission(obj));
                         },
                         extPoint: POINT
                     }),
                     guid = _.uniqueId('form-control-label-');
+
+                if (objModel.isFolder()) {
+                    dialog.getFooter().prepend(
+                        $('<div>').addClass('form-group cascade').append(
+                            $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
+                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogModel }).render().$el
+                            )
+                        )
+                    );
+                }
 
                 dialog.getFooter().prepend(
                     $('<div class="share-options">').append(
@@ -550,7 +585,23 @@
                             $('<div class="form-group">').append(
                                 $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid })
-                            )
+                            ).on('keydown', 'input', function (e) {
+                                // enter
+                                if (e.which === 13) {
+                                    var val = $(this).typeahead('val');
+                                    if (!_.isEmpty(val)) {
+                                        permissionsView.collection.add(new Permission({
+                                            type: 'guest',
+                                            bits: objModel.isFolder() ? 4227332 : 2, // Author
+                                            contact: {
+                                                email1: val
+                                            }
+                                        }));
+                                        // clear input
+                                        $(this).typeahead('val', '');
+                                    }
+                                }
+                            })
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid = _.uniqueId('form-control-label-') }),
@@ -564,11 +615,6 @@
                                 placeholder: gt('Message (optional)')
                             })
                         )
-                    ),
-                    $('<div>').addClass('form-group cascade').append(
-                        $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
-                            new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogModel }).render().$el
-                        )
                     )
                 );
 
@@ -579,19 +625,21 @@
             }
 
             dialog.on('save', function () {
-                // api.update(folder_id, { permissions: permissionsView.collection.toJSON() }, { cascadePermissions: cascadePermissionsFlag }).then(
-                //     function success() {
-                //         permissionsView.collection.off();
-                //         dialog.close();
-                //     },
-                //     function fail(error) {
-                //         dialog.idle();
-                //         notifications.yell(error);
-                //     }
-                // );
-            })
-            .on('cancel', function () {
-                // close action
+                var def;
+                if (objModel.isFolder()) {
+                    def = folderAPI.update(objModel.get('id'), { permissions: permissionsView.collection.toJSON() }, dialogModel.toJSON());
+                } else {
+                    def = filesAPI.update({ id: objModel.get('id') }, { object_permissions: permissionsView.collection.toJSON() });
+                }
+                def.then(
+                    function success() {
+                        dialog.close();
+                    },
+                    function fail(error) {
+                        dialog.idle();
+                        yell(error);
+                    }
+                );
             })
             .show();
         }
