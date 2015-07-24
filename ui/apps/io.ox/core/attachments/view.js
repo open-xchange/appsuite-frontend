@@ -106,7 +106,7 @@ define('io.ox/core/attachments/view',
                 ),
                 $('<span class="links">'),
                 $('<a href="#" class="pull-right toggle-mode" tabindex="1">')
-                    .append('<i class="fa">'),
+                    .append('<i class="fa">')
             );
 
             this.renderSummary();
