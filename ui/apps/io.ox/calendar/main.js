@@ -565,6 +565,106 @@ define('io.ox/calendar/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
             };
+        },
+
+        'metrics': function (app) {
+
+            function getFolderType(folder) {
+                if (folderAPI.is('shared', folder)) return 'shared';
+                if (folderAPI.is('private', folder)) return 'private';
+                if (folderAPI.is('public', folder)) return 'public';
+                return 'unknown';
+            }
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // detail view
+                nodes.outer.delegate('.participants-view .io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // detail view as sidepopup
+                nodes.outer.delegate('.io-ox-sidepopup .io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // folder permissions action
+                sidepanel.find('.folder-tree').delegate('.folder-shared', 'mousedown', function () {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'permissions'
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change', function (folder) {
+                    folderAPI
+                        .get(folder)
+                        .then(function (data) {
+                            metrics.trackEvent({
+                                app: 'calendar',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: getFolderType(data)
+                            });
+                        });
+                });
+                // selection in listview
+                app.grid.selection.on({
+                    'change': function (event, list) {
+                        metrics.trackEvent({
+                            app: 'calendar',
+                            target: 'list',
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+            });
         }
 
     });

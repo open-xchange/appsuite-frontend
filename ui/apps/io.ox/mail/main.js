@@ -1177,69 +1177,87 @@ define('io.ox/mail/main', [
         },
 
         'metrics': function (app) {
-            ext.point('io.ox/metrics').extend({
-                id: 'io.ox/mail',
-                setup: function () {
-                    var self = this;
-                    require(['io.ox/metrics/main'], function (metrics) {
-                        var nodes = app.getWindow().nodes,
-                            toolbar = nodes.body.find('.classic-toolbar-container'),
-                            sidepanel = nodes.sidepanel;
-                        // A/B testing which add mail account button is prefered
-                        metrics.watch({
-                            node: self,
-                            selector: '[data-action="add-mail-account"]',
-                            type: 'click'
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
 
-                        }, {
-                            app: 'mail',
-                            target: 'folder/account',
-                            type: 'click',
-                            action: 'add'
-                        });
-                        // detail view actions
-                        app.getWindow().nodes.main.delegate('.detail-view-header', 'mousedown', function (e) {
-                            metrics.trackEvent({
-                                app: 'mail',
-                                target: 'detail/toolbar/action',
-                                type: 'click',
-                                action: $(e.currentTarget).attr('data-action')
-                            });
-                        });
-                        // toolbar actions
-                        toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
-                            metrics.trackEvent({
-                                app: 'mail',
-                                target: 'toolbar/action',
-                                type: 'click',
-                                action: $(e.currentTarget).attr('data-action')
-                            });
-                        });
-                        // folder tree action
-                        sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
-                            metrics.trackEvent({
-                                app: 'mail',
-                                target: 'folders/context-menu/action',
-                                type: 'click',
-                                action: $(e.currentTarget).attr('data-action')
-                            });
-                        });
-                        // check for clicks in folder trew
-                        app.on('folder:change', function (folder) {
-                            metrics.trackEvent({
-                                app: 'mail',
-                                target: 'folders/folder',
-                                type: 'click',
-                                action: 'select',
-                                detail: account.isPrimary(folder) ? 'primary' : 'external'
-                            });
-                        });
+                var nodes = app.getWindow().nodes,
+                    node = nodes.outer,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // A/B testing which add mail account button is prefered
+                metrics.watch({
+                    node: node,
+                    selector: '[data-action="add-mail-account"]',
+                    type: 'click'
+
+                }, {
+                    app: 'mail',
+                    target: 'folder/account',
+                    type: 'click',
+                    action: 'add'
+                });
+                // detail view actions
+                app.getWindow().nodes.main.delegate('.detail-view-header .dropdown-menu a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'detail/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
                     });
-                }
+                });
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change', function (folder) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'select',
+                        detail: account.isPrimary(folder) ? 'primary' : 'external'
+                    });
+                });
+                // selection in listview
+                app.listView.on({
+                    'selection:multiple selection:one': function (list) {
+                        metrics.trackEvent({
+                            app: 'mail',
+                            target: 'list/' + app.props.get('layout'),
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
             });
-            ext.point('io.ox/metrics').invoke('setup', app.getWindow().nodes.outer, ext.Baton({ app: app }));
         }
-
     });
 
     // launcher

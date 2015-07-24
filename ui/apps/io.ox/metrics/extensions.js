@@ -46,4 +46,21 @@ define('io.ox/metrics/extensions', [
         }
     });
 
+    point.extend({
+        id: 'settings',
+        register: function () {
+            var metrics = this;
+            $('#topbar-settings-dropdown').delegate('a', 'mousedown', function (e) {
+                var node = $(e.target).closest('a'),
+                    action = node.attr('data-action') || node.attr('class') || node.parent().attr('class');
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'toolbar',
+                    type: 'click',
+                    action: action
+                });
+            });
+        }
+    });
+
 });

@@ -885,7 +885,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -905,7 +905,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem" tabindex="-1">')
                         .text(gt('My contact data'))
                     )
                     .on('click', function (e) {
@@ -927,7 +927,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem" tabindex="-1">')
                         .text(gt('Change password'))
                     )
                     .on('click', function (e) {

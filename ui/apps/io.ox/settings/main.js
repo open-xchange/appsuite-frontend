@@ -414,26 +414,22 @@ define('io.ox/settings/main', [
             });
         });
 
-        ext.point('io.ox/metrics').extend({
-            id: 'io.ox/mail/settings',
-            setup: function () {
-                var self = this;
-                require(['io.ox/metrics/main'], function (metrics) {
-                    metrics.watch({
-                            node: self,
-                            selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
-                            type: 'click'
+        require(['io.ox/metrics/main'], function (metrics) {
+            if (!metrics.isEnabled()) return;
 
-                        }, {
-                            app: 'mail',
-                            target: 'settings/account',
-                            type: 'click',
-                            action: 'add'
-                        });
+            var node = app.getWindow().nodes.outer;
+            metrics.watch({
+                    node: node,
+                    selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
+                    type: 'click'
+
+                }, {
+                    app: 'mail',
+                    target: 'settings/account',
+                    type: 'click',
+                    action: 'add'
                 });
-            }
         });
-        ext.point('io.ox/metrics').invoke('setup', app.getWindow().nodes.outer, ext.Baton({ app: app }));
 
         ext.point('io.ox/settings/pane').extend({
             id: 'general',

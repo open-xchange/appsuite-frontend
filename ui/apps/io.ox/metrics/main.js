@@ -72,7 +72,8 @@ define('io.ox/metrics/main', [
         // util
         getUserHash: function () {
             return userhash;
-        }
+        },
+        isEnabled: isEnabled
     };
 
     // replace existing functions with no-ops when metrics is disabled

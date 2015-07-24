@@ -793,6 +793,80 @@ define('io.ox/contacts/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
             };
+        },
+
+        'metrics': function (app) {
+
+            function getFolderType(folder) {
+                if (folderAPI.is('shared', folder)) return 'shared';
+                if (folderAPI.is('private', folder)) return 'private';
+                if (folderAPI.is('public', folder)) return 'public';
+                if (folder.id === '6') return 'gab';
+                return 'unknown';
+            }
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    sidepanel = nodes.sidepanel;
+                // toolbar actions
+                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropfdown
+                toolbar.delegate('.dropdown-menu a', 'mousedown', function (e) {
+                    var node =  $(e.target).closest('a');
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                // folder tree action
+                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // check for clicks in folder trew
+                app.on('folder:change', function (folder) {
+                    folderAPI
+                        .get(folder)
+                        .then(function (data) {
+                            metrics.trackEvent({
+                                app: 'contacts',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: getFolderType(data)
+                            });
+                        });
+                });
+                // selection in listview
+                app.grid.selection.on({
+                    'change': function (event, list) {
+                        metrics.trackEvent({
+                            app: 'contacts',
+                            target: 'list',
+                            type: 'click',
+                            action: 'select',
+                            detail: list.length > 1 ? 'multiple' : 'one'
+                        });
+                    }
+                });
+            });
         }
     });
 
