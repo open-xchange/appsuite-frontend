@@ -227,8 +227,6 @@ define('io.ox/files/share/model', [
     // wrapping model for infostore files and folders in sharing context
     var Share = Backbone.Model.extend({
 
-        idAttribute: 'token',
-
         initialize: function () {
 
         },
@@ -268,15 +266,6 @@ define('io.ox/files/share/model', [
                 return this.get('com.openexchange.share.extendedPermissions') || this.get('permissions');
             } else {
                 return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
-            }
-        },
-
-        sync: function (action, model) {
-            switch (action) {
-                case 'delete':
-                    return api.remove(model.get('token'));
-                default:
-                    break;
             }
         }
 
