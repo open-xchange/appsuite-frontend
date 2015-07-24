@@ -30,9 +30,19 @@ define('io.ox/presenter/views/presentationview', [
         loopedSlides: 0,
         followFinger: false,
         simulateTouch: false,
+        onlyExternal: false,
         noSwiping: true,
         speed: 0,
+        spaceBetween: 0,
         runCallbacksOnInit: false
+    };
+
+    var SWIPER_PARAMS_BUTTONS_ENABLED = {
+        onlyExternal: false
+    };
+
+    var SWIPER_PARAMS_BUTTONS_DISABLED = {
+        onlyExternal: true
     };
 
     var SWIPER_PARAMS_SWIPING_ENABLED = {
@@ -57,13 +67,17 @@ define('io.ox/presenter/views/presentationview', [
      * @param {String} type='left'|'right'
      *  the button type to create, could be 'left' or 'right'.
      *
+     * @param {String} id
+     *  the CSS id for the button.
+     *
      * @returns {jQuery}
      *  the button node.
      */
-    function createNavigationButton (type) {
+    function createNavigationButton (type, id) {
         var button = $('<a href="#" class="swiper-button-control" tabindex="1" role="button" aria-controls="presenter-carousel">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
+        button.attr('id', id);
         button.addClass((type === 'left') ? 'swiper-button-prev  left' : 'swiper-button-next right');
         button.attr((type === 'left') ? {
             //#. button tooltip for 'go to previous presentation slide' action
@@ -88,11 +102,6 @@ define('io.ox/presenter/views/presentationview', [
         className: 'presenter-presentation',
 
         attributes: { tabindex: -1, role: 'main' },
-
-        events: {
-            'click .swiper-button-next': 'showNextSlide',
-            'click .swiper-button-prev': 'showPreviousSlide'
-        },
 
         initialize: function (options) {
             _.extend(this, options);
@@ -558,16 +567,18 @@ define('io.ox/presenter/views/presentationview', [
          */
         updateSwiperParams: function () {
             var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+                userId = this.app.rtConnection.getRTUuid(),
+                enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId);
 
-            if (!this.swiper || _.device('!smartphone && !tablet')) { return; }
+            if (!this.swiper) { return; }
 
-            if (!rtModel.isJoined(userId) || rtModel.isPresenter(userId)) {
-                // enable touch and swiping for mobile devices
-                this.swiper.params = _.extend(this.swiper.params, SWIPER_PARAMS_SWIPING_ENABLED);
+            if (_.device('touch')) {
+                // on touch devices enable or disable swiping and the buttons
+                this.swiper.params = _.extend(this.swiper.params, (enable ? SWIPER_PARAMS_SWIPING_ENABLED : SWIPER_PARAMS_SWIPING_DISABLED));
+
             } else {
-                // disable touch and swiping for mobile devices
-                this.swiper.params = _.extend(this.swiper.params, SWIPER_PARAMS_SWIPING_DISABLED);
+                // on non touch devices enable or disable the buttons only
+                this.swiper.params = _.extend(this.swiper.params, (enable ? SWIPER_PARAMS_BUTTONS_ENABLED : SWIPER_PARAMS_BUTTONS_DISABLED));
             }
         },
 
@@ -705,15 +716,20 @@ define('io.ox/presenter/views/presentationview', [
                 return;
             }
 
+            var swiperNextButtonId = _.uniqueId('presenter-button-next-'),
+                swiperPrevButtonId = _.uniqueId('presenter-button-prev-');
+
             // configure Swiper
             var swiperParameter = {
                 initialSlide: this.startIndex,
+                nextButton: '#' + swiperNextButtonId,
+                prevButton: '#' + swiperPrevButtonId,
                 onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
                 onSlideChangeStart: this.onSlideChangeStart.bind(this)
             };
             swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_DEFAULT);
-            // enable touch and swiping for mobile devices
-            if (_.device('smartphone || tablet')) {
+            // enable swiping on touch devices
+            if (_.device('touch')) {
                 swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_SWIPING_ENABLED);
             }
 
@@ -724,8 +740,8 @@ define('io.ox/presenter/views/presentationview', [
             // add navigation buttons
             if (pageCount > 1) {
                 this.carouselRoot.append(
-                    createNavigationButton('left'),
-                    createNavigationButton('right')
+                    createNavigationButton('left', swiperPrevButtonId),
+                    createNavigationButton('right', swiperNextButtonId)
                 );
             }
 
