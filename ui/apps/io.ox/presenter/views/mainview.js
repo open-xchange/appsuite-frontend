@@ -519,14 +519,8 @@ define('io.ox/presenter/views/mainview', [
          */
         onExitFullscreen: function () {
             //console.info('Presenter - mainview - onExitFullscreen()');
-            var userId = this.app.rtConnection.getRTUuid();
-
             this.fullscreen = false;
             this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);
-
-            if (this.app.rtModel.canLeave(userId)) {
-                this.app.rtConnection.leavePresentation();
-            }
 
             this.presenterEvents.trigger('presenter:fullscreen:exit');
         },
