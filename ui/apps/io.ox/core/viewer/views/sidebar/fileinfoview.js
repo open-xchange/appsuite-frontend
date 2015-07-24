@@ -14,11 +14,12 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/core/api/user',
     'io.ox/core/util',
     'io.ox/core/capabilities',
     'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FolderAPI, util, capabilities, BreadcrumbView, gt) {
+], function (PanelBaseView, Ext, FolderAPI, UserAPI, util, capabilities, BreadcrumbView, gt) {
 
     'use strict';
 
@@ -34,6 +35,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 fileName = model.get('filename') || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
+                modifiedBy = model.get('modified_by'),
                 modified = model.get('last_modified'),
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
@@ -55,6 +57,20 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dt>').text(gt('Folder')),
                 $('<dd class="saved-in">')
             );
+
+            UserAPI.getName(modifiedBy)
+                .done(function (name) {
+                    dl.find('.size').after(
+                        // modified
+                        $('<dt>').text(gt('Modified by')),
+                        $('<dd class="modified-by">').text(name));
+                })
+                .fail(function () {
+                    dl.find('.size').after(
+                        // modified
+                        $('<dt>').text(gt('Modified by')),
+                        $('<dd class="modified-by">').text(gt('unknown')));
+                });
 
             if (!capabilities.has('alone')) {
                 FolderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
