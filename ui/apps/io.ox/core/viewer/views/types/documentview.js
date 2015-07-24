@@ -588,18 +588,15 @@ define('io.ox/core/viewer/views/types/documentview', [
             var pdfView = this.pdfView,
                 documentTopPosition = this.$el.scrollTop(),
                 documentLeftPosition = this.$el.scrollLeft(),
-                pageMarginHeight = 40,
+                pageMarginHeight = 20,
                 pageMarginCount = this.getDominantPage() - 1,
                 pageMarginTotal = pageMarginHeight * pageMarginCount,
                 pagesHeightBeforeZoom = documentTopPosition - pageMarginTotal;
-            _.each(this.pages, function (page, pageIndex) {
-                var pdfPage = $(page).children();
-                pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
-                $(page).css({
-                    width: pdfPage.width(),
-                    height: pdfPage.height()
-                });
-            });
+            // set page zoom to all pages and apply the new size to all page wrappers
+            pdfView.setPageZoom(zoomLevel / 100);
+            var currentPage = this.getDominantPage(),
+                pageSizeAfterZoom = pdfView.getRealPageSize(currentPage);
+            this.pages.css(pageSizeAfterZoom);
             // adjust document scroll position according to new zoom
             var pagesHeightAfterZoom = pagesHeightBeforeZoom * zoomLevel / this.currentZoomFactor,
                 scrollTopAfterZoom = pagesHeightAfterZoom + pageMarginTotal,
