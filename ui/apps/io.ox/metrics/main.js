@@ -35,7 +35,7 @@ define('io.ox/metrics/main', [
         // disable durin development
         if (ox.debug) return false;
         // disable when global setting is set
-        if (settings.get('tracking/enabled', false)) return false;
+        if (!settings.get('tracking/enabled', false)) return false;
         return true;
     }
 
