@@ -28,7 +28,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 name = node.attr('data-name'),
                 value = node.data('value'),
                 toggle = node.data('toggle'),
-                keep = node.attr('data-keep-open') === 'true';
+                keep = this.options.keep || node.attr('data-keep-open') === 'true';
             // keep drop-down open?
             if (keep) e.stopPropagation();
             // ignore plain links
@@ -140,7 +140,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     'aria-haspopup': true,
                     'aria-label': ariaLabel,
                     'data-toggle': 'dropdown'
-                }).append(
+                })
+                .append(
                     // label
                     $('<span class="dropdown-label">').append(
                         label
@@ -150,7 +151,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 ),
                 this.$ul
             );
-            //in firefox draggable=false is not enough to prevent dragging...
+            // use smart drop-down? (fixed positioning)
+            if (this.options.smart) toggle.addClass('smart-dropdown');
+            // in firefox draggable=false is not enough to prevent dragging...
             if ( _.device('firefox') ) {
                 toggle.attr('ondragstart', 'return false;');
             }

@@ -282,7 +282,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '612': 'locale',
             '613': 'groups',
             '614': 'contact_id',
-            '615': 'login_info'
+            '615': 'login_info',
+            '616': 'guest_created_by'
         },
         'group': {
             '1':   'id',

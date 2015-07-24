@@ -1,3 +1,16 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
+ */
+
 .share-wizard {
 
     .tokenfield .twitter-typeahead .tt-dropdown-menu {
@@ -135,6 +148,10 @@
         }
     }
 
+    .modal-body {
+        padding: 16px 0;
+    }
+
     .modal-footer {
 
         .cascade {
@@ -143,7 +160,6 @@
             float: left;
             margin-top: 5px;
             margin-bottom: 0;
-            margin-left: 10px;
         }
 
         .share-options {
@@ -158,15 +174,31 @@
     }
 
     .permission {
-        margin: 0 0 13px 0;
+
+        margin-bottom: 16px;
+
+        @picture-height: 40px;
 
         .contact-picture {
             display: inline-block;
-            .picture(64px, 64px);
+            .picture(@picture-height, @picture-height);
         }
 
         .contact-picture.group {
-            i { font-size: 64px; line-height: 64px; color: #eee; }
+            i { font-size: @picture-height; line-height: @picture-height; color: #eee; }
+        }
+
+        .role, .detail-dropdown, .remove-button {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .display_name {
+            font-weight: bold;
+        }
+
+        .description {
+            .ellipsis();
         }
 
         .readwrite, .readonly { margin-right: 45px; }
@@ -198,33 +230,22 @@
             color: darken(@red, 20%);
         }
 
-        // .close { padding: 21px 0; }
-
         a[data-action="remove"] {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            width: 45px;
-            cursor: pointer;
-
+            color: #777;
+            width: 40px;
+            display: inline-block;
+            position: relative;
+            text-align: center;
             &:hover {
                 background-color: @trash-icon-hover-background;
-
                 i {
                     color: @trash-icon-hover-color;
                 }
             }
-
             i {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                margin: -7px 0 0 -6px;
-                color: #aaa;
+                color: #777;
             }
         }
-
     }
 }
 

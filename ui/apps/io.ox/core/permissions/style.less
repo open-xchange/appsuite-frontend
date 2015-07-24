@@ -48,15 +48,16 @@
     }
 
     .permission {
-        margin: 0 0 13px 0;
+
+        margin-bottom: 8px;
 
         .contact-picture {
             display: inline-block;
-            .picture(64px, 64px);
+            .picture(48px, 48px);
         }
 
         .contact-picture.group {
-            i { font-size: 64px; line-height: 64px; color: #eee; }
+            i { font-size: 48px; line-height: 48px; color: #eee; }
         }
 
         .readwrite, .readonly { margin-right: 45px; }
@@ -100,7 +101,6 @@
 
             &:hover {
                 background-color: @trash-icon-hover-background;
-
                 i {
                     color: @trash-icon-hover-color;
                 }

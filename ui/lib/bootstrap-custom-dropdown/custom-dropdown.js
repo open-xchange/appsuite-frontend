@@ -100,6 +100,7 @@
         }
 
         clearMenus();
+
         if (!isActive) {
             if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
                 // if mobile we use a backdrop because click events don't delegate
@@ -111,7 +112,7 @@
 
             activeElement = $(document.activeElement);
 
-            if (e.isDefaultPrevented()) return
+            if (e.isDefaultPrevented()) return;
 
             $parent
                 .toggleClass('open')
@@ -123,7 +124,7 @@
                 $parent.data('menu').show();
             }
 
-            $this.trigger('focus')
+            $this.trigger('focus');
         }
 
         return false;
