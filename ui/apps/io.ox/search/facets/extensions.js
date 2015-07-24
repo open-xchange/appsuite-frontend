@@ -457,9 +457,9 @@ define('io.ox/search/facets/extensions',
 
                         if (value !== '') {
                             // standard date format
-                            value = (dateAPI.Local.parse(value, dateAPI.DATE));
-                            // use 23:59:59 for end date
-                            value = type === 'start' ? value : value.setHours(0,0,0,0).add(dateAPI.DAY-1);
+                            value = (dateAPI.Local.parse(value, dateAPI.DATE)).setHours(0,0,0,0);
+                            // use 23:59:59:999 for end date
+                            value = type === 'start' ? value : value.add(dateAPI.DAY-1);
                         } else {
                             // use wildcard
                             value = value !== '' ? value : WILDCARD;
@@ -550,7 +550,7 @@ define('io.ox/search/facets/extensions',
                                     .append(
                                         getBlock(gt('Starts on'), 'start', from),
                                         $('<span class="input-group-addon">').text('-'),
-                                        getBlock(gt('Ends on'), 'start', to)
+                                        getBlock(gt('Ends on'), 'end', to)
                                     )
                                     .datepicker({
                                         format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
