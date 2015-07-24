@@ -250,6 +250,9 @@ define('io.ox/presenter/views/presentationview', [
          *  The count of taps, indicating a single or double tap.
          */
         onTap: function (event, tapCount) {
+            // on hybrid devices onSlideClick() handles click and tap
+            if (_.device('desktop')) { return; }
+
             if (tapCount === 1) {
                 this.showNextSlide();
 
