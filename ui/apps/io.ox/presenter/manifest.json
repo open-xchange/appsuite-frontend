@@ -3,7 +3,7 @@
     "company": "Open-Xchange",
     "icon": "default.png",
     "category": "Productivity",
-    "settings": true,
+    "settings": false,
     "requires": "infostore",
     "refreshable": true,
     "path": "io.ox/presenter/main"
