@@ -133,7 +133,7 @@
                 this.parseBitmask();
 
                 this.listenTo(this.model, 'change:bits', this.onChangeBitmask);
-                this.listenTo(this.model, 'change:folder change:read change:write change:delete', this.updateBitmask);
+                this.listenTo(this.model, 'change:folder change:read change:write change:delete change:admin', this.updateBitmask);
             },
 
             onChangeBitmask: function () {
@@ -147,7 +147,8 @@
                     'folder': bitmask.get('folder'),
                     'read':   bitmask.get('read'),
                     'write':  bitmask.get('write'),
-                    'delete': bitmask.get('delete')
+                    'delete': bitmask.get('delete'),
+                    'admin':  bitmask.get('admin')
                 });
             },
 
@@ -157,6 +158,7 @@
                 bitmask.set('read', this.model.get('read'));
                 bitmask.set('write', this.model.get('write'));
                 bitmask.set('delete', this.model.get('delete'));
+                bitmask.set('admin', this.model.get('admin'));
                 this.model.set('bits', bitmask.get());
             },
 
@@ -227,8 +229,11 @@
             getRoleDescription: function () {
                 var bitmask = folderAPI.Bitmask(this.model.get('bits'));
                 if (bitmask.get('admin')) return gt('Administrator');
-                // the following is just a good guess
-                if (bitmask.get('read') && bitmask.get('write')) return gt('Author');
+                if (bitmask.get('read') && bitmask.get('write')) {
+                    // Author: read, write, delete
+                    // Reviewer: read, write
+                    return bitmask.get('delete') ? gt('Author') : gt('Reviewer');
+                }
                 // assumption is that everyone is at least a "Viewer"
                 return gt('Viewer');
             },
@@ -381,7 +386,7 @@
             draw: function (baton) {
 
                 this.append(
-                    $('<div class="col-xs-6">').append(
+                    $('<div class="col-xs-4">').append(
                         $('<div class="display_name">').text(baton.view.display_name),
                         $('<div class="description">').text(baton.view.description)
                     )
@@ -397,7 +402,7 @@
             draw: function (baton) {
 
                 this.append(
-                    $('<div class="col-xs-2 role">').text(baton.view.getRoleDescription())
+                    $('<div class="col-xs-3 role">').text(baton.view.getRoleDescription())
                 );
             }
         },
@@ -458,10 +463,18 @@
                     //#. object permissions - delete
                     .option('delete', 1, gt('Delete own objects'))
                     //#. object permissions - delete
-                    .option('delete', maxDelete, gt('Delete all objects'));
+                    .option('delete', maxDelete, gt('Delete all objects'))
+                    //
+                    // ADMIN role
+                    //
+                    .header(gt('Administrative role'))
+                    //#. object permissions - admin
+                    .option('admin', 0, gt('User'))
+                    //#. object permissions - admin
+                    .option('admin', 1, gt('Administrator'));
 
                 this.append(
-                    $('<div class="col-xs-2 detail-dropdown">').append(
+                    $('<div class="col-xs-3 detail-dropdown">').append(
                         dropdown.render().$el
                     )
                 );

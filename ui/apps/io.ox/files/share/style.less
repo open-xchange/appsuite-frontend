@@ -193,12 +193,12 @@
             line-height: 40px;
         }
 
-        .display_name {
-            font-weight: bold;
+        .display_name, .description, .role, .detail-dropdown {
+            .ellipsis();
         }
 
-        .description {
-            .ellipsis();
+        .display_name {
+            font-weight: bold;
         }
 
         .readwrite, .readonly { margin-right: 45px; }

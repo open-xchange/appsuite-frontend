@@ -32,19 +32,45 @@ define('io.ox/core/tk/flag-picker', [
                 $ul = $('ul', $parent).first(),
                 $zIndex = $parent.parents('[style*="z-index"]'),
                 transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
-                $container = $this.closest('.scrollable'),
-                margin = 7;
+                margin = 8;
 
             function computeBounds() {
-                var positions = {
-                    top: Math.max($container.offset().top + margin, Math.min($this.offset().top, $container.offset().top + $container.innerHeight() - $ul.outerHeight() - margin)) - transformOffset.top,
-                    right: ($(window).width() - $this.offset().left - $this.outerWidth() + $this.width() + margin) + transformOffset.left,
-                    left: 'initial',
-                    bottom: 'initial'
-                };
 
-                if (positions.top + $ul.outerHeight() > $(window).height() - margin) {
-                    positions.bottom = margin;
+                var positions = { top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' },
+                    offset = $this.offset(),
+                    width = $this.width(),
+                    height = $this.height(),
+                    dropdownWidth = $ul.outerWidth(),
+                    dropdownHeight = $ul.outerHeight(),
+                    availableWidth = $(window).width(),
+                    availableHeight = $(window).height();
+
+                // check potential positions
+                if ((offset.top + height + dropdownHeight + margin) < availableHeight) {
+                    // enough room below
+                    positions.top = offset.top + height + margin;
+                } else {
+                    // same top position
+                    positions.top = offset.top;
+                    // left or right?
+                    if ((offset.left + width + dropdownWidth + margin) < availableWidth) {
+                        // enough room on right side
+                        positions.left = offset.left + width + margin;
+                    } else {
+                        // position of left side
+                        positions.left = offset.left - dropdownWidth - margin;
+                    }
+                    // hits bottom?
+                    if (positions.top + dropdownHeight > availableHeight - margin) {
+                        // apply bottom limit
+                        positions.bottom = margin;
+                        // enough room above?
+                        if ((dropdownHeight + 2 * margin) < availableHeight) {
+                            positions.top = 'auto';
+                        } else {
+                            positions.top = margin;
+                        }
+                    }
                 }
 
                 $ul.css(positions);
