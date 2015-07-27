@@ -409,6 +409,13 @@ define('io.ox/mail/main',
             });
         },
 
+        'isThreaded': function (app) {
+            app.isThreaded = function () {
+                if (app.listView.loader.mode === 'search') return false;
+                return app.props.get('thread');
+            };
+        },
+
         /*
          * Store view options
          */
@@ -581,7 +588,7 @@ define('io.ox/mail/main',
         'show-mail': function (app) {
             if (_.device('smartphone')) return;
             app.showMail = function (cid) {
-                app.threadView.show(cid, app.props.get('thread'));
+                app.threadView.show(cid, app.isThreaded());
             };
         },
 
@@ -1085,8 +1092,15 @@ define('io.ox/mail/main',
                                         'extra': 1
                                     }, { silent: true });
 
-                                    var self = this;
-                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                    var self = this,
+                                        defaultParams = api.collectionLoader.getQueryParams(params),
+                                        params = {
+                                            sort: app.props.get('sort'),
+                                            order: app.props.get('order'),
+                                            // add columns of default collection loader to find api request
+                                            loadercolumns: defaultParams.columns
+                                        };
+
                                     return search.apiproxy.query(true, params).then(function (response) {
                                         response = response || {};
                                         var list = response.results || [],
@@ -1104,7 +1118,7 @@ define('io.ox/mail/main',
                                         '&order=' + app.props.get('order');
                                 },
                                 each: function (obj) {
-                                    api.processThreadMessage(obj);
+                                    api.pool.add('detail', obj);
                                 }
                             });
 
