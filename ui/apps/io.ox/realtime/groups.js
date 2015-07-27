@@ -211,7 +211,9 @@ define('io.ox/realtime/groups', [
             }
             groups[id] = new RealtimeGroup(id);
             return groups[id];
-        }
+        },
+
+        rtId: rt.resource
     };
 
 });
