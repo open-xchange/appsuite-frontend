@@ -109,7 +109,8 @@ define('io.ox/find/view-tokenfield', [
                 guid = _.uniqueId('form-control-label-'),
                 model = baton.model,
                 hasFocus = fieldstub.is(':focus'),
-                query = fieldstub.val();
+                query = fieldstub.val(),
+                self = this;
 
             // extend basic tokenfieldview
             this.ui.view = new Tokenfield({
@@ -188,10 +189,11 @@ define('io.ox/find/view-tokenfield', [
                     return node;
                 },
                 harmonize: function (data) {
+                    var query = self.ui.container.find('.token-input').val();
                     return _(data).map(function (value) {
                         return {
                             label: value.getDisplayName(),
-                            value: value.isPerson() ? value.getNameDetail() || value.getDisplayName() : value.getDisplayName(),
+                            value: query,
                             model: value
                         };
                     });
@@ -222,10 +224,19 @@ define('io.ox/find/view-tokenfield', [
             this.instance = this.ui.field.data('bs.tokenfield');
             // some shortcuts (available after render)
             this.ui.container = this.ui.field.parent();
+            this.ui.tokeninput = this.ui.container.find('.token-input');
 
             // recover state after replace
-            this.ui.container.find('.token-input').val(query);
+            this.ui.tokeninput.val(query);
             if (hasFocus) this.setFocus();
+
+            // update dropdown selection state
+            this.ui.tokeninput.on({
+                'typeahead:cursorchange typeahead:cursorchanged': _.bind(this.updateSelection, this, 'add'),
+                'typeahead:close typeahead:closed': _.bind(this.updateSelection, this, 'remove'),
+                'typeahead:select typeahead:selected': _.bind(this.updateSelection, this, 'remove')
+            });
+
             return this;
         },
 
@@ -238,7 +249,6 @@ define('io.ox/find/view-tokenfield', [
             function preventOnCancel (e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
-
             //retrigger events on view
             this.ui.field.on([
                 'tokenfield:initialize',
@@ -248,8 +258,7 @@ define('io.ox/find/view-tokenfield', [
                 'tokenfield:removetoken',
                 'tokenfield:removedtoken'
                 ].join(' '), _.bind(this.retrigger, this));
-
-            //
+            // listen for tokenfield:events
             this.on({
                 // stop creation when cancel button is clicked while dropdown is open
                 'tokenfield:createtoken': preventOnCancel,
@@ -258,7 +267,23 @@ define('io.ox/find/view-tokenfield', [
                 // try to contract each time a token is removed
                 'tokenfield:removedtoken': _.bind(this.removedToken, this)
             });
+            // list for custom typeahead events
+            this.ui.view.on({
+                'typeahead-custom:dropdown-rendered': _.bind(this.restoreSelection, this)
+            });
+        },
 
+        updateSelection: function (action, e, item) {
+            if (action !== 'add' || !item) return this.ui.selected = undefined;
+            this.ui.selected = item.model.get('id');
+        },
+
+        // used when search string changes and item from dropdown is selcted
+        restoreSelection: function () {
+            if (!this.ui.selected) return;
+            var node = $('.tt-suggestion> [data-id="' + this.ui.selected + '"]');
+            if (!node.length) return this.ui.selected = undefined;
+            node.parent().addClass('tt-cursor');
         },
 
         removedToken: function (e) {
@@ -275,7 +300,7 @@ define('io.ox/find/view-tokenfield', [
         isEmpty: function () {
             var none = !this.model.manager.getActive().length;
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return none && this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
+            return none && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
         },
 
         empty: function () {
@@ -296,16 +321,16 @@ define('io.ox/find/view-tokenfield', [
         },
 
         reset: function () {
-            this.ui.container.find('.token-input').val('');
+            this.ui.tokeninput.val('');
             // remove all tokens
             this.empty();
             this.setPlaceholder();
             // tokenfield manually sets width -  has to be removed here
-            this.ui.container.find('.token-input').css('width', 'auto');
+            this.ui.tokeninput.css('width', 'auto');
         },
 
         setFocus: function () {
-            this.ui.container.find('.token-input').focus();
+            this.ui.tokeninput.focus();
         },
 
         // show input placeholder only on empty tokenfield

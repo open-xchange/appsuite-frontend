@@ -133,6 +133,7 @@ define('io.ox/core/tk/typeahead', [
                             if (dropdown.is(':visible')) {
                                 self.model.set('dropdown', 'opened');
                             }
+                            self.trigger('typeahead-custom:dropdown-rendered');
                         });
                         self.registered = true;
                     }
