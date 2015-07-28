@@ -400,7 +400,6 @@
             index: 300,
             id: 'role',
             draw: function (baton) {
-
                 this.append(
                     $('<div class="col-xs-3 role">').text(baton.view.getRoleDescription())
                 );
@@ -413,6 +412,12 @@
             index: 400,
             id: 'detail-dropdown',
             draw: function (baton) {
+
+                // not available for anonymous links (read-only)
+                if (baton.model.get('type') === 'anonymous') {
+                    this.append('<div class="col-xs-3">');
+                    return;
+                }
 
                 // take care of highest bit (64 vs 4 vs 2)
                 var maxFolder = baton.model.get('folder') === 64 ? 64 : 4,
