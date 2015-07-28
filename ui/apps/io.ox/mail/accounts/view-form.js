@@ -608,7 +608,7 @@ define.async('io.ox/mail/accounts/view-form', [
                             )
                         ),
                         // unified inbox
-                        capabilities.has('!multiple_mail_accounts') ?
+                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ?
                         $() :
                         group(
                             checkbox(
