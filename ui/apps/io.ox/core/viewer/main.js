@@ -39,6 +39,8 @@ define('io.ox/core/viewer/main', [], function () {
          *  whether viewer should be launched in standalone mode.
          *  @param {Boolean} [data.app]
          *  a reference to an app object, from which this viewer is launched.
+         *  @param {Object} [data.opt]
+         *  a reference to an an options object that can be accessed in all subviews
          */
         this.launch = function (data) {
 
@@ -68,7 +70,7 @@ define('io.ox/core/viewer/main', [], function () {
                     this.fileCollection.setStartIndex(data.selection);
                 }
                 // create main view and append main view to core
-                this.mainView = new MainView({ collection: this.fileCollection, el: el, app: data.app, standalone: data.standalone });
+                this.mainView = new MainView({ collection: this.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {} });
 
             }.bind(this));
         };

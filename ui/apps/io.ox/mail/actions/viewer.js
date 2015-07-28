@@ -15,8 +15,9 @@ define('io.ox/mail/actions/viewer', [
 
     'use strict';
 
-    return function (baton) {
+    return function (data) {
         var viewer = new Viewer();
-        viewer.launch(baton);
+        // disable file details: data unavailbale for mail attachments
+        viewer.launch(_.extend({ opt: { disableFileDetail: true } }, data));
     };
 });

@@ -266,6 +266,9 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             if (!this.model) return;
 
+            // f.e. when used to preview file attachments in mail
+            if (this.options.opt.disableFileDetail) return;
+
             FilesAPI.get(this.model.toJSON()).done(function (file) {
                 // after loading the file details we set at least an empty string as description.
                 // in order to distinguish between 'the file details have been loaded but the file has no description'
