@@ -77,6 +77,22 @@ define('io.ox/core/tk/wizard', [
         };
     }
 
+    // resolves strings, DOM node, jQuery instances, and callbacks
+    // (returns either a valid jQuery collection with one element, or null)
+    function resolveSelector(selector) {
+
+        // resolve callback function
+        if (typeof selector === 'function') {
+            selector = selector.call(this);
+        }
+
+        // convert to jQuery, check visibility (undefined, null etc. are never ':visible')
+        selector = $(selector).filter(':visible');
+        return selector.length ? selector.first() : null;
+    }
+
+    // align automatically
+
     //
     // Wizard/Tour
     //
@@ -292,9 +308,9 @@ define('io.ox/core/tk/wizard', [
                 // check if "close" button exists
                 case 27: if (this.$('.close').length) this.trigger('close'); break;
                 // check if "back" button is enabled
-                case 37: if (!this.$('.back').prop('disabled')) this.trigger('back'); break;
+                case 37: if (!this.$('[data-action="back"]').prop('disabled')) this.trigger('back'); break;
                 // check if "next" button is enabled
-                case 39: if (!this.$('.next').prop('disabled')) this.trigger('next'); break;
+                case 39: if (!this.$('[data-action="next"]').prop('disabled')) this.trigger('next'); break;
             }
         },
 
@@ -309,6 +325,8 @@ define('io.ox/core/tk/wizard', [
                 // buttons
                 back: true,
                 next: true,
+                enableBack: true,
+                enableNext: true,
                 labelBack: gt('Back'),
                 labelDone: gt('Done')
             }, options);
@@ -364,9 +382,15 @@ define('io.ox/core/tk/wizard', [
                 footer = this.$('.footer').empty();
 
             // show "Back" button
-            if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
+            if (dir.back) {
+                this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
+                this.$('.btn[data-action="back"]').prop('disabled', !this.options.enableBack);
+            }
             // show "Start" or Next" button
-            if (dir.next) this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
+            if (dir.next) {
+                this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
+                this.$('.btn[data-action="next"]').prop('disabled', !this.options.enableNext);
+            }
             // show "Done" button
             if (dir.done) this.addButton(footer, { action: 'done', className: 'btn-primary', label: this.getLabelDone() });
         },
@@ -425,13 +449,13 @@ define('io.ox/core/tk/wizard', [
 
         // enable/disable 'next' button
         toggleNext: function (state) {
-            this.$('.btn.next').prop('disabled', !state);
+            this.options.enableNext = !!state;
             return this;
         },
 
         // enable/disable 'back' button
         toggleBack: function (state) {
-            this.$('.btn.back').prop('disabled', !state);
+            this.options.enableBack = !!state;
             return this;
         },
 
@@ -461,7 +485,7 @@ define('io.ox/core/tk/wizard', [
             }
 
             function waitFor() {
-                if (!this.options.waitFor || $(this.options.waitFor).is(':visible')) return cont.call(this);
+                if (!this.options.waitFor || resolveSelector(this.options.waitFor)) return cont.call(this);
                 counter++;
                 if (counter < 50) {
                     setTimeout(waitFor.bind(this), 100);
@@ -641,12 +665,8 @@ define('io.ox/core/tk/wizard', [
             return function (selector) {
 
                 // if nothing is defined the step is centered
-                selector = selector || this.options.referTo || this.options.spotlight;
-                if (!selector) return;
-
-                // align automatically
-                var elem = $(selector + ':visible');
-                if (!elem.length) return;
+                var elem = resolveSelector(selector || this.options.referTo || this.options.spotlight);
+                if (!elem) return;
 
                 // remove default class and reset all inline positions
                 this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
