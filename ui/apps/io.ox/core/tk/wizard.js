@@ -77,16 +77,9 @@ define('io.ox/core/tk/wizard', [
         };
     }
 
-    // resolves strings, DOM node, jQuery instances, and callbacks
+    // resolves strings, DOM node, or jQuery instances
     // (returns either a valid jQuery collection with one element, or null)
     function resolveSelector(selector) {
-
-        // resolve callback function
-        if (typeof selector === 'function') {
-            selector = selector.call(this);
-        }
-
-        // convert to jQuery, check visibility (undefined, null etc. are never ':visible')
         selector = $(selector).filter(':visible');
         return selector.length ? selector.first() : null;
     }
