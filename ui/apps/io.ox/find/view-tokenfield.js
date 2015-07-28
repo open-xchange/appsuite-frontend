@@ -229,6 +229,14 @@ define('io.ox/find/view-tokenfield', [
             // recover state after replace
             this.ui.tokeninput.val(query);
             if (hasFocus) this.setFocus();
+
+            // update dropdown selection state
+            this.ui.tokeninput.on({
+                'typeahead:cursorchange typeahead:cursorchanged': _.bind(this.updateSelection, this, 'add'),
+                'typeahead:close typeahead:closed': _.bind(this.updateSelection, this, 'remove'),
+                'typeahead:select typeahead:selected': _.bind(this.updateSelection, this, 'remove')
+            });
+
             return this;
         },
 
@@ -259,7 +267,23 @@ define('io.ox/find/view-tokenfield', [
                 // try to contract each time a token is removed
                 'tokenfield:removedtoken': _.bind(this.removedToken, this)
             });
+            // list for custom typeahead events
+            this.ui.view.on({
+                'typeahead-custom:dropdown-rendered': _.bind(this.restoreSelection, this)
+            });
+        },
 
+        updateSelection: function (action, e, item) {
+            if (action !== 'add' || !item) return this.ui.selected = undefined;
+            this.ui.selected = item.model.get('id');
+        },
+
+        // used when search string changes and item from dropdown is selcted
+        restoreSelection: function () {
+            if (!this.ui.selected) return;
+            var node = $('.tt-suggestion> [data-id="' + this.ui.selected + '"]');
+            if (!node.length) return this.ui.selected = undefined;
+            node.parent().addClass('tt-cursor');
         },
 
         removedToken: function (e) {
