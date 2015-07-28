@@ -224,9 +224,10 @@ define('io.ox/find/view-tokenfield', [
             this.instance = this.ui.field.data('bs.tokenfield');
             // some shortcuts (available after render)
             this.ui.container = this.ui.field.parent();
+            this.ui.tokeninput = this.ui.container.find('.token-input');
 
             // recover state after replace
-            this.ui.container.find('.token-input').val(query);
+            this.ui.tokeninput.val(query);
             if (hasFocus) this.setFocus();
             return this;
         },
@@ -275,7 +276,7 @@ define('io.ox/find/view-tokenfield', [
         isEmpty: function () {
             var none = !this.model.manager.getActive().length;
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return none && this.api('getTokens').length === 0 && this.ui.container.find('.token-input').val().trim() === '';
+            return none && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
         },
 
         empty: function () {
@@ -296,16 +297,16 @@ define('io.ox/find/view-tokenfield', [
         },
 
         reset: function () {
-            this.ui.container.find('.token-input').val('');
+            this.ui.tokeninput.val('');
             // remove all tokens
             this.empty();
             this.setPlaceholder();
             // tokenfield manually sets width -  has to be removed here
-            this.ui.container.find('.token-input').css('width', 'auto');
+            this.ui.tokeninput.css('width', 'auto');
         },
 
         setFocus: function () {
-            this.ui.container.find('.token-input').focus();
+            this.ui.tokeninput.focus();
         },
 
         // show input placeholder only on empty tokenfield
