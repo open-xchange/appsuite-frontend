@@ -24,6 +24,7 @@ define('io.ox/find/extensions-tokenfield', [
 
             item: function (baton) {
                 this.addClass(baton.data.facet.getOriginalId());
+                this.attr('data-id', baton.data.value.getOriginalId());
                 // contact picture
                 ext.point(POINT + '/image').invoke('draw', this, baton);
                 // display name

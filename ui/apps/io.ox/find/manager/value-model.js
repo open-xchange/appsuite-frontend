@@ -136,6 +136,10 @@ define('io.ox/find/manager/value-model', [
             return _.findWhere(options, { id: id }) || {};
         },
 
+        getOriginalId: function () {
+            return this.get('id');
+        },
+
         getImageUrl: function () {
             var data = this.get('data');
             if (!data.item) return;
