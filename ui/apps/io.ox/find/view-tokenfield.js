@@ -109,7 +109,8 @@ define('io.ox/find/view-tokenfield', [
                 guid = _.uniqueId('form-control-label-'),
                 model = baton.model,
                 hasFocus = fieldstub.is(':focus'),
-                query = fieldstub.val();
+                query = fieldstub.val(),
+                self = this;
 
             // extend basic tokenfieldview
             this.ui.view = new Tokenfield({
@@ -188,10 +189,11 @@ define('io.ox/find/view-tokenfield', [
                     return node;
                 },
                 harmonize: function (data) {
+                    var query = self.ui.container.find('.token-input').val();
                     return _(data).map(function (value) {
                         return {
                             label: value.getDisplayName(),
-                            value: value.isPerson() ? value.getNameDetail() || value.getDisplayName() : value.getDisplayName(),
+                            value: query,
                             model: value
                         };
                     });
@@ -238,7 +240,6 @@ define('io.ox/find/view-tokenfield', [
             function preventOnCancel (e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
-
             //retrigger events on view
             this.ui.field.on([
                 'tokenfield:initialize',
@@ -248,8 +249,7 @@ define('io.ox/find/view-tokenfield', [
                 'tokenfield:removetoken',
                 'tokenfield:removedtoken'
                 ].join(' '), _.bind(this.retrigger, this));
-
-            //
+            // listen for tokenfield:events
             this.on({
                 // stop creation when cancel button is clicked while dropdown is open
                 'tokenfield:createtoken': preventOnCancel,
