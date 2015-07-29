@@ -590,11 +590,8 @@ define('io.ox/mail/compose/view', [
 
             this.stopAutoSave();
 
-            var timeoutScale = timeout * scale;
-            timeoutScale = 10000;
-
             delay = function () {
-                self.autosave.timer = _.delay(timer, timeoutScale);
+                self.autosave.timer = _.delay(timer, timeout * scale);
             };
 
             timer = function () {
