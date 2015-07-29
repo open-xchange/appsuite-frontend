@@ -37,7 +37,8 @@ define('io.ox/mail/compose/model', [
                 sendtype: mailAPI.SENDTYPE.NORMAL,
                 defaultSignatureId: settings.get('defaultSignature'),
                 csid: mailAPI.csid(),
-                vcard: settings.get('appendVcard', false) ? 1 : 0
+                vcard: settings.get('appendVcard', false) ? 1 : 0,
+                infostore_ids_saved: []
             };
         },
 
@@ -237,7 +238,7 @@ define('io.ox/mail/compose/model', [
 
             attachmentCollection.at(0).set('content', content, { silent: true });
 
-            result = _(this.toJSON()).pick(
+            result = this.pick(
                 'from',
                 'to',
                 'cc',
@@ -286,6 +287,15 @@ define('io.ox/mail/compose/model', [
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 this.set('sendtype', mail.sendtype, { silent: true });
+            }
+
+            // delete mail.infostore_ids;
+            if (mail.infostore_ids) {
+                // Reject files from drive to avoid duplicates
+                var saved = this.get('infostore_ids_saved');
+                mail.infostore_ids = _(mail.infostore_ids).reject(function (id) {
+                    return _(saved).indexOf(id) > -1;
+                });
             }
 
             if (_(mail.flags).isUndefined()) {

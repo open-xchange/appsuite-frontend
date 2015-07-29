@@ -545,13 +545,18 @@ define('io.ox/mail/compose/view', [
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-
                     if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                         self.model.set('msgref', result, { silent: true });
                     }
-
-                    notifications.yell('success', gt('Mail saved as draft'));
-                    def.resolve(result);
+                    mailAPI.get(self.parseMsgref(result)).then(function (updated) {
+                        var attachmentCollection = self.model.get('attachments');
+                        attachmentCollection.reset(updated.attachments);
+                        self.model.set(attachmentCollection);
+                        var saved = self.model.get('infostore_ids_saved');
+                        self.model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
+                        notifications.yell('success', gt('Mail saved as draft'));
+                        def.resolve(result);
+                    });
                 }
             });
 
