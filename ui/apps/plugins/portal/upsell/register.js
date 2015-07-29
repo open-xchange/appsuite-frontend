@@ -25,7 +25,7 @@ define('plugins/portal/upsell/register', [
             title: gt('Upgrade your account'),
             requires: 'active_sync || caldav || carddav',
             removable: false,
-            icon: settings.get('upsell/defaultIcon', 'fa-lock')
+            icon: settings.get('upsell/defaultIcon', 'fa-star')
         }, settings.get('features/upsell/' + id), settings.get('features/upsell/' + id + '/i18n/' + ox.language));
 
     function trigger(e) {

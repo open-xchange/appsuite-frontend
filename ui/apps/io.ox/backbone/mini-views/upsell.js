@@ -40,22 +40,36 @@ define('io.ox/backbone/mini-views/upsell', [
 
         initialize: function (opt) {
             this.opt = _.extend({
-                icon: settings.get('upsell/defaultIcon', 'fa-lock'),
+                icon: settings.get('upsell/defaultIcon', 'fa-star'),
                 enabled: true
             }, opt, settings.get('features/upsell/' + opt.id), settings.get('features/upsell/' + opt.id + '/i18n/' + ox.language));
 
             this.customize = this.opt.customize;
             this.icon = this.opt.icon;
+            this.visible = this.opt.enabled && !upsell.has(this.opt.requires) && upsell.enabled(this.opt.requires);
         },
 
         render: function () {
-            if (this.opt.enabled && !upsell.has(this.opt.requires) && upsell.enabled(this.opt.requires)) {
+            if (this.visible) {
+                var self = this;
+
                 this.$el.append(
-                    $('<a href="#">').text(this.opt.title)
+                    $('<a href="#">').css('color', this.opt.color).append(
+                        this.opt.title,
+                        _(this.icon.split(/ /)).map(function (icon, index) {
+                            return $('<i class="fa">')
+                                .addClass(icon)
+                                .css({
+                                    'margin-left': (index === 0 && self.opt.title && self.opt.title.length > 0) ? '0.5em' : '',
+                                    'color': self.opt.color
+                                });
+                        })
+                    )
                 );
+
                 if (this.customize && _.isFunction(this.customize)) this.customize();
             } else {
-                this.$el.addClass('hidden');
+                this.$el.hide();
             }
 
             return this;

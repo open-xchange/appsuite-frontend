@@ -70,7 +70,7 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         // download multiple files as zip file
         files: function (list) {
             form({
-                url: ox.apiRoot + '/files?action=zipdocuments&session=' + ox.session,
+                url: ox.apiRoot + '/files?action=zipdocuments&callback=yell&session=' + ox.session,
                 // this one wants folder_id
                 body: JSON.stringify(_.map(list, map))
             });

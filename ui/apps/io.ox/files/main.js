@@ -256,7 +256,7 @@ define('io.ox/files/main', [
                 'filter': 'none',
                 'layout': layout,
                 'folderEditMode': false,
-                'details': _.device('smartphone') ? false : app.settings.get('showDetails', true)
+                'details': _.device('touch') ? false : app.settings.get('showDetails', true)
             });
             // initial setup
             var folder = app.folder.get();

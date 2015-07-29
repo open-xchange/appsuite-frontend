@@ -49,6 +49,10 @@ define('io.ox/core/tk/flag-picker', [
                 if ((offset.top + height + dropdownHeight + margin) < availableHeight) {
                     // enough room below
                     positions.top = offset.top + height + margin;
+                    // right aligned?
+                    if ((offset.left + dropdownWidth + margin) > availableWidth) {
+                        positions.left = offset.left + width - dropdownWidth;
+                    }
                 } else {
                     // same top position
                     positions.top = offset.top;
