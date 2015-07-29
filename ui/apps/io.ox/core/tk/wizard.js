@@ -471,17 +471,15 @@ define('io.ox/core/tk/wizard', [
         // considers 'navigateTo' and 'waitFor' (both async)
         show: (function () {
 
-            var counter = 0;
-
             function navigateTo() {
                 ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(waitFor.bind(this));
             }
 
-            function waitFor() {
+            function waitFor(counter) {
                 if (!this.options.waitFor || resolveSelector(this.options.waitFor)) return cont.call(this);
-                counter++;
+                counter = counter || 0;
                 if (counter < 50) {
-                    setTimeout(waitFor.bind(this), 100);
+                    setTimeout(waitFor.bind(this, counter + 1), 100);
                 } else {
                     console.error('Step.show(). Stopped waiting for:', this.options.waitFor);
                     this.parent.close();
