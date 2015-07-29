@@ -187,12 +187,12 @@ define('io.ox/core/tk/wizard', [
             });
             if (_.device('smartphone')) this.container.remove().empty();
             // unregister / clean up
-            this.off();
             $(document).off('click.wizard');
             this.steps = [];
             this.container = null;
             // done
             this.trigger('stop');
+            this.off();
             this.closed = true;
             return this;
         },
@@ -561,6 +561,7 @@ define('io.ox/core/tk/wizard', [
             }
 
             return function () {
+                this.trigger('init:show');
 
                 if (_.device('smartphone')) return handleSmartphone.call(this);
 
