@@ -62,6 +62,7 @@ define('plugins/portal/upsell/register', [
                 );
             }
 
+            this.off('click', trigger);
             this.on('click', trigger);
 
             if (!options.removable) {
