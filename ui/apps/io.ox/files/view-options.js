@@ -218,24 +218,23 @@ define('io.ox/files/view-options', [
                     }
                 });
                 function buildbutton (text, customclass, icon, service) {
-                    return $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
+                    var node = $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
                         .append(
                             icon ? [$('<i class="fa ' + icon + '" aria-hidden="true">'), $('<span class="sr-only">').text(text)] : $('<span>').text(text)
-                        ).on('click', function () {
-                            ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
-                                this.setSettingsPane({ id: 'io.ox/settings/accounts' });
-                                if (service) {
-                                    var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
-                                    service.createInteractively(win);
-                                }
-                            });
-                        }).attr({
+                        ).attr({
                             'data-toggle': 'tooltip',
                             'data-placement': 'top',
                             'data-animation': 'false',
                             'data-container': 'body',
                             'title': text
                         }).tooltip();
+                    if (service) {
+                        node.on('click', function () {
+                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=700, width=800, resizable=yes, scrollbars=yes');
+                            service.createInteractively(win);
+                        });
+                    }
+                    return node;
                 }
 
                 toolbar.append(
@@ -246,7 +245,11 @@ define('io.ox/files/view-options', [
                             buttons.google || '',
                             buttons.msliveconnect || '',
                             buttons.boxcom || '',
-                            buildbutton(gt('Add account'), 'misc-link', 'fa-ellipsis-h')
+                            buildbutton(gt('Add account'), 'misc-link', 'fa-ellipsis-h').on('click', function () {
+                                ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
+                                    this.setSettingsPane({ id: 'io.ox/settings/accounts' });
+                                });
+                            })
                             )
                         )
                     );
