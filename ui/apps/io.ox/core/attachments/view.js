@@ -234,7 +234,7 @@ define('io.ox/core/attachments/view', [
             // word blue
             if (/^do[ct]x?$/.test(extension)) return '#2C5897';
             // excel green
-            if (/^xlsx?$/.test(extension)) return '#1D7047';
+            if (/^xlsx?|o[dt]s$/.test(extension)) return '#1D7047';
             // powerpoint orange
             if (/^p[po]tx?$/.test(extension)) return '#D04423';
             // pdf red
