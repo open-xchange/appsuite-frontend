@@ -230,7 +230,7 @@ define('io.ox/files/view-options', [
                         }).tooltip();
                     if (service) {
                         node.on('click', function () {
-                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=700, width=800, resizable=yes, scrollbars=yes');
+                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
                             service.createInteractively(win);
                         });
                     }

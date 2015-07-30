@@ -230,7 +230,7 @@ define('io.ox/settings/accounts/settings/pane', [
                             var submodule = e.data.submodule;
                             // looks like oauth?
                             if ('reauthorize' in submodule) {
-                                var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
+                                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
                                 submodule.createInteractively(win);
                             } else {
                                 submodule.createInteractively(e);
