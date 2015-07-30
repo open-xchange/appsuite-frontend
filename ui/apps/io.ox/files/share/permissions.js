@@ -378,7 +378,7 @@
                 var url = baton.model.get('share_url');
 
                 this.append(
-                    $('<div class="col-xs-4">').append(
+                    $('<div class="col-xs-6">').append(
                         $('<div class="display_name">').text(baton.view.display_name),
                         $('<div class="description">').append(
                             url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
@@ -420,11 +420,11 @@
                             model.set('bits', roles[value].bit);
                         }
                     });
-                    node = dropdown.render().$el.addClass('pull-right');
+                    node = dropdown.render().$el;
                 }
 
                 this.append(
-                    $('<div class="col-xs-3 role">').append(node)
+                    $('<div class="col-xs-2 role">').append(node)
                 );
             }
         },
@@ -438,7 +438,7 @@
 
                 // not available for anonymous links (read-only)
                 if (baton.model.get('type') === 'anonymous') {
-                    this.append('<div class="col-xs-3">');
+                    this.append('<div class="col-xs-2">');
                     return;
                 }
 
@@ -503,7 +503,7 @@
                     .option('admin', 1, gt('Administrator'));
 
                 this.append(
-                    $('<div class="col-xs-3 detail-dropdown">').append(
+                    $('<div class="col-xs-2 detail-dropdown">').append(
                         dropdown.render().$el.addClass('pull-right').attr('title', gt('Detailed access rights'))
                     )
                 );
@@ -521,19 +521,20 @@
                 // var bitmask = folderAPI.Bitmask(baton.model.get('bits'));
                 // if (!bitmask.get('admin')) return;
 
-                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') });
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
+                    type = baton.model.get('type'),
+                    myself = type === 'user' && baton.model.get('entity') === ox.user_id;
 
                 switch (baton.model.get('type')) {
                     case 'group':
-                        dropdown
-                            .link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', gt('Revoke access'));
                         break;
                     case 'user':
                     case 'guest':
-                        dropdown
-                            .link('resend', gt('Resend invitation'))
-                            .divider()
-                            .link('revoke', gt('Revoke access'));
+                        if (!myself) {
+                            dropdown.link('resend', gt('Resend invitation')).divider();
+                        }
+                        dropdown.link('revoke', gt('Revoke access'));
                         break;
                     case 'anonymous':
                         dropdown
@@ -651,7 +652,7 @@
                         click: function (e, member) {
                             // build extended permission object
                             var obj = {
-                                bits: objModel.isFolder() ? 4227332 : 2, // Author
+                                bits: objModel.isFolder() ? 4227332 : 257, // Author
                                 group: member.get('type') === 2,
                                 type: member.get('type') === 2 ? 'group' : 'user'
                             };
@@ -695,7 +696,7 @@
                                     if (!_.isEmpty(val)) {
                                         permissionsView.collection.add(new Permission({
                                             type: 'guest',
-                                            bits: objModel.isFolder() ? 4227332 : 2, // Author
+                                            bits: objModel.isFolder() ? 4227332 : 257, // Author
                                             contact: {
                                                 email1: val
                                             }
