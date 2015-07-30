@@ -192,10 +192,72 @@ define('io.ox/files/view-options', [
     }
 
     ext.point('io.ox/files/list-view/toolbar/bottom').extend({
-        id: 'toggle-folderview',
+        id: 'add-accounts',
         index: 100,
         draw: function (baton) {
+            require(['io.ox/keychain/api'], function (keychainApi) {
+                var toolbar = baton.app.getWindow().nodes.sidepanel,
+                    availableServices = _(keychainApi.submodules).filter(function (submodule) {
+                        return !submodule.canAdd || submodule.canAdd.apply(this);
+                    }),
+                    buttonTemplates = {
+                        'google': [gt('Add Google Drive account'),'logo-google', 'fa-google'],
+                        'dropbox': [gt('Add Dropbox account'),'logo-dropbox', 'fa-dropbox'],
+                        'msliveconnect': [gt('Add OneDrive account'),'logo-onedrive', 'fa-windows'],
+                        'boxcom': [gt('Add Box.com account'), 'logo-boxcom', 'fa-archive']
+                    },
+                    buttons = {};
 
+                if (availableServices.length === 0) {
+                    return;
+                }
+                _(availableServices).each(function (service) {
+                    if (service.id === 'google' || service.id === 'dropbox' || service.id === 'boxcom' || service.id === 'msliveconnect') {
+                        buttonTemplates[service.id].push(service);
+                        buttons[service.id] = (buildbutton.apply(this, buttonTemplates[service.id]));
+                    }
+                });
+                function buildbutton (text, customclass, icon, service) {
+                    return $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
+                        .append(
+                            icon ? [$('<i class="fa ' + icon + '" aria-hidden="true">'), $('<span class="sr-only">').text(text)] : $('<span>').text(text)
+                        ).on('click', function () {
+                            ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
+                                this.setSettingsPane({ id: 'io.ox/settings/accounts' });
+                                if (service) {
+                                    var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
+                                    service.createInteractively(win);
+                                }
+                            });
+                        }).attr({
+                            'data-toggle': 'tooltip',
+                            'data-placement': 'top',
+                            'data-animation': 'false',
+                            'data-container': 'body',
+                            'title': text
+                        }).tooltip();
+                }
+
+                toolbar.append(
+                    $('<div class="generic-toolbar over-bottom visual-focus">').append(
+                        $('<label class=add-acc-label>').text(gt('Add account')),
+                        $('<div class="clearfix">').append(
+                            buttons.dropbox || '',
+                            buttons.google || '',
+                            buttons.msliveconnect || '',
+                            buttons.boxcom || '',
+                            buildbutton(gt('Add account'), 'misc-link', 'fa-ellipsis-h')
+                            )
+                        )
+                    );
+            });
+        }
+    });
+
+    ext.point('io.ox/files/list-view/toolbar/bottom').extend({
+        id: 'toggle-folderview',
+        index: 200,
+        draw: function (baton) {
             this.append(
                 $('<a href="#" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))

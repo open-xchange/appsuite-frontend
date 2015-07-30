@@ -81,7 +81,7 @@ define('io.ox/settings/accounts/settings/pane', [
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<div>').addClass('row').append(
-                    $('<h1 class="col-md-8 col-xs-12">').text(gt('Mail and Social Accounts')),
+                    $('<h1 class="col-md-8 col-xs-12">').text(gt('Accounts')),
                     drawAddButton()
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')
@@ -111,6 +111,7 @@ define('io.ox/settings/accounts/settings/pane', [
                     'data-accounttype': self.model.get('accountType')
                 });
                 self.$el.append(
+                    listUtils.widgetIcon(self.model.get('accountType')),
                     listUtils.widgetTitle(title),
                     listUtils.widgetControlls().append(
                         listUtils.controlsDelete(title, gt('Delete'), self.model.get('id')),

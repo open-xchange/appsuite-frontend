@@ -31,6 +31,42 @@ var appendIconText = function (target, text, type, activeColor) {
         }
     }
 },
+    widgetIcon = function (type) {
+        var icon = $('<i class="widget-icon fa">');
+        switch (type) {
+            case 'mail':
+                icon.addClass('fa-envelope');
+                break;
+            case 'xing':
+                icon.addClass('fa-xing');
+                break;
+            case 'twitter':
+                icon.addClass('fa-twitter');
+                break;
+            case 'google':
+                icon.addClass('fa-google');
+                break;
+            case 'yahoo':
+                icon.addClass('fa-yahoo');
+                break;
+            case 'linkedin':
+                icon.addClass('fa-linkedin');
+                break;
+            case 'dropbox':
+                icon.addClass('fa-dropbox');
+                break;
+            case 'msliveconnect':
+                icon.addClass('fa-windows');
+                break;
+            case 'boxcom':
+                icon.addClass('fa-archive');
+                break;
+            default:
+                icon.addClass('fa-circle');
+                break;
+        }
+        return icon;
+    },
     widgetTitle = function (title) {
         return $('<span class="widget-title pull-left">').text(title);
     },
@@ -104,6 +140,7 @@ var appendIconText = function (target, text, type, activeColor) {
 
 return {
         appendIconText: appendIconText,
+        widgetIcon: widgetIcon,
         widgetTitle: widgetTitle,
         widgetControlls: widgetControlls,
         controlsDelete: controlsDelete,

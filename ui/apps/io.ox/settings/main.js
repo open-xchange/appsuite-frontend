@@ -444,7 +444,7 @@ define('io.ox/settings/main', [
         });
 
         ext.point('io.ox/settings/pane/general').extend({
-            title: gt('Mail and Social Accounts'),
+            title: gt('Accounts'),
             index: 200,
             id: 'io.ox/settings/accounts'
         });

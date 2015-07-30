@@ -20,8 +20,9 @@ define.async('io.ox/oauth/keychain', [
     'io.ox/core/http',
     'io.ox/core/event',
     'io.ox/core/notifications',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (ext, http, Events, notifications, gt) {
+], function (ext, http, Events, notifications, filestorageApi, gt) {
 
     'use strict';
 
@@ -128,11 +129,23 @@ define.async('io.ox/oauth/keychain', [
                             }
                         }
                         if (account) {
-                            def.resolve(account);
-                            self.trigger('create', account);
-                            self.trigger('refresah.all refresh.list');
-                            ox.trigger('refresh-portal');
-                            notifications.yell('success', gt('Account added successfully'));
+                            // if this Oauth account belongs to a filestorage service (like dropbox etc.), we create a matching filestorage account.
+                            // the folders appear will then appear in the drive module
+                            if (filestorageApi.isStorageAvailable(account.serviceId)) {
+                                filestorageApi.createAccountFromOauth(account).done(function () {
+                                    def.resolve(account);
+                                    self.trigger('create', account);
+                                    self.trigger('refresah.all refresh.list');
+                                    ox.trigger('refresh-portal');
+                                    notifications.yell('success', gt('Account added successfully'));
+                                });
+                            } else {
+                                def.resolve(account);
+                                self.trigger('create', account);
+                                self.trigger('refresah.all refresh.list');
+                                ox.trigger('refresh-portal');
+                                notifications.yell('success', gt('Account added successfully'));
+                            }
                         } else {
                             notifications.yell('error', gt('Account could not be added'));
                         }
@@ -154,6 +167,13 @@ define.async('io.ox/oauth/keychain', [
                     id: account.id
                 }
             }).done(function () {
+                var filestorageAccount;
+                account.serviceId = service.id;
+                filestorageAccount = filestorageApi.getAccountForOauth(account);
+                // if there is a filestorageAccount for this Oauth account, remove it too
+                if (filestorageAccount) {
+                    filestorageApi.deleteAccount(filestorageAccount);
+                }
                 delete cache[service.id].accounts[account.id];
                 self.trigger('delete', account);
                 self.trigger('refresh.all refresh.list', account);
@@ -170,9 +190,22 @@ define.async('io.ox/oauth/keychain', [
                 },
                 data: { displayName: account.displayName }
             }).done(function () {
-                cache[service.id].accounts[account.id] = account;
-                self.trigger('update', account);
-                self.trigger('refresh.list', account);
+                var filestorageAccount = filestorageApi.getAccountForOauth(account);
+                // if there is a filestorageAccount for this Oauth account, update it too. Changes foldername in drive
+                if (filestorageAccount) {
+                    var options = filestorageAccount.attributes;
+                    options.displayName = account.displayName;
+
+                    filestorageApi.updateAccount(options).done(function () {
+                        cache[service.id].accounts[account.id] = account;
+                        self.trigger('update', account);
+                        self.trigger('refresh.list', account);
+                    });
+                } else {
+                    cache[service.id].accounts[account.id] = account;
+                    self.trigger('update', account);
+                    self.trigger('refresh.list', account);
+                }
             });
         };
 

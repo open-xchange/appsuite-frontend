@@ -306,6 +306,8 @@
         border-top-width: 1px;
     }
 
+    
+
     .toolbar-item {
         color: #333;
         display: inline-block;
@@ -313,6 +315,58 @@
         line-height: @height-default - 2;
         padding: 0 @default-padding;
         text-decoration: none;
+    }
+
+    &.over-bottom {
+        bottom: @height-default;
+        border-top-width: 1px;
+        height: 80px;
+        padding-left: 16px;
+        line-height: 32px;
+        .add-acc-label {
+            color: #777
+        }
+        .toolbar-item {
+            float: none;
+            color: #fff;
+            margin-right: 4px;
+            &.logo-google {
+                background-color: #dd4b39;
+            }
+            &.logo-boxcom {
+                background-color: #00aef0;
+            }
+            &.logo-onedrive {
+                background-color: #094AB1;
+            }
+            &.logo-dropbox {
+                background-color: #007ee5;
+            }
+            &.misc-link {
+                background-color: #DFDFDF;
+                color: #333
+            }
+        }
+        &.visual-focus .toolbar-item {
+            &:hover {
+                color: #fff;
+                &.logo-google {
+                background-color: darken(#dd4b39, 20%);
+                }
+                &.logo-boxcom {
+                    background-color: darken(#00aef0, 20%);
+                }
+                &.logo-onedrive {
+                    background-color: darken(#094AB1, 20%);
+                }
+                &.logo-dropbox {
+                    background-color: darken(#007ee5, 20%);
+                }
+                &.misc-link {
+                    background-color: darken(#888, 20%);
+                }
+            }
+        }
     }
 
     &.visual-focus .toolbar-item {
