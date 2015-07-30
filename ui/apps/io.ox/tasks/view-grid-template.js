@@ -36,6 +36,7 @@ define('io.ox/tasks/view-grid-template', [
                     ),
                     $('<div class="second-row">').append(
                         status = $('<span>').addClass('status'),
+                        //#. message for screenreaders in case selected task has participants
                         userMessage = $('<span class="sr-only">').text(gt('has participants')).hide(),
                         user = $('<i class="participants fa fa-user" aria-hidden="true">').hide(),
                         progressMessage = $('<span class="sr-only">').hide(),

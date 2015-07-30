@@ -473,9 +473,9 @@
                     // ADMIN role
                     //
                     .header(gt('Administrative role'))
-                    //#. object permissions - admin
+                    //#. object permissions - user role
                     .option('admin', 0, gt('User'))
-                    //#. object permissions - admin
+                    //#. object permissions - admin role
                     .option('admin', 1, gt('Administrator'));
 
                 this.append(
