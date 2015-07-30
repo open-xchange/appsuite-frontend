@@ -128,7 +128,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 label: gt('Start presentation'),
-                icon: 'fa  fa-line-chart',
+                icon: 'fa  fa-picture-o',
                 ref: TOOLBAR_ACTION_ID + '/launchpresenter',
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')
