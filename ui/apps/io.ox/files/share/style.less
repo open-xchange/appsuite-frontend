@@ -100,10 +100,11 @@
 
             .displayname {
                 .ellipsis();
-                width: 150px;
+                width: 50%;
             }
 
             .breadcrumb-view {
+                width: 50%;
                 overflow: hidden;
                 a {
                     color: #333;
@@ -119,14 +120,17 @@
                 .ellipsis();
                 color: #333;
                 opacity: .5;
-                width: 120px;
+                width: 85px;
                 text-align: right;
+                @media all and (max-width: 480px) {
+                    display: none;
+                }
             }
 
             .actions {
 
                 .ellipsis();
-                width: 120px;
+                width: 85px;
                 text-align: right;
 
                 a {
