@@ -21,7 +21,7 @@ define('io.ox/metrics/extensions', [
         id: 'upsell',
         register: function () {
             var metrics = this;
-            ox.on('upsell:upgrade', function (data) {
+            ox.on('upsell:requires-upgrade', function (data) {
                 metrics.trackEvent({
                     app: 'core',
                     target: 'upsell/' + data.type,
