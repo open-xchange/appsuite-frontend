@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-07-29 15:08+0100\n"
+"PO-Revision-Date: 2015-07-30 13:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -83,7 +83,7 @@ msgstr "Zeit"
 #: apps/io.ox/backbone/mini-views/datepicker.js:227 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:590
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:589
 #: module:io.ox/settings/settings
 msgid "Please enter a valid date"
 msgstr "Geben Sie ein gültiges Datum ein."
@@ -135,7 +135,7 @@ msgstr "Inline-Menü %1$s"
 #: apps/io.ox/files/mobile-toolbar-actions.js:88
 #: apps/io.ox/files/mobile-toolbar-actions.js:132
 #: apps/io.ox/mail/detail/view.js:91 apps/io.ox/mail/detail/view.js:92
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:952
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:951
 #: module:io.ox/settings/settings apps/io.ox/mail/mobile-toolbar-actions.js:150
 #: apps/io.ox/mail/mobile-toolbar-actions.js:151
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:110 module:io.ox/tasks
@@ -384,7 +384,7 @@ msgstr "Ablehnen"
 #: apps/io.ox/mail/actions/reminder.js:37
 #: apps/io.ox/mail/compose/extensions.js:427
 #: apps/io.ox/mail/compose/inline-images.js:80
-#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:654
+#: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:651
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105 apps/io.ox/mail/main.js:260
 #: apps/io.ox/mail/main.js:1105
 #: apps/io.ox/mail/settings/signatures/register.js:180
@@ -585,7 +585,7 @@ msgstr "Verwerfen"
 
 #: apps/io.ox/calendar/edit/extensions.js:126 module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js:74 module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:797
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:796
 #: module:io.ox/settings/settings
 msgid "Select folder"
 msgstr "Ordner wählen"
@@ -2153,7 +2153,7 @@ msgstr "Verteilerliste bearbeiten"
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:457
 #: apps/io.ox/files/share/myshares.js:43 module:io.ox/files
 #: apps/io.ox/files/view-options.js:44
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:513
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:512
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Name"
@@ -2800,13 +2800,11 @@ msgstr "Gespeichert unter:"
 msgid "Your selected picture will be displayed after saving"
 msgstr "Ihr ausgewähltes Bild wird nach dem Speichern angezeigt"
 
-#. %1$s maximum filesize
+#. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js:66 module:io.ox/contacts
-#, fuzzy
-msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
 msgstr ""
-"Das von Ihnen gewählte Bild überschreitet die maximal zulässige Dateigröße von "
-"%1$s."
+"Ihr gewähltes Bild überschreitet die maximal zulässige Dateigröße von %1$s"
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js:162 module:io.ox/contacts
 #: apps/io.ox/contacts/widgets/pictureUpload.js:166
@@ -3907,7 +3905,7 @@ msgstr "Gast"
 msgid "Author"
 msgstr "Autor"
 
-#. object permissions - admin
+#. object permissions - admin role
 #: apps/io.ox/core/permissions/permissions.js:51 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:47
 #: apps/io.ox/files/share/permissions.js:231
@@ -5673,7 +5671,7 @@ msgstr "Alle Objekte löschen"
 msgid "Administrative role"
 msgstr "Adminrolle"
 
-#. object permissions - admin
+#. object permissions - user role
 #: apps/io.ox/files/share/permissions.js:477 module:io.ox/core
 #, fuzzy
 msgid "User"
@@ -6688,38 +6686,38 @@ msgstr "Lesebestätigung anfordern"
 msgid "Mail saved as draft"
 msgstr "E-Mail als Entwurf gespeichert"
 
-#: apps/io.ox/mail/compose/view.js:649 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Wollen Sie Ihre Nachricht wirklich verwerfen?"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:649 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Nachricht verwerfen"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:650 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Als Entwurf speichern"
 
-#: apps/io.ox/mail/compose/view.js:747 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:744 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Die E-Mail wurde gesendet"
 
-#: apps/io.ox/mail/compose/view.js:817 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:814 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Die E-Mail hat keinen Empfänger."
 
-#: apps/io.ox/mail/compose/view.js:824 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Der Betreff der E-Mail ist leer. Trotzdem senden?"
 
-#: apps/io.ox/mail/compose/view.js:825 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:822 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Ja, ohne Betreff senden"
 
-#: apps/io.ox/mail/compose/view.js:826 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Add subject"
 msgstr "Betreff hinzufügen"
 
@@ -6950,44 +6948,44 @@ msgstr ""
 "Diese Regel gilt für alle Nachrichten. Fügen Sie bitte eine Bedingung hinzu, "
 "um diese Regel auf bestimmte Nachrichten zu beschränken. "
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:614
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:613
 #: module:io.ox/settings/settings
 #, fuzzy
 msgid "datepicker"
 msgstr "Minikalender"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:951
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:950
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Bedingungen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:961
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:960
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Bedingung hinzufügen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:966
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:965
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Aktion hinzufügen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:980
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:979
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Regel-Name"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:996
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1001
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1000
 msgid "Apply rule if all conditions are met"
 msgstr "Regel anwenden, wenn alle Bedingungen erfüllt sind"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:997
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:996
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Regel anwenden, wenn irgendeine Bedingung erfüllt ist."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1040
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:1039
 #: module:io.ox/settings/settings
 msgid "Process subsequent rules"
 msgstr "Gegen nachfolgende Regeln prüfen"
@@ -7672,7 +7670,7 @@ msgstr "Vollbild an/aus"
 #: apps/io.ox/presenter/views/navigationview.js:197
 #, fuzzy
 msgid "none"
-msgstr "keiner"
+msgstr "niemand"
 
 #. text of an user list that shows the names of presenting user and participants.
 #. the presenter section label.
@@ -8284,7 +8282,7 @@ msgstr "Datum für Erinnerung %1$s"
 
 #. %1$s how much of a task is completed in percent, values from 0-100
 #: apps/io.ox/tasks/view-detail.js:193 module:io.ox/tasks
-#: apps/io.ox/tasks/view-grid-template.js:89
+#: apps/io.ox/tasks/view-grid-template.js:90
 #, c-format
 msgid "Progress %1$s %"
 msgstr "Fortschritt %1$s %"
@@ -8297,8 +8295,8 @@ msgstr "Die Anlagen zu dieser Aufgabe konnten nicht geladen werden."
 msgid "private"
 msgstr "Privat"
 
-#: apps/io.ox/tasks/view-grid-template.js:39 module:io.ox/tasks
-#, fuzzy
+#. message for screenreaders in case selected task has participants
+#: apps/io.ox/tasks/view-grid-template.js:40 module:io.ox/tasks
 msgid "has participants"
 msgstr "hat Teilnehmer"
 
@@ -9517,6 +9515,12 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js:152 apps/plugins/xing/main.js:160
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
+#~ msgstr ""
+#~ "Das von Ihnen gewählte Bild überschreitet die maximal zulässige Dateigröße "
+#~ "von %1$s."
 
 #~ msgid "Continue Presentation"
 #~ msgstr "Präsentation fortführen"
