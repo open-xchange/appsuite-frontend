@@ -126,7 +126,7 @@ define('io.ox/core/upsell', [
             function isEnabled(capability) {
                 if (!_.isString(capability)) return false;
 
-                return capability in enabled;
+                return !!enabled[capability];
             }
 
             return function () {
