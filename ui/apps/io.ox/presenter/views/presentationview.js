@@ -954,6 +954,9 @@ define('io.ox/presenter/views/presentationview', [
             var x, y;
 
             return function (event) {
+                //only allow left click
+                if (event.button) { return; }
+
                 switch (event.type) {
                     case 'mousedown':
                         x = event.clientX;
