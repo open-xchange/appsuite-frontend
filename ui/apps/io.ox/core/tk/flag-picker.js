@@ -46,11 +46,11 @@ define('io.ox/core/tk/flag-picker', [
                     availableHeight = $(window).height();
 
                 // check potential positions
-                if ((offset.top + height + dropdownHeight + margin) < availableHeight) {
+                if ((offset.top + height + dropdownHeight) < availableHeight) {
                     // enough room below
-                    positions.top = offset.top + height + margin;
+                    positions.top = offset.top + height;
                     // right aligned?
-                    if ((offset.left + dropdownWidth + margin) > availableWidth) {
+                    if ($parent.hasClass('pull-right') || (offset.left + dropdownWidth + margin) > availableWidth) {
                         positions.left = offset.left + width - dropdownWidth;
                     }
                 } else {

@@ -191,6 +191,15 @@
 
     }
 
+    // fix border radius for a compact widget
+    .form-control.tt-input {
+        .border-radius(@border-radius-small @border-radius-small 0px 0px);
+    }
+
+    .form-control.message-text {
+        .border-radius(0px 0px @border-radius-small @border-radius-small);
+    }
+
     .permission {
 
         margin-bottom: 16px;
@@ -206,9 +215,10 @@
             i { font-size: @picture-height; line-height: @picture-height; color: #eee; }
         }
 
-        .role, .detail-dropdown, .remove-button {
+        .role, .detail-dropdown, .entity-actions {
             height: 40px;
             line-height: 40px;
+            text-align: right;
         }
 
         .display_name, .description, .role, .detail-dropdown {

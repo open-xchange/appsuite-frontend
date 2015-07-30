@@ -17,7 +17,6 @@
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/core/api/user',
@@ -32,20 +31,22 @@
     'less!io.ox/files/share/style',
     // todo: relocate smart-dropdown logic
     'io.ox/core/tk/flag-picker'
-], function (ext, DisposableView, yell, miniViews, DropdownView, BreadcrumbView, folderAPI, filesAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/files/share/permissions',
 
-        presets = [
-            // view folder + read all
-            { label: gt('Guest'), bits: 257 },
+        roles = {
+            // all
+            'administrator': { bit: 272662788, label: gt('Administrator') },
             // create folder + read/write/delete all
-            { label: gt('Author'), bits: 4227332 },
-            // plus admin
-            { label: gt('Administrator'), bits: 272662788 }
-        ],
+            'author': { bit: 4227332, label: gt('Author') },
+            // view folder + read/write all
+            'reviewer': { bit: 33025, label: gt('Reviewer') },
+            // view folder + read all
+            'viewer': { bit: 257, label: gt('Viewer') }
+        },
 
         /* Models */
 
@@ -119,8 +120,9 @@
 
             events: {
                 'click a.bit': 'updateDropdown',
-                'click a.role': 'applyRole',
-                'click a[data-action="remove"]': 'removeEntity'
+                'click a[data-name="edit"]': 'onEdit',
+                'click a[data-name="resend"]': 'onResend',
+                'click a[data-name="revoke"]': 'onRemove'
             },
 
             initialize: function (options) {
@@ -138,7 +140,6 @@
 
             onChangeBitmask: function () {
                 this.parseBitmask();
-                this.updateRole();
             },
 
             parseBitmask: function () {
@@ -170,10 +171,20 @@
                 return this;
             },
 
-            removeEntity: function (e) {
+            onRemove: function (e) {
                 e.preventDefault();
                 this.model.collection.remove(this.model);
                 this.remove();
+            },
+
+            onResend: function (e) {
+                e.preventDefault();
+                alert('TBD: Resend!');
+            },
+
+            onEdit: function (e) {
+                e.preventDefault();
+                alert('TBD: Edit!');
             },
 
             getEntityDetails: function () {
@@ -226,42 +237,21 @@
                 }.bind(this));
             },
 
-            getRoleDescription: function () {
+            getRole: function () {
                 var bitmask = folderAPI.Bitmask(this.model.get('bits'));
-                if (bitmask.get('admin')) return gt('Administrator');
+                if (bitmask.get('admin')) return 'administrator';
                 if (bitmask.get('read') && bitmask.get('write')) {
                     // Author: read, write, delete
                     // Reviewer: read, write
-                    return bitmask.get('delete') ? gt('Author') : gt('Reviewer');
+                    return bitmask.get('delete') ? 'author' : 'reviewer';
                 }
                 // assumption is that everyone is at least a "Viewer"
-                return gt('Viewer');
+                return 'viewer';
             },
 
-            updateRole: function () {
-                this.$('.role').text(this.getRoleDescription());
-            },
-
-            applyRole: function (e) {
-                e.preventDefault();
-                var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', parseInt(bits, 10), { validate: true });
-            },
-
-            addRoles: function () {
-                if (!this.item.isAdmin()) return $();
-                var self = this;
-                return $('<span class="dropdown preset">').append(
-                    $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
-                    $('<ul class="dropdown-menu" role="menu">').append(
-                        _(presets).map(function (obj) {
-                            if (self.preventAdminPermissions() && obj.bits === 272662788) return;
-                            return $('<li>').append(
-                                $('<a>', { href: '#', 'data-value': obj.bits, role: 'menuitem' }).addClass('role').text(obj.label)
-                            );
-                        })
-                    )
-                );
+            getRoleDescription: function (role) {
+                role = role || this.getRole();
+                return roles[role] ? roles[role].label : 'N/A';
             },
 
             preventAdminPermissions: function () {
@@ -385,10 +375,14 @@
             id: 'who',
             draw: function (baton) {
 
+                var url = baton.model.get('share_url');
+
                 this.append(
                     $('<div class="col-xs-4">').append(
                         $('<div class="display_name">').text(baton.view.display_name),
-                        $('<div class="description">').text(baton.view.description)
+                        $('<div class="description">').append(
+                            url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
+                        )
                     )
                 );
             }
@@ -400,8 +394,37 @@
             index: 300,
             id: 'role',
             draw: function (baton) {
+
+                var node, dropdown, role = baton.view.getRole(), description = baton.view.getRoleDescription(role);
+
+                // apply role for the first time
+                baton.model.set('role', role, { silent: true });
+
+                if (baton.model.get('type') === 'anonymous') {
+                    node = $.txt(description);
+                } else {
+                    dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
+                        .option('role', 'administrator', gt('Administrator'))
+                        .option('role', 'author', gt('Author'))
+                        .option('role', 'reviewer', gt('Reviewer'))
+                        .option('role', 'viewer', gt('Viewer'));
+                    baton.view.listenTo(baton.model, {
+                        'change': _.debounce(function (model) {
+                            // just update the role - not the bits
+                            role = baton.view.getRole();
+                            model.set('role', role, { silent: true });
+                            // always update the drop-down label
+                            dropdown.$('.dropdown-label').text(baton.view.getRoleDescription(role));
+                        }, 10),
+                        'change:role': function (model, value) {
+                            model.set('bits', roles[value].bit);
+                        }
+                    });
+                    node = dropdown.render().$el.addClass('pull-right');
+                }
+
                 this.append(
-                    $('<div class="col-xs-3 role">').text(baton.view.getRoleDescription())
+                    $('<div class="col-xs-3 role">').append(node)
                 );
             }
         },
@@ -425,7 +448,7 @@
                     maxWrite = baton.model.get('write') === 64 ? 64 : 2,
                     maxDelete = baton.model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Access rights'), model: baton.model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: baton.model, smart: true })
                     //
                     // FOLDER access
                     //
@@ -469,6 +492,7 @@
                     .option('delete', 1, gt('Delete own objects'))
                     //#. object permissions - delete
                     .option('delete', maxDelete, gt('Delete all objects'))
+                    .divider()
                     //
                     // ADMIN role
                     //
@@ -480,7 +504,7 @@
 
                 this.append(
                     $('<div class="col-xs-3 detail-dropdown">').append(
-                        dropdown.render().$el
+                        dropdown.render().$el.addClass('pull-right').attr('title', gt('Detailed access rights'))
                     )
                 );
             }
@@ -490,12 +514,39 @@
         //
         {
             index: 500,
-            id: 'remove-button',
-            draw: function () {
-                // TODO: check for admin status
+            id: 'actions',
+            draw: function (baton) {
+
+                // TODO: add admin check
+                // var bitmask = folderAPI.Bitmask(baton.model.get('bits'));
+                // if (!bitmask.get('admin')) return;
+
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') });
+
+                switch (baton.model.get('type')) {
+                    case 'group':
+                        dropdown
+                            .link('revoke', gt('Revoke access'));
+                        break;
+                    case 'user':
+                    case 'guest':
+                        dropdown
+                            .link('resend', gt('Resend invitation'))
+                            .divider()
+                            .link('revoke', gt('Revoke access'));
+                        break;
+                    case 'anonymous':
+                        dropdown
+                            .link('edit', gt('Edit'))
+                            .link('resend', gt('Resend invitation'))
+                            .divider()
+                            .link('revoke', gt('Revoke access'));
+                        break;
+                }
+
                 this.append(
-                    $('<div class="col-xs-1 remove-button">').append(
-                        $('<a href="#" role="button" data-action="remove"><i class="fa fa-trash-o"></i></a>')
+                    $('<div class="col-xs-1 entity-actions">').append(
+                        dropdown.render().$el.addClass('pull-right')
                     )
                 );
             }
@@ -551,8 +602,7 @@
             dialog.getPopup().addClass('share-permissions-dialog');
 
             dialog.getHeader().append(
-                $('<h4>').text(gt('Permissions for "%1$s"', objModel.getDisplayName())),
-                new BreadcrumbView({ folder: objModel.getFolderID(), notail: true }).render().$el
+                $('<h4>').text(gt('Permissions for "%1$s"', objModel.getDisplayName()))
             );
 
             // add permissions view
@@ -661,7 +711,7 @@
                             new miniViews.TextView({
                                 name: 'message',
                                 model: dialogConfig
-                            }).render().$el.attr({
+                            }).render().$el.addClass('message-text').attr({
                                 id: guid,
                                 rows: 3,
                                 //#. placeholder text in share dialog

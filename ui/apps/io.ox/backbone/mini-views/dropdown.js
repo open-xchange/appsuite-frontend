@@ -33,7 +33,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (keep) e.stopPropagation();
             // ignore plain links
             if (value === undefined) return;
-            this.model.set(name, toggle === true ? !this.model.get(name) : value);
+            if (this.model) this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
         setup: function () {
@@ -75,12 +75,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         option: function (name, value, text, header) {
-            var link;
+            var link, currentValue = this.model ? this.model.get(name) : undefined;
             this.append(
                 link = $('<a href="#">')
                 .attr({
                     role: 'menuitemcheckbox',
-                    'aria-checked': _.isEqual(this.model.get(name), value),
+                    'aria-checked': _.isEqual(currentValue, value),
                     'data-name': name,
                     'draggable': false,
                     'data-value': this.stringify(value),
@@ -92,7 +92,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .append(
                     $('<i class="fa fa-fw">')
                         .attr({ 'aria-hidden': true })
-                        .addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
+                        .addClass(_.isEqual(currentValue, value) ? 'fa-check' : 'fa-none'),
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
@@ -106,7 +106,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         link: function (name, text, callback) {
             var link = $('<a href="#" draggable="false">')
                 .attr('data-name', name)
-                .text(text).on('click', callback);
+                .text(text);
+            if (callback) link.on('click', callback);
             // in firefox draggable=false is not enough to prevent dragging...
             if ( _.device('firefox') ) {
                 link.attr('ondragstart', 'return false;');
@@ -125,7 +126,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         render: function () {
-            var label = _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label),
+            var label = _.isFunction(this.options.label) ? this.options.label() : (_.isObject(this.options.label) ? this.options.label : $.txt(this.options.label)),
                 ariaLabel = this.options.aria ? this.options.aria : null,
                 toggle;
             if (_.isString(label)) {
@@ -151,6 +152,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 ),
                 this.$ul
             );
+            // add title?
+            if (this.options.title) toggle.attr('title', this.options.title);
             // use smart drop-down? (fixed positioning)
             if (this.options.smart) toggle.addClass('smart-dropdown');
             // in firefox draggable=false is not enough to prevent dragging...
