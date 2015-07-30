@@ -684,6 +684,17 @@ define('io.ox/mail/compose/view', [
         },
 
         send: function () {
+
+            // track click on send button
+            require(['io.ox/metrics/main'], function (metrics) {
+                metrics.trackEvent({
+                    app: 'mail',
+                    target: 'compose/toolbar',
+                    type: 'click',
+                    action: 'send'
+                });
+            });
+
             // get mail
             var self = this,
                 mail = this.model.getMail(),

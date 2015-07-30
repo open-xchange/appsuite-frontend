@@ -324,9 +324,9 @@ define('io.ox/find/main', [
                             facet = model.get('facet').get('id').split(':')[0];
                         // toolbar actions
                         metrics.trackEvent({
-                            category: apptitle,
-                            action: apptitle + '/search/facet/' + facet,
-                            name: 'search',
+                            app: apptitle,
+                            target: apptitle + '/search/facet/' + facet,
+                            action: 'search',
                             value: facet
                         });
                     });

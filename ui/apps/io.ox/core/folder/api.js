@@ -24,8 +24,9 @@ define('io.ox/core/folder/api', [
     'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, capabilities, contactUtil, settings, mailSettings, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
 
     'use strict';
 
@@ -1083,6 +1084,9 @@ define('io.ox/core/folder/api', [
     }
 
     ox.on('please:refresh refresh^', refresh);
+
+    // If there is a new filestorage refresh the folders
+    $(filestorageApi).on('create delete update', refresh);
 
     //
     // Get standard mail folders

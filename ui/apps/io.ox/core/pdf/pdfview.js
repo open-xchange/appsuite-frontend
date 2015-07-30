@@ -84,17 +84,18 @@ define('io.ox/core/pdf/pdfview', [
             if (textWrapperNode) {
                 var pageChildren = textWrapperNode.children(),
                     last = null,
-                    sortedChildren = pageChildren.get(),
-                    childrenCount = sortedChildren.length,
+                    childrenCount = pageChildren.length,
                     //top right bottom left
                     margin = '-500px -2em 0 -10em',
                     padding = '+500px +2em 0 +10em',
                     origin = '10em 0 0';
 
-                sortedChildren.sort(function (a, b) {
+                pageChildren.detach();
+                pageChildren.sort(function (a, b) {
                     var aV = PDFView.convertCssLength(a.style.top, 'px', 1);
                     var bV = PDFView.convertCssLength(b.style.top, 'px', 1);
                     var diff = aV - bV;
+
                     if (Math.round(diff) === 0) {
                         aV = PDFView.convertCssLength(a.style.left, 'px', 1);
                         bV = PDFView.convertCssLength(b.style.left, 'px', 1);
@@ -103,7 +104,7 @@ define('io.ox/core/pdf/pdfview', [
                     return diff;
                 });
 
-                _.each(sortedChildren, function (child) {
+                _.each(pageChildren, function (child) {
 
                     if (child.innerHTML.length === 1) {
                         // workaround for infinte height selections
@@ -138,7 +139,7 @@ define('io.ox/core/pdf/pdfview', [
                 });
 
                 //much bigger element for a smooth forward selection!
-                _.each(sortedChildren, function (child, index) {
+                _.each(pageChildren, function (child, index) {
                     // Non IPAD case
                     if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
                         child.style.margin = margin;
@@ -148,6 +149,8 @@ define('io.ox/core/pdf/pdfview', [
 
                     child.style.zIndex = childrenCount - index;
                 });
+
+                pageChildren.appendTo(textWrapperNode);
 
                 textWrapperNode.append('<div style="bottom: 0; right: 0; padding: 200% 0 0 100%; cursor: default;">&#8203;</div>');
             }

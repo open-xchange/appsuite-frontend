@@ -62,7 +62,18 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
                 if (options.version) {
                     file = _.extend({}, file, { version: options.version });
                 }
-                var url = api.getUrl(file, 'download');
+                var url;
+                // some filestorages have own urls
+                // a bit of an ugly workaround that doesn't always work, maybe some backendwork can fix this
+                if (file.url && (file.folder_id.indexOf('boxcom') === 0 ||
+                    file.folder_id.indexOf('dropbox') === 0 ||
+                    file.folder_id.indexOf('googledrive') === 0 ||
+                    file.folder_id.indexOf('onedrive') === 0)) {
+                    url = file.url;
+                } else {
+                    url = api.getUrl(file, 'download');
+                }
+
                 iframe(url);
             });
         },

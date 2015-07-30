@@ -273,13 +273,20 @@ define('io.ox/files/share/model', [
 
     var Shares = Backbone.Collection.extend({
 
-        model: Share
+        model: Share,
+
+        load: function () {
+            var self = this;
+            return api.all().then(function (data) {
+                self.reset(data);
+            });
+        }
 
     });
 
     return {
         WizardShare: WizardShare,
         Share: Share,
-        Shares: Shares
+        collection: new Shares()
     };
 });

@@ -18,9 +18,10 @@
     'io.ox/files/share/api',
     'io.ox/core/folder/breadcrumb',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/toolbar',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, sModel, api, BreadcrumbView, Dropdown, gt) {
+], function (ext, DisposableView, sModel, api, BreadcrumbView, Dropdown, Toolbar, gt) {
 
     'use strict';
 
@@ -34,10 +35,14 @@
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
+
+            var toolbar = new Toolbar({ title: 'My Shares', tabindex: 1 });
+
             var dropdown = new Dropdown({
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
                 model: baton.model,
+                tagName: 'li',
                 caret: true
             })
             .option('sort', 'name', gt('Name'))
@@ -47,13 +52,12 @@
             .option('order', 'asc', gt('Ascending'))
             .option('order', 'desc', gt('Descending'));
             dropdown.$ul.addClass('pull-right');
-            this.append(
-                $('<fieldset>').append(
-                    $('<legend>').text(gt('My shares')).append(
-                        dropdown.render().$el.addClass('sort')
-                    ),
-                    baton.view.$ul
-                )
+            this.addClass('classic-toolbar-visible').append(
+                toolbar.render().$el.find('ul').append(
+                    $('<li>').append($('<span class="title">').text(gt('My shares'))),
+                    dropdown.render().$el.addClass('sort pull-right')
+                ),
+                baton.view.$ul.addClass('abs')
             );
         }
     });
@@ -67,7 +71,7 @@
         draw: function (baton) {
             this.append(
                 $('<div class="icon">').append(
-                    $('<i class="fa fa-' + (baton.view.model.isFolder() ? 'folder' : 'file') + '">')
+                    $('<i class="fa ' + (baton.view.model.isFolder() ? 'fa-folder' : 'file-type-icon') + '">')
                 )
             );
         }
@@ -81,7 +85,7 @@
         index: INDEX += 100,
         draw: function (baton) {
             var model = baton.view.model,
-                breadcrumb = new BreadcrumbView({ folder: model.getFolderID(), exclude: ['9'], notail: true });
+                breadcrumb = new BreadcrumbView({ folder: model.getFolderID(), exclude: ['9'], notail: true, isLast: true });
 
             breadcrumb.handler = function (id) {
                 // launch files and set/change folder
@@ -91,18 +95,16 @@
             };
 
             this.append(
-                $('<div class="info">').append(
-                    $('<div class="displayname">').text(model.getDisplayName()),
-                    breadcrumb.render().$el
-                )
+                $('<div class="displayname">').text(model.getDisplayName()),
+                breadcrumb.render().$el
             );
         }
     });
 
     /*
-     * extension point  date
+     * extension point shared with count
      */
-    ext.point(POINT + '/share').extend({
+    /*ext.point(POINT + '/share').extend({
         id: 'badge',
         index: INDEX += 100,
         draw: function (baton) {
@@ -112,10 +114,10 @@
                 )
             );
         }
-    });
+    });*/
 
     /*
-     * extension point  date
+     * extension point date
      */
     ext.point(POINT + '/share').extend({
         id: 'date',
@@ -139,10 +141,7 @@
         draw: function () {
             this.append(
                 $('<div class="actions">').append(
-                    $('<a href="#" class="edit">').append(
-                        $('<span class="sr-only">').text(gt('edit share')),
-                        $('<i class="fa fa-gear" aria-hidden="true">')
-                    )
+                    $('<a href="#" class="edit">').text(gt('Edit'))
                 )
             );
         }
@@ -158,6 +157,7 @@
         className: 'share-view',
 
         events: {
+            'dblclick': 'onEdit',
             'click .actions .edit': 'onEdit',
             'keydown': 'fnKey'
         },
@@ -230,11 +230,11 @@
 
             this.$ul = $('<ul class="list-unstyled">');
 
-            this.collection = new sModel.Shares();
+            this.collection = sModel.collection;
 
             this.listenTo(this.collection, 'reset sort', this.updateShares);
 
-            this.listenTo(ox, 'refresh^', this.getShares);
+            this.listenTo(ox, 'refresh^', this.collection.load);
 
             this.listenTo(this.baton.model, 'change:sort change:order', this.sortBy);
 
@@ -247,19 +247,12 @@
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
 
-            this.getShares().then(function () {
+            this.collection.load().then(function () {
                 self.sortBy(self.baton.model);
             });
 
             return this;
 
-        },
-
-        getShares: function () {
-            var self = this;
-            return api.all().then(function (data) {
-                self.collection.reset(data);
-            });
         },
 
         sortBy: function (model) {
