@@ -736,7 +736,14 @@
                 }
                 def.then(
                     function success() {
-                        dialog.close();
+                        require(['io.ox/files/share/model'], function (sModel) {
+                            sModel.collection.load().then(function () {
+                                dialog.close();
+                            }, function (error) {
+                                dialog.idle();
+                                yell(error);
+                            });
+                        });
                     },
                     function fail(error) {
                         dialog.idle();

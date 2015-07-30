@@ -230,11 +230,11 @@
 
             this.$ul = $('<ul class="list-unstyled">');
 
-            this.collection = new sModel.Shares();
+            this.collection = sModel.collection;
 
             this.listenTo(this.collection, 'reset sort', this.updateShares);
 
-            this.listenTo(ox, 'refresh^', this.getShares);
+            this.listenTo(ox, 'refresh^', this.collection.load);
 
             this.listenTo(this.baton.model, 'change:sort change:order', this.sortBy);
 
@@ -247,19 +247,12 @@
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
 
-            this.getShares().then(function () {
+            this.collection.load().then(function () {
                 self.sortBy(self.baton.model);
             });
 
             return this;
 
-        },
-
-        getShares: function () {
-            var self = this;
-            return api.all().then(function (data) {
-                self.collection.reset(data);
-            });
         },
 
         sortBy: function (model) {
