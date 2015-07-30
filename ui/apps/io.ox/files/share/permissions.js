@@ -299,7 +299,7 @@
 
                 this.listenTo(this.collection, {
                     'reset': this.resetPermissions,
-                    'add': this.addEntitry
+                    'add': this.addEntity
                 });
             },
 
