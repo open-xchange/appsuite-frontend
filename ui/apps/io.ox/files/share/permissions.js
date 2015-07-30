@@ -686,7 +686,12 @@
                 }
                 def.then(
                     function success() {
-                        dialog.close();
+                        objModel.reload().then(function () {
+                            dialog.close();
+                        }, function (error) {
+                            dialog.idle();
+                            yell(error);
+                        });
                     },
                     function fail(error) {
                         dialog.idle();

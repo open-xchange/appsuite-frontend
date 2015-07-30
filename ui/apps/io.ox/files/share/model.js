@@ -267,6 +267,19 @@ define('io.ox/files/share/model', [
             } else {
                 return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
             }
+        },
+
+        reload: function () {
+            var self = this;
+            if (this.isFolder()) {
+                return api.getFolderShare(this.getFolderID()).then(function (data) {
+                    self.set(data);
+                });
+            } else {
+                return api.getFileShare(this.get('id')).then(function (data) {
+                    self.set(data);
+                });
+            }
         }
 
     });

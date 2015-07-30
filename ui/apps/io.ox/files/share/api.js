@@ -135,6 +135,36 @@ define('io.ox/files/share/api', [
             });
         },
 
+        getFolderShare: function (id) {
+            return http.GET({
+                module: 'folders',
+                params: {
+                    action: 'get',
+                    id: id,
+                    'content_type': 'infostore',
+                    tree: 0,
+                    all: 0,
+                    altNames: true,
+                    columns: '1,2,5,300,301,302,305,3060'
+                }
+            });
+        },
+
+        getFileShare: function (id) {
+            return http.GET({
+                module: 'files',
+                params: {
+                    action: 'get',
+                    id: id,
+                    'content_type': 'infostore',
+                    tree: 0,
+                    all: 0,
+                    altNames: true,
+                    columns: '1,2,5,20,700,7010'
+                }
+            });
+        },
+
         /**
          * get a share
          * @param  { string }   token
