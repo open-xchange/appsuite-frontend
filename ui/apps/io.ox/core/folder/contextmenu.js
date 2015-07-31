@@ -397,9 +397,9 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 e.preventDefault();
-                var folder = String(e.data.app.folder.get());
-                require(['io.ox/core/permissions/permissions'], function (permissions) {
-                    permissions.show(folder);
+                var id = String(e.data.app.folder.get());
+                require(['io.ox/files/share/permissions'], function (controller) {
+                    controller.showFolderPermissions(id);
                 });
             }
 

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
@@ -15,13 +15,12 @@
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/files/share/model',
-    'io.ox/files/share/api',
     'io.ox/core/folder/breadcrumb',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, sModel, api, BreadcrumbView, Dropdown, Toolbar, gt) {
+], function (ext, DisposableView, sModel, BreadcrumbView, Dropdown, Toolbar, gt) {
 
     'use strict';
 
@@ -199,12 +198,12 @@
 
         onEdit: function (e) {
             e.preventDefault();
-            var self = this;
+            var model = this.model;
+            console.log('onEdit', model.attributes);
             return require(['io.ox/files/share/permissions'], function (permissions) {
-                permissions.show(self.model);
+                permissions.show(model);
             });
         }
-
     });
 
     /*
