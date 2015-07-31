@@ -306,8 +306,6 @@
         border-top-width: 1px;
     }
 
-
-
     .toolbar-item {
         color: #333;
         display: inline-block;
@@ -318,6 +316,7 @@
     }
 
     &.over-bottom {
+
         bottom: @height-default;
         border-top-width: 1px;
         height: 72px;
@@ -326,7 +325,7 @@
         overflow: hidden;
 
         .add-acc-label {
-            color: #777
+            color: #555;
             margin: 0;
         }
 
@@ -406,6 +405,12 @@
         .toolbar-item {
             line-height: @height-small - 1;
         }
+    }
+}
+
+.window-sidepanel .generic-toolbar {
+    &.bottom, &.over-bottom {
+        background-color: @foldertree-sidepanel-background;
     }
 }
 

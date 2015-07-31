@@ -29,11 +29,12 @@
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
     'io.ox/participants/views',
+    'io.ox/core/capabilities',
     'gettext!io.ox/core',
     'less!io.ox/files/share/style',
     // todo: relocate smart-dropdown logic
     'io.ox/core/tk/flag-picker'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, shareModel, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, shareModel, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, gt) {
 
     'use strict';
 
@@ -185,7 +186,16 @@
 
             onEdit: function (e) {
                 e.preventDefault();
-                alert('TBD: Edit!');
+                // turn parent model into file/folder model
+                var model = new filesAPI.Model(this.parentModel.attributes),
+                    popup = this.$el.closest('.share-permissions-dialog');
+                ox.load(['io.ox/files/actions/share']).done(function (action) {
+                    popup.hide();
+                    action.link([model]).one('close', function () {
+                        popup.show();
+                        popup = model = null;
+                    });
+                });
             },
 
             getEntityDetails: function () {
@@ -288,8 +298,6 @@
                     .filter(function (obj) { return obj.type === 'user'; })
                     .pluck('entity')
                     .value();
-
-                console.log('YEAH', this.model.getPermissions());
 
                 // load user data after opening the dialog
                 userAPI.getList(ids, true, { allColumns: true }).then(function () {
@@ -530,8 +538,8 @@
                         dropdown.link('revoke', gt('Revoke access'));
                         break;
                     case 'anonymous':
+                        if (capabilities.has('share_links')) dropdown.link('edit', gt('Edit'));
                         dropdown
-                            .link('edit', gt('Edit'))
                             .link('resend', gt('Resend invitation'))
                             .divider()
                             .link('revoke', gt('Revoke access'));

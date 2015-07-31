@@ -165,8 +165,8 @@ define('io.ox/files/actions', [
             return e.collection.has('one', 'folders');
         },
         action: function (baton) {
-            require(['io.ox/core/permissions/permissions'], function (permissions) {
-                permissions.show(baton.data.id);
+            require(['io.ox/files/share/permissions'], function (controller) {
+                controller.showFolderPermissions(baton.data.id);
             });
         }
     });
@@ -395,7 +395,7 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                action.invite(baton);
+                action.invite(baton.models);
             });
         }
     });
@@ -405,7 +405,7 @@ define('io.ox/files/actions', [
         requires: 'one',
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                action.link(baton);
+                action.link(baton.models);
             });
         }
     });

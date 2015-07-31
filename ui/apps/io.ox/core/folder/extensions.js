@@ -511,8 +511,8 @@ define('io.ox/core/folder/extensions', [
         //
 
         function openPermissions(e) {
-            require(['io.ox/core/permissions/permissions'], function (controller) {
-                controller.show(e.data.id);
+            require(['io.ox/files/share/permissions'], function (controller) {
+                controller.showFolderPermissions(e.data.id);
             });
         }
 
