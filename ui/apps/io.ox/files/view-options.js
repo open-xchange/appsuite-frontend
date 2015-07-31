@@ -217,6 +217,9 @@ define('io.ox/files/view-options', [
                         buttons[service.id] = (buildbutton.apply(this, buttonTemplates[service.id]));
                     }
                 });
+                if (_.size(buttons) === 0) {
+                    return;
+                }
                 function buildbutton (text, customclass, icon, service) {
                     var node = $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
                         .append(
@@ -244,12 +247,12 @@ define('io.ox/files/view-options', [
                             buttons.dropbox || '',
                             buttons.google || '',
                             buttons.msliveconnect || '',
-                            buttons.boxcom || '',
-                            buildbutton(gt('Add account'), 'misc-link', 'fa-ellipsis-h').on('click', function () {
+                            buttons.boxcom || ''
+                            /*buildbutton(gt('Add account'), 'misc-link', 'fa-ellipsis-h').on('click', function () {
                                 ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
                                     this.setSettingsPane({ id: 'io.ox/settings/accounts' });
                                 });
-                            })
+                            })*/
                             )
                         )
                     );
