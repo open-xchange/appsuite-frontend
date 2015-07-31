@@ -50,7 +50,7 @@ define.async('io.ox/core/api/filestorage', [
                 }).then( function (services) {
                     servicesCache.reset(services);
                     _(services).each(function (service) {
-                        if (service.configuration) {
+                        if (service.configuration && service.configuration.length > 0 && service.configuration[0].options) {
                             // workarount until bug 40035 is resolved (config type and oauth serviceId don't not match)
                             if (service.configuration[0].options.type === 'com.openexchange.oauth.onedrive') {
                                 service.configuration[0].options.type = 'com.openexchange.oauth.msliveconnect';

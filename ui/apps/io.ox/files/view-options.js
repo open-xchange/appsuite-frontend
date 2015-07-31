@@ -240,7 +240,7 @@ define('io.ox/files/view-options', [
                     return node;
                 }
 
-                toolbar.append(
+                toolbar.addClass('file-storage-toolbar').append(
                     $('<div class="generic-toolbar over-bottom visual-focus">').append(
                         $('<label class=add-acc-label>').text(gt('Add account')),
                         $('<div class="clearfix">').append(
