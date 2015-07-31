@@ -319,7 +319,6 @@ define('io.ox/core/tk/wizard', [
                 back: true,
                 next: true,
                 enableBack: true,
-                enableNext: true,
                 labelBack: gt('Back'),
                 labelDone: gt('Done')
             }, options);
@@ -375,15 +374,9 @@ define('io.ox/core/tk/wizard', [
                 footer = this.$('.footer').empty();
 
             // show "Back" button
-            if (dir.back) {
-                this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
-                this.$('.btn[data-action="back"]').prop('disabled', !this.options.enableBack);
-            }
+            if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
             // show "Start" or Next" button
-            if (dir.next) {
-                this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
-                this.$('.btn[data-action="next"]').prop('disabled', !this.options.enableNext);
-            }
+            if (dir.next) this.addButton(footer, { action: 'next', className: 'btn-primary', label: this.getLabelNext() });
             // show "Done" button
             if (dir.done) this.addButton(footer, { action: 'done', className: 'btn-primary', label: this.getLabelDone() });
         },
@@ -442,13 +435,13 @@ define('io.ox/core/tk/wizard', [
 
         // enable/disable 'next' button
         toggleNext: function (state) {
-            this.options.enableNext = !!state;
+            this.$('.btn[data-action="next"]').prop('disabled', !state);
             return this;
         },
 
         // enable/disable 'back' button
         toggleBack: function (state) {
-            this.options.enableBack = !!state;
+            this.$('.btn[data-action="back"]').prop('disabled', !state);
             return this;
         },
 
