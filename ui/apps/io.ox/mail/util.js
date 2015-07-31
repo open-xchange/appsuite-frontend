@@ -316,6 +316,9 @@ define('io.ox/mail/util',
 
             if (options.unescapeDisplayName === true) {
                 display_name = util.unescapeDisplayName(name);
+            } else {
+                // reorderDisplayName doesn't work without unescapeDisplayName; just to be safe
+                options.reorderDisplayName = false;
             }
 
             if (options.showDisplayName === false) return email;

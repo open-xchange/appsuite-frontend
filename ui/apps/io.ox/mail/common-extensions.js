@@ -92,12 +92,13 @@ define('io.ox/mail/common-extensions',
                 // if bit 4096 is set, the server sort by local part not display name
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
                 bit4096 = capabilities & 4096,
-                useDisplayName = baton.options.sort !== 'from-to' || !bit4096,
-                unescapeDisplayName = baton.options.sort !== 'from-to';
+                sortByRecipients = baton.options.sort === 'from-to',
+                useDisplayName = !sortByRecipients || !bit4096,
+                unescapeDisplayName = !sortByRecipients;
 
             this.append(
                 $('<div class="from">').append(
-                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: useDisplayName, unescapeDisplayName: unescapeDisplayName })
+                    util.getFrom(data, { field: field, showDisplayName: useDisplayName, unescapeDisplayName: unescapeDisplayName })
                 )
             );
         },
