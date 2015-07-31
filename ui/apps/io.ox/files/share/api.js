@@ -136,6 +136,55 @@ define('io.ox/files/share/api', [
         },
 
         /**
+         * get a single shared folder
+         * @return { deferred } an object with share data
+         */
+        getFolderShare: function (id) {
+            var columns = [
+                'id',
+                'created_by',
+                'last_modified',
+                'title',
+                'module',
+                'type',
+                'com.openexchange.share.extendedPermissions'
+            ];
+
+            return http.GET({
+                module: 'folders',
+                params: {
+                    action: 'get',
+                    id: id,
+                    tree: 0
+                }
+            }).then(function (data) {
+                return _(data).pick(function (value, key) {
+                    return columns.indexOf(key) >= 0;
+                });
+            });
+        },
+
+        /**
+         * get a single shared file
+         * @return { deferred } an object with share data
+         */
+        getFileShare: function (id, folder) {
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: 'list',
+                    columns: '1,2,5,20,700,7010'
+                },
+                data: [{
+                    id: id,
+                    folder: folder
+                }]
+            }).then(function (array) {
+                return _.first(array);
+            });
+        },
+
+        /**
          * get a share
          * @param  { string }   token
          * @return { deferred } a JSON object with share data

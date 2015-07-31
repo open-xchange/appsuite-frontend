@@ -267,26 +267,32 @@ define('io.ox/files/share/model', [
             } else {
                 return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
             }
+        },
+
+        reload: function () {
+            var self = this;
+            if (this.isFolder()) {
+                return api.getFolderShare(this.getFolderID()).then(function (data) {
+                    self.set(data);
+                });
+            } else {
+                return api.getFileShare(this.get('id'), this.getFolderID()).then(function (data) {
+                    self.set(data);
+                });
+            }
         }
 
     });
 
     var Shares = Backbone.Collection.extend({
 
-        model: Share,
-
-        load: function () {
-            var self = this;
-            return api.all().then(function (data) {
-                self.reset(data);
-            });
-        }
+        model: Share
 
     });
 
     return {
         WizardShare: WizardShare,
         Share: Share,
-        collection: new Shares()
+        Shares: Shares
     };
 });
