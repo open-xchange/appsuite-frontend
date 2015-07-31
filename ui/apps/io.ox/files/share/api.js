@@ -147,6 +147,7 @@ define('io.ox/files/share/api', [
                 'title',
                 'module',
                 'type',
+                'own_rights',
                 'com.openexchange.share.extendedPermissions'
             ];
 

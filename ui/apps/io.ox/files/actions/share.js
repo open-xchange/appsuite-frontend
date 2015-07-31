@@ -15,8 +15,9 @@ define('io.ox/files/actions/share', [
     'io.ox/core/tk/dialogs',
     'io.ox/files/share/wizard',
     'io.ox/core/notifications',
-    'gettext!io.ox/files'
-], function (dialogs, ShareWizard, notifications, gt) {
+    'gettext!io.ox/files',
+    'io.ox/files/share/model'
+], function (dialogs, ShareWizard, notifications, gt, sModel) {
 
     'use strict';
 
@@ -59,7 +60,19 @@ define('io.ox/files/actions/share', [
     return {
         // array is an array of models
         invite: function (array) {
-            return share(array, 'invite');
+            if (!array) return;
+
+            var model = _.first(array),
+                objModel = new sModel.Share({
+                    id: model.get('id'),
+                    'folder_id': model.isFile() ? model.get('folder_id') : null
+                });
+
+            return require(['io.ox/files/share/permissions'], function (permissions) {
+                objModel.reload().done(function () {
+                    permissions.show(objModel);
+                });
+            });
         },
         link: function (array) {
             return share(array, 'link');
