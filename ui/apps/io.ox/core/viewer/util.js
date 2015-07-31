@@ -260,7 +260,7 @@ define('io.ox/core/viewer/util', [
      *  @param {String} source
      *   the source of the file model.
      */
-    Util.getConvertParams = function (model, additionalData) {
+    Util.getConvertParams = function (model, extraData) {
         var originalModel = model.get('origData'),
             defaultParams = {
                 action: 'getdocument',
@@ -292,7 +292,7 @@ define('io.ox/core/viewer/util', [
             case 'guard':
                 paramExtension = {
                     source: 'guard',
-                    guardURL: encodeURIComponent(model.get('guardUrl')),
+                    guardUrl: encodeURIComponent(model.get('guardUrl')),
                     mimetype: (model.get('meta').OrigMime === undefined ?
                         encodeURIComponent(model.get('file_mimetype')) :
                         encodeURIComponent(model.get('meta').OrigMime))
@@ -303,12 +303,12 @@ define('io.ox/core/viewer/util', [
 
         // return the default params, combined with possible
         // paramExtension, combined with possible addtional data
-        if (_.isObject(paramExtension)) {
+        if (paramExtension && paramExtension.length) {
             defaultParams = _.extend(defaultParams, paramExtension);
         }
 
-        if (_.isObject(additionalData)) {
-            defaultParams = _.extend(defaultParams, additionalData);
+        if (extraData && extraData.length) {
+            defaultParams = _.extend(defaultParams, extraData);
         }
 
         return defaultParams;
