@@ -303,11 +303,11 @@ define('io.ox/core/viewer/util', [
 
         // return the default params, combined with possible
         // paramExtension, combined with possible addtional data
-        if (paramExtension && paramExtension.length) {
+        if (_.isObject(paramExtension)) {
             defaultParams = _.extend(defaultParams, paramExtension);
         }
 
-        if (extraData && extraData.length) {
+        if (_.isObject(extraData)) {
             defaultParams = _.extend(defaultParams, extraData);
         }
 
