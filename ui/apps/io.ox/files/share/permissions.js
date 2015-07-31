@@ -235,26 +235,25 @@
                 return roles[role] ? roles[role].label : 'N/A';
             },
 
-            preventAdminPermissions: function () {
-                // this check is for folders only
+            // check if it's possible to assign the admin role at all
+            supportsAdminRole: function () {
+
                 if (!this.parentModel.isFolder()) return false;
 
                 var type = this.parentModel.get('type'),
                     module = this.parentModel.get('module');
 
-                if (
-                    // no admin choice for default and system folders (see Bug 27704)
-                    (String(folderAPI.getDefaultFolder(module)) === this.parentModel.get('id')) || (type === 5) ||
-                    // Public folder and permission enity 0
-                    (type === 2 && this.model.id === 0) ||
-                    // Private contacts and calendar folders can't have other users with admin permissions
-                    (type === 1 && (module === 'contacts' || module === 'calendar'))
-                ) {
-                    return true;
-                }
-                return false;
+                // no admin choice for default folders (see Bug 27704)
+                if (String(folderAPI.getDefaultFolder(module)) === this.parentModel.get('id')) return false;
+                // not for system folders
+                if (type === 5) return false;
+                // public folder and permission enity 0, i.e. "All users"
+                if (type === 2 && this.model.id === 0) return false;
+                // private contacts and calendar folders can't have other users with admin permissions
+                if (type === 1 && (module === 'contacts' || module === 'calendar')) return false;
+                // otherwise
+                return true;
             }
-
         }),
 
         // All Permissions view
@@ -386,8 +385,11 @@
                 if (!baton.parentModel.isAdmin() || baton.model.get('type') === 'anonymous') {
                     node = $.txt(description);
                 } else {
-                    dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
-                        .option('role', 'administrator', gt('Administrator'))
+                    dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true });
+                    if (baton.view.supportsAdminRole()) {
+                        dropdown.option('role', 'administrator', gt('Administrator'));
+                    }
+                    dropdown
                         .option('role', 'author', gt('Author'))
                         .option('role', 'reviewer', gt('Reviewer'))
                         .option('role', 'viewer', gt('Viewer'));
@@ -442,10 +444,10 @@
                     .option('folder', 2, gt('Create objects'))
                     //#. folder permissions
                     .option('folder', maxFolder, gt('Create objects and subfolders'))
-                    .divider()
                     //
                     // READ access
                     //
+                    .divider()
                     .header(gt('Read permissions'))
                     //#. object permissions - read
                     .option('read', 0, gt('None'))
@@ -453,10 +455,10 @@
                     .option('read', 1, gt('Read own objects'))
                     //#. object permissions - read
                     .option('read', maxRead, gt('Read all objects'))
-                    .divider()
                     //
                     // WRITE access
                     //
+                    .divider()
                     .header(gt('Write permissions'))
                     //#. object permissions - edit/modify
                     .option('write', 0, gt('None'))
@@ -464,27 +466,33 @@
                     .option('write', 1, gt('Edit own objects'))
                     //#. object permissions - edit/modify
                     .option('write', maxWrite, gt('Edit all objects'))
-                    .divider()
                     //
                     // DELETE access
                     //
+                    .divider()
                     .header(gt('Delete permissions'))
                     //#. object permissions - delete
                     .option('delete', 0, gt('None'))
                     //#. object permissions - delete
                     .option('delete', 1, gt('Delete own objects'))
                     //#. object permissions - delete
-                    .option('delete', maxDelete, gt('Delete all objects'))
-                    .divider()
+                    .option('delete', maxDelete, gt('Delete all objects'));
+
+                // add admin role?
+                if (baton.view.supportsAdminRole()) {
                     //
                     // ADMIN role
                     //
+                    dropdown
+                    .divider()
                     .header(gt('Administrative role'))
                     //#. object permissions - user role
                     .option('admin', 0, gt('User'))
                     //#. object permissions - admin role
-                    .option('admin', 1, gt('Administrator'))
-                    .render();
+                    .option('admin', 1, gt('Administrator'));
+                }
+
+                dropdown.render();
 
                 // disable all items if not admin
                 if (!baton.parentModel.isAdmin()) dropdown.$('li > a').addClass('disabled');
