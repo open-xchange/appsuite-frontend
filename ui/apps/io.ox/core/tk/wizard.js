@@ -465,7 +465,7 @@ define('io.ox/core/tk/wizard', [
         show: (function () {
 
             function navigateTo() {
-                ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(waitFor.bind(this));
+                ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(waitFor.bind(this, 0));
             }
 
             function waitFor(counter) {
@@ -561,7 +561,7 @@ define('io.ox/core/tk/wizard', [
                 this.parent.toggleBackdrop(true);
 
                 if (this.options.navigateTo) navigateTo.call(this);
-                else if (this.options.waitFor) waitFor.call(this);
+                else if (this.options.waitFor) waitFor.call(this, 0);
                 else cont.call(this);
 
                 return this;
