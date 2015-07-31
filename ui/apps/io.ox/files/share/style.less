@@ -53,16 +53,22 @@
         .user-select(none);
     }
 
+    font-size: 13px;
+
     background-color: #fff;
 
     .classic-toolbar {
         .title {
+            font-weight: bold;
             display: inline-block;
             line-height: 22px;
             padding: 8px 16px;
             text-decoration: none;
             float: left;
             outline: 0;
+        }
+        & > li:last-child > a:first-child {
+            color: #777;
         }
     }
 
@@ -96,6 +102,11 @@
                 width: 30px;
                 padding-right: 10px;
                 color: #777;
+                font-size:14px;
+                .fa.file-type-icon {
+                    position: relative;
+                    left: -2px;
+                }
             }
 
             .displayname {
