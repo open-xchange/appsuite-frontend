@@ -236,11 +236,11 @@ define('io.ox/files/share/model', [
         },
 
         isAdmin: function () {
-            if (this.isFolder()) {
-                return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
-            } else {
-                return true;
-            }
+
+            // temp. simplification: user is always admin for single files
+            if (!this.isFolder()) return true;
+
+            return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
         },
 
         isExtendedPermission: function () {
@@ -273,13 +273,20 @@ define('io.ox/files/share/model', [
 
     var Shares = Backbone.Collection.extend({
 
-        model: Share
+        model: Share,
+
+        load: function () {
+            var self = this;
+            return api.all().then(function (data) {
+                self.reset(data);
+            });
+        }
 
     });
 
     return {
         WizardShare: WizardShare,
         Share: Share,
-        Shares: Shares
+        collection: new Shares()
     };
 });

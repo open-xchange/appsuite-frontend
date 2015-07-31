@@ -172,6 +172,8 @@ define('io.ox/core/folder/extensions', [
         },
 
         mailQuota: function () {
+            if (_.device('smartphone')) return;
+
             this.append(new QuotaView({
                 className: 'links border-top',
                 title: gt('Mail quota'),
@@ -179,7 +181,8 @@ define('io.ox/core/folder/extensions', [
                 upsell: {
                     title: gt('Need more space?'),
                     requires: 'active_sync || caldav || carddav',
-                    id: 'mail-folderview-quota'
+                    id: 'mail-folderview-quota',
+                    icon: ''
                 },
                 upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
             }).render().$el);
@@ -508,8 +511,8 @@ define('io.ox/core/folder/extensions', [
         //
 
         function openPermissions(e) {
-            require(['io.ox/core/permissions/permissions'], function (controller) {
-                controller.show(e.data.id);
+            require(['io.ox/files/share/permissions'], function (controller) {
+                controller.showFolderPermissions(e.data.id);
             });
         }
 

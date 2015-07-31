@@ -746,16 +746,37 @@ define('io.ox/mail/api', [
         return transfer('copy', list, targetFolderId);
     };
 
-    api.autosave = function (obj) {
+    var parseMsgref = function (msgref) {
+        var base = _(msgref.toString().split(api.separator)),
+            id = base.last(),
+            folder = base.without(id).join(api.separator);
+        return { folder_id: folder, id: id };
+    };
 
-        return http.PUT({
-            module: 'mail',
-            params: {
-                action: 'autosave'
-            },
-            data: obj,
-            appendColumns: false
-        });
+    api.autosave = function (obj) {
+        try {
+            return http.wait(
+                http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'autosave'
+                },
+                data: obj,
+                appendColumns: false
+            })
+            .then(function (result) {
+
+                // reset draft folder
+                var draftsFolder = accountAPI.getFoldersByType('drafts');
+                pool.resetFolder(draftsFolder);
+                folderAPI.reload(draftsFolder);
+                api.trigger('refresh.all');
+                return result;
+            }));
+        } finally {
+            // try/finally is used to set up http.wait() first
+            if (obj.msgref) prepareRemove(parseMsgref(obj.msgref));
+        }
     };
 
     // composition space id

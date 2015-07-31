@@ -6,9 +6,10 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
  define('io.ox/files/share/permissions', [
@@ -17,9 +18,9 @@
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
     'io.ox/files/api',
+    'io.ox/files/share/model',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/contacts/api',
@@ -28,24 +29,27 @@
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
     'io.ox/participants/views',
+    'io.ox/core/capabilities',
     'gettext!io.ox/core',
     'less!io.ox/files/share/style',
     // todo: relocate smart-dropdown logic
     'io.ox/core/tk/flag-picker'
-], function (ext, DisposableView, yell, miniViews, DropdownView, BreadcrumbView, folderAPI, filesAPI, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, gt) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, shareModel, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/files/share/permissions',
 
-        presets = [
-            // view folder + read all
-            { label: gt('Guest'), bits: 257 },
+        roles = {
+            // all
+            'administrator': { bit: 272662788, label: gt('Administrator') },
             // create folder + read/write/delete all
-            { label: gt('Author'), bits: 4227332 },
-            // plus admin
-            { label: gt('Administrator'), bits: 272662788 }
-        ],
+            'author': { bit: 4227332, label: gt('Author') },
+            // view folder + read/write all
+            'reviewer': { bit: 33025, label: gt('Reviewer') },
+            // view folder + read all
+            'viewer': { bit: 257, label: gt('Viewer') }
+        },
 
         /* Models */
 
@@ -119,13 +123,14 @@
 
             events: {
                 'click a.bit': 'updateDropdown',
-                'click a.role': 'applyRole',
-                'click a[data-action="remove"]': 'removeEntity'
+                'click a[data-name="edit"]': 'onEdit',
+                'click a[data-name="resend"]': 'onResend',
+                'click a[data-name="revoke"]': 'onRemove'
             },
 
             initialize: function (options) {
 
-                this.item = options.itemModel;
+                this.parentModel = options.parentModel;
                 this.user = null;
                 this.display_name = '';
                 this.description = '';
@@ -138,7 +143,6 @@
 
             onChangeBitmask: function () {
                 this.parseBitmask();
-                this.updateRole();
             },
 
             parseBitmask: function () {
@@ -163,127 +167,103 @@
             },
 
             render: function () {
-                this.getEntityDetails().done(function () {
-                    var baton = ext.Baton({ model: this.model, view: this });
-                    ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
-                }.bind(this));
+                this.getEntityDetails();
+                var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
+                ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
                 return this;
             },
 
-            removeEntity: function (e) {
+            onRemove: function (e) {
                 e.preventDefault();
                 this.model.collection.remove(this.model);
                 this.remove();
             },
 
-            getEntityDetails: function () {
-
-                var entity = this.model.get('entity');
-
-                if (this.item.isExtendedPermission()) {
-                    // extended permissions
-                    // we don't have that data all time
-                    // "My shares" vies has them; a folder or a file don't have them
-                    switch (this.model.get('type')) {
-                        case 'user':
-                            this.user = this.model.get('contact');
-                            this.display_name = this.model.get('display_name');
-                            this.description = gt('Internal user');
-                            break;
-                        case 'group':
-                            this.display_name = this.model.get('display_name');
-                            this.description = gt('Group');
-                            break;
-                        case 'guest':
-                            this.user = this.model.get('contact');
-                            this.display_name = this.model.get('contact').email1;
-                            this.description = gt('Guest');
-                            break;
-                        case 'anonymous':
-                            // TODO: public vs. password-protected link
-                            this.display_name = gt('Public link');
-                            this.description = this.model.get('share_url');
-                            break;
-                    }
-                    return $.when();
-                }
-
-                if (this.model.get('group')) {
-                    // group
-                    return groupAPI.getName(entity).done(function (name) {
-                        this.display_name = name;
-                        this.description = gt('Group');
-                    }.bind(this));
-                }
-
-                // TODO: anonymous case seems to be missing
-
-                // internal user or guest
-                return userAPI.get({ id: String(entity) }).done(function (user) {
-                    this.user = user;
-                    this.display_name = contactsUtil.getFullName(user) || contactsUtil.getMail(user);
-                    this.description = user.guest_created_by ? gt('Guest') : gt('Internal user');
-                }.bind(this));
+            onResend: function (e) {
+                e.preventDefault();
+                alert('TBD: Resend!');
             },
 
-            getRoleDescription: function () {
+            onEdit: function (e) {
+                e.preventDefault();
+                // turn parent model into file/folder model
+                var model = new filesAPI.Model(this.parentModel.attributes),
+                    popup = this.$el.closest('.share-permissions-dialog');
+                ox.load(['io.ox/files/actions/share']).done(function (action) {
+                    popup.hide();
+                    action.link([model]).one('close', function () {
+                        popup.show();
+                        popup = model = null;
+                    });
+                });
+            },
+
+            getEntityDetails: function () {
+
+                // extended permissions are mandatory now
+                if (!this.parentModel.isExtendedPermission()) {
+                    return console.error('Extended permissions are mandatory', this);
+                }
+
+                switch (this.model.get('type')) {
+                    case 'user':
+                        this.user = this.model.get('contact');
+                        this.display_name = contactsUtil.getFullName(this.user);
+                        this.description = gt('Internal user');
+                        break;
+                    case 'group':
+                        this.display_name = this.model.get('display_name');
+                        this.description = gt('Group');
+                        break;
+                    case 'guest':
+                        this.user = this.model.get('contact');
+                        this.display_name = this.model.get('contact').email1;
+                        this.description = gt('Guest');
+                        break;
+                    case 'anonymous':
+                        // TODO: public vs. password-protected link
+                        this.display_name = gt('Public link');
+                        this.description = this.model.get('share_url');
+                        break;
+                }
+            },
+
+            getRole: function () {
                 var bitmask = folderAPI.Bitmask(this.model.get('bits'));
-                if (bitmask.get('admin')) return gt('Administrator');
+                if (bitmask.get('admin')) return 'administrator';
                 if (bitmask.get('read') && bitmask.get('write')) {
                     // Author: read, write, delete
                     // Reviewer: read, write
-                    return bitmask.get('delete') ? gt('Author') : gt('Reviewer');
+                    return bitmask.get('delete') ? 'author' : 'reviewer';
                 }
                 // assumption is that everyone is at least a "Viewer"
-                return gt('Viewer');
+                return 'viewer';
             },
 
-            updateRole: function () {
-                this.$('.role').text(this.getRoleDescription());
+            getRoleDescription: function (role) {
+                role = role || this.getRole();
+                return roles[role] ? roles[role].label : 'N/A';
             },
 
-            applyRole: function (e) {
-                e.preventDefault();
-                var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', parseInt(bits, 10), { validate: true });
-            },
+            // check if it's possible to assign the admin role at all
+            supportsAdminRole: function () {
 
-            addRoles: function () {
-                if (!this.item.isAdmin()) return $();
-                var self = this;
-                return $('<span class="dropdown preset">').append(
-                    $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
-                    $('<ul class="dropdown-menu" role="menu">').append(
-                        _(presets).map(function (obj) {
-                            if (self.preventAdminPermissions() && obj.bits === 272662788) return;
-                            return $('<li>').append(
-                                $('<a>', { href: '#', 'data-value': obj.bits, role: 'menuitem' }).addClass('role').text(obj.label)
-                            );
-                        })
-                    )
-                );
-            },
+                if (!this.parentModel.isFolder()) return false;
 
-            preventAdminPermissions: function () {
-                // this check is for folders only
-                if (!this.item.isFolder()) return false;
+                var type = this.parentModel.get('type'),
+                    module = this.parentModel.get('module');
 
-                var type = this.item.get('type'),
-                    module = this.item.get('module');
-
-                if (
-                    // no admin choice for default and system folders (see Bug 27704)
-                    (String(folderAPI.getDefaultFolder(module)) === this.item.get('id')) || (type === 5) ||
-                    // Public folder and permission enity 0
-                    (type === 2 && this.model.id === 0) ||
-                    // Private contacts and calendar folders can't have other users with admin permissions
-                    (type === 1 && (module === 'contacts' || module === 'calendar'))
-                ) {
-                    return true;
-                }
-                return false;
+                // no admin choice for default folders (see Bug 27704)
+                if (String(folderAPI.getDefaultFolder(module)) === this.parentModel.get('id')) return false;
+                // not for system folders
+                if (type === 5) return false;
+                // public folder and permission enity 0, i.e. "All users"
+                if (type === 2 && this.model.id === 0) return false;
+                // private contacts and calendar folders can't have other users with admin permissions
+                if (type === 1 && (module === 'contacts' || module === 'calendar')) return false;
+                // otherwise
+                return true;
             }
-
         }),
 
         // All Permissions view
@@ -299,7 +279,7 @@
 
                 this.listenTo(this.collection, {
                     'reset': this.resetPermissions,
-                    'add': this.addEntitry
+                    'add': this.addEntity
                 });
             },
 
@@ -344,7 +324,7 @@
                 return this.$el.append(
                     new PermissionEntityView({
                         model: PermissionModel,
-                        itemModel: this.model
+                        parentModel: this.model
                     }).render().$el
                 );
             }
@@ -385,10 +365,14 @@
             id: 'who',
             draw: function (baton) {
 
+                var url = baton.model.get('share_url');
+
                 this.append(
-                    $('<div class="col-xs-4">').append(
+                    $('<div class="col-xs-6">').append(
                         $('<div class="display_name">').text(baton.view.display_name),
-                        $('<div class="description">').text(baton.view.description)
+                        $('<div class="description">').append(
+                            url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
+                        )
                     )
                 );
             }
@@ -401,8 +385,39 @@
             id: 'role',
             draw: function (baton) {
 
+                var node, dropdown, role = baton.view.getRole(), description = baton.view.getRoleDescription(role);
+
+                // apply role for the first time
+                baton.model.set('role', role, { silent: true });
+
+                if (!baton.parentModel.isAdmin() || baton.model.get('type') === 'anonymous') {
+                    node = $.txt(description);
+                } else {
+                    dropdown = new DropdownView({ caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true });
+                    if (baton.view.supportsAdminRole()) {
+                        dropdown.option('role', 'administrator', gt('Administrator'));
+                    }
+                    dropdown
+                        .option('role', 'author', gt('Author'))
+                        .option('role', 'reviewer', gt('Reviewer'))
+                        .option('role', 'viewer', gt('Viewer'));
+                    baton.view.listenTo(baton.model, {
+                        'change': _.debounce(function (model) {
+                            // just update the role - not the bits
+                            role = baton.view.getRole();
+                            model.set('role', role, { silent: true });
+                            // always update the drop-down label
+                            dropdown.$('.dropdown-label').text(baton.view.getRoleDescription(role));
+                        }, 10),
+                        'change:role': function (model, value) {
+                            model.set('bits', roles[value].bit);
+                        }
+                    });
+                    node = dropdown.render().$el;
+                }
+
                 this.append(
-                    $('<div class="col-xs-3 role">').text(baton.view.getRoleDescription())
+                    $('<div class="col-xs-2 role">').append(node)
                 );
             }
         },
@@ -414,13 +429,19 @@
             id: 'detail-dropdown',
             draw: function (baton) {
 
+                // not available for anonymous links (read-only)
+                if (baton.model.get('type') === 'anonymous') {
+                    this.append('<div class="col-xs-2">');
+                    return;
+                }
+
                 // take care of highest bit (64 vs 4 vs 2)
                 var maxFolder = baton.model.get('folder') === 64 ? 64 : 4,
                     maxRead = baton.model.get('read') === 64 ? 64 : 2,
                     maxWrite = baton.model.get('write') === 64 ? 64 : 2,
                     maxDelete = baton.model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Access rights'), model: baton.model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: baton.model, smart: true })
                     //
                     // FOLDER access
                     //
@@ -431,10 +452,10 @@
                     .option('folder', 2, gt('Create objects'))
                     //#. folder permissions
                     .option('folder', maxFolder, gt('Create objects and subfolders'))
-                    .divider()
                     //
                     // READ access
                     //
+                    .divider()
                     .header(gt('Read permissions'))
                     //#. object permissions - read
                     .option('read', 0, gt('None'))
@@ -442,10 +463,10 @@
                     .option('read', 1, gt('Read own objects'))
                     //#. object permissions - read
                     .option('read', maxRead, gt('Read all objects'))
-                    .divider()
                     //
                     // WRITE access
                     //
+                    .divider()
                     .header(gt('Write permissions'))
                     //#. object permissions - edit/modify
                     .option('write', 0, gt('None'))
@@ -453,29 +474,40 @@
                     .option('write', 1, gt('Edit own objects'))
                     //#. object permissions - edit/modify
                     .option('write', maxWrite, gt('Edit all objects'))
-                    .divider()
                     //
                     // DELETE access
                     //
+                    .divider()
                     .header(gt('Delete permissions'))
                     //#. object permissions - delete
                     .option('delete', 0, gt('None'))
                     //#. object permissions - delete
                     .option('delete', 1, gt('Delete own objects'))
                     //#. object permissions - delete
-                    .option('delete', maxDelete, gt('Delete all objects'))
+                    .option('delete', maxDelete, gt('Delete all objects'));
+
+                // add admin role?
+                if (baton.view.supportsAdminRole()) {
                     //
                     // ADMIN role
                     //
+                    dropdown
+                    .divider()
                     .header(gt('Administrative role'))
-                    //#. object permissions - admin
+                    //#. object permissions - user role
                     .option('admin', 0, gt('User'))
-                    //#. object permissions - admin
+                    //#. object permissions - admin role
                     .option('admin', 1, gt('Administrator'));
+                }
+
+                dropdown.render();
+
+                // disable all items if not admin
+                if (!baton.parentModel.isAdmin()) dropdown.$('li > a').addClass('disabled');
 
                 this.append(
-                    $('<div class="col-xs-3 detail-dropdown">').append(
-                        dropdown.render().$el
+                    $('<div class="col-xs-2 detail-dropdown">').append(
+                        dropdown.$el.addClass('pull-right').attr('title', gt('Detailed access rights'))
                     )
                 );
             }
@@ -485,21 +517,69 @@
         //
         {
             index: 500,
-            id: 'remove-button',
-            draw: function () {
-                // TODO: check for admin status
+            id: 'actions',
+            draw: function (baton) {
+
+                if (!baton.parentModel.isAdmin()) return;
+
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
+                    type = baton.model.get('type'),
+                    myself = type === 'user' && baton.model.get('entity') === ox.user_id;
+
+                switch (type) {
+                    case 'group':
+                        dropdown.link('revoke', gt('Revoke access'));
+                        break;
+                    case 'user':
+                    case 'guest':
+                        if (!myself) {
+                            dropdown.link('resend', gt('Resend invitation')).divider();
+                        }
+                        dropdown.link('revoke', gt('Revoke access'));
+                        break;
+                    case 'anonymous':
+                        if (capabilities.has('share_links')) dropdown.link('edit', gt('Edit'));
+                        dropdown
+                            .link('resend', gt('Resend invitation'))
+                            .divider()
+                            .link('revoke', gt('Revoke access'));
+                        break;
+                }
+
                 this.append(
-                    $('<div class="col-xs-1 remove-button">').append(
-                        $('<a href="#" role="button" data-action="remove"><i class="fa fa-trash-o"></i></a>')
+                    $('<div class="col-xs-1 entity-actions">').append(
+                        dropdown.render().$el.addClass('pull-right')
                     )
                 );
             }
         }
     );
 
-    return {
+    var that = {
+
+        // async / id is folder id
+        showFolderPermissions: function (id) {
+
+            function show(data) {
+                // create sharing model and show dialog
+                // omit "folder_id" otherwise a folder is regarded as file (might need some improvement)
+                data = _(data).omit('folder_id');
+                that.show(new shareModel.Share(data));
+            }
+
+            // we need "extendedPermissions" to show all permissions
+            var model = folderAPI.pool.getModel(id);
+            if (model.has('com.openexchange.share.extendedPermissions')) {
+                // use existing model
+                show(model.toJSON());
+            } else {
+                // bypass cache (once) to have all columns (incl. 3060)
+                folderAPI.get(id, { cache: false }).done(show);
+            }
+        },
 
         show: function (objModel) {
+
             // // Check if ACLs enabled and only do that for mail component,
             // // every other component will have ACL capabilities (stored in DB)
             // if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
@@ -546,12 +626,11 @@
             dialog.getPopup().addClass('share-permissions-dialog');
 
             dialog.getHeader().append(
-                $('<h4>').text(gt('Permissions for "%1$s"', objModel.getDisplayName())),
-                new BreadcrumbView({ folder: objModel.getFolderID(), notail: true }).render().$el
+                $('<h4>').text(gt('Permissions for "%1$s"', objModel.getDisplayName()))
             );
 
             // add permissions view
-            dialog.getContentNode().addClass('scrollable').append(
+            dialog.getContentNode().append(
                 permissionsView.render().$el
             );
 
@@ -596,7 +675,7 @@
                         click: function (e, member) {
                             // build extended permission object
                             var obj = {
-                                bits: objModel.isFolder() ? 4227332 : 2, // Author
+                                bits: objModel.isFolder() ? 4227332 : 257, // Author : Viewer
                                 group: member.get('type') === 2,
                                 type: member.get('type') === 2 ? 'group' : 'user'
                             };
@@ -640,7 +719,7 @@
                                     if (!_.isEmpty(val)) {
                                         permissionsView.collection.add(new Permission({
                                             type: 'guest',
-                                            bits: objModel.isFolder() ? 4227332 : 2, // Author
+                                            bits: objModel.isFolder() ? 4227332 : 257, // Author : Viewer
                                             contact: {
                                                 email1: val
                                             }
@@ -656,7 +735,7 @@
                             new miniViews.TextView({
                                 name: 'message',
                                 model: dialogConfig
-                            }).render().$el.attr({
+                            }).render().$el.addClass('message-text').attr({
                                 id: guid,
                                 rows: 3,
                                 //#. placeholder text in share dialog
@@ -681,7 +760,14 @@
                 }
                 def.then(
                     function success() {
-                        dialog.close();
+                        require(['io.ox/files/share/model'], function (sModel) {
+                            sModel.collection.load().then(function () {
+                                dialog.close();
+                            }, function (error) {
+                                dialog.idle();
+                                yell(error);
+                            });
+                        });
                     },
                     function fail(error) {
                         dialog.idle();
@@ -692,4 +778,6 @@
             .show();
         }
     };
+
+    return that;
 });

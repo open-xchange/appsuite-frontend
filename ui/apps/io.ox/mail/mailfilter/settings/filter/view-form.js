@@ -376,7 +376,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 var self = this,
                     list = $(e.currentTarget).closest('li'),
-                    type = list.attr('data-type'),
                     actionID = list.attr('data-action-id'),
                     inputField = list.find('input'),
                     currentFolder =  this.model.get('actioncmds')[actionID].into,
@@ -390,7 +389,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                         var prepared = prepareFolderForDisplay(id);
 
-                        actionArray[actionID][type] = id;
+                        actionArray[actionID].into = id;
                         self.model.set('actioncmds', actionArray);
 
                         inputField.val(prepared);

@@ -62,8 +62,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     // check if the picture is small enough
                     if (fileData && settings.get('maxImageSize') && fileData.size > settings.get('maxImageSize')) {
                         require(['io.ox/core/strings'], function (strings) {
-                            //#. %1$s maximum filesize
-                            notifications.yell('error', gt('Your selected picture exceeds the maximum allowed filesize of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
+                            //#. %1$s maximum file size
+                            notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
                         });
                         return;
                     }

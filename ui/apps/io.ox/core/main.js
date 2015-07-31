@@ -606,9 +606,9 @@ define('io.ox/core/main', [
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
-                if (!upsell.has(model.get('requires'))) {
+                if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
-                        _(settings.get('upsell/defaultIcon', 'fa-lock').split(/ /)).map(function (icon) {
+                        _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
                             return $('<i class="fa">').addClass(icon);
                         })
                     );
@@ -760,19 +760,19 @@ define('io.ox/core/main', [
             draw: function () {
                 if (_.device('smartphone')) return;
 
-                this.append(new UpsellView({
+                var view = new UpsellView({
                     tagName: 'li',
                     className: 'launcher',
                     id: 'secondary-launcher',
                     requires: 'active_sync || caldav || carddav',
                     customize: function () {
-                        $('a', this.$el).append(
-                            _(this.icon.split(/ /)).map(function (icon) {
-                                return $('<i class="fa">').addClass(icon + ' launcher-icon');
-                            })
-                        );
+                        $('i', this.$el).addClass('launcher-icon');
                     }
-                }).render().$el);
+                });
+
+                if (view.visible) {
+                    this.append(view.render().$el);
+                }
             }
         });
 
@@ -848,31 +848,23 @@ define('io.ox/core/main', [
             id: 'upsell',
             index: 50,
             draw: function () {
-                var view;
-                this.append(
-                    view = new UpsellView({
-                        tagName: 'li',
-                        id: 'topbar-dropdown',
-                        requires: 'active_sync || caldav || carddav',
-                        title: 'Upgrade your account',
-                        customize: function () {
-                            this.$el.attr({
-                                'role': 'presentation'
-                            });
-                            $('a', this.$el).append(
-                                _(this.icon.split(/ /)).map(function (icon, index) {
-                                    return $('<i class="fa">').addClass(icon).css({
-                                        'margin-left': index === 0 ? '1em' : 0,
-                                        'width': 'auto'
-                                    });
-                                })
-                            );
-                        }
-                    }).render().$el
-                );
+                var view = new UpsellView({
+                    tagName: 'li',
+                    id: 'topbar-dropdown',
+                    requires: 'active_sync || caldav || carddav',
+                    title: 'Upgrade your account',
+                    customize: function () {
+                        this.$el.attr({
+                            'role': 'presentation'
+                        });
 
-                if (!view.hasClass('hidden')) {
+                        $('i', this.$el).css({ 'width': 'auto' });
+                    }
+                });
+
+                if (view.visible) {
                     this.append(
+                        view.render().$el,
                         $('<li class="divider" aria-hidden="true" role="presentation">')
                     );
                 }

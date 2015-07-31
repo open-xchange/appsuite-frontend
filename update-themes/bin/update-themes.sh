@@ -1,20 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 
+# fail early
+set -e 
+
+# create dirty file with proper mode
 umask 022
-
-cd "$(dirname "$0")/.."
 
 TESTFILE="apps/themes/.need_update"
 
-for key in $@
-do
-    key="$1"
-    shift
+bail () {
+  echo 'failed! If a subsequent theme update finishes without errors,' \
+       'you can ignore the above error message.'
+  exit 1
+}
 
-    case $key in
+cd "$(dirname "$0")/.."
+
+for key in "$@"
+do
+    case "$key" in
         --if-needed)
         [ ! -f $TESTFILE ] && echo "Themes up-to-date" && exit 0 || echo "Themes need update"
-        shift
         ;;
         --later)
         touch $TESTFILE
@@ -23,27 +29,25 @@ do
     esac
 done
 
-[ -f $TESTFILE ] && rm $TESTFILE
+# check for nodejs
+for candidate in nodejs node
+do
+  command -v $candidate > /dev/null && NODEJS=$candidate && break
+done
 
 if [ -z $NODEJS ]
 then
-    if command -v nodejs > /dev/null; then
-        NODEJS=nodejs
-    elif command -v node > /dev/null; then
-        NODEJS=node
-    else
-        echo 'Updating themes... (this may take a while)'
-        java -Xmx1g -jar /opt/open-xchange/bundles/com.openexchange.scripting.rhino/lib/js.jar \
-             share/update-themes/lib/update-themes-rhino.js \
-        || echo 'failed! If a subsequent theme update finishes without errors,' \
-                'you can ignore the above error message.'
-        exit 0
-    fi
+    echo 'Updating themes... (this may take a while)'
+    java -Xmx1g -jar /opt/open-xchange/bundles/com.openexchange.scripting.rhino/lib/js.jar \
+         share/update-themes/lib/update-themes-rhino.js || bail
+else
+    echo 'Updating themes...'
+    $NODEJS "share/update-themes/bin/update-themes" || bail
 fi
 
-echo 'Updating themes...'
-$NODEJS "share/update-themes/bin/update-themes" \
-|| echo 'failed! If a subsequent theme update finishes without errors,' \
-        'you can ignore the above error message.'
+# process other scripts if they exist
+[ -d "share/update-themes.d" ] && find "share/update-themes.d" -type f -executable -exec {} \; 
 
-[ -d "share/update-themes.d" ] && find "share/update-themes.d" -type f -executable -exec {} + || exit 0
+# delete dirty file _after_ we are done and exit cleanly
+[ -f $TESTFILE ] && rm $TESTFILE
+exit 0
