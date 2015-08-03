@@ -14,8 +14,9 @@
 
 define('io.ox/files/share/api', [
     'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Events) {
+    'io.ox/core/event',
+    'io.ox/files/api'
+], function (http, Events, filesAPI) {
 
     'use strict';
 
@@ -169,19 +170,21 @@ define('io.ox/files/share/api', [
          * get a single shared file
          * @return { deferred } an object with share data
          */
-        getFileShare: function (id, folder) {
+        getFileShare: function (obj, options) {
+
+            options = _.extend({ cache: true }, options);
+
+            var model = filesAPI.pool.get('detail').get(_.cid(obj));
+            if (options.cache && model.has('com.openexchange.share.extendedObjectPermissions')) return $.when(model.toJSON());
+
             return http.PUT({
                 module: 'files',
-                params: {
-                    action: 'list',
-                    columns: '1,2,5,20,700,7010'
-                },
-                data: [{
-                    id: id,
-                    folder: folder
-                }]
-            }).then(function (array) {
-                return _.first(array);
+                params: { action: 'list', columns: '7010' },
+                data: [{ id: obj.id, folder: obj.folder_id }]
+            })
+            .then(function (array) {
+                model.set(array[0]).toJSON();
+                return model.toJSON();
             });
         },
 

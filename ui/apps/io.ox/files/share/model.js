@@ -231,15 +231,18 @@ define('io.ox/files/share/model', [
 
         },
 
+        isFile: function () {
+            return this.has('folder_id');
+        },
+
         isFolder: function () {
             return !this.has('folder_id');
         },
 
         isAdmin: function () {
-
-            // temp. simplification: user is always admin for single files
-            if (!this.isFolder()) return true;
-
+            // simplification: user is always admin for single files
+            if (this.isFile()) return true;
+            // otherwise check folder bits
             return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
         },
 
@@ -269,26 +272,43 @@ define('io.ox/files/share/model', [
             }
         },
 
-        reload: function () {
-            var self = this;
-            if (this.isFolder()) {
-                return api.getFolderShare(this.getFolderID()).then(function (data) {
-                    self.set(data);
-                });
-            } else {
-                return api.getFileShare(this.get('id'), this.getFolderID()).then(function (data) {
-                    self.set(data);
+        loadExtendedPermissions: (function () {
+
+            function fetchFile(model, options) {
+                return api.getFileShare(model.pick('id', 'folder_id'), options).done(function (data) {
+                    model.set(data);
                 });
             }
+
+            function fetchFolder(model, options) {
+
+                if (options.cache && model.has('com.openexchange.share.extendedPermissions')) {
+                    // use existing model
+                    return $.when();
+                }
+
+                // bypass cache (once) to have all columns (incl. 3060)
+                return folderAPI.get(model.id, { cache: false }).done(function (data) {
+                    // omit "folder_id" otherwise a folder is regarded as file (might need some improvement)
+                    data = _(data).omit('folder_id');
+                    model.set(data);
+                });
+            }
+
+            return function (options) {
+                options = _.extend({ cache: true }, options);
+                return this.isFolder() ? fetchFolder(this, options) : fetchFile(this, options);
+            };
+
+        }()),
+
+        reload: function () {
+            return this.loadExtendedPermissions({ cache: false });
         }
 
     });
 
-    var Shares = Backbone.Collection.extend({
-
-        model: Share
-
-    });
+    var Shares = Backbone.Collection.extend({ model: Share });
 
     return {
         WizardShare: WizardShare,

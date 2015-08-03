@@ -451,14 +451,18 @@ define('io.ox/files/api', [
             if (model && model.has('description')) return $.when(model.toJSON());
         }
 
+        var params =  {
+            action: 'get',
+            id: file.id,
+            folder: file.folder_id || file.folder,
+            timezone: 'UTC'
+        };
+
+        if (options.columns) params.columns = options.columns;
+
         return http.GET({
             module: 'files',
-            params: {
-                action: 'get',
-                id: file.id,
-                folder: file.folder_id || file.folder,
-                timezone: 'UTC'
-            }
+            params: params
         })
         .then(function (data) {
             pool.add('detail', data);
@@ -1101,6 +1105,11 @@ define('io.ox/files/api', [
         };
 
     }());
+
+    api.getDefaultColumns = function (additional) {
+        var columns = http.getAllColumns('files');
+        return _([].concat(columns, additional)).uniq().sort().join(',');
+    };
 
     return api;
 
