@@ -73,10 +73,8 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         fail: function (error, focus) {
-            // fail
-            $('#io-ox-login-feedback').idle();
-            // visual response (shake sucks on touch devices)
-            $('#io-ox-login-form').css('opacity', '');
+            exports.restore();
+
             // show error
             if (error && error.error === '0 general') {
                 this.feedback('error', 'No connection to server. Please check your internet connection and retry.');
@@ -104,9 +102,21 @@ define('io.ox/core/boot/util', [], function () {
 
         restore: function () {
             // stop being busy
-            $('#io-ox-login-form').css('opacity', '');
+            $('#io-ox-login-form')
+                // visual response (shake sucks on touch devices)
+                .css('opacity', '')
+                .find('input').removeAttr('disabled');
             $('#io-ox-login-blocker').hide();
-            $('#io-ox-login-feedback').idle();
+            //$('#io-ox-login-feedback').idle();
+        },
+
+        lock: function () {
+            // be busy
+            $('#io-ox-login-form')
+                .css('opacity', 0.5)
+                .find('input').attr('disabled', 'disabled');
+            $('#io-ox-login-blocker').show();
+            //$('#io-ox-login-feedback').busy().empty();
         }
 
     };
