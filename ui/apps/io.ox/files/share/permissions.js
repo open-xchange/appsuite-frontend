@@ -607,18 +607,17 @@
                 DialogConfigModel = Backbone.Model.extend({
                     defaults: {
                         cascadePermissions: false,
-                        message: null,
-                        transport: 'mail'
+                        message: ''
                     },
                     toJSON: function () {
                         var data = {
-                            cascadePermissions: this.get('cascadePermissions')
+                            cascadePermissions: this.get('cascadePermissions'),
+                            notification: { transport: 'mail' }
                         };
-                        if (this.get('message') && $.trim(this.get('message')) !== '' ) {
-                            data.notification = {
-                                message: this.get('message'),
-                                transport: this.get('transport')
-                            };
+                        // add personal message only if not empty
+                        // but always send notification!
+                        if (this.get('message') && $.trim(this.get('message')) !== '') {
+                            data.notification.message = this.get('message');
                         }
                         return data;
                     }
@@ -758,28 +757,38 @@
             }
 
             dialog.on('save', function () {
-                var def;
+
+                var id = objModel.get('id'), changes, options, def;
+
                 if (objModel.isFolder()) {
-                    def = folderAPI.update(objModel.get('id'), { permissions: permissionsView.collection.toJSON() }, dialogConfig.toJSON());
+                    changes = { permissions: permissionsView.collection.toJSON() };
+                    options = dialogConfig.toJSON();
+                    def = folderAPI.update(id, changes, options);
                 } else {
-                    def = filesAPI.update({ id: objModel.get('id') }, { object_permissions: permissionsView.collection.toJSON() });
+                    changes = { object_permissions: permissionsView.collection.toJSON() };
+                    def = filesAPI.update({ id: id });
                 }
+
                 def.then(
                     function success() {
-                        objModel.reload().then(function () {
-                            dialog.close();
-                        }, function (error) {
-                            dialog.idle();
-                            yell(error);
-                        });
+                        objModel.reload().then(
+                            function () {
+                                dialog.close();
+                            },
+                            function (error) {
+                                dialog.idle();
+                                yell(error);
+                            }
+                        );
                     },
                     function fail(error) {
                         dialog.idle();
                         yell(error);
                     }
                 );
-            })
-            .show();
+            });
+
+            dialog.show();
         }
     };
 
