@@ -361,14 +361,29 @@ define('io.ox/files/main', [
                             app: app
                         });
 
-                        // Double click handler
-                        var ev = _.device('touch') ? 'tap' : 'dblclick';
-                        app.mysharesListView.$el.on(ev, '.list-item .list-item-content', function () {
+                        var openPermissionsDialog = function () {
                             var model = app.mysharesListView.collection.get(app.mysharesListView.selection.get()[0]);
                             return require(['io.ox/files/share/permissions'], function (permissions) {
                                 permissions.show(model);
                             });
-                        });
+                        };
+
+                        // Doubleclick handler
+                        app.mysharesListView.$el.on(
+                            _.device('touch') ? 'tap' : 'dblclick',
+                            '.list-item .list-item-content',
+                            openPermissionsDialog
+                        );
+
+                        // Keydown handler (only Enter) on selection
+                        (function () {
+                            if (_.device('smartphone')) return;
+                            app.mysharesListView.$el.on('keydown', '.list-item', function (e) {
+                                if (e.which === 13) {
+                                    openPermissionsDialog();
+                                }
+                            });
+                        })();
 
                         app.getWindow().nodes.body.prepend(app.mysharesListViewControl.render().$el);
                         app.mysharesListViewControl.$el.siblings().hide();
