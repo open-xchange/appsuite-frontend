@@ -760,13 +760,11 @@
                 }
                 def.then(
                     function success() {
-                        require(['io.ox/files/share/model'], function (sModel) {
-                            sModel.collection.load().then(function () {
-                                dialog.close();
-                            }, function (error) {
-                                dialog.idle();
-                                yell(error);
-                            });
+                        objModel.reload().then(function () {
+                            dialog.close();
+                        }, function (error) {
+                            dialog.idle();
+                            yell(error);
                         });
                     },
                     function fail(error) {

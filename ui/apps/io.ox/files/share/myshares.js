@@ -12,6 +12,7 @@
  */
 
  define('io.ox/files/share/myshares', [
+    'io.ox/files/share/api',
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/files/share/model',
@@ -20,7 +21,7 @@
     'io.ox/backbone/mini-views/toolbar',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, sModel, BreadcrumbView, Dropdown, Toolbar, gt) {
+], function (api, ext, DisposableView, sModel, BreadcrumbView, Dropdown, Toolbar, gt) {
 
     'use strict';
 
@@ -229,11 +230,11 @@
 
             this.$ul = $('<ul class="list-unstyled">');
 
-            this.collection = sModel.collection;
+            this.collection = new sModel.Shares();
 
             this.listenTo(this.collection, 'reset sort', this.updateShares);
 
-            this.listenTo(ox, 'refresh^', this.collection.load);
+            this.listenTo(ox, 'refresh^', this.getShares);
 
             this.listenTo(this.baton.model, 'change:sort change:order', this.sortBy);
 
@@ -246,7 +247,7 @@
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
 
-            this.collection.load().then(function () {
+            this.getShares().then(function () {
                 self.sortBy(self.baton.model);
             });
 
@@ -277,6 +278,13 @@
                 default:
             }
             this.collection.sort();
+        },
+
+        getShares: function () {
+            var self = this;
+            return api.all().then(function (data) {
+                self.collection.reset(data);
+            });
         },
 
         updateShares: function () {

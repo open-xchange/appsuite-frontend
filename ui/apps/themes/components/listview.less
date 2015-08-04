@@ -125,6 +125,7 @@
         }
     }
 }
+
 .list-view {
 
     height: 100%;
@@ -140,6 +141,9 @@
 
     &.scrollpane {
         .overflow-y(auto);
+        // optimize repaint behavior; see bug 39931
+        // http://stackoverflow.com/questions/20671729/chrome-repaints-div-on-scroll-differently-on-low-and-high-dpi-displays
+        -webkit-transform: translateZ(0);
     }
 
     .list-item, .list-header {

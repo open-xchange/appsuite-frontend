@@ -169,6 +169,16 @@ define('io.ox/mail/listview', [
             draw: extensions.paperClip
         },
         {
+            id: 'pgp-encrypted',
+            index: 600,
+            draw: extensions.pgp.encrypted
+        },
+        {
+            id: 'pgp-signed',
+            index: 600,
+            draw: extensions.pgp.signed
+        },
+        {
             id: 'subject',
             index: 1000,
             draw: extensions.subject
