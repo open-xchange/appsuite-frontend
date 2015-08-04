@@ -81,7 +81,7 @@
         id: 'title',
         index: 300,
         draw: function () {
-            var item = $('<div class="toolbar-item">').text(gt('My shares'));
+            var item = $('<div class="toolbar-item breadcrumb-tail">').text(gt('My shares'));
             this.append(item);
         }
     });
