@@ -23,7 +23,7 @@ define('io.ox/files/main', [
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
-    'io.ox/files/share/myshares',
+    'io.ox/files/share/listview',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
@@ -314,7 +314,7 @@ define('io.ox/files/main', [
         /*
          * Respond to virtual myshares
          */
-        'myshares': function (app) {
+        'myshares-listview': function (app) {
             if (!capabilities.has('publication')) return;
 
             // add virtual folder to folder api
@@ -342,18 +342,41 @@ define('io.ox/files/main', [
             app.folderView.tree.on({
                 'virtual': function (id) {
                     if (id !== 'virtual/myshares') return;
-                    if (app.myshares) {
-                        app.myshares.$el.show().siblings().hide();
+                    if (app.mysharesListViewControl) {
+                        app.mysharesListViewControl.$el.show().siblings().hide();
                     } else {
-                        app.myshares = new MySharesView();
-                        window.testview = app.myshares;
-                        app.getWindow().nodes.body.prepend(app.myshares.render().$el);
-                        app.myshares.$el.siblings().hide();
+                        app.mysharesListView = new MySharesView({
+                            app: app,
+                            pagination: false,
+                            draggable: false,
+                            ignoreFocus: true,
+                            noSwipe: true
+                        });
+
+                        app.mysharesListView.toggleCheckboxes(false);
+
+                        app.mysharesListViewControl = new ListViewControl({
+                            id: 'io.ox/files/share/myshares',
+                            listView: app.mysharesListView,
+                            app: app
+                        });
+
+                        // Double click handler
+                        var ev = _.device('touch') ? 'tap' : 'dblclick';
+                        app.mysharesListView.$el.on(ev, '.list-item .list-item-content', function () {
+                            var model = app.mysharesListView.collection.get(app.mysharesListView.selection.get()[0]);
+                            return require(['io.ox/files/share/permissions'], function (permissions) {
+                                permissions.show(model);
+                            });
+                        });
+
+                        app.getWindow().nodes.body.prepend(app.mysharesListViewControl.render().$el);
+                        app.mysharesListViewControl.$el.siblings().hide();
                     }
                 },
                 'change': function () {
-                    if (app.myshares) {
-                        app.myshares.$el.hide().siblings().show();
+                    if (app.mysharesListViewControl) {
+                        app.mysharesListViewControl.$el.hide().siblings().show();
                     }
                 }
             });

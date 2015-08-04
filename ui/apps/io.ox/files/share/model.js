@@ -264,6 +264,15 @@ define('io.ox/files/share/model', [
             return this.isFolder() ? this.get('id') : this.get('folder_id');
         },
 
+        getFileType: filesAPI.Model.prototype.getFileType,
+
+        types: filesAPI.Model.prototype.types,
+
+        getExtension: function () {
+            var parts = String(this.get('title') || '').split('.');
+            return parts.length === 1 ? '' : parts.pop().toLowerCase();
+        },
+
         getPermissions: function () {
             if (this.isFolder()) {
                 return this.get('com.openexchange.share.extendedPermissions') || this.get('permissions');

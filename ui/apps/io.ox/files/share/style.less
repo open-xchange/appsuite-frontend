@@ -47,8 +47,32 @@
     }
 
 }
+.myshares-list {
+    &.visible-selection.has-focus .list-item.selected {
+        a, i, i:before { color: white; }
+    }
+    .displayname {.ellipsis(); }
 
-.myshares-view {
+    .breadcrumb-view {
+        overflow: hidden;
+        a {
+            color: #333;
+        }
+    }
+    .list-item-content {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+
+        .list-item-column.column-2, .list-item-column.column-3 {
+            width: 50%;
+            padding:0;
+            text-align: left;
+        }
+    }
+}
+
+/* .myshares-view {
     * {
         .user-select(none);
     }
@@ -154,6 +178,7 @@
     }
 
 }
+*/
 
 .share-permissions-dialog {
 
