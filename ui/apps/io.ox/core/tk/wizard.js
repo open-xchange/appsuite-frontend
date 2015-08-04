@@ -465,7 +465,10 @@ define('io.ox/core/tk/wizard', [
         show: (function () {
 
             function navigateTo() {
-                ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(waitFor.bind(this, 0));
+                ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(function () {
+                    var callback = this.options.navigateTo.callback || _.noop;
+                    $.when(callback.call(this)).done(waitFor.bind(this, 0));
+                }.bind(this));
             }
 
             function waitFor(counter) {
@@ -625,8 +628,8 @@ define('io.ox/core/tk/wizard', [
         },
 
         // set 'navigateTo' option; defines which app to start
-        navigateTo: function (id, options) {
-            this.options.navigateTo = { id: id, options: options };
+        navigateTo: function (id, options, callback) {
+            this.options.navigateTo = { id: id, options: options, callback: callback };
             return this;
         },
 

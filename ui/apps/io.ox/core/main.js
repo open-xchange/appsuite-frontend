@@ -1033,7 +1033,7 @@ define('io.ox/core/main', [
             draw: function () {
                 var ul, a;
                 this.append(
-                    $('<li class="launcher dropdown" role="presentation">').append(
+                    $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
                         a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
                         .append(
                             $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
