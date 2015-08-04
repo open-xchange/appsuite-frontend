@@ -542,6 +542,8 @@ define('io.ox/files/actions', [
         index: 100,
         id: 'invite',
         label: gt('Invite people'),
+        //#. sharing: a guest user will be created for the owner of that email address
+        description: gt('Only the email address owner can view or edit'),
         ref: 'io.ox/files/actions/invite'
     });
 
@@ -549,6 +551,8 @@ define('io.ox/files/actions', [
         index: 200,
         id: 'getalink',
         label: gt('Get a link'),
+        //#. sharing: a link will be created
+        description: gt('Anyone with this link can view'),
         ref: 'io.ox/files/actions/getalink'
     });
 
