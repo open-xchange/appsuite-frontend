@@ -789,7 +789,9 @@
                 );
             });
 
-            dialog.show();
+            dialog.show(function () {
+                $(this).find('.form-control.tt-input').focus();
+            });
         }
     };
 
