@@ -746,7 +746,7 @@
                                 id: guid,
                                 rows: 3,
                                 //#. placeholder text in share dialog
-                                placeholder: gt('Message (optional)')
+                                placeholder: gt('Personal message (optional)')
                             })
                         )
                     )

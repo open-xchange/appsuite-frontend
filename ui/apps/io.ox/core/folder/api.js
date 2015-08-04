@@ -156,6 +156,7 @@ define('io.ox/core/folder/api', [
     //
 
     var FolderModel = Backbone.Model.extend({
+
         constructor: function () {
             Backbone.Model.apply(this, arguments);
             this.set('virtual_parents', []);
@@ -167,10 +168,24 @@ define('io.ox/core/folder/api', [
                     'change:unread': onChangeUnread
                 });
             }
+        },
+
+        // check if the current user has admin privileges
+        isAdmin: function () {
+            var bits = new Bitmask(this.get('own_rights'));
+            return !!bits.get('admin');
+        },
+
+        // check if the folder can be shared (requires admin bit and the capability "permissions")
+        isShareable: function () {
+            return this.isAdmin() && _(this.get('supported_capabilities')).indexOf('permissions') > -1;
         }
     });
 
     var FolderCollection = Backbone.Collection.extend({
+
+        model: FolderModel,
+
         constructor: function (id) {
             Backbone.Collection.apply(this, arguments);
             this.id = id;
@@ -184,14 +199,15 @@ define('io.ox/core/folder/api', [
                 };
             }
         },
+
         comparator: function (model) {
             return model.get('index/' + this.id) || 0;
         },
+
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
             pool.getModel(this.id).set('subfolders', this.length > 0);
-        },
-        model: FolderModel
+        }
     });
 
     // collection pool
