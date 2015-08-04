@@ -88,19 +88,21 @@
             // contact_id  String  (for type “guest”, optional) The object identifier of the corresponding contact entry if the recipient was chosen from the address book
             // contact_folder  String  (for type “guest”, required if “contact_id” is set) The folder identifier of the corresponding contact entry if the recipient was chosen from the address book
             toJSON: function () {
-                var data = {
-                    bits: this.get('bits')
-                };
+
+                var type = this.get('type'),
+                    data = {
+                        bits: this.get('bits')
+                    };
 
                 if (this.has('entity')) {
                     data.entity = this.get('entity');
-                    data.group = this.get('type') === 'group';
+                    data.group = type === 'group';
                 } else {
-                    switch (this.get('type')) {
+                    switch (type) {
                         case 'guest':
-                            data.type = this.get('type');
+                            data.type = type;
                             var contact = this.get('contact');
-                            data.email_address = contact.email1;
+                            data.email_address = contact[contact.field] || contact.email1;
                             if (this.has('display_name')) {
                                 data.display_name = this.get('display_name');
                             }
@@ -110,7 +112,7 @@
                             }
                             break;
                         case 'anonymous':
-                            data.type = this.get('type');
+                            data.type = type;
                             break;
                     }
                 }
@@ -221,7 +223,7 @@
                         break;
                     case 'guest':
                         this.user = this.model.get('contact');
-                        this.display_name = this.model.get('contact').email1;
+                        this.display_name = this.user[this.user.field] || this.user.email1;
                         this.description = gt('Guest');
                         break;
                     case 'anonymous':
@@ -693,8 +695,8 @@
                                 obj.type = 'guest';
                                 obj.contact_id = member.get('id');
                                 obj.folder_id = member.get('folder_id');
+                                obj.field = member.get('field');
                             }
-
                             permissionsView.collection.add(new Permission(obj));
                         },
                         extPoint: POINT
@@ -758,15 +760,14 @@
 
             dialog.on('save', function () {
 
-                var id = objModel.get('id'), changes, options, def;
+                var id = objModel.get('id'), changes, options = dialogConfig.toJSON(), def;
 
                 if (objModel.isFolder()) {
                     changes = { permissions: permissionsView.collection.toJSON() };
-                    options = dialogConfig.toJSON();
                     def = folderAPI.update(id, changes, options);
                 } else {
                     changes = { object_permissions: permissionsView.collection.toJSON() };
-                    def = filesAPI.update({ id: id });
+                    def = filesAPI.update({ id: id }, changes, options);
                 }
 
                 def.then(

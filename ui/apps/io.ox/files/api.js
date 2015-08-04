@@ -773,12 +773,20 @@ define('io.ox/files/api', [
     // @param {object} file { id, folder_id }
     // @param {object} changes The changes to apply; not sent to server if empty
     //
-    api.update = function (file, changes) {
+    api.update = function (file, changes, options) {
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
         var model = api.pool.get('detail').get(_.cid(file));
         if (model) model.set(changes);
+
+        // build split data object to support notifications
+        options = options || {};
+        var data = { file: changes };
+
+        if (options.notification && !_.isEmpty(options.notification)) {
+            data.notification = options.notification;
+        }
 
         return http.PUT({
             module: 'files',
@@ -787,7 +795,7 @@ define('io.ox/files/api', [
                 id: file.id,
                 timestamp: _.then()
             },
-            data: changes,
+            data: data,
             appendColumns: false
         })
         .done(function () {
