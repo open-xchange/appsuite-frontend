@@ -86,4 +86,37 @@
         }
     });
 
+    function toggleFolderView(e) {
+        e.preventDefault();
+        e.data.app.folderView.toggle(e.data.state);
+    }
+
+    function onFolderViewOpen() {
+        $('.myshares-list').parent().removeClass('toolbar-bottom-visible');
+    }
+
+    function onFolderViewClose() {
+        $('.myshares-list').parent().addClass('toolbar-bottom-visible');
+    }
+
+    ext.point('io.ox/files/share/myshares/list-view/toolbar/bottom').extend({
+        id: 'toggle-folderview',
+        index: 200,
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="toolbar-item" tabindex="1">')
+                .attr('title', gt('Open folder view'))
+                .append($('<i class="fa fa-angle-double-right">'))
+                .on('click', { app: baton.app, state: true }, toggleFolderView)
+            );
+
+            baton.app.on({
+                'folderview:open': onFolderViewOpen.bind(null, baton.app),
+                'folderview:close': onFolderViewClose.bind(null, baton.app)
+            });
+
+            if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
+        }
+    });
+
 });
