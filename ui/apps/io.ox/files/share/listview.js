@@ -64,7 +64,9 @@ define('io.ox/files/share/listview', [
                     break;
                 case 'name':
                     this.collection.comparator = function (shareA, shareB) {
-                        var ret = (shareA.getDisplayName().toLowerCase() > shareB.getDisplayName().toLowerCase()) ? 1 : -1;
+                        var a = (shareA.isFolder() ? '0' : '1') + shareA.getDisplayName().toLowerCase(),
+                            b = (shareB.isFolder() ? '0' : '1') + shareB.getDisplayName().toLowerCase();
+                        var ret = a > b ? 1 : -1;
                         return desc ? -ret : ret;
                     };
                     break;
