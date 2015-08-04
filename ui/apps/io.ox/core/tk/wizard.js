@@ -496,8 +496,6 @@ define('io.ox/core/tk/wizard', [
 
             function cont() {
 
-                this.trigger('before:show');
-
                 // make invisible and add to DOM to allow proper alignment
                 this.$el.addClass('invisible').appendTo('body');
 
@@ -554,7 +552,7 @@ define('io.ox/core/tk/wizard', [
             }
 
             return function () {
-                this.trigger('init:show');
+                this.trigger('before:show');
 
                 if (_.device('smartphone')) return handleSmartphone.call(this);
 
