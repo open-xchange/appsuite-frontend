@@ -51,28 +51,30 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dd class="size">').text(sizeString),
                 // modified
                 $('<dt>').text(gt('Modified')),
-                $('<dd class="modified">').text(dateString),
+                $('<dd class="modified">').append(
+                    $.txt(dateString), $('<br>'), UserAPI.getTextNode(modifiedBy)
+                ),
                 // path; using "Folder" instead of "Save in" because that one
                 // might get quite long, e.g. "Gespeichert unter"
                 $('<dt>').text(gt('Folder')),
                 $('<dd class="saved-in">')
             );
 
-            UserAPI.getName(modifiedBy)
-                .done(function (name) {
-                    dl.find('.size').after(
-                        // modified
-                        $('<dt>').text(gt('Modified by')),
-                        $('<dd class="modified-by">').text(name));
-                })
-                .fail(function () {
-                    dl.find('.size').after(
-                        // modified
-                        $('<dt>').text(gt('Modified by')),
-                        $('<dd class="modified-by">').text(gt('unknown')));
-                });
+            // UserAPI.getName(modifiedBy)
+            //     .done(function (name) {
+            //         dl.find('.size').after(
+            //             // modified
+            //             $('<dt>').text(gt('Modified by')),
+            //             $('<dd class="modified-by">').text(name));
+            //     })
+            //     .fail(function () {
+            //         dl.find('.size').after(
+            //             // modified
+            //             $('<dt>').text(gt('Modified by')),
+            //             $('<dd class="modified-by">').text(gt('unknown')));
+            //     });
 
-            if (!capabilities.has('alone')) {
+            if (!capabilities.has('alone') && !capabilities.has('guest')) {
                 FolderAPI.get(baton.model.get('folder_id')).done(function (folderData) {
                     // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
                     if (FolderAPI.is('infostore', folderData)) {
