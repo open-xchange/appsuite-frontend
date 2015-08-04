@@ -214,7 +214,7 @@ define('io.ox/core/tk/wizard', [
 
         spotlight: function (selector) {
             if (!selector) return;
-            var elem = $(selector + ':visible');
+            var elem = $(selector).filter(':visible');
             if (!elem.length) return;
             var bounds = getBounds(elem);
             // apply positions (top, right, bottom, left)
@@ -241,7 +241,7 @@ define('io.ox/core/tk/wizard', [
         },
 
         positionHotspot: function (hotspot, options) {
-            var elem = $(options.selector + ':visible');
+            var elem = $(options.selector).filter(':visible');
             if (!elem.length) return elem;
             var bounds = getBounds(elem);
             return hotspot.css({
@@ -594,7 +594,7 @@ define('io.ox/core/tk/wizard', [
 
         // show hotspot
         hotspot: function (selector, options) {
-            this.options.hotspot = _.isArray(selector) ? selector : [selector, options];
+            this.options.hotspot = _.isArray(selector) ? selector : [[selector, options]];
             this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
             return this;
         },
@@ -645,7 +645,7 @@ define('io.ox/core/tk/wizard', [
                 if (!selector) return;
 
                 // align automatically
-                var elem = $(selector + ':visible');
+                var elem = $(selector).filter(':visible');
                 if (!elem.length) return;
 
                 // remove default class and reset all inline positions
