@@ -48,21 +48,20 @@
 
 }
 .myshares-list {
-    &.visible-selection.has-focus .list-item.selected {
-        a, i, i:before { color: white; }
-    }
-    .displayname {.ellipsis(); }
 
-    .breadcrumb-view {
-        overflow: hidden;
-        a {
-            color: #333;
-        }
-    }
+    &.visible-selection.has-focus .list-item.selected a { color: white; }
+
     .list-item-content {
         display: table;
         table-layout: fixed;
         width: 100%;
+
+        .displayname { .ellipsis(); }
+
+        .breadcrumb-view {
+            overflow: hidden;
+            a { color: #333; }
+        }
 
         .list-item-column.column-2, .list-item-column.column-3 {
             width: 50%;
@@ -71,114 +70,6 @@
         }
     }
 }
-
-/* .myshares-view {
-    * {
-        .user-select(none);
-    }
-
-    font-size: 13px;
-
-    background-color: #fff;
-
-    .classic-toolbar {
-        .title {
-            font-weight: bold;
-            display: inline-block;
-            line-height: 22px;
-            padding: 8px 16px;
-            text-decoration: none;
-            float: left;
-            outline: 0;
-        }
-        & > li:last-child > a:first-child {
-            color: #777;
-        }
-    }
-
-    ul.abs {
-        top:40px;
-        .overflow-y(auto);
-    }
-
-    .share-view {
-        cursor: pointer;
-        position: relative;
-        line-height: 16px;
-        padding: 4px 16px 4px 16px;
-
-        &:nth-child(odd) {
-            background-color: #f5f5f5;
-        }
-
-        .share-wrapper {
-
-            display: table;
-            table-layout: fixed;
-            width: 100%;
-
-            &>* {
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .icon {
-                width: 30px;
-                padding-right: 10px;
-                color: #777;
-                font-size:14px;
-                .fa.file-type-icon {
-                    position: relative;
-                    left: -2px;
-                }
-            }
-
-            .displayname {
-                .ellipsis();
-                width: 50%;
-            }
-
-            .breadcrumb-view {
-                width: 50%;
-                overflow: hidden;
-                a {
-                    color: #333;
-                    opacity: .5;
-                }
-            }
-
-            .url {
-                display: none;
-            }
-
-            .date {
-                .ellipsis();
-                color: #333;
-                opacity: .5;
-                width: 85px;
-                text-align: right;
-                @media all and (max-width: 480px) {
-                    display: none;
-                }
-            }
-
-            .actions {
-
-                .ellipsis();
-                width: 85px;
-                text-align: right;
-
-                a {
-                    padding: 6px;
-                }
-            }
-
-        }
-
-    }
-
-}
-*/
 
 .share-permissions-dialog {
 

@@ -36,7 +36,7 @@ define('io.ox/files/share/listview', [
 
             ListView.prototype.initialize.call(this, options);
 
-            this.$el.addClass('myshares-list');
+            this.$el.addClass('myshares-list column-layout');
 
             this.getShares();
         },
