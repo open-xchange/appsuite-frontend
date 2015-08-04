@@ -291,8 +291,8 @@ define('io.ox/core/tk/list',
         },
 
         setCollection: function (collection) {
-            // remove listeners
-            this.stopListening(this.collection);
+            // remove listeners; make sure this.collection is an object otherwise we remove all listeners
+            if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
             this.toggleComplete(false);
             this.listenTo(collection, {
@@ -342,8 +342,9 @@ define('io.ox/core/tk/list',
         },
 
         connect: function (loader) {
-            // remove listeners
-            this.stopListening(this.collection);
+
+            // remove listeners; make sure this.collection is an object otherwise we remove all listeners
+            if (this.collection) this.stopListening(this.collection);
             this.collection = loader.getDefaultCollection();
             this.loader = loader;
 
