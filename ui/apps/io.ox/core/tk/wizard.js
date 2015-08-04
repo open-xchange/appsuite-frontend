@@ -250,7 +250,7 @@ define('io.ox/core/tk/wizard', [
         },
 
         positionHotspot: function (hotspot, options) {
-            var elem = $(options.selector + ':visible');
+            var elem = $(options.selector).filter(':visible');
             if (!elem.length) return elem;
             var bounds = getBounds(elem);
             return hotspot.css({
@@ -604,7 +604,7 @@ define('io.ox/core/tk/wizard', [
 
         // show hotspot
         hotspot: function (selector, options) {
-            this.options.hotspot = _.isArray(selector) ? selector : [selector, options];
+            this.options.hotspot = _.isArray(selector) ? selector : [[selector, options]];
             this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
             return this;
         },
