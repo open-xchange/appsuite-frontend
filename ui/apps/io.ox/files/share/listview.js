@@ -39,6 +39,13 @@ define('io.ox/files/share/listview', [
             this.$el.addClass('myshares-list column-layout');
 
             this.getShares();
+
+            this.listenTo(this.collection, 'reset sort', this.redraw);
+
+            this.listenTo(ox, 'refresh^', this.getShares);
+
+            this.listenTo(this.model, 'change:sort change:order', this.sortBy);
+
         },
 
         getShares: function () {
@@ -47,24 +54,18 @@ define('io.ox/files/share/listview', [
                 self.collection.reset(data);
             });
         },
-        sortBy: function (model) {
-            var desc = model.get('order') === 'desc';
-            switch (model.get('sort')) {
+        sortBy: function () {
+            var desc = this.model.get('order') === 'desc';
+            switch (this.model.get('sort')) {
                 case 'date':
                     this.collection.comparator = function (shareA) {
-                        return desc ? shareA.get('created') : -shareA.get('created');
+                        return desc ? shareA.get('last_modified') : -shareA.get('last_modified');
                     };
                     break;
                 case 'name':
                     this.collection.comparator = function (shareA, shareB) {
                         var ret = (shareA.getDisplayName().toLowerCase() > shareB.getDisplayName().toLowerCase()) ? 1 : -1;
                         return desc ? -ret : ret;
-                    };
-                    break;
-                case 'type':
-                    this.collection.comparator = function (shareA) {
-                        var ret = shareA.isFolder() ? 1 : -1;
-                        return desc ? ret : -ret;
                     };
                     break;
                 default:

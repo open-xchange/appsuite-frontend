@@ -353,6 +353,8 @@ define('io.ox/files/main', [
                             noSwipe: true
                         });
 
+                        app.mysharesListView.model.set({ sort: 'name', order: 'asc' });
+
                         app.mysharesListView.toggleCheckboxes(false);
 
                         app.mysharesListViewControl = new ListViewControl({
@@ -384,6 +386,8 @@ define('io.ox/files/main', [
                                 }
                             });
                         })();
+
+                        window.myshareslist = app.mysharesListView;
 
                         app.getWindow().nodes.body.prepend(app.mysharesListViewControl.render().$el);
                         app.mysharesListViewControl.$el.siblings().hide();

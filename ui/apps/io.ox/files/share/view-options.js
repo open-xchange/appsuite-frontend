@@ -32,32 +32,6 @@
         }
     });
 
-    //
-    // View dropdown
-    //
-
-    ext.point('io.ox/files/share/myshares/view-options').extend({
-        id: 'sort',
-        index: 100,
-        draw: function () {
-            this.data('view')
-                .option('sort', 702, gt('Name'))
-                .option('sort',   5, gt('Date'))
-                .option('sort', 704, gt('Size'));
-        }
-    });
-
-    ext.point('io.ox/files/share/myshares/view-options').extend({
-        id: 'order',
-        index: 200,
-        draw: function () {
-            this.data('view')
-                .divider()
-                .option('order', 'asc', gt('Ascending'))
-                .option('order', 'desc', gt('Descending'));
-        }
-    });
-
     ext.point('io.ox/files/share/myshares/list-view/toolbar/top').extend({
         id: 'dropdown',
         index: 1000,
@@ -66,14 +40,16 @@
             var dropdown = new Dropdown({
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
-                model: baton.model,
+                model: baton.app.mysharesListView.model,
                 caret: true
-            });
+            })
+            .option('sort', 'name', gt('Name'))
+            .option('sort', 'date', gt('Date'))
+            .divider()
+            .option('order', 'asc', gt('Ascending'))
+            .option('order', 'desc', gt('Descending'));
 
-            ext.point('io.ox/files/share/myshares/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
-                e.stopPropagation();
-            }));
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right'));
         }
     });
 
