@@ -572,7 +572,8 @@
 
         showByModel: function (model, options) {
             // TODO: this is a weak check
-            model = new shareModel.Share(model.has('folder_id') ? model.pick('id', 'folder_id') : model.pick('id'));
+            var isFile = model.isFile ? model.isFile() : model.has('folder_id');
+            model = new shareModel.Share(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions().done(function () {
                 that.show(model, options);
             });
