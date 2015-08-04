@@ -543,7 +543,7 @@ define('io.ox/files/actions', [
         id: 'invite',
         label: gt('Invite people'),
         //#. sharing: a guest user will be created for the owner of that email address
-        description: gt('Only the email address owner can view or edit'),
+        description: gt('Only the owner of the email address can view or edit'),
         ref: 'io.ox/files/actions/invite'
     });
 
