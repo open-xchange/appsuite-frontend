@@ -132,23 +132,54 @@ define('io.ox/core/extPatterns/links', [
         actions.invoke(extension.ref, extension, baton);
     }
 
+    var ActionLinkDescription = function (baton, extension, link) {
+        var process = this.attr('data-described') || !!extension.description;
+        if (!process) return;
+
+        // add least one desription exists so inject dividers
+        if (!extension.description)  { return injectDescriptionDividers(this);}
+
+        // add help description
+        var id = extension.ref.replace(/\//g, '-') + '-descr';
+        link.attr('aria-describedby', id);
+        this.append(
+            $('<li>')
+                .attr({
+                    id: id,
+                    'data-section': extension.ref,
+                    role: 'presentation',
+                    class: 'dropdown-header dropdown-description'
+                })
+                .text(extension.description)
+                .on('click', { baton: baton, extension: extension }, actionClick)
+        );
+        // flag parent
+        this.attr('data-described', true);
+        // update dividers
+        injectDescriptionDividers(this);
+    };
+
     var ActionLink = function (id, extension) {
         extension = extension || {};
         extension = _.extend({
             ref: id + '/' + extension.id,
             draw: function (baton) {
+                var link;
                 baton = ext.Baton.ensure(baton);
+                // add action
                 this.append(
                     $('<li>').attr({ role: 'presentation' }).append(
-                        $('<a>').attr({
-                            'data-action': extension.ref,
-                            role: 'menuitem',
-                            href: '#',
-                            tabindex: 1
-                        }).text(extension.label)
-                        .on('click', { baton: baton, extension: extension }, actionClick)
+                        link = $('<a>').attr({
+                                    'data-action': extension.ref,
+                                    role: 'menuitem',
+                                    href: '#',
+                                    tabindex: 1
+                                }).text(extension.label)
+                                .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
+                // handle possible
+                ActionLinkDescription.call(this, baton, extension, link);
             }
         }, extension);
         ext.point(id).extend(extension);
@@ -303,6 +334,27 @@ define('io.ox/core/extPatterns/links', [
             this.children('.dropdown').children('a').addClass('btn btn-primary');
         };
     };
+
+    // surround action-description-block with dividers
+    function injectDescriptionDividers(node) {
+        // loop over all items and visually group by "section"
+        var list = node.children('li');
+        node.children('li').each(function (index, node) {
+            var node = $(node);
+            // get descriptions
+            if (!node.hasClass('dropdown-description')) return;
+            // related link is not first child && divider not already added
+            if ((index - 1 >= 1) && !node.prev().prev().hasClass('divider')) {
+                $(list[index - 1]).before('<li class="divider" role="presentation">');
+            }
+            // description is not last child
+            if (index === list.length - 1) return;
+            // divider not already added
+            if (!node.next().hasClass('divider')) {
+                node.after('<li class="divider" role="presentation">');
+            }
+        });
+    }
 
     function injectDividers(node) {
         // loop over all items and visually group by "section"
