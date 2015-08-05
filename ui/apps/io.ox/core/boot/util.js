@@ -73,7 +73,8 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         fail: function (error, focus) {
-            exports.restore();
+            // restore form
+            this.restore();
 
             // show error
             if (error && error.error === '0 general') {
@@ -91,8 +92,6 @@ define('io.ox/core/boot/util', [], function () {
             } else {
                 this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
             }
-            // restore form
-            this.restore();
             // reset focus
             var id = (_.isString(focus) && focus) || (this.isAnonymous() && 'password') || 'username';
             $('#io-ox-login-' + id).focus().select();
