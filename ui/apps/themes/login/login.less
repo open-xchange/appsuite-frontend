@@ -119,12 +119,6 @@ html.baseline {
         margin: 0;
     }
 
-    .password, .password, .username {
-        input {
-            font-size: 16px;
-        }
-    }
-
     &.relogin {
         right: auto;
         left: 50%;
@@ -213,6 +207,10 @@ html.baseline {
             box-shadow: 0 0 8px 2px rgba(157, 207, 255, 1);
             outline: 0;
         }
+    }
+
+    input:not([type='submit']) {
+        font-size: 16px;
     }
 
     .row.password-retype {
