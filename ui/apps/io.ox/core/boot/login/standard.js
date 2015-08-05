@@ -55,7 +55,6 @@ define('io.ox/core/boot/login/standard', [
                     _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder });
                 }
                 // success
-                util.restore();
                 ox.trigger('login:success', data);
             },
             function (err) {

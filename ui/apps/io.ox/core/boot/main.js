@@ -121,6 +121,7 @@ define('io.ox/core/boot/main', [
             .done(function (load) {
                 util.debug('Load UI > current language and core plugins DONE.');
                 gettext.enable();
+                util.restore();
                 load();
             });
         }
