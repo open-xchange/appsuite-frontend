@@ -13,9 +13,11 @@
 
 /* This is not the files, drive or infostore api, use 'io.ox/files/api' for that!
 *  This api provides functions for integrating external filestorages, like Dropbox or Google Drive
+*  Before the first use of this api please check the rampup attribute. If it is false call the rampup function to make sure caches are correctly filled.
+*  Otherwise functions like isStorageAvailable or getAccountForOauth don't work correctly. Those functions were designed without deferreds so they can be used in if statements
 */
 
-define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
+define('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
@@ -25,10 +27,38 @@ define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) 
         servicesCache = new Backbone.Collection(),
         // stores multiple backbone collections. One for every filestorageservice, is filled after getAllAccounts was called
         accountsCache = {},
-        // fill caches in advance
-        moduleDeferred = $.Deferred(),
 
         api = {
+            // if the api is ready to use or rampup function must be called
+            rampupDone: false,
+            // if the rampup failed, because server does not support external storages etc this attribute is true, so you don't call rampup again everytime
+            rampupFailed: false,
+            // always call this function if the rampupDone attribute is false or api will function incorrectly see comments above
+            rampup: function () {
+                // if rampup was called before there is no need to do it again.
+                if (api.rampupDone) {
+                    return $.Deferred().resolve();
+                } else if (api.rampupFailed) {
+                    $.Deferred().reject();
+                }
+
+                // pre fill caches and set rampupDone to true
+                // set rampupFailed to true otherwise
+                http.pause();
+                api.getAllServices();
+                api.getAllAccounts();
+                return http.resume()
+                    .done(function () {
+                        // no errors everything is ready and caches are up to date.
+                        api.rampupDone = true;
+                    })
+                    .fail(function (e) {
+                        // something went wrong, for example filestorages are not enabled on the server
+                        // set rampupfailed to true to indicate that a rampup was tried before but failed for whatever reasons
+                        api.rampupFailed = true;
+                        return e;
+                    });
+            },
             // returns a collection with all available file storage services
             getAllServices: function (filestorageService, useCache) {
                 // only ignore cache if useCache is set to false, undefined results in using the cache
@@ -50,17 +80,21 @@ define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) 
                 .then( function (services) {
                     servicesCache.reset(services);
                     _(services).each(function (service) {
-                        if (service.configuration && service.configuration.length > 0 && service.configuration[0].options) {
-                            // workarount until bug 40035 is resolved (config type and oauth serviceId don't not match)
-                            if (service.configuration[0].options.type === 'com.openexchange.oauth.onedrive') {
-                                service.configuration[0].options.type = 'com.openexchange.oauth.msliveconnect';
-                            }
-                            serviceConfigsCache[service.configuration[0].options.type] = {
-                                filestorageService: service.id,
-                                configuration: {
-                                    type: service.configuration[0].options.type
+                        try {
+                            if (service.configuration && service.configuration.length > 0 && service.configuration[0].options) {
+                                // workarount until bug 40035 is resolved (config type and oauth serviceId don't not match)
+                                if (service.configuration[0].options.type === 'com.openexchange.oauth.onedrive') {
+                                    service.configuration[0].options.type = 'com.openexchange.oauth.msliveconnect';
                                 }
-                            };
+                                serviceConfigsCache[service.configuration[0].options.type] = {
+                                    filestorageService: service.id,
+                                    configuration: {
+                                        type: service.configuration[0].options.type
+                                    }
+                                };
+                            }
+                        } catch (e) {
+                            console.error(e);
                         }
                     });
                     return servicesCache;
@@ -110,7 +144,7 @@ define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) 
                         if (!accountsCache[account.filestorageService]) {
                             accountsCache[account.filestorageService] = new Backbone.Collection();
                         }
-                        accountsCache[account.filestorageService].add(account);
+                        accountsCache[account.filestorageService].add(account, { merge: true });
                     });
                     return accountsCache;
                 });
@@ -165,6 +199,7 @@ define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) 
                 });
             },
             // utility function to create a filestorage account from an existing oauth account
+            // fails if rampup was not done before (configscache empty)
             createAccountFromOauth: function (oauthAccount) {
                 if (!oauthAccount) {
                     return $.Deferred().reject();
@@ -224,12 +259,17 @@ define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) 
                 );
             },
             // utility function to find storage accounts for a given oauth account, also used to limit storage accounts to one per oauth account
+            // fails if rampup was not done before (configscache empty)
             getAccountForOauth: function (oauthAccount) {
                 var account,
                     models;
-                if (oauthAccount && oauthAccount.serviceId && serviceConfigsCache[oauthAccount.serviceId] &&
-                    serviceConfigsCache[oauthAccount.serviceId].filestorageService && accountsCache[serviceConfigsCache[oauthAccount.serviceId].filestorageService]) {
-                    models = accountsCache[serviceConfigsCache[oauthAccount.serviceId].filestorageService].models;
+                try {
+                    if (oauthAccount && oauthAccount.serviceId && serviceConfigsCache[oauthAccount.serviceId] &&
+                        serviceConfigsCache[oauthAccount.serviceId].filestorageService && accountsCache[serviceConfigsCache[oauthAccount.serviceId].filestorageService]) {
+                        models = accountsCache[serviceConfigsCache[oauthAccount.serviceId].filestorageService].models;
+                    }
+                } catch (e) {
+                    console.error(e);
                 }
                 _(models).each(function (item) {
                     if (item.get('configuration').account === String(oauthAccount.id)) {
@@ -262,20 +302,12 @@ define.async('io.ox/core/api/filestorage', ['io.ox/core/http'], function (http) 
             },
             // returns true or false if there is a filestorage Service available for the given Oauth Account serviceId.
             // If serviceId is undefined an array with ids for all available serviceIds is returned
+            // fails if rampup was not done before (configscache empty)
             isStorageAvailable: function (serviceId) {
                 return serviceId ? !!serviceConfigsCache[serviceId] : _.keys(serviceConfigsCache);
             }
         };
 
-    // pre fill caches and return module
-    // ignore any failure otherwise the UI freezes
-    http.pause();
-    api.getAllServices();
-    api.getAllAccounts();
-    http.resume().always(function () {
-        moduleDeferred.resolve(api);
-    });
-
-    return moduleDeferred;
+    return api;
 
 });
