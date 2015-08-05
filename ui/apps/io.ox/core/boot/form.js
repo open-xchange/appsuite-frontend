@@ -24,6 +24,24 @@ define('io.ox/core/boot/form', [
 
     'use strict';
 
+    /**
+     * url params/values (all optional)
+     * ================================
+     *
+     * login_type:      [ 'guest' | 'anonymous' ]
+     * login_name:      [ something ]
+     *
+     * status:          [ 'reset_password' | 'invalid_request' ]
+     *
+     * message_type:    [ 'INFO' | 'ERROR' ]
+     * message:         [ something ]
+     *
+     * forgot-password: [ something ]
+     * share:           [ something ]
+     * confirm:         [ something ]
+     * autologout:      [ something ]
+     */
+
     return function () {
 
         var sc = ox.serverConfig, gt = util.gt, bindLogin = true;
