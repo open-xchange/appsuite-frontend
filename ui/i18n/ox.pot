@@ -7335,9 +7335,8 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js:334
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js:140
+#: apps/io.ox/oauth/keychain.js:130
 #: module:io.ox/core
-#: apps/io.ox/oauth/keychain.js:147
 msgid "Account added successfully"
 msgstr ""
 
@@ -7709,12 +7708,12 @@ msgstr ""
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1113
+#: apps/io.ox/mail/api.js:1116
 #: module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1390
+#: apps/io.ox/mail/api.js:1393
 #: module:io.ox/mail
 msgid "New Mail"
 msgstr ""
