@@ -95,7 +95,7 @@ define('io.ox/core/boot/form', [
 
         function guestLogin() {
             var loginName = _.url.hash('login_name');
-            $('#io-ox-login-username').hide();
+            $('.row.username').hide();
             if (!_.isEmpty(loginName)) {
                 $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
             }
@@ -109,7 +109,7 @@ define('io.ox/core/boot/form', [
         }
 
         function anonymousLogin() {
-            $('#io-ox-login-username').hide();
+            $('.row.username').hide();
             $('#io-ox-forgot-password').remove();
         }
 
