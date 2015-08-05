@@ -211,8 +211,12 @@ define('io.ox/mail/threadview', [
             // no change?
             if (this.model && this.model.cid === cid) return;
             // get new model
-            var model = api.pool.get('detail').get(cid);
-            if (!model) return;
+            var pool = api.pool.get('detail'), model = pool.get(cid);
+            if (!model) {
+                this.empty();
+                console.error('ThreadView.show(): Mail not found in pool', cid, pool);
+                return;
+            }
             // stop listening
             if (this.model) this.stopListening(this.model);
             // use new model
