@@ -828,7 +828,20 @@ define('io.ox/tours/main',
             }
 
             require(['settings!io.ox/tours', 'io.ox/tours/main'], function (tourSettings, thisIsStupid) {
-                tourLink.append(
+
+                function toggleVisibility() {
+                    var currentApp = ox.ui.App.getCurrentApp(),
+                        currentType = currentApp ? currentApp.attributes.name : null,
+                        isAvailable = currentType && thisIsStupid.isAvailable(currentType);
+
+                    if (!isAvailable || tourSettings.get('disableTours', false) || tourSettings.get('disable/' + currentType, false)) {
+                        tourLink.hide();
+                    } else {
+                        tourLink.show();
+                    }
+                }
+
+            	tourLink.append(
                     $('<a target="_blank" href="" role="menuitem">').text(gt('Guided tour for this app'))
                     .on('click', function (e) {
                         var currentApp = ox.ui.App.getCurrentApp(),
@@ -839,17 +852,8 @@ define('io.ox/tours/main',
                     })
                 );
 
-                ox.ui.windowManager.events.on('window.show', function () {
-                    var currentApp = ox.ui.App.getCurrentApp(),
-                        currentType = currentApp.attributes.name,
-                        isAvailable = thisIsStupid.isAvailable(currentType);
-
-                    if (tourSettings.get('disableTours', false) || tourSettings.get('disable/' + currentType, false) || !isAvailable) {
-                        tourLink.hide();
-                    } else {
-                        tourLink.show();
-                    }
-                });
+                ox.ui.windowManager.on('window.show', toggleVisibility);
+                toggleVisibility();
             });
         }
     });

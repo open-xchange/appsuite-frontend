@@ -77,6 +77,15 @@ define('io.ox/core/tk/wizard', [
         };
     }
 
+    // resolves strings, DOM node, or jQuery instances
+    // (returns either a valid jQuery collection with one element, or null)
+    function resolveSelector(selector) {
+        selector = $(selector).filter(':visible');
+        return selector.length ? selector.first() : null;
+    }
+
+    // align automatically
+
     //
     // Wizard/Tour
     //
@@ -178,12 +187,12 @@ define('io.ox/core/tk/wizard', [
             });
             if (_.device('smartphone')) this.container.remove().empty();
             // unregister / clean up
-            this.off();
             $(document).off('click.wizard');
             this.steps = [];
             this.container = null;
             // done
             this.trigger('stop');
+            this.off();
             this.closed = true;
             return this;
         },
@@ -241,7 +250,7 @@ define('io.ox/core/tk/wizard', [
         },
 
         positionHotspot: function (hotspot, options) {
-            var elem = $(options.selector + ':visible');
+            var elem = $(options.selector).filter(':visible');
             if (!elem.length) return elem;
             var bounds = getBounds(elem);
             return hotspot.css({
@@ -292,9 +301,9 @@ define('io.ox/core/tk/wizard', [
                 // check if "close" button exists
                 case 27: if (this.$('.close').length) this.trigger('close'); break;
                 // check if "back" button is enabled
-                case 37: if (!this.$('.back').prop('disabled')) this.trigger('back'); break;
+                case 37: if (!this.$('[data-action="back"]').prop('disabled')) this.trigger('back'); break;
                 // check if "next" button is enabled
-                case 39: if (!this.$('.next').prop('disabled')) this.trigger('next'); break;
+                case 39: if (!this.$('[data-action="next"]').prop('disabled')) this.trigger('next'); break;
             }
         },
 
@@ -309,6 +318,7 @@ define('io.ox/core/tk/wizard', [
                 // buttons
                 back: true,
                 next: true,
+                enableBack: true,
                 labelBack: gt('Back'),
                 labelDone: gt('Done')
             }, options);
@@ -425,13 +435,13 @@ define('io.ox/core/tk/wizard', [
 
         // enable/disable 'next' button
         toggleNext: function (state) {
-            this.$('.btn.next').prop('disabled', !state);
+            this.$('.btn[data-action="next"]').prop('disabled', !state);
             return this;
         },
 
         // enable/disable 'back' button
         toggleBack: function (state) {
-            this.$('.btn.back').prop('disabled', !state);
+            this.$('.btn[data-action="back"]').prop('disabled', !state);
             return this;
         },
 
@@ -454,17 +464,18 @@ define('io.ox/core/tk/wizard', [
         // considers 'navigateTo' and 'waitFor' (both async)
         show: (function () {
 
-            var counter = 0;
-
             function navigateTo() {
-                ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(waitFor.bind(this));
+                ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(function () {
+                    var callback = this.options.navigateTo.callback || _.noop;
+                    $.when(callback.call(this)).done(waitFor.bind(this, 0));
+                }.bind(this));
             }
 
-            function waitFor() {
-                if (!this.options.waitFor || $(this.options.waitFor).is(':visible')) return cont.call(this);
-                counter++;
+            function waitFor(counter) {
+                if (!this.options.waitFor || resolveSelector(this.options.waitFor)) return cont.call(this);
+                counter = counter || 0;
                 if (counter < 50) {
-                    setTimeout(waitFor.bind(this), 100);
+                    setTimeout(waitFor.bind(this, counter + 1), 100);
                 } else {
                     console.error('Step.show(). Stopped waiting for:', this.options.waitFor);
                     this.parent.close();
@@ -487,8 +498,6 @@ define('io.ox/core/tk/wizard', [
             }
 
             function cont() {
-
-                this.trigger('before:show');
 
                 // make invisible and add to DOM to allow proper alignment
                 this.$el.addClass('invisible').appendTo('body');
@@ -546,13 +555,14 @@ define('io.ox/core/tk/wizard', [
             }
 
             return function () {
+                this.trigger('before:show');
 
                 if (_.device('smartphone')) return handleSmartphone.call(this);
 
                 this.parent.toggleBackdrop(true);
 
                 if (this.options.navigateTo) navigateTo.call(this);
-                else if (this.options.waitFor) waitFor.call(this);
+                else if (this.options.waitFor) waitFor.call(this, 0);
                 else cont.call(this);
 
                 return this;
@@ -594,7 +604,7 @@ define('io.ox/core/tk/wizard', [
 
         // show hotspot
         hotspot: function (selector, options) {
-            this.options.hotspot = _.isArray(selector) ? selector : [selector, options];
+            this.options.hotspot = _.isArray(selector) ? selector : [[selector, options]];
             this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
             return this;
         },
@@ -618,8 +628,8 @@ define('io.ox/core/tk/wizard', [
         },
 
         // set 'navigateTo' option; defines which app to start
-        navigateTo: function (id, options) {
-            this.options.navigateTo = { id: id, options: options };
+        navigateTo: function (id, options, callback) {
+            this.options.navigateTo = { id: id, options: options, callback: callback };
             return this;
         },
 
@@ -631,52 +641,50 @@ define('io.ox/core/tk/wizard', [
         },
 
         // auto-align popup (used internally)
-        align: (function () {
+        align: function (selector) {
 
-            function set($el, key, value) {
-                value = Math.max(16, value);
+            // if nothing is defined the step is centered
+            var elem = resolveSelector(selector || this.options.referTo || this.options.spotlight);
+            if (!elem) return;
+
+            var $el = this.$el;
+            var bounds = getBounds(elem), popupWidth = $el.width(), popupHeight = $el.height();
+
+            function set(key, value, size, available) {
+                value = Math.min(Math.max(16, value), available - size - 16);
                 $el.css(key, value);
             }
 
-            return function (selector) {
+            function setLeft(value) {
+                set('left', value, popupWidth, bounds.availableWidth);
+            }
 
-                // if nothing is defined the step is centered
-                selector = selector || this.options.referTo || this.options.spotlight;
-                if (!selector) return;
+            function setTop(value) {
+                set('top', value, popupHeight, bounds.availableHeight);
+            }
 
-                // align automatically
-                var elem = $(selector + ':visible');
-                if (!elem.length) return;
+            // remove default class and reset all inline positions
+            this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
 
-                // remove default class and reset all inline positions
-                this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
+            if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
+                // enough room to appear on the right side
+                setLeft(bounds.left + bounds.width + 16);
+                setTop(bounds.top);
+            } else if ((bounds.top + bounds.height + popupHeight) < bounds.availableHeight) {
+                // enough room to appear below
+                setLeft(bounds.left);
+                setTop(bounds.top + bounds.height + 16);
+            } else if ((bounds.left - popupWidth) > 0) {
+                // enough room to appear on the left side
+                setLeft(bounds.left - popupWidth - 16);
+                setTop(bounds.top);
+            } else {
+                // otherwise
+                this.$el.addClass('center middle');
+            }
 
-                var bounds = getBounds(elem), popupWidth = this.$el.width(), popupHeight = this.$el.height();
-
-                if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
-                    // enough room to appear on the right side
-                    set(this.$el, 'left', bounds.left + bounds.width + 16);
-                    set(this.$el, 'top', bounds.top);
-                } else if ((bounds.top + bounds.height + popupHeight) < bounds.availableHeight) {
-                    // enough room to appear below
-                    set(this.$el, 'top', bounds.top + bounds.height + 16);
-                    set(this.$el, 'left', bounds.left);
-                } else if ((bounds.left - popupWidth) > 0) {
-                    // enough room to appear on the left side
-                    set(this.$el, 'left', bounds.left - popupWidth - 16);
-                    set(this.$el, 'top', bounds.top);
-                } else {
-                    // otherwise
-                    this.$el.addClass('center middle');
-                }
-
-                // fix positions
-                if ((bounds.left + popupWidth + 16) > bounds.availableWidth) this.$el.css('left', bounds.availableWidth - popupWidth - 16);
-                if ((bounds.top + popupHeight + 16) > bounds.availableHeight) this.$el.css('top', bounds.availableHeight - popupHeight - 16);
-
-                return this;
-            };
-        }()),
+            return this;
+        },
 
         // little helper to allow long chains while constructing a wizard or a tour
         end: function () {
