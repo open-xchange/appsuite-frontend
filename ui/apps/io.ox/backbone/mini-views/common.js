@@ -20,7 +20,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var InputView = AbstractView.extend({
-        el: $('<input type="text" class="form-control">'),
+        el: '<input type="text" class="form-control">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
@@ -44,7 +44,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var PasswordView = AbstractView.extend({
-        el: $('<input type="password" class="form-control">'),
+        el: '<input type="password" class="form-control">',
         events: { 'change': 'onChange' },
         onChange: function () {
             var value = this.$el.val();
@@ -76,7 +76,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var TextView = AbstractView.extend({
-        el: $('<input type="textarea" class="form-control">'),
+        el: '<textarea class="form-control">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val());
@@ -101,7 +101,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var CheckboxView = AbstractView.extend({
-        el: $('<input type="text">'),
+        el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.prop('checked'));
