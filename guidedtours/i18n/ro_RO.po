@@ -278,8 +278,7 @@ msgstr ""
 "sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
 "barei de unelte."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Invitarea altor participanți "
 
@@ -323,8 +322,8 @@ msgstr "Citirea detaliilor"
 msgid "Searching for objects"
 msgstr "Căutarea de obiecte"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
+#: apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Selectare unei vederi"
 
@@ -378,8 +377,7 @@ msgstr ""
 "fiecare fișier. Apăsați pe o pictogramă pentru a vizualiza detaliile și "
 "funcțiile suplimentare într-o fereastră pop-up. "
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Vederea pe liste"
 
@@ -675,9 +673,13 @@ msgstr ""
 "pe Pagina de pornire sau pe Cuprins în partea superioară a ferestrei."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "Pentru a deschide setările, apăsați pe pictograma Meniu sistem din partea "
 "dreapă sus a barei de meniu. Selectați Setări."
@@ -799,8 +801,7 @@ msgstr ""
 "Utilizați lista pentru a selecta un obiect, a afișa conținutul acestuia sau "
 "a activa anumite funcții."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Utilizarea funcției de memento"
 

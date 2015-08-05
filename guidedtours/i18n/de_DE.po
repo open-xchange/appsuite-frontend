@@ -280,8 +280,7 @@ msgstr ""
 "angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
 "Kontrollfelder."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Andere Teilnehmer einladen"
 
@@ -325,8 +324,8 @@ msgstr "Details lesen"
 msgid "Searching for objects"
 msgstr "Objekte suchen"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
+#: apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Eine Ansicht wählen"
 
@@ -378,8 +377,7 @@ msgstr ""
 "Zeigt für jede Datei ein Symbol und den Dateinamen. Klicken Sie auf ein "
 "Symbol, um im Popup weitere Details und Funktionen anzuzeigen."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Die Ansicht Liste"
 
@@ -680,9 +678,13 @@ msgstr ""
 "Startseite oder auf Inhaltsverzeichnis."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "Um die Einstellungen zu öffnen, klicken Sie in der Menüleiste rechts oben "
 "auf das Symbol Systemmenü. Wählen Sie Einstellungen."
@@ -805,8 +807,7 @@ msgstr ""
 "In der Liste wählen Sie ein Objekt, um seine Inhalte anzuzeigen oder "
 "Funktionen auszuführen."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Die Erinnerungsfunktion verwenden"
 

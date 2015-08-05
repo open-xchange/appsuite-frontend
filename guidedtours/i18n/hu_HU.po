@@ -277,8 +277,7 @@ msgstr ""
 "kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek "
 "ikonra."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "További résztvevők meghívása"
 
@@ -322,8 +321,8 @@ msgstr "Részletek olvasása"
 msgid "Searching for objects"
 msgstr "Elemek keresése"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
+#: apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Nézet kiválasztása"
 
@@ -376,8 +375,7 @@ msgstr ""
 "A Ikonnézet minden fájlhoz egy ikont és a fájlnevet jelenít meg. Az ikonra "
 "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Listanézet"
 
@@ -677,9 +675,13 @@ msgstr ""
 "részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
 "található Rendszer menü ikonra és válassza ki a Beállításokat."
@@ -802,8 +804,7 @@ msgstr ""
 "Használja a listát egy olyan elem kiválasztásához, amelynek tartalmát "
 "szeretné megnézni, vagy művelet kíván vele végrehajtani."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Emlékeztető funkció használata"
 
