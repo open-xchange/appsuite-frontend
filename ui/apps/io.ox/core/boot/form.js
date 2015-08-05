@@ -147,6 +147,8 @@ define('io.ox/core/boot/form', [
                 break;
         }
 
+        $('#io-ox-login-feedback').hide();
+
         // handle message params
         if (_.url.hash('message')) {
             var type = (_.url.hash('message_type') || 'info').toLowerCase();
