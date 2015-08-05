@@ -212,7 +212,10 @@ define('io.ox/core/boot/form', [
         }
 
         // update productname in password reset dialog
-        $('#io-ox-password-forget-form > .help-block').text(gt('Please enter your email address associated with ' + sc.productName + '. A link to a page where you can reset your passwort will be sent to you.'));
+        $('#io-ox-password-forget-form > .help-block').text(
+            //#. %1$s is the product name, e.g. OX App Suite
+            gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', sc.productName)
+        );
 
         util.debug('Load "signin" plugins & set default language');
 

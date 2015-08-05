@@ -191,10 +191,14 @@ html.baseline {
 }
 
 #io-ox-login-container {
+
     position: relative;
     max-width: 400px;
     top: 50%;
     .translate(0; -50%);
+
+    // fix visual center (a bit higher due to copyright line)
+    padding-bottom: 32px;
 
     a { color: #87B7E4; }
 
@@ -220,7 +224,8 @@ html.baseline {
     }
 
     .alert {
-        padding: 15px;
+
+        padding: 15px; // 16 minus 1
         .border-radius(4px);
 
         body.down & {
@@ -231,14 +236,14 @@ html.baseline {
         &.alert-info {
             color: #fff;
             background: rgba(0, 0, 0, 0.2);
-            border:1px solid rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.2);
         }
     }
 
     h1 {
         font-size: 40px;
         font-weight: 100;
-        margin: 16px 0 22px 0;
+        margin: 0 0 22px 0;
         line-height: 48px;
         padding-top: 2px;
     }
@@ -258,9 +263,7 @@ html.baseline {
 }
 
 #io-ox-login-feedback {
-    margin-top: 13px;
-    margin-bottom: 13px;
-    min-height: 3em; /* for busy animation */
+    margin-bottom: 8px;
 }
 
 #io-ox-backtosignin {
