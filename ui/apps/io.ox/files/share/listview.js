@@ -40,12 +40,9 @@ define('io.ox/files/share/listview', [
 
             this.getShares();
 
-            this.listenTo(this.collection, 'reset sort', this.redraw);
-
+            this.listenTo(this.collection, 'reset', this.redraw);
             this.listenTo(ox, 'refresh^', this.getShares);
-
             this.listenTo(this.model, 'change:sort change:order', this.sortBy);
-
         },
 
         getShares: function () {
@@ -54,6 +51,7 @@ define('io.ox/files/share/listview', [
                 self.collection.reset(data);
             });
         },
+
         sortBy: function () {
             var desc = this.model.get('order') === 'desc';
             switch (this.model.get('sort')) {
@@ -72,7 +70,12 @@ define('io.ox/files/share/listview', [
                     break;
                 default:
             }
-            this.collection.sort();
+            // the list view needs a proper "index" attribute for sorting
+            this.collection.sort({ silent: true });
+            this.collection.each(function (model, index) {
+                model.set('index', index);
+            });
+            this.collection.trigger('sort');
         }
     });
 

@@ -228,7 +228,7 @@ define('io.ox/files/share/model', [
     var Share = Backbone.Model.extend({
 
         initialize: function () {
-
+            this.cid = this.isFolder() ? 'folder.' + this.get('id') : _.cid(this.attributes);
         },
 
         isFile: function () {
