@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="row buttons">
-                        <div class="col-sm-6 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12">
                             <input type="submit" name="signin"
                                 id="io-ox-login-button" class="btn btn-primary form-control"
                                 value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
@@ -111,7 +111,11 @@
 
                 {{!-- forget password dialog (sharing) --}}
                 <form action="/appsuite/api/share/reset/password" method="get" id="io-ox-password-forget-form" style="display:none;" novalidate>
-                    <p class="help-block"></p>
+                    <div class="row help">
+                        <div class="col-xs-12">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
                     <div class="row email">
                         <div class="form-group col-xs-12">
                             <label for="io-ox-login-restoremail" class="sr-only" data-i18n="Email">Email</label>
@@ -126,7 +130,7 @@
                                 id="resetpassword-button" class="btn btn-primary form-control"
                                 value="Reset my password" data-i18n="Next" data-i18n-attr="value,aria-label">
                         </div>
-                        <div class="col-md-6 col-xs-12 text-right" id="io-ox-backtosignin">
+                        <div class="col-sm-6 col-xs-12 text-right" id="io-ox-backtosignin">
                             <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
                         </div>
                     </div>
