@@ -193,6 +193,9 @@ define('io.ox/core/boot/form', [
             $('#io-ox-login-username')[0].type = 'text';
         }
 
+        // update productname in password reset dialog
+        $('#io-ox-password-forget-form > .help-block').text(gt('Please enter your email address associated with ' + sc.productName + '. A link to a page where you can reset your passwort will be sent to you.'));
+
         util.debug('Load "signin" plugins & set default language');
 
         // make sure we get 'signin' plugins
