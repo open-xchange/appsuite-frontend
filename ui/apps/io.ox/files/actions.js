@@ -543,7 +543,7 @@ define('io.ox/files/actions', [
         id: 'invite',
         label: gt('Invite people'),
         //#. sharing: a guest user will be created for the owner of that email address
-        description: gt('Only the owner of the email address can view or edit'),
+        description: gt('Every recipient gets an individual link. Guests can also create and change files.'),
         ref: 'io.ox/files/actions/invite'
     });
 
@@ -552,7 +552,7 @@ define('io.ox/files/actions', [
         id: 'getalink',
         label: gt('Get a link'),
         //#. sharing: a link will be created
-        description: gt('Anyone with this link can view'),
+        description: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
         ref: 'io.ox/files/actions/getalink'
     });
 
