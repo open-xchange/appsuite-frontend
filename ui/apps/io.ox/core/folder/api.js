@@ -1010,9 +1010,16 @@ define('io.ox/core/folder/api', [
 
     function reload() {
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
-            get(id, { cache: false });
+            // register function call once
+            if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
+            reload.hash[id]();
         });
     }
+
+    // to debounce reloading folders
+    reload.hash = {};
+    // interval
+    reload.wait = 2000;
 
     //
     // Hide/show (flat) folder
