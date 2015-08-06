@@ -80,19 +80,19 @@ define('io.ox/files/share/listview', [
     });
 
     var getPermissions = function (baton) {
-        return _(_(baton.model.getPermissions()).pluck('type')).uniq();
-    },
-    hasGuests = function (baton) {
-        return _(getPermissions(baton)).contains('guest');
-    },
+            return _(_(baton.model.getPermissions()).pluck('type')).uniq();
+        },
+        hasGuests = function (baton) {
+            return _(getPermissions(baton)).contains('guest');
+        },
 
-    isPublic = function (baton) {
-        return _(getPermissions(baton)).contains('anonymous');
-    },
+        isPublic = function (baton) {
+            return _(getPermissions(baton)).contains('anonymous');
+        },
 
-    hasUser = function (baton) {
-        return _(getPermissions(baton)).contains('user') || _(getPermissions(baton)).contains('group');
-    };
+        hasUser = function (baton) {
+            return _(getPermissions(baton)).contains('user') || _(getPermissions(baton)).contains('group');
+        };
 
     //
     // Extensions
@@ -173,7 +173,7 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user">').toggleClass('gray', hasUser(baton))
+                        $('<i class="fa fa-user">').toggleClass('gray', !hasUser(baton))
                     )
                 );
             }
@@ -184,7 +184,7 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user-plus">').toggleClass('gray', hasGuests(baton))
+                        $('<i class="fa fa-user-plus">').toggleClass('gray', !hasGuests(baton))
                     )
                 );
             }
@@ -195,7 +195,7 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-link">').toggleClass('gray', isPublic(baton))
+                        $('<i class="fa fa-link">').toggleClass('gray', !isPublic(baton))
                     )
                 );
             }
