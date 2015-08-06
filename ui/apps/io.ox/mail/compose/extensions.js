@@ -341,12 +341,13 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                if (capabilities.has('infostore')) {
-                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
-                        fileInput = $('<input type="file" name="file">').css('display', 'none')
-                            .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true);
+                var fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
+                        .on('change', addLocalFile.bind(this, baton.model))
+                        // multiple is off on smartphones in favor of camera roll/capture selection
+                        .prop('multiple', _.device('!smartphone'));
 
+                if (capabilities.has('infostore')) {
+                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true });
                     this.append(
                         fileInput,
                         dropdown.append(
@@ -361,14 +362,18 @@ define('io.ox/mail/compose/extensions', [
                         .render().$el
                     );
                 } else {
-                    this.append($('<button type="button" class="btn btn-link hidden-file-picker">').append(
-                        $('<span class="hidden">'),
-                        $.txt(gt('Attachments')),
+                    this.append(
                         // file input
-                        $('<input type="file" name="file" tabindex="1">')
-                            .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true)
-                    ));
+                        fileInput,
+                        $('<button type="button" class="btn btn-link">')
+                            .text(gt('Attachments'))
+                            .on('click', function () {
+                                //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                                //in file picker dialog - other browsers still seem to work)
+                                fileInput[0].value = '';
+                                fileInput.trigger('click');
+                            })
+                    );
                 }
             };
 
