@@ -472,12 +472,13 @@ define('io.ox/core/tk/wizard', [
             }
 
             function waitFor(counter) {
-                if (!this.options.waitFor || resolveSelector(this.options.waitFor)) return cont.call(this);
+                if (resolveSelector(this.options.waitFor.selector)) return cont.call(this);
+                var max = _.isNumber(this.options.waitFor.timeout) ? (this.options.waitFor.timeout * 10) : 50;
                 counter = counter || 0;
-                if (counter < 50) {
+                if (counter < max) {
                     setTimeout(waitFor.bind(this, counter + 1), 100);
                 } else {
-                    console.error('Step.show(). Stopped waiting for:', this.options.waitFor);
+                    console.error('Step.show(). Stopped waiting for:', this.options.waitFor.selector);
                     this.parent.close();
                 }
             }
@@ -622,8 +623,8 @@ define('io.ox/core/tk/wizard', [
         },
 
         // wait for element for be visible
-        waitFor: function (selector) {
-            this.options.waitFor = selector;
+        waitFor: function (selector, timeout) {
+            this.options.waitFor = { selector: selector, timout: timeout };
             return this;
         },
 
