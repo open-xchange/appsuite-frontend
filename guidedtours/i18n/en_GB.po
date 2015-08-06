@@ -222,7 +222,7 @@ msgstr "Additional information"
 msgid "Getting started"
 msgstr "Getting started"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Guided tour for this app"
 
@@ -276,7 +276,8 @@ msgstr ""
 "the left side of the E-Mail messages. If the checkboxes are not displayed, "
 "click on View > Checkboxes on the right side of the tool bar."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Inviting other participants"
 
@@ -320,8 +321,8 @@ msgstr "Reading the details"
 msgid "Searching for objects"
 msgstr "Searching for objects"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Selecting a view"
 
@@ -373,7 +374,8 @@ msgstr ""
 "The Icons view displays an icon and the file name for each file. Click on an "
 "icon to view additional details and functions in the pop-up."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "The List view"
 
@@ -775,7 +777,8 @@ msgid ""
 msgstr ""
 "Use the list to select an object, show its contents or activate functions."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Using the reminder function"
 

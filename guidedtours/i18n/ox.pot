@@ -700,7 +700,7 @@ msgstr ""
 msgid "Getting started"
 msgstr ""
 
-#: apps/io.ox/tours/main.js:832
+#: apps/io.ox/tours/main.js:845
 #: module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr ""

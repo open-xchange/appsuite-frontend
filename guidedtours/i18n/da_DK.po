@@ -222,7 +222,7 @@ msgstr "Yderligere information"
 msgid "Getting started"
 msgstr "Kom i gang"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Guidet tur for denne app"
 
@@ -276,7 +276,8 @@ msgstr ""
 "e-mailene markeres. Hvis tjekboksen ikke er synlig, klik Visning > Tjekbokse "
 "i højre side af værktøjslinjen."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Inviterer andre deltagere"
 
@@ -320,8 +321,8 @@ msgstr "Læser detaljerne"
 msgid "Searching for objects"
 msgstr "Søger efter objekter"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Vælger en visning"
 
@@ -373,7 +374,8 @@ msgstr ""
 "Ikonvisningen viser et ikon og filnavnet for hver fil.  Klik på en ikon for "
 "at se flere detaljer og funktioner i pop-op-vinduet."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Listevisningen"
 
@@ -780,7 +782,8 @@ msgstr ""
 "Brug listen til at vælge et objekt, for at se dets indhold eller aktivere "
 "funktioner."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Brug af funktionen til påmindelse"
 

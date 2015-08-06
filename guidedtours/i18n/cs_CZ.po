@@ -219,7 +219,7 @@ msgstr "Další informace"
 msgid "Getting started"
 msgstr "Začínáme"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Prohlídka pro tuto aplikaci"
 
@@ -273,7 +273,8 @@ msgstr ""
 "zpráv. Pokud nejsou políčka zobrazená, klikněte na Pohled > Zaškrtávací pole "
 "na pravé straně nástrojové lišty."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Pozvání dalších účastníků"
 
@@ -317,8 +318,8 @@ msgstr "Čtení podrobností"
 msgid "Searching for objects"
 msgstr "Vyhledávání objektů"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Vybrání pohledu"
 
@@ -370,7 +371,8 @@ msgstr ""
 "Ikonový pohled zobrazuje u každého souboru ikonu a název. Kliknutím na ikonu "
 "zobrazíte další podrobnosti a funkce ve vyskakovacím okně."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Pohled seznam"
 
@@ -788,7 +790,8 @@ msgstr ""
 "Použijte seznam k výběru objektu, abyste mohli zobrazit jeho obsah nebo "
 "použít jiné funkce."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Použití připomínací funkce"
 

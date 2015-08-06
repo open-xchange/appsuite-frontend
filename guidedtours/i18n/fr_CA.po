@@ -228,7 +228,7 @@ msgstr "Pour plus d'informations"
 msgid "Getting started"
 msgstr "Premiers pas"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Visite guidée pour cette app"
 
@@ -282,7 +282,8 @@ msgstr ""
 "gauche des courriels. Si les cases à cocher ne sont pas affichées, cliquez "
 "sur « Vue > Cases à cocher » à droite de la barre d'outils."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Inviter d'autres participants"
 
@@ -326,8 +327,8 @@ msgstr "Lire les détails"
 msgid "Searching for objects"
 msgstr "Chercher des objets"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Choisir une vue"
 
@@ -381,7 +382,8 @@ msgstr ""
 "fichier. Cliquez sur une icône pour afficher dans une nouvelle fenêtre "
 "davantage de détails et de fonctions."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "La vue en liste"
 
@@ -818,7 +820,8 @@ msgstr ""
 "Utilisez la liste pour sélectionner un objet, afficher son contenu ou "
 "activer certaines fonctions."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Utiliser les rappels"
 

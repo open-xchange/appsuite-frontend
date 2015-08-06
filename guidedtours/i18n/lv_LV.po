@@ -222,7 +222,7 @@ msgstr "Papildus informācija"
 msgid "Getting started"
 msgstr "Iepazīstināšana"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Iepazīstināšana ar šo aplikāciju"
 
@@ -276,7 +276,8 @@ msgstr ""
 "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, noklikšķiniet uz "
 "Skats > Izveles rūtiņas rīkjoslas labajā malā."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Citu dalībnieku uzaicināšana"
 
@@ -320,8 +321,8 @@ msgstr "Detaļu apskats"
 msgid "Searching for objects"
 msgstr "Objektu meklēšana"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Skata izvēle"
 
@@ -374,7 +375,8 @@ msgstr ""
 "Noklikšķinot uz ikonas tiek parādīts uznirstošais logs ar faila detaļām un "
 "funkcijām."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Saraksta skats"
 
@@ -798,7 +800,8 @@ msgstr ""
 "Lai skatītu objkta saturu vai izpildītu funkcijas, izvēlieties atbilstošo "
 "objektu sarakstā."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Atgādinājuma funkciju lietošana"
 

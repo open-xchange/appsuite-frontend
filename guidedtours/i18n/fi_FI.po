@@ -218,7 +218,7 @@ msgstr "Lisätietoja"
 msgid "Getting started"
 msgstr "Aluksi"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Tämän sovelluksen ohjattu esittely"
 
@@ -270,7 +270,8 @@ msgstr ""
 "vasemmalla puolella. Mikäli valintaruudut eivät näy, napsauta Näytä > "
 "Valintaruudut työkalupalkin oikeasta reunasta."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Muiden osallistujien kutsuminen"
 
@@ -314,8 +315,8 @@ msgstr "Yksityiskohtien katselu"
 msgid "Searching for objects"
 msgstr "Kohteiden etsiminen"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Näkymän valitseminen"
 
@@ -367,7 +368,8 @@ msgstr ""
 "Kuvakenäkymä näyttää jokaisesta tiedostosta kuvakkeen ja tiedostonimen. "
 "Napsauta kuvaketta nähdäksesi lisää yksityiskohtia ja valikoima toimintoja."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Listanäkymä"
 
@@ -781,7 +783,8 @@ msgstr ""
 "Valitse laitanäkymästä kohde jota haluat katsella tai johon haluat kohdentaa "
 "toimintoja."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Muistutustoiminnon käyttäminen"
 
