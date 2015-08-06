@@ -76,7 +76,20 @@ define('io.ox/core/tk/list', [
             // ignore fake clicks
             if (!e.pageX) return;
             // restore focus
-            this.getItems().filter('.selected').focus();
+            // try to find the correct item to focus
+            var selectedItems = this.getItems().filter('.selected');
+            if (selectedItems.length !== 0) {
+                if (selectedItems.length === 1) {
+                    // only one item, just focus that
+                    selectedItems.focus();
+                } else if (selectedItems.filter(document.activeElement).length === 1) {
+                    // the activeElement is in the list, focus it
+                    selectedItems.filter(document.activeElement).focus();
+                } else {
+                    // just use the last selected item to focus
+                    selectedItems.last().focus();
+                }
+            }
         },
 
         onItemKeydown: function (e) {
