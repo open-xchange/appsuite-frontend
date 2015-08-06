@@ -4,6 +4,12 @@ open-xchange-appsuite-spamexperts (7.6.3-0) unstable; urgency=medium
 
  -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 25 Mar 2015 13:07:32 +0100
 
+open-xchange-appsuite-spamexperts (7.6.2-21) stable; urgency=low
+
+  * Build for patch 2015-08-03 (2650)
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 04 Aug 2015 12:00:37 +0200
+
 open-xchange-appsuite-spamexperts (7.6.2-20) stable; urgency=low
 
   * Build for patch 2015-07-20 (2614)

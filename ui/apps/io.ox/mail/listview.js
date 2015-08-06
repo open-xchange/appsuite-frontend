@@ -282,6 +282,7 @@ define('io.ox/mail/listview',
         ref: 'io.ox/mail/listview',
 
         initialize: function (options) {
+
             var self = this;
             ListView.prototype.initialize.call(this, options || {});
             this.$el.addClass('mail-item');
@@ -293,6 +294,15 @@ define('io.ox/mail/listview',
                     self.threaded = model.get('thread');
                 }
             });
+
+            // track some states
+            if (options && options.app) {
+                var props = options.app.props;
+                _.extend(this.options, props.pick('thread', 'sort'));
+                this.listenTo(props, 'change:sort', function (model, value) {
+                    this.options.sort = value;
+                });
+            }
         },
 
         lookForUnseenMessage: function () {
