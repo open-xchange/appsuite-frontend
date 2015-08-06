@@ -459,7 +459,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'items') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'items', 'modify') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             api.versions.setCurrent(baton.data);
@@ -469,7 +469,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'items') && e.baton.openedBy !== 'io.ox/mail/compose';
+            return e.collection.has('one', 'items', 'delete') && e.baton.openedBy !== 'io.ox/mail/compose';
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {
