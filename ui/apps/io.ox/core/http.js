@@ -819,7 +819,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             })
             .fail(function (xhr, textStatus, errorThrown) {
                 that.trigger('stop fail', r.xhr);
-                r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'An unknown error occurred') }, xhr);
+                var message = xhr.status !== 0 ? xhr.status + ' ' : '';
+                message += errorThrown || (navigator.onLine ? that.messages.generic : that.messages.offline);
+                r.def.reject({ error: message }, xhr);
                 r = null;
             });
         }
@@ -1304,7 +1306,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return log.collection;
         },
 
-        statistics: log.statistics
+        statistics: log.statistics,
+
+        messages: {
+            // translation will be injected by http_error.js
+            generic: 'An unknown error occurred',
+            offline: 'Cannot connect to server. Please check your connection.'
+        }
     };
 
     Events.extend(that);
