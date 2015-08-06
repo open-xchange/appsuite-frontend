@@ -215,6 +215,30 @@ define('io.ox/core/tk/list', [
             this.trigger('remove', model);
         },
 
+        onBatchRemove: function (list) {
+
+            // build hash of all composite keys
+            var hash = {};
+            _(list).each(function (obj) { hash[obj.cid] = true; });
+
+            // get all DOM nodes
+            var items = this.getItems();
+            if (items.length === 0) return;
+
+            // get first selected item and its offset
+            var selected = items.filter('.selected')[0];
+
+            // get affected DOM nodes and remove them
+            items.filter(function () {
+                    var cid = $(this).attr('data-cid');
+                    return !!hash[cid];
+                })
+                .remove();
+
+            // make sure the first selected item is visible
+            if (selected) selected.scrollIntoView();
+        },
+
         onSort: (function () {
 
             function getIndex(node) {

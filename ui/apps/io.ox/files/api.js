@@ -660,14 +660,14 @@ define('io.ox/files/api', [
 
     function prepareRemove(ids) {
 
-        var collection = pool.get('detail');
-
         api.trigger('beforedelete', ids);
 
-        _(ids).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
-        });
+        var collection = pool.get('detail'),
+            models = _(ids).map(function (item) {
+                return collection.get(_.cid(item));
+            });
+
+        collection.remove(models);
     }
 
     api.remove = function (ids, hardDelete) {

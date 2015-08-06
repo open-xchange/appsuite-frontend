@@ -896,6 +896,20 @@ define('io.ox/files/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.sect.files.gui';
             };
+        },
+
+        'before-delete': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            api.on('beforedelete', function (ids) {
+                // change selection
+                app.listView.selection.dodge();
+                // optimization for many items
+                if (ids.length === 1) return;
+                // remove all DOM elements of current collection; keep the first item
+                app.listView.onBatchRemove(ids.slice(1));
+            });
         }
     });
 
