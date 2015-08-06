@@ -33,9 +33,7 @@ define('io.ox/core/tk/typeahead', [
 
     var Typeahead = Backbone.View.extend({
 
-        tagName: 'input type="text"',
-
-        className: 'form-control',
+        el: '<input type="text" class="form-control">',
 
         options: {
             apiOptions: {

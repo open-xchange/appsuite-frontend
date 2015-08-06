@@ -272,6 +272,8 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         prefetch: function () {
+            $.ajax({ url: Util.getConverterUrl(Util.getConvertParams(this.model, { async: true })) });
+
             return this;
         },
 

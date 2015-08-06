@@ -126,7 +126,7 @@ define('io.ox/core/upsell', [
             function isEnabled(capability) {
                 if (!_.isString(capability)) return false;
 
-                return capability in enabled;
+                return !!enabled[capability];
             }
 
             return function () {
@@ -195,6 +195,8 @@ define('io.ox/core/upsell', [
         }
 
     }());
+
+    if (window.cordova) return that;
 
     // add or remove upsell widget to portal
     require(['io.ox/portal/widgets'], function (widgets) {

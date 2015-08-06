@@ -14,8 +14,9 @@
 define('io.ox/wizards/firstStart/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'settings!io.ox/core'
-], function (Stage, ext, settings) {
+    'settings!io.ox/core',
+    'gettext!io.ox/core/wizard'
+], function (Stage, ext, settings, gt) {
 
     'use strict';
 
@@ -45,11 +46,10 @@ define('io.ox/wizards/firstStart/main', [
                     return $.when(
                         registry.getWizard({
                             id: 'io.ox/wizards/firstStart'
-                        }),
-                        require(['gettext!io.ox/core/wizard'])
+                        })
                     );
                 })
-                .then(function (wizard, gt) {
+                .then(function (wizard) {
                     wizard.navButtons.append(
                         $('<button class="btn wizard-close pull-left" tabindex="1">')
                             .text(gt('Back to sign in'))

@@ -32,9 +32,7 @@ define('io.ox/core/boot/login/standard', [
             form = $(this);
 
         // be busy
-        $('#io-ox-login-form').css('opacity', 0.5);
-        $('#io-ox-login-blocker').show();
-        $('#io-ox-login-feedback').busy().empty();
+        util.lock();
 
         // user name and password shouldn't be empty
         if ($.trim(username).length === 0 && !util.isAnonymous()) {
@@ -57,7 +55,6 @@ define('io.ox/core/boot/login/standard', [
                     _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder });
                 }
                 // success
-                util.restore();
                 ox.trigger('login:success', data);
             },
             function (err) {

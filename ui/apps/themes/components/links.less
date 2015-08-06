@@ -176,6 +176,12 @@ ul.io-ox-inline-links + header {
     }
 }
 
+// allow line breaks for dropdown description (using bs dropdown-header style)
+.dropdown-header.dropdown-description {
+    min-width: 200px;
+    white-space: normal;
+}
+
 a.attachment-link {
     color: @mail-attachment-link-color;
     word-break: break-all;

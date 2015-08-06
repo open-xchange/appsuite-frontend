@@ -237,7 +237,7 @@ define('io.ox/mail/detail/view', [
             this.append(
                 $('<div class="max-size-warning">').append(
                     $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
-                    $('<a role="button" target="_blank">').attr('href', url).text('Show entire message')
+                    $('<a role="button" target="_blank">').attr('href', url).text(gt('Show entire message'))
                 )
             );
         }

@@ -606,7 +606,7 @@ define('io.ox/core/main', [
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
-                if (!upsell.has(model.get('requires'))) {
+                if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
                         _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
                             return $('<i class="fa">').addClass(icon);

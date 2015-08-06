@@ -20,14 +20,15 @@ define('io.ox/files/actions/share', [
 
     'use strict';
 
-    function share(baton, type) {
-        if (!baton || !baton.models) return;
+    function share(array, type) {
+
+        if (!array) return;
 
         var header = '',
-            count = baton.models.length,
-            first = baton.models[0],
+            count = array.length,
+            first = array[0],
             filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
-            view = new ShareWizard({ files: baton.models, type: type });
+            view = new ShareWizard({ files: array, type: type });
 
         // build header
         if (first.isFile()) {
@@ -37,7 +38,7 @@ define('io.ox/files/actions/share', [
             header = gt.format(gt.ngettext('Share the folder "%1$d"', 'Share %1$d items', count), filler);
         }
 
-        new dialogs.ModalDialog({ width: 600, async: true })
+        var dialog = new dialogs.ModalDialog({ width: 600, async: true })
             .header($('<h4>').text(header))
             .append(view.render().$el)
             .addPrimaryButton('share', type === 'invite' ? gt('Invite') : gt('Done'), 'share')
@@ -48,16 +49,27 @@ define('io.ox/files/actions/share', [
             .on('cancel', function () {
                 view.cancel();
                 this.close();
-            })
-            .show();
+            });
+
+        dialog.show();
+
+        return dialog;
     }
 
     return {
-        invite: function (baton) {
-            share(baton, 'invite');
+        // array is an array of models
+        invite: function (array) {
+
+            if (!array) return;
+
+            return require(['io.ox/files/share/permissions'], function (permissions) {
+                var model = _.first(array);
+                permissions.showByModel(model, { share: true });
+            });
         },
-        link: function (baton) {
-            share(baton, 'link');
+
+        link: function (array) {
+            return share(array, 'link');
         }
     };
 });

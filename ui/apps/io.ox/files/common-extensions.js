@@ -137,10 +137,10 @@ define('io.ox/files/common-extensions', [
                         width = retina ? 400 : 200,
                         height = retina ? 300 : 150,
                         url = baton.model.getUrl(preview, { width: width, height: height, scaletype: 'cover' }),
-                        img = $('<img class="dummy-image invisible">').attr('data-original', url);
+                        img = $('<img class="dummy-image invisible">').data('retry', 0);
 
                     // fix URL - would be cool if we had just one call for thumbnails ...
-                    url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+                    img.attr('data-original', url.replace(/format\=preview_image/, 'format=thumbnail_image'));
 
                     // use lazyload
                     img.on({ 'load': load, 'error': error }).lazyload();

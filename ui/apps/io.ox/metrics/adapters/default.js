@@ -44,6 +44,7 @@ define('io.ox/metrics/adapters/default', [
         trackEvent: function (baton) {
             var data = baton.data;
             //_paq.push(['setUserId', this.getUserHash() ]);
+            // category, action, name, value
             _paq.push(['trackEvent', data.app, baton.id || data.target, data.action, data.detail]);
         },
         trackPage: function (baton) {

@@ -20,8 +20,9 @@ define.async('io.ox/oauth/keychain', [
     'io.ox/core/http',
     'io.ox/core/event',
     'io.ox/core/notifications',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (ext, http, Events, notifications, gt) {
+], function (ext, http, Events, notifications, filestorageApi, gt) {
 
     'use strict';
 
@@ -120,7 +121,14 @@ define.async('io.ox/oauth/keychain', [
 
                     //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug 37891)
                     getAll().done(function (services, accounts) {
-                        var account;
+                        var account,
+                            success = function () {
+                                def.resolve(account);
+                                self.trigger('create', account);
+                                self.trigger('refresah.all refresh.list');
+                                ox.trigger('refresh-portal');
+                                notifications.yell('success', gt('Account added successfully'));
+                            };
                         for (var i = 0; i < accounts[0].length; i++) {
                             if (accounts[0][i].id === id) {
                                 account = accounts[0][i];
@@ -128,11 +136,16 @@ define.async('io.ox/oauth/keychain', [
                             }
                         }
                         if (account) {
-                            def.resolve(account);
-                            self.trigger('create', account);
-                            self.trigger('refresah.all refresh.list');
-                            ox.trigger('refresh-portal');
-                            notifications.yell('success', gt('Account added successfully'));
+                            // if this Oauth account belongs to a filestorage service (like dropbox etc.), we create a matching filestorage account.
+                            // the folders appear will then appear in the drive module
+                            // if the rampup has failed, just ignore filestorages
+                            if (filestorageApi.rampupDone && filestorageApi.isStorageAvailable(account.serviceId)) {
+                                filestorageApi.createAccountFromOauth(account).done(function () {
+                                    success();
+                                });
+                            } else {
+                                success();
+                            }
                         } else {
                             notifications.yell('error', gt('Account could not be added'));
                         }
@@ -154,6 +167,16 @@ define.async('io.ox/oauth/keychain', [
                     id: account.id
                 }
             }).done(function () {
+                var filestorageAccount;
+                account.serviceId = service.id;
+                // if rampup failed, ignore filestorages, maybe the server does not support them
+                if (filestorageApi.rampupDone) {
+                    filestorageAccount = filestorageApi.getAccountForOauth(account);
+                    // if there is a filestorageAccount for this Oauth account, remove it too
+                    if (filestorageAccount) {
+                        filestorageApi.deleteAccount(filestorageAccount);
+                    }
+                }
                 delete cache[service.id].accounts[account.id];
                 self.trigger('delete', account);
                 self.trigger('refresh.all refresh.list', account);
@@ -170,9 +193,27 @@ define.async('io.ox/oauth/keychain', [
                 },
                 data: { displayName: account.displayName }
             }).done(function () {
-                cache[service.id].accounts[account.id] = account;
-                self.trigger('update', account);
-                self.trigger('refresh.list', account);
+                var filestorageAccount;
+                // if rampup failed, ignore filestorages, maybe the server does not support them
+                if (filestorageApi.rampupDone) {
+                    filestorageAccount = filestorageApi.getAccountForOauth(account);
+                }
+
+                // if there is a filestorageAccount for this Oauth account, update it too. Changes foldername in drive
+                if (filestorageAccount) {
+                    var options = filestorageAccount.attributes;
+                    options.displayName = account.displayName;
+
+                    filestorageApi.updateAccount(options).done(function () {
+                        cache[service.id].accounts[account.id] = account;
+                        self.trigger('update', account);
+                        self.trigger('refresh.list', account);
+                    });
+                } else {
+                    cache[service.id].accounts[account.id] = account;
+                    self.trigger('update', account);
+                    self.trigger('refresh.list', account);
+                }
             });
         };
 
@@ -275,20 +316,25 @@ define.async('io.ox/oauth/keychain', [
                 });
             });
 
-            // Resolve loading
-            moduleDeferred.resolve({
-                message: 'Done with oauth keychain',
-                services: services,
-                accounts: accounts,
-                serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
+            // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
+            filestorageApi.rampup().always( function () {
+                // Resolve loading
+                moduleDeferred.resolve({
+                    message: 'Done with oauth keychain',
+                    services: services,
+                    accounts: accounts,
+                    serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
+                });
             });
         })
         .fail(function () {
 
             console.error('Could not initialize OAuth keyring!');
-
-            // Resolve on fail
-            moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
+            // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
+            filestorageApi.rampup().always(function () {
+                // Resolve on fail
+                moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
+            });
         });
 
     return moduleDeferred;

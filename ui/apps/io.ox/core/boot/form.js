@@ -24,9 +24,28 @@ define('io.ox/core/boot/form', [
 
     'use strict';
 
+    /**
+     * url params/values (all optional)
+     * ================================
+     *
+     * login_type:      [ 'guest' | 'anonymous' ]
+     * login_name:      [ something ]
+     *
+     * status:          [ 'reset_password' | 'invalid_request' ]
+     *
+     * message_type:    [ 'INFO' | 'ERROR' ]
+     * message:         [ something ]
+     *
+     * forgot-password: [ something ]
+     * share:           [ something ]
+     * confirm:         [ something ]
+     * autologout:      [ something ]
+     */
+
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt, bindLogin = true;
+        var sc = ox.serverConfig, gt = util.gt,
+            bindLogin = true, messageReplacement;
 
         util.debug('Show form ...');
 
@@ -77,7 +96,11 @@ define('io.ox/core/boot/form', [
 
         function guestLogin() {
             var loginName = _.url.hash('login_name');
-            $('#io-ox-login-username').hide();
+
+            // use more suitable message
+            messageReplacement = gt('Please enter the password you have received by email.');
+
+            $('.row.username').hide();
             if (!_.isEmpty(loginName)) {
                 $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
             }
@@ -91,7 +114,7 @@ define('io.ox/core/boot/form', [
         }
 
         function anonymousLogin() {
-            $('#io-ox-login-username').hide();
+            $('.row.username').hide();
             $('#io-ox-forgot-password').remove();
         }
 
@@ -147,13 +170,16 @@ define('io.ox/core/boot/form', [
                 break;
         }
 
+        $('#io-ox-login-feedback').hide();
+
         // handle message params
-        if (_.url.hash('message')) {
-            var type = (_.url.hash('message_type') || 'info').toLowerCase();
+        if (_.url.hash('message') || messageReplacement) {
+            var type = (_.url.hash('message_type') || 'info').toLowerCase(),
+                message = messageReplacement || _.url.hash('message');
             if (type === 'info') {
-                $('#io-ox-login-help').text(_.url.hash('message'));
+                $('#io-ox-login-help').text(message);
             } else {
-                util.feedback(type, _.url.hash('message'));
+                util.feedback(type, message);
             }
         }
 
@@ -190,6 +216,12 @@ define('io.ox/core/boot/form', [
             // cannot change type with jQuery's attr()
             $('#io-ox-login-username')[0].type = 'text';
         }
+
+        // update productname in password reset dialog
+        $('#io-ox-password-forget-form .help-block').text(
+            //#. %1$s is the product name, e.g. OX App Suite
+            gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', sc.productName)
+        );
 
         util.debug('Load "signin" plugins & set default language');
 

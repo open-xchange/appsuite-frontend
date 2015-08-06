@@ -85,6 +85,10 @@
                                 placeholder="Confirm new password" data-i18n="Confirm new password" data-i18n-attr="placeholder">
                         </div>
                     </div>
+                    {{!-- Feedback area --}}
+                    <div class="row feedback">
+                        <div class="col-xs-12" id="io-ox-login-feedback"></div>
+                    </div>
                     <div class="row options">
                         <div class="col-sm-6 col-xs-12 checkbox" id="io-ox-login-store">
                             <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
@@ -97,37 +101,36 @@
                         </div>
                     </div>
                     <div class="row buttons">
-                        <div class="col-sm-6 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12">
                             <input type="submit" name="signin"
                                 id="io-ox-login-button" class="btn btn-primary form-control"
                                 value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
                         </div>
                     </div>
-                    {{!-- Feedback area --}}
-                    <div class="row feedback">
-                        <div class="col-xs-12" id="io-ox-login-feedback"></div>
-                    </div>
                 </form>
 
                 {{!-- forget password dialog (sharing) --}}
                 <form action="/appsuite/api/share/reset/password" method="get" id="io-ox-password-forget-form" style="display:none;" novalidate>
-                    <h3 id="io-ox-login-subtitle" data-i18n="Reset password"></h3>
-                    <p class="help-block" data-i18n="A 'Reset your password' will be sent to the following email address"></p>
+                    <div class="row help">
+                        <div class="col-xs-12">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
                     <div class="row email">
                         <div class="form-group col-xs-12">
                             <label for="io-ox-login-restoremail" class="sr-only" data-i18n="Email">Email</label>
                             <input type="email" id="io-ox-login-restoremail" name="restoremail" class="form-control"
                                 maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                aria-required="true" placeholder="Email" data-i18n="Email" data-i18n-attr="placeholder">
+                                aria-required="true" placeholder="Email" data-i18n="Email address" data-i18n-attr="placeholder">
                         </div>
                     </div>
                     <div class="row button">
-                        <div class="form-group col-md-6 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12">
                             <input type="submit" name="resetpassword"
                                 id="resetpassword-button" class="btn btn-primary form-control"
-                                value="Reset my password" data-i18n="Reset my password" data-i18n-attr="value,aria-label">
+                                value="Reset my password" data-i18n="Next" data-i18n-attr="value,aria-label">
                         </div>
-                        <div class="col-md-6 col-xs-12 text-right" id="io-ox-backtosignin">
+                        <div class="col-sm-6 col-xs-12 text-right" id="io-ox-backtosignin">
                             <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
                         </div>
                     </div>

@@ -628,7 +628,7 @@
     background-color: #eee;
 }
 
-.subject() {
+.subject-base() {
     font-size: 20px;
     line-height: 24px;
     padding: 12px @default-padding 4px @default-padding;
@@ -644,8 +644,11 @@
 
     & > h1 {
 
-        .subject();
+        .subject-base();
         background-color: white;
+        .subject {
+            .ellipsis();
+        }
 
         .toggle-all {
             color: #ccc;
@@ -965,7 +968,7 @@ textarea.inplace-editor {
     }
 
     .subject {
-        .subject();
+        .subject-base();
         &.empty {
             font-style: italic;
             color: #aaa;

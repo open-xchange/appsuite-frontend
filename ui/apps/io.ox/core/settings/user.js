@@ -29,6 +29,10 @@ define('io.ox/core/settings/user', [
 
     return {
 
+        getCurrentUser: function () {
+            return factory.realm('default').get({});
+        },
+
         openModalDialog: function () {
 
             var dialog = new dialogs.ModalDialog({

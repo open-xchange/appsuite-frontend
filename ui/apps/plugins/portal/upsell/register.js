@@ -62,19 +62,12 @@ define('plugins/portal/upsell/register', [
                 );
             }
 
+            this.off('click', trigger);
             this.on('click', trigger);
 
             if (!options.removable) {
                 $('.disable-widget', this).remove();
             }
         }
-    });
-
-    ext.point('io.ox/portal/widget/upsell/settings').extend({
-        title: gt('Upgrade your account'),
-        type: 'upsell',
-        editable: false,
-        color: 'gray',
-        inverse: true
     });
 });

@@ -123,6 +123,7 @@ define('io.ox/mail/compose/extensions', [
                         function toggleNames() {
                             var value = !!settings.get('sendDisplayName', true);
                             settings.set('sendDisplayName', !value).save();
+                            baton.model.set('sendDisplayName', !value);
                             redraw();
                             // stop propagation to keep drop-down open
                             return false;

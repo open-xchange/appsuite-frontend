@@ -587,10 +587,52 @@ define('io.ox/mail/main', [
          * Define basic function to show an email
          */
         'show-mail': function (app) {
+
             if (_.device('smartphone')) return;
+
+            // This function just shows an email. Almost.
+            // It has a little optimization to add some delay if a message
+            // has recently beeen deleted. This addresses the use-case of
+            // cleaning up a mailbox, i.e. deleting several messages in a row.
+            // wWithout the delay, the UI would try to render messages that are
+            // just about to be deleted as well.
+
+            var recentDeleteEvent = false,
+                eventTimer,
+                messageTimer,
+                wait = 500,
+                latestMessage;
+
+            function show() {
+                // check if message is still within the current collection
+                if (!app.listView.collection.get(latestMessage)) return;
+                app.threadView.show(latestMessage, app.isThreaded());
+            }
+
+            // show instantly
             app.showMail = function (cid) {
-                app.threadView.show(cid, app.isThreaded());
+                // remember latest message
+                latestMessage = cid;
+                // delay or instant?
+                if (recentDeleteEvent) {
+                    // clear view instantly
+                    app.threadView.empty();
+                    clearTimeout(messageTimer);
+                    messageTimer = setTimeout(show, wait);
+                } else {
+                    show();
+                    wait = 500;
+                }
             };
+
+            // add delay if a mail just got deleted
+            api.on('beforedelete', function () {
+                recentDeleteEvent = true;
+                // increase delay by 500ms (max is 2 seconds)
+                if (wait < 2000) wait += 500;
+                clearTimeout(eventTimer);
+                eventTimer = setTimeout(function () { recentDeleteEvent = false; }, wait);
+            });
         },
 
         /*

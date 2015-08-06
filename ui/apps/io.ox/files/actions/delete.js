@@ -67,7 +67,7 @@ define('io.ox/files/actions/delete', [
             .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
             .on('delete', function () {
-                process(list);
+                _.defer(function () { process(list); });
             })
             .show();
     };
