@@ -725,22 +725,24 @@
                             $('<div class="form-group">').append(
                                 $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid })
-                            ).on('keydown', 'input', function (e) {
+                            )
+                            .on('keydown', 'input', function (e) {
                                 // enter
-                                if (e.which === 13) {
-                                    var val = $(this).typeahead('val');
-                                    if (!_.isEmpty(val)) {
-                                        permissionsView.collection.add(new Permission({
-                                            type: 'guest',
-                                            bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
-                                            contact: {
-                                                email1: val
-                                            }
-                                        }));
-                                        // clear input
-                                        $(this).typeahead('val', '');
+                                if (e.which !== 13) return;
+                                // mail does not support sharing folders to guets
+                                // so we skip any manual edits
+                                if (module === 'mail') return;
+                                var val = $(this).typeahead('val');
+                                if (_.isEmpty(val)) return;
+                                permissionsView.collection.add(new Permission({
+                                    type: 'guest',
+                                    bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
+                                    contact: {
+                                        email1: val
                                     }
-                                }
+                                }));
+                                // clear input
+                                $(this).typeahead('val', '');
                             })
                         ),
                         $('<div>').addClass('form-group').append(
