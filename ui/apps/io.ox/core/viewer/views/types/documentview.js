@@ -272,11 +272,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         prefetch: function () {
-            var startTime = _.now();
-
-            $.ajax({ url: Util.getConverterUrl(Util.getConvertParams(this.model, { async: true })) }).always(function () {
-                console.warn('DocumentView.prefetch() duration: ', _.now() - startTime, 'ms)');
-            });
+            $.ajax({ url: Util.getConverterUrl(Util.getConvertParams(this.model, { async: true })) });
 
             return this;
         },
