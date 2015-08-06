@@ -176,12 +176,20 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
-            return nodes.addClass('selected').attr({ 'aria-selected': true, tabindex: 1 });
+            var width = this.view.$el.width();
+            return nodes.addClass('selected')
+                .attr({ 'aria-selected': true, tabindex: 1 })
+                .find('.folder-label').each(function () {
+                    var left = $(this).position().left, maxWidth = width - left - 64;
+                    $(this).css('max-width', Math.max(maxWidth, 120));
+                })
+                .end();
         },
 
         // TODO: isn't this basically the same as resetSelected?
         uncheck: function (nodes) {
-            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
+            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
+                .find('.folder-label').css('max-width', null);
         },
 
         getItems: function () {
