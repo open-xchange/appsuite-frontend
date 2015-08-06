@@ -259,7 +259,7 @@ define('io.ox/presenter/views/mainview', [
                             this.app.rtConnection.startPresentation({ activeSlide: slideId });
                         }
                         if (rtModel.canJoin(userId)) {
-                            this.app.rtConnection.joinPresentation();
+                            this.joinPresentation();
                         }
                     } else { // enter: show next slide
                         this.presentationView.showNextSlide();
@@ -576,6 +576,39 @@ define('io.ox/presenter/views/mainview', [
         showPreviousSlide: function () {
             this.presentationView.showPreviousSlide();
             this.presentationView.focusActiveSlide();
+        },
+
+        /**
+         * Tries to join the presentation. Shows an error alert on failure.
+         */
+        joinPresentation: function () {
+
+            // full-screen mode MUST be started synchronously (security)
+            this.toggleFullscreen(true);
+
+            // try to join the presentation (may fail due to participants limit)
+            var promise = this.app.rtConnection.joinPresentation();
+
+            // handle failed attempt to join the presentation
+            promise.fail(function (error) {
+
+                // ugly, but no better solution: leave full-screen mode started above
+                this.toggleFullscreen(false);
+
+                // show an alert box for known errors
+                if (_.isObject(error) && (error.error === 'GENERAL_MAX_PARTICIPANTS_FOR_PRESENTATION_REACHED_ERROR')) {
+                    this.showNotification({
+                        type: 'error',
+                        //#. message text of an alert box if joining a presentation fails
+                        //#. %1$d is the name of the user who started the presentation
+                        //#, c-format
+                        message: gt('The limit of participants has been reached. Please contact the presenter %1$s.', this.app.rtModel.get('presenterName')),
+                        focus: true
+                    });
+                }
+            }.bind(this));
+
+            return promise;
         },
 
         /**
