@@ -910,6 +910,20 @@ define('io.ox/files/main', [
                 // remove all DOM elements of current collection; keep the first item
                 app.listView.onBatchRemove(ids.slice(1));
             });
+        },
+
+        /*
+         * Handle delete event based on keyboard shortcut or swipe gesture
+         */
+        'selection-delete': function () {
+            app.listView.on('selection:delete', function (cids) {
+                // turn cids into proper objects
+                var list = _(api.resolve(cids, false)).invoke('toJSON');
+                // check if action can be called
+                actions.check('io.ox/files/actions/delete', list).done(function () {
+                    actions.invoke('io.ox/files/actions/delete', null, ext.Baton({ data: list }));
+                });
+            });
         }
     });
 
