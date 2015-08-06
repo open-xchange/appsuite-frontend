@@ -47,9 +47,17 @@
     }
 
 }
+
+.list-view-control:not(.upside-down).toolbar-top-visible .list-view.myshares-list {
+    top: 80px;
+}
+.myshares-list-control .secondary-toolbar { top: 40px; }
+
 .myshares-list {
 
     &.visible-selection.has-focus .list-item.selected a { color: white; }
+
+    &.visible-selection.has-focus .list-item.selected .type i:not(.gray) { color: white; }
 
     .list-item-content {
         display: table;
@@ -67,6 +75,9 @@
             width: 50%;
             padding:0;
             text-align: left;
+        }
+        .list-item-column.type {
+            width: 20px;
         }
     }
 }

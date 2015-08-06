@@ -253,6 +253,7 @@ define('io.ox/files/share/api', [
                 data: o
             });
         }
+
     };
 
     Events.extend(api);
