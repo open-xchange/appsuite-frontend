@@ -33,7 +33,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-            if (this.id) this.$el.attr({ id: this.id });
+            if (this.id) this.$el.attr('id', this.id);
+            if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
             return this;
         }
@@ -65,7 +66,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
                 name: this.name,
                 tabindex: this.options.tabindex || 1
             });
-            if (this.id) this.$el.attr({ id: this.id });
+            if (this.id) this.$el.attr('id', this.id);
+            if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
             return this;
         }
@@ -90,7 +92,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-            if (this.rows) this.$el.attr({ rows: this.rows });
+            if (this.rows) this.$el.attr('rows', this.rows);
+            if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
             return this;
         }
