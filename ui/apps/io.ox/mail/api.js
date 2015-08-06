@@ -249,6 +249,9 @@ define('io.ox/mail/api', [
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         return get.call(api, obj, options && options.cache).done(function (data) {
+            // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
+            delete data.cid;
+            // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
                 model.set(data);

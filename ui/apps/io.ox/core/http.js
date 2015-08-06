@@ -1249,6 +1249,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                             item = data[i];
                             if (_.isObject(item) && 'data' in item && 'timestamp' in item) {
                                 q[i].deferred.resolve(item.data, item.timestamp);
+                            } else if (item === undefined || item === null) {
+                                // sometimes the server just sends "null" in a mutliple request
+                                var gt = require('gettext!io.ox/core');
+                                q[i].deferred.reject({ error: gt('Server did not send a response'), code: '0000' });
                             } else if (item.error) {
                                 q[i].deferred.reject(item.error);
                             } else {

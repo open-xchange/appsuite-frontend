@@ -24,15 +24,15 @@
 
 // file list view
 
-.file-list-view {
+.file-list-view, .myshares-list {
 
     //
     // Column layout
     //
 
     &.column-layout .list-item {
-        line-height: 16px;
-        padding: 4px 16px 4px 42px;
+        line-height: 20px;
+        padding: 2px 16px 2px 42px;
         border-bottom: 0;
         &:not(.selected):nth-child(odd),  {
             background-color: #f5f5f5;
@@ -107,7 +107,7 @@
     .file-type-folder &:before { content: '\f07b'; color: #777; } // fa-folder
 }
 
-.file-list-view {
+.file-list-view, .myshares-list {
 
     &.visible-selection.has-focus .list-item.selected .file-type-icon:before { color: white; }
 

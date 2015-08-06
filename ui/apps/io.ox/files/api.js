@@ -451,14 +451,18 @@ define('io.ox/files/api', [
             if (model && model.has('description')) return $.when(model.toJSON());
         }
 
+        var params =  {
+            action: 'get',
+            id: file.id,
+            folder: file.folder_id || file.folder,
+            timezone: 'UTC'
+        };
+
+        if (options.columns) params.columns = options.columns;
+
         return http.GET({
             module: 'files',
-            params: {
-                action: 'get',
-                id: file.id,
-                folder: file.folder_id || file.folder,
-                timezone: 'UTC'
-            }
+            params: params
         })
         .then(function (data) {
             pool.add('detail', data);
@@ -656,14 +660,14 @@ define('io.ox/files/api', [
 
     function prepareRemove(ids) {
 
-        var collection = pool.get('detail');
-
         api.trigger('beforedelete', ids);
 
-        _(ids).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
-        });
+        var collection = pool.get('detail'),
+            models = _(ids).map(function (item) {
+                return collection.get(_.cid(item));
+            });
+
+        collection.remove(models);
     }
 
     api.remove = function (ids, hardDelete) {
@@ -769,12 +773,20 @@ define('io.ox/files/api', [
     // @param {object} file { id, folder_id }
     // @param {object} changes The changes to apply; not sent to server if empty
     //
-    api.update = function (file, changes) {
+    api.update = function (file, changes, options) {
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
         var model = api.pool.get('detail').get(_.cid(file));
         if (model) model.set(changes);
+
+        // build split data object to support notifications
+        options = options || {};
+        var data = { file: changes };
+
+        if (options.notification && !_.isEmpty(options.notification)) {
+            data.notification = options.notification;
+        }
 
         return http.PUT({
             module: 'files',
@@ -783,7 +795,7 @@ define('io.ox/files/api', [
                 id: file.id,
                 timestamp: _.then()
             },
-            data: changes,
+            data: data,
             appendColumns: false
         })
         .done(function () {
@@ -1101,6 +1113,11 @@ define('io.ox/files/api', [
         };
 
     }());
+
+    api.getDefaultColumns = function (additional) {
+        var columns = http.getAllColumns('files');
+        return _([].concat(columns, additional)).uniq().sort().join(',');
+    };
 
     return api;
 

@@ -391,11 +391,25 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
-            return e.collection.has('one');
+            // true if we have a file
+            if (e.collection.has('one')) return true;
+            // otherwise check if the user is admin for the current folder
+            if (!e.baton.app) return false;
+            var id = e.baton.app.folder.get();
+            return folderAPI.pool.getModel(id).isShareable();
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                action.invite(baton.models);
+                if (baton.models && baton.models.length) {
+                    // share selected file
+                    action.invite(baton.models);
+                } else {
+                    // share current folder
+                    // convert folder model into file model
+                    var id = baton.app.folder.get(),
+                        model = new api.Model(folderAPI.pool.getModel(id).toJSON());
+                    action.invite([model]);
+                }
             });
         }
     });
@@ -528,6 +542,8 @@ define('io.ox/files/actions', [
         index: 100,
         id: 'invite',
         label: gt('Invite people'),
+        //#. sharing: a guest user will be created for the owner of that email address
+        description: gt('Every recipient gets an individual link. Guests can also create and change files.'),
         ref: 'io.ox/files/actions/invite'
     });
 
@@ -535,6 +551,8 @@ define('io.ox/files/actions', [
         index: 200,
         id: 'getalink',
         label: gt('Get a link'),
+        //#. sharing: a link will be created
+        description: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
         ref: 'io.ox/files/actions/getalink'
     });
 

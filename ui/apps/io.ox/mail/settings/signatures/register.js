@@ -481,6 +481,12 @@ define('io.ox/mail/settings/signatures/register', [
                     }
                 });
 
+                baton.model.on('change:defaultSignature', function () {
+                    var id = baton.model.get('defaultSignature');
+                    $list.find('.default').removeClass('default');
+                    $list.find('[data-id="' + id + '"]').addClass('default');
+                });
+
                 defaultReplyForwardView = new mini.SelectView({ list: [], name: 'defaultReplyForwardSignature', model: baton.model, id: 'defaultReplyForwardSignature', className: 'form-control' })
                 .on('appendOption', function (option) {
                     this.$el.append($('<option>').attr({ 'value': option.value }).text(option.label));

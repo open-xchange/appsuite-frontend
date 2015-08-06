@@ -407,7 +407,8 @@ define('io.ox/core/folder/extensions', [
 
                 // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
                 api.flat({ module: module }).always(function () {
-                    privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
+
+                    privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
 
                     // open private folder whenever a folder is added to it
                     api.pool.getCollection('flat/' + module + '/private').on('add', function () {
@@ -460,6 +461,9 @@ define('io.ox/core/folder/extensions', [
                     var module = baton.module,
                         folder = api.getDefaultFolder(module),
                         title = module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+
+                    // guests might have no default folder
+                    if (!folder) return;
 
                     this.append(
                         $('<div>').append(

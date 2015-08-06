@@ -196,6 +196,8 @@ define('io.ox/core/upsell', [
 
     }());
 
+    if (window.cordova) return that;
+
     // add or remove upsell widget to portal
     require(['io.ox/portal/widgets'], function (widgets) {
         var options = _.extend({

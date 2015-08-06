@@ -136,15 +136,20 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
                     list.append(
                         _(langSorted).map(function (value) {
                             return $('<li role="presentation">').append(
-                                $('<a role="menuitem" href="#" aria-label="' + lang[value] + '" lang="' + value + '">')
-                                    .on('click',  function () {
-                                        self.changeByUser(value);
-                                        toggle.find('span.toggle-text').text(lang[value]);
-                                    })
+                                $('<a href="#" role="menuitem">')
+                                    .attr({ 'aria-label': lang[value], 'lang': value })
                                     .text(lang[value])
                             );
                         })
                     );
+
+                    list.on('click', 'a', function (e) {
+                        var node = $(e.currentTarget), value = node.attr('lang');
+                        e.preventDefault();
+                        self.changeByUser(value);
+                        $(e.delegateTarget).parent().find('.toggle-text').text(lang[value]);
+                    });
+
                     // init dropdown
                     toggle.dropdown();
                 } else {

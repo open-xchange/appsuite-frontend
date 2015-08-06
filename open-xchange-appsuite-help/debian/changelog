@@ -10,6 +10,18 @@ open-xchange-appsuite-help (7.8.0-0) unstable; urgency=medium
 
  -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 05 Nov 2014 16:22:07 +0100
 
+open-xchange-appsuite-help (7.6.2-21) stable; urgency=low
+
+  * Build for patch 2015-08-03 (2650)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 04 Aug 2015 11:59:18 +0200
+
+open-xchange-appsuite-help (7.6.2-20) stable; urgency=low
+
+  * Build for patch 2015-07-20 (2614)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 17 Jul 2015 09:19:13 +0200
+
 open-xchange-appsuite-help (7.6.2-19) stable; urgency=low
 
   * Build for patch 2015-06-29 (2569)

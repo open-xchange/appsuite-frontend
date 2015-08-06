@@ -76,7 +76,20 @@ define('io.ox/core/tk/list', [
             // ignore fake clicks
             if (!e.pageX) return;
             // restore focus
-            this.getItems().filter('.selected').focus();
+            // try to find the correct item to focus
+            var selectedItems = this.getItems().filter('.selected');
+            if (selectedItems.length !== 0) {
+                if (selectedItems.length === 1) {
+                    // only one item, just focus that
+                    selectedItems.focus();
+                } else if (selectedItems.filter(document.activeElement).length === 1) {
+                    // the activeElement is in the list, focus it
+                    selectedItems.filter(document.activeElement).focus();
+                } else {
+                    // just use the last selected item to focus
+                    selectedItems.last().focus();
+                }
+            }
         },
 
         onItemKeydown: function (e) {
@@ -213,6 +226,30 @@ define('io.ox/core/tk/list', [
 
             // forward event
             this.trigger('remove', model);
+        },
+
+        onBatchRemove: function (list) {
+
+            // build hash of all composite keys
+            var hash = {};
+            _(list).each(function (obj) { hash[obj.cid] = true; });
+
+            // get all DOM nodes
+            var items = this.getItems();
+            if (items.length === 0) return;
+
+            // get first selected item and its offset
+            var selected = items.filter('.selected')[0];
+
+            // get affected DOM nodes and remove them
+            items.filter(function () {
+                    var cid = $(this).attr('data-cid');
+                    return !!hash[cid];
+                })
+                .remove();
+
+            // make sure the first selected item is visible
+            if (selected) selected.scrollIntoView();
         },
 
         onSort: (function () {

@@ -229,8 +229,12 @@ done
 %changelog
 * Wed Aug 05 2015 Marcus Klein <marcus.klein@open-xchange.com>
 First candidate for 7.8.0 release
+* Tue Aug 04 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-08-03 (2650)
 * Fri Jul 17 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-07-20 (2637)
+* Fri Jul 17 2015 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2015-07-20 (2614)
 * Tue Jun 30 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2015-06-29 (2569)
 * Wed Jun 24 2015 Marcus Klein <marcus.klein@open-xchange.com>

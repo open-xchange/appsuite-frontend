@@ -276,8 +276,7 @@ msgstr ""
 "strane emailov. Ak políčka nie sú zobrazené, kliknite na Zobraziť > "
 "Zaškrtávacie polia na pravej strane panelu nástrojov."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours
-#: apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Pozývanie ďalších účastníkov"
 
@@ -321,8 +320,8 @@ msgstr "Čítanie podrobností"
 msgid "Searching for objects"
 msgstr "Hľadanie objektov"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours
-#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
+#: apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Výber zobrazenia"
 
@@ -374,8 +373,7 @@ msgstr ""
 "Zobrazenie ikon zobrazí pre každý súbor ikonu a názov súboru. Kliknutím na "
 "ikonu zobrazíte ďalšie podrobnosti a funkcie v kontextovom menu."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours
-#: apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "Zobrazenie zoznamu"
 
@@ -667,9 +665,13 @@ msgstr ""
 "tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
 
 #: apps/io.ox/tours/main.js:732 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To open the settings, click the System menu icon on the upper right side "
+#| "of the menu bar. Select Settings. "
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
-"the menu bar. Select Settings. "
+"the menu bar. Select Settings."
 msgstr ""
 "Nastavenia otvoríte kliknutím na ikonu menu Systém v pravej hornej časti "
 "panela menu. Vyberte Nastavenia."
@@ -788,8 +790,7 @@ msgstr ""
 "Zoznam použite na vybranie objektu, zobrazenie jeho obsahu alebo použitie "
 "funkcií."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours
-#: apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Používanie funkcie pripomenutia"
 

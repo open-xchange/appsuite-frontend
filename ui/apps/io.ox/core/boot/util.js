@@ -27,7 +27,7 @@ define('io.ox/core/boot/util', [], function () {
             $('<div role="alert" class="selectable-text alert alert-info">').append(
                 node
             )
-        );
+        ).show();
     }
 
     var feedbackType = null, feedbackNode = null;
@@ -73,10 +73,9 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         fail: function (error, focus) {
-            // fail
-            $('#io-ox-login-feedback').idle();
-            // visual response (shake sucks on touch devices)
-            $('#io-ox-login-form').css('opacity', '');
+            // restore form
+            this.restore();
+
             // show error
             if (error && error.error === '0 general') {
                 this.feedback('error', 'No connection to server. Please check your internet connection and retry.');
@@ -93,8 +92,6 @@ define('io.ox/core/boot/util', [], function () {
             } else {
                 this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
             }
-            // restore form
-            this.restore();
             // reset focus
             var id = (_.isString(focus) && focus) || (this.isAnonymous() && 'password') || 'username';
             $('#io-ox-login-' + id).focus().select();
@@ -104,9 +101,21 @@ define('io.ox/core/boot/util', [], function () {
 
         restore: function () {
             // stop being busy
-            $('#io-ox-login-form').css('opacity', '');
+            $('#io-ox-login-form')
+                // visual response (shake sucks on touch devices)
+                .css('opacity', '')
+                .find('input').removeAttr('disabled');
             $('#io-ox-login-blocker').hide();
-            $('#io-ox-login-feedback').idle();
+            //$('#io-ox-login-feedback').idle();
+        },
+
+        lock: function () {
+            // be busy
+            $('#io-ox-login-form')
+                .css('opacity', 0.5)
+                .find('input').attr('disabled', 'disabled');
+            $('#io-ox-login-blocker').show();
+            //$('#io-ox-login-feedback').busy().empty();
         }
 
     };

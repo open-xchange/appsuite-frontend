@@ -651,7 +651,7 @@ msgstr ""
 
 #: apps/io.ox/tours/main.js:732
 #: module:io.ox/tours
-msgid "To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings. "
+msgid "To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings."
 msgstr ""
 
 #: apps/io.ox/tours/main.js:735
