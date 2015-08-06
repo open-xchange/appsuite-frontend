@@ -79,6 +79,21 @@ define('io.ox/files/share/listview', [
         }
     });
 
+    var getPermissions = function (baton) {
+        return _(_(baton.model.getPermissions()).pluck('type')).uniq();
+    },
+    hasGuests = function (baton) {
+        return _(getPermissions(baton)).contains('guest');
+    },
+
+    isPublic = function (baton) {
+        return _(getPermissions(baton)).contains('anonymous');
+    },
+
+    hasUser = function (baton) {
+        return _(getPermissions(baton)).contains('user') || _(getPermissions(baton)).contains('group');
+    };
+
     //
     // Extensions
     //
@@ -153,8 +168,41 @@ define('io.ox/files/share/listview', [
             }
         },
         {
+            id: 'user',
+            index: 600,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="list-item-column type gray">').append(
+                        $('<i class="fa fa-user">').toggleClass('gray', hasUser(baton))
+                    )
+                );
+            }
+        },
+        {
+            id: 'guest',
+            index: 700,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="list-item-column type gray">').append(
+                        $('<i class="fa fa-user-plus">').toggleClass('gray', hasGuests(baton))
+                    )
+                );
+            }
+        },
+        {
+            id: 'external',
+            index: 800,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="list-item-column type gray">').append(
+                        $('<i class="fa fa-link">').toggleClass('gray', isPublic(baton))
+                    )
+                );
+            }
+        },
+        {
             id: 'date',
-            index: 500,
+            index: 1000,
             draw: function (baton) {
                 var created = moment(baton.model.get('last_modified'));
                 this.append(

@@ -24,6 +24,7 @@ define('io.ox/files/main', [
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
     'io.ox/files/share/listview',
+    'io.ox/backbone/mini-views/toolbar',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
@@ -37,8 +38,9 @@ define('io.ox/files/main', [
     'less!io.ox/files/style',
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
+    'io.ox/files/share/toolbar',
     'io.ox/files/upload/dropzone'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, MySharesView, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, MySharesView, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
 
     'use strict';
 
@@ -387,9 +389,30 @@ define('io.ox/files/main', [
                             });
                         })();
 
-                        window.myshareslist = app.mysharesListView;
+                        var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
 
-                        app.getWindow().nodes.body.prepend(app.mysharesListViewControl.render().$el);
+                        app.getWindow().nodes.body.prepend(app.mysharesListViewControl.render().$el.addClass('myshares-list-control').append(toolbar.render().$el));
+
+                        app.updateMyshareToolbar = _.debounce(function (list) {
+                            var baton = ext.Baton({
+                                $el: toolbar.$list,
+                                data: app.mysharesListView.collection.get(list),
+                                app: app
+                            }),
+                            ret = ext.point('io.ox/files/share/classic-toolbar')
+                                .invoke('draw', toolbar.$list.empty(), baton);
+
+                            $.when.apply($, ret.value()).then(function () {
+                                toolbar.initButtons();
+                            });
+                        }, 10);
+
+                        app.updateMyshareToolbar([]);
+                        // update toolbar on selection change as well as any model change
+                        app.mysharesListView.on('selection:change change', function () {
+                            app.updateMyshareToolbar(app.mysharesListView.selection.get());
+                        });
+
                         app.mysharesListViewControl.$el.siblings().hide();
                     }
                 },
