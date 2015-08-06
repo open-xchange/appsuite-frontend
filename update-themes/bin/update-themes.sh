@@ -6,12 +6,27 @@ set -e
 # create dirty file with proper mode
 umask 022
 
+# package-wide compilation of ui packages must be allowed to fail or otherwise
+# deinstallation via package manager fails, too. For this the script is called
+# without any parameters.
+#
+# installation-wide compilation during server start should fail if any of the
+# ui packages can't be compiled or otherwise the server starts in a broken
+# state. For this the script is called with --if-needed.
+STRICT=0
+
 TESTFILE="apps/themes/.need_update"
 
 bail () {
-  echo 'failed! If a subsequent theme update finishes without errors,' \
-       'you can ignore the above error message.'
-  exit 1
+  if [ $STRICT -eq 1 ]
+  then
+    echo "failed!"
+    exit 1
+  else
+    echo 'failed! If a subsequent theme update finishes without errors,' \
+         'you can ignore the above error message.'
+    exit 0
+  fi
 }
 
 cd "$(dirname "$0")/.."
@@ -20,11 +35,18 @@ for key in "$@"
 do
     case "$key" in
         --if-needed)
-        [ ! -f $TESTFILE ] && echo "Themes up-to-date" && exit 0 || echo "Themes need update"
+        if [ ! -f $TESTFILE ]
+        then
+          echo "Themes up-to-date"
+          exit 0 
+        else
+          echo "Themes need update"
+          STRICT=1;
+        fi
         ;;
         --later)
         touch $TESTFILE
-        echo "Run update-themes with --if-needed option to update themes, later"
+        echo "Run update-themes with --if-needed option to update themes later"
         exit 0
     esac
 done
