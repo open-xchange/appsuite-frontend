@@ -643,8 +643,8 @@ define('io.ox/core/tk/wizard', [
         // auto-align popup (used internally)
         align: (function () {
 
-            function set(key, value, size, available) {
-                value = Math.min(Math.max(16, value), available - size - 16);
+            function set($el, key, value) {
+                value = Math.max(16, value);
                 $el.css(key, value);
             }
 
@@ -679,6 +679,10 @@ define('io.ox/core/tk/wizard', [
                     // otherwise
                     this.$el.addClass('center middle');
                 }
+
+                // fix positions
+                if ((bounds.left + popupWidth + 16) > bounds.availableWidth) this.$el.css('left', bounds.availableWidth - popupWidth - 16);
+                if ((bounds.top + popupHeight + 16) > bounds.availableHeight) this.$el.css('top', bounds.availableHeight - popupHeight - 16);
 
                 return this;
             };
