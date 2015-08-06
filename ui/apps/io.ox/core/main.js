@@ -1640,13 +1640,12 @@ define('io.ox/core/main', [
                         //only load first app on small devices
                         if (_.device('smartphone') && index > 0) return;
                         // split app/call
-                        var launch, method;
-                        debug('Auto launch:', details.app);
-                        launch = ox.launch(details.app);
+                        var hash = _.url.hash(), launch, method, options = _(hash).pick('folder', 'id');
+                        debug('Auto launch:', details.app, options);
+                        launch = ox.launch(details.app, options);
                         method = details.method;
                         // TODO: all pretty hard-wired here; looks for better solution
                         // special case: open viewer too?
-                        var hash = _.url.hash();
                         if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
                                 api.get(hash).done(function (data) {
