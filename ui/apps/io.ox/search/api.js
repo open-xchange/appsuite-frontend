@@ -86,14 +86,19 @@ define('io.ox/search/api', [
 
     function getColumns (options) {
         var module = options.params.module,
-            data = columns[module],
-            obj = {
-                params: {
-                    columns: apiFactory.extendColumns(data.extendColumns, module, data.columns)
-                }
-            };
-        // filter admin contacts
-        return obj;
+            data = _.extend(columns[module]);
+        // merge columnlist strings (see bug #38853)
+        if (options.params.loadercolumns) {
+            var standard = data.columns.split(','),
+                custom = options.params.loadercolumns.split(',');
+            delete options.params.loadercolumns;
+            data.columns = _.union(standard, custom).join(',');
+        }
+        return {
+            params: {
+                columns: apiFactory.extendColumns(data.extendColumns, module, data.columns)
+            }
+        };
     }
 
     // get default options
@@ -136,6 +141,7 @@ define('io.ox/search/api', [
      * @return { deferred}   returns results
      */
     api.query = function (options) {
+        // in case options.params.loadercolumns is defined it will be used by getColumns() and removeed from params object
         var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
         return http[opt.method](opt);
     };
