@@ -641,52 +641,50 @@ define('io.ox/core/tk/wizard', [
         },
 
         // auto-align popup (used internally)
-        align: (function () {
+        align: function (selector) {
 
-            function set($el, key, value) {
-                value = Math.max(16, value);
+            // if nothing is defined the step is centered
+            var elem = resolveSelector(selector || this.options.referTo || this.options.spotlight);
+            if (!elem) return;
+
+            var $el = this.$el;
+            var bounds = getBounds(elem), popupWidth = $el.width(), popupHeight = $el.height();
+
+            function set(key, value, size, available) {
+                value = Math.min(Math.max(16, value), available - size - 16);
                 $el.css(key, value);
             }
 
-            return function (selector) {
+            function setLeft(value) {
+                set('left', value, popupWidth, bounds.availableWidth);
+            }
 
-                // if nothing is defined the step is centered
-                selector = selector || this.options.referTo || this.options.spotlight;
-                if (!selector) return;
+            function setTop(value) {
+                set('top', value, popupHeight, bounds.availableHeight);
+            }
 
-                // align automatically
-                var elem = $(selector).filter(':visible');
-                if (!elem.length) return;
+            // remove default class and reset all inline positions
+            this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
 
-                // remove default class and reset all inline positions
-                this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
+            if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
+                // enough room to appear on the right side
+                setLeft(bounds.left + bounds.width + 16);
+                setTop(bounds.top);
+            } else if ((bounds.top + bounds.height + popupHeight) < bounds.availableHeight) {
+                // enough room to appear below
+                setLeft(bounds.left);
+                setTop(bounds.top + bounds.height + 16);
+            } else if ((bounds.left - popupWidth) > 0) {
+                // enough room to appear on the left side
+                setLeft(bounds.left - popupWidth - 16);
+                setTop(bounds.top);
+            } else {
+                // otherwise
+                this.$el.addClass('center middle');
+            }
 
-                var bounds = getBounds(elem), popupWidth = this.$el.width(), popupHeight = this.$el.height();
-
-                if ((bounds.left + bounds.width + popupWidth) < bounds.availableWidth) {
-                    // enough room to appear on the right side
-                    set(this.$el, 'left', bounds.left + bounds.width + 16);
-                    set(this.$el, 'top', bounds.top);
-                } else if ((bounds.top + bounds.height + popupHeight) < bounds.availableHeight) {
-                    // enough room to appear below
-                    set(this.$el, 'top', bounds.top + bounds.height + 16);
-                    set(this.$el, 'left', bounds.left);
-                } else if ((bounds.left - popupWidth) > 0) {
-                    // enough room to appear on the left side
-                    set(this.$el, 'left', bounds.left - popupWidth - 16);
-                    set(this.$el, 'top', bounds.top);
-                } else {
-                    // otherwise
-                    this.$el.addClass('center middle');
-                }
-
-                // fix positions
-                if ((bounds.left + popupWidth + 16) > bounds.availableWidth) this.$el.css('left', bounds.availableWidth - popupWidth - 16);
-                if ((bounds.top + popupHeight + 16) > bounds.availableHeight) this.$el.css('top', bounds.availableHeight - popupHeight - 16);
-
-                return this;
-            };
-        }()),
+            return this;
+        },
 
         // little helper to allow long chains while constructing a wizard or a tour
         end: function () {
