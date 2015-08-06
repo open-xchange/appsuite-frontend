@@ -664,9 +664,12 @@
                     }
                 });
 
+                var module = objModel.get('module');
+
                 var typeaheadView = new Typeahead({
                         apiOptions: {
-                            contacts: true,
+                            // mail does not support sharing folders to guets
+                            contacts: module !== 'mail',
                             users: true,
                             groups: true
                         },
@@ -677,13 +680,15 @@
                             });
                             // remove duplicate entries from typeahead dropdown
                             return _(data).filter(function (model) {
+                                // mail does not support sharing folders to guets
+                                if (module === 'mail' && model.get('field') !== 'email1') return false;
                                 return !permissionsView.collection.get(model.id);
                             });
                         },
                         click: function (e, member) {
                             // build extended permission object
                             var obj = {
-                                bits: objModel.isFolder() ? 4227332 : 257, // Author : Viewer
+                                bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
                                 group: member.get('type') === 2,
                                 type: member.get('type') === 2 ? 'group' : 'user'
                             };
@@ -727,7 +732,7 @@
                                     if (!_.isEmpty(val)) {
                                         permissionsView.collection.add(new Permission({
                                             type: 'guest',
-                                            bits: objModel.isFolder() ? 4227332 : 257, // Author : Viewer
+                                            bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
                                             contact: {
                                                 email1: val
                                             }
