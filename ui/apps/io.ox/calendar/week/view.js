@@ -990,7 +990,7 @@ define('io.ox/calendar/week/view', [
                 $.txt(' '),
                 $('<span class="cw">').text(
                     //#. %1$d = Calendar week
-                    gt('CW %1$d', this.startDate.format('w'))
+                    gt('CW %1$d', this.startDate.day(1).isoWeek())
                 ),
                 $('<i>').addClass('fa fa-caret-down fa-fw').attr({ 'aria-hidden': true })
             );
