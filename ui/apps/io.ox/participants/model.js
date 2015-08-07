@@ -190,39 +190,49 @@ define('io.ox/participants/model', [
         },
 
         fetch: function () {
-            var self = this,
-                setModel = function (data) { self.set(data); };
+
+            var model = this,
+                update = function (data) {
+                    model.set(data);
+                },
+                partialUpdate = function (data) {
+                    // keep display_name (see bug 40264)
+                    if (model.get('display_name')) {
+                        // if we have a display name we drop other names to keep it
+                        // since this update is done on search results
+                        data = _(data).omit('first_name', 'last_name', 'display_name');
+                    }
+                    model.set(data);
+                };
 
             switch (this.get('type')) {
                 case this.TYPE_USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
-                    return userAPI.get({ id: this.get('id') }).then(setModel);
+                    return userAPI.get({ id: this.get('id') }).then(update);
                 case this.TYPE_USER_GROUP:
                     if (this.get('display_name') && this.get('members')) break;
-                    return groupAPI.get({ id: this.get('id') }).then(setModel);
+                    return groupAPI.get({ id: this.get('id') }).then(update);
                 case this.TYPE_RESOURCE:
                     if (this.get('display_name')) break;
-                    return resourceAPI.get({ id: this.get('id') }).then(setModel);
+                    return resourceAPI.get({ id: this.get('id') }).then(update);
                 case this.TYPE_RESOURCE_GROUP:
                     this.set('display_name', 'resource group');
                     break;
                 case this.TYPE_EXTERNAL_USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
                     if (this.get('id') && this.get('folder_id')) {
-                        return contactAPI.get(this.pick('id', 'folder_id')).then(setModel);
+                        return contactAPI.get(this.pick('id', 'folder_id')).then(update);
                     } else {
-                        return contactAPI.getByEmailaddress(this.getEmail()).then(setModel);
+                        return contactAPI.getByEmailaddress(this.getEmail()).then(partialUpdate);
                     }
                     break;
                 case this.TYPE_DISTLIST:
                     if (this.get('display_name') && 'distribution_list' in this.attributes) break;
-                    return contactAPI.get(this.pick('id', 'folder_id')).then(setModel);
-                default:
-                    break;
+                    return contactAPI.get(this.pick('id', 'folder_id')).then(update);
             }
+
             return $.when();
         }
-
     });
 
     var Collection = Backbone.Collection.extend({
