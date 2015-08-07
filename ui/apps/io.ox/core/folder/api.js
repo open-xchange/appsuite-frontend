@@ -762,7 +762,8 @@ define('io.ox/core/folder/api', [
                 id: id,
                 timezone: 'UTC',
                 tree: tree(id),
-                cascadePermissions: options.cascadePermissions
+                cascadePermissions: options.cascadePermissions,
+                ignoreWarnings: options.ignoreWarnings
             },
             data: data,
             appendColumns: false
@@ -804,7 +805,7 @@ define('io.ox/core/folder/api', [
     // Move folder
     //
 
-    function move(id, target) {
+    function move(id, target, ignoreWarnings) {
 
         if (id === target) return;
 
@@ -820,7 +821,7 @@ define('io.ox/core/folder/api', [
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
 
-        return update(id, { folder_id: target }).then(function success(newId) {
+        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(function success(newId) {
             // update new parent folder
             pool.getModel(target).set('subfolders', true);
             // update all virtual folders

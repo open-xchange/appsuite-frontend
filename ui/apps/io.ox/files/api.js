@@ -691,12 +691,12 @@ define('io.ox/files/api', [
     // Move / Copy
     //
 
-    function move(list, targetFolderId) {
+    function move(list, targetFolderId, ignoreConflicts) {
         http.pause();
         _(list).map(function (item) {
             // move files and folders
             return item.folder_id === 'folder' ?
-                folderAPI.move(item.id, targetFolderId) :
+                folderAPI.move(item.id, targetFolderId, ignoreConflicts) :
                 api.update(item, { folder_id: targetFolderId });
         });
         return http.resume();
@@ -720,12 +720,11 @@ define('io.ox/files/api', [
         return http.resume();
     }
 
-    function transfer(type, list, targetFolderId) {
-
+    function transfer(type, list, targetFolderId, ignoreConflicts) {
         var fn = type === 'move' ? move : copy;
 
-        return http.wait(fn(list, targetFolderId)).then(function (response) {
-            var errorText, i = 0, $i = response.length;
+        return http.wait(fn(list, targetFolderId, ignoreConflicts)).then(function (response) {
+            var errorText, i = 0, $i = response ? response.length : 0;
             // look if anything went wrong
             for (; i < $i; i++) {
                 if (response[i].error) {
@@ -734,7 +733,11 @@ define('io.ox/files/api', [
                 }
             }
             api.propagate(type, list, targetFolderId);
-            if (errorText) return errorText;
+            if (errorText) {
+                return errorText;
+            } else {
+                return response;
+            }
         });
     }
 
@@ -742,19 +745,21 @@ define('io.ox/files/api', [
      * Move files to another folder
      * @param  {array} list of objects { id, folder_id }
      * @param  {string} targetFolderId
+     * @param  {boolean} ignoreConflicts
      */
-    api.move = function (list, targetFolderId) {
+    api.move = function (list, targetFolderId, ignoreConflicts) {
         prepareRemove(list);
-        return transfer('move', list, targetFolderId);
+        return transfer('move', list, targetFolderId, ignoreConflicts);
     };
 
     /**
      * Copy files to another folder
      * @param  {array} list
      * @param  {string} targetFolderId
+     * @param  {boolean} ignoreConflicts
      */
-    api.copy = function (list, targetFolderId) {
-        return transfer('copy', list, targetFolderId);
+    api.copy = function (list, targetFolderId, ignoreConflicts) {
+        return transfer('copy', list, targetFolderId, ignoreConflicts);
     };
 
     //

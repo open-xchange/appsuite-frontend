@@ -376,7 +376,39 @@ define('io.ox/files/actions', [
                     var options = {
                         type: type,
                         label: label,
-                        success: success
+                        success: success,
+                        successCallback: function (response) {
+                            if (!_.isString(response)) {
+                                var conflicts = { warnings: [] };
+                                // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
+                                _(response).each(function (error) {
+                                    if (response.categories === 'CONFLICT' && response.code === 'FLD-1038') {
+                                        if (!conflicts.title) {
+                                            conflicts.title = error.error;
+                                        }
+                                        _(error.warnings).each(function (warning) {
+                                            conflicts.warnings.push(warning.error);
+                                        });
+                                    }
+                                });
+                                if (conflicts.title) {
+                                    require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
+                                        filestorageUtil.displayConflicts(conflicts, function () {
+                                            api[type](list, baton.target, true);
+                                        });
+                                    });
+                                } else {
+                                    //no error, must be success
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell('success', list.length > 1 ? success.multiple : success.single);
+                                    });
+                                }
+                            } else {
+                                require(['io.ox/core/yell'], function (yell) {
+                                    yell(response);
+                                });
+                            }
+                        }
                     };
                     action(list, baton, options);
                 });
