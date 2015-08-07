@@ -717,7 +717,7 @@ msgstr "Faktisk tidsåtgång i minuter"
 #: apps/io.ox/core/folder/actions/add.js:108 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:427 module:io.ox/mail
 msgid "Add"
 msgstr "Lägg till"
 
@@ -773,7 +773,7 @@ msgid "Add as public folder"
 msgstr "Ny offentlig mapp"
 
 #: apps/io.ox/core/tk/attachments.js:455 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:428 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:429 module:io.ox/mail
 msgid "Add attachments"
 msgstr "Lägg till bilagor"
 
@@ -797,12 +797,12 @@ msgid "Add files"
 msgstr "Lägg till filer"
 
 #: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:459 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:460 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Lägg till från Drive"
 
 #: apps/io.ox/files/actions.js:519 module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js:452 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:453 module:io.ox/mail
 msgid "Add local file"
 msgstr "Lägg till lokal fil"
 
@@ -818,14 +818,14 @@ msgid "Add new account"
 msgstr "Lägg till nytt konto"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:462
+#: apps/io.ox/core/folder/extensions.js:463
 #, fuzzy
 msgid "Add new calendar"
 msgstr "Lägg till i kalendern"
 
 #: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:229
-#: apps/io.ox/core/folder/extensions.js:462 apps/io.ox/files/actions.js:536
+#: apps/io.ox/core/folder/extensions.js:463 apps/io.ox/files/actions.js:536
 #: module:io.ox/files
 #, fuzzy
 msgid "Add new folder"
@@ -1217,8 +1217,7 @@ msgid "As incoming mail server"
 msgstr "Som inkommande e-postserver"
 
 #: apps/io.ox/calendar/list/perspective.js:243 module:io.ox/calendar
-#: apps/io.ox/files/share/myshares.js:52 module:io.ox/files
-#: apps/io.ox/files/share/view-options.js:49
+#: apps/io.ox/files/share/view-options.js:49 module:io.ox/files
 #: apps/io.ox/files/view-options.js:56 apps/io.ox/mail/view-options.js:46
 #: module:io.ox/mail apps/io.ox/tasks/main.js:774 module:io.ox/tasks
 msgid "Ascending"
@@ -1245,8 +1244,8 @@ msgstr[1] "Bilagorna har sparats"
 #: apps/io.ox/calendar/edit/extensions.js:522 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:381 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:130 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:443 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:465
+#: apps/io.ox/mail/compose/extensions.js:444 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:466
 #: apps/io.ox/tasks/edit/view-template.js:437 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:92 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:224
@@ -1330,7 +1329,7 @@ msgid "B"
 msgstr "b"
 
 #: apps/io.ox/mail/compose/extensions.js:57 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:202
+#: apps/io.ox/mail/compose/extensions.js:203
 msgid "BCC"
 msgstr "BCC"
 
@@ -1435,7 +1434,7 @@ msgstr ""
 "serien. Vill du fortsätta?"
 
 #: apps/io.ox/mail/compose/extensions.js:56 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:200
+#: apps/io.ox/mail/compose/extensions.js:201
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:59
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1513,8 +1512,8 @@ msgstr "Kalender"
 #: apps/io.ox/files/actions/edit-description.js:36
 #: apps/io.ox/files/actions/rename.js:74 apps/io.ox/files/actions/share.js:45
 #: apps/io.ox/files/actions/upload-new-version.js:70
-#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:817
-#: apps/io.ox/files/main.js:868 apps/io.ox/files/share/permissions.js:649
+#: apps/io.ox/files/actions/versions-delete.js:26 apps/io.ox/files/main.js:840
+#: apps/io.ox/files/main.js:891 apps/io.ox/files/share/permissions.js:649
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
@@ -1522,7 +1521,7 @@ msgstr "Kalender"
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29 module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js:63 apps/io.ox/mail/actions/delete.js:82
 #: apps/io.ox/mail/actions/reminder.js:37
-#: apps/io.ox/mail/compose/extensions.js:427
+#: apps/io.ox/mail/compose/extensions.js:428
 #: apps/io.ox/mail/compose/inline-images.js:80
 #: apps/io.ox/mail/compose/names.js:163 apps/io.ox/mail/compose/view.js:651
 #: apps/io.ox/mail/mailfilter/settings/filter.js:105
@@ -1799,7 +1798,7 @@ msgid "Close"
 msgstr "Stäng"
 
 #: apps/io.ox/core/commons.js:650 module:io.ox/core
-#: apps/io.ox/files/main.js:850 module:io.ox/files
+#: apps/io.ox/files/main.js:873 module:io.ox/files
 #: apps/io.ox/files/view-options.js:282 apps/io.ox/mail/view-options.js:158
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -2235,8 +2234,7 @@ msgstr "Data importerades bara delvis ( %1$s av %2$s poster)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js:63 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:117
-#: apps/io.ox/files/share/myshares.js:49 module:io.ox/files
-#: apps/io.ox/files/share/view-options.js:47
+#: apps/io.ox/files/share/view-options.js:47 module:io.ox/files
 #: apps/io.ox/files/view-options.js:45 apps/io.ox/mail/view-options.js:31
 #: module:io.ox/mail
 msgid "Date"
@@ -2441,8 +2439,7 @@ msgid "Department"
 msgstr "Avdelning"
 
 #: apps/io.ox/calendar/list/perspective.js:244 module:io.ox/calendar
-#: apps/io.ox/files/share/myshares.js:53 module:io.ox/files
-#: apps/io.ox/files/share/view-options.js:50
+#: apps/io.ox/files/share/view-options.js:50 module:io.ox/files
 #: apps/io.ox/files/view-options.js:57 apps/io.ox/mail/view-options.js:47
 #: module:io.ox/mail apps/io.ox/tasks/main.js:775 module:io.ox/tasks
 msgid "Descending"
@@ -2819,7 +2816,7 @@ msgstr "Drive-inställningar"
 msgid "Drop EML file here for import"
 msgstr "Släpp EML-fil här för att importera"
 
-#: apps/io.ox/mail/compose/extensions.js:371 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:372 module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Släpp bilagor här"
 
@@ -2902,9 +2899,8 @@ msgstr "Eb"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:77 apps/io.ox/files/actions.js:576
 #: module:io.ox/files apps/io.ox/files/actions.js:586
-#: apps/io.ox/files/main.js:153 apps/io.ox/files/main.js:159
-#: apps/io.ox/files/main.js:820 apps/io.ox/files/main.js:868
-#: apps/io.ox/files/share/myshares.js:144
+#: apps/io.ox/files/main.js:155 apps/io.ox/files/main.js:161
+#: apps/io.ox/files/main.js:843 apps/io.ox/files/main.js:891
 #: apps/io.ox/files/share/permissions.js:544 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:73 apps/io.ox/mail/actions.js:508
 #: apps/io.ox/mail/mailfilter/settings/filter.js:156
@@ -2975,7 +2971,7 @@ msgstr "Redigera utkast"
 msgid "Edit group"
 msgstr "Redigera grupp"
 
-#: apps/io.ox/mail/compose/extensions.js:157 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:158 module:io.ox/mail
 #, fuzzy
 msgid "Edit names"
 msgstr "Listnamn"
@@ -2999,6 +2995,12 @@ msgstr "Redigera resurs"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:54 module:io.ox/mail
 msgid "Edit rule"
 msgstr "Redigera regel"
+
+#: apps/io.ox/files/share/toolbar.js:33 module:io.ox/files
+#, fuzzy
+#| msgid "Edit signature"
+msgid "Edit share"
+msgstr "Redigera signatur"
 
 #: apps/io.ox/mail/settings/signatures/register.js:171 module:io.ox/mail
 msgid "Edit signature"
@@ -3660,7 +3662,7 @@ msgid "Folder view"
 msgstr "Mappvy"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1746 module:io.ox/core
+#: apps/io.ox/core/main.js:1745 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3678,8 +3680,8 @@ msgstr "Mappspecifika åtgärder"
 #: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:369 apps/io.ox/core/folder/view.js:291
 #: module:io.ox/core apps/io.ox/files/filepicker.js:63 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:81 apps/io.ox/files/main.js:150
-#: apps/io.ox/files/main.js:157 apps/io.ox/mail/main.js:144 module:io.ox/mail
+#: apps/io.ox/files/filepicker.js:81 apps/io.ox/files/main.js:152
+#: apps/io.ox/files/main.js:159 apps/io.ox/mail/main.js:144 module:io.ox/mail
 #: apps/io.ox/mail/main.js:151 apps/io.ox/tasks/main.js:148 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:155
 msgid "Folders"
@@ -3757,7 +3759,7 @@ msgstr "Frilansare"
 
 #: apps/io.ox/mail/actions/reminder.js:53 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:117
-#: apps/io.ox/mail/compose/extensions.js:163 apps/io.ox/mail/main.js:567
+#: apps/io.ox/mail/compose/extensions.js:164 apps/io.ox/mail/main.js:567
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Från"
@@ -3944,7 +3946,7 @@ msgstr "Dölj kommentarer"
 msgid "Hide details"
 msgstr "Dölj detaljer"
 
-#: apps/io.ox/mail/compose/extensions.js:156 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:157 module:io.ox/mail
 #, fuzzy
 msgid "Hide names"
 msgstr "Mellannamn"
@@ -4258,14 +4260,14 @@ msgstr "Objekt"
 
 #. items list (e.g. mails)
 #: apps/io.ox/core/commons.js:596 module:io.ox/core
-#: apps/io.ox/files/main.js:285 module:io.ox/files apps/io.ox/mail/main.js:458
+#: apps/io.ox/files/main.js:287 module:io.ox/files apps/io.ox/mail/main.js:458
 #: module:io.ox/mail
 msgid "Item list"
 msgstr "Objekt"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
-#: apps/io.ox/files/main.js:288 module:io.ox/files apps/io.ox/mail/main.js:461
+#: apps/io.ox/files/main.js:290 module:io.ox/files apps/io.ox/mail/main.js:461
 #: module:io.ox/mail
 msgid "Item list options"
 msgstr "Alternativ för objektlista"
@@ -4952,8 +4954,7 @@ msgstr "Mina senaste filer"
 msgid "My password"
 msgstr "Mitt lösenord"
 
-#: apps/io.ox/files/main.js:331 module:io.ox/files
-#: apps/io.ox/files/share/myshares.js:57
+#: apps/io.ox/files/main.js:333 module:io.ox/files
 #: apps/io.ox/files/share/view-options.js:60
 msgid "My shares"
 msgstr ""
@@ -4967,8 +4968,7 @@ msgstr "Mina uppgifter"
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:74 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:457
-#: apps/io.ox/files/share/myshares.js:48 module:io.ox/files
-#: apps/io.ox/files/share/view-options.js:46
+#: apps/io.ox/files/share/view-options.js:46 module:io.ox/files
 #: apps/io.ox/files/view-options.js:44
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:512
 #: module:io.ox/settings/settings
@@ -5177,7 +5177,7 @@ msgstr ""
 "igen."
 
 #: apps/io.ox/core/commons.js:151 module:io.ox/core
-#: apps/io.ox/files/main.js:464 module:io.ox/files
+#: apps/io.ox/files/main.js:487 module:io.ox/files
 msgid "No elements selected"
 msgstr "Inga element valda"
 
@@ -5224,7 +5224,7 @@ msgstr "Inga mottagare"
 msgid "No reminder"
 msgstr "Ingen påminnelse"
 
-#: apps/io.ox/mail/compose/extensions.js:338 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:339 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:339
 #: apps/io.ox/mail/settings/signatures/register.js:341
 #: apps/io.ox/mail/settings/signatures/register.js:403
@@ -5522,7 +5522,7 @@ msgstr "Valfritt 20"
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:281 module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js:83 module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js:351 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:352 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:197 apps/io.ox/mail/compose/view.js:198
 #: apps/io.ox/mail/compose/view.js:199 apps/io.ox/mail/toolbar.js:245
 #: apps/io.ox/tasks/toolbar.js:143
@@ -6639,6 +6639,7 @@ msgstr ""
 #: apps/io.ox/files/share/permissions.js:534 module:io.ox/core
 #: apps/io.ox/files/share/permissions.js:541
 #: apps/io.ox/files/share/permissions.js:548
+#: apps/io.ox/files/share/toolbar.js:40 module:io.ox/files
 msgid "Revoke access"
 msgstr ""
 
@@ -7001,7 +7002,7 @@ msgstr "Delad aktivitet"
 msgid "Shared address books"
 msgstr "Lägg till i adressboken"
 
-#: apps/io.ox/core/folder/extensions.js:545 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:549 module:io.ox/core
 msgid "Shared by other users"
 msgstr "Delad av andra användare"
 
@@ -7037,11 +7038,11 @@ msgstr "Visa alla objekt"
 msgid "Show appointment details"
 msgstr "Visa detaljer om möte"
 
-#: apps/io.ox/mail/compose/extensions.js:202 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:203 module:io.ox/mail
 msgid "Show blind carbon copy input field"
 msgstr "Visa fält för hemlig kopiamottagare"
 
-#: apps/io.ox/mail/compose/extensions.js:200 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:201 module:io.ox/mail
 msgid "Show carbon copy input field"
 msgstr "Visa fält för inmatning av kopiamottagare"
 
@@ -7105,7 +7106,7 @@ msgstr "Visa lista"
 msgid "Show more comments"
 msgstr "Visa fler kommentarer"
 
-#: apps/io.ox/mail/compose/extensions.js:156 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:157 module:io.ox/mail
 #, fuzzy
 msgid "Show names"
 msgstr "Visa som"
@@ -7172,7 +7173,7 @@ msgstr "Signatur"
 msgid "Signature name"
 msgstr "Signaturnamn"
 
-#: apps/io.ox/mail/compose/extensions.js:337 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:338 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:421
 msgid "Signatures"
 msgstr "Signaturer"
@@ -7262,8 +7263,7 @@ msgstr ""
 "från LinkedIn med tillstånd att läsa meddelanden."
 
 #. Sort options drop-down
-#: apps/io.ox/files/share/myshares.js:43 module:io.ox/files
-#: apps/io.ox/files/share/view-options.js:42
+#: apps/io.ox/files/share/view-options.js:42 module:io.ox/files
 #: apps/io.ox/files/view-options.js:68 apps/io.ox/mail/view-options.js:71
 #: module:io.ox/mail
 msgctxt "dropdown"
@@ -7389,8 +7389,8 @@ msgstr "Student"
 
 #: apps/io.ox/calendar/edit/extensions.js:174 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:47 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:303
-#: apps/io.ox/mail/compose/extensions.js:307
+#: apps/io.ox/mail/compose/extensions.js:304
+#: apps/io.ox/mail/compose/extensions.js:308
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:56
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:172
@@ -7464,8 +7464,8 @@ msgstr ""
 "offentliga, delade och systemmappar till Microsoft Outlook®-klienter."
 
 #: apps/io.ox/core/folder/extensions.js:170 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:489
-#: apps/io.ox/core/folder/extensions.js:504
+#: apps/io.ox/core/folder/extensions.js:493
+#: apps/io.ox/core/folder/extensions.js:508
 msgid "Synchronize with your tablet or smartphone"
 msgstr ""
 
@@ -8121,11 +8121,11 @@ msgstr ""
 msgid "This folder has no subscriptions"
 msgstr "Den här mappen har inga prenumerationer"
 
-#: apps/io.ox/core/folder/extensions.js:587 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:591 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Den här mappen innehåller publikationer och/eller prenumerationer"
 
-#: apps/io.ox/core/folder/extensions.js:584 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:588 module:io.ox/core
 #, fuzzy
 msgid "This folder has subscriptions"
 msgstr "Den här mappen har inga prenumerationer"
@@ -8362,7 +8362,6 @@ msgid "Twitter reported the following errors:"
 msgstr "Twitter rapporterade följande fel:"
 
 #: apps/io.ox/calendar/edit/extensions.js:444 module:io.ox/calendar/edit/main
-#: apps/io.ox/files/share/myshares.js:50 module:io.ox/files
 #: apps/io.ox/tasks/edit/view-template.js:381 module:io.ox/tasks/edit
 #: apps/plugins/portal/flickr/register.js:221 module:plugins/portal
 msgid "Type"
@@ -9086,9 +9085,9 @@ msgstr "Du måste använda Android %n eller nyare."
 msgid "You need to use iOS %n or higher."
 msgstr "Du måste använda iOS %n eller nyare."
 
-#: apps/io.ox/core/folder/extensions.js:555 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:564
-#: apps/io.ox/core/folder/extensions.js:567
+#: apps/io.ox/core/folder/extensions.js:559 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:568
+#: apps/io.ox/core/folder/extensions.js:571
 msgid "You share this folder with other users"
 msgstr "Du delar den här mappen med andra användare"
 
@@ -9850,7 +9849,7 @@ msgstr "imorse"
 msgid "three months"
 msgstr "varje månad"
 
-#: apps/io.ox/files/main.js:472 module:io.ox/files
+#: apps/io.ox/files/main.js:495 module:io.ox/files
 msgid "thumbnail"
 msgstr ""
 
@@ -15622,11 +15621,6 @@ msgstr "yyyy"
 
 #~ msgid "date range"
 #~ msgstr "datumintervall"
-
-#, fuzzy
-#~| msgid "Edit signature"
-#~ msgid "edit share"
-#~ msgstr "Redigera signatur"
 
 #~ msgid "files"
 #~ msgstr "filer"
