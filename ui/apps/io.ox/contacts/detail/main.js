@@ -29,8 +29,9 @@ define('io.ox/contacts/detail/main', [
         'show-contact': function (app) {
             app.showContact = function (contact) {
                 api.get(contact).done(function (data) {
+
                     var baton = ext.Baton({ data: data }),
-                        title = data.display_name ? data.display_name : util.getFullName(data.toJSON()),
+                        title = util.getFullName(data),
                         label = data.mark_as_distributionlist ? gt('Distribution List Details') : gt('Contact Details');
 
                     app.setTitle(title);
