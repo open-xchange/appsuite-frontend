@@ -560,6 +560,10 @@
 
     var that = {
 
+        Permission: Permission,
+
+        Permissions: Permissions,
+
         // async / id is folder id
         showFolderPermissions: function (id, options) {
             that.showByModel(new Backbone.Model({ id: id }), options);

@@ -16,10 +16,13 @@ define('io.ox/files/share/toolbar', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/yell',
+    'io.ox/core/folder/api',
+    'io.ox/files/api',
+    'io.ox/files/share/permissions',
     'gettext!io.ox/files',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, yell, gt) {
+], function (ext, links, actions, yell, folderAPI, filesAPI, permissionsModel, gt) {
 
     'use strict';
 
@@ -55,8 +58,37 @@ define('io.ox/files/share/toolbar', [
 
     new actions.Action('io.ox/files/share/revoke', {
         requires: 'one',
-        action: function () {
-            yell('warning', 'TBD!');
+        action: function (baton) {
+            var model = baton.app.mysharesListView.collection.get(baton.data),
+                permissions = model.getPermissions(),
+                collection = new permissionsModel.Permissions(),
+                id = model.get('id'),
+                changes,
+                def,
+                options = {
+                    cascadePermissions: false,
+                    message: ''
+                };
+
+            collection.reset(_(permissions).where({ entity: ox.user_id }));
+
+            if (model.isFolder()) {
+                changes = { permissions: collection.toJSON() };
+                def = folderAPI.update(id, changes, options);
+            } else {
+                changes = { object_permissions: collection.toJSON() };
+                def = filesAPI.update({ id: id }, changes, options);
+            }
+
+            def.then(
+                function success() {
+                    baton.app.mysharesListView.collection.remove(model);
+                    yell('success', gt('Revoked access.'));
+                },
+                function fail(error) {
+                    yell(error);
+                }
+            );
         }
     });
 
