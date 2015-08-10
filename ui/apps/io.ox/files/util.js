@@ -282,7 +282,7 @@ define('io.ox/files/util', [
             var image = '(gif|png|jpe?g|bmp|tiff)',
                 audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
                 video = '(mp4|m4v|ogv|ogm|webm)',
-                office = '(csv|xls|xlb|xlt|ppt|pps|doc|dot|xlsx|xlsm|xltx|xltm|pptx|pptm|ppsx|potx|potm|docx|docm|dotx|dotm|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',
+                office = '(csv|xls|xla|xlb|xlt|ppt|pps|doc|dot|xlsx|xlsm|xltx|xltm|xlam|pptx|pptm|ppsx|ppsm|ppa|ppam|pot|potx|potm|docx|docm|dotx|dotm|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',
                 application = '(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf)',
                 text = '(rtf|plain)';
 
