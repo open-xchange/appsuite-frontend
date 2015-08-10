@@ -468,7 +468,7 @@ define('io.ox/core/tk/wizard', [
                 this.trigger('before:navigate');
                 ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(function () {
                     this.trigger('navigate');
-                    waitFor.bind(this, 0);
+                    waitFor.call(this, 0);
                 }.bind(this));
             }
 
@@ -476,7 +476,6 @@ define('io.ox/core/tk/wizard', [
                 if (counter === 0) this.trigger('wait');
                 if (resolveSelector(this.options.waitFor.selector)) return cont.call(this);
                 var max = _.isNumber(this.options.waitFor.timeout) ? (this.options.waitFor.timeout * 10) : 50;
-                counter = counter || 0;
                 if (counter < max) {
                     setTimeout(waitFor.bind(this, counter + 1), 100);
                 } else {
