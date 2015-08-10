@@ -183,7 +183,7 @@ define('io.ox/files/share/api', [
                 data: [{ id: obj.id, folder: obj.folder_id }]
             })
             .then(function (array) {
-                model.set(array[0]).toJSON();
+                model.set(array[0]);
                 return model.toJSON();
             });
         },
