@@ -49,17 +49,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function (baton) {
                     var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
-                    this.addClass('viewer-toolbar-filename')
-                        .attr('title', gt('File name'));
+                    this.addClass('viewer-toolbar-filename');
                     if (!baton.context.standalone) {
                         this.append(fileIcon);
                     }
                     this.append(filenameLabel).parent().addClass('pull-left');
+
                     if (baton.model.isFile()) {
-                        this.attr({
-                            title: gt('Double click to rename'),
-                            'aria-label': gt('Filename, double click to rename')
-                        });
+                        this.attr('title', gt('File name, click to rename'));
+                    } else {
+                        this.attr('title', gt('File name'));
                     }
                 }
             },
