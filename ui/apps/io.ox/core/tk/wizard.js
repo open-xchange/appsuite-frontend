@@ -465,13 +465,15 @@ define('io.ox/core/tk/wizard', [
         show: (function () {
 
             function navigateTo() {
+                this.trigger('before:navigate');
                 ox.launch(this.options.navigateTo.id, this.options.navigateTo.options).done(function () {
-                    var callback = this.options.navigateTo.callback || _.noop;
-                    $.when(callback.call(this)).done(waitFor.bind(this, 0));
+                    this.trigger('navigate');
+                    waitFor.bind(this, 0);
                 }.bind(this));
             }
 
             function waitFor(counter) {
+                if (counter === 0) this.trigger('wait');
                 if (resolveSelector(this.options.waitFor.selector)) return cont.call(this);
                 var max = _.isNumber(this.options.waitFor.timeout) ? (this.options.waitFor.timeout * 10) : 50;
                 counter = counter || 0;
@@ -502,6 +504,9 @@ define('io.ox/core/tk/wizard', [
 
                 // make invisible and add to DOM to allow proper alignment
                 this.$el.addClass('invisible').appendTo('body');
+
+                // counter-event to "wait"
+                this.trigger('ready');
 
                 // auto-align
                 this.align();
@@ -546,7 +551,6 @@ define('io.ox/core/tk/wizard', [
 
             // no alignment, no spotlight, nothing to wait for
             function handleSmartphone() {
-                this.trigger('before:show');
                 this.$el
                     .css('left', this.indexOf() * 100 + '%')
                     .removeClass('center middle')
@@ -556,6 +560,7 @@ define('io.ox/core/tk/wizard', [
             }
 
             return function () {
+
                 this.trigger('before:show');
 
                 if (_.device('smartphone')) return handleSmartphone.call(this);
@@ -629,8 +634,8 @@ define('io.ox/core/tk/wizard', [
         },
 
         // set 'navigateTo' option; defines which app to start
-        navigateTo: function (id, options, callback) {
-            this.options.navigateTo = { id: id, options: options, callback: callback };
+        navigateTo: function (id, options) {
+            this.options.navigateTo = { id: id, options: options };
             return this;
         },
 
@@ -683,6 +688,8 @@ define('io.ox/core/tk/wizard', [
                 // otherwise
                 this.$el.addClass('center middle');
             }
+
+            this.trigger('align');
 
             return this;
         },
