@@ -232,7 +232,10 @@ define('io.ox/core/tk/list', [
 
             // build hash of all composite keys
             var hash = {};
-            _(list).each(function (obj) { hash[obj.cid] = true; });
+            _(list).each(function (obj) {
+                var cid = obj.cid || _.cid(obj);
+                hash[cid] = true;
+            });
 
             // get all DOM nodes
             var items = this.getItems();
@@ -403,9 +406,11 @@ define('io.ox/core/tk/list', [
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
+
             var li = this.$el.find('li[data-cid="' + $.escape(this.getCompositeKey(model)) + '"]'),
                 baton = this.getBaton(model),
                 index = model.changed.index;
+
             // change position?
             if (index !== undefined) li.attr('data-index', index);
             // draw via extensions

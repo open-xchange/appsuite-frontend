@@ -697,7 +697,7 @@ define('io.ox/files/api', [
             // move files and folders
             return item.folder_id === 'folder' ?
                 folderAPI.move(item.id, targetFolderId, ignoreConflicts) :
-                api.update(item, { folder_id: targetFolderId });
+                api.update(item, { folder_id: targetFolderId }, { silent: true });
         });
         return http.resume();
     }
@@ -732,12 +732,9 @@ define('io.ox/files/api', [
                     break;
                 }
             }
+            // propagete move/copy event
             api.propagate(type, list, targetFolderId);
-            if (errorText) {
-                return errorText;
-            } else {
-                return response;
-            }
+            return errorText || response;
         });
     }
 
@@ -786,7 +783,7 @@ define('io.ox/files/api', [
         if (model) model.set(changes);
 
         // build split data object to support notifications
-        options = options || {};
+        options = _.extend({ silent: false }, options);
         var data = { file: changes };
 
         if (options.notification && !_.isEmpty(options.notification)) {
@@ -804,7 +801,7 @@ define('io.ox/files/api', [
             appendColumns: false
         })
         .done(function () {
-            api.propagate('change:file', file, changes);
+            if (!options.silent) api.propagate('change:file', file, changes);
         });
     };
 
