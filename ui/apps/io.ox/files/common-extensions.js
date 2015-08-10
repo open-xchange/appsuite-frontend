@@ -102,12 +102,16 @@ define('io.ox/files/common-extensions', [
                 // stop trying after three retries
                 if (retry > 3) return;
                 setTimeout(function () {
-                    img.off('load error').on({ load: load, error: error }).attr('src', url).data('retry', retry);
+                    img.off('load.lazyload error.lazyload').on({ 'load.lazyload': load, 'error.lazyload': error }).attr('src', url).data('retry', retry);
                     img = null;
                 }, wait);
             }
 
             function error() {
+                //fallback to default
+                $(this).parent().addClass('default-icon').append(
+                    $('<span class="file-icon"><i class="fa file-type-icon"></i></span>')
+                );
                 $(this).remove();
             }
 
@@ -143,7 +147,7 @@ define('io.ox/files/common-extensions', [
                     img.attr('data-original', url.replace(/format\=preview_image/, 'format=thumbnail_image'));
 
                     // use lazyload
-                    img.on({ 'load': load, 'error': error }).lazyload();
+                    img.on({ 'load.lazyload': load, 'error.lazyload': error }).lazyload();
 
                     return this.append(
                         $('<div class="icon-thumbnail">').append(img)
