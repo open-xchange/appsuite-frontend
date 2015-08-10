@@ -72,7 +72,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
                         tabindex: '1',
-                        title: gt('Zoom out'),
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -86,7 +85,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
                         tabindex: '1',
-                        title: gt('Zoom in'),
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -104,7 +102,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
                             tabindex: '1',
-                            title: gt('Fit to screen width'),
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -119,7 +116,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
                             tabindex: '1',
-                            title: gt('Fit to screen size'),
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -127,15 +123,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             'launchpresenter': {
                 prio: 'hi',
                 mobile: 'lo',
-                label: gt('Start presentation'),
+                label: gt('Present'),
                 icon: 'fa  fa-picture-o',
                 ref: TOOLBAR_ACTION_ID + '/launchpresenter',
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')
                     .attr({
                         tabindex: '1',
-                        title: gt('Start presentation'),
-                        'aria-label': gt('Start presentation')
+                        'aria-label': gt('Present')
                     });
                 }
             },
@@ -148,7 +143,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
                             tabindex: '1',
-                            title: gt('View details'),
                             'aria-label': gt('View details')
                         });
                 }
@@ -163,7 +157,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
                             tabindex: '1',
-                            title: gt('Pop out standalone viewer'),
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -177,7 +170,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-close')
                         .attr({
                             tabindex: '1',
-                            title: gt('Close'),
                             'aria-label': gt('Close')
                         })
                         .parent().addClass('pull-right');
