@@ -40,14 +40,14 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for starting the presentation
-                label: gt('Start presentation'),
+                label: gt('Present'),
                 ref: PRESENTER_ACTION_ID + '/start',
                 customize: function () {
                     this.addClass('presenter-toolbar-start')
                         .attr({
                             tabindex: '1',
                             //#. button tooltip for starting the presentation
-                            'aria-label': gt('Start presentation')
+                            'aria-label': gt('Present')
                         });
                     this.parent().addClass('pull-left');
                 }
