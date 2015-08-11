@@ -122,14 +122,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             'launchpresenter': {
                 prio: 'hi',
                 mobile: 'lo',
-                label: gt('Present'),
-                icon: 'fa  fa-picture-o',
+                label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
+                icon: 'fa fa-picture-o',
                 ref: TOOLBAR_ACTION_ID + '/launchpresenter',
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')
                     .attr({
                         tabindex: '1',
-                        'aria-label': gt('Present')
+                        'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
                     });
                 }
             },
