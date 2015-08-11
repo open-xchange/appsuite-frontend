@@ -231,6 +231,7 @@ define('io.ox/presenter/views/presentationview', [
             function onPauseLeave() {
                 this.togglePauseOverlay();
                 this.app.rtConnection.leavePresentation();
+                this.app.mainView.toggleFullscreen(false);
             }
             leaveButton.on('click', onPauseLeave.bind(this));
             infoBox.append(pauseNotification, leaveButton);
