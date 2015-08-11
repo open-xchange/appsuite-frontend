@@ -293,6 +293,9 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             if (m.count < INFINITY) {
                 api.sendWithoutSequence(m.msg);
             } else {
+                if (api.debug) {
+                    console.log('Count to infinity reached, dropping message with sequence: ', m.msg.seq);
+                }
                 delete resendBuffer[Number(m.msg.seq)];
                 resendDeferreds[Number(m.msg.seq)].reject();
                 delete resendDeferreds[Number(m.msg.seq)];
@@ -690,7 +693,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
             def.resolve(); // Pretend a message without sequence numbers always arrives
         } else {
             if (api.debug) {
-                console.log('Enqueuing in resendBuffer', options.seq);
+                console.log('Enqueuing in resendBuffer ', options.seq);
             }
             if (resendDeferreds[Number(options.seq)]) {
                 def = resendDeferreds[Number(options.seq)];
@@ -701,7 +704,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId) {
         }
 
         if (api.debug) {
-            console.log('Adding to sender queue', queue);
+            console.log('Adding to sender queue ', queue);
         }
         queue.stanzas.push(JSON.parse(JSON.stringify(options)));
         if (!purging) {
