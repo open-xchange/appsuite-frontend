@@ -357,20 +357,16 @@ define('io.ox/files/share/api', [
         revoke: function (collection, model) {
 
             var id = model.get('id'),
-                changes,
-                options = {
-                    cascadePermissions: false,
-                    message: ''
-                };
-
-            collection.reset(_(model.getPermissions()).where({ entity: ox.user_id }));
+                changes;
 
             if (model.isFolder()) {
+                // TODO: Refactor this ugly workaround
+                collection.reset(_(model.getPermissions()).where({ entity: ox.user_id }));
                 changes = { permissions: collection.toJSON() };
-                return folderAPI.update(id, changes, options);
+                return folderAPI.update(id, changes);
             } else {
-                changes = { object_permissions: collection.toJSON() };
-                return filesAPI.update({ id: id }, changes, options);
+                changes = { object_permissions: [] };
+                return filesAPI.update({ id: id }, changes);
             }
         }
 
