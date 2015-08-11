@@ -207,7 +207,7 @@ msgstr "更多信息"
 msgid "Getting started"
 msgstr "开始使用"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "此应用程序的导游"
 
@@ -254,7 +254,8 @@ msgstr ""
 "为了一次编辑多个电子邮件，勾选电子邮件左边的选择框。如果选择框没有显示，请单"
 "击工具条右边的视图  > 选择框。"
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "邀请其他参与者"
 
@@ -298,8 +299,8 @@ msgstr "阅读详情"
 msgid "Searching for objects"
 msgstr "搜寻对象"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "选择一个视图"
 
@@ -351,7 +352,8 @@ msgstr ""
 "图标视图为每个文件显示一个图标和文件名称。单击一个图标以在弹出窗口检视更多详"
 "情和功能。"
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "列表视图"
 
@@ -707,7 +709,8 @@ msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr "使用列表选择一个对象，显示其内容或激活功能。"
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "使用提醒功能"
 

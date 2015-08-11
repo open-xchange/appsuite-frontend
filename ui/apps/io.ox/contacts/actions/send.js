@@ -11,23 +11,24 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/contacts/actions/send', [
-    'io.ox/contacts/api'
-], function (api) {
+define('io.ox/contacts/actions/send', ['io.ox/contacts/api'], function (api) {
 
     'use strict';
 
-    return function (list) {
-        var def = null;
+    function resolve(list) {
+
         if (list.length === 1 && (list[0].id === 0 || list[0].folder_id === 0)) {
+            // just one contact
             var adress = list[0].email1 || list[0].email2 || list[0].email3;
-            def = $.Deferred().resolve([[adress, adress]]);
+            return $.Deferred().resolve([[adress, adress]]);
         } else {
-            def = api.getList(list, true, {
+            // multiple contacts
+            return api.getList(list, true, {
                 check: function (obj) {
                     return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
                 }
-            }).then(function (list) {
+            })
+            .then(function (list) {
                 // set recipient
                 return _.chain(list)
                     .map(function (obj) {
@@ -46,13 +47,12 @@ define('io.ox/contacts/actions/send', [
                     .value();
             });
         }
+    }
 
-        def.done(function (recipients) {
+    return function (list) {
+        return resolve(list).done(function (recipients) {
             // open compose
-            ox.registry.call('mail-compose', 'compose', {
-                to: recipients
-            });
+            ox.registry.call('mail-compose', 'compose', { to: recipients });
         });
     };
-
 });

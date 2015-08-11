@@ -128,8 +128,23 @@ define('io.ox/contacts/edit/view-form', [
             comment: gt('Comment'),
             userfields: gt('User fields'),
             attachments: gt('Attachments')
+        },
+
+        maxlength: {
+            // most fields have a maxlength of 64
+            128: 'first_name last_name position department tax_id',
+            256: 'url profession street_home street_other street_business',
+            512: 'email1 email2 email3 company',
+            5680: 'comment'
         }
     };
+
+    // process maxlength
+    _(meta.maxlength).keys().forEach(function (size) {
+        meta.maxlength[size].split(' ').forEach(function (field) {
+            meta.maxlength[field] = size;
+        });
+    });
 
     // Remove attachment handling when infostore is not present
     if (!capabilities.has('infostore')) {
@@ -432,7 +447,7 @@ define('io.ox/contacts/edit/view-form', [
             this.append(
                 $('<label class="control-label col-xs-12">').append(
                     $.txt(options.label),
-                    input = new mini.InputView({ name: options.field, model: model }).render().$el,
+                    input = new mini.InputView({ name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el,
                     new mini.ErrorView({ selector: '.row' }).render().$el
                 )
             );
@@ -454,7 +469,7 @@ define('io.ox/contacts/edit/view-form', [
             this.append(
                 $('<label>').addClass('control-label col-xs-12').append(
                     $.txt('\u00A0'), $('<br>'),
-                    new mini.TextView({ name: options.field, model: model }).render().$el
+                    new mini.TextView({ name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
                 )
             );
         }

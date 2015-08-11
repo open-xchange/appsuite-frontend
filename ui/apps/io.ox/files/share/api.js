@@ -15,12 +15,112 @@
 define('io.ox/files/share/api', [
     'io.ox/core/http',
     'io.ox/core/event',
-    'io.ox/files/api'
-], function (http, Events, filesAPI) {
+    'io.ox/files/api',
+    'io.ox/core/folder/api'
+], function (http, Events, filesAPI, folderAPI) {
 
     'use strict';
 
+    // wrapping model for infostore files and folders in sharing context
+    var Share = Backbone.Model.extend({
+
+        initialize: function () {
+            this.cid = this.isFolder() ? 'folder.' + this.get('id') : _.cid(this.attributes);
+        },
+
+        isFile: function () {
+            return this.has('folder_id');
+        },
+
+        isFolder: function () {
+            return !this.has('folder_id');
+        },
+
+        isAdmin: function () {
+            // simplification: user is always admin for single files
+            if (this.isFile()) return true;
+            // otherwise check folder bits
+            return folderAPI.Bitmask(this.get('own_rights')).get('admin') >= 1;
+        },
+
+        isExtendedPermission: function () {
+            return this.has('com.openexchange.share.extended' + (this.isFolder() ? 'Permissions' : 'ObjectPermissions'));
+        },
+
+        getOwner: function () {
+            // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
+            // shared folder only have admins, no owner, because it's not possible to determine the right one
+            return this.get('created_by') || (folderAPI.is('insideDefaultfolder', this.attributes) ? ox.user_id : null);
+        },
+
+        getDisplayName: function () {
+            return this.get('title');
+        },
+
+        getFolderID: function () {
+            return this.isFolder() ? this.get('id') : this.get('folder_id');
+        },
+
+        getFileType: filesAPI.Model.prototype.getFileType,
+
+        types: filesAPI.Model.prototype.types,
+
+        getExtension: function () {
+            var parts = String(this.get('title') || '').split('.');
+            return parts.length === 1 ? '' : parts.pop().toLowerCase();
+        },
+
+        getPermissions: function () {
+            if (this.isFolder()) {
+                return this.get('com.openexchange.share.extendedPermissions') || this.get('permissions');
+            } else {
+                return this.get('com.openexchange.share.extendedObjectPermissions') || this.get('object_permissions');
+            }
+        },
+
+        loadExtendedPermissions: (function () {
+
+            function fetchFile(model, options) {
+                return api.getFileShare(model.pick('id', 'folder_id'), options).done(function (data) {
+                    model.set(data);
+                });
+            }
+
+            function fetchFolder(model, options) {
+
+                if (options.cache && model.has('com.openexchange.share.extendedPermissions')) {
+                    // use existing model
+                    return $.when();
+                }
+
+                // bypass cache (once) to have all columns (incl. 3060)
+                return folderAPI.get(model.id, { cache: false }).done(function (data) {
+                    // omit "folder_id" otherwise a folder is regarded as file (might need some improvement)
+                    data = _(data).omit('folder_id');
+                    model.set(data);
+                });
+            }
+
+            return function (options) {
+                options = _.extend({ cache: true }, options);
+                return this.isFolder() ? fetchFolder(this, options) : fetchFile(this, options);
+            };
+
+        }()),
+
+        reload: function () {
+            return this.loadExtendedPermissions({ cache: false });
+        }
+
+    });
+
+    var SharesCollection = Backbone.Collection.extend({ model: Share });
+
     var api = {
+
+        Model: Share,
+
+        collection: new SharesCollection(),
 
         /**
          * invite ot share
@@ -183,7 +283,7 @@ define('io.ox/files/share/api', [
                 data: [{ id: obj.id, folder: obj.folder_id }]
             })
             .then(function (array) {
-                model.set(array[0]).toJSON();
+                model.set(array[0]);
                 return model.toJSON();
             });
         },
@@ -252,6 +352,22 @@ define('io.ox/files/share/api', [
                 },
                 data: o
             });
+        },
+
+        revoke: function (collection, model) {
+
+            var id = model.get('id'),
+                changes;
+
+            if (model.isFolder()) {
+                // TODO: Refactor this ugly workaround
+                collection.reset(_(model.getPermissions()).where({ entity: ox.user_id }));
+                changes = { permissions: collection.toJSON() };
+                return folderAPI.update(id, changes);
+            } else {
+                changes = { object_permissions: [] };
+                return filesAPI.update({ id: id }, changes);
+            }
         }
 
     };

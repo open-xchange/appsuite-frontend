@@ -31,6 +31,7 @@ define('io.ox/core/main', [
     'gettext!io.ox/core',
     'io.ox/core/relogin',
     'io.ox/core/links',
+    'io.ox/core/http_errors',
     'io.ox/backbone/disposable'
 ], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
 
@@ -1033,7 +1034,7 @@ define('io.ox/core/main', [
             draw: function () {
                 var ul, a;
                 this.append(
-                    $('<li class="launcher dropdown" role="presentation">').append(
+                    $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
                         a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
                         .append(
                             $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),

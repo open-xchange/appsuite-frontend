@@ -101,7 +101,7 @@ define('io.ox/presenter/rtconnection', [
          * Log the data
          */
         function debugLogUpdateNotification(data) {
-            console.info('Presenter - RTConnection - data', JSON.stringify(data || {}));
+            console.info('Presenter - RTConnection - data', data);
         }
 
         /**
@@ -493,7 +493,22 @@ define('io.ox/presenter/rtconnection', [
          */
         this.joinPresentation = function () {
             RTConnection.log('RTConnection.joinPresentation called');
-            return send('joinpresentation');
+
+            // try to join the presentation
+            var promise = send('joinpresentation');
+
+            // US #99684978: wait for the update message, reject with error code
+            var def = $.Deferred();
+            this.one('update', function (event, data) {
+                if (_.isObject(data) && _.isObject(data.error) && (data.error.error === 'NO_ERROR')) {
+                    def.resolve();
+                } else {
+                    def.reject(_.isObject(data) ? data.error : null);
+                }
+            });
+
+            // return a promise that resolves/rejects after the update message
+            return promise.then(_.constant(def));
         };
 
         /**

@@ -99,6 +99,8 @@ define('io.ox/core/tk/tokenfield', [
                 createTokensOnBlur: true,
                 // dnd sort
                 dnd: true,
+                // no html by default
+                html: false,
                 // dont't call init function in typeahead view
                 init: false,
                 // activate to prevent creation of an participant model in tokenfield:create handler
@@ -312,17 +314,18 @@ define('io.ox/core/tk/tokenfield', [
         },
 
         render: function () {
-            var o = this.options,
-                self = this;
+
+            var o = this.options, self = this;
 
             this.$el
-                .addClass('tokenfield');
-            this.$el.tokenfield({
-                createTokensOnBlur: o.createTokensOnBlur,
-                minLength: o.minLength,
-                allowEditing: o.allowEditing,
-                typeahead: self.typeaheadOptions
-            });
+                .addClass('tokenfield')
+                .tokenfield({
+                    createTokensOnBlur: o.createTokensOnBlur,
+                    minLength: o.minLength,
+                    allowEditing: o.allowEditing,
+                    typeahead: self.typeaheadOptions,
+                    html: this.options.html || false
+                });
 
             this.register();
 

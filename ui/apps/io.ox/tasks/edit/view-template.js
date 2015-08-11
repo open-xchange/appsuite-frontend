@@ -421,6 +421,7 @@ define('io.ox/tasks/edit/view-template', [
                 view.$el
             );
             view.render().$el.addClass('col-xs-12 collapsed');
+            view.$el.find('input.add-participant').addClass('task-participant-input-field');
         }
     });
 

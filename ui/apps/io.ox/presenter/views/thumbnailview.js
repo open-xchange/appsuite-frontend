@@ -263,6 +263,7 @@ define('io.ox/presenter/views/thumbnailview', [
                     thumbnailPane.scrollLeft(thumbnailPaneScrollLeft + thumbnailLeftEdge - marginOffset);
                 }
             }
+            thumbnail.focus();
         },
 
         /**

@@ -40,6 +40,7 @@ define('io.ox/core/folder/actions/move', [
         //   root: tree root id
         //   settings: app-specific settings
         //   success: i18n strings { multiple: '...', single: '... }
+        //   successCallback: callback function on success, is used instead of yell then
         //   title: dialog title
         //   target: target is known; no dialog
         //   type: move/copy
@@ -70,13 +71,18 @@ define('io.ox/core/folder/actions/move', [
                         // contacts a double array of undefined; tasks the new object.
                         // so every API seems to behave differently.
                         if (_.isArray(response)) response = _(response).compact()[0];
-                        // fail?
-                        if (_.isObject(response) && response.error) {
-                            notifications.yell(response);
+                        // custom callback?
+                        if (options.successCallback) {
+                            options.successCallback(response);
                         } else {
-                            if (type === 'copy') success();
-                            api.reload(target, options.list);
-                            if (type === 'move' && options.vgrid) options.vgrid.idle();
+                            // fail?
+                            if (_.isObject(response) && response.error) {
+                                notifications.yell(response);
+                            } else {
+                                if (type === 'copy') success();
+                                api.reload(target, options.list);
+                                if (type === 'move' && options.vgrid) options.vgrid.idle();
+                            }
                         }
                     },
                     notifications.yell

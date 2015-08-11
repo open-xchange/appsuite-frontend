@@ -166,7 +166,7 @@ define('io.ox/mail/compose/names', [
                     this.view = null;
                 })
                 .show(function () {
-                    this.find('input:enabled:first').focus();
+                    this.find('input:enabled').focus();
                 });
             });
         }

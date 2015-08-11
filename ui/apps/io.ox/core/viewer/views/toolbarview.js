@@ -49,17 +49,16 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function (baton) {
                     var fileIcon = $('<i class="fa">').addClass(Util.getIconClass(baton.model)),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
-                    this.addClass('viewer-toolbar-filename')
-                        .attr('title', gt('File name'));
+                    this.addClass('viewer-toolbar-filename');
                     if (!baton.context.standalone) {
                         this.append(fileIcon);
                     }
                     this.append(filenameLabel).parent().addClass('pull-left');
+
                     if (baton.model.isFile()) {
-                        this.attr({
-                            title: gt('Double click to rename'),
-                            'aria-label': gt('Filename, double click to rename')
-                        });
+                        this.attr('title', gt('File name, click to rename'));
+                    } else {
+                        this.attr('title', gt('File name'));
                     }
                 }
             },
@@ -72,7 +71,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
                         tabindex: '1',
-                        title: gt('Zoom out'),
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -86,7 +84,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
                         tabindex: '1',
-                        title: gt('Zoom in'),
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -104,7 +101,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
                             tabindex: '1',
-                            title: gt('Fit to screen width'),
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -119,7 +115,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
                             tabindex: '1',
-                            title: gt('Fit to screen size'),
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -127,15 +122,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             'launchpresenter': {
                 prio: 'hi',
                 mobile: 'lo',
-                label: gt('Start presentation'),
-                icon: 'fa  fa-picture-o',
+                label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
+                icon: 'fa fa-picture-o',
                 ref: TOOLBAR_ACTION_ID + '/launchpresenter',
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')
                     .attr({
                         tabindex: '1',
-                        title: gt('Start presentation'),
-                        'aria-label': gt('Start presentation')
+                        'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
                     });
                 }
             },
@@ -148,7 +142,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
                             tabindex: '1',
-                            title: gt('View details'),
                             'aria-label': gt('View details')
                         });
                 }
@@ -163,7 +156,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
                             tabindex: '1',
-                            title: gt('Pop out standalone viewer'),
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -177,7 +169,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-close')
                         .attr({
                             tabindex: '1',
-                            title: gt('Close'),
                             'aria-label': gt('Close')
                         })
                         .parent().addClass('pull-right');
@@ -398,6 +389,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
         id: 'launchpresenter',
+        capabilities: 'document_preview',
         requires: function (e) {
             return e.baton.model.isPresentation();
         },

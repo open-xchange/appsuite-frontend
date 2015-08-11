@@ -48,6 +48,7 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
             this.getFile();
             return http.resume()
                 .then(function (req) {
+                    $(api).trigger('quota-update', { mail: req[0].data, file: req[1].data });
                     return { mail: req[0].data, file: req[1].data };
                 });
             // for demo purposes
@@ -63,6 +64,11 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
             // });
         }
     };
+
+    // get fresh quota to trigger update events
+    ox.on('refresh^', function () {
+        api.get();
+    });
 
     return api;
 });

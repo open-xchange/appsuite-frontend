@@ -227,7 +227,7 @@ msgstr "Ulteriori informazioni"
 msgid "Getting started"
 msgstr "Primi passi"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "Presentazione guidata per questa applicazione"
 
@@ -282,7 +282,8 @@ msgstr ""
 "selezione a sinistra dei messaggi. Se le caselle non sono visualizzate, fare "
 "clic su Vista > Caselle di selezione a destra della barra degli strumenti."
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "Invitare altri partecipanti"
 
@@ -326,8 +327,8 @@ msgstr "Leggere i dettagli"
 msgid "Searching for objects"
 msgstr "Cercare oggetti"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "Selezionare una vista"
 
@@ -381,7 +382,8 @@ msgstr ""
 "clic su un'icona per visualizzare ulteriori dettagli e funzioni nella "
 "finestra a comparsa."
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "La vista Elenco"
 
@@ -812,7 +814,8 @@ msgstr ""
 "Utilizzare l'elenco per selezionare un oggetto, mostrare il suo contenuto o "
 "attivare funzioni."
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "Utilizzare le funzioni di promemoria"
 

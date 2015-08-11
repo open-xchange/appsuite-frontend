@@ -42,6 +42,12 @@ define('io.ox/mail/toolbar', [
             drawDisabled: true,
             ref: 'io.ox/mail/actions/compose'
         },
+        'edit': {
+            prio: 'hi',
+            mobile: 'lo',
+            label: gt('Edit draft'),
+            ref: 'io.ox/mail/actions/edit'
+        },
         'reply': {
             prio: 'hi',
             mobile: 'lo',
@@ -98,12 +104,6 @@ define('io.ox/mail/toolbar', [
             customize: function (baton) {
                 flagPicker.attach(this, { data: baton.data });
             }
-        },
-        'edit': {
-            prio: 'hi',
-            mobile: 'lo',
-            label: gt('Edit draft'),
-            ref: 'io.ox/mail/actions/edit'
         },
         'archive': {
             prio: 'hi',

@@ -376,7 +376,39 @@ define('io.ox/files/actions', [
                     var options = {
                         type: type,
                         label: label,
-                        success: success
+                        success: success,
+                        successCallback: function (response) {
+                            if (!_.isString(response)) {
+                                var conflicts = { warnings: [] };
+                                // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
+                                _(response).each(function (error) {
+                                    if (response.categories === 'CONFLICT' && response.code === 'FLD-1038') {
+                                        if (!conflicts.title) {
+                                            conflicts.title = error.error;
+                                        }
+                                        _(error.warnings).each(function (warning) {
+                                            conflicts.warnings.push(warning.error);
+                                        });
+                                    }
+                                });
+                                if (conflicts.title) {
+                                    require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
+                                        filestorageUtil.displayConflicts(conflicts, function () {
+                                            api[type](list, baton.target, true);
+                                        });
+                                    });
+                                } else {
+                                    //no error, must be success
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell('success', list.length > 1 ? success.multiple : success.single);
+                                    });
+                                }
+                            } else {
+                                require(['io.ox/core/yell'], function (yell) {
+                                    yell(response);
+                                });
+                            }
+                        }
                     };
                     action(list, baton, options);
                 });
@@ -459,7 +491,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'items') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one', 'items', 'modify') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             api.versions.setCurrent(baton.data);
@@ -469,7 +501,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'items') && e.baton.openedBy !== 'io.ox/mail/compose';
+            return e.collection.has('one', 'items', 'delete') && e.baton.openedBy !== 'io.ox/mail/compose';
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {

@@ -80,7 +80,7 @@
 
  .io-ox-alert {
      .presenter-notification-btn {
-         color: green;
+         color: @link-color;
          font-size: 15pt;
      }
  }
@@ -463,6 +463,7 @@
              margin: 0 2px;
              text-align: center;
              vertical-align: top;
+             outline-color: transparent;
              .wrapper {
                  .flex-center();
                  -webkit-flex-direction: column;
@@ -477,9 +478,6 @@
                  .page-number {
                      color: @presenter-thumbnail-number-hover-color;
                  }
-             }
-             &:active, &:focus {
-                 background: @presenter-thumbnail-link-focus-color;
              }
              &.selected {
                  background: @presenter-thumbnail-link-selected-color;
@@ -496,6 +494,7 @@
 
          .thumbnail-image {
              width: 100%;
+             height: auto;
          }
 
          .page-number {

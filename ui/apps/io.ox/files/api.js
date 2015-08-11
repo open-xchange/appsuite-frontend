@@ -390,6 +390,8 @@ define('io.ox/files/api', [
                 columns: allColumns,
                 sort: params.sort || '702',
                 order: params.order || 'asc',
+                // tell server to prefetch thumbnails (see bug 39897)
+                pregenerate_previews: true,
                 timezone: 'utc'
             };
         },
@@ -691,13 +693,13 @@ define('io.ox/files/api', [
     // Move / Copy
     //
 
-    function move(list, targetFolderId) {
+    function move(list, targetFolderId, ignoreConflicts) {
         http.pause();
         _(list).map(function (item) {
             // move files and folders
             return item.folder_id === 'folder' ?
-                folderAPI.move(item.id, targetFolderId) :
-                api.update(item, { folder_id: targetFolderId });
+                folderAPI.move(item.id, targetFolderId, ignoreConflicts) :
+                api.update(item, { folder_id: targetFolderId }, { silent: true });
         });
         return http.resume();
     }
@@ -720,12 +722,11 @@ define('io.ox/files/api', [
         return http.resume();
     }
 
-    function transfer(type, list, targetFolderId) {
-
+    function transfer(type, list, targetFolderId, ignoreConflicts) {
         var fn = type === 'move' ? move : copy;
 
-        return http.wait(fn(list, targetFolderId)).then(function (response) {
-            var errorText, i = 0, $i = response.length;
+        return http.wait(fn(list, targetFolderId, ignoreConflicts)).then(function (response) {
+            var errorText, i = 0, $i = response ? response.length : 0;
             // look if anything went wrong
             for (; i < $i; i++) {
                 if (response[i].error) {
@@ -733,8 +734,9 @@ define('io.ox/files/api', [
                     break;
                 }
             }
+            // propagete move/copy event
             api.propagate(type, list, targetFolderId);
-            if (errorText) return errorText;
+            return errorText || response;
         });
     }
 
@@ -742,19 +744,21 @@ define('io.ox/files/api', [
      * Move files to another folder
      * @param  {array} list of objects { id, folder_id }
      * @param  {string} targetFolderId
+     * @param  {boolean} ignoreConflicts
      */
-    api.move = function (list, targetFolderId) {
+    api.move = function (list, targetFolderId, ignoreConflicts) {
         prepareRemove(list);
-        return transfer('move', list, targetFolderId);
+        return transfer('move', list, targetFolderId, ignoreConflicts);
     };
 
     /**
      * Copy files to another folder
      * @param  {array} list
      * @param  {string} targetFolderId
+     * @param  {boolean} ignoreConflicts
      */
-    api.copy = function (list, targetFolderId) {
-        return transfer('copy', list, targetFolderId);
+    api.copy = function (list, targetFolderId, ignoreConflicts) {
+        return transfer('copy', list, targetFolderId, ignoreConflicts);
     };
 
     //
@@ -781,7 +785,7 @@ define('io.ox/files/api', [
         if (model) model.set(changes);
 
         // build split data object to support notifications
-        options = options || {};
+        options = _.extend({ silent: false }, options);
         var data = { file: changes };
 
         if (options.notification && !_.isEmpty(options.notification)) {
@@ -799,7 +803,7 @@ define('io.ox/files/api', [
             appendColumns: false
         })
         .done(function () {
-            api.propagate('change:file', file, changes);
+            if (!options.silent) api.propagate('change:file', file, changes);
         });
     };
 
@@ -1059,6 +1063,7 @@ define('io.ox/files/api', [
                     // rename?
                     var changes = arguments[2] || {};
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
+                    if ('object_permissions' in changes) api.propagate('permissions', file);
                     break;
 
                 case 'change:version':
@@ -1104,6 +1109,10 @@ define('io.ox/files/api', [
 
                 case 'rename':
                     api.trigger('rename', _.cid(file));
+                    break;
+
+                case 'permissions':
+                    api.trigger('change:permissions', _.cid(file));
                     break;
 
                 case 'unlock':

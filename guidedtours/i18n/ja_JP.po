@@ -220,7 +220,7 @@ msgstr "詳細情報"
 msgid "Getting started"
 msgstr "はじめに"
 
-#: apps/io.ox/tours/main.js:832 module:io.ox/tours
+#: apps/io.ox/tours/main.js:845 module:io.ox/tours
 msgid "Guided tour for this app"
 msgstr "このアプリケーションのガイドツアー"
 
@@ -271,7 +271,8 @@ msgstr ""
 "します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
 "[ビュー] → [チェックボックス] の順にクリックします。"
 
-#: apps/io.ox/tours/main.js:445 module:io.ox/tours apps/io.ox/tours/main.js:662
+#: apps/io.ox/tours/main.js:445 module:io.ox/tours
+#: apps/io.ox/tours/main.js:662
 msgid "Inviting other participants"
 msgstr "アポイントへの出席依頼"
 
@@ -315,8 +316,8 @@ msgstr "詳細情報の閲覧"
 msgid "Searching for objects"
 msgstr "オブジェクトの検索"
 
-#: apps/io.ox/tours/main.js:305 module:io.ox/tours apps/io.ox/tours/main.js:490
-#: apps/io.ox/tours/main.js:534
+#: apps/io.ox/tours/main.js:305 module:io.ox/tours
+#: apps/io.ox/tours/main.js:490 apps/io.ox/tours/main.js:534
 msgid "Selecting a view"
 msgstr "ビューの選択"
 
@@ -368,7 +369,8 @@ msgstr ""
 "アイコン ビューには、各ファイルのアイコンとファイル名が表示されます。アイコン"
 "をクリックすると、詳細と機能がポップアップに表示されます。"
 
-#: apps/io.ox/tours/main.js:501 module:io.ox/tours apps/io.ox/tours/main.js:540
+#: apps/io.ox/tours/main.js:501 module:io.ox/tours
+#: apps/io.ox/tours/main.js:540
 msgid "The List view"
 msgstr "リスト ビュー"
 
@@ -785,7 +787,8 @@ msgstr ""
 "オブジェクトの選択やその内容の閲覧、機能を有効にするには、一覧でそのオブジェ"
 "クトを選択します。"
 
-#: apps/io.ox/tours/main.js:439 module:io.ox/tours apps/io.ox/tours/main.js:645
+#: apps/io.ox/tours/main.js:439 module:io.ox/tours
+#: apps/io.ox/tours/main.js:645
 msgid "Using the reminder function"
 msgstr "アラーム機能の使用"
 

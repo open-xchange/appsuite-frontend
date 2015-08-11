@@ -1,4 +1,4 @@
-/**
+ /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -109,7 +109,7 @@ define('io.ox/participants/add', [
             this.typeahead = new Typeahead(this.options);
             this.$el.append(
                 $('<label class="sr-only">').attr({ for: guid }).text(this.options.label),
-                this.typeahead.$el.attr({ id: guid })
+                this.typeahead.$el.attr({ id: guid }).addClass('add-participant')
             );
             this.typeahead.render();
             return this;

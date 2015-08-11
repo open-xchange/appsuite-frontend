@@ -28,6 +28,7 @@ define('io.ox/files/actions/move-copy', [
             root: '9',
             settings: settings,
             success: options.success,
+            successCallback: options.successCallback,
             target: baton.target,
             title: options.label,
             type: options.type

@@ -1338,7 +1338,7 @@ msgstr "CCO"
 #: apps/io.ox/calendar/main.js:208 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:229 apps/io.ox/contacts/main.js:377
 #: module:io.ox/contacts apps/io.ox/core/commons.js:603 module:io.ox/core
-#: apps/io.ox/core/tk/wizard.js:312 apps/io.ox/mail/main.js:159
+#: apps/io.ox/core/tk/wizard.js:322 apps/io.ox/mail/main.js:159
 #: module:io.ox/mail apps/io.ox/mail/main.js:164
 #: apps/io.ox/mail/threadview.js:40 apps/io.ox/tasks/main.js:164
 #: module:io.ox/tasks
@@ -1779,7 +1779,7 @@ msgstr "Clique para enviar imagem"
 #: apps/io.ox/core/folder/actions/properties.js:71
 #: apps/io.ox/core/folder/tree.js:224 module:io.ox/core/folder/tree
 #: apps/io.ox/core/main.js:1227 apps/io.ox/core/permissions/permissions.js:492
-#: apps/io.ox/core/tk/wizard.js:349
+#: apps/io.ox/core/tk/wizard.js:359
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js:140
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js:180
 #: apps/io.ox/core/viewer/views/toolbarview.js:181
@@ -2731,7 +2731,7 @@ msgid "Documents"
 msgstr "Documentos"
 
 #. Task: Done like in "Mark as done"
-#: apps/io.ox/core/tk/wizard.js:313 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:323 module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js:189 apps/io.ox/files/actions/share.js:44
 #: module:io.ox/files apps/io.ox/files/share/wizard.js:312
@@ -5121,7 +5121,7 @@ msgstr "Lembretes de tarefa"
 msgid "New task reminders"
 msgstr "Lembretes de tarefa"
 
-#: apps/io.ox/core/tk/wizard.js:398 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js:114
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -7356,7 +7356,7 @@ msgstr "Destino"
 msgid "Start search"
 msgstr "Iniciar pesquisa"
 
-#: apps/io.ox/core/tk/wizard.js:398 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:408 module:io.ox/core
 #, fuzzy
 #| msgid "Starts on"
 msgid "Start tour"
@@ -8783,7 +8783,7 @@ msgstr "Visualizar semana"
 msgid "Weekly on %1$s"
 msgstr "Semanalmente em %1$s"
 
-#: apps/io.ox/core/tk/wizard.js:723 module:io.ox/core
+#: apps/io.ox/core/tk/wizard.js:729 module:io.ox/core
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome"

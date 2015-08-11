@@ -61,6 +61,7 @@ module.exports = function (grunt) {
                             'bower_components/bootstrap-accessibility-plugin/plugins/js/bootstrap-accessibility.js',
                             // add mandatory UI sources
                             'apps/io.ox/core/http.js',
+                            'apps/io.ox/core/http_errors.js',
                             'apps/io.ox/core/uuids.js',
                             'apps/io.ox/core/session.js',
                             'apps/io.ox/core/cache.js',

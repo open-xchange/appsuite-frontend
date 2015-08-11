@@ -16,10 +16,13 @@ define('io.ox/files/share/toolbar', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/yell',
+    'io.ox/core/folder/api',
+    'io.ox/files/api',
+    'io.ox/files/share/api',
     'gettext!io.ox/files',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, yell, gt) {
+], function (ext, links, actions, yell, folderAPI, filesAPI, api, gt) {
 
     'use strict';
 
@@ -46,17 +49,21 @@ define('io.ox/files/share/toolbar', [
     new actions.Action('io.ox/files/share/edit', {
         requires: 'one',
         action: function (baton) {
-            var model = baton.app.mysharesListView.collection.get(baton.data);
             require(['io.ox/files/share/permissions'], function (permissions) {
-                permissions.show(model);
+                permissions.show(baton.model);
             });
         }
     });
 
     new actions.Action('io.ox/files/share/revoke', {
         requires: 'one',
-        action: function () {
-            yell('warning', 'TBD!');
+        action: function (baton) {
+            require(['io.ox/files/share/permissions'], function (permissions) {
+                var collection = new permissions.Permissions();
+                api.revoke(collection, baton.model).then(function () {
+                    yell('success', gt('Revoked access.'));
+                }).fail(yell);
+            });
         }
     });
 

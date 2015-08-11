@@ -1064,7 +1064,14 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.listView.on('selection:doubleclick', function (list) {
                 if (app.isThreaded()) list = _(api.threads.get(list[0])).pluck('cid');
-                ox.launch('io.ox/mail/detail/main', { cid: _(list).first() });
+                var cid = list[0],
+                    obj = _.cid(cid),
+                    isDraft = account.is('drafts', obj.folder_id);
+                if (isDraft) {
+                    ox.registry.call('mail-compose', 'edit', obj);
+                } else {
+                    ox.launch('io.ox/mail/detail/main', { cid: cid });
+                }
             });
         },
 

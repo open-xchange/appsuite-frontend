@@ -295,8 +295,11 @@ define('io.ox/mail/detail/content', [
         index: 800,
         process: function () {
             each(this, 'blockquote', function (node) {
+                var indent = (/border:\s*(none|0)/i).test(node.getAttribute('style'));
                 node.removeAttribute('style');
                 node.removeAttribute('type');
+                // hide border to use blockquote just for indentation
+                if (indent) node.style.border = '0';
             });
         }
     });

@@ -19,6 +19,7 @@
         isOpera,
         webkit,
         chrome,
+        edge,
         phantom,
         MacOS,
         Windows,
@@ -114,7 +115,7 @@
             isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
-            spartan = ua.indexOf('Edge/12.0') > -1;  // TODO: This needs to be updated, if better user agent is available
+            edge = ua.indexOf('Edge/') > -1;  // TODO: This needs to be updated, if better user agent is available
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Windows = ua.indexOf('Windows') > -1;
@@ -128,8 +129,8 @@
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
             // TODO: This needs to be updated, if better user agent is available
-            // Spartan is no Chrome and no Webkit.
-            if (spartan) {
+            // Edge is no Chrome and no Webkit.
+            if (edge) {
                 chrome = false;
                 webkit = false;
             }
@@ -137,15 +138,15 @@
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
-                IE: spartan ?
-                    // TODO: Handle Spartan as IE 12. Is this really wanted?
-                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : (
+                IE: edge ?
+                    // TODO: Handle Edge as IE 12. Is this really wanted?
+                    Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1]) : (
                         nav.appName === 'Microsoft Internet Explorer' ?
                             Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
                                 !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)),
-                /** is Spartan? */
-                Spartan: spartan ?
-                    // TODO: If Spartan is handled as IE 12, a specific 'Spartan' property is not required.
+                /** is Edge browser? */
+                Edge: edge ?
+                    // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.
                     Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined,
                 /** is Opera? */
                 Opera: isOpera ?

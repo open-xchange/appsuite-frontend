@@ -32,23 +32,57 @@ define('io.ox/files/share/listview', [
 
         initialize: function (options) {
 
-            options.collection = this.collection = new sModel.Shares();
+            options.collection = this.collection = api.collection;
 
             ListView.prototype.initialize.call(this, options);
 
             this.$el.addClass('myshares-list column-layout');
 
-            this.getShares();
+            this.load();
+
+            this.model.set({ sort: 'name', order: 'asc' });
+            this.toggleCheckboxes(false);
 
             this.listenTo(this.collection, 'reset', this.redraw);
-            this.listenTo(ox, 'refresh^', this.getShares);
+            this.listenTo(ox, 'refresh^', this.reload);
             this.listenTo(this.model, 'change:sort change:order', this.sortBy);
+
+            var self = this;
+
+            // Doubleclick handler
+            this.$el.on(
+                _.device('touch') ? 'tap' : 'dblclick',
+                '.list-item .list-item-content',
+                function () {
+                    self.openPermissionsDialog();
+                }
+            );
+
+            // Keydown handler (only Enter) on selection
+            (function () {
+                if (_.device('smartphone')) return;
+                self.$el.on('keydown', '.list-item', function (e) {
+                    if (e.which === 13) self.openPermissionsDialog();
+                });
+            })();
+
         },
 
-        getShares: function () {
+        load: function () {
             var self = this;
             return api.all().then(function (data) {
                 self.collection.reset(data);
+            });
+        },
+
+        reload: function () {
+            return this.load();
+        },
+
+        openPermissionsDialog: function () {
+            var model = this.collection.get(this.selection.get()[0]);
+            return require(['io.ox/files/share/permissions'], function (permissions) {
+                permissions.show(model);
             });
         },
 
@@ -80,19 +114,19 @@ define('io.ox/files/share/listview', [
     });
 
     var getPermissions = function (baton) {
-        return _(_(baton.model.getPermissions()).pluck('type')).uniq();
-    },
-    hasGuests = function (baton) {
-        return _(getPermissions(baton)).contains('guest');
-    },
+            return _(_(baton.model.getPermissions()).pluck('type')).uniq();
+        },
+        hasGuests = function (baton) {
+            return _(getPermissions(baton)).contains('guest');
+        },
 
-    isPublic = function (baton) {
-        return _(getPermissions(baton)).contains('anonymous');
-    },
+        isPublic = function (baton) {
+            return _(getPermissions(baton)).contains('anonymous');
+        },
 
-    hasUser = function (baton) {
-        return _(getPermissions(baton)).contains('user') || _(getPermissions(baton)).contains('group');
-    };
+        hasUser = function (baton) {
+            return _(getPermissions(baton)).contains('user') || _(getPermissions(baton)).contains('group');
+        };
 
     //
     // Extensions
@@ -105,9 +139,6 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 // We only have a list layout, if we add more layouts this needs to be changed
                 var layout = 'list';
-                if (!baton.model) {
-                    baton.model = new sModel.Shares();
-                }
                 ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
             }
         }
@@ -173,7 +204,7 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user">').toggleClass('gray', hasUser(baton))
+                        $('<i class="fa fa-user">').toggleClass('gray', !hasUser(baton))
                     )
                 );
             }
@@ -184,7 +215,7 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user-plus">').toggleClass('gray', hasGuests(baton))
+                        $('<i class="fa fa-user-plus">').toggleClass('gray', !hasGuests(baton))
                     )
                 );
             }
@@ -195,7 +226,7 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 this.append(
                     $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-link">').toggleClass('gray', isPublic(baton))
+                        $('<i class="fa fa-link">').toggleClass('gray', !isPublic(baton))
                     )
                 );
             }

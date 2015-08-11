@@ -113,14 +113,17 @@ define('io.ox/core/boot/main', [
             $.when(
                 require(['io.ox/core/boot/load', ox.base + '/precore.js']),
                 gettext.setLanguage(ox.language),
-                manifests.manager.loadPluginsFor('core')
+                manifests.manager.loadPluginsFor('i18n')
             )
             .then(function (response) {
-                return response[0];
-            })
-            .done(function (load) {
                 util.debug('Load UI > current language and core plugins DONE.');
                 gettext.enable();
+                return $.when(
+                    response[0],
+                    manifests.manager.loadPluginsFor('core')
+                );
+            })
+            .done(function (load) {
                 util.restore();
                 load();
             });

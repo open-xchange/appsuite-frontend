@@ -580,6 +580,12 @@ define('io.ox/tasks/api', [
      */
     api.getTasks = function () {
 
+        // no default folder returns an empty list
+        // happens with guestmode
+        if (!api.getDefaultFolder()) {
+            return $.Deferred().resolve([]);
+        }
+
         //could be done to use all folders, see portal widget but not sure if this is needed
         return http.GET({
             module: 'tasks',

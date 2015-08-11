@@ -20,7 +20,7 @@
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/api',
     'io.ox/files/api',
-    'io.ox/files/share/model',
+    'io.ox/files/share/api',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/contacts/api',
@@ -34,7 +34,7 @@
     'less!io.ox/files/share/style',
     // todo: relocate smart-dropdown logic
     'io.ox/core/tk/flag-picker'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, shareModel, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, gt) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, gt) {
 
     'use strict';
 
@@ -560,6 +560,10 @@
 
     var that = {
 
+        Permission: Permission,
+
+        Permissions: Permissions,
+
         // async / id is folder id
         showFolderPermissions: function (id, options) {
             that.showByModel(new Backbone.Model({ id: id }), options);
@@ -572,7 +576,7 @@
 
         showByModel: function (model, options) {
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
-            model = new shareModel.Share(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
+            model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions().done(function () {
                 that.show(model, options);
             });
@@ -664,9 +668,12 @@
                     }
                 });
 
+                var module = objModel.get('module');
+
                 var typeaheadView = new Typeahead({
                         apiOptions: {
-                            contacts: true,
+                            // mail does not support sharing folders to guets
+                            contacts: module !== 'mail',
                             users: true,
                             groups: true
                         },
@@ -677,13 +684,15 @@
                             });
                             // remove duplicate entries from typeahead dropdown
                             return _(data).filter(function (model) {
+                                // mail does not support sharing folders to guets
+                                if (module === 'mail' && model.get('field') !== 'email1') return false;
                                 return !permissionsView.collection.get(model.id);
                             });
                         },
                         click: function (e, member) {
                             // build extended permission object
                             var obj = {
-                                bits: objModel.isFolder() ? 4227332 : 257, // Author : Viewer
+                                bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
                                 group: member.get('type') === 2,
                                 type: member.get('type') === 2 ? 'group' : 'user'
                             };
@@ -720,22 +729,24 @@
                             $('<div class="form-group">').append(
                                 $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid })
-                            ).on('keydown', 'input', function (e) {
+                            )
+                            .on('keydown', 'input', function (e) {
                                 // enter
-                                if (e.which === 13) {
-                                    var val = $(this).typeahead('val');
-                                    if (!_.isEmpty(val)) {
-                                        permissionsView.collection.add(new Permission({
-                                            type: 'guest',
-                                            bits: objModel.isFolder() ? 4227332 : 257, // Author : Viewer
-                                            contact: {
-                                                email1: val
-                                            }
-                                        }));
-                                        // clear input
-                                        $(this).typeahead('val', '');
+                                if (e.which !== 13) return;
+                                // mail does not support sharing folders to guets
+                                // so we skip any manual edits
+                                if (module === 'mail') return;
+                                var val = $(this).typeahead('val');
+                                if (_.isEmpty(val)) return;
+                                permissionsView.collection.add(new Permission({
+                                    type: 'guest',
+                                    bits: objModel.isFolder() ? 4227332 : 1, // Author : Viewer
+                                    contact: {
+                                        email1: val
                                     }
-                                }
+                                }));
+                                // clear input
+                                $(this).typeahead('val', '');
                             })
                         ),
                         $('<div>').addClass('form-group').append(
