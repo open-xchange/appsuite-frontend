@@ -167,7 +167,7 @@ define('io.ox/participants/views',
                 this.setRows('', gt('Resource group'));
                 break;
             case 5:
-                mail = this.model.getEmail();
+                mail = this.model.get('field') ? this.model.get(this.model.get('field')) : this.model.getEmail();
                 this.setRows(mail, gt('External contact'));
                 if (mail && this.options.halo) {
                     this.nodes.$mail
